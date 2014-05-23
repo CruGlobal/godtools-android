@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<document lang="en">
+  <packagename translate="true" tnt-trx-ref-value="The Four Spiritual Laws" tnt-trx-translated="true">4个属灵的原则</packagename>
+  <page thumb="PageThumb_01.png" filename="01_Home.xml" translate="true" tnt-trx-ref-value="Home" tnt-trx-translated="true">首页</page>
+  <page thumb="PageThumb_02.png" filename="02_FirstPoint.xml" translate="true" tnt-trx-ref-value="1 God Loves You And Created You To Know Him Personally." tnt-trx-translated="true">1神爱你并创造你可以亲自的来认识祂</page>
+  <page thumb="PageThumb_03.png" filename="03_SecondPoint.xml" translate="true" tnt-trx-ref-value="2 We Are Separated From God By Our Sin, So We Cannot Know Him Or Experience His Love." tnt-trx-translated="true">2我们因罪而与神隔绝，所以我们不能知道并经验神的爱</page>
+  <page thumb="PageThumb_04.png" filename="04_ThirdPoint.xml" translate="true" tnt-trx-ref-value="3 Jesus Is God's Only Solution For Our Sin. Only Through Him Can We Know God And Receive His Love And Forgiveness." tnt-trx-translated="true">3 耶稣是神为我们的罪所预备的唯一救法。只有通过祂我们才能认识神和接受祂的爱与赦免</page>
+  <page thumb="PageThumb_05.png" filename="05_FourthPoint.xml" translate="true" tnt-trx-ref-value="4 We Must Each Respond To Jesus By Placing Our Trust In Him As Our Saviour And Lord. Only Then Can We Know God Personally." tnt-trx-translated="true">4 我们每个人都必须透过信靠耶稣为我们的救主和生命的主来回应耶稣的邀请。只有这样我们才能亲自的认识神</page>
+  <page thumb="PageThumb_06.png" filename="06_TwoCircles.xml" translate="true" tnt-trx-ref-value="These Circles Describe Two Types Of People" tnt-trx-translated="true">这些圆圈代表了两种人</page>
+  <page thumb="PageThumb_07.png" filename="07_SuggestedPrayer.xml" translate="true" tnt-trx-ref-value="You Can Express Your Attitude Toward God Through Prayer." tnt-trx-translated="true">你可以通过祷告向神说话</page>
+  <page thumb="PageThumb_08.png" filename="08_HowCanYouBeSure.xml" translate="true" tnt-trx-ref-value="How Can You Be Sure That All This Has Really Happened?" tnt-trx-translated="true">你怎么能确定这些都已经真实的发生了呢</page>
+  <page thumb="PageThumb_09.png" filename="09_WhatHappens.xml" translate="true" tnt-trx-ref-value="If You Asked Jesus Into Your Life As Saviour And Lord, Many Things Have Happened, Including:" tnt-trx-translated="true">当你邀请耶稣进入你的生命，成为你的救主和生命的主时，许多的改变就已经在你的生命中发生了，它们包括:</page>
+  <page thumb="PageThumb_10.png" filename="10_HowToGrow.xml" translate="true" tnt-trx-ref-value="How To Grow As A Follower Of Jesus" tnt-trx-translated="true">作为信徒应该怎样在基督里长进</page>
+  <page thumb="PageThumb_11.png" filename="11_FinalPage.xml" translate="true" tnt-trx-ref-value="Special Materials" tnt-trx-translated="true">特殊的材料</page>
+  <about filename="00_About.xml" translate="true" tnt-trx-ref-value="About" tnt-trx-translated="true">关于</about>
+  <instructions translate="true">
+  </instructions>
+</document>

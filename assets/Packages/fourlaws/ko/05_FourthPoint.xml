@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#BC1111" watermark="Watermark.png">
+  <title>
+    <number>4</number>
+    <heading size="90" translate="true" tnt-trx-ref-value="WE MUST INDIVIDUALLY RECEIVE JESUS CHRIST AS SAVIOR AND LORD; THEN WE CAN KNOW AND EXPERIENCE GOD'S LOVE AND PLAN FOR OUR LIVES." tnt-trx-translated="true">우리는 개인적으로 예수 그리스도를 '나의 구주, 나의 하나님"으로 영접해야 합니다. 그러면 우리는 우리 각 사람에 대한 하나님의 사랑과 계획을 할게 되며, 또 그것을 체험하게 됩니다.</heading>
+  </title>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="We Must Receive Christ" tnt-trx-translated="true">우리는 예수 그리스도를 영접해야 합니다.</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;As many as received Him, to them He gave the right to become children of God, even to those who believe in His name&quot;." tnt-trx-translated="true">"영접하는 자 곧 그 이름을 믿는 자들에게는 하나님의 자녀가 되는 권세를 주셨으니"</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(John 1:12)" tnt-trx-translated="true">(요한복음 1:12)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="We Receive Christ Through Faith" tnt-trx-translated="true">우리는 믿음으로 예수 그리스도를 영접합니다.</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;By grace you have been saved through faith; and that not of yourselves, it is the gift of God; not as a result of works that no one should boast.&quot;" tnt-trx-translated="true">"너희가 그 은혜를 인하여 믿음으로 말미암아 구원을 얻었나니 이것이 너희에게서 난 것이 아니요 하나님의 선물이라 행위에서 난 것이 아니니 이는 누구든지 자랑치 못하게 함이니라"고 했습니다.</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Ephesians 2:8,9)" tnt-trx-translated="true">(에베소서 2:8,9)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="When we receive Christ ..." tnt-trx-translated="true">우리가 예수그리스도를 영접할때...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="We experience a new birth." tnt-trx-translated="true">우리는 새롭게 태어나는 것을 경험합니다.</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Read John 3:1-8)" tnt-trx-translated="true">(요한복음 3:1-8을 읽으십시요.)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="65" translate="true" tnt-trx-ref-value="We Receive Christ Through Personal Invitation" tnt-trx-translated="true">우리는 각자의 초청으로 예수 그리스도를 영접합니다.</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="[Christ speaking] &quot;Behold, I stand at the door and knock; if anyone hears My voice and opens the door, I will come in to him.&quot;" tnt-trx-translated="true">예수그리스도께서 말씀하시길 "볼지어다 내가 문 밖에 서서 두드리노니 누구든지 내 음성을 듣고 문을 열면 내가 그에게로 들어가 그와 더불어 먹고 그는 나와 더불어 먹으리라"</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Revelation 3:20)" tnt-trx-translated="true">(요한계시록 3:20)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="Receiving Christ involves ..." tnt-trx-translated="true">예수 그리스도를 영접하는 것은 다음과 같은 것을 포함합니다...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="... turning to God from self (repentance) and trusting Christ to come into our lives to forgive our sins and to make us what He wants us to be." tnt-trx-translated="true">... 나 중심에서 하나님 중심으로 바꾸는 것이며, 내 안에 들어오셔서 내 죄를 용서하시고 그분이 원하는 사람이 되도록 그리스도께 나를 맡기는 것입니다.</text>
+      <text size="90" translate="true" tnt-trx-ref-value="Just to agree intellectually that Jesus Christ is the Son of God and that He died on the cross for our sins is not enough.  Nor is it enough to have an emotional experience.  We receive Jesus Christ by faith, as an act of the will." tnt-trx-translated="true">예수 그리스도의 말씀에 지적으로 동의한다든가 감정적인 경험만으로는 충분하지 않습니다. 우리는 의지의 행위인 믿음으로 예수 그리스도를 영접합니다.</text>
+    </panel>
+  </button>
+</page>

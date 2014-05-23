@@ -1,0 +1,22 @@
+<resources>
+<color name="about_text">#000</color>
+<color name="about_background">#fff</color>
+<color name="info_text">#000</color>
+<color name="selected_background">#fff</color>
+
+<color name="es_article_background">#fff</color>
+<color name="es_article_foreground">#000</color>
+
+	<!-- iphone-like blue gradient - not used -->
+	<color name="toolbar_top_default">#ff7d88a5</color>
+	<color name="toolbar_bottom_default">#ff3a4e78</color>
+	<!-- black n grey/transparent gradient -->
+	<color name="toolbar_top">#40c0c0c0</color>
+	<color name="toolbar_bottom">#ff000000</color>
+	<!-- solid organgish color when pressed -->
+	<color name="highlight_top">#ffffc600</color>
+	<color name="highlight_bottom">#ffcf9600</color>
+	<!--  buttons themselves are white -->
+	<color name="toolbar_fg">#ffffffff</color>
+
+</resources>

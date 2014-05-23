@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#BC1111" watermark="Watermark.png">
+  <title>
+    <number>4</number>
+    <heading size="90" translate="true" tnt-trx-ref-value="WE MUST INDIVIDUALLY RECEIVE JESUS CHRIST AS SAVIOR AND LORD; THEN WE CAN KNOW AND EXPERIENCE GOD'S LOVE AND PLAN FOR OUR LIVES." tnt-trx-translated="true">MUSIMY OSOBIŚCIE PRZYJĄĆ JEZUSA CHRYSTUSA JAKO ZBAWICIELA I PANA. DOPIERO WTEDY MOŻEMY POZNAĆ BOGA I DOŚWIADCZYĆ JEGO MIŁOŚCI</heading>
+  </title>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="We Must Receive Christ" tnt-trx-translated="true">MUSIMY PRZYJĄĆ CHRYSTUSA</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;As many as received Him, to them He gave the right to become children of God, even to those who believe in His name&quot;." tnt-trx-translated="true">"A wszystkim, którzy Go przyjęli, tym, którzy wierzą w imię Jego, dał moc, aby się stali dziećmi Bożymi"</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(John 1:12)" tnt-trx-translated="true">(Ew. Jana 1,12, Pismo Święte Nowego Testamentu, przekł. Eugeniusz Dąbrowski).</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="We Receive Christ Through Faith" tnt-trx-translated="true">PRZYJMUJEMY CHRYSTUSA PRZEZ WIARĘ</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;By grace you have been saved through faith; and that not of yourselves, it is the gift of God; not as a result of works that no one should boast.&quot;" tnt-trx-translated="true">"Łaską bowiem jesteście zbawieni przez wiarę. A to pochodzi nie od was, lecz jest darem Boga: nie z uczynków, aby się nikt nie chlubił"</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Ephesians 2:8,9)" tnt-trx-translated="true">(List do Efezjan 2,8-9)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="When we receive Christ ..." tnt-trx-translated="true">Kiedy przyjmujemy Chrystusa ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="We experience a new birth." tnt-trx-translated="true">Doświadczamy nowego narodzenia.</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Read John 3:1-8)" tnt-trx-translated="true">(Ew. Jana 3,1-8)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="65" translate="true" tnt-trx-ref-value="We Receive Christ Through Personal Invitation" tnt-trx-translated="true">PRZYJMUJEMY CHRYSTUSA PRZEZ OSOBISTE ZAPROSZENIE GO</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="[Christ speaking] &quot;Behold, I stand at the door and knock; if anyone hears My voice and opens the door, I will come in to him.&quot;" tnt-trx-translated="true">Chrystus Pan mówi: "Oto stoję u drzwi i kołaczę: jeśli ktoś posłyszy mój głos i drzwi otworzy, wejdę do niego i będę z nim wieczerzał, a on ze mną"</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Revelation 3:20)" tnt-trx-translated="true">(Apokalipsa Jana 3,20)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="Receiving Christ involves ..." tnt-trx-translated="true">Przyjęcie Chrystusa zawiera ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="... turning to God from self (repentance) and trusting Christ to come into our lives to forgive our sins and to make us what He wants us to be." tnt-trx-translated="true">... odwrócenie się od swego "ja" i nawrócenie się do Boga oraz zaufanie Jezusowi, że wejdzie do naszego życia, przebaczy nasze grzechy i przekształci nas według swojej woli.</text>
+      <text size="90" translate="true" tnt-trx-ref-value="Just to agree intellectually that Jesus Christ is the Son of God and that He died on the cross for our sins is not enough.  Nor is it enough to have an emotional experience.  We receive Jesus Christ by faith, as an act of the will." tnt-trx-translated="true">Nie wystarczy tylko rozumieć, że Jezus Chrystus jest Synem Bożym i umarł za nasze grzechy. Nie chodzi też o religijne wzruszenia. Musimy przyjąć Jezusa Chrystusa przez wiarę, aktem naszej woli.</text>
+    </panel>
+  </button>
+</page>

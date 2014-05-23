@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#00759A" watermark="Watermark.png" buttons="1">
+  <title mode="straight">
+    <heading textalign="center" size="90" w="300" translate="true" tnt-trx-ref-value="YOU CAN RECEIVE CHRIST RIGHT NOW BY FAITH THROUGH PRAYER" tnt-trx-translated="true">አሁኑኑ ክርስቶስን በእምነት ልትቀበል ትችላለህ</heading>
+  </title>
+  <text textalign="center" size="80" translate="true" tnt-trx-ref-value="(Prayer is talking with God)" tnt-trx-translated="true">(ፀሎት ከእግዚአብሔር ጋር ማውራት ነው)</text>
+  <text modifier="bold-italics" size="120" textalign="center" translate="true" w="300" tnt-trx-ref-value="God knows your heart and is not so concerned with your words as He is with the attitude of your heart." tnt-trx-translated="true">እግዚአብሔር ልብህን ስለሚያውቅ ልታታልለው አትችልም፡፡</text>
+  <button>
+    <buttontext size="82" translate="true" tnt-trx-ref-value="The following is a suggested prayer:" tnt-trx-translated="true">እንዲህ ልትፀልይ ትችላለህ</buttontext>
+    <panel>
+      <image w="280" h="2">line.png</image>
+      <text size="95" modifier="italics" translate="true" tnt-trx-ref-value="Lord Jesus,&#xD;&#xA;&#xD;&#xA;I need You.  Thank you for dying on the cross for my sins.  I open the door of my life and receive You as my Savior and Lord.&#xD;&#xA;                &#xD;&#xA;Thank You for forgiving my sins and giving me eternal life.  Take control of the throne of my life.  Make me the kind of person You want me to be." tnt-trx-translated="true">‹‹ጌታ ኢየሱስ ሆይ፣ አንተን በግሌ ለማወቅ እፈልጋለሁ፡፡ ስለ ኃጢያቴ በመስቀል ላይ ስለሞትክልኝ አመሰግንሃለሁ፡፡ አሁን ልቤን ከፍቼ አዳኜና ጌታዬ አድርጌ እቀበልሃለሁ፡፡ ኃጢያቴን ሁሉ ይቅር ስላልከኝና የዘላለም ሕይወት ስለሰጠኸኝ አመሰግንሃለሁ፤፤ በሕይወቴ ዙፋን ላይ ሆነህ ግዛኝ አንተ የምትፈልገው ዓይነት ሰው አድርገኝ፡፡ አሜን!››</text>
+      <image w="280" h="2">line.png</image>
+      <text textalign="center" size="95" translate="true" tnt-trx-ref-value="Does this prayer express the desire of your heart?  If it does, I invite you to pray this prayer right now." tnt-trx-translated="true">ይህን ፀሎት ልትፀልይ ትወዳለህን?</text>
+    </panel>
+  </button>
+  <question mode="straight" size="96" translate="true" tnt-trx-ref-value="Christ will come into your life &#xD;&#xA;as He promised." tnt-trx-translated="true">ፈቃደኛ ሆነህ አሁኑኑ ብትፀልይ በሰጠው ተስፋ መሰረት ክርስቶስ ወደ ሕይወትህ ይመጣል፡፡</question>
+</page>

@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#BC1111" watermark="Watermark.png" buttons="7">
+  <title>
+    <heading x="20" w="290" size="95" translate="true" tnt-trx-ref-value="SUGGESTIONS FOR CHRISTIAN GROWTH" tnt-trx-translated="true">ПОРАДИ ДЛЯ ДУХОВНОГО ЗРОСТУ</heading>
+    <peekpanel textalign="right" w="260" size="96" translate="true" tnt-trx-ref-value="Spiritual growth results from trusting Jesus Christ.  &quot;...The righteous man shall live by faith&quot; (Galatians 3:11).&#xD;&#xA;            &#xD;&#xA;            A life of faith will enable you to trust God increasingly with every detail of your life, and to practice the following:&#xD;&#xA;        " tnt-trx-translated="true">Духовний зріст залежить від нашої довіри Ісусу Христу. "... Праведний житиме вірою" (Галатам 3:11).
+            
+            Життя з вірою зробить вас здатними довіряти Богу все більше і більше у кожній дрібниці вашого життя і робити наступне:
+        </peekpanel>
+  </title>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="G o ..." tnt-trx-translated="true">Приходити ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Go to God in prayer daily" tnt-trx-translated="true">Приходити до Бога в молитві щодня</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(John 15:7)" tnt-trx-translated="true">(Івана 15:7)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="R ead ..." tnt-trx-translated="true">Читати ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Read God's Word daily." tnt-trx-translated="true">Читати Слово Боже кожен день.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see Acts 17:11)" tnt-trx-translated="true">(Дії 17:11)</text>
+      <text size="90" translate="true" tnt-trx-ref-value="Begin with the Gospel of John." tnt-trx-translated="true">Почніть з Євангелія від Івана.</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="O bey ..." tnt-trx-translated="true">Коритися ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Obey God moment by moment." tnt-trx-translated="true">Коритися Богу у всьому.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see John 14:21)" tnt-trx-translated="true">(Івана 14:21)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="W itness ..." tnt-trx-translated="true">Свідчити ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Witness for Christ by your life and words." tnt-trx-translated="true">Свідчити про Ісуса Христа словом та життям.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see Matthew 4:19 and John 15:8)" tnt-trx-translated="true">(Матфія 4:19 та Івана 15:8)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="T rust ..." tnt-trx-translated="true">Покладатись ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Trust God for every detail of your life." tnt-trx-translated="true">Покладатись на Бога у всьому.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see 1 Peter 5:7)" tnt-trx-translated="true">(1 Петра 5:7)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="H oly Spirit -" tnt-trx-translated="true">Дух Святий -</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Allow Him to control and empower your daily life and witness." tnt-trx-translated="true">Надати право Духу Свтому керувати вами і сповнювати вас Його силою для повсякденного життя і свідкування про Христа.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see Galatians 5:16,17 and Acts 1:8)" tnt-trx-translated="true">(Галатів 5:16,17 та Дії 1:8)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="Fellowship In A Good Church" tnt-trx-translated="true">Спілкування з віруючими у церкві</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="God's Word instructs us not to forsake &quot;the assembling of ourselves together&quot; (Hebrews 10:25).  Several logs burn brightly together, but put one aside on the cold hearth and the fire goes out.  So it is with your relationship with other Christians." tnt-trx-translated="true">Боже Слово радить віруючим "не залишати збору свого"(Евреям 10:25).  Вогнище добре горить, коли полінця зібрані разом, але окремо вони швидко згаснуть. Те саме відбувається і з віруючими.</text>
+      <text size="90" translate="true" tnt-trx-ref-value="If you do not belong to a  church, do not wait to be invited.  Take the initiative; call the pastor of a nearby church where Christ is honored and His Word is preached.  Start this week, and make plans to attend regularly." tnt-trx-translated="true">Якщо ви не відвідуєте церкву, не чекайте, поки вас запросять. Знайдіть віруючих у Христа там, де ви живете, тобто церкву (зібрання віруючих), де Христа поважають і проповідується Його Слово. Це дуже важливо для вашого духовного життя.</text>
+    </panel>
+  </button>
+</page>

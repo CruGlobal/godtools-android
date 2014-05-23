@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#BC1111" watermark="Watermark.png" buttons="7">
+  <title>
+    <heading x="20" w="290" size="95" translate="true" tnt-trx-ref-value="SUGGESTIONS FOR CHRISTIAN GROWTH" tnt-trx-translated="true">WSKAZÓWKI DO WZRASTANIA W WIERZE</heading>
+    <peekpanel textalign="right" w="260" size="96" translate="true" tnt-trx-ref-value="Spiritual growth results from trusting Jesus Christ.  &quot;...The righteous man shall live by faith&quot; (Galatians 3:11).&#xD;&#xA;            &#xD;&#xA;            A life of faith will enable you to trust God increasingly with every detail of your life, and to practice the following:&#xD;&#xA;        " tnt-trx-translated="true">"Wzrastajcie zaś w łasce i poznaniu Pana naszego i Zbawiciela" (2 List Piotra 3,18).
+
+              Duchowy wzrost wynika z naszego zaufania Chrystusowi. Pomoże ci w tym:
+        </peekpanel>
+  </title>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="G o ..." tnt-trx-translated="true">W głębiaj się...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Go to God in prayer daily" tnt-trx-translated="true">Wgłębiaj się w prawdy Słowa Bożego. To będzie budowało twoją wiarę.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(John 15:7)" tnt-trx-translated="true">(2 List do Tymoteusza 3,16-17)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="R ead ..." tnt-trx-translated="true">Z awsze ufaj ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Read God's Word daily." tnt-trx-translated="true">Zawsze ufaj Bogu w każdej dziedzinie swojego życia.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see Acts 17:11)" tnt-trx-translated="true">(1 List Piotra 5,7)</text>
+      <text size="90" translate="true" tnt-trx-ref-value="Begin with the Gospel of John." tnt-trx-translated="true">Rozpocznij od Ewangelii św. Jana</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="O bey ..." tnt-trx-translated="true">R ozmawiaj ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Obey God moment by moment." tnt-trx-translated="true">Rozmawiaj z innymi ludźmi o swojej wierze w Jezusa.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see John 14:21)" tnt-trx-translated="true">(1 List Piotra 3,15-16)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="W itness ..." tnt-trx-translated="true">O pieraj się ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Witness for Christ by your life and words." tnt-trx-translated="true">Opieraj się w życiu na mocy Ducha Świętego, a nie na własnych siłach.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see Matthew 4:19 and John 15:8)" tnt-trx-translated="true">(List do Galatów 5,16; Dzieje Apostolskie 1,8)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="T rust ..." tnt-trx-translated="true">S potykaj się ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Trust God for every detail of your life." tnt-trx-translated="true">Spotykaj się codziennie z Bogiem w osobistej rozmowie (modlitwie).</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see 1 Peter 5:7)" tnt-trx-translated="true">(List do Filipian 4,6-7)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="H oly Spirit -" tnt-trx-translated="true">T rwaj</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Allow Him to control and empower your daily life and witness." tnt-trx-translated="true">Trwaj w posłuszeństwie Bogu.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see Galatians 5:16,17 and Acts 1:8)" tnt-trx-translated="true">(Ew. Jana 14,27)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="Fellowship In A Good Church" tnt-trx-translated="true">KONIECZNOŚĆ UCZĘSZCZANIA DO KOŚCIOŁA</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="God's Word instructs us not to forsake &quot;the assembling of ourselves together&quot; (Hebrews 10:25).  Several logs burn brightly together, but put one aside on the cold hearth and the fire goes out.  So it is with your relationship with other Christians." tnt-trx-translated="true">W Liście do Hebrajczyków 10,25 jesteśmy zachęcani, abyśmy nie opuszczali "wspólnych zebrań" chrześcijańskich. Kilka razem płonących żagwi tworzy duże, jasno płonące ognisko; natomiast jedna żagiew - wyjęta z ogniska i położona na wilgotnej ziemi - szybko gaśnie. Podobnie jest z naszym związkiem z innymi chrześcijanami.</text>
+      <text size="90" translate="true" tnt-trx-ref-value="If you do not belong to a  church, do not wait to be invited.  Take the initiative; call the pastor of a nearby church where Christ is honored and His Word is preached.  Start this week, and make plans to attend regularly." tnt-trx-translated="true">Zacznij jeszcze w tym tygodniu uczęszczać na nabożeństwa i czyń to regularnie.</text>
+    </panel>
+  </button>
+</page>

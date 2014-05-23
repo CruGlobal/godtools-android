@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#D95E00" watermark="Watermark.png" buttons="6">
+  <title>
+    <heading x="20" w="262" size="85" translate="true" tnt-trx-ref-value="SPECIAL MATERIALS ARE AVAILABLE FOR CHRISTIAN GROWTH" tnt-trx-translated="true">Materiales disponibles para el crecimiento Cristiano</heading>
+    <peekpanel textalign="right" w="260" size="96" translate="true" tnt-trx-ref-value="If you have come to know Christ personally through this presentation of the gospel or would like further help in getting to know Christ better, these sites are recommended:&#xD;&#xA;        " tnt-trx-translated="true">Si has venido al conocimiento de Cristo personalmente a través de esta presentación del evangelio o te gustaría ver más recursos para conocer a Cristo mejor, te recomendamos estos sitios web:
+        </peekpanel>
+  </title>
+  <button mode="url" label="empezandocondios.com" translate="true" tnt-trx-ref-value="www.startingwithGod.com" tnt-trx-translated="true">empezandocondios.com</button>
+  <button mode="url" label="es.godlife.com" translate="true" tnt-trx-ref-value="www.growinginChrist.com" tnt-trx-translated="true">es.godlife.com</button>
+  <button mode="url" label="www.whoisJesus-really.com" translate="true" tnt-trx-ref-value="www.whoisJesus-really.com" tnt-trx-translated="true">www.whoisJesus-really.com/spanish/default.htm</button>
+  <button mode="url" label="www.cadaestudiante.com" translate="true" tnt-trx-ref-value="www.everystudent.com" tnt-trx-translated="true">www.cadaestudiante.com</button>
+</page>

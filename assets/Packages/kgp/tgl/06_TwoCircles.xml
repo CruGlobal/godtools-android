@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#7EB14F" watermark="sprout_desat.png" bigbuttons="2">
+  <title mode="straight" h="60">
+    <heading textalign="center" translate="true" tnt-trx-ref-value="THESE CIRCLES DESCRIBE TWO TYPES OF PEOPLE" tnt-trx-translated="true">Ang dalawang larawan ay kumakatawan sa dalawang uri ng buhay:</heading>
+  </title>
+  <button mode="big">
+    <image align="center">SelfDirected.png</image>
+    <buttontext translate="true" tnt-trx-ref-value="Self-Directed Person" tnt-trx-translated="true">Buhay na Pinaghaharian ng Sarili</buttontext>
+    <panel>
+      <text size="80" textalign="center" w="265" translate="true" tnt-trx-ref-value="s - Self is in control and " tnt-trx-translated="true">s - Sarili ang nasa trono at </text>
+      <text size="80" textalign="center" w="265" translate="true" tnt-trx-ref-value="✝ - Jesus has no influence in my life." tnt-trx-translated="true">✝ - Si Hesus ay walang impluwensiya sa buhay.</text>
+      <text textalign="center" yoffset="20" w="265" h="82" translate="true" tnt-trx-ref-value="People like this have never received Jesus into their lives. They remain guilty and cut off from God by their sin." tnt-trx-translated="true">Hindi pa tinanggap ng taong ito ang Panginoong Hesus sa kanyang buhay. Siya ay nanatiling makasalanan at hiwalay sa Diyos dahil sa kasalanan.</text>
+    </panel>
+  </button>
+  <button mode="big">
+    <image align="center">ChristDirected.png</image>
+    <buttontext translate="true" tnt-trx-ref-value="Christ-Directed Person" tnt-trx-translated="true">Buhay na Pinapangunahan ni Kristo</buttontext>
+    <panel>
+      <text size="80" textalign="center" w="265" translate="true" tnt-trx-ref-value="✝ - Jesus is in control and" tnt-trx-translated="true">✝ - Si Hesus ang nangunguna at</text>
+      <text size="80" textalign="center" w="265" translate="true" tnt-trx-ref-value="s - Self is following Jesus as Lord." tnt-trx-translated="true">s - Sarili ay sumusunod kay Hesus bilang Panginoon.</text>
+      <text textalign="center" yoffset="20" w="265" h="82" translate="true" tnt-trx-ref-value="People like this have received Jesus into their lives. They have been forgiven and experience God's love." tnt-trx-translated="true">Ang mga taong gaya nito ay tumanggap kay Hesus sa kanilang buhay. Sila ay napatawad at nakararanas ng pag-ibig ng Diyos.</text>
+    </panel>
+  </button>
+  <question mode="straight" modifier="normal" size="100" translate="true" tnt-trx-ref-value="Which circle best describes you?&#xD;&#xA;Which would you like to describe you?" tnt-trx-translated="true">Aling larawan ang kumakatawan ng iyong buhay?
+Aling larawan ang ninanais mong kumatawan ng iyong buhay?</question>
+</page>

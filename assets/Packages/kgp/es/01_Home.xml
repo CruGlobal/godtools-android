@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#0083C8">
+  <title mode="clear">
+    <heading color="#FFFFFF" textalign="left" size="150" x="19" y="25" w="300" translate="true" tnt-trx-ref-value="KNOWING GOD" tnt-trx-translated="true">CONOCIENDO A DIOS</heading>
+    <subheading color="#FFFFFF" textalign="right" size="150" x="0" y="60" w="275" translate="true" tnt-trx-ref-value="personally" tnt-trx-translated="true">personalmente</subheading>
+  </title>
+  <text color="#FFFFFF" alpha="0.7" yoffset="-50" textalign="center"></text>
+  <text color="#FFFFFF" alpha="0.7" modifier="italics" size="112" xoffset="19" yoffset="50" w="260" translate="true" tnt-trx-ref-value="These four points explain how to enter into a personal relationship with God and experience the life for which you were created." tnt-trx-translated="true">Los siguientes cuatro puntos explican cómo iniciar una relación personal con Dios y experimentar la vida para la que te creó.</text>
+</page>

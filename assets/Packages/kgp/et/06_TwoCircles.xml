@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#7EB14F" watermark="sprout_desat.png" bigbuttons="2">
+	
+	<title mode="straight">
+		<heading textalign="center" translate="true">NEED KOLM RINGI KIRJELDAVAD KAHTE TÜÜPI INIMESI</heading>
+	</title>
+
+	<button mode="big">
+		<image align="center">SelfDirected.png</image>
+		<buttontext translate="true">Enesekeskne inimene</buttontext>
+		<panel>
+            <text yoffset="-4" size="80" textalign="center" w="265" translate="true">s - Inimene juhib ise ja </text>
+            <text yoffset="-4" size="80" textalign="center" w="265" translate="true">† - Jeesusel ei ole mingit mõju minu elule.</text>
+			<text textalign="center" w="265" translate="true">Sellised inimesed ei ole Jeesust kunagi oma ellu vastu võtnud. Nad jäävad süüdi ja on oma patu tõttu Jumalast eraldatud.</text>
+		</panel>
+	</button>
+	
+	<button mode="big">
+		<image align="center">ChristDirected.png</image>
+		<buttontext translate="true">Kristusekeskne inimene</buttontext>
+		<panel>
+            <text yoffset="-4" size="80" textalign="center" w="265" translate="true">† - Jeesus juhib ja</text>
+            <text yoffset="-4" size="80" textalign="center" w="265" translate="true">s - Inimene järgib Jeesust kui Issandat.</text>
+			<text textalign="center" w="265" translate="true">Sellised inimesed on Jeesuse oma ellu vastu võtnud. Neile on andestatud ja nad kogevad Jumala armastust.</text>
+		</panel>
+	</button>
+
+	<question mode="straight" modifier="normal" size="100" translate="true">Milline ring kirjeldab Sind kõige paremini?
+Milline Sa tahaksid, et kirjeldaks Sind?</question>
+
+</page>

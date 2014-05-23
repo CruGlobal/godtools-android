@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#A2AD00" watermark="Watermark.png">
+  <title>
+    <number>3</number>
+    <heading size="90" translate="true" tnt-trx-ref-value="JESUS CHRIST IS GOD'S ONLY PROVISION FOR OUR SIN. THROUGH HIM ALONE WE CAN KNOW GOD PERSONALLY AND EXPERIENCE GOD'S LOVE AND PLAN." tnt-trx-translated="true">โดยทางพระเยซูคริสต์เท่านั้น ที่พระเจ้าทรงจัดเตรียมไว้ เพื่อชำระล้างความผิดบาปของมนุษย์ โดยพระองค์ท่านจะสามารถรู้และพบกับความรักของพระเจ้าและแผนการของพระองค์สำหรับชีวิตของท่านได้</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="He Died in Our Place" tnt-trx-translated="true">พระองค์ยอมตายแทนเรา</buttontext>
+    <panel>
+      <text translate="true" tnt-trx-ref-value="&quot;God demonstrates His own love for us, in that while we were yet sinners, Christ died for us.&quot;" tnt-trx-translated="true">"แต่พระเจ้าทรงสำแดงความรักของพระองค์แก่เราทั้งหลายคือ ขณะที่เรายังเป็นคนบาป พระคริสต์ได้ทรงสิ้นพระชนม์เพื่อเรา"</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Romans 5:8)" tnt-trx-translated="true">(โรม 5:8)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="He Rose From the Dead" tnt-trx-translated="true">พระองค์ทรงคืนพระชนม์</buttontext>
+    <panel>
+      <text translate="true" tnt-trx-ref-value="&quot;Christ died for our sins…He was buried…He was raised on the third day, according to the Scriptures…He appeared to Peter, then to the Twelve.  After that He appeared to more than five hundred…&quot;" tnt-trx-translated="true">"พระคริสต์ได้ทรงวายพระชนม์เพราะบาปของเราทั้งหลาย ตามที่เขียนไว้ในพระคัมภีร์ และทรงถูกฝังไว้ แล้ววันที่สามพระองค์ทรงถูกชุบให้เป็นขึ้นมาใหม่ ตามทีเขียนไว้ในพระคัมภีร์นั้น พระองค์ทรงปรากฏแก่เคฟาส แล้วแก่อัครทูตสิบสองคน ภายหลังพระองค์ทรงปรากฏแก่พวกพี่น้องกว่าห้าร้อยคนในคราวเดียว</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(1 Corinthians 15:3-6)" tnt-trx-translated="true">(1 โครินธ์ 15:3-6)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="He is the Only Way to God" tnt-trx-translated="true">พระองค์ทรงเป็นทางเดียวเท่านั้น</buttontext>
+    <panel>
+      <text w="280" size="90" translate="true" tnt-trx-ref-value="&quot;Jesus said to him, 'I am the way, and the truth, and the life; no one comes to the Father but through Me.'&quot;  (John 14:6)" tnt-trx-translated="true">"พระเยซูตรัสกับเขาว่า 'เราเป็นทางนั้น เป็นความจริง และเป็นชีวิต ไม่มีผู้ใดมาถึงพระบิดาได้นอกจากจะมาทางเรา'"  (ยอห์น 14:6)</text>
+      <image align="center" w="176" h="176">Bridged.png</image>
+      <text size="72" textalign="center" translate="true" tnt-trx-ref-value="▲ - God  |  † - Jesus  |  ★ - Man" tnt-trx-translated="true">▲ - พระเจ้า  |  † - พระเยซู  |  ★ - มนุษย์</text>
+      <text size="90" translate="true" tnt-trx-ref-value="This diagram illustrates that God has bridged the gulf that separates us from Him by sending His Son, Jesus Christ, to die on the cross in our place to pay the penalty for our sins." tnt-trx-translated="true">แผนภาพนี้แสดงให้เห็นถึงการที่พระเจ้าทรงเชื่อมหุบเหวที่ขวางกั้นระหว่างพระองค์กับมนุษย์โดยการส่งพระเยซูคริสต์ พระบุตรองค์เดียวของพระองค์ ให้ลงมาสิ้นพระชนม์บนไม้กางเขนแทนเรา</text>
+    </panel>
+  </button>
+  <question size="96" translate="true" tnt-trx-ref-value="It is not enough just to &#xD;&#xA;know these three laws...&#xD;&#xA;    " tnt-trx-translated="true">การรู้แต่เพียงหลักความจริงสามประการนี้เท่านั้นยังไม่เป็นการเพียงพอ...
+    </question>
+</page>

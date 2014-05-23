@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#00759A" watermark="Watermark.png">
+  <title>
+    <number>1</number>
+    <heading size="110" translate="true" tnt-trx-ref-value="GOD LOVES YOU AND OFFERS A WONDERFUL PLAN FOR YOUR LIFE." tnt-trx-translated="true">INIIBIG KA NG DIYOS AT SIYA'Y MAY MAGANDANG PLANO SA IYONG BUHAY</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="God's Love" tnt-trx-translated="true">Ang Pag-ibig ng Diyos</buttontext>
+    <panel>
+      <text translate="true" tnt-trx-ref-value="&quot;For God so loved the world that He gave His one and only Son, that whoever believes in Him shall not perish but have eternal life.&quot;" tnt-trx-translated="true">"Sapagka't gayon na lamang ang pagsinta ng Diyos sa sanlibutan na ibinigay Niya ang Kanyang bugtong na Anak, upang ang sinomang sa Kaniya'y sumampalataya ay huwag mapahamak, kundi magkaroon ng buhay na walang hanggan."</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(John 3:16, NIV)" tnt-trx-translated="true">(Juan 3:16)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="God's Plan" tnt-trx-translated="true">Ang Plano ng Diyos</buttontext>
+    <panel>
+      <text size="97" translate="true" tnt-trx-ref-value="[Christ speaking] &quot;I came that they might have life, and might have it abundantly&quot; [that it might be full and meaningful]." tnt-trx-translated="true">(Si Cristo ang nagsasalita) "Ako'y naparito upang sila'y magkaroon ng buhay at magkaroon ng kasaganaan nito."</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(John 10:10)" tnt-trx-translated="true">(Juan 10:10)</text>
+    </panel>
+  </button>
+  <question size="96" translate="true" tnt-trx-ref-value="Why is it that most people &#xD;&#xA;are not experiencing the &#xD;&#xA;abundant life?  Because..." tnt-trx-translated="true">Bakit ang karamihan
+ay hindi nakararanas 
+ng masaganang buhay? Sapagka't...</question>
+</page>

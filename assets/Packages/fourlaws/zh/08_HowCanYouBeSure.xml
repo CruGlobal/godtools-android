@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#F0AB00" watermark="Watermark.png">
+  <title>
+    <heading x="20" w="285" size="95" translate="true" tnt-trx-ref-value="HOW TO KNOW THAT CHRIST IS IN YOUR LIFE" tnt-trx-translated="true">怎么知道基督已在你的生命中</heading>
+  </title>
+  <button>
+    <buttontext size="82" translate="true" tnt-trx-ref-value="Did you receive Christ into your life?" tnt-trx-translated="true">你是否有接受基督进入你的生命?</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="According to His promise in Revelation 3:20, where is Christ right now in relation to you?  &#xD;&#xA;                &#xD;&#xA;Christ said He would come into your life.  Would He mislead you?  &#xD;&#xA;                &#xD;&#xA;On what authority do you know God has answered your prayer?  (The trustworthiness of God Himself and His Word.) " tnt-trx-translated="true">根据祂在启示录 3:20的应许, 现在基督是否在你心里?  
+                
+基督应许祂会进入你的生命.  祂会失信吗?  
+                
+你怎么知道祂已经应许了你的祷告?  (根据神的信实和祂可靠的话语.) </text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="82" translate="true" tnt-trx-ref-value="The Bible promises Eternal Life ..." tnt-trx-translated="true">圣经应许我们有永生 ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="... to all who receive Christ." tnt-trx-translated="true">... 就是那凡接受基督的人.</text>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;God has given us eternal life, and this life is in His Son. He who has the Son has the life; he who does not have the Son of God does not have the life.  These things I have written to you who believe in the name of the Son of God, in order that you may know that you have eternal life.&quot;  (1 John 5:11-13)" tnt-trx-translated="true">”这见证就是神赐给我们永生，这永生也是在祂儿子里面。人有了神的儿子就有生命，没有神的儿子就没有生命。我将这些话写给你们信奉神儿子之名的人，要叫你们知道自己有永生。“（约翰一书5：11-13）</text>
+      <text size="90" translate="true" tnt-trx-ref-value="Thank God often that Christ is in your life and that He will never leave you (Hebrews 13:5). You can know on the basis of His promise that Christ lives in you and that you have eternal life from the very moment you invite Him in.  He will not deceive you." tnt-trx-translated="true">你可以常常为着基督已在你的生命中并且祂永不离开你而感谢神 (希伯来书 13:5).你可以因着神的应许知道从你邀请耶稣进入你的心中起，基督就在你里面并且你有永生。祂永远不会骗你.</text>
+      <text size="90" translate="true" tnt-trx-ref-value="An important reminder..." tnt-trx-translated="true">一个重要的提醒...</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="82" translate="true" tnt-trx-ref-value="Do Not Depend on Feelings" tnt-trx-translated="true">不要依靠感觉</buttontext>
+    <panel>
+      <text size="80" translate="true" tnt-trx-ref-value="The promise of God's Word, the Bible - not our feelings - is our authority.  The Christian lives by faith (trust) in the trustworthiness of God Himself and His Word.  This train diagram illustrates the relationship among fact (God and His Word), faith (our trust in God and His Word), and feeling (the result of our faith and obedience).  (Read John 14:21)" tnt-trx-translated="true">神话语的应许,也就是圣经 - 而不是我们的感觉 - 才是我们的权威.  基督徒应靠信心生活，信靠那值得信靠的神和祂的话语.  火车图表展示了事实 (神和祂的话语), 信心 (我们对神和祂话语的信靠), 和感觉(因着我们的信心和顺服而有的结果)之间的关系.  (读约翰福音 14:21)</text>
+      <image align="center" yoffset="-10" w="286" h="90">Train.png</image>
+      <text size="72" textalign="center" yoffset="-10" translate="true" tnt-trx-ref-value="[ Fact ] - [ Faith ] - [ Feeling ]" tnt-trx-translated="true">[ 事实 ] - [ 信心 ] - [ 感觉 ]</text>
+      <text size="80" translate="true" tnt-trx-ref-value="The train will run with or without the caboose.  However, it would be useless to attempt to pull the train by the caboose.  In the same way, as Christians we do not depend on feelings or emotions, but we place our faith (trust) in the trustworthiness of God and the promises of His Word." tnt-trx-translated="true">火车无论有没有车厢都可以前进.  但是, 如果想要用车厢拉动车头则是不可能的.  同样,作为基督徒我们不应该依靠我们的感觉或是情绪，而应该将我们的信心放在值得信靠的神和祂话语的应许上。</text>
+    </panel>
+  </button>
+</page>

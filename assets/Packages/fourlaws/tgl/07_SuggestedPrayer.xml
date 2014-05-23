@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#00759A" watermark="Watermark.png" buttons="1">
+  <title mode="straight">
+    <heading textalign="center" size="90" w="300" translate="true" tnt-trx-ref-value="YOU CAN RECEIVE CHRIST RIGHT NOW BY FAITH THROUGH PRAYER" tnt-trx-translated="true">SA PAMAMAGITAN NG PANANAMPALATAYA, MAARI MONG TANGGAPIN SI CRISTO NGAYON DIN SA PANANALAGIN.</heading>
+  </title>
+  <text textalign="center" size="80" translate="true" tnt-trx-ref-value="(Prayer is talking with God)" tnt-trx-translated="true">(Ang panalangin ay pakikipag-usap sa Diyos)</text>
+  <text modifier="bold-italics" size="120" textalign="center" translate="true" w="300" tnt-trx-ref-value="God knows your heart and is not so concerned with your words as He is with the attitude of your heart." tnt-trx-translated="true">Alam ng Diyos ang katayuan ng iyong puso at hindi Niya pinapansin ang paraan ng pagsasalita kundi ang nilalaman ng iyong puso.</text>
+  <button>
+    <buttontext size="82" translate="true" tnt-trx-ref-value="The following is a suggested prayer:" tnt-trx-translated="true">Isang mungkahing panalangin lamang:</buttontext>
+    <panel>
+      <image w="280" h="2">line.png</image>
+      <text size="95" modifier="italics" translate="true" tnt-trx-ref-value="Lord Jesus,&#xD;&#xA;&#xD;&#xA;I need You.  Thank you for dying on the cross for my sins.  I open the door of my life and receive You as my Savior and Lord.&#xD;&#xA;                &#xD;&#xA;Thank You for forgiving my sins and giving me eternal life.  Take control of the throne of my life.  Make me the kind of person You want me to be." tnt-trx-translated="true">Panginoong Hesus,
+
+Kailangan kita.  Salamat sa pagkamatay mo sa krus para sa aking mga kasalanan.  Binubuksan ko ang aking puso at tinatanggap kita bilang aking Tagapagligtas at Panginoon.
+                
+Salamat po sa pagpapatawad mo sa aking mga kasalanan at pagbbigay ng buhay na walang hanggan.  Ikaw po ang maghari sa trono ng aking buhay  Gawin mo po akong isang taong namumuhay ayon sa iyong kalooban.</text>
+      <image w="280" h="2">line.png</image>
+      <text textalign="center" size="95" translate="true" tnt-trx-ref-value="Does this prayer express the desire of your heart?  If it does, I invite you to pray this prayer right now." tnt-trx-translated="true">Ang panalangin bang ito ang nais ng iyong puso? Kung gayon nga, idalangin ito ngayon din.</text>
+    </panel>
+  </button>
+  <question mode="straight" size="96" translate="true" tnt-trx-ref-value="Christ will come into your life &#xD;&#xA;as He promised." tnt-trx-translated="true">Si Cristo'y papasok sa iyong buhay, 
+tulad ng Kanyang ipinangako.</question>
+</page>

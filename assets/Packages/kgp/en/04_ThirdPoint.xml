@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#007486" watermark="sprout_desat.png" buttons="5">
+	
+	<title>
+		<number>3</number>
+		<heading size="90" translate="true">JESUS IS GOD'S ONLY SOLUTION FOR OUR SIN. ONLY THROUGH HIM CAN WE KNOW GOD AND RECEIVE HIS LOVE AND FORGIVENESS.</heading>
+	</title>
+    
+	<button>
+		<buttontext translate="true">Jesus is God</buttontext>
+		<panel>
+			<text size="90" translate="true">Christ is the visible image of the invisible God. He existed before anything was created and is supreme over all creation.</text>
+            <text size="90" textalign="right" translate="true">- Colossians 1:15</text>
+		</panel>
+	</button>
+    
+	<button>
+		<buttontext translate="true">Jesus Died In Our Place</buttontext>
+		<panel>
+			<text size="90" translate="true">Christ suffered for our sins once for all time. He never sinned, but he died for sinners to bring you home safely to God.</text>
+            <text size="90" textalign="right" translate="true">- 1 Peter 3:18a</text>
+		</panel>
+	</button>
+    
+	<button>
+		<buttontext translate="true">Jesus Came Back to Life</buttontext>
+		<panel>
+			<text size="90" translate="true">During the forty days after his crucifixion, he appeared to the apostles ... and he proved to them in many ways he was actually alive.   - Acts 1:3a</text>
+			<text size="90" translate="true">His resurrection proved that he was God and that he had suffered the punishment we deserved in our place.</text>
+		</panel>
+	</button>
+    
+    <button>
+		<buttontext translate="true">Jesus is the Only Way...</buttontext>
+		<panel>
+			<text size="90" translate="true">Jesus said, "I am the way, the truth and the life. No-one can come to the Father except through me."</text>
+            <text size="90" textalign="right" translate="true">- John 14:6</text>
+		</panel>
+	</button>	
+	
+	<button>
+		<buttontext translate="true">God Proves His Love...</buttontext>
+        <panel>
+            <text w="280" size="80" translate="true">For God loved the world so much that he gave his one and only Son, so that everyone who believes in him will not perish but have eternal life. - John 3:16</text>
+            <image align="center" w="120" h="120">Bridged.png</image>
+            <text size="76" textalign="center" translate="true">▲ - God  |  † - Jesus  |  ★ - Man</text>
+            <text size="80" translate="true">Although we deserve to be cut off from God forever, in his love God sent Jesus to pay the penalty for our sins by dying on the cross.</text>
+            <text size="80" translate="true">Through Jesus, God has bridged the gap that separates us from him, and provided a way for us to be forgiven and restored to relationship with him.</text> 
+        </panel>
+        
+	</button>
+	
+	<question size="90" translate="true">It's not enough just to know 
+these points...</question>
+    
+</page>

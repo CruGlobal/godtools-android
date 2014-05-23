@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#D95E00" watermark="Watermark.png" buttons="6">
+	
+	<title>
+        <heading x="20" w="260" size="85" translate="true">SPECIAL MATERIALS ARE AVAILABLE FOR CHRISTIAN GROWTH</heading>
+        <peekpanel textalign="right" w="262" size="96" translate="true">If you have come to know Christ personally through this presentation of the gospel or would like further help in getting to know Christ better, these sites are recommended:
+        </peekpanel>        
+    </title>
+    
+    <button mode="url" label="www.startingwithGod.com" translate="true">www.startingwithGod.com</button>
+    <button mode="url" label="www.growinginChrist.com" translate="true">www.growinginChrist.com</button>
+    <button mode="url" label="www.whoisJesus-really.com" translate="true">www.whoisJesus-really.com</button>
+    <button mode="url" label="www.everystudent.com" translate="true">www.everystudent.com</button>
+    <button mode="allurl" translate="true">All Websites</button>
+    
+</page>

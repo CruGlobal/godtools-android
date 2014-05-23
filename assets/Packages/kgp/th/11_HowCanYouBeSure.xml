@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#57324D" watermark="sprout_desat.png" buttons="4">
+  <title h="60">
+    <heading x="10" w="285" size="94" translate="true" tnt-trx-ref-value="HOW CAN YOU BE SURE THAT ALL&#xD;&#xA;THIS HAS REALLY HAPPENED?" tnt-trx-translated="true">ท่านจะมั่นใจได้อย่างไรว่าสิ่งทั้งหมดเหล่านี้ได้เกิดขึ้นแล้ว?</heading>
+  </title>
+  <button yoffset="30">
+    <buttontext translate="true" tnt-trx-ref-value="Jesus is in your life ..." tnt-trx-translated="true">พระเยซูทรงสถิตอยู่ในชีวิตของท่าน ...</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="...because God has promised, and he can be trusted." tnt-trx-translated="true">...เพราะพระเจ้าได้ทรงสัญญาไว้ และพระองค์ทรงรักษาพระสัญญาของพระองค์เสมอ</text>
+      <text yoffset="10" size="90" modifier="italics" translate="true" tnt-trx-ref-value="Thank God often that Jesus is in your life, and that he will never leave you." tnt-trx-translated="true">จงขอบพระคุณพระเจ้าที่พระองค์ทรงประทับอยู่ในชีวิตของท่าน และพระองค์จะไม่ทรงละทิ้งท่าน</text>
+      <text yoffset="4" size="90" textalign="right">(Romans 8:38-39)</text>
+    </panel>
+  </button>
+  <button yoffset="20">
+    <buttontext translate="true" tnt-trx-ref-value="You Have the Spirit of Christ" tnt-trx-translated="true">ท่านได้รับพระวิญญาณบริสุทธิ์</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="You can know that the Spirit of Christ lives in you and that you have eternal life from the moment you invited Jesus into your life, because this is what he has promised." tnt-trx-translated="true">ท่านสามารถที่จะรู้ได้ว่า พระเยซูคริสต์ผู้ทรงพระชนม์สถิตอยู่ในท่านและท่านมีชีวิตนิรันดร์ ตั้งแต่วินาทีที่ท่านทูลเชิญพระองค์ให้เสด็จเข้ามาในชีวิตของท่านตามพระสัญญาของพระองค์</text>
+      <text yoffset="22" size="85" modifier="italics" translate="true" tnt-trx-ref-value="And this is what God has testified: He has given us eternal life, and this life is in his Son. Whoever has the Son has life; whoever does not have God's Son does not have life. I have written this to you who believe in the name of the Son of God, so that you may know you have eternal life." tnt-trx-translated="true">และพยานหลักฐานนั้นคือว่า พระเจ้าได้ทรงโปรดประทานชีวิตนิรันดร์ให้เราทั้งหลาย และชีวิตนี้มีอยู่ในพระบุตรของพระองค์ ผู้ที่มีพระบุตรก็มีชีวิต ผู้ที่ไม่มีพระบุตรก็ไม่มีชีวิต ข้อความเหล่านี้ข้าพเจ้าได้เขียนถึงท่านทั้งหลายที่เชื่อในพระนามพระบุตรของพระเจ้า เพื่อท่านทั้งหลายจะได้รู้ว่าท่านมีชีวิตนิรันดร์</text>
+      <text yoffset="4" size="90" textalign="right">- 1 John 5:11-13</text>
+    </panel>
+  </button>
+  <button yoffset="90">
+    <buttontext translate="true" tnt-trx-ref-value="Rely on God" tnt-trx-translated="true">พึ่งพาพระเจ้า</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="Although feelings are valid and important, they don't determine what is true. A follower of Jesus lives by trusting in the reliability of God himself and what he has said." tnt-trx-translated="true">ถึงแม้ว่าความรู้สึกจะเป็นสิ่งสำคัญและสามารถรับรู้ได้ แต่ความรู้สึกก็ไม่สามารถตัดสินได้ว่าสิ่งใดจริงหรือเท็จ ผู้ติดตามพระเยซูคริสต์ดำเนินชีวิตโดยการไว้วางใจในพระเจ้าและพระวจนะของพระองค์</text>
+    </panel>
+  </button>
+  <button yoffset="20">
+    <buttontext size="85" translate="true" tnt-trx-ref-value="Do Not Depend on How You Feel" tnt-trx-translated="true">อย่าพึ่งพิงความรู้สึก</buttontext>
+    <panel>
+      <text yoffset="12" size="80" translate="true" tnt-trx-ref-value="We rely on God and his promises in the Bible, not our feelings. Feelings are valid and important, but they don't determine what is true. A follower of Jesus lives by trusting in the reliability of God himself and what he has said through his word, the Bible." tnt-trx-translated="true">เราต้องยึดมั่นในพระเจ้าและพระสัญญาของพระองค์ในพระคัมภีร์ ไม่ใช่ความรู้สึกของเรา ถึงแม้ว่าความรู้สึกจะเป็นสิ่งสำคัญและสามารถรับรู้ได้ แต่ความรู้สึกก็ไม่สามารถตัดสินได้ว่าสิ่งใดจริงหรือเท็จ ผู้ติดตามพระเยซูคริสต์ดำเนินชีวิตโดยการไว้วางใจในพระเจ้าและพระวจนะของพระองค์ นั่นก็คือพระคัมภีร์</text>
+      <image xoffset="-6" y="120" w="286" h="90">Train.png</image>
+      <text size="72" textalign="center" yoffset="84" translate="true" tnt-trx-ref-value="★ - Fact  |  ▲ - Faith  |  ◆ - Feeling" tnt-trx-translated="true">★ - ความจริง  |  ▲ - ความเชื่อ  |  ◆ - ความรู้สึก</text>
+      <text yoffset="16" size="80" translate="true" tnt-trx-ref-value="The train illustrates the connection between fact (God and his word), faith (our trust in God and his word) and feelings (a result of our faith and obedience)." tnt-trx-translated="true">แผนภาพรถไฟนี้แสดงให้เห็นถึงความสัมพันธ์ระหว่าง ความจริง (พระเจ้าและพระวจนะของพระองค์) ความเชื่อ (การไว้วางใจในพระเจ้าและพระวจนะของพระองค์) และ ความรู้สึก (ผลของความเชื่อและการเชื่อฟัง)</text>
+      <text yoffset="12" size="80" translate="true" tnt-trx-ref-value="The train will run with or without the guard's van, but it would be useless to attempt to pull the train by the guard's van.  In the same way, we can rely on God and what he has said in his word, and not depend on how we feel." tnt-trx-translated="true">ไม่ว่าจะมีตู้ผู้โดยสารหรือไม่ก็ตาม รถไฟก็ย่อมแล่นไปได้เสมอ เพราะตู้ผู้โดยสารนั้นมิได้มีส่วนช่วยในการฉุดลากรถไฟให้เคลื่อนที่แต่อย่างใด ชีวิตคริสเตียนก็ทำนองเดียวกันนี้คือ เราไม่จำเป็นต้องพึ่งพิงความรู้สึก หากแต่ต้องเชื่อและไว้วางใจในพระเจ้าและพระสัญญาของพระองค์</text>
+    </panel>
+  </button>
+  <question y="230">
+    <text textalign="center" y="0" h="43" translate="true" tnt-trx-ref-value="What If You Don't Feel Any Different?" tnt-trx-translated="true">จะเกิดอะไรขึ้นถ้าท่านไม่รู้สึกถึงความแตกต่างอะไรเลย?</text>
+    <text y="185" translate="true" tnt-trx-ref-value="So what comes next?" tnt-trx-translated="true">แล้วจะมีอะไรเกิดขึ้นต่อมา?</text>
+  </question>
+</page>

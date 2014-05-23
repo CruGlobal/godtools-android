@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<document lang="en_heartbeat">
+  <packagename translate="true" tnt-trx-ref-value="Knowing God Personally (Heartbeat Edition)" tnt-trx-translated="true">Pagkilala sa Diyos ng Personal (Heartbeat Edition)</packagename>
+  <page thumb="PageThumb_01.png" filename="01_Home.xml" translate="true">Home</page>
+  <page thumb="PageThumb_02.png" filename="02_FirstPoint.xml" translate="true" tnt-trx-ref-value="1 God Loves You And Created You To Know Him Personally." tnt-trx-translated="true">1 Ini-ibig ka ng Diyos at Nilikha ka Niya upang makilala Siya ng Personal.</page>
+  <page thumb="PageThumb_03.png" filename="03_SecondPoint.xml" translate="true" tnt-trx-ref-value="2 We Are Separated From God By Our Sin, So We Cannot Know Him Or Experience His Love." tnt-trx-translated="true">2 Tayo ay nahiwalay sa Diyos dahil sa kasalanan, kaya't hindi natin Siya lubos na makilala o maranasan ang pag-ibig niya.</page>
+  <page thumb="PageThumb_04.png" filename="04_ThirdPoint.xml" translate="true" tnt-trx-ref-value="3 Jesus Is God's Only Solution For Our Sin. Only Through Him Can We Know God And Receive His Love And Forgiveness." tnt-trx-translated="true">3 Si Hesu-Kristo ang tanging lunas sa ating kasalanan. Sa pamamagitan niya ay malalaman natin ang pag-ibig at plano ng Diyos sa ating buhay.</page>
+  <page thumb="PageThumb_05.png" filename="05_FourthPoint.xml" translate="true" tnt-trx-ref-value="4 We Must Each Respond To Jesus By Placing Our Trust In Him As Our Saviour And Lord. Only Then Can We Know God Personally." tnt-trx-translated="true">4 Kinakailangan nating tanggapin si Hesu-Kristo na ating Tagapagligtas at Panginoon; saka lamang natin Siya makikilala ng personal.</page>
+  <page thumb="PageThumb_06.png" filename="06_TwoCircles.xml" translate="true" tnt-trx-ref-value="These Circles Describe Two Types Of People" tnt-trx-translated="true">Ang dalawang larawan ay kumakatawan sa dalawang uri ng buhay:</page>
+  <page thumb="PageThumb_07.png" filename="07_AttitudeOfYourHeart.xml" translate="true" tnt-trx-ref-value="To Begin A Relationship With God, You Must Give Jesus Everything." tnt-trx-translated="true">Upang masimulan ang relasyon sa Diyos, kinakailangang ibigay ang lahat kay Hesus.</page>
+  <page thumb="PageThumb_08.png" filename="08_SuggestedPrayer.xml" translate="true" tnt-trx-ref-value="You Can Express Your Attitude Toward God Through Prayer." tnt-trx-translated="true">Maaari mong ihayag ang iyong naisin sa Diyos sapamamagitan ng panalangin.</page>
+  <page thumb="PageThumb_09.png" filename="09_WhatHappens.xml" translate="true" tnt-trx-ref-value="What Happens When You Put Your Trust In Jesus?" tnt-trx-translated="true">Ano ang mangyayari kung ibigay ang tiwala kay Hesus?</page>
+  <page thumb="PageThumb_10.png" filename="10_WhatHappensTwo.xml" translate="true" tnt-trx-ref-value="If You Asked Jesus Into Your Life As Saviour And Lord, Many Things Have Happened, Including:" tnt-trx-translated="true">Sa sandaling tinanggap mo si Kristo sapamamagitan ng pananampalataya, maraming bagay ang nangyari, kasama ang mga sumusunod:</page>
+  <page thumb="PageThumb_11.png" filename="11_HowCanYouBeSure.xml" translate="true" tnt-trx-ref-value="How Can You Be Sure That All This Has Really Happened?" tnt-trx-translated="true">Paano makatitiyak na ang lahat ng ito ay nangyari?</page>
+  <page thumb="PageThumb_12.png" filename="12_HowToGrow.xml" translate="true" tnt-trx-ref-value="How To Grow As A Follower Of Jesus" tnt-trx-translated="true">Paano lumago bilang tagasunod ni Kristo</page>
+  <page thumb="PageThumb_13.png" filename="13_FinalPage.xml" translate="true" tnt-trx-ref-value="Websites To Assist You" tnt-trx-translated="true">Websites na makakatulong sa inyo</page>
+  <about filename="00_About.xml" translate="true">About</about>
+  <instructions translate="true">
+  </instructions>
+</document>

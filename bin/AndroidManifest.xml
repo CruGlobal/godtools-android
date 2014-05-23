@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="org.keynote.godtools.android"
+      android:versionCode="3"
+      android:versionName="3.1"
+      android:installLocation="auto">
+
+    <application 
+    		android:icon="@drawable/icon" 
+    		android:label="@string/app_name"
+    		android:description="@string/app_description" 
+    		android:name=".snuffy.SnuffyApplication"    
+   		 	android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
+		<activity android:name="Splash" android:label="@string/app_name" android:screenOrientation="portrait">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+
+		<activity android:name="Main"							         android:label="@string/app_name" 			       android:screenOrientation="portrait"/>
+        <activity android:name="LanguagesActivity" 					     android:label="@string/languages_activity_title"  android:screenOrientation="portrait"/>
+        		
+		<activity android:name="About"                                   android:label="@string/app_name_about"        android:theme="@android:style/Theme.Dialog"
+																													   android:screenOrientation="portrait"/>
+		<activity android:name="Kgp"                                     android:label="@string/app_name_kgp"></activity>
+        <activity android:name="Satisfied"                               android:label="@string/app_name_satisfied"></activity>
+		<activity android:name="SpiritualLaws"                           android:label="@string/app_name_sl"></activity>
+		<activity android:name="GalleryHelp"                             android:label="@string/app_name_gallery_help" android:theme="@android:style/Theme.Dialog"></activity>
+		<activity android:name=".everystudent.EveryStudent"              android:label="@string/app_name_everystudent" android:theme="@android:style/Theme.Light"></activity>
+		<activity android:name=".everystudent.EveryStudentView"          android:label="@string/app_name_everystudent" android:theme="@android:style/Theme.Light"></activity>
+		<activity android:name=".everystudent.EveryStudentSearchResults" android:label="@string/app_name_everystudent" android:theme="@android:style/Theme.Light">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data android:name="android.app.searchable"
+                       android:resource="@xml/searchable" />
+		</activity>
+		
+        <provider android:name=".everystudent.EveryStudentProvider"
+                  android:authorities="org.keynote.godtools.android.everystudent.EveryStudentProvider" />
+
+        <meta-data android:name="android.app.default_searchable"
+                   android:value=".everystudent.EveryStudentSearchResults" />
+                   
+        <activity android:name=".snuffy.SnuffyActivity" 		android:screenOrientation="portrait" />
+        <activity android:name=".snuffy.SnuffyAboutActivity"    android:label="@string/app_title" android:screenOrientation="portrait"/>
+        <activity android:name=".snuffy.SnuffyPageMenuActivity" android:label="@string/app_title" android:screenOrientation="portrait" android:theme="@android:style/Theme.Light"/>
+        <activity android:name=".snuffy.SnuffyLanguageActivity" android:label="@string/app_title" android:screenOrientation="portrait" android:theme="@android:style/Theme.Light"/>
+		<activity android:name=".snuffy.SnuffyHelpActivity"     android:label="@string/app_title" android:screenOrientation="portrait" android:theme="@android:style/Theme.Dialog"></activity>
+                   
+
+    </application>
+    <uses-sdk 
+    	android:minSdkVersion="8"
+    	android:targetSdkVersion="8" />    
+	<supports-screens 
+		android:smallScreens="false"
+		android:resizeable="false"/>
+
+	<uses-permission android:name="android.permission.VIBRATE"/>
+	<uses-permission android:name="android.permission.WAKE_LOCK"/>
+	<uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    
+</manifest>

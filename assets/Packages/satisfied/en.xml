@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<document lang="en">
+	<packagename translate="true">Satisfied?</packagename>
+	<page thumb="pagethumb_01.png" filename="1.xml" translate="true">Home</page>
+	<page thumb="pagethumb_02.png" filename="2.xml" translate="true">Satisfied?</page>
+	<page thumb="pagethumb_03.png" filename="3.xml" translate="true">The Divine Gift</page>
+	<page thumb="pagethumb_04.png" filename="4.xml" translate="true">The Present Danger</page>
+	<page thumb="pagethumb_05.png" filename="5.xml" translate="true">The Intimate Journey</page>
+	<page thumb="pagethumb_06.png" filename="6.xml" translate="true">The Empowering Presence</page>
+	<page thumb="pagethumb_07.png" filename="7.xml" translate="true">The Turning Point</page>
+	<page thumb="pagethumb_08.png" filename="8.xml" translate="true">Now that you are filled...</page>
+	<about thumb="pagethumb_09.png" filename="about.xml" translate="true">About</about>
+
+</document>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#7EB14F" watermark="sprout_desat.png" buttons="2">
+    
+	<title>
+		<number>1</number>
+		<heading translate="true">GOD LOVES YOU AND CREATED YOU TO KNOW HIM PERSONALLY.</heading>
+	</title>
+	
+	<button>
+		<buttontext translate="true">God Loves You</buttontext>
+		<panel>
+			<text size="90" translate="true">God showed how much he loved us by sending his one and only Son into the world so that we might have eternal life through him.</text>
+            
+            <text size="85" textalign="right" translate="true">- 1 John 4:9</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext translate="true">God Wants You to Know Him</buttontext>
+		<panel>
+			<text size="90" translate="true">And this is the way to have eternal life - to know you, the only true God, and Jesus Christ, the one you sent to earth.</text>
+            <text size="85" textalign="right" translate="true">- John 17:3</text>
+		</panel>
+	</button>
+	
+	<question translate="true">Why do you think most people 
+don't know God personally?</question>
+    
+</page>

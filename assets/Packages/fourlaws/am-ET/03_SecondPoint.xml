@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#F0AB00" watermark="Watermark.png">
+  <title>
+    <number>2</number>
+    <heading size="100" translate="true" tnt-trx-ref-value="MAN IS SINFUL AND SEPARATED FROM GOD.  THEREFORE, HE CANNOT KNOW AND EXPERIENCE GOD'S LOVE AND PLAN FOR HIS LIFE." tnt-trx-translated="true">ሰው ኃጢአተኛ ነው፡፡ በዚህም ምክንያት ከእግዚአብሔር ተለይቷል፡፡ ስለዚህም የእግዚአብሔርን ፍቅርና ዕቅድ ማወቅና በሕይወቱ መለማመድ አይችልም፡፡</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Man Is Sinful" tnt-trx-translated="true">ሰው ኃጥአተኛ ነው</buttontext>
+    <panel>
+      <text translate="true" tnt-trx-ref-value="&quot;All have sinned and fall short of the glory of God.&quot;  (Romans 3:23)" tnt-trx-translated="true">“ሁሉ ኃጢአትን ሠርተዋልና የእግዚአብሔርም ክብር ጎድሎአቸዋል፡፡”(ሮሜ 3፡23)</text>
+      <text translate="true" tnt-trx-ref-value="Man was created to have fellowship with God; but, because of his own stubborn self-will, he chose to go his own independent way and fellowship with God was broken.  This self-will, characterized by an attitude of active rebellion or passive indifference, is an evidence of what the Bible calls sin." tnt-trx-translated="true">እግዚአብሔር ሰውን ሲፈጥረው ከእርሱ ጋር የቀረበ ግንኙነት በመመስረት በደስታ እንዲኖር ነበር፡፡ነገር ግን ሰው በራሱ መንገድ ለመጓዝ በመምረጡ ግንኙነታቸው ተቋረጠ፡፡ በራሳችን መንገድ ስንጓዝ ለእግዚአብሔር የማንታዘዝና ለርሱም ግድ የሌለን እንሆናለን፡፡ መጽሐፍ ቅዱስ ይህን አይነቱን አስተሳሰብ ነው ኃጢአት ብሎ የሚጠራው፡፡</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Man Is Separated" tnt-trx-translated="true">ሰው ከእግዚአብሔር ተለይቷል</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;The wages of sin is death&quot; [spiritual separation from God].  (Romans 6:23)" tnt-trx-translated="true">“የኃጢአት ደመወዝ ሞት ነውና” (ሮሜ 6፡23) ይህም ሞት በመንፈስ ከእግዚአብሔር መለየት ማለት ነው፡፡</text>
+      <image align="center" w="176" h="176">Separated.png</image>
+      <text size="72" textalign="center" translate="true" tnt-trx-ref-value="▲ - Holy God  |  ★ - Sinful Man" tnt-trx-translated="true">▲ - ቅዱስ እግዚአብሔር  |  ★ - ኃጢአተኛ ሰው</text>
+      <text size="90" translate="true" tnt-trx-ref-value="This diagram illustrates that God is holy and man is sinful.  A great gulf separates the two.  The arrows illustrate that man is continually trying to reach God and the abundant life through his own efforts, such as a good life, philosophy, or religion, but he inevitably fails." tnt-trx-translated="true">ይህ ስዕል የሚያሳው እግዚአብሔር ቅዱስ ሰው ደግሞ ኃጢአተኛ በመሆኑ በመካከላቸው ትልቅ መለያየት መኖሩን ነው፡፡ ቀስቶቹ የሚያመለክቱት ሰው በራሱ መንገድ ወደ እግዚአብሔር ለመድረስ እንዴት እንደሚጥር ነው፡፡ ለምሳሌ፡- የሃይማኖት ስርአቶችን በመፈፀም፣ ቤተክርስትያን ሳያቋርጥ በመመላለስ፣ መልካምን ስራ በመስራት፣ ሰውን ባለመጉዳት፣ወ.ዘ.ተ. ነገር ግን ሰውን ጥረቱ ወደ እግዚአብሔር ሊያቀርበው አልቻለም፡፡</text>
+    </panel>
+  </button>
+  <question translate="true" tnt-trx-ref-value="The third principle explains the only way to bridge this gulf..." tnt-trx-translated="true">ሦስተኛው ህግ ሰው ወደ እግዚአብሔር
+የሚደርስበትን ብቸኛ ሕግ ያሳየናል . . ...</question>
+</page>

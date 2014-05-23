@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#BC1111" watermark="Watermark.png">
+  <title>
+    <number>4</number>
+    <heading size="90" translate="true" tnt-trx-ref-value="WE MUST INDIVIDUALLY RECEIVE JESUS CHRIST AS SAVIOR AND LORD; THEN WE CAN KNOW AND EXPERIENCE GOD'S LOVE AND PLAN FOR OUR LIVES." tnt-trx-translated="true">KINAKAILANGAN NATING TANGGAPIN SI JESU-CRISTO NA ATING TAGAPAGLIGTAS AT PANGINOON; SAKA LAMANG NATING MALALAMAN AT MARARANASAN ANG PAG-IBIG AT PLANO NG DIYOS SA ATING BUHAY.</heading>
+  </title>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="We Must Receive Christ" tnt-trx-translated="true">Ang Pangangailangan ng Pagtanggap kay Cristo</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;As many as received Him, to them He gave the right to become children of God, even to those who believe in His name&quot;." tnt-trx-translated="true">"Datapwa't ang lahat ng sa kaniya'y nagsitanggap, ay pinagkalooban Niya sila ng karapatang maging mga anak ng Diyos, samakatuwid baga'y ang mga nagsisisampalataya sa Kanyang pangalan."</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(John 1:12)" tnt-trx-translated="true">(Juan 1:12)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="We Receive Christ Through Faith" tnt-trx-translated="true">...sa pamamagitan ng Pananampalataya</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;By grace you have been saved through faith; and that not of yourselves, it is the gift of God; not as a result of works that no one should boast.&quot;" tnt-trx-translated="true">Ang Pagtanggap kay Cristo ay sa Pamamagitan ng Pananampalataya 
+"Sapagka't sa biyaya kayo'y nangaligtas sa pamamagitan ng pananampalataya; at ito'y hindi sa inyong sarili, ito'y kaloob ng Diyos; Hindi sa pamamagitan ng mga gawa, upang ang sinoman ay huwag magmapuri."</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Ephesians 2:8,9)" tnt-trx-translated="true">(Efeso 2:8,9)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="When we receive Christ ..." tnt-trx-translated="true">Sa sandaling tanggapin si Kristo...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="We experience a new birth." tnt-trx-translated="true">Nakaranas tayo ng bagong pagsilang.</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Read John 3:1-8)" tnt-trx-translated="true">(Basahin ang Juan 3:1-8)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="65" translate="true" tnt-trx-ref-value="We Receive Christ Through Personal Invitation" tnt-trx-translated="true">Ang Pagtanggap kay Cristo sa Pamamagitan ng Paanyayang Personal</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="[Christ speaking] &quot;Behold, I stand at the door and knock; if anyone hears My voice and opens the door, I will come in to him.&quot;" tnt-trx-translated="true">(Si Cristo ang nagsasalita): "Narito Ako'y nakatayo sa pintuan at tumutuktok: kung ang sinoman ay duminig ng Aking tinig at magbukas ng pinto, Ako'y papasok sa kaniya."</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Revelation 3:20)" tnt-trx-translated="true">(Pahayag 3:20)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="Receiving Christ involves ..." tnt-trx-translated="true">Ang pagtanggap ay nangangailangan ng ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="... turning to God from self (repentance) and trusting Christ to come into our lives to forgive our sins and to make us what He wants us to be." tnt-trx-translated="true">pagbabalik-loob sa Diyos (pagsisisi) at pagtitiwala kay Cristo na papasok sa ating buhay, magpapatawad sa ating mga kasalanan at babaguhin ang ating buhay ayon sa Kanyang kalooban.</text>
+      <text size="90" translate="true" tnt-trx-ref-value="Just to agree intellectually that Jesus Christ is the Son of God and that He died on the cross for our sins is not enough.  Nor is it enough to have an emotional experience.  We receive Jesus Christ by faith, as an act of the will." tnt-trx-translated="true">Ang malaman lamang o sumang-ayon na si Jesus-Cristo ay ang Anak ng Diyos at Siya'y namatay sa krus par sa ating mga kasalanan ay hindi sapat. Hindi rin sapat. Hindi rin sapat ang magkaroon lamang ng emosyonal na karanasan. Ang pagtanggap kay Jesus-Cristo ay sa pamamagitan ng pananampalataya, isang kapasiyahan ng kalooban.</text>
+    </panel>
+  </button>
+</page>

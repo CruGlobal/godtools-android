@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#F0AB00" watermark="Watermark.png">
+  <title>
+    <number>2</number>
+    <heading size="100" translate="true" tnt-trx-ref-value="MAN IS SINFUL AND SEPARATED FROM GOD.  THEREFORE, HE CANNOT KNOW AND EXPERIENCE GOD'S LOVE AND PLAN FOR HIS LIFE." tnt-trx-translated="true">CZŁOWIEK JEST GRZESZNY I W KONSEKWENCJI ODDZIELONY OD BOGA, DLATEGO TEŻ NIE MOŻE POZNAĆ BOGA ANI DOŚWIADCZYĆ JEGO MIŁOŚCI.</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Man Is Sinful" tnt-trx-translated="true">CZŁOWIEK JEST GRZESZNY</buttontext>
+    <panel>
+      <text translate="true" tnt-trx-ref-value="&quot;All have sinned and fall short of the glory of God.&quot;  (Romans 3:23)" tnt-trx-translated="true">"Wszyscy bowiem zgrzeszyli i pozbawieni są chwały Bożej" (List do Rzymian 3,23).</text>
+      <text translate="true" tnt-trx-ref-value="Man was created to have fellowship with God; but, because of his own stubborn self-will, he chose to go his own independent way and fellowship with God was broken.  This self-will, characterized by an attitude of active rebellion or passive indifference, is an evidence of what the Bible calls sin." tnt-trx-translated="true">Człowiek został stworzony do wspólnoty z Bogiem, ale samowolnie wybrał niezależną drogę życia. W rezultacie tego wspólnota z Bogiem została zerwana. Ta samowola wyrażająca się w buncie lub obojętności wobec Boga jest przejawem tego, co Biblia nazywa grzechem.</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Man Is Separated" tnt-trx-translated="true">CZŁOWIEK JEST ODDZIELONY OD BOGA</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;The wages of sin is death&quot; [spiritual separation from God].  (Romans 6:23)" tnt-trx-translated="true">"Albowiem zapłatą za grzech jest śmierć" (to znaczy duchowe odłączenie od Boga) (List do Rzymian 6,23).</text>
+      <image align="center" w="176" h="176">Separated.png</image>
+      <text size="72" textalign="center" translate="true" tnt-trx-ref-value="▲ - Holy God  |  ★ - Sinful Man" tnt-trx-translated="true">▲ - Święty Bóg  |  ★ - Grzeszny człowiek</text>
+      <text size="90" translate="true" tnt-trx-ref-value="This diagram illustrates that God is holy and man is sinful.  A great gulf separates the two.  The arrows illustrate that man is continually trying to reach God and the abundant life through his own efforts, such as a good life, philosophy, or religion, but he inevitably fails." tnt-trx-translated="true">Bóg jest święty, a człowiek grzeszny. Dzieli ich wielka przepaść. Strzałki ilustrują to, że człowiek usiłuje dosięgnąć Boga i doświadczyć Jego miłości przez własne wysiłki, takie jak: dobre, uczciwe życie, etykę, filozofię lub religię.</text>
+    </panel>
+  </button>
+  <question translate="true" tnt-trx-ref-value="The third principle explains the only way to bridge this gulf..." tnt-trx-translated="true">Trzecie prawo daje nam jedyny sposób pokonania tej przepaści...</question>
+</page>

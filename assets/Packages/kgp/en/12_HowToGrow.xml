@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#7EB14F" watermark="sprout_desat.png" buttons="6">
+	
+	<title>
+        <heading x="10" w="285" size="94" translate="true">HOW TO GROW AS A FOLLOWER OF JESUS:</heading>
+    </title>
+	
+	<button>
+		<buttontext size="140" translate="true">G et to Know God</buttontext>
+		<panel>
+			<text size="90" translate="true">Get to know God by reading the Bible daily.   (2 Timothy 3:14-17)</text>
+            <text size="90" translate="true">Begin with the gospel of John or Mark.</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext size="140" translate="true">R espond</buttontext>
+		<panel>
+			<text size="90" translate="true">Respond to God in prayer.</text>
+            <text size="90" textalign="right" translate="true">(Phillipians 4:6)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext size="140" translate="true">O bey</buttontext>
+		<panel>
+			<text size="90" translate="true">Obey God Moment by Moment.</text>
+            <text size="90" textalign="right" translate="true">(Luke 6:46-49)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext size="140" translate="true">W alk</buttontext>
+		<panel>
+			<text size="90" translate="true">Walk in the Power of the Holy Spirit.</text>
+            <text size="90" textalign="right" translate="true">(Ephesians 3:14-21, 5:18)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext size="140" translate="true">T ell Others</buttontext>
+		<panel>
+			<text size="90" translate="true">Tell others about Jesus through our life and words.</text>
+            <text size="90" textalign="right" translate="true">(Matthew 28:18-20;
+2 Corinthians 5:17-20;
+Ephesians 4:1)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext size="140" translate="true">H ave Fellowship</buttontext>
+		<panel>
+			<text size="90" translate="true">Have fellowship with other Christians.</text>
+            <text size="90" textalign="right" translate="true">(Hebrews 10:25; Acts 2:42-47)</text>
+            <text size="90" translate="true">Find a church where Jesus is worshipped and the Bible is taught.</text>
+		</panel>
+	</button>
+	
+	<question translate="true">Want to Know More?</question>
+	
+</page>

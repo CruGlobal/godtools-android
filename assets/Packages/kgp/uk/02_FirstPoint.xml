@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#7EB14F" watermark="sprout_desat.png" buttons="2">
+  <title>
+    <number>1</number>
+    <heading translate="true" tnt-trx-ref-value="GOD LOVES YOU AND CREATED YOU TO KNOW HIM PERSONALLY." tnt-trx-translated="true">БОГ ЛЮБИТЬ ВАС І СТВОРИВ ВАС ДЛЯ ТОГО, ЩОБ ВИ ЗНАЛИ ЙОГО ОСОБИСТО.</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="God Loves You" tnt-trx-translated="true">Божа любов</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="God showed how much he loved us by sending his one and only Son into the world so that we might have eternal life through him." tnt-trx-translated="true">"Бо так Бог полюбив світ, що віддав Сина Свого Єдинородного, щоб кожен, віруючий у Нього, не загинув, а мав життя вічне". (Івана 3:16)</text>
+      <text size="85" textalign="right">- 1 John 4:9</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="God Wants You to Know Him" tnt-trx-translated="true">Божий план</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="And this is the way to have eternal life - to know you, the only true God, and Jesus Christ, the one you sent to earth." tnt-trx-translated="true">"Це є життя вічне, щоб пізнали Тебе, Єдиного Істинного Бога, та посланого Тобою Ісуса Христа". (Івана 17:3)</text>
+      <text size="85" textalign="right">- John 17:3</text>
+    </panel>
+  </button>
+  <question translate="true" tnt-trx-ref-value="Why do you think most people &#xD;&#xA;don't know God personally?" tnt-trx-translated="true">Що заважає нам знати Бога особисто?</question>
+</page>

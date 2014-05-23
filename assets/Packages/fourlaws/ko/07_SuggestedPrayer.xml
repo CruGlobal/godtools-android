@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#00759A" watermark="Watermark.png" buttons="1">
+  <title mode="straight">
+    <heading textalign="center" size="90" w="300" translate="true" tnt-trx-ref-value="YOU CAN RECEIVE CHRIST RIGHT NOW BY FAITH THROUGH PRAYER" tnt-trx-translated="true">당신은 바로 지금 이 자리에서 기도로 그리스도를 영접할 수 있습니다.</heading>
+  </title>
+  <text textalign="center" size="80" translate="true" tnt-trx-ref-value="(Prayer is talking with God)" tnt-trx-translated="true">(기도는 하나님과 이야기하는 것입니다)</text>
+  <text modifier="bold-italics" size="120" textalign="center" translate="true" w="300" tnt-trx-ref-value="God knows your heart and is not so concerned with your words as He is with the attitude of your heart." tnt-trx-translated="true">하나님은 당신의 중심을 알고 계십니다. 그래서 입으로 하는 말보다는 중심의 태도를 보고 싶어 하십니다.</text>
+  <button>
+    <buttontext size="82" translate="true" tnt-trx-ref-value="The following is a suggested prayer:" tnt-trx-translated="true">다음은 예수그리스도를 어떻게 영접하는가를 설명해 줍니다.</buttontext>
+    <panel>
+      <image w="280" h="2">line.png</image>
+      <text size="95" modifier="italics" translate="true" tnt-trx-ref-value="Lord Jesus,&#xD;&#xA;&#xD;&#xA;I need You.  Thank you for dying on the cross for my sins.  I open the door of my life and receive You as my Savior and Lord.&#xD;&#xA;                &#xD;&#xA;Thank You for forgiving my sins and giving me eternal life.  Take control of the throne of my life.  Make me the kind of person You want me to be." tnt-trx-translated="true">주 예수님,
+
+나는 주님을 믿고 싶습니다. 십자가에서 죽으심으로 내 죄 값을 담당하시니 감사합니다. 지금 나는 내 마음의 문을 열고 예수님을 나의 구주, 나의 하나님으로 영접합니다. 나의 죄를 용서하시고 영생을 주심을 감사합니다. 나를 다스려 주시고, 나를 주님이 원하시는 사람으로 만들어 주옵소서. 예수님의 이름으로 기도합니다. 아멘</text>
+      <image w="280" h="2">line.png</image>
+      <text textalign="center" size="95" translate="true" tnt-trx-ref-value="Does this prayer express the desire of your heart?  If it does, I invite you to pray this prayer right now." tnt-trx-translated="true">이 기도가 당신의 마음에 드십니까? 그렇다면 바로 지금 이 기도를 드리십시오.</text>
+    </panel>
+  </button>
+  <question mode="straight" size="96" translate="true" tnt-trx-ref-value="Christ will come into your life &#xD;&#xA;as He promised." tnt-trx-translated="true">예수 그리스도는 그가 야속하신 대로 당신 안에 들어오실 것입니다.</question>
+</page>

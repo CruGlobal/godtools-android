@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#F0AB00" watermark="Watermark.png">
+	
+	<title>
+        <heading x="20" w="285" size="95" translate="true">HOW TO KNOW THAT CHRIST IS IN YOUR LIFE</heading>
+    </title>
+	
+	<button>
+		<buttontext size="82" translate="true">Did you receive Christ into your life?</buttontext>
+		<panel>
+			<text size="90" translate="true">According to His promise in Revelation 3:20, where is Christ right now in relation to you?  
+                
+Christ said He would come into your life.  Would He mislead you?  
+                
+On what authority do you know God has answered your prayer?  (The trustworthiness of God Himself and His Word.) </text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext size="82" translate="true">The Bible promises Eternal Life ...</buttontext>
+		<panel>
+			<text size="90" translate="true">... to all who receive Christ.</text>
+			<text size="90" translate="true">"God has given us eternal life, and this life is in His Son. He who has the Son has the life; he who does not have the Son of God does not have the life.  These things I have written to you who believe in the name of the Son of God, in order that you may know that you have eternal life."  (1 John 5:11-13)</text>
+            <text size="90" translate="true">Thank God often that Christ is in your life and that He will never leave you (Hebrews 13:5). You can know on the basis of His promise that Christ lives in you and that you have eternal life from the very moment you invite Him in.  He will not deceive you.</text>
+            <text size="90" translate="true">An important reminder...</text>
+		</panel>
+        </button>
+    
+    <button>
+        <buttontext size="82" translate="true">Do Not Depend on Feelings</buttontext>
+        <panel>
+            <text size="80" translate="true">The promise of God's Word, the Bible - not our feelings - is our authority.  The Christian lives by faith (trust) in the trustworthiness of God Himself and His Word.  This train diagram illustrates the relationship among fact (God and His Word), faith (our trust in God and His Word), and feeling (the result of our faith and obedience).  (Read John 14:21)</text>
+            <image align="center" yoffset="-10" w="286" h="90">Train.png</image>
+            <text size="72" textalign="center" yoffset="-10" translate="true">[ Fact ] - [ Faith ] - [ Feeling ]</text>
+            <text size="80" translate="true">The train will run with or without the caboose.  However, it would be useless to attempt to pull the train by the caboose.  In the same way, as Christians we do not depend on feelings or emotions, but we place our faith (trust) in the trustworthiness of God and the promises of His Word.</text>
+        </panel>
+    </button>
+
+</page>

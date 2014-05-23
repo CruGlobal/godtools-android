@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#F0AB00" watermark="Watermark.png">
+  <title>
+    <number>2</number>
+    <heading size="100" translate="true" tnt-trx-ref-value="MAN IS SINFUL AND SEPARATED FROM GOD.  THEREFORE, HE CANNOT KNOW AND EXPERIENCE GOD'S LOVE AND PLAN FOR HIS LIFE." tnt-trx-translated="true">ŽMOGUS YRA NUODĖMINGAS IR PER NUODĖMĘ ATSKIRTAS NUO DIEVO. TODĖL JIS NEGALI PAŽINTI IR PATIRTI DIEVO MEILĖS BEI JO GYVENIMUI SKIRTO DIEVO SUMANYMO.</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Man Is Sinful" tnt-trx-translated="true">Žmogus yra nuodėmingas</buttontext>
+    <panel>
+      <text translate="true" tnt-trx-ref-value="&quot;All have sinned and fall short of the glory of God.&quot;  (Romans 3:23)" tnt-trx-translated="true">"Visi yra nusidėję ir stokoja Dievo garbės." Laiškas romiečiams 3,23</text>
+      <text translate="true" tnt-trx-ref-value="Man was created to have fellowship with God; but, because of his own stubborn self-will, he chose to go his own independent way and fellowship with God was broken.  This self-will, characterized by an attitude of active rebellion or passive indifference, is an evidence of what the Bible calls sin." tnt-trx-translated="true">Dievas sukūrė žmogų, kad jis gyventų bendraudamas su Dievu. Tačiau žmogus nusigręžė nuo Dievo, pasirinkdamas savo kelią. Bendravimas su Dievu nutrūko. Šį savanaudišką žmogaus pasirinkimą, kuris gali pasireikšti tiek aktyviu priešinimusi, tiek pasyviu abejingumu Dievu, Šventasis Raštas vadina nuodėme.</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Man Is Separated" tnt-trx-translated="true">Žmogus yra atskirtas nuo Dievo</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;The wages of sin is death&quot; [spiritual separation from God].  (Romans 6:23)" tnt-trx-translated="true">"Atpildas už nuodėmę – mirtis."  (Laiškas romiečiams 6,23)</text>
+      <image align="center" w="176" h="176">Separated.png</image>
+      <text size="72" textalign="center" translate="true" tnt-trx-ref-value="▲ - Holy God  |  ★ - Sinful Man" tnt-trx-translated="true">▲ - Šventas Dievas  |  ★ - Nuodėmingas žmogus</text>
+      <text size="90" translate="true" tnt-trx-ref-value="This diagram illustrates that God is holy and man is sinful.  A great gulf separates the two.  The arrows illustrate that man is continually trying to reach God and the abundant life through his own efforts, such as a good life, philosophy, or religion, but he inevitably fails." tnt-trx-translated="true">Šis piešinys vaizduoja, kad Dievas yra šventas, o žmogus - nuodėmingas. Juos skiria gili bedugnė. Rodyklės atspindi, kad žmogus stengiasi gerais darbais, filosofija ar religingumu pasiekti Dievą. Tačiau savo jėgomis žmogus niekaip negali atstatyti bendravimo su Dievu.</text>
+    </panel>
+  </button>
+  <question translate="true" tnt-trx-ref-value="The third principle explains the only way to bridge this gulf..." tnt-trx-translated="true">Trečiasis dėsnis parodo vienintelę išeitį...</question>
+</page>

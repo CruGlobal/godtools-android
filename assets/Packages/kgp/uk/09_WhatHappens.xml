@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#DBF0FC" backgroundimage="wave.png">
+  <text color="#007486" size="100" modifier="bold" textalign="center" yoffset="60" w="300" h="55" translate="true" tnt-trx-ref-value="WHAT HAPPENS WHEN YOU PUT YOUR TRUST IN" tnt-trx-translated="true">ЩО ЗМІНИЛОСЯ, КОЛИ ВИ ПОКЛАЛИ СВОЮ ДОВІРУ НА</text>
+  <text color="#007486" size="240" modifier="italics" textalign="center" yoffset="-100" w="300" h="32" translate="true" tnt-trx-ref-value="Jesus?" tnt-trx-translated="true">Ісуса?</text>
+</page>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#DC5C31" watermark="sprout_desat.png" buttons="3">
+	
+	<title>
+	  <number>2</number>
+	  <heading translate="true">ME OLEME LAHUTATUD JUMALAST PATU TÕTTU, SELLEPÄRAST ME EI SAA TEDA TUNDA EGA TEMA ARMASTUST KOGEDA.</heading>
+    </title>
+	
+	<button>
+		<buttontext translate="true">Mis on patt?</buttontext>
+		<panel>
+			<text size="90" translate="true">Meid loodi selleks, et meil võiks olla suhe Jumalaga, aga me heitsime Ta kõrvale ja suhe purunes.</text> 
+            <text size="90" translate="true">Jumala tagasilükkamise ja selle, et oleme ehitanud oma elud ümber muude asjade, nimetab Piibel patuks. Me näitame seda oma isekate tegude ja suhtumisega, kui me ei allu Talle või lihtsalt ignoreerime Teda teadlikult.</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext translate="true">Kõik on patused</buttontext>
+		<panel>
+			<text size="90" translate="true">Sest kõik on pattu teinud ja Jumala aust ilma.</text>
+            <text size="90" textalign="right" translate="true">- Kiri Roomlastele 3:23</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext translate="true">Patul on tagajärjed</buttontext>
+        <panel>
+			<text size="79" translate="true">Sest patu palk on surm, aga Jumala armuand on igavene elu Kristuses Jeesuses, meie Issandas. – Kiri Roomlastele 6:23.</text>
+            <text size="79" translate="true">Jumal on täiuslik ja õiglane ja ma peame Talle aru andma oma patu pärast. Jumala tagasilükkamisega kaasneb karistus.</text>
+			<image align="center" w="120" h="120">Separated.png</image>
+            <text size="72" textalign="center" translate="true">▲ - Püha Jumal  |  ★ - Patune inimene</text>
+			<text size="79" translate="true">Jumal on täiuslik ja meie oleme patused. Meie ja Jumala vahel on suur sügavik meie patu pärast.</text>
+            <text size="79" translate="true">Me võime üritada ehitada silla üle sügaviku oma heade tegude ja religiooni järgimisega. Siiski meie pingutused on tühised, sest me ei suuda lahendada patu olemust, mis meid Jumalast lahutab.
+            </text>
+		</panel>
+	</button>
+	
+	<question translate="true">Kolmas punkt annab ainukese lahenduse sellele probleemile...</question>
+	
+</page>

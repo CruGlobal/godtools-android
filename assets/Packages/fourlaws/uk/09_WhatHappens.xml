@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#A2AD00" watermark="Watermark.png" buttons="6">
+  <title>
+    <heading x="20" w="275" size="95" translate="true" tnt-trx-ref-value="NOW THAT YOU HAVE RECEIVED CHRIST" tnt-trx-translated="true">ТЕПЕР, КОЛИ ВИ ПРИЙНЯЛИ ХРИСТА</heading>
+    <peekpanel textalign="right" w="260" size="90" translate="true" tnt-trx-ref-value="The moment you received Christ by faith, as an act of the will, many things happened, including the following:&#xD;&#xA;        " tnt-trx-translated="true">В той момент, коли ви прийняли Христа вірою, трапилось багато чого, а саме:
+        </peekpanel>
+  </title>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- Christ came into your life" tnt-trx-translated="true">- Христос увійшов до вашого життя</buttontext>
+    <panel>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(Revelation 3:20 and Colossians 1:27)" tnt-trx-translated="true">(Об’явлення 3:20 та Колоссянам 1:27)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- Your sins were forgiven" tnt-trx-translated="true">- Ви отримали прощення гріхів</buttontext>
+    <panel>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(Colossians 1:14)" tnt-trx-translated="true">(Колоссянам 1:14)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- You became a child of God" tnt-trx-translated="true">- Ви стали дитиною Божою</buttontext>
+    <panel>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(John 1:12)" tnt-trx-translated="true">(Івана 1:12)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- You received eternal life" tnt-trx-translated="true">- Ви отримали вічне життя</buttontext>
+    <panel>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(John 5:24)" tnt-trx-translated="true">(Івана 5:24)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- You began the great adventure..." tnt-trx-translated="true">- Ви почали шлях до великої мети...</buttontext>
+    <panel>
+      <text textalign="left" size="85" translate="true" tnt-trx-ref-value="...for which God created you." tnt-trx-translated="true">...ради якої Бог створив вас.</text>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(John 10:10; 2 Corinthians 5:17; 1 Thessalonians 5:18)" tnt-trx-translated="true">(Івана 10:10; 2 Коринтянам 5:17; 1 Солунянам 5:18)</text>
+    </panel>
+  </button>
+  <button yoffset="20">
+    <buttontext translate="true" tnt-trx-ref-value="Can you think of ..." tnt-trx-translated="true">Чи можете ви уявити собі ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="... anything more wonderful that could happen to you than receiving Christ?  Would you like to thank God in prayer right now for what He has done for you?  By thanking God, you demonstrate your faith." tnt-trx-translated="true">... щось більш прекрасне, ніж прийняти вами Ісуса Христа? Хотіли б ви подякувати Богу у молитві просто зараз за все те, що Він зробив для вас? Дякуючи Богу, ви показуєте свою віру в Нього.</text>
+    </panel>
+  </button>
+  <question size="96" translate="true" tnt-trx-ref-value="To enjoy your new life &#xD;&#xA;to the fullest..." tnt-trx-translated="true">Щоб ваше нове життя було 
+повноцінне...</question>
+</page>

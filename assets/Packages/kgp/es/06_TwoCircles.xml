@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#7EB14F" watermark="sprout_desat.png" bigbuttons="2">
+  <title mode="straight" h="60">
+    <heading textalign="center" translate="true" tnt-trx-ref-value="THESE CIRCLES DESCRIBE TWO TYPES OF PEOPLE" tnt-trx-translated="true">ESTOS CÍRCULOS DESCRIBEN DOS TIPOS DE VIDA</heading>
+  </title>
+  <button mode="big">
+    <image align="center">SelfDirected.png</image>
+    <buttontext translate="true" tnt-trx-ref-value="Self-Directed Person" tnt-trx-translated="true">Persona dirigida por el Yo</buttontext>
+    <panel>
+      <text size="80" textalign="center" w="265" translate="true" tnt-trx-ref-value="s - Self is in control and " tnt-trx-translated="true">s - El Yo está en control y </text>
+      <text size="80" textalign="center" w="265" translate="true" tnt-trx-ref-value="✝ - Jesus has no influence in my life." tnt-trx-translated="true">✝ - Jesús no tiene influencia en mi vida.</text>
+      <text textalign="center" yoffset="20" w="265" h="82" translate="true" tnt-trx-ref-value="People like this have never received Jesus into their lives. They remain guilty and cut off from God by their sin." tnt-trx-translated="true">Personas como éstas nunca han recibido a Jesús en sus vidas. Siguen siendo culpables y están separados de Dios por sus pecados.</text>
+    </panel>
+  </button>
+  <button mode="big">
+    <image align="center">ChristDirected.png</image>
+    <buttontext translate="true" tnt-trx-ref-value="Christ-Directed Person" tnt-trx-translated="true">Persona dirigida por Cristo</buttontext>
+    <panel>
+      <text size="80" textalign="center" w="265" translate="true" tnt-trx-ref-value="✝ - Jesus is in control and" tnt-trx-translated="true">✝ - Jesús está en control y</text>
+      <text size="80" textalign="center" w="265" translate="true" tnt-trx-ref-value="s - Self is following Jesus as Lord." tnt-trx-translated="true">s - El Yo ahora está siguiendo a Jesus como Señor.</text>
+      <text textalign="center" yoffset="20" w="265" h="82" translate="true" tnt-trx-ref-value="People like this have received Jesus into their lives. They have been forgiven and experience God's love." tnt-trx-translated="true">Personas como éstas han recibido a Jesús en sus vidas. Han sido perdonadas y experimentan el amor de Dios.</text>
+    </panel>
+  </button>
+  <question mode="straight" modifier="normal" size="100" translate="true" tnt-trx-ref-value="Which circle best describes you?&#xD;&#xA;Which would you like to describe you?" tnt-trx-translated="true">¿Cuál círculo representa realmente tu vida?
+¿Cuál círculo te gustaría que representara tu vida?</question>
+</page>

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#DC5C31" watermark="sprout_desat.png" buttons="1">
+  <title mode="straight">
+    <heading textalign="center" size="111" w="320" translate="true" tnt-trx-ref-value="YOU CAN EXPRESS YOUR ATTITUDE TOWARDS GOD THROUGH PRAYER." tnt-trx-translated="true">TÚ PUEDES EXPRESAR TU ACTITUD HACIA DIOS MEDIANTE LA ORACIÓN.</heading>
+    <subheading textalign="center" size="100" translate="true" tnt-trx-ref-value="Prayer is simply talking with God." tnt-trx-translated="true">Orar es simplemente hablar con Dios</subheading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Here is a suggested prayer" tnt-trx-translated="true">La siguiente oración se sugiere como guía:</buttontext>
+    <panel>
+      <image align="center" y="10" w="280" h="2">line.png</image>
+      <text size="90" modifier="italics" textalign="left" yoffset="20" translate="true" tnt-trx-ref-value="Lord Jesus," tnt-trx-translated="true">Señor Jesús,</text>
+      <text size="90" modifier="italics" textalign="left" yoffset="12" translate="true" tnt-trx-ref-value="I want to know you personally." tnt-trx-translated="true">Te quiero conocer personalmente.</text>
+      <text size="90" modifier="italics" textalign="left" yoffset="10" translate="true" tnt-trx-ref-value="I'm sorry for going my own way.&#xD;&#xA;Please forgive me for all my sin." tnt-trx-translated="true">Perdóname por hacer las cosas a mi manera. Por favor perdóname por todos mis pecados.</text>
+      <text size="90" modifier="italics" textalign="left" yoffset="10" translate="true" tnt-trx-ref-value="Thank you for dying on the cross to pay for my sin." tnt-trx-translated="true">Gracias por morir en la cruz por mis pecados.</text>
+      <text size="90" modifier="italics" textalign="left" yoffset="10" translate="true" tnt-trx-ref-value="I agree to turn from my old ways and follow you as my Saviour and Lord." tnt-trx-translated="true">Estoy de acuerdo en alejarme de mis viejas costumbres y seguirte como mi Salvador y Señor.</text>
+      <text size="90" modifier="italics" textalign="left" yoffset="10" translate="true" tnt-trx-ref-value="Please come and take first place in my life." tnt-trx-translated="true">Por favor ven a y tomar el primer lugar en mi vida.</text>
+      <image align="center" y="272" w="280" h="2">line.png</image>
+      <text size="90" textalign="center" yoffset="24" translate="true" tnt-trx-ref-value="Could you say this to God and mean it?" tnt-trx-translated="true">¿Podrías decirle esto a Dios y en serio?</text>
+      <text size="90" textalign="center" yoffset="12" translate="true" tnt-trx-ref-value="Is there anything stopping you from saying this right now" tnt-trx-translated="true">¿Hay algo que te está deteniendo para decir esto ahora?</text>
+    </panel>
+  </button>
+  <question y="250">
+    <text textalign="left" y="0" w="320" h="43" translate="true" tnt-trx-ref-value="Could you say this to God and mean it?" tnt-trx-translated="true">¿Podrías decirle esto a Dios y en serio?</text>
+    <text textalign="left" y="60" w="320" h="50" translate="true" tnt-trx-ref-value="Is there anything stopping you from saying this right now?" tnt-trx-translated="true">¿Hay algo que te está deteniendo para decir esto ahora?</text>
+  </question>
+  <question mode="straight" size="100" translate="true" tnt-trx-ref-value="Jesus will come into your life as he promised." tnt-trx-translated="true">Jesús entrará a tu vida tal como Él lo prometió.</question>
+</page>

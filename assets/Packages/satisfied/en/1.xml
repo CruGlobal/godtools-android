@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#F59C00" backgroundimage="flame.png">
+
+	<title mode="clear">
+        <subheading align="center" color="#000000" textalign="center" size="211" translate="true">satisfied?</subheading>
+	</title>
+	   
+</page>

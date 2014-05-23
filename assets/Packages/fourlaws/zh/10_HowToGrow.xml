@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#BC1111" watermark="Watermark.png" buttons="7">
+  <title>
+    <heading x="20" w="290" size="95" translate="true" tnt-trx-ref-value="SUGGESTIONS FOR CHRISTIAN GROWTH" tnt-trx-translated="true">基督徒生命成长的建议</heading>
+    <peekpanel textalign="right" w="260" size="96" translate="true" tnt-trx-ref-value="Spiritual growth results from trusting Jesus Christ.  &quot;...The righteous man shall live by faith&quot; (Galatians 3:11).&#xD;&#xA;            &#xD;&#xA;            A life of faith will enable you to trust God increasingly with every detail of your life, and to practice the following:&#xD;&#xA;        " tnt-trx-translated="true">属灵生命的成长是从信靠耶稣基督而来.  "...义人必因信得生" (加拉太书 3:11).
+            
+           信心的生命能使你在生活的方方面面信靠神上长进，并活出下面的:
+        </peekpanel>
+  </title>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="G o ..." tnt-trx-translated="true">亲近...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Go to God in prayer daily" tnt-trx-translated="true">每天向神祷告亲近神</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(John 15:7)" tnt-trx-translated="true">(约翰福音 15:7)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="R ead ..." tnt-trx-translated="true">研读...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Read God's Word daily." tnt-trx-translated="true">每天研读神的话语.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see Acts 17:11)" tnt-trx-translated="true">(参考使徒行传 17:11)</text>
+      <text size="90" translate="true" tnt-trx-ref-value="Begin with the Gospel of John." tnt-trx-translated="true">从约翰福音开始.</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="O bey ..." tnt-trx-translated="true">顺服 ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Obey God moment by moment." tnt-trx-translated="true">时时刻刻顺服神.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see John 14:21)" tnt-trx-translated="true">(参考约翰福音 14:21)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="W itness ..." tnt-trx-translated="true">见证 ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Witness for Christ by your life and words." tnt-trx-translated="true">通过你的生活言行为基督作见证.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see Matthew 4:19 and John 15:8)" tnt-trx-translated="true">(参考马太福音 4:19 和约翰福音 15:8)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="T rust ..." tnt-trx-translated="true">信靠 ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Trust God for every detail of your life." tnt-trx-translated="true">在生活的方方面面信靠神.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see 1 Peter 5:7)" tnt-trx-translated="true">(参考彼得前书 5:7)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="H oly Spirit -" tnt-trx-translated="true">圣灵 -</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Allow Him to control and empower your daily life and witness." tnt-trx-translated="true">允许祂管理你每天的生活，从祂得力为神作见证.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see Galatians 5:16,17 and Acts 1:8)" tnt-trx-translated="true">(参考加拉太书 5:16,17 和使徒行传 1:8)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="Fellowship In A Good Church" tnt-trx-translated="true">参与教会聚会</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="God's Word instructs us not to forsake &quot;the assembling of ourselves together&quot; (Hebrews 10:25).  Several logs burn brightly together, but put one aside on the cold hearth and the fire goes out.  So it is with your relationship with other Christians." tnt-trx-translated="true">圣经告诉我们"不可停止聚会" (希伯来书 10:25).  几根木材一起燃烧就会光热倍增, 若将一根抽出，放在一旁，热火就会熄灭.  你和其他基督徒的关系也是这样.</text>
+      <text size="90" translate="true" tnt-trx-ref-value="If you do not belong to a  church, do not wait to be invited.  Take the initiative; call the pastor of a nearby church where Christ is honored and His Word is preached.  Start this week, and make plans to attend regularly." tnt-trx-translated="true">如果你尚未加入教会，不必等人邀请。请主动的与附近的尊荣基督并传扬圣经真理的教会联系。从这周开始，就计划规律地参加教会聚会。</text>
+    </panel>
+  </button>
+</page>

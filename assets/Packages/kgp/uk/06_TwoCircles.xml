@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#7EB14F" watermark="sprout_desat.png" bigbuttons="2">
+  <title mode="straight" h="60">
+    <heading textalign="center" translate="true" tnt-trx-ref-value="THESE CIRCLES DESCRIBE TWO TYPES OF PEOPLE" tnt-trx-translated="true">ЦІ КОЛА ОПИСУЮТЬ ДВА ТИПИ ЛЮДЕЙ</heading>
+  </title>
+  <button mode="big">
+    <image align="center">SelfDirected.png</image>
+    <buttontext translate="true" tnt-trx-ref-value="Self-Directed Person" tnt-trx-translated="true">Людина, що сама всім керує</buttontext>
+    <panel>
+      <text size="80" textalign="center" w="265" translate="true" tnt-trx-ref-value="s - Self is in control and " tnt-trx-translated="true">s - власне Я все контролює і </text>
+      <text size="80" textalign="center" w="265" translate="true" tnt-trx-ref-value="✝ - Jesus has no influence in my life." tnt-trx-translated="true">✝ - Ісус не має впливу на моє життя.</text>
+      <text textalign="center" yoffset="20" w="265" h="82" translate="true" tnt-trx-ref-value="People like this have never received Jesus into their lives. They remain guilty and cut off from God by their sin." tnt-trx-translated="true">Такі люди ніколи не приймали Христа в своє життя. Їхня провина залишається на них, вони відділені від Бога своїми гріхами.</text>
+    </panel>
+  </button>
+  <button mode="big">
+    <image align="center">ChristDirected.png</image>
+    <buttontext translate="true" tnt-trx-ref-value="Christ-Directed Person" tnt-trx-translated="true">Людина, що є керована Христом</buttontext>
+    <panel>
+      <text size="80" textalign="center" w="265" translate="true" tnt-trx-ref-value="✝ - Jesus is in control and" tnt-trx-translated="true">✝ - Ісус керує та</text>
+      <text size="80" textalign="center" w="265" translate="true" tnt-trx-ref-value="s - Self is following Jesus as Lord." tnt-trx-translated="true">s - власне Я слідує за Христом як за Господом.</text>
+      <text textalign="center" yoffset="20" w="265" h="82" translate="true" tnt-trx-ref-value="People like this have received Jesus into their lives. They have been forgiven and experience God's love." tnt-trx-translated="true">Такі люди запросили Христа в своє життя. Вони прощені та переживають Божу любов.</text>
+    </panel>
+  </button>
+  <question mode="straight" modifier="normal" size="100" translate="true" tnt-trx-ref-value="Which circle best describes you?&#xD;&#xA;Which would you like to describe you?" tnt-trx-translated="true">Яке з кіл краще описує вас?
+Яке з кіл ви хотіли б обрати?</question>
+</page>

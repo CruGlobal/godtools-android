@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#007486" watermark="sprout_desat.png" buttons="5">
+	
+	<title>
+	  <heading x="20" w="275" translate="true">KUI SA KUTSUSID JEESUSE OMA ELLU KUI PÄÄSTJA JA ISSANDA, JUHTUSID MITMED ASJAD, SEALHULGAS:</heading>
+    </title>
+	
+	<button>
+		<buttontext size="90" translate="true">Jeesus on tulnud Sinu ellu</buttontext>
+		<panel>
+			<text size="90" translate="true">Jeesus on tulnud Sinu ellu Püha Vaimu läbi ja Ta ei jäta Sind iial.</text>
+            <text size="90" textalign="right" translate="true">(Kiri Heebrealastele 13:5)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext size="90" translate="true">Sinu patud on Sulle andeks antud</buttontext>
+		<panel>
+			<text size="90" translate="true">Kõik Su patud on Sulle andeks antud.</text>
+            <text size="90" textalign="right" translate="true">(Kiri Koloslastele 1:13-14)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext size="90" translate="true">Sa oled nüüd Jumala laps</buttontext>
+		<panel>
+			<text size="90" translate="true">Sa oled saanud Jumala lapseks. Ta on Sinu Taevane Isa.</text>
+            <text size="90" textalign="right" translate="true">(Kiri Galaatlastele 3:26)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext size="90" translate="true">Sulle on antud uus jõud ja voli.</buttontext>
+		<panel>
+			<text size="90" translate="true">Jumal on andnud Sulle uue jõu elada muudetud elu.</text>
+            <text size="90" textalign="right" translate="true">(2 Kiri Korintlastele 5:17, Kiri Efeslastele 3:14-21)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext size="90" translate="true">Sa oled nüüd Jumala sõber</buttontext>
+		<panel>
+			<text size="90" translate="true">Sa oled alustanud Jumalaga sõprust, mis kestab igavesti.</text>
+            <text size="90" textalign="right" translate="true">(Jh 17:3)</text>
+		</panel>
+	</button>
+	
+	<question translate="true">Aga kuidas me teame, et see
+päriselt juhtus?</question>
+	
+</page>

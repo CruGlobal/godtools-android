@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#F0AB00" watermark="Watermark.png">
+  <title>
+    <heading x="20" w="285" size="95" translate="true" tnt-trx-ref-value="HOW TO KNOW THAT CHRIST IS IN YOUR LIFE" tnt-trx-translated="true">ЯК ДІЗНАТИСЬ, ЧИ УВІЙШОВ ХРИСТОС У ВАШЕ ЖИТТЯ</heading>
+  </title>
+  <button>
+    <buttontext size="82" translate="true" tnt-trx-ref-value="Did you receive Christ into your life?" tnt-trx-translated="true">Ви прийняли Христа у ваше життя?</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="According to His promise in Revelation 3:20, where is Christ right now in relation to you?  &#xD;&#xA;                &#xD;&#xA;Christ said He would come into your life.  Would He mislead you?  &#xD;&#xA;                &#xD;&#xA;On what authority do you know God has answered your prayer?  (The trustworthiness of God Himself and His Word.) " tnt-trx-translated="true">Згідно з Його обіцянкою (Об’явлення 3:20), де Христос тепер по відношенню до вас?  
+           
+Христос сказав, що Він увійде у ваше життя. Чи може Він зрадити вас?   
+                
+На чому заснована ваша впевненість, що Бог відповів на молитву? (На тому, що Бог і Його Слово гідні вашої довіри.) </text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="82" translate="true" tnt-trx-ref-value="The Bible promises Eternal Life ..." tnt-trx-translated="true">Біблія обіцяє вічне життя ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="... to all who receive Christ." tnt-trx-translated="true">... усім, хто прийняв Христа.</text>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;God has given us eternal life, and this life is in His Son. He who has the Son has the life; he who does not have the Son of God does not have the life.  These things I have written to you who believe in the name of the Son of God, in order that you may know that you have eternal life.&quot;  (1 John 5:11-13)" tnt-trx-translated="true">"А це свідчення, що Бог життя вічне нам дав, а життя це у Сині Його. Хто має Сина, той має життя; хто не має Сина Божого, той не має життя. Оце написав я до вас, що віруєте в Ім'я Божого Сина, щоб ви знали, що ви віруючи в Ім'я Божого Сина, маєте вічне життя. (1 Івана 5:11-13)</text>
+      <text size="90" translate="true" tnt-trx-ref-value="Thank God often that Christ is in your life and that He will never leave you (Hebrews 13:5). You can know on the basis of His promise that Christ lives in you and that you have eternal life from the very moment you invite Him in.  He will not deceive you." tnt-trx-translated="true">Завжди дякуйте Богу за те, що Христос у вашому житті і що Він ніколи не залишить вас (Евреям 13:5). Виходячи з Його обіцянки, ви можете знати, що Христос живе у вас і що ви маєте вічне життя з того моменту, коли запросили Його. Він не зрадить вас.</text>
+      <text size="90" translate="true" tnt-trx-ref-value="An important reminder..." tnt-trx-translated="true">Важливо пам’ятати...</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="82" translate="true" tnt-trx-ref-value="Do Not Depend on Feelings" tnt-trx-translated="true">Не покладайтесь на почуття</buttontext>
+    <panel>
+      <text size="80" translate="true" tnt-trx-ref-value="The promise of God's Word, the Bible - not our feelings - is our authority.  The Christian lives by faith (trust) in the trustworthiness of God Himself and His Word.  This train diagram illustrates the relationship among fact (God and His Word), faith (our trust in God and His Word), and feeling (the result of our faith and obedience).  (Read John 14:21)" tnt-trx-translated="true">Основа нашої віри - це не наші почуття, а Божі обітниці, що дані нам у Біблії. Християнин живе упованням на вірність самого Бога і Його Слова. Цей малюнок потяга символізує християнське життя і показує зв’язок між фактом (Богом і Його Словом), вірою (нашою довірою Богу і Його Словом), і почуттями (результатом нашої віри та послуху). (Івана 14:21)</text>
+      <image align="center" yoffset="-10" w="286" h="90">Train.png</image>
+      <text size="72" textalign="center" yoffset="-10" translate="true" tnt-trx-ref-value="[ Fact ] - [ Faith ] - [ Feeling ]" tnt-trx-translated="true">[ Факт ] - [ Віра ] - [ Почуття ]</text>
+      <text size="80" translate="true" tnt-trx-ref-value="The train will run with or without the caboose.  However, it would be useless to attempt to pull the train by the caboose.  In the same way, as Christians we do not depend on feelings or emotions, but we place our faith (trust) in the trustworthiness of God and the promises of His Word." tnt-trx-translated="true">Зрозуміло, що потяг може їхати і без вагона. Проте було б марно намагатись тягнути потяг за допомогою вагона. Схожим чином ми, християни, не повинні покладатись на наші почуття або емоції, але ми покладаємо нашу віру на непохитний авторитет Бога і обітниці Його Слова.</text>
+    </panel>
+  </button>
+</page>

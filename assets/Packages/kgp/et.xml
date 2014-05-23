@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<document lang="et_heartbeat">
+	<packagename translate="true">Tundes Jumalat isiklikult (Heartbeat'i väljaanne)</packagename>
+	<page thumb="PageThumb_01.png" filename="01_Home.xml" translate="true">Algusesse</page>
+	<page thumb="PageThumb_02.png" filename="02_FirstPoint.xml" translate="true">1 Jumal armastab Sind ja lõi Sind selleks, et võiksid Teda isiklikult tunda.</page>
+	<page thumb="PageThumb_03.png" filename="03_SecondPoint.xml" translate="true">2 Me oleme pattu tõttu Jumalast eraldatud, seega me ei saa Teda tunda ega Tema armastust kogeda.</page>
+	<page thumb="PageThumb_04.png" filename="04_ThirdPoint.xml" translate="true">3 Jeesus on ainus lahendus meie patule. Ainult läbi Tema võime me tunda Jumalat ja võtta vastu Tema armastust ja andestust.</page>
+	<page thumb="PageThumb_05.png" filename="05_FourthPoint.xml" translate="true">4 Me peame igaüks isiklikult Jeesuse vastu võtma, usaldades Teda kui oma isiklikku Päästjat ja Issandat. Ainult nii võime tunda Jumalat isiklikult.</page>
+	<page thumb="PageThumb_06.png" filename="06_TwoCircles.xml" translate="true">Need kaks ringi kirjeldavad kahte tüüpi inimesi.</page>
+	<page thumb="PageThumb_07.png" filename="07_AttitudeOfYourHeart.xml" translate="true">Selleks, et astuda isiklikku suhtesse Jumalaga, pead Sa andma Jeesusele kõik.</page>
+	<page thumb="PageThumb_08.png" filename="08_SuggestedPrayer.xml" translate="true">Sa võid väljendada oma suhtumist Jumalasse palve kaudu.</page>
+	<page thumb="PageThumb_09.png" filename="09_WhatHappens.xml" translate="true">Mis juhtub, kui Sa usaldad Jeesust?</page>
+	<page thumb="PageThumb_10.png" filename="10_WhatHappensTwo.xml" translate="true">Kui Sa palusid Jeesuse oma ellu kui isikliku Päästja ja Issanda, juhtusid mitmed asjad, kaasa arvatud:</page>
+	<page thumb="PageThumb_11.png" filename="11_HowCanYouBeSure.xml" translate="true">Kuidas ma saan olla kindel, et kõik see päriselt juhtus?</page>
+	<page thumb="PageThumb_12.png" filename="12_HowToGrow.xml" translate="true">Kuidas kasvada Jeesuse järgijana.</page>
+	<page thumb="PageThumb_13.png" filename="13_FinalPage.xml" translate="true">Veebilehed, mis Sind aitavad</page>
+	<about filename="00_About.xml" translate="true">Rakendusest</about>
+    <instructions translate="true"></instructions>
+</document>

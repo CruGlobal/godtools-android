@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#DC5C31" watermark="sprout_desat.png" buttons="3">
+  <title>
+    <number>2</number>
+    <heading translate="true" tnt-trx-ref-value="WE ARE SEPARATED FROM GOD BY OUR SIN, SO WE CANNOT KNOW HIM OR EXPERIENCE HIS LOVE." tnt-trx-translated="true">TAYO AY HIWALAY SA DIYOS DAHIL ATING MGA KASALANAN KAYA'T HINDI NATIN MALAMAN AT MARANASAN ANG KANYANG PAG-IBIG.</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="What is Sin?" tnt-trx-translated="true">Ano ang kasalanan?</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="We were created to have a relationship with God but we rejected him and the relationship was broken." tnt-trx-translated="true">Tayo ay nilikha upang magkaroon ng kaugnayan sa Diyos ngunit siya ay ating tinanggihan na ikinasira ng relasyong ito.</text>
+      <text yoffset="12" size="90" translate="true" tnt-trx-ref-value="This rejection of God and the building of our lives around anything else is what the Bible calls sin. We show this by having selfish actions and attitudes, by disobeying God or displaying indifference toward Him." tnt-trx-translated="true">Ang pagtanggi sa Diyos at pamumuhay ng hiwalay sa kanya ang tinatawag ng Biblia na kasalanan. Ipinapakita natin ito sapamamagitan ng makasariling gawi at naisin, pagsuway sa Diyos o pagwawalang bahala sa kanya.</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Everyone is Sinful" tnt-trx-translated="true">Lahat ay Makasalanan</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="For everyone has sinned; we all fall short of God's glorious standard." tnt-trx-translated="true">Sapagka't ang lahat ay nangagkasala nga, at hindi nangakaabot sa kaluwalhatian ng Diyos.</text>
+      <text size="90" textalign="right">- Romans 3:23</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Sin Has Consequences" tnt-trx-translated="true">Ang Kasalanan ay may kabayaran</buttontext>
+      <panel>
+          <text size="90" translate="true" tnt-trx-ref-value="&quot;The wages of sin is death&quot; [spiritual separation from God].  (Romans 6:23)" tnt-trx-translated="true">"Sapagka't ang kabayaran ng kasalanan ay kamatayan (espirituwal na pagkahiwalay sa Diyos) (Roma 6:23).</text>
+          <image align="center" w="176" h="176">Separated.png</image>
+          <text size="72" textalign="center" translate="true" tnt-trx-ref-value="▲ - Holy God  |  ★ - Sinful Man" tnt-trx-translated="true">▲ - Banal na Diyos  |  ★ - Makasalanang Tao</text>
+          <text size="90" translate="true" tnt-trx-ref-value="This diagram illustrates that God is holy and man is sinful.  A great gulf separates the two.  The arrows illustrate that man is continually trying to reach God and the abundant life through his own efforts, such as a good life, philosophy, or religion, but he inevitably fails." tnt-trx-translated="true">Inilalarawan dito na banal ang Diyos at makasalanan ang tao, at sila ay magkahiwalay. Patuloy na nagsisikap ang tao na maabot ang Diyos at ang masaganang buhay sa pamamagitan ng kaniyang sariling paraan, tulad ng mabuting kaugalian, pilosopiya o relihiyon.</text>
+      </panel>
+  </button>
+  <question translate="true" tnt-trx-ref-value="The third point gives us the only solution to this problem..." tnt-trx-translated="true">Ipinaliliwanag ng ikatlong bahagi kung paano matutugunan ang suliraning ito ...</question>
+</page>

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#F0AB00" watermark="Watermark.png">
+  <title>
+    <number>2</number>
+    <heading size="100" translate="true" tnt-trx-ref-value="MAN IS SINFUL AND SEPARATED FROM GOD.  THEREFORE, HE CANNOT KNOW AND EXPERIENCE GOD'S LOVE AND PLAN FOR HIS LIFE." tnt-trx-translated="true">사람은 죄에 빠져 하나님으로 부터 떠나 있습니다. 그러므로 하나님의 사랑과 계획을 알수 없고, 또 그것을 체험 할 수 없습니다.</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Man Is Sinful" tnt-trx-translated="true">사람은 죄에 빠져있습니다.</buttontext>
+    <panel>
+      <text translate="true" tnt-trx-ref-value="&quot;All have sinned and fall short of the glory of God.&quot;  (Romans 3:23)" tnt-trx-translated="true">"모든 사람이 죄를 범하였으매 하나님의 영광에 이르지 못하더니."  (로마서 3:23)</text>
+      <text translate="true" tnt-trx-ref-value="Man was created to have fellowship with God; but, because of his own stubborn self-will, he chose to go his own independent way and fellowship with God was broken.  This self-will, characterized by an attitude of active rebellion or passive indifference, is an evidence of what the Bible calls sin." tnt-trx-translated="true">본래 사람은 하나님과 사귀며 살도록 창조되었습니다. 그런데 사람은 자기 마음대로 살려고 했기 때문에 마침내 하나님과의 사귐은 끊어지고 말았습니다. 한나님 없이 제 마음대로 사는 사람은 적극적일때는 하나님께 반항하게 되며, 소극적일 때는 하나님에 대하여 무관심하게 되는데 이것이 바로 성경이 말하는 죄의 증거입니다.</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Man Is Separated" tnt-trx-translated="true">사람은 하나님으로 부터 분리되어 있습니다.</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;The wages of sin is death&quot; [spiritual separation from God].  (Romans 6:23)" tnt-trx-translated="true">"죄의 삯은 사망" [여기서 사망이란 영적으로 하나님으로 부터 떠나 있는 상태를 말합니다].  (로마서 6:23)</text>
+      <image align="center" w="176" h="176">Separated.png</image>
+      <text size="72" textalign="center" translate="true" tnt-trx-ref-value="▲ - Holy God  |  ★ - Sinful Man" tnt-trx-translated="true">▲ - 거룩한 하나님  |  ★ - 죄에 빠진 인간</text>
+      <text size="90" translate="true" tnt-trx-ref-value="This diagram illustrates that God is holy and man is sinful.  A great gulf separates the two.  The arrows illustrate that man is continually trying to reach God and the abundant life through his own efforts, such as a good life, philosophy, or religion, but he inevitably fails." tnt-trx-translated="true">하나님은 거룩하시며 사람은 죄에 빠져 있습니다. 그리하여 이 둘 사이에는 커다란 간격이 생겼습니다. 사람들은 끊임없이 선행, 철학, 종교 등의 자기 힘으로 하나님께 도달하여 풍성한 삶을 누려 보려고 애쓰고 있습니다.</text>
+    </panel>
+  </button>
+  <question translate="true" tnt-trx-ref-value="The third principle explains the only way to bridge this gulf..." tnt-trx-translated="true">이 간격을 이어주는 유일한 길을 제3원리에서 설명하고 있습니다...</question>
+</page>

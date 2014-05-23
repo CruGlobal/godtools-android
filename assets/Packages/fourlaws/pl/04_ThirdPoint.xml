@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#A2AD00" watermark="Watermark.png">
+  <title>
+    <number>3</number>
+    <heading size="90" translate="true" tnt-trx-ref-value="JESUS CHRIST IS GOD'S ONLY PROVISION FOR OUR SIN. THROUGH HIM ALONE WE CAN KNOW GOD PERSONALLY AND EXPERIENCE GOD'S LOVE AND PLAN." tnt-trx-translated="true">JEZUS CHRYSTUS JEST JEDYNYM, BOŻYM ROZWIĄZANIEM PROBLEMU GRZECHU I WINY CZŁOWIEKA. PRZEZ NIEGO MOŻESZ POZNAĆ BOGA I DOŚWIADCZYĆ JEGO MIŁOŚCI.</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="He Died in Our Place" tnt-trx-translated="true">ON ZMARŁ ZA NAS</buttontext>
+    <panel>
+      <text translate="true" tnt-trx-ref-value="&quot;God demonstrates His own love for us, in that while we were yet sinners, Christ died for us.&quot;" tnt-trx-translated="true">"Bóg zaś okazuje nam swoją miłość [właśnie] przez to, że Chrystus umarł za nas, gdyśmy byli jeszcze grzesznikami."</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Romans 5:8)" tnt-trx-translated="true">(List do Rzymian 5,8)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="He Rose From the Dead" tnt-trx-translated="true">... I ZMARTWYCHWSTAŁ:</buttontext>
+    <panel>
+      <text translate="true" tnt-trx-ref-value="&quot;Christ died for our sins…He was buried…He was raised on the third day, according to the Scriptures…He appeared to Peter, then to the Twelve.  After that He appeared to more than five hundred…&quot;" tnt-trx-translated="true">"Chrystus umarł... za nasze grzechy... został pogrzebany... zmartwychwstał trzeciego dnia, zgodnie z Pismem... ukazał się Kefasowi, a potem Dwunastu, później zjawił się więcej niż pięciuset braciom równocześnie"</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(1 Corinthians 15:3-6)" tnt-trx-translated="true">(1 Koryntian 15,3-6)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="He is the Only Way to God" tnt-trx-translated="true">I DLATEGO ON JEST JEDYNĄ DROGĄ</buttontext>
+    <panel>
+      <text w="280" size="90" translate="true" tnt-trx-ref-value="&quot;Jesus said to him, 'I am the way, and the truth, and the life; no one comes to the Father but through Me.'&quot;  (John 14:6)" tnt-trx-translated="true">"Odpowiedział mu Jezus: Ja jestem drogą i prawdą, i życiem. Nikt nie przychodzi do Ojca inaczej jak tylko przeze Mnie" (Ew. Jana 14,6).</text>
+      <image align="center" w="176" h="176">Bridged.png</image>
+      <text size="72" textalign="center" translate="true" tnt-trx-ref-value="▲ - God  |  † - Jesus  |  ★ - Man" tnt-trx-translated="true">▲ - Bóg  |  † - Jezus  |  ★ - Człowiek</text>
+      <text size="90" translate="true" tnt-trx-ref-value="This diagram illustrates that God has bridged the gulf that separates us from Him by sending His Son, Jesus Christ, to die on the cross in our place to pay the penalty for our sins." tnt-trx-translated="true">Bóg przerzucił pomost nad przepaścią, która dzieli nas od Niego, przez posłanie swego Syna Jezusa Chrystusa, aby umarł zamiast nas, płacąc w ten sposób karę za nasze grzechy.</text>
+    </panel>
+  </button>
+  <question size="96" translate="true" tnt-trx-ref-value="It is not enough just to &#xD;&#xA;know these three laws...&#xD;&#xA;    " tnt-trx-translated="true">Jednak nie wystarczy tylko intelektualna znajomość tych trzech praw...
+    </question>
+</page>

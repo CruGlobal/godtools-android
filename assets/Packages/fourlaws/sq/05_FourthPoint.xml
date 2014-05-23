@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#BC1111" watermark="Watermark.png">
+  <title>
+    <number>4</number>
+    <heading size="90" translate="true" tnt-trx-ref-value="WE MUST INDIVIDUALLY RECEIVE JESUS CHRIST AS SAVIOR AND LORD; THEN WE CAN KNOW AND EXPERIENCE GOD'S LOVE AND PLAN FOR OUR LIVES." tnt-trx-translated="true">NE DUHET PERSONALISHT TA PRANOJMË JEZU KRISHTlN Sl SHPËTIMTAR DHE ZOT ATËHERË MUND TË NJOHIM DHE TË PËRJETOJMË DASHURINË E PERËNDISË DHE PLANIN E TIJ PËR JETËT TONA.</heading>
+  </title>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="We Must Receive Christ" tnt-trx-translated="true">Duhet të pranojmë Krishtin</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;As many as received Him, to them He gave the right to become children of God, even to those who believe in His name&quot;." tnt-trx-translated="true">“Megjithatë, disa e pranuan dhe besuan në të. Ai u dha atyre të drejtën të bëheshin fëmijë të Perëndisë.”</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(John 1:12)" tnt-trx-translated="true">(Gjoni 1:12)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="We Receive Christ Through Faith" tnt-trx-translated="true">Krishtin e pranojmë nëpërmjet besimit</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;By grace you have been saved through faith; and that not of yourselves, it is the gift of God; not as a result of works that no one should boast.&quot;" tnt-trx-translated="true">“...me mëshirë jeni të shpëtuar. Vetvetiu nuk mund të bëni asgjë veçse ta pranoni me besim atë që Perëndia bëri për ju. Shpëtimin tuaj nuk e meritoni, por ai është dhuratë e Perëndisë. Askush nuk mund të mburret para Perëndisë për atë që ka arritur…”</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Ephesians 2:8,9)" tnt-trx-translated="true">(Efesianëve 2:8,9)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="When we receive Christ ..." tnt-trx-translated="true">Kur pranojmë Krishtin ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="We experience a new birth." tnt-trx-translated="true">Përjetojmë një lindje të re.</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Read John 3:1-8)" tnt-trx-translated="true">(Lexo Gjoni 3:1-8)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="65" translate="true" tnt-trx-ref-value="We Receive Christ Through Personal Invitation" tnt-trx-translated="true">Krishtin e pranojmë përmes një ftese personale</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="[Christ speaking] &quot;Behold, I stand at the door and knock; if anyone hears My voice and opens the door, I will come in to him.&quot;" tnt-trx-translated="true">(Jezusi thotë) “Unë qëndroj para derës dhe trokas: kush e dëgjon zërin tim dhe e hap derën, do të hyj tek ai’,</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Revelation 3:20)" tnt-trx-translated="true">(Zbulesa 3:20)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="Receiving Christ involves ..." tnt-trx-translated="true">Pranimi i Krishtit përshin ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="... turning to God from self (repentance) and trusting Christ to come into our lives to forgive our sins and to make us what He wants us to be." tnt-trx-translated="true">...nga rruga e mëkatit të kthehemi (pendohemi) tek Perëndia, ta ftojmë atë në jetën tonë që të na i falë mëkatet dhe që të na bëjë ashtu siç dëshiron Ai.</text>
+      <text size="90" translate="true" tnt-trx-ref-value="Just to agree intellectually that Jesus Christ is the Son of God and that He died on the cross for our sins is not enough.  Nor is it enough to have an emotional experience.  We receive Jesus Christ by faith, as an act of the will." tnt-trx-translated="true">Nuk mjafton që vetëm ta pranojmë intelektualisht që Jezusi është Biri i Perëndisë dhe se Ai vdiq në kryq për ne; nuk mjafton as përjetimi emocional. Por duhet ta pranojmë Atë përmes besimit, si vepër të vullnetit personal.</text>
+    </panel>
+  </button>
+</page>

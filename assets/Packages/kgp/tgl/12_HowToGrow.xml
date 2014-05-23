@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#7EB14F" watermark="sprout_desat.png" buttons="6">
+  <title h="60">
+    <heading x="10" w="285" size="94" translate="true" tnt-trx-ref-value="HOW TO GROW AS A FOLLOWER &#xD;&#xA;OF JESUS:" tnt-trx-translated="true">PAANO LUMAGO BILANG TAGASUNOD NI HESUS:</heading>
+  </title>
+  <button>
+    <buttontext size="140" translate="true" tnt-trx-ref-value="G et to Know God" tnt-trx-translated="true">Kilalanin ang Diyos</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="Get to know God by reading the Bible daily.   (2 Timothy 3:14-17)" tnt-trx-translated="true">Kilalanin ang Diyos sapamamagitan ng pagbabasa ng Bibliya araw-araw.   (2 Timoteo 3:14-17)</text>
+      <text yoffset="12" size="90" translate="true" tnt-trx-ref-value="Begin with the gospel of John or Mark." tnt-trx-translated="true">Mag-umpisa sa ebanghelyo ayon kay Juan o Marcos.</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="140" translate="true" tnt-trx-ref-value="R espond" tnt-trx-translated="true">Mangusap</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="Respond to God in prayer." tnt-trx-translated="true">Mangusap sa Diyos sapamamagitan ng panalangin.</text>
+      <text yoffset="4" size="90" textalign="right">(Phillipians 4:6)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="140" translate="true" tnt-trx-ref-value="O bey" tnt-trx-translated="true">Sumunod</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="Obey God Moment by Moment." tnt-trx-translated="true">Sumunod sa Diyos sa bahwat saglit.</text>
+      <text yoffset="4" size="90" textalign="right">(Luke 6:46-49)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="140" translate="true" tnt-trx-ref-value="W alk" tnt-trx-translated="true">Lumakad</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="Walk in the Power of the Holy Spirit." tnt-trx-translated="true">Lumakad sa kapangyarihan ng Banal na Espiritu.</text>
+      <text yoffset="4" size="90" textalign="right">(Ephesians 3:14-21, 5:18)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="140" translate="true" tnt-trx-ref-value="T ell Others" tnt-trx-translated="true">Magbahagi Sa Iba</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="Tell others about Jesus through our life and words." tnt-trx-translated="true">Magbahagi sa iba ng patungkol kay Hesus sapamamagitan ng buhay at pananalita.</text>
+      <text yoffset="4" size="90" textalign="right">( Matthew 28:18-20;
+2 Corinthians 5:17-20;
+Ephesians 4:1)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="140" translate="true" tnt-trx-ref-value="H ave Fellowship" tnt-trx-translated="true">Makipagtipon</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="Have fellowship with other Christians.&#xD;&#xA;(Hebrews 10:25; Acts 2:42-47)" tnt-trx-translated="true">Makipagniig kang kasama ang ibang mananampalataya.
+(Hebreo 10:25; Gawa 2:42-47)</text>
+      <text yoffset="12" size="90" translate="true" tnt-trx-ref-value="Find a church where Jesus is worshipped and the Bible is taught." tnt-trx-translated="true">Humanap ng simbahan na si Hesus is sinasamba at ang biblia ay itinuturo.</text>
+    </panel>
+  </button>
+  <question translate="true" tnt-trx-ref-value="Want to Know More?" tnt-trx-translated="true">Nais mo pa ba ng karagdagang kaalaman?</question>
+</page>

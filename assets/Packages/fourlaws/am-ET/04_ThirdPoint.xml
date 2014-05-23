@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#A2AD00" watermark="Watermark.png">
+  <title>
+    <number>3</number>
+    <heading size="90" translate="true" tnt-trx-ref-value="JESUS CHRIST IS GOD'S ONLY PROVISION FOR OUR SIN. THROUGH HIM ALONE WE CAN KNOW GOD PERSONALLY AND EXPERIENCE GOD'S LOVE AND PLAN." tnt-trx-translated="true">ሰው ወደ እግዚአብሔር ሊደርስ የሚችልበት ብቸኛው መንገድ ኢየሱስ ክርስቶስ ነው፡፡ ስለዚህም ሰው በእርሱ በኩል የእግዚአብሔርን ፍቅርና ዕቅድ ሊያውቅና ሊለማመድ ይችላል፡፡</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="He Died in Our Place" tnt-trx-translated="true">እርሱ ስለ እኛ ሞቷል፡፡</buttontext>
+    <panel>
+      <text translate="true" tnt-trx-ref-value="&quot;God demonstrates His own love for us, in that while we were yet sinners, Christ died for us.&quot;" tnt-trx-translated="true">‹‹ነገር ግን ገና ኃጢያተኞች ሳለን ክርስቶስ ስለ እኛ ሞቷልና እግዚአብሔር ለእኛ ያለውን የራሱን ፍቅር ያስረዳል፡፡››</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Romans 5:8)" tnt-trx-translated="true">(ሮሜ. 5፡8)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="He Rose From the Dead" tnt-trx-translated="true">ከሞት ተነስቷል</buttontext>
+    <panel>
+      <text translate="true" tnt-trx-ref-value="&quot;Christ died for our sins…He was buried…He was raised on the third day, according to the Scriptures…He appeared to Peter, then to the Twelve.  After that He appeared to more than five hundred…&quot;" tnt-trx-translated="true">‹‹…ክርስቶስ ስለ ኃጢያታችን ሞተ ተቀበረም መጽሐፍ እንደሚል በሦስተኛው ቀን ተነሣ፣ …››</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(1 Corinthians 15:3-6)" tnt-trx-translated="true">(1ኛ ቆሮ. 15፡3-5)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="He is the Only Way to God" tnt-trx-translated="true">እርሱ ብቸኛ መንገድ ነው</buttontext>
+    <panel>
+      <text w="280" size="90" translate="true" tnt-trx-ref-value="&quot;Jesus said to him, 'I am the way, and the truth, and the life; no one comes to the Father but through Me.'&quot;  (John 14:6)" tnt-trx-translated="true">ኢየሱስ እንዲህ አለ፡-
+‹‹እኔ መንገድና እውነት ሕይወትም ነኝ በእኔ በቀር ወደ አብ የሚመጣ የለም›› (ዩሐ› 14፡6)</text>
+      <image align="center" w="176" h="176">Bridged.png</image>
+      <text size="72" textalign="center" translate="true" tnt-trx-ref-value="▲ - God  |  † - Jesus  |  ★ - Man" tnt-trx-translated="true">▲ - እግዚአብሔር  |  † - ኢየሱስ  |  ★ - ሰው</text>
+      <text size="90" translate="true" tnt-trx-ref-value="This diagram illustrates that God has bridged the gulf that separates us from Him by sending His Son, Jesus Christ, to die on the cross in our place to pay the penalty for our sins." tnt-trx-translated="true">ይህ ስዕል የሚያሳየው እኛን ወደ ራሱ ሊመልሰን የሚችለው እግዚአብሔር ብቻ መሆኑን ነው፡፡ ይህንንም ልጁን ኢየሱስ ክርስቶስን በመስቀል ላይ ስለእኛ እንዲሞት በመላክ ፈጽሞታል፡፡ ከዚህም የተነሳ ሁላችንም በእርሱ በኩል ወደ እግዚአብሔር መድረስ እንችላለን፡፡</text>
+    </panel>
+  </button>
+  <question size="96" translate="true" tnt-trx-ref-value="It is not enough just to &#xD;&#xA;know these three laws...&#xD;&#xA;    " tnt-trx-translated="true">ነገር ግን እነዚህን ሦስት ሕጎች ብቻ ማወቅ በቂ አይደለም ...
+    </question>
+</page>

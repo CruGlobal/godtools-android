@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#7EB14F" watermark="sprout_desat.png" buttons="6">
+	
+	<title>
+	  <heading x="10" w="285" size="94" translate="true">KUIDAS KASVADA JEESUSE JÄRGIJANA:</heading>
+    </title>
+	
+	<button>
+		<buttontext size="140" translate="true">Õpi Jumalat tundma</buttontext>
+		<panel>
+			<text size="90" translate="true">Õpi Jumalat tundma lugedes igapäevaselt Piiblit. (2Tm 3:14-17)</text>
+            <text size="90" translate="true">Alusta Johannese või Markuse evangeeliumist.</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext size="140" translate="true">Vasta</buttontext>
+		<panel>
+			<text size="90" translate="true">Vasta Jumalale palves.</text>
+            <text size="90" textalign="right" translate="true">(Kiri Filiplastele 4:6)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext size="140" translate="true">Alistu</buttontext>
+		<panel>
+			<text size="90" translate="true">Alistu Jumalale hetk hetke järel.</text>
+            <text size="90" textalign="right" translate="true">(Luuka 6:46-49)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext size="140" translate="true">Mine edasi</buttontext>
+		<panel>
+			<text size="90" translate="true">Mine edasi Püha Vaimu väes.</text>
+            <text size="90" textalign="right" translate="true">(Kiri Efeslastele 3:14-21, 5:18)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext size="140" translate="true">Räägi teistele</buttontext>
+		<panel>
+			<text size="90" translate="true">Räägi teistele Jeesusest läbi oma elu ja sõnade.</text>
+            <text size="90" textalign="right" translate="true">(Matteuse 28:18-20;
+2 Kiri Korintlastele 5:17-20;
+Kiri Efeslastele 4:1)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext size="140" translate="true">Ole osaduses</buttontext>
+		<panel>
+			<text size="90" translate="true">Ole osaduses teiste kristlastega</text>
+            <text size="90" textalign="right" translate="true">(Heebrea 10:25; Apostlite 2:42-47)</text>
+            <text size="90" translate="true">Leia kogudus, kus ülistatakse Jeesust ja õpetatakse Piiblit.</text>
+		</panel>
+	</button>
+	
+	<question translate="true">Tahad rohkem teada?</question>
+	
+</page>

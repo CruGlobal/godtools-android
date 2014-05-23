@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#FB8D08" shadows="no" buttons="4">
+
+	<title mode="plain">
+		<subheading textalign="left" size="118" translate="true">If this app has helped you, please share it with someone else, so that others may be Satisfied.</subheading>
+	</title>
+	
+	<text textalign="center" size="112" y="140" w="300" translate="true">You can share it via our website:</text>
+	
+    <button mode="url" y="165" translate="true">www.ccca.org.au/app/</button>
+	
+	<text textalign="center" size="82" w="300" y="235" translate="true">© 2011 Campus Crusade for Christ, Inc. and Bright Media Foundation all rights reserved. Created by Campus Crusade for Christ, Australia. No part of this app may be changed in any way or reproduced in any form without written permission from the publisher.</text>
+	
+	<text textalign="center" modifier="bold" size="94" x="15" y="370" w="300" translate="true">Campus Crusade for Christ Australia</text>
+	
+	<button mode="phone" y="400" translate="true">+61-3-9014-7584</button>
+	<button mode="email" y="450" translate="true">resources@ccca.org.au</button>
+	<button mode="url" y="500" translate="true">www.ccca.org.au</button>
+	
+	<text textalign="center" size="82" y="570" w="300" translate="true">All Bible references are from the New International Version unless otherwise stated.</text>
+</page>

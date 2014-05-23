@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<document lang="en">
+  <packagename translate="true" tnt-trx-ref-value="The Four Spiritual Laws" tnt-trx-translated="true">Dört Ruhsal Kural</packagename>
+  <page thumb="PageThumb_01.png" filename="01_Home.xml" translate="true" tnt-trx-ref-value="Home" tnt-trx-translated="true">Ana</page>
+  <page thumb="PageThumb_02.png" filename="02_FirstPoint.xml" translate="true" tnt-trx-ref-value="1 God Loves You And Created You To Know Him Personally." tnt-trx-translated="true">1 Tanrı Sizi Seviyor ve Onu Kişisel Tanımanız İçin Sizi Yarattı</page>
+  <page thumb="PageThumb_03.png" filename="03_SecondPoint.xml" translate="true" tnt-trx-ref-value="2 We Are Separated From God By Our Sin, So We Cannot Know Him Or Experience His Love." tnt-trx-translated="true">2 İnsan Günahlıdır ve Tanrı'dan Ayrı Düşmüştür.Bu Nedenle Tanrı'nın Sevgisini ve Yaşamımız İçin Olan Planını Bilemez ve Uygulayamayız.</page>
+  <page thumb="PageThumb_04.png" filename="04_ThirdPoint.xml" translate="true" tnt-trx-ref-value="3 Jesus Is God's Only Solution For Our Sin. Only Through Him Can We Know God And Receive His Love And Forgiveness." tnt-trx-translated="true">3 İsa Mesih İnsanın Günahını Ortadan Kaldırmak İçin Tanrı'nın Sağladığı Tek Çaredir. Ancak O'nun ile Tanrı'nın Sevgisini ve Yaşamımız İçin Olan Planını Bilebilir ve Uygulayabiliriz.</page>
+  <page thumb="PageThumb_05.png" filename="05_FourthPoint.xml" translate="true" tnt-trx-ref-value="4 We Must Each Respond To Jesus By Placing Our Trust In Him As Our Saviour And Lord. Only Then Can We Know God Personally." tnt-trx-translated="true">4 İsa Mesih'i Rabbimiz ve Kurtarıcımız Olarak Kabul Etmeliyiz. Bundan Sonra Tanrı'nın Sevgisini ve Yaşamımız İçin Olan Planını Bilebilir ve Uygulayabiliriz.</page>
+  <page thumb="PageThumb_06.png" filename="06_TwoCircles.xml" translate="true" tnt-trx-ref-value="These Circles Describe Two Types Of People" tnt-trx-translated="true">Bu Daireler İki Ayrı Yaşamı Simgelemektedir.</page>
+  <page thumb="PageThumb_07.png" filename="07_SuggestedPrayer.xml" translate="true" tnt-trx-ref-value="You Can Express Your Attitude Toward God Through Prayer." tnt-trx-translated="true">Dua Aracılığıyla Tanrı İle Olan İlişkimizi Sağlayabiliriz.</page>
+  <page thumb="PageThumb_08.png" filename="08_HowCanYouBeSure.xml" translate="true" tnt-trx-ref-value="How Can You Be Sure That All This Has Really Happened?" tnt-trx-translated="true">Bütün Bu Şeylerin Gerçekten Olduğuna Nasıl Emin Olabiliriz ?</page>
+  <page thumb="PageThumb_09.png" filename="09_WhatHappens.xml" translate="true" tnt-trx-ref-value="If You Asked Jesus Into Your Life As Saviour And Lord, Many Things Have Happened, Including:" tnt-trx-translated="true">İsteğinizle İsa Mesih'i imanla yaşamınıza aldığınız an birçok şey yaşamınızda değişti, bunlar aşağıdakilerdir:</page>
+  <page thumb="PageThumb_10.png" filename="10_HowToGrow.xml" translate="true" tnt-trx-ref-value="How To Grow As A Follower Of Jesus" tnt-trx-translated="true">İsa Mesih'in Takipçisi Olarak Nasıl Olgunlaşabilirim</page>
+  <page thumb="PageThumb_11.png" filename="11_FinalPage.xml" translate="true" tnt-trx-ref-value="Special Materials" tnt-trx-translated="true">Özel Materyaller</page>
+  <about filename="00_About.xml" translate="true" tnt-trx-ref-value="About" tnt-trx-translated="true">Hakkında</about>
+  <instructions translate="true">
+  </instructions>
+</document>

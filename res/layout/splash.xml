@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/splashscreen_layout"
+	android:orientation="vertical" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" 
+	android:background="#000">
+	<!-- assume portrait mode so bars, if any, are above and below -->
+	<ImageView 
+		android:src="@drawable/godtools_splashscreen_2x"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent" 
+		android:scaleType="fitCenter"
+		android:gravity="center"
+		android:layout_gravity="center_vertical"/>		
+		
+</LinearLayout>
+		

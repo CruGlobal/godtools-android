@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#BC1111" watermark="Watermark.png">
+  <title>
+    <number>4</number>
+    <heading size="90" translate="true" tnt-trx-ref-value="WE MUST INDIVIDUALLY RECEIVE JESUS CHRIST AS SAVIOR AND LORD; THEN WE CAN KNOW AND EXPERIENCE GOD'S LOVE AND PLAN FOR OUR LIVES." tnt-trx-translated="true">我们必须亲自接受耶稣基督成为我们的救主和生命的主，然后才能知道并经验神的爱和祂对我们生命的计划</heading>
+  </title>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="We Must Receive Christ" tnt-trx-translated="true">我们必须接受基督</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;As many as received Him, to them He gave the right to become children of God, even to those who believe in His name&quot;." tnt-trx-translated="true">"凡接待祂的，就是信祂名的人，祂就赐他们权柄作神的儿女".</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(John 1:12)" tnt-trx-translated="true">(约翰福音 1:12)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="We Receive Christ Through Faith" tnt-trx-translated="true">我们藉着信心接受基督</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;By grace you have been saved through faith; and that not of yourselves, it is the gift of God; not as a result of works that no one should boast.&quot;" tnt-trx-translated="true">"你们得救是本乎恩也因着信；这并不是出于自己，乃是神所赐的，也不是出于行为，免得有人自夸."</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Ephesians 2:8,9)" tnt-trx-translated="true">(以弗所书 2:8,9)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="When we receive Christ ..." tnt-trx-translated="true">当我们接受基督时 ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="We experience a new birth." tnt-trx-translated="true">我们就经历了属灵的重生.</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Read John 3:1-8)" tnt-trx-translated="true">(读 约翰福音 3:1-8)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="65" translate="true" tnt-trx-ref-value="We Receive Christ Through Personal Invitation" tnt-trx-translated="true">我们必须亲自邀请基督进入心中</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="[Christ speaking] &quot;Behold, I stand at the door and knock; if anyone hears My voice and opens the door, I will come in to him.&quot;" tnt-trx-translated="true">[基督说] "看哪，我站在门外叩门，若有听见我声音就开门的，我要进到他那里去."</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Revelation 3:20)" tnt-trx-translated="true">启示录 3:20)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="Receiving Christ involves ..." tnt-trx-translated="true">接受基督包括 ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="... turning to God from self (repentance) and trusting Christ to come into our lives to forgive our sins and to make us what He wants us to be." tnt-trx-translated="true">... 从自我转向神 (悔改) 并相信基督进入了我们的生命，赦免了我们的罪，要使我成为祂所喜悦的样式.</text>
+      <text size="90" translate="true" tnt-trx-ref-value="Just to agree intellectually that Jesus Christ is the Son of God and that He died on the cross for our sins is not enough.  Nor is it enough to have an emotional experience.  We receive Jesus Christ by faith, as an act of the will." tnt-trx-translated="true">只在理智上认同耶稣基督是神的儿子，并且祂为我们的罪死在十字架上的真理是不够的.或者只有一时的感动也是不够的。我们需要藉着信心，也就是意志的行动，接受耶稣基督。</text>
+    </panel>
+  </button>
+</page>

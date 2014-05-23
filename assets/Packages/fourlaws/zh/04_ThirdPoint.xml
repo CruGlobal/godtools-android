@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#A2AD00" watermark="Watermark.png">
+  <title>
+    <number>3</number>
+    <heading size="90" translate="true" tnt-trx-ref-value="JESUS CHRIST IS GOD'S ONLY PROVISION FOR OUR SIN. THROUGH HIM ALONE WE CAN KNOW GOD PERSONALLY AND EXPERIENCE GOD'S LOVE AND PLAN." tnt-trx-translated="true">耶稣基督是神为人的罪所预备的唯一救法。只有通过祂我们才能亲自的认识神并经验祂的爱和祂对我们生命的计划。</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="He Died in Our Place" tnt-trx-translated="true">耶稣为我们死</buttontext>
+    <panel>
+      <text translate="true" tnt-trx-ref-value="&quot;God demonstrates His own love for us, in that while we were yet sinners, Christ died for us.&quot;" tnt-trx-translated="true">“唯有基督在我们还作罪人的时候为我们死，神的爱就在此向我们显明了。”</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(Romans 5:8)" tnt-trx-translated="true">(罗马书 5:8)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="He Rose From the Dead" tnt-trx-translated="true">耶稣从死里复活</buttontext>
+    <panel>
+      <text translate="true" tnt-trx-ref-value="&quot;Christ died for our sins…He was buried…He was raised on the third day, according to the Scriptures…He appeared to Peter, then to the Twelve.  After that He appeared to more than five hundred…&quot;" tnt-trx-translated="true">"基督照圣经所说为我们的罪死了…而且埋葬了…又照圣经所说，第三天复活了…并且显给矶法看，然后显给十二使徒看；后来一时显给五百多弟兄看…"</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(1 Corinthians 15:3-6)" tnt-trx-translated="true">(哥林多前书 15:3-6)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="He is the Only Way to God" tnt-trx-translated="true">神和人之间唯一的道路</buttontext>
+    <panel>
+      <text w="280" size="90" translate="true" tnt-trx-ref-value="&quot;Jesus said to him, 'I am the way, and the truth, and the life; no one comes to the Father but through Me.'&quot;  (John 14:6)" tnt-trx-translated="true">"耶稣说：’我就是道路，真理，生命；若不藉着我，没有人能到父那里去‘"  (约翰福音 14:6)</text>
+      <image align="center" w="176" h="176">Bridged.png</image>
+      <text size="72" textalign="center" translate="true" tnt-trx-ref-value="▲ - God  |  † - Jesus  |  ★ - Man" tnt-trx-translated="true">▲ - 神 |  † - 耶稣  |  ★ - 人</text>
+      <text size="90" translate="true" tnt-trx-ref-value="This diagram illustrates that God has bridged the gulf that separates us from Him by sending His Son, Jesus Christ, to die on the cross in our place to pay the penalty for our sins." tnt-trx-translated="true">这一图表展示了神差祂的儿子耶稣基督，为我们的罪死在十字架上，成为了人与神中间的桥梁。</text>
+    </panel>
+  </button>
+  <question size="96" translate="true" tnt-trx-ref-value="It is not enough just to &#xD;&#xA;know these three laws...&#xD;&#xA;    " tnt-trx-translated="true">只知道以上三个原则是不够的...
+    </question>
+</page>

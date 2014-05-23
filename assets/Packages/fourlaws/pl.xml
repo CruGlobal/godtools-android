@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<document lang="en">
+  <packagename translate="true" tnt-trx-ref-value="The Four Spiritual Laws" tnt-trx-translated="true">Czy słyszałeś o 4 prawach duchowego życia?</packagename>
+  <page thumb="PageThumb_01.png" filename="01_Home.xml" translate="true" tnt-trx-ref-value="Home" tnt-trx-translated="true">Strona główna</page>
+  <page thumb="PageThumb_02.png" filename="02_FirstPoint.xml" translate="true" tnt-trx-ref-value="1 God Loves You And Created You To Know Him Personally." tnt-trx-translated="true">1 Bóg cię kocha i pragnie bliskiej więzi z tobą.</page>
+  <page thumb="PageThumb_03.png" filename="03_SecondPoint.xml" translate="true" tnt-trx-ref-value="2 We Are Separated From God By Our Sin, So We Cannot Know Him Or Experience His Love." tnt-trx-translated="true">2 Człowiek jest grzeszny i w konsekwencji oddzielony od Boga, dlatego też nie może poznać Boga ani doświadczyć Jego miłości.</page>
+  <page thumb="PageThumb_04.png" filename="04_ThirdPoint.xml" translate="true" tnt-trx-ref-value="3 Jesus Is God's Only Solution For Our Sin. Only Through Him Can We Know God And Receive His Love And Forgiveness." tnt-trx-translated="true">3 Jezus Chrystus jest jedynym, Bożym rozwiązaniem problemu grzechu i winy człowieka. Przez Niego możesz poznać Boga i doświadczyć Jego miłości.</page>
+  <page thumb="PageThumb_05.png" filename="05_FourthPoint.xml" translate="true" tnt-trx-ref-value="4 We Must Each Respond To Jesus By Placing Our Trust In Him As Our Saviour And Lord. Only Then Can We Know God Personally." tnt-trx-translated="true">4 Musimy osobiście przyjąć Jezusa Chrystusa jako Zbawiciela i Pana. Dopiero wtedy możemy poznać Boga i doświadczyć Jego miłości.</page>
+  <page thumb="PageThumb_06.png" filename="06_TwoCircles.xml" translate="true" tnt-trx-ref-value="These Circles Describe Two Types Of People" tnt-trx-translated="true">Te koła ilustrują dwa sposoby życia:</page>
+  <page thumb="PageThumb_07.png" filename="07_SuggestedPrayer.xml" translate="true" tnt-trx-ref-value="You Can Express Your Attitude Toward God Through Prayer." tnt-trx-translated="true">Możesz wyrazić swoją postawę wobec Boga w modlitwie.</page>
+  <page thumb="PageThumb_08.png" filename="08_HowCanYouBeSure.xml" translate="true" tnt-trx-ref-value="How Can You Be Sure That All This Has Really Happened?" tnt-trx-translated="true">Jak możesz upewnić się, że to wszystko rzeczywiście się wydarzyło?</page>
+  <page thumb="PageThumb_09.png" filename="09_WhatHappens.xml" translate="true" tnt-trx-ref-value="If You Asked Jesus Into Your Life As Saviour And Lord, Many Things Have Happened, Including:" tnt-trx-translated="true">Z chwilą, gdy przyjąłeś Chrystusa przez akt wiary, w twoim życiu zaszło wiele zmian, a przede wszystkim:</page>
+  <page thumb="PageThumb_10.png" filename="10_HowToGrow.xml" translate="true" tnt-trx-ref-value="How To Grow As A Follower Of Jesus" tnt-trx-translated="true">Wskazówki do wzrastania w wierze</page>
+  <page thumb="PageThumb_11.png" filename="11_FinalPage.xml" translate="true" tnt-trx-ref-value="Special Materials" tnt-trx-translated="true">Materiały dodatkowe</page>
+  <about filename="00_About.xml" translate="true" tnt-trx-ref-value="About" tnt-trx-translated="true">O</about>
+  <instructions translate="true">
+  </instructions>
+</document>

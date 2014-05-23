@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#007486" watermark="sprout_desat.png" buttons="5">
+  <title>
+    <number>3</number>
+    <heading size="90" translate="true" tnt-trx-ref-value="JESUS IS GOD'S ONLY SOLUTION FOR OUR SIN. ONLY THROUGH HIM CAN WE KNOW GOD AND RECEIVE HIS LOVE AND FORGIVENESS." tnt-trx-translated="true">JESÚS ES LA ÚNICA SOLUCIÓN DE DIOS PARA NUESTRO PECADO. SÓLO A TRAVÉS DE ÉL PODEMOS CONOCER A DIOS Y RECIBIR SU AMOR Y PERDÓN.</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Jesus is God" tnt-trx-translated="true">Jesús es Dios</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="Christ is the visible image of the invisible God. He existed before anything was created and is supreme over all creation." tnt-trx-translated="true">Cristo es la imagen visible del Dios invisible. Él ya existía antes de que las cosas fueran creadas y es supremo sobre toda la creación</text>
+      <text yoffset="4" size="90" textalign="right">- Colossians 1:15</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Jesus Died In Our Place" tnt-trx-translated="true">Jesús murió en nuestro lugar</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="Christ suffered for our sins once for all time. He never sinned, but he died for sinners to bring you home safely to God." tnt-trx-translated="true">Cristo sufrió por nuestros pecados una sola vez y para siempre. Él nunca pecó, en cambio, murió por los pecadores para llevarlos a salvo con Dios.</text>
+      <text yoffset="4" size="90" textalign="right">- 1 Peter 3:18a</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Jesus Came Back to Life" tnt-trx-translated="true">Jesús volvió a la vida</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="During the forty days after his crucifixion, he appeared to the apostles ... and he proved to them in many ways he was actually alive.   - Acts 1:3a" tnt-trx-translated="true">Durante los cuarenta días posteriores a su crucifixión, Cristo se apareció varias veces a los apóstoles y les demostró con muchas pruebas convincentes que él realmente estaba vivo.   - Hechos 1:3a</text>
+      <text yoffset="12" size="90" translate="true" tnt-trx-ref-value="His resurrection proved that he was God and that he had suffered the punishment we deserved in our place." tnt-trx-translated="true">Su resurrección probó que Él era Dios y que sufrió en nuestro lugar el castigo que merecíamos.</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Jesus is the Only Way..." tnt-trx-translated="true">Jesús es el único camino...</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="Jesus said, &quot;I am the way, the truth and the life. No-one can come to the Father except through me.&quot;" tnt-trx-translated="true">Jesús le contestó, "Yo soy el camino, la verdad y la vida; nadie puede ir al Padre si no es por medio de mí."</text>
+      <text yoffset="4" size="90" textalign="right">- John 14:6</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="God Proves His Love..." tnt-trx-translated="true">Dios demuestra su amor...</buttontext>
+    <panel>
+      <text w="280" size="80" translate="true" tnt-trx-ref-value="For God loved the world so much that he gave his one and only Son, so that everyone who believes in him will not perish but have eternal life. - John 3:16" tnt-trx-translated="true">Pues Dios amó tanto al mundo que dio a su único Hijo, para que todo el que crea en él no se pierda, sino que tenga vida eterna. - Juan 3:16</text>
+      <image x="75" y="87" w="120" h="120" translate="true">Bridged.png</image>
+      <text size="76" textalign="center" yoffset="140" translate="true" tnt-trx-ref-value="★ - God  |  ✝ - Jesus  |  ▲ - Man" tnt-trx-translated="true">★ - Dios  |  ✝ - Jesús  |  ▲ - Hombre</text>
+      <text yoffset="15" size="80" translate="true" tnt-trx-ref-value="Although we deserve to be cut off from God forever, in his love God sent Jesus to pay the penalty for our sins by dying on the cross." tnt-trx-translated="true">A pesar de que merecemos estar separados para siempre de Dios, en su amor Dios envió a Jesús para pagar el castigo por nuestros pecados al morir en la cruz.</text>
+      <text yoffset="10" size="80" translate="true" tnt-trx-ref-value="Through Jesus, God has bridged the gap that separates us from him, and provided a way for us to be forgiven and restored to relationship with him." tnt-trx-translated="true">A través de Jesús, Dios ha cruzado el abismo que nos separa de Él, y ha proporcionado una manera para que podamos ser perdonados y nuestra relación con Él sea  restaurada.</text>
+    </panel>
+  </button>
+  <question size="90" translate="true" tnt-trx-ref-value="It's not enough just to know &#xD;&#xA;these points..." tnt-trx-translated="true">No es suficiente saber 
+estos puntos ...</question>
+</page>

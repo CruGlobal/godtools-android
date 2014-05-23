@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<document lang="en">
+  <packagename translate="true" tnt-trx-ref-value="The Four Spiritual Laws" tnt-trx-translated="true">Apat na Tuntuning Espiritwal</packagename>
+  <page thumb="PageThumb_01.png" filename="01_Home.xml" translate="true">Home</page>
+  <page thumb="PageThumb_02.png" filename="02_FirstPoint.xml" translate="true" tnt-trx-ref-value="1 God Loves You And Created You To Know Him Personally." tnt-trx-translated="true">1 Ini-ibig ka ng Diyos at Siya'y may magandang plano sa iyong buhay.</page>
+  <page thumb="PageThumb_03.png" filename="03_SecondPoint.xml" translate="true" tnt-trx-ref-value="2 We Are Separated From God By Our Sin, So We Cannot Know Him Or Experience His Love." tnt-trx-translated="true">2 Ang tao ay makasalanan at nahiwalay sa Diyos, kaya't hindi niya maaring malaman at maranasan ang pag-ibig at plano ng Diyos sa kanyang buhay.</page>
+  <page thumb="PageThumb_04.png" filename="04_ThirdPoint.xml" translate="true" tnt-trx-ref-value="3 Jesus Is God's Only Solution For Our Sin. Only Through Him Can We Know God And Receive His Love And Forgiveness." tnt-trx-translated="true">3 Si Hesu-Kristo ang tanging lunas sa kasalanan ng tao. Sa pamamagitan niya ay malalaman mo ang pag-ibig at plano ng Diyos sa iyong buhay.</page>
+  <page thumb="PageThumb_05.png" filename="05_FourthPoint.xml" translate="true" tnt-trx-ref-value="4 We Must Each Respond To Jesus By Placing Our Trust In Him As Our Saviour And Lord. Only Then Can We Know God Personally." tnt-trx-translated="true">4 Kinakailangan nating tanggapin si Hesu-Kristo na ating Tagapagligtas at Panginoon; saka lamang natin malalaman at mararanasan ang pag-ibig at plano ng Diyos sa ating buhay.</page>
+  <page thumb="PageThumb_06.png" filename="06_TwoCircles.xml" translate="true" tnt-trx-ref-value="These Circles Describe Two Types Of People" tnt-trx-translated="true">Ang dalawang larawan ay kumakatawan sa dalawang uri ng buhay:</page>
+  <page thumb="PageThumb_07.png" filename="07_SuggestedPrayer.xml" translate="true" tnt-trx-ref-value="You Can Express Your Attitude Toward God Through Prayer." tnt-trx-translated="true">Maaari mong ihayag ang iyong naisin sa Diyos sapamamagitan ng panalangin.</page>
+  <page thumb="PageThumb_08.png" filename="08_HowCanYouBeSure.xml" translate="true" tnt-trx-ref-value="How Can You Be Sure That All This Has Really Happened?" tnt-trx-translated="true">Paano Malalaman Na Si Cristo'y Nasa Ating Buhay?</page>
+  <page thumb="PageThumb_09.png" filename="09_WhatHappens.xml" translate="true" tnt-trx-ref-value="If You Asked Jesus Into Your Life As Saviour And Lord, Many Things Have Happened, Including:" tnt-trx-translated="true">Sa sandaling tinanggap mo si Cristo sa pamamagitan ng pananampalataya, maraming bagay ang nangyari, kasama ang mga sumusunod:</page>
+  <page thumb="PageThumb_10.png" filename="10_HowToGrow.xml" translate="true" tnt-trx-ref-value="How To Grow As A Follower Of Jesus" tnt-trx-translated="true">Mga mungkahi sa pagalago sa buhay Kristiyano</page>
+  <page thumb="PageThumb_11.png" filename="11_FinalPage.xml" translate="true" tnt-trx-ref-value="Special Materials" tnt-trx-translated="true">Karagdagang Babasahin</page>
+  <about filename="00_About.xml" translate="true">About</about>
+  <instructions translate="true">
+  </instructions>
+</document>

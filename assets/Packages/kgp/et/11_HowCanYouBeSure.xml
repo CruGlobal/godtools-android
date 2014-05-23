@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#57324D" watermark="sprout_desat.png" buttons="4">
+	
+	<title>
+        <heading x="10" w="285" size="94" translate="true">KUIDAS SA SAAD OLLA KINDEL, ET KÕIK SEE PÄRISELT JUHTUS?</heading>
+    </title>
+
+    <button >
+		<buttontext size="90" translate="true">Jeesus on Sinu elus...</buttontext>
+		<panel>
+			<text size="90" translate="true">...sest Jumal on tõotanud, ja Teda võib usaldada.</text>
+			<text size="90" modifier="italics" translate="true">Täna Jumalat tihti selle eest, et Jeesus on Sinu elus ja et Ta ei jäta Sind kunagi.</text>
+            <text size="90" textalign="right" translate="true">(Kiri Roomlastele 8:38-39)</text>
+		</panel>
+	</button>
+	
+	<button yoffset="-12">
+		<buttontext size="90" translate="true">Sul on Kristuse Vaim</buttontext>
+		<panel>
+			<text size="90" translate="true">Sa võid kindel olla, et Kristuse Vaim elab Sinu sees ja Sul on igavene elu alates sellest hetkest, kui kutsusid Kristuse enda ellu, sest Ta on seda tõotanud.</text>
+			<text size="85" modifier="italics" translate="true">Ja see tunnistus on: Jumal on andnud meile igavese elu ja see elu on tema Pojas. Kellel on Poeg, sellel on elu; kellel ei ole Jumala Poega, sellel pole elu. Seda ma olen kirjutanud teile, kes te usute Jumala Poja nimesse, et te teaksite: teil on igavene elu.</text>
+            <text size="90" textalign="right" translate="true">- 1 Johannese 5:11-13</text>
+		</panel>
+	</button>
+    
+    <text textalign="center" size="110" modifier="bold" translate="true">Mis siis, kui Sa ei tunne end teisiti?</text>
+		
+	<button>
+		<buttontext size="90" translate="true">Toetu Jumalale</buttontext>
+		<panel>
+			<text size="90" translate="true">Kuigi tunded on põhjendatud ja tähtsad, ei määra need tõde. Jeesuse järgija elab oma elu, usaldades Jumalat ja seda, mida Ta on öelnud.</text>
+		</panel>
+	</button>
+	
+	<button yoffset="-12">
+		<buttontext size="85" translate="true">Ära toetu sellele, mida tunned.</buttontext>
+		<panel>
+            <text size="80" translate="true">Me toetume Jumalale ja Tema tõotustele Piiblis, mitte oma tunnetele. Tunded on küll põhjendatud ja tähtsad, kuid need ei määra tõde. Jeesuse järgija elab oma elu, usaldades Jumalat ja seda, mida Ta on öelnud läbi oma sõna, Piibli.</text>
+            <image align="center" yoffset="-8" w="286" h="90">Train.png</image>
+            <text size="72" yoffset="-8" textalign="center" translate="true">[ Fakt ] - [ Usk ] - [ Tunne ]</text>
+            <text size="80" translate="true">See rong illustreerib seost fakti (Jumal ja Tema Sõna), usu (meie usaldus Jumala ja Tema sõna vastu) ja tunnete (meie usu ja kuulekuse tulemus) vahel.</text>
+            <text size="80" translate="true">Rong liigub sõltumata tagavaguni olemasolust, aga oleks kasutu üritada vedada tervet rongi tagavagunit pidi. Täpselt samamoodi võime me toetuda Jumalale ja sellele, mida Ta on öelnud oma sõnas ja mitte toetuda oma tunnetele.</text>
+        </panel>
+    </button>
+    <question translate="true">Mis siis järgmiseks tuleb?</question>
+	
+</page>

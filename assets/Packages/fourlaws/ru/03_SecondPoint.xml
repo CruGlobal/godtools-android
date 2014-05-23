@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#F0AB00" watermark="Watermark.png">
+  <title>
+    <number>2</number>
+    <heading size="100" translate="true" tnt-trx-ref-value="MAN IS SINFUL AND SEPARATED FROM GOD.  THEREFORE, HE CANNOT KNOW AND EXPERIENCE GOD'S LOVE AND PLAN FOR HIS LIFE." tnt-trx-translated="true">ЧЕЛОВЕК ГРЕШЕН И ОТДЕЛЕН ОТ БОГА. ПОЭТОМУ ЧЕЛОВЕК НЕ В СОСТОЯНИИ НИ ПОЗНАТЬ, НИ ИСПЫТАТЬ ЛЮБОВЬ БОГА И ЕГО ЗАМЫСЕЛ.</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Man Is Sinful" tnt-trx-translated="true">Человек грешен</buttontext>
+    <panel>
+      <text translate="true" tnt-trx-ref-value="&quot;All have sinned and fall short of the glory of God.&quot;  (Romans 3:23)" tnt-trx-translated="true">"Потому что все согрешили и лишены славы Божией" (Рuмлянам 3:23)</text>
+      <text translate="true" tnt-trx-ref-value="Man was created to have fellowship with God; but, because of his own stubborn self-will, he chose to go his own independent way and fellowship with God was broken.  This self-will, characterized by an attitude of active rebellion or passive indifference, is an evidence of what the Bible calls sin." tnt-trx-translated="true">Человек был сотворен для того, чтобы иметь общение с Богом, но из-за упрямого своеволия человек избрал свой собственный путь. В результате этого общение с Богом было нарушено. Это своеволие, которое выражается в активном неповиновении Богу или просто в равнодушном отношении к Нему, Библия называет грехом.</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Man Is Separated" tnt-trx-translated="true">Человек отлучен от Бога</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;The wages of sin is death&quot; [spiritual separation from God].  (Romans 6:23)" tnt-trx-translated="true">"Ибо возмездие за грех - смерть" (духовное отлучение от Бога) (Рuмлянам 6:23).</text>
+      <image align="center" w="176" h="176">Separated.png</image>
+      <text size="72" textalign="center" translate="true" tnt-trx-ref-value="▲ - Holy God  |  ★ - Sinful Man" tnt-trx-translated="true">▲ - Святой Бог  |  ★ - Грешный человек</text>
+      <text size="90" translate="true" tnt-trx-ref-value="This diagram illustrates that God is holy and man is sinful.  A great gulf separates the two.  The arrows illustrate that man is continually trying to reach God and the abundant life through his own efforts, such as a good life, philosophy, or religion, but he inevitably fails." tnt-trx-translated="true">Этот рисунок показывает, что Бог свят, а человек грешен. Огромная пропасть разделяет их. Стрелки показывают, что человек постоянно пытается достичь Бога и жизни с избытком своими собственными силами, например, добрыми делами, философией или религией.</text>
+    </panel>
+  </button>
+  <question translate="true" tnt-trx-ref-value="The third principle explains the only way to bridge this gulf..." tnt-trx-translated="true">На единственный выход из этого тупика нам указывает третий закон...</question>
+</page>

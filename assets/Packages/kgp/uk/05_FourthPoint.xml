@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#57324D" watermark="sprout_desat.png" buttons="3">
+  <title>
+    <number>4</number>
+    <heading translate="true" tnt-trx-ref-value="WE MUST EACH RESPOND TO JESUS BY PLACING OUR TRUST IN HIM AS OUR SAVIOUR AND LORD. ONLY THEN CAN WE KNOW GOD PERSONALLY." tnt-trx-translated="true">МИ ПОВИННІ ІНДИВІДУАЛЬНО ПРИЙНЯТИ ІСУСА ХРИСТА ЯК НАШОГО СПАСИТЕЛЯ І ГОСПОДА; ТОДІ МИ ЗМОЖЕМО ОСОБИСТО ВЗНАТИ БОГА ТА ПЕРЕСВІДЧИТИСЬ У ЙОГО ЛЮБОВІ.</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="This Response Involves ..." tnt-trx-translated="true">Наша реакція передбачає...</buttontext>
+    <panel>
+      <text modifier="bold" translate="true" tnt-trx-ref-value="- Agreeing" tnt-trx-translated="true">- погодитись</text>
+      <text xoffset="10" translate="true" tnt-trx-ref-value="                  with God that we are sinful and deciding to turn from our sin." tnt-trx-translated="true">                  з Богом в тому, що ми є грішні та вирішити відвернутися від своїх гріхів.</text>
+      <text modifier="bold" yoffset="10" translate="true" tnt-trx-ref-value="- Trusting God" tnt-trx-translated="true">- довіритися Богові</text>
+      <text xoffset="10" translate="true" tnt-trx-ref-value="                         to forgive us completely because Jesus died for our sin." tnt-trx-translated="true">                         аби повністю простив нас, бо Ісус помер за наші гріхи.</text>
+      <text modifier="bold" yoffset="10" translate="true" tnt-trx-ref-value="- Choosing" tnt-trx-translated="true">- Вирішити</text>
+      <text xoffset="10" translate="true" tnt-trx-ref-value="                   to follow Jesus; putting him first in our lives." tnt-trx-translated="true">                   слідувати за Ісусом; помістивши Його на перше місце в нашому житті.</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="The Relationship is Personal" tnt-trx-translated="true">Стосунки є особистими</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="But to all who believed him and accepted him, he gave the right to become children of God." tnt-trx-translated="true">"А тим, хто прийняв Його, віруючим в ім'я Його, дав владу бути дітьми Божими." (Івана 1:12)</text>
+      <text yoffset="4" size="90" textalign="right">- John 1:12</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="The Relationship is a Gift" tnt-trx-translated="true">Стосунки - це подарунок</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="God saved you by his grace when you believed. And you can't take credit for this; it's a gift from God... so none of us can boast about it.   - Ephesians 2:8-9" tnt-trx-translated="true">Бо ви спасені благодаттю через віру. І це не від нас: воно дар Божий.Воно не від діл, щоб ніхто не міг хвалитися.-до Єфесян 2:8-9</text>
+      <text yoffset="12" size="90" translate="true" tnt-trx-ref-value="He saved us, not because of the righteous things we had done, but because of his mercy. He washed away our sins, giving us a new birth and new life.   - Titus 3:5" tnt-trx-translated="true">"він спас нас не ради діл справедливости, які ми були зробили, але з свого милосердя, купіллю відродження і відновленням Святого Духа.- Титу 3:5</text>
+    </panel>
+  </button>
+  <question size="90" translate="true" tnt-trx-ref-value="It's not enough just to know &#xD;&#xA;or feel that this is true.&#xD;&#xA;We have a choice to make..." tnt-trx-translated="true">Недостатньо просто знати, 
+або відчувати, що це правда.
+Нам треба зробити вибір...</question>
+</page>

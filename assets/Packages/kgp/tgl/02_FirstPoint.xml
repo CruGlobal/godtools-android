@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#7EB14F" watermark="sprout_desat.png" buttons="2">
+  <title>
+    <number>1</number>
+    <heading translate="true" tnt-trx-ref-value="GOD LOVES YOU AND CREATED YOU TO KNOW HIM PERSONALLY." tnt-trx-translated="true">INIIBIG KA NG DIYOS AT NILIKHA KA NIYA UPANG MAKILALA SIYA NG PERSONAL</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="God Loves You" tnt-trx-translated="true">Ini-ibig ka ng Diyos</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="God showed how much he loved us by sending his one and only Son into the world so that we might have eternal life through him." tnt-trx-translated="true">Ipinakita ng Diyos ang Kanyang pagmamahal sa atin sapamamagitan ng pagpapadala ng Kanyang Anak upang sapamamagitan Niya ay magkaroon ng buhay na walang hanggan.</text>
+      <text size="85" textalign="right">- 1 John 4:9</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="God Wants You to Know Him" tnt-trx-translated="true">NAIS NG DIYOS NA MAKILALA MO SIYA</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="And this is the way to have eternal life - to know you, the only true God, and Jesus Christ, the one you sent to earth." tnt-trx-translated="true">Ito ang buhay na walang hanggan: ang makilala ka nila, ang iisa at tunay na Diyos, at ang makilala si Jesu-Cristo na iyong isinugo.</text>
+      <text size="85" textalign="right">- John 17:3</text>
+    </panel>
+  </button>
+  <question translate="true" tnt-trx-ref-value="Why do you think most people &#xD;&#xA;don't know God personally?" tnt-trx-translated="true">Bakit, sa iyong palagay, maraming tao
+ang hindi nakakakilala sa Diyos ng personal?</question>
+</page>

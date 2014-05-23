@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#BC1111" watermark="Watermark.png" buttons="7">
+  <title>
+    <heading x="20" w="290" size="95" translate="true" tnt-trx-ref-value="SUGGESTIONS FOR CHRISTIAN GROWTH" tnt-trx-translated="true">SUGERENCIAS PARA EL CRECIMIENTO CRISTIANO</heading>
+    <peekpanel textalign="right" w="260" size="96" translate="true" tnt-trx-ref-value="Spiritual growth results from trusting Jesus Christ.  &quot;...The righteous man shall live by faith&quot; (Galatians 3:11).&#xD;&#xA;            &#xD;&#xA;            A life of faith will enable you to trust God increasingly with every detail of your life, and to practice the following:&#xD;&#xA;        " tnt-trx-translated="true">El crecimiento espiritual es el resultado de cuando confiamos en Cristo Jesús.  “...El justo por la fe vivirá” (Gálatas 3:11).
+            
+            Una vida de fe te capacitará para confiarle a Dios cada vez más todo detalle de tu vida y para practicar lo siguiente:
+        </peekpanel>
+  </title>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="G o ..." tnt-trx-translated="true">C onversa ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Go to God in prayer daily" tnt-trx-translated="true">Conversa con Dios en oración diariamente</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(John 15:7)" tnt-trx-translated="true">(Juan 15:7)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="R ead ..." tnt-trx-translated="true">R ecurre ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Read God's Word daily." tnt-trx-translated="true">Recurre a la Biblia diariamente.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see Acts 17:11)" tnt-trx-translated="true">(Hechos 17:11)</text>
+      <text size="90" translate="true" tnt-trx-ref-value="Begin with the Gospel of John." tnt-trx-translated="true">Comienza con el evangelio de Juan.</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="O bey ..." tnt-trx-translated="true">I nsiste ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Obey God moment by moment." tnt-trx-translated="true">Insiste en confiar a Dios cada aspecto de tu vida.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see John 14:21)" tnt-trx-translated="true">(Juan 14:21)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="W itness ..." tnt-trx-translated="true">S e ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Witness for Christ by your life and words." tnt-trx-translated="true">Se lleno del Espíritu Santo. Permítele dirigir y fortalecer tu vida diariamente para testificar.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see Matthew 4:19 and John 15:8)" tnt-trx-translated="true">(Gálatas 5:16,17; Hechos 1:8)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="T rust ..." tnt-trx-translated="true">T estifica ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Trust God for every detail of your life." tnt-trx-translated="true">Testifica a otros de Cristo verbalmente y con tu vida.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see 1 Peter 5:7)" tnt-trx-translated="true">(Mateo 4:19, Juan 15:8)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="H oly Spirit -" tnt-trx-translated="true">O bedece</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="Allow Him to control and empower your daily life and witness." tnt-trx-translated="true">Obedece a Dios momento a momento.</text>
+      <text textalign="right" size="80" translate="true" tnt-trx-ref-value="(see Galatians 5:16,17 and Acts 1:8)" tnt-trx-translated="true">(Juan 14:21)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="80" translate="true" tnt-trx-ref-value="Fellowship In A Good Church" tnt-trx-translated="true">Convivencia en una buena iglesia</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="God's Word instructs us not to forsake &quot;the assembling of ourselves together&quot; (Hebrews 10:25).  Several logs burn brightly together, but put one aside on the cold hearth and the fire goes out.  So it is with your relationship with other Christians." tnt-trx-translated="true">La palabra de Dios nos instruye a “no dejar de reunirnos” (Hebreos 10:25). Las brasas de un fuego arden cuando están juntas, pero si apartas una, esta se apagará. Así es tu relación con otros cristianos.</text>
+      <text size="90" translate="true" tnt-trx-ref-value="If you do not belong to a  church, do not wait to be invited.  Take the initiative; call the pastor of a nearby church where Christ is honored and His Word is preached.  Start this week, and make plans to attend regularly." tnt-trx-translated="true">Si no eres miembro de una iglesia, no esperes a que te inviten a hacerlo. Toma la iniciativa; llama o visita a un ministro de Dios en alguna iglesia cercana donde se exalte a Cristo y se predique Su Palabra. Comienza esta semana, y haz planes de asistir regularmente.</text>
+    </panel>
+  </button>
+</page>

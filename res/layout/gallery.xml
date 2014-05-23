@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/gallery_flipper" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<org.keynote.godtools.android.utils.ImageZoomView
+		android:id="@+id/gallery_image0" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" />
+
+	<org.keynote.godtools.android.utils.ImageZoomView
+		android:id="@+id/gallery_image1" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" />
+
+	<org.keynote.godtools.android.utils.ImageZoomView
+		android:id="@+id/gallery_image2" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" />
+
+</ViewFlipper>

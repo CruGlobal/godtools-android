@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#007486" watermark="sprout_desat.png" buttons="5">
+  <title>
+    <heading x="20" w="275" translate="true" tnt-trx-ref-value="IF YOU ASKED JESUS INTO YOUR LIFE AS SAVIOUR AND LORD, MANY THINGS HAVE HAPPENED, INCLUDING:" tnt-trx-translated="true">Si recibiste a Jesús en tu vida como Señor y Salvador, muchas cosas han pasado, incluyendo:</heading>
+  </title>
+  <button>
+    <buttontext size="90" translate="true" tnt-trx-ref-value="Jesus Has Come Into Your life" tnt-trx-translated="true">Cristo entró en tu vida</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="Jesus has come into your life by the Holy Spirit and he will never leave you." tnt-trx-translated="true">Jesús ha venido a tu vida por el Espíritu Santo y nunca te dejará.</text>
+      <text yoffset="4" size="90" textalign="right">(Hebrews 13:5)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="90" translate="true" tnt-trx-ref-value="Your Sins Have Been Forgiven" tnt-trx-translated="true">Tus pecados te fueron perdonados</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="All your sins have been forgiven." tnt-trx-translated="true">Todos tus pecados te fueron perdonados.</text>
+      <text yoffset="4" size="90" textalign="right">(Colossians 1:13-14)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="90" translate="true" tnt-trx-ref-value="You Are Now a Child of God" tnt-trx-translated="true">Ahora eres un hijo de Dios</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="You have become a child of God. He is your heavenly father." tnt-trx-translated="true">Te has convertido en un hijo de Dios. Él es tu Padre celestial.</text>
+      <text yoffset="4" size="90" textalign="right">(Galatians 3:26)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="90" translate="true" tnt-trx-ref-value="You Have Been Empowered" tnt-trx-translated="true">Has sido empoderado</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="God has given you new power to live a transformed life." tnt-trx-translated="true">Dios te ha dado un nuevo poder para vivir una vida transformada.</text>
+      <text yoffset="4" size="90" textalign="right">(2 Corinthians 5:17; Ephesians 3:14-21)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="90" translate="true" tnt-trx-ref-value="You Are Now Friends with God" tnt-trx-translated="true">Tú y Dios son amigos ahora</buttontext>
+    <panel>
+      <text yoffset="6" size="90" translate="true" tnt-trx-ref-value="You have started a friendship with God that will last forever." tnt-trx-translated="true">Has iniciado una amistad con Dios que durará para siempre.</text>
+      <text yoffset="4" size="90" textalign="right">(John 17:3)</text>
+    </panel>
+  </button>
+  <question translate="true" tnt-trx-ref-value="But how do we know this&#xD;&#xA;actually happened?" tnt-trx-translated="true">¿Cómo puedes estar seguro de que todo esto realmente sucedió?</question>
+</page>

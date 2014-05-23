@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#DC5C31" watermark="sprout_desat.png" buttons="1">
+	
+	<title mode="straight">
+		<heading textalign="center" size="111" x="10" w="300" translate="true">SA SAAD VÄLJENDADA OMA SUHTUMIST JUMALASSE PALVE KAUDU.</heading>
+		<subheading textalign="center" size="100" translate="true">Palve on lihtsalt vestlus Jumalaga.</subheading>
+	</title>
+
+	<button>
+		<buttontext translate="true">Siin on näide palvest</buttontext>
+		<panel>
+            <image align="center" w="280" h="2">line.png</image>
+			<text size="90" modifier="italics" textalign="left" translate="true">Issand Jeesus,</text>
+			<text size="90" modifier="italics" textalign="left" translate="true">Ma tahan Sind isiklikult tunda.</text>
+			<text size="90" modifier="italics" textalign="left" translate="true">Palun andesta, et olen oma tahtmist mööda elanud. Palun andesta mulle mu patud.</text>
+			<text size="90" modifier="italics" textalign="left" translate="true">Aitäh, et surid ristil, et maksta minu pattude eest.</text>
+			<text size="90" modifier="italics" textalign="left" translate="true">Olen nõus pöörduma oma senisest elust ja järgima Sind kui oma isiklikku Päästjat ja Issandat.</text>
+			<text size="90" modifier="italics" textalign="left" translate="true">Palun tule ja võta minu elus esikoht.</text>
+			<image align="center" w="280" h="2">line.png</image>
+			<text size="90" textalign="center" translate="true">Kas Sa saaksid seda veendunult Jumalale öelda?</text>
+            <text size="90" textalign="center" translate="true">Kas on midagi, mis takistab Sind praegu seda ütlemast?</text>
+		</panel>
+	</button>
+	
+		<text textalign="left" yoffset="12 " size="110" w="300" modifier="bold" translate="true">Kas Sa saaksid seda veendunult Jumalale öelda?</text>
+		<text textalign="left" yoffset="-24" size="110" w="300" modifier="bold" translate="true">Kas on midagi, mis takistab Sind praegu seda ütlemast?</text>
+
+	<question mode="straight" size="100" translate="true">Jeesus tuleb Sinu ellu, nagu Ta on lubanud.</question>
+
+</page>

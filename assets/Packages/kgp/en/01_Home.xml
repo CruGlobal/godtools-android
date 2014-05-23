@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page backgroundimage="grass.png" color="#7EB14F">
+	<title mode="clear">
+		<heading color="#000000" textalign="left" size="200" x="19" y="25" w="300" translate="true">KNOWING GOD</heading>
+		<subheading color="#000000" textalign="right" size="211" x="0" y="60" w="275" translate="true">personally</subheading>
+	</title>
+	
+	<text color="#000000" modifier="italics" size="112" xoffset="19" yoffset="40" w="260" translate="true">These four points explain how to enter into a personal relationship with God and experience the life for which you were created.</text>
+	   
+</page>

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#D95E00" watermark="Watermark.png" bigbuttons="2">
+  <title mode="straight">
+    <heading textalign="center" size="90" translate="true" tnt-trx-ref-value="THESE TWO CIRCLES REPRESENT TWO KINDS OF LIVES." tnt-trx-translated="true">ŠIE APSKRITIMAI ATSPINDI DU SKIRTINGUS ŽMONIŲ TIPUS.</heading>
+  </title>
+  <button mode="big">
+    <image align="center">SelfDirected.png</image>
+    <buttontext size="90" translate="true" tnt-trx-ref-value="Self-Directed Life" tnt-trx-translated="true">Pats žmogus valdo savo gyvenimą</buttontext>
+    <panel>
+      <text size="78" textalign="center" w="265" translate="true" tnt-trx-ref-value="s - Self is on the throne." tnt-trx-translated="true">s - "Aš" savo gyvenimo soste.</text>
+      <text size="78" textalign="center" w="265" translate="true" tnt-trx-ref-value="† - Christ is outside the life." tnt-trx-translated="true">† - Kristus už gyvenimo ribų.</text>
+      <text size="78" textalign="center" w="265" translate="true" tnt-trx-ref-value="o - Interests are directed by self, often resulting in discord and frustration.&#xD;&#xA;                &#xD;&#xA;            " tnt-trx-translated="true">o - Viskas gyvenime koncentruota į save, kas dažnai sukelia nusivylimą.
+                
+            </text>
+    </panel>
+  </button>
+  <button mode="big">
+    <image align="center">ChristDirected.png</image>
+    <buttontext size="90" translate="true" tnt-trx-ref-value="Christ-Directed Life" tnt-trx-translated="true">Kristus vadovauja žmogaus gyvenimui</buttontext>
+    <panel>
+      <text size="78" textalign="center" w="265" translate="true" tnt-trx-ref-value="† - Christ is in the life and on the throne." tnt-trx-translated="true">† - Kristus yra gyvenimo centre ir soste.</text>
+      <text size="78" textalign="center" w="265" translate="true" tnt-trx-ref-value="s - Self is yielding to Christ." tnt-trx-translated="true">s - "Aš" atsidavęs Kristui.</text>
+      <text size="78" textalign="center" w="265" translate="true" tnt-trx-ref-value="o - Interests are directed by Christ, resulting in harmony with God's plan." tnt-trx-translated="true">o - Siekiai yra įkvėpti Kristaus bei sutampa su Dievo sumanymu žmogaus gyvenimui.</text>
+      <image align="center" w="260" h="2">line.png</image>
+      <text modifier="italics" textalign="center" w="260" translate="true" tnt-trx-ref-value="Which circle best represents your life?" tnt-trx-translated="true">Kuris iš šių apskritimų atspindi tavo gyvenimą?</text>
+      <text modifier="italics" textalign="center" w="260" translate="true" tnt-trx-ref-value="Which circle would you like to have represent your life?" tnt-trx-translated="true">Kokį gyvenimą norėtum pasirinkti?</text>
+    </panel>
+  </button>
+  <question mode="straight" size="96" translate="true" tnt-trx-ref-value="The following explains how you can receive Christ ..." tnt-trx-translated="true">Štai kaip tu galėtum priimti Kristų ...</question>
+</page>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<document lang="en">
+  <packagename translate="true" tnt-trx-ref-value="The Four Spiritual Laws" tnt-trx-translated="true">Чотири Духовні Закони</packagename>
+  <page thumb="PageThumb_01.png" filename="01_Home.xml" translate="true" tnt-trx-ref-value="Home" tnt-trx-translated="true">Домашня</page>
+  <page thumb="PageThumb_02.png" filename="02_FirstPoint.xml" translate="true" tnt-trx-ref-value="1 God Loves You And Created You To Know Him Personally." tnt-trx-translated="true">1 Бог Любить Вас І Пропонує Чудовий План Для Вашого Життя.</page>
+  <page thumb="PageThumb_03.png" filename="03_SecondPoint.xml" translate="true" tnt-trx-ref-value="2 We Are Separated From God By Our Sin, So We Cannot Know Him Or Experience His Love." tnt-trx-translated="true">2 Людина Грішна І Відокремлена Від Бога, Тому Вона Не Може Знати Й Розуміти Божої Любові Та Його Плану Для Свого Життя.</page>
+  <page thumb="PageThumb_04.png" filename="04_ThirdPoint.xml" translate="true" tnt-trx-ref-value="3 Jesus Is God's Only Solution For Our Sin. Only Through Him Can We Know God And Receive His Love And Forgiveness." tnt-trx-translated="true">3 Іісус Христос - Єдиний Шлях До Примирення З Богом Та Вирішення Проблеми Позбавлення Людства Від Гріха. Через Нього Ви Можете Пізнати Й Зрозуміти Божу Любов Та Його План Для Вашого Життя.</page>
+  <page thumb="PageThumb_05.png" filename="05_FourthPoint.xml" translate="true" tnt-trx-ref-value="4 We Must Each Respond To Jesus By Placing Our Trust In Him As Our Saviour And Lord. Only Then Can We Know God Personally." tnt-trx-translated="true">4 Ми Повинні Прийняти Іісуса Христа, Як Свого Особистого Спасителя І Господа. Тільки Тоді Ми Будемо Знати З Досвіду Божу Любов Та Його План Для Нашого Життя.</page>
+  <page thumb="PageThumb_06.png" filename="06_TwoCircles.xml" translate="true" tnt-trx-ref-value="These Circles Describe Two Types Of People" tnt-trx-translated="true">Ці Два Кола Символізують Два Способи Життя:</page>
+  <page thumb="PageThumb_07.png" filename="07_SuggestedPrayer.xml" translate="true" tnt-trx-ref-value="You Can Express Your Attitude Toward God Through Prayer." tnt-trx-translated="true">Ви Можете Прийняти Христа Тепер, Вірою Через Молитву</page>
+  <page thumb="PageThumb_08.png" filename="08_HowCanYouBeSure.xml" translate="true" tnt-trx-ref-value="How Can You Be Sure That All This Has Really Happened?" tnt-trx-translated="true">Як Узнати, Чи Ввійшов Христос У Ваше Життя?</page>
+  <page thumb="PageThumb_09.png" filename="09_WhatHappens.xml" translate="true" tnt-trx-ref-value="If You Asked Jesus Into Your Life As Saviour And Lord, Many Things Have Happened, Including:" tnt-trx-translated="true">У Хвилину, Коли Ви Вірою Прийняли Христа, Як Чин Волі, Багато Чого Сталося У Вашому Житті:</page>
+  <page thumb="PageThumb_10.png" filename="10_HowToGrow.xml" translate="true" tnt-trx-ref-value="How To Grow As A Follower Of Jesus" tnt-trx-translated="true">Поради Для Зростання Християнина</page>
+  <page thumb="PageThumb_11.png" filename="11_FinalPage.xml" translate="true" tnt-trx-ref-value="Special Materials" tnt-trx-translated="true">Додаткові матеріали</page>
+  <about filename="00_About.xml" translate="true" tnt-trx-ref-value="About" tnt-trx-translated="true">Про</about>
+  <instructions translate="true">
+  </instructions>
+</document>

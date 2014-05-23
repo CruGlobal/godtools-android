@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#00759A" watermark="Watermark.png">
+  <title>
+    <number>1</number>
+    <heading size="110" translate="true" tnt-trx-ref-value="GOD LOVES YOU AND OFFERS A WONDERFUL PLAN FOR YOUR LIFE." tnt-trx-translated="true">하나님은 당신을 사랑하시며 당신을 위한 놀라운 계획을 가지고 계십니다.</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="God's Love" tnt-trx-translated="true">하나님의 사랑</buttontext>
+    <panel>
+      <text translate="true" tnt-trx-ref-value="&quot;For God so loved the world that He gave His one and only Son, that whoever believes in Him shall not perish but have eternal life.&quot;" tnt-trx-translated="true">"하나님이 세상을 이처럼 사랑하사 독생자를 주셨으니 이는 그를 믿는 자마다 멸망하지 않고 영생을 얻게 하려 하심이라"</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(John 3:16, NIV)" tnt-trx-translated="true">(요한복음 3:16, NIV)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="God's Plan" tnt-trx-translated="true">하나님의 계획</buttontext>
+    <panel>
+      <text size="97" translate="true" tnt-trx-ref-value="[Christ speaking] &quot;I came that they might have life, and might have it abundantly&quot; [that it might be full and meaningful]." tnt-trx-translated="true">예수 그리스도께서 말씀하시기를 "내가 온것은 양(당신)으로 생명을 얻게 하고 더 풍성히 얻게 하려는 것이라"고 하셨습니다.</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(John 10:10)" tnt-trx-translated="true">(요한복음 10:10)</text>
+    </panel>
+  </button>
+  <question size="96" translate="true" tnt-trx-ref-value="Why is it that most people &#xD;&#xA;are not experiencing the &#xD;&#xA;abundant life?  Because..." tnt-trx-translated="true">왜 대부분의 사람들은 하나님의 풍성한 삶을 누리지 못하고 있을까요? 그 이유는...</question>
+</page>

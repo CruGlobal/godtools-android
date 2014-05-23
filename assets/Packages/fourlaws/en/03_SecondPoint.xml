@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#F0AB00" watermark="Watermark.png">
+	
+	<title>
+        <number>2</number>
+        <heading size="100" translate="true">MAN IS SINFUL AND SEPARATED FROM GOD.  THEREFORE, HE CANNOT KNOW AND EXPERIENCE GOD'S LOVE AND PLAN FOR HIS LIFE.</heading>
+    </title>
+	
+	<button>
+		<buttontext translate="true">Man Is Sinful</buttontext>
+		<panel>
+			<text translate="true">"All have sinned and fall short of the glory of God."  (Romans 3:23)</text>
+            <text translate="true">Man was created to have fellowship with God; but, because of his own stubborn self-will, he chose to go his own independent way and fellowship with God was broken.  This self-will, characterized by an attitude of active rebellion or passive indifference, is an evidence of what the Bible calls sin.</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext translate="true">Man Is Separated</buttontext>
+		<panel>
+			<text size="90" translate="true">"The wages of sin is death" [spiritual separation from God].  (Romans 6:23)</text>
+			<image align="center" w="176" h="176">Separated.png</image>
+            <text size="72" textalign="center" translate="true">▲ - Holy God  |  ★ - Sinful Man</text>
+			<text size="90" translate="true">This diagram illustrates that God is holy and man is sinful.  A great gulf separates the two.  The arrows illustrate that man is continually trying to reach God and the abundant life through his own efforts, such as a good life, philosophy, or religion, but he inevitably fails.</text>
+		</panel>
+	</button>
+	
+	<question translate="true">The third principle explains the only way to bridge this gulf...</question>
+	
+</page>

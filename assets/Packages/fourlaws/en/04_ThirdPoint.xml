@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#A2AD00" watermark="Watermark.png">
+	
+	<title>
+		<number>3</number>
+		<heading size="90" translate="true">JESUS CHRIST IS GOD'S ONLY PROVISION FOR OUR SIN. THROUGH HIM ALONE WE CAN KNOW GOD PERSONALLY AND EXPERIENCE GOD'S LOVE AND PLAN.</heading>
+	</title>
+    
+	<button>
+		<buttontext translate="true">He Died in Our Place</buttontext>
+		<panel>
+			<text translate="true">"God demonstrates His own love for us, in that while we were yet sinners, Christ died for us."</text>
+            <text size="80" textalign="right" translate="true">(Romans 5:8)</text>
+		</panel>
+	</button>
+    
+	<button>
+		<buttontext translate="true">He Rose From the Dead</buttontext>
+		<panel>
+			<text translate="true">"Christ died for our sins…He was buried…He was raised on the third day, according to the Scriptures…He appeared to Peter, then to the Twelve.  After that He appeared to more than five hundred…"</text>
+            <text size="80" textalign="right" translate="true">(1 Corinthians 15:3-6)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext translate="true">He is the Only Way to God</buttontext>
+		<panel>
+			<text w="280" size="90" translate="true">"Jesus said to him, 'I am the way, and the truth, and the life; no one comes to the Father but through Me.'"  (John 14:6)</text>
+            <image align="center" w="176" h="176">Bridged.png</image>
+            <text size="72" textalign="center" translate="true">▲ - God  |  † - Jesus  |  ★ - Man</text>
+			<text size="90" translate="true">This diagram illustrates that God has bridged the gulf that separates us from Him by sending His Son, Jesus Christ, to die on the cross in our place to pay the penalty for our sins.</text> 
+        </panel>
+	</button>
+	
+	<question size="96" translate="true">It is not enough just to 
+know these three laws...
+    </question>
+    
+</page>

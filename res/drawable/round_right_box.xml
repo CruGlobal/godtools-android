@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:shape="rectangle">
+  <!--  Reversed left/right bottom corner definition - Required for API levels 11 and lower (a bug cured in API 12) -->
+  <!-- http://code.google.com/p/android/issues/detail?id=9161 -->
+  <corners 	android:radius="15dip"
+  	android:topLeftRadius="0dip"
+  	android:bottomRightRadius="0dip"/>
+  <solid android:color="#fff"/>
+  <size android:width="100dip" android:height="100dip"/>    
+</shape>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!--  Snuffy toolbar styles  -->
+	<style name="Toolbar">
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">44dip</item>
+		<item name="android:background">@drawable/toolbar_background</item>
+	</style>
+	<style name="ToolbarButton">
+		<item name="android:layout_width">44dip</item>
+		<item name="android:layout_height">44dip</item>
+		<item name="android:padding">12dip</item>
+		<item name="android:layout_centerVertical">true</item>
+		<item name="android:scaleType">fitCenter</item>
+		<item name="android:background">@drawable/toolbar_background</item>
+		<item name="android:tint">@color/toolbar_fg</item>
+	</style>
+	<style name="ToolbarButtonRight" parent="@style/ToolbarButton">
+		<item name="android:layout_alignParentRight">true</item>
+	</style>
+	<style name="ToolBarSep">
+		<item name="android:background">#444</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">1px</item>
+	</style>
+    
+    
+</resources>

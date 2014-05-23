@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#D95E00" watermark="Watermark.png" bigbuttons="2">
+  <title mode="straight">
+    <heading textalign="center" size="90" translate="true" tnt-trx-ref-value="THESE TWO CIRCLES REPRESENT TWO KINDS OF LIVES." tnt-trx-translated="true">Ang dalawang larawan ay kumakatawan sa dalawang uri ng buhay:</heading>
+  </title>
+  <button mode="big">
+    <image align="center">SelfDirected.png</image>
+    <buttontext size="90" translate="true" tnt-trx-ref-value="Self-Directed Life" tnt-trx-translated="true">Buhay na Pinaghaharian ng Sarili</buttontext>
+    <panel>
+      <text size="78" textalign="center" w="265" translate="true" tnt-trx-ref-value="s - Self is on the throne." tnt-trx-translated="true">s - Sarili ang nasa trono.</text>
+      <text size="78" textalign="center" w="265" translate="true" tnt-trx-ref-value="† - Christ is outside the life." tnt-trx-translated="true">† - Si Kristo ay nasa Labas ng Buhay.</text>
+      <text size="78" textalign="center" w="265" translate="true" tnt-trx-ref-value="o - Interests are directed by self, often resulting in discord and frustration.&#xD;&#xA;                &#xD;&#xA;            " tnt-trx-translated="true">o - Ang mga naisin ay pinaghaharian ng sarili at tuloy nagbubunga ng kabiguan sa buhay.
+                
+            </text>
+    </panel>
+  </button>
+  <button mode="big">
+    <image align="center">ChristDirected.png</image>
+    <buttontext size="90" translate="true" tnt-trx-ref-value="Christ-Directed Life" tnt-trx-translated="true">Buhay na Pinaghaharian ni Kristo</buttontext>
+    <panel>
+      <text size="78" textalign="center" w="265" translate="true" tnt-trx-ref-value="† - Christ is in the life and on the throne." tnt-trx-translated="true">† - Si Kristo ay nasa buhay at nasa trono.</text>
+      <text size="78" textalign="center" w="265" translate="true" tnt-trx-ref-value="s - Self is yielding to Christ." tnt-trx-translated="true">s - Sarili ay sumusunod kay Kristo.</text>
+      <text size="78" textalign="center" w="265" translate="true" tnt-trx-ref-value="o - Interests are directed by Christ, resulting in harmony with God's plan." tnt-trx-translated="true">o - Mag naisin ay pinaghaharian ni Kristo ayon sa layunin ng Diyos.</text>
+      <image align="center" w="260" h="2">line.png</image>
+      <text modifier="italics" textalign="center" w="260" translate="true" tnt-trx-ref-value="Which circle best represents your life?" tnt-trx-translated="true">Aling larawan ang kumakatawan ng iyong buhay?</text>
+      <text modifier="italics" textalign="center" w="260" translate="true" tnt-trx-ref-value="Which circle would you like to have represent your life?" tnt-trx-translated="true">Aling larawan ang ninanais mong kumatawan ng iyong buhay?</text>
+    </panel>
+  </button>
+  <question mode="straight" size="96" translate="true" tnt-trx-ref-value="The following explains how you can receive Christ ..." tnt-trx-translated="true">Ipinaliliwanag ng mga sumusunod kung paano tatanggpin si Cristo:...</question>
+</page>

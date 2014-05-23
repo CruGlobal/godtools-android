@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<document lang="en">
+	<packagename translate="true">The Four Spiritual Laws</packagename>
+	<page thumb="PageThumb_01.png" filename="01_Home.xml" translate="true">Home</page>
+	<page thumb="PageThumb_02.png" filename="02_FirstPoint.xml" translate="true">1 God Loves You And Created You To Know Him Personally.</page>
+    <page thumb="PageThumb_03.png" filename="03_SecondPoint.xml" translate="true">2 We Are Separated From God By Our Sin, So We Cannot Know Him Or Experience His Love.</page>
+    <page thumb="PageThumb_04.png" filename="04_ThirdPoint.xml" translate="true">3 Jesus Is God's Only Solution For Our Sin. Only Through Him Can We Know God And Receive His Love And Forgiveness.</page>
+    <page thumb="PageThumb_05.png" filename="05_FourthPoint.xml" translate="true">4 We Must Each Respond To Jesus By Placing Our Trust In Him As Our Saviour And Lord. Only Then Can We Know God Personally.</page>
+	<page thumb="PageThumb_06.png" filename="06_TwoCircles.xml" translate="true">These Circles Describe Two Types Of People</page>
+	<page thumb="PageThumb_07.png" filename="07_SuggestedPrayer.xml" translate="true">You Can Express Your Attitude Toward God Through Prayer.</page>
+	<page thumb="PageThumb_08.png" filename="08_HowCanYouBeSure.xml" translate="true">How Can You Be Sure That All This Has Really Happened?</page>
+    <page thumb="PageThumb_09.png" filename="09_WhatHappens.xml" translate="true">If You Asked Jesus Into Your Life As Saviour And Lord, Many Things Have Happened, Including:</page>
+	<page thumb="PageThumb_10.png" filename="10_HowToGrow.xml" translate="true">How To Grow As A Follower Of Jesus</page>
+	<page thumb="PageThumb_11.png" filename="11_FinalPage.xml" translate="true">Special Materials</page>
+	<about filename="00_About.xml" translate="true">About</about>
+    <instructions translate="true"></instructions>
+</document>

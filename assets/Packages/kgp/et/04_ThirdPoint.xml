@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#007486" watermark="sprout_desat.png" buttons="5">
+	
+	<title>
+		<number>3</number>
+		<heading size="90" translate="true">JEESUS ON AINUS LAHENDUS PATULE. AINULT LÄBI TEMA SAAME ME TUNDA JUMALAT JA VÕTTA VASTU TEMA ARMASTUST JA ANDESTUST.</heading>
+	</title>
+
+	<button>
+		<buttontext translate="true">Jeesus on Jumal</buttontext>
+		<panel>
+			<text size="90" translate="true">Tema on nähtamatu Jumala kuju, kogu loodu esmasündinu.</text>
+        <text size="90" textalign="right" translate="true">- Kiri Koloslastele 1:15</text>
+		</panel>
+	</button>
+
+	<button>
+		<buttontext translate="true">Jeesus suri meie eest</buttontext>
+		<panel>
+			<text size="90" translate="true">Sest ka Kristus kannatas pattude pärast üheainsa korra, õige ülekohtuste eest, et Ta teid juhiks Jumala juurde.</text>
+            <text size="90" textalign="right" translate="true">- 1 Peetruse 3:18a</text>
+		</panel>
+	</button>
+
+	<button>
+		<buttontext translate="true">Jeesus tõusis surnuist ellu</buttontext>
+		<panel>
+			<text size="90" translate="true">Neile ta oli pärast oma kannatamist näidanud ennast elavana, tõendades seda mitmel viisil, ilmudes neile neljakümne päeva jooksul ja kõneldes Jumala riigist. - Apostlite teod 1:3a</text>
+			<text size="90" translate="true">Tema ülestõusmine tõestas, et Ta on Jumal ja et Ta kandis karistust meie pattude eest.</text>
+		</panel>
+	</button>
+
+    <button>
+		<buttontext translate="true">Jeesus on ainus tee...</buttontext>
+		<panel>
+			<text size="90" translate="true">Jeesus ütles: "Mina olen tee ja tõde ja elu. Ükski ei saa minna Isa juurde muidu kui minu kaudu."</text>
+        <text size="90" textalign="right" translate="true">- Jh 14:6</text>
+		</panel>
+	</button>	
+	
+	<button>
+		<buttontext translate="true">Jumal tõestab oma armastust...</buttontext>
+        <panel>
+            <text w="280" size="80" translate="true">Sest nõnda on Jumal maailma armastanud, et ta oma ainusündinud Poja on andnud, et ükski, kes temasse usub, ei hukkuks, vaid et tal oleks igavene elu. - Jh 3:16</text>
+            <image align="center" w="120" h="120">Bridged.png</image>
+            <text size="76" textalign="center" translate="true">▲ - Jumal  |  † - Jeesus  |  ★ - Inimene</text>
+            <text size="80" translate="true">Kuigi me väärime igavest eraldatust Jumalast, saatis Jumal oma armastuses Jeesuse karistust kandma, surres ristil meie pattude eest.</text>
+             <text size="80" translate="true">Läbi Jeesuse on Jumal sillutanud sügaviku, mis meid Temast eraldas, tekitades võimaluse saada andeks ja taastada oma suhe Temaga.</text> 
+        </panel>
+        
+	</button>
+	
+	<question size="90" translate="true">Nende punktide teadmisest 
+üksi ei piisa...</question>
+
+</page>

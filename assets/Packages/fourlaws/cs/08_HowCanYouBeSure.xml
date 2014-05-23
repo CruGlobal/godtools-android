@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#F0AB00" watermark="Watermark.png">
+  <title>
+    <heading x="20" w="285" size="95" translate="true" tnt-trx-ref-value="HOW TO KNOW THAT CHRIST IS IN YOUR LIFE" tnt-trx-translated="true">JAK SI MŮŽEŠ BÝT JISTÝ, ŽE JEŽÍŠ JE VE TVÉM ŽIVOTĚ</heading>
+  </title>
+  <button>
+    <buttontext size="82" translate="true" tnt-trx-ref-value="Did you receive Christ into your life?" tnt-trx-translated="true">Přijal jsi Pána Ježíše do svého života?</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="According to His promise in Revelation 3:20, where is Christ right now in relation to you?  &#xD;&#xA;                &#xD;&#xA;Christ said He would come into your life.  Would He mislead you?  &#xD;&#xA;                &#xD;&#xA;On what authority do you know God has answered your prayer?  (The trustworthiness of God Himself and His Word.) " tnt-trx-translated="true">Ježíš slíbil, jak je psáno ve Zjevení 3,20, že k tobě vejde a stane se tvým Spasitelem a přítelem. Kde je tedy teď Ježíš?
+                
+Na základě čeho si můžeš být jistý, že Bůh odpověděl na tvou modlitbu? (Na základě důvěryhodnosti Boha a jeho Slova.) </text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="82" translate="true" tnt-trx-ref-value="The Bible promises Eternal Life ..." tnt-trx-translated="true">V Bibli je zaslíben věčný život...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="... to all who receive Christ." tnt-trx-translated="true">...všem, kdo přijmou Pána Ježíše.</text>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;God has given us eternal life, and this life is in His Son. He who has the Son has the life; he who does not have the Son of God does not have the life.  These things I have written to you who believe in the name of the Son of God, in order that you may know that you have eternal life.&quot;  (1 John 5:11-13)" tnt-trx-translated="true">„A to je to svědectví: Bůh nám dal věčný život, a ten život je v jeho Synu. Kdo má Syna, má život; kdo nemá Syna Božího, nemá život. Toto píšu vám, kteří věříte ve jméno Syna Božího, abyste věděli, že máte věčný život.“  1. Janův 5,11-13</text>
+      <text size="90" translate="true" tnt-trx-ref-value="Thank God often that Christ is in your life and that He will never leave you (Hebrews 13:5). You can know on the basis of His promise that Christ lives in you and that you have eternal life from the very moment you invite Him in.  He will not deceive you." tnt-trx-translated="true">Často Bohu děkuj za to, že Kristus vstoupil do tvého života a že tě nikdy neopustí (Židům 13,5). Na základě jeho zaslíbení si můžeš být jistý, že Ježíš v tobě žije a že s ním máš už teď věčný život. On nikdy nelže.</text>
+      <text size="90" translate="true" tnt-trx-ref-value="An important reminder..." tnt-trx-translated="true">Důležitá připomínka...</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="82" translate="true" tnt-trx-ref-value="Do Not Depend on Feelings" tnt-trx-translated="true">Nespoléhej se na pocity</buttontext>
+    <panel>
+      <text size="80" translate="true" tnt-trx-ref-value="The promise of God's Word, the Bible - not our feelings - is our authority.  The Christian lives by faith (trust) in the trustworthiness of God Himself and His Word.  This train diagram illustrates the relationship among fact (God and His Word), faith (our trust in God and His Word), and feeling (the result of our faith and obedience).  (Read John 14:21)" tnt-trx-translated="true">Pro nás jsou směrodatná zaslíbení Božího slova – Bible. Naše pocity jsou důležité, ale ne rozhodující. Křesťan žije vírou, to znamená, že se spoléhá na důvěryhodného Boha a jeho Slovo. Následující obrázek znázorňuje vztah mezi skutečností (Bůh a jeho slovo), vírou (naše důvěra Bohu a jeho slovu) a pocity. (Přečti si Janovo evangelium 14,21.)</text>
+      <image align="center" yoffset="-10" w="286" h="90">Train.png</image>
+      <text size="72" textalign="center" yoffset="-10" translate="true" tnt-trx-ref-value="[ Fact ] - [ Faith ] - [ Feeling ]" tnt-trx-translated="true">[ Skutečnost ] - [ Víra ] - [ Pocity ]</text>
+      <text size="80" translate="true" tnt-trx-ref-value="The train will run with or without the caboose.  However, it would be useless to attempt to pull the train by the caboose.  In the same way, as Christians we do not depend on feelings or emotions, but we place our faith (trust) in the trustworthiness of God and the promises of His Word." tnt-trx-translated="true">Vlak pojede s vagónem i bez něj. Bylo by však marné snažit se uvádět vlak do pohybu pomocí vagónu. Stejně tak náš křesťanský život půjde dopředu jen tehdy, když budeme věřit spolehlivému Bohu a jednat podle jeho slova, ne podle pocitů, které se často mění.</text>
+    </panel>
+  </button>
+</page>

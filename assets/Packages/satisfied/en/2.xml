@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#FB8D08" watermark="flame_desat.png" buttons="3">
+	<title mode="peek">
+		<heading size="70" translate="true">Satisfied?</heading>
+		<subheading translate="true">Which words would you use to describe your current experience as a Christian?</subheading>
+		<peekpanel textalign="center" translate="true">Growing | Frustrated
+Disappointing | Fulfilled
+Forgiven | Stuck | Struggling
+Joyful | Defeated | Exciting
+Up and Down | Empty
+Discouraged | Duty
+Intimate | Mediocre
+Painful | Dynamic | Guilty
+Vital | So-so | Others?</peekpanel>
+	</title>
+	
+	<button>
+		<buttontext translate="true">Do you desire more?</buttontext>
+		<panel>
+			<text modifier="italics" translate="true">Jesus said, "If anyone is thirsty, let him come to me and drink. Whoever believes in me, as the Scripture has said, streams of living water will flow from within him".  (John 7:37, 38)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext translate="true">What did Jesus mean?</buttontext>
+		<panel>
+			<text translate="true">John, the biblical author, went on to explain,</text>
+			<text modifier="italics" translate="true">"By this he meant the Spirit, whom those who believed in him were later to receive. Up to that time the Spirit had not been given, since Jesus had not yet been glorified".  (John 7:39)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext translate="true">Jesus promised...</buttontext>
+		<panel>
+			<text translate="true">...that God's Holy Spirit would satisfy the thirst, or deepest longings, of all who believe in Jesus Christ.</text>
+			<text translate="true">However, many Christians do not understand the Holy Spirit or how to experience Him in their daily lives.</text>
+		</panel>
+	</button>
+	
+	<question translate="true">The following principles will help you to understand and enjoy God's Spirit.</question>
+</page>

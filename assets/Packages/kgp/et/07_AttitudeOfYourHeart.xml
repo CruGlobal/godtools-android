@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#FAB15E" backgroundimage="ripples.png">
+	
+   
+    <text size="100" color="#DC5C31" modifier="bold" textalign="center" y="20" w="300" translate="true">SELLEKS, ET ASTUDA JUMALAGA SUHTESSE, PEAD SA ANDMA JEESUSELE</text>
+    
+    <text size="240" color="#DC5C31" textalign="center" modifier="italics" y="80" w="290" translate="true">kõik.</text>
+
+	<text size="100" color="#DC5C31" modifier="bold" textalign="center" y="150" w="300" translate="true">JUMAL EI VAATA NIIVÕRD SU SÕNADELE KUIVÕRD SINU SÜDAMEHOIAKULE.</text>
+
+</page>

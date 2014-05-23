@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#57324D" watermark="sprout_desat.png" buttons="3">
+	
+	<title>
+		<number>4</number>
+		<heading translate="true">ME PEAME IGAÜKS JEESUSE KUTSELE VASTAMA JA USALDAMA TEDA KUI OMA ISIKLIKKU PÄÄSTJAT JA ISSANDAT. AINULT NII SAAME TUNDA TEDA ISIKLIKULT.</heading>
+	</title>
+
+	<button>
+		<buttontext translate="true">See vastus hõlmab...</buttontext>
+		<panel>
+			<text modifier="bold" translate="true">- Nõustudes</text>
+			<text xoffset="10" yoffset="-4" translate="true">Jumalaga, et oleme patused ja otsustades pöörduda oma pattudest.</text>
+			<text modifier="bold" translate="true">- Usaldades Jumalat</text>
+			<text xoffset="10" yoffset="-4" translate="true">et Ta annab meile täielikult andeks, sest Jeesus suri meie pattude eest.</text>
+			<text modifier="bold" translate="true">- Valides</text>
+			<text xoffset="10" yoffset="-4" translate="true">järgida Jeesust; asetades Tema oma elus esimeseks.</text>
+		</panel>
+	</button>
+
+	<button>
+		<buttontext translate="true">Suhe on isiklik</buttontext>
+		<panel>
+			<text size="90" translate="true">Aga kõigile, kes tema vastu võtsid, andis ta meelevalla saada Jumala lasteks, neile, kes usuvad tema nimesse.</text>                          
+            <text size="90" textalign="right" translate="true">- Jh 1:12</text>
+		</panel>
+	</button>
+
+    <button>
+		<buttontext translate="true">Suhe on kingitus</buttontext>
+		<panel>
+			<text size="90" translate="true">Sest teie olete armu läbi päästetud usu kaudu - ja see ei ole teist enestest, vaid see on and Jumalalt -, mitte tegudest, et ükski ei saaks kiidelda. - Ef 2:8-9</text>
+			<text size="90" translate="true">Ta päästis meid - mitte õiguse tegude tõttu, mida meie nagu oleksime teinud, vaid oma halastust mööda, uuestisünni pesemise ja Püha Vaimu uuendamise kaudu. - Tiituse 3:5</text>
+		</panel>
+	</button>
+	
+	<question size="90" translate="true">Sellest ei piisa kui me lihtsalt 
+teame või tunneme, et see on õige.
+Me peame tegema valiku...</question>
+</page>

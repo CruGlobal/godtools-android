@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#F0AB00" watermark="Watermark.png">
+  <title>
+    <heading x="20" w="285" size="95" translate="true" tnt-trx-ref-value="HOW TO KNOW THAT CHRIST IS IN YOUR LIFE" tnt-trx-translated="true">KAIP GALI ŽINOTI, KAD KRISTUS YRA TAVO GYVENIME?</heading>
+  </title>
+  <button>
+    <buttontext size="82" translate="true" tnt-trx-ref-value="Did you receive Christ into your life?" tnt-trx-translated="true">Ar pakvietei Kristų vadovauti tavo gyvenimui?</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="According to His promise in Revelation 3:20, where is Christ right now in relation to you?  &#xD;&#xA;                &#xD;&#xA;Christ said He would come into your life.  Would He mislead you?  &#xD;&#xA;                &#xD;&#xA;On what authority do you know God has answered your prayer?  (The trustworthiness of God Himself and His Word.) " tnt-trx-translated="true">Remiantis pažadu, užrašytu Apreiškimo Jonui 3:20, kur yra Kristus tavo atžvilgiu?  
+                
+Kristus sakė, kad jis ateis į tavo gyvenimą.  Ar jis galėtų tave suklaidinti?  
+                
+Kuo remiamės sakydami, kad Dievas atsakė į tavo maldą?  (Pats Dievas ir Jo Žodis yra patikimas.) </text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="82" translate="true" tnt-trx-ref-value="The Bible promises Eternal Life ..." tnt-trx-translated="true">Biblija yra pažadamas amžinasis gyvenimas ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="... to all who receive Christ." tnt-trx-translated="true">... visiems, kurie priima Kristų.</text>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;God has given us eternal life, and this life is in His Son. He who has the Son has the life; he who does not have the Son of God does not have the life.  These things I have written to you who believe in the name of the Son of God, in order that you may know that you have eternal life.&quot;  (1 John 5:11-13)" tnt-trx-translated="true">"O liudijimas toks: Dievas mums suteikė amžinąjį gyvenimą, ir tas gyvenimas yra jo Sūnuje. Kas turi Sūnų, tas turi gyvenimą. Kas neturi Dievo Sūnaus, tas neturi gyvenimo. Aš tai parašiau jums, įtikėjusiems Dievo Sūnaus vardą, kad žinotumėte turį amžinąjį gyvenimą."    (Pirmas Jono laiškas 5:11-13)</text>
+      <text size="90" translate="true" tnt-trx-ref-value="Thank God often that Christ is in your life and that He will never leave you (Hebrews 13:5). You can know on the basis of His promise that Christ lives in you and that you have eternal life from the very moment you invite Him in.  He will not deceive you." tnt-trx-translated="true">Dažnai dėkoki Dievui, kad Kristus gyvena tavyje ir kad Jis niekada tavęs neapleis (Laiškas hebrajams 13:5). Remdamasis Jo pažadais, gali būti tikras, kad Kristus gyvena tavyje ir kad iškart, kai tik pakvietei Kristų vadovauti tavo gyvenimui, tu turi amžinąjį gyvenimą.  Kristus tavęs neapgaus ir neapvils.</text>
+      <text size="90" translate="true" tnt-trx-ref-value="An important reminder..." tnt-trx-translated="true">Labai svarbu prisiminti...</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext size="82" translate="true" tnt-trx-ref-value="Do Not Depend on Feelings" tnt-trx-translated="true">Nepasikliauti vien tik jausmais</buttontext>
+    <panel>
+      <text size="80" translate="true" tnt-trx-ref-value="The promise of God's Word, the Bible - not our feelings - is our authority.  The Christian lives by faith (trust) in the trustworthiness of God Himself and His Word.  This train diagram illustrates the relationship among fact (God and His Word), faith (our trust in God and His Word), and feeling (the result of our faith and obedience).  (Read John 14:21)" tnt-trx-translated="true">Mūsų gyvenimo pagrindas yra Šventasis Raštas, o ne jausmai.  Krikščionys gyvena, pasitikėdami Dievu bei Jo Žodžiu (Biblija).  Šis piešinys parodo, koks yra santykis tarp fakto (Dievo ir Jo Žodžio), tikėjimo(pasitikėjimo Dievu bei Jo Žodžiu) ir jausmų (mūsų tikėjimo ir paklusnumo rezultato).  (Perskaityk Evangeliją pagal Joną 14:21)</text>
+      <image align="center" yoffset="-10" w="286" h="90">Train.png</image>
+      <text size="72" textalign="center" yoffset="-10" translate="true" tnt-trx-ref-value="[ Fact ] - [ Faith ] - [ Feeling ]" tnt-trx-translated="true">[ Faktas] - [ Tikėjimas] - [ Jausmai]</text>
+      <text size="80" translate="true" tnt-trx-ref-value="The train will run with or without the caboose.  However, it would be useless to attempt to pull the train by the caboose.  In the same way, as Christians we do not depend on feelings or emotions, but we place our faith (trust) in the trustworthiness of God and the promises of His Word." tnt-trx-translated="true">Garvežys važiuoja tiek su vagonais, tiek be jų.  Tačiau tikėtis, kad vagonai trauktų garvežį būtų beprasmiška. Lygiai taip pat ir krikščionys nėra priklausomi nuo nuotaikų ar jausmų, o pasirenka tikėti Dievu bei Jo pažadais, kuriuos randame Jo Žodyje - Biblijoje.</text>
+    </panel>
+  </button>
+</page>

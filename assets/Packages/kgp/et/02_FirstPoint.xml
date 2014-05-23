@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#7EB14F" watermark="sprout_desat.png" buttons="2">
+
+	<title>
+		<number>1</number>
+		<heading translate="true">JUMAL ARMASTAB SIND JA TA LÕI SIND SELLEKS, ET SA TUNNEKSID TEDA ISIKLIKULT.</heading>
+	</title>
+	
+	<button>
+		<buttontext translate="true">Jumal armastab Sind</buttontext>
+		<panel>
+			<text size="90" translate="true">Jumala armastus meie vastu on saanud avalikuks selles, et Jumal oma ainusündinud Poja on läkitanud maailma, et me tema läbi elaksime.</text>
+                               
+        <text size="85" textalign="right" translate="true">- 1 Johannese 4:9</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext size="84" translate="true">Jumal tahab, et Sa Teda tunneksid</buttontext>
+		<panel>
+			<text size="90" translate="true">Aga igavene elu on see, et nad tunneksid sind, ainsat tõelist Jumalat, ja Jeesust Kristust, kelle sina oled läkitanud.</text>
+            <text size="85" textalign="right" translate="true">- Jh 17:3</text>
+		</panel>
+	</button>
+	
+	<question translate="true">Miks Sinu arvates ei tunne enamik inimesi Jumalat isiklikult?</question>
+
+</page>

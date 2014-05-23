@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#F0AB00" watermark="Watermark.png">
+  <title>
+    <number>2</number>
+    <heading size="100" translate="true" tnt-trx-ref-value="MAN IS SINFUL AND SEPARATED FROM GOD.  THEREFORE, HE CANNOT KNOW AND EXPERIENCE GOD'S LOVE AND PLAN FOR HIS LIFE." tnt-trx-translated="true">NJERIU ËSHTË MËKATAR DHE I NDARË NGA PERËNDIA. PRANDAJ AI NUK MUND TA NJOHË PERËNDINË DHE NUK MUND TË PËRJETOJË DASHURINË E TIJ DHE PLANIN E TIJ.</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Man Is Sinful" tnt-trx-translated="true">Njeriu është mëkatar</buttontext>
+    <panel>
+      <text translate="true" tnt-trx-ref-value="&quot;All have sinned and fall short of the glory of God.&quot;  (Romans 3:23)" tnt-trx-translated="true">“Të gjithë u bënë fajtorë dhe humbën madhështinë që u dha Perëndia” (Romakëve 3:23).</text>
+      <text translate="true" tnt-trx-ref-value="Man was created to have fellowship with God; but, because of his own stubborn self-will, he chose to go his own independent way and fellowship with God was broken.  This self-will, characterized by an attitude of active rebellion or passive indifference, is an evidence of what the Bible calls sin." tnt-trx-translated="true">Njeriu u krijua që të ketë shoqëri me Perëndinë, por për shkak të egoizmit të tij ai zgjodhi të ndiqte rrugën e vet të pavarur dhe shoqëria me Perëndinë u ndërpre. Këtë mënyrë të jetës pa Perëndinë që tregon indiferencë dhe rebelim kundër Tij, Bibla e quan mëkat.</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="Man Is Separated" tnt-trx-translated="true">Njeri është i ndarë</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="&quot;The wages of sin is death&quot; [spiritual separation from God].  (Romans 6:23)" tnt-trx-translated="true">Sepse paga e mëkatit është vdekja” (ndarje shpirtërore nga Perëndia) (Romakëve 6:23).</text>
+      <image align="center" w="176" h="176">Separated.png</image>
+      <text size="72" textalign="center" translate="true" tnt-trx-ref-value="▲ - Holy God  |  ★ - Sinful Man" tnt-trx-translated="true">▲ - Perëndia i Shenjtë  |  ★ - Njeri mëkatar</text>
+      <text size="90" translate="true" tnt-trx-ref-value="This diagram illustrates that God is holy and man is sinful.  A great gulf separates the two.  The arrows illustrate that man is continually trying to reach God and the abundant life through his own efforts, such as a good life, philosophy, or religion, but he inevitably fails." tnt-trx-translated="true">Ky diagram tregon se Perëndia është i shenjtë ndërsa njeriu mëkatar. Një humnerë shumë e gjerë dhe e thellë i ndan ata të dy. Shigjetat ilustrojnë njeriun që vazhdimisht mundohet të arrijë Perëndinë dhe jetën me bollëk me përpjekjet e veta, përmes veprave të mira fesë a filozofisë.</text>
+    </panel>
+  </button>
+  <question translate="true" tnt-trx-ref-value="The third principle explains the only way to bridge this gulf..." tnt-trx-translated="true">Parimi i tretë shpjegon urën e vetme që lidh këtë humnerë…...</question>
+</page>

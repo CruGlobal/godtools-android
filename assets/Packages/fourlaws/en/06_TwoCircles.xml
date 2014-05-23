@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#D95E00" watermark="Watermark.png" bigbuttons="2">
+	
+	<title mode="straight">
+		<heading textalign="center" size="90" translate="true">THESE TWO CIRCLES REPRESENT TWO KINDS OF LIVES.</heading>
+	</title>
+    
+	<button mode="big">
+		<image align="center">SelfDirected.png</image>
+		<buttontext size="90" translate="true">Self-Directed Life</buttontext>
+		<panel>
+            <text size="78" textalign="center" w="265" translate="true">s - Self is on the throne.</text>
+            <text size="78" textalign="center" w="265" translate="true">† - Christ is outside the life.</text>
+            <text size="78" textalign="center" w="265" translate="true">o - Interests are directed by self, often resulting in discord and frustration.
+                
+            </text> 
+		</panel>
+	</button>
+	
+	<button mode="big">
+		<image align="center">ChristDirected.png</image>
+		<buttontext size="90" translate="true">Christ-Directed Life</buttontext>
+		<panel> 
+            <text size="78" textalign="center" w="265" translate="true">† - Christ is in the life and on the throne.</text>
+            <text size="78" textalign="center" w="265" translate="true">s - Self is yielding to Christ.</text>
+            <text size="78" textalign="center" w="265" translate="true">o - Interests are directed by Christ, resulting in harmony with God's plan.</text> 
+            
+			<image align="center" w="260" h="2">line.png</image>
+            
+			<text modifier="italics" textalign="center" w="260" translate="true">Which circle best represents your life?</text>
+            
+			<text modifier="italics" textalign="center" w="260" translate="true">Which circle would you like to have represent your life?</text>
+		</panel>
+	</button>
+    
+	<question mode="straight" size="96" translate="true">The following explains how you can receive Christ ...</question>
+    
+</page>

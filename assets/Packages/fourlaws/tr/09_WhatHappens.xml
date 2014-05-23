@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#A2AD00" watermark="Watermark.png" buttons="6">
+  <title>
+    <heading x="20" w="275" size="95" translate="true" tnt-trx-ref-value="NOW THAT YOU HAVE RECEIVED CHRIST" tnt-trx-translated="true">ŞİMDİ İSA MESİHİ KABUL ETTİNİZ</heading>
+    <peekpanel textalign="right" w="260" size="90" translate="true" tnt-trx-ref-value="The moment you received Christ by faith, as an act of the will, many things happened, including the following:&#xD;&#xA;        " tnt-trx-translated="true">İsteğinizle İsa Mesih'i imanla yaşamınıza aldığınız an birçok şey yaşamınızda değişti, bunlar aşağıdakilerdir:
+        </peekpanel>
+  </title>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- Christ came into your life" tnt-trx-translated="true">- Mesih İsa yaşamınıza geldi</buttontext>
+    <panel>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(Revelation 3:20 and Colossians 1:27)" tnt-trx-translated="true">(Vahiy 3:20 and Koloseliler 1:27)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- Your sins were forgiven" tnt-trx-translated="true">- Günahlarınız bağışlandı</buttontext>
+    <panel>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(Colossians 1:14)" tnt-trx-translated="true">(Koloseliler 1:14)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- You became a child of God" tnt-trx-translated="true">- Tanrı'nın çocuğu oldunuz.</buttontext>
+    <panel>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(John 1:12)" tnt-trx-translated="true">(Yuhanna 1:12)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- You received eternal life" tnt-trx-translated="true">- Sonsuz yaşamı elde ettiniz.</buttontext>
+    <panel>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(John 5:24)" tnt-trx-translated="true">(Yuhanna 5:24)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- You began the great adventure..." tnt-trx-translated="true">- Tanrı'nın sizin için oluşturduğu...</buttontext>
+    <panel>
+      <text textalign="left" size="85" translate="true" tnt-trx-ref-value="...for which God created you." tnt-trx-translated="true">...serüven dolu bir yaşama başladınız.</text>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(John 10:10; 2 Corinthians 5:17; 1 Thessalonians 5:18)" tnt-trx-translated="true">(Yuhanna 10:10; 2 Korintliler 5:17; 1 Selanikliler 5:18)</text>
+    </panel>
+  </button>
+  <button yoffset="20">
+    <buttontext translate="true" tnt-trx-ref-value="Can you think of ..." tnt-trx-translated="true">Bu durumda...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="... anything more wonderful that could happen to you than receiving Christ?  Would you like to thank God in prayer right now for what He has done for you?  By thanking God, you demonstrate your faith." tnt-trx-translated="true">... İsa Mesih'i kabul etmekten daha düzel bir şey olabilir mi? Tanrı'ya bizim için yaptıklarından ötürü şimdi kısa bir dua ile teşekkür sunmak ister misiniz? O'na hamd etmekle aynı zamanda imanınızı açıklamış olursunuz.</text>
+    </panel>
+  </button>
+  <question size="96" translate="true" tnt-trx-ref-value="To enjoy your new life &#xD;&#xA;to the fullest..." tnt-trx-translated="true">Yeni yaşamınızı tüm doluluğuyla yaşayın...</question>
+</page>

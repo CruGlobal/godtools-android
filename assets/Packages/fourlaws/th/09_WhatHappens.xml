@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#A2AD00" watermark="Watermark.png" buttons="6">
+  <title>
+    <heading x="20" w="275" size="95" translate="true" tnt-trx-ref-value="NOW THAT YOU HAVE RECEIVED CHRIST" tnt-trx-translated="true">เมื่อท่านรับพระเยซูคริสต์แล้ว</heading>
+    <peekpanel textalign="right" w="260" size="90" translate="true" tnt-trx-ref-value="The moment you received Christ by faith, as an act of the will, many things happened, including the following:&#xD;&#xA;        " tnt-trx-translated="true">ในทันทีที่ท่านรับเอาพระเยซูคริสต์โดยความเชื่อนั้น มีหลายสิ่งหลายอย่างได้บังเกิดขึ้นในชีวิตของท่าน รวมทั้งสิ่งที่จะกล่าวต่อไปนี้ด้วย
+        </peekpanel>
+  </title>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- Christ came into your life" tnt-trx-translated="true">- พระเยซูคริสต์ได้เสด็จเข้ามาประทับในชีวิตของท่านแล้ว</buttontext>
+    <panel>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(Revelation 3:20 and Colossians 1:27)" tnt-trx-translated="true">(วิวรณ์ 3:20 และ โคโลสี 1:27)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- Your sins were forgiven" tnt-trx-translated="true">- ท่านได้รับการอภัยโทษบาปแล้ว</buttontext>
+    <panel>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(Colossians 1:14)" tnt-trx-translated="true">(โคโลสี 1:14)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- You became a child of God" tnt-trx-translated="true">- ท่านได้กลายเป็นบุตรของพระเจ้าแล้ว</buttontext>
+    <panel>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(John 1:12)" tnt-trx-translated="true">(ยอห์น 1:12)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- You received eternal life" tnt-trx-translated="true">- ท่านได้รับชีวิตนิรันดร์แล้ว</buttontext>
+    <panel>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(John 5:24)" tnt-trx-translated="true">(ยอห์น 5:24)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- You began the great adventure..." tnt-trx-translated="true">- ท่านจะเริ่มเผชิญชีวิตที่ตื่นเต้น...</buttontext>
+    <panel>
+      <text textalign="left" size="85" translate="true" tnt-trx-ref-value="...for which God created you." tnt-trx-translated="true">...ตามที่พระเจ้ามีแผนการไว้ให้แก่ท่านแล้ว</text>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(John 10:10; 2 Corinthians 5:17; 1 Thessalonians 5:18)" tnt-trx-translated="true">(ยอห์น 10:10; 2 โครินธ์ 5:17; 1 เธสะโลนิกา 5:18)</text>
+    </panel>
+  </button>
+  <button yoffset="20">
+    <buttontext translate="true" tnt-trx-ref-value="Can you think of ..." tnt-trx-translated="true">ท่านลองคิดดูซิว่า ...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="... anything more wonderful that could happen to you than receiving Christ?  Would you like to thank God in prayer right now for what He has done for you?  By thanking God, you demonstrate your faith." tnt-trx-translated="true">... มีอะไรที่ประเสริฐยิ่งกว่าการรับพระเยซูคริสต์?  ท่านอยากจะอธิษฐานขอบพระคุณพระเจ้า สำหรับสิ่งที่พระองค์ทรงกระทำเพื่อท่านเดี๋ยวนี้ไหม?  การขอบพระคุณพระเจ้าเป็นการสำแดงออกซึ่งความเชื่อที่เรามีต่อพระองค์</text>
+    </panel>
+  </button>
+  <question size="96" translate="true" tnt-trx-ref-value="To enjoy your new life &#xD;&#xA;to the fullest..." tnt-trx-translated="true">ในการที่จะดำเนินชีวิตใหม่ของท่านอย่างเต็มที่...</question>
+</page>

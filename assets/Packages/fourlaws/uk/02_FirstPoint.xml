@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#00759A" watermark="Watermark.png">
+  <title>
+    <number>1</number>
+    <heading size="110" translate="true" tnt-trx-ref-value="GOD LOVES YOU AND OFFERS A WONDERFUL PLAN FOR YOUR LIFE." tnt-trx-translated="true">БОГ ЛЮБИТЬ ВАС І В НЬОГО Є ДИВОВИЖНИЙ, ПРЕКРАСНИЙ ЗАДУМ ВІДНОСНО ВАШОГО ЖИТТЯ.</heading>
+  </title>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="God's Love" tnt-trx-translated="true">Божа любов</buttontext>
+    <panel>
+      <text translate="true" tnt-trx-ref-value="&quot;For God so loved the world that He gave His one and only Son, that whoever believes in Him shall not perish but have eternal life.&quot;" tnt-trx-translated="true">"Бо так полюбив Бог світ, що віддав Сина Свого Єдинородного, щоб кожен, хто вірує в Нього, не згинув, але мав життя вічне."</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(John 3:16, NIV)" tnt-trx-translated="true">(Івана 3:16)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext translate="true" tnt-trx-ref-value="God's Plan" tnt-trx-translated="true">Божий задум</buttontext>
+    <panel>
+      <text size="97" translate="true" tnt-trx-ref-value="[Christ speaking] &quot;I came that they might have life, and might have it abundantly&quot; [that it might be full and meaningful]." tnt-trx-translated="true">Христос сказав: "Я прийшов для того, щоб мали життя, і мали c надлишком", тобто повноцінне життя, наповнену глибоким духовним змістом.</text>
+      <text size="80" textalign="right" translate="true" tnt-trx-ref-value="(John 10:10)" tnt-trx-translated="true">(Івана 10:10)</text>
+    </panel>
+  </button>
+  <question size="96" translate="true" tnt-trx-ref-value="Why is it that most people &#xD;&#xA;are not experiencing the &#xD;&#xA;abundant life?  Because..." tnt-trx-translated="true">Чому ж у більшості людей 
+немає цієї «життя з надлишком»? 
+Тому що ...</question>
+</page>

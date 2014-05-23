@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<page color="#A2AD00" watermark="Watermark.png" buttons="6">
+  <title>
+    <heading x="20" w="275" size="95" translate="true" tnt-trx-ref-value="NOW THAT YOU HAVE RECEIVED CHRIST" tnt-trx-translated="true">CO SE STALO, KDYŽ JSI PŘIJAL PÁNA JEŽÍŠE?</heading>
+    <peekpanel textalign="right" w="260" size="90" translate="true" tnt-trx-ref-value="The moment you received Christ by faith, as an act of the will, many things happened, including the following:&#xD;&#xA;        " tnt-trx-translated="true">V okamžiku, kdy jsi vírou přijal Ježíše do svého života, stalo se mimo jiné toto:
+        </peekpanel>
+  </title>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- Christ came into your life" tnt-trx-translated="true">- Ježíš vstoupil do tvého života</buttontext>
+    <panel>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(Revelation 3:20 and Colossians 1:27)" tnt-trx-translated="true">Zjevení 3,20 a Koloským 1,27</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- Your sins were forgiven" tnt-trx-translated="true">- Byly ti odpuštěny hříchy</buttontext>
+    <panel>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(Colossians 1:14)" tnt-trx-translated="true">Koloským 1,14</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- You became a child of God" tnt-trx-translated="true">- Stal ses Božím dítětem</buttontext>
+    <panel>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(John 1:12)" tnt-trx-translated="true">Jan 1,12</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- You received eternal life" tnt-trx-translated="true">- Dostal jsi věčný život</buttontext>
+    <panel>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(John 5:24)" tnt-trx-translated="true">Jan 5,24</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext modifier="bold" textalign="left" size="85" translate="true" tnt-trx-ref-value="- You began the great adventure..." tnt-trx-translated="true">- Začal jsi žít nový život,...</buttontext>
+    <panel>
+      <text textalign="left" size="85" translate="true" tnt-trx-ref-value="...for which God created you." tnt-trx-translated="true">...který ti Bůh připravil a pro který tě stvořil.</text>
+      <text textalign="center" size="85" translate="true" tnt-trx-ref-value="(John 10:10; 2 Corinthians 5:17; 1 Thessalonians 5:18)" tnt-trx-translated="true">(Jan 10,10; 2. Korintským 5,17; 1. Tesalonickým 5,18)</text>
+    </panel>
+  </button>
+  <button yoffset="20">
+    <buttontext translate="true" tnt-trx-ref-value="Can you think of ..." tnt-trx-translated="true">Je něco...</buttontext>
+    <panel>
+      <text size="90" translate="true" tnt-trx-ref-value="... anything more wonderful that could happen to you than receiving Christ?  Would you like to thank God in prayer right now for what He has done for you?  By thanking God, you demonstrate your faith." tnt-trx-translated="true">... významnějšího a zároveň radostnějšího, co by tě mohlo potkat než přijetí Krista? Chtěl bys teď poděkovat Bohu za to, co pro tebe udělal? Vděčnost je jeden ze způsobů, jak vyjádřit svou víru.</text>
+    </panel>
+  </button>
+  <question size="96" translate="true" tnt-trx-ref-value="To enjoy your new life &#xD;&#xA;to the fullest..." tnt-trx-translated="true">Abys mohl prožívat svůj nový život naplno...</question>
+</page>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#DBF0FC" backgroundimage="wave.png">
+	
+	<text color="#007486" size="100" modifier="bold" textalign="center" y="200" w="300" translate="true">MIS JUHTUB KUI SA USALDAD</text>
+	<text color="#007486" size="240" modifier="italics" textalign="center" y="225" w="300" translate="true">Jeesust?</text>
+
+</page>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<page color="#57324D" watermark="sprout_desat.png" buttons="3">
+	
+	<title>
+		<number>4</number>
+		<heading translate="true">WE MUST EACH RESPOND TO JESUS BY PLACING OUR TRUST IN HIM AS OUR SAVIOUR AND LORD. ONLY THEN CAN WE KNOW GOD PERSONALLY.</heading>
+	</title>
+    
+	<button>
+		<buttontext translate="true">This Response Involves ...</buttontext>
+		<panel>
+			<text modifier="bold" translate="true">- Agreeing</text>
+			<text xoffset="10" yoffset="-4" translate="true">with God that we are sinful and deciding to turn from our sin.</text>
+			<text modifier="bold" translate="true">- Trusting God</text>
+			<text xoffset="10" yoffset="-4" translate="true">to forgive us completely because Jesus died for our sin.</text>
+			<text modifier="bold" translate="true">- Choosing</text>
+			<text xoffset="10" yoffset="-4" translate="true">to follow Jesus; putting him first in our lives.</text>
+		</panel>
+	</button>
+    
+	<button>
+		<buttontext translate="true">The Relationship is Personal</buttontext>
+		<panel>
+			<text size="90" translate="true">But to all who believed him and accepted him, he gave the right to become children of God.</text>                          
+            <text size="90" textalign="right" translate="true">- John 1:12</text>
+		</panel>
+	</button>
+    
+    <button>
+		<buttontext translate="true">The Relationship is a Gift</buttontext>
+		<panel>
+			<text size="90" translate="true">God saved you by his grace when you believed. And you can't take credit for this; it's a gift from God... so none of us can boast about it.   - Ephesians 2:8-9</text>
+			<text size="90" translate="true">He saved us, not because of the righteous things we had done, but because of his mercy. He washed away our sins, giving us a new birth and new life.   - Titus 3:5</text>
+		</panel>
+	</button>
+	
+	<question size="90" translate="true">It's not enough just to know 
+or feel that this is true.
+We have a choice to make...</question>
+</page>
