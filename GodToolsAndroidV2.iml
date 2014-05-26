@@ -71,6 +71,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="play-services-4.3.23" level="project" />
     <orderEntry type="library" exported="" name="FlurryAgent" level="project" />
+    <orderEntry type="library" exported="" name="crittercism_v4_5_3_sdkonly" level="project" />
     <orderEntry type="library" exported="" name="support-v4-19.0.1" level="project" />
   </component>
 </module>
