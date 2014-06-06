@@ -11,11 +11,10 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
-public class HttpPostTask extends HttpTask{
+public class HttpPostTask extends HttpTask {
 
     private String url;
     private JSONObject data;
@@ -26,10 +25,10 @@ public class HttpPostTask extends HttpTask{
     }
 
     @Override
-    protected String doInBackground(Object... params) {
+    protected InputStream doInBackground(Object... params) {
 
         url = params[0].toString();
-        data = (JSONObject)params[1];
+        data = (JSONObject) params[1];
         tag = params[2].toString();
 
         HttpPost request = new HttpPost(url);
@@ -55,27 +54,21 @@ public class HttpPostTask extends HttpTask{
             HttpResponse response = httpClient.execute(request);
             statusCode = response.getStatusLine().getStatusCode();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
-            StringBuilder builder = new StringBuilder();
-            for (String line; (line = reader.readLine()) != null;) {
-                builder.append(line).append("\n");
-            }
+            return response.getEntity().getContent();
 
-            return builder.toString();
-
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
     @Override
-    protected void onPostExecute(String xmlString) {
+    protected void onPostExecute(InputStream is) {
 
-        if (statusCode == HttpStatus.SC_OK){
-            taskHandler.httpTaskComplete(url, xmlString, statusCode, tag);
+        if (statusCode == HttpStatus.SC_OK) {
+            taskHandler.httpTaskComplete(url, is, statusCode, tag);
         } else {
-            taskHandler.httpTaskFailure(url, xmlString, statusCode, tag);
+            taskHandler.httpTaskFailure(url, is, statusCode, tag);
         }
 
     }

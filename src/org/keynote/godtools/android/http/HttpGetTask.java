@@ -9,21 +9,20 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 
-public class HttpGetTask extends HttpTask{
+public class HttpGetTask extends HttpTask {
 
     private String url;
     private String tag;
 
-    public HttpGetTask(HttpTaskHandler listener){
+    public HttpGetTask(HttpTaskHandler listener) {
         taskHandler = listener;
     }
 
     @Override
-    protected String doInBackground(Object... params) {
+    protected InputStream doInBackground(Object... params) {
 
         url = params[0].toString();
         tag = params[1].toString();
@@ -31,6 +30,7 @@ public class HttpGetTask extends HttpTask{
         HttpGet request = new HttpGet(url);
         request.setHeader("Accept", "application/xml");
         request.setHeader("Content-type", "application/xml");
+        request.setHeader("authentication", "apikey");
 
         HttpParams httpParams = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParams, 30000);
@@ -41,13 +41,7 @@ public class HttpGetTask extends HttpTask{
             HttpResponse response = httpClient.execute(request);
             statusCode = response.getStatusLine().getStatusCode();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
-            StringBuilder builder = new StringBuilder();
-            for (String line; (line = reader.readLine()) != null;) {
-                builder.append(line).append("\n");
-            }
-
-            return builder.toString();
+            return response.getEntity().getContent();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -57,12 +51,12 @@ public class HttpGetTask extends HttpTask{
     }
 
     @Override
-    protected void onPostExecute(String xmlString) {
+    protected void onPostExecute(InputStream is) {
 
-        if (statusCode == HttpStatus.SC_OK){
-            taskHandler.httpTaskComplete(url, xmlString, statusCode, tag);
+        if (statusCode == HttpStatus.SC_OK) {
+            taskHandler.httpTaskComplete(url, is, statusCode, tag);
         } else {
-            taskHandler.httpTaskFailure(url, xmlString, statusCode, tag);
+            taskHandler.httpTaskFailure(url, is, statusCode, tag);
         }
     }
 }
