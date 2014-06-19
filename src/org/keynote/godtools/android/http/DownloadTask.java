@@ -1,19 +1,31 @@
 package org.keynote.godtools.android.http;
 
+import android.content.Context;
 import android.os.AsyncTask;
+
+import org.keynote.godtools.android.business.GTPackage;
+import org.keynote.godtools.android.business.GTPackageReader;
+import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.snuffy.Decompress;
 
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.util.List;
 
 public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
 
-    private DownloadTaskHandler taskHandler;
+    private DownloadTaskHandler mTaskHandler;
+    private Context mContext;
     private String url, filePath, tag;
 
     public static interface  DownloadTaskHandler {
@@ -21,8 +33,9 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
         void downloadTaskFailure(String url, String filePath, String tag);
     }
 
-    public DownloadTask(DownloadTaskHandler taskHandler) {
-        this.taskHandler = taskHandler;
+    public DownloadTask(Context context, DownloadTaskHandler taskHandler) {
+        this.mTaskHandler = taskHandler;
+        this.mContext = context;
     }
 
     @Override
@@ -34,14 +47,22 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
 
         try {
             URL mURL = new URL(url);
-            InputStream is = mURL.openStream();
+            URLConnection c = mURL.openConnection();
+            c.addRequestProperty("authorization", "a");
+            c.addRequestProperty("interpreter", "1");
+
+            InputStream is = c.getInputStream();
             DataInputStream dis = new DataInputStream(is);
 
-            File file = new File(filePath);
+            File zipfile = new File(filePath);
+            String parentDir = zipfile.getParent();
+            File unzipDir = new File(parentDir);
+            unzipDir.mkdirs();
+
             byte[] buffer = new byte[2048];
             int length;
 
-            FileOutputStream fout = new FileOutputStream(file);
+            FileOutputStream fout = new FileOutputStream(zipfile);
             BufferedOutputStream bufferOut = new BufferedOutputStream(fout, buffer.length);
 
             while ((length = dis.read(buffer, 0, buffer.length)) != -1)
@@ -52,6 +73,50 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
 
             dis.close();
             fout.close();
+
+            // unzip package.zip
+            new Decompress().unzip(zipfile, unzipDir);
+
+            // parse content.xml
+            String content = unzipDir + "/contents.xml";
+            File contentFile = new File(content);
+            List<GTPackage> packageList = GTPackageReader.processContentFile(contentFile);
+
+            // save the parsed packages to database
+            DBAdapter adapter = DBAdapter.getInstance(mContext);
+            adapter.open();
+            for (GTPackage gtp : packageList) {
+                adapter.insertGTPackage(gtp);
+            }
+            adapter.close();
+
+            // delete package.zip and contents.xml
+            zipfile.delete();
+            contentFile.delete();
+
+            // move files to main directory
+            String mainDir = unzipDir.getParent();
+            FileInputStream inputStream;
+            FileOutputStream outputStream;
+
+            File[] fileList = unzipDir.listFiles();
+            File oldFile;
+            for (int i = 0; i < fileList.length; i++){
+                oldFile = fileList[i];
+                inputStream = new FileInputStream(oldFile);
+                outputStream = new FileOutputStream(mainDir + File.separator + oldFile.getName());
+                copyFile(inputStream, outputStream);
+
+                inputStream.close();
+                inputStream = null;
+                outputStream.flush();
+                outputStream.close();
+                outputStream = null;
+                oldFile.delete();
+            }
+
+            // delete unzip directory
+            unzipDir.delete();
 
             return true;
 
@@ -68,9 +133,17 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
     protected void onPostExecute(Boolean isSuccessful) {
 
         if (isSuccessful)
-            taskHandler.downloadTaskComplete(url, filePath, tag);
+            mTaskHandler.downloadTaskComplete(url, filePath, tag);
         else
-            taskHandler.downloadTaskFailure(url, filePath, tag);
+            mTaskHandler.downloadTaskFailure(url, filePath, tag);
 
+    }
+
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while ((read = in.read(buffer)) != -1) {
+            out.write(buffer, 0, read);
+        }
     }
 }

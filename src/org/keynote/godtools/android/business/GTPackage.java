@@ -10,7 +10,7 @@ public class GTPackage {
 
     private String code;
     private String name;
-    private int version;
+    private double version;
     private String language;
     private String configFileName;
     private String status;
@@ -31,11 +31,11 @@ public class GTPackage {
         this.name = name;
     }
 
-    public int getVersion() {
+    public double getVersion() {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(double version) {
         this.version = version;
     }
 
@@ -65,11 +65,13 @@ public class GTPackage {
 
     public static List<GTPackage> getPackageByLanguage(Context context, String language){
         DBAdapter adapter = DBAdapter.getInstance(context);
+        adapter.open();
         return adapter.getGTPackageByLanguage(language);
     }
 
     public long addToDatabase(Context context){
         DBAdapter adapter = DBAdapter.getInstance(context);
+        adapter.open();
         return adapter.insertGTPackage(this);
     }
 }
