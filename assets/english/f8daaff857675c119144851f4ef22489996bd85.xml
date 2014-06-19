@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="3" color="#7EB14F" shadows="no">
+    
+	<title mode="plain">
+		<subheading gtapi-trx-id="5e742311-2fd7-49c5-956d-388eb62f4481" size="118" textalign="left" translate="true">If this app has helped you, please share it with someone else, so that others may come to Know God Personally.</subheading>
+	</title>
+
+	<text gtapi-trx-id="edf08b32-c33c-478b-98d7-3239b14cf75a" size="112" textalign="center" translate="true" w="300" y="140">You can share it via our website:</text>
+	
+    <button gtapi-trx-id="be152e00-0774-4b52-a68c-5ff68f478093" mode="url" translate="true" y="165">www.ccca.org.au/app/</button>
+	
+	<text gtapi-trx-id="4c86fce0-5abf-4748-95b2-5bedb5fbb92e" size="82" textalign="center" translate="true" w="300" y="235">? 2010 Campus Crusade for Christ, Inc. and Bright Media Foundation all rights reserved. Created by Campus Crusade for Christ, Australia. No part of this app may be changed in any way or reproduced in any form without written permission from the publisher.</text>
+	
+	<text gtapi-trx-id="3d56c5f1-40ca-4b2b-a495-545f11500c99" modifier="bold" size="94" textalign="center" translate="true" w="300" x="15" y="370">Campus Crusade for Christ Australia</text>
+	
+	<!--<button mode="phone" y="400" translate="true">+61-3-9014-7584</button>-->
+	<button gtapi-trx-id="48dab3b5-7f4f-461e-9084-da8b3ff2d1ea" mode="email" translate="true" y="400">resources@ccca.org.au</button>
+	<button gtapi-trx-id="a49963d3-d3cb-4f7e-9f22-e1c971ef17f0" mode="url" translate="true" y="450">www.ccca.org.au</button>
+	
+	<text gtapi-trx-id="57928ab0-c06b-417e-a456-18e0e52cbe8c" size="82" textalign="center" translate="true" w="300" y="520">All Bible references are from the New Living Translation.</text>
+</page>

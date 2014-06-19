@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="7" color="#BC1111" watermark="7332eeca6be3275ed2ef9340c3dab5816f8b88e7.png">
+	
+	<title>
+        <heading gtapi-trx-id="b3392b0e-3741-4d21-8045-8cf100ea19e1" size="95" translate="true" w="290" x="20">SUGGESTIONS FOR CHRISTIAN GROWTH</heading>
+	  	<peekpanel gtapi-trx-id="675c9e3e-5f19-4363-97fb-5c113481a49e" size="96" textalign="right" translate="true" w="260">Spiritual growth results from trusting Jesus Christ.  "...The righteous man shall live by faith" (Galatians 3:11).
+            
+            A life of faith will enable you to trust God increasingly with every detail of your life, and to practice the following:</peekpanel>
+    </title>
+	
+	<button>
+		<buttontext gtapi-trx-id="3a44ae8b-57fb-40b2-ae07-e49a247b86d6" size="80" translate="true">G o ...</buttontext>
+		<panel>
+			<text gtapi-trx-id="b23cc422-5a2d-4373-9351-273869cc9492" size="90" translate="true">Go to God in prayer daily</text>
+            <text gtapi-trx-id="e74896c6-c75c-4977-b966-ca6d638b09fc" size="80" textalign="right" translate="true">(John 15:7)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext gtapi-trx-id="5264f7e7-3efa-4402-92ea-8ec03611f458" size="80" translate="true">R ead ...</buttontext>
+		<panel>
+			<text gtapi-trx-id="e6faf043-f9e8-4cdb-8bd3-d62f7d0cc333" size="90" translate="true">Read God's Word daily.</text>
+            <text gtapi-trx-id="fea177dc-bfaf-403a-a8d8-42f9654e353a" size="80" textalign="right" translate="true">(see Acts 17:11)</text>
+            <text gtapi-trx-id="3ba9a1c9-f45a-4ab6-ac6b-5c5f200a0e49" size="90" translate="true">Begin with the Gospel of John.</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext gtapi-trx-id="7649f3ac-1f58-4f16-9f9b-1878627747c8" size="80" translate="true">O bey ...</buttontext>
+		<panel>
+			<text gtapi-trx-id="4fdc045d-c1cf-4c02-a452-c2badc2401f4" size="90" translate="true">Obey God moment by moment.</text>
+            <text gtapi-trx-id="7a1b2b4b-e208-4fcf-bb0a-4ffd19bfa404" size="80" textalign="right" translate="true">(see John 14:21)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext gtapi-trx-id="854339c0-1187-4d7a-9525-0da0598bbec8" size="80" translate="true">W itness ...</buttontext>
+		<panel>
+			<text gtapi-trx-id="0c706dc6-1ced-4762-960c-d8f3873f25d4" size="90" translate="true">Witness for Christ by your life and words.</text>
+            <text gtapi-trx-id="4d77d183-5ebe-42d2-a32f-9ec7f0db1d7e" size="80" textalign="right" translate="true">(see Matthew 4:19 and John 15:8)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext gtapi-trx-id="3a7f0808-07b2-4084-b99b-b67074465688" size="80" translate="true">T rust ...</buttontext>
+		<panel>
+			<text gtapi-trx-id="34efbc6c-3798-43e6-94a1-bc232335983f" size="90" translate="true">Trust God for every detail of your life.</text>
+            <text gtapi-trx-id="ca9b2c2e-1443-45ef-95b2-269bb00c24b7" size="80" textalign="right" translate="true">(see 1 Peter 5:7)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext gtapi-trx-id="9e308834-c189-4030-8efa-5d9498ad7f1e" size="80" translate="true">H oly Spirit -</buttontext>
+		<panel>
+			<text gtapi-trx-id="75842974-4ef3-4e54-b6a1-844388f8f729" size="90" translate="true">Allow Him to control and empower your daily life and witness.</text>
+            <text gtapi-trx-id="9aa9ac5d-a92d-42b9-92aa-3d331a16a773" size="80" textalign="right" translate="true">(see Galatians 5:16,17 and Acts 1:8)</text>
+        </panel>
+	</button>
+    
+    <button>
+		<buttontext gtapi-trx-id="3831ae3b-0305-475c-9c48-dc3dd4eda94d" size="80" translate="true">Fellowship In A Good Church</buttontext>
+		<panel>
+			<text gtapi-trx-id="1991b629-b8ec-43bc-9391-207928b3d9ac" size="90" translate="true">God's Word instructs us not to forsake "the assembling of ourselves together" (Hebrews 10:25).  Several logs burn brightly together, but put one aside on the cold hearth and the fire goes out.  So it is with your relationship with other Christians.</text>
+            <text gtapi-trx-id="ff9db155-65df-4fa6-81dc-44181865a8e4" size="90" translate="true">If you do not belong to a  church, do not wait to be invited.  Take the initiative; call the pastor of a nearby church where Christ is honored and His Word is preached.  Start this week, and make plans to attend regularly.</text>
+        </panel>
+	</button>
+	
+</page>

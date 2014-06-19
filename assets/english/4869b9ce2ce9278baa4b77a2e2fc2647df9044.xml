@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="6" color="#A2AD00" watermark="7332eeca6be3275ed2ef9340c3dab5816f8b88e7.png">
+	
+	<title>
+        <heading gtapi-trx-id="1c771879-95fc-46c6-add8-cd15813650b5" size="95" translate="true" w="275" x="20">NOW THAT YOU HAVE RECEIVED CHRIST</heading>
+        <peekpanel gtapi-trx-id="6812332c-7075-469e-8efc-d8453af0116c" size="90" textalign="right" translate="true" w="260">The moment you received Christ by faith, as an act of the will, many things happened, including the following:</peekpanel>
+    </title>
+  	
+	<button>
+        <buttontext gtapi-trx-id="6e2b9e9a-bb9e-420d-932f-3be2cc875ef9" modifier="bold" size="85" textalign="left" translate="true">- Christ came into your life</buttontext>
+        <panel>
+            <text gtapi-trx-id="69e08e0b-0377-4202-bbc0-d0f146d07dbb" size="85" textalign="center" translate="true">(Revelation 3:20 and Colossians 1:27)</text>
+        </panel>
+    </button>
+
+    <button>
+        <buttontext gtapi-trx-id="3bb3f2dd-fb0c-4b1d-8722-52df1149f91e" modifier="bold" size="85" textalign="left" translate="true">- Your sins were forgiven</buttontext>
+        <panel>
+            <text gtapi-trx-id="c010b441-3ea8-4804-aa67-9cd423a4bd48" size="85" textalign="center" translate="true">(Colossians 1:14)</text>
+        </panel>
+    </button>
+
+    <button>
+        <buttontext gtapi-trx-id="39db06b6-7ed4-4c69-8252-178f3a494cce" modifier="bold" size="85" textalign="left" translate="true">- You became a child of God</buttontext>
+        <panel>
+            <text gtapi-trx-id="31911357-7f3e-4cbc-96fe-379f30b018da" size="85" textalign="center" translate="true">(John 1:12)</text>
+        </panel>
+    </button>
+
+    <button>
+        <buttontext gtapi-trx-id="b55f9945-99c3-4674-85de-92ac495e38e6" modifier="bold" size="85" textalign="left" translate="true">- You received eternal life</buttontext>
+        <panel>
+            <text gtapi-trx-id="3a4ed84e-8604-4514-a6ae-0616cf0c45bd" size="85" textalign="center" translate="true">(John 5:24)</text>
+        </panel>
+    </button>
+
+    <button>
+        <buttontext gtapi-trx-id="20873134-6b66-4c82-a1eb-3b251202b049" modifier="bold" size="85" textalign="left" translate="true">- You began the great adventure...</buttontext>
+        <panel>
+            <text gtapi-trx-id="c0de2fea-4e69-496d-a3bf-dc9df93c829a" size="85" textalign="left" translate="true">...for which God created you.</text>
+            <text gtapi-trx-id="a67033b2-7c7c-4459-a0f3-a11c33df0b79" size="85" textalign="center" translate="true">(John 10:10; 2 Corinthians 5:17; 1 Thessalonians 5:18)</text>
+        </panel>
+    </button>
+        
+	<button yoffset="20">
+		<buttontext gtapi-trx-id="c9534707-1efc-4087-a6fd-958b911a328f" translate="true">Can you think of ...</buttontext>
+		<panel>
+			<text gtapi-trx-id="1924f9b6-6e96-4c82-91dc-6c99ad1e784c" size="90" translate="true">... anything more wonderful that could happen to you than receiving Christ?  Would you like to thank God in prayer right now for what He has done for you?  By thanking God, you demonstrate your faith.</text>
+		</panel>
+	</button>
+    
+	<question gtapi-trx-id="aaf6adbf-41ea-4ea7-8be2-ec570bd9dfb1" size="96" translate="true">To enjoy your new life 
+to the fullest...</question>
+	
+</page>

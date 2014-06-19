@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="1" color="#00759A" watermark="7332eeca6be3275ed2ef9340c3dab5816f8b88e7.png">
+	
+	<title mode="straight">
+		<heading gtapi-trx-id="f47654b7-d927-47e9-9de2-2d36251c6517" size="90" textalign="center" translate="true" w="300">YOU CAN RECEIVE CHRIST RIGHT NOW BY FAITH THROUGH PRAYER</heading>
+	</title>
+	
+	<text gtapi-trx-id="ff663f9d-4ab6-4da9-b941-f438951fdc31" size="80" textalign="center" translate="true">(Prayer is talking with God)</text>
+	<text gtapi-trx-id="effae4c4-2a4f-4076-9703-d41451b06528" modifier="bold-italics" size="120" textalign="center" translate="true" w="300">God knows your heart and is not so concerned with your words as He is with the attitude of your heart.</text>
+    
+	<button>
+		<buttontext gtapi-trx-id="0bc63c7c-24c2-4ac1-abb8-18f7b3d3522b" size="82" translate="true">The following is a suggested prayer:</buttontext>
+		<panel>
+			<image h="2" w="280">abeea62e8f94a4ad19cbbb93cfc0cca44c35.png</image>
+			<text gtapi-trx-id="848d6f31-188b-4e45-add1-45a11a54c1d9" modifier="italics" size="95" translate="true">Lord Jesus,
+
+I need You.  Thank you for dying on the cross for my sins.  I open the door of my life and receive You as my Savior and Lord.
+                
+Thank You for forgiving my sins and giving me eternal life.  Take control of the throne of my life.  Make me the kind of person You want me to be.</text>
+			<image h="2" w="280">abeea62e8f94a4ad19cbbb93cfc0cca44c35.png</image>
+			<text gtapi-trx-id="44badb49-e9bf-4ead-a565-f2e03c26a5ce" size="95" textalign="center" translate="true">Does this prayer express the desire of your heart?  If it does, I invite you to pray this prayer right now.</text>
+		</panel>
+	</button>
+    
+	<question gtapi-trx-id="49006934-0f1a-4ad7-a264-6c8577a967e5" mode="straight" size="96" translate="true">Christ will come into your life 
+as He promised.</question>
+    
+</page>

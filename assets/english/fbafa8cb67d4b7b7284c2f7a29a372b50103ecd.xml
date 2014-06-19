@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><page color="#A2AD00" watermark="7332eeca6be3275ed2ef9340c3dab5816f8b88e7.png">
+	
+	<title>
+		<number>3</number>
+		<heading gtapi-trx-id="4c42b57a-7ac1-4a0b-8028-4deb0ccd4328" size="90" translate="true">JESUS CHRIST IS GOD'S ONLY PROVISION FOR OUR SIN. THROUGH HIM ALONE WE CAN KNOW GOD PERSONALLY AND EXPERIENCE GOD'S LOVE AND PLAN.</heading>
+	</title>
+    
+	<button>
+		<buttontext gtapi-trx-id="f9742018-4aef-4fe9-9712-6988d3c1913d" translate="true">He Died in Our Place</buttontext>
+		<panel>
+			<text gtapi-trx-id="0415f7ab-ad1e-41e7-bca5-4f040de33dc0" translate="true">"God demonstrates His own love for us, in that while we were yet sinners, Christ died for us."</text>
+            <text gtapi-trx-id="a1299ce9-eb91-493d-b9e0-a28352ac28ae" size="80" textalign="right" translate="true">(Romans 5:8)</text>
+		</panel>
+	</button>
+    
+	<button>
+		<buttontext gtapi-trx-id="44f11f63-dff8-449b-b657-af251fa81b40" translate="true">He Rose From the Dead</buttontext>
+		<panel>
+			<text gtapi-trx-id="416de7d5-ea89-4e66-a577-8788c4333ae5" translate="true">"Christ died for our sins?He was buried?He was raised on the third day, according to the Scriptures?He appeared to Peter, then to the Twelve.  After that He appeared to more than five hundred?"</text>
+            <text gtapi-trx-id="4e7374f6-e828-4680-a9ad-35625a56be71" size="80" textalign="right" translate="true">(1 Corinthians 15:3-6)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext gtapi-trx-id="d1421bc1-0416-4787-8c7c-4d17bf303dff" translate="true">He is the Only Way to God</buttontext>
+		<panel>
+			<text gtapi-trx-id="25a2d5c1-4971-4fb8-9540-7b8a4301e1d5" size="90" translate="true" w="280">"Jesus said to him, 'I am the way, and the truth, and the life; no one comes to the Father but through Me.'"  (John 14:6)</text>
+            <image align="center" h="176" w="176">f621f45b7ab7a8a7289ba1fe27976e24aaf8888.png</image>
+            <text gtapi-trx-id="3c746180-4479-4027-843b-27ad30b5fcdb" size="72" textalign="center" translate="true">? - God  |  ? - Jesus  |  ? - Man</text>
+			<text gtapi-trx-id="3e583e90-5f24-46a0-ae7b-67f6131e404a" size="90" translate="true">This diagram illustrates that God has bridged the gulf that separates us from Him by sending His Son, Jesus Christ, to die on the cross in our place to pay the penalty for our sins.</text> 
+        </panel>
+	</button>
+	
+	<question gtapi-trx-id="7e994512-ec38-458a-86b3-c3229626d4e5" size="96" translate="true">It is not enough just to 
+know these three laws...</question>
+    
+</page>
