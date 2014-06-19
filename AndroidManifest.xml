@@ -26,6 +26,10 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".MainPW"
+            android:label="main test"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="LanguagesActivity"
             android:label="@string/languages_activity_title"
             android:screenOrientation="portrait" />
@@ -105,8 +109,8 @@
     </application>
 
     <uses-sdk
-        android:minSdkVersion="9"
-        android:targetSdkVersion="9" />
+        android:minSdkVersion="10"
+        android:targetSdkVersion="19" />
     <supports-screens
         android:smallScreens="false"
         android:resizeable="false" />

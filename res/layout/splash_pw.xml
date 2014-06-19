@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#000">
+
+    <ImageView
+        android:id="@+id/ivSplash"
+        android:src="@drawable/godtools_splashscreen_2x"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:gravity="center"
+        android:layout_gravity="center_vertical" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:indeterminate="true"
+        android:paddingLeft="20dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="42dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tvTask"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="40dp"
+        android:layout_toRightOf="@+id/progressBar"
+        android:textSize="16sp"
+        android:textColor="#777"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+</RelativeLayout>
