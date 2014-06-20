@@ -105,6 +105,14 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Dialog" />
 
+        <activity
+            android:name=".SnuffyPWActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SnuffyPageMenuPWActivity"
+            android:label="@string/app_title"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light" />
 
     </application>
 

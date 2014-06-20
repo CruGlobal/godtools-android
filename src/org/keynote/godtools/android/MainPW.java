@@ -20,6 +20,7 @@ import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.fragments.PackageListFragment.OnPackageSelectedListener;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
+import org.keynote.godtools.android.snuffy.SnuffyActivity;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
@@ -170,13 +171,13 @@ public class MainPW extends FragmentActivity implements OnLanguageChangedListene
     public void onPackageSelected(GTPackage gtPackage) {
         Toast.makeText(this, gtPackage.getCode(), Toast.LENGTH_LONG).show();
 
-        /**
-         Intent intent = new Intent(this, SnuffyActivity.class);
-         intent.putExtra("PackageName", gtPackage.getName());
-         intent.putExtra("LanguageCode", gtPackage.getLanguage());
-         addPageFrameToIntent(intent);
-         startActivity(intent);
-         */
+        Intent intent = new Intent(this, SnuffyPWActivity.class);
+        intent.putExtra("PackageName", gtPackage.getCode());
+        intent.putExtra("LanguageCode", gtPackage.getLanguage());
+        intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
+        addPageFrameToIntent(intent);
+        startActivity(intent);
+
     }
 
     @Override
