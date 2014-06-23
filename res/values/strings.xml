@@ -20,6 +20,7 @@
 
 	<string name="app_description">Campus Crusade for Christ</string>
 	<string name="app_name_about">About God Tools</string>
+    <string name="app_name_settings">Settings</string>
 	<string name="app_name_kgp">Knowing God Personally</string>
 	<string name="app_name_cwg">Connecting With God</string>
 	<string name="app_name_sl">The Four Spiritual Laws</string>
@@ -32,6 +33,12 @@
 	<string name="summary_toggle_analytics">Allow God Tools to collect anonymous usage data for statistical purposes.</string>
 	<string name="title_toggle_wakelock">Keep Screen On</string>
 	<string name="summary_toggle_wakelock">Keep the screen on while viewing Booklets and EveryStudent.com Articles</string>
+
+    <string name="settings_main_language">Language</string>
+    <string name="settings_parallel_language">Parallel Language</string>
+    <string name="settings_about">About GodTools</string>
+    <string name="settings_current_language">This is the current Language</string>
+
 	
 	<string name="dialog_analytics_title">Collect Anonymous Usage Data</string>
 	<string name="dialog_analytics_body">Would you like to allow God Tools to collect anonymous usage data for statistical purposes? Doing so will help to improve God Tools and promote the application to supporters.</string>
