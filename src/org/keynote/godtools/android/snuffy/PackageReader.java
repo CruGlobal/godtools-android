@@ -113,6 +113,266 @@ public class PackageReader {
 	public interface ProgressCallback {
 		void updateProgress(int curr, int max);
 	}
+
+    public boolean processPackagePW(SnuffyApplication app,
+                                    int pageWidth,
+                                    int pageHeight,
+                                    String packageConfigName,
+                                    Vector<SnuffyPage> pages,
+                                    ProgressCallback progressCallback,
+                                    Typeface alternateTypeface){
+
+        mAppRef				= new WeakReference<SnuffyApplication>(app);
+        mContext			= app.getApplicationContext();
+        mPageWidth			= pageWidth;
+        mPageHeight			= pageHeight;
+        mPages				= pages;
+        mTotalBitmapSpace 	= 0;
+        mImageFolderName  	= "";
+        mThumbsFolderName 	= "";
+        mSharedFolderName 	= "shared/";
+        mFromAssets         = false;
+        mProgressCallback   = progressCallback;
+        mAlternateTypeface  = alternateTypeface;
+
+        // In the case where this package is replacing the previous package - release the memory occupied by the original
+        bitmapCache.clear();
+        mPages.clear();
+
+        String mainPackagefileName = packageConfigName;
+        boolean bSuccess;
+        InputStream isMain = null;
+        try {
+            isMain = new BufferedInputStream(new FileInputStream(app.getDocumentsDir().getPath() + "/" + mainPackagefileName));
+            bSuccess = processMainPackageFilePW(isMain);
+
+        } catch (IOException e) {
+            Log.e(TAG, "Cannot open or read main package file: " + mainPackagefileName);
+            return false;
+        }
+        finally {
+            if (isMain != null) {
+                try {
+                    isMain.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return bSuccess;
+    }
+
+    public boolean processMainPackageFilePW(InputStream isMain){
+        Log.d(TAG, ">>> processMainPackageFile starts");
+
+        boolean bSuccess = false;
+
+        Document xmlDoc	= null;
+        try {
+            xmlDoc = DocumentBuilderFactory
+                    .newInstance()
+                    .newDocumentBuilder()
+                    .parse(isMain);
+            org.w3c.dom.Element root =  xmlDoc.getDocumentElement();
+            if (root == null)
+                throw new SAXException("XML Document has no root element");
+
+            NodeList nlPages = root.getElementsByTagName("page");
+            int numPages = nlPages.getLength();
+            if (numPages == 0)
+                throw new SAXException("Main Package file document must have at least one page node");
+            NodeList nlAbout = root.getElementsByTagName("about");
+            int numAbouts = nlAbout.getLength();
+            if (numAbouts != 1)
+                throw new SAXException("Main Package file document must have exactly one about node");
+            NodeList nlPackageName = root.getElementsByTagName("packagename"); // packagename seems to have superseded displayname as the name for this element
+            int numPackageNames = nlPackageName.getLength();
+            NodeList nlDisplayName = root.getElementsByTagName("displayname"); // but some files (e.g. 4Laws/ru.xml) still have displayname ?
+            int numDisplayNames = nlDisplayName.getLength();
+            if ((numPackageNames + numDisplayNames) != 1)
+                throw new SAXException("Main Package file document must have exactly one packagename or displayname node");
+            if (numPackageNames == 1) {
+                Element elPackage = (Element)nlPackageName.item(0);
+                mPackageTitle = elPackage.getTextContent();
+            }
+            else {
+                Element elPackage = (Element)nlDisplayName.item(0);
+                mPackageTitle = elPackage.getTextContent();
+            }
+
+            Element elAbout = (Element)nlAbout.item(0);
+            if (!processPagePW(elAbout))	// about will be page 0
+                return false;
+
+            mProgressCallback.updateProgress(0, numPages);
+            for (int i=0; i < numPages; i++) {
+                Element elPage = (Element)nlPages.item(i);
+                if (!processPagePW(elPage))
+                    return false;
+                mProgressCallback.updateProgress(i+1, numPages);
+            }
+
+            bSuccess = true;
+        } catch (IOException e) {
+            Log.e(TAG, "processMainPackageFile failed: " + e.toString());
+        } catch (ParserConfigurationException e) {
+            Log.e(TAG, "processMainPackageFile failed: " + e.toString());
+        } catch (SAXException e) {
+            Log.e(TAG, "processMainPackageFile failed: " + e.toString());
+        } finally {
+
+        }
+        Log.d(TAG, ">>> processMainPackageFile ends");
+        return bSuccess;
+    }
+
+    private boolean processPagePW(Element elPage){
+        String	thumbFileName	= elPage.getAttribute("thumb");
+        String	pageFileName	= elPage.getAttribute("filename");
+        String	description		= elPage.getTextContent();
+        Log.d(TAG, ">>> processPage: " + pageFileName);
+
+        SnuffyPage	currPage = null;
+        InputStream isPage = null;
+        try {
+            isPage = new BufferedInputStream(new FileInputStream(mAppRef.get().getDocumentsDir().getPath() + "/" + pageFileName));
+            currPage = processPageFilePW(isPage, elPage);
+            currPage.mDescription = description;
+            //currPage.mThumbnail   = Uri.parse("file:///android_asset/" + mThumbsFolderName + thumbFileName).toString();
+            currPage.mThumbnail   = thumbFileName;
+            mPages.add(currPage);
+        } catch (IOException e) {
+            Log.e(TAG, "Cannot open or read page file: " + pageFileName);
+            return false;
+        }
+        finally {
+            if (isPage != null) {
+                try {
+                    isPage.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return (currPage != null);
+    }
+
+    private SnuffyPage processPageFilePW(InputStream isPage, Element elPage){
+        Log.d(TAG, ">>> processPageFile starts");
+
+        SnuffyPage currPage = null;
+
+        Document xmlDoc	= null;
+        try {
+            xmlDoc = DocumentBuilderFactory
+                    .newInstance()
+                    .newDocumentBuilder()
+                    .parse(isPage);
+            Element root =  xmlDoc.getDocumentElement();
+            if (root == null)
+                throw new SAXException("XML Document has no root element");
+
+            mYOffsetPerItem = getScaledYValue(DEFAULT_YOFFSET);
+            int SAVE = mTotalBitmapSpace;
+            for (int iPass=1; iPass <= 2; iPass++) {
+                currPage = new SnuffyPage(mContext);
+
+                mYOffset			= 0;
+                mYFooterTop			= mPageHeight;
+                mNumOffsetItems		= 0;
+                addCover(currPage);
+                processBackgroundPW(elPage, root, currPage);
+                processPageElements(elPage, root, currPage);
+                switch (iPass) {
+                    case 1: {
+                        if (mNumOffsetItems < 1){
+                            // no second pass required
+                            iPass = 2; // force exit from loop
+                        }
+                        else {
+                            mYOffsetPerItem = (int)Math.round(
+                                    (double)((mYFooterTop-getScaledYValue(MIN_MARGIN_ABOVE_FOOTER)) - (mYOffset - (mNumOffsetItems * getScaledYValue(DEFAULT_YOFFSET))))/
+                                            (double)(mNumOffsetItems+1));
+                            mYOffsetPerItem = Math.min(mYOffsetPerItem, getScaledYValue(MAX_YOFFSET));
+                            mYOffsetPerItem = Math.max(mYOffsetPerItem, 0);
+                            mTotalBitmapSpace = SAVE;
+                        }
+                        break;
+                    }
+                    case 2: {
+                        break;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "processPageFile failed: " + e.toString());
+            currPage = null;
+        } catch (ParserConfigurationException e) {
+            Log.e(TAG, "processPageFile failed: " + e.toString());
+            currPage = null;
+        } catch (SAXException e) {
+            Log.e(TAG, "processPageFile failed: " + e.toString());
+            currPage = null;
+        } finally {
+
+        }
+        Log.d(TAG, ">>> processPageFile ends");
+        return currPage;
+    }
+
+    private void processBackgroundPW(Element elPage, Element root, SnuffyPage currPage){
+        String watermark		= root.getAttribute("watermark");		// 	either this
+        String backgroundImage	= root.getAttribute("backgroundimage");	// 	or this
+        String shadows			= getStringAttributeValue(root, "shadows", "yes");
+
+        mBackgroundColor = Color.parseColor(getStringAttributeValue(root, "color", DEFAULT_BACKGROUND_COLOR));
+        currPage.setBackgroundColor(mBackgroundColor);
+        currPage.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+
+        if (backgroundImage.length() > 0) {
+            Bitmap bm = getBitmapFromAssetOrFile(mContext, backgroundImage);
+            if (bm != null) {
+                ImageView iv = new ImageView(mContext);
+                iv.setLayoutParams(new SnuffyLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 0, 0));
+                iv.setImageBitmap(bm);
+                iv.setScaleType(ImageView.ScaleType.FIT_XY);
+                currPage.addView(iv);
+            }
+        }
+        if (watermark.length() > 0) {
+            Bitmap bm = getBitmapFromAssetOrFile(mContext, watermark);
+            if (bm != null) {
+                ImageView iv = new ImageView(mContext);
+                iv.setLayoutParams(new SnuffyLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 0, 0));
+                iv.setImageBitmap(bm);
+                iv.setScaleType(ImageView.ScaleType.FIT_XY);
+                currPage.addView(iv);
+            }
+        }
+        if (shadows.equalsIgnoreCase("yes")) {
+            Bitmap bmTop = getBitmapFromAssetOrFile(mContext, "grad_shad_top.png");
+            if (bmTop != null) {
+                ImageView iv = new ImageView(mContext);
+                iv.setLayoutParams(new SnuffyLayoutParams(LayoutParams.MATCH_PARENT, getScaledYValue(bmTop.getHeight()), 0, 0));
+                iv.setImageBitmap(bmTop);
+                iv.setScaleType(ImageView.ScaleType.FIT_XY);
+                currPage.addView(iv);
+
+            }
+            Bitmap bmBot = getBitmapFromAssetOrFile(mContext, "grad_shad_bot.png");
+            if (bmBot != null) {
+                ImageView iv = new ImageView(mContext);
+                iv.setLayoutParams(new SnuffyLayoutParams(LayoutParams.MATCH_PARENT, getScaledYValue(bmBot.getHeight()), 0, mPageHeight - getScaledYValue(bmBot.getHeight())));
+                iv.setImageBitmap(bmBot);
+                iv.setScaleType(ImageView.ScaleType.FIT_XY);
+                currPage.addView(iv);
+            }
+        }
+    }
 	
 	public boolean processPackage(SnuffyApplication app,
 								  int pageWidth,

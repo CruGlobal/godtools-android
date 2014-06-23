@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="6" color="#DC5C31" watermark="90458873df4460124f51a61d5e22e2c3d021a739.png">
+	<title h="50" mode="straight">
+	  <heading gtapi-trx-id="682223e1-426e-420e-ae5c-fc30cafb6c56" textalign="center" translate="true">WEBSITES TO ASSIST YOU</heading>
+    </title>
+	<button>
+		<buttontext gtapi-trx-id="8583236e-6713-4c4e-b3eb-92902e407492" translate="true">Still not sure who Jesus is?</buttontext>
+		<panel>
+			<button gtapi-trx-id="d5a327dc-506d-4724-965f-69232b9953d6" mode="url" translate="true">whyjesus.com.au</button>
+		</panel>
+	</button>
+	<button>
+		<buttontext gtapi-trx-id="54511b9f-2cde-40e2-a29a-34f2f5ad3b56" translate="true">Need help with the Bible?</buttontext>
+		<panel>
+			<button gtapi-trx-id="1400a76d-706c-45fd-b5b3-8b030e71622e" mode="url" translate="true">mobile.biblegateway.com</button>
+		</panel>
+	</button>
+	<button>
+		<buttontext gtapi-trx-id="56539558-5523-417b-a0b7-f6734d918426" translate="true">More about Christianity...</buttontext>
+		<panel>
+			<button gtapi-trx-id="1fdf09e3-8f6c-4d75-bb58-4e56350b57ac" mode="url" translate="true">www.startingwithgod.com</button>
+		</panel>
+	</button>
+	<button>
+		<buttontext gtapi-trx-id="06cab443-6d20-45a6-85a2-819be4e0f94b" translate="true">Want to share your new faith?</buttontext>
+		<panel>
+			<button gtapi-trx-id="427675ea-3a88-4f05-b921-e56150dbc5c7" mode="url" translate="true">www.5clicks.com</button>
+		</panel>
+	</button>
+	<button gtapi-trx-id="f8201983-5e4b-4b78-ba89-16ba411832b2" mode="allurl" translate="true">All Websites</button>
+</page>

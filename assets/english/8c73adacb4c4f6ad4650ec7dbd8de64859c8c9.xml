@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="4" color="#222222" watermark="1cac553e8c041883367e669b5f7bc23c3a9fe9.png">
+	<title mode="peek">	
+		<heading gtapi-trx-id="eb397c74-3ce5-461c-a7e4-9069ff0c4860" translate="true" w="100">The Intimate Journey</heading>
+		<subheading gtapi-trx-id="e2d7fb9f-0e91-441c-b770-6468064849d5" translate="true">By walking in the Spirit we increasingly experience intimacy with God and enjoy all He has for us.</subheading>
+		<peekpanel gtapi-trx-id="5980d0a6-a0ec-4457-9d45-c81ab1983219" translate="true">Walking in the Spirit moment by moment is a lifestyle. It is learning to depend upon the Holy Spirit for His abundant resources as a way of life.</peekpanel>
+		
+	</title>
+
+	<text gtapi-trx-id="22b4646e-f8f1-4f24-83a8-32f25ffaffd2" modifier="italics" size="111" translate="true" x="20">As we walk in the Spirit:</text>
+
+	<button>
+		<buttontext gtapi-trx-id="92391c86-9c95-455e-8111-1f6038f7955b" translate="true">We have the ability...</buttontext>
+		<panel>
+			<text gtapi-trx-id="af3a7bd9-bc91-4b0a-b5d1-ee76e701ac6c" size="111" translate="true">...to live a life pleasing to God.</text>
+			<text gtapi-trx-id="ed56a4a8-405d-4d85-b8f5-4e8b2c515918" modifier="italics" translate="true">So I say, live by the Spirit, and you will not gratify the desires of the sinful nature… Since we live by the Spirit, let us stay in step with the Spirit. (Galatians 5:16, 25)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext gtapi-trx-id="047cee87-5f1e-4dcf-a037-0ac5a2c2f2ed" translate="true">We experience intimacy...</buttontext>
+		<panel>
+			<text gtapi-trx-id="d713dde0-af37-4d6a-beef-138dd0d0cc04" size="111" translate="true">...with God and all He has for us.</text>
+			<text gtapi-trx-id="13f50222-29b6-44c8-976e-29afd58bd7f9" modifier="italics" translate="true">But the fruit of the Spirit is love, joy, peace, patience, kindness, goodness, faithfulness, gentleness and self-control. (Galatians 5:22,23)</text>
+		</panel>
+	</button>
+
+	<button>
+		<buttontext gtapi-trx-id="d7208811-ceb5-4e2c-a996-f85af5688a6e" translate="true">The Christ-centered Life</buttontext>
+		<panel textalign="center">
+			<image align="center" gtapi-trx-id="13c443d6-0482-4f3c-abf5-573cff2b29e7" h="111" translate="true" w="280">86df4569753039e38d22e945699339798f8869.png</image>
+			<text gtapi-trx-id="ffca0a02-daaf-4c55-bbff-8ebc39840591" textalign="center" translate="true">Faith (trust in God and His promises) is the only way a Christian can live by the Spirit.</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext gtapi-trx-id="e7335a57-4151-45f5-8024-209399dcb315" translate="true">Spiritual breathing...</buttontext>
+		<panel>
+			<text gtapi-trx-id="a7c3f873-c5cf-4ddf-9c85-19ca8966bb03" size="93" translate="true">…is a powerful word picture which can help you experience moment-by-moment dependence upon the Spirit.</text>
+			<text gtapi-trx-id="a0e10c83-9b7e-46f3-b765-3c0c32c993a9" modifier="italics" size="111" textalign="center" translate="true">Exhale...</text>
+			<text gtapi-trx-id="2c142282-989d-48df-84d0-1f7b24748237" size="93" translate="true">Confess your sin the moment you become aware of it - agree with God concerning it and thank him for His forgiveness, according to 1 John 1:9 and Hebrews 10:1-25.
+Confessing requires repentance - a change in attitude and action.</text>
+			<text gtapi-trx-id="09819708-cdaf-4c6a-ac03-a86d0cc48bf1" modifier="italics" size="111" textalign="center" translate="true">Inhale...</text>
+			<text gtapi-trx-id="55a449e9-2104-4d4b-9376-4c4ad3893d7e" size="93" translate="true">Surrender control of your life to Christ, and rely upon the Holy Spirit to fill you with His presence and power by faith, according to his command (Ephesians 5:18) and promise (1 John 5:14, 15).</text>
+		</panel>
+	</button>
+	
+	<question gtapi-trx-id="978fc154-6be6-4d19-b63a-c6781eeb69e6" translate="true">How does the Holy Spirit fill us with His power?</question>
+</page>

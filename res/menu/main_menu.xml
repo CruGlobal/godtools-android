@@ -5,9 +5,4 @@
         android:id="@+id/menu_settings"
         android:title="Settings"
         android:icon="@android:drawable/ic_menu_preferences"></item>
-
-    <item
-        android:id="@+id/menu_test"
-        android:title="Settings"
-        android:icon="@drawable/ic_back"></item>
 </menu>

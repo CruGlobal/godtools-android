@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="4" color="#57324D" watermark="90458873df4460124f51a61d5e22e2c3d021a739.png">
+	
+	<title>
+        <heading gtapi-trx-id="6781ef0f-393a-4255-bd3a-61ca63315ae8" size="94" translate="true" w="285" x="10">HOW CAN YOU BE SURE THAT ALL THIS HAS REALLY HAPPENED?</heading>
+    </title>
+    
+    <button>
+		<buttontext gtapi-trx-id="7c653ef5-d56a-4434-a59c-c081e48ff2fe" size="90" translate="true">Jesus is in your life ...</buttontext>
+		<panel>
+			<text gtapi-trx-id="e9b74f50-3c0b-4adc-bcdc-eb1f617bda80" size="90" translate="true">...because God has promised, and he can be trusted.</text>
+			<text gtapi-trx-id="30441ebe-cf3a-4a8d-9aa2-a14541586dcf" modifier="italics" size="90" translate="true">Thank God often that Jesus is in your life, and that he will never leave you.</text>
+            <text gtapi-trx-id="bd17db78-ccc1-41c2-b56f-d1d716182e72" size="90" textalign="right" translate="true">(Romans 8:38-39)</text>
+		</panel>
+	</button>
+	
+	<button yoffset="-12">
+		<buttontext gtapi-trx-id="1e8da2bb-17dd-41f8-a46e-5e3e4260b7d0" size="90" translate="true">You Have the Spirit of Christ</buttontext>
+		<panel>
+			<text gtapi-trx-id="cbd953df-6231-4478-b4c7-aeaa1590f01e" size="90" translate="true">You can know that the Spirit of Christ lives in you and that you have eternal life from the moment you invited Jesus into your life, because this is what he has promised.</text>
+			<text gtapi-trx-id="2fb30bfa-e90e-45b6-8a99-494d48937688" modifier="italics" size="85" translate="true">And this is what God has testified: He has given us eternal life, and this life is in his Son. Whoever has the Son has life; whoever does not have God's Son does not have life. I have written this to you who believe in the name of the Son of God, so that you may know you have eternal life.</text>
+            <text gtapi-trx-id="19b33e43-3273-4c9f-b357-f42e92ed4aed" size="90" textalign="right" translate="true">- 1 John 5:11-13</text>
+		</panel>
+	</button>
+    
+    <text gtapi-trx-id="902b0fdd-48c8-4f0e-98b9-f71f1c1e0553" modifier="bold" size="110" textalign="center" translate="true">What If You Don't Feel Any Different?</text>
+    
+	<button>
+		<buttontext gtapi-trx-id="7f71fa22-2e37-4ff7-9bf8-5abc8d51b322" size="90" translate="true">Rely on God</buttontext>
+		<panel>
+			<text gtapi-trx-id="f5f568c3-a4c1-49d0-bd37-55b77c9962c8" size="90" translate="true">Although feelings are valid and important, they don't determine what is true. A follower of Jesus lives by trusting in the reliability of God himself and what he has said.</text>
+		</panel>
+	</button>
+	
+	<button yoffset="20">
+		<buttontext gtapi-trx-id="11ec3fcb-8d08-40d6-9a7f-2b7b42fe67fc" translate="true">Trust Facts Not Feelings</buttontext>
+		<panel>
+			<image align="center" h="131" w="286">159752986115ce0984ac981896c358f5247fa8.png</image>
+			<text gtapi-trx-id="9c48a7ab-cc0b-492c-84ca-ee1830e481a3" translate="true">To be transported by an aeroplane, we must put our trust in the construction of the aircraft. Our feelings do not influence the fact that the plane will carry us.</text>
+			<text gtapi-trx-id="fe18e45b-c39b-4af3-8e70-fffb31c7d82c" translate="true">In the same way, we can rely on God and trust what he has promised in the Bible, and not depend on the way we feel.</text>
+		</panel>
+	</button>
+	
+	<question gtapi-trx-id="eea1faaa-9ecc-44a3-a51c-269fe40e3cfa" translate="true">So what comes next?</question>
+	
+</page>

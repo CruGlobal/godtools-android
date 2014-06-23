@@ -30,7 +30,7 @@ public class DBContract {
                 + GTPackageTable.COL_LANGUAGE + TEXT_TYPE + COMMA_SEP
                 + GTPackageTable.COL_CONFIG_FILE_NAME + TEXT_TYPE + COMMA_SEP
                 + GTPackageTable.COL_STATUS + TEXT_TYPE + COMMA_SEP
-                + GTPackageTable.COL_VERSION + INTEGER_TYPE + ")";
+                + GTPackageTable.COL_VERSION + DOUBLE_TYPE + ")";
 
         public static final String SQL_DELETE_GTPACKAGES = "DROP TABLE IF EXISTS "
                 + GTPackageTable.TABLE_NAME;

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="3" color="#FB8D08" watermark="1cac553e8c041883367e669b5f7bc23c3a9fe9.png">
+	<title mode="peek">	
+		<heading gtapi-trx-id="9dbd96e5-d68e-44c7-8e05-fcf603063a5e" translate="true">The New Start</heading>
+		<subheading gtapi-trx-id="f376068d-1432-48b6-a340-854262cb3688" translate="true">Now that you are filled with the Holy Spirit:</subheading>
+	</title>
+
+	<button>
+		<buttontext gtapi-trx-id="48c6594b-4b8a-4519-ad3a-2f99eab95c4a" translate="true">Thank God...</buttontext>
+		<panel>
+			<text gtapi-trx-id="7696c176-e543-4b96-a126-719188b1518d" size="111" translate="true">...that the Spirit will enable you:</text>
+			<text gtapi-trx-id="df07144e-ef9c-4cdf-a5eb-830a16243d1d" translate="true">- To glorify Christ with your life.
+(John 16:14)</text>
+			<text gtapi-trx-id="ba56edc6-de85-4ca9-8446-2dad143f6e40" translate="true">- To grow in your understanding of God and His Word.
+(1 Corinthians 2:14,15)</text>
+			<text gtapi-trx-id="8f8859b6-f981-436a-a732-b9e8e9af8368" translate="true">- To live a life pleasing to God.
+(Galatians 5:16-23)</text>
+		</panel>
+	</button>
+	
+	<button>
+		<buttontext gtapi-trx-id="b4b1a381-6273-4474-b062-33d8d15c82a3" translate="true">Remember Jesus' promise:</buttontext>
+		<panel>
+			<text gtapi-trx-id="812a8279-ddbd-458e-9c63-7e3e7f8c8656" modifier="italics" textalign="center" translate="true">"But you will receive power when the Holy Spirit comes on you; and you will be my witnesses in Jerusalem, and in all Judea and Samaria, and to the ends of the earth"
+(Acts 1:8)"</text>
+		</panel>
+	</button>
+	
+	<text gtapi-trx-id="ebaa4bbb-408c-4faf-a975-58405f700b26" textalign="center" translate="true" w="300">If you would like more resources on the Holy Spirit, please go to:</text>
+	<button gtapi-trx-id="6a519a83-22e7-49cb-9a1b-41fe2805a976" mode="url" translate="true">www.campuscrusade.org</button>
+	
+</page>

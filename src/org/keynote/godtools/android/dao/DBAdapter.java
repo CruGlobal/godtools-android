@@ -49,7 +49,7 @@ public class DBAdapter {
     }
 
     public List<GTPackage> getGTPackageByLanguage(String language){
-        String selection = String.format("%s = %s", DBContract.GTPackageTable.COL_LANGUAGE, language);
+        String selection = String.format("%s = '%s'", DBContract.GTPackageTable.COL_LANGUAGE, language);
         return queryGTPackage(selection);
     }
 
@@ -72,7 +72,7 @@ public class DBAdapter {
             String code = cursor.getString(cursor.getColumnIndex(DBContract.GTPackageTable.COL_CODE));
             String name = cursor.getString(cursor.getColumnIndex(DBContract.GTPackageTable.COL_NAME));
             String language = cursor.getString(cursor.getColumnIndex(DBContract.GTPackageTable.COL_LANGUAGE));
-            int version = cursor.getInt(cursor.getColumnIndex(DBContract.GTPackageTable.COL_VERSION));
+            double version = cursor.getDouble(cursor.getColumnIndex(DBContract.GTPackageTable.COL_VERSION));
             String configFileName = cursor.getString(cursor.getColumnIndex(DBContract.GTPackageTable.COL_CONFIG_FILE_NAME));
             String status = cursor.getString(cursor.getColumnIndex(DBContract.GTPackageTable.COL_STATUS));
 
