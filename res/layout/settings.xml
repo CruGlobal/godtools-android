@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/settings_background"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textSize="18sp"
+            android:paddingLeft="16dp"
+            android:textColor="@color/gray_60"
+            android:text="@string/settings_main_language"
+            android:gravity="center_vertical" />
+
+        <RelativeLayout
+            android:id="@+id/rlMainLanguage"
+            android:layout_width="match_parent"
+
+            android:background="@drawable/settings_language_bg"
+            android:layout_height="40dp">
+
+            <TextView
+                android:textStyle="bold"
+                android:id="@+id/tvMainLanguage"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:textSize="18sp"
+                android:paddingLeft="48dp"
+                android:textColor="@color/settings_listitem_item"
+                android:text="@string/settings_main_language"
+                android:gravity="center_vertical" />
+
+            <ImageView
+                android:src="@drawable/ic_language_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tvMainLanguage"
+                android:tint="@color/settings_listitem_item" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray_20" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textSize="18sp"
+            android:paddingLeft="16dp"
+            android:textColor="@color/gray_60"
+            android:text="@string/settings_parallel_language"
+            android:gravity="center_vertical" />
+
+        <RelativeLayout
+            android:id="@+id/rlParallelLanguage"
+            android:layout_width="match_parent"
+            android:background="@drawable/settings_language_bg"
+            android:layout_height="40dp">
+
+            <TextView
+                android:textStyle="bold"
+                android:id="@+id/tvParallelLanguage"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:textSize="18sp"
+                android:paddingLeft="48dp"
+                android:textColor="@color/settings_listitem_item"
+                android:text="@string/settings_parallel_language"
+                android:gravity="center_vertical" />
+
+            <ImageView
+                android:src="@drawable/ic_language_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tvParallelLanguage"
+                android:tint="@color/settings_listitem_item"/>
+        </RelativeLayout>
+
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray_20" />
+
+
+        <TextView
+            android:layout_margin="24dp"
+            android:id="@+id/tvDescription"
+            android:background="@drawable/settings_language_bg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:paddingLeft="16dp"
+            android:textColor="@color/gray_60"
+            android:text="Description:\nThe quick brown fox jumped over the lazy dog near the bank of the river."
+            android:gravity="center_vertical" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray_20" />
+
+        <TextView
+            android:id="@+id/tvAbout"
+            android:background="@drawable/settings_language_bg"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textSize="18sp"
+            android:paddingLeft="16dp"
+            android:textColor="@color/gray_60"
+            android:text="@string/settings_about"
+            android:gravity="center_vertical" />
+    </LinearLayout>
+
+    <!-- use 1px for height to make it very thin and slightly noticeable-->
+    <!--<ListView-->
+    <!--android:id="@android:id/list"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="fill_parent"-->
+    <!--android:divider="@color/settings_list_divider"-->
+    <!--android:dividerHeight="1px"></ListView>-->
+
+
+</LinearLayout>

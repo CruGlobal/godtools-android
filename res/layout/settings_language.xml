@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/settings_background"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <!-- use 1px for height to make it very thin and slightly noticeable-->
+    <ListView
+        android:listSelector="@drawable/settings_language_bg"
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:divider="@color/gray_20"
+        android:dividerHeight="1px"></ListView>
+
+
+</LinearLayout>

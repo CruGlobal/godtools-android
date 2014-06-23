@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="160dp">
+
+    <View android:id="@+id/strut" android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        android:layout_centerInParent="true"/>
+
+    <ImageView
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/strut"
+        android:id="@+id/ivPackageImage"
+        android:layout_marginLeft="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_width="wrap_content"
+        android:scaleType="fitCenter"
+        android:layout_height="120dp"
+        android:src="@drawable/homescreen_kgp_icon_2x"/>
+
+    <TextView
+        android:id="@+id/tvPackageName"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/strut"
+        android:layout_width="match_parent"
+        android:layout_marginRight="20dp"
+        android:layout_height="wrap_content"
+        android:text="Knowing God Personally"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:gravity="center_vertical"
+        android:textColor="@color/gray_60" />
+
+</RelativeLayout>
