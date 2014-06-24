@@ -26,6 +26,7 @@ public class PackageListFragment extends ListFragment {
     }
 
     private List<GTPackage> listPackages;
+    private PackageListAdapter mAdapter;
     private OnPackageSelectedListener mListener;
 
     public static PackageListFragment newInstance(List<GTPackage> packages){
@@ -53,12 +54,16 @@ public class PackageListFragment extends ListFragment {
 
         setRetainInstance(true);
 
-        PackageListAdapter adapter = new PackageListAdapter(getActivity(), listPackages);
-        setListAdapter(adapter);
+        mAdapter = new PackageListAdapter(getActivity(), listPackages);
+        setListAdapter(mAdapter);
     }
 
     public void setPackages(List<GTPackage> packages){
         this.listPackages = packages;
+    }
+
+    public void refreshList(List<GTPackage> packages){
+        mAdapter.refresh(packages);
     }
 
     public void disable(){
@@ -118,6 +123,12 @@ public class PackageListFragment extends ListFragment {
         private class ViewHolder {
             ImageView ivIcon;
             TextView tvPackageName;
+        }
+
+        public void refresh(List<GTPackage> packageList){
+            this.listPackages.clear();
+            this.listPackages.addAll(packageList);
+            notifyDataSetChanged();
         }
     }
 }
