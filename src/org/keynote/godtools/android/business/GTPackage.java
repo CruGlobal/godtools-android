@@ -63,6 +63,12 @@ public class GTPackage {
         this.status = status;
     }
 
+    public static GTPackage getPackage(Context context, String code, String language){
+        DBAdapter adapter = DBAdapter.getInstance(context);
+        adapter.open();
+        return adapter.getGTPackage(code, language);
+    }
+
     public static List<GTPackage> getPackageByLanguage(Context context, String language){
         DBAdapter adapter = DBAdapter.getInstance(context);
         adapter.open();

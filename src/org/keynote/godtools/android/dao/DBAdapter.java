@@ -48,6 +48,14 @@ public class DBAdapter {
         return db.insert(DBContract.GTPackageTable.TABLE_NAME, null, cv);
     }
 
+    public GTPackage getGTPackage(String code, String language){
+        String selection = String.format("%s = '%s' AND %s = '%s'",
+                                        DBContract.GTPackageTable.COL_CODE, code,
+                                        DBContract.GTPackageTable.COL_LANGUAGE, language);
+        List<GTPackage> packages = queryGTPackage(selection);
+        return packages.size() > 0 ? packages.get(0): null;
+    }
+
     public List<GTPackage> getGTPackageByLanguage(String language){
         String selection = String.format("%s = '%s'", DBContract.GTPackageTable.COL_LANGUAGE, language);
         return queryGTPackage(selection);
