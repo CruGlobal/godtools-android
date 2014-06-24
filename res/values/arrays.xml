@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <array name="settings_list_headers">
+       <item>Language</item>
+       <item>Parallel Language</item>
+       <item></item>
+   </array>
+
+    <array name="settings_list_defaultitems">
+        <item>English</item>
+        <item>English</item>
+        <item>About</item>
+    </array>
+
+    <array name="settings_list_languages">
+        <item>ar~Arabic</item>
+        <item>nl~Dutch</item>
+        <item>en~English</item>
+        <item>fr~French</item>
+        <item>it~Italian</item>
+        <item>ru~Russian</item>
+    </array>
+
+    <!--<array name="settings_list_langcodes">-->
+        <!--<item>ar</item>-->
+        <!--<item>nl</item>-->
+        <!--<item>en</item>-->
+        <!--<item>fr</item>-->
+        <!--<item>it</item>-->
+        <!--<item>ru</item>-->
+    <!--</array>-->
+</resources>
