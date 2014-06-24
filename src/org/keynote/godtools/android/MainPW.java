@@ -8,6 +8,8 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ProgressBar;
@@ -20,7 +22,6 @@ import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.fragments.PackageListFragment.OnPackageSelectedListener;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
-import org.keynote.godtools.android.snuffy.SnuffyActivity;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
@@ -87,6 +88,8 @@ public class MainPW extends FragmentActivity implements OnLanguageChangedListene
         String langPrimary = settings.getString("languagePrimary", "en");
         String langPhone = Device.getDefaultLanguage();
 
+        // TODO: check first if language code is supported
+
         return !langPrimary.equalsIgnoreCase(langPhone);
     }
 
@@ -146,23 +149,22 @@ public class MainPW extends FragmentActivity implements OnLanguageChangedListene
         if (packageList.size() == 0) {
 
             if (Device.isConnected(MainPW.this)) {
-                // TODO: check first if language code is supported
+                showLoading();
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), newLangCode, "", this);
 
             } else {
-                // TODO: show dialog, cant set language as default
+                // TODO: show dialog, Internet connection is required to download the resources
+                Toast.makeText(this, "Default language not changed", Toast.LENGTH_SHORT).show();
             }
 
-            Toast.makeText(this, "Language not found", Toast.LENGTH_LONG).show();
         } else {
-            // TODO: display packages on list
-            Toast.makeText(this, "Display package on list", Toast.LENGTH_LONG).show();
 
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString("languagePrimary", code);
             editor.commit();
 
+            packageFrag.refreshList(packageList);
 
         }
     }
@@ -183,19 +185,22 @@ public class MainPW extends FragmentActivity implements OnLanguageChangedListene
     @Override
     public void downloadTaskComplete(String url, String filePath, String tag) {
 
-        // TODO: set the language code as default
+        // set the language code as default
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("languagePrimary", newLangCode);
         editor.commit();
 
-        // TODO: refresh package list
+        packageList = GTPackage.getPackageByLanguage(MainPW.this, newLangCode);
+        packageFrag.refreshList(packageList);
 
+        hideLoading();
     }
 
     @Override
     public void downloadTaskFailure(String url, String filePath, String tag) {
 
         // TODO: show dialog to inform the user that the download failed
+        hideLoading();
     }
 }

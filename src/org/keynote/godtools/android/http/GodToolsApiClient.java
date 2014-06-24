@@ -13,35 +13,35 @@ public class GodToolsApiClient {
     private static final String ENDPOINT_PACKAGES = "packages/";
     private static final String ENDPOINT_TRANSLATIONS = "translations/";
 
-    public static void getListOfPackages(String langCode, String tag, HttpTask.HttpTaskHandler taskHandler){
+    public static void getListOfPackages(String langCode, String tag, HttpTask.HttpTaskHandler taskHandler) {
         HttpGetTask getTask = new HttpGetTask(taskHandler);
         String url = BASE_URL + ENDPOINT_META + langCode;
         getTask.execute(url, tag);
     }
 
-    public static void downloadLanguagePack(SnuffyApplication app, String langCode, String tag, DownloadTask.DownloadTaskHandler taskHandler){
+    public static void downloadLanguagePack(SnuffyApplication app, String langCode, String tag, DownloadTask.DownloadTaskHandler taskHandler) {
         String url = BASE_URL + ENDPOINT_PACKAGES + langCode + "?compressed=true";
         String mock_url = "https://docs.google.com/uc?export=download&id=0B1T_JTQ8nih7N0lGTVRlQldkaEk";
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + File.separator + "package.zip";
 
-        download(app.getApplicationContext(), mock_url, filePath, tag ,taskHandler);
+        download(app.getApplicationContext(), mock_url, filePath, tag, taskHandler);
     }
 
-    public static void downloadPackage(SnuffyApplication app, String langCode, String packageName, String tag, DownloadTask.DownloadTaskHandler taskHandler){
-        String url = BASE_URL + ENDPOINT_PACKAGES + langCode + "/" + packageName + "?compressed=true";
-        String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode  + "_" + packageName + File.separator + "package.zip";
+    public static void downloadPackage(SnuffyApplication app, String langCode, String packageName, String tag, DownloadTask.DownloadTaskHandler taskHandler) {
+        String url = BASE_URL + ENDPOINT_PACKAGES + langCode + File.separator + packageName + "?compressed=true";
+        String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + "_" + packageName + File.separator + "package.zip";
 
         download(app.getApplicationContext(), url, filePath, tag, taskHandler);
     }
 
-    public static void downloadTranslation(SnuffyApplication app ,String langCode, String tag, DownloadTask.DownloadTaskHandler taskHandler) {
-        String url = BASE_URL + ENDPOINT_TRANSLATIONS + langCode + "?compressed=true";
-        String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + File.separator + "package.zip";
+    public static void downloadTranslation(SnuffyApplication app, String packageName, String langCode, String tag, DownloadTask.DownloadTaskHandler taskHandler) {
+        String url = BASE_URL + ENDPOINT_TRANSLATIONS + langCode + File.separator + packageName + "?compressed=true";
+        String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + "_" + packageName + File.separator + "package.zip";
 
-        download(app.getApplicationContext(), url, filePath, tag,taskHandler);
+        download(app.getApplicationContext(), url, filePath, tag, taskHandler);
     }
 
-    private static void download(Context context ,String url, String filePath, String tag, DownloadTask.DownloadTaskHandler taskHandler){
+    private static void download(Context context, String url, String filePath, String tag, DownloadTask.DownloadTaskHandler taskHandler) {
         DownloadTask dlTask = new DownloadTask(context, taskHandler);
         dlTask.execute(url, filePath, tag);
     }

@@ -22,20 +22,21 @@ import android.view.Window;
 import android.widget.AbsoluteLayout;
 import android.widget.Toast;
 
+import org.keynote.godtools.android.business.GTPackage;
+import org.keynote.godtools.android.http.DownloadTask;
+import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.snuffy.PackageReader;
 import org.keynote.godtools.android.snuffy.SnuffyAboutActivity;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.snuffy.SnuffyHelpActivity;
-import org.keynote.godtools.android.snuffy.SnuffyLanguageActivity;
 import org.keynote.godtools.android.snuffy.SnuffyPage;
-import org.keynote.godtools.android.snuffy.SnuffyPageMenuActivity;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
 
 import java.util.Iterator;
 import java.util.Vector;
 
-public class SnuffyPWActivity extends Activity {
+public class SnuffyPWActivity extends Activity implements DownloadTask.DownloadTaskHandler {
     private static final String TAG = "SnuffyActivity";
 
     private static final String PREFS_NAME = "GodTools";
@@ -56,6 +57,10 @@ public class SnuffyPWActivity extends Activity {
     private int mPageHeight;
     private String mPackageTitle;
     private ProcessPackageAsync mProcessPackageAsync;
+
+    private String mConfigPrimary, mConfigParallel;
+    private GTPackage mParallelPackage;
+    private boolean isUsingPrimaryLanguage, isParallelLanguageSet;
 
     public void setLanguage(String languageCode) {
         mAppLanguage = languageCode;
@@ -78,13 +83,13 @@ public class SnuffyPWActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
-        mAppPackage = getIntent().getStringExtra("PackageName");
+        mAppPackage = getIntent().getStringExtra("PackageName");        // "kgp"
+        mAppLanguage = getIntent().getStringExtra("LanguageCode");      // "en"
         mConfigFileName = getIntent().getStringExtra("ConfigFileName");
-        mAppLanguage = getIntent().getStringExtra("LanguageCode");
         mPageLeft = getIntent().getIntExtra("PageLeft", 0);
         mPageTop = getIntent().getIntExtra("PageTop", 0);
-        mPageWidth = getIntent().getIntExtra("PageWidth", 320); // set defaults but they will not be used
-        mPageHeight = getIntent().getIntExtra("PageHeight", 480); // caller will always determine these and pass them in
+        mPageWidth = getIntent().getIntExtra("PageWidth", 320);         // set defaults but they will not be used
+        mPageHeight = getIntent().getIntExtra("PageHeight", 480);       // caller will always determine these and pass them in
         getIntent().putExtra("AllowFlip", false);
 
         setContentView(R.layout.snuffy_main);
@@ -92,17 +97,22 @@ public class SnuffyPWActivity extends Activity {
         mPager = (ViewPager) findViewById(R.id.snuffyViewPager);
         mPager.setAdapter(mPagerAdapter);
 
-        // TODO: can we stop ViewPager from cycling from last back to first?
-        // But it only does it sometimes
+        mConfigPrimary = mConfigFileName;
+        isUsingPrimaryLanguage = true;
 
-        // restore state from prefs
+        // check if parallel language is set
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String langParallel = settings.getString("languageParallel", "");
+
+        // get package if parallel language is set
+        if (!langParallel.isEmpty()) {
+            isParallelLanguageSet = true;
+            mParallelPackage = GTPackage.getPackage(this, mAppPackage, langParallel);
+        }
 
         // Now we are called from GodTools - do not restore current page
-        //mPagerCurrentItem = settings.getInt("currPage", 0);
         // always start at 0
         mPagerCurrentItem = 0;
-
 
         // not appropriate from God tools: setLanguage(settings.getString("currLanguageCode", getLanguageDefault()));
         // TODO: when we can display About or other pages, save that state too so we can restore that too.
@@ -172,9 +182,7 @@ public class SnuffyPWActivity extends Activity {
 
     protected void onResume() {
         super.onResume();
-
         // TODO: check if language changed
-
     }
 
     private void doSetup(int delay) {
@@ -383,14 +391,6 @@ public class SnuffyPWActivity extends Activity {
                 mPager.setCurrentItem(resultCode - RESULT_FIRST_USER);
                 break;
             }
-            case 1: // Show Language Selector
-            {
-                // Restart app - processing the chosen package/language
-                String languageCode = data.getStringExtra("LanguageCode");
-                switchLanguages(languageCode, true);
-                break;
-            }
-
         }
     }
 
@@ -416,17 +416,58 @@ public class SnuffyPWActivity extends Activity {
 
     }
 
-    private void switchToParallelLanguage(){
-        // TODO: refresh the pager if the language is available
+    private void switchLanguage() {
+
+        if (isParallelLanguageSet) {
+            if (isUsingPrimaryLanguage) {
+                if (mParallelPackage == null) { // translation is not available
+                    Toast.makeText(this, "Not available in parallel language", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    mConfigParallel = mParallelPackage.getConfigFileName();
+                    if (mConfigParallel == null) { // translation available but not yet downloaded
+                        // download translation
+
+                    } else {
+                        mConfigFileName = mConfigParallel;
+                        isUsingPrimaryLanguage = false;
+                        doSetup(0);
+
+                    }
+                }
+            } else {
+                mConfigFileName = mConfigPrimary;
+                isUsingPrimaryLanguage = true;
+                doSetup(0);
+            }
+
+        } else {
+            Toast.makeText(this, "Parallel Language not set", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    public void doCmdChooseLanguage(View v) {
-        // See navToolbarLanguageSelector in snuffyViewController.m
+    private void switchToParallelLanguage() {
 
-        Intent intent = new Intent(this, SnuffyLanguageActivity.class);
-        intent.putExtra("LanguageCode", mAppLanguage);
-        intent.putExtra("PackageName", mAppPackage);
-        startActivityForResult(intent, 1);
+        if (mConfigParallel != null) {
+            mConfigFileName = mConfigParallel;
+            isUsingPrimaryLanguage = false;
+            doSetup(0);
+        } else {
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            String langCodeParallel = settings.getString("languageParallel", "");
+
+            GTPackage gtPackage = GTPackage.getPackage(this, mAppPackage, langCodeParallel);
+            if (gtPackage != null) {
+                mConfigParallel = gtPackage.getConfigFileName();
+                mConfigFileName = mConfigParallel;
+                isUsingPrimaryLanguage = false;
+                doSetup(0);
+            } else {
+                // download package translation for parallel language
+                // show loading
+                GodToolsApiClient.downloadTranslation((SnuffyApplication) getApplication(), mAppPackage, langCodeParallel, "", this);
+            }
+        }
     }
 
     public void doCmdInfo(View v) {
@@ -448,7 +489,7 @@ public class SnuffyPWActivity extends Activity {
         // matches corresponding items in doCmdFlip() below
         MenuItem flipItem = menu.findItem(R.id.CMD_FLIP);
         if (mAppPackage.equalsIgnoreCase("kgp")
-                && (mAppLanguage.equalsIgnoreCase("en_heartbeat") || mAppLanguage.equalsIgnoreCase("et_heartbeat")) )
+                && (mAppLanguage.equalsIgnoreCase("en_heartbeat") || mAppLanguage.equalsIgnoreCase("et_heartbeat")))
             flipItem.setVisible(true);
         else
             flipItem.setVisible(false);
@@ -476,10 +517,6 @@ public class SnuffyPWActivity extends Activity {
                 doCmdShowPageMenu(null);
                 break;
             }
-            case R.id.CMD_LANGUAGES: {
-                doCmdChooseLanguage(null);
-                break;
-            }
             case R.id.CMD_EMAIL: {
                 doCmdShare(null);
                 break;
@@ -493,7 +530,7 @@ public class SnuffyPWActivity extends Activity {
                 break;
             }
             case R.id.CMD_SWITCH_LANGUAGE: {
-                switchToParallelLanguage();
+                switchLanguage();
                 break;
             }
             default:
@@ -582,7 +619,16 @@ public class SnuffyPWActivity extends Activity {
             // TODO: COMPLETE PROCESSING ON MAIN THREAD
             completeSetup(result != 0);
         }
+    }
 
+    @Override
+    public void downloadTaskComplete(String url, String filePath, String tag) {
+        // hide loading
+        switchToParallelLanguage();
+    }
 
+    @Override
+    public void downloadTaskFailure(String url, String filePath, String tag) {
+        // failed to download
     }
 }
