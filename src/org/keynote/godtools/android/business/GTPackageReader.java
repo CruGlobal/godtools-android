@@ -17,9 +17,9 @@ import javax.xml.parsers.ParserConfigurationException;
 public class GTPackageReader {
 
 
-    public static List<GTPackage> processMetaResponse(InputStream is) {
+    public static List<GTLanguage> processMetaResponse(InputStream is) {
 
-        List<GTPackage> packageList = new ArrayList<GTPackage>();
+        List<GTLanguage> languageList = new ArrayList<GTLanguage>();
 
         Document xmlDoc;
         try {
@@ -29,26 +29,34 @@ public class GTPackageReader {
                     .parse(is);
             xmlDoc.normalize();
 
-            NodeList nlLanguage = xmlDoc.getElementsByTagName("language");
-            String language = ((Element) nlLanguage.item(0)).getAttribute("code");
+            NodeList nlLanguages = xmlDoc.getElementsByTagName("language");
+            for (int i = 0; i < nlLanguages.getLength(); i++) {
+                Element elLanguage = (Element) nlLanguages.item(i);
+                String languageCode = elLanguage.getAttribute("code");
 
-            NodeList nlPackages = xmlDoc.getElementsByTagName("package");
-            int numPackages = nlPackages.getLength();
+                GTLanguage gtl = new GTLanguage(languageCode);
+                List<GTPackage> packageList = new ArrayList<GTPackage>();
 
-            for (int i = 0; i < numPackages; i++) {
-                Element element = (Element) nlPackages.item(i);
+                NodeList nlPackages = elLanguage.getElementsByTagName("package");
+                for (int j =0; j < nlPackages.getLength(); j++){
+                    Element element = (Element) nlPackages.item(j);
 
-                String name = element.getAttribute("name");
-                String code = element.getAttribute("code");
-                double version = Double.valueOf(element.getAttribute("version"));
+                    String name = element.getAttribute("name");
+                    String code = element.getAttribute("code");
+                    double version = Double.valueOf(element.getAttribute("version"));
+                    String status = element.getAttribute("status");
 
-                GTPackage gtp = new GTPackage();
-                gtp.setCode(code);
-                gtp.setName(name);
-                gtp.setVersion(version);
-                gtp.setLanguage(language);
+                    GTPackage gtp = new GTPackage();
+                    gtp.setCode(code);
+                    gtp.setName(name);
+                    gtp.setVersion(version);
+                    gtp.setLanguage(languageCode);
+                    gtp.setStatus(status);
 
-                packageList.add(gtp);
+                    packageList.add(gtp);
+                }
+                gtl.setPackages(packageList);
+                languageList.add(gtl);
             }
 
         } catch (SAXException e) {
@@ -59,7 +67,7 @@ public class GTPackageReader {
             e.printStackTrace();
         }
 
-        return packageList;
+        return languageList;
     }
 
     public static List<GTPackage> processContentFile(File contentFile) {

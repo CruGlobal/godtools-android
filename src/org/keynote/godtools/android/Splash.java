@@ -12,12 +12,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
+import org.keynote.godtools.android.http.HttpTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
@@ -27,14 +30,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Locale;
 
 
-public class Splash extends Activity implements DownloadTask.DownloadTaskHandler {
+public class Splash extends Activity implements DownloadTask.DownloadTaskHandler, HttpTask.HttpTaskHandler {
+
+    private static final String LOG_TAG = "splash";
+
     protected boolean _active = true;
     protected int _splashTime = 2000;
     private static final String PREFS_NAME = "GodTools";
+    private static final String KEY_NEW_LANGUAGE = "new_language";
+    private static final String KEY_UPDATE_LANGUAGE = "update_language";
 
     private String languagePhone;
+    private String languagePrimary;
 
     TextView tvTask;
     ProgressBar progressBar;
@@ -52,9 +62,15 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         // Enable crash reporting
         //Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
 
-        if (isFirstLaunch()) {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+        languagePhone = Device.getDefaultLanguage();
 
+        if (isFirstLaunch()) {
             new PrepareInitialContentTask((SnuffyApplication) getApplication()).execute((Void) null);
+
+        } else if (Device.isConnected(Splash.this)) {
+            checkForUpdates();
 
         } else {
             // thread for displaying the SplashScreen
@@ -105,7 +121,8 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         return isFirst;
     }
 
-    private void showLoading() {
+    private void showLoading(String msg) {
+        tvTask.setText(msg);
         tvTask.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.VISIBLE);
     }
@@ -116,11 +133,13 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
     }
 
     private boolean shouldUpdateLanguageSettings() {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String langPrimary = settings.getString("languagePrimary", "en");
-        String langPhone = Device.getDefaultLanguage();
 
-        return !langPrimary.equalsIgnoreCase(langPhone);
+        // check first if the we support the phones language
+        GTLanguage gtLanguage = GTLanguage.getLanguage(this, languagePhone);
+        if (gtLanguage == null)
+            return false;
+
+        return !languagePrimary.equalsIgnoreCase(languagePhone);
     }
 
     /**
@@ -144,8 +163,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            tvTask.setText("Copying files from assets...");
-            showLoading();
+            showLoading("Copying files from assets...");
         }
 
         @Override
@@ -153,6 +171,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
             AssetManager manager = mContext.getAssets();
 
             try {
+                // copy the files from assets/english to documents directory
                 String[] files = manager.list("english");
                 for (String fileName : files) {
                     InputStream is = manager.open("english/" + fileName);
@@ -167,14 +186,27 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
                     os = null;
                 }
 
+                // meta.xml file contains information about the packages available on the server
+                InputStream metaStream = manager.open("meta.xml");
+                List<GTLanguage> languageList = GTPackageReader.processMetaResponse(metaStream);
+                for (GTLanguage gtl : languageList) {
+                    gtl.addToDatabase(mContext);
+                    for (GTPackage gtp : gtl.getPackages()) {
+                        gtp.addToDatabase(mContext);
+                    }
+                }
+
+                // contents.xml file contains information about the bundled english resources
                 InputStream contentsStream = manager.open("contents.xml");
                 List<GTPackage> packageList = GTPackageReader.processContentFile(contentsStream);
-
-                adapter.open();
                 for (GTPackage gtp : packageList) {
-                    adapter.insertGTPackage(gtp);
+                    gtp.update(mContext);
                 }
-                adapter.close();
+
+                // english resources should be marked as downloaded
+                GTLanguage gtlEnglish = new GTLanguage("en");
+                gtlEnglish.setDownloaded(true);
+                gtlEnglish.update(Splash.this);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -186,16 +218,10 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         @Override
         protected void onPostExecute(Void aVoid) {
 
-            if (Device.isConnected(mContext) && shouldUpdateLanguageSettings()) {
-
-                languagePhone = Device.getDefaultLanguage();
-                tvTask.setText(String.format("Downloading %s package...", languagePhone));
-                GodToolsApiClient.downloadLanguagePack(mApp, languagePhone, "", Splash.this);
-
+            if (Device.isConnected(mContext)) {
+                checkForUpdates();
             } else {
-
                 goToMainActivity();
-
             }
         }
     }
@@ -208,15 +234,33 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         }
     }
 
+    private void checkForUpdates() {
+        showLoading("Checking for updates...");
+        GodToolsApiClient.getListOfPackages("", Splash.this);
+    }
+
     @Override
     public void downloadTaskComplete(String url, String filePath, String tag) {
 
         hideLoading();
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("languagePrimary", languagePhone);
-        editor.commit();
+        if (tag.equalsIgnoreCase(KEY_NEW_LANGUAGE)) {
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(GTLanguage.KEY_PRIMARY, languagePhone);
+            editor.commit();
+
+            GTLanguage gtl = new GTLanguage(languagePhone);
+            gtl.setDownloaded(true);
+            gtl.update(Splash.this);
+
+        } else if (tag.equalsIgnoreCase(KEY_UPDATE_LANGUAGE)) {
+
+            GTLanguage gtl = new GTLanguage(languagePrimary);
+            gtl.setDownloaded(true);
+            gtl.update(Splash.this);
+
+        }
 
         goToMainActivity();
 
@@ -228,7 +272,62 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         finish();
     }
 
-    private void goToMainActivity(){
+    @Override
+    public void httpTaskComplete(String url, InputStream is, int statusCode, String tag) {
+
+        // update the database
+        List<GTLanguage> languageList = GTPackageReader.processMetaResponse(is);
+        DBAdapter adapter = DBAdapter.getInstance(Splash.this);
+        adapter.open();
+        for (GTLanguage gtl : languageList) {
+
+            // check if language is already in the db
+            GTLanguage dbLanguage = adapter.getGTLanguage(gtl.getLanguageCode());
+            if (dbLanguage == null)
+                adapter.insertGTLanguage(gtl);
+
+            dbLanguage = adapter.getGTLanguage(gtl.getLanguageCode());
+            for (GTPackage gtp : gtl.getPackages()) {
+
+                // check if a new package is available for download or an existing package has been updated
+                GTPackage dbPackage = adapter.getGTPackage(gtp.getCode(), gtp.getLanguage());
+                if (dbPackage == null) {
+                    adapter.insertGTPackage(gtp);
+                    dbLanguage.setDownloaded(false);
+                } else if (gtp.getVersion() > dbPackage.getVersion()) {
+                    adapter.updateGTPackage(gtp);
+                    dbLanguage.setDownloaded(false);
+                }
+            }
+
+            adapter.updateGTLanguage(dbLanguage);
+        }
+        adapter.close();
+
+        if (shouldUpdateLanguageSettings()) {
+            // download resources for the phones language
+            Locale mLocale = new Locale(languagePhone);
+            showLoading(String.format("Downloading %s resources...", mLocale.getDisplayName()));
+            GodToolsApiClient.downloadLanguagePack((SnuffyApplication)getApplication(), languagePhone, KEY_NEW_LANGUAGE, Splash.this);
+
+        } else {
+            GTLanguage gtlPrimary = adapter.getGTLanguage(languagePrimary);
+            if (gtlPrimary.isDownloaded()) {
+                goToMainActivity();
+            } else {
+                showLoading(String.format("Updating %s resources...", gtlPrimary.getLanguageName()));
+                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), languagePhone, KEY_UPDATE_LANGUAGE, Splash.this);
+            }
+        }
+    }
+
+    @Override
+    public void httpTaskFailure(String url, InputStream is, int statusCode, String tag) {
+        Toast.makeText(Splash.this, "Failed to update resources", Toast.LENGTH_SHORT).show();
+        goToMainActivity();
+    }
+
+    private void goToMainActivity() {
         Intent intent = new Intent(this, MainPW.class);
         finish();
         startActivity(intent);

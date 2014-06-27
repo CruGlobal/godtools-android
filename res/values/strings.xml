@@ -38,6 +38,7 @@
     <string name="settings_parallel_language">Parallel Language</string>
     <string name="settings_about">About GodTools</string>
     <string name="settings_current_language">This is the current Language</string>
+    <string name="none">None</string>
 
 	
 	<string name="dialog_analytics_title">Collect Anonymous Usage Data</string>

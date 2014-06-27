@@ -17,11 +17,14 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(DBContract.GTPackageTable.SQL_CREATE_GTPACKAGES);
+        sqLiteDatabase.execSQL(DBContract.GTLanguageTable.SQL_CREATE_GTLANGUAGES);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2) {
         sqLiteDatabase.execSQL(DBContract.GTPackageTable.SQL_DELETE_GTPACKAGES);
+        sqLiteDatabase.execSQL(
+                DBContract.GTLanguageTable.SQL_DELETE_GTLANGUAGES);
         onCreate(sqLiteDatabase);
     }
 }

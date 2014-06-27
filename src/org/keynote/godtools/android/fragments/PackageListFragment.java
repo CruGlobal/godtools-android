@@ -67,11 +67,11 @@ public class PackageListFragment extends ListFragment {
     }
 
     public void disable(){
-
+        mAdapter.disableClick();
     }
 
     public void enable(){
-
+        mAdapter.enableClick();
     }
 
     @Override
@@ -84,6 +84,7 @@ public class PackageListFragment extends ListFragment {
         private List<GTPackage> listPackages;
         private Context context;
         private LayoutInflater inflater;
+        private boolean mIsEnabled;
 
 
         public PackageListAdapter(Context context, List<GTPackage> listPackages) {
@@ -91,6 +92,7 @@ public class PackageListFragment extends ListFragment {
             this.context = context;
             this.listPackages = listPackages;
             this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            this.mIsEnabled = true;
         }
 
         @Override
@@ -115,7 +117,9 @@ public class PackageListFragment extends ListFragment {
 
             // set values
             holder.ivIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.homescreen_kgp_icon_2x));
-            holder.tvPackageName.setText(gtp.getCode());
+            holder.tvPackageName.setText(gtp.getName());
+
+            // check if enabled, set the tint color of the ivIcon if disabled
 
             return convertView;
         }
@@ -129,6 +133,19 @@ public class PackageListFragment extends ListFragment {
             this.listPackages.clear();
             this.listPackages.addAll(packageList);
             notifyDataSetChanged();
+        }
+
+        @Override
+        public boolean isEnabled(int position) {
+            return mIsEnabled;
+        }
+
+        public void enableClick(){
+            mIsEnabled = true;
+        }
+
+        public void disableClick(){
+            mIsEnabled = false;
         }
     }
 }

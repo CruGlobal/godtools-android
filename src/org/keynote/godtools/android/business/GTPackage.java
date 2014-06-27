@@ -8,12 +8,21 @@ import java.util.List;
 
 public class GTPackage {
 
+    private long id;
     private String code;
     private String name;
     private double version;
     private String language;
     private String configFileName;
     private String status;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getCode() {
         return code;
@@ -79,5 +88,11 @@ public class GTPackage {
         DBAdapter adapter = DBAdapter.getInstance(context);
         adapter.open();
         return adapter.insertGTPackage(this);
+    }
+
+    public void update(Context context) {
+        DBAdapter adapter = DBAdapter.getInstance(context);
+        adapter.open();
+        adapter.updateGTPackage(this);
     }
 }

@@ -23,9 +23,10 @@
         <RelativeLayout
             android:id="@+id/rlMainLanguage"
             android:layout_width="match_parent"
-
             android:background="@drawable/settings_language_bg"
-            android:layout_height="40dp">
+            android:layout_height="40dp"
+            android:paddingRight="40dp"
+            android:paddingLeft="40dp">
 
             <TextView
                 android:textStyle="bold"
@@ -33,7 +34,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:textSize="18sp"
-                android:paddingLeft="48dp"
                 android:textColor="@color/settings_listitem_item"
                 android:text="@string/settings_main_language"
                 android:gravity="center_vertical" />
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/tvMainLanguage"
+                android:layout_alignParentRight="true"
                 android:tint="@color/settings_listitem_item" />
         </RelativeLayout>
 
@@ -65,7 +65,9 @@
             android:id="@+id/rlParallelLanguage"
             android:layout_width="match_parent"
             android:background="@drawable/settings_language_bg"
-            android:layout_height="40dp">
+            android:layout_height="40dp"
+            android:paddingRight="40dp"
+            android:paddingLeft="40dp">
 
             <TextView
                 android:textStyle="bold"
@@ -73,9 +75,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:textSize="18sp"
-                android:paddingLeft="48dp"
                 android:textColor="@color/settings_listitem_item"
-                android:text="@string/settings_parallel_language"
+                android:text="@string/none"
                 android:gravity="center_vertical" />
 
             <ImageView
@@ -83,10 +84,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/tvParallelLanguage"
-                android:tint="@color/settings_listitem_item"/>
+                android:layout_alignParentRight="true"
+                android:tint="@color/settings_listitem_item" />
         </RelativeLayout>
-
 
 
         <View
@@ -124,14 +124,4 @@
             android:text="@string/settings_about"
             android:gravity="center_vertical" />
     </LinearLayout>
-
-    <!-- use 1px for height to make it very thin and slightly noticeable-->
-    <!--<ListView-->
-    <!--android:id="@android:id/list"-->
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="fill_parent"-->
-    <!--android:divider="@color/settings_list_divider"-->
-    <!--android:dividerHeight="1px"></ListView>-->
-
-
 </LinearLayout>

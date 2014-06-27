@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<languages>
+    <language code="en">
+        <packages>
+            <package code="satisfied" name="Satisfied?" version="1.1" status="live"/>
+            <package code="kgp" name="Knowing God Personally" version="1.1" status="live"/>
+            <package code="fourlaws" name="The Four Spiritual Laws" version="1.1" status="live"/>
+        </packages>
+    </language>
+</languages>

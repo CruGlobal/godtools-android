@@ -3,15 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="#ff3ea2ff"
-        android:id="@+id/vActionBar"/>
-
     <FrameLayout
         android:id="@+id/contList"
-        android:layout_below="@+id/vActionBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#fff">

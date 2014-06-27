@@ -13,10 +13,11 @@ public class GodToolsApiClient {
     private static final String ENDPOINT_PACKAGES = "packages/";
     private static final String ENDPOINT_TRANSLATIONS = "translations/";
 
-    public static void getListOfPackages(String langCode, String tag, HttpTask.HttpTaskHandler taskHandler) {
+    public static void getListOfPackages(String tag, HttpTask.HttpTaskHandler taskHandler) {
         HttpGetTask getTask = new HttpGetTask(taskHandler);
-        String url = BASE_URL + ENDPOINT_META + langCode;
-        getTask.execute(url, tag);
+        String url = BASE_URL + ENDPOINT_META;
+        String mock_url = "http://demo9996907.mockable.io/meta";
+        getTask.execute(mock_url, tag);
     }
 
     public static void downloadLanguagePack(SnuffyApplication app, String langCode, String tag, DownloadTask.DownloadTaskHandler taskHandler) {
