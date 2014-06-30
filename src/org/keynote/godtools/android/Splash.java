@@ -45,6 +45,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
     private String languagePhone;
     private String languagePrimary;
+    private boolean isFirst;
 
     TextView tvTask;
     ProgressBar progressBar;
@@ -112,7 +113,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
     private boolean isFirstLaunch() {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        boolean isFirst = settings.getBoolean("firstLaunch", true);
+        isFirst = settings.getBoolean("firstLaunch", true);
         if (isFirst) {
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("firstLaunch", false);
@@ -302,9 +303,8 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
             adapter.updateGTLanguage(dbLanguage);
         }
-        adapter.close();
 
-        if (shouldUpdateLanguageSettings()) {
+        if (isFirst && shouldUpdateLanguageSettings()) {
             // download resources for the phones language
             Locale mLocale = new Locale(languagePhone);
             showLoading(String.format("Downloading %s resources...", mLocale.getDisplayName()));
@@ -319,6 +319,8 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), languagePhone, KEY_UPDATE_LANGUAGE, Splash.this);
             }
         }
+
+        adapter.close();
     }
 
     @Override
