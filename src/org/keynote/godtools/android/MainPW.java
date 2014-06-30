@@ -33,7 +33,11 @@ public class MainPW extends ActionActivity implements OnLanguageChangedListener,
     private static final String PREFS_NAME = "GodTools";
     private static final String TAG_LIST = "PackageList";
     private static final String TAG_DIALOG_LANGUAGE = "LanguageDialog";
-    private static final int RC_SETTINGS = 1001;
+
+    private static final int REQUEST_SETTINGS = 1001;
+    private static final int RESULT_DOWNLOAD_PRIMARY = 2001;
+    private static final int RESULT_DOWNLOAD_PARALLEL = 2002;
+    private static final int RESULT_CHANGED_PRIMARY = 2003;
 
     public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
     public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
@@ -55,11 +59,12 @@ public class MainPW extends ActionActivity implements OnLanguageChangedListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_pw);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         setBackButtonEnabled(false);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+        languagePhone = Device.getDefaultLanguage();
 
         // get the packages for the primary language
         packageList = GTPackage.getPackageByLanguage(this, languagePrimary);
@@ -74,16 +79,39 @@ public class MainPW extends ActionActivity implements OnLanguageChangedListener,
         }
 
         computeDimension();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        languagePhone = Device.getDefaultLanguage();
 
         if (shouldUpdateLanguageSettings()) {
             showLanguageDialog();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (resultCode) {
+            case RESULT_CHANGED_PRIMARY: {
+                packageList = GTPackage.getPackageByLanguage(MainPW.this, data.getStringExtra("code"));
+                packageFrag.refreshList(packageList);
+
+                break;
+            }
+            case RESULT_DOWNLOAD_PRIMARY: {
+                // start the download
+                String code = data.getStringExtra("code");
+                gtLanguage = GTLanguage.getLanguage(MainPW.this, code);
+                if (Device.isConnected(MainPW.this)) {
+                    showLoading();
+                    GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), gtLanguage.getLanguageCode(), "", this);
+                } else {
+                    // TODO: show dialog, Internet connection is required to download the resources
+                    Toast.makeText(this, "Unable to download resources. Internet connection unavailable.", Toast.LENGTH_LONG).show();
+                }
+
+                break;
+            }
+        }
+
     }
 
     @Override
@@ -97,7 +125,7 @@ public class MainPW extends ActionActivity implements OnLanguageChangedListener,
         switch (item.getItemId()) {
             case R.id.menu_settings:
                 Intent intent = new Intent(this, SettingsPW.class);
-                startActivityForResult(intent, RC_SETTINGS);
+                startActivityForResult(intent, REQUEST_SETTINGS);
                 break;
         }
 
@@ -174,7 +202,6 @@ public class MainPW extends ActionActivity implements OnLanguageChangedListener,
                 // TODO: show dialog, Internet connection is required to download the resources
                 Toast.makeText(this, "Unable to download resources. Internet connection unavailable.", Toast.LENGTH_LONG).show();
             }
-
 
         }
     }
