@@ -21,6 +21,10 @@ import java.util.List;
 public class SelectLanguagePW extends ListActionActivity {
     private static final String PREFS_NAME = "GodTools";
 
+    private static final int RESULT_DOWNLOAD_PRIMARY = 2001;
+    private static final int RESULT_DOWNLOAD_PARALLEL = 2002;
+    private static final int RESULT_CHANGED_PRIMARY = 2003;
+
     SharedPreferences settings;
     List<GTLanguage> languageList;
 
@@ -48,6 +52,7 @@ public class SelectLanguagePW extends ListActionActivity {
         } else if (languageType.equalsIgnoreCase("Parallel Language")) {
             currentLanguage = parallelLanguage;
             isMainLang = false;
+            removeLanguageFromList(languageList, primaryLanguage);
         }
 
         LanguageAdapter adapter = new LanguageAdapter(this, languageList);
@@ -60,27 +65,53 @@ public class SelectLanguagePW extends ListActionActivity {
         super.onListItemClick(l, v, position, id);
 
         GTLanguage gtl = languageList.get(position);
+        if (gtl.getLanguageCode().equalsIgnoreCase(currentLanguage))
+            finish();
+
 
         if (isMainLang) {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, gtl.getLanguageCode());
-            editor.commit();
 
-            if (!gtl.isDownloaded()) {
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("code", gtl.getLanguageCode());
-                setResult(2001, returnIntent);
-                finish();
+            if (gtl.getLanguageCode().equalsIgnoreCase(parallelLanguage)){
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString(GTLanguage.KEY_PARALLEL, "");
+                editor.commit();
             }
 
+            if (gtl.isDownloaded()) {
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString(GTLanguage.KEY_PRIMARY, gtl.getLanguageCode());
+                editor.commit();
+
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("code", gtl.getLanguageCode());
+                setResult(RESULT_CHANGED_PRIMARY, returnIntent);
+
+            } else {
+
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("code", gtl.getLanguageCode());
+                setResult(RESULT_DOWNLOAD_PRIMARY, returnIntent);
+
+            }
 
         } else {
+
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PARALLEL, gtl.getLanguageCode());
             editor.commit();
 
         }
 
+        finish();
+    }
+
+    private void removeLanguageFromList(List<GTLanguage> list, String code) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getLanguageCode().equalsIgnoreCase(code)) {
+                list.remove(i);
+                break;
+            }
+        }
     }
 
     private class LanguageAdapter extends ArrayAdapter<GTLanguage> {

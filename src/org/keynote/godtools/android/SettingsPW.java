@@ -17,6 +17,13 @@ public class SettingsPW extends ActionActivity implements View.OnClickListener {
     private static final String PREFS_NAME = "GodTools";
     private static final String TITLE = "Settings";
 
+    private static final int REQUEST_PRIMARY = 1002;
+    private static final int REQUEST_PARALLEL = 1003;
+
+    private static final int RESULT_DOWNLOAD_PRIMARY = 2001;
+    private static final int RESULT_DOWNLOAD_PARALLEL = 2002;
+    private static final int RESULT_CHANGED_PRIMARY = 2003;
+
     TextView tvMainLanguage, tvParallelLanguage, tvAbout;
     RelativeLayout rlMainLanguage, rlParallelLanguage;
 
@@ -52,7 +59,9 @@ public class SettingsPW extends ActionActivity implements View.OnClickListener {
         tvMainLanguage.setText(localePrimary.getDisplayName());
 
         // set up parallel language views
-        if (!parallelLanguageCode.isEmpty()) {
+        if (parallelLanguageCode.isEmpty()) {
+            tvParallelLanguage.setText("None");
+        } else {
             Locale localeParallel = new Locale(parallelLanguageCode);
             tvParallelLanguage.setText(localeParallel.getDisplayName());
         }
@@ -62,13 +71,11 @@ public class SettingsPW extends ActionActivity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        setResult(resultCode, data);
 
-        switch (resultCode) {
-            case 2001: {
-
-            }
+        if (requestCode == REQUEST_PRIMARY && resultCode == RESULT_DOWNLOAD_PRIMARY) {
+                finish();
         }
-
 
     }
 
@@ -80,12 +87,12 @@ public class SettingsPW extends ActionActivity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.rlMainLanguage:
                 intent.putExtra("languageType", "Main Language");
-                startActivityForResult(intent, 1002);
+                startActivityForResult(intent, REQUEST_PRIMARY);
                 break;
 
             case R.id.rlParallelLanguage:
                 intent.putExtra("languageType", "Parallel Language");
-                startActivityForResult(intent, 1003);
+                startActivityForResult(intent, REQUEST_PARALLEL);
                 break;
 
             case R.id.tvAbout:
