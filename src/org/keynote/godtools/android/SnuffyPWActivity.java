@@ -418,32 +418,28 @@ public class SnuffyPWActivity extends Activity implements DownloadTask.DownloadT
 
     private void switchLanguage() {
 
-        if (isParallelLanguageSet) {
-            if (isUsingPrimaryLanguage) {
-                if (mParallelPackage == null) { // translation is not available
-                    Toast.makeText(this, "Not available in parallel language", Toast.LENGTH_SHORT).show();
+        if (isUsingPrimaryLanguage) {
+            if (mParallelPackage == null) { // translation is not available
+                Toast.makeText(this, "Not available in parallel language", Toast.LENGTH_SHORT).show();
+
+            } else {
+                mConfigParallel = mParallelPackage.getConfigFileName();
+                if (mConfigParallel == null) { // translation available but not yet downloaded
+                    // download translation
 
                 } else {
-                    mConfigParallel = mParallelPackage.getConfigFileName();
-                    if (mConfigParallel == null) { // translation available but not yet downloaded
-                        // download translation
+                    mConfigFileName = mConfigParallel;
+                    isUsingPrimaryLanguage = false;
+                    doSetup(0);
 
-                    } else {
-                        mConfigFileName = mConfigParallel;
-                        isUsingPrimaryLanguage = false;
-                        doSetup(0);
-
-                    }
                 }
-            } else {
-                mConfigFileName = mConfigPrimary;
-                isUsingPrimaryLanguage = true;
-                doSetup(0);
             }
-
         } else {
-            Toast.makeText(this, "Parallel Language not set", Toast.LENGTH_SHORT).show();
+            mConfigFileName = mConfigPrimary;
+            isUsingPrimaryLanguage = true;
+            doSetup(0);
         }
+
     }
 
     private void switchToParallelLanguage() {
@@ -493,6 +489,15 @@ public class SnuffyPWActivity extends Activity implements DownloadTask.DownloadT
             flipItem.setVisible(true);
         else
             flipItem.setVisible(false);
+
+        // enable this feature if the the parallel language is set
+        // and a translation is available for this package
+        MenuItem switchItem = menu.findItem(R.id.CMD_SWITCH_LANGUAGE);
+        if (isParallelLanguageSet && mParallelPackage != null)
+            switchItem.setVisible(true);
+        else
+            switchItem.setVisible(false);
+
         return true;
     }
 
@@ -530,7 +535,8 @@ public class SnuffyPWActivity extends Activity implements DownloadTask.DownloadT
                 break;
             }
             case R.id.CMD_SWITCH_LANGUAGE: {
-                switchLanguage();
+                Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
+                //switchLanguage();
                 break;
             }
             default:
