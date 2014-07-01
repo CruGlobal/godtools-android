@@ -30,7 +30,11 @@ import java.util.ArrayList;
  * Created by john.jarder on 6/17/14.
  */
 public class ListActionActivity extends ListActivity {
-    final static String LOGTAG = "ActionActivity";
+    String LOGTAG = "ActionActivity";
+
+    public static final int RESULT_DOWNLOAD_PRIMARY = 2001;
+    public static final int RESULT_DOWNLOAD_PARALLEL = 2002;
+    public static final int RESULT_CHANGED_PRIMARY = 2003;
 
     CustomActionBar actionbar;
     MenuParser menuParser;

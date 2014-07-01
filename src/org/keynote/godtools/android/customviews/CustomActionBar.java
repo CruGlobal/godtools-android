@@ -1,7 +1,6 @@
 package org.keynote.godtools.android.customviews;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,25 +18,25 @@ import java.util.ArrayList;
  */
 public class CustomActionBar {
     static final String LOGTAG = "CustomActionBar";
-    Context context;
     Activity activity;
 
-    View contTitle;
+    //    View contTitle;
+    ImageView ivBack;
     LinearLayout contMenu;
     TextView tvTitle;
     ArrayList<MenuItem> menuItems;
 
-    public CustomActionBar(Activity activity, View actionLayout){
+    public CustomActionBar(Activity activity, View actionLayout) {
         this.activity = activity;
 
-        contTitle = actionLayout.findViewById(R.id.contTitle);
+        ivBack = (ImageView) actionLayout.findViewById(R.id.ivBack);
         contMenu = (LinearLayout) actionLayout.findViewById(R.id.contMenu);
         tvTitle = (TextView) actionLayout.findViewById(R.id.tvPageTitle);
 
     }
 
     public void setPageTitle(String title) {
-        ((TextView) contTitle.findViewById(R.id.tvPageTitle)).setText(title);
+        tvTitle.setText(title);
     }
 
     public void setUpMenu(ArrayList<MenuParser.ActionMenu> actionMenuList, ArrayList<MenuItem> menuItems) {
@@ -65,9 +64,8 @@ public class CustomActionBar {
 
     public void applyBackButtonState(boolean enabled) {
         if (enabled) {
-            contTitle.findViewById(R.id.ivBack).setVisibility(View.VISIBLE);
-            contTitle.setEnabled(true);
-            contTitle.setOnClickListener(new View.OnClickListener() {
+            ivBack.setVisibility(View.VISIBLE);
+            ivBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.d(LOGTAG, "backPress OnclickListener");
@@ -75,8 +73,7 @@ public class CustomActionBar {
                 }
             });
         } else {
-            contTitle.findViewById(R.id.ivBack).setVisibility(View.GONE);
-            contTitle.setEnabled(false);
+            ivBack.setVisibility(View.GONE);
         }
     }
 

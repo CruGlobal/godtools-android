@@ -1,35 +1,23 @@
 package org.keynote.godtools.android.customactivities;
 
-import android.app.Activity;
-import android.app.ListActivity;
-import android.content.res.TypedArray;
-import android.content.res.XmlResourceParser;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.internal.view.menu.MenuBuilder;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.util.Xml;
-import android.view.InflateException;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.customviews.CustomActionBar;
 import org.keynote.godtools.android.utils.MenuParser;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class ActionActivity extends FragmentActivity {
-    final static String LOGTAG = "ActionActivity";
+    String LOGTAG = "ActionActivity";
+
+    public static final int RESULT_DOWNLOAD_PRIMARY = 2001;
+    public static final int RESULT_DOWNLOAD_PARALLEL = 2002;
+    public static final int RESULT_CHANGED_PRIMARY = 2003;
 
     CustomActionBar actionbar;
     MenuParser menuParser;
