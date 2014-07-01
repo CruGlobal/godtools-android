@@ -12,18 +12,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.customactivities.ListActionActivity;
+import org.keynote.godtools.android.utils.Device;
 
 import java.util.List;
 
 public class SelectLanguagePW extends ListActionActivity {
     private static final String PREFS_NAME = "GodTools";
-
-    private static final int RESULT_DOWNLOAD_PRIMARY = 2001;
-    private static final int RESULT_DOWNLOAD_PARALLEL = 2002;
-    private static final int RESULT_CHANGED_PRIMARY = 2003;
 
     SharedPreferences settings;
     List<GTLanguage> languageList;
@@ -65,6 +63,11 @@ public class SelectLanguagePW extends ListActionActivity {
         super.onListItemClick(l, v, position, id);
 
         GTLanguage gtl = languageList.get(position);
+        if (!gtl.isDownloaded() && !Device.isConnected(SelectLanguagePW.this)) {
+            Toast.makeText(SelectLanguagePW.this, "No internet connection, resources needs to be downloaded.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (gtl.getLanguageCode().equalsIgnoreCase(currentLanguage))
             finish();
 
@@ -96,9 +99,18 @@ public class SelectLanguagePW extends ListActionActivity {
 
         } else {
 
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PARALLEL, gtl.getLanguageCode());
-            editor.commit();
+            if (gtl.isDownloaded()) {
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString(GTLanguage.KEY_PARALLEL, gtl.getLanguageCode());
+                editor.commit();
+
+            } else {
+
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("code", gtl.getLanguageCode());
+                setResult(RESULT_DOWNLOAD_PARALLEL, returnIntent);
+
+            }
 
         }
 

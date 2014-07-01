@@ -35,9 +35,6 @@ public class MainPW extends ActionActivity implements OnLanguageChangedListener,
     private static final String TAG_DIALOG_LANGUAGE = "LanguageDialog";
 
     private static final int REQUEST_SETTINGS = 1001;
-    private static final int RESULT_DOWNLOAD_PRIMARY = 2001;
-    private static final int RESULT_DOWNLOAD_PARALLEL = 2002;
-    private static final int RESULT_CHANGED_PRIMARY = 2003;
 
     public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
     public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
@@ -100,15 +97,17 @@ public class MainPW extends ActionActivity implements OnLanguageChangedListener,
                 // start the download
                 String code = data.getStringExtra("code");
                 gtLanguage = GTLanguage.getLanguage(MainPW.this, code);
-                if (Device.isConnected(MainPW.this)) {
-                    showLoading();
-                    GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), gtLanguage.getLanguageCode(), "", this);
-                } else {
-                    // TODO: show dialog, Internet connection is required to download the resources
-                    Toast.makeText(this, "Unable to download resources. Internet connection unavailable.", Toast.LENGTH_LONG).show();
-                }
+
+                showLoading();
+                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), gtLanguage.getLanguageCode(), "primary", this);
 
                 break;
+            }
+            case RESULT_DOWNLOAD_PARALLEL: {
+                String code = data.getStringExtra("code");
+                gtLanguage = GTLanguage.getLanguage(MainPW.this, code);
+                showLoading();
+                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), code, "parallel", this);
             }
         }
 
@@ -208,7 +207,6 @@ public class MainPW extends ActionActivity implements OnLanguageChangedListener,
 
     @Override
     public void onPackageSelected(GTPackage gtPackage) {
-        Toast.makeText(this, gtPackage.getCode(), Toast.LENGTH_LONG).show();
 
         Intent intent = new Intent(this, SnuffyPWActivity.class);
         intent.putExtra("PackageName", gtPackage.getCode());
@@ -222,20 +220,31 @@ public class MainPW extends ActionActivity implements OnLanguageChangedListener,
     @Override
     public void downloadTaskComplete(String url, String filePath, String tag) {
 
-        // set the language code as default
-        languagePrimary = gtLanguage.getLanguageCode();
+        if (tag.equalsIgnoreCase("primary")) {
+            // set the language code as default
+            languagePrimary = gtLanguage.getLanguageCode();
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(GTLanguage.KEY_PRIMARY, gtLanguage.getLanguageCode());
-        editor.commit();
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(GTLanguage.KEY_PRIMARY, gtLanguage.getLanguageCode());
+            editor.commit();
+
+            packageList = GTPackage.getPackageByLanguage(MainPW.this, gtLanguage.getLanguageCode());
+            packageFrag.refreshList(packageList);
+
+        } else if (tag.equalsIgnoreCase("parallel")) {
+
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(GTLanguage.KEY_PARALLEL, gtLanguage.getLanguageCode());
+            editor.commit();
+
+
+        }
 
         // update the database
         gtLanguage.setDownloaded(true);
         gtLanguage.update(MainPW.this);
-
-        packageList = GTPackage.getPackageByLanguage(MainPW.this, gtLanguage.getLanguageCode());
-        packageFrag.refreshList(packageList);
 
         hideLoading();
     }

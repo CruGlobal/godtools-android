@@ -20,10 +20,6 @@ public class SettingsPW extends ActionActivity implements View.OnClickListener {
     private static final int REQUEST_PRIMARY = 1002;
     private static final int REQUEST_PARALLEL = 1003;
 
-    private static final int RESULT_DOWNLOAD_PRIMARY = 2001;
-    private static final int RESULT_DOWNLOAD_PARALLEL = 2002;
-    private static final int RESULT_CHANGED_PRIMARY = 2003;
-
     TextView tvMainLanguage, tvParallelLanguage, tvAbout;
     RelativeLayout rlMainLanguage, rlParallelLanguage;
 
@@ -71,10 +67,13 @@ public class SettingsPW extends ActionActivity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        setResult(resultCode, data);
+        if (resultCode != RESULT_CANCELED)
+            setResult(resultCode, data);
 
         if (requestCode == REQUEST_PRIMARY && resultCode == RESULT_DOWNLOAD_PRIMARY) {
-                finish();
+            finish();
+        } else if (requestCode == REQUEST_PARALLEL && resultCode == RESULT_DOWNLOAD_PARALLEL) {
+            finish();
         }
 
     }
