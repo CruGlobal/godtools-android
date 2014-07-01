@@ -3,6 +3,8 @@ package org.keynote.godtools.android.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -29,7 +31,7 @@ public class PackageListFragment extends ListFragment {
     private PackageListAdapter mAdapter;
     private OnPackageSelectedListener mListener;
 
-    public static PackageListFragment newInstance(List<GTPackage> packages){
+    public static PackageListFragment newInstance(List<GTPackage> packages) {
         PackageListFragment frag = new PackageListFragment();
         frag.setPackages(packages);
         return frag;
@@ -58,19 +60,19 @@ public class PackageListFragment extends ListFragment {
         setListAdapter(mAdapter);
     }
 
-    public void setPackages(List<GTPackage> packages){
+    public void setPackages(List<GTPackage> packages) {
         this.listPackages = packages;
     }
 
-    public void refreshList(List<GTPackage> packages){
+    public void refreshList(List<GTPackage> packages) {
         mAdapter.refresh(packages);
     }
 
-    public void disable(){
+    public void disable() {
         mAdapter.disableClick();
     }
 
-    public void enable(){
+    public void enable() {
         mAdapter.enableClick();
     }
 
@@ -115,11 +117,16 @@ public class PackageListFragment extends ListFragment {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            // set values
-            holder.ivIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.homescreen_kgp_icon_2x));
-            holder.tvPackageName.setText(gtp.getName());
 
-            // check if enabled, set the tint color of the ivIcon if disabled
+            Drawable d = context.getResources().getDrawable(R.drawable.homescreen_kgp_icon_2x);
+            if (mIsEnabled)
+                d.setColorFilter(null);
+            else
+                d.setColorFilter(0x90000000, PorterDuff.Mode.SRC_OVER);
+
+            // set values
+            holder.ivIcon.setImageDrawable(d);
+            holder.tvPackageName.setText(gtp.getName());
 
             return convertView;
         }
@@ -129,7 +136,7 @@ public class PackageListFragment extends ListFragment {
             TextView tvPackageName;
         }
 
-        public void refresh(List<GTPackage> packageList){
+        public void refresh(List<GTPackage> packageList) {
             this.listPackages.clear();
             this.listPackages.addAll(packageList);
             notifyDataSetChanged();
@@ -140,12 +147,14 @@ public class PackageListFragment extends ListFragment {
             return mIsEnabled;
         }
 
-        public void enableClick(){
+        public void enableClick() {
             mIsEnabled = true;
+            this.notifyDataSetChanged();
         }
 
-        public void disableClick(){
+        public void disableClick() {
             mIsEnabled = false;
+            this.notifyDataSetChanged();
         }
     }
 }

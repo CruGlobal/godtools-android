@@ -24,6 +24,7 @@ public class LanguageDialogFragment extends DialogFragment {
         Bundle args = new Bundle();
         args.putString(ARGS_LANGUAGE_NAME, langName);
         args.putString(ARGS_LANGUAGE_CODE, langCode);
+        frag.setCancelable(false);
         frag.setArguments(args);
 
         return frag;
