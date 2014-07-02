@@ -88,14 +88,14 @@ public class MainPW extends ActionActivity implements OnLanguageChangedListener,
 
         switch (resultCode) {
             case RESULT_CHANGED_PRIMARY: {
-                packageList = GTPackage.getPackageByLanguage(MainPW.this, data.getStringExtra("code"));
+                packageList = GTPackage.getPackageByLanguage(MainPW.this, data.getStringExtra("primaryCode"));
                 packageFrag.refreshList(packageList);
 
                 break;
             }
             case RESULT_DOWNLOAD_PRIMARY: {
                 // start the download
-                String code = data.getStringExtra("code");
+                String code = data.getStringExtra("primaryCode");
                 gtLanguage = GTLanguage.getLanguage(MainPW.this, code);
 
                 showLoading();
@@ -104,7 +104,16 @@ public class MainPW extends ActionActivity implements OnLanguageChangedListener,
                 break;
             }
             case RESULT_DOWNLOAD_PARALLEL: {
-                String code = data.getStringExtra("code");
+
+                // refresh the list if the primary language was changed
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+                if (!languagePrimary.equalsIgnoreCase(primaryCode)) {
+                    packageList = GTPackage.getPackageByLanguage(MainPW.this, primaryCode);
+                    packageFrag.refreshList(packageList);
+                }
+
+                String code = data.getStringExtra("parallelCode");
                 gtLanguage = GTLanguage.getLanguage(MainPW.this, code);
                 showLoading();
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), code, "parallel", this);
@@ -190,6 +199,11 @@ public class MainPW extends ActionActivity implements OnLanguageChangedListener,
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PRIMARY, code);
+
+            String parallelLanguage = settings.getString(GTLanguage.KEY_PARALLEL, "");
+            if (code.equalsIgnoreCase(parallelLanguage))
+                editor.putString(GTLanguage.KEY_PARALLEL, "");
+
             editor.commit();
 
         } else {

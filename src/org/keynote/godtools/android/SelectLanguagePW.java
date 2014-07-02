@@ -86,13 +86,13 @@ public class SelectLanguagePW extends ListActionActivity {
                 editor.commit();
 
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("code", gtl.getLanguageCode());
+                returnIntent.putExtra("primaryCode", gtl.getLanguageCode());
                 setResult(RESULT_CHANGED_PRIMARY, returnIntent);
 
             } else {
 
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("code", gtl.getLanguageCode());
+                returnIntent.putExtra("primaryCode", gtl.getLanguageCode());
                 setResult(RESULT_DOWNLOAD_PRIMARY, returnIntent);
 
             }
@@ -107,7 +107,7 @@ public class SelectLanguagePW extends ListActionActivity {
             } else {
 
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("code", gtl.getLanguageCode());
+                returnIntent.putExtra("parallelCode", gtl.getLanguageCode());
                 setResult(RESULT_DOWNLOAD_PARALLEL, returnIntent);
 
             }

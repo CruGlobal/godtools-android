@@ -23,8 +23,6 @@ import android.widget.AbsoluteLayout;
 import android.widget.Toast;
 
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.http.DownloadTask;
-import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.snuffy.PackageReader;
 import org.keynote.godtools.android.snuffy.SnuffyAboutActivity;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
@@ -36,7 +34,7 @@ import org.keynote.godtools.android.utils.Typefaces;
 import java.util.Iterator;
 import java.util.Vector;
 
-public class SnuffyPWActivity extends Activity implements DownloadTask.DownloadTaskHandler {
+public class SnuffyPWActivity extends Activity {
     private static final String TAG = "SnuffyActivity";
 
     private static final String PREFS_NAME = "GodTools";
@@ -109,6 +107,9 @@ public class SnuffyPWActivity extends Activity implements DownloadTask.DownloadT
             isParallelLanguageSet = true;
             mParallelPackage = GTPackage.getPackage(this, mAppPackage, langParallel);
         }
+
+        if (mParallelPackage != null)
+            mConfigParallel = mParallelPackage.getConfigFileName();
 
         // Now we are called from GodTools - do not restore current page
         // always start at 0
@@ -419,21 +420,10 @@ public class SnuffyPWActivity extends Activity implements DownloadTask.DownloadT
     private void switchLanguage() {
 
         if (isUsingPrimaryLanguage) {
-            if (mParallelPackage == null) { // translation is not available
-                Toast.makeText(this, "Not available in parallel language", Toast.LENGTH_SHORT).show();
+            mConfigFileName = mConfigParallel;
+            isUsingPrimaryLanguage = false;
+            doSetup(0);
 
-            } else {
-                mConfigParallel = mParallelPackage.getConfigFileName();
-                if (mConfigParallel == null) { // translation available but not yet downloaded
-                    // download translation
-
-                } else {
-                    mConfigFileName = mConfigParallel;
-                    isUsingPrimaryLanguage = false;
-                    doSetup(0);
-
-                }
-            }
         } else {
             mConfigFileName = mConfigPrimary;
             isUsingPrimaryLanguage = true;
@@ -461,7 +451,7 @@ public class SnuffyPWActivity extends Activity implements DownloadTask.DownloadT
             } else {
                 // download package translation for parallel language
                 // show loading
-                GodToolsApiClient.downloadTranslation((SnuffyApplication) getApplication(), mAppPackage, langCodeParallel, "", this);
+//                GodToolsApiClient.downloadTranslation((SnuffyApplication) getApplication(), mAppPackage, langCodeParallel, "", this);
             }
         }
     }
@@ -535,8 +525,7 @@ public class SnuffyPWActivity extends Activity implements DownloadTask.DownloadT
                 break;
             }
             case R.id.CMD_SWITCH_LANGUAGE: {
-                Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
-                //switchLanguage();
+                switchLanguage();
                 break;
             }
             default:
@@ -625,16 +614,5 @@ public class SnuffyPWActivity extends Activity implements DownloadTask.DownloadT
             // TODO: COMPLETE PROCESSING ON MAIN THREAD
             completeSetup(result != 0);
         }
-    }
-
-    @Override
-    public void downloadTaskComplete(String url, String filePath, String tag) {
-        // hide loading
-        switchToParallelLanguage();
-    }
-
-    @Override
-    public void downloadTaskFailure(String url, String filePath, String tag) {
-        // failed to download
     }
 }

@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.widget.Toast;
 
 public class LanguageDialogFragment extends DialogFragment {
 
@@ -53,7 +52,7 @@ public class LanguageDialogFragment extends DialogFragment {
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getActivity(), "Cancelled", Toast.LENGTH_LONG).show();
+                        // do nothing
                     }
                 });
 
