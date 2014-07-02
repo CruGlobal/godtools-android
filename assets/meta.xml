@@ -7,4 +7,22 @@
             <package code="fourlaws" name="The Four Spiritual Laws" version="1.1" status="live"/>
         </packages>
     </language>
+    <language code="es">
+        <packages>
+            <package code="satisfied" name="¿Satisfecho?" version="1.1" status="live"/>
+            <package code="kgp" name="Conocer a Dios personalmente" version="1.1" status="live"/>
+        </packages>
+    </language>
+    <language code="fr">
+        <packages>
+            <package code="kgp" name="Connaître Dieu Personnellement" version="1.2" status="live"/>
+        </packages>
+    </language>
+    <language code="et">
+        <packages>
+            <package code="satisfied" name="Rahul?" version="1.1" status="live"/>
+            <package code="kgp" name="Teades Jumal isiklikult" version="1.1" status="live"/>
+            <package code="fourlaws" name="Neli vaimsetest seadustest" version="1.1" status="live"/>
+        </packages>
+    </language>
 </languages>
