@@ -34,7 +34,7 @@ public class HttpGetTask extends HttpTask {
         request.setHeader("Interpreter", "1");
 
         HttpParams httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParams, 30000);
+        HttpConnectionParams.setConnectionTimeout(httpParams, 10000);
 
         HttpClient httpClient = new DefaultHttpClient(httpParams);
 

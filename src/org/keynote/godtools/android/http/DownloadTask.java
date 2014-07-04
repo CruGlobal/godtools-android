@@ -3,6 +3,7 @@ package org.keynote.godtools.android.http;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import org.apache.http.conn.ConnectTimeoutException;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
@@ -48,6 +49,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
         try {
             URL mURL = new URL(url);
             URLConnection c = mURL.openConnection();
+            c.setConnectTimeout(10000);
             c.addRequestProperty("authorization", "a");
             c.addRequestProperty("interpreter", "1");
 
@@ -120,13 +122,20 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
 
             return true;
 
+        } catch (ConnectTimeoutException e){
+            e.printStackTrace();
+            return false;
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return false;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
+
     }
 
     @Override
