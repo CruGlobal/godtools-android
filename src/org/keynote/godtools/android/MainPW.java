@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -16,7 +19,6 @@ import android.widget.Toast;
 
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.customactivities.ActionActivity;
 import org.keynote.godtools.android.fragments.LanguageDialogFragment;
 import org.keynote.godtools.android.fragments.LanguageDialogFragment.OnLanguageChangedListener;
 import org.keynote.godtools.android.fragments.PackageListFragment;
@@ -29,12 +31,15 @@ import org.keynote.godtools.android.utils.Device;
 import java.util.List;
 import java.util.Locale;
 
-public class MainPW extends ActionActivity implements OnLanguageChangedListener, OnPackageSelectedListener, DownloadTask.DownloadTaskHandler {
+public class MainPW extends ActionBarActivity implements OnLanguageChangedListener, OnPackageSelectedListener, DownloadTask.DownloadTaskHandler {
     private static final String PREFS_NAME = "GodTools";
     private static final String TAG_LIST = "PackageList";
     private static final String TAG_DIALOG_LANGUAGE = "LanguageDialog";
 
     private static final int REQUEST_SETTINGS = 1001;
+    public static final int RESULT_DOWNLOAD_PRIMARY = 2001;
+    public static final int RESULT_DOWNLOAD_PARALLEL = 2002;
+    public static final int RESULT_CHANGED_PRIMARY = 2003;
 
     public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
     public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
@@ -56,8 +61,11 @@ public class MainPW extends ActionActivity implements OnLanguageChangedListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_pw);
-        setBackButtonEnabled(false);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
@@ -124,7 +132,11 @@ public class MainPW extends ActionActivity implements OnLanguageChangedListener,
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        createMenuItems(R.menu.main_menu, menu);
+        //createMenuItems(R.menu.main_menu, menu);
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -210,7 +222,7 @@ public class MainPW extends ActionActivity implements OnLanguageChangedListener,
 
             if (Device.isConnected(MainPW.this)) {
                 showLoading();
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), gtLanguage.getLanguageCode(), "", this);
+                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), gtLanguage.getLanguageCode(), "primary", this);
             } else {
                 // TODO: show dialog, Internet connection is required to download the resources
                 Toast.makeText(this, "Unable to download resources. Internet connection unavailable.", Toast.LENGTH_LONG).show();

@@ -2,7 +2,7 @@
 <LinearLayout
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/settings_background"
+    android:background="#ffffff"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
@@ -105,7 +105,7 @@
             android:textStyle="italic"
             android:paddingLeft="16dp"
             android:textColor="@color/gray_60"
-            android:text="Description:\nThe quick brown fox jumped over the lazy dog near the bank of the river."
+            android:text="You can select a primary and parallel language that you can switch to at any time"
             android:gravity="center_vertical" />
 
         <View

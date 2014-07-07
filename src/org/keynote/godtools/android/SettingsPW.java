@@ -3,22 +3,25 @@ package org.keynote.godtools.android;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.keynote.godtools.android.business.GTLanguage;
-import org.keynote.godtools.android.customactivities.ActionActivity;
 
 import java.util.Locale;
 
-public class SettingsPW extends ActionActivity implements View.OnClickListener {
+public class SettingsPW extends ActionBarActivity implements View.OnClickListener {
 
     private static final String PREFS_NAME = "GodTools";
-    private static final String TITLE = "Settings";
 
     private static final int REQUEST_PRIMARY = 1002;
     private static final int REQUEST_PARALLEL = 1003;
+    public static final int RESULT_DOWNLOAD_PRIMARY = 2001;
+    public static final int RESULT_DOWNLOAD_PARALLEL = 2002;
+    public static final int RESULT_CHANGED_PRIMARY = 2003;
 
     TextView tvMainLanguage, tvParallelLanguage, tvAbout;
     RelativeLayout rlMainLanguage, rlParallelLanguage;
@@ -27,7 +30,10 @@ public class SettingsPW extends ActionActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
-        setPageTitle(TITLE);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(false);
 
         tvMainLanguage = (TextView) findViewById(R.id.tvMainLanguage);
         tvParallelLanguage = (TextView) findViewById(R.id.tvParallelLanguage);

@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.crittercism.app.Crittercism;
+
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
@@ -61,11 +63,12 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_pw);
+
         tvTask = (TextView) findViewById(R.id.tvTask);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         // Enable crash reporting
-        //Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
+        Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
@@ -349,6 +352,8 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
             gtl.setDownloaded(true);
             gtl.update(Splash.this);
 
+            goToMainActivity();
+
         } else if (tag.equalsIgnoreCase(KEY_UPDATE_PRIMARY)) {
 
             gtlPrimary.setDownloaded(true);
@@ -369,8 +374,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
             goToMainActivity();
         }
-
-
 
     }
 

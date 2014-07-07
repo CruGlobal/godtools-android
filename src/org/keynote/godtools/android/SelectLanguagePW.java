@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -15,14 +18,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.keynote.godtools.android.business.GTLanguage;
-import org.keynote.godtools.android.customactivities.ListActionActivity;
 import org.keynote.godtools.android.utils.Device;
 
 import java.util.List;
 
-public class SelectLanguagePW extends ListActionActivity {
+public class SelectLanguagePW extends ActionBarActivity implements AdapterView.OnItemClickListener {
     private static final String PREFS_NAME = "GodTools";
+    public static final int RESULT_DOWNLOAD_PRIMARY = 2001;
+    public static final int RESULT_DOWNLOAD_PARALLEL = 2002;
+    public static final int RESULT_CHANGED_PRIMARY = 2003;
 
+    ListView mList;
     SharedPreferences settings;
     List<GTLanguage> languageList;
 
@@ -34,9 +40,14 @@ public class SelectLanguagePW extends ListActionActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_language);
+        mList = (ListView) findViewById(android.R.id.list);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(false);
 
         String languageType = getIntent().getStringExtra("languageType");
-        setPageTitle("Select " + languageType);
+        setTitle("Select " + languageType);
 
         languageList = GTLanguage.getAll(this);
 
@@ -55,12 +66,12 @@ public class SelectLanguagePW extends ListActionActivity {
 
         LanguageAdapter adapter = new LanguageAdapter(this, languageList);
         adapter.setCurrentLanguage(currentLanguage);
-        setListAdapter(adapter);
+        mList.setAdapter(adapter);
+        mList.setOnItemClickListener(this);
     }
 
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         GTLanguage gtl = languageList.get(position);
         if (!gtl.isDownloaded() && !Device.isConnected(SelectLanguagePW.this)) {
@@ -74,7 +85,7 @@ public class SelectLanguagePW extends ListActionActivity {
 
         if (isMainLang) {
 
-            if (gtl.getLanguageCode().equalsIgnoreCase(parallelLanguage)){
+            if (gtl.getLanguageCode().equalsIgnoreCase(parallelLanguage)) {
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString(GTLanguage.KEY_PARALLEL, "");
                 editor.commit();

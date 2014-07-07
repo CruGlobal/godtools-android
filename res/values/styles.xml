@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:actionBarStyle">@style/GodToolsActionBar</item>
+        <item name="actionBarStyle">@style/GodToolsActionBar</item>
+    </style>
+
+    <style name="SnuffyTheme" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <!-- Action bar customization -->
+    <style name="GodToolsActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="android:background">@color/settings_listitem_item</item>
+        <item name="background">@color/settings_listitem_item</item>
+    </style>
+
     
     <!--  Snuffy toolbar styles  -->
 	<style name="Toolbar">

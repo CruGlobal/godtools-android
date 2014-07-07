@@ -52,7 +52,6 @@ public class DBAdapter {
     public long insertGTLanguage(GTLanguage gtLanguage){
         ContentValues cv = new ContentValues();
         cv.put(DBContract.GTLanguageTable.COL_CODE, gtLanguage.getLanguageCode());
-        cv.put(DBContract.GTLanguageTable.COL_NAME, gtLanguage.getLanguageName());
         cv.put(DBContract.GTLanguageTable.COL_IS_DOWNLOADED, gtLanguage.isDownloaded());
 
         return db.insert(DBContract.GTLanguageTable.TABLE_NAME, null, cv);
@@ -152,7 +151,6 @@ public class DBAdapter {
     private List<GTLanguage> queryGTLanguage(String selection) {
         String[] projection = {DBContract.GTLanguageTable._ID,
                 DBContract.GTLanguageTable.COL_CODE,
-                DBContract.GTLanguageTable.COL_NAME,
                 DBContract.GTLanguageTable.COL_IS_DOWNLOADED
         };
 
@@ -163,13 +161,10 @@ public class DBAdapter {
         while (cursor.moveToNext()) {
             long id = cursor.getLong(cursor.getColumnIndex(DBContract.GTLanguageTable._ID));
             String code = cursor.getString(cursor.getColumnIndex(DBContract.GTLanguageTable.COL_CODE));
-            String name = cursor.getString(cursor.getColumnIndex(DBContract.GTLanguageTable.COL_NAME));
             boolean isDownloaded = cursor.getInt(cursor.getColumnIndex(DBContract.GTLanguageTable.COL_IS_DOWNLOADED)) > 0;
 
-            GTLanguage gtl = new GTLanguage();
+            GTLanguage gtl = new GTLanguage(code);
             gtl.setId(id);
-            gtl.setLanguageCode(code);
-            gtl.setLanguageName(name);
             gtl.setDownloaded(isDownloaded);
 
             listGTLanguages.add(gtl);
