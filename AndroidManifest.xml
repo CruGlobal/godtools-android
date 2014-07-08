@@ -119,7 +119,8 @@
         <activity
             android:name=".snuffy.SnuffyAboutActivity"
             android:label="@string/app_title"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/SnuffyTheme"/>
         <activity
             android:name=".snuffy.SnuffyPageMenuActivity"
             android:label="@string/app_title"
