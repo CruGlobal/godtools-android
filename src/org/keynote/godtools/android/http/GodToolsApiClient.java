@@ -10,7 +10,7 @@ import java.io.File;
 
 public class GodToolsApiClient {
 
-    private static final String BASE_URL = "http://ec2-54-209-152-169.compute-1.amazonaws.com/godtools-api/rest/";
+    private static final String BASE_URL = "http://godtoolsapi-stage-1291189452.us-east-1.elb.amazonaws.com/godtools-api/rest/";
     private static final String ENDPOINT_META = "meta/";
     private static final String ENDPOINT_PACKAGES = "packages/";
     private static final String ENDPOINT_TRANSLATIONS = "translations/";
@@ -19,7 +19,7 @@ public class GodToolsApiClient {
         HttpGetTask getTask = new HttpGetTask(taskHandler);
         String url = BASE_URL + ENDPOINT_META;
         String mock_url = "http://demo9996907.mockable.io/meta";
-        getTask.execute(mock_url, tag);
+        getTask.execute(url, tag);
     }
 
     public static void downloadLanguagePack(SnuffyApplication app, String langCode, String tag, DownloadTask.DownloadTaskHandler taskHandler) {
@@ -27,7 +27,7 @@ public class GodToolsApiClient {
         String mock_url = getMockURL(langCode);
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + File.separator + "package.zip";
 
-        download(app.getApplicationContext(), mock_url, filePath, tag, taskHandler);
+        download(app.getApplicationContext(), url, filePath, tag, taskHandler);
     }
 
     public static void downloadPackage(SnuffyApplication app, String langCode, String packageName, String tag, DownloadTask.DownloadTaskHandler taskHandler) {
@@ -61,11 +61,11 @@ public class GodToolsApiClient {
         if (languageCode.equalsIgnoreCase("en"))
             url = "https://docs.google.com/uc?export=download&id=0B1T_JTQ8nih7N0lGTVRlQldkaEk";
         else if (languageCode.equalsIgnoreCase("es"))
-            url = "https://docs.google.com/uc?export=download&id=0B1T_JTQ8nih7LUpqVTJxZHZXZUE";
+            url = "https://docs.google.com/uc?export=download&id=0B1T_JTQ8nih7ZHpna3A5UC1UVnc";//"https://docs.google.com/uc?export=download&id=0B1T_JTQ8nih7LUpqVTJxZHZXZUE";
         else if (languageCode.equalsIgnoreCase("fr"))
-            url = "https://docs.google.com/uc?export=download&id=0B1T_JTQ8nih7REs4ZHZTSHp2RGM";
+            url = "https://docs.google.com/uc?export=download&id=0B1T_JTQ8nih7ZUtNLTR4aDFFYVU";//"https://docs.google.com/uc?export=download&id=0B1T_JTQ8nih7REs4ZHZTSHp2RGM";
         else if (languageCode.equalsIgnoreCase("et"))
-            url = "https://docs.google.com/uc?export=download&id=0B1T_JTQ8nih7Z1hTWGdIczJNa3c";
+            url = "https://docs.google.com/uc?export=download&id=0B1T_JTQ8nih7LVB2WUs0WFJmMjA";//"https://docs.google.com/uc?export=download&id=0B1T_JTQ8nih7Z1hTWGdIczJNa3c";
 
         return url;
     }

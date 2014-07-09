@@ -20,6 +20,8 @@ import android.widget.Toast;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.utils.Device;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class SelectLanguagePW extends ActionBarActivity implements AdapterView.OnItemClickListener {
@@ -63,6 +65,13 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
             isMainLang = false;
             removeLanguageFromList(languageList, primaryLanguage);
         }
+
+        // sort the list alphabetically
+        Collections.sort(languageList, new Comparator<GTLanguage>() {
+            public int compare(GTLanguage result1, GTLanguage result2) {
+                return result1.getLanguageName().compareTo(result2.getLanguageName());
+            }
+        });
 
         LanguageAdapter adapter = new LanguageAdapter(this, languageList);
         adapter.setCurrentLanguage(currentLanguage);
@@ -170,16 +179,14 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
 
             GTLanguage gtl = mLanguageList.get(position);
             holder.tvLanguage.setText(gtl.getLanguageName());
+            holder.tvLanguage.setTypeface(Typeface.DEFAULT);
+            holder.tvLanguage.setTextColor(mContext.getResources().getColor(R.color.gray_60));
             holder.ivDownload.setVisibility(gtl.isDownloaded() ? View.GONE : View.VISIBLE);
 
             if (gtl.getLanguageCode().equalsIgnoreCase(currentLanguage)) {
                 holder.tvLanguage.setTextColor(mContext.getResources().getColor(R.color.settings_listitem_item));
-                holder.tvLanguage.setTypeface(holder.tvLanguage.getTypeface(), Typeface.BOLD);
-            } else {
-                holder.tvLanguage.setTextColor(mContext.getResources().getColor(R.color.gray_60));
-                holder.tvLanguage.setTypeface(holder.tvLanguage.getTypeface(), Typeface.NORMAL);
+                holder.tvLanguage.setTypeface(Typeface.DEFAULT_BOLD);
             }
-
 
             return convertView;
         }

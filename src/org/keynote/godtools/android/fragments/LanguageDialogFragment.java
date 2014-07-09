@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
+import org.keynote.godtools.android.R;
+
 public class LanguageDialogFragment extends DialogFragment {
 
     private static final String ARGS_LANGUAGE_NAME = "name";
@@ -40,16 +42,21 @@ public class LanguageDialogFragment extends DialogFragment {
         final String name = getArguments().getString(ARGS_LANGUAGE_NAME);
         final String code = getArguments().getString(ARGS_LANGUAGE_CODE);
 
+        String title = getString(R.string.dialog_language_title);
+        String body = getString(R.string.dialog_language_body);
+        String positive = getString(R.string.yes);
+        String negative = getString(R.string.no);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setTitle("Language Settings")
-                .setMessage(String.format("Would you like to set %s as the default language?", name))
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                .setTitle(title)
+                .setMessage(String.format(body, name))
+                .setPositiveButton(positive, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         mListener.onLanguageChanged(name, code);
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(negative, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // do nothing

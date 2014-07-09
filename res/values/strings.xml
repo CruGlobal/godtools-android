@@ -16,67 +16,58 @@
     <string name="menu_item_last_page">Last page</string>
     <string name="menu_item_help">Help</string>
     <string name="languages_activity_title">Languages</string>
-    
 
-	<string name="app_description">Campus Crusade for Christ</string>
-	<string name="app_name_about">About God Tools</string>
+    <string name="app_description">Campus Crusade for Christ</string>
+    <string name="app_name_about">About God Tools</string>
     <string name="app_name_settings">Settings</string>
-	<string name="app_name_kgp">Knowing God Personally</string>
-	<string name="app_name_cwg">Connecting With God</string>
-	<string name="app_name_sl">The Four Spiritual Laws</string>
-	<string name="app_name_satisfied">Satisfied?</string>
-	<string name="app_name_gallery_help">Booklet Help</string>
-	<string name="app_name_everystudent">EveryStudent.com</string>
-	
-	<string name="settings">God Tools Settings</string>
-	<string name="title_toggle_analytics">Collect Usage Data</string>
-	<string name="summary_toggle_analytics">Allow God Tools to collect anonymous usage data for statistical purposes.</string>
-	<string name="title_toggle_wakelock">Keep Screen On</string>
-	<string name="summary_toggle_wakelock">Keep the screen on while viewing Booklets and EveryStudent.com Articles</string>
+    <string name="app_name_kgp">Knowing God Personally</string>
+    <string name="app_name_cwg">Connecting With God</string>
+    <string name="app_name_sl">The Four Spiritual Laws</string>
+    <string name="app_name_satisfied">Satisfied?</string>
+    <string name="app_name_gallery_help">Booklet Help</string>
+    <string name="app_name_everystudent">EveryStudent.com</string>
 
-    <string name="settings_main_language">Language</string>
-    <string name="settings_parallel_language">Parallel Language</string>
-    <string name="settings_about">About GodTools</string>
-    <string name="settings_current_language">This is the current Language</string>
-    <string name="none">None</string>
+    <string name="settings">God Tools Settings</string>
+    <string name="title_toggle_analytics">Collect Usage Data</string>
+    <string name="summary_toggle_analytics">Allow God Tools to collect anonymous usage data for statistical purposes.</string>
+    <string name="title_toggle_wakelock">Keep Screen On</string>
+    <string name="summary_toggle_wakelock">Keep the screen on while viewing Booklets and EveryStudent.com Articles</string>
 
-	
-	<string name="dialog_analytics_title">Collect Anonymous Usage Data</string>
-	<string name="dialog_analytics_body">Would you like to allow God Tools to collect anonymous usage data for statistical purposes? Doing so will help to improve God Tools and promote the application to supporters.</string>
-	<string name="dialog_analytics_optin">Yes</string>
-	<string name="dialog_analytics_optout">No</string>
-	
-	<string name="search_label">EveryStudent.com</string>
-	<string name="search_hint">Search EveryStudent.com</string>
+    <string name="dialog_analytics_title">Collect Anonymous Usage Data</string>
+    <string name="dialog_analytics_body">Would you like to allow God Tools to collect anonymous usage data for statistical purposes? Doing so will help to improve God Tools and promote the application to supporters.</string>
+    <string name="dialog_analytics_optin">Yes</string>
+    <string name="dialog_analytics_optout">No</string>
+
+    <string name="search_label">EveryStudent.com</string>
+    <string name="search_hint">Search EveryStudent.com</string>
     <plurals name="search_results">
-      <item quantity="one">%1$d result for \"%2$s\": </item>
-      <item quantity="other">%1$d results for \"%2$s\": </item>
+        <item quantity="one">%1$d result for \"%2$s\": </item>
+        <item quantity="other">%1$d results for \"%2$s\": </item>
     </plurals>
     <string name="search_no_results">No results found for \"%s\"</string>
-	
-	<string name="settings_description">Explore questions about life and God</string>
-	
-	<string name="gallery_no_images">No Images To Display!</string>
-	
-	<string name="menu_search">Search</string>
-	<string name="menu_about">About</string>
-	<string name="menu_settings">Settings</string>
-	<string name="menu_help">Help</string>
-	<string name="menu_quit">Quit</string>
+
+    <string name="settings_description">Explore questions about life and God</string>
+
+    <string name="gallery_no_images">No Images To Display!</string>
+
+    <string name="menu_search">Search</string>
+    <string name="menu_about">About</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_quit">Quit</string>
 
     <string name="about_suggestions">Please email us at support@godtoolsapp.com with any questions or suggestions on how to make this app better.</string>
-	<string name="about_copyright">Copyright Information</string>
+    <string name="about_copyright">Copyright Information</string>
     <string name="about_presentation">This presentation created and produced by Cru ©2014. All rights reserved.</string>
     <string name="about_kgp">"Would You Like to Know God Personally?" ©1995-2010 Cru and Bright Media Foundation (BMF). All rights reserved.</string>
-	<string name="about_satisfied">"Satisfied?" ©2001-2010 Cru and Bright Media Foundation (BMF). All rights reserved.</string>
+    <string name="about_satisfied">"Satisfied?" ©2001-2010 Cru and Bright Media Foundation (BMF). All rights reserved.</string>
 
-	<string name="gallery_help">The booklets in God Tools were designed to create a similar experience to that of using a real booklet. To advance to the next booklet page, simply swipe to the left. To return to the previous page, swipe to the right. To zoom, press and hold until your device vibrates; then without lifting your finger, drag up to zoom in or down to zoom out. Turning your device to landscape will automatically zoom the booklet page to fit horizontally, allowing you to more easily view the booklet.</string>
-	<string name="snuffy_help">To advance to the next page, simply swipe to the left. To return to the previous page, swipe to the right. To show the menu you can tap in any area of the page other than on a button.</string>
-	<string name="snuffy_help_title" formatted="false">%1 help</string>
+    <string name="gallery_help">The booklets in God Tools were designed to create a similar experience to that of using a real booklet. To advance to the next booklet page, simply swipe to the left. To return to the previous page, swipe to the right. To zoom, press and hold until your device vibrates; then without lifting your finger, drag up to zoom in or down to zoom out. Turning your device to landscape will automatically zoom the booklet page to fit horizontally, allowing you to more easily view the booklet.</string>
+    <string name="snuffy_help">To advance to the next page, simply swipe to the left. To return to the previous page, swipe to the right. To show the menu you can tap in any area of the page other than on a button.</string>
+    <string name="snuffy_help_title" formatted="false">%1 help</string>
 
-    <string name="choose_your_email_provider">Choose your email provider</string>    
+    <string name="choose_your_email_provider">Choose your email provider</string>
     <string name="unable_to_send_the_email">Unable to send the email</string>
-    <string name="ok">OK</string>
     <string name="email">Email</string>
     <string name="copy">Copy</string>
     <string name="all_websites">All Websites</string>
@@ -85,12 +76,38 @@
     <string name="download_language">Download language</string>
     <string name="remove_language">Remove language</string>
     <string name="switch_to_language">Switch to language</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
     <string name="remove_this_language">Are you sure you want to remove this language?</string>
+
+    <string name="app_email_body" formatted="false">Get the %1 App by going to the following link:\n%2</string>
+    <string name="app_email_link" formatted="false">http://www.godtoolsapp.com/?p=%1&amp;l=%2</string>
+
+    <!-- Renderer Activity -->
     <string name="processing_package">Loading pages...</string>
 
-	<string name="app_email_body" formatted="false">Get the %1 App by going to the following link:\n%2</string>
-	<string name="app_email_link" formatted="false">http://www.godtoolsapp.com/?p=%1&amp;l=%2</string>
-	    
+    <!-- Splash Activity -->
+    <string name="copy_files">Initializing Content...</string>
+    <string name="check_update">Checking for updates...</string>
+    <string name="download_resources">Downloading %s resources...</string>
+    <string name="update_resources">Updating %s resources...</string>
+
+    <!-- Settings Activity -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_main_language">Main Language</string>
+    <string name="settings_parallel_language">Parallel Language</string>
+    <string name="settings_about">About GodTools</string>
+    <string name="settings_current_language">This is the current Language</string>
+    <string name="settings_explanation">You can select a primary and parallel language that you can switch to at any time</string>
+    <string name="settings_select">Select</string>
+
+    <!-- Language Dialog -->
+    <string name="dialog_language_title">Language Settings</string>
+    <string name="dialog_language_body">"Would you like to set %s as the default language?"</string>
+
+    <!-- Shared Strings -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="none">None</string>
+
 </resources>

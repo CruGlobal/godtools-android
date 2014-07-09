@@ -172,7 +172,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            showLoading("Copying files from assets...");
+            showLoading(getString(R.string.copy_files));
         }
 
         @Override
@@ -286,14 +286,14 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
             if (isFirst && shouldUpdateLanguageSettings()) {
                 // download resources for the phones language
                 Locale mLocale = new Locale(languagePhone);
-                showLoading(String.format("Downloading %s resources...", mLocale.getDisplayName()));
+                showLoading(String.format(getString(R.string.download_resources), mLocale.getDisplayName()));
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), languagePhone, KEY_NEW_LANGUAGE, Splash.this);
 
             } else {
 
                 if (gtlPrimary.isDownloaded()) {
                     if (gtlParallel != null && !gtlParallel.isDownloaded()) {
-                        showLoading(String.format("Updating %s resources...", gtlParallel.getLanguageName()));
+                        showLoading(String.format(getString(R.string.update_resources), gtlParallel.getLanguageName()));
                         GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), gtlParallel.getLanguageCode(), KEY_UPDATE_PARALLEL, Splash.this);
 
                     } else {
@@ -301,7 +301,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
                     }
 
                 } else {
-                    showLoading(String.format("Updating %s resources...", gtlPrimary.getLanguageName()));
+                    showLoading(String.format(getString(R.string.update_resources), gtlPrimary.getLanguageName()));
                     GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), languagePhone, KEY_UPDATE_PRIMARY, Splash.this);
                 }
             }
@@ -320,7 +320,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
     }
 
     private void checkForUpdates() {
-        showLoading("Checking for updates...");
+        showLoading(getString(R.string.check_update));
         GodToolsApiClient.getListOfPackages("", Splash.this);
     }
 
@@ -360,7 +360,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
             gtlPrimary.update(Splash.this);
 
             if (gtlParallel != null && !gtlParallel.isDownloaded()) {
-                showLoading(String.format("Updating %s resources...", gtlParallel.getLanguageName()));
+                showLoading(String.format(getString(R.string.update_resources), gtlParallel.getLanguageName()));
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), gtlParallel.getLanguageCode(), KEY_UPDATE_PARALLEL, Splash.this);
             } else {
                 goToMainActivity();

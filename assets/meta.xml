@@ -1,28 +1,89 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <languages>
-    <language code="en">
+    <language code="uk">
         <packages>
-            <package code="satisfied" name="Satisfied?" version="1.1" status="live"/>
-            <package code="kgp" name="Knowing God Personally" version="1.1" status="live"/>
-            <package code="fourlaws" name="The Four Spiritual Laws" version="1.1" status="live"/>
+            <package code="kgp" name="Пізнання Бога Особисто" status="live" version="1.1"/>
+            <package code="fourlaws" name="Чотири духовні закони" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="es">
         <packages>
-            <package code="satisfied" name="¿Satisfecho?" version="1.1" status="live"/>
-            <package code="kgp" name="Conocer a Dios personalmente" version="1.1" status="live"/>
+            <package code="fourlaws" name="Las Cuatro Leyes Espirituales" status="live" version="1.1"/>
+            <package code="kgp" name="Conocer a Dios personalmente" status="live" version="1.1"/>
+        </packages>
+    </language>
+    <language code="th">
+        <packages>
+            <package code="kgp" name="รู้จักพระเจ้าส่วนตัว" status="live" version="1.1"/>
+            <package code="fourlaws" name="สี่กฎหมายจิตวิญญาณ" status="live" version="1.1"/>
+        </packages>
+    </language>
+    <language code="ru">
+        <packages>
+            <package code="fourlaws" name="Четыре духовных закона" status="live" version="1.1"/>
+        </packages>
+    </language>
+    <language code="tgl">
+        <packages>
+            <package code="fourlaws" name="Ang Apat na Tuntuning Espirituwal" status="live" version="1.1"/>
+            <package code="kgp" name="Pagkilala sa Diyos ng Personal" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="fr">
         <packages>
-            <package code="kgp" name="Connaître Dieu Personnellement" version="1.2" status="live"/>
+            <package code="fourlaws" name="Les quatre lois spirituelles" status="draft" version="1.1"/>
+        </packages>
+    </language>
+    <language code="sq">
+        <packages>
+            <package code="fourlaws" name="Katër Ligjet Shpirtërore" status="live" version="1.1"/>
+        </packages>
+    </language>
+    <language code="en">
+        <packages>
+            <package code="satisfied" name="Satisfied?" status="live" version="1.1"/>
+            <package code="fourlaws" name="The Four Spiritual Laws" status="live" version="1.1"/>
+            <package code="kgp" name="Knowing God Personally" status="live" version="1.1"/>
+        </packages>
+    </language>
+    <language code="pl">
+        <packages>
+            <package code="fourlaws" name="Cztery prawa duchowe" status="live" version="1.1"/>
+        </packages>
+    </language>
+    <language code="lt">
+        <packages>
+            <package code="fourlaws" name="Keturi dvasiniai dėsniai" status="live" version="1.1"/>
+        </packages>
+    </language>
+    <language code="cs">
+        <packages>
+            <package code="fourlaws" name="Čtyři duchovní zákony" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="et">
         <packages>
-            <package code="satisfied" name="Rahul?" version="1.1" status="live"/>
-            <package code="kgp" name="Teades Jumal isiklikult" version="1.1" status="live"/>
-            <package code="fourlaws" name="Neli vaimsetest seadustest" version="1.1" status="live"/>
+            <package code="kgp" name="Teades Jumal isiklikult" status="live" version="1.1"/>
+        </packages>
+    </language>
+    <language code="tr">
+        <packages>
+            <package code="fourlaws" name="Dört Ruhsal Kanunları" status="live" version="1.1"/>
+        </packages>
+    </language>
+    <language code="zh">
+        <packages>
+            <package code="fourlaws" name="4个属灵的定律" status="live" version="1.1"/>
+        </packages>
+    </language>
+    <language code="ko">
+        <packages>
+            <package code="fourlaws" name="4 영적인 법률" status="live" version="1.1"/>
+        </packages>
+    </language>
+    <language code="am_et">
+        <packages>
+            <package code="fourlaws" name="አራቱ መንፈሳዊ ሕጎች" status="live" version="1.1"/>
         </packages>
     </language>
 </languages>
