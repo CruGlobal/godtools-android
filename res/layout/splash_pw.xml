@@ -2,11 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#000">
+    android:background="#fff">
 
     <ImageView
         android:id="@+id/ivSplash"
-        android:src="@drawable/godtools_splashscreen_2x"
+        android:src="@drawable/godtools_splashscreen_2x_borderless"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitCenter"
@@ -19,9 +19,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/progressBar"
         android:indeterminate="true"
-        android:paddingLeft="20dp"
+        android:layout_marginLeft="20dp"
         android:paddingRight="10dp"
-        android:paddingBottom="42dp"
+        android:paddingBottom="22dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:visibility="gone"/>
@@ -29,7 +29,7 @@
     <TextView
         android:id="@+id/tvTask"
         android:layout_alignParentBottom="true"
-        android:paddingBottom="40dp"
+        android:paddingBottom="20dp"
         android:layout_toRightOf="@+id/progressBar"
         android:textSize="16sp"
         android:textColor="#777"

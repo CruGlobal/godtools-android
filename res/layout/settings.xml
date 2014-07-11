@@ -117,11 +117,31 @@
             android:id="@+id/tvAbout"
             android:background="@drawable/settings_language_bg"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:textSize="18sp"
             android:paddingLeft="16dp"
             android:textColor="@color/gray_60"
             android:text="@string/settings_about"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray_20" />
+
+        <Switch
+            android:background="@drawable/settings_language_bg"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Translator Mode"
+            android:textColor="@color/gray_60"
+            android:textSize="18sp"
+            android:id="@+id/cbTranslatorMode"
+            android:layout_gravity="right"
+            android:checked="false"
+            android:padding="16dp"
+            android:onClick="onToggleClicked" />
     </LinearLayout>
 </LinearLayout>

@@ -3,17 +3,26 @@ package org.keynote.godtools.android;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.keynote.godtools.android.business.GTLanguage;
+import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
+import org.keynote.godtools.android.fragments.AlertDialogFragment;
 
 import java.util.Locale;
 
-public class SettingsPW extends ActionBarActivity implements View.OnClickListener {
+public class SettingsPW extends ActionBarActivity implements
+        View.OnClickListener,
+        AlertDialogFragment.OnDialogClickListener,
+        AccessCodeDialogFragment.AccessCodeDialogListener {
 
     private static final String PREFS_NAME = "GodTools";
 
@@ -25,6 +34,7 @@ public class SettingsPW extends ActionBarActivity implements View.OnClickListene
 
     TextView tvMainLanguage, tvParallelLanguage, tvAbout;
     RelativeLayout rlMainLanguage, rlParallelLanguage;
+    CompoundButton cbTranslatorMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +50,16 @@ public class SettingsPW extends ActionBarActivity implements View.OnClickListene
         tvAbout = (TextView) findViewById(R.id.tvAbout);
         rlMainLanguage = (RelativeLayout) findViewById(R.id.rlMainLanguage);
         rlParallelLanguage = (RelativeLayout) findViewById(R.id.rlParallelLanguage);
+        cbTranslatorMode = (CompoundButton) findViewById(R.id.cbTranslatorMode);
 
         // set click listeners
         rlParallelLanguage.setOnClickListener(this);
         rlMainLanguage.setOnClickListener(this);
         tvAbout.setOnClickListener(this);
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean isTranslatorEnabled = settings.getBoolean("TranslatorMode", false);
+        cbTranslatorMode.setChecked(isTranslatorEnabled);
 
     }
 
@@ -108,5 +123,86 @@ public class SettingsPW extends ActionBarActivity implements View.OnClickListene
 
     }
 
+    public void onToggleClicked(View view) {
+        view.setEnabled(false);
 
+        boolean on = ((CompoundButton) view).isChecked();
+        if (on) {
+            showAccessCodeDialog();
+        } else {
+            showExitTranslatorModeDialog();
+        }
+    }
+
+    private void showAccessCodeDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        DialogFragment frag = (DialogFragment) fm.findFragmentByTag("access_dialog");
+        if (frag == null) {
+            frag = new AccessCodeDialogFragment();
+            frag.setCancelable(false);
+            frag.show(fm, "access_dialog");
+        }
+    }
+
+
+    private void showExitTranslatorModeDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        DialogFragment frag = (DialogFragment) fm.findFragmentByTag("alert_dialog");
+        if (frag == null) {
+            frag = AlertDialogFragment.newInstance(
+                    getString(R.string.dialog_translator_mode_title),
+                    getString(R.string.dialog_translator_mode_body),
+                    "ExitTranslatorMode"
+            );
+            frag.show(fm, "alert_dialog");
+        }
+    }
+
+    @Override
+    public void onDialogClick(boolean positive, String tag) {
+
+        if (tag.equalsIgnoreCase("ExitTranslatorMode")) {
+
+            if (positive) {
+                // disable translator mode
+                Toast.makeText(SettingsPW.this, "Translator mode disabled", Toast.LENGTH_SHORT).show();
+                setTranslatorMode(false);
+
+            } else {
+                // undo the switch
+                toggleTranslatorMode();
+            }
+
+            cbTranslatorMode.setEnabled(true);
+        }
+
+    }
+
+    @Override
+    public void onAccessDialogClick(boolean positive, String accessCode) {
+
+        if (positive) {
+            // start the authentication
+            Toast.makeText(SettingsPW.this, "Translator mode enabled with access code " +  accessCode, Toast.LENGTH_LONG).show();
+            setTranslatorMode(true);
+
+        } else {
+            // undo the switch
+            toggleTranslatorMode();
+        }
+
+        cbTranslatorMode.setEnabled(true);
+    }
+
+    private void toggleTranslatorMode() {
+        boolean on = cbTranslatorMode.isChecked();
+        cbTranslatorMode.setChecked(!on);
+    }
+
+    private void setTranslatorMode(boolean isEnabled){
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("TranslatorMode", isEnabled);
+        editor.commit();
+    }
 }
