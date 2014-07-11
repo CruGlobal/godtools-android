@@ -57,6 +57,8 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
     PackageListFragment packageFrag;
     ProgressBar progressBar;
 
+    boolean isDownloading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,6 +133,13 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.menu_settings);
+        item.setEnabled(!isDownloading);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //createMenuItems(R.menu.main_menu, menu);
         // Inflate the menu items for use in the action bar
@@ -191,11 +200,15 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
     }
 
     private void showLoading() {
+        isDownloading = true;
+        supportInvalidateOptionsMenu();
         progressBar.setVisibility(View.VISIBLE);
         packageFrag.disable();
     }
 
     private void hideLoading() {
+        isDownloading = false;
+        supportInvalidateOptionsMenu();
         progressBar.setVisibility(View.GONE);
         packageFrag.enable();
     }
