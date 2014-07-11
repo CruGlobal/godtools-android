@@ -50,7 +50,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
             URL mURL = new URL(url);
             URLConnection c = mURL.openConnection();
             c.setConnectTimeout(10000);
-            c.addRequestProperty("authorization", "b");
+            c.addRequestProperty("authorization", "a");
             c.addRequestProperty("interpreter", "1");
 
             InputStream is = c.getInputStream();

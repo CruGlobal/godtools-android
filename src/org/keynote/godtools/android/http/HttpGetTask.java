@@ -30,7 +30,7 @@ public class HttpGetTask extends HttpTask {
         HttpGet request = new HttpGet(url);
         request.setHeader("Accept", "application/xml");
         request.setHeader("Content-type", "application/xml");
-        request.setHeader("Authorization", "b");
+        request.setHeader("Authorization", "a");
         request.setHeader("Interpreter", "1");
 
         HttpParams httpParams = new BasicHttpParams();
