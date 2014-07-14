@@ -25,7 +25,9 @@ public class GTLanguage {
         this.languageCode = languageCode;
 
         Locale locale = new Locale(languageCode);
-        this.languageName = locale.getDisplayName();
+        String name = locale.getDisplayName();
+
+        this.languageName = Character.toUpperCase(name.charAt(0)) + name.substring(1);
     }
 
     public long getId() {

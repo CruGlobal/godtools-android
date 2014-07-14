@@ -73,14 +73,16 @@ public class SettingsPW extends ActionBarActivity implements
 
         // set up primary language views
         Locale localePrimary = new Locale(primaryLanguageCode);
-        tvMainLanguage.setText(localePrimary.getDisplayName());
+        String primaryName = capitalizeFirstLetter(localePrimary.getDisplayName());
+        tvMainLanguage.setText(primaryName);
 
         // set up parallel language views
         if (parallelLanguageCode.isEmpty()) {
             tvParallelLanguage.setText("None");
         } else {
             Locale localeParallel = new Locale(parallelLanguageCode);
-            tvParallelLanguage.setText(localeParallel.getDisplayName());
+            String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName());
+            tvParallelLanguage.setText(parallelName);
         }
     }
 
@@ -204,5 +206,9 @@ public class SettingsPW extends ActionBarActivity implements
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("TranslatorMode", isEnabled);
         editor.commit();
+    }
+
+    private String capitalizeFirstLetter(String word) {
+        return Character.toUpperCase(word.charAt(0)) + word.substring(1);
     }
 }
