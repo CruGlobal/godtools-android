@@ -3,6 +3,7 @@ package org.keynote.godtools.android;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -43,6 +44,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_language);
         mList = (ListView) findViewById(android.R.id.list);
+        mList.setCacheColorHint(Color.TRANSPARENT);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
