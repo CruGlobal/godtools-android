@@ -544,7 +544,7 @@ public class SnuffyPWActivity extends Activity {
                 mProgressDialog = new ProgressDialog(this);
                 mProgressDialog.setMessage(getApplicationContext().getString(R.string.processing_package));
                 mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                //mProgressDialog.setCancelable(true);
+                mProgressDialog.setCancelable(false);
                 mProgressDialog.setProgress(0);
                 mProgressDialog.setMax(1); //harmless values to start with to avoid seeing "Nan"
                 // Can't support cancel - would leave app undefined. Processing does not take more than a few seconds so no need.
