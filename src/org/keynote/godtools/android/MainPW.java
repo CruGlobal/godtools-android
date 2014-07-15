@@ -2,6 +2,7 @@ package org.keynote.godtools.android;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -59,6 +60,29 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
 
     boolean isDownloading;
 
+    /**
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        SnuffyApplication app = (SnuffyApplication) getApplication();
+        Locale deviceLocale = Locale.getDefault();
+        Locale appLocale = app.getAppLocale();
+
+
+        if (!deviceLocale.getLanguage().equalsIgnoreCase(app.mAppLocale.getLanguage())){
+            app.mDeviceLocale = deviceLocale;
+
+            Locale.setDefault(appLocale);
+            Configuration config = new Configuration();
+            config.locale = appLocale;
+            getBaseContext().getResources().updateConfiguration(config,
+                    getBaseContext().getResources().getDisplayMetrics());
+        }
+
+    }
+    */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +124,9 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
             case RESULT_CHANGED_PRIMARY: {
                 packageList = GTPackage.getPackageByLanguage(MainPW.this, data.getStringExtra("primaryCode"));
                 packageFrag.refreshList(packageList);
+
+                SnuffyApplication app = (SnuffyApplication) getApplication();
+                app.setAppLocale(data.getStringExtra("primaryCode"));
 
                 break;
             }
@@ -231,6 +258,11 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
 
             editor.commit();
 
+            SnuffyApplication app = (SnuffyApplication) getApplication();
+            app.setAppLocale(code);
+
+//            recreate();
+
         } else {
 
             if (Device.isConnected(MainPW.this)) {
@@ -270,6 +302,9 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
 
             packageList = GTPackage.getPackageByLanguage(MainPW.this, gtLanguage.getLanguageCode());
             packageFrag.refreshList(packageList);
+
+            SnuffyApplication app = (SnuffyApplication) getApplication();
+            app.setAppLocale(languagePrimary);
 
         } else if (tag.equalsIgnoreCase("parallel")) {
 

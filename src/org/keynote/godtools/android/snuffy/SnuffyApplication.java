@@ -2,18 +2,22 @@ package org.keynote.godtools.android.snuffy;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.Vector;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Environment;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.utils.GoogleAnalyticsConfig;
 
 public class SnuffyApplication extends Application {
@@ -25,9 +29,17 @@ public class SnuffyApplication extends Application {
 
 	public Tracker tracker;
 
+    public Locale mDeviceLocale, mAppLocale;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
+
+        mDeviceLocale = Locale.getDefault();
+        SharedPreferences settings = getSharedPreferences("GodTools", MODE_PRIVATE);
+        String primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+        setAppLocale(primaryLanguageCode);
+
 	}
 	
 	public void sendEmailWithContent(Activity callingActivity, String subjectLine, String msgBody) {
@@ -100,5 +112,14 @@ public class SnuffyApplication extends Application {
 
 		return tracker;
 	}
-	
+
+    public void setAppLocale(String languageCode){
+
+        mAppLocale = new Locale(languageCode);
+        Locale.setDefault(mAppLocale);
+        Configuration config = new Configuration();
+        config.locale = mAppLocale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
+    }
 }

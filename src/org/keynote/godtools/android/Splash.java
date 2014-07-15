@@ -73,7 +73,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         languageParallel = settings.getString(GTLanguage.KEY_PARALLEL, "");
-        languagePhone = Device.getDefaultLanguage();
+        languagePhone = ((SnuffyApplication)getApplication()).mDeviceLocale.getLanguage();
 
         if (isFirstLaunch()) {
             new PrepareInitialContentTask((SnuffyApplication) getApplication()).execute((Void) null);
