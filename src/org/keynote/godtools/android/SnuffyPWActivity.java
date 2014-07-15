@@ -49,6 +49,7 @@ public class SnuffyPWActivity extends Activity {
     private ViewPager mPager;
     private int mPagerCurrentItem;
     private MyPagerAdapter mPagerAdapter;
+    private boolean mSetupRequired = true;
     private int mPageLeft;
     private int mPageTop;
     private int mPageWidth;
@@ -91,9 +92,12 @@ public class SnuffyPWActivity extends Activity {
         getIntent().putExtra("AllowFlip", false);
 
         setContentView(R.layout.snuffy_main);
-        mPagerAdapter = new MyPagerAdapter();
-        mPager = (ViewPager) findViewById(R.id.snuffyViewPager);
-        mPager.setAdapter(mPagerAdapter);
+
+        /** Only set the pager adapter on completeSetUp() **/
+        //mPagerAdapter = new MyPagerAdapter();
+        //mPager = (ViewPager) findViewById(R.id.snuffyViewPager);
+        //mPager.setAdapter(mPagerAdapter);
+
 
         mConfigPrimary = mConfigFileName;
         isUsingPrimaryLanguage = true;
@@ -120,7 +124,7 @@ public class SnuffyPWActivity extends Activity {
 
         handleLanguagesWithAlternateFonts();
 
-        doSetup(100); // used to be 1 second delay required to make sure activity fully created
+        //doSetup(100); // used to be 1 second delay required to make sure activity fully created
         // - is there something we can test for that is better than a fixed timeout?
         // We reduce this now to 100 msec since we are not measuring the device size here
         // since that is done in GodTools which calls us and passes the dimensions in.
@@ -183,7 +187,15 @@ public class SnuffyPWActivity extends Activity {
 
     protected void onResume() {
         super.onResume();
-        // TODO: check if language changed
+
+        if (mSetupRequired) {
+            doSetup(100); // used to be 1 second delay required to make sure activity fully created
+            // - is there something we can test for that is better than a fixed timeout?
+            // We reduce this now to 100 msec since we are not measuring the device size here
+            // since that is done in GodTools which calls us and passes the dimensions in.
+            mSetupRequired = false;
+        }
+
     }
 
     private void doSetup(int delay) {
@@ -199,7 +211,9 @@ public class SnuffyPWActivity extends Activity {
                 app.mAboutView = mAboutView;
                 app.mPackageTitle = mPackageTitle;
                 mPages = new Vector<SnuffyPage>(0);
-                mPagerAdapter.notifyDataSetChanged(); // try to clear cached views (SnuffyPages) in pager, else they will display until we navigate away and back.
+
+                /** No instance of pager adapter yet, it's only created on completeSetUp()**/
+                //mPagerAdapter.notifyDataSetChanged();
 
                 resizeTheActivity();
 
@@ -222,7 +236,14 @@ public class SnuffyPWActivity extends Activity {
         addCallingActivityToAllPages();
         mAboutView = mPages.elementAt(0);
         mPages.remove(mAboutView);
-        mPagerAdapter.notifyDataSetChanged();
+
+        //mPagerAdapter.notifyDataSetChanged();
+        mPagerAdapter = new MyPagerAdapter();
+        mPager = (ViewPager) findViewById(R.id.snuffyViewPager);
+        mPager.setAdapter(mPagerAdapter);
+
+
+
         if (mPagerCurrentItem >= mPages.size()) // if value from prefs (left over from running with different package?) is out-of-range
             mPagerCurrentItem = 0;                // reset to first page.
         mPager.setCurrentItem(mPagerCurrentItem);
