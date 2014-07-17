@@ -443,38 +443,16 @@ public class SnuffyPWActivity extends Activity {
         if (isUsingPrimaryLanguage) {
             mConfigFileName = mConfigParallel;
             isUsingPrimaryLanguage = false;
-            doSetup(0);
 
         } else {
             mConfigFileName = mConfigPrimary;
             isUsingPrimaryLanguage = true;
-            doSetup(0);
         }
 
-    }
 
-    private void switchToParallelLanguage() {
+        mPager.setAdapter(null);
+        doSetup(0);
 
-        if (mConfigParallel != null) {
-            mConfigFileName = mConfigParallel;
-            isUsingPrimaryLanguage = false;
-            doSetup(0);
-        } else {
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-            String langCodeParallel = settings.getString("languageParallel", "");
-
-            GTPackage gtPackage = GTPackage.getPackage(this, mAppPackage, langCodeParallel);
-            if (gtPackage != null) {
-                mConfigParallel = gtPackage.getConfigFileName();
-                mConfigFileName = mConfigParallel;
-                isUsingPrimaryLanguage = false;
-                doSetup(0);
-            } else {
-                // download package translation for parallel language
-                // show loading
-//                GodToolsApiClient.downloadTranslation((SnuffyApplication) getApplication(), mAppPackage, langCodeParallel, "", this);
-            }
-        }
     }
 
     public void doCmdInfo(View v) {
