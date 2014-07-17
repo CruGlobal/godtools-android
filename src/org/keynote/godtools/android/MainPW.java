@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -60,29 +61,6 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
 
     boolean isDownloading;
 
-    /**
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        SnuffyApplication app = (SnuffyApplication) getApplication();
-        Locale deviceLocale = Locale.getDefault();
-        Locale appLocale = app.getAppLocale();
-
-
-        if (!deviceLocale.getLanguage().equalsIgnoreCase(app.mAppLocale.getLanguage())){
-            app.mDeviceLocale = deviceLocale;
-
-            Locale.setDefault(appLocale);
-            Configuration config = new Configuration();
-            config.locale = appLocale;
-            getBaseContext().getResources().updateConfiguration(config,
-                    getBaseContext().getResources().getDisplayMetrics());
-        }
-
-    }
-    */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +73,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-        languagePhone = Device.getDefaultLanguage();
+        languagePhone = ((SnuffyApplication) getApplication()).getDeviceLocale().getLanguage();
 
         // get the packages for the primary language
         packageList = GTPackage.getPackageByLanguage(this, languagePrimary);
@@ -200,6 +178,8 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
 
     private boolean shouldUpdateLanguageSettings() {
 
+
+
         // check first if the we support the phones language
         gtLanguage = GTLanguage.getLanguage(this, languagePhone);
         if (gtLanguage == null)
@@ -261,7 +241,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
             SnuffyApplication app = (SnuffyApplication) getApplication();
             app.setAppLocale(code);
 
-//            recreate();
+            //recreate();
 
         } else {
 
