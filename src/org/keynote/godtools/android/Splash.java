@@ -352,6 +352,9 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
             gtl.setDownloaded(true);
             gtl.update(Splash.this);
 
+            SnuffyApplication app = (SnuffyApplication) getApplication();
+            app.setAppLocale(languagePhone);
+
             goToMainActivity();
 
         } else if (tag.equalsIgnoreCase(KEY_UPDATE_PRIMARY)) {
