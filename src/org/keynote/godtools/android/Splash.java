@@ -73,7 +73,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         languageParallel = settings.getString(GTLanguage.KEY_PARALLEL, "");
-        languagePhone = ((SnuffyApplication)getApplication()).mDeviceLocale.getLanguage();
 
         if (isFirstLaunch()) {
             new PrepareInitialContentTask((SnuffyApplication) getApplication()).execute((Void) null);
@@ -285,6 +284,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
             if (isFirst && shouldUpdateLanguageSettings()) {
                 // download resources for the phones language
+                languagePhone = ((SnuffyApplication)getApplication()).getDeviceLocale().getLanguage();
                 Locale mLocale = new Locale(languagePhone);
                 showLoading(String.format(getString(R.string.download_resources), mLocale.getDisplayName()));
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), languagePhone, KEY_NEW_LANGUAGE, Splash.this);

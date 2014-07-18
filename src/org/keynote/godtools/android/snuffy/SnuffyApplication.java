@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Environment;
-import android.util.Log;
 
 import com.google.android.gms.analytics.Tracker;
 
@@ -120,13 +119,20 @@ public class SnuffyApplication extends Application {
                 getBaseContext().getResources().getDisplayMetrics());
     }
 
-    public Locale getDeviceLocale(){
-        if (mDeviceLocale != null) {
-            Locale loc = mDeviceLocale;
-            mDeviceLocale = null;
-            return loc;
-        }
+    public Locale getDeviceLocale() {
+        return mDeviceLocale;
+    }
 
-        return Locale.getDefault();
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        mDeviceLocale = newConfig.locale;
+        super.onConfigurationChanged(newConfig);
+
+        Locale.setDefault(mAppLocale);
+        Configuration config = new Configuration();
+        config.locale = mAppLocale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
+
     }
 }

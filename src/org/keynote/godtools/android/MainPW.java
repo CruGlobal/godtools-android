@@ -75,6 +75,10 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         languagePhone = ((SnuffyApplication) getApplication()).getDeviceLocale().getLanguage();
 
+        // this will ensure that the primary language will be set as the default app locale
+        // SnuffyApplication app = (SnuffyApplication) getApplication();
+        // app.setAppLocale(languagePrimary);
+
         // get the packages for the primary language
         packageList = GTPackage.getPackageByLanguage(this, languagePrimary);
 
