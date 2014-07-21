@@ -41,6 +41,7 @@ public class SnuffyPWActivity extends Activity {
 
     private String mAppPackage;
     private String mConfigFileName;
+    private String mStatus;
     private String mAppLanguage = "en";
     private String mAppLanguageDefault = "en";
     private Typeface mAlternateTypeface;
@@ -58,6 +59,7 @@ public class SnuffyPWActivity extends Activity {
     private ProcessPackageAsync mProcessPackageAsync;
 
     private String mConfigPrimary, mConfigParallel;
+    private String mStatusPrimary, mStatusParallel;
     private GTPackage mParallelPackage;
     private boolean isUsingPrimaryLanguage, isParallelLanguageSet;
 
@@ -84,6 +86,7 @@ public class SnuffyPWActivity extends Activity {
 
         mAppPackage = getIntent().getStringExtra("PackageName");        // "kgp"
         mAppLanguage = getIntent().getStringExtra("LanguageCode");      // "en"
+        mStatus = getIntent().getStringExtra("Status");                 // "live" or "draft"
         mConfigFileName = getIntent().getStringExtra("ConfigFileName");
         mPageLeft = getIntent().getIntExtra("PageLeft", 0);
         mPageTop = getIntent().getIntExtra("PageTop", 0);
@@ -100,6 +103,7 @@ public class SnuffyPWActivity extends Activity {
 
 
         mConfigPrimary = mConfigFileName;
+        mStatusPrimary = mStatus;
         isUsingPrimaryLanguage = true;
 
         // check if parallel language is set
@@ -112,8 +116,10 @@ public class SnuffyPWActivity extends Activity {
             mParallelPackage = GTPackage.getPackage(this, mAppPackage, langParallel);
         }
 
-        if (mParallelPackage != null)
+        if (mParallelPackage != null) {
             mConfigParallel = mParallelPackage.getConfigFileName();
+            mStatusParallel = mParallelPackage.getStatus();
+        }
 
         // Now we are called from GodTools - do not restore current page
         // always start at 0
@@ -399,6 +405,7 @@ public class SnuffyPWActivity extends Activity {
         Intent intent = new Intent(this, SnuffyPageMenuPWActivity.class);
         intent.putExtra("LanguageCode", mAppLanguage);
         intent.putExtra("PackageName", mAppPackage);
+        intent.putExtra("Status", mStatus);
         startActivityForResult(intent, 0);
     }
 
@@ -442,10 +449,12 @@ public class SnuffyPWActivity extends Activity {
 
         if (isUsingPrimaryLanguage) {
             mConfigFileName = mConfigParallel;
+            mStatus = mStatusParallel;
             isUsingPrimaryLanguage = false;
 
         } else {
             mConfigFileName = mConfigPrimary;
+            mStatus = mStatusPrimary;
             isUsingPrimaryLanguage = true;
         }
 
@@ -584,8 +593,8 @@ public class SnuffyPWActivity extends Activity {
                 bSuccess = packageReader.processPackagePW(
                         (SnuffyApplication) getApplication(),
                         mPageWidth, mPageHeight,
-                        mConfigFileName, mPages,
-                        ProcessPackageAsync.this,
+                        mConfigFileName, mStatus,
+                        mPages, ProcessPackageAsync.this,
                         mAlternateTypeface
                 );
             } catch (Exception e) {

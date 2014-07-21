@@ -105,6 +105,8 @@ public class PackageReader {
 	private int				mTotalBitmapSpace;
 	private boolean			mFromAssets;
 	private ProgressCallback mProgressCallback;
+
+    private String          mPackageStatus;
 	
 	public String getPackageTitle() {
 		return mPackageTitle;
@@ -118,18 +120,20 @@ public class PackageReader {
                                     int pageWidth,
                                     int pageHeight,
                                     String packageConfigName,
+                                    String packageStatus,
                                     Vector<SnuffyPage> pages,
                                     ProgressCallback progressCallback,
                                     Typeface alternateTypeface){
 
+        mPackageStatus      = packageStatus;
         mAppRef				= new WeakReference<SnuffyApplication>(app);
         mContext			= app.getApplicationContext();
         mPageWidth			= pageWidth;
         mPageHeight			= pageHeight;
         mPages				= pages;
         mTotalBitmapSpace 	= 0;
-        mImageFolderName  	= "";
-        mThumbsFolderName 	= "";
+        mImageFolderName  	= mPackageStatus + "/";
+        mThumbsFolderName 	= mPackageStatus + "/";
         mSharedFolderName 	= "shared/";
         mFromAssets         = false;
         mProgressCallback   = progressCallback;
@@ -139,7 +143,7 @@ public class PackageReader {
         bitmapCache.clear();
         mPages.clear();
 
-        String mainPackagefileName = packageConfigName;
+        String mainPackagefileName = mPackageStatus + "/" + packageConfigName;
         boolean bSuccess;
         InputStream isMain = null;
         try {
@@ -233,6 +237,8 @@ public class PackageReader {
         String	pageFileName	= elPage.getAttribute("filename");
         String	description		= elPage.getTextContent();
         Log.d(TAG, ">>> processPage: " + pageFileName);
+
+        pageFileName = mPackageStatus + "/" + pageFileName;
 
         SnuffyPage	currPage = null;
         InputStream isPage = null;

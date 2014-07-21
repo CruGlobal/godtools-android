@@ -2,7 +2,6 @@ package org.keynote.godtools.android;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -10,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -183,7 +181,6 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
     private boolean shouldUpdateLanguageSettings() {
 
 
-
         // check first if the we support the phones language
         gtLanguage = GTLanguage.getLanguage(this, languagePhone);
         if (gtLanguage == null)
@@ -267,6 +264,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
         intent.putExtra("PackageName", gtPackage.getCode());
         intent.putExtra("LanguageCode", gtPackage.getLanguage());
         intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
+        intent.putExtra("Status", gtPackage.getStatus());
         addPageFrameToIntent(intent);
         startActivity(intent);
 

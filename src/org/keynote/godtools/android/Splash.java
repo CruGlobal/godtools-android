@@ -178,11 +178,15 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         protected Void doInBackground(Void... voids) {
             AssetManager manager = mContext.getAssets();
 
+            File liveDir = new File(documentsDir, "live");
+            liveDir.mkdir();
+
             try {
                 // copy the files from assets/english to documents directory
                 String[] files = manager.list("english");
                 for (String fileName : files) {
                     InputStream is = manager.open("english/" + fileName);
+                    //File outFile = new File(liveDir, fileName);
                     File outFile = new File(documentsDir, fileName);
                     OutputStream os = new FileOutputStream(outFile);
 

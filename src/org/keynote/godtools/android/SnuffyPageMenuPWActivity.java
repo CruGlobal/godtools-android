@@ -36,30 +36,32 @@ public class SnuffyPageMenuPWActivity extends ListActivity {
 	private boolean mFromAssets;
 	private String mPackageName;
 	private String mLanguageCode;
-	private String mDocumentsDir;
+	private String mFilesDir;
+    private String mPackageStatus;
 
 	List<HashMap<String, Object>> mList = new ArrayList<HashMap<String, Object>>(2);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         getWindow().setFlags(
-        		WindowManager.LayoutParams.FLAG_FULLSCREEN, 
+        		WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		super.onCreate(savedInstanceState);
-		
+
 		setContentView(R.layout.page_menu);
-		
+
 		mLanguageCode = getIntent().getStringExtra("LanguageCode");
 		mPackageName  = getIntent().getStringExtra("PackageName");
+        mPackageStatus = getIntent().getStringExtra("Status");
 		SnuffyApplication app = (SnuffyApplication)getApplication();
   		mFromAssets		  	= false;
-  		mDocumentsDir		= app.getDocumentsDir().getPath();
-  		
-  		setTitle(app.mPackageTitle);		
+        mFilesDir		= app.getDocumentsDir().getPath() + "/" + mPackageStatus;
+
+  		setTitle(app.mPackageTitle);
 
 		// see also : http://stackoverflow.com/questions/6852876/android-about-listview-and-simpleadapter
 		// see also: http://android-developers.blogspot.com.au/2009/02/android-layout-tricks-1.html
-		
+
 		HashMap<String, Object> map;
 
 		// the from array specifies which keys from the map
@@ -75,13 +77,13 @@ public class SnuffyPageMenuPWActivity extends ListActivity {
 			map = new HashMap<String, Object>();
 			map.put("label", page.mDescription);
 			map.put("image", page.mThumbnail.toString());
-			mList.add(map);			
+			mList.add(map);
 		}
-		
+
 		SimpleImageAdapter adapter = new SimpleImageAdapter(this, mList, R.layout.list_item_with_icon_and_text, from, to);
 		setListAdapter(adapter);
-	}	
-	
+	}
+
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		setResult(RESULT_FIRST_USER + position);
@@ -99,13 +101,13 @@ public class SnuffyPageMenuPWActivity extends ListActivity {
 		@Override
 		public void setViewImage(ImageView v, String value) {
 			Log.d(TAG, "setViewImage: " + value);
-			
+
 			try {
-				Bitmap bm = getBitmapFromAssetOrFile(getApplicationContext(), value);				
+				Bitmap bm = getBitmapFromAssetOrFile(getApplicationContext(), value);
 				v.setImageBitmap(bm);
 			} catch (Exception e) {
 				e.printStackTrace();
-			}		
+			}
 		}
 
 		@Override
@@ -135,7 +137,7 @@ public class SnuffyPageMenuPWActivity extends ListActivity {
 
 	private Bitmap getBitmapFromAssetOrFile(Context context, String imageFileName) {
 		// a path is passed such as: /Packages/kgp/en_US/thumbs/uspagethumb_10.png
-		
+
 		// first the package-specific folder
 		String path = imageFileName;
 		InputStream isImage = null;
@@ -143,10 +145,10 @@ public class SnuffyPageMenuPWActivity extends ListActivity {
 			if (mFromAssets)
 				isImage = context.getAssets().open(path, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
 			else {
-				isImage = new BufferedInputStream(new FileInputStream(mDocumentsDir + "/" + path));
+				isImage = new BufferedInputStream(new FileInputStream(mFilesDir + "/" + path));
 			}
         	return BitmapFactory.decodeStream(isImage);
-			
+
 		} catch (IOException e) {
 			// try the next path instead
 		}
@@ -159,7 +161,7 @@ public class SnuffyPageMenuPWActivity extends ListActivity {
 				}
 			}
 		}
-		
+
 		// next the package-specific folder with a @2x
 		path = imageFileName.replace(".png", "@2x.png");
 		isImage = null;
@@ -167,11 +169,11 @@ public class SnuffyPageMenuPWActivity extends ListActivity {
 			if (mFromAssets)
 				isImage = context.getAssets().open(path, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
 			else {
-				Log.d (TAG, "getBitmapFromAssetOrFile:" + mDocumentsDir + "/" + path);
-				isImage = new BufferedInputStream(new FileInputStream(mDocumentsDir + "/" + path));
+				Log.d (TAG, "getBitmapFromAssetOrFile:" + mFilesDir + "/" + path);
+				isImage = new BufferedInputStream(new FileInputStream(mFilesDir + "/" + path));
 			}
         	return BitmapFactory.decodeStream(isImage);
-			
+
 		} catch (IOException e) {
 			Log.e(TAG, "Cannot open or read bitmap file: " + imageFileName);
 			return null;
@@ -185,6 +187,6 @@ public class SnuffyPageMenuPWActivity extends ListActivity {
 				}
 			}
 		}
-		
+
 	}
 }
