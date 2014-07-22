@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.keynote.godtools.android.business.GTLanguage;
@@ -55,7 +56,8 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
     private GTLanguage gtLanguage;
 
     PackageListFragment packageFrag;
-    ProgressBar progressBar;
+    View vLoading;
+    TextView tvTask;
 
     boolean isDownloading;
 
@@ -63,7 +65,8 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_pw);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        vLoading = findViewById(R.id.contLoading);
+        tvTask = (TextView) findViewById(R.id.tvTask);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(false);
@@ -72,10 +75,6 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         languagePhone = ((SnuffyApplication) getApplication()).getDeviceLocale().getLanguage();
-
-        // this will ensure that the primary language will be set as the default app locale
-        // SnuffyApplication app = (SnuffyApplication) getApplication();
-        // app.setAppLocale(languagePrimary);
 
         // get the packages for the primary language
         packageList = GTPackage.getPackageByLanguage(this, languagePrimary);
@@ -115,8 +114,12 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
                 String code = data.getStringExtra("primaryCode");
                 gtLanguage = GTLanguage.getLanguage(MainPW.this, code);
 
-                showLoading();
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), gtLanguage.getLanguageCode(), "primary", this);
+                showLoading("Downloading resources...");
+                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                        gtLanguage.getLanguageCode(),
+                        "primary",
+                        getString(R.string.key_authorization_generic),
+                        this);
 
                 break;
             }
@@ -132,8 +135,12 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
 
                 String code = data.getStringExtra("parallelCode");
                 gtLanguage = GTLanguage.getLanguage(MainPW.this, code);
-                showLoading();
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), code, "parallel", this);
+                showLoading("Downloading resources...");
+                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                        code,
+                        "parallel",
+                        getString(R.string.key_authorization_generic),
+                        this);
             }
         }
 
@@ -143,6 +150,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.menu_settings);
         item.setEnabled(!isDownloading);
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -207,17 +215,19 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
         intent.putExtra("PageHeight", mPageHeight);
     }
 
-    private void showLoading() {
+    private void showLoading(String msg) {
         isDownloading = true;
         supportInvalidateOptionsMenu();
-        progressBar.setVisibility(View.VISIBLE);
+        tvTask.setText(msg);
+        vLoading.setVisibility(View.VISIBLE);
         packageFrag.disable();
     }
 
     private void hideLoading() {
         isDownloading = false;
         supportInvalidateOptionsMenu();
-        progressBar.setVisibility(View.GONE);
+        tvTask.setText("");
+        vLoading.setVisibility(View.GONE);
         packageFrag.enable();
     }
 
@@ -247,8 +257,12 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
         } else {
 
             if (Device.isConnected(MainPW.this)) {
-                showLoading();
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), gtLanguage.getLanguageCode(), "primary", this);
+                showLoading("Downloading resources...");
+                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                        gtLanguage.getLanguageCode(),
+                        "primary",
+                        getString(R.string.key_authorization_generic),
+                        this);
             } else {
                 // TODO: show dialog, Internet connection is required to download the resources
                 Toast.makeText(this, "Unable to download resources. Internet connection unavailable.", Toast.LENGTH_LONG).show();

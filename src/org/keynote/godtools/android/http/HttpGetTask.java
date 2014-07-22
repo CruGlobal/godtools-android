@@ -16,6 +16,7 @@ public class HttpGetTask extends HttpTask {
 
     private String url;
     private String tag;
+    private String authorization;
 
     public HttpGetTask(HttpTaskHandler listener) {
         taskHandler = listener;
@@ -25,12 +26,13 @@ public class HttpGetTask extends HttpTask {
     protected InputStream doInBackground(Object... params) {
 
         url = params[0].toString();
-        tag = params[1].toString();
+        authorization = params[1].toString();
+        tag = params[2].toString();
 
         HttpGet request = new HttpGet(url);
         request.setHeader("Accept", "application/xml");
         request.setHeader("Content-type", "application/xml");
-        request.setHeader("Authorization", "a");
+        request.setHeader("Authorization", authorization);
         request.setHeader("Interpreter", "1");
 
         HttpParams httpParams = new BasicHttpParams();

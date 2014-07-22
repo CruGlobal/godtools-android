@@ -28,6 +28,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
     private DownloadTaskHandler mTaskHandler;
     private Context mContext;
     private String url, filePath, tag;
+    private String authorization;
 
     public static interface  DownloadTaskHandler {
         void downloadTaskComplete(String url, String filePath, String tag);
@@ -45,12 +46,13 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
         url = params[0].toString();
         filePath = params[1].toString();
         tag = params[2].toString();
+        authorization = params[3].toString();
 
         try {
             URL mURL = new URL(url);
             URLConnection c = mURL.openConnection();
             c.setConnectTimeout(10000);
-            c.addRequestProperty("authorization", "a");
+            c.addRequestProperty("authorization", authorization);
             c.addRequestProperty("interpreter", "1");
 
             InputStream is = c.getInputStream();
@@ -98,6 +100,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
 
             // move files to main directory
             String mainDir = unzipDir.getParent();
+            String resourcesDir = mainDir + "/resources";
             FileInputStream inputStream;
             FileOutputStream outputStream;
 
@@ -106,7 +109,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
             for (int i = 0; i < fileList.length; i++){
                 oldFile = fileList[i];
                 inputStream = new FileInputStream(oldFile);
-                outputStream = new FileOutputStream(mainDir + File.separator + oldFile.getName());
+                outputStream = new FileOutputStream(resourcesDir + File.separator + oldFile.getName());
                 copyFile(inputStream, outputStream);
 
                 inputStream.close();

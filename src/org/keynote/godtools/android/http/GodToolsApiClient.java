@@ -15,21 +15,22 @@ public class GodToolsApiClient {
     private static final String ENDPOINT_PACKAGES = "packages/";
     private static final String ENDPOINT_TRANSLATIONS = "translations/";
 
-    public static void getListOfPackages(String tag, HttpTask.HttpTaskHandler taskHandler) {
+    public static void getListOfPackages(String authorization, String tag, HttpTask.HttpTaskHandler taskHandler) {
         HttpGetTask getTask = new HttpGetTask(taskHandler);
         String url = BASE_URL + ENDPOINT_META;
         String mock_url = "http://demo9996907.mockable.io/meta";
-        getTask.execute(url, tag);
+        getTask.execute(url, authorization, tag);
     }
 
-    public static void downloadLanguagePack(SnuffyApplication app, String langCode, String tag, DownloadTask.DownloadTaskHandler taskHandler) {
+    public static void downloadLanguagePack(SnuffyApplication app, String langCode, String tag, String authorization, DownloadTask.DownloadTaskHandler taskHandler) {
         String url = BASE_URL + ENDPOINT_PACKAGES + langCode + "?compressed=true";
         String mock_url = getMockURL(langCode);
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + File.separator + "package.zip";
 
-        download(app.getApplicationContext(), url, filePath, tag, taskHandler);
+        download(app.getApplicationContext(), url, filePath, tag, authorization, taskHandler);
     }
 
+    /**
     public static void downloadPackage(SnuffyApplication app, String langCode, String packageName, String tag, DownloadTask.DownloadTaskHandler taskHandler) {
         String url = BASE_URL + ENDPOINT_PACKAGES + langCode + File.separator + packageName + "?compressed=true";
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + "_" + packageName + File.separator + "package.zip";
@@ -43,15 +44,16 @@ public class GodToolsApiClient {
 
         download(app.getApplicationContext(), url, filePath, tag, taskHandler);
     }
+    */
 
-    private static void download(Context context, String url, String filePath, String tag, DownloadTask.DownloadTaskHandler taskHandler) {
+    private static void download(Context context, String url, String filePath, String tag, String authorization, DownloadTask.DownloadTaskHandler taskHandler) {
         DownloadTask dlTask = new DownloadTask(context, taskHandler);
-//        dlTask.execute(url, filePath, tag);
+        //dlTask.execute(url, filePath, tag);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            dlTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, filePath, tag);
+            dlTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, filePath, tag, authorization);
         } else {
-            dlTask.execute(url, filePath, tag);
+            dlTask.execute(url, filePath, tag, authorization);
         }
 
     }

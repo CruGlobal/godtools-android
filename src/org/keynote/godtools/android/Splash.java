@@ -175,19 +175,18 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Void doInBackground(Void... voids) {;
             AssetManager manager = mContext.getAssets();
 
-            File liveDir = new File(documentsDir, "live");
-            liveDir.mkdir();
+            File resourcesDir = new File(documentsDir, "resources");
+            resourcesDir.mkdir();
 
             try {
                 // copy the files from assets/english to documents directory
                 String[] files = manager.list("english");
                 for (String fileName : files) {
                     InputStream is = manager.open("english/" + fileName);
-                    //File outFile = new File(liveDir, fileName);
-                    File outFile = new File(documentsDir, fileName);
+                    File outFile = new File(resourcesDir, fileName);
                     OutputStream os = new FileOutputStream(outFile);
 
                     copyFile(is, os);
@@ -288,17 +287,25 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
             if (isFirst && shouldUpdateLanguageSettings()) {
                 // download resources for the phones language
-                languagePhone = ((SnuffyApplication)getApplication()).getDeviceLocale().getLanguage();
+                languagePhone = ((SnuffyApplication) getApplication()).getDeviceLocale().getLanguage();
                 Locale mLocale = new Locale(languagePhone);
                 showLoading(String.format(getString(R.string.download_resources), mLocale.getDisplayName()));
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), languagePhone, KEY_NEW_LANGUAGE, Splash.this);
+                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                                                        languagePhone,
+                                                        KEY_NEW_LANGUAGE,
+                                                        getString(R.string.key_authorization_generic),
+                                                        Splash.this);
 
             } else {
 
                 if (gtlPrimary.isDownloaded()) {
                     if (gtlParallel != null && !gtlParallel.isDownloaded()) {
                         showLoading(String.format(getString(R.string.update_resources), gtlParallel.getLanguageName()));
-                        GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), gtlParallel.getLanguageCode(), KEY_UPDATE_PARALLEL, Splash.this);
+                        GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                                                                gtlParallel.getLanguageCode(),
+                                                                KEY_UPDATE_PARALLEL,
+                                                                getString(R.string.key_authorization_generic),
+                                                                Splash.this);
 
                     } else {
                         goToMainActivity();
@@ -306,7 +313,11 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
                 } else {
                     showLoading(String.format(getString(R.string.update_resources), gtlPrimary.getLanguageName()));
-                    GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), languagePhone, KEY_UPDATE_PRIMARY, Splash.this);
+                    GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                                                            languagePhone,
+                                                            KEY_UPDATE_PRIMARY,
+                                                            getString(R.string.key_authorization_generic),
+                                                            Splash.this);
                 }
             }
 
@@ -325,7 +336,8 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
     private void checkForUpdates() {
         showLoading(getString(R.string.check_update));
-        GodToolsApiClient.getListOfPackages("", Splash.this);
+        String authorization = getString(R.string.key_authorization_generic);
+        GodToolsApiClient.getListOfPackages(authorization, "", Splash.this);
     }
 
     @Override
@@ -368,7 +380,11 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
             if (gtlParallel != null && !gtlParallel.isDownloaded()) {
                 showLoading(String.format(getString(R.string.update_resources), gtlParallel.getLanguageName()));
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(), gtlParallel.getLanguageCode(), KEY_UPDATE_PARALLEL, Splash.this);
+                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                                                            gtlParallel.getLanguageCode(),
+                                                            KEY_UPDATE_PARALLEL,
+                                                            getString(R.string.key_authorization_generic),
+                                                            Splash.this);
             } else {
                 goToMainActivity();
             }

@@ -37,7 +37,6 @@ public class SnuffyPageMenuPWActivity extends ListActivity {
 	private String mPackageName;
 	private String mLanguageCode;
 	private String mFilesDir;
-    private String mPackageStatus;
 
 	List<HashMap<String, Object>> mList = new ArrayList<HashMap<String, Object>>(2);
 
@@ -52,10 +51,9 @@ public class SnuffyPageMenuPWActivity extends ListActivity {
 
 		mLanguageCode = getIntent().getStringExtra("LanguageCode");
 		mPackageName  = getIntent().getStringExtra("PackageName");
-        mPackageStatus = getIntent().getStringExtra("Status");
 		SnuffyApplication app = (SnuffyApplication)getApplication();
   		mFromAssets		  	= false;
-        mFilesDir		= app.getDocumentsDir().getPath() + "/" + mPackageStatus;
+        mFilesDir		= app.getDocumentsDir().getPath() + "/resources";
 
   		setTitle(app.mPackageTitle);
 
