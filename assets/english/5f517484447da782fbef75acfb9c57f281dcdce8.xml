@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="4&#13;" color="#993300" watermark="1c0ac553e8c0418833067e669b5f7bc23c3a9fe9.png">
+  <title mode="peek">
+    <heading gtapi-trx-id="3ab30058-5b7d-46c7-abae-c72713263413" translate="true">The Turning Point</heading>
+    <subheading gtapi-trx-id="45ea4d4b-bf86-4355-b51a-9384793c8701" translate="true">We are filled with the Holy Spirit by faith alone.</subheading>
+    <peekpanel gtapi-trx-id="1b2698ac-d747-416e-9f5b-50403730c0b9" translate="true">Sincere prayer is one way of expressing our faith.</peekpanel>
+  </title>
+  <button>
+    <buttontext gtapi-trx-id="8f422a0c-3c73-4df6-9a38-c50ad3b2cfdd" translate="true">A suggested prayer:</buttontext>
+    <panel>
+      <text gtapi-trx-id="30cf3162-b7e1-4c0f-a086-c498f5e4e5e6" modifier="italics" textalign="left" translate="true" yoffset="10">Dear Father, I need You. I acknowledge that I have sinned against You by directing my own life. I thank You that You have forgiven my sin through Christ's death on the cross for me.  I now invite Christ to again take His place on the throne of my life.  Fill me with the Holy Spirit as You commanded me to be filled, and as You promised in Your Word that You would do if I asked in faith. I pray this in the name of Jesus. I now thank You for filling me with the Holy Spirit and directing my life.</text>
+      <text gtapi-trx-id="941a1882-0ec2-41b9-8e73-37ccb8d88e92" translate="true" yoffset="10">Does this prayer express the desire of your heart?  If so, you can pray right now and trust God to fill you with His Holy Spirit.</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="5c955323-bd76-4100-952b-177e88652077" translate="true">How to know...</buttontext>
+    <panel>
+      <text gtapi-trx-id="4543523f-f1cd-4361-a304-2b0d55786c6a" size="111" tnt-trx-ref-value="...that your are filled by the Holy Spirit" tnt-trx-translated="true" translate="true">...that you are filled by the Holy Spirit</text>
+      <text gtapi-trx-id="10d1c254-8d13-456c-b90f-5ce7434f2762" translate="true">- Did you ask God to fill you with the Holy Spirit?</text>
+      <text gtapi-trx-id="cb83a1ff-7ff6-4738-b403-dd39db75464d" translate="true">- Do you know that you are now filled with the Holy Spirit?</text>
+      <text gtapi-trx-id="f1491d3f-42da-411c-a66a-c0b22867a9fc" translate="true">- On what authority? (On the trustworthiness of God Himself and His Word: Hebrews 11:6; Romans 14:22, 23.)</text>
+      <text gtapi-trx-id="44b817e2-75d4-4890-a336-5ae1deee0a63" translate="true">As you continue to depend on God's Spirit moment by moment you will experience and enjoy intimacy with God and all He has for you - a truly rich and satisfying life.</text>
+    </panel>
+  </button>
+  <text gtapi-trx-id="f4da919d-a6b2-4c7d-a23d-4521db6390a7" modifier="italics" size="111" textalign="center" translate="true">An important reminder:</text>
+  <button>
+    <buttontext gtapi-trx-id="c07c3ffb-e3af-4da9-879b-331418f074ee" translate="true">Do not depend on feelings</buttontext>
+    <panel>
+      <text gtapi-trx-id="fc95cf73-3684-4f6c-aa2f-9ac3f07e50ae" textalign="center" tnt-trx-ref-value="The promise of God's Word, the Bible - not our feelings - is our authority.  the Christian lives by faith (trust) in the trustworthiness of God Himself and His Word." tnt-trx-translated="true" translate="true" yoffset="10">The promise of God's Word, the Bible - not our feelings - is our authority.  The Christian lives by faith (trust) in the trustworthiness of God Himself and His Word.</text>
+      <text gtapi-trx-id="9461665f-e707-406a-a499-e761b93d1289" textalign="center" translate="true" yoffset="10">Flying in an airplane can illustrate the relationship among fact (God and His Word), faith (our trust in God and His Word), and feeling (the result of our faith and obedience). (John 14:21)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="a58be0d1-72d1-4cb5-8f85-8bd1ec3a792c" translate="true">Trust facts not feelings</buttontext>
+    <panel>
+      <image align="center" h="131" w="286">1597529806115ce0984ac981896c0358f5247fa8.png</image>
+      <text gtapi-trx-id="abef1cba-1afc-4ea5-a410-86fc387da665" size="93" textalign="center" translate="true">To be transported by an airplane, we must place our faith in the trustworthiness of the aircraft and the pilot who flies it. Our feelings of confidence or fear do not affect the ability of the airplane to transport us, though they do affect how much we enjoy the trip.</text>
+      <text gtapi-trx-id="1b1d8e74-936a-46cf-bae8-5cdbf2a68ab4" size="93" textalign="center" translate="true">In the same way, we as Christians do not depend on feelings or emotions, but we place our faith (trust) in the trustworthiness of God and the promises of His Word.</text>
+    </panel>
+  </button>
+  <question gtapi-trx-id="5c8c1611-3d0c-4c5a-aedb-f0bab78a7ab1" translate="true">Now that you are filled with Holy Spirit..</question>
+</page>

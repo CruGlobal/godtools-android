@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><page bigbuttons="2" color="#7EB14F" watermark="90458873df4460124f51a61d5e22e2c3d021a739.png">
+  <title mode="straight">
+    <heading gtapi-trx-id="5dd2b8d1-11ac-44d2-b7cc-81646723898a" textalign="center" translate="true">THESE CIRCLES DESCRIBE TWO TYPES OF PEOPLE</heading>
+  </title>
+  <button mode="big">
+    <image align="center">3044c80b3f7e68432cf1c56654ea3efc0bfd26f1.png</image>
+    <buttontext gtapi-trx-id="31e3186e-f964-4b5f-8d9d-8e49dacf667c" translate="true">Self-Directed Person</buttontext>
+    <panel>
+      <text gtapi-trx-id="95a6424b-de8c-453b-bd1b-2457ee8c9bc7" size="80" textalign="center" translate="true" w="265" yoffset="-4">s - Self is in control and</text>
+      <text gtapi-trx-id="3ea37bf4-f8a9-40d6-a876-1dc480dc8ac8" size="80" textalign="center" translate="true" w="265" yoffset="-4">† - Jesus has no influence in my life.</text>
+      <text gtapi-trx-id="28b733cc-a32a-43ad-b92a-381dacb39a3c" textalign="center" translate="true" w="265">People like this have never received Jesus into their lives. They remain guilty and cut off from God by their sin.</text>
+    </panel>
+  </button>
+  <button mode="big">
+    <image align="center">bcf7244d05757800087495fb2c255e9197eb3662.png</image>
+    <buttontext gtapi-trx-id="f53a0f8b-36af-41f1-a2ad-6e2de20f1131" translate="true">Christ-Directed Person</buttontext>
+    <panel>
+      <text gtapi-trx-id="4bf30efb-8518-4662-951a-98aa95c581b1" size="80" textalign="center" translate="true" w="265" yoffset="-4">† - Jesus is in control and</text>
+      <text gtapi-trx-id="e832250d-bf58-4509-ade7-dacf7f9a8775" size="80" textalign="center" translate="true" w="265" yoffset="-4">s - Self is following Jesus as Lord.</text>
+      <text gtapi-trx-id="1c938577-b96d-4689-b910-34c50346c117" textalign="center" translate="true" w="265">People like this have received Jesus into their lives. They have been forgiven and experience God's love.</text>
+    </panel>
+  </button>
+  <question gtapi-trx-id="4292a44a-69f6-44d1-8e2b-a6a15f102df1" mode="straight" modifier="normal" size="100" translate="true">Which circle best describes you?
+Which would you like to describe you?</question>
+</page>

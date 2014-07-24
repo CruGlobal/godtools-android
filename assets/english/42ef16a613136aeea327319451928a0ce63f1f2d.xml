@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="3" color="#FB8D08" watermark="1c0ac553e8c0418833067e669b5f7bc23c3a9fe9.png">
+  <title mode="peek">
+    <heading gtapi-trx-id="098717e4-6e2c-4b81-a63c-21f099354a00" translate="true">The New Start</heading>
+    <subheading gtapi-trx-id="4c9287c8-b761-4030-bb38-e2ed47585b12" translate="true">Now that you are filled with the Holy Spirit:</subheading>
+  </title>
+  <button>
+    <buttontext gtapi-trx-id="1a71aced-7346-439f-8c32-224cb0a8da48" translate="true">Thank God...</buttontext>
+    <panel>
+      <text gtapi-trx-id="5e6bfd31-5b2a-4e33-a1ec-4e31a69e16d6" size="111" translate="true">...that the Spirit will enable you:</text>
+      <text gtapi-trx-id="7f0e514c-0f03-4d4a-a61e-361a4b07c59d" translate="true">- To glorify Christ with your life.
+(John 16:14)</text>
+      <text gtapi-trx-id="58effc6c-c7f8-45f0-a3d3-a3374193e981" translate="true">- To grow in your understanding of God and His Word.
+(1 Corinthians 2:14,15)</text>
+      <text gtapi-trx-id="db26d3c5-373c-465b-a9d0-1907f6f21ab4" translate="true">- To live a life pleasing to God.
+(Galatians 5:16-23)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="116c1666-02db-4886-8baf-712c70642ff2" translate="true">Remember Jesus' promise:</buttontext>
+    <panel>
+      <text gtapi-trx-id="bfc002a4-6586-421f-ada7-1c34b719882c" modifier="italics" textalign="center" translate="true">"But you will receive power when the Holy Spirit comes on you; and you will be my witnesses in Jerusalem, and in all Judea and Samaria, and to the ends of the earth"
+(Acts 1:8)"</text>
+    </panel>
+  </button>
+  <text gtapi-trx-id="e341ec9d-9096-466d-81f9-b76f9eb61ce8" textalign="center" translate="true" w="300">If you would like more resources on the Holy Spirit, please go to:</text>
+  <button gtapi-trx-id="57fd997b-b135-4c19-9458-df834d4f7ade" mode="url" tnt-trx-ref-value="www.campuscrusade.org" tnt-trx-translated="true" translate="true">http://www.cru.org/training-and-growth/classics/index.htm</button>
+</page>

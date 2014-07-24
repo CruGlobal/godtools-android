@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="3" color="#FB8D08" watermark="1c0ac553e8c0418833067e669b5f7bc23c3a9fe9.png">
+  <title mode="peek">
+    <heading gtapi-trx-id="e707ed5c-714d-413c-8f61-7ab07e73f0f2" size="70" translate="true">Satisfied?</heading>
+    <subheading gtapi-trx-id="54f39144-e515-4316-bf73-53a5f33c6329" translate="true">Which words would you use to describe your current experience as a Christian?</subheading>
+    <peekpanel gtapi-trx-id="38d7056b-96da-4c50-ae3e-da7d35fd51f4" textalign="center" translate="true">Growing | Frustrated
+Disappointing | Fulfilled
+Forgiven | Stuck | Struggling
+Joyful | Defeated | Exciting
+Up and Down | Empty
+Discouraged | Duty
+Intimate | Mediocre
+Painful | Dynamic | Guilty
+Vital | So-so | Others?</peekpanel>
+  </title>
+  <button>
+    <buttontext gtapi-trx-id="05c42190-9ac1-4bbc-8178-30e4a16a24f8" translate="true">Do you desire more?</buttontext>
+    <panel>
+      <text gtapi-trx-id="8d5949ba-b489-4c59-8121-369ff8257a3d" modifier="italics" translate="true">Jesus said, "If anyone is thirsty, let him come to me and drink. Whoever believes in me, as the Scripture has said, streams of living water will flow from within him".  (John 7:37, 38)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="64529fdf-fcd1-4e12-81e4-e69cffb7bff0" translate="true">What did Jesus mean?</buttontext>
+    <panel>
+      <text gtapi-trx-id="591c4e35-7642-4c65-892f-773dd1e65331" translate="true">John, the biblical author, went on to explain,</text>
+      <text gtapi-trx-id="3425e616-185d-44b0-bd8b-556650269a60" modifier="italics" translate="true">"By this he meant the Spirit, whom those who believed in him were later to receive. Up to that time the Spirit had not been given, since Jesus had not yet been glorified".  (John 7:39)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="f21c3b63-a269-4655-b3d6-cfdfdc987f74" translate="true">Jesus promised...</buttontext>
+    <panel>
+      <text gtapi-trx-id="f352f6a9-ea63-4b69-94e9-ba2028f5b8bc" translate="true">...that God's Holy Spirit would satisfy the thirst, or deepest longings, of all who believe in Jesus Christ.</text>
+      <text gtapi-trx-id="80911581-18ac-4d52-af81-658335c6650a" translate="true">However, many Christians do not understand the Holy Spirit or how to experience Him in their daily lives.</text>
+    </panel>
+  </button>
+  <question gtapi-trx-id="907bf5fb-b053-4be6-aa02-a60d3ad6e0b2" translate="true">The following principles will help you to understand and enjoy God's Spirit.</question>
+</page>

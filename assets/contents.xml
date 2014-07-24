@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <content>
-<resource config="5c080da3f2e162fff4b3e82fcd9c92ad8240cd.xml" language="en" package="fourlaws"/>
-<resource config="44f847d2d477f0777acff91638a24c82c8e6d080.xml" language="en" package="kgp"/>
-<resource config="b98a47b5eed974fb9742ce1512c7112629816ce.xml" language="en" package="satisfied"/>
+    <resource config="4fcb945ceb9f81dd4388a809d84217c0d282ece9.xml" icon="88509b0e5343f4eb90d3e15b740c9a245d8c95da.png" language="en" package="fourlaws"/>
+    <resource config="62cc585d0eefec01ca32c4a48030ae26e76f6638.xml" icon="30adeee865dd2ff568b11715e9077ffbb851bb65.png" language="en" package="kgp"/>
+    <resource config="d5c3d790be6502a91b4ee5507c44dc44ca459ffe.xml" icon="e03545c532f6bf95168fe22f3343cb1d0c2345a0.png" language="en" package="satisfied"/>
 </content>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="4" color="#FB8D08" shadows="no">
+  <title mode="plain">
+    <subheading gtapi-trx-id="d173bc79-6041-4b04-a394-d37acd94819d" size="118" textalign="left" translate="true">If this app has helped you, please share it with someone else, so that others may be Satisfied.</subheading>
+  </title>
+  <text gtapi-trx-id="fcd476ad-0fa6-47b0-99fe-37496560b4d0" size="112" textalign="center" translate="true" w="300" y="140">You can share it via our website:</text>
+  <button gtapi-trx-id="ab8731f7-f7fe-4d7e-8a9d-0c2b0a90a243" mode="url" tnt-trx-ref-value="www.ccca.org.au/app/" tnt-trx-translated="true" translate="true" y="165">www.godtoolsapp.com</button>
+  <text gtapi-trx-id="108dff5a-a200-43db-9508-327a5cd6f017" size="82" textalign="center" tnt-trx-ref-value="© 2011 Campus Crusade for Christ, Inc. and Bright Media Foundation all rights reserved. Created by Campus Crusade for Christ, Australia. No part of this app may be changed in any way or reproduced in any form without written permission from the publisher." tnt-trx-translated="true" translate="true" w="300" y="235">©2014 Cru and Bright Media Foundation all rights reserved. Created by Cru. No part of this app may be changed in any way or reproduced in any form without written permission from the publisher.</text>
+  <text gtapi-trx-id="55a292f4-2e8c-4df6-a799-167d6e3423c6" modifier="bold" size="94" textalign="center" tnt-trx-ref-value="Campus Crusade for Christ Australia" tnt-trx-translated="true" translate="true" w="300" x="15" y="370">Cru</text>
+  <button gtapi-trx-id="91e06e3c-874d-4576-920d-19f74c032416" mode="email" tnt-trx-ref-value="resources@ccca.org.au" tnt-trx-translated="true" translate="true" y="450">support@godtoolsapp.com</button>
+  <button gtapi-trx-id="30cc5bde-4458-49a3-9f94-01caf620ffa3" mode="url" tnt-trx-ref-value="www.ccca.org.au" tnt-trx-translated="true" translate="true" y="500">www.godtoolsapp.com</button>
+  <text gtapi-trx-id="fe6bc9df-65fe-449a-833e-67227358c7d1" size="82" textalign="center" translate="true" w="300" y="570">All Bible references are from the New International Version unless otherwise stated.</text>
+</page>
