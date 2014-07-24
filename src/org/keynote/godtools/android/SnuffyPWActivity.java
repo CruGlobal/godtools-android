@@ -109,7 +109,7 @@ public class SnuffyPWActivity extends Activity {
         // get package if parallel language is set
         if (!langParallel.isEmpty()) {
             isParallelLanguageSet = true;
-            mParallelPackage = GTPackage.getPackage(this, mAppPackage, langParallel);
+            mParallelPackage = GTPackage.getPackage(this, mAppPackage, langParallel, "live");
         }
 
         if (mParallelPackage != null) {

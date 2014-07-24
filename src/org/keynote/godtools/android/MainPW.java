@@ -14,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +59,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
     TextView tvTask;
 
     boolean isDownloading;
+    String authorization;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +75,13 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         languagePhone = ((SnuffyApplication) getApplication()).getDeviceLocale().getLanguage();
+
+        boolean isTranslatorEnabled = settings.getBoolean("TranslatorMode", false);
+        if (isTranslatorEnabled) {
+            authorization = settings.getString("authorization", getString(R.string.key_authorization_generic));
+        } else {
+            authorization = getString(R.string.key_authorization_generic);
+        }
 
         // get the packages for the primary language
         packageList = GTPackage.getPackageByLanguage(this, languagePrimary);
@@ -118,7 +125,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         gtLanguage.getLanguageCode(),
                         "primary",
-                        getString(R.string.key_authorization_generic),
+                        authorization,
                         this);
 
                 break;
@@ -139,8 +146,9 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         code,
                         "parallel",
-                        getString(R.string.key_authorization_generic),
+                        authorization,
                         this);
+                break;
             }
         }
 
@@ -252,7 +260,6 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
             SnuffyApplication app = (SnuffyApplication) getApplication();
             app.setAppLocale(code);
 
-            //recreate();
 
         } else {
 
@@ -261,7 +268,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         gtLanguage.getLanguageCode(),
                         "primary",
-                        getString(R.string.key_authorization_generic),
+                        authorization,
                         this);
             } else {
                 // TODO: show dialog, Internet connection is required to download the resources

@@ -2,9 +2,9 @@ package org.keynote.godtools.android.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.business.GTPackage;
+import org.keynote.godtools.android.imagemanager.BitmapWorkerTask;
 
 import java.util.List;
 
@@ -88,7 +89,6 @@ public class PackageListFragment extends ListFragment {
         private LayoutInflater inflater;
         private boolean mIsEnabled;
 
-
         public PackageListAdapter(Context context, List<GTPackage> listPackages) {
             super(context, R.layout.list_item_package, listPackages);
             this.context = context;
@@ -117,16 +117,20 @@ public class PackageListFragment extends ListFragment {
                 holder = (ViewHolder) convertView.getTag();
             }
 
+            /**
+             Drawable d = context.getResources().getDrawable(R.drawable.homescreen_kgp_icon_2x);
+             if (mIsEnabled)
+             d.setColorFilter(null);
+             else
+             d.setColorFilter(0x90000000, PorterDuff.Mode.SRC_OVER);
 
-            Drawable d = context.getResources().getDrawable(R.drawable.homescreen_kgp_icon_2x);
-            if (mIsEnabled)
-                d.setColorFilter(null);
-            else
-                d.setColorFilter(0x90000000, PorterDuff.Mode.SRC_OVER);
+             holder.ivIcon.setImageDrawable(d);
+             */
 
             // set values
-            holder.ivIcon.setImageDrawable(d);
             holder.tvPackageName.setText(gtp.getName());
+            BitmapWorkerTask task = new BitmapWorkerTask(getActivity(), holder.ivIcon);
+            task.execute(gtp.getIcon());
 
             return convertView;
         }

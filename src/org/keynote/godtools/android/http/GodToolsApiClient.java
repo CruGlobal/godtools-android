@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 
+import org.apache.http.client.methods.HttpPost;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 import java.io.File;
@@ -14,6 +15,7 @@ public class GodToolsApiClient {
     private static final String ENDPOINT_META = "meta/";
     private static final String ENDPOINT_PACKAGES = "packages/";
     private static final String ENDPOINT_TRANSLATIONS = "translations/";
+    private static final String ENDPOINT_AUTH = "auth/";
 
     public static void getListOfPackages(String authorization, String tag, HttpTask.HttpTaskHandler taskHandler) {
         HttpGetTask getTask = new HttpGetTask(taskHandler);
@@ -28,6 +30,13 @@ public class GodToolsApiClient {
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + File.separator + "package.zip";
 
         download(app.getApplicationContext(), url, filePath, tag, authorization, taskHandler);
+    }
+
+    public static void getTranslatorToken(String authorization, String accessCode, String tag, HttpTask.HttpTaskHandler taskHandler){
+        HttpPostTask authTask = new HttpPostTask(taskHandler);
+        String url = BASE_URL + ENDPOINT_AUTH + accessCode;
+        String mock_url = "http://demo9996907.mockable.io/auth/status";
+        authTask.execute(url, authorization, tag);
     }
 
     /**

@@ -45,6 +45,7 @@ public class DBAdapter {
         cv.put(DBContract.GTPackageTable.COL_VERSION, gtPackage.getVersion());
         cv.put(DBContract.GTPackageTable.COL_CONFIG_FILE_NAME, gtPackage.getConfigFileName());
         cv.put(DBContract.GTPackageTable.COL_STATUS, gtPackage.getStatus());
+        cv.put(DBContract.GTPackageTable.COL_ICON, gtPackage.getIcon());
 
         return db.insert(DBContract.GTPackageTable.TABLE_NAME, null, cv);
     }
@@ -61,10 +62,11 @@ public class DBAdapter {
         return queryGTLanguage(null);
     }
 
-    public GTPackage getGTPackage(String code, String language){
-        String selection = String.format("%s = '%s' AND %s = '%s'",
+    public GTPackage getGTPackage(String code, String language, String status){
+        String selection = String.format("%s = '%s' AND %s = '%s' AND %s = '%s'",
                                         DBContract.GTPackageTable.COL_CODE, code,
-                                        DBContract.GTPackageTable.COL_LANGUAGE, language);
+                                        DBContract.GTPackageTable.COL_LANGUAGE, language,
+                                        DBContract.GTPackageTable.COL_STATUS, status);
         List<GTPackage> packages = queryGTPackage(selection);
         return packages.size() > 0 ? packages.get(0) : null;
     }
@@ -81,6 +83,14 @@ public class DBAdapter {
         return queryGTPackage(selection);
     }
 
+    public List<GTPackage> getLiveGTPackage(String language) {
+        String selection = String.format("%s = '%s' AND %s = 'live'",
+                                        DBContract.GTPackageTable.COL_LANGUAGE, language,
+                                        DBContract.GTPackageTable.COL_STATUS);
+
+        return queryGTPackage(selection);
+    }
+
     public void updateGTPackage(GTPackage gtp){
         ContentValues cv = new ContentValues();
 
@@ -88,6 +98,7 @@ public class DBAdapter {
             cv.put(DBContract.GTPackageTable.COL_VERSION, gtp.getVersion());
         } else if (gtp.getConfigFileName() != null) {
             cv.put(DBContract.GTPackageTable.COL_CONFIG_FILE_NAME, gtp.getConfigFileName());
+            cv.put(DBContract.GTPackageTable.COL_ICON, gtp.getIcon());
         } else {
             return;
         }
@@ -95,6 +106,7 @@ public class DBAdapter {
         String where = String.format("%s = '%s' AND %s = '%s'",
                                     DBContract.GTPackageTable.COL_CODE, gtp.getCode(),
                                     DBContract.GTPackageTable.COL_LANGUAGE, gtp.getLanguage());
+                                    //DBContract.GTPackageTable.COL_STATUS, gtp.getStatus()); tell client to include the status on the content file
 
         db.update(DBContract.GTPackageTable.TABLE_NAME, cv, where, null);
     }
@@ -117,7 +129,8 @@ public class DBAdapter {
                 DBContract.GTPackageTable.COL_LANGUAGE,
                 DBContract.GTPackageTable.COL_VERSION,
                 DBContract.GTPackageTable.COL_CONFIG_FILE_NAME,
-                DBContract.GTPackageTable.COL_STATUS
+                DBContract.GTPackageTable.COL_STATUS,
+                DBContract.GTPackageTable.COL_ICON
         };
 
         Cursor cursor = db.query(DBContract.GTPackageTable.TABLE_NAME, projection, selection, null, null, null, null);
@@ -132,6 +145,7 @@ public class DBAdapter {
             double version = cursor.getDouble(cursor.getColumnIndex(DBContract.GTPackageTable.COL_VERSION));
             String configFileName = cursor.getString(cursor.getColumnIndex(DBContract.GTPackageTable.COL_CONFIG_FILE_NAME));
             String status = cursor.getString(cursor.getColumnIndex(DBContract.GTPackageTable.COL_STATUS));
+            String icon = cursor.getString(cursor.getColumnIndex(DBContract.GTPackageTable.COL_ICON));
 
             GTPackage gtPackage = new GTPackage();
             gtPackage.setId(id);
@@ -141,6 +155,7 @@ public class DBAdapter {
             gtPackage.setVersion(version);
             gtPackage.setConfigFileName(configFileName);
             gtPackage.setStatus(status);
+            gtPackage.setIcon(icon);
 
             listGTPackages.add(gtPackage);
         }

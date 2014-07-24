@@ -91,11 +91,13 @@ public class GTPackageReader {
                 String code = element.getAttribute("package");
                 String configFileName = element.getAttribute("config");
                 String language = element.getAttribute("language");
+                String icon = element.getAttribute("icon");
 
                 GTPackage gtp = new GTPackage();
                 gtp.setCode(code);
                 gtp.setConfigFileName(configFileName);
                 gtp.setLanguage(language);
+                gtp.setIcon(icon);
 
                 packageList.add(gtp);
             }
@@ -133,11 +135,13 @@ public class GTPackageReader {
                 String code = element.getAttribute("package");
                 String configFileName = element.getAttribute("config");
                 String language = element.getAttribute("language");
+                String icon = element.getAttribute("icon");
 
                 GTPackage gtp = new GTPackage();
                 gtp.setCode(code);
                 gtp.setConfigFileName(configFileName);
                 gtp.setLanguage(language);
+                gtp.setIcon(icon);
 
                 packageList.add(gtp);
             }
@@ -153,5 +157,4 @@ public class GTPackageReader {
 
         return packageList;
     }
-
 }

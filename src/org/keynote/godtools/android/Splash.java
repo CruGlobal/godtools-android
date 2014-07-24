@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -55,6 +56,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
     TextView tvTask;
     ProgressBar progressBar;
+    String authorization;
 
     /**
      * Called when the activity is first created.
@@ -73,6 +75,13 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         languageParallel = settings.getString(GTLanguage.KEY_PARALLEL, "");
+
+        boolean isTranslatorEnabled = settings.getBoolean("TranslatorMode", false);
+        if (isTranslatorEnabled) {
+            authorization = settings.getString("authorization", getString(R.string.key_authorization_generic));
+        } else {
+            authorization = getString(R.string.key_authorization_generic);
+        }
 
         if (isFirstLaunch()) {
             new PrepareInitialContentTask((SnuffyApplication) getApplication()).execute((Void) null);
@@ -175,11 +184,14 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {;
+        protected Void doInBackground(Void... voids) {
+            ;
             AssetManager manager = mContext.getAssets();
 
             File resourcesDir = new File(documentsDir, "resources");
             resourcesDir.mkdir();
+
+            Log.i("resourceDir", resourcesDir.getAbsolutePath());
 
             try {
                 // copy the files from assets/english to documents directory
@@ -263,7 +275,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
                 for (GTPackage gtp : gtl.getPackages()) {
 
                     // check if a new package is available for download or an existing package has been updated
-                    GTPackage dbPackage = mAdapter.getGTPackage(gtp.getCode(), gtp.getLanguage());
+                    GTPackage dbPackage = mAdapter.getGTPackage(gtp.getCode(), gtp.getLanguage(), gtp.getStatus());
                     if (dbPackage == null) {
                         mAdapter.insertGTPackage(gtp);
                         dbLanguage.setDownloaded(false);
@@ -291,10 +303,10 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
                 Locale mLocale = new Locale(languagePhone);
                 showLoading(String.format(getString(R.string.download_resources), mLocale.getDisplayName()));
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                                                        languagePhone,
-                                                        KEY_NEW_LANGUAGE,
-                                                        getString(R.string.key_authorization_generic),
-                                                        Splash.this);
+                        languagePhone,
+                        KEY_NEW_LANGUAGE,
+                        authorization,
+                        Splash.this);
 
             } else {
 
@@ -302,10 +314,10 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
                     if (gtlParallel != null && !gtlParallel.isDownloaded()) {
                         showLoading(String.format(getString(R.string.update_resources), gtlParallel.getLanguageName()));
                         GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                                                                gtlParallel.getLanguageCode(),
-                                                                KEY_UPDATE_PARALLEL,
-                                                                getString(R.string.key_authorization_generic),
-                                                                Splash.this);
+                                gtlParallel.getLanguageCode(),
+                                KEY_UPDATE_PARALLEL,
+                                authorization,
+                                Splash.this);
 
                     } else {
                         goToMainActivity();
@@ -314,10 +326,10 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
                 } else {
                     showLoading(String.format(getString(R.string.update_resources), gtlPrimary.getLanguageName()));
                     GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                                                            languagePhone,
-                                                            KEY_UPDATE_PRIMARY,
-                                                            getString(R.string.key_authorization_generic),
-                                                            Splash.this);
+                            languagePhone,
+                            KEY_UPDATE_PRIMARY,
+                            authorization,
+                            Splash.this);
                 }
             }
 
@@ -336,7 +348,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
     private void checkForUpdates() {
         showLoading(getString(R.string.check_update));
-        String authorization = getString(R.string.key_authorization_generic);
         GodToolsApiClient.getListOfPackages(authorization, "", Splash.this);
     }
 
@@ -381,10 +392,10 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
             if (gtlParallel != null && !gtlParallel.isDownloaded()) {
                 showLoading(String.format(getString(R.string.update_resources), gtlParallel.getLanguageName()));
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                                                            gtlParallel.getLanguageCode(),
-                                                            KEY_UPDATE_PARALLEL,
-                                                            getString(R.string.key_authorization_generic),
-                                                            Splash.this);
+                        gtlParallel.getLanguageCode(),
+                        KEY_UPDATE_PARALLEL,
+                        getString(R.string.key_authorization_generic),
+                        Splash.this);
             } else {
                 goToMainActivity();
             }

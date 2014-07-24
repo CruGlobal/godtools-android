@@ -3,9 +3,15 @@
     xmlns:godtools="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menu_refresh_drafts"
+        android:title="Refresh Drafts"
+        godtools:showAsAction="always"
+        android:visible="false"/>
+
+    <item
         android:id="@+id/menu_settings"
         android:title="Settings"
         godtools:showAsAction="always"
-        android:icon="@android:drawable/ic_menu_preferences" />
+        android:icon="@android:drawable/ic_menu_preferences"/>
 
 </menu>

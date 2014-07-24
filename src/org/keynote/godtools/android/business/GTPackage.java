@@ -15,6 +15,7 @@ public class GTPackage {
     private String language;
     private String configFileName;
     private String status;
+    private String icon;
 
     public long getId() {
         return id;
@@ -72,10 +73,18 @@ public class GTPackage {
         this.status = status;
     }
 
-    public static GTPackage getPackage(Context context, String code, String language){
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public static GTPackage getPackage(Context context, String code, String language, String status){
         DBAdapter adapter = DBAdapter.getInstance(context);
         adapter.open();
-        return adapter.getGTPackage(code, language);
+        return adapter.getGTPackage(code, language, status);
     }
 
     public static List<GTPackage> getPackageByLanguage(Context context, String language){
