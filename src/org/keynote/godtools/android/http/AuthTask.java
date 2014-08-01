@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.http;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
@@ -11,31 +12,27 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
-import java.io.InputStream;
+public class AuthTask extends AsyncTask<Object, Void, String> {
 
-public class HttpPostTask extends HttpTask {
+    private AuthTaskHandler taskHandler;
+    private int statusCode;
 
-    private String url;
-    private String authorization;
-    private String tag;
+    public static interface AuthTaskHandler {
+        void authComplete(String authorization);
 
-    public HttpPostTask(HttpTaskHandler listener) {
+        void authFailed();
+    }
+
+    public AuthTask(AuthTaskHandler listener) {
         taskHandler = listener;
     }
 
     @Override
-    protected InputStream doInBackground(Object... params) {
+    protected String doInBackground(Object... params) {
 
-        url = params[0].toString();
-        authorization = params[1].toString();
-        tag = params[2].toString();
+        String url = params[0].toString();
 
         HttpPost request = new HttpPost(url);
-        request.setHeader("Accept", "application/xml");
-        request.setHeader("Content-type", "application/xml");
-        request.setHeader("Authorization", authorization);
-
-
         HttpParams httpParams = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParams, 30000);
 
@@ -45,10 +42,10 @@ public class HttpPostTask extends HttpTask {
             HttpResponse response = httpClient.execute(request);
             statusCode = response.getStatusLine().getStatusCode();
 
-            authorization = response.getFirstHeader("Authorization").getValue();
+            String authorization = response.getFirstHeader("Authorization").getValue();
             Log.i("Authorization", authorization);
 
-            return null;
+            return authorization;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,12 +54,13 @@ public class HttpPostTask extends HttpTask {
     }
 
     @Override
-    protected void onPostExecute(InputStream is) {
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
 
         if (statusCode == HttpStatus.SC_NO_CONTENT) {
-            taskHandler.httpTaskComplete(url, is, statusCode, tag);
+            taskHandler.authComplete(s);
         } else {
-            taskHandler.httpTaskFailure(url, is, statusCode, tag);
+            taskHandler.authFailed();
         }
 
     }

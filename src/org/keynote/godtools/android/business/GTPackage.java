@@ -93,6 +93,18 @@ public class GTPackage {
         return adapter.getGTPackageByLanguage(language);
     }
 
+    public static List<GTPackage> getLivePackages(Context context, String language){
+        DBAdapter adapter = DBAdapter.getInstance(context);
+        adapter.open();
+        return adapter.getLiveGTPackage(language);
+    }
+
+    public static List<GTPackage> getDraftPackages(Context context, String language) {
+        DBAdapter adapter = DBAdapter.getInstance(context);
+        adapter.open();
+        return adapter.getDraftGTPackage(language);
+    }
+
     public long addToDatabase(Context context){
         DBAdapter adapter = DBAdapter.getInstance(context);
         adapter.open();

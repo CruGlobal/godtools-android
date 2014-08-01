@@ -91,6 +91,14 @@ public class DBAdapter {
         return queryGTPackage(selection);
     }
 
+    public List<GTPackage> getDraftGTPackage(String language) {
+        String selection = String.format("%s = '%s' AND %s = 'draft'",
+                DBContract.GTPackageTable.COL_LANGUAGE, language,
+                DBContract.GTPackageTable.COL_STATUS);
+
+        return queryGTPackage(selection);
+    }
+
     public void updateGTPackage(GTPackage gtp){
         ContentValues cv = new ContentValues();
 
@@ -103,10 +111,10 @@ public class DBAdapter {
             return;
         }
 
-        String where = String.format("%s = '%s' AND %s = '%s'",
+        String where = String.format("%s = '%s' AND %s = '%s' AND %s = '%s'",
                                     DBContract.GTPackageTable.COL_CODE, gtp.getCode(),
-                                    DBContract.GTPackageTable.COL_LANGUAGE, gtp.getLanguage());
-                                    //DBContract.GTPackageTable.COL_STATUS, gtp.getStatus()); tell client to include the status on the content file
+                                    DBContract.GTPackageTable.COL_LANGUAGE, gtp.getLanguage(),
+                                    DBContract.GTPackageTable.COL_STATUS, gtp.getStatus()); //tell client to include the status on the content file
 
         db.update(DBContract.GTPackageTable.TABLE_NAME, cv, where, null);
     }

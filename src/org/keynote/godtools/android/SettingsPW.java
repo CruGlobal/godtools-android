@@ -3,7 +3,6 @@ package org.keynote.godtools.android;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -16,21 +15,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.keynote.godtools.android.business.GTLanguage;
-import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
-import org.keynote.godtools.android.fragments.AlertDialogFragment;
+import org.keynote.godtools.android.fragments.ConfirmDialogFragment;
+import org.keynote.godtools.android.http.AuthTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
-import org.keynote.godtools.android.http.HttpTask;
 import org.keynote.godtools.android.utils.Device;
 
-import java.io.InputStream;
 import java.util.Locale;
 
 public class SettingsPW extends ActionBarActivity implements
         View.OnClickListener,
-        AlertDialogFragment.OnDialogClickListener,
+        ConfirmDialogFragment.OnConfirmClickListener,
         AccessCodeDialogFragment.AccessCodeDialogListener,
-        HttpTask.HttpTaskHandler {
+        AuthTask.AuthTaskHandler {
 
     private static final String PREFS_NAME = "GodTools";
 
@@ -72,7 +69,6 @@ public class SettingsPW extends ActionBarActivity implements
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean isTranslatorEnabled = settings.getBoolean("TranslatorMode", false);
         cbTranslatorMode.setChecked(isTranslatorEnabled);
-
     }
 
     @Override
@@ -147,7 +143,7 @@ public class SettingsPW extends ActionBarActivity implements
                 showAccessCodeDialog();
             else {
                 Toast.makeText(SettingsPW.this, "Internet connection is needed to enable translator mode", Toast.LENGTH_SHORT).show();
-                toggleTranslatorMode();
+                ((CompoundButton) view).setChecked(false);
                 view.setEnabled(true);
             }
 
@@ -170,30 +166,32 @@ public class SettingsPW extends ActionBarActivity implements
 
     private void showExitTranslatorModeDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        DialogFragment frag = (DialogFragment) fm.findFragmentByTag("alert_dialog");
+        DialogFragment frag = (DialogFragment) fm.findFragmentByTag("confirm_dialog");
         if (frag == null) {
-            frag = AlertDialogFragment.newInstance(
+            frag = ConfirmDialogFragment.newInstance(
                     getString(R.string.dialog_translator_mode_title),
                     getString(R.string.dialog_translator_mode_body),
+                    getString(R.string.yes),
+                    getString(R.string.no),
                     "ExitTranslatorMode"
             );
-            frag.show(fm, "alert_dialog");
+            frag.show(fm, "confirm_dialog");
         }
     }
 
     @Override
-    public void onDialogClick(boolean positive, String tag) {
+    public void onConfirmClick(boolean positive, String tag) {
 
         if (tag.equalsIgnoreCase("ExitTranslatorMode")) {
 
             if (positive) {
                 // disable translator mode
-                Toast.makeText(SettingsPW.this, "Translator mode disabled", Toast.LENGTH_SHORT).show();
+                setResult(2345);
                 setTranslatorMode(false);
+                finish();
 
             } else {
-                // undo the switch
-                toggleTranslatorMode();
+                cbTranslatorMode.setChecked(true);
             }
 
             cbTranslatorMode.setEnabled(true);
@@ -206,20 +204,42 @@ public class SettingsPW extends ActionBarActivity implements
 
         if (positive) {
             // start the authentication
-            //authenticateAccessCode(accessCode);
-            setTranslatorMode(true);
+            if (accessCode.isEmpty()) {
+                Toast.makeText(SettingsPW.this, "Invalid Access Code", Toast.LENGTH_SHORT).show();
+                cbTranslatorMode.setChecked(false);
+                cbTranslatorMode.setEnabled(true);
+            } else {
+                showLoading("Authenticating access code");
+                GodToolsApiClient.authenticateAccessCode(accessCode, this);
+            }
 
         } else {
-            // undo the switch
-            toggleTranslatorMode();
+            cbTranslatorMode.setChecked(false);
         }
 
         cbTranslatorMode.setEnabled(true);
     }
 
-    private void toggleTranslatorMode() {
-        boolean on = cbTranslatorMode.isChecked();
-        cbTranslatorMode.setChecked(!on);
+    @Override
+    public void authComplete(String authorization) {
+        pdLoading.dismiss();
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("authorization", authorization);
+        editor.commit();
+
+        setTranslatorMode(true);
+        setResult(1234);
+        finish();
+    }
+
+    @Override
+    public void authFailed() {
+        pdLoading.dismiss();
+        Toast.makeText(SettingsPW.this, "Invalid Access Code", Toast.LENGTH_SHORT).show();
+        cbTranslatorMode.setChecked(false);
+        cbTranslatorMode.setEnabled(true);
     }
 
     private void setTranslatorMode(boolean isEnabled) {
@@ -240,125 +260,4 @@ public class SettingsPW extends ActionBarActivity implements
         pdLoading.show();
 
     }
-
-    private void authenticateAccessCode(String accessCode) {
-        String authorization = getString(R.string.key_authorization_generic);
-        showLoading("Authenticating access code");
-        GodToolsApiClient.getTranslatorToken(authorization, accessCode, "Auth", this);
-    }
-
-    @Override
-    public void httpTaskComplete(String url, InputStream is, int statusCode, String tag) {
-
-        /**
-         if (tag.equalsIgnoreCase("Auth")) {
-         new AuthTask().execute(is);
-         }
-         else if (tag.equalsIgnoreCase("CheckForUpdates")) {
-         new UpdatePackageListTask().execute(is);
-         }
-         */
-    }
-
-    @Override
-    public void httpTaskFailure(String url, InputStream is, int statusCode, String tag) {
-        setTranslatorMode(false);
-        toggleTranslatorMode();
-        pdLoading.dismiss();
-
-        if (tag.equalsIgnoreCase("Auth")) {
-            Toast.makeText(SettingsPW.this, "Authentication failed", Toast.LENGTH_SHORT).show();
-        } else if (tag.equalsIgnoreCase("CheckForUpdates")) {
-            Toast.makeText(SettingsPW.this, "Failed to update resources", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private class AuthTask extends AsyncTask<InputStream, Void, String> {
-
-        @Override
-        protected String doInBackground(InputStream... params) {
-            InputStream is = params[0];
-
-            String authorization = GTPackageReader.processAuthResponse(is);
-
-            if (authorization != null) {
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString("authorization", authorization);
-                editor.commit();
-            }
-
-            return authorization;
-        }
-
-        @Override
-        protected void onPostExecute(String authorization) {
-            super.onPostExecute(authorization);
-            pdLoading.dismiss();
-
-            Toast.makeText(SettingsPW.this, "Translator mode enabled", Toast.LENGTH_SHORT).show();
-
-            /**
-             pdLoading.setMessage("Checking for update...");
-             GodToolsApiClient.getListOfPackages(authorization, "CheckForUpdates", SettingsPW.this);
-             */
-        }
-    }
-    /**
-     private class UpdatePackageListTask extends AsyncTask<InputStream, Void, Void> {
-
-     DBAdapter mAdapter;
-
-     @Override protected void onPreExecute() {
-     super.onPreExecute();
-     pdLoading.setMessage("Updating resources...");
-     mAdapter = DBAdapter.getInstance(SettingsPW.this);
-     }
-
-     @Override protected Void doInBackground(InputStream... params) {
-     InputStream is = params[0];
-     // update the database
-     List<GTLanguage> languageList = GTPackageReader.processMetaResponse(is);
-     mAdapter.open();
-     for (GTLanguage gtl : languageList) {
-
-     // check if language is already in the db
-     GTLanguage dbLanguage = mAdapter.getGTLanguage(gtl.getLanguageCode());
-     if (dbLanguage == null)
-     mAdapter.insertGTLanguage(gtl);
-
-     dbLanguage = mAdapter.getGTLanguage(gtl.getLanguageCode());
-     for (GTPackage gtp : gtl.getPackages()) {
-
-     // check if a new package is available for download or an existing package has been updated
-     GTPackage dbPackage = mAdapter.getGTPackage(gtp.getCode(), gtp.getLanguage());
-     if (dbPackage == null) {
-     mAdapter.insertGTPackage(gtp);
-     dbLanguage.setDownloaded(false);
-     } else if (gtp.getVersion() > dbPackage.getVersion()) {
-     mAdapter.updateGTPackage(gtp);
-     dbLanguage.setDownloaded(false);
-     }
-     }
-
-     mAdapter.updateGTLanguage(dbLanguage);
-     }
-
-     return null;
-     }
-
-     @Override protected void onPostExecute(Void aVoid) {
-     super.onPostExecute(aVoid);
-     pdLoading.dismiss();
-
-     SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-     SharedPreferences.Editor editor = settings.edit();
-     editor.putString(GTLanguage.KEY_PARALLEL, "");
-     editor.commit();
-
-     Toast.makeText(SettingsPW.this, "Translator mode is enabled", Toast.LENGTH_SHORT).show();
-     mAdapter.close();
-     }
-     }
-     */
 }

@@ -13,6 +13,17 @@
         android:scaleType="fitCenter"
         android:layout_marginRight="20dp"/>
 
+    <View
+        android:id="@+id/vGray"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignTop="@+id/ivIcon"
+        android:layout_alignBottom="@+id/ivIcon"
+        android:layout_alignLeft="@+id/ivIcon"
+        android:layout_alignRight="@+id/ivIcon"
+        android:background="#90000000"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/tvPackageName"
         android:layout_width="wrap_content"

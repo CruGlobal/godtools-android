@@ -12,6 +12,6 @@
         android:id="@+id/menu_settings"
         android:title="Settings"
         godtools:showAsAction="always"
-        android:icon="@android:drawable/ic_menu_preferences"/>
+        android:icon="@drawable/ic_menu_preferences"/>
 
 </menu>

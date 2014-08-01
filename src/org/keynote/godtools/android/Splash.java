@@ -76,12 +76,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         languageParallel = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
-        boolean isTranslatorEnabled = settings.getBoolean("TranslatorMode", false);
-        if (isTranslatorEnabled) {
-            authorization = settings.getString("authorization", getString(R.string.key_authorization_generic));
-        } else {
-            authorization = getString(R.string.key_authorization_generic);
-        }
+        authorization = getString(R.string.key_authorization_generic);
 
         if (isFirstLaunch()) {
             new PrepareInitialContentTask((SnuffyApplication) getApplication()).execute((Void) null);

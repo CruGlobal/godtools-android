@@ -92,12 +92,20 @@ public class GTPackageReader {
                 String configFileName = element.getAttribute("config");
                 String language = element.getAttribute("language");
                 String icon = element.getAttribute("icon");
+                String status = element.getAttribute("status");
 
                 GTPackage gtp = new GTPackage();
                 gtp.setCode(code);
                 gtp.setConfigFileName(configFileName);
                 gtp.setLanguage(language);
                 gtp.setIcon(icon);
+
+                if (status.isEmpty()) {
+                    gtp.setStatus("live");
+                }
+                else {
+                    gtp.setStatus(status);
+                }
 
                 packageList.add(gtp);
             }
@@ -136,12 +144,20 @@ public class GTPackageReader {
                 String configFileName = element.getAttribute("config");
                 String language = element.getAttribute("language");
                 String icon = element.getAttribute("icon");
+                String status = element.getAttribute("status");
 
                 GTPackage gtp = new GTPackage();
                 gtp.setCode(code);
                 gtp.setConfigFileName(configFileName);
                 gtp.setLanguage(language);
                 gtp.setIcon(icon);
+
+                if (status.isEmpty()) {
+                    gtp.setStatus("live");
+                }
+                else {
+                    gtp.setStatus(status);
+                }
 
                 packageList.add(gtp);
             }

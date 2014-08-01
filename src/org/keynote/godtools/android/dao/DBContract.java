@@ -45,8 +45,6 @@ public class DBContract {
         public static final String COL_CODE = "code";
         public static final String COL_IS_DOWNLOADED = "is_downloaded";
 
-        public static final String COL_ARE_DRAFTS_AVAILABLE = "are_drafts_available";
-
         public static final String SQL_CREATE_GTLANGUAGES = "CREATE TABLE "
                 + GTLanguageTable.TABLE_NAME + "("
                 + GTLanguageTable._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP
@@ -54,6 +52,21 @@ public class DBContract {
                 + GTLanguageTable.COL_IS_DOWNLOADED + INTEGER_TYPE + ")";
 
         public static final String SQL_DELETE_GTLANGUAGES = "DROP TABLE IF EXISTS "
+                + GTLanguageTable.TABLE_NAME;
+    }
+
+    public static abstract class GTDraftLanguageTable implements BaseColumns {
+        public static final String TABLE_NAME = "gtdraftlanguages";
+        public static final String COL_CODE = "code";
+        public static final String COL_IS_DOWNLOADED = "is_downloaded";
+
+        public static final String SQL_CREATE_GTDRAFTLANGUAGES = "CREATE TABLE "
+                + GTLanguageTable.TABLE_NAME + "("
+                + GTLanguageTable._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP
+                + GTLanguageTable.COL_CODE + TEXT_TYPE + COMMA_SEP
+                + GTLanguageTable.COL_IS_DOWNLOADED + INTEGER_TYPE + ")";
+
+        public static final String SQL_DELETE_GTDRAFTLANGUAGES = "DROP TABLE IF EXISTS "
                 + GTLanguageTable.TABLE_NAME;
     }
 

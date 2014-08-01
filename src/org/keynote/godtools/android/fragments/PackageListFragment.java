@@ -2,8 +2,6 @@ package org.keynote.godtools.android.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -85,13 +83,11 @@ public class PackageListFragment extends ListFragment {
     private class PackageListAdapter extends ArrayAdapter<GTPackage> {
 
         private List<GTPackage> listPackages;
-        private Context context;
         private LayoutInflater inflater;
         private boolean mIsEnabled;
 
         public PackageListAdapter(Context context, List<GTPackage> listPackages) {
             super(context, R.layout.list_item_package, listPackages);
-            this.context = context;
             this.listPackages = listPackages;
             this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             this.mIsEnabled = true;
@@ -110,6 +106,7 @@ public class PackageListFragment extends ListFragment {
                 holder = new ViewHolder();
                 holder.ivIcon = (ImageView) convertView.findViewById(R.id.ivIcon);
                 holder.tvPackageName = (TextView) convertView.findViewById(R.id.tvPackageName);
+                holder.vGray = convertView.findViewById(R.id.vGray);
 
                 convertView.setTag(holder);
 
@@ -117,18 +114,17 @@ public class PackageListFragment extends ListFragment {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            /**
-             Drawable d = context.getResources().getDrawable(R.drawable.homescreen_kgp_icon_2x);
-             if (mIsEnabled)
-             d.setColorFilter(null);
-             else
-             d.setColorFilter(0x90000000, PorterDuff.Mode.SRC_OVER);
+            if (mIsEnabled)
+                holder.vGray.setVisibility(View.GONE);
+            else
+                holder.vGray.setVisibility(View.VISIBLE);
 
-             holder.ivIcon.setImageDrawable(d);
-             */
+            String name = gtp.getName();
+            if (gtp.getStatus().equalsIgnoreCase("draft"))
+                name = String.format("%s (v%s)", name, gtp.getVersion());
 
             // set values
-            holder.tvPackageName.setText(gtp.getName());
+            holder.tvPackageName.setText(name);
             BitmapWorkerTask task = new BitmapWorkerTask(getActivity(), holder.ivIcon);
             task.execute(gtp.getIcon());
 
@@ -138,6 +134,7 @@ public class PackageListFragment extends ListFragment {
         private class ViewHolder {
             ImageView ivIcon;
             TextView tvPackageName;
+            View vGray;
         }
 
         public void refresh(List<GTPackage> packageList) {
