@@ -114,6 +114,6 @@ public class GTPackage {
     public void update(Context context) {
         DBAdapter adapter = DBAdapter.getInstance(context);
         adapter.open();
-        adapter.updateGTPackage(this);
+        adapter.upsertGTPackage(this);
     }
 }

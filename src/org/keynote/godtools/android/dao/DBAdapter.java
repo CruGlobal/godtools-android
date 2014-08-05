@@ -99,24 +99,27 @@ public class DBAdapter {
         return queryGTPackage(selection);
     }
 
-    public void updateGTPackage(GTPackage gtp){
+    public void upsertGTPackage(GTPackage gtp){
         ContentValues cv = new ContentValues();
 
-        if (gtp.getVersion() > 0) {
-            cv.put(DBContract.GTPackageTable.COL_VERSION, gtp.getVersion());
-        } else if (gtp.getConfigFileName() != null) {
-            cv.put(DBContract.GTPackageTable.COL_CONFIG_FILE_NAME, gtp.getConfigFileName());
-            cv.put(DBContract.GTPackageTable.COL_ICON, gtp.getIcon());
-        } else {
-            return;
-        }
+        cv.put(DBContract.GTPackageTable.COL_NAME, gtp.getName());
+        cv.put(DBContract.GTPackageTable.COL_LANGUAGE, gtp.getLanguage());
+        cv.put(DBContract.GTPackageTable.COL_CODE, gtp.getCode());
+        cv.put(DBContract.GTPackageTable.COL_STATUS, gtp.getStatus());
+        cv.put(DBContract.GTPackageTable.COL_CONFIG_FILE_NAME, gtp.getConfigFileName());
+        cv.put(DBContract.GTPackageTable.COL_ICON, gtp.getIcon());
+        cv.put(DBContract.GTPackageTable.COL_VERSION, gtp.getVersion());
 
         String where = String.format("%s = '%s' AND %s = '%s' AND %s = '%s'",
-                                    DBContract.GTPackageTable.COL_CODE, gtp.getCode(),
-                                    DBContract.GTPackageTable.COL_LANGUAGE, gtp.getLanguage(),
-                                    DBContract.GTPackageTable.COL_STATUS, gtp.getStatus()); //tell client to include the status on the content file
+                DBContract.GTPackageTable.COL_CODE, gtp.getCode(),
+                DBContract.GTPackageTable.COL_LANGUAGE, gtp.getLanguage(),
+                DBContract.GTPackageTable.COL_STATUS, gtp.getStatus());
 
-        db.update(DBContract.GTPackageTable.TABLE_NAME, cv, where, null);
+        int numberOfAffectedRows = db.update(DBContract.GTPackageTable.TABLE_NAME, cv, where, null);
+
+        if (numberOfAffectedRows == 0) {
+            db.insert(DBContract.GTPackageTable.TABLE_NAME, null, cv);
+        }
     }
 
     public void updateGTLanguage(GTLanguage gtl){

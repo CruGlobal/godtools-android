@@ -2,106 +2,78 @@
 <languages>
     <language code="pl">
         <packages>
-            <package code="fourlaws" name="The Four Spiritual Laws" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="tgl">
         <packages>
-            <package code="fourlaws" name="The Four Spiritual Laws" status="live" version="1.1"/>
-            <package code="kgp" name="Knowing God Personally" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="en">
         <packages>
-            <package code="kgp" name="Knowing God Personally" status="live" version="1.1"/>
-            <package code="fourlaws" name="The Four Spiritual Laws" status="live" version="1.1"/>
-            <package code="satisfied" name="Satisfied?" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="uk">
         <packages>
-            <package code="fourlaws" name="The Four Spiritual Laws" status="live" version="1.1"/>
-            <package code="kgp" name="Knowing God Personally" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="fr">
         <packages>
-            <package code="fourlaws" name="The Four Spiritual Laws" status="live" version="1.1"/>
-            <package code="kgp" name="Knowing God Personally" status="live" version="1.1"/>
-            <package code="satisfied" name="Satisfied?" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="ru">
         <packages>
-            <package code="fourlaws" name="The Four Spiritual Laws" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="sk">
         <packages>
-            <package code="kgp" name="Knowing God Personally" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="cs">
         <packages>
-            <package code="fourlaws" name="The Four Spiritual Laws" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="lt">
         <packages>
-            <package code="fourlaws" name="The Four Spiritual Laws" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="zh">
         <packages>
-            <package code="kgp" name="Knowing God Personally" status="live" version="1.1"/>
-            <package code="fourlaws" name="The Four Spiritual Laws" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="th">
         <packages>
-            <package code="fourlaws" name="The Four Spiritual Laws" status="live" version="1.1"/>
-            <package code="kgp" name="Knowing God Personally" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="hu">
         <packages>
-            <package code="kgp" name="Knowing God Personally" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="ko">
         <packages>
-            <package code="fourlaws" name="The Four Spiritual Laws" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="es">
         <packages>
-            <package code="fourlaws" name="The Four Spiritual Laws" status="live" version="1.1"/>
-            <package code="kgp" name="Knowing God Personally" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="et">
         <packages>
-            <package code="kgp" name="Knowing God Personally" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="tr">
         <packages>
-            <package code="fourlaws" name="The Four Spiritual Laws" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="nso">
         <packages>
-            <package code="fourlaws" name="The Four Spiritual Laws" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="sq">
         <packages>
-            <package code="fourlaws" name="The Four Spiritual Laws" status="live" version="1.1"/>
         </packages>
     </language>
     <language code="am-ET">
         <packages>
-            <package code="fourlaws" name="The Four Spiritual Laws" status="live" version="1.1"/>
         </packages>
     </language>
 </languages>

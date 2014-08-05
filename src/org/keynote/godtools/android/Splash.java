@@ -204,27 +204,24 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
                     os = null;
                 }
 
-                // meta.xml file contains information about the packages available on the server
+                // meta.xml file contains the list of supported languages
                 InputStream metaStream = manager.open("meta.xml");
                 List<GTLanguage> languageList = GTPackageReader.processMetaResponse(metaStream);
                 for (GTLanguage gtl : languageList) {
                     gtl.addToDatabase(mContext);
-                    for (GTPackage gtp : gtl.getPackages()) {
-                        gtp.addToDatabase(mContext);
-                    }
                 }
 
                 // contents.xml file contains information about the bundled english resources
                 InputStream contentsStream = manager.open("contents.xml");
                 List<GTPackage> packageList = GTPackageReader.processContentFile(contentsStream);
                 for (GTPackage gtp : packageList) {
-                    gtp.update(mContext);
+                    gtp.addToDatabase(mContext);
                 }
 
                 // english resources should be marked as downloaded
                 GTLanguage gtlEnglish = new GTLanguage("en");
                 gtlEnglish.setDownloaded(true);
-                gtlEnglish.update(Splash.this);
+                gtlEnglish.update(mContext);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -271,11 +268,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
                     // check if a new package is available for download or an existing package has been updated
                     GTPackage dbPackage = mAdapter.getGTPackage(gtp.getCode(), gtp.getLanguage(), gtp.getStatus());
-                    if (dbPackage == null) {
-                        mAdapter.insertGTPackage(gtp);
-                        dbLanguage.setDownloaded(false);
-                    } else if (gtp.getVersion() > dbPackage.getVersion()) {
-                        mAdapter.updateGTPackage(gtp);
+                    if (dbPackage == null || (gtp.getVersion() > dbPackage.getVersion())) {
                         dbLanguage.setDownloaded(false);
                     }
                 }
@@ -292,20 +285,43 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
             gtlPrimary = mAdapter.getGTLanguage(languagePrimary);
             gtlParallel = mAdapter.getGTLanguage(languageParallel);
 
-            if (isFirst && shouldUpdateLanguageSettings()) {
-                // download resources for the phones language
-                languagePhone = ((SnuffyApplication) getApplication()).getDeviceLocale().getLanguage();
-                Locale mLocale = new Locale(languagePhone);
-                showLoading(String.format(getString(R.string.download_resources), mLocale.getDisplayName()));
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        languagePhone,
-                        KEY_NEW_LANGUAGE,
-                        authorization,
-                        Splash.this);
+            if (isFirst) {
+
+                if (shouldUpdateLanguageSettings()) {
+                    // download resources for the phone's language
+                    languagePhone = ((SnuffyApplication) getApplication()).getDeviceLocale().getLanguage();
+                    Locale mLocale = new Locale(languagePhone);
+                    showLoading(String.format(getString(R.string.download_resources), mLocale.getDisplayName()));
+                    GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                            languagePhone,
+                            KEY_NEW_LANGUAGE,
+                            authorization,
+                            Splash.this);
+                } else if (!gtlPrimary.isDownloaded()) {
+                    // update resources for the primary language
+                    showLoading(String.format(getString(R.string.update_resources), gtlPrimary.getLanguageName()));
+                    GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                            languagePrimary,
+                            KEY_UPDATE_PRIMARY,
+                            authorization,
+                            Splash.this);
+                } else {
+                    goToMainActivity();
+                }
 
             } else {
 
-                if (gtlPrimary.isDownloaded()) {
+                if (!gtlPrimary.isDownloaded()) {
+                    // update resources for the primary language
+                    showLoading(String.format(getString(R.string.update_resources), gtlPrimary.getLanguageName()));
+                    GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                            languagePrimary,
+                            KEY_UPDATE_PRIMARY,
+                            authorization,
+                            Splash.this);
+
+                } else {
+                    // update the resources for the parallel language
                     if (gtlParallel != null && !gtlParallel.isDownloaded()) {
                         showLoading(String.format(getString(R.string.update_resources), gtlParallel.getLanguageName()));
                         GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
@@ -318,13 +334,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
                         goToMainActivity();
                     }
 
-                } else {
-                    showLoading(String.format(getString(R.string.update_resources), gtlPrimary.getLanguageName()));
-                    GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                            languagePhone,
-                            KEY_UPDATE_PRIMARY,
-                            authorization,
-                            Splash.this);
                 }
             }
 

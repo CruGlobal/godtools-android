@@ -41,14 +41,12 @@ public class GTPackageReader {
                 for (int j =0; j < nlPackages.getLength(); j++){
                     Element element = (Element) nlPackages.item(j);
 
-                    String name = element.getAttribute("name");
                     String code = element.getAttribute("code");
                     double version = Double.valueOf(element.getAttribute("version"));
                     String status = element.getAttribute("status");
 
                     GTPackage gtp = new GTPackage();
                     gtp.setCode(code);
-                    gtp.setName(name);
                     gtp.setVersion(version);
                     gtp.setLanguage(languageCode);
                     gtp.setStatus(status);
@@ -93,19 +91,17 @@ public class GTPackageReader {
                 String language = element.getAttribute("language");
                 String icon = element.getAttribute("icon");
                 String status = element.getAttribute("status");
+                String name = element.getAttribute("name");
+                double version = Double.parseDouble(element.getAttribute("version"));
 
                 GTPackage gtp = new GTPackage();
                 gtp.setCode(code);
                 gtp.setConfigFileName(configFileName);
                 gtp.setLanguage(language);
                 gtp.setIcon(icon);
-
-                if (status.isEmpty()) {
-                    gtp.setStatus("live");
-                }
-                else {
-                    gtp.setStatus(status);
-                }
+                gtp.setStatus(status);
+                gtp.setName(name);
+                gtp.setVersion(version);
 
                 packageList.add(gtp);
             }
@@ -145,19 +141,17 @@ public class GTPackageReader {
                 String language = element.getAttribute("language");
                 String icon = element.getAttribute("icon");
                 String status = element.getAttribute("status");
+                String name = element.getAttribute("name");
+                double version = Double.parseDouble(element.getAttribute("version"));
 
                 GTPackage gtp = new GTPackage();
                 gtp.setCode(code);
                 gtp.setConfigFileName(configFileName);
                 gtp.setLanguage(language);
                 gtp.setIcon(icon);
-
-                if (status.isEmpty()) {
-                    gtp.setStatus("live");
-                }
-                else {
-                    gtp.setStatus(status);
-                }
+                gtp.setStatus(status);
+                gtp.setName(name);
+                gtp.setVersion(version);
 
                 packageList.add(gtp);
             }

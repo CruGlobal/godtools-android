@@ -90,7 +90,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
             DBAdapter adapter = DBAdapter.getInstance(mContext);
             adapter.open();
             for (GTPackage gtp : packageList) {
-                adapter.updateGTPackage(gtp);
+                adapter.upsertGTPackage(gtp);
             }
             adapter.close();
 
