@@ -13,10 +13,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.imagemanager.BitmapWorkerTask;
+import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
+import java.io.File;
 import java.util.List;
 
 public class PackageListFragment extends ListFragment {
@@ -85,12 +88,17 @@ public class PackageListFragment extends ListFragment {
         private List<GTPackage> listPackages;
         private LayoutInflater inflater;
         private boolean mIsEnabled;
+        private String resourcesDir;
 
         public PackageListAdapter(Context context, List<GTPackage> listPackages) {
             super(context, R.layout.list_item_package, listPackages);
             this.listPackages = listPackages;
             this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             this.mIsEnabled = true;
+
+            SnuffyApplication mApp = (SnuffyApplication) getActivity().getApplication();
+            resourcesDir = mApp.getDocumentsDir().getAbsolutePath() + "/resources/";
+
         }
 
         @Override
@@ -125,8 +133,10 @@ public class PackageListFragment extends ListFragment {
 
             // set values
             holder.tvPackageName.setText(name);
-            BitmapWorkerTask task = new BitmapWorkerTask(getActivity(), holder.ivIcon);
-            task.execute(gtp.getIcon());
+
+            Picasso.with(getActivity())
+                    .load(new File(resourcesDir + gtp.getIcon()))
+                    .into(holder.ivIcon);
 
             return convertView;
         }

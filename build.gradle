@@ -9,15 +9,14 @@ buildscript {
 apply plugin: 'android'
 
 dependencies {
-    compile "com.android.support:appcompat-v7:19.1.+"
+    compile 'com.android.support:appcompat-v7:19.1.+'
     compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.google.android.gms:play-services:4.3.23'
 }
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.1.0"
-
+    buildToolsVersion '19.1.0'
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -40,5 +39,10 @@ android {
         // by a similar customization.
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
+    }
+    defaultConfig {}
+    productFlavors {
+    }
+    buildTypes {
     }
 }

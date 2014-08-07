@@ -1,6 +1,5 @@
 package org.keynote.godtools.android;
 
-import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
@@ -16,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -453,16 +451,19 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
 
     @Override
     public void downloadTaskFailure(String url, String filePath, String tag) {
-        // TODO: show dialog to inform the user that the download failed
-        Toast.makeText(MainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
-        // if drafts failed delete all drafts
+
+        if (tag.equalsIgnoreCase("draft")) {
+            Toast.makeText(MainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(MainPW.this, "Failed to download resources", Toast.LENGTH_SHORT).show();
+        }
         hideLoading();
     }
 
     @Override
     public void httpTaskFailure(String url, InputStream is, int statusCode, String tag) {
         hideLoading();
-        Toast.makeText(MainPW.this, "failed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
     }
 
     private class UpdateDraftListTask extends AsyncTask<InputStream, Void, Boolean> {
@@ -488,19 +489,19 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
             return packagesDraft.size() != 0;
 
             /**
-            if (packagesDraft.size() == 0) {
-                return false;
-            }
+             if (packagesDraft.size() == 0) {
+             return false;
+             }
 
-            for (GTPackage gtp : packagesDraft) {
+             for (GTPackage gtp : packagesDraft) {
 
-                GTPackage dbPackage = mAdapter.getGTPackage(gtp.getCode(), gtp.getLanguage(), gtp.getStatus());
-                if (dbPackage == null || (gtp.getVersion() > dbPackage.getVersion())) {
-                    mNewDraftsAvailable = true;
-                }
-            }
-            return mNewDraftsAvailable;
-            */
+             GTPackage dbPackage = mAdapter.getGTPackage(gtp.getCode(), gtp.getLanguage(), gtp.getStatus());
+             if (dbPackage == null || (gtp.getVersion() > dbPackage.getVersion())) {
+             mNewDraftsAvailable = true;
+             }
+             }
+             return mNewDraftsAvailable;
+             */
         }
 
         @Override

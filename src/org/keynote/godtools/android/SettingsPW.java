@@ -19,6 +19,7 @@ import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
 import org.keynote.godtools.android.fragments.ConfirmDialogFragment;
 import org.keynote.godtools.android.http.AuthTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
+import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
 import java.util.Locale;
@@ -86,7 +87,7 @@ public class SettingsPW extends ActionBarActivity implements
 
         // set up parallel language views
         if (parallelLanguageCode.isEmpty()) {
-            tvParallelLanguage.setText("None");
+            tvParallelLanguage.setText(getString(R.string.none));
         } else {
             Locale localeParallel = new Locale(parallelLanguageCode);
             String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName());
@@ -101,11 +102,25 @@ public class SettingsPW extends ActionBarActivity implements
         if (resultCode != RESULT_CANCELED)
             setResult(resultCode, data);
 
+        switch (resultCode) {
+            case RESULT_CHANGED_PRIMARY: {
+                SnuffyApplication app = (SnuffyApplication) getApplication();
+                app.setAppLocale(data.getStringExtra("primaryCode"));
+                break;
+            }
+            case RESULT_DOWNLOAD_PRIMARY:
+            case RESULT_DOWNLOAD_PARALLEL:
+                finish();
+                break;
+        }
+
+        /**
         if (requestCode == REQUEST_PRIMARY && resultCode == RESULT_DOWNLOAD_PRIMARY) {
             finish();
         } else if (requestCode == REQUEST_PARALLEL && resultCode == RESULT_DOWNLOAD_PARALLEL) {
             finish();
         }
+        */
 
     }
 

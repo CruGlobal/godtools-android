@@ -112,6 +112,11 @@ public class SnuffyApplication extends Application {
     public void setAppLocale(String languageCode) {
 
         mAppLocale = new Locale(languageCode);
+
+        String name = mAppLocale.getDisplayName();
+        if (name == null || name.isEmpty())
+            mAppLocale = new Locale("en");
+
         Locale.setDefault(mAppLocale);
         Configuration config = new Configuration();
         config.locale = mAppLocale;
