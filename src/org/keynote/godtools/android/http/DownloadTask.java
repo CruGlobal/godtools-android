@@ -17,21 +17,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
 
-public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
+public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
     private DownloadTaskHandler mTaskHandler;
     private Context mContext;
-    private String url, filePath, tag;
+    private String url, filePath, tag, langCode;
     private String authorization;
 
-    public static interface  DownloadTaskHandler {
+    public static interface DownloadTaskHandler {
         void downloadTaskComplete(String url, String filePath, String tag);
+
         void downloadTaskFailure(String url, String filePath, String tag);
     }
 
@@ -47,11 +47,13 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
         filePath = params[1].toString();
         tag = params[2].toString();
         authorization = params[3].toString();
+        langCode = params[4].toString();
 
         try {
             URL mURL = new URL(url);
             URLConnection c = mURL.openConnection();
             c.setConnectTimeout(10000);
+            c.setReadTimeout(30000);
             c.addRequestProperty("Authorization", authorization);
             c.addRequestProperty("Interpreter", "1");
 
@@ -86,12 +88,19 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
             File contentFile = new File(content);
             List<GTPackage> packageList = GTPackageReader.processContentFile(contentFile);
 
-            // save the parsed packages to database
             DBAdapter adapter = DBAdapter.getInstance(mContext);
             adapter.open();
+
+            // delete packages
+            if (tag.equals("draft")) {
+                adapter.deletePackages(langCode, "draft");
+            }
+
+            // save the parsed packages to database
             for (GTPackage gtp : packageList) {
                 adapter.upsertGTPackage(gtp);
             }
+
             adapter.close();
 
             // delete package.zip and contents.xml
@@ -106,7 +115,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
 
             File[] fileList = unzipDir.listFiles();
             File oldFile;
-            for (int i = 0; i < fileList.length; i++){
+            for (int i = 0; i < fileList.length; i++) {
                 oldFile = fileList[i];
                 inputStream = new FileInputStream(oldFile);
                 outputStream = new FileOutputStream(resourcesDir + File.separator + oldFile.getName());
@@ -125,7 +134,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean>{
 
             return true;
 
-        } catch (ConnectTimeoutException e){
+        } catch (ConnectTimeoutException e) {
             e.printStackTrace();
             return false;
         } catch (MalformedURLException e) {

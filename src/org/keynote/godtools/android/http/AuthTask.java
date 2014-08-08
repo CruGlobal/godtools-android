@@ -34,7 +34,8 @@ public class AuthTask extends AsyncTask<Object, Void, String> {
 
         HttpPost request = new HttpPost(url);
         HttpParams httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParams, 30000);
+        HttpConnectionParams.setConnectionTimeout(httpParams, 10000);
+        HttpConnectionParams.setSoTimeout(httpParams, 10000);
 
         HttpClient httpClient = new DefaultHttpClient(httpParams);
 

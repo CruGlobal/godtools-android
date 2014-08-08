@@ -50,7 +50,7 @@ public class DBAdapter {
         return db.insert(DBContract.GTPackageTable.TABLE_NAME, null, cv);
     }
 
-    public long insertGTLanguage(GTLanguage gtLanguage){
+    public long insertGTLanguage(GTLanguage gtLanguage) {
         ContentValues cv = new ContentValues();
         cv.put(DBContract.GTLanguageTable.COL_CODE, gtLanguage.getLanguageCode());
         cv.put(DBContract.GTLanguageTable.COL_IS_DOWNLOADED, gtLanguage.isDownloaded());
@@ -58,35 +58,35 @@ public class DBAdapter {
         return db.insert(DBContract.GTLanguageTable.TABLE_NAME, null, cv);
     }
 
-    public List<GTLanguage> getAllLanguages(){
+    public List<GTLanguage> getAllLanguages() {
         return queryGTLanguage(null);
     }
 
-    public GTPackage getGTPackage(String code, String language, String status){
+    public GTPackage getGTPackage(String code, String language, String status) {
         String selection = String.format("%s = '%s' AND %s = '%s' AND %s = '%s'",
-                                        DBContract.GTPackageTable.COL_CODE, code,
-                                        DBContract.GTPackageTable.COL_LANGUAGE, language,
-                                        DBContract.GTPackageTable.COL_STATUS, status);
+                DBContract.GTPackageTable.COL_CODE, code,
+                DBContract.GTPackageTable.COL_LANGUAGE, language,
+                DBContract.GTPackageTable.COL_STATUS, status);
         List<GTPackage> packages = queryGTPackage(selection);
         return packages.size() > 0 ? packages.get(0) : null;
     }
 
-    public GTLanguage getGTLanguage(String code){
+    public GTLanguage getGTLanguage(String code) {
         String selection = String.format("%s = '%s'",
-                                        DBContract.GTLanguageTable.COL_CODE, code);
+                DBContract.GTLanguageTable.COL_CODE, code);
         List<GTLanguage> languages = queryGTLanguage(selection);
         return languages.size() > 0 ? languages.get(0) : null;
     }
 
-    public List<GTPackage> getGTPackageByLanguage(String language){
+    public List<GTPackage> getGTPackageByLanguage(String language) {
         String selection = String.format("%s = '%s'", DBContract.GTPackageTable.COL_LANGUAGE, language);
         return queryGTPackage(selection);
     }
 
     public List<GTPackage> getLiveGTPackage(String language) {
         String selection = String.format("%s = '%s' AND %s = 'live'",
-                                        DBContract.GTPackageTable.COL_LANGUAGE, language,
-                                        DBContract.GTPackageTable.COL_STATUS);
+                DBContract.GTPackageTable.COL_LANGUAGE, language,
+                DBContract.GTPackageTable.COL_STATUS);
 
         return queryGTPackage(selection);
     }
@@ -99,7 +99,15 @@ public class DBAdapter {
         return queryGTPackage(selection);
     }
 
-    public void upsertGTPackage(GTPackage gtp){
+    public void deletePackages(String language, String status){
+        String selection = String.format("%s = '%s' AND %s = '%s'",
+                DBContract.GTPackageTable.COL_LANGUAGE, language,
+                DBContract.GTPackageTable.COL_STATUS, status);
+
+        db.delete(DBContract.GTPackageTable.TABLE_NAME, selection, null);
+    }
+
+    public void upsertGTPackage(GTPackage gtp) {
         ContentValues cv = new ContentValues();
 
         cv.put(DBContract.GTPackageTable.COL_NAME, gtp.getName());
@@ -122,12 +130,12 @@ public class DBAdapter {
         }
     }
 
-    public void updateGTLanguage(GTLanguage gtl){
+    public void updateGTLanguage(GTLanguage gtl) {
         ContentValues cv = new ContentValues();
         cv.put(DBContract.GTLanguageTable.COL_IS_DOWNLOADED, gtl.isDownloaded());
 
         String where = String.format("%s = '%s'",
-                                    DBContract.GTLanguageTable.COL_CODE, gtl.getLanguageCode());
+                DBContract.GTLanguageTable.COL_CODE, gtl.getLanguageCode());
 
         db.update(DBContract.GTLanguageTable.TABLE_NAME, cv, where, null);
     }
@@ -144,7 +152,9 @@ public class DBAdapter {
                 DBContract.GTPackageTable.COL_ICON
         };
 
-        Cursor cursor = db.query(DBContract.GTPackageTable.TABLE_NAME, projection, selection, null, null, null, null);
+        String order = DBContract.GTPackageTable.COL_NAME + " ASC";
+
+        Cursor cursor = db.query(DBContract.GTPackageTable.TABLE_NAME, projection, selection, null, null, null, order);
 
         List<GTPackage> listGTPackages = new ArrayList<GTPackage>();
 
@@ -198,5 +208,4 @@ public class DBAdapter {
 
         return listGTLanguages;
     }
-
 }

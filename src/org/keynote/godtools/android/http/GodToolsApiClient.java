@@ -34,7 +34,7 @@ public class GodToolsApiClient {
         String url = BASE_URL + ENDPOINT_PACKAGES + langCode + "?compressed=true";
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + File.separator + "package.zip";
 
-        download(app.getApplicationContext(), url, filePath, tag, authorization, taskHandler);
+        download(app.getApplicationContext(), url, filePath, tag, authorization, langCode, taskHandler);
     }
 
     public static void authenticateAccessCode(String accessCode, AuthTask.AuthTaskHandler taskHandler){
@@ -47,7 +47,7 @@ public class GodToolsApiClient {
         String url = BASE_URL + ENDPOINT_DRAFTS + langCode + "?compressed=true";
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + File.separator + "package.zip";
 
-        download(app.getApplicationContext(), url, filePath, tag, authorization, tashHandler);
+        download(app.getApplicationContext(), url, filePath, tag, authorization, langCode, tashHandler);
     }
 
     /**
@@ -66,14 +66,14 @@ public class GodToolsApiClient {
     }
     */
 
-    private static void download(Context context, String url, String filePath, String tag, String authorization, DownloadTask.DownloadTaskHandler taskHandler) {
+    private static void download(Context context, String url, String filePath, String tag, String authorization, String langCode, DownloadTask.DownloadTaskHandler taskHandler) {
         DownloadTask dlTask = new DownloadTask(context, taskHandler);
         //dlTask.execute(url, filePath, tag);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            dlTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, filePath, tag, authorization);
+            dlTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, filePath, tag, authorization, langCode);
         } else {
-            dlTask.execute(url, filePath, tag, authorization);
+            dlTask.execute(url, filePath, tag, authorization, langCode);
         }
 
     }
