@@ -37,6 +37,8 @@ public class SettingsPW extends ActionBarActivity implements
     public static final int RESULT_DOWNLOAD_PRIMARY = 2001;
     public static final int RESULT_DOWNLOAD_PARALLEL = 2002;
     public static final int RESULT_CHANGED_PRIMARY = 2003;
+    public static final int RESULT_PREVIEW_MODE_ENABLED = 1234;
+    public static final int RESULT_PREVIEW_MODE_DISABLED = 2345;
 
     String primaryLanguageCode, parallelLanguageCode;
 
@@ -201,7 +203,7 @@ public class SettingsPW extends ActionBarActivity implements
 
             if (positive) {
                 // disable translator mode
-                setResult(2345);
+                setResult(RESULT_PREVIEW_MODE_DISABLED);
                 setTranslatorMode(false);
                 finish();
 
@@ -245,7 +247,7 @@ public class SettingsPW extends ActionBarActivity implements
         editor.commit();
 
         setTranslatorMode(true);
-        setResult(1234);
+        setResult(RESULT_PREVIEW_MODE_ENABLED);
         finish();
     }
 

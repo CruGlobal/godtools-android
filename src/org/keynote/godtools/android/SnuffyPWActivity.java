@@ -14,9 +14,11 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.AbsoluteLayout;
@@ -56,6 +58,7 @@ public class SnuffyPWActivity extends Activity {
     private int mPageHeight;
     private String mPackageTitle;
     private ProcessPackageAsync mProcessPackageAsync;
+    private GestureDetector MyGestureDetector;
 
     private String mConfigPrimary, mConfigParallel;
     private GTPackage mParallelPackage;
@@ -332,12 +335,15 @@ public class SnuffyPWActivity extends Activity {
     private void addClickHandlersToAllPages() {
         Iterator<SnuffyPage> iter = mPages.iterator();
 
-        while (iter.hasNext()) {
-            iter.next().setOnClickListener(new View.OnClickListener() {
+        MyGestureDetector = new GestureDetector(new MyGestureListener());
 
+
+        while (iter.hasNext()) {
+            iter.next().setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public void onClick(View v) {
-                    openOptionsMenu();
+                public boolean onTouch(View v, MotionEvent event) {
+                    MyGestureDetector.onTouchEvent(event);
+                    return true;
                 }
             });
         }
@@ -612,6 +618,14 @@ public class SnuffyPWActivity extends Activity {
             dismissDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);
             // TODO: COMPLETE PROCESSING ON MAIN THREAD
             completeSetup(result != 0);
+        }
+    }
+
+    private class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            openOptionsMenu();
+            return super.onSingleTapUp(e);
         }
     }
 }

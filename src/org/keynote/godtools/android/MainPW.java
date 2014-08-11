@@ -48,6 +48,8 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
     public static final int RESULT_DOWNLOAD_PRIMARY = 2001;
     public static final int RESULT_DOWNLOAD_PARALLEL = 2002;
     public static final int RESULT_CHANGED_PRIMARY = 2003;
+    public static final int RESULT_PREVIEW_MODE_ENABLED = 1234;
+    public static final int RESULT_PREVIEW_MODE_DISABLED = 2345;
 
     public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
     public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
@@ -154,7 +156,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
                         this);
                 break;
             }
-            case 1234: {
+            case RESULT_PREVIEW_MODE_ENABLED: {
                 ActionBar actionBar = getSupportActionBar();
                 actionBar.setDisplayShowCustomEnabled(true);
                 ibRefresh = (ImageButton) findViewById(R.id.ibRefresh);
@@ -177,7 +179,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
                 Toast.makeText(MainPW.this, "Translator preview mode is enabled", Toast.LENGTH_LONG).show();
                 break;
             }
-            case 2345: {
+            case RESULT_PREVIEW_MODE_DISABLED: {
                 ActionBar actionBar = getSupportActionBar();
                 actionBar.setDisplayShowCustomEnabled(false);
                 ibRefresh = null;
