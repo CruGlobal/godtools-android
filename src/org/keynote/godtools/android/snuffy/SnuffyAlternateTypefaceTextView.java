@@ -34,6 +34,22 @@ public class SnuffyAlternateTypefaceTextView
 		return this;
 	}
 
+    /**
+     * Will set the typeface on underlying TextView if the @param alternateTypeface is not null.
+     *
+     * @param alternateTypeface
+     * @param style
+     * @return
+     */
+    public SnuffyAlternateTypefaceTextView setAlternateTypeface(Typeface alternateTypeface, int style){
+
+        if (alternateTypeface != null)
+        {
+            textView.setTypeface(alternateTypeface, style);
+        }
+        return this;
+    }
+
 	/**
 	 * Get the underlying Android TextView
 	 *

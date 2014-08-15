@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.utils.Device;
+import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
+import org.keynote.godtools.android.utils.Typefaces;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,6 +39,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
 
     String primaryLanguage, parallelLanguage;
     String currentLanguage;
+    Typeface mAlternateTypeface;
     boolean isMainLang;
 
     @Override
@@ -59,6 +62,8 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
         primaryLanguage = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         parallelLanguage = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
+        handleLanguagesWithAlternateFonts(primaryLanguage);
+
         if (languageType.equalsIgnoreCase("Main Language")) {
             currentLanguage = primaryLanguage;
             isMainLang = true;
@@ -75,7 +80,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
             }
         });
 
-        LanguageAdapter adapter = new LanguageAdapter(this, languageList);
+        LanguageAdapter adapter = new LanguageAdapter(this, languageList, mAlternateTypeface);
         adapter.setCurrentLanguage(currentLanguage);
         mList.setAdapter(adapter);
         mList.setOnItemClickListener(this);
@@ -154,11 +159,13 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
         private LayoutInflater mInflater;
         private List<GTLanguage> mLanguageList;
         private String currentLanguage;
+        private Typeface tp;
 
-        public LanguageAdapter(Context context, List<GTLanguage> objects) {
+        public LanguageAdapter(Context context, List<GTLanguage> objects, Typeface typeface) {
             super(context, R.layout.languages_list_item, objects);
             this.mContext = context;
             this.mLanguageList = objects;
+            this.tp = typeface;
             this.mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
@@ -172,7 +179,6 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
                 holder = new ViewHolder();
                 holder.tvLanguage = (TextView) convertView.findViewById(R.id.tvLanguageName);
                 holder.ivDownload = (ImageView) convertView.findViewById(R.id.ivDownloadLanguage);
-                holder.tvCurrentLanguageIndicator = (TextView) convertView.findViewById(R.id.tvCurrentLanguageIndicator);
 
                 convertView.setTag(holder);
             } else {
@@ -180,14 +186,14 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
             }
 
             GTLanguage gtl = mLanguageList.get(position);
-            holder.tvLanguage.setText(gtl.getLanguageName());
-            holder.tvLanguage.setTypeface(Typeface.DEFAULT);
+            holder.tvLanguage.setTypeface(mAlternateTypeface, Typeface.NORMAL);
             holder.tvLanguage.setTextColor(mContext.getResources().getColor(R.color.gray_60));
+            holder.tvLanguage.setText(gtl.getLanguageName());
             holder.ivDownload.setVisibility(gtl.isDownloaded() ? View.GONE : View.VISIBLE);
 
             if (gtl.getLanguageCode().equalsIgnoreCase(currentLanguage)) {
                 holder.tvLanguage.setTextColor(mContext.getResources().getColor(R.color.settings_listitem_item));
-                holder.tvLanguage.setTypeface(Typeface.DEFAULT_BOLD);
+                holder.tvLanguage.setTypeface(mAlternateTypeface, Typeface.BOLD);
             }
 
             return convertView;
@@ -196,11 +202,18 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
         private class ViewHolder {
             public TextView tvLanguage;
             public ImageView ivDownload;
-            public TextView tvCurrentLanguageIndicator;
         }
 
         public void setCurrentLanguage(String currentLanguage) {
             this.currentLanguage = currentLanguage;
+        }
+    }
+
+    private void handleLanguagesWithAlternateFonts(String mAppLanguage) {
+        if (LanguagesNotSupportedByDefaultFont.contains(mAppLanguage)) {
+            mAlternateTypeface = Typefaces.get(getApplication(), LanguagesNotSupportedByDefaultFont.getPathToAlternateFont(mAppLanguage));
+        } else {
+            mAlternateTypeface = Typeface.DEFAULT;
         }
     }
 }

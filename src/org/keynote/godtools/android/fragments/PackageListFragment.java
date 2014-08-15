@@ -3,6 +3,7 @@ package org.keynote.godtools.android.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -18,6 +19,8 @@ import com.squareup.picasso.Picasso;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
+import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
+import org.keynote.godtools.android.utils.Typefaces;
 
 import java.io.File;
 import java.util.List;
@@ -29,13 +32,16 @@ public class PackageListFragment extends ListFragment {
         public void onPackageSelected(GTPackage gtPackage);
     }
 
+    private String languageCode;
     private List<GTPackage> listPackages;
     private PackageListAdapter mAdapter;
+    private Typeface mAlternateTypeface;
     private OnPackageSelectedListener mListener;
 
-    public static PackageListFragment newInstance(List<GTPackage> packages) {
+    public static PackageListFragment newInstance(String langCode, List<GTPackage> packages) {
         PackageListFragment frag = new PackageListFragment();
         frag.setPackages(packages);
+        frag.setLanguageCode(langCode);
         return frag;
     }
 
@@ -58,6 +64,8 @@ public class PackageListFragment extends ListFragment {
 
         setRetainInstance(true);
 
+        handleLanguagesWithAlternateFonts(this.languageCode);
+
         mAdapter = new PackageListAdapter(getActivity(), listPackages);
         setListAdapter(mAdapter);
     }
@@ -66,7 +74,13 @@ public class PackageListFragment extends ListFragment {
         this.listPackages = packages;
     }
 
-    public void refreshList(List<GTPackage> packages) {
+    public void setLanguageCode(String langCode) {
+        this.languageCode = langCode;
+    }
+
+    public void refreshList(String langCode, List<GTPackage> packages) {
+        this.languageCode = langCode;
+        handleLanguagesWithAlternateFonts(langCode);
         mAdapter.refresh(packages);
     }
 
@@ -76,6 +90,14 @@ public class PackageListFragment extends ListFragment {
 
     public void enable() {
         mAdapter.enableClick();
+    }
+
+    private void handleLanguagesWithAlternateFonts(String mAppLanguage) {
+        if (LanguagesNotSupportedByDefaultFont.contains(mAppLanguage)) {
+            mAlternateTypeface = Typefaces.get(getActivity(), LanguagesNotSupportedByDefaultFont.getPathToAlternateFont(mAppLanguage));
+        } else {
+            mAlternateTypeface = Typeface.DEFAULT;
+        }
     }
 
     @Override
@@ -121,6 +143,8 @@ public class PackageListFragment extends ListFragment {
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
+
+            holder.tvPackageName.setTypeface(mAlternateTypeface);
 
             if (mIsEnabled)
                 holder.vGray.setVisibility(View.GONE);

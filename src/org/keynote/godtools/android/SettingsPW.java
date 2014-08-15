@@ -3,6 +3,7 @@ package org.keynote.godtools.android;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -19,9 +20,13 @@ import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
 import org.keynote.godtools.android.fragments.ConfirmDialogFragment;
 import org.keynote.godtools.android.http.AuthTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
+import org.keynote.godtools.android.snuffy.SnuffyAlternateTypefaceTextView;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
+import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
+import org.keynote.godtools.android.utils.Typefaces;
 
+import java.lang.reflect.Type;
 import java.util.Locale;
 
 public class SettingsPW extends ActionBarActivity implements
@@ -45,6 +50,7 @@ public class SettingsPW extends ActionBarActivity implements
     TextView tvMainLanguage, tvParallelLanguage, tvAbout;
     RelativeLayout rlMainLanguage, rlParallelLanguage;
     CompoundButton cbTranslatorMode;
+    Typeface mAlternateTypeface;
 
     ProgressDialog pdLoading;
 
@@ -81,6 +87,10 @@ public class SettingsPW extends ActionBarActivity implements
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
+
+        handleLanguagesWithAlternateFonts(primaryLanguageCode);
+        tvMainLanguage = new SnuffyAlternateTypefaceTextView(tvMainLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.BOLD).get();
+        tvParallelLanguage = new SnuffyAlternateTypefaceTextView(tvParallelLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.BOLD).get();
 
         // set up primary language views
         Locale localePrimary = new Locale(primaryLanguageCode);
@@ -276,5 +286,13 @@ public class SettingsPW extends ActionBarActivity implements
         pdLoading.setMessage(msg);
         pdLoading.show();
 
+    }
+
+    private void handleLanguagesWithAlternateFonts(String mAppLanguage) {
+        if (LanguagesNotSupportedByDefaultFont.contains(mAppLanguage)) {
+            mAlternateTypeface = Typefaces.get(getApplication(), LanguagesNotSupportedByDefaultFont.getPathToAlternateFont(mAppLanguage));
+        } else {
+            mAlternateTypeface = Typeface.DEFAULT;
+        }
     }
 }

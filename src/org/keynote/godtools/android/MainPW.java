@@ -93,7 +93,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
         FragmentManager fm = getSupportFragmentManager();
         packageFrag = (PackageListFragment) fm.findFragmentByTag(TAG_LIST);
         if (packageFrag == null) {
-            packageFrag = PackageListFragment.newInstance(packageList);
+            packageFrag = PackageListFragment.newInstance(languagePrimary, packageList);
             FragmentTransaction ft = fm.beginTransaction();
             ft.add(R.id.contList, packageFrag, TAG_LIST);
             ft.commit();
@@ -114,7 +114,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
             case RESULT_CHANGED_PRIMARY: {
                 languagePrimary = data.getStringExtra("primaryCode");
                 packageList = getPackageList();
-                packageFrag.refreshList(packageList);
+                packageFrag.refreshList(languagePrimary, packageList);
 
                 SnuffyApplication app = (SnuffyApplication) getApplication();
                 app.setAppLocale(data.getStringExtra("primaryCode"));
@@ -143,7 +143,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
                 if (!languagePrimary.equalsIgnoreCase(primaryCode)) {
                     languagePrimary = primaryCode;
                     packageList = getPackageList();
-                    packageFrag.refreshList(packageList);
+                    packageFrag.refreshList(languagePrimary, packageList);
                 }
 
                 String code = data.getStringExtra("parallelCode");
@@ -173,7 +173,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
 
                 languagePrimary = primaryCode;
                 packageList = getPackageList();
-                packageFrag.refreshList(packageList);
+                packageFrag.refreshList(languagePrimary, packageList);
 
 
                 Toast.makeText(MainPW.this, "Translator preview mode is enabled", Toast.LENGTH_LONG).show();
@@ -195,7 +195,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
 
                 languagePrimary = primaryCode;
                 packageList = getPackageList();
-                packageFrag.refreshList(packageList);
+                packageFrag.refreshList(languagePrimary, packageList);
 
                 Toast.makeText(MainPW.this, "Translator preview mode is disabled", Toast.LENGTH_LONG).show();
                 break;
@@ -351,7 +351,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
         if (gtLanguage.isDownloaded()) {
             languagePrimary = gtLanguage.getLanguageCode();
             packageList = getPackageList();
-            packageFrag.refreshList(packageList);
+            packageFrag.refreshList(languagePrimary, packageList);
 
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
@@ -419,7 +419,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
             editor.commit();
 
             packageList = getPackageList();
-            packageFrag.refreshList(packageList);
+            packageFrag.refreshList(languagePrimary, packageList);
 
             SnuffyApplication app = (SnuffyApplication) getApplication();
             app.setAppLocale(languagePrimary);
@@ -444,7 +444,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
             Toast.makeText(MainPW.this, "Drafts have been updated", Toast.LENGTH_SHORT).show();
 
             packageList = getPackageList();
-            packageFrag.refreshList(packageList);
+            packageFrag.refreshList(languagePrimary, packageList);
         }
 
 
