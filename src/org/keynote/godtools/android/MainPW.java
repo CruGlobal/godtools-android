@@ -164,8 +164,11 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
                 }
 
                 languagePrimary = primaryCode;
-                packageList = getPackageList();
-                packageFrag.refreshList(languagePrimary, packageList);
+                //packageList = getPackageList();
+                //packageFrag.refreshList(languagePrimary, packageList);
+                showLoading("Downloading drafts...");
+                String authorization = settings.getString("authorization", getString(R.string.key_authorization_generic));
+                GodToolsApiClient.getListOfDrafts(authorization, primaryCode, "draft_primary", this);
 
                 Toast.makeText(MainPW.this, "Translator preview mode is enabled", Toast.LENGTH_LONG).show();
                 break;
@@ -457,8 +460,16 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
 
     @Override
     public void metaTaskFailure(InputStream is, String langCode, String tag) {
+
+        if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary")) {
+            packageList = getPackageList();
+            packageFrag.refreshList(langCode, packageList);
+        }
+
         hideLoading();
         Toast.makeText(MainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
+
+
     }
 
     @Override
@@ -468,11 +479,23 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
 
             Toast.makeText(MainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
 
-        } else if (tag.equalsIgnoreCase("primary") || tag.equalsIgnoreCase("parallel")){
+        } else if (tag.equalsIgnoreCase("draft_primary")) {
+
+            packageList = getPackageList();
+            packageFrag.refreshList(langCode, packageList);
+            Toast.makeText(MainPW.this, "Failed to download drafts", Toast.LENGTH_SHORT).show();
+
+        } else if (tag.equalsIgnoreCase("draft_parallel")) {
+
+            // do nothing
+
+        }
+        else if (tag.equalsIgnoreCase("primary") || tag.equalsIgnoreCase("parallel")){
 
             Toast.makeText(MainPW.this, "Failed to download resources", Toast.LENGTH_SHORT).show();
 
         }
+
         hideLoading();
     }
 
