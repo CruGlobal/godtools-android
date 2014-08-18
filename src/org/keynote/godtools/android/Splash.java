@@ -22,7 +22,7 @@ import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
-import org.keynote.godtools.android.http.HttpTask;
+import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class Splash extends Activity implements DownloadTask.DownloadTaskHandler, HttpTask.HttpTaskHandler {
+public class Splash extends Activity implements DownloadTask.DownloadTaskHandler, MetaTask.MetaTaskHandler {
 
     private static final String LOG_TAG = "splash";
 
@@ -341,7 +341,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         }
     }
 
-
     private void copyFile(InputStream in, OutputStream out) throws IOException {
         byte[] buffer = new byte[1024];
         int read;
@@ -352,39 +351,33 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
     private void checkForUpdates() {
         showLoading(getString(R.string.check_update));
-        GodToolsApiClient.getListOfPackages(authorization, "", Splash.this);
+        GodToolsApiClient.getListOfPackages(authorization, "meta", Splash.this);
     }
 
     @Override
-    public void httpTaskComplete(String url, InputStream is, int statusCode, String tag) {
+    public void metaTaskComplete(InputStream is, String langCode, String tag) {
 
         new UpdatePackageListTask().execute(is);
 
     }
 
     @Override
-    public void httpTaskFailure(String url, InputStream is, int statusCode, String tag) {
-        // Toast.makeText(Splash.this, "Failed to update resources", Toast.LENGTH_SHORT).show();
-        goToMainActivity();
-    }
-
-    @Override
-    public void downloadTaskComplete(String url, String filePath, String tag) {
+    public void downloadTaskComplete(String url, String filePath, String langCode, String tag) {
 
         hideLoading();
 
         if (tag.equalsIgnoreCase(KEY_NEW_LANGUAGE)) {
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, languagePhone);
+            editor.putString(GTLanguage.KEY_PRIMARY, langCode);
             editor.commit();
 
-            GTLanguage gtl = new GTLanguage(languagePhone);
+            GTLanguage gtl = new GTLanguage(langCode);
             gtl.setDownloaded(true);
             gtl.update(Splash.this);
 
             SnuffyApplication app = (SnuffyApplication) getApplication();
-            app.setAppLocale(languagePhone);
+            app.setAppLocale(langCode);
 
             goToMainActivity();
 
@@ -416,7 +409,14 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
     }
 
     @Override
-    public void downloadTaskFailure(String url, String filePath, String tag) {
+    public void metaTaskFailure(InputStream is, String langCode, String tag) {
+
+        goToMainActivity();
+
+    }
+
+    @Override
+    public void downloadTaskFailure(String url, String filePath, String langCode, String tag) {
         // TODO: show dialog to inform the user that the download failed
         finish();
     }
