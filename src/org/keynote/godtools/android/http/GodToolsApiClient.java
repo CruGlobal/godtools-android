@@ -18,16 +18,16 @@ public class GodToolsApiClient {
     private static final String ENDPOINT_DRAFTS = "drafts/";
     private static final String ENDPOINT_AUTH = "auth/";
 
-    public static void getListOfPackages(String authorization, String tag, HttpTask.HttpTaskHandler taskHandler) {
-        HttpGetTask getTask = new HttpGetTask(taskHandler);
+    public static void getListOfPackages(String authorization, String tag, MetaTask.MetaTaskHandler taskHandler){
+        MetaTask metaTask = new MetaTask(taskHandler);
         String url = BASE_URL + ENDPOINT_META;
-        getTask.execute(url, authorization, tag);
+        metaTask.execute(url, authorization, "", tag);
     }
 
-    public static void getListOfDrafts(String authorization, String language, String tag, HttpTask.HttpTaskHandler taskHandler){
-        HttpGetTask draftTask = new HttpGetTask(taskHandler);
+    public static void getListOfDrafts(String authorization, String language, String tag, MetaTask.MetaTaskHandler taskHandler){
+        MetaTask draftTask = new MetaTask(taskHandler);
         String url = BASE_URL + ENDPOINT_META + language;
-        draftTask.execute(url, authorization, tag);
+        draftTask.execute(url, authorization, language, tag);
     }
 
     public static void downloadLanguagePack(SnuffyApplication app, String langCode, String tag, String authorization, DownloadTask.DownloadTaskHandler taskHandler) {

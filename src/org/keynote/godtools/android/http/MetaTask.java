@@ -1,5 +1,7 @@
 package org.keynote.godtools.android.http;
 
+import android.os.AsyncTask;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
@@ -9,25 +11,31 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
-import java.io.IOException;
 import java.io.InputStream;
 
-public class HttpGetTask extends HttpTask {
+public class MetaTask extends AsyncTask<Object, Void, InputStream> {
 
-    private String url;
-    private String tag;
-    private String authorization;
+    private int statusCode;
+    private String tag, langCode;
+    private MetaTaskHandler metaTaskHandler;
 
-    public HttpGetTask(HttpTaskHandler listener) {
-        taskHandler = listener;
+    public static interface MetaTaskHandler {
+        void metaTaskComplete(InputStream is, String langCode, String tag);
+
+        void metaTaskFailure(InputStream is, String langCode, String tag);
+    }
+
+    public MetaTask(MetaTaskHandler listener) {
+        metaTaskHandler = listener;
     }
 
     @Override
     protected InputStream doInBackground(Object... params) {
 
-        url = params[0].toString();
-        authorization = params[1].toString();
-        tag = params[2].toString();
+        String url = params[0].toString();
+        String authorization = params[1].toString();
+        langCode = params[2].toString();
+        tag = params[3].toString();
 
         HttpGet request = new HttpGet(url);
         request.setHeader("Accept", "application/xml");
@@ -47,20 +55,19 @@ public class HttpGetTask extends HttpTask {
 
             return response.getEntity().getContent();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
     }
 
     @Override
-    protected void onPostExecute(InputStream is) {
+    protected void onPostExecute(InputStream inputStream) {
 
         if (statusCode == HttpStatus.SC_OK) {
-            taskHandler.httpTaskComplete(url, is, statusCode, tag);
+            metaTaskHandler.metaTaskComplete(inputStream, langCode, tag);
         } else {
-            taskHandler.httpTaskFailure(url, is, statusCode, tag);
+            metaTaskHandler.metaTaskFailure(inputStream, langCode, tag);
         }
     }
 }

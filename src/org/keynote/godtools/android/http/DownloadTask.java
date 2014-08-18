@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
@@ -30,9 +31,9 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
     private String authorization;
 
     public static interface DownloadTaskHandler {
-        void downloadTaskComplete(String url, String filePath, String tag);
+        void downloadTaskComplete(String url, String filePath, String langCode, String tag);
 
-        void downloadTaskFailure(String url, String filePath, String tag);
+        void downloadTaskFailure(String url, String filePath, String langCode, String tag);
     }
 
     public DownloadTask(Context context, DownloadTaskHandler taskHandler) {
@@ -134,6 +135,9 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
             return true;
 
+        } catch (SocketTimeoutException e){
+            e.printStackTrace();
+            return false;
         } catch (ConnectTimeoutException e) {
             e.printStackTrace();
             return false;
@@ -154,9 +158,9 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
     protected void onPostExecute(Boolean isSuccessful) {
 
         if (isSuccessful)
-            mTaskHandler.downloadTaskComplete(url, filePath, tag);
+            mTaskHandler.downloadTaskComplete(url, filePath, langCode, tag);
         else
-            mTaskHandler.downloadTaskFailure(url, filePath, tag);
+            mTaskHandler.downloadTaskFailure(url, filePath, langCode, tag);
 
     }
 
