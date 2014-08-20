@@ -93,7 +93,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             adapter.open();
 
             // delete packages
-            if (tag.equals("draft")) {
+            if (tag.contains("draft")) {
                 adapter.deletePackages(langCode, "draft");
             }
 

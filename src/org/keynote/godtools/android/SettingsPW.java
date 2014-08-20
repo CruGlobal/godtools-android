@@ -42,10 +42,9 @@ public class SettingsPW extends ActionBarActivity implements
     public static final int RESULT_DOWNLOAD_PRIMARY = 2001;
     public static final int RESULT_DOWNLOAD_PARALLEL = 2002;
     public static final int RESULT_CHANGED_PRIMARY = 2003;
+    public static final int RESULT_CHANGED_PARALLEL = 2004;
     public static final int RESULT_PREVIEW_MODE_ENABLED = 1234;
     public static final int RESULT_PREVIEW_MODE_DISABLED = 2345;
-
-    String primaryLanguageCode, parallelLanguageCode;
 
     TextView tvMainLanguage, tvParallelLanguage, tvAbout;
     RelativeLayout rlMainLanguage, rlParallelLanguage;
@@ -77,27 +76,22 @@ public class SettingsPW extends ActionBarActivity implements
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean isTranslatorEnabled = settings.getBoolean("TranslatorMode", false);
-        cbTranslatorMode.setChecked(isTranslatorEnabled);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-        parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
+        String primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+        String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
         handleLanguagesWithAlternateFonts(primaryLanguageCode);
         tvMainLanguage = new SnuffyAlternateTypefaceTextView(tvMainLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.BOLD).get();
         tvParallelLanguage = new SnuffyAlternateTypefaceTextView(tvParallelLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.BOLD).get();
 
-        // set up primary language views
+        // set up translator switch
+        cbTranslatorMode.setChecked(isTranslatorEnabled);
+
+        // set value for primary language view
         Locale localePrimary = new Locale(primaryLanguageCode);
         String primaryName = capitalizeFirstLetter(localePrimary.getDisplayName());
         tvMainLanguage.setText(primaryName);
 
-        // set up parallel language views
+        // set value for parallel language view
         if (parallelLanguageCode.isEmpty()) {
             tvParallelLanguage.setText(getString(R.string.none));
         } else {
@@ -114,10 +108,43 @@ public class SettingsPW extends ActionBarActivity implements
         if (resultCode != RESULT_CANCELED)
             setResult(resultCode, data);
 
-        switch (resultCode) {
+        switch(resultCode) {
             case RESULT_CHANGED_PRIMARY: {
+                String languagePrimary = data.getStringExtra("primaryCode");
                 SnuffyApplication app = (SnuffyApplication) getApplication();
-                app.setAppLocale(data.getStringExtra("primaryCode"));
+                app.setAppLocale(languagePrimary);
+
+                handleLanguagesWithAlternateFonts(languagePrimary);
+                tvMainLanguage = new SnuffyAlternateTypefaceTextView(tvMainLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.BOLD).get();
+                tvParallelLanguage = new SnuffyAlternateTypefaceTextView(tvParallelLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.BOLD).get();
+
+                // set value for primary language view
+                Locale localePrimary = new Locale(languagePrimary);
+                String primaryName = capitalizeFirstLetter(localePrimary.getDisplayName());
+                tvMainLanguage.setText(primaryName);
+
+                // set value for parallel language view
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
+
+                if (parallelLanguageCode.isEmpty()) {
+                    tvParallelLanguage.setText(getString(R.string.none));
+                } else {
+                    Locale localeParallel = new Locale(parallelLanguageCode);
+                    String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName());
+                    tvParallelLanguage.setText(parallelName);
+                }
+
+                break;
+            }
+            case RESULT_CHANGED_PARALLEL: {
+
+                // set value for parallel language view
+                String languageParallel = data.getStringExtra("parallelCode");
+                Locale localeParallel = new Locale(languageParallel);
+                String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName());
+                tvParallelLanguage.setText(parallelName);
+
                 break;
             }
             case RESULT_DOWNLOAD_PRIMARY:
@@ -125,14 +152,6 @@ public class SettingsPW extends ActionBarActivity implements
                 finish();
                 break;
         }
-
-        /**
-        if (requestCode == REQUEST_PRIMARY && resultCode == RESULT_DOWNLOAD_PRIMARY) {
-            finish();
-        } else if (requestCode == REQUEST_PARALLEL && resultCode == RESULT_DOWNLOAD_PARALLEL) {
-            finish();
-        }
-        */
 
     }
 

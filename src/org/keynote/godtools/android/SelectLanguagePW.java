@@ -32,6 +32,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
     public static final int RESULT_DOWNLOAD_PRIMARY = 2001;
     public static final int RESULT_DOWNLOAD_PARALLEL = 2002;
     public static final int RESULT_CHANGED_PRIMARY = 2003;
+    public static final int RESULT_CHANGED_PARALLEL = 2004;
 
     ListView mList;
     SharedPreferences settings;
@@ -95,46 +96,43 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
             return;
         }
 
-        if (gtl.getLanguageCode().equalsIgnoreCase(currentLanguage))
+        if (gtl.getLanguageCode().equalsIgnoreCase(currentLanguage)) {
             finish();
+        }
 
+        Intent returnIntent = new Intent();
 
         if (isMainLang) {
-
-            if (gtl.getLanguageCode().equalsIgnoreCase(parallelLanguage)) {
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString(GTLanguage.KEY_PARALLEL, "");
-                editor.commit();
-            }
-
+            returnIntent.putExtra("primaryCode", gtl.getLanguageCode());
             if (gtl.isDownloaded()) {
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString(GTLanguage.KEY_PRIMARY, gtl.getLanguageCode());
+
+                if (gtl.getLanguageCode().equalsIgnoreCase(parallelLanguage)) {
+                    editor.putString(GTLanguage.KEY_PARALLEL, "");
+                }
                 editor.commit();
 
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("primaryCode", gtl.getLanguageCode());
                 setResult(RESULT_CHANGED_PRIMARY, returnIntent);
 
             } else {
-
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("primaryCode", gtl.getLanguageCode());
                 setResult(RESULT_DOWNLOAD_PRIMARY, returnIntent);
 
             }
 
         } else {
 
+            returnIntent.putExtra("parallelCode", gtl.getLanguageCode());
+
             if (gtl.isDownloaded()) {
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString(GTLanguage.KEY_PARALLEL, gtl.getLanguageCode());
                 editor.commit();
 
+                setResult(RESULT_CHANGED_PARALLEL, returnIntent);
+
             } else {
 
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("parallelCode", gtl.getLanguageCode());
                 setResult(RESULT_DOWNLOAD_PARALLEL, returnIntent);
 
             }
