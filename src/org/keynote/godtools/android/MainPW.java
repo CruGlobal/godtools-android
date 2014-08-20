@@ -37,17 +37,12 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 
-public class MainPW extends ActionBarActivity implements OnLanguageChangedListener, OnPackageSelectedListener, DownloadTask.DownloadTaskHandler, MetaTask.MetaTaskHandler {
-    private static final String PREFS_NAME = "GodTools";
+public class MainPW extends BaseActionBarActivity implements OnLanguageChangedListener, OnPackageSelectedListener, DownloadTask.DownloadTaskHandler, MetaTask.MetaTaskHandler {
+
     private static final String TAG_LIST = "PackageList";
     private static final String TAG_DIALOG_LANGUAGE = "LanguageDialog";
 
     private static final int REQUEST_SETTINGS = 1001;
-    public static final int RESULT_DOWNLOAD_PRIMARY = 2001;
-    public static final int RESULT_DOWNLOAD_PARALLEL = 2002;
-    public static final int RESULT_CHANGED_PRIMARY = 2003;
-    public static final int RESULT_PREVIEW_MODE_ENABLED = 1234;
-    public static final int RESULT_PREVIEW_MODE_DISABLED = 2345;
 
     public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
     public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width

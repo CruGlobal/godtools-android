@@ -26,25 +26,16 @@ import org.keynote.godtools.android.utils.Device;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
 
-import java.lang.reflect.Type;
 import java.util.Locale;
 
-public class SettingsPW extends ActionBarActivity implements
+public class SettingsPW extends BaseActionBarActivity implements
         View.OnClickListener,
         ConfirmDialogFragment.OnConfirmClickListener,
         AccessCodeDialogFragment.AccessCodeDialogListener,
         AuthTask.AuthTaskHandler {
 
-    private static final String PREFS_NAME = "GodTools";
-
     private static final int REQUEST_PRIMARY = 1002;
     private static final int REQUEST_PARALLEL = 1003;
-    public static final int RESULT_DOWNLOAD_PRIMARY = 2001;
-    public static final int RESULT_DOWNLOAD_PARALLEL = 2002;
-    public static final int RESULT_CHANGED_PRIMARY = 2003;
-    public static final int RESULT_CHANGED_PARALLEL = 2004;
-    public static final int RESULT_PREVIEW_MODE_ENABLED = 1234;
-    public static final int RESULT_PREVIEW_MODE_DISABLED = 2345;
 
     TextView tvMainLanguage, tvParallelLanguage, tvAbout;
     RelativeLayout rlMainLanguage, rlParallelLanguage;
@@ -108,7 +99,7 @@ public class SettingsPW extends ActionBarActivity implements
         if (resultCode != RESULT_CANCELED)
             setResult(resultCode, data);
 
-        switch(resultCode) {
+        switch (resultCode) {
             case RESULT_CHANGED_PRIMARY: {
                 String languagePrimary = data.getStringExtra("primaryCode");
                 SnuffyApplication app = (SnuffyApplication) getApplication();
