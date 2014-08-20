@@ -164,8 +164,9 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
                 }
 
                 languagePrimary = primaryCode;
-                //packageList = getPackageList();
-                //packageFrag.refreshList(languagePrimary, packageList);
+                packageList = getPackageList();
+                packageFrag.refreshList(languagePrimary, packageList);
+
                 showLoading("Downloading drafts...");
                 String authorization = settings.getString("authorization", getString(R.string.key_authorization_generic));
                 GodToolsApiClient.getListOfDrafts(authorization, primaryCode, "draft_primary", this);
@@ -489,8 +490,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
 
             // do nothing
 
-        }
-        else if (tag.equalsIgnoreCase("primary") || tag.equalsIgnoreCase("parallel")){
+        } else if (tag.equalsIgnoreCase("primary") || tag.equalsIgnoreCase("parallel")) {
 
             Toast.makeText(MainPW.this, "Failed to download resources", Toast.LENGTH_SHORT).show();
 
@@ -548,7 +548,7 @@ public class MainPW extends ActionBarActivity implements OnLanguageChangedListen
                         frag.show(fm, "alert_dialog");
                     }
 
-                } else if (tag.equalsIgnoreCase("draft_primary")){
+                } else if (tag.equalsIgnoreCase("draft_primary")) {
 
                     languagePrimary = langCode;
                     packageList = getPackageList();
