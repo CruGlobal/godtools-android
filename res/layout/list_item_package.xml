@@ -26,7 +26,7 @@
     <TextView
         android:id="@+id/tvPackageName"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_toRightOf="@+id/ivIcon"
         android:layout_alignTop="@+id/ivIcon"
         android:layout_alignBottom="@+id/ivIcon"
@@ -34,6 +34,31 @@
         android:gravity="center"
         android:textColor="#000"
         android:textSize="19sp"
-        android:text="asdasdasd"/>
+        android:text="asdasdasd"
+        android:layout_centerHorizontal="true"/>
+    <View
+        android:layout_width="25dp"
+        android:layout_height="0dp"
+        android:layout_toRightOf="@+id/tvPackageName"
+        android:layout_alignTop="@+id/tvPackageName"
+        android:layout_alignBottom="@+id/tvPackageName"
+        android:layout_toLeftOf="@+id/arrow"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"/>
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/homescreen_menu_arrow_2x"
+        android:layout_alignTop="@+id/tvPackageName"
+        android:layout_alignBottom="@+id/tvPackageName"
+        android:layout_toRightOf="@+id/tvPackageName"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:cropToPadding="false"
+        android:scaleType="fitEnd"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="10dp"/>
 
 </RelativeLayout>

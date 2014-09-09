@@ -16,6 +16,7 @@
 		
 		<!-- the linen background, vignettte and white table background (not needed?)  -->					
 		<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+                   android:id="@+id/vignette_background"
 			android:layout_width="640px"
 			android:layout_height="960px"
 			android:layout_x="0px"
@@ -23,7 +24,8 @@
 			android:scaleType="fitXY"
 			android:src="@drawable/homescreen_background_linen_vignette"/>
 					
-		<ImageView xmlns:android="http://schemas.android.com/apk/res/android" 
+		<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+                   android:id="@+id/logo"
 			android:layout_width="238px"
 			android:layout_height="182px"
 			android:layout_x="200px"
@@ -99,36 +101,6 @@
 			android:layout_y="264px"
 			android:src="@drawable/homescreen_menu_e_repeat"
             android:id="@+id/right_side"/>
-
-		<!-- the 4 list cell arrows -->
-		<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/arrow_one"
-			android:layout_width="26px"
-			android:layout_height="40px"
-			android:layout_x="550px"
-			android:layout_y="289px"
-			android:src="@drawable/homescreen_menu_arrow_2x"/>	
-		<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-                   android:id="@+id/arrow_two"
-			android:layout_width="26px"
-			android:layout_height="40px"
-			android:layout_x="550px"
-			android:layout_y="409px"
-			android:src="@drawable/homescreen_menu_arrow_2x"/>
-		<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-                   android:id="@+id/arrow_three"
-			android:layout_width="26px"
-			android:layout_height="40px"
-			android:layout_x="550px"
-			android:layout_y="529px"
-			android:src="@drawable/homescreen_menu_arrow_2x"/>	
-		<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-                   android:id="@+id/arrow_four"
-			android:layout_width="26px"
-			android:layout_height="40px"
-			android:layout_x="550px"
-			android:layout_y="659px"
-			android:src="@drawable/homescreen_menu_arrow_2x"/>
 			
 		<!-- the settings button -->
 		<ImageButton	
