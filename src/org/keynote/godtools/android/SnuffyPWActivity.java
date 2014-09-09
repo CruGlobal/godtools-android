@@ -25,6 +25,8 @@ import android.widget.AbsoluteLayout;
 import android.widget.Toast;
 
 import org.keynote.godtools.android.business.GTPackage;
+import org.keynote.godtools.android.http.DownloadTask;
+import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.snuffy.PackageReader;
 import org.keynote.godtools.android.snuffy.SnuffyAboutActivity;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
@@ -548,7 +550,27 @@ public class SnuffyPWActivity extends Activity {
     }
 
     private void refreshPage() {
+        SnuffyPage currentPage = mPages.get(mPagerCurrentItem);
+        GodToolsApiClient.downloadDraftPage((SnuffyApplication) getApplication(),
+                "6cc05cf3abfdb768d4b1adcb35860bacc2cb9966",
+                mAppLanguage,
+                mAppPackage,
+                currentPage.getPageId(),
+                new DownloadTask.DownloadTaskHandler()
+                {
+                    @Override
+                    public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
+                    {
+//                        currentPage.set
+                        Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_SHORT).show();
+                    }
 
+                    @Override
+                    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
+                    {
+                        Toast.makeText(getApplicationContext(), "Error refreshing page", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private ProgressDialog mProgressDialog;
@@ -608,6 +630,7 @@ public class SnuffyPWActivity extends Activity {
                 );
             } catch (Exception e) {
                 Log.e(TAG, "processPackage failed: " + e.toString());
+                e.printStackTrace();
             }
             if (bSuccess)
                 mPackageTitle = packageReader.getPackageTitle();
