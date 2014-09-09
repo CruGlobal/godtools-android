@@ -495,6 +495,8 @@ public class SnuffyPWActivity extends Activity {
         else
             switchItem.setVisible(false);
 
+        MenuItem refreshItem = menu.findItem(R.id.CMD_REFRESH_PAGE);
+        refreshItem.setVisible(true);
         return true;
     }
 
@@ -535,10 +537,18 @@ public class SnuffyPWActivity extends Activity {
                 switchLanguage();
                 break;
             }
+            case R.id.CMD_REFRESH_PAGE: {
+                refreshPage();
+                break;
+            }
             default:
                 break;
         }
         return true;
+    }
+
+    private void refreshPage() {
+
     }
 
     private ProgressDialog mProgressDialog;
