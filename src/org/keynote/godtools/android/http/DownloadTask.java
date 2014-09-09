@@ -123,10 +123,8 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
                 copyFile(inputStream, outputStream);
 
                 inputStream.close();
-                inputStream = null;
                 outputStream.flush();
                 outputStream.close();
-                outputStream = null;
                 oldFile.delete();
             }
 

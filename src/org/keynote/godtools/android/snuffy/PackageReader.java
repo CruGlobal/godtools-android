@@ -228,19 +228,19 @@ public class PackageReader {
         return bSuccess;
     }
 
-    private boolean processPagePW(Element elPage){
-        String	thumbFileName	= elPage.getAttribute("thumb");
-        String	pageFileName	= elPage.getAttribute("filename");
-        String	description		= elPage.getTextContent();
+    private boolean processPagePW(Element pageElement){
+        String	thumbFileName	= pageElement.getAttribute("thumb");
+        String	pageFileName	= pageElement.getAttribute("filename");
+        String	description		= pageElement.getTextContent();
         Log.d(TAG, ">>> processPage: " + pageFileName);
 
         pageFileName = "resources/" + pageFileName;
 
         SnuffyPage	currPage = null;
-        InputStream isPage = null;
+        InputStream pageInputStream = null;
         try {
-            isPage = new BufferedInputStream(new FileInputStream(mAppRef.get().getDocumentsDir().getPath() + "/" + pageFileName));
-            currPage = processPageFilePW(isPage, elPage);
+            pageInputStream = new BufferedInputStream(new FileInputStream(mAppRef.get().getDocumentsDir().getPath() + "/" + pageFileName));
+            currPage = processPageFilePW(pageInputStream, pageElement, pageFileName);
             currPage.mDescription = description;
             //currPage.mThumbnail   = Uri.parse("file:///android_asset/" + mThumbsFolderName + thumbFileName).toString();
             currPage.mThumbnail   = thumbFileName;
@@ -250,9 +250,9 @@ public class PackageReader {
             return false;
         }
         finally {
-            if (isPage != null) {
+            if (pageInputStream != null) {
                 try {
-                    isPage.close();
+                    pageInputStream.close();
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -263,12 +263,12 @@ public class PackageReader {
         return (currPage != null);
     }
 
-    private SnuffyPage processPageFilePW(InputStream isPage, Element elPage){
+    private SnuffyPage processPageFilePW(InputStream isPage, Element elPage, String pageFileName){
         Log.d(TAG, ">>> processPageFile starts");
 
-        SnuffyPage currPage = null;
+        SnuffyPage snuffyPage = null;
 
-        Document xmlDoc	= null;
+        Document xmlDoc;
         try {
             xmlDoc = DocumentBuilderFactory
                     .newInstance()
@@ -281,14 +281,17 @@ public class PackageReader {
             mYOffsetPerItem = getScaledYValue(DEFAULT_YOFFSET);
             int SAVE = mTotalBitmapSpace;
             for (int iPass=1; iPass <= 2; iPass++) {
-                currPage = new SnuffyPage(mContext);
+                snuffyPage = new SnuffyPage(mContext);
 
                 mYOffset			= 0;
                 mYFooterTop			= mPageHeight;
                 mNumOffsetItems		= 0;
-                addCover(currPage);
-                processBackgroundPW(elPage, root, currPage);
-                processPageElements(elPage, root, currPage);
+                addCover(snuffyPage);
+                processBackgroundPW(elPage, root, snuffyPage);
+                processPageElements(elPage, root, snuffyPage);
+
+                snuffyPage.setPageIdFromFilename(pageFileName);
+
                 switch (iPass) {
                     case 1: {
                         if (mNumOffsetItems < 1){
@@ -312,18 +315,18 @@ public class PackageReader {
             }
         } catch (IOException e) {
             Log.e(TAG, "processPageFile failed: " + e.toString());
-            currPage = null;
+            snuffyPage = null;
         } catch (ParserConfigurationException e) {
             Log.e(TAG, "processPageFile failed: " + e.toString());
-            currPage = null;
+            snuffyPage = null;
         } catch (SAXException e) {
             Log.e(TAG, "processPageFile failed: " + e.toString());
-            currPage = null;
+            snuffyPage = null;
         } finally {
 
         }
         Log.d(TAG, ">>> processPageFile ends");
-        return currPage;
+        return snuffyPage;
     }
 
     private void processBackgroundPW(Element elPage, Element root, SnuffyPage currPage){
@@ -503,7 +506,7 @@ public class PackageReader {
    		String	pageFileName	= elPage.getAttribute("filename");
    		String	description		= elPage.getTextContent();
 		Log.d(TAG, ">>> processPage: " + pageFileName);
-   		
+
    		pageFileName  =  "Packages/" + mPackageName + "/" + mLanguageCode + "/" + pageFileName;
 
 		SnuffyPage	currPage = null;
@@ -513,13 +516,13 @@ public class PackageReader {
 				isPage = mContext.getAssets().open(pageFileName, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
 			}
 			else {
-				isPage = new BufferedInputStream(new FileInputStream(mAppRef.get().getDocumentsDir().getPath() + "/" + pageFileName));				
+				isPage = new BufferedInputStream(new FileInputStream(mAppRef.get().getDocumentsDir().getPath() + "/" + pageFileName));
 			}
 			currPage = processPageFile(isPage, elPage);
 			currPage.mDescription = description;
 			//currPage.mThumbnail   = Uri.parse("file:///android_asset/" + mThumbsFolderName + thumbFileName).toString();
 			currPage.mThumbnail   = mThumbsFolderName + thumbFileName;
-			mPages.add(currPage);			
+			mPages.add(currPage);
 		} catch (IOException e) {
 			Log.e(TAG, "Cannot open or read page file: " + pageFileName);
 			return false;
@@ -534,37 +537,37 @@ public class PackageReader {
 				}
 			}
 		}
-	
-		return (currPage != null);		
+
+		return (currPage != null);
 	}
-	
-	
+
+
 	private SnuffyPage processPageFile(InputStream isPage, Element elPage) {
 		Log.d(TAG, ">>> processPageFile starts");
 
     	SnuffyPage currPage = null;
-		
-        Document xmlDoc	= null; 
+
+        Document xmlDoc	= null;
         try {
         	xmlDoc = DocumentBuilderFactory
         				.newInstance()
         				.newDocumentBuilder()
-        				.parse(isPage); 
+        				.parse(isPage);
         	Element root =  xmlDoc.getDocumentElement();
         	if (root == null)
         		throw new SAXException("XML Document has no root element");
-        	
-        	mYOffsetPerItem = getScaledYValue(DEFAULT_YOFFSET); 
+
+        	mYOffsetPerItem = getScaledYValue(DEFAULT_YOFFSET);
         	int SAVE = mTotalBitmapSpace;
         	for (int iPass=1; iPass <= 2; iPass++) {
-        		currPage = new SnuffyPage(mContext); 
+        		currPage = new SnuffyPage(mContext);
 
         		mYOffset			= 0;
         		mYFooterTop			= mPageHeight;
         		mNumOffsetItems		= 0;
         		addCover(currPage);
-        		processBackground  (elPage, root, currPage); 
-        		processPageElements(elPage, root, currPage); 
+        		processBackground  (elPage, root, currPage);
+        		processPageElements(elPage, root, currPage);
 				switch (iPass) {
 				case 1: {
 					if (mNumOffsetItems < 1){
@@ -587,20 +590,20 @@ public class PackageReader {
 				}
         	}
          } catch (IOException e) {
-			Log.e(TAG, "processPageFile failed: " + e.toString()); 
+			Log.e(TAG, "processPageFile failed: " + e.toString());
 			currPage = null;
         } catch (ParserConfigurationException e) {
-			Log.e(TAG, "processPageFile failed: " + e.toString());        	        	
+			Log.e(TAG, "processPageFile failed: " + e.toString());
 			currPage = null;
         } catch (SAXException e) {
-			Log.e(TAG, "processPageFile failed: " + e.toString());        	
+			Log.e(TAG, "processPageFile failed: " + e.toString());
 			currPage = null;
         } finally {
-        	
+
         }
 		Log.d(TAG, ">>> processPageFile ends");
 		return currPage;
-		
+
 	}
 	
 	private void addCover(SnuffyPage currPage) {
@@ -617,7 +620,7 @@ public class PackageReader {
     	String backgroundImage	= root.getAttribute("backgroundimage");	// 	or this
     	//int numButtons = Integer.valueOf(root.getAttribute("buttons"), 10); // but redundant since we get it from the DOM below
     	String shadows			= getStringAttributeValue(root, "shadows", "yes");
-    	
+
       	mBackgroundColor = Color.parseColor(getStringAttributeValue(root, "color", DEFAULT_BACKGROUND_COLOR));
      	currPage.setBackgroundColor(mBackgroundColor);
      	currPage.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
@@ -651,7 +654,7 @@ public class PackageReader {
         		iv.setImageBitmap(bmTop);
         		iv.setScaleType(ImageView.ScaleType.FIT_XY);
         		currPage.addView(iv);
-    			
+
     		}
     		Bitmap bmBot = getBitmapFromAssetOrFile(mContext, "grad_shad_bot.png");
     		if (bmBot != null) {
@@ -659,7 +662,7 @@ public class PackageReader {
             	iv.setLayoutParams(new SnuffyLayoutParams(LayoutParams.MATCH_PARENT, getScaledYValue(bmBot.getHeight()), 0, mPageHeight - getScaledYValue(bmBot.getHeight())));
         		iv.setImageBitmap(bmBot);
         		iv.setScaleType(ImageView.ScaleType.FIT_XY);
-        		currPage.addView(iv);    			
+        		currPage.addView(iv);
     		}
     	}
 	}

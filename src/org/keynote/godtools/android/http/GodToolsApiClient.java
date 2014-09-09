@@ -4,10 +4,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 
-import org.apache.http.client.methods.HttpPost;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 import java.io.File;
+import java.util.UUID;
 
 public class GodToolsApiClient {
 
@@ -54,11 +54,11 @@ public class GodToolsApiClient {
                                          String authorization,
                                          String languageCode,
                                          String packageCode,
-                                         String pageId,
+                                         UUID pageId,
                                          DownloadTask.DownloadTaskHandler taskHandler)
     {
         String url = BASE_URL + ENDPOINT_DRAFTS + languageCode + File.separator + packageCode + File.separator + "pages" + File.separator + pageId;
-        String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + languageCode + File.separator;
+        String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + languageCode + File.separator + pageId + ".zip";
 
         download(app.getApplicationContext(),
                 url,
