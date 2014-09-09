@@ -75,6 +75,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+		Log.i("matt", "Priamry language is " + languagePrimary);
         languageParallel = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
         authorization = getString(R.string.key_authorization_generic);
