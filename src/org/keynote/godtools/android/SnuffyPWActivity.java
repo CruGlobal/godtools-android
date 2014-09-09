@@ -60,9 +60,11 @@ public class SnuffyPWActivity extends Activity {
     private ProcessPackageAsync mProcessPackageAsync;
     private GestureDetector MyGestureDetector;
 
-    private String mConfigPrimary, mConfigParallel;
+    private String mConfigPrimary;
+    private String mConfigParallel;
     private GTPackage mParallelPackage;
-    private boolean isUsingPrimaryLanguage, isParallelLanguageSet;
+    private boolean isUsingPrimaryLanguage;
+    private boolean isParallelLanguageSet;
 
     public void setLanguage(String languageCode) {
         mAppLanguage = languageCode;
