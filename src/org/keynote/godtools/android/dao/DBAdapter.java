@@ -152,7 +152,7 @@ public class DBAdapter {
                 DBContract.GTPackageTable.COL_ICON
         };
 
-        String order = DBContract.GTPackageTable.COL_NAME + " ASC";
+        String order = DBContract.GTPackageTable._ID + " ASC";
 
         Cursor cursor = db.query(DBContract.GTPackageTable.TABLE_NAME, projection, selection, null, null, null, order);
 

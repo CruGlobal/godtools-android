@@ -34,6 +34,7 @@ import android.widget.Toast;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
+import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.fragments.AlertDialogFragment;
 import org.keynote.godtools.android.fragments.LanguageDialogFragment;
 import org.keynote.godtools.android.fragments.PackageListFragment;
@@ -513,15 +514,25 @@ public class Main extends BaseActionBarActivity implements LanguageDialogFragmen
     }
 
     @Override
-    public void onPackageSelected(GTPackage gtPackage) {
-
-            Intent intent = new Intent(this, SnuffyPWActivity.class);
-            intent.putExtra("PackageName", gtPackage.getCode());
-            intent.putExtra("LanguageCode", gtPackage.getLanguage());
-            intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
-            intent.putExtra("Status", gtPackage.getStatus());
-            addPageFrameToIntent(intent);
-            startActivity(intent);
+    public void onPackageSelected(GTPackage gtPackage)
+	{
+		if (gtPackage.getCode().equalsIgnoreCase("everystudent"))
+		{
+			Intent intent = new Intent(this, EveryStudent.class);
+			intent.putExtra("PackageName", gtPackage.getCode());
+			addPageFrameToIntent(intent);
+			startActivity(intent);
+		}
+		else
+		{
+			Intent intent = new Intent(this, SnuffyPWActivity.class);
+			intent.putExtra("PackageName", gtPackage.getCode());
+			intent.putExtra("LanguageCode", gtPackage.getLanguage());
+			intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
+			intent.putExtra("Status", gtPackage.getStatus());
+			addPageFrameToIntent(intent);
+			startActivity(intent);
+		}
 
     }
 
