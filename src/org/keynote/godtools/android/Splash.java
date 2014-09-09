@@ -65,6 +65,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_pw);
+		Log.i("Matt", "Starting splash");
 
         tvTask = (TextView) findViewById(R.id.tvTask);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -215,8 +216,20 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
                 InputStream contentsStream = manager.open("contents.xml");
                 List<GTPackage> packageList = GTPackageReader.processContentFile(contentsStream);
                 for (GTPackage gtp : packageList) {
+					Log.i("addingDB", gtp.getName());
                     gtp.addToDatabase(mContext);
                 }
+
+				// Add Every Student to database
+				GTPackage everyStudent = new GTPackage();
+				everyStudent.setCode("everystudent");
+				everyStudent.setName("Every Student");
+				everyStudent.setIcon("homescreen_everystudent_icon_2x.png");
+				everyStudent.setStatus("live");
+				everyStudent.setLanguage("en");
+				everyStudent.setVersion(1.1);
+
+				everyStudent.addToDatabase(mContext);
 
                 // english resources should be marked as downloaded
                 GTLanguage gtlEnglish = new GTLanguage("en");

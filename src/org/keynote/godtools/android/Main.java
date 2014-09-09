@@ -82,6 +82,7 @@ public class Main extends BaseActionBarActivity implements LanguageDialogFragmen
         		WindowManager.LayoutParams.FLAG_FULLSCREEN, 
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
+		Log.i("Matt", "Starting main");
         
         setContentView(R.layout.main);
 
