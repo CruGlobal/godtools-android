@@ -43,11 +43,30 @@ public class GodToolsApiClient {
         authTask.execute(url);
     }
 
-    public static void downloadDrafts(SnuffyApplication app, String authorization, String langCode, String tag, DownloadTask.DownloadTaskHandler tashHandler){
+    public static void downloadDrafts(SnuffyApplication app, String authorization, String langCode, String tag, DownloadTask.DownloadTaskHandler taskHandler){
         String url = BASE_URL + ENDPOINT_DRAFTS + langCode + "?compressed=true";
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + File.separator + "package.zip";
 
-        download(app.getApplicationContext(), url, filePath, tag, authorization, langCode, tashHandler);
+        download(app.getApplicationContext(), url, filePath, tag, authorization, langCode, taskHandler);
+    }
+
+    public static void downloadDraftPage(SnuffyApplication app,
+                                         String authorization,
+                                         String languageCode,
+                                         String packageCode,
+                                         String pageId,
+                                         DownloadTask.DownloadTaskHandler taskHandler)
+    {
+        String url = BASE_URL + ENDPOINT_DRAFTS + languageCode + File.separator + packageCode + File.separator + "pages" + File.separator + pageId;
+        String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + languageCode + File.separator;
+
+        download(app.getApplicationContext(),
+                url,
+                filePath,
+                "draft",
+                authorization,
+                languageCode,
+                taskHandler);
     }
 
     /**
@@ -67,13 +86,13 @@ public class GodToolsApiClient {
     */
 
     private static void download(Context context, String url, String filePath, String tag, String authorization, String langCode, DownloadTask.DownloadTaskHandler taskHandler) {
-        DownloadTask dlTask = new DownloadTask(context, taskHandler);
-        //dlTask.execute(url, filePath, tag);
+        DownloadTask downloadTask = new DownloadTask(context, taskHandler);
+        //downloadTask.execute(url, filePath, tag);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            dlTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, filePath, tag, authorization, langCode);
+            downloadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, filePath, tag, authorization, langCode);
         } else {
-            dlTask.execute(url, filePath, tag, authorization, langCode);
+            downloadTask.execute(url, filePath, tag, authorization, langCode);
         }
 
     }
