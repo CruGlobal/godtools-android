@@ -1,5 +1,5 @@
 # built application files 
-*.apk 
+*.apk
 *.ap_ 
  
 # files for the dex VM 
@@ -16,13 +16,16 @@ out/
 build/
  
 # Local configuration file (sdk path, etc) 
-local.properties 
+local.properties
 /gen/
 /.idea/
 /snuffy-android.iml
+*.iml
 
 # OS specific annoyances
 **/*.DS_Store
 
 
 /snuffy-android.apk
+
+.gradle/
