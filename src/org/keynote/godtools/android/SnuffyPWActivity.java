@@ -64,6 +64,7 @@ public class SnuffyPWActivity extends Activity {
     private int mPageWidth;
     private int mPageHeight;
     private String mPackageTitle;
+    private String mPackageStatus;
     private ProcessPackageAsync mProcessPackageAsync;
     private GestureDetector MyGestureDetector;
 
@@ -101,6 +102,7 @@ public class SnuffyPWActivity extends Activity {
         mAppPackage = getIntent().getStringExtra("PackageName");        // "kgp"
         mAppLanguage = getIntent().getStringExtra("LanguageCode");      // "en"
         mConfigFileName = getIntent().getStringExtra("ConfigFileName");
+        mPackageStatus = getIntent().getStringExtra("Status"); // live = draft
         mPageLeft = getIntent().getIntExtra("PageLeft", 0);
         mPageTop = getIntent().getIntExtra("PageTop", 0);
         mPageWidth = getIntent().getIntExtra("PageWidth", 320);         // set defaults but they will not be used
@@ -121,6 +123,7 @@ public class SnuffyPWActivity extends Activity {
         // check if parallel language is set
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String langParallel = settings.getString("languageParallel", "");
+
 
         // get package if parallel language is set
         if (!langParallel.isEmpty()) {
@@ -506,8 +509,15 @@ public class SnuffyPWActivity extends Activity {
         else
             switchItem.setVisible(false);
 
-        MenuItem refreshItem = menu.findItem(R.id.CMD_REFRESH_PAGE);
-        refreshItem.setVisible(true);
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+        if("draft".equalsIgnoreCase(mPackageStatus) && settings.getBoolean("TranslatorMode",false))
+        {
+            menu.findItem(R.id.CMD_REFRESH_PAGE).setVisible(true);        }
+        else
+        {
+            menu.findItem(R.id.CMD_REFRESH_PAGE).setVisible(false);
+        }
         return true;
     }
 
