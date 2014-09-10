@@ -433,7 +433,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
     }
 
     private void goToMainActivity() {
-        Intent intent = new Intent(this, Main.class);
+        Intent intent = new Intent(this, MainPW.class);
         finish();
         startActivity(intent);
     }
