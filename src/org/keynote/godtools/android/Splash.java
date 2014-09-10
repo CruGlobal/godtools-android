@@ -66,7 +66,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_pw);
-		Log.i("Matt", "Starting splash");
 
         tvTask = (TextView) findViewById(R.id.tvTask);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -76,7 +75,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-		Log.i("matt", "Priamry language is " + languagePrimary);
         languageParallel = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
         authorization = getString(R.string.key_authorization_generic);
@@ -436,7 +434,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
     private void goToMainActivity() {
         Intent intent = new Intent(this, Main.class);
-		Log.i("matt", "Going to main - Language is " + languagePrimary);
         finish();
         startActivity(intent);
     }
