@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,6 +72,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
     View vLoading;
     ImageButton ibRefresh;
     TextView tvTask;
+	FrameLayout frameLayout;
 
     boolean isDownloading;
     String authorization;
@@ -88,10 +90,10 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
         vLoading = findViewById(R.id.contLoading);
         tvTask = (TextView) findViewById(R.id.tvTask);
+		frameLayout = (FrameLayout) findViewById(R.id.contList);
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-		Log.i("matt", "Primary language is " + languagePrimary);
         authorization = getString(R.string.key_authorization_generic);
 
         packageList = getPackageList(); // get the packages for the primary language
@@ -105,6 +107,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             ft.add(R.id.contList, packageFrag, TAG_LIST);
             ft.commit();
         }
+
+
         
         // Make the Settings button highlight when pressed (without defining a separate image)
         ImageButton button = (ImageButton) findViewById(R.id.homescreen_settings_button);
@@ -230,7 +234,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 break;
             }
         }
-
     }
   
 
@@ -353,6 +356,17 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             	tv.setTextSize(getScaledTextSize(tv.getTextSize()));
             }
         }
+
+		try
+		{
+			int childHeight = packageFrag.getListView().getChildAt(0).getHeight();
+			int totalHeight = childHeight * packageList.size();
+			packageFrag.getListView().setLayoutParams(new FrameLayout.LayoutParams(967, totalHeight));
+		}
+		catch (Exception e)
+		{
+			Log.e("error", e.getMessage());
+		}
 	}
 	
 	private void showTheHomeScreen() {

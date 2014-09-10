@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,6 @@ import java.util.List;
 
 public class PackageListFragment extends ListFragment
 {
-
 
 	public interface OnPackageSelectedListener
 	{
@@ -144,13 +144,11 @@ public class PackageListFragment extends ListFragment
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent)
 		{
-
 			GTPackage gtp = listPackages.get(position);
 
 			ViewHolder holder;
 			if (convertView == null)
 			{
-
 				convertView = inflater.inflate(R.layout.list_item_package, parent, false);
 
 				holder = new ViewHolder();

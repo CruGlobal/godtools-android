@@ -34,8 +34,8 @@
 
         <FrameLayout
             android:id="@+id/contList"
-            android:layout_width="572px"
-            android:layout_height="515px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_x="34px"
             android:layout_y="252px"
             android:background="#fff">
