@@ -55,7 +55,7 @@ public class Main extends BaseActionBarActivity implements LanguageDialogFragmen
     private static final String TAG_LIST = "PackageList";
     private static final String TAG_DIALOG_LANGUAGE = "LanguageDialog";
     private static final int REQUEST_SETTINGS = 1001;
-	private static final String PREFS_NAME = "MAIN";
+	private static final String PREFS_NAME = "GodTools";
 
 	public static final int		REFERENCE_DEVICE_HEIGHT = 960;	// pixels on iPhone w/retina - including title bar
 	public static final int		REFERENCE_DEVICE_WIDTH  = 640;	// pixels on iPhone w/retina - full width

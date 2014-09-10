@@ -57,6 +57,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
     TextView tvTask;
     ProgressBar progressBar;
     String authorization;
+	SharedPreferences settings;
 
     /**
      * Called when the activity is first created.
@@ -73,7 +74,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         // Enable crash reporting
         Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 		Log.i("matt", "Priamry language is " + languagePrimary);
         languageParallel = settings.getString(GTLanguage.KEY_PARALLEL, "");
@@ -125,7 +126,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
     }
 
     private boolean isFirstLaunch() {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         isFirst = settings.getBoolean("firstLaunch", true);
         if (isFirst) {
             SharedPreferences.Editor editor = settings.edit();
@@ -381,7 +381,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         hideLoading();
 
         if (tag.equalsIgnoreCase(KEY_NEW_LANGUAGE)) {
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PRIMARY, langCode);
             editor.commit();
@@ -437,6 +436,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
     private void goToMainActivity() {
         Intent intent = new Intent(this, Main.class);
+		Log.i("matt", "Going to main - Language is " + languagePrimary);
         finish();
         startActivity(intent);
     }
