@@ -138,6 +138,11 @@ public class PackageListFragment extends ListFragment {
                 holder.tvPackageName = (TextView) convertView.findViewById(R.id.tvPackageName);
                 holder.vGray = convertView.findViewById(R.id.vGray);
 
+				if (position % 2 == 0)
+				{
+					convertView.setBackgroundColor(0x000000);
+				}
+
                 convertView.setTag(holder);
 
             } else {
