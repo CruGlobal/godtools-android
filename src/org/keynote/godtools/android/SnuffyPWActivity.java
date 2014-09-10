@@ -22,9 +22,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.AbsoluteLayout;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.keynote.godtools.android.business.GTPackage;
+import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.snuffy.PackageReader;
@@ -67,6 +72,10 @@ public class SnuffyPWActivity extends Activity {
     private GTPackage mParallelPackage;
     private boolean isUsingPrimaryLanguage;
     private boolean isParallelLanguageSet;
+
+
+
+    boolean isDownloading;
 
     public void setLanguage(String languageCode) {
         mAppLanguage = languageCode;
@@ -551,6 +560,9 @@ public class SnuffyPWActivity extends Activity {
 
     private void refreshPage() {
         SnuffyPage currentPage = mPages.get(mPagerCurrentItem);
+
+        showLoading("Updating page...");
+
         GodToolsApiClient.downloadDraftPage((SnuffyApplication) getApplication(),
                 "6cc05cf3abfdb768d4b1adcb35860bacc2cb9966",
                 mAppLanguage,
@@ -564,12 +576,14 @@ public class SnuffyPWActivity extends Activity {
                         Integer result = mProcessPackageAsync.doInBackground();
                         mProcessPackageAsync.onPostExecute(result);
                         Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_SHORT).show();
+                        hideLoading();
                     }
 
                     @Override
                     public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
                     {
                         Toast.makeText(getApplicationContext(), "Error refreshing page", Toast.LENGTH_SHORT).show();
+                        hideLoading();
                     }
                 });
     }
@@ -663,5 +677,28 @@ public class SnuffyPWActivity extends Activity {
             openOptionsMenu();
             return super.onSingleTapUp(e);
         }
+    }
+
+    private void showLoading(String msg)
+    {
+        isDownloading = true;
+
+        RelativeLayout updatingDraftLayout = (RelativeLayout) findViewById(R.id.updatingDraft);
+        updatingDraftLayout.setVisibility(View.VISIBLE);
+
+        TextView updatingPage = (TextView) findViewById(R.id.updatingPageTextView);
+        updatingPage.setText(msg);
+    }
+
+    private void hideLoading()
+    {
+        isDownloading = false;
+
+        TextView updatingPage = (TextView) findViewById(R.id.updatingPageTextView);
+        updatingPage.setText("");
+
+        RelativeLayout updatingDraftLayout = (RelativeLayout) findViewById(R.id.updatingDraft);
+        updatingDraftLayout.setVisibility(View.GONE);
+
     }
 }
