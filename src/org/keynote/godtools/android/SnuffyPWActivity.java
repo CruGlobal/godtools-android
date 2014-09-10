@@ -562,7 +562,8 @@ public class SnuffyPWActivity extends Activity {
                     @Override
                     public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
                     {
-//                        currentPage.set
+                        Integer result = mProcessPackageAsync.doInBackground();
+                        mProcessPackageAsync.onPostExecute(result);
                         Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_SHORT).show();
                     }
 
