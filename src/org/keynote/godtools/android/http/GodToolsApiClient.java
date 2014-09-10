@@ -37,6 +37,13 @@ public class GodToolsApiClient {
         download(app.getApplicationContext(), url, filePath, tag, authorization, langCode, taskHandler);
     }
 
+    public static void authenticateGeneric(AuthTask.AuthTaskHandler taskHandler)
+    {
+        AuthTask authTask = new AuthTask(taskHandler);
+        String url = BASE_URL + ENDPOINT_AUTH;
+        authTask.execute(url);
+    }
+
     public static void authenticateAccessCode(String accessCode, AuthTask.AuthTaskHandler taskHandler){
         AuthTask authTask = new AuthTask(taskHandler);
         String url = BASE_URL + ENDPOINT_AUTH + accessCode;
@@ -69,21 +76,15 @@ public class GodToolsApiClient {
                 taskHandler);
     }
 
-    /**
-    public static void downloadPackage(SnuffyApplication app, String langCode, String packageName, String tag, DownloadTask.DownloadTaskHandler taskHandler) {
-        String url = BASE_URL + ENDPOINT_PACKAGES + langCode + File.separator + packageName + "?compressed=true";
-        String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + "_" + packageName + File.separator + "package.zip";
+    public static void createDraft(String authorization,
+                                   String languageCode,
+                                   String packageCode,
+                                   DraftCreationTask.DraftTaskHandler taskHandler)
+    {
+        String url = BASE_URL + ENDPOINT_TRANSLATIONS + languageCode + File.separator + packageCode;
 
-        download(app.getApplicationContext(), url, filePath, tag, taskHandler);
+        new DraftCreationTask(taskHandler).execute(url, authorization);
     }
-
-    public static void downloadTranslation(SnuffyApplication app, String packageName, String langCode, String tag, DownloadTask.DownloadTaskHandler taskHandler) {
-        String url = BASE_URL + ENDPOINT_TRANSLATIONS + langCode + File.separator + packageName + "?compressed=true";
-        String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + "_" + packageName + File.separator + "package.zip";
-
-        download(app.getApplicationContext(), url, filePath, tag, taskHandler);
-    }
-    */
 
     private static void download(Context context, String url, String filePath, String tag, String authorization, String langCode, DownloadTask.DownloadTaskHandler taskHandler) {
         DownloadTask downloadTask = new DownloadTask(context, taskHandler);
