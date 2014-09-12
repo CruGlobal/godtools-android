@@ -85,6 +85,8 @@ public class SnuffyPWActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
+		Log.i("Activity", "SnuffyPWActivity");
+
         mAppPackage = getIntent().getStringExtra("PackageName");        // "kgp"
         mAppLanguage = getIntent().getStringExtra("LanguageCode");      // "en"
         mConfigFileName = getIntent().getStringExtra("ConfigFileName");
@@ -92,6 +94,7 @@ public class SnuffyPWActivity extends Activity {
         mPageTop = getIntent().getIntExtra("PageTop", 0);
         mPageWidth = getIntent().getIntExtra("PageWidth", 320);         // set defaults but they will not be used
         mPageHeight = getIntent().getIntExtra("PageHeight", 480);       // caller will always determine these and pass them in
+		Log.i("ScreenSize", "Left = " + mPageLeft + ", Top = " + mPageTop + ", Width = " + mPageWidth + ", Height = " + mPageHeight);
         getIntent().putExtra("AllowFlip", false);
 
         setContentView(R.layout.snuffy_main);

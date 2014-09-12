@@ -27,7 +27,7 @@
             android:name=".MainPW"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainPWOld"
             android:label="main test"

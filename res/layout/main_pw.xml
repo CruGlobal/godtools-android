@@ -1,143 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:id="@+id/homescreen">
-	
-	<!--  the container -->
-	<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:visibility="invisible"
-		android:layout_width="200px"
-		android:layout_height="400px"
-		android:layout_x="20px"
-		android:layout_y="20px"
-		android:background="@drawable/homescreen_background"
-		android:id="@+id/homescreen_container">
-		
-		<!-- the linen background, vignettte and white table background (not needed?)  -->					
-		<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-                   android:id="@+id/vignette_background"
-			android:layout_width="640px"
-			android:layout_height="960px"
-			android:layout_x="0px"
-			android:layout_y="0px"
-			android:scaleType="fitXY"
-			android:src="@drawable/homescreen_background_linen_vignette"/>
-					
-		<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-                   android:id="@+id/logo"
-			android:layout_width="238px"
-			android:layout_height="182px"
-			android:layout_x="200px"
-			android:layout_y="30px"
-			android:src="@drawable/homescreen_godtools_logo_2x"/>
+<RelativeLayout
+    android:id="@+id/homescreen"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/contList"
+    <!--  the container -->
+    <RelativeLayout
+        android:id="@+id/homescreen_container"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_x="20px"
+        android:layout_y="20px"
+        android:background="@drawable/homescreen_background"
+        android:visibility="invisible">
+
+        <!-- the linen background, vignettte and white table background (not needed?)  -->
+        <ImageView
+            android:id="@+id/vignette_background"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_x="0px"
+            android:layout_y="0px"
+            android:scaleType="fitXY"
+            android:src="@drawable/homescreen_background_linen_vignette"/>
+
+        <ImageView
+            android:id="@+id/logo"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="100dp"
+            android:layout_height="76dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="45dp"
+            android:layout_marginTop="15dp"
+            android:layout_x="200px"
+            android:layout_y="30px"
+            android:src="@drawable/homescreen_godtools_logo_2x"/>
+
+        <RelativeLayout
+            android:id="@+id/full_table"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_x="34px"
-            android:layout_y="252px"
-            android:background="#fff">
+            android:layout_below="@+id/logo"
+            android:layout_centerHorizontal="true"
+            >
 
-        </FrameLayout>
+            <FrameLayout
+                android:id="@+id/contList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="15dp"
+                android:background="#ffffffff">
 
-		<!-- the 4 corners of the frame -->
-		<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-			android:layout_width="38px"
-			android:layout_height="38px"
-			android:layout_x="8px"
-			android:layout_y="226px"
-			android:src="@drawable/homescreen_menu_nw_2x"
-            android:id="@+id/top_left"/>
-		<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-			android:layout_width="38px"
-			android:layout_height="38px"
-			android:layout_x="594px"
-			android:layout_y="226px"
-			android:src="@drawable/homescreen_menu_ne_2x"
-            android:id="@+id/top_right"/>
-		<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-			android:layout_width="38px"
-			android:layout_height="38px"
-			android:layout_x="8px"
-			android:layout_y="755px"
-			android:src="@drawable/homescreen_menu_sw_2x"
-            android:id="@+id/bottom_left"/>
-		<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-			android:layout_width="38px"
-			android:layout_height="38px"
-			android:layout_x="594px"
-			android:layout_y="755px"
-			android:src="@drawable/homescreen_menu_se_2x"
-            android:id="@+id/bottom_right"/>
+            </FrameLayout>
 
-		<!-- the 4 sides of the frame -->
-		<ImageView xmlns:android="http://schemas.android.com/apk/res/android" 
-			android:layout_width="548px"
-			android:layout_height="38px"
-			android:layout_x="46px"
-			android:layout_y="226px"
-			android:src="@drawable/homescreen_menu_n_repeat"
-            android:id="@+id/top_side"/>
-		<ImageView xmlns:android="http://schemas.android.com/apk/res/android" 
-			android:layout_width="548px"
-			android:layout_height="38px"
-			android:layout_x="46px"
-			android:layout_y="755px"
-			android:src="@drawable/homescreen_menu_s_repeat"
-            android:id="@+id/bottom_side"/>
-		<ImageView xmlns:android="http://schemas.android.com/apk/res/android" 
-			android:layout_width="38px"
-			android:layout_height="495px"
-			android:layout_x="8px"
-			android:layout_y="264px"
-			android:src="@drawable/homescreen_menu_w_repeat"
-            android:id="@+id/left_side"/>
-		<ImageView xmlns:android="http://schemas.android.com/apk/res/android" 
-			android:layout_width="38px"
-			android:layout_height="495px"
-			android:layout_x="594px"
-			android:layout_y="264px"
-			android:src="@drawable/homescreen_menu_e_repeat"
-            android:id="@+id/right_side"/>
-			
-		<!-- the settings button -->
-		<ImageButton	
-			android:id="@+id/homescreen_settings_button"		
-			android:layout_width="142px"
-			android:layout_height="96px"
-			android:layout_x="480px"
-			android:layout_y="800px"
-			android:background="@drawable/homescreen_settings_button_2x"
-			android:onClick="onCmd_settings"/>	
-				
-		
-	</AbsoluteLayout>
+        </RelativeLayout>
+
+        <!-- the 4 corners of the frame -->
+        <ImageView
+            android:id="@+id/top_left"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignLeft="@+id/full_table"
+            android:layout_alignTop="@+id/full_table"
+            android:src="@drawable/homescreen_menu_nw_2x"/>
+
+        <ImageView
+            android:id="@+id/top_right"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignRight="@+id/full_table"
+            android:layout_alignTop="@+id/full_table"
+            android:src="@drawable/homescreen_menu_ne_2x"/>
+
+        <ImageView
+            android:id="@+id/bottom_left"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignBottom="@+id/full_table"
+            android:layout_alignLeft="@+id/full_table"
+            android:src="@drawable/homescreen_menu_sw_2x"
+            />
+
+        <ImageView
+            android:id="@+id/bottom_right"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignBottom="@+id/full_table"
+            android:layout_alignRight="@+id/full_table"
+            android:src="@drawable/homescreen_menu_se_2x"/>
+
+        <!-- the 4 sides of the frame -->
+        <ImageView
+            android:id="@+id/top_side"
+            android:layout_width="250dp"
+            android:layout_height="22dp"
+            android:layout_alignTop="@+id/full_table"
+            android:layout_toLeftOf="@+id/top_right"
+            android:layout_toRightOf="@+id/top_left"
+            android:src="@drawable/homescreen_menu_n_repeat"
+            android:scaleType="centerCrop"/>
+
+        <ImageView
+            android:id="@+id/bottom_side"
+            android:layout_width="250dp"
+            android:layout_height="22dp"
+            android:layout_alignBottom="@+id/full_table"
+            android:layout_toLeftOf="@+id/bottom_right"
+            android:layout_toRightOf="@+id/bottom_left"
+            android:src="@drawable/homescreen_menu_s_repeat"
+            android:scaleType="centerCrop"/>
+
+        <ImageView
+            android:id="@+id/left_side"
+            android:layout_width="22dp"
+            android:layout_height="250dp"
+            android:layout_above="@+id/bottom_left"
+            android:layout_alignLeft="@+id/full_table"
+            android:layout_below="@+id/top_left"
+            android:src="@drawable/homescreen_menu_w_repeat"
+            android:cropToPadding="false"
+            android:scaleType="centerCrop"/>
+
+        <ImageView
+            android:id="@+id/right_side"
+            android:layout_width="22dp"
+            android:layout_height="250dp"
+            android:layout_above="@+id/bottom_right"
+            android:layout_alignRight="@+id/full_table"
+            android:layout_below="@+id/top_right"
+            android:src="@drawable/homescreen_menu_e_repeat"
+            android:scaleType="centerCrop"/>
+
+        <!-- the settings button -->
+        <ImageButton
+            android:id="@+id/homescreen_settings_button"
+            android:layout_width="100dp"
+            android:layout_height="68dp"
+            android:layout_x="480px"
+            android:layout_y="800px"
+            android:background="@drawable/homescreen_settings_button_2x"
+            android:onClick="onCmd_settings"
+            android:layout_below="@+id/full_table"
+            android:layout_alignRight="@+id/full_table"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"/>
+
+    </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/contLoading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:padding="20dp"
         android:gravity="center_vertical"
-        android:id="@+id/contLoading"
+        android:padding="20dp"
         android:visibility="gone">
 
         <ProgressBar
+            android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/progressBar"
-            android:indeterminate="true"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:indeterminate="true"/>
 
         <TextView
+            android:id="@+id/tvTask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
             android:textColor="#fff"
-            android:id="@+id/tvTask"/>
+            android:textSize="16sp"/>
 
     </LinearLayout>
 
-</AbsoluteLayout>
+</RelativeLayout>
