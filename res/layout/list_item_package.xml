@@ -36,7 +36,8 @@
         android:textColor="#000"
         android:textSize="19sp"
         android:text="asdasdasd"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        />
 
     <ImageView
         android:id="@+id/arrow"

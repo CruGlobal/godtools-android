@@ -52,7 +52,7 @@ import java.util.Locale;
 
 public class MainPW extends BaseActionBarActivity implements LanguageDialogFragment.OnLanguageChangedListener, PackageListFragment.OnPackageSelectedListener, DownloadTask.DownloadTaskHandler, MetaTask.MetaTaskHandler
 {
-	private static final String TAG = "Main";
+	private static final String TAG = "MainPW";
 	private static final String TAG_LIST = "PackageList";
 	private static final String TAG_DIALOG_LANGUAGE = "LanguageDialog";
 	private static final int REQUEST_SETTINGS = 1001;
@@ -89,7 +89,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 				WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		// overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+		overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
 
 		super.onCreate(savedInstanceState);
 
@@ -252,6 +252,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 				break;
 			}
 		}
+
+		createTheHomeScreen();
 	}
 
 
@@ -307,6 +309,11 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
 	private void getScreenSize()
 	{
+
+		/*
+		 * Although these measurements are not used on this screen, they are passed to and used by
+		 * the following screens. At some point maybe all layouts can be updated to relative layout.
+		 */
 		Rect rect = new Rect();
 		Window window = getWindow();
 		window.getDecorView().getWindowVisibleDisplayFrame(rect);
@@ -324,8 +331,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		{
 			height = rect.height();
 			width = (int) Math.round(height * aspectRatioTarget);
-		}
-		else
+		} else
 		{
 			width = rect.width();
 			height = (int) Math.round(width / aspectRatioTarget);
@@ -338,7 +344,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		mPageTop = top;
 		mPageWidth = width;
 		mPageHeight = height;
-		Log.i("ScreenSize", "Left = " + mPageLeft + ", Top = " + mPageTop + ", Width = " + mPageWidth + ", Height = " + mPageHeight);
 	}
 
 	private void createTheHomeScreen()
@@ -347,8 +352,9 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		try
 		{
 			int childHeight = packageFrag.getListView().getChildAt(0).getHeight();
+			int childWidth = packageFrag.getListView().getChildAt(0).getWidth();
 			int totalHeight = childHeight * packageList.size();
-			packageFrag.getListView().setLayoutParams(new FrameLayout.LayoutParams(967, totalHeight));
+			packageFrag.getListView().setLayoutParams(new FrameLayout.LayoutParams(childWidth, totalHeight));
 		} catch (Exception e)
 		{
 			Log.e("error", e.getMessage());
@@ -420,6 +426,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			}
 
 		}
+
+		createTheHomeScreen();
 	}
 
 	@Override

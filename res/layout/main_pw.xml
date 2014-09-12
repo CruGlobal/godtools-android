@@ -30,11 +30,11 @@
         <ImageView
             android:id="@+id/logo"
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="100dp"
-            android:layout_height="76dp"
+            android:layout_width="125dp"
+            android:layout_height="96dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="45dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginBottom="40dp"
+            android:layout_marginTop="20dp"
             android:layout_x="200px"
             android:layout_y="30px"
             android:src="@drawable/homescreen_godtools_logo_2x"/>
