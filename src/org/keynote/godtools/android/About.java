@@ -1,8 +1,11 @@
 package org.keynote.godtools.android;
  
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -52,10 +55,27 @@ public class About extends Activity {
 
 	private void sendEmail()
 	{
+		String[] sendTo = {"support@godtoolsapp.com"};
 		String subjectLine = "GodTools Suggestion";
 		String message = "";
-		SnuffyApplication application = ((SnuffyApplication) getApplication());
-		application.sendEmailWithContent(this, subjectLine, message);
+		
+		try {
+			Intent intent = new Intent(Intent.ACTION_SENDTO);
+			intent.setData(Uri.parse("mailto:"));
+			intent.putExtra(Intent.EXTRA_EMAIL, sendTo);
+			intent.putExtra(Intent.EXTRA_SUBJECT, subjectLine);
+			intent.putExtra(Intent.EXTRA_TEXT, message);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			this.startActivity(Intent.createChooser(intent, getApplicationContext().getString(R.string.choose_your_email_provider)));
+		} catch (Exception e) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage(R.string.unable_to_send_the_email)
+					.setCancelable(false)
+					.setPositiveButton(R.string.ok, null);
+			AlertDialog alert = builder.create();
+			alert.show();
+			return;
+		}
 	}
 	
     @Override
