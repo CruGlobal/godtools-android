@@ -2,16 +2,16 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="20dp">
-
+    android:layout_height="wrap_content"
+    android:background="#f0f0f0"
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/ivIcon"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:scaleType="fitCenter"
-        android:layout_marginRight="20dp"/>
+        android:layout_marginRight="10dp"/>
 
     <View
         android:id="@+id/vGray"
@@ -27,13 +27,32 @@
     <TextView
         android:id="@+id/tvPackageName"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_toRightOf="@+id/ivIcon"
         android:layout_alignTop="@+id/ivIcon"
         android:layout_alignBottom="@+id/ivIcon"
-        android:gravity="center_vertical"
+        android:paddingTop="10dp"
+        android:gravity="center"
         android:textColor="#000"
-        android:textSize="22sp"
-        android:text="asdasdasd"/>
+        android:textSize="19sp"
+        android:text="asdasdasd"
+        android:layout_centerHorizontal="true"
+        />
+
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/homescreen_menu_arrow_2x"
+        android:layout_alignTop="@+id/tvPackageName"
+        android:layout_alignBottom="@+id/tvPackageName"
+        android:layout_toRightOf="@+id/tvPackageName"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:cropToPadding="false"
+        android:scaleType="fitEnd"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="10dp"/>
 
 </RelativeLayout>

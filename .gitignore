@@ -20,6 +20,7 @@ local.properties
 /gen/
 /.idea/
 /snuffy-android.iml
+/.gradle/
 
 # OS specific annoyances
 **/*.DS_Store
