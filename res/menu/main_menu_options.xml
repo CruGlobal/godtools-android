@@ -26,15 +26,10 @@
         android:title="@string/menu_item_first_page"
         android:icon="@drawable/rewind_grey"
         android:visible="false" />
-
-    <!-- Rename email to share. Email makes one think they are email the maker of the app, which
-        is now done from about page. Share is used to send app to others.-->
     <item
         android:id="@+id/CMD_EMAIL"
         android:title="@string/menu_item_email"
         android:icon="@drawable/button_export" />
-
-    
     <item
         android:id="@+id/CMD_LANGUAGES"
         android:title="@string/menu_item_languages"
