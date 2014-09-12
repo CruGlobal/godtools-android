@@ -8,7 +8,10 @@
     <string name="menu_item_4laws">The Four Spiritual Laws</string>
     <string name="menu_item_everystudent">Everystudent.com</string>
     <string name="menu_item_first_page">First page</string>
-    <string name="menu_item_email">Email</string>
+
+    <!--It seems that this item should be called share and not email. Email would lead one
+    to think that they are emailing the maker of the app-->
+    <string name="menu_item_email">Share</string>
     <string name="menu_item_contents">Contents</string>
     <string name="menu_item_languages">Languages</string>
     <string name="menu_item_about">About</string>
@@ -56,7 +59,7 @@
     <string name="menu_help">Help</string>
     <string name="menu_quit">Quit</string>
 
-    <string name="about_suggestions">Please email us at support@godtoolsapp.com with any questions or suggestions on how to make this app better.</string>
+    <string name="about_suggestions">Please email us at %1$s with any questions or suggestions on how to make this app better.</string>
     <string name="about_copyright">Copyright Information</string>
     <string name="about_presentation">This presentation created and produced by Cru ©2014. All rights reserved.</string>
     <string name="about_kgp">"Would You Like to Know God Personally?" ©1995-2010 Cru and Bright Media Foundation (BMF). All rights reserved.</string>
