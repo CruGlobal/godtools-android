@@ -28,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,6 +75,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 	TextView tvTask;
 	FrameLayout frameLayout;
 	RelativeLayout tableLayout;
+	ImageButton refreshButton;
 
 	boolean isDownloading;
 	String authorization;
@@ -143,6 +145,42 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			}
 		});
 
+		refreshButton = (ImageButton) findViewById(R.id.refresh_button);
+		refreshButton.setOnTouchListener(new OnTouchListener()
+		{
+			@Override
+			public boolean onTouch(View arg0, MotionEvent me)
+			{
+				ImageButton button = (ImageButton) arg0;
+				Drawable d = button.getBackground();
+				PorterDuffColorFilter grayFilter =
+						new PorterDuffColorFilter(Color.DKGRAY, PorterDuff.Mode.SRC_ATOP);
+
+				if (me.getAction() == MotionEvent.ACTION_DOWN)
+				{
+					d.setColorFilter(grayFilter);
+					button.invalidate();
+					return false;
+				} else if (me.getAction() == MotionEvent.ACTION_UP)
+				{
+					d.setColorFilter(null);
+					button.invalidate();
+					return false;
+				} else
+					return false;
+			}
+		});
+
+		refreshButton.setOnClickListener( new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View view)
+			{
+				UpdateDraftListTask updateDraftListTask = new UpdateDraftListTask();
+				updateDraftListTask.execute(null, true);
+			}
+		});
+
 		mSetupNeeded = true;
 	}
 
@@ -203,9 +241,11 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			}
 			case RESULT_PREVIEW_MODE_ENABLED:
 			{
-				ActionBar actionBar = getSupportActionBar();
-				actionBar.setDisplayShowCustomEnabled(true);
-				ibRefresh = (ImageButton) findViewById(R.id.ibRefresh);
+				// ActionBar actionBar = getSupportActionBar();
+				// actionBar.setDisplayShowCustomEnabled(true);
+				// ibRefresh = (ImageButton) findViewById(R.id.ibRefresh);
+				refreshButton = (ImageButton) findViewById(R.id.refresh_button);
+				refreshButton.setVisibility(View.VISIBLE);
 
 				// refresh the list
 				SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -230,9 +270,12 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			}
 			case RESULT_PREVIEW_MODE_DISABLED:
 			{
-				ActionBar actionBar = getSupportActionBar();
-				actionBar.setDisplayShowCustomEnabled(false);
-				ibRefresh = null;
+				// ActionBar actionBar = getSupportActionBar();
+				// actionBar.setDisplayShowCustomEnabled(false);
+				// ibRefresh = null;
+				refreshButton = (ImageButton) findViewById(R.id.refresh_button);
+				refreshButton.setVisibility(View.INVISIBLE);
+				refreshButton = null;
 
 				// refresh the list
 				SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -377,9 +420,9 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		vLoading.setVisibility(View.VISIBLE);
 		packageFrag.disable();
 
-		if (ibRefresh != null)
+		if (refreshButton != null)
 		{
-			ibRefresh.setEnabled(false);
+			refreshButton.setEnabled(false);
 		}
 	}
 
@@ -690,9 +733,9 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		vLoading.setVisibility(View.GONE);
 		packageFrag.enable();
 
-		if (ibRefresh != null)
+		if (refreshButton != null)
 		{
-			ibRefresh.setEnabled(true);
+			refreshButton.setEnabled(true);
 		}
 	}
 
@@ -720,7 +763,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
 		return false;
 	}
-
 
 	private void addPageFrameToIntent(Intent intent)
 	{
