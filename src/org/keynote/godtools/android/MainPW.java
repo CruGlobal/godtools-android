@@ -155,6 +155,17 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			}
 		});
 
+		if (settings.getBoolean("TranslatorMode", false))
+		{
+			refreshButton.setVisibility(View.VISIBLE);
+			refreshButton.setEnabled(true);
+		}
+		else
+		{
+			refreshButton.setVisibility(View.INVISIBLE);
+			refreshButton.setEnabled(false);
+		}
+
 		mSetupNeeded = true;
 	}
 
