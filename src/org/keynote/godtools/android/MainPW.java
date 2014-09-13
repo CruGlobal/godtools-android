@@ -146,38 +146,12 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		});
 
 		refreshButton = (ImageButton) findViewById(R.id.refresh_button);
-		refreshButton.setOnTouchListener(new OnTouchListener()
-		{
-			@Override
-			public boolean onTouch(View arg0, MotionEvent me)
-			{
-				ImageButton button = (ImageButton) arg0;
-				Drawable d = button.getBackground();
-				PorterDuffColorFilter grayFilter =
-						new PorterDuffColorFilter(Color.DKGRAY, PorterDuff.Mode.SRC_ATOP);
-
-				if (me.getAction() == MotionEvent.ACTION_DOWN)
-				{
-					d.setColorFilter(grayFilter);
-					button.invalidate();
-					return false;
-				} else if (me.getAction() == MotionEvent.ACTION_UP)
-				{
-					d.setColorFilter(null);
-					button.invalidate();
-					return false;
-				} else
-					return false;
-			}
-		});
-
-		refreshButton.setOnClickListener( new View.OnClickListener()
+		refreshButton.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View view)
 			{
-				UpdateDraftListTask updateDraftListTask = new UpdateDraftListTask();
-				updateDraftListTask.execute(null, true);
+				onCmd_refresh(null);
 			}
 		});
 
@@ -241,11 +215,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			}
 			case RESULT_PREVIEW_MODE_ENABLED:
 			{
-				// ActionBar actionBar = getSupportActionBar();
-				// actionBar.setDisplayShowCustomEnabled(true);
-				// ibRefresh = (ImageButton) findViewById(R.id.ibRefresh);
-				refreshButton = (ImageButton) findViewById(R.id.refresh_button);
 				refreshButton.setVisibility(View.VISIBLE);
+				refreshButton.setClickable(true);
 
 				// refresh the list
 				SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -270,12 +241,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			}
 			case RESULT_PREVIEW_MODE_DISABLED:
 			{
-				// ActionBar actionBar = getSupportActionBar();
-				// actionBar.setDisplayShowCustomEnabled(false);
-				// ibRefresh = null;
-				refreshButton = (ImageButton) findViewById(R.id.refresh_button);
 				refreshButton.setVisibility(View.INVISIBLE);
-				refreshButton = null;
+				refreshButton.setClickable(false);
 
 				// refresh the list
 				SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -776,6 +743,20 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 	{
 		Intent intent = new Intent(this, SettingsPW.class);
 		startActivityForResult(intent, REQUEST_SETTINGS);
+	}
+
+	public void onCmd_refresh(View view)
+	{
+		if (Device.isConnected(MainPW.this))
+		{
+			SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+			String authorization = settings.getString("authorization", getString(R.string.key_authorization_generic));
+			showLoading("Updating drafts...");
+			GodToolsApiClient.getListOfDrafts(authorization, languagePrimary, "draft", this);
+		} else
+		{
+			Toast.makeText(MainPW.this, "Internet connection is required", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	private void quit()
