@@ -782,38 +782,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
 			final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-			if (shouldDownload)
-			{
-				GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), settings.getString("Authorization_Draft", ""), langCode, tag, MainPW.this);
-			}
-			else
-			{
-				if (tag.equalsIgnoreCase("draft"))
-				{
-					FragmentManager fm = getSupportFragmentManager();
-					DialogFragment frag = (DialogFragment) fm.findFragmentByTag("alert_dialog");
-					if (frag == null)
-					{
-						Locale primary = new Locale(langCode);
-						frag = AlertDialogFragment.newInstance("Drafts", String.format("No drafts available for %s", primary.getDisplayName()));
-						frag.setCancelable(false);
-						frag.show(fm, "alert_dialog");
-					}
-
-				} else if (tag.equalsIgnoreCase("draft_primary"))
-				{
-
-					languagePrimary = langCode;
-					packageList = getPackageList();
-					packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
-
-				} else if (tag.equalsIgnoreCase("draft_parallel"))
-				{
-					// do nothing
-				}
-
-				hideLoading();
-			}
+		    GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), settings.getString("Authorization_Draft", ""), langCode, tag, MainPW.this);
 		}
 	}
 
