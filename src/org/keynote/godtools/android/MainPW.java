@@ -28,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,6 +75,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 	TextView tvTask;
 	FrameLayout frameLayout;
 	RelativeLayout tableLayout;
+	ImageButton refreshButton;
 
 	boolean isDownloading;
 	String authorization;
@@ -143,6 +145,27 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			}
 		});
 
+		refreshButton = (ImageButton) findViewById(R.id.refresh_button);
+		refreshButton.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View view)
+			{
+				onCmd_refresh(null);
+			}
+		});
+
+		if (settings.getBoolean("TranslatorMode", false))
+		{
+			refreshButton.setVisibility(View.VISIBLE);
+			refreshButton.setEnabled(true);
+		}
+		else
+		{
+			refreshButton.setVisibility(View.INVISIBLE);
+			refreshButton.setEnabled(false);
+		}
+
 		mSetupNeeded = true;
 	}
 
@@ -203,9 +226,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			}
 			case RESULT_PREVIEW_MODE_ENABLED:
 			{
-				ActionBar actionBar = getSupportActionBar();
-				actionBar.setDisplayShowCustomEnabled(true);
-				ibRefresh = (ImageButton) findViewById(R.id.ibRefresh);
+				refreshButton.setVisibility(View.VISIBLE);
+				refreshButton.setClickable(true);
 
 				// refresh the list
 				SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -230,9 +252,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			}
 			case RESULT_PREVIEW_MODE_DISABLED:
 			{
-				ActionBar actionBar = getSupportActionBar();
-				actionBar.setDisplayShowCustomEnabled(false);
-				ibRefresh = null;
+				refreshButton.setVisibility(View.INVISIBLE);
+				refreshButton.setClickable(false);
 
 				// refresh the list
 				SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -377,9 +398,9 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		vLoading.setVisibility(View.VISIBLE);
 		packageFrag.disable();
 
-		if (ibRefresh != null)
+		if (refreshButton != null)
 		{
-			ibRefresh.setEnabled(false);
+			refreshButton.setEnabled(false);
 		}
 	}
 
@@ -690,9 +711,9 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		vLoading.setVisibility(View.GONE);
 		packageFrag.enable();
 
-		if (ibRefresh != null)
+		if (refreshButton != null)
 		{
-			ibRefresh.setEnabled(true);
+			refreshButton.setEnabled(true);
 		}
 	}
 
@@ -721,7 +742,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		return false;
 	}
 
-
 	private void addPageFrameToIntent(Intent intent)
 	{
 		intent.putExtra("PageLeft", mPageLeft);
@@ -734,6 +754,20 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 	{
 		Intent intent = new Intent(this, SettingsPW.class);
 		startActivityForResult(intent, REQUEST_SETTINGS);
+	}
+
+	public void onCmd_refresh(View view)
+	{
+		if (Device.isConnected(MainPW.this))
+		{
+			SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+			String authorization = settings.getString("authorization", getString(R.string.key_authorization_generic));
+			showLoading("Updating drafts...");
+			GodToolsApiClient.getListOfDrafts(authorization, languagePrimary, "draft", this);
+		} else
+		{
+			Toast.makeText(MainPW.this, "Internet connection is required", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	private void quit()

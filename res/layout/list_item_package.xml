@@ -48,11 +48,10 @@
         android:layout_alignBottom="@+id/tvPackageName"
         android:layout_toRightOf="@+id/tvPackageName"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="false"
-        android:cropToPadding="false"
         android:scaleType="fitEnd"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:layout_marginRight="10dp"/>
+        android:layout_marginRight="10dp"
+        android:layout_alignParentEnd="false"/>
 
 </RelativeLayout>
