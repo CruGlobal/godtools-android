@@ -194,7 +194,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		{
 			case RESULT_CHANGED_PRIMARY:
 			{
-
 				SnuffyApplication app = (SnuffyApplication) getApplication();
 				app.setAppLocale(data.getStringExtra("primaryCode"));
 
@@ -206,7 +205,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			}
 			case RESULT_DOWNLOAD_PRIMARY:
 			{
-
 				// start the download
 				String code = data.getStringExtra("primaryCode");
 				showLoading("Downloading resources...");
@@ -220,7 +218,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			}
 			case RESULT_DOWNLOAD_PARALLEL:
 			{
-
 				// refresh the list if the primary language was changed
 				String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 				if (!languagePrimary.equalsIgnoreCase(primaryCode))
