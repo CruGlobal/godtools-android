@@ -6,12 +6,10 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,15 +35,17 @@ public class PackageListFragment extends ListFragment
 
 	private String languageCode;
 	private List<GTPackage> listPackages;
+    private boolean translatorMode;
 	private PackageListAdapter mAdapter;
 	private Typeface mAlternateTypeface;
 	private OnPackageSelectedListener mListener;
 
-	public static PackageListFragment newInstance(String langCode, List<GTPackage> packages)
+	public static PackageListFragment newInstance(String langCode, List<GTPackage> packages, boolean translatorMode)
 	{
 		PackageListFragment frag = new PackageListFragment();
 		frag.setPackages(packages);
 		frag.setLanguageCode(langCode);
+        frag.translatorMode = translatorMode;
 		return frag;
 	}
 
@@ -87,9 +87,10 @@ public class PackageListFragment extends ListFragment
 		this.languageCode = langCode;
 	}
 
-	public void refreshList(String langCode, List<GTPackage> packages)
+	public void refreshList(String langCode, boolean translatorMode, List<GTPackage> packages)
 	{
 		this.languageCode = langCode;
+        this.translatorMode = translatorMode;
 		handleLanguagesWithAlternateFonts(langCode);
 		mAdapter.refresh(packages);
 	}
@@ -149,17 +150,32 @@ public class PackageListFragment extends ListFragment
 			ViewHolder holder;
 			if (convertView == null)
 			{
-				convertView = inflater.inflate(R.layout.list_item_package, parent, false);
 
-				holder = new ViewHolder();
-				holder.ivIcon = (ImageView) convertView.findViewById(R.id.ivIcon);
-				holder.tvPackageName = (TextView) convertView.findViewById(R.id.tvPackageName);
-				holder.vGray = convertView.findViewById(R.id.vGray);
+                if(translatorMode)
+                {
+				    convertView = inflater.inflate(R.layout.list_item_with_icon_text_and_status, parent, false);
 
+                    holder = new ViewHolder();
+				    holder.icon = (ImageView) convertView.findViewById(R.id.list2Image);
+				    holder.packageName = (TextView) convertView.findViewById(R.id.list2Text1);
+                    holder.status = (TextView) convertView.findViewById(R.id.list2Text2);
+                }
+                else
+                {
+                    convertView = inflater.inflate(R.layout.list_item_with_icon_and_text, parent, false);
+
+                    holder = new ViewHolder();
+                    holder.icon = (ImageView) convertView.findViewById(R.id.list1Image);
+                    holder.packageName = (TextView) convertView.findViewById(R.id.list1Text);
+                }
 				if (position % 2 == 0)
 				{
 					convertView.setBackgroundColor(0x000000);
 				}
+                else
+                {
+                    convertView.setBackgroundColor(0x909090);
+                }
 
 				convertView.setTag(holder);
 
@@ -168,32 +184,30 @@ public class PackageListFragment extends ListFragment
 				holder = (ViewHolder) convertView.getTag();
 			}
 
-			holder.tvPackageName.setTypeface(mAlternateTypeface);
+			holder.packageName.setTypeface(mAlternateTypeface);
 
-			if (mIsEnabled)
-				holder.vGray.setVisibility(View.GONE);
-			else
-				holder.vGray.setVisibility(View.VISIBLE);
-
-			String name = gtp.getName();
-			if (gtp.getStatus().equalsIgnoreCase("draft"))
-				name = String.format("%s (%s)", name, gtp.getStatus());
+//			if (mIsEnabled)
+//				holder.gray.setVisibility(View.GONE);
+//			else
+//				holder.gray.setVisibility(View.VISIBLE);
 
 			// set values
-			holder.tvPackageName.setText(name);
+			holder.packageName.setText(gtp.getName());
+            if(translatorMode) holder.status.setText(gtp.getStatus());
 
 			Picasso.with(getActivity())
 					.load(new File(resourcesDir + gtp.getIcon()))
-					.into(holder.ivIcon);
+					.into(holder.icon);
 
 			return convertView;
 		}
 
 		private class ViewHolder
 		{
-			ImageView ivIcon;
-			TextView tvPackageName;
-			View vGray;
+			ImageView icon;
+			TextView packageName;
+            TextView status;
+			View gray;
 		}
 
 		public void refresh(List<GTPackage> packageList)
