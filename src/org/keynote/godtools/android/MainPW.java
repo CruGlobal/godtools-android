@@ -841,13 +841,15 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                                 @Override
                                 public void draftTaskComplete()
                                 {
-
+                                    Toast.makeText(getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT);
+                                    showLoading("Updating drafts...");
+                                    GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", MainPW.this);
                                 }
 
                                 @Override
                                 public void draftTaskFailure()
                                 {
-
+                                    Toast.makeText(getApplicationContext(), "Failed to create a new draft", Toast.LENGTH_SHORT);
                                 }
                             });
                 }
