@@ -551,66 +551,119 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		return settings.getBoolean("TranslatorMode", false);
 	}
 
-	/**
-	 * Dialog example taken from:
-	 * http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android
-	 */
-	@Override
-	public void onPackageSelected(final GTPackage gtPackage) {
-		final MainPW referenceToThisActivity = this;
-		final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+    @Override
+    public void onPackageSelected(final GTPackage gtPackage)
+    {
+        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-		if(isTranslatorModeEnabled() && !"draft".equalsIgnoreCase(gtPackage.getStatus()))
-		{
-			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialogInterface, int which)
-				{
-					Intent intent;
-					switch (which)
-					{
-						case DialogInterface.BUTTON_POSITIVE:
-							GodToolsApiClient.createDraft(settings.getString("Authorization_Draft", ""),
-									gtPackage.getLanguage(),
-									gtPackage.getCode(),
-									null);
+        if(isTranslatorModeEnabled() && !"draft".equalsIgnoreCase(gtPackage.getStatus()))
+        {
+            presentCreateDraftOption(gtPackage, settings);
+        }
+        else if(isTranslatorModeEnabled() && "draft".equalsIgnoreCase(gtPackage.getStatus()))
+        {
+            presentFinalizeDraftOption(gtPackage, settings);
+        }
+        else
+        {
+            Intent intent = new Intent(this, SnuffyPWActivity.class);
+            intent.putExtra("PackageName", gtPackage.getCode());
+            intent.putExtra("LanguageCode", gtPackage.getLanguage());
+            intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
+            intent.putExtra("Status", gtPackage.getStatus());
+            addPageFrameToIntent(intent);
+            startActivity(intent);
+        }
+    }
 
-							intent = new Intent(referenceToThisActivity, MainPW.class);
-							startActivity(intent);
-							break;
+    /**
+     * Dialog example taken from:
+     * http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android
+     */
+    private void presentFinalizeDraftOption(final GTPackage gtPackage, final SharedPreferences settings)
+    {
+        final MainPW referenceToThisActivity = this;
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which)
+            {
+                Intent intent;
+                switch (which)
+                {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        GodToolsApiClient.publishDraft(settings.getString("Authorization_Draft", ""),
+                                gtPackage.getLanguage(),
+                                gtPackage.getCode(),
+                                null);
 
-						case DialogInterface.BUTTON_NEGATIVE:
-							intent = new Intent(referenceToThisActivity, SnuffyPWActivity.class);
-							intent.putExtra("PackageName", gtPackage.getCode());
-							intent.putExtra("LanguageCode", gtPackage.getLanguage());
-							intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
-							intent.putExtra("Status", gtPackage.getStatus());
-							addPageFrameToIntent(intent);
-							startActivity(intent);
-							break;
-					}
-				}
-			};
+                        intent = new Intent(referenceToThisActivity, MainPW.class);
+                        startActivity(intent);
+                        break;
 
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage("Do you want create a new draft for \"" + gtPackage.getName() + "\"?")
-					.setPositiveButton("Yes, create it for me!", dialogClickListener)
-					.setNegativeButton("No, just open the existing.", dialogClickListener)
-					.show();
-		}
-		else
-		{
-			Intent intent = new Intent(this, SnuffyPWActivity.class);
-			intent.putExtra("PackageName", gtPackage.getCode());
-			intent.putExtra("LanguageCode", gtPackage.getLanguage());
-			intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
-			intent.putExtra("Status", gtPackage.getStatus());
-			addPageFrameToIntent(intent);
-			startActivity(intent);
-		}
-	}
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        intent = new Intent(referenceToThisActivity, SnuffyPWActivity.class);
+                        intent.putExtra("PackageName", gtPackage.getCode());
+                        intent.putExtra("LanguageCode", gtPackage.getLanguage());
+                        intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
+                        intent.putExtra("Status", gtPackage.getStatus());
+                        addPageFrameToIntent(intent);
+                        startActivity(intent);
+                        break;
+                }
+            }
+        };
 
-	@Override
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Do you want publish this draft?")
+                .setPositiveButton("Yes, it's ready!", dialogClickListener)
+                .setNegativeButton("No, I just need to see it.", dialogClickListener)
+                .show();
+    }
+    /**
+     * Dialog example taken from:
+     * http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android
+     */
+    private void presentCreateDraftOption(final GTPackage gtPackage, final SharedPreferences settings)
+    {
+        final MainPW referenceToThisActivity = this;
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which)
+            {
+                Intent intent;
+                switch (which)
+                {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        GodToolsApiClient.createDraft(settings.getString("Authorization_Draft", ""),
+                                gtPackage.getLanguage(),
+                                gtPackage.getCode(),
+                                null);
+
+                        intent = new Intent(referenceToThisActivity, MainPW.class);
+                        startActivity(intent);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        intent = new Intent(referenceToThisActivity, SnuffyPWActivity.class);
+                        intent.putExtra("PackageName", gtPackage.getCode());
+                        intent.putExtra("LanguageCode", gtPackage.getLanguage());
+                        intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
+                        intent.putExtra("Status", gtPackage.getStatus());
+                        addPageFrameToIntent(intent);
+                        startActivity(intent);
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Do you want create a new draft for \"" + gtPackage.getName() + "\"?")
+                .setPositiveButton("Yes, create it for me!", dialogClickListener)
+                .setNegativeButton("No, just open the existing.", dialogClickListener)
+                .show();
+    }
+
+    @Override
 	public void metaTaskComplete(InputStream is, String langCode, String tag)
 	{
 		// process the input stream

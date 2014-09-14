@@ -86,6 +86,16 @@ public class GodToolsApiClient {
         new DraftCreationTask(taskHandler).execute(url, authorization);
     }
 
+    public static void publishDraft(String authorization,
+                                    String languageCode,
+                                    String packageCode,
+                                    DraftPublishTask.DraftTaskHandler taskHandler)
+    {
+        String url = BASE_URL + ENDPOINT_TRANSLATIONS + languageCode + File.separator + packageCode;
+
+        new DraftPublishTask(taskHandler).execute(url, authorization);
+    }
+
     private static void download(Context context, String url, String filePath, String tag, String authorization, String langCode, DownloadTask.DownloadTaskHandler taskHandler) {
         DownloadTask downloadTask = new DownloadTask(context, taskHandler);
         //downloadTask.execute(url, filePath, tag);
