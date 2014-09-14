@@ -238,12 +238,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			}
 			case RESULT_PREVIEW_MODE_ENABLED:
 			{
-//				refreshButton.setVisibility(View.VISIBLE);
-//				refreshButton.setClickable(true);
-//
-//                addButton.setVisibility(View.VISIBLE);
-//                addButton.setClickable(true);
-
 				// refresh the list
 				String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 
@@ -252,10 +246,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 					SnuffyApplication app = (SnuffyApplication) getApplication();
 					app.setAppLocale(primaryCode);
 				}
-
-//				languagePrimary = primaryCode;
-//				packageList = getPackageList();
-//                packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
 
 				showLoading("Downloading drafts...");
 
@@ -270,12 +260,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			}
 			case RESULT_PREVIEW_MODE_DISABLED:
 			{
-//				refreshButton.setVisibility(View.INVISIBLE);
-//				refreshButton.setClickable(false);
-//
-//                addButton.setVisibility(View.INVISIBLE);
-//                addButton.setClickable(false);
-
 				// refresh the list
 				String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 
@@ -284,10 +268,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 					SnuffyApplication app = (SnuffyApplication) getApplication();
 					app.setAppLocale(primaryCode);
 				}
-
-//				languagePrimary = primaryCode;
-//				packageList = getPackageList();
-//                packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
 
                 Toast.makeText(MainPW.this, "Translator preview mode is disabled", Toast.LENGTH_LONG).show();
 
@@ -633,7 +613,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                                     }
                                 });
 
-
+                        startActivity(getIntent());
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -689,9 +669,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                                         Toast.makeText(getApplicationContext(), "Failed to create draft", Toast.LENGTH_SHORT).show();
                                     }
                                 });
-
-                        intent = new Intent(referenceToThisActivity, MainPW.class);
-                        startActivity(intent);
+                        startActivity(getIntent());
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
