@@ -1,6 +1,8 @@
 package org.keynote.godtools.android;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -549,18 +551,55 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		return settings.getBoolean("TranslatorMode", false);
 	}
 
+	/**
+	 * Dialog example taken from:
+	 * http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android
+	 */
 	@Override
-	public void onPackageSelected(GTPackage gtPackage)
-	{
-		if (gtPackage.getCode().equalsIgnoreCase("everystudent"))
+	public void onPackageSelected(final GTPackage gtPackage) {
+		final MainPW referenceToThisActivity = this;
+		final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+		if(isTranslatorModeEnabled() && !"draft".equalsIgnoreCase(gtPackage.getStatus()))
 		{
-			Intent intent = new Intent(this, EveryStudent.class);
-			intent.putExtra("PackageName", gtPackage.getCode());
-			addPageFrameToIntent(intent);
-			startActivity(intent);
-		} else
+			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialogInterface, int which)
+				{
+					Intent intent;
+					switch (which)
+					{
+						case DialogInterface.BUTTON_POSITIVE:
+							GodToolsApiClient.createDraft(settings.getString("Authorization_Draft", ""),
+									gtPackage.getLanguage(),
+									gtPackage.getCode(),
+									null);
+
+							intent = new Intent(referenceToThisActivity, MainPW.class);
+							startActivity(intent);
+							break;
+
+						case DialogInterface.BUTTON_NEGATIVE:
+							intent = new Intent(referenceToThisActivity, SnuffyPWActivity.class);
+							intent.putExtra("PackageName", gtPackage.getCode());
+							intent.putExtra("LanguageCode", gtPackage.getLanguage());
+							intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
+							intent.putExtra("Status", gtPackage.getStatus());
+							addPageFrameToIntent(intent);
+							startActivity(intent);
+							break;
+					}
+				}
+			};
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("Do you want create a new draft for \"" + gtPackage.getName() + "\"?")
+					.setPositiveButton("Yes, create it for me!", dialogClickListener)
+					.setNegativeButton("No, just open the existing.", dialogClickListener)
+					.show();
+		}
+		else
 		{
-			Log.i("Activity", "Calling SnuffyPWActivity");
 			Intent intent = new Intent(this, SnuffyPWActivity.class);
 			intent.putExtra("PackageName", gtPackage.getCode());
 			intent.putExtra("LanguageCode", gtPackage.getLanguage());
@@ -569,7 +608,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			addPageFrameToIntent(intent);
 			startActivity(intent);
 		}
-
 	}
 
 	@Override
