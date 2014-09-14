@@ -659,20 +659,16 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		{
 			super.onPostExecute(shouldDownload);
 
+			final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
 			if (shouldDownload)
 			{
-
-				SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-				String authorization = settings.getString("authorization", getString(R.string.key_authorization_generic));
-				GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), authorization, langCode, tag, MainPW.this);
-
-
-			} else
+				GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), settings.getString("Authorization_Draft", ""), langCode, tag, MainPW.this);
+			}
+			else
 			{
-
 				if (tag.equalsIgnoreCase("draft"))
 				{
-
 					FragmentManager fm = getSupportFragmentManager();
 					DialogFragment frag = (DialogFragment) fm.findFragmentByTag("alert_dialog");
 					if (frag == null)
