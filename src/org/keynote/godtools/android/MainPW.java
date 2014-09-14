@@ -43,6 +43,8 @@ import org.keynote.godtools.android.fragments.AlertDialogFragment;
 import org.keynote.godtools.android.fragments.LanguageDialogFragment;
 import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.http.DownloadTask;
+import org.keynote.godtools.android.http.DraftCreationTask;
+import org.keynote.godtools.android.http.DraftPublishTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
@@ -587,21 +589,34 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             @Override
             public void onClick(DialogInterface dialogInterface, int which)
             {
-                Intent intent;
                 switch (which)
                 {
                     case DialogInterface.BUTTON_POSITIVE:
                         GodToolsApiClient.publishDraft(settings.getString("Authorization_Draft", ""),
                                 gtPackage.getLanguage(),
                                 gtPackage.getCode(),
-                                null);
+                                new DraftPublishTask.DraftTaskHandler()
+                                {
+                                    @Override
+                                    public void draftTaskComplete()
+                                    {
+                                        Toast.makeText(getApplicationContext(), "Draft has been published", Toast.LENGTH_SHORT).show();
+                                        showLoading("Updating drafts");
+                                        GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", referenceToThisActivity);
+                                    }
 
-                        intent = new Intent(referenceToThisActivity, MainPW.class);
-                        startActivity(intent);
+                                    @Override
+                                    public void draftTaskFailure()
+                                    {
+                                        Toast.makeText(getApplicationContext(), "Failed to publish draft", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
-                        intent = new Intent(referenceToThisActivity, SnuffyPWActivity.class);
+                        Intent intent = new Intent(referenceToThisActivity, SnuffyPWActivity.class);
                         intent.putExtra("PackageName", gtPackage.getCode());
                         intent.putExtra("LanguageCode", gtPackage.getLanguage());
                         intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
@@ -637,7 +652,22 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                         GodToolsApiClient.createDraft(settings.getString("Authorization_Draft", ""),
                                 gtPackage.getLanguage(),
                                 gtPackage.getCode(),
-                                null);
+                                new DraftCreationTask.DraftTaskHandler()
+                                {
+                                    @Override
+                                    public void draftTaskComplete()
+                                    {
+                                        Toast.makeText(getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT).show();
+                                        showLoading("Updating drafts");
+                                        GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", referenceToThisActivity);
+                                    }
+
+                                    @Override
+                                    public void draftTaskFailure()
+                                    {
+                                        Toast.makeText(getApplicationContext(), "Failed to create draft", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
 
                         intent = new Intent(referenceToThisActivity, MainPW.class);
                         startActivity(intent);
@@ -662,6 +692,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 .setNegativeButton("No, just open the existing.", dialogClickListener)
                 .show();
     }
+
 
     @Override
 	public void metaTaskComplete(InputStream is, String langCode, String tag)
