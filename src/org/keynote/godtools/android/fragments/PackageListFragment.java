@@ -177,7 +177,7 @@ public class PackageListFragment extends ListFragment
 
 			String name = gtp.getName();
 			if (gtp.getStatus().equalsIgnoreCase("draft"))
-				name = String.format("%s (v%s)", name, gtp.getVersion());
+				name = String.format("%s (%s)", name, gtp.getStatus());
 
 			// set values
 			holder.tvPackageName.setText(name);
