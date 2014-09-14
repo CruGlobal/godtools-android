@@ -61,7 +61,7 @@ public class DraftPublishTask extends AsyncTask<Object, Void, Integer>
     @Override
     protected void onPostExecute(Integer responseStatusCode)
     {
-        if(responseStatusCode.equals(201))
+        if(responseStatusCode.equals(204))
         {
             taskHandler.draftTaskComplete();
         }
