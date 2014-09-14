@@ -30,7 +30,6 @@ import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +38,6 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.everystudent.EveryStudent;
-import org.keynote.godtools.android.fragments.AlertDialogFragment;
 import org.keynote.godtools.android.fragments.LanguageDialogFragment;
 import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.http.DownloadTask;
@@ -51,15 +49,10 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 
 public class MainPW extends BaseActionBarActivity implements LanguageDialogFragment.OnLanguageChangedListener,
@@ -564,6 +557,15 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
     @Override
     public void onPackageSelected(final GTPackage gtPackage)
     {
+        if (gtPackage.getCode().equalsIgnoreCase("everystudent"))
+        {
+            Intent intent = new Intent(this, EveryStudent.class);
+            intent.putExtra("PackageName", gtPackage.getCode());
+            addPageFrameToIntent(intent);
+            startActivity(intent);
+            return;
+        }
+
         final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         if(isTranslatorModeEnabled() && "draft".equalsIgnoreCase(gtPackage.getStatus()))
