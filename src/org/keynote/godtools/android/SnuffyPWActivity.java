@@ -561,9 +561,11 @@ public class SnuffyPWActivity extends Activity {
     }
 
     private void refreshPage() {
+        final SharedPreferences settings = getSharedPreferences("GodTools", MODE_PRIVATE);
+
         SnuffyPage currentPage = mPages.get(mPagerCurrentItem);
         GodToolsApiClient.downloadDraftPage((SnuffyApplication) getApplication(),
-                "6cc05cf3abfdb768d4b1adcb35860bacc2cb9966",
+                settings.getString("Authorization_Draft", ""),
                 mAppLanguage,
                 mAppPackage,
                 currentPage.getPageId(),
