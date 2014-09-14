@@ -20,6 +20,7 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.http.AuthTask;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
@@ -57,7 +58,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
 	TextView tvTask;
 	ProgressBar progressBar;
-	String authorization;
 	SharedPreferences settings;
 
 	/**
@@ -79,11 +79,30 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 		languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 		languageParallel = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
-		authorization = getString(R.string.key_authorization_generic);
-
 		if (isFirstLaunch())
 		{
 			new PrepareInitialContentTask((SnuffyApplication) getApplication()).execute((Void) null);
+
+			if(Device.isConnected(Splash.this) &&
+					settings.getString("Authorization_Generic", "").equals(""))
+			{
+				GodToolsApiClient.authenticateGeneric(new AuthTask.AuthTaskHandler()
+				{
+					@Override
+					public void authComplete(String authorization)
+					{
+						SharedPreferences.Editor editor = settings.edit();
+						editor.putString("Authorization_Generic", authorization);
+						editor.apply();
+					}
+
+					@Override
+					public void authFailed()
+					{
+						throw new IllegalStateException("Cannot continue w/o a Generic Authorization token");
+					}
+				});
+			}
 
 		} else if (Device.isConnected(Splash.this))
 		{
@@ -332,6 +351,8 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 		{
 			super.onPostExecute(aVoid);
 
+			final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
 			gtlPrimary = mAdapter.getGTLanguage(languagePrimary);
 			gtlParallel = mAdapter.getGTLanguage(languageParallel);
 
@@ -347,7 +368,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 					GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
 							languagePhone,
 							KEY_NEW_LANGUAGE,
-							authorization,
+							settings.getString("Authorization_Generic", ""),
 							Splash.this);
 				} else if (!gtlPrimary.isDownloaded())
 				{
@@ -356,7 +377,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 					GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
 							languagePrimary,
 							KEY_UPDATE_PRIMARY,
-							authorization,
+							settings.getString("Authorization_Generic", ""),
 							Splash.this);
 				} else
 				{
@@ -373,7 +394,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 					GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
 							languagePrimary,
 							KEY_UPDATE_PRIMARY,
-							authorization,
+							settings.getString("Authorization_Generic", ""),
 							Splash.this);
 
 				} else
@@ -385,7 +406,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 						GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
 								gtlParallel.getLanguageCode(),
 								KEY_UPDATE_PARALLEL,
-								authorization,
+								settings.getString("Authorization_Generic", ""),
 								Splash.this);
 
 					} else
@@ -413,7 +434,8 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 	private void checkForUpdates()
 	{
 		showLoading(getString(R.string.check_update));
-		GodToolsApiClient.getListOfPackages(authorization, "meta", Splash.this);
+		final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+		GodToolsApiClient.getListOfPackages(settings.getString("Authorization_Generic", ""), "meta", Splash.this);
 	}
 
 	@Override
@@ -457,7 +479,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 				GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
 						gtlParallel.getLanguageCode(),
 						KEY_UPDATE_PARALLEL,
-						getString(R.string.key_authorization_generic),
+						settings.getString("Authorization_Generic", ""),
 						Splash.this);
 			} else
 			{

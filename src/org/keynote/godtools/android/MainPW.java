@@ -78,7 +78,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 	ImageButton refreshButton;
 
 	boolean isDownloading;
-	String authorization;
 
 	/**
 	 * Called when the activity is first created.
@@ -104,7 +103,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 		languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-		authorization = getString(R.string.key_authorization_generic);
 
 		packageList = getPackageList(); // get the packages for the primary language
 
@@ -174,6 +172,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 	{
 		super.onActivityResult(requestCode, resultCode, data);
 
+		final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
 		switch (resultCode)
 		{
 			case RESULT_CHANGED_PRIMARY:
@@ -197,7 +197,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 				GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
 						code,
 						"primary",
-						authorization,
+						settings.getString("Authorization_Generic", ""),
 						this);
 
 				break;
@@ -206,7 +206,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			{
 
 				// refresh the list if the primary language was changed
-				SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 				String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 				if (!languagePrimary.equalsIgnoreCase(primaryCode))
 				{
@@ -220,7 +219,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 				GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
 						code,
 						"parallel",
-						authorization,
+						settings.getString("Authorization_Generic", ""),
 						this);
 				break;
 			}
@@ -230,7 +229,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 				refreshButton.setClickable(true);
 
 				// refresh the list
-				SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 				String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 
 				if (!languagePrimary.equalsIgnoreCase(primaryCode))
@@ -256,7 +254,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 				refreshButton.setClickable(false);
 
 				// refresh the list
-				SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 				String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 
 				if (!languagePrimary.equalsIgnoreCase(primaryCode))
@@ -407,6 +404,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 	@Override
 	public void onLanguageChanged(String name, String code)
 	{
+		final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
 		GTLanguage gtLanguage = GTLanguage.getLanguage(MainPW.this, code);
 		if (gtLanguage.isDownloaded())
@@ -415,7 +413,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			packageList = getPackageList();
 			packageFrag.refreshList(languagePrimary, packageList);
 
-			SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putString(GTLanguage.KEY_PRIMARY, code);
 
@@ -438,7 +435,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 				GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
 						code,
 						"primary",
-						authorization,
+						settings.getString("Authorization_Generic", ""),
 						this);
 			} else
 			{
