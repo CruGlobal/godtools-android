@@ -51,8 +51,15 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
 import java.io.InputStream;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 
 public class MainPW extends BaseActionBarActivity implements LanguageDialogFragment.OnLanguageChangedListener,
@@ -559,11 +566,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
     {
         final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        if(isTranslatorModeEnabled() && !"draft".equalsIgnoreCase(gtPackage.getStatus()))
-        {
-            presentCreateDraftOption(gtPackage, settings);
-        }
-        else if(isTranslatorModeEnabled() && "draft".equalsIgnoreCase(gtPackage.getStatus()))
+        if(isTranslatorModeEnabled() && "draft".equalsIgnoreCase(gtPackage.getStatus()))
         {
             presentFinalizeDraftOption(gtPackage, settings);
         }
@@ -635,63 +638,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 .setNegativeButton("No, I just need to see it.", dialogClickListener)
                 .show();
     }
-    /**
-     * Dialog example taken from:
-     * http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android
-     */
-    private void presentCreateDraftOption(final GTPackage gtPackage, final SharedPreferences settings)
-    {
-        final MainPW referenceToThisActivity = this;
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which)
-            {
-                Intent intent;
-                switch (which)
-                {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        GodToolsApiClient.createDraft(settings.getString("Authorization_Draft", ""),
-                                gtPackage.getLanguage(),
-                                gtPackage.getCode(),
-                                new DraftCreationTask.DraftTaskHandler()
-                                {
-                                    @Override
-                                    public void draftTaskComplete()
-                                    {
-                                        Toast.makeText(getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT).show();
-                                        showLoading("Updating drafts");
-                                        GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", referenceToThisActivity);
-                                    }
-
-                                    @Override
-                                    public void draftTaskFailure()
-                                    {
-                                        Toast.makeText(getApplicationContext(), "Failed to create draft", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                        startActivity(getIntent());
-                        break;
-
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        intent = new Intent(referenceToThisActivity, SnuffyPWActivity.class);
-                        intent.putExtra("PackageName", gtPackage.getCode());
-                        intent.putExtra("LanguageCode", gtPackage.getLanguage());
-                        intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
-                        intent.putExtra("Status", gtPackage.getStatus());
-                        addPageFrameToIntent(intent);
-                        startActivity(intent);
-                        break;
-                }
-            }
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Do you want create a new draft for \"" + gtPackage.getName() + "\"?")
-                .setPositiveButton("Yes, create it for me!", dialogClickListener)
-                .setNegativeButton("No, just open the existing.", dialogClickListener)
-                .show();
-    }
-
 
     @Override
 	public void metaTaskComplete(InputStream is, String langCode, String tag)
@@ -847,13 +793,107 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
 			showLoading("Updating drafts...");
 			GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", this);
-		} else
+		}
+        else
 		{
 			Toast.makeText(MainPW.this, "Internet connection is required", Toast.LENGTH_SHORT).show();
 		}
 	}
 
-	private void quit()
+    public void onCmd_add(View view)
+    {
+        if (Device.isConnected(MainPW.this))
+        {
+            final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setTitle("Start a draft for: ");
+
+            final LinkedHashMap<String,String> possiblePackagesForDraft = getPossiblePackagesForDraft();
+
+            final String[] packageNames = new ArrayList<String>(possiblePackagesForDraft.values()).toArray(new String[possiblePackagesForDraft.size()]);
+
+            b.setItems(packageNames, new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    dialog.dismiss();
+
+                    int i = 0;
+                    String packageCode = null;
+                    for(Map.Entry<String,String> entry : possiblePackagesForDraft.entrySet())
+                    {
+                        if(i == which)
+                        {
+                            packageCode = entry.getKey();
+                            break;
+                        }
+                        i++;
+                    }
+                    GodToolsApiClient.createDraft(settings.getString("Authorization_Draft", ""),
+                            languagePrimary,
+                            packageCode,
+                            new DraftCreationTask.DraftTaskHandler()
+                            {
+                                @Override
+                                public void draftTaskComplete()
+                                {
+
+                                }
+
+                                @Override
+                                public void draftTaskFailure()
+                                {
+
+                                }
+                            });
+                }
+
+            });
+
+            b.show();
+        }
+        else
+        {
+            Toast.makeText(MainPW.this, "Internet connection is required", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private LinkedHashMap<String,String> getPossiblePackagesForDraft()
+    {
+        // start with an ArrayList the length of number of packages. it will never be bigger than that.
+        LinkedHashMap<String,String> possiblePackages = new LinkedHashMap<String,String>(packageList.size());
+
+        // start with an list of (unfortuantely) hard coded packages
+        possiblePackages.put("kgp", "Knowing God Personally");
+        possiblePackages.put("fourlaws", "Four Spiritual Laws");
+        possiblePackages.put("satisfied", "Satisfied?");
+
+        // loop through the list of loaded packages, and stick in the name of any existing packages (already translated)
+        for(GTPackage gtPackage : packageList)
+        {
+            if("live".equalsIgnoreCase(gtPackage.getStatus()) &&
+                    possiblePackages.containsKey(gtPackage.getCode()))
+            {
+                possiblePackages.put(gtPackage.getCode(), gtPackage.getName());
+            }
+        }
+
+        // loop through the list again and remove any that are already in 'draft' status
+        for(GTPackage gtPackage : packageList)
+        {
+            if("draft".equalsIgnoreCase(gtPackage.getStatus()) &&
+                    possiblePackages.containsKey(gtPackage.getCode()))
+            {
+                possiblePackages.remove(gtPackage.getCode());
+            }
+        }
+
+        return possiblePackages;
+    }
+
+    private void quit()
 	{
 		super.onDestroy();
 		this.finish();

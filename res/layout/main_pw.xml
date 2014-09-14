@@ -161,7 +161,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp"/>
 
-        <!-- the refresh button -->
+        <!-- the add button -->
         <ImageButton
             android:id="@+id/homescreen_add_button"
             android:layout_width="100dp"
@@ -170,7 +170,8 @@
             android:layout_below="@+id/full_table"
             android:layout_toRightOf="@+id/refresh_button"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:onClick="onCmd_add"/>
 
     </RelativeLayout>
 
