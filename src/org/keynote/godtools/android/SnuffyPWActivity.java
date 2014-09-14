@@ -22,6 +22,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.AbsoluteLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.keynote.godtools.android.business.GTPackage;
@@ -562,8 +564,10 @@ public class SnuffyPWActivity extends Activity {
 
     private void refreshPage() {
         final SharedPreferences settings = getSharedPreferences("GodTools", MODE_PRIVATE);
-
         SnuffyPage currentPage = mPages.get(mPagerCurrentItem);
+
+        showLoading("Updating page...");
+
         GodToolsApiClient.downloadDraftPage((SnuffyApplication) getApplication(),
                 settings.getString("Authorization_Draft", ""),
                 mAppLanguage,
@@ -577,12 +581,14 @@ public class SnuffyPWActivity extends Activity {
                         Integer result = mProcessPackageAsync.doInBackground();
                         mProcessPackageAsync.onPostExecute(result);
                         Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_SHORT).show();
+                        hideLoading();
                     }
 
                     @Override
                     public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
                     {
                         Toast.makeText(getApplicationContext(), "Error refreshing page", Toast.LENGTH_SHORT).show();
+                        hideLoading();
                     }
                 });
     }
@@ -676,5 +682,24 @@ public class SnuffyPWActivity extends Activity {
             openOptionsMenu();
             return super.onSingleTapUp(e);
         }
+    }
+
+    private void showLoading(String msg)
+    {
+        RelativeLayout updatingDraftLayout = (RelativeLayout) findViewById(R.id.updatingDraft);
+        updatingDraftLayout.setVisibility(View.VISIBLE);
+
+        TextView updatingPage = (TextView) findViewById(R.id.updatingPageTextView);
+        updatingPage.setText(msg);
+    }
+
+    private void hideLoading()
+    {
+        TextView updatingPage = (TextView) findViewById(R.id.updatingPageTextView);
+        updatingPage.setText("");
+
+        RelativeLayout updatingDraftLayout = (RelativeLayout) findViewById(R.id.updatingDraft);
+        updatingDraftLayout.setVisibility(View.GONE);
+
     }
 }
