@@ -43,7 +43,7 @@ public class DraftCreationTask extends AsyncTask<Object, Void, Integer>
 
         HttpParams httpParams = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParams, 10000);
-        HttpConnectionParams.setSoTimeout(httpParams, 10000);
+        HttpConnectionParams.setSoTimeout(httpParams, 30000);
 
         HttpClient httpClient = new DefaultHttpClient(httpParams);
 
