@@ -4,6 +4,7 @@
   android:orientation="horizontal"
   android:layout_width="match_parent"
   android:layout_height="54dip"
+  android:background="#f0f0f0"
   android:padding="4dip">
   <!-- android:layout_height="?android:attr/listPreferredItemHeight"-->
     <ImageView 
@@ -13,14 +14,14 @@
      	android:layout_gravity="left"
      	android:layout_height="match_parent" 
      	android:scaleType="centerInside"
-     	android:src="@drawable/icon"></ImageView>
+     	android:src="@drawable/icon"/>
      	
      	<LinearLayout
      		android:orientation="vertical"
 	    	android:layout_weight="1"
   			android:layout_width="0dip"
-  			android:layout_height="match_parent"
-     		>
+  			android:layout_height="match_parent">
+
 		    <TextView 
 			    android:id="@+id/list2Text1"
 		    	android:text="TextView" 
@@ -34,7 +35,7 @@
 		     	android:ellipsize="end"
 				android:padding="0dip"		     	
 		     	android:layout_marginLeft="4dip"
-		     	android:layout_marginRight="4dip"></TextView>
+		     	android:layout_marginRight="4dip"/>
 		    <TextView 
 			    android:id="@+id/list2Text2"
 		    	android:text="TextView" 
@@ -48,6 +49,14 @@
 		     	android:ellipsize="end"
 				android:padding="0dip"		     	
 		     	android:layout_marginLeft="4dip"
-		     	android:layout_marginRight="4dip"></TextView>
+		     	android:layout_marginRight="4dip"/>
      	</LinearLayout>
+
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/homescreen_menu_arrow_2x"
+        android:layout_gravity="center_vertical|right"/>
+
 </LinearLayout>
