@@ -18,6 +18,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -78,7 +79,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 	private List<GTPackage> packageList;
 	PackageListFragment packageFrag;
 	View vLoading;
-	ImageButton ibRefresh;
 	TextView tvTask;
 	FrameLayout frameLayout;
 	RelativeLayout tableLayout;
@@ -749,28 +749,34 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.homescreen, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
-		switch (item.getItemId())
+		if (keyCode == KeyEvent.KEYCODE_MENU)
 		{
-			case R.id.CMD_SETTINGS:
-				onCmd_settings(null);
-				return true;
-
-			case R.id.CMD_QUIT:
-				quit();
-				return true;
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setCancelable(false)
+					.setMessage(R.string.quit_dialog_message)
+					.setPositiveButton(R.string.quit_dialog_confirm, new DialogInterface.OnClickListener()
+					{
+						@Override
+						public void onClick(DialogInterface dialogInterface, int i)
+						{
+							finish();
+						}
+					})
+					.setNegativeButton(R.string.quit_dialog_cancel, new DialogInterface.OnClickListener()
+					{
+						@Override
+						public void onClick(DialogInterface dialogInterface, int i)
+						{
+							dialogInterface.cancel();
+						}
+					});
+			AlertDialog alertDialog = builder.create();
+			alertDialog.show();
+			return true;
 		}
-
-		return false;
+		return super.onKeyDown(keyCode, event);
 	}
 
 	private void addPageFrameToIntent(Intent intent)
@@ -896,11 +902,4 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
         return possiblePackages;
     }
-
-    private void quit()
-	{
-		super.onDestroy();
-		this.finish();
-	}
-
 }
