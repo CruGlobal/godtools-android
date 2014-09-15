@@ -59,6 +59,10 @@
     <string name="menu_help">Help</string>
     <string name="menu_quit">Quit</string>
 
+    <string name="quit_dialog_message">Are you sure you want to exit GodTools?</string>
+    <string name="quit_dialog_confirm">Exit</string>
+    <string name="quit_dialog_cancel">Cancel</string>
+
     <string name="about_suggestions">Please email us at %1$s with any questions or suggestions on how to make this app better.</string>
     <string name="about_copyright">Copyright Information</string>
     <string name="about_presentation">This presentation created and produced by Cru ©2014. All rights reserved.</string>
