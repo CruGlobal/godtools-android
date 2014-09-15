@@ -168,14 +168,11 @@ public class PackageListFragment extends ListFragment
                     holder.icon = (ImageView) convertView.findViewById(R.id.list1Image);
                     holder.packageName = (TextView) convertView.findViewById(R.id.list1Text);
                 }
+
 				if (position % 2 == 0)
 				{
 					convertView.setBackgroundColor(0x000000);
 				}
-                else
-                {
-                    convertView.setBackgroundColor(0x909090);
-                }
 
 				convertView.setTag(holder);
 
