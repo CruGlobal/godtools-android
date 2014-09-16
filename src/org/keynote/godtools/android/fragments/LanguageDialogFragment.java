@@ -9,18 +9,21 @@ import android.support.v4.app.DialogFragment;
 
 import org.keynote.godtools.android.R;
 
-public class LanguageDialogFragment extends DialogFragment {
+public class LanguageDialogFragment extends DialogFragment
+{
 
     private static final String ARGS_LANGUAGE_NAME = "name";
     private static final String ARGS_LANGUAGE_CODE = "code";
 
-    public interface OnLanguageChangedListener {
+    public interface OnLanguageChangedListener
+    {
         public void onLanguageChanged(String name, String code);
     }
 
     private OnLanguageChangedListener mListener;
 
-    public static DialogFragment newInstance(String langName, String langCode) {
+    public static DialogFragment newInstance(String langName, String langCode)
+    {
         DialogFragment frag = new LanguageDialogFragment();
         Bundle args = new Bundle();
         args.putString(ARGS_LANGUAGE_NAME, langName);
@@ -32,13 +35,15 @@ public class LanguageDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Activity activity)
+    {
         super.onAttach(activity);
         mListener = (OnLanguageChangedListener) activity;
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState)
+    {
         final String name = getArguments().getString(ARGS_LANGUAGE_NAME);
         final String code = getArguments().getString(ARGS_LANGUAGE_CODE);
 
@@ -50,15 +55,19 @@ public class LanguageDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle(title)
                 .setMessage(String.format(body, name))
-                .setPositiveButton(positive, new DialogInterface.OnClickListener() {
+                .setPositiveButton(positive, new DialogInterface.OnClickListener()
+                {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onClick(DialogInterface dialogInterface, int i)
+                    {
                         mListener.onLanguageChanged(name, code);
                     }
                 })
-                .setNegativeButton(negative, new DialogInterface.OnClickListener() {
+                .setNegativeButton(negative, new DialogInterface.OnClickListener()
+                {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onClick(DialogInterface dialogInterface, int i)
+                    {
                         // do nothing
                     }
                 });

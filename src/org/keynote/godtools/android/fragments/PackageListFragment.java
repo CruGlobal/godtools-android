@@ -28,136 +28,137 @@ import java.util.List;
 public class PackageListFragment extends ListFragment
 {
 
-	public interface OnPackageSelectedListener
-	{
-		public void onPackageSelected(GTPackage gtPackage);
-	}
+    public interface OnPackageSelectedListener
+    {
+        public void onPackageSelected(GTPackage gtPackage);
+    }
 
-	private String languageCode;
-	private List<GTPackage> listPackages;
+    private String languageCode;
+    private List<GTPackage> listPackages;
     private boolean translatorMode;
-	private PackageListAdapter mAdapter;
-	private Typeface mAlternateTypeface;
-	private OnPackageSelectedListener mListener;
+    private PackageListAdapter mAdapter;
+    private Typeface mAlternateTypeface;
+    private OnPackageSelectedListener mListener;
 
-	public static PackageListFragment newInstance(String langCode, List<GTPackage> packages, boolean translatorMode)
-	{
-		PackageListFragment frag = new PackageListFragment();
-		frag.setPackages(packages);
-		frag.setLanguageCode(langCode);
+    public static PackageListFragment newInstance(String langCode, List<GTPackage> packages, boolean translatorMode)
+    {
+        PackageListFragment frag = new PackageListFragment();
+        frag.setPackages(packages);
+        frag.setLanguageCode(langCode);
         frag.translatorMode = translatorMode;
-		return frag;
-	}
+        return frag;
+    }
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState)
-	{
-		super.onActivityCreated(savedInstanceState);
-		getListView().setCacheColorHint(Color.TRANSPARENT);
-		getListView().setDivider(null);
-	}
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+        getListView().setCacheColorHint(Color.TRANSPARENT);
+        getListView().setDivider(null);
+    }
 
-	@Override
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
-		mListener = (OnPackageSelectedListener) activity;
-	}
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        mListener = (OnPackageSelectedListener) activity;
+    }
 
-	@Override
-	public void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
 
-		setRetainInstance(true);
+        setRetainInstance(true);
 
-		handleLanguagesWithAlternateFonts(this.languageCode);
+        handleLanguagesWithAlternateFonts(this.languageCode);
 
-		mAdapter = new PackageListAdapter(getActivity(), listPackages);
-		setListAdapter(mAdapter);
-	}
+        mAdapter = new PackageListAdapter(getActivity(), listPackages);
+        setListAdapter(mAdapter);
+    }
 
-	public void setPackages(List<GTPackage> packages)
-	{
-		this.listPackages = packages;
-	}
+    public void setPackages(List<GTPackage> packages)
+    {
+        this.listPackages = packages;
+    }
 
-	public void setLanguageCode(String langCode)
-	{
-		this.languageCode = langCode;
-	}
+    public void setLanguageCode(String langCode)
+    {
+        this.languageCode = langCode;
+    }
 
-	public void refreshList(String langCode, boolean translatorMode, List<GTPackage> packages)
-	{
-		this.languageCode = langCode;
+    public void refreshList(String langCode, boolean translatorMode, List<GTPackage> packages)
+    {
+        this.languageCode = langCode;
         this.translatorMode = translatorMode;
-		handleLanguagesWithAlternateFonts(langCode);
-		mAdapter.refresh(packages);
-	}
+        handleLanguagesWithAlternateFonts(langCode);
+        mAdapter.refresh(packages);
+    }
 
-	public void disable()
-	{
-		mAdapter.disableClick();
-	}
+    public void disable()
+    {
+        mAdapter.disableClick();
+    }
 
-	public void enable()
-	{
-		mAdapter.enableClick();
-	}
+    public void enable()
+    {
+        mAdapter.enableClick();
+    }
 
-	private void handleLanguagesWithAlternateFonts(String mAppLanguage)
-	{
-		if (LanguagesNotSupportedByDefaultFont.contains(mAppLanguage))
-		{
-			mAlternateTypeface = Typefaces.get(getActivity(), LanguagesNotSupportedByDefaultFont.getPathToAlternateFont(mAppLanguage));
-		} else
-		{
-			mAlternateTypeface = Typeface.DEFAULT;
-		}
-	}
+    private void handleLanguagesWithAlternateFonts(String mAppLanguage)
+    {
+        if (LanguagesNotSupportedByDefaultFont.contains(mAppLanguage))
+        {
+            mAlternateTypeface = Typefaces.get(getActivity(), LanguagesNotSupportedByDefaultFont.getPathToAlternateFont(mAppLanguage));
+        }
+        else
+        {
+            mAlternateTypeface = Typeface.DEFAULT;
+        }
+    }
 
-	@Override
-	public void onListItemClick(ListView l, View v, int position, long id)
-	{
-		mListener.onPackageSelected(listPackages.get(position));
-	}
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id)
+    {
+        mListener.onPackageSelected(listPackages.get(position));
+    }
 
-	private class PackageListAdapter extends ArrayAdapter<GTPackage>
-	{
+    private class PackageListAdapter extends ArrayAdapter<GTPackage>
+    {
 
-		private List<GTPackage> listPackages;
-		private LayoutInflater inflater;
-		private boolean mIsEnabled;
-		private String resourcesDir;
+        private List<GTPackage> listPackages;
+        private LayoutInflater inflater;
+        private boolean mIsEnabled;
+        private String resourcesDir;
 
-		public PackageListAdapter(Context context, List<GTPackage> listPackages)
-		{
-			super(context, R.layout.list_item_package, listPackages);
-			this.listPackages = listPackages;
-			this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			this.mIsEnabled = true;
+        public PackageListAdapter(Context context, List<GTPackage> listPackages)
+        {
+            super(context, R.layout.list_item_package, listPackages);
+            this.listPackages = listPackages;
+            this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            this.mIsEnabled = true;
 
-			SnuffyApplication mApp = (SnuffyApplication) getActivity().getApplication();
-			resourcesDir = mApp.getDocumentsDir().getAbsolutePath() + "/resources/";
+            SnuffyApplication mApp = (SnuffyApplication) getActivity().getApplication();
+            resourcesDir = mApp.getDocumentsDir().getAbsolutePath() + "/resources/";
 
-		}
+        }
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent)
-		{
-			GTPackage gtp = listPackages.get(position);
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent)
+        {
+            GTPackage gtp = listPackages.get(position);
 
-			ViewHolder holder;
-			if (convertView == null)
-			{
+            ViewHolder holder;
+            if (convertView == null)
+            {
 
-                if(translatorMode)
+                if (translatorMode)
                 {
-				    convertView = inflater.inflate(R.layout.list_item_with_icon_text_and_status, parent, false);
+                    convertView = inflater.inflate(R.layout.list_item_with_icon_text_and_status, parent, false);
 
                     holder = new ViewHolder();
-				    holder.icon = (ImageView) convertView.findViewById(R.id.list2Image);
-				    holder.packageName = (TextView) convertView.findViewById(R.id.list2Text1);
+                    holder.icon = (ImageView) convertView.findViewById(R.id.list2Image);
+                    holder.packageName = (TextView) convertView.findViewById(R.id.list2Text1);
                     holder.status = (TextView) convertView.findViewById(R.id.list2Text2);
                 }
                 else
@@ -168,71 +169,72 @@ public class PackageListFragment extends ListFragment
                     holder.icon = (ImageView) convertView.findViewById(R.id.list1Image);
                     holder.packageName = (TextView) convertView.findViewById(R.id.list1Text);
                 }
-				if (position % 2 == 0)
-				{
-					convertView.setBackgroundColor(0x000000);
-				}
+                if (position % 2 == 0)
+                {
+                    convertView.setBackgroundColor(0x000000);
+                }
                 else
                 {
                     convertView.setBackgroundColor(0x909090);
                 }
 
-				convertView.setTag(holder);
+                convertView.setTag(holder);
 
-			} else
-			{
-				holder = (ViewHolder) convertView.getTag();
-			}
+            }
+            else
+            {
+                holder = (ViewHolder) convertView.getTag();
+            }
 
-			holder.packageName.setTypeface(mAlternateTypeface);
+            holder.packageName.setTypeface(mAlternateTypeface);
 
 //			if (mIsEnabled)
 //				holder.gray.setVisibility(View.GONE);
 //			else
 //				holder.gray.setVisibility(View.VISIBLE);
 
-			// set values
-			holder.packageName.setText(gtp.getName());
-            if(translatorMode) holder.status.setText(gtp.getStatus());
+            // set values
+            holder.packageName.setText(gtp.getName());
+            if (translatorMode) holder.status.setText(gtp.getStatus());
 
-			Picasso.with(getActivity())
-					.load(new File(resourcesDir + gtp.getIcon()))
-					.into(holder.icon);
+            Picasso.with(getActivity())
+                    .load(new File(resourcesDir + gtp.getIcon()))
+                    .into(holder.icon);
 
-			return convertView;
-		}
+            return convertView;
+        }
 
-		private class ViewHolder
-		{
-			ImageView icon;
-			TextView packageName;
+        private class ViewHolder
+        {
+            ImageView icon;
+            TextView packageName;
             TextView status;
-			View gray;
-		}
+            View gray;
+        }
 
-		public void refresh(List<GTPackage> packageList)
-		{
-			this.listPackages.clear();
-			this.listPackages.addAll(packageList);
-			notifyDataSetChanged();
-		}
+        public void refresh(List<GTPackage> packageList)
+        {
+            this.listPackages.clear();
+            this.listPackages.addAll(packageList);
+            notifyDataSetChanged();
+        }
 
-		@Override
-		public boolean isEnabled(int position)
-		{
-			return mIsEnabled;
-		}
+        @Override
+        public boolean isEnabled(int position)
+        {
+            return mIsEnabled;
+        }
 
-		public void enableClick()
-		{
-			mIsEnabled = true;
-			this.notifyDataSetChanged();
-		}
+        public void enableClick()
+        {
+            mIsEnabled = true;
+            this.notifyDataSetChanged();
+        }
 
-		public void disableClick()
-		{
-			mIsEnabled = false;
-			this.notifyDataSetChanged();
-		}
-	}
+        public void disableClick()
+        {
+            mIsEnabled = false;
+            this.notifyDataSetChanged();
+        }
+    }
 }

@@ -8,13 +8,15 @@ import android.support.v4.app.DialogFragment;
 
 import org.keynote.godtools.android.R;
 
-public class AlertDialogFragment extends DialogFragment {
+public class AlertDialogFragment extends DialogFragment
+{
 
     private static final String ARGS_TITLE = "title";
     private static final String ARGS_MESSAGE = "message";
 
 
-    public static DialogFragment newInstance(String title, String message) {
+    public static DialogFragment newInstance(String title, String message)
+    {
         DialogFragment frag = new AlertDialogFragment();
         Bundle args = new Bundle();
         args.putString(ARGS_TITLE, title);
@@ -26,7 +28,8 @@ public class AlertDialogFragment extends DialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState)
+    {
 
         String title = getArguments().getString(ARGS_TITLE);
         String body = getArguments().getString(ARGS_MESSAGE);
@@ -35,10 +38,12 @@ public class AlertDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle(title)
                 .setMessage(body)
-                .setPositiveButton(positive, new DialogInterface.OnClickListener() {
+                .setPositiveButton(positive, new DialogInterface.OnClickListener()
+                {
 
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
                         // do nothing
                     }
                 });

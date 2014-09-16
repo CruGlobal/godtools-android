@@ -7,7 +7,8 @@ import org.keynote.godtools.android.dao.DBAdapter;
 import java.util.List;
 import java.util.Locale;
 
-public class GTLanguage {
+public class GTLanguage
+{
 
     public static final String KEY_PRIMARY = "languagePrimary";
     public static final String KEY_PARALLEL = "languageParallel";
@@ -18,10 +19,12 @@ public class GTLanguage {
     private boolean downloaded;
     private List<GTPackage> listPackages;
 
-    public GTLanguage() {
+    public GTLanguage()
+    {
     }
 
-    public GTLanguage(String languageCode) {
+    public GTLanguage(String languageCode)
+    {
         this.languageCode = languageCode;
 
         Locale locale = new Locale(languageCode);
@@ -30,65 +33,79 @@ public class GTLanguage {
         this.languageName = Character.toUpperCase(name.charAt(0)) + name.substring(1);
     }
 
-    public long getId() {
+    public long getId()
+    {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(long id)
+    {
         this.id = id;
     }
 
-    public String getLanguageName() {
+    public String getLanguageName()
+    {
         return languageName;
     }
 
-    public String getLanguageCode() {
+    public String getLanguageCode()
+    {
         return languageCode;
     }
 
-    public void setLanguageCode(String languageCode) {
+    public void setLanguageCode(String languageCode)
+    {
         this.languageCode = languageCode;
     }
 
-    public void setLanguageName(String languageName) {
+    public void setLanguageName(String languageName)
+    {
         this.languageName = languageName;
     }
 
-    public boolean isDownloaded() {
+    public boolean isDownloaded()
+    {
         return downloaded;
     }
 
-    public void setDownloaded(boolean downloaded) {
+    public void setDownloaded(boolean downloaded)
+    {
         this.downloaded = downloaded;
     }
 
-    public List<GTPackage> getPackages() {
+    public List<GTPackage> getPackages()
+    {
         return listPackages;
     }
 
-    public void setPackages(List<GTPackage> listPackages) {
+    public void setPackages(List<GTPackage> listPackages)
+    {
         this.listPackages = listPackages;
     }
 
-    public static GTLanguage getLanguage(Context context, String languageCode) {
+    public static GTLanguage getLanguage(Context context, String languageCode)
+    {
         DBAdapter adapter = DBAdapter.getInstance(context);
         adapter.open();
         return adapter.getGTLanguage(languageCode);
     }
 
-    public static List<GTLanguage> getAll(Context context) {
+    public static List<GTLanguage> getAll(Context context)
+    {
         DBAdapter adapter = DBAdapter.getInstance(context);
         adapter.open();
         return adapter.getAllLanguages();
     }
 
-    public long addToDatabase(Context context) {
+    public long addToDatabase(Context context)
+    {
         DBAdapter adapter = DBAdapter.getInstance(context);
         adapter.open();
         return adapter.insertGTLanguage(this);
     }
 
-    public void update(Context context) {
+    public void update(Context context)
+    {
         DBAdapter adapter = DBAdapter.getInstance(context);
         adapter.open();
         adapter.updateGTLanguage(this);

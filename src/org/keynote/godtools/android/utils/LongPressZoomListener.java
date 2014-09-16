@@ -27,20 +27,21 @@
 
 package org.keynote.godtools.android.utils;
 
-import org.keynote.godtools.android.Gallery;
-
 import android.content.Context;
 import android.os.Vibrator;
 import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.view.GestureDetector.SimpleOnGestureListener;
+
+import org.keynote.godtools.android.Gallery;
 
 /**
  * Listener for controlling zoom state through touch events
  */
-public class LongPressZoomListener implements View.OnTouchListener {
+public class LongPressZoomListener implements View.OnTouchListener
+{
 
     /**
      * Enum defining listener modes. Before the view is touched the listener is
@@ -49,89 +50,116 @@ public class LongPressZoomListener implements View.OnTouchListener {
      * enter PAN mode, if the user lets his finger rest and makes a longpress
      * the listener will enter ZOOM mode.
      */
-    private enum Mode {
+    private enum Mode
+    {
         UNDEFINED, PAN, ZOOM, NEXT, PREV
     }
 
-    /** Time of tactile feedback vibration when entering zoom mode */
+    /**
+     * Time of tactile feedback vibration when entering zoom mode
+     */
     private static final long VIBRATE_TIME = 50;
 
-    /** Current listener mode */
+    /**
+     * Current listener mode
+     */
     private Mode mMode = Mode.UNDEFINED;
 
-    /** Zoom control to manipulate */
+    /**
+     * Zoom control to manipulate
+     */
     private BasicZoomControl mZoomControl;
 
-    /** X-coordinate of previously handled touch event */
+    /**
+     * X-coordinate of previously handled touch event
+     */
     private float mX;
 
-    /** Y-coordinate of previously handled touch event */
+    /**
+     * Y-coordinate of previously handled touch event
+     */
     private float mY;
 
-    /** X-coordinate of latest down event */
+    /**
+     * X-coordinate of latest down event
+     */
     private float mDownX;
 
-    /** Y-coordinate of latest down event */
+    /**
+     * Y-coordinate of latest down event
+     */
     private float mDownY;
 
-    /** Distance touch can wander before we think it's scrolling */
+    /**
+     * Distance touch can wander before we think it's scrolling
+     */
     private final int mScaledTouchSlop;
 
-    /** Duration in ms before a press turns into a long press */
+    /**
+     * Duration in ms before a press turns into a long press
+     */
     private final int mLongPressTimeout;
 
-    /** Vibrator for tactile feedback */
+    /**
+     * Vibrator for tactile feedback
+     */
     private final Vibrator mVibrator;
-    
-    
+
+
     private static final int SWIPE_MIN_DISTANCE = 150;
     private static final int SWIPE_MAX_OFF_PATH = 180;
-	private static final int SWIPE_THRESHOLD_VELOCITY = 800;
-	private GestureDetector gestureDetector = new GestureDetector(new MyGestureDetector());
+    private static final int SWIPE_THRESHOLD_VELOCITY = 800;
+    private GestureDetector gestureDetector = new GestureDetector(new MyGestureDetector());
 
-	private Gallery gallery = null;
-	
+    private Gallery gallery = null;
+
     /**
      * Creates a new instance
-     * 
+     *
      * @param context Application context
      */
-    public LongPressZoomListener(Context context, Gallery galleryin) {
-    	mLongPressTimeout = ViewConfiguration.getLongPressTimeout();
+    public LongPressZoomListener(Context context, Gallery galleryin)
+    {
+        mLongPressTimeout = ViewConfiguration.getLongPressTimeout();
         mScaledTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
-        mVibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
-    	gallery = galleryin;
-	}
+        mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        gallery = galleryin;
+    }
 
-	/**
+    /**
      * Sets the zoom control to manipulate
-     * 
+     *
      * @param control Zoom control
      */
-    public void setZoomControl(BasicZoomControl control) {
+    public void setZoomControl(BasicZoomControl control)
+    {
         mZoomControl = control;
     }
 
     /**
      * Runnable that enters zoom mode
      */
-    private final Runnable mLongPressRunnable = new Runnable() {
-        public void run() {
+    private final Runnable mLongPressRunnable = new Runnable()
+    {
+        public void run()
+        {
             mMode = Mode.ZOOM;
             mVibrator.vibrate(VIBRATE_TIME);
         }
     };
 
     // implements View.OnTouchListener
-    public boolean onTouch(View v, MotionEvent event) {
-    	if (gestureDetector.onTouchEvent(event))
+    public boolean onTouch(View v, MotionEvent event)
+    {
+        if (gestureDetector.onTouchEvent(event))
             return true;
-        
-    	final int action = event.getAction();
+
+        final int action = event.getAction();
         final float x = event.getX();
         final float y = event.getY();
 
-        switch (action) {
+        switch (action)
+        {
             case MotionEvent.ACTION_DOWN:
                 v.postDelayed(mLongPressRunnable, mLongPressTimeout);
                 mDownX = x;
@@ -140,22 +168,29 @@ public class LongPressZoomListener implements View.OnTouchListener {
                 mY = y;
                 break;
 
-            case MotionEvent.ACTION_MOVE: {
+            case MotionEvent.ACTION_MOVE:
+            {
                 final float dx = (x - mX) / v.getWidth();
                 final float dy = (y - mY) / v.getHeight();
 
-                if (mMode == Mode.ZOOM) {
-                    mZoomControl.zoom((float)Math.pow(20, -dy), mDownX / v.getWidth(), mDownY
+                if (mMode == Mode.ZOOM)
+                {
+                    mZoomControl.zoom((float) Math.pow(20, -dy), mDownX / v.getWidth(), mDownY
                             / v.getHeight());
-                } else if (mMode == Mode.PAN) {
+                }
+                else if (mMode == Mode.PAN)
+                {
                     mZoomControl.pan(-dx, -dy);
-                } else {
+                }
+                else
+                {
                     final float scrollX = mDownX - x;
                     final float scrollY = mDownY - y;
 
-                    final float dist = (float)Math.sqrt(scrollX * scrollX + scrollY * scrollY);
+                    final float dist = (float) Math.sqrt(scrollX * scrollX + scrollY * scrollY);
 
-                    if (dist >= mScaledTouchSlop) {
+                    if (dist >= mScaledTouchSlop)
+                    {
                         v.removeCallbacks(mLongPressRunnable);
                         mMode = Mode.PAN;
                     }
@@ -174,20 +209,27 @@ public class LongPressZoomListener implements View.OnTouchListener {
 
         return true;
     }
-    
-    class MyGestureDetector extends SimpleOnGestureListener {
+
+    class MyGestureDetector extends SimpleOnGestureListener
+    {
         @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            try {
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+        {
+            try
+            {
                 if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
                     return false;
                 // right to left swipe
-                if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                	gallery.nextImage();
-                }  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                	gallery.prevImage();
+                if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY)
+                {
+                    gallery.nextImage();
                 }
-            } catch (Exception e) {
+                else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY)
+                {
+                    gallery.prevImage();
+                }
+            } catch (Exception e)
+            {
                 // nothing
             }
             return false;
