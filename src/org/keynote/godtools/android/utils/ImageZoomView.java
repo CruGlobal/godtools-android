@@ -41,24 +41,37 @@ import java.util.Observer;
 /**
  * View capable of drawing an image at different zoom state levels
  */
-public class ImageZoomView extends View implements Observer {
+public class ImageZoomView extends View implements Observer
+{
 
-    /** Paint object used when drawing bitmap. */
+    /**
+     * Paint object used when drawing bitmap.
+     */
     private final Paint mPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
 
-    /** Rectangle used (and re-used) for cropping source image. */
+    /**
+     * Rectangle used (and re-used) for cropping source image.
+     */
     private final Rect mRectSrc = new Rect();
 
-    /** Rectangle used (and re-used) for specifying drawing area on canvas. */
+    /**
+     * Rectangle used (and re-used) for specifying drawing area on canvas.
+     */
     private final Rect mRectDst = new Rect();
 
-    /** Object holding aspect quotient */
+    /**
+     * Object holding aspect quotient
+     */
     private final AspectQuotient mAspectQuotient = new AspectQuotient();
 
-    /** The bitmap that we're zooming in, and drawing on the screen. */
+    /**
+     * The bitmap that we're zooming in, and drawing on the screen.
+     */
     private Bitmap mBitmap;
 
-    /** State of the zoom. */
+    /**
+     * State of the zoom.
+     */
     private ZoomState mState;
 
     // Public methods
@@ -66,19 +79,21 @@ public class ImageZoomView extends View implements Observer {
     /**
      * Constructor
      */
-    public ImageZoomView(Context context, AttributeSet attrs) {
+    public ImageZoomView(Context context, AttributeSet attrs)
+    {
         super(context, attrs);
-        
+
         setFocusable(true);
-		setFocusableInTouchMode(true);
+        setFocusableInTouchMode(true);
     }
 
     /**
      * Set image bitmap
-     * 
+     *
      * @param bitmap The bitmap to view and zoom into
      */
-    public void setImage(Bitmap bitmap) {
+    public void setImage(Bitmap bitmap)
+    {
         mBitmap = bitmap;
 
         mAspectQuotient.updateAspectQuotient(getWidth(), getHeight(), mBitmap.getWidth(), mBitmap
@@ -90,11 +105,13 @@ public class ImageZoomView extends View implements Observer {
 
     /**
      * Set object holding the zoom state that should be used
-     * 
+     *
      * @param state The zoom state
      */
-    public void setZoomState(ZoomState state) {
-        if (mState != null) {
+    public void setZoomState(ZoomState state)
+    {
+        if (mState != null)
+        {
             mState.deleteObserver(this);
         }
 
@@ -106,18 +123,21 @@ public class ImageZoomView extends View implements Observer {
 
     /**
      * Gets reference to object holding aspect quotient
-     * 
+     *
      * @return Object holding aspect quotient
      */
-    public AspectQuotient getAspectQuotient() {
+    public AspectQuotient getAspectQuotient()
+    {
         return mAspectQuotient;
     }
 
     // Superclass overrides
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        if (mBitmap != null && mState != null) {
+    protected void onDraw(Canvas canvas)
+    {
+        if (mBitmap != null && mState != null)
+        {
             final float aspectQuotient = mAspectQuotient.get();
 
             final int viewWidth = getWidth();
@@ -131,29 +151,33 @@ public class ImageZoomView extends View implements Observer {
             final float zoomY = mState.getZoomY(aspectQuotient) * viewHeight / bitmapHeight;
 
             // Setup source and destination rectangles
-            mRectSrc.left = (int)(panX * bitmapWidth - viewWidth / (zoomX * 2));
-            mRectSrc.top = (int)(panY * bitmapHeight - viewHeight / (zoomY * 2));
-            mRectSrc.right = (int)(mRectSrc.left + viewWidth / zoomX);
-            mRectSrc.bottom = (int)(mRectSrc.top + viewHeight / zoomY);
+            mRectSrc.left = (int) (panX * bitmapWidth - viewWidth / (zoomX * 2));
+            mRectSrc.top = (int) (panY * bitmapHeight - viewHeight / (zoomY * 2));
+            mRectSrc.right = (int) (mRectSrc.left + viewWidth / zoomX);
+            mRectSrc.bottom = (int) (mRectSrc.top + viewHeight / zoomY);
             mRectDst.left = getLeft();
             mRectDst.top = getTop();
             mRectDst.right = getRight();
             mRectDst.bottom = getBottom();
 
             // Adjust source rectangle so that it fits within the source image.
-            if (mRectSrc.left < 0) {
+            if (mRectSrc.left < 0)
+            {
                 mRectDst.left += -mRectSrc.left * zoomX;
                 mRectSrc.left = 0;
             }
-            if (mRectSrc.right > bitmapWidth) {
+            if (mRectSrc.right > bitmapWidth)
+            {
                 mRectDst.right -= (mRectSrc.right - bitmapWidth) * zoomX;
                 mRectSrc.right = bitmapWidth;
             }
-            if (mRectSrc.top < 0) {
+            if (mRectSrc.top < 0)
+            {
                 mRectDst.top += -mRectSrc.top * zoomY;
                 mRectSrc.top = 0;
             }
-            if (mRectSrc.bottom > bitmapHeight) {
+            if (mRectSrc.bottom > bitmapHeight)
+            {
                 mRectDst.bottom -= (mRectSrc.bottom - bitmapHeight) * zoomY;
                 mRectSrc.bottom = bitmapHeight;
             }
@@ -163,34 +187,39 @@ public class ImageZoomView extends View implements Observer {
     }
 
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom)
+    {
         super.onLayout(changed, left, top, right, bottom);
         mAspectQuotient.updateAspectQuotient(right - left, bottom - top, mBitmap.getWidth(),
                 mBitmap.getHeight());
-        
-        if (mState != null) {
-        	if (getWidth() > getHeight()){
-        		mState.setZoom(1f / getAspectQuotient().get());
-        		mState.setPanX(0.5f);
-        		mState.setPanY(.5f - getMaxPanDelta(mState.getZoomY(getAspectQuotient().get())));
-        	}
+
+        if (mState != null)
+        {
+            if (getWidth() > getHeight())
+            {
+                mState.setZoom(1f / getAspectQuotient().get());
+                mState.setPanX(0.5f);
+                mState.setPanY(.5f - getMaxPanDelta(mState.getZoomY(getAspectQuotient().get())));
+            }
         }
-        
+
         mAspectQuotient.notifyObservers();
     }
 
     /**
      * Help function to figure out max delta of pan from center position.
-     * 
+     *
      * @param zoom Zoom value
      * @return Max delta of pan
      */
-    public float getMaxPanDelta(float zoom) {
+    public float getMaxPanDelta(float zoom)
+    {
         return Math.max(0f, .5f * ((zoom - 1) / zoom));
     }
-    
+
     // implements Observer
-    public void update(Observable observable, Object data) {
+    public void update(Observable observable, Object data)
+    {
         invalidate();
     }
 

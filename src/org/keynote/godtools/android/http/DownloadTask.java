@@ -6,8 +6,6 @@ import android.os.AsyncTask;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
@@ -25,32 +23,32 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
 
-public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
+public class DownloadTask extends AsyncTask<Object, Void, Boolean>
+{
 
     private DownloadTaskHandler mTaskHandler;
     private Context mContext;
     private String url, filePath, tag, langCode;
     private String authorization;
 
-    public static interface DownloadTaskHandler {
+    public static interface DownloadTaskHandler
+    {
         void downloadTaskComplete(String url, String filePath, String langCode, String tag);
 
         void downloadTaskFailure(String url, String filePath, String langCode, String tag);
     }
 
-    public DownloadTask(Context context, DownloadTaskHandler taskHandler) {
+    public DownloadTask(Context context, DownloadTaskHandler taskHandler)
+    {
         this.mTaskHandler = taskHandler;
         this.mContext = context;
     }
 
     @Override
-    protected Boolean doInBackground(Object... params) {
+    protected Boolean doInBackground(Object... params)
+    {
 
         url = params[0].toString();
         filePath = params[1].toString();
@@ -58,7 +56,8 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
         authorization = params[3].toString();
         langCode = params[4].toString();
 
-        try {
+        try
+        {
             HttpGet request = new HttpGet(url);
             request.setHeader("Accept", "application/xml");
             request.setHeader("Content-type", "application/xml");
@@ -74,8 +73,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             try
             {
                 response = httpClient.execute(request);
-            }
-            catch (IOException e)
+            } catch (IOException e)
             {
                 e.printStackTrace();
                 return false;
@@ -115,12 +113,14 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             adapter.open();
 
             // delete packages
-            if (tag.contains("draft")) {
+            if (tag.contains("draft"))
+            {
                 adapter.deletePackages(langCode, "draft");
             }
 
             // save the parsed packages to database
-            for (GTPackage gtp : packageList) {
+            for (GTPackage gtp : packageList)
+            {
                 adapter.upsertGTPackage(gtp);
             }
 
@@ -138,7 +138,8 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
             File[] fileList = unzipDir.listFiles();
             File oldFile;
-            for (int i = 0; i < fileList.length; i++) {
+            for (int i = 0; i < fileList.length; i++)
+            {
                 oldFile = fileList[i];
                 inputStream = new FileInputStream(oldFile);
                 outputStream = new FileOutputStream(resourcesDir + File.separator + oldFile.getName());
@@ -155,7 +156,8 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
             return true;
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
             return false;
         }
@@ -163,7 +165,8 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean isSuccessful) {
+    protected void onPostExecute(Boolean isSuccessful)
+    {
 
         if (isSuccessful)
             mTaskHandler.downloadTaskComplete(url, filePath, langCode, tag);
@@ -172,10 +175,12 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
     }
 
-    private void copyFile(InputStream in, OutputStream out) throws IOException {
+    private void copyFile(InputStream in, OutputStream out) throws IOException
+    {
         byte[] buffer = new byte[1024];
         int read;
-        while ((read = in.read(buffer)) != -1) {
+        while ((read = in.read(buffer)) != -1)
+        {
             out.write(buffer, 0, read);
         }
     }

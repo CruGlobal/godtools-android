@@ -13,24 +13,28 @@ import org.apache.http.params.HttpParams;
 
 import java.io.InputStream;
 
-public class MetaTask extends AsyncTask<Object, Void, InputStream> {
+public class MetaTask extends AsyncTask<Object, Void, InputStream>
+{
 
     private int statusCode;
     private String tag, langCode;
     private MetaTaskHandler metaTaskHandler;
 
-    public static interface MetaTaskHandler {
+    public static interface MetaTaskHandler
+    {
         void metaTaskComplete(InputStream is, String langCode, String tag);
 
         void metaTaskFailure(InputStream is, String langCode, String tag);
     }
 
-    public MetaTask(MetaTaskHandler listener) {
+    public MetaTask(MetaTaskHandler listener)
+    {
         metaTaskHandler = listener;
     }
 
     @Override
-    protected InputStream doInBackground(Object... params) {
+    protected InputStream doInBackground(Object... params)
+    {
 
         String url = params[0].toString();
         String authorization = params[1].toString();
@@ -49,24 +53,30 @@ public class MetaTask extends AsyncTask<Object, Void, InputStream> {
 
         HttpClient httpClient = new DefaultHttpClient(httpParams);
 
-        try {
+        try
+        {
             HttpResponse response = httpClient.execute(request);
             statusCode = response.getStatusLine().getStatusCode();
 
             return response.getEntity().getContent();
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
             return null;
         }
     }
 
     @Override
-    protected void onPostExecute(InputStream inputStream) {
+    protected void onPostExecute(InputStream inputStream)
+    {
 
-        if (statusCode == HttpStatus.SC_OK) {
+        if (statusCode == HttpStatus.SC_OK)
+        {
             metaTaskHandler.metaTaskComplete(inputStream, langCode, tag);
-        } else {
+        }
+        else
+        {
             metaTaskHandler.metaTaskFailure(inputStream, langCode, tag);
         }
     }

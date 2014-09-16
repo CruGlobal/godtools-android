@@ -8,21 +8,21 @@ import java.util.Map;
  */
 public class LanguagesNotSupportedByDefaultFont
 {
-	private static final Map<String, String> languageCodeSet = new HashMap<String, String>();
+    private static final Map<String, String> languageCodeSet = new HashMap<String, String>();
 
-	static
-	{
-		languageCodeSet.put("th", "fonts/FreeSerif.ttf");
-		languageCodeSet.put("ko", "fonts/UnGraphic.ttf");
-	}
+    static
+    {
+        languageCodeSet.put("th", "fonts/FreeSerif.ttf");
+        languageCodeSet.put("ko", "fonts/UnGraphic.ttf");
+    }
 
-	public static boolean contains(String languageCode)
-	{
-		return languageCodeSet.containsKey(languageCode);
-	}
+    public static boolean contains(String languageCode)
+    {
+        return languageCodeSet.containsKey(languageCode);
+    }
 
-	public static String getPathToAlternateFont(String languageCode)
-	{
-		return languageCodeSet.get(languageCode);
-	}
+    public static String getPathToAlternateFont(String languageCode)
+    {
+        return languageCodeSet.get(languageCode);
+    }
 }

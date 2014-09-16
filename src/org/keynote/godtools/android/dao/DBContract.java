@@ -2,9 +2,8 @@ package org.keynote.godtools.android.dao;
 
 import android.provider.BaseColumns;
 
-import org.keynote.godtools.android.business.GTLanguage;
-
-public class DBContract {
+public class DBContract
+{
 
     private static final String TEXT_TYPE = " TEXT";
     private static final String INTEGER_TYPE = " INTEGER";
@@ -14,7 +13,8 @@ public class DBContract {
     private static final String PRIMARY_KEY = " PRIMARY KEY";
     private static final String COMMA_SEP = ",";
 
-    public static abstract class GTPackageTable implements BaseColumns {
+    public static abstract class GTPackageTable implements BaseColumns
+    {
         public static final String TABLE_NAME = "gtpackages";
         public static final String COL_CODE = "code";
         public static final String COL_NAME = "name";
@@ -40,7 +40,8 @@ public class DBContract {
                 + GTPackageTable.TABLE_NAME;
     }
 
-    public static abstract class GTLanguageTable implements BaseColumns {
+    public static abstract class GTLanguageTable implements BaseColumns
+    {
         public static final String TABLE_NAME = "gtlanguages";
         public static final String COL_CODE = "code";
         public static final String COL_IS_DOWNLOADED = "is_downloaded";
@@ -55,7 +56,8 @@ public class DBContract {
                 + GTLanguageTable.TABLE_NAME;
     }
 
-    public static abstract class GTDraftLanguageTable implements BaseColumns {
+    public static abstract class GTDraftLanguageTable implements BaseColumns
+    {
         public static final String TABLE_NAME = "gtdraftlanguages";
         public static final String COL_CODE = "code";
         public static final String COL_IS_DOWNLOADED = "is_downloaded";

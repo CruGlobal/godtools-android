@@ -7,7 +7,7 @@ import com.google.android.gms.analytics.Logger;
  */
 public class GoogleAnalyticsConfig
 {
-	public static final int DISPATCH_PERIOD = 30;
-	public static final boolean IS_DRY_RUN = false;
-	public static final int LOG_LEVEL = Logger.LogLevel.INFO;
+    public static final int DISPATCH_PERIOD = 30;
+    public static final boolean IS_DRY_RUN = false;
+    public static final int LOG_LEVEL = Logger.LogLevel.INFO;
 }

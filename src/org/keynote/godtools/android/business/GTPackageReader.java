@@ -14,15 +14,18 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-public class GTPackageReader {
+public class GTPackageReader
+{
 
 
-    public static List<GTLanguage> processMetaResponse(InputStream is) {
+    public static List<GTLanguage> processMetaResponse(InputStream is)
+    {
 
         List<GTLanguage> languageList = new ArrayList<GTLanguage>();
 
         Document xmlDoc;
-        try {
+        try
+        {
             xmlDoc = DocumentBuilderFactory
                     .newInstance()
                     .newDocumentBuilder()
@@ -30,7 +33,8 @@ public class GTPackageReader {
             xmlDoc.normalize();
 
             NodeList nlLanguages = xmlDoc.getElementsByTagName("language");
-            for (int i = 0; i < nlLanguages.getLength(); i++) {
+            for (int i = 0; i < nlLanguages.getLength(); i++)
+            {
                 Element elLanguage = (Element) nlLanguages.item(i);
                 String languageCode = elLanguage.getAttribute("code");
 
@@ -38,7 +42,8 @@ public class GTPackageReader {
                 List<GTPackage> packageList = new ArrayList<GTPackage>();
 
                 NodeList nlPackages = elLanguage.getElementsByTagName("package");
-                for (int j =0; j < nlPackages.getLength(); j++){
+                for (int j = 0; j < nlPackages.getLength(); j++)
+                {
                     Element element = (Element) nlPackages.item(j);
 
                     String code = element.getAttribute("code");
@@ -57,23 +62,28 @@ public class GTPackageReader {
                 languageList.add(gtl);
             }
 
-        } catch (SAXException e) {
+        } catch (SAXException e)
+        {
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
-        } catch (ParserConfigurationException e) {
+        } catch (ParserConfigurationException e)
+        {
             e.printStackTrace();
         }
 
         return languageList;
     }
 
-    public static List<GTPackage> processContentFile(File contentFile) {
+    public static List<GTPackage> processContentFile(File contentFile)
+    {
         List<GTPackage> packageList = new ArrayList<GTPackage>();
 
         Document xmlDoc;
 
-        try {
+        try
+        {
             xmlDoc = DocumentBuilderFactory
                     .newInstance()
                     .newDocumentBuilder()
@@ -83,7 +93,8 @@ public class GTPackageReader {
             NodeList nlResources = xmlDoc.getElementsByTagName("resource");
             int numResources = nlResources.getLength();
 
-            for (int i = 0; i < numResources; i++) {
+            for (int i = 0; i < numResources; i++)
+            {
                 Element element = (Element) nlResources.item(i);
 
                 String code = element.getAttribute("package");
@@ -107,23 +118,28 @@ public class GTPackageReader {
             }
 
 
-        } catch (SAXException e) {
+        } catch (SAXException e)
+        {
             e.printStackTrace();
-        } catch (ParserConfigurationException e) {
+        } catch (ParserConfigurationException e)
+        {
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
 
         return packageList;
     }
 
-    public static List<GTPackage> processContentFile(InputStream is) {
+    public static List<GTPackage> processContentFile(InputStream is)
+    {
         List<GTPackage> packageList = new ArrayList<GTPackage>();
 
         Document xmlDoc;
 
-        try {
+        try
+        {
             xmlDoc = DocumentBuilderFactory
                     .newInstance()
                     .newDocumentBuilder()
@@ -133,7 +149,8 @@ public class GTPackageReader {
             NodeList nlResources = xmlDoc.getElementsByTagName("resource");
             int numResources = nlResources.getLength();
 
-            for (int i = 0; i < numResources; i++) {
+            for (int i = 0; i < numResources; i++)
+            {
                 Element element = (Element) nlResources.item(i);
 
                 String code = element.getAttribute("package");
@@ -157,11 +174,14 @@ public class GTPackageReader {
             }
 
 
-        } catch (SAXException e) {
+        } catch (SAXException e)
+        {
             e.printStackTrace();
-        } catch (ParserConfigurationException e) {
+        } catch (ParserConfigurationException e)
+        {
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
 

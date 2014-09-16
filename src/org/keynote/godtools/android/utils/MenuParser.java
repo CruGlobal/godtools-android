@@ -21,7 +21,8 @@ import java.util.ArrayList;
 /**
  * Created by john.jarder on 6/23/14.
  */
-public class MenuParser {
+public class MenuParser
+{
     private final String LOGTAG = "Menu Parser";
 
     private static final String XML_ITEM = "item";
@@ -33,11 +34,13 @@ public class MenuParser {
     protected ArrayList<ActionMenu> actionMenuList;
     protected ArrayList<MenuItem> menuItems;
 
-    public MenuParser(Context context){
+    public MenuParser(Context context)
+    {
         this.context = context;
     }
 
-    public void createMenuItems(int menuResourceId, Menu menu) {
+    public void createMenuItems(int menuResourceId, Menu menu)
+    {
         Log.d(LOGTAG, "super createMenuItems");
         actionMenuList = new ArrayList<ActionMenu>();
         menuItems = new ArrayList<MenuItem>();
@@ -46,31 +49,39 @@ public class MenuParser {
         inflate(menuResourceId, menu);
     }
 
-    public ArrayList<ActionMenu> getActionMenuList(){
+    public ArrayList<ActionMenu> getActionMenuList()
+    {
         return actionMenuList;
     }
 
-    public ArrayList<MenuItem> getMenuItems(){
+    public ArrayList<MenuItem> getMenuItems()
+    {
         return menuItems;
     }
 
-    private void inflate(int menuRes, Menu menu) {
+    private void inflate(int menuRes, Menu menu)
+    {
         XmlResourceParser parser = null;
-        try {
+        try
+        {
             parser = context.getResources().getLayout(menuRes);
             AttributeSet attrs = Xml.asAttributeSet(parser);
 
             Log.d(LOGTAG, "attrs: " + attrs);
 
             parseMenu(parser, attrs, menu);
-        } catch (XmlPullParserException e) {
+        } catch (XmlPullParserException e)
+        {
             throw new InflateException("Error inflating menu XML", e);
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             throw new InflateException("Error inflating menu XML", e);
-        } catch (RuntimeException e) {
+        } catch (RuntimeException e)
+        {
             parser.close();
             parser = null;
-        } finally {
+        } finally
+        {
             if (parser != null) parser.close();
         }
     }
@@ -80,7 +91,8 @@ public class MenuParser {
      * call this recursively.
      */
     private void parseMenu(XmlPullParser parser, AttributeSet attrs, Menu menu)
-            throws XmlPullParserException, IOException {
+            throws XmlPullParserException, IOException
+    {
 
         int eventType = parser.getEventType();
         String tagName;
@@ -90,12 +102,15 @@ public class MenuParser {
         int index = 0;
 
         boolean reachedEndOfMenu = false;
-        while (!reachedEndOfMenu) {
+        while (!reachedEndOfMenu)
+        {
 
-            switch (eventType) {
+            switch (eventType)
+            {
                 case XmlPullParser.START_TAG:
                     Log.d(LOGTAG, "parser: eventType.START_TAG");
-                    if (lookingForEndOfUnknownTag) {
+                    if (lookingForEndOfUnknownTag)
+                    {
                         break;
                     }
 
@@ -103,16 +118,21 @@ public class MenuParser {
 
                     Log.d(LOGTAG, "parser.getName(): " + tagName);
 
-                    if (tagName.equals(XML_ITEM)) {
+                    if (tagName.equals(XML_ITEM))
+                    {
                         readMenuItem(attrs, index);
                         index++;
-                    } else if (tagName.equals(XML_MENU)) {
+                    }
+                    else if (tagName.equals(XML_MENU))
+                    {
 //                        // A menu start tag denotes a submenu for an item
 //                        SubMenu subMenu = addSubMenuItem(attrs);
 //
 //                        // Parse the submenu into returned SubMenu
 //                        parseMenu(parser, attrs, subMenu);
-                    } else {
+                    }
+                    else
+                    {
                         lookingForEndOfUnknownTag = true;
                     }
 
@@ -127,7 +147,8 @@ public class MenuParser {
         }
     }
 
-    private void readMenuItem(AttributeSet attrs, int index) {
+    private void readMenuItem(AttributeSet attrs, int index)
+    {
         final int defaultItemId = NO_ID;
         final int defaultGroupid = NO_ID;
         final int defaultCategoryOrder = 0;
@@ -155,7 +176,8 @@ public class MenuParser {
     }
 
 
-    public class ActionMenu {
+    public class ActionMenu
+    {
         public int itemIndex;
         public int itemId;
         public int itemIconResId;
