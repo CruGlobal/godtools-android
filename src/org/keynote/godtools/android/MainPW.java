@@ -167,15 +167,11 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
 		if (settings.getBoolean("TranslatorMode", false))
 		{
-			refreshButton.setVisibility(View.VISIBLE);
-			refreshButton.setEnabled(true);
             addButton.setVisibility(View.VISIBLE);
             addButton.setEnabled(true);
 		}
 		else
 		{
-			refreshButton.setVisibility(View.INVISIBLE);
-			refreshButton.setEnabled(false);
             addButton.setVisibility(View.INVISIBLE);
             addButton.setEnabled(false);
 		}
@@ -590,7 +586,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
      */
     private void presentFinalizeDraftOption(final GTPackage gtPackage, final SharedPreferences settings)
     {
-        final MainPW referenceToThisActivity = this;
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which)
@@ -608,7 +603,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                                     {
                                         Toast.makeText(getApplicationContext(), "Draft has been published", Toast.LENGTH_SHORT).show();
                                         showLoading("Updating drafts");
-                                        GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", referenceToThisActivity);
+                                        GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", MainPW.this);
                                     }
 
                                     @Override
@@ -622,7 +617,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
-                        Intent intent = new Intent(referenceToThisActivity, SnuffyPWActivity.class);
+                        Intent intent = new Intent(MainPW.this, SnuffyPWActivity.class);
                         intent.putExtra("PackageName", gtPackage.getCode());
                         intent.putExtra("LanguageCode", gtPackage.getLanguage());
                         intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
@@ -799,8 +794,23 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		{
 			SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-			showLoading("Updating drafts...");
-			GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", this);
+
+            if(isTranslatorModeEnabled())
+            {
+                showLoading("Updating drafts...");
+			    GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", this);
+            }
+            else
+            {
+                showLoading("Updating resources...");
+                GodToolsApiClient.downloadLanguagePack((SnuffyApplication)getApplication(),
+                        languagePrimary,
+                        "primary",
+                        settings.getString("Authorization_Generic", ""),
+                        this);
+            }
+
+
 		}
         else
 		{

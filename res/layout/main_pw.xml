@@ -155,7 +155,6 @@
             android:layout_width="100dp"
             android:layout_height="68dp"
             android:background="@drawable/homescreen_refresh_button_2x"
-            android:visibility="invisible"
             android:layout_below="@+id/full_table"
             android:layout_alignLeft="@+id/full_table"
             android:layout_marginLeft="15dp"
