@@ -183,10 +183,10 @@ public class PackageListFragment extends ListFragment
 
 			holder.packageName.setTypeface(mAlternateTypeface);
 
-//			if (mIsEnabled)
-//				holder.gray.setVisibility(View.GONE);
-//			else
-//				holder.gray.setVisibility(View.VISIBLE);
+            if("Every Student".equals(holder.packageName.getText()))
+            {
+                convertView.setBackgroundColor(0xf0f0f0);
+            }
 
 			// set values
 			holder.packageName.setText(gtp.getName());
