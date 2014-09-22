@@ -263,7 +263,7 @@ public class SettingsPW extends BaseActionBarActivity implements
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString("authorization", authorization);
+        editor.putString("Authorization_Draft", authorization);
         editor.commit();
 
         setTranslatorMode(true);

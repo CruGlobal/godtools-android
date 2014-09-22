@@ -76,7 +76,7 @@ public class SnuffyLanguageActivity extends ListActivity {
 		
 		// the to array specifies the views from the xml layout
 		// on which we want to display the values defined in the from array
-		int[] to = { R.id.list2Text1, R.id.list2Text2, R.id.list2Image, R.id.list2Status };
+		int[] to = { R.id.list2Text1, R.id.list2Text2, R.id.list2Image};
 		
 		mLanguageCode = getIntent().getStringExtra("LanguageCode");
 		mPackageName  = getIntent().getStringExtra("PackageName");

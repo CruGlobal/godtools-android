@@ -22,9 +22,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.AbsoluteLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.keynote.godtools.android.business.GTPackage;
+import org.keynote.godtools.android.http.DownloadTask;
+import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.snuffy.PackageReader;
 import org.keynote.godtools.android.snuffy.SnuffyAboutActivity;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
@@ -57,6 +61,7 @@ public class SnuffyPWActivity extends Activity {
     private int mPageWidth;
     private int mPageHeight;
     private String mPackageTitle;
+    private String mPackageStatus;
     private ProcessPackageAsync mProcessPackageAsync;
     private GestureDetector MyGestureDetector;
 
@@ -90,6 +95,7 @@ public class SnuffyPWActivity extends Activity {
         mAppPackage = getIntent().getStringExtra("PackageName");        // "kgp"
         mAppLanguage = getIntent().getStringExtra("LanguageCode");      // "en"
         mConfigFileName = getIntent().getStringExtra("ConfigFileName");
+        mPackageStatus = getIntent().getStringExtra("Status"); // live = draft
         mPageLeft = getIntent().getIntExtra("PageLeft", 0);
         mPageTop = getIntent().getIntExtra("PageTop", 0);
         mPageWidth = getIntent().getIntExtra("PageWidth", 320);         // set defaults but they will not be used
@@ -111,6 +117,7 @@ public class SnuffyPWActivity extends Activity {
         // check if parallel language is set
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String langParallel = settings.getString("languageParallel", "");
+
 
         // get package if parallel language is set
         if (!langParallel.isEmpty()) {
@@ -496,6 +503,15 @@ public class SnuffyPWActivity extends Activity {
         else
             switchItem.setVisible(false);
 
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+        if("draft".equalsIgnoreCase(mPackageStatus) && settings.getBoolean("TranslatorMode",false))
+        {
+            menu.findItem(R.id.CMD_REFRESH_PAGE).setVisible(true);        }
+        else
+        {
+            menu.findItem(R.id.CMD_REFRESH_PAGE).setVisible(false);
+        }
         return true;
     }
 
@@ -536,10 +552,45 @@ public class SnuffyPWActivity extends Activity {
                 switchLanguage();
                 break;
             }
+            case R.id.CMD_REFRESH_PAGE: {
+                refreshPage();
+                break;
+            }
             default:
                 break;
         }
         return true;
+    }
+
+    private void refreshPage() {
+        final SharedPreferences settings = getSharedPreferences("GodTools", MODE_PRIVATE);
+        SnuffyPage currentPage = mPages.get(mPagerCurrentItem);
+
+        showLoading("Updating page...");
+
+        GodToolsApiClient.downloadDraftPage((SnuffyApplication) getApplication(),
+                settings.getString("Authorization_Draft", ""),
+                mAppLanguage,
+                mAppPackage,
+                currentPage.getPageId(),
+                new DownloadTask.DownloadTaskHandler()
+                {
+                    @Override
+                    public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
+                    {
+                        Integer result = mProcessPackageAsync.doInBackground();
+                        mProcessPackageAsync.onPostExecute(result);
+                        Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_SHORT).show();
+                        hideLoading();
+                    }
+
+                    @Override
+                    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
+                    {
+                        Toast.makeText(getApplicationContext(), "Error refreshing page", Toast.LENGTH_SHORT).show();
+                        hideLoading();
+                    }
+                });
     }
 
     private ProgressDialog mProgressDialog;
@@ -599,6 +650,7 @@ public class SnuffyPWActivity extends Activity {
                 );
             } catch (Exception e) {
                 Log.e(TAG, "processPackage failed: " + e.toString());
+                e.printStackTrace();
             }
             if (bSuccess)
                 mPackageTitle = packageReader.getPackageTitle();
@@ -630,5 +682,24 @@ public class SnuffyPWActivity extends Activity {
             openOptionsMenu();
             return super.onSingleTapUp(e);
         }
+    }
+
+    private void showLoading(String msg)
+    {
+        RelativeLayout updatingDraftLayout = (RelativeLayout) findViewById(R.id.updatingDraft);
+        updatingDraftLayout.setVisibility(View.VISIBLE);
+
+        TextView updatingPage = (TextView) findViewById(R.id.updatingPageTextView);
+        updatingPage.setText(msg);
+    }
+
+    private void hideLoading()
+    {
+        TextView updatingPage = (TextView) findViewById(R.id.updatingPageTextView);
+        updatingPage.setText("");
+
+        RelativeLayout updatingDraftLayout = (RelativeLayout) findViewById(R.id.updatingDraft);
+        updatingDraftLayout.setVisibility(View.GONE);
+
     }
 }

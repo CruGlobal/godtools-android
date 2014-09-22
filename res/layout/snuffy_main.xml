@@ -10,5 +10,34 @@
 		android:layout_x="0px"
 		android:layout_y="0px"
 		android:id="@+id/snuffyViewPager" />
-		
+
+    <RelativeLayout
+        android:id="@+id/updatingDraft"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#000"
+        android:alpha="0.5"
+        android:gravity="center_vertical"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:id="@+id/progressBar"
+            android:indeterminate="true"/>
+
+        <TextView
+            android:layout_toRightOf="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:textSize="16sp"
+            android:textColor="#fff"
+            android:gravity="center_vertical"
+            android:id="@+id/updatingPageTextView"/>
+    </RelativeLayout>
+
 </AbsoluteLayout>

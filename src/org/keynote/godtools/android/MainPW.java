@@ -1,6 +1,8 @@
 package org.keynote.godtools.android;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -16,6 +18,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,7 +31,6 @@ import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,21 +39,27 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.everystudent.EveryStudent;
-import org.keynote.godtools.android.fragments.AlertDialogFragment;
 import org.keynote.godtools.android.fragments.LanguageDialogFragment;
 import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.http.DownloadTask;
+import org.keynote.godtools.android.http.DraftCreationTask;
+import org.keynote.godtools.android.http.DraftPublishTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
+import java.util.Map;
 
 
-public class MainPW extends BaseActionBarActivity implements LanguageDialogFragment.OnLanguageChangedListener, PackageListFragment.OnPackageSelectedListener, DownloadTask.DownloadTaskHandler, MetaTask.MetaTaskHandler
+public class MainPW extends BaseActionBarActivity implements LanguageDialogFragment.OnLanguageChangedListener,
+        PackageListFragment.OnPackageSelectedListener,
+        DownloadTask.DownloadTaskHandler,
+        MetaTask.MetaTaskHandler
 {
 	private static final String TAG = "MainPW";
 	private static final String TAG_LIST = "PackageList";
@@ -71,14 +79,15 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 	private List<GTPackage> packageList;
 	PackageListFragment packageFrag;
 	View vLoading;
-	ImageButton ibRefresh;
 	TextView tvTask;
 	FrameLayout frameLayout;
 	RelativeLayout tableLayout;
 	ImageButton refreshButton;
-
+    /**
+     * When clicked, dialog to launch a new translation is opened
+     */
+    ImageButton addButton;
 	boolean isDownloading;
-	String authorization;
 
 	/**
 	 * Called when the activity is first created.
@@ -104,7 +113,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 		languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-		authorization = getString(R.string.key_authorization_generic);
 
 		packageList = getPackageList(); // get the packages for the primary language
 
@@ -112,7 +120,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		packageFrag = (PackageListFragment) fm.findFragmentByTag(TAG_LIST);
 		if (packageFrag == null)
 		{
-			packageFrag = PackageListFragment.newInstance(languagePrimary, packageList);
+			packageFrag = PackageListFragment.newInstance(languagePrimary, packageList, isTranslatorModeEnabled());
 			FragmentTransaction ft = fm.beginTransaction();
 			ft.add(R.id.contList, packageFrag, TAG_LIST);
 			ft.commit();
@@ -155,15 +163,17 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			}
 		});
 
+        addButton = (ImageButton) findViewById(R.id.homescreen_add_button);
+
 		if (settings.getBoolean("TranslatorMode", false))
 		{
-			refreshButton.setVisibility(View.VISIBLE);
-			refreshButton.setEnabled(true);
+            addButton.setVisibility(View.VISIBLE);
+            addButton.setEnabled(true);
 		}
 		else
 		{
-			refreshButton.setVisibility(View.INVISIBLE);
-			refreshButton.setEnabled(false);
+            addButton.setVisibility(View.INVISIBLE);
+            addButton.setEnabled(false);
 		}
 
 		mSetupNeeded = true;
@@ -174,45 +184,43 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 	{
 		super.onActivityResult(requestCode, resultCode, data);
 
+		final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
 		switch (resultCode)
 		{
 			case RESULT_CHANGED_PRIMARY:
 			{
-
 				SnuffyApplication app = (SnuffyApplication) getApplication();
 				app.setAppLocale(data.getStringExtra("primaryCode"));
 
 				languagePrimary = data.getStringExtra("primaryCode");
 				packageList = getPackageList();
-				packageFrag.refreshList(languagePrimary, packageList);
+				packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
 
 				break;
 			}
 			case RESULT_DOWNLOAD_PRIMARY:
 			{
-
 				// start the download
 				String code = data.getStringExtra("primaryCode");
 				showLoading("Downloading resources...");
 				GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
 						code,
 						"primary",
-						authorization,
+						settings.getString("Authorization_Generic", ""),
 						this);
 
 				break;
 			}
 			case RESULT_DOWNLOAD_PARALLEL:
 			{
-
 				// refresh the list if the primary language was changed
-				SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 				String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 				if (!languagePrimary.equalsIgnoreCase(primaryCode))
 				{
 					languagePrimary = primaryCode;
 					packageList = getPackageList();
-					packageFrag.refreshList(languagePrimary, packageList);
+					packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
 				}
 
 				String code = data.getStringExtra("parallelCode");
@@ -220,17 +228,13 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 				GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
 						code,
 						"parallel",
-						authorization,
+						settings.getString("Authorization_Generic", ""),
 						this);
 				break;
 			}
 			case RESULT_PREVIEW_MODE_ENABLED:
 			{
-				refreshButton.setVisibility(View.VISIBLE);
-				refreshButton.setClickable(true);
-
 				// refresh the list
-				SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 				String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 
 				if (!languagePrimary.equalsIgnoreCase(primaryCode))
@@ -239,24 +243,20 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 					app.setAppLocale(primaryCode);
 				}
 
-				languagePrimary = primaryCode;
-				packageList = getPackageList();
-				packageFrag.refreshList(languagePrimary, packageList);
-
 				showLoading("Downloading drafts...");
-				String authorization = settings.getString("authorization", getString(R.string.key_authorization_generic));
-				GodToolsApiClient.getListOfDrafts(authorization, primaryCode, "draft_primary", this);
+
+				GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", this);
 
 				Toast.makeText(MainPW.this, "Translator preview mode is enabled", Toast.LENGTH_LONG).show();
-				break;
+
+                finish();
+                startActivity(getIntent());
+
+                break;
 			}
 			case RESULT_PREVIEW_MODE_DISABLED:
 			{
-				refreshButton.setVisibility(View.INVISIBLE);
-				refreshButton.setClickable(false);
-
 				// refresh the list
-				SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 				String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 
 				if (!languagePrimary.equalsIgnoreCase(primaryCode))
@@ -265,11 +265,11 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 					app.setAppLocale(primaryCode);
 				}
 
-				languagePrimary = primaryCode;
-				packageList = getPackageList();
-				packageFrag.refreshList(languagePrimary, packageList);
+                Toast.makeText(MainPW.this, "Translator preview mode is disabled", Toast.LENGTH_LONG).show();
 
-				Toast.makeText(MainPW.this, "Translator preview mode is disabled", Toast.LENGTH_LONG).show();
+                finish();
+                startActivity(getIntent());
+
 				break;
 			}
 		}
@@ -407,15 +407,15 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 	@Override
 	public void onLanguageChanged(String name, String code)
 	{
+		final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
 		GTLanguage gtLanguage = GTLanguage.getLanguage(MainPW.this, code);
 		if (gtLanguage.isDownloaded())
 		{
 			languagePrimary = gtLanguage.getLanguageCode();
 			packageList = getPackageList();
-			packageFrag.refreshList(languagePrimary, packageList);
+			packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
 
-			SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putString(GTLanguage.KEY_PRIMARY, code);
 
@@ -438,7 +438,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 				GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
 						code,
 						"primary",
-						authorization,
+						settings.getString("Authorization_Generic", ""),
 						this);
 			} else
 			{
@@ -475,13 +475,12 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			if (isTranslatorModeEnabled())
 			{
 				// check for draft_primary
-				String authorization = settings.getString("authorization", getString(R.string.key_authorization_generic));
-				GodToolsApiClient.getListOfDrafts(authorization, langCode, "draft_primary", this);
+				GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), langCode, "draft_primary", this);
 
 			} else
 			{
 				packageList = getPackageList();
-				packageFrag.refreshList(langCode, packageList);
+				packageFrag.refreshList(langCode,isTranslatorModeEnabled(), packageList);
 				hideLoading();
 			}
 
@@ -500,8 +499,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 			if (isTranslatorModeEnabled())
 			{
 				// check for draft_parallel
-				String authorization = settings.getString("authorization", getString(R.string.key_authorization_generic));
-				GodToolsApiClient.getListOfDrafts(authorization, langCode, "draft_parallel", this);
+				GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), langCode, "draft_parallel", this);
 
 			} else
 			{
@@ -513,7 +511,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
 			Toast.makeText(MainPW.this, "Drafts have been updated", Toast.LENGTH_SHORT).show();
 			packageList = getPackageList();
-			packageFrag.refreshList(langCode, packageList);
+			packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
 			hideLoading();
 
 		} else if (tag.equalsIgnoreCase("draft_primary"))
@@ -521,7 +519,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
 			languagePrimary = langCode;
 			packageList = getPackageList();
-			packageFrag.refreshList(langCode, packageList);
+			packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
 			hideLoading();
 
 		} else if (tag.equalsIgnoreCase("draft_parallel"))
@@ -552,30 +550,93 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		return settings.getBoolean("TranslatorMode", false);
 	}
 
-	@Override
-	public void onPackageSelected(GTPackage gtPackage)
-	{
-		if (gtPackage.getCode().equalsIgnoreCase("everystudent"))
-		{
-			Intent intent = new Intent(this, EveryStudent.class);
-			intent.putExtra("PackageName", gtPackage.getCode());
-			addPageFrameToIntent(intent);
-			startActivity(intent);
-		} else
-		{
-			Log.i("Activity", "Calling SnuffyPWActivity");
-			Intent intent = new Intent(this, SnuffyPWActivity.class);
-			intent.putExtra("PackageName", gtPackage.getCode());
-			intent.putExtra("LanguageCode", gtPackage.getLanguage());
-			intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
-			intent.putExtra("Status", gtPackage.getStatus());
-			addPageFrameToIntent(intent);
-			startActivity(intent);
-		}
+    @Override
+    public void onPackageSelected(final GTPackage gtPackage)
+    {
+        if (gtPackage.getCode().equalsIgnoreCase("everystudent"))
+        {
+            Intent intent = new Intent(this, EveryStudent.class);
+            intent.putExtra("PackageName", gtPackage.getCode());
+            addPageFrameToIntent(intent);
+            startActivity(intent);
+            return;
+        }
 
-	}
+        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-	@Override
+        if(isTranslatorModeEnabled() && "draft".equalsIgnoreCase(gtPackage.getStatus()))
+        {
+            presentFinalizeDraftOption(gtPackage, settings);
+        }
+        else
+        {
+            Intent intent = new Intent(this, SnuffyPWActivity.class);
+            intent.putExtra("PackageName", gtPackage.getCode());
+            intent.putExtra("LanguageCode", gtPackage.getLanguage());
+            intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
+            intent.putExtra("Status", gtPackage.getStatus());
+            addPageFrameToIntent(intent);
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * Dialog example taken from:
+     * http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android
+     */
+    private void presentFinalizeDraftOption(final GTPackage gtPackage, final SharedPreferences settings)
+    {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which)
+            {
+                switch (which)
+                {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        GodToolsApiClient.publishDraft(settings.getString("Authorization_Draft", ""),
+                                gtPackage.getLanguage(),
+                                gtPackage.getCode(),
+                                new DraftPublishTask.DraftTaskHandler()
+                                {
+                                    @Override
+                                    public void draftTaskComplete()
+                                    {
+                                        Toast.makeText(getApplicationContext(), "Draft has been published", Toast.LENGTH_SHORT).show();
+                                        showLoading("Updating drafts");
+                                        GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", MainPW.this);
+                                    }
+
+                                    @Override
+                                    public void draftTaskFailure()
+                                    {
+                                        Toast.makeText(getApplicationContext(), "Failed to publish draft", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                        startActivity(getIntent());
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        Intent intent = new Intent(MainPW.this, SnuffyPWActivity.class);
+                        intent.putExtra("PackageName", gtPackage.getCode());
+                        intent.putExtra("LanguageCode", gtPackage.getLanguage());
+                        intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
+                        intent.putExtra("Status", gtPackage.getStatus());
+                        addPageFrameToIntent(intent);
+                        startActivity(intent);
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Do you want publish this draft?")
+                .setPositiveButton("Yes, it's ready!", dialogClickListener)
+                .setNegativeButton("No, I just need to see it.", dialogClickListener)
+                .show();
+    }
+
+    @Override
 	public void metaTaskComplete(InputStream is, String langCode, String tag)
 	{
 		// process the input stream
@@ -589,7 +650,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))
 		{
 			packageList = getPackageList();
-			packageFrag.refreshList(langCode, packageList);
+			packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
 		}
 
 		hideLoading();
@@ -611,7 +672,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		{
 
 			packageList = getPackageList();
-			packageFrag.refreshList(langCode, packageList);
+			packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
 			Toast.makeText(MainPW.this, "Failed to download drafts", Toast.LENGTH_SHORT).show();
 
 		} else if (tag.equalsIgnoreCase("draft_parallel"))
@@ -662,44 +723,9 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		{
 			super.onPostExecute(shouldDownload);
 
-			if (shouldDownload)
-			{
+			final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-				SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-				String authorization = settings.getString("authorization", getString(R.string.key_authorization_generic));
-				GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), authorization, langCode, tag, MainPW.this);
-
-
-			} else
-			{
-
-				if (tag.equalsIgnoreCase("draft"))
-				{
-
-					FragmentManager fm = getSupportFragmentManager();
-					DialogFragment frag = (DialogFragment) fm.findFragmentByTag("alert_dialog");
-					if (frag == null)
-					{
-						Locale primary = new Locale(langCode);
-						frag = AlertDialogFragment.newInstance("Drafts", String.format("No drafts available for %s", primary.getDisplayName()));
-						frag.setCancelable(false);
-						frag.show(fm, "alert_dialog");
-					}
-
-				} else if (tag.equalsIgnoreCase("draft_primary"))
-				{
-
-					languagePrimary = langCode;
-					packageList = getPackageList();
-					packageFrag.refreshList(langCode, packageList);
-
-				} else if (tag.equalsIgnoreCase("draft_parallel"))
-				{
-					// do nothing
-				}
-
-				hideLoading();
-			}
+		    GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), settings.getString("Authorization_Draft", ""), langCode, tag, MainPW.this);
 		}
 	}
 
@@ -718,28 +744,34 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.homescreen, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
-		switch (item.getItemId())
+		if (keyCode == KeyEvent.KEYCODE_MENU)
 		{
-			case R.id.CMD_SETTINGS:
-				onCmd_settings(null);
-				return true;
-
-			case R.id.CMD_QUIT:
-				quit();
-				return true;
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setCancelable(false)
+					.setMessage(R.string.quit_dialog_message)
+					.setPositiveButton(R.string.quit_dialog_confirm, new DialogInterface.OnClickListener()
+					{
+						@Override
+						public void onClick(DialogInterface dialogInterface, int i)
+						{
+							finish();
+						}
+					})
+					.setNegativeButton(R.string.quit_dialog_cancel, new DialogInterface.OnClickListener()
+					{
+						@Override
+						public void onClick(DialogInterface dialogInterface, int i)
+						{
+							dialogInterface.cancel();
+						}
+					});
+			AlertDialog alertDialog = builder.create();
+			alertDialog.show();
+			return true;
 		}
-
-		return false;
+		return super.onKeyDown(keyCode, event);
 	}
 
 	private void addPageFrameToIntent(Intent intent)
@@ -761,19 +793,123 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		if (Device.isConnected(MainPW.this))
 		{
 			SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-			String authorization = settings.getString("authorization", getString(R.string.key_authorization_generic));
-			showLoading("Updating drafts...");
-			GodToolsApiClient.getListOfDrafts(authorization, languagePrimary, "draft", this);
-		} else
+
+
+            if(isTranslatorModeEnabled())
+            {
+                showLoading("Updating drafts...");
+			    GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", this);
+            }
+            else
+            {
+                showLoading("Updating resources...");
+                GodToolsApiClient.downloadLanguagePack((SnuffyApplication)getApplication(),
+                        languagePrimary,
+                        "primary",
+                        settings.getString("Authorization_Generic", ""),
+                        this);
+            }
+
+
+		}
+        else
 		{
 			Toast.makeText(MainPW.this, "Internet connection is required", Toast.LENGTH_SHORT).show();
 		}
 	}
 
-	private void quit()
-	{
-		super.onDestroy();
-		this.finish();
-	}
+    public void onCmd_add(View view)
+    {
+        if (Device.isConnected(MainPW.this))
+        {
+            final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setTitle("Start a draft for: ");
+
+            final LinkedHashMap<String,String> possiblePackagesForDraft = getPossiblePackagesForDraft();
+
+            final String[] packageNames = new ArrayList<String>(possiblePackagesForDraft.values()).toArray(new String[possiblePackagesForDraft.size()]);
+
+            b.setItems(packageNames, new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    dialog.dismiss();
+
+                    int i = 0;
+                    String packageCode = null;
+                    for(Map.Entry<String,String> entry : possiblePackagesForDraft.entrySet())
+                    {
+                        if(i == which)
+                        {
+                            packageCode = entry.getKey();
+                            break;
+                        }
+                        i++;
+                    }
+                    GodToolsApiClient.createDraft(settings.getString("Authorization_Draft", ""),
+                            languagePrimary,
+                            packageCode,
+                            new DraftCreationTask.DraftTaskHandler()
+                            {
+                                @Override
+                                public void draftTaskComplete()
+                                {
+                                    Toast.makeText(getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT);
+                                    showLoading("Updating drafts...");
+                                    GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", MainPW.this);
+                                }
+
+                                @Override
+                                public void draftTaskFailure()
+                                {
+                                    Toast.makeText(getApplicationContext(), "Failed to create a new draft", Toast.LENGTH_SHORT);
+                                }
+                            });
+                }
+
+            });
+
+            b.show();
+        }
+        else
+        {
+            Toast.makeText(MainPW.this, "Internet connection is required", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private LinkedHashMap<String,String> getPossiblePackagesForDraft()
+    {
+        // start with an ArrayList the length of number of packages. it will never be bigger than that.
+        LinkedHashMap<String,String> possiblePackages = new LinkedHashMap<String,String>(packageList.size());
+
+        // start with an list of (unfortuantely) hard coded packages
+        possiblePackages.put("kgp", "Knowing God Personally");
+        possiblePackages.put("fourlaws", "Four Spiritual Laws");
+        possiblePackages.put("satisfied", "Satisfied?");
+
+        // loop through the list of loaded packages, and stick in the name of any existing packages (already translated)
+        for(GTPackage gtPackage : packageList)
+        {
+            if("live".equalsIgnoreCase(gtPackage.getStatus()) &&
+                    possiblePackages.containsKey(gtPackage.getCode()))
+            {
+                possiblePackages.put(gtPackage.getCode(), gtPackage.getName());
+            }
+        }
+
+        // loop through the list again and remove any that are already in 'draft' status
+        for(GTPackage gtPackage : packageList)
+        {
+            if("draft".equalsIgnoreCase(gtPackage.getStatus()) &&
+                    possiblePackages.containsKey(gtPackage.getCode()))
+            {
+                possiblePackages.remove(gtPackage.getCode());
+            }
+        }
+
+        return possiblePackages;
+    }
 }

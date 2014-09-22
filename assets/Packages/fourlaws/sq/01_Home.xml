@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<page watermark="Home_Watermark.png" color="#00759A">
-  <text color="#FFFFFF" textalign="center" y="50" xoffset="40" size="136" w="300" translate="true" tnt-trx-ref-value="Have you heard of" tnt-trx-translated="true">A keni dëgjuar për</text>
-  <text color="#FFFFFF" modifier="bold" textalign="center" size="156" yoffset="-50" w="300" translate="true" tnt-trx-ref-value="THE FOUR SPIRITUAL" tnt-trx-translated="true">KATËR LIGJET</text>
-  <text color="#FFFFFF" modifier="bold" textalign="center" xoffset="-34" size="156" yoffset="-50" w="300" translate="true" tnt-trx-ref-value="LAWS?" tnt-trx-translated="true">SHPIRTËRORE?</text>
-  <text color="#ffffff" alpha="0.8" modifier="italics" textalign="center" size="112" yoffset="140" w="300" translate="true" tnt-trx-ref-value="Just as there are physical laws that govern the physical universe, so are there spiritual laws that govern your relationship with God." tnt-trx-translated="true">Ashtu siç ka ligje fizike që rregullojnë universin fizik, po ashtu ka edhe ligje shpirtërore që rregullojnë marrëdhënien tënde me Perëndinë.</text>
-</page>

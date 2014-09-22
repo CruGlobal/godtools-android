@@ -152,15 +152,25 @@
         <!-- the refresh button -->
         <ImageButton
             android:id="@+id/refresh_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_action_refresh"
-            android:visibility="invisible"
+            android:layout_width="100dp"
+            android:layout_height="68dp"
+            android:background="@drawable/homescreen_refresh_button_2x"
             android:layout_below="@+id/full_table"
             android:layout_alignLeft="@+id/full_table"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp"/>
 
+        <!-- the add button -->
+        <ImageButton
+            android:id="@+id/homescreen_add_button"
+            android:layout_width="100dp"
+            android:layout_height="68dp"
+            android:background="@drawable/homescreen_add_button_2x"
+            android:layout_below="@+id/full_table"
+            android:layout_toRightOf="@+id/refresh_button"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:onClick="onCmd_add"/>
 
     </RelativeLayout>
 

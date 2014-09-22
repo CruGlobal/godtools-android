@@ -4,10 +4,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 
-import org.apache.http.client.methods.HttpPost;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 import java.io.File;
+import java.util.UUID;
 
 public class GodToolsApiClient {
 
@@ -37,43 +37,73 @@ public class GodToolsApiClient {
         download(app.getApplicationContext(), url, filePath, tag, authorization, langCode, taskHandler);
     }
 
+    public static void authenticateGeneric(AuthTask.AuthTaskHandler taskHandler)
+    {
+        AuthTask authTask = new AuthTask(taskHandler);
+        String url = BASE_URL + ENDPOINT_AUTH;
+        authTask.execute(url);
+    }
+
     public static void authenticateAccessCode(String accessCode, AuthTask.AuthTaskHandler taskHandler){
         AuthTask authTask = new AuthTask(taskHandler);
         String url = BASE_URL + ENDPOINT_AUTH + accessCode;
         authTask.execute(url);
     }
 
-    public static void downloadDrafts(SnuffyApplication app, String authorization, String langCode, String tag, DownloadTask.DownloadTaskHandler tashHandler){
+    public static void downloadDrafts(SnuffyApplication app, String authorization, String langCode, String tag, DownloadTask.DownloadTaskHandler taskHandler){
         String url = BASE_URL + ENDPOINT_DRAFTS + langCode + "?compressed=true";
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + File.separator + "package.zip";
 
-        download(app.getApplicationContext(), url, filePath, tag, authorization, langCode, tashHandler);
+        download(app.getApplicationContext(), url, filePath, tag, authorization, langCode, taskHandler);
     }
 
-    /**
-    public static void downloadPackage(SnuffyApplication app, String langCode, String packageName, String tag, DownloadTask.DownloadTaskHandler taskHandler) {
-        String url = BASE_URL + ENDPOINT_PACKAGES + langCode + File.separator + packageName + "?compressed=true";
-        String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + "_" + packageName + File.separator + "package.zip";
+    public static void downloadDraftPage(SnuffyApplication app,
+                                         String authorization,
+                                         String languageCode,
+                                         String packageCode,
+                                         UUID pageId,
+                                         DownloadTask.DownloadTaskHandler taskHandler)
+    {
+        String url = BASE_URL + ENDPOINT_DRAFTS + languageCode + File.separator + packageCode + File.separator + "pages" + File.separator + pageId;
+        String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + languageCode + File.separator + pageId + ".zip";
 
-        download(app.getApplicationContext(), url, filePath, tag, taskHandler);
+        download(app.getApplicationContext(),
+                url,
+                filePath,
+                "draft",
+                authorization,
+                languageCode,
+                taskHandler);
     }
 
-    public static void downloadTranslation(SnuffyApplication app, String packageName, String langCode, String tag, DownloadTask.DownloadTaskHandler taskHandler) {
-        String url = BASE_URL + ENDPOINT_TRANSLATIONS + langCode + File.separator + packageName + "?compressed=true";
-        String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + "_" + packageName + File.separator + "package.zip";
+    public static void createDraft(String authorization,
+                                   String languageCode,
+                                   String packageCode,
+                                   DraftCreationTask.DraftTaskHandler taskHandler)
+    {
+        String url = BASE_URL + ENDPOINT_TRANSLATIONS + languageCode + File.separator + packageCode;
 
-        download(app.getApplicationContext(), url, filePath, tag, taskHandler);
+        new DraftCreationTask(taskHandler).execute(url, authorization);
     }
-    */
+
+    public static void publishDraft(String authorization,
+                                    String languageCode,
+                                    String packageCode,
+                                    DraftPublishTask.DraftTaskHandler taskHandler)
+    {
+        String url = BASE_URL + ENDPOINT_TRANSLATIONS + languageCode + File.separator + packageCode;
+
+        new DraftPublishTask(taskHandler).execute(url, authorization);
+    }
 
     private static void download(Context context, String url, String filePath, String tag, String authorization, String langCode, DownloadTask.DownloadTaskHandler taskHandler) {
-        DownloadTask dlTask = new DownloadTask(context, taskHandler);
-        //dlTask.execute(url, filePath, tag);
+        DownloadTask downloadTask = new DownloadTask(context, taskHandler);
+        //downloadTask.execute(url, filePath, tag);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            dlTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, filePath, tag, authorization, langCode);
+            downloadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, filePath, tag, authorization, langCode);
         } else {
-            dlTask.execute(url, filePath, tag, authorization, langCode);
+            downloadTask.execute(url, filePath, tag, authorization, langCode);
         }
 
     }

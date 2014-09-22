@@ -41,6 +41,10 @@
     <string name="dialog_analytics_optin">Yes</string>
     <string name="dialog_analytics_optout">No</string>
 
+    <string name="quit_dialog_message">Are you sure you want to exit GodTools?</string>
+    <string name="quit_dialog_confirm">Exit</string>
+    <string name="quit_dialog_cancel">Cancel</string>
+
     <string name="search_label">EveryStudent.com</string>
     <string name="search_hint">Search EveryStudent.com</string>
     <plurals name="search_results">

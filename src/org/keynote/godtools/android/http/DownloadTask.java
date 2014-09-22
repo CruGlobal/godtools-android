@@ -3,7 +3,15 @@ package org.keynote.godtools.android.http;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
@@ -51,15 +59,29 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
         langCode = params[4].toString();
 
         try {
-            URL mURL = new URL(url);
-            URLConnection c = mURL.openConnection();
-            c.setConnectTimeout(10000);
-            c.setReadTimeout(30000);
-            c.addRequestProperty("Authorization", authorization);
-            c.addRequestProperty("Interpreter", "1");
+            HttpGet request = new HttpGet(url);
+            request.setHeader("Accept", "application/xml");
+            request.setHeader("Content-type", "application/xml");
+            request.setHeader("Authorization", authorization);
+            request.setHeader("Interpreter", "1");
 
-            InputStream is = c.getInputStream();
-            DataInputStream dis = new DataInputStream(is);
+            HttpParams httpParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpParams, 10000);
+            HttpConnectionParams.setSoTimeout(httpParams, 30000);
+
+            HttpClient httpClient = new DefaultHttpClient(httpParams);
+            HttpResponse response;
+            try
+            {
+                response = httpClient.execute(request);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+                return false;
+            }
+
+            DataInputStream dis = new DataInputStream(response.getEntity().getContent());
 
             File zipfile = new File(filePath);
             String parentDir = zipfile.getParent();
@@ -123,10 +145,8 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
                 copyFile(inputStream, outputStream);
 
                 inputStream.close();
-                inputStream = null;
                 outputStream.flush();
                 outputStream.close();
-                outputStream = null;
                 oldFile.delete();
             }
 
@@ -135,18 +155,6 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
             return true;
 
-        } catch (SocketTimeoutException e){
-            e.printStackTrace();
-            return false;
-        } catch (ConnectTimeoutException e) {
-            e.printStackTrace();
-            return false;
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
