@@ -26,6 +26,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
@@ -104,6 +107,7 @@ public class SnuffyPWActivity extends Activity {
         getIntent().putExtra("AllowFlip", false);
 
         setContentView(R.layout.snuffy_main);
+        trackScreenActivity();
 
         /** Only set the pager adapter on completeSetUp() **/
         //mPagerAdapter = new MyPagerAdapter();
@@ -521,34 +525,42 @@ public class SnuffyPWActivity extends Activity {
             return true;
         switch (item.getItemId()) {
             case R.id.CMD_ABOUT: {
+                trackScreenEvent("About");
                 doCmdInfo(null);
                 break;
             }
             case R.id.CMD_FIRST_PAGE: {
+                trackScreenEvent("First Page");
                 doCmdGoToFirstPage(null);
                 break;
             }
             case R.id.CMD_LAST_PAGE: {
+                trackScreenEvent("Last Page");
                 doCmdGoToLastPage(null);
                 break;
             }
             case R.id.CMD_CONTENT: {
+                trackScreenEvent("Content");
                 doCmdShowPageMenu(null);
                 break;
             }
             case R.id.CMD_EMAIL: {
+                trackScreenEvent("Share");
                 doCmdShare(null);
                 break;
             }
             case R.id.CMD_HELP: {
+                trackScreenEvent("Help");
                 doCmdHelp();
                 break;
             }
             case R.id.CMD_FLIP: {
+                trackScreenEvent("Flip");
                 doCmdFlip();
                 break;
             }
             case R.id.CMD_SWITCH_LANGUAGE: {
+                trackScreenEvent("Switch Language");
                 switchLanguage();
                 break;
             }
@@ -701,5 +713,31 @@ public class SnuffyPWActivity extends Activity {
         RelativeLayout updatingDraftLayout = (RelativeLayout) findViewById(R.id.updatingDraft);
         updatingDraftLayout.setVisibility(View.GONE);
 
+    }
+
+    private Tracker getGoogleAnalyticsTracker()
+    {
+        return ((SnuffyApplication)getApplication()).getTracker();
+    }
+
+    private void trackScreenEvent(String event)
+    {
+        Tracker tracker = getGoogleAnalyticsTracker();
+        tracker.setScreenName(mAppPackage);
+        tracker.send(new HitBuilders.EventBuilder()
+        .setCategory("Menu event")
+        .setAction(event)
+        .setLabel(event)
+        .build());
+    }
+
+    private void trackScreenActivity()
+    {
+        Tracker tracker = getGoogleAnalyticsTracker();
+        tracker.setScreenName(mAppPackage);
+        tracker.send(new HitBuilders.AppViewBuilder()
+        .setCustomDimension(1, mAppPackage)
+        .setCustomDimension(2, mAppLanguage)
+        .build());
     }
 }

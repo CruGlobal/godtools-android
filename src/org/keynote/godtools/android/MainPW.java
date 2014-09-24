@@ -35,6 +35,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
@@ -387,7 +390,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 		// Now that it is resized - show it
 		ViewGroup container = (ViewGroup) findViewById(R.id.homescreen_container);
 		container.setVisibility(View.VISIBLE);
-
+        trackScreenVisit();
 	}
 
 	private void showLoading(String msg)
@@ -911,5 +914,20 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         }
 
         return possiblePackages;
+    }
+
+    private Tracker getGoogleAnalyticsTracker()
+    {
+        return ((SnuffyApplication)getApplication()).getTracker();
+    }
+
+    private void trackScreenVisit()
+    {
+        Tracker tracker = getGoogleAnalyticsTracker();
+        tracker.setScreenName("HomeScreen");
+        tracker.send(new HitBuilders.AppViewBuilder()
+        .setCustomDimension(1, "HomeScreen")
+        .setCustomDimension(2, languagePrimary)
+        .build());
     }
 }
