@@ -107,13 +107,7 @@ public class SnuffyPWActivity extends Activity {
         getIntent().putExtra("AllowFlip", false);
 
         setContentView(R.layout.snuffy_main);
-        trackScreenActivity();
-
-        /** Only set the pager adapter on completeSetUp() **/
-        //mPagerAdapter = new MyPagerAdapter();
-        //mPager = (ViewPager) findViewById(R.id.snuffyViewPager);
-        //mPager.setAdapter(mPagerAdapter);
-
+        trackScreenActivity(mAppPackage);
 
         mConfigPrimary = mConfigFileName;
         isUsingPrimaryLanguage = true;
@@ -273,7 +267,9 @@ public class SnuffyPWActivity extends Activity {
 
             @Override
             public void onPageSelected(int position) {
-                Log.d(TAG, "onPageSelected: " + Integer.toString(position));
+                Log.d(TAG, "onPageSelected: " + mAppPackage + Integer.toString(position));
+                trackScreenActivity(mAppPackage + Integer.toString(position));
+
                 View oldPage = mPages.elementAt(mPagerCurrentItem);
                 if (SnuffyPage.class.isInstance(oldPage)) {
                     ((SnuffyPage) oldPage).onExitPage();
@@ -294,18 +290,6 @@ public class SnuffyPWActivity extends Activity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                // arg0 is 0, 1 or 2 and m_currItem contains more info
-                //switch (state) {
-                //case ViewPager.SCROLL_STATE_IDLE:
-                //	Log.d(TAG, "onPageScrollStateChanged: IDLE");
-                //	break;
-                //case ViewPager.SCROLL_STATE_DRAGGING:
-                //	Log.d(TAG, "onPageScrollStateChanged: DRAGGING");
-                //	break;
-                //case ViewPager.SCROLL_STATE_SETTLING:
-                //	Log.d(TAG, "onPageScrollStateChanged: SETTLING");
-                //	break;
-                //}
             }
         });
     }
@@ -618,14 +602,6 @@ public class SnuffyPWActivity extends Activity {
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.setProgress(0);
                 mProgressDialog.setMax(1); //harmless values to start with to avoid seeing "Nan"
-                // Can't support cancel - would leave app undefined. Processing does not take more than a few seconds so no need.
-                //mProgressDialog.setOnCancelListener(new OnCancelListener() {
-                //
-                //	@Override
-                //	public void onCancel(DialogInterface dialog) {
-                //		mProcessPackageAsync.cancel(false);
-                //	}
-                //});
                 mProgressDialog.show();
                 return mProgressDialog;
             default:
@@ -731,12 +707,12 @@ public class SnuffyPWActivity extends Activity {
         .build());
     }
 
-    private void trackScreenActivity()
+    private void trackScreenActivity(String activity)
     {
         Tracker tracker = getGoogleAnalyticsTracker();
-        tracker.setScreenName(mAppPackage);
+        tracker.setScreenName(activity);
         tracker.send(new HitBuilders.AppViewBuilder()
-        .setCustomDimension(1, mAppPackage)
+        .setCustomDimension(1, activity)
         .setCustomDimension(2, mAppLanguage)
         .build());
     }
