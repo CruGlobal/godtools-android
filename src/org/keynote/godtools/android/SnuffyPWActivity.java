@@ -297,7 +297,7 @@ public class SnuffyPWActivity extends Activity
             public void onPageSelected(int position)
             {
                 Log.d(TAG, "onPageSelected: " + mAppPackage + Integer.toString(position));
-                trackScreenActivity(mAppPackage + Integer.toString(position));
+                trackScreenActivity(mAppPackage + "-" + Integer.toString(position));
 
                 View oldPage = mPages.elementAt(mPagerCurrentItem);
                 if (SnuffyPage.class.isInstance(oldPage))

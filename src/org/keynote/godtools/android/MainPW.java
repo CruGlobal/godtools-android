@@ -428,7 +428,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             SnuffyApplication app = (SnuffyApplication) getApplication();
             app.setAppLocale(code);
 
-
         }
         else
         {
