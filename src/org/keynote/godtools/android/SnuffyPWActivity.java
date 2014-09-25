@@ -113,7 +113,7 @@ public class SnuffyPWActivity extends Activity
         getIntent().putExtra("AllowFlip", false);
 
         setContentView(R.layout.snuffy_main);
-        trackScreenActivity(mAppPackage);
+        trackScreenActivity(mAppPackage + "-0");
 
         mConfigPrimary = mConfigFileName;
         isUsingPrimaryLanguage = true;
