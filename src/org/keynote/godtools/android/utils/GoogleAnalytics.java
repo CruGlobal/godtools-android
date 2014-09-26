@@ -18,7 +18,7 @@ public class GoogleAnalytics
 			googleAnalytics.setLocalDispatchPeriod(GoogleAnalyticsConfig.DISPATCH_PERIOD);
 			googleAnalytics.setDryRun(GoogleAnalyticsConfig.IS_DRY_RUN);
 
-			return googleAnalytics.newTracker("");
+			return googleAnalytics.newTracker("UA-325725-50");
 		}
 
 		return tracker;

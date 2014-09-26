@@ -15,6 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
 import org.keynote.godtools.android.fragments.ConfirmDialogFragment;
@@ -41,6 +44,7 @@ public class SettingsPW extends BaseActionBarActivity implements
     RelativeLayout rlMainLanguage, rlParallelLanguage;
     CompoundButton cbTranslatorMode;
     Typeface mAlternateTypeface;
+    String primaryLanguageCode;
 
     ProgressDialog pdLoading;
 
@@ -67,7 +71,7 @@ public class SettingsPW extends BaseActionBarActivity implements
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean isTranslatorEnabled = settings.getBoolean("TranslatorMode", false);
-        String primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+        primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
         handleLanguagesWithAlternateFonts(primaryLanguageCode);
@@ -90,6 +94,8 @@ public class SettingsPW extends BaseActionBarActivity implements
             String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName());
             tvParallelLanguage.setText(parallelName);
         }
+
+        trackScreenActivity();
     }
 
     @Override
@@ -126,6 +132,7 @@ public class SettingsPW extends BaseActionBarActivity implements
                     tvParallelLanguage.setText(parallelName);
                 }
 
+                trackScreenEvent("Change Primary Language");
                 break;
             }
             case RESULT_CHANGED_PARALLEL: {
@@ -136,6 +143,7 @@ public class SettingsPW extends BaseActionBarActivity implements
                 String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName());
                 tvParallelLanguage.setText(parallelName);
 
+                trackScreenEvent("Change Parallel Language");
                 break;
             }
             case RESULT_DOWNLOAD_PRIMARY:
@@ -304,5 +312,31 @@ public class SettingsPW extends BaseActionBarActivity implements
         } else {
             mAlternateTypeface = Typeface.DEFAULT;
         }
+    }
+
+    private Tracker getGoogleAnalyticsTracker()
+    {
+        return ((SnuffyApplication)getApplication()).getTracker();
+    }
+
+    private void trackScreenEvent(String event)
+    {
+        Tracker tracker = getGoogleAnalyticsTracker();
+        tracker.setScreenName("Settings");
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Language Change")
+                .setAction(event)
+                .setLabel(event)
+                .build());
+    }
+
+    private void trackScreenActivity()
+    {
+        Tracker tracker = getGoogleAnalyticsTracker();
+        tracker.setScreenName("Settings");
+        tracker.send(new HitBuilders.AppViewBuilder()
+                .setCustomDimension(1, "Settings")
+                .setCustomDimension(2, primaryLanguageCode)
+                .build());
     }
 }

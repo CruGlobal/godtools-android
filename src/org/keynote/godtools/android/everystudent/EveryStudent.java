@@ -20,12 +20,16 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.SimpleExpandableListAdapter;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 public class EveryStudent extends ExpandableListActivity {
 	public static final String NAME = "NAME";
@@ -78,6 +82,8 @@ public class EveryStudent extends ExpandableListActivity {
 				return false;
 			}
 		});
+
+        trackScreenActivity();
 
 //FIXME		FlurryAgent.onEvent(FlurryAPI.FlurryPrefix + LOGTAG);
 //FIXME		FlurryAgent.onPageView();
@@ -200,5 +206,19 @@ public class EveryStudent extends ExpandableListActivity {
             default:
                 return false;
         }
+    }
+
+    private Tracker getGoogleAnalyticsTracker()
+    {
+        return ((SnuffyApplication)getApplication()).getTracker();
+    }
+
+    private void trackScreenActivity()
+    {
+        Tracker tracker = getGoogleAnalyticsTracker();
+        tracker.setScreenName("EveryStudent");
+        tracker.send(new HitBuilders.AppViewBuilder()
+        .setCustomDimension(1, "EveryStudent")
+        .build());
     }
 }

@@ -3,12 +3,9 @@ package org.keynote.godtools.android;
 import java.util.HashMap;
 
 import org.keynote.godtools.android.utils.BasicZoomControl;
-//import org.keynote.godtools.android.utils.FlurryAPI;
 import org.keynote.godtools.android.utils.ImageZoomView;
 import org.keynote.godtools.android.utils.KeyListener;
 import org.keynote.godtools.android.utils.LongPressZoomListener;
-
-//import com.flurry.android.FlurryAgent;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,7 +16,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.PowerManager;
-//import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -195,6 +191,7 @@ public class Gallery extends Activity {
         }
         
         logPageView();
+
     }
     
     protected void logTime() {
