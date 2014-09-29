@@ -169,11 +169,6 @@ public class PackageListFragment extends ListFragment
                     holder.packageName = (TextView) convertView.findViewById(R.id.list1Text);
                 }
 
-				if (position % 2 == 0)
-				{
-					convertView.setBackgroundColor(0x000000);
-				}
-
 				convertView.setTag(holder);
 
 			} else
@@ -183,9 +178,9 @@ public class PackageListFragment extends ListFragment
 
 			holder.packageName.setTypeface(mAlternateTypeface);
 
-            if("Every Student".equals(holder.packageName.getText()))
+            if (position % 2 == 0)
             {
-                convertView.setBackgroundColor(0xf0f0f0);
+                convertView.setBackgroundColor(0x000000);
             }
 
 			// set values
