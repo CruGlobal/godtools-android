@@ -82,7 +82,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 		if (isFirstLaunch())
 		{
 			new PrepareInitialContentTask((SnuffyApplication) getApplication()).execute((Void) null);
-
 			if(Device.isConnected(Splash.this) &&
 					settings.getString("Authorization_Generic", "").equals(""))
 			{
@@ -94,6 +93,8 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 						SharedPreferences.Editor editor = settings.edit();
 						editor.putString("Authorization_Generic", authorization);
 						editor.apply();
+                        Log.i("Splash", "Now Authorized");
+                        checkForUpdates();
 					}
 
 					@Override

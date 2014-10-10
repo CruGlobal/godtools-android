@@ -1,6 +1,7 @@
 package org.keynote.godtools.android.http;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -52,6 +53,8 @@ public class MetaTask extends AsyncTask<Object, Void, InputStream> {
         try {
             HttpResponse response = httpClient.execute(request);
             statusCode = response.getStatusLine().getStatusCode();
+
+            Log.i("Status", "" + statusCode);
 
             return response.getEntity().getContent();
 

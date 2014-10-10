@@ -44,7 +44,6 @@ public class AuthTask extends AsyncTask<Object, Void, String> {
             statusCode = response.getStatusLine().getStatusCode();
 
             String authorization = response.getFirstHeader("Authorization").getValue();
-            Log.i("Authorization", authorization);
 
             return authorization;
 
