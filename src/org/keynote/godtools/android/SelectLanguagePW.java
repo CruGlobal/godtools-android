@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
     String primaryLanguage, parallelLanguage;
     String currentLanguage;
+    Boolean isTranslator;
     Typeface mAlternateTypeface;
     boolean isMainLang;
 
@@ -57,6 +59,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         primaryLanguage = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         parallelLanguage = settings.getString(GTLanguage.KEY_PARALLEL, "");
+        isTranslator = settings.getBoolean("TranslatorMode", false);
 
         handleLanguagesWithAlternateFonts(primaryLanguage);
 
@@ -67,6 +70,16 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             currentLanguage = parallelLanguage;
             isMainLang = false;
             removeLanguageFromList(languageList, primaryLanguage);
+        }
+
+        Log.i("Translator: ", isTranslator.toString());
+
+        if (!isTranslator)
+        {
+           for (GTLanguage language : languageList)
+           {
+               if (language.isDraft()) removeLanguageFromList(languageList, language.getLanguageCode());
+           }
         }
 
         // sort the list alphabetically
