@@ -383,7 +383,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             packageFrag.getListView().setLayoutParams(new FrameLayout.LayoutParams(childWidth, totalHeight));
         } catch (Exception e)
         {
-            Log.e("error", e.getMessage());
+            Log.e("error", e.getMessage(), e);
         }
     }
 
