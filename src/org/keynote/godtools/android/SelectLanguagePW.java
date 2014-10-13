@@ -25,6 +25,7 @@ import org.keynote.godtools.android.utils.Typefaces;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 public class SelectLanguagePW extends BaseActionBarActivity implements AdapterView.OnItemClickListener
@@ -78,17 +79,11 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
         if (!isTranslator)
         {
-            for (int i = 0; i < languageList.size(); i++)
+            Iterator<GTLanguage> i = languageList.iterator();
+            for (; i.hasNext();)
             {
-                if (languageList.get(i).isDraft())
-                {
-                    removeLanguageFromList(languageList, languageList.get(i).getLanguageCode());
-                    Log.i("Removing", languageList.get(i).getLanguageName());
-                }
-                else
-                {
-                    Log.i("Not Removing", languageList.get(i).getLanguageCode());
-                }
+                GTLanguage lang = i.next();
+                if (lang.isDraft()) i.remove();
             }
         }
 
