@@ -328,7 +328,13 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 				// check if language is already in the db
 				GTLanguage dbLanguage = mAdapter.getGTLanguage(gtl.getLanguageCode());
 				if (dbLanguage == null)
-					mAdapter.insertGTLanguage(gtl);
+                {
+                    mAdapter.insertGTLanguage(gtl);
+                }
+                else
+                {
+                    mAdapter.updateGTLanguage(gtl);
+                }
 
 				dbLanguage = mAdapter.getGTLanguage(gtl.getLanguageCode());
 				for (GTPackage gtp : gtl.getPackages())

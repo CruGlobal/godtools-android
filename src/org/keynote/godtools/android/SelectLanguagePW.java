@@ -78,7 +78,11 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         {
            for (GTLanguage language : languageList)
            {
-               if (language.isDraft()) removeLanguageFromList(languageList, language.getLanguageCode());
+               if (language.isDraft())
+               {
+                   Log.i(language.getLanguageCode(), "draft: " + language.isDraft());
+                   //removeLanguageFromList(languageList, language.getLanguageCode());
+               }
            }
         }
 

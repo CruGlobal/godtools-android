@@ -151,6 +151,7 @@ public class DBAdapter
     {
         ContentValues cv = new ContentValues();
         cv.put(DBContract.GTLanguageTable.COL_IS_DOWNLOADED, gtl.isDownloaded());
+        cv.put(DBContract.GTLanguageTable.COL_IS_DRAFT, gtl.isDraft());
 
         String where = String.format("%s = '%s'",
                 DBContract.GTLanguageTable.COL_CODE, gtl.getLanguageCode());
