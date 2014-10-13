@@ -69,7 +69,6 @@ public class GTPackageReader {
                 }
                 gtl.setPackages(packageList);
                 gtl.setDraft(isDraft);
-                Log.i("language: " + gtl.getLanguageCode(), "Is draft = " + gtl.isDraft());
                 languageList.add(gtl);
             }
 

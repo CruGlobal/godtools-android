@@ -76,16 +76,18 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             removeLanguageFromList(languageList, primaryLanguage);
         }
 
-        Log.i("Translator: ", isTranslator.toString());
-
         if (!isTranslator)
         {
-            for (GTLanguage language : languageList)
+            for (int i = 0; i < languageList.size(); i++)
             {
-                if (language.isDraft())
+                if (languageList.get(i).isDraft())
                 {
-                    Log.i(language.getLanguageCode(), "draft: " + language.isDraft());
-                    //removeLanguageFromList(languageList, language.getLanguageCode());
+                    removeLanguageFromList(languageList, languageList.get(i).getLanguageCode());
+                    Log.i("Removing", languageList.get(i).getLanguageName());
+                }
+                else
+                {
+                    Log.i("Not Removing", languageList.get(i).getLanguageCode());
                 }
             }
         }
@@ -159,13 +161,10 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 editor.commit();
 
                 setResult(RESULT_CHANGED_PARALLEL, returnIntent);
-
             }
             else
             {
-
                 setResult(RESULT_DOWNLOAD_PARALLEL, returnIntent);
-
             }
 
         }
