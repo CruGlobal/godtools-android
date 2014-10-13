@@ -85,6 +85,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
      */
     ImageButton addButton;
     boolean isDownloading;
+    int childHeight, childWidth;
 
     /**
      * Called when the activity is first created.
@@ -369,16 +370,53 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
     private void createTheHomeScreen()
     {
+        if (packageList.size() < 1)
+        {
+            GTPackage newPackage = new GTPackage();
+            newPackage.setName("No Package");
+            packageList.add(newPackage);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("New").setMessage("Something about new package here")
+                    .setPositiveButton("New", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i)
+                        {
+                            onCmd_add(null);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i)
+                        {
+                            onCmd_settings(null);
+                        }
+                    });
+
+            builder.create().show();
+        }
         // resize contList
         try
         {
-            int childHeight = packageFrag.getListView().getChildAt(0).getHeight();
-            int childWidth = packageFrag.getListView().getChildAt(0).getWidth();
-            int totalHeight = childHeight * packageList.size();
-            packageFrag.getListView().setLayoutParams(new FrameLayout.LayoutParams(childWidth, totalHeight));
+            childHeight = packageFrag.getListView().getChildAt(0).getHeight();
+            childWidth = packageFrag.getListView().getChildAt(0).getWidth();
         } catch (Exception e)
         {
-            Log.e("error", e.getMessage());
+            Log.e("error", e.getMessage(), e);
+
+        }
+        finally
+        {
+            /*
+             * Frame size is set successful on first launch. However, there are times, when changing
+             * languages, the getListView will return a null.
+             */
+            if (childWidth > 0)
+            {
+                packageFrag.getListView().setLayoutParams(new FrameLayout.LayoutParams(childWidth, childHeight * packageList.size()));
+            }
         }
     }
 
@@ -458,7 +496,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
         if (tag.equalsIgnoreCase("primary"))
         {
-
             languagePrimary = langCode;
 
             SnuffyApplication app = (SnuffyApplication) getApplication();
