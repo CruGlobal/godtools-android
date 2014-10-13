@@ -386,7 +386,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         } catch (Exception e)
         {
             Log.e("error", e.getMessage(), e);
-
         }
         finally
         {
@@ -855,7 +854,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
             AlertDialog.Builder b = new AlertDialog.Builder(this);
-
             b.setTitle("Start a draft for: ");
 
             final LinkedHashMap<String, String> possiblePackagesForDraft = getPossiblePackagesForDraft();
