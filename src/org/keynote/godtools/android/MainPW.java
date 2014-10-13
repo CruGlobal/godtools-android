@@ -197,6 +197,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 packageList = getPackageList();
                 packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
 
+                createTheHomeScreen();
+
                 break;
             }
             case RESULT_DOWNLOAD_PRIMARY:
@@ -273,8 +275,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 break;
             }
         }
-
-        createTheHomeScreen();
     }
 
 
@@ -330,7 +330,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
     private void getScreenSize()
     {
-
 		/*
          * Although these measurements are not used on this screen, they are passed to and used by
 		 * the following screens. At some point maybe all layouts can be updated to relative layout.
@@ -383,20 +382,10 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         {
             childHeight = packageFrag.getListView().getChildAt(0).getHeight();
             childWidth = packageFrag.getListView().getChildAt(0).getWidth();
+            packageFrag.getListView().setLayoutParams(new FrameLayout.LayoutParams(childWidth, childHeight * packageList.size()));
         } catch (Exception e)
         {
             Log.e("error", e.getMessage(), e);
-        }
-        finally
-        {
-            /*
-             * Frame size is set successful on first launch. However, there are times, when changing
-             * languages, the getListView will return a null.
-             */
-            if (childWidth > 0)
-            {
-                packageFrag.getListView().setLayoutParams(new FrameLayout.LayoutParams(childWidth, childHeight * packageList.size()));
-            }
         }
     }
 
@@ -466,8 +455,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             }
 
         }
-
-        createTheHomeScreen();
     }
 
     @Override
