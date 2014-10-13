@@ -16,6 +16,7 @@ public class GTLanguage {
     private String languageName;
     private String languageCode;
     private boolean downloaded;
+    private boolean draft;
     private List<GTPackage> listPackages;
 
     public GTLanguage() {
@@ -68,6 +69,16 @@ public class GTLanguage {
 
     public void setPackages(List<GTPackage> listPackages) {
         this.listPackages = listPackages;
+    }
+
+    public boolean isDraft()
+    {
+        return draft;
+    }
+
+    public void setDraft(boolean draft)
+    {
+        this.draft = draft;
     }
 
     public static GTLanguage getLanguage(Context context, String languageCode) {

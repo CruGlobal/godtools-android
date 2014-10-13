@@ -1,5 +1,7 @@
 package org.keynote.godtools.android.business;
 
+import android.util.Log;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -30,20 +32,32 @@ public class GTPackageReader {
             xmlDoc.normalize();
 
             NodeList nlLanguages = xmlDoc.getElementsByTagName("language");
-            for (int i = 0; i < nlLanguages.getLength(); i++) {
+            for (int i = 0; i < nlLanguages.getLength(); i++)
+            {
                 Element elLanguage = (Element) nlLanguages.item(i);
                 String languageCode = elLanguage.getAttribute("code");
 
                 GTLanguage gtl = new GTLanguage(languageCode);
                 List<GTPackage> packageList = new ArrayList<GTPackage>();
+                boolean isDraft = true; // Assume language is draft
 
                 NodeList nlPackages = elLanguage.getElementsByTagName("package");
-                for (int j =0; j < nlPackages.getLength(); j++){
+                for (int j =0; j < nlPackages.getLength(); j++)
+                {
                     Element element = (Element) nlPackages.item(j);
 
                     String code = element.getAttribute("code");
                     double version = Double.valueOf(element.getAttribute("version"));
                     String status = element.getAttribute("status");
+
+                    /*
+                     * If any package is live for the language the language will be live. It should
+                     * not be change back to draft by another package.
+                     */
+                    if (isDraft)
+                    {
+                        if ("live".equalsIgnoreCase(status)) isDraft = false;
+                    }
 
                     GTPackage gtp = new GTPackage();
                     gtp.setCode(code);
@@ -54,6 +68,7 @@ public class GTPackageReader {
                     packageList.add(gtp);
                 }
                 gtl.setPackages(packageList);
+                gtl.setDraft(isDraft);
                 languageList.add(gtl);
             }
 

@@ -2,9 +2,8 @@ package org.keynote.godtools.android.dao;
 
 import android.provider.BaseColumns;
 
-import org.keynote.godtools.android.business.GTLanguage;
-
-public class DBContract {
+public class DBContract
+{
 
     private static final String TEXT_TYPE = " TEXT";
     private static final String INTEGER_TYPE = " INTEGER";
@@ -14,7 +13,8 @@ public class DBContract {
     private static final String PRIMARY_KEY = " PRIMARY KEY";
     private static final String COMMA_SEP = ",";
 
-    public static abstract class GTPackageTable implements BaseColumns {
+    public static abstract class GTPackageTable implements BaseColumns
+    {
         public static final String TABLE_NAME = "gtpackages";
         public static final String COL_CODE = "code";
         public static final String COL_NAME = "name";
@@ -40,22 +40,26 @@ public class DBContract {
                 + GTPackageTable.TABLE_NAME;
     }
 
-    public static abstract class GTLanguageTable implements BaseColumns {
+    public static abstract class GTLanguageTable implements BaseColumns
+    {
         public static final String TABLE_NAME = "gtlanguages";
         public static final String COL_CODE = "code";
         public static final String COL_IS_DOWNLOADED = "is_downloaded";
+        public static final String COL_IS_DRAFT = "is_draft";
 
         public static final String SQL_CREATE_GTLANGUAGES = "CREATE TABLE "
                 + GTLanguageTable.TABLE_NAME + "("
                 + GTLanguageTable._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP
                 + GTLanguageTable.COL_CODE + TEXT_TYPE + COMMA_SEP
-                + GTLanguageTable.COL_IS_DOWNLOADED + INTEGER_TYPE + ")";
+                + GTLanguageTable.COL_IS_DOWNLOADED + INTEGER_TYPE + COMMA_SEP
+                + GTLanguageTable.COL_IS_DRAFT + INTEGER_TYPE + ")";
 
         public static final String SQL_DELETE_GTLANGUAGES = "DROP TABLE IF EXISTS "
                 + GTLanguageTable.TABLE_NAME;
     }
 
-    public static abstract class GTDraftLanguageTable implements BaseColumns {
+    public static abstract class GTDraftLanguageTable implements BaseColumns
+    {
         public static final String TABLE_NAME = "gtdraftlanguages";
         public static final String COL_CODE = "code";
         public static final String COL_IS_DOWNLOADED = "is_downloaded";

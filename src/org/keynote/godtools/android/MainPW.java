@@ -152,27 +152,32 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             }
         });
 
-        refreshButton = (ImageButton) findViewById(R.id.refresh_button);
-        refreshButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                onCmd_refresh(null);
-            }
-        });
-
         addButton = (ImageButton) findViewById(R.id.homescreen_add_button);
+        refreshButton = (ImageButton) findViewById(R.id.refresh_button);
 
         if (settings.getBoolean("TranslatorMode", false))
         {
             addButton.setVisibility(View.VISIBLE);
             addButton.setEnabled(true);
+
+            refreshButton.setVisibility(View.VISIBLE);
+            refreshButton.setEnabled(true);
+            refreshButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    onCmd_refresh(null);
+                }
+            });
         }
         else
         {
             addButton.setVisibility(View.INVISIBLE);
             addButton.setEnabled(false);
+
+            refreshButton.setVisibility(View.INVISIBLE);
+            refreshButton.setEnabled(false);
         }
 
         mSetupNeeded = true;
@@ -378,7 +383,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             packageFrag.getListView().setLayoutParams(new FrameLayout.LayoutParams(childWidth, totalHeight));
         } catch (Exception e)
         {
-            Log.e("error", e.getMessage());
+            Log.e("error", e.getMessage(), e);
         }
     }
 
