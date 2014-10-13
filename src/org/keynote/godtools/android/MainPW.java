@@ -376,26 +376,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             newPackage.setName("No Package");
             packageList.add(newPackage);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("New").setMessage("Something about new package here")
-                    .setPositiveButton("New", new DialogInterface.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i)
-                        {
-                            onCmd_add(null);
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i)
-                        {
-                            onCmd_settings(null);
-                        }
-                    });
-
-            builder.create().show();
+            onCmd_add(null);
         }
         // resize contList
         try
@@ -874,6 +855,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
             AlertDialog.Builder b = new AlertDialog.Builder(this);
+
             b.setTitle("Start a draft for: ");
 
             final LinkedHashMap<String, String> possiblePackagesForDraft = getPossiblePackagesForDraft();
@@ -921,6 +903,15 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                             });
                 }
 
+            });
+
+            b.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i)
+                {
+                    onCmd_settings(null);
+                }
             });
 
             b.show();
