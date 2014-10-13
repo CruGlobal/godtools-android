@@ -56,7 +56,7 @@ public class GTPackageReader {
                      */
                     if (isDraft)
                     {
-                        if (status.equalsIgnoreCase("live")) isDraft = false;
+                        if ("live".equalsIgnoreCase(status)) isDraft = false;
                     }
 
                     GTPackage gtp = new GTPackage();
