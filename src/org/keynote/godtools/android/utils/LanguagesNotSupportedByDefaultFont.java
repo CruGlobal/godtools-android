@@ -12,6 +12,7 @@ public class LanguagesNotSupportedByDefaultFont
 
 	static
 	{
+		languageCodeSet.put("ta", "fonts/FreeSerif.ttf");
 		languageCodeSet.put("th", "fonts/FreeSerif.ttf");
 		languageCodeSet.put("ko", "fonts/UnGraphic.ttf");
 	}
