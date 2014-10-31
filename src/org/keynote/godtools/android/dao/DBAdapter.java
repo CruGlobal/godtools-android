@@ -10,6 +10,7 @@ import org.keynote.godtools.android.business.GTPackage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class DBAdapter
 {
@@ -217,6 +218,9 @@ public class DBAdapter
 
         List<GTLanguage> listGTLanguages = new ArrayList<GTLanguage>();
 
+        Locale current = Locale.getDefault();
+        Locale.setDefault(new Locale("en"));
+
         while (cursor.moveToNext())
         {
             long id = cursor.getLong(cursor.getColumnIndex(DBContract.GTLanguageTable._ID));
@@ -231,6 +235,8 @@ public class DBAdapter
 
             listGTLanguages.add(gtl);
         }
+
+        Locale.setDefault(current);
 
         return listGTLanguages;
     }
