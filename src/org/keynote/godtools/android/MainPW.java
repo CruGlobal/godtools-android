@@ -470,6 +470,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         {
             languagePrimary = gtLanguage.getLanguageCode();
             packageList = getPackageList();
+            alterLayoutToAccommodateLongerLists(packageList);
             packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
 
             SharedPreferences.Editor editor = settings.edit();
@@ -590,8 +591,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             hideLoading();
 
         }
-
-//        alterLayoutToAccommodateLongerLists(packageList);
 
         createTheHomeScreen();
     }
