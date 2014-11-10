@@ -209,10 +209,12 @@ public class SettingsPW extends BaseActionBarActivity implements
     }
 
 
-    private void showExitTranslatorModeDialog() {
+    private void showExitTranslatorModeDialog()
+    {
         FragmentManager fm = getSupportFragmentManager();
         DialogFragment frag = (DialogFragment) fm.findFragmentByTag("confirm_dialog");
-        if (frag == null) {
+        if (frag == null)
+        {
             frag = ExitTranslatorModeConfirmDialogFragment.newInstance(
                     getString(R.string.dialog_translator_mode_title),
                     getString(R.string.dialog_translator_mode_body),
@@ -225,17 +227,19 @@ public class SettingsPW extends BaseActionBarActivity implements
     }
 
     @Override
-    public void onConfirmClick(boolean positive, String tag) {
-
-        if (tag.equalsIgnoreCase("ExitTranslatorMode")) {
-
-            if (positive) {
+    public void onConfirmClick(boolean positive, String tag)
+    {
+        if (tag.equalsIgnoreCase("ExitTranslatorMode"))
+        {
+            if (positive)
+            {
                 // disable translator mode
                 setResult(RESULT_PREVIEW_MODE_DISABLED);
                 setTranslatorMode(false);
                 finish();
-
-            } else {
+            }
+            else
+            {
                 cbTranslatorMode.setChecked(true);
             }
 
@@ -287,7 +291,8 @@ public class SettingsPW extends BaseActionBarActivity implements
         cbTranslatorMode.setEnabled(true);
     }
 
-    private void setTranslatorMode(boolean isEnabled) {
+    private void setTranslatorMode(boolean isEnabled)
+    {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("TranslatorMode", isEnabled);

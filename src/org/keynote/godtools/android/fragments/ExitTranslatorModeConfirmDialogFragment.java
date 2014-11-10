@@ -21,7 +21,11 @@ public class ExitTranslatorModeConfirmDialogFragment extends DialogFragment {
 
     private OnConfirmClickListener mListener;
 
-    public static DialogFragment newInstance(String title, String message, String positive, String negative, String tag) {
+    public static DialogFragment newInstance(String title,
+                                             String message,
+                                             String positive,
+                                             String negative, String tag)
+    {
         DialogFragment frag = new ExitTranslatorModeConfirmDialogFragment();
         Bundle args = new Bundle();
         args.putString(ARGS_TAG, tag);
@@ -36,7 +40,8 @@ public class ExitTranslatorModeConfirmDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Activity activity)
+    {
         super.onAttach(activity);
         mListener = (OnConfirmClickListener) activity;
     }
