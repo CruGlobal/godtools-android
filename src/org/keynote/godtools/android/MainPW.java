@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -25,6 +26,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +53,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import static android.widget.RelativeLayout.*;
 
 
 public class MainPW extends BaseActionBarActivity implements LanguageDialogFragment.OnLanguageChangedListener,
@@ -112,6 +116,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 
         packageList = getPackageList(); // get the packages for the primary language
+
+        alterLayoutToAccommodateLongerLists(packageList);
 
         FragmentManager fm = getSupportFragmentManager();
         packageFrag = (PackageListFragment) fm.findFragmentByTag(TAG_LIST);
@@ -265,7 +271,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
                 if(listHasNoLivePackage(packageList))
                 {
-                    handleLiseWithNoLivePackages();
+                    handleListWithNoLivePackages();
                     primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
                     packageFrag.refreshList(primaryCode, isTranslatorModeEnabled(), packageList);
                 }
@@ -288,6 +294,25 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         createTheHomeScreen();
     }
 
+    private void alterLayoutToAccommodateLongerLists(List<GTPackage> packageList)
+    {
+        if(packageList == null) return;
+
+        if(packageList.size() > 6)
+        {
+            LayoutInflater mInflater = LayoutInflater.from(this);
+            View contentView = mInflater.inflate(R.layout.main_pw, null);
+            ImageView imageView = (ImageView) contentView.findViewById(R.id.logo);
+
+            RelativeLayout.MarginLayoutParams marginParams = new RelativeLayout.MarginLayoutParams(imageView.getLayoutParams());
+            marginParams.setMargins(marginParams.leftMargin, 15, marginParams.rightMargin, 5);
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(marginParams);
+            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            imageView.setLayoutParams(layoutParams);
+            setContentView(contentView);
+        }
+    }
+
     private boolean listHasNoLivePackage(List<GTPackage> packageList)
     {
         if(packageList == null || packageList.isEmpty()) return true;
@@ -300,7 +325,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         return true;
     }
 
-    private void handleLiseWithNoLivePackages()
+    private void handleListWithNoLivePackages()
     {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
@@ -516,7 +541,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
                 hideLoading();
             }
-
         }
         else if (tag.equalsIgnoreCase("parallel"))
         {
@@ -567,8 +591,9 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
         }
 
-        createTheHomeScreen();
+//        alterLayoutToAccommodateLongerLists(packageList);
 
+        createTheHomeScreen();
     }
 
     private List<GTPackage> getPackageList()
