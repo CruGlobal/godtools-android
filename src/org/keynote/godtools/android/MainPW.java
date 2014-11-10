@@ -263,6 +263,13 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 // refresh the list
                 String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 
+                if(listHasNoLivePackage(packageList))
+                {
+                    handleLiseWithNoLivePackages();
+                    primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+                    packageFrag.refreshList(primaryCode, isTranslatorModeEnabled(), packageList);
+                }
+
                 if (!languagePrimary.equalsIgnoreCase(primaryCode))
                 {
                     SnuffyApplication app = (SnuffyApplication) getApplication();
@@ -281,6 +288,25 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         createTheHomeScreen();
     }
 
+    private boolean listHasNoLivePackage(List<GTPackage> packageList)
+    {
+        if(packageList == null || packageList.isEmpty()) return true;
+
+        for(GTPackage gtPackage : packageList)
+        {
+            if("Live".equalsIgnoreCase(gtPackage.getStatus())) return false;
+        }
+
+        return true;
+    }
+
+    private void handleLiseWithNoLivePackages()
+    {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(GTLanguage.KEY_PRIMARY, "en");
+        editor.commit();
+    }
 
     @Override
     public void onStart()
