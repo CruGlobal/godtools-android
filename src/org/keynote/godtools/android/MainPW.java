@@ -644,7 +644,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Do you want publish this draft?")
+        builder.setMessage("Do you want to publish this draft?")
                 .setPositiveButton("Yes, it's ready!", dialogClickListener)
                 .setNegativeButton("No, I just need to see it.", dialogClickListener)
                 .show();
