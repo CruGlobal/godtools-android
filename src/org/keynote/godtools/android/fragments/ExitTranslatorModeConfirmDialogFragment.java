@@ -7,7 +7,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
-public class ConfirmDialogFragment extends DialogFragment {
+public class ExitTranslatorModeConfirmDialogFragment extends DialogFragment {
 
     private static final String ARGS_TAG = "tag";
     private static final String ARGS_TITLE = "title";
@@ -21,8 +21,12 @@ public class ConfirmDialogFragment extends DialogFragment {
 
     private OnConfirmClickListener mListener;
 
-    public static DialogFragment newInstance(String title, String message, String positive, String negative, String tag) {
-        DialogFragment frag = new ConfirmDialogFragment();
+    public static DialogFragment newInstance(String title,
+                                             String message,
+                                             String positive,
+                                             String negative, String tag)
+    {
+        DialogFragment frag = new ExitTranslatorModeConfirmDialogFragment();
         Bundle args = new Bundle();
         args.putString(ARGS_TAG, tag);
         args.putString(ARGS_TITLE, title);
@@ -36,7 +40,8 @@ public class ConfirmDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Activity activity)
+    {
         super.onAttach(activity);
         mListener = (OnConfirmClickListener) activity;
     }
