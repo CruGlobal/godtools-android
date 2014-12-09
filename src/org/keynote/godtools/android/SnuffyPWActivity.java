@@ -432,18 +432,14 @@ public class SnuffyPWActivity extends Activity
 
     public void doCmdShare(View v)
     {
-        // See navToolbarShareSelector in snuffyViewController.m
-
-        String subjectLine = mPackageTitle + " App";
-        // stick to plain text - Android cannot reliably send HTML email and anyway
-        // most receivers will turn the link into a hyperlink automatically
-
         String msgBody = getString(R.string.app_email_body); // "Get the %@1 App by going to the following link:\n%@2";
         msgBody = msgBody.replace("%1", mPackageTitle);
         msgBody = msgBody.replace("%2", getLinkForPackage());
 
-        SnuffyApplication app = ((SnuffyApplication) getApplication());
-        app.sendEmailWithContent(this, subjectLine, msgBody);
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.putExtra(Intent.EXTRA_TEXT, msgBody);
+        startActivity(Intent.createChooser(share, "Select how you would like to share"));
     }
 
     public void doCmdShowPageMenu(View v)
