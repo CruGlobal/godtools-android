@@ -17,6 +17,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -80,6 +83,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
     FrameLayout frameLayout;
     RelativeLayout tableLayout;
     ImageButton refreshButton;
+    ImageButton shareButton;
     /**
      * When clicked, dialog to launch a new translation is opened
      */
@@ -149,6 +153,16 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 }
                 else
                     return false;
+            }
+        });
+
+        shareButton = (ImageButton) findViewById(R.id.export_button);
+        shareButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                doCmdShare(view);
             }
         });
 
@@ -930,6 +944,16 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         }
 
         return possiblePackages;
+    }
+
+    public void doCmdShare(View v)
+    {
+        String msgBody = getString(R.string.app_share_link);
+
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.putExtra(Intent.EXTRA_TEXT, msgBody);
+        startActivity(Intent.createChooser(share, "Select how you would like to share"));
     }
 
     private Tracker getGoogleAnalyticsTracker()

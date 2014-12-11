@@ -39,6 +39,17 @@
             android:layout_y="30px"
             android:src="@drawable/homescreen_godtools_logo_2x"/>
 
+        <ImageButton
+            android:id="@+id/export_button"
+            android:layout_width="75dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="25dp"
+            android:src="@drawable/homescreen_export_button_2x"
+            android:layout_toLeftOf="@+id/logo"
+            android:scaleType="centerCrop"
+            android:background="#00ffffff"
+            android:layout_above="@+id/full_table"/>
+
         <RelativeLayout
             android:id="@+id/full_table"
             android:layout_width="wrap_content"
