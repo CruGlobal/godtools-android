@@ -156,6 +156,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             }
         });
 
+
         shareButton = (ImageButton) findViewById(R.id.export_button);
         shareButton.setOnClickListener(new View.OnClickListener()
         {
@@ -184,6 +185,9 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                     onCmd_refresh(null);
                 }
             });
+
+            shareButton.setVisibility(View.INVISIBLE);
+            shareButton.setEnabled(false);
         }
         else
         {
@@ -192,6 +196,9 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
             refreshButton.setVisibility(View.INVISIBLE);
             refreshButton.setEnabled(false);
+
+            shareButton.setVisibility(View.VISIBLE);
+            shareButton.setEnabled(true);
         }
 
         mSetupNeeded = true;
