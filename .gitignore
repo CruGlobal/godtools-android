@@ -10,8 +10,8 @@
 **/*.class
  
 # generated files 
-bin/ 
-gen/ 
+bin/
+gen/
 out/
 build/
  
@@ -28,4 +28,3 @@ local.properties
 
 
 /snuffy-android.apk
-build.gradle

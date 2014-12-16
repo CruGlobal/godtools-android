@@ -437,10 +437,9 @@ public class SnuffyPWActivity extends Activity
         else msgBody = getString(R.string.everystudent_share); //every student
 
         msgBody = msgBody.replace("%1", mAppLanguage);
-        CharSequence styledText = Html.fromHtml(msgBody);
 
         SnuffyApplication app = ((SnuffyApplication) getApplication());
-        app.sendEmailWithContent(this, subjectLine, styledText);
+        app.sendEmailWithContent(this, subjectLine, msgBody);
     }
 
     public void doCmdShowPageMenu(View v)
