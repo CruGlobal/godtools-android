@@ -13,6 +13,7 @@ import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.Html;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AbsoluteLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -422,28 +424,23 @@ public class SnuffyPWActivity extends Activity
         startActivity(intent);
     }
 
-    private String getLinkForPackage()
-    {
-        String link = getString(R.string.app_email_link); // http://www.godtoolsapp.com/?p=%1&l=%2
-        link = link.replace("%1", mAppPackage);
-        link = link.replace("%2", mAppLanguage);
-        return link;
-    }
-
     public void doCmdShare(View v)
     {
-        // See navToolbarShareSelector in snuffyViewController.m
 
-        String subjectLine = mPackageTitle + " App";
-        // stick to plain text - Android cannot reliably send HTML email and anyway
-        // most receivers will turn the link into a hyperlink automatically
+        String subjectLine = "Our conversation about " + mPackageTitle + " today";
 
-        String msgBody = getString(R.string.app_email_body); // "Get the %@1 App by going to the following link:\n%@2";
-        msgBody = msgBody.replace("%1", mPackageTitle);
-        msgBody = msgBody.replace("%2", getLinkForPackage());
+        String msgBody = "";
+
+        if (mAppPackage == "kgp") msgBody = getString(R.string.kgp_share);
+        else if (mAppPackage == "fourlaws") msgBody = getString(R.string.fourlaws_share);
+        else if (mAppPackage == "satisfied") msgBody = getString(R.string.satisfied_share);
+        else msgBody = getString(R.string.everystudent_share); //every student
+
+        msgBody = msgBody.replace("%1", mAppLanguage);
+        CharSequence styledText = Html.fromHtml(msgBody);
 
         SnuffyApplication app = ((SnuffyApplication) getApplication());
-        app.sendEmailWithContent(this, subjectLine, msgBody);
+        app.sendEmailWithContent(this, subjectLine, styledText);
     }
 
     public void doCmdShowPageMenu(View v)

@@ -41,10 +41,11 @@ public class SnuffyApplication extends Application {
 
     }
 
-    public void sendEmailWithContent(Activity callingActivity, String subjectLine, String msgBody) {
+    public void sendEmailWithContent(Activity callingActivity, String subjectLine, CharSequence msgBody) {
         try {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setData(Uri.parse("mailto:"));
+            intent.setType("text/html");
             intent.putExtra(Intent.EXTRA_SUBJECT, subjectLine);
             intent.putExtra(Intent.EXTRA_TEXT, msgBody);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
