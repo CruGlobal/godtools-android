@@ -2,9 +2,12 @@ package org.keynote.godtools.android;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -34,6 +37,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
@@ -49,6 +55,7 @@ import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -66,6 +73,15 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
     private static final String TAG_DIALOG_LANGUAGE = "LanguageDialog";
     private static final int REQUEST_SETTINGS = 1001;
     private static final String PREFS_NAME = "GodTools";
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    public static final String PROPERTY_REG_ID = "registration_id";
+    private static final String PROPERTY_APP_VERSION = "appVersion";
+    /**
+     * Substitute you own sender ID here. This is the project number you got
+     * from the API Console, as described in "Getting Started."
+     */
+    String SENDER_ID = "237513440670";
 
     public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
     public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
@@ -84,11 +100,15 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
     RelativeLayout tableLayout;
     ImageButton refreshButton;
     ImageButton shareButton;
+    GoogleCloudMessaging gcm;
+    Context context;
+    String regid = "";
     /**
      * When clicked, dialog to launch a new translation is opened
      */
     ImageButton addButton;
     boolean isDownloading;
+    SharedPreferences settings;
 
     /**
      * Called when the activity is first created.
@@ -112,7 +132,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         frameLayout = (FrameLayout) findViewById(R.id.contList);
         tableLayout = (RelativeLayout) findViewById(R.id.full_table);
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 
         packageList = getPackageList(); // get the packages for the primary language
@@ -202,6 +222,23 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         }
 
         mSetupNeeded = true;
+        context = getApplicationContext();
+
+        Log.i(TAG, regid);
+        // Check device for Play Services APK. If check succeeds, proceed with GCM registration.
+        if (checkPlayServices())
+        {
+            Log.i(TAG, "Registering Device");
+            gcm = GoogleCloudMessaging.getInstance(this);
+            regid = getRegistrationId(context);
+
+            if (regid.isEmpty()) {
+                registerInBackground();
+            }
+        } else {
+            Log.i(TAG, "No valid Google Play Services APK found.");
+        }
+        Log.i(TAG, regid);
     }
 
     @Override
@@ -976,5 +1013,97 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 .setCustomDimension(1, "HomeScreen")
                 .setCustomDimension(2, languagePrimary)
                 .build());
+    }
+
+    private boolean checkPlayServices()
+    {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS)
+        {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode))
+            {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            }
+            else
+            {
+                Log.i(TAG, "This device is not supported.");
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private String getRegistrationId(Context context)
+    {
+        String registrationId = settings.getString(PROPERTY_REG_ID, "");
+        if (registrationId.isEmpty()) {
+            Log.i(TAG, "Registration not found.");
+            return "";
+        }
+        // Check if app was updated; if so, it must clear the registration ID
+        // since the existing regID is not guaranteed to work with the new
+        // app version.
+        int registeredVersion = settings.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
+        int currentVersion = getAppVersion(context);
+        if (registeredVersion != currentVersion)
+        {
+            Log.i(TAG, "App version changed.");
+            return "";
+        }
+        return registrationId;
+    }
+
+    private void registerInBackground() {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg = "";
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(context);
+                    }
+                    regid = gcm.register(SENDER_ID);
+                    msg = "Device registered, registration ID=" + regid;
+
+                    sendRegistrationIdToBackend();
+
+                    // Persist the regID - no need to register again.
+                    storeRegistrationId(context, regid);
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+                }
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String msg)
+            {
+                Log.i(TAG, msg);
+            }
+        }.execute(null, null, null);
+    }
+
+    private void storeRegistrationId(Context context, String regId) {
+        int appVersion = getAppVersion(context);
+        Log.i(TAG, "Saving regId on app version " + appVersion);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(PROPERTY_REG_ID, regId);
+        editor.putInt(PROPERTY_APP_VERSION, appVersion);
+        editor.commit();
+    }
+
+    private static int getAppVersion(Context context) {
+        try {
+            PackageInfo packageInfo = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            // should never happen
+            throw new RuntimeException("Could not get package name: " + e);
+        }
+    }
+
+    private void sendRegistrationIdToBackend() {
+        // todo: send registration id to Godtools API
     }
 }
