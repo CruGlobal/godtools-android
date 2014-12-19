@@ -137,14 +137,14 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light" />
 
-        <receiver android:name=".pushNotifications.GcmBroadcastReceiver"
+        <receiver android:name=".notifications.GcmBroadcastReceiver"
                   android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <category android:name="org.keynote.godtools.android" />
             </intent-filter>
         </receiver>
-        <service android:name=".pushNotifications.GcmIntentService" />
+        <service android:name=".notifications.GcmIntentService" />
         <meta-data android:name="com.google.android.gms.version"
                    android:value="@integer/google_play_services_version" />
     </application>
