@@ -3,7 +3,9 @@ package org.keynote.godtools.android.http;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.telephony.TelephonyManager;
 
+import org.keynote.godtools.android.MainPW;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 import java.io.File;
@@ -17,6 +19,7 @@ public class GodToolsApiClient {
     private static final String ENDPOINT_TRANSLATIONS = "translations/";
     private static final String ENDPOINT_DRAFTS = "drafts/";
     private static final String ENDPOINT_AUTH = "auth/";
+    private static final String ENDPOINT_NOTIFICATIONS = "notifications/";
 
     public static void getListOfPackages(String authorization, String tag, MetaTask.MetaTaskHandler taskHandler){
         MetaTask metaTask = new MetaTask(taskHandler);
@@ -94,6 +97,11 @@ public class GodToolsApiClient {
         String url = BASE_URL + ENDPOINT_TRANSLATIONS + languageCode + File.separator + packageCode;
 
         new DraftPublishTask(taskHandler).execute(url, authorization);
+    }
+
+    public static void registerDeviceForNotifications(String registrationID)
+    {
+        String url = BASE_URL + ENDPOINT_NOTIFICATIONS + "register/" + registrationID;
     }
 
     private static void download(Context context, String url, String filePath, String tag, String authorization, String langCode, DownloadTask.DownloadTaskHandler taskHandler) {

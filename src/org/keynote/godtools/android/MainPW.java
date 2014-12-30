@@ -1104,6 +1104,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
     }
 
     private void sendRegistrationIdToBackend() {
-        // todo: send registration id to Godtools API
+       GodToolsApiClient.registerDeviceForNotifications(regid);
     }
 }
