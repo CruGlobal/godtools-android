@@ -80,12 +80,12 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
     FrameLayout frameLayout;
     RelativeLayout tableLayout;
     ImageButton refreshButton;
+    ImageButton shareButton;
     /**
      * When clicked, dialog to launch a new translation is opened
      */
     ImageButton addButton;
     boolean isDownloading;
-    int childHeight, childWidth;
 
     /**
      * Called when the activity is first created.
@@ -153,6 +153,18 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             }
         });
 
+
+        shareButton = (ImageButton) findViewById(R.id.export_button);
+        shareButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                doCmdShare(view);
+            }
+        });
+
+        addButton = (ImageButton) findViewById(R.id.homescreen_add_button);
         refreshButton = (ImageButton) findViewById(R.id.refresh_button);
         refreshButton.setOnClickListener(new View.OnClickListener()
         {
@@ -169,11 +181,31 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         {
             addButton.setVisibility(View.VISIBLE);
             addButton.setEnabled(true);
+
+            refreshButton.setVisibility(View.VISIBLE);
+            refreshButton.setEnabled(true);
+            refreshButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    onCmd_refresh(null);
+                }
+            });
+
+            shareButton.setVisibility(View.INVISIBLE);
+            shareButton.setEnabled(false);
         }
         else
         {
             addButton.setVisibility(View.INVISIBLE);
             addButton.setEnabled(false);
+
+            refreshButton.setVisibility(View.INVISIBLE);
+            refreshButton.setEnabled(false);
+
+            shareButton.setVisibility(View.VISIBLE);
+            shareButton.setEnabled(true);
         }
 
         mSetupNeeded = true;
@@ -196,8 +228,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 languagePrimary = data.getStringExtra("primaryCode");
                 packageList = getPackageList();
                 packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
-
-                createTheHomeScreen();
 
                 break;
             }
@@ -275,6 +305,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 break;
             }
         }
+
+        createTheHomeScreen();
     }
 
 
@@ -380,9 +412,10 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         // resize contList
         try
         {
-            childHeight = packageFrag.getListView().getChildAt(0).getHeight();
-            childWidth = packageFrag.getListView().getChildAt(0).getWidth();
-            packageFrag.getListView().setLayoutParams(new FrameLayout.LayoutParams(childWidth, childHeight * packageList.size()));
+            int childHeight = packageFrag.getListView().getChildAt(0).getHeight();
+            int childWidth = packageFrag.getListView().getChildAt(0).getWidth();
+            int totalHeight = childHeight * packageList.size();
+            packageFrag.getListView().setLayoutParams(new FrameLayout.LayoutParams(childWidth, totalHeight));
         } catch (Exception e)
         {
             Log.e("error", e.getMessage(), e);
@@ -455,6 +488,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             }
 
         }
+
+        createTheHomeScreen();
     }
 
     @Override
@@ -938,6 +973,16 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         }
 
         return possiblePackages;
+    }
+
+    public void doCmdShare(View v)
+    {
+        String msgBody = getString(R.string.app_share_link);
+
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.putExtra(Intent.EXTRA_TEXT, msgBody);
+        startActivity(Intent.createChooser(share, "Select how you would like to share"));
     }
 
     private Tracker getGoogleAnalyticsTracker()
