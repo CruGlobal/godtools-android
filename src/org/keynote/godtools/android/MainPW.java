@@ -17,9 +17,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -89,6 +86,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
      */
     ImageButton addButton;
     boolean isDownloading;
+    boolean noPackages = false;
 
     /**
      * Called when the activity is first created.
@@ -169,6 +167,16 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
         addButton = (ImageButton) findViewById(R.id.homescreen_add_button);
         refreshButton = (ImageButton) findViewById(R.id.refresh_button);
+        refreshButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                onCmd_refresh(null);
+            }
+        });
+
+        addButton = (ImageButton) findViewById(R.id.homescreen_add_button);
 
         if (settings.getBoolean("TranslatorMode", false))
         {
@@ -355,7 +363,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
     private void getScreenSize()
     {
-
 		/*
          * Although these measurements are not used on this screen, they are passed to and used by
 		 * the following screens. At some point maybe all layouts can be updated to relative layout.
@@ -395,6 +402,18 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
     private void createTheHomeScreen()
     {
+        if (packageList.size() < 1)
+        {
+            GTPackage newPackage = new GTPackage();
+            newPackage.setName("No Package");
+            packageList.add(newPackage);
+            noPackages = true;
+
+            onCmd_add(null);
+        }
+
+        noPackages = false;
+
         // resize contList
         try
         {
@@ -484,7 +503,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
         if (tag.equalsIgnoreCase("primary"))
         {
-
             languagePrimary = langCode;
 
             SnuffyApplication app = (SnuffyApplication) getApplication();
@@ -910,6 +928,15 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                             });
                 }
 
+            });
+
+            b.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i)
+                {
+                    if (noPackages) onCmd_settings(null);
+                }
             });
 
             b.show();
