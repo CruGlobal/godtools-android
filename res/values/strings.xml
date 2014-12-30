@@ -86,8 +86,8 @@
     <string name="remove_this_language">Are you sure you want to remove this language?</string>
 
     <string name="app_email_body" formatted="false">Get the %1 App by going to the following link:\n%2</string>
-    <string name="app_email_link" formatted="false">http://www.godtoolsapp.com/?p=%1&amp;l=%2</string>
-    <string name="app_share_link" formatted="false">http://www.godtoolsapp.com</string>
+    <string name="app_email_link" formatted="false">http://www.godtoolsapp.com/?p=%1&amp;l=%2&amp;source=godtools-android&amp;campaign=app-sharing</string>
+    <string name="app_share_link" formatted="false">http://www.godtoolsapp.com/?source=godtools-android&amp;campaign=app-sharing</string>
 
     <!-- Renderer Activity -->
     <string name="processing_package">Loading pages...</string>
