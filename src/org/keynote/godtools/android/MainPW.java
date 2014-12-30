@@ -86,6 +86,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
      */
     ImageButton addButton;
     boolean isDownloading;
+    boolean noPackages = false;
 
     /**
      * Called when the activity is first created.
@@ -406,9 +407,13 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             GTPackage newPackage = new GTPackage();
             newPackage.setName("No Package");
             packageList.add(newPackage);
+            noPackages = true;
 
             onCmd_add(null);
         }
+
+        noPackages = false;
+
         // resize contList
         try
         {
@@ -930,7 +935,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i)
                 {
-                    onCmd_settings(null);
+                    if (noPackages) onCmd_settings(null);
                 }
             });
 
