@@ -354,6 +354,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         {
             public void run()
             {
+                Log.i(TAG, "Set up");
                 createTheHomeScreen();
                 getScreenSize();
                 showTheHomeScreen();
@@ -404,6 +405,11 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
     private void createTheHomeScreen()
     {
+        /*
+         * This method is called each time the UI needs to be refreshed.
+         */
+
+        // If no packages are available for a language, the add method is automatically called
         if (packageList.size() < 1)
         {
             GTPackage newPackage = new GTPackage();
@@ -415,6 +421,11 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         }
         else if (justSwitchedToTranslatorMode)
         {
+            /*
+             * When switching to translator mode, the MainPW activity is restarted. However, the packageList and
+             * packageFrag need to be refreshed based on the newly downloaded items. The justSwitchedToTranslatorMode is
+             * saved in the settings and when true, this will refresh the packages available.
+             */
             packageList = getPackageList();
             packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
         }
@@ -428,6 +439,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             int childWidth = packageFrag.getListView().getChildAt(0).getWidth();
             int totalHeight = childHeight * packageList.size();
             packageFrag.getListView().setLayoutParams(new FrameLayout.LayoutParams(childWidth, totalHeight));
+
+            // Once the resizing is successful the boolean is changed to false the the list is not refreshed continually
 
             justSwitchedToTranslatorMode = false;
             switchedToTranslatorMode(false);
@@ -538,6 +551,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
                 hideLoading();
             }
+            createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase("parallel"))
         {
@@ -560,6 +574,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             {
                 hideLoading();
             }
+            createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase("draft"))
         {
@@ -567,6 +582,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             packageList = getPackageList();
             packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
             hideLoading();
+            createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase("draft_primary"))
         {
@@ -581,8 +597,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         else if (tag.equalsIgnoreCase("draft_parallel"))
         {
             hideLoading();
+            createTheHomeScreen();
         }
-        createTheHomeScreen();
     }
 
     private List<GTPackage> getPackageList()
