@@ -99,9 +99,11 @@ public class GodToolsApiClient {
         new DraftPublishTask(taskHandler).execute(url, authorization);
     }
 
-    public static void registerDeviceForNotifications(String registrationID)
+    public static void registerDeviceForNotifications(String registrationID, NotificationTask.NotificationTaskHandler taskHandler)
     {
-        String url = BASE_URL + ENDPOINT_NOTIFICATIONS + "register/" + registrationID;
+        String url = BASE_URL + ENDPOINT_NOTIFICATIONS + registrationID;
+
+        new NotificationTask(taskHandler).execute(url);
     }
 
     private static void download(Context context, String url, String filePath, String tag, String authorization, String langCode, DownloadTask.DownloadTaskHandler taskHandler) {
