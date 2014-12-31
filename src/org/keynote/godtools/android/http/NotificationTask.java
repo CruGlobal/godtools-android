@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.http;
 
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -19,6 +20,7 @@ public class NotificationTask extends AsyncTask<Object, Void, String>
 {
     private NotificationTaskHandler taskHandler;
     private int statusCode;
+    private String TAG = "NotificationTask";
 
     public static interface NotificationTaskHandler
     {
@@ -38,6 +40,8 @@ public class NotificationTask extends AsyncTask<Object, Void, String>
         String url = objects[0].toString();
 
         HttpPost request = new HttpPost(url);
+        Log.i(TAG, url);
+        request.setHeader("deviceId", "Test");
         HttpParams httpParams = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParams, 10000);
         HttpConnectionParams.setSoTimeout(httpParams, 10000);
@@ -66,6 +70,6 @@ public class NotificationTask extends AsyncTask<Object, Void, String>
         if (statusCode == HttpStatus.SC_OK) taskHandler.registrationComplete("Complete");
         else taskHandler.registrationFailed();
 
-        Log.i("Notification Task", "Code: " + statusCode);
+        Log.i(TAG, "Code: " + statusCode);
     }
 }

@@ -13,13 +13,14 @@ import java.util.UUID;
 
 public class GodToolsApiClient {
 
-    private static final String BASE_URL = "http://api.godtoolsapp.com/godtools-api/rest/";
+    // private static final String BASE_URL = "http://www.godtools.com/godtools-api/rest/";
+    private static final String BASE_URL = "http://GodToolsAPI-Stage-1291189452.us-east-1.elb.amazonaws.com/godtools-api/rest/";
     private static final String ENDPOINT_META = "meta/";
     private static final String ENDPOINT_PACKAGES = "packages/";
     private static final String ENDPOINT_TRANSLATIONS = "translations/";
     private static final String ENDPOINT_DRAFTS = "drafts/";
     private static final String ENDPOINT_AUTH = "auth/";
-    private static final String ENDPOINT_NOTIFICATIONS = "notifications/";
+    private static final String ENDPOINT_NOTIFICATIONS = "notification/";
 
     public static void getListOfPackages(String authorization, String tag, MetaTask.MetaTaskHandler taskHandler){
         MetaTask metaTask = new MetaTask(taskHandler);
