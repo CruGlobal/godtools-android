@@ -3,9 +3,7 @@ package org.keynote.godtools.android.http;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.telephony.TelephonyManager;
 
-import org.keynote.godtools.android.MainPW;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 import java.io.File;
@@ -101,11 +99,18 @@ public class GodToolsApiClient {
         new DraftPublishTask(taskHandler).execute(url, authorization);
     }
 
-    public static void registerDeviceForNotifications(String registrationID, NotificationTask.NotificationTaskHandler taskHandler)
+    public static void registerDeviceForNotifications(String registrationID, NotificationRegistrationTask.NotificationTaskHandler taskHandler)
     {
         String url = BASE_URL + ENDPOINT_NOTIFICATIONS + registrationID;
 
-        new NotificationTask(taskHandler).execute(url);
+        new NotificationRegistrationTask(taskHandler).execute(url);
+    }
+
+    public static void updateNotification(String authcode, String registrationId, int notificationType,  NotificationUpdateTask.NotificationTaskHandler taskHandler)
+    {
+        String url = BASE_URL + ENDPOINT_NOTIFICATIONS + "update";
+
+        new NotificationUpdateTask(taskHandler).execute(url, authcode, registrationId, notificationType);
     }
 
     private static void download(Context context, String url, String filePath, String tag, String authorization, String langCode, DownloadTask.DownloadTaskHandler taskHandler) {

@@ -62,7 +62,7 @@ public class GcmIntentService extends IntentService
 
                 Log.i(TAG, "Creating Notification");
                 // Post notification of received message.
-                sendNotification("Received: " + extras.toString());
+                sendNotification(extras.getString("test"));
                 Log.i(TAG, "Received: " + extras.toString());
             }
         }

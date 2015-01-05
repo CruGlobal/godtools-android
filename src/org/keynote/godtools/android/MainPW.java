@@ -49,7 +49,7 @@ import org.keynote.godtools.android.http.DraftCreationTask;
 import org.keynote.godtools.android.http.DraftPublishTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
-import org.keynote.godtools.android.http.NotificationTask;
+import org.keynote.godtools.android.http.NotificationRegistrationTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
@@ -1156,7 +1156,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
     }
 
     private void sendRegistrationIdToBackend() {
-       GodToolsApiClient.registerDeviceForNotifications(regid, new NotificationTask.NotificationTaskHandler()
+       GodToolsApiClient.registerDeviceForNotifications(regid, new NotificationRegistrationTask.NotificationTaskHandler()
        {
            @Override
            public void registrationComplete(String regId)

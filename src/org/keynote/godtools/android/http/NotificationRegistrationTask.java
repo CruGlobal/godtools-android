@@ -16,11 +16,11 @@ import org.apache.http.params.HttpParams;
 /**
  * Created by matthewfrederick on 12/31/14.
  */
-public class NotificationTask extends AsyncTask<Object, Void, String>
+public class NotificationRegistrationTask extends AsyncTask<Object, Void, String>
 {
     private NotificationTaskHandler taskHandler;
     private int statusCode;
-    private String TAG = "NotificationTask";
+    private String TAG = "NotificationRegistrationTask";
 
     public static interface NotificationTaskHandler
     {
@@ -29,7 +29,7 @@ public class NotificationTask extends AsyncTask<Object, Void, String>
         void registrationFailed();
     }
 
-    public NotificationTask(NotificationTaskHandler listener)
+    public NotificationRegistrationTask(NotificationTaskHandler listener)
     {
         taskHandler = listener;
     }
