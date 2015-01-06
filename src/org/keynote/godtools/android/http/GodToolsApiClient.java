@@ -106,7 +106,7 @@ public class GodToolsApiClient {
         new NotificationRegistrationTask(taskHandler).execute(url);
     }
 
-    public static void updateNotification(String authcode, String registrationId, int notificationType,  NotificationUpdateTask.NotificationTaskHandler taskHandler)
+    public static void updateNotification(String authcode, String registrationId, int notificationType,  NotificationUpdateTask.NotificationUpdateTaskHandler taskHandler)
     {
         String url = BASE_URL + ENDPOINT_NOTIFICATIONS + "update";
 

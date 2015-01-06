@@ -50,6 +50,7 @@ import org.keynote.godtools.android.http.DraftPublishTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.http.NotificationRegistrationTask;
+import org.keynote.godtools.android.http.NotificationUpdateTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
@@ -1159,9 +1160,24 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
        GodToolsApiClient.registerDeviceForNotifications(regid, new NotificationRegistrationTask.NotificationTaskHandler()
        {
            @Override
-           public void registrationComplete(String regId)
+           public void registrationComplete(String status)
            {
                Log.i(TAG, "API Registration Complete");
+
+               GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""), regid, 5, new NotificationUpdateTask.NotificationUpdateTaskHandler()
+               {
+                   @Override
+                   public void registrationComplete(String regId)
+                   {
+                       Log.i(TAG, "Download Notification notice sent to API");
+                   }
+
+                   @Override
+                   public void registrationFailed()
+                   {
+                        Log.e(TAG, "Download notification notice failed to send to API");
+                   }
+               });
            }
 
            @Override

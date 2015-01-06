@@ -21,18 +21,18 @@ import org.json.JSONObject;
  */
 public class NotificationUpdateTask extends AsyncTask<Object, Void, String>
 {
-    private NotificationTaskHandler taskHandler;
+    private NotificationUpdateTaskHandler taskHandler;
     private int statusCode;
     private String TAG = "NotificationUpdateTask";
 
-    public static interface NotificationTaskHandler
+    public static interface NotificationUpdateTaskHandler
     {
         void registrationComplete(String regId);
 
         void registrationFailed();
     }
 
-    public NotificationUpdateTask(NotificationTaskHandler listener)
+    public NotificationUpdateTask(NotificationUpdateTaskHandler listener)
     {
         taskHandler = listener;
     }
@@ -41,17 +41,24 @@ public class NotificationUpdateTask extends AsyncTask<Object, Void, String>
     protected String doInBackground(Object... objects)
     {
         String url = objects[0].toString();
+        Log.i(TAG, url);
+
         String authcode = objects[1].toString();
+        Log.i(TAG, authcode);
 
         JSONObject jsonObject = new JSONObject();
         try
         {
             jsonObject.put("id", null); // done by api
             jsonObject.put("registrationId", objects[2].toString());
+            Log.i("registrationId", objects[2].toString());
+
             jsonObject.put("notificationType", objects[3].toString());
+            Log.i("notificationType", objects[3].toString());
+
+            jsonObject.put("presentations", null); //done by api
             jsonObject.put("notificationSent", false);
             jsonObject.put("createdTimestamp", null); // done by api
-
 
             HttpPost request = new HttpPost(url);
             Log.i(TAG, url);
@@ -86,7 +93,7 @@ public class NotificationUpdateTask extends AsyncTask<Object, Void, String>
     {
         super.onPostExecute(s);
 
-        if (statusCode == HttpStatus.SC_OK) taskHandler.registrationComplete("Complete");
+        if (statusCode == HttpStatus.SC_NO_CONTENT) taskHandler.registrationComplete("Complete");
         else taskHandler.registrationFailed();
 
         Log.i(TAG, "Code: " + statusCode);
