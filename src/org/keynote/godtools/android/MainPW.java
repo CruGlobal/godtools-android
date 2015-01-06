@@ -60,6 +60,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class MainPW extends BaseActionBarActivity implements LanguageDialogFragment.OnLanguageChangedListener,
@@ -266,6 +268,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             Log.i(TAG, "No valid Google Play Services APK found.");
         }
         Log.i(TAG, regid);
+        
+        if (!justSwitchedToTranslatorMode) startTimer(); // don't start timer when switching to translator mode
     }
 
     @Override
@@ -1159,7 +1163,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         editor.commit();
     }
 
-    private static int getAppVersion(Context context) {
+    private static int getAppVersion(Context context) 
+    {
         try {
             PackageInfo packageInfo = context.getPackageManager()
                     .getPackageInfo(context.getPackageName(), 0);
@@ -1170,7 +1175,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         }
     }
 
-    private void sendRegistrationIdToBackend() {
+    private void sendRegistrationIdToBackend() 
+    {
        GodToolsApiClient.registerDeviceForNotifications(regid, new NotificationRegistrationTask.NotificationTaskHandler()
        {
            @Override
@@ -1201,5 +1207,35 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                Log.i(TAG, "API Registration Failed");
            }
        });
+    }
+    
+    private void startTimer()
+    {
+        TimerTask timerTask = new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                Log.i(TAG, "Timer complete");
+                GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""), regid, 6, new NotificationUpdateTask.NotificationUpdateTaskHandler()
+                {
+                    @Override
+                    public void registrationComplete(String regId)
+                    {
+                        Log.i(TAG, "Download Notification notice sent to API");
+                    }
+
+                    @Override
+                    public void registrationFailed()
+                    {
+                        Log.e(TAG, "Download notification notice failed to send to API");
+                    }
+                });
+            }
+        };
+        
+        Timer timer = new Timer("1.5MinuteTimer");
+        timer.schedule(timerTask, 90000); //1.5 minutes
+        Log.i(TAG, "Timer scheduled");
     }
 }

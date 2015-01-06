@@ -22,7 +22,7 @@ import org.json.JSONObject;
 public class NotificationUpdateTask extends AsyncTask<Object, Void, String>
 {
     private NotificationUpdateTaskHandler taskHandler;
-    private int statusCode;
+    private int statusCode = 0;
     private String TAG = "NotificationUpdateTask";
 
     public static interface NotificationUpdateTaskHandler
