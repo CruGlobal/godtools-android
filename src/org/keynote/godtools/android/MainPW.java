@@ -76,10 +76,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
-    /**
-     * Substitute you own sender ID here. This is the project number you got
-     * from the API Console, as described in "Getting Started."
-     */
+
     String SENDER_ID = "237513440670";
 
     public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
@@ -245,9 +242,26 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             gcm = GoogleCloudMessaging.getInstance(this);
             regid = getRegistrationId(context);
 
-            if (regid.isEmpty()) {
+            if (regid.isEmpty())
+            {
                 registerInBackground();
             }
+
+            // send notification update each time app is used for notification type 1
+            GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""), regid, 1, new NotificationUpdateTask.NotificationUpdateTaskHandler()
+            {
+                @Override
+                public void registrationComplete(String regId)
+                {
+                    Log.i(TAG, "Used Notification notice sent to API");
+                }
+
+                @Override
+                public void registrationFailed()
+                {
+                    Log.e(TAG, "Used notification notice failed to send to API");
+                }
+            });
         } else {
             Log.i(TAG, "No valid Google Play Services APK found.");
         }
@@ -1164,6 +1178,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
            {
                Log.i(TAG, "API Registration Complete");
 
+               // todo: This should be removed since they want this to only be sent if app not opened. I am leaving it here for testing
                GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""), regid, 5, new NotificationUpdateTask.NotificationUpdateTaskHandler()
                {
                    @Override
