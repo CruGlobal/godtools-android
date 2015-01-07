@@ -51,6 +51,7 @@ import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.http.NotificationRegistrationTask;
 import org.keynote.godtools.android.http.NotificationUpdateTask;
+import org.keynote.godtools.android.notifications.NotificationInfo;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
@@ -250,18 +251,19 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             }
 
             // send notification update each time app is used for notification type 1
-            GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""), regid, 1, new NotificationUpdateTask.NotificationUpdateTaskHandler()
+            GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""), 
+                    regid, NotificationInfo.NOT_USED_2_WEEKS, new NotificationUpdateTask.NotificationUpdateTaskHandler()
             {
                 @Override
                 public void registrationComplete(String regId)
                 {
-                    Log.i(TAG, "Used Notification notice sent to API");
+                    Log.i(NotificationInfo.NOTIFICATION_TAG, "Used Notification notice sent to API");
                 }
 
                 @Override
                 public void registrationFailed()
                 {
-                    Log.e(TAG, "Used notification notice failed to send to API");
+                    Log.e(NotificationInfo.NOTIFICATION_TAG, "Used notification notice failed to send to API");
                 }
             });
         } else {
@@ -1182,7 +1184,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
            @Override
            public void registrationComplete(String status)
            {
-               Log.i(TAG, "API Registration Complete");
+               Log.i(NotificationInfo.NOTIFICATION_TAG, "API Registration Complete");
 
                // todo: This should be removed since they want this to only be sent if app not opened. I am leaving it here for testing
                GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""), regid, 5, new NotificationUpdateTask.NotificationUpdateTaskHandler()
@@ -1190,13 +1192,13 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                    @Override
                    public void registrationComplete(String regId)
                    {
-                       Log.i(TAG, "Download Notification notice sent to API");
+                       Log.i(NotificationInfo.NOTIFICATION_TAG, "Download Notification notice sent to API");
                    }
 
                    @Override
                    public void registrationFailed()
                    {
-                        Log.e(TAG, "Download notification notice failed to send to API");
+                        Log.e(NotificationInfo.NOTIFICATION_TAG, "Download notification notice failed to send to API");
                    }
                });
            }
@@ -1204,7 +1206,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
            @Override
            public void registrationFailed()
            {
-               Log.i(TAG, "API Registration Failed");
+               Log.i(NotificationInfo.NOTIFICATION_TAG, "API Registration Failed");
            }
        });
     }
@@ -1217,18 +1219,19 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             public void run()
             {
                 Log.i(TAG, "Timer complete");
-                GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""), regid, 6, new NotificationUpdateTask.NotificationUpdateTaskHandler()
+                GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""), 
+                        regid, NotificationInfo.AFTER_3_USES, new NotificationUpdateTask.NotificationUpdateTaskHandler()
                 {
                     @Override
                     public void registrationComplete(String regId)
                     {
-                        Log.i(TAG, "Download Notification notice sent to API");
+                        Log.i(NotificationInfo.NOTIFICATION_TAG, "3 Uses Notification notice sent to API");
                     }
 
                     @Override
                     public void registrationFailed()
                     {
-                        Log.e(TAG, "Download notification notice failed to send to API");
+                        Log.e(NotificationInfo.NOTIFICATION_TAG, "3 Uses notification notice failed to send to API");
                     }
                 });
             }
