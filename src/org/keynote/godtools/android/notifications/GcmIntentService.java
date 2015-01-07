@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
@@ -31,6 +32,8 @@ public class GcmIntentService extends IntentService
     }
 
     public static final String TAG = "GcmIntentService";
+    
+    Intent resultIntent;
 
     @Override
     protected void onHandleIntent(Intent intent)
@@ -50,19 +53,28 @@ public class GcmIntentService extends IntentService
              */
             if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType))
             {
-                sendNotification("Send error: " + extras.toString());
+                sendNotification("Send error: " + extras.toString(), 0);
             }
             else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType))
             {
-                sendNotification("Deleted messages on server: " + extras.toString());
+                sendNotification("Deleted messages on server: " + extras.toString(), 0);
                 // If it's a regular GCM message, do some work.
             }
             else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType))
             {
+                int type;
+                try
+                {
+                    type = Integer.parseInt(extras.getString("type"));
+                }
+                catch (Exception e)
+                {
+                    type = 0;
+                }
 
                 Log.i(TAG, "Creating Notification");
                 // Post notification of received message.
-                sendNotification(extras.getString("test"));
+                sendNotification(extras.getString("msg"), type);
                 Log.i(TAG, "Received: " + extras.toString());
             }
         }
@@ -73,20 +85,37 @@ public class GcmIntentService extends IntentService
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
     // a GCM message.
-    private void sendNotification(String msg)
+    private void sendNotification(String msg, int type)
     {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.homescreen_godtools_logo)
                 .setContentTitle("GodTools")
-                .setContentText(msg);
+                .setContentText(msg)
+                .setAutoCancel(true);
+        
 
-        Intent resultIntent = new Intent(this, Splash.class);
+        if (type == NotificationInfo.DAY_AFTER_SHARE)
+        {
+            resultIntent = new Intent(Intent.ACTION_SEND);
+            resultIntent.setType("text/plain");
+        }
+        else if (type == NotificationInfo.AFTER_1_PRESENTATION || type == NotificationInfo.AFTER_10_PRESENTATIONS || type == NotificationInfo.AFTER_3_USES)
+        {
+            resultIntent = new Intent(Intent.ACTION_SENDTO);
+            String uriText = "mailto:" + Uri.encode("support@godtools.com");
+            Uri uri = Uri.parse(uriText);
+            resultIntent.setData(uri);
+        }
+        else
+        {
+            resultIntent = new Intent(this, Splash.class);
+        }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         
         mBuilder.setContentIntent(pendingIntent);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-        Log.i(TAG, "Showing notificaiton");
+        Log.i(TAG, "Showing notification");
     }
 }
