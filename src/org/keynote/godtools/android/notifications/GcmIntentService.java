@@ -1,6 +1,7 @@
 package org.keynote.godtools.android.notifications;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -91,6 +92,7 @@ public class GcmIntentService extends IntentService
                 .setSmallIcon(R.drawable.homescreen_godtools_logo)
                 .setContentTitle("GodTools")
                 .setContentText(msg)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                 .setAutoCancel(true);
         
 
