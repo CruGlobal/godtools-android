@@ -1201,27 +1201,43 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             {
                 Log.i(TAG, "Timer complete");
                 
-                
-                GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""), 
-                        regid, NotificationInfo.AFTER_3_USES, new NotificationUpdateTask.NotificationUpdateTaskHandler()
+                if (isAppInForeground())
                 {
-                    @Override
-                    public void registrationComplete(String regId)
-                    {
-                        Log.i(NotificationInfo.NOTIFICATION_TAG, "3 Uses Notification notice sent to API");
-                    }
+                    Log.i(TAG, "App is in foreground");
+                    GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""),
+                            regid, NotificationInfo.AFTER_3_USES, new NotificationUpdateTask.NotificationUpdateTaskHandler()
+                            {
+                                @Override
+                                public void registrationComplete(String regId)
+                                {
+                                    Log.i(NotificationInfo.NOTIFICATION_TAG, "3 Uses Notification notice sent to API");
+                                }
 
-                    @Override
-                    public void registrationFailed()
-                    {
-                        Log.e(NotificationInfo.NOTIFICATION_TAG, "3 Uses notification notice failed to send to API");
-                    }
-                });
+                                @Override
+                                public void registrationFailed()
+                                {
+                                    Log.e(NotificationInfo.NOTIFICATION_TAG, "3 Uses notification notice failed to send to API");
+                                }
+                            });
+                }
+                else
+                {
+                    Log.i(TAG, "App not in foreground, canceling timer");
+                }
             }
         };
         
         timer = new Timer("1.5MinuteTimer");
         timer.schedule(timerTask, 90000); //1.5 minutes
         Log.i(TAG, "Timer scheduled");
+    }
+    
+    private boolean isAppInForeground()
+    {
+        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> services = activityManager.getRunningTasks(1);
+        
+        return (services.get(0).topActivity.getPackageName()
+                .equalsIgnoreCase(getApplicationContext().getPackageName()));
     }
 }
