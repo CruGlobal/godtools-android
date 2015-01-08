@@ -14,5 +14,5 @@ Android project that produces snuffy based apps (eg GodTools)
 2 - after 1 presentation of 4SL/KGP
 3 - after 10 presentation of 4SL/KGP
 4 - 24 hours after a share longer than 1.5 minutes (4SL/KGP)
-5 - app not opened after downloading (probably will need to be changed)
+5 - app not opened after downloading (no longer used)
 6 - After 3 uses longer than 1.5 minutes
