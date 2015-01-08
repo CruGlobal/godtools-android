@@ -17,6 +17,8 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.*;
+import android.provider.Settings;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -1176,7 +1178,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
     private void sendRegistrationIdToBackend() 
     {
-       GodToolsApiClient.registerDeviceForNotifications(regid, new NotificationRegistrationTask.NotificationTaskHandler()
+       String deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+       GodToolsApiClient.registerDeviceForNotifications(regid, deviceId, new NotificationRegistrationTask.NotificationTaskHandler()
        {
            @Override
            public void registrationComplete(String status)

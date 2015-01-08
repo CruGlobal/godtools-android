@@ -99,11 +99,11 @@ public class GodToolsApiClient {
         new DraftPublishTask(taskHandler).execute(url, authorization);
     }
 
-    public static void registerDeviceForNotifications(String registrationID, NotificationRegistrationTask.NotificationTaskHandler taskHandler)
+    public static void registerDeviceForNotifications(String registrationID, String deviceId, NotificationRegistrationTask.NotificationTaskHandler taskHandler)
     {
         String url = BASE_URL + ENDPOINT_NOTIFICATIONS + registrationID;
 
-        new NotificationRegistrationTask(taskHandler).execute(url);
+        new NotificationRegistrationTask(taskHandler).execute(url, deviceId);
     }
 
     public static void updateNotification(String authcode, String registrationId, int notificationType,  NotificationUpdateTask.NotificationUpdateTaskHandler taskHandler)
