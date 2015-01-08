@@ -1,6 +1,7 @@
 package org.keynote.godtools.android;
 
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -103,6 +104,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
     GoogleCloudMessaging gcm;
     Context context;
     String regid = "";
+    Timer timer;
     /**
      * When clicked, dialog to launch a new translation is opened
      */
@@ -377,12 +379,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
     {
         super.onStart();
         Log.d(TAG, "onStart");
-    }
-
-    @Override
-    public void onStop()
-    {
-        super.onStop();
     }
 
     @Override
@@ -895,6 +891,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i)
                         {
+                            timer.cancel();
                             finish();
                         }
                     })
@@ -1185,22 +1182,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
            public void registrationComplete(String status)
            {
                Log.i(NotificationInfo.NOTIFICATION_TAG, "API Registration Complete");
-
-               // todo: This should be removed since they want this to only be sent if app not opened. I am leaving it here for testing
-               GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""), regid, 5, new NotificationUpdateTask.NotificationUpdateTaskHandler()
-               {
-                   @Override
-                   public void registrationComplete(String regId)
-                   {
-                       Log.i(NotificationInfo.NOTIFICATION_TAG, "Download Notification notice sent to API");
-                   }
-
-                   @Override
-                   public void registrationFailed()
-                   {
-                        Log.e(NotificationInfo.NOTIFICATION_TAG, "Download notification notice failed to send to API");
-                   }
-               });
            }
 
            @Override
@@ -1219,6 +1200,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             public void run()
             {
                 Log.i(TAG, "Timer complete");
+                
+                
                 GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""), 
                         regid, NotificationInfo.AFTER_3_USES, new NotificationUpdateTask.NotificationUpdateTaskHandler()
                 {
@@ -1237,7 +1220,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             }
         };
         
-        Timer timer = new Timer("1.5MinuteTimer");
+        timer = new Timer("1.5MinuteTimer");
         timer.schedule(timerTask, 90000); //1.5 minutes
         Log.i(TAG, "Timer scheduled");
     }
