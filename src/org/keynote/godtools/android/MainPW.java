@@ -60,9 +60,9 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 {
     private static final String TAG = "MainPW";
     private static final String TAG_LIST = "PackageList";
-    private static final String TAG_DIALOG_LANGUAGE = "LanguageDialog";
     private static final int REQUEST_SETTINGS = 1001;
     private static final String PREFS_NAME = "GodTools";
+    private static final String JUST_SWITCHED = "justSwitched";
 
     public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
     public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
@@ -75,16 +75,20 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
     private String languagePrimary;
     private List<GTPackage> packageList;
     PackageListFragment packageFrag;
+    FragmentManager fm;
     View vLoading;
     TextView tvTask;
     FrameLayout frameLayout;
     RelativeLayout tableLayout;
     ImageButton refreshButton;
+    ImageButton shareButton;
     /**
      * When clicked, dialog to launch a new translation is opened
      */
     ImageButton addButton;
     boolean isDownloading;
+    boolean noPackages = false;
+    boolean justSwitchedToTranslatorMode;
 
     /**
      * Called when the activity is first created.
@@ -110,10 +114,11 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+        justSwitchedToTranslatorMode = settings.getBoolean(JUST_SWITCHED, false);
 
         packageList = getPackageList(); // get the packages for the primary language
 
-        FragmentManager fm = getSupportFragmentManager();
+        fm = getSupportFragmentManager();
         packageFrag = (PackageListFragment) fm.findFragmentByTag(TAG_LIST);
         if (packageFrag == null)
         {
@@ -152,8 +157,29 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             }
         });
 
+
+        shareButton = (ImageButton) findViewById(R.id.export_button);
+        shareButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                doCmdShare(view);
+            }
+        });
+
         addButton = (ImageButton) findViewById(R.id.homescreen_add_button);
         refreshButton = (ImageButton) findViewById(R.id.refresh_button);
+        refreshButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                onCmd_refresh(null);
+            }
+        });
+
+        addButton = (ImageButton) findViewById(R.id.homescreen_add_button);
 
         if (settings.getBoolean("TranslatorMode", false))
         {
@@ -170,6 +196,9 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                     onCmd_refresh(null);
                 }
             });
+
+            shareButton.setVisibility(View.INVISIBLE);
+            shareButton.setEnabled(false);
         }
         else
         {
@@ -178,6 +207,9 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
             refreshButton.setVisibility(View.INVISIBLE);
             refreshButton.setEnabled(false);
+
+            shareButton.setVisibility(View.VISIBLE);
+            shareButton.setEnabled(true);
         }
 
         mSetupNeeded = true;
@@ -200,6 +232,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 languagePrimary = data.getStringExtra("primaryCode");
                 packageList = getPackageList();
                 packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
+                createTheHomeScreen();
 
                 break;
             }
@@ -213,7 +246,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                         "primary",
                         settings.getString("Authorization_Generic", ""),
                         this);
-
                 break;
             }
             case RESULT_DOWNLOAD_PARALLEL:
@@ -252,6 +284,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", this);
 
                 Toast.makeText(MainPW.this, "Translator preview mode is enabled", Toast.LENGTH_LONG).show();
+                switchedToTranslatorMode(true);
 
                 finish();
                 startActivity(getIntent());
@@ -277,8 +310,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 break;
             }
         }
-
-        createTheHomeScreen();
     }
 
 
@@ -323,6 +354,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         {
             public void run()
             {
+                Log.i(TAG, "Set up");
                 createTheHomeScreen();
                 getScreenSize();
                 showTheHomeScreen();
@@ -334,7 +366,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
     private void getScreenSize()
     {
-
 		/*
          * Although these measurements are not used on this screen, they are passed to and used by
 		 * the following screens. At some point maybe all layouts can be updated to relative layout.
@@ -374,6 +405,33 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
     private void createTheHomeScreen()
     {
+        /*
+         * This method is called each time the UI needs to be refreshed.
+         */
+
+        // If no packages are available for a language, the add method is automatically called
+        if (packageList.size() < 1)
+        {
+            GTPackage newPackage = new GTPackage();
+            newPackage.setName("No Package");
+            packageList.add(newPackage);
+            noPackages = true;
+
+            onCmd_add(null);
+        }
+        else if (justSwitchedToTranslatorMode)
+        {
+            /*
+             * When switching to translator mode, the MainPW activity is restarted. However, the packageList and
+             * packageFrag need to be refreshed based on the newly downloaded items. The justSwitchedToTranslatorMode is
+             * saved in the settings and when true, this will refresh the packages available.
+             */
+            packageList = getPackageList();
+            packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
+        }
+
+        noPackages = false;
+
         // resize contList
         try
         {
@@ -381,6 +439,11 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             int childWidth = packageFrag.getListView().getChildAt(0).getWidth();
             int totalHeight = childHeight * packageList.size();
             packageFrag.getListView().setLayoutParams(new FrameLayout.LayoutParams(childWidth, totalHeight));
+
+            // Once the resizing is successful the boolean is changed to false the the list is not refreshed continually
+
+            justSwitchedToTranslatorMode = false;
+            switchedToTranslatorMode(false);
         } catch (Exception e)
         {
             Log.e("error", e.getMessage(), e);
@@ -453,7 +516,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             }
 
         }
-
         createTheHomeScreen();
     }
 
@@ -463,7 +525,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
         if (tag.equalsIgnoreCase("primary"))
         {
-
             languagePrimary = langCode;
 
             SnuffyApplication app = (SnuffyApplication) getApplication();
@@ -490,7 +551,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
                 hideLoading();
             }
-
+            createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase("parallel"))
         {
@@ -508,41 +569,36 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             {
                 // check for draft_parallel
                 GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), langCode, "draft_parallel", this);
-
             }
             else
             {
                 hideLoading();
             }
-
+            createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase("draft"))
         {
-
             Toast.makeText(MainPW.this, "Drafts have been updated", Toast.LENGTH_SHORT).show();
             packageList = getPackageList();
             packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
             hideLoading();
-
+            createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase("draft_primary"))
         {
-
             languagePrimary = langCode;
             packageList = getPackageList();
+
             packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
+
             hideLoading();
 
         }
         else if (tag.equalsIgnoreCase("draft_parallel"))
         {
-
             hideLoading();
-
+            createTheHomeScreen();
         }
-
-        createTheHomeScreen();
-
     }
 
     private List<GTPackage> getPackageList()
@@ -561,6 +617,14 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
     {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         return settings.getBoolean("TranslatorMode", false);
+    }
+
+    private void switchedToTranslatorMode(boolean switched)
+    {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(JUST_SWITCHED, switched);
+        editor.commit();
     }
 
     @Override
@@ -891,6 +955,15 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
             });
 
+            b.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i)
+                {
+                    if (noPackages) onCmd_settings(null);
+                }
+            });
+
             b.show();
         }
         else
@@ -930,6 +1003,16 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         }
 
         return possiblePackages;
+    }
+
+    public void doCmdShare(View v)
+    {
+        String msgBody = getString(R.string.app_share_link);
+
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.putExtra(Intent.EXTRA_TEXT, msgBody);
+        startActivity(Intent.createChooser(share, "Select how you would like to share"));
     }
 
     private Tracker getGoogleAnalyticsTracker()

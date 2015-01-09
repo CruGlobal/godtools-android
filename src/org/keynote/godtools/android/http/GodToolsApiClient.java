@@ -64,7 +64,7 @@ public class GodToolsApiClient {
                                          UUID pageId,
                                          DownloadTask.DownloadTaskHandler taskHandler)
     {
-        String url = BASE_URL + ENDPOINT_DRAFTS + languageCode + File.separator + packageCode + File.separator + "pages" + File.separator + pageId;
+        String url = BASE_URL + ENDPOINT_DRAFTS + languageCode + File.separator + packageCode + File.separator + "pages" + File.separator + pageId + "?compressed=true";
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + languageCode + File.separator + pageId + ".zip";
 
         download(app.getApplicationContext(),

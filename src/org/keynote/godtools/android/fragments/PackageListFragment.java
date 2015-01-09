@@ -132,7 +132,7 @@ public class PackageListFragment extends ListFragment
 
 		public PackageListAdapter(Context context, List<GTPackage> listPackages)
 		{
-			super(context, R.layout.list_item_package, listPackages);
+            super(context, R.layout.list_item_package, listPackages);
 			this.listPackages = listPackages;
 			this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			this.mIsEnabled = true;
@@ -145,19 +145,19 @@ public class PackageListFragment extends ListFragment
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent)
 		{
-			GTPackage gtp = listPackages.get(position);
+            GTPackage gtp = listPackages.get(position);
 
-			ViewHolder holder;
-			if (convertView == null)
-			{
+            ViewHolder holder;
+            if (convertView == null)
+            {
 
-                if(translatorMode)
+                if (translatorMode)
                 {
-				    convertView = inflater.inflate(R.layout.list_item_with_icon_text_and_status, parent, false);
+                    convertView = inflater.inflate(R.layout.list_item_with_icon_text_and_status, parent, false);
 
                     holder = new ViewHolder();
-				    holder.icon = (ImageView) convertView.findViewById(R.id.list2Image);
-				    holder.packageName = (TextView) convertView.findViewById(R.id.list2Text1);
+                    holder.icon = (ImageView) convertView.findViewById(R.id.list2Image);
+                    holder.packageName = (TextView) convertView.findViewById(R.id.list2Text1);
                     holder.status = (TextView) convertView.findViewById(R.id.list2Text2);
                 }
                 else
@@ -169,29 +169,30 @@ public class PackageListFragment extends ListFragment
                     holder.packageName = (TextView) convertView.findViewById(R.id.list1Text);
                 }
 
-				convertView.setTag(holder);
+                convertView.setTag(holder);
 
-			} else
-			{
-				holder = (ViewHolder) convertView.getTag();
-			}
+            }
+            else
+            {
+                holder = (ViewHolder) convertView.getTag();
+            }
 
-			holder.packageName.setTypeface(mAlternateTypeface);
+            holder.packageName.setTypeface(mAlternateTypeface);
 
             if (position % 2 == 0)
             {
                 convertView.setBackgroundColor(0x000000);
             }
 
-			// set values
-			holder.packageName.setText(gtp.getName());
-            if(translatorMode) holder.status.setText(gtp.getStatus());
+            // set values
+            holder.packageName.setText(gtp.getName());
+            if (translatorMode) holder.status.setText(gtp.getStatus());
 
-			Picasso.with(getActivity())
-					.load(new File(resourcesDir + gtp.getIcon()))
-					.into(holder.icon);
+            Picasso.with(getActivity())
+                    .load(new File(resourcesDir + gtp.getIcon()))
+                    .into(holder.icon);
 
-			return convertView;
+            return convertView;
 		}
 
 		private class ViewHolder

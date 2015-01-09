@@ -424,6 +424,14 @@ public class SnuffyPWActivity extends Activity
         startActivity(intent);
     }
 
+    private String getLinkForPackage()
+    {
+        String link = getString(R.string.app_email_link); // http://www.godtoolsapp.com/?p=%1&l=%2
+        link = link.replace("%1", mAppPackage);
+        link = link.replace("%2", mAppLanguage);
+        return link;
+    }
+
     public void doCmdShare(View v)
     {
 
@@ -438,8 +446,10 @@ public class SnuffyPWActivity extends Activity
 
         msgBody = msgBody.replace("%1", mAppLanguage);
 
-        SnuffyApplication app = ((SnuffyApplication) getApplication());
-        app.sendEmailWithContent(this, subjectLine, msgBody);
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.putExtra(Intent.EXTRA_TEXT, msgBody);
+        startActivity(Intent.createChooser(share, "Select how you would like to share"));
     }
 
     public void doCmdShowPageMenu(View v)
