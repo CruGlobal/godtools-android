@@ -131,9 +131,9 @@
     <string name="none">None</string>
     <string name="send">Send</string>
 
-    <string name="kgp_share">It was great talking with you today about how we can know God personally. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today. www.godtoolsapp.com/?p=kgp&amp;l=%1</string>
-    <string name="fourlaws_share">It was great talking with you today about how we can know God personally. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today. www.godtoolsapp.com/?p=fourlaws&amp;l=%1</string>
-    <string name="satisfied_share">It was great talking with you today about how we can experience The Holy Spirit’s power in our lives. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today. www.godtoolsapp.com/?p=satisfied&amp;l=%1</string>
-    <string name="everystudent_share">It was great talking with you today about your spiritual questions. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today. www.godtoolsapp.com/?p=everystudent&amp;l=%1</string>
+    <string name="kgp_share">It was great talking with you today about how we can know God personally. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today. www.godtoolsapp.com/?p=kgp&amp;l=%1&amp;source=godtools-android&amp;campaign=app-sharing</string>
+    <string name="fourlaws_share">It was great talking with you today about how we can know God personally. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today. www.godtoolsapp.com/?p=fourlaws&amp;l=%1&amp;source=godtools-android&amp;campaign=app-sharing</string>
+    <string name="satisfied_share">It was great talking with you today about how we can experience The Holy Spirit’s power in our lives. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today. www.godtoolsapp.com/?p=satisfied&amp;l=%1&amp;source=godtools-android&amp;campaign=app-sharing</string>
+    <string name="everystudent_share">It was great talking with you today about your spiritual questions. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today. www.godtoolsapp.com/?p=everystudent&amp;l=%1&amp;source=godtools-android&amp;campaign=app-sharing</string>
 
 </resources>
