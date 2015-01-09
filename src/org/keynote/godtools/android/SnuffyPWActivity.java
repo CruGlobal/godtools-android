@@ -439,9 +439,11 @@ public class SnuffyPWActivity extends Activity
 
         String msgBody = "";
 
-        if (mAppPackage == "kgp") msgBody = getString(R.string.kgp_share);
-        else if (mAppPackage == "fourlaws") msgBody = getString(R.string.fourlaws_share);
-        else if (mAppPackage == "satisfied") msgBody = getString(R.string.satisfied_share);
+        Log.i(TAG, mAppPackage);
+        
+        if (mAppPackage.equalsIgnoreCase("kgp")) msgBody = getString(R.string.kgp_share);
+        else if (mAppPackage.equalsIgnoreCase("fourlaws")) msgBody = getString(R.string.fourlaws_share);
+        else if (mAppPackage.equalsIgnoreCase("satisfied")) msgBody = getString(R.string.satisfied_share);
         else msgBody = getString(R.string.everystudent_share); //every student
 
         msgBody = msgBody.replace("%1", mAppLanguage);
