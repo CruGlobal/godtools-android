@@ -38,7 +38,6 @@ import java.util.Locale;
 
 public class Splash extends Activity implements DownloadTask.DownloadTaskHandler, MetaTask.MetaTaskHandler
 {
-
 	private static final String LOG_TAG = "splash";
 
 	protected boolean _active = true;
@@ -104,7 +103,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 					}
 				});
 			}
-
 		}
         else if(settings.getString("Authorization_Generic", "").equals(""))
         {
@@ -130,7 +128,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         else if (Device.isConnected(Splash.this))
 		{
 			checkForUpdates();
-
 		}
         else
 		{
@@ -316,11 +313,11 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 		@Override
 		protected void onPostExecute(Void aVoid)
 		{
-
 			if (Device.isConnected(mContext))
 			{
 				checkForUpdates();
-			} else
+			}
+            else
 			{
 				goToMainActivity();
 			}
