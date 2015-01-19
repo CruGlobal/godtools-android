@@ -179,9 +179,21 @@ public class SettingsPW extends BaseActionBarActivity implements
     }
 
     public void onToggleClicked(View view) {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean on = ((CompoundButton) view).isChecked();
+
+        if(on && !settings.getString("Authorization_Draft", "").isEmpty())
+        {
+            ((CompoundButton) view).setChecked(true);
+            cbTranslatorMode.setEnabled(true);
+            setTranslatorMode(true);
+            setResult(RESULT_PREVIEW_MODE_ENABLED);
+            finish();
+            return;
+        }
+
         view.setEnabled(false);
 
-        boolean on = ((CompoundButton) view).isChecked();
         if (on) {
 
             if (Device.isConnected(SettingsPW.this))
