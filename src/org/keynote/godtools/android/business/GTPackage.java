@@ -8,6 +8,8 @@ import java.util.List;
 
 public class GTPackage {
 
+    public static final String EVERYSTUDENT_PACKAGE_CODE = "everystudent";
+
     private long id;
     private String code;
     private String name;

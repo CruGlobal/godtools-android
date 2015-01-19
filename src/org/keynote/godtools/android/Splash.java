@@ -288,7 +288,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
 				// Add Every Student to database
 				GTPackage everyStudent = new GTPackage();
-				everyStudent.setCode("everystudent");
+				everyStudent.setCode(GTPackage.EVERYSTUDENT_PACKAGE_CODE);
 				everyStudent.setName("Every Student");
 				everyStudent.setIcon("homescreen_everystudent_icon_2x.png");
 				everyStudent.setStatus("live");
