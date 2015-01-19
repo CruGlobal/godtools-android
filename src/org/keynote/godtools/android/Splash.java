@@ -461,7 +461,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 	private void checkForUpdates()
 	{
 		showLoading(getString(R.string.check_update));
-		final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 		GodToolsApiClient.getListOfPackages(settings.getString("Authorization_Generic", ""), "meta", Splash.this);
 	}
 
