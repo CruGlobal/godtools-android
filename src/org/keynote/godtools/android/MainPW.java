@@ -222,12 +222,17 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         switch (resultCode)
         {
+            /* It's possible that both primary and parallel languages that were previously downloaded were changed at the same time.
+             * If only one or the other were changed, no harm in running this code, but we do need to make sure the main screen updates
+             * if the both were changed.  If if both were changed RESULT_CHANGED_PARALLEL were not added here, then the home screen would
+             * not reflect the changed primary language*/
             case RESULT_CHANGED_PRIMARY:
+            case RESULT_CHANGED_PARALLEL:
             {
                 SnuffyApplication app = (SnuffyApplication) getApplication();
-                app.setAppLocale(data.getStringExtra("primaryCode"));
+                app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
 
-                languagePrimary = data.getStringExtra("primaryCode");
+                languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
                 packageList = getPackageList();
                 packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
                 createTheHomeScreen();
