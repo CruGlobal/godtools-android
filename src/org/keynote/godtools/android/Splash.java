@@ -100,16 +100,39 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 					@Override
 					public void authFailed()
 					{
-						throw new IllegalStateException("Cannot continue w/o a Generic Authorization token");
+                        Log.e("Splash", "Failed getting auth token.");
 					}
 				});
 			}
 
-		} else if (Device.isConnected(Splash.this))
+		}
+        else if(settings.getString("Authorization_Generic", "").equals(""))
+        {
+            GodToolsApiClient.authenticateGeneric(new AuthTask.AuthTaskHandler()
+            {
+                @Override
+                public void authComplete(String authorization)
+                {
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString("Authorization_Generic", authorization);
+                    editor.apply();
+                    Log.i("Splash", "Now Authorized");
+                    checkForUpdates();
+                }
+
+                @Override
+                public void authFailed()
+                {
+                    Log.e("Splash", "Failed getting auth token.");
+                }
+            });
+        }
+        else if (Device.isConnected(Splash.this))
 		{
 			checkForUpdates();
 
-		} else
+		}
+        else
 		{
 			// thread for displaying the SplashScreen
 			Thread splashThread = new Thread()

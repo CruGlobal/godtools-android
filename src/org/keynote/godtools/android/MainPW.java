@@ -36,7 +36,6 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.everystudent.EveryStudent;
-import org.keynote.godtools.android.fragments.LanguageDialogFragment;
 import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.DraftCreationTask;
@@ -53,8 +52,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MainPW extends BaseActionBarActivity implements LanguageDialogFragment.OnLanguageChangedListener,
-        PackageListFragment.OnPackageSelectedListener,
+public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
         DownloadTask.DownloadTaskHandler,
         MetaTask.MetaTaskHandler
 {
@@ -470,53 +468,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
         {
             refreshButton.setEnabled(false);
         }
-    }
-
-    @Override
-    public void onLanguageChanged(String name, String code)
-    {
-        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-        GTLanguage gtLanguage = GTLanguage.getLanguage(MainPW.this, code);
-        if (gtLanguage.isDownloaded())
-        {
-            languagePrimary = gtLanguage.getLanguageCode();
-            packageList = getPackageList();
-            packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
-
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, code);
-
-            String parallelLanguage = settings.getString(GTLanguage.KEY_PARALLEL, "");
-            if (code.equalsIgnoreCase(parallelLanguage))
-                editor.putString(GTLanguage.KEY_PARALLEL, "");
-
-            editor.commit();
-
-            SnuffyApplication app = (SnuffyApplication) getApplication();
-            app.setAppLocale(code);
-
-        }
-        else
-        {
-
-            if (Device.isConnected(MainPW.this))
-            {
-                showLoading("Downloading resources...");
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        code,
-                        "primary",
-                        settings.getString("Authorization_Generic", ""),
-                        this);
-            }
-            else
-            {
-                // TODO: show dialog, Internet connection is required to download the resources
-                Toast.makeText(this, "Unable to download resources. Internet connection unavailable.", Toast.LENGTH_LONG).show();
-            }
-
-        }
-        createTheHomeScreen();
     }
 
     @Override
