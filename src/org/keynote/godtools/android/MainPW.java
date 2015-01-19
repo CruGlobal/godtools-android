@@ -559,7 +559,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
 
             hideLoading();
-
+            createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase("draft_parallel"))
         {
