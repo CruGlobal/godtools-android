@@ -92,44 +92,44 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 						SharedPreferences.Editor editor = settings.edit();
 						editor.putString("Authorization_Generic", authorization);
 						editor.apply();
-                        Log.i("Splash", "Now Authorized");
-                        checkForUpdates();
+						Log.i("Splash", "Now Authorized");
+						checkForUpdates();
 					}
 
 					@Override
 					public void authFailed()
 					{
-                        Log.e("Splash", "Failed getting auth token.");
+						Log.e("Splash", "Failed getting auth token.");
 					}
 				});
 			}
 		}
-        else if(settings.getString("Authorization_Generic", "").equals(""))
-        {
-            GodToolsApiClient.authenticateGeneric(new AuthTask.AuthTaskHandler()
-            {
-                @Override
-                public void authComplete(String authorization)
-                {
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString("Authorization_Generic", authorization);
-                    editor.apply();
-                    Log.i("Splash", "Now Authorized");
-                    checkForUpdates();
-                }
+		else if(settings.getString("Authorization_Generic", "").equals(""))
+		{
+			GodToolsApiClient.authenticateGeneric(new AuthTask.AuthTaskHandler()
+			{
+				@Override
+				public void authComplete(String authorization)
+				{
+					SharedPreferences.Editor editor = settings.edit();
+					editor.putString("Authorization_Generic", authorization);
+					editor.apply();
+					Log.i("Splash", "Now Authorized");
+					checkForUpdates();
+				}
 
-                @Override
-                public void authFailed()
-                {
-                    Log.e("Splash", "Failed getting auth token.");
-                }
-            });
-        }
-        else if (Device.isConnected(Splash.this))
+				@Override
+				public void authFailed()
+				{
+					Log.e("Splash", "Failed getting auth token.");
+				}
+			});
+		}
+		else if (Device.isConnected(Splash.this))
 		{
 			checkForUpdates();
 		}
-        else
+		else
 		{
 			// thread for displaying the SplashScreen
 			Thread splashThread = new Thread()
@@ -317,7 +317,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 			{
 				checkForUpdates();
 			}
-            else
+			else
 			{
 				goToMainActivity();
 			}
@@ -344,22 +344,20 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 			mAdapter.open();
 			for (GTLanguage gtl : languageList)
 			{
-
 				// check if language is already in the db
 				GTLanguage dbLanguage = mAdapter.getGTLanguage(gtl.getLanguageCode());
 				if (dbLanguage == null)
-                {
-                    mAdapter.insertGTLanguage(gtl);
-                }
-                else
-                {
-                    mAdapter.updateGTLanguage(gtl);
-                }
+				{
+					mAdapter.insertGTLanguage(gtl);
+				}
+				else
+				{
+					mAdapter.updateGTLanguage(gtl);
+				}
 
 				dbLanguage = mAdapter.getGTLanguage(gtl.getLanguageCode());
 				for (GTPackage gtp : gtl.getPackages())
 				{
-
 					// check if a new package is available for download or an existing package has been updated
 					GTPackage dbPackage = mAdapter.getGTPackage(gtp.getCode(), gtp.getLanguage(), gtp.getStatus());
 					if (dbPackage == null || (gtp.getVersion() > dbPackage.getVersion()))
@@ -378,14 +376,11 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 		{
 			super.onPostExecute(aVoid);
 
-			final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
 			gtlPrimary = mAdapter.getGTLanguage(languagePrimary);
 			gtlParallel = mAdapter.getGTLanguage(languageParallel);
 
 			if (isFirst)
 			{
-
 				if (shouldUpdateLanguageSettings())
 				{
 					// download resources for the phone's language
@@ -397,7 +392,8 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 							KEY_NEW_LANGUAGE,
 							settings.getString("Authorization_Generic", ""),
 							Splash.this);
-				} else if (!gtlPrimary.isDownloaded())
+				}
+				else if (!gtlPrimary.isDownloaded())
 				{
 					// update resources for the primary language
 					showLoading(String.format(getString(R.string.update_resources), gtlPrimary.getLanguageName()));
@@ -406,14 +402,15 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 							KEY_UPDATE_PRIMARY,
 							settings.getString("Authorization_Generic", ""),
 							Splash.this);
-				} else
+				}
+				else
 				{
 					goToMainActivity();
 				}
 
-			} else
+			}
+			else
 			{
-
 				if (!gtlPrimary.isDownloaded())
 				{
 					// update resources for the primary language
@@ -423,8 +420,8 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 							KEY_UPDATE_PRIMARY,
 							settings.getString("Authorization_Generic", ""),
 							Splash.this);
-
-				} else
+				}
+				else
 				{
 					// update the resources for the parallel language
 					if (gtlParallel != null && !gtlParallel.isDownloaded())
@@ -435,15 +432,14 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 								KEY_UPDATE_PARALLEL,
 								settings.getString("Authorization_Generic", ""),
 								Splash.this);
-
-					} else
+					}
+					else
 					{
 						goToMainActivity();
 					}
 
 				}
 			}
-
 			mAdapter.close();
 		}
 	}
@@ -467,15 +463,12 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 	@Override
 	public void metaTaskComplete(InputStream is, String langCode, String tag)
 	{
-
 		new UpdatePackageListTask().execute(is);
-
 	}
 
 	@Override
 	public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
 	{
-
 		hideLoading();
 
 		if (tag.equalsIgnoreCase(KEY_NEW_LANGUAGE))
@@ -492,10 +485,9 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 			app.setAppLocale(langCode);
 
 			goToMainActivity();
-
-		} else if (tag.equalsIgnoreCase(KEY_UPDATE_PRIMARY))
+		}
+		else if (tag.equalsIgnoreCase(KEY_UPDATE_PRIMARY))
 		{
-
 			gtlPrimary.setDownloaded(true);
 			gtlPrimary.update(Splash.this);
 
@@ -507,29 +499,25 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 						KEY_UPDATE_PARALLEL,
 						settings.getString("Authorization_Generic", ""),
 						Splash.this);
-			} else
+			}
+			else
 			{
 				goToMainActivity();
 			}
-
-
-		} else if (tag.equalsIgnoreCase(KEY_UPDATE_PARALLEL))
+		}
+		else if (tag.equalsIgnoreCase(KEY_UPDATE_PARALLEL))
 		{
-
 			gtlParallel.setDownloaded(true);
 			gtlParallel.update(Splash.this);
 
 			goToMainActivity();
 		}
-
 	}
 
 	@Override
 	public void metaTaskFailure(InputStream is, String langCode, String tag)
 	{
-
 		goToMainActivity();
-
 	}
 
 	@Override
@@ -544,6 +532,5 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 		Intent intent = new Intent(this, MainPW.class);
 		startActivity(intent);
 		finish();
-
 	}
 }
