@@ -232,9 +232,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 SnuffyApplication app = (SnuffyApplication) getApplication();
                 app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
 
-                languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
-                packageList = getPackageList();
-                packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
+                refreshPackageFragmentList(settings, false);
                 createTheHomeScreen();
 
                 break;
@@ -299,6 +297,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 // refresh the list
                 String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 
+                refreshPackageFragmentList(settings, true);
+
                 if (!languagePrimary.equalsIgnoreCase(primaryCode))
                 {
                     SnuffyApplication app = (SnuffyApplication) getApplication();
@@ -313,6 +313,27 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 break;
             }
         }
+    }
+
+    /**
+     * @param withFallback specifies when true will fallback to English if the primary language code
+     *                     has no packages available.  This is true when leaving translator mode in a language with all
+     *                     drafts and no published live versions.
+     */
+    private void refreshPackageFragmentList(SharedPreferences settings, boolean withFallback)
+    {
+        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
+        packageList = getPackageList();
+
+        if(withFallback && packageList.isEmpty())
+        {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(GTLanguage.KEY_PRIMARY, "en");
+            editor.commit();
+            languagePrimary = "en";
+            packageList = getPackageList();
+        }
+        packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
     }
 
 
@@ -412,17 +433,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
          * This method is called each time the UI needs to be refreshed.
          */
 
-        // If no packages are available for a language, the add method is automatically called
-        if (packageList.size() < 1)
-        {
-            GTPackage newPackage = new GTPackage();
-            newPackage.setName("No Package");
-            packageList.add(newPackage);
-            noPackages = true;
-
-            onCmd_add(null);
-        }
-        else if (justSwitchedToTranslatorMode)
+        // If no packages are available for a language, then fallback to English
+        if (justSwitchedToTranslatorMode)
         {
             /*
              * When switching to translator mode, the MainPW activity is restarted. However, the packageList and
@@ -499,7 +511,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             {
                 // check for draft_primary
                 GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), langCode, "draft_primary", this);
-
             }
             else
             {
