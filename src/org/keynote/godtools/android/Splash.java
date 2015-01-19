@@ -352,6 +352,8 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 				}
 				else
 				{
+					// don't forget that a previously downloaded language was already downloaded.
+					gtl.setDownloaded(dbLanguage.isDownloaded());
 					mAdapter.updateGTLanguage(gtl);
 				}
 
