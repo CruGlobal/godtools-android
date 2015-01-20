@@ -93,18 +93,10 @@ public class PackageListFragment extends ListFragment
 		this.languageCode = langCode;
         this.translatorMode = translatorMode;
 		handleLanguagesWithAlternateFonts(langCode);
-        if(translatorMode && "en".equals(langCode)) removeEveryStudent(packages);
 		mAdapter.refresh(packages);
 	}
 
-    private void removeEveryStudent(List<GTPackage> packages)
-    {
-        Iterator<GTPackage> i = packages.iterator();
-        for(; i.hasNext(); )
-        {
-            if(i.next().getCode().equals(GTPackage.EVERYSTUDENT_PACKAGE_CODE)) i.remove();
-        }
-    }
+
 
 	public void disable()
 	{

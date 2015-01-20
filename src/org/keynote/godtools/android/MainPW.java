@@ -47,6 +47,7 @@ import org.keynote.godtools.android.utils.Device;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -572,11 +573,25 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     {
         if (isTranslatorModeEnabled())
         {
-            return GTPackage.getPackageByLanguage(MainPW.this, languagePrimary);
+            List<GTPackage> packageByLanguage = GTPackage.getPackageByLanguage(MainPW.this, languagePrimary);
+            if("en".equals(languagePrimary))
+            {
+                removeEveryStudent(packageByLanguage);
+            }
+            return packageByLanguage;
         }
         else
         {
             return GTPackage.getLivePackages(MainPW.this, languagePrimary);
+        }
+    }
+
+    private void removeEveryStudent(List<GTPackage> packages)
+    {
+        Iterator<GTPackage> i = packages.iterator();
+        for(; i.hasNext(); )
+        {
+            if(i.next().getCode().equals(GTPackage.EVERYSTUDENT_PACKAGE_CODE)) i.remove();
         }
     }
 
