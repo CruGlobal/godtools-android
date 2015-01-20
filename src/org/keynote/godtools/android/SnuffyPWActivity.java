@@ -32,6 +32,8 @@ import com.google.android.gms.analytics.Tracker;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
+import org.keynote.godtools.android.http.NotificationUpdateTask;
+import org.keynote.godtools.android.notifications.NotificationInfo;
 import org.keynote.godtools.android.snuffy.PackageReader;
 import org.keynote.godtools.android.snuffy.SnuffyAboutActivity;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
@@ -41,6 +43,8 @@ import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
 
 import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 public class SnuffyPWActivity extends Activity
@@ -68,10 +72,15 @@ public class SnuffyPWActivity extends Activity
     private String mPackageStatus;
     private ProcessPackageAsync mProcessPackageAsync;
     private GestureDetector MyGestureDetector;
+    public static final String PROPERTY_REG_ID = "registration_id";
 
     private String mConfigPrimary, mConfigParallel;
     private GTPackage mParallelPackage;
     private boolean isUsingPrimaryLanguage, isParallelLanguageSet;
+    
+    SharedPreferences settings;
+    String regid;
+    Timer timer;
 
     public void setLanguage(String languageCode)
     {
@@ -119,7 +128,7 @@ public class SnuffyPWActivity extends Activity
         isUsingPrimaryLanguage = true;
 
         // check if parallel language is set
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String langParallel = settings.getString("languageParallel", "");
 
 
@@ -148,6 +157,47 @@ public class SnuffyPWActivity extends Activity
         // - is there something we can test for that is better than a fixed timeout?
         // We reduce this now to 100 msec since we are not measuring the device size here
         // since that is done in GodTools which calls us and passes the dimensions in.
+        
+        regid = settings.getString(PROPERTY_REG_ID, "");
+        
+        if (mAppPackage.equalsIgnoreCase("kgp") || mAppPackage.equalsIgnoreCase("fourlaws"))
+        {
+            startTimer();
+            
+            GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""),
+                    regid, NotificationInfo.AFTER_1_PRESENTATION, new NotificationUpdateTask.NotificationUpdateTaskHandler()
+                    {
+                        @Override
+                        public void registrationComplete(String regId)
+                        {
+                            Log.i(NotificationInfo.NOTIFICATION_TAG, "1 Presentation Notification notice sent to API");
+                        }
+
+                        @Override
+                        public void registrationFailed()
+                        {
+                            Log.e(NotificationInfo.NOTIFICATION_TAG, "1 Presentation notification notice failed to send to API");
+                        }
+                    });
+
+            GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""),
+                    regid, NotificationInfo.AFTER_10_PRESENTATIONS, new NotificationUpdateTask.NotificationUpdateTaskHandler()
+                    {
+                        @Override
+                        public void registrationComplete(String regId)
+                        {
+                            Log.i(NotificationInfo.NOTIFICATION_TAG, "10 Presentation Notification notice sent to API");
+                        }
+
+                        @Override
+                        public void registrationFailed()
+                        {
+                            Log.e(NotificationInfo.NOTIFICATION_TAG, "10 Presentation notification notice failed to send to API");
+                        }
+                    });
+
+
+        }
     }
 
     private void handleLanguagesWithAlternateFonts()
@@ -229,7 +279,20 @@ public class SnuffyPWActivity extends Activity
             // since that is done in GodTools which calls us and passes the dimensions in.
             mSetupRequired = false;
         }
+    }
 
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        Log.i(TAG, "Activity stopped");
+        
+        if (timer != null)
+        {
+            timer.cancel();
+            Log.i(NotificationInfo.NOTIFICATION_TAG, "Share Timer stopped");
+        }
+        
     }
 
     private void doSetup(int delay)
@@ -337,6 +400,8 @@ public class SnuffyPWActivity extends Activity
         ed.putString("currLanguageCode", getLanguage());
         // TODO: when we can display About or other pages, save that state too so we can restore that too.
         ed.commit();
+        
+        
     }
 
     @Override
@@ -795,5 +860,36 @@ public class SnuffyPWActivity extends Activity
                 .setCustomDimension(1, activity)
                 .setCustomDimension(2, mAppLanguage)
                 .build());
+    }
+
+    private void startTimer()
+    {
+        TimerTask timerTask = new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                Log.i(TAG, "Timer complete");
+                GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""),
+                        regid, NotificationInfo.DAY_AFTER_SHARE, new NotificationUpdateTask.NotificationUpdateTaskHandler()
+                        {
+                            @Override
+                            public void registrationComplete(String regId)
+                            {
+                                Log.i(NotificationInfo.NOTIFICATION_TAG, "Day After Share Notification notice sent to API");
+                            }
+
+                            @Override
+                            public void registrationFailed()
+                            {
+                                Log.e(NotificationInfo.NOTIFICATION_TAG, "Day After Share notification notice failed to send to API");
+                            }
+                        });
+            }
+        };
+
+        timer = new Timer("1.5ShareTimer");
+        timer.schedule(timerTask, 90000); //1.5 minutes
+        Log.i(TAG, "Timer scheduled");
     }
 }
