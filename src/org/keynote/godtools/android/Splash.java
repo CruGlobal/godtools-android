@@ -121,7 +121,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 				@Override
 				public void authFailed()
 				{
-					gLog.e("Splash", "Failed getting auth token.");
+					Log.e("Splash", "Failed getting auth token.");
 					goToMainActivity();
 				}
 			});
