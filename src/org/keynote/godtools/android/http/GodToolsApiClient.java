@@ -11,12 +11,13 @@ import java.util.UUID;
 
 public class GodToolsApiClient {
 
-    private static final String BASE_URL = "http://api.godtoolsapp.com/godtools-api/rest/";
+    private static final String BASE_URL = "https://api.godtools.com/godtools-api/rest/";
     private static final String ENDPOINT_META = "meta/";
     private static final String ENDPOINT_PACKAGES = "packages/";
     private static final String ENDPOINT_TRANSLATIONS = "translations/";
     private static final String ENDPOINT_DRAFTS = "drafts/";
     private static final String ENDPOINT_AUTH = "auth/";
+    private static final String ENDPOINT_NOTIFICATIONS = "notification/";
 
     public static void getListOfPackages(String authorization, String tag, MetaTask.MetaTaskHandler taskHandler){
         MetaTask metaTask = new MetaTask(taskHandler);
@@ -94,6 +95,20 @@ public class GodToolsApiClient {
         String url = BASE_URL + ENDPOINT_TRANSLATIONS + languageCode + File.separator + packageCode;
 
         new DraftPublishTask(taskHandler).execute(url, authorization);
+    }
+
+    public static void registerDeviceForNotifications(String registrationID, String deviceId, NotificationRegistrationTask.NotificationTaskHandler taskHandler)
+    {
+        String url = BASE_URL + ENDPOINT_NOTIFICATIONS + registrationID;
+
+        new NotificationRegistrationTask(taskHandler).execute(url, deviceId);
+    }
+
+    public static void updateNotification(String authcode, String registrationId, int notificationType,  NotificationUpdateTask.NotificationUpdateTaskHandler taskHandler)
+    {
+        String url = BASE_URL + ENDPOINT_NOTIFICATIONS + "update";
+
+        new NotificationUpdateTask(taskHandler).execute(url, authcode, registrationId, notificationType);
     }
 
     private static void download(Context context, String url, String filePath, String tag, String authorization, String langCode, DownloadTask.DownloadTaskHandler taskHandler) {
