@@ -92,14 +92,14 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 						SharedPreferences.Editor editor = settings.edit();
 						editor.putString("Authorization_Generic", authorization);
 						editor.apply();
-						Log.i("Splash", "Now Authorized");
+						Log.i(LOG_TAG, "Now Authorized");
 						checkForUpdates();
 					}
 
 					@Override
 					public void authFailed()
 					{
-						Log.e("Splash", "Failed getting auth token.");
+						Log.e(LOG_TAG, "Failed getting auth token.");
 					}
 				});
 			}
@@ -114,14 +114,14 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 					SharedPreferences.Editor editor = settings.edit();
 					editor.putString("Authorization_Generic", authorization);
 					editor.apply();
-					Log.i("Splash", "Now Authorized");
+					Log.i(LOG_TAG, "Now Authorized");
 					checkForUpdates();
 				}
 
 				@Override
 				public void authFailed()
 				{
-					Log.e("Splash", "Failed getting auth token.");
+					Log.e(LOG_TAG, "Failed getting auth token.");
 					goToMainActivity();
 				}
 			});
