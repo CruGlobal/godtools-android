@@ -10,7 +10,8 @@ import java.io.File;
 import java.util.UUID;
 
 public class GodToolsApiClient {
-    private static final String BASE_URL = "http://api.godtoolsapp.com/godtools-api/rest/";
+
+    private static final String BASE_URL = "https://api.godtools.com/godtools-api/rest/";
     private static final String ENDPOINT_META = "meta/";
     private static final String ENDPOINT_PACKAGES = "packages/";
     private static final String ENDPOINT_TRANSLATIONS = "translations/";
