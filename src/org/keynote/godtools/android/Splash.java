@@ -38,7 +38,7 @@ import java.util.Locale;
 
 public class Splash extends Activity implements DownloadTask.DownloadTaskHandler, MetaTask.MetaTaskHandler
 {
-	private static final String LOG_TAG = Splash.getClass().getSimpleName();
+	private static final String LOG_TAG = Splash.class.getSimpleName();
 
 	protected boolean _active = true;
 	protected int _splashTime = 2000;
