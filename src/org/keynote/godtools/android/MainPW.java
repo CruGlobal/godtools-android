@@ -45,7 +45,6 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.everystudent.EveryStudent;
-import org.keynote.godtools.android.fragments.LanguageDialogFragment;
 import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.DraftCreationTask;
@@ -61,6 +60,7 @@ import org.keynote.godtools.android.utils.Device;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,8 +68,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class MainPW extends BaseActionBarActivity implements LanguageDialogFragment.OnLanguageChangedListener,
-        PackageListFragment.OnPackageSelectedListener,
+public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
         DownloadTask.DownloadTaskHandler,
         MetaTask.MetaTaskHandler
 {
@@ -287,14 +286,17 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
 
         switch (resultCode)
         {
+            /* It's possible that both primary and parallel languages that were previously downloaded were changed at the same time.
+             * If only one or the other were changed, no harm in running this code, but we do need to make sure the main screen updates
+             * if the both were changed.  If if both were changed RESULT_CHANGED_PARALLEL were not added here, then the home screen would
+             * not reflect the changed primary language*/
             case RESULT_CHANGED_PRIMARY:
+            case RESULT_CHANGED_PARALLEL:
             {
                 SnuffyApplication app = (SnuffyApplication) getApplication();
-                app.setAppLocale(data.getStringExtra("primaryCode"));
+                app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
 
-                languagePrimary = data.getStringExtra("primaryCode");
-                packageList = getPackageList();
-                packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
+                refreshPackageFragmentList(settings, false);
                 createTheHomeScreen();
 
                 break;
@@ -359,6 +361,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 // refresh the list
                 String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 
+                refreshPackageFragmentList(settings, true);
+
                 if (!languagePrimary.equalsIgnoreCase(primaryCode))
                 {
                     SnuffyApplication app = (SnuffyApplication) getApplication();
@@ -373,6 +377,27 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
                 break;
             }
         }
+    }
+
+    /**
+     * @param withFallback specifies when true will fallback to English if the primary language code
+     *                     has no packages available.  This is true when leaving translator mode in a language with all
+     *                     drafts and no published live versions.
+     */
+    private void refreshPackageFragmentList(SharedPreferences settings, boolean withFallback)
+    {
+        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
+        packageList = getPackageList();
+
+        if(withFallback && packageList.isEmpty())
+        {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(GTLanguage.KEY_PRIMARY, "en");
+            editor.commit();
+            languagePrimary = "en";
+            packageList = getPackageList();
+        }
+        packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
     }
 
 
@@ -465,17 +490,8 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
          * This method is called each time the UI needs to be refreshed.
          */
 
-        // If no packages are available for a language, the add method is automatically called
-        if (packageList.size() < 1)
-        {
-            GTPackage newPackage = new GTPackage();
-            newPackage.setName("No Package");
-            packageList.add(newPackage);
-            noPackages = true;
-
-            onCmd_add(null);
-        }
-        else if (justSwitchedToTranslatorMode)
+        // If no packages are available for a language, then fallback to English
+        if (justSwitchedToTranslatorMode)
         {
             /*
              * When switching to translator mode, the MainPW activity is restarted. However, the packageList and
@@ -529,53 +545,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
     }
 
     @Override
-    public void onLanguageChanged(String name, String code)
-    {
-        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-        GTLanguage gtLanguage = GTLanguage.getLanguage(MainPW.this, code);
-        if (gtLanguage.isDownloaded())
-        {
-            languagePrimary = gtLanguage.getLanguageCode();
-            packageList = getPackageList();
-            packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
-
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, code);
-
-            String parallelLanguage = settings.getString(GTLanguage.KEY_PARALLEL, "");
-            if (code.equalsIgnoreCase(parallelLanguage))
-                editor.putString(GTLanguage.KEY_PARALLEL, "");
-
-            editor.commit();
-
-            SnuffyApplication app = (SnuffyApplication) getApplication();
-            app.setAppLocale(code);
-
-        }
-        else
-        {
-
-            if (Device.isConnected(MainPW.this))
-            {
-                showLoading("Downloading resources...");
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        code,
-                        "primary",
-                        settings.getString("Authorization_Generic", ""),
-                        this);
-            }
-            else
-            {
-                // TODO: show dialog, Internet connection is required to download the resources
-                Toast.makeText(this, "Unable to download resources. Internet connection unavailable.", Toast.LENGTH_LONG).show();
-            }
-
-        }
-        createTheHomeScreen();
-    }
-
-    @Override
     public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
     {
 
@@ -599,7 +568,6 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             {
                 // check for draft_primary
                 GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), langCode, "draft_primary", this);
-
             }
             else
             {
@@ -648,7 +616,7 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
             packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
 
             hideLoading();
-
+            createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase("draft_parallel"))
         {
@@ -661,11 +629,25 @@ public class MainPW extends BaseActionBarActivity implements LanguageDialogFragm
     {
         if (isTranslatorModeEnabled())
         {
-            return GTPackage.getPackageByLanguage(MainPW.this, languagePrimary);
+            List<GTPackage> packageByLanguage = GTPackage.getPackageByLanguage(MainPW.this, languagePrimary);
+            if("en".equals(languagePrimary))
+            {
+                removeEveryStudent(packageByLanguage);
+            }
+            return packageByLanguage;
         }
         else
         {
             return GTPackage.getLivePackages(MainPW.this, languagePrimary);
+        }
+    }
+
+    private void removeEveryStudent(List<GTPackage> packages)
+    {
+        Iterator<GTPackage> i = packages.iterator();
+        for(; i.hasNext(); )
+        {
+            if(i.next().getCode().equals(GTPackage.EVERYSTUDENT_PACKAGE_CODE)) i.remove();
         }
     }
 

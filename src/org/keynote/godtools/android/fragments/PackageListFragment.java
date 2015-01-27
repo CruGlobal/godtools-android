@@ -23,6 +23,7 @@ import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.List;
 
 public class PackageListFragment extends ListFragment
@@ -94,6 +95,8 @@ public class PackageListFragment extends ListFragment
 		handleLanguagesWithAlternateFonts(langCode);
 		mAdapter.refresh(packages);
 	}
+
+
 
 	public void disable()
 	{
