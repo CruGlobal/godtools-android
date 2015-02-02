@@ -137,6 +137,20 @@
         android:textOff="OFF"
         android:textOn="ON"/>
 
+    <Switch
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/settings_notifications"
+        android:id="@+id/notification_switch"
+        android:textColor="@color/gray_60"
+        android:textSize="18sp"
+        android:layout_gravity="right"
+        android:checked="true"
+        android:padding="16dp"
+        android:textOff="No"
+        android:textOn="YES"
+        android:background="@color/settings_background"/>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
