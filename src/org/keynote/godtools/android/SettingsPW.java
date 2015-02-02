@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
@@ -208,6 +207,13 @@ public class SettingsPW extends BaseActionBarActivity implements
         } else {
             showExitTranslatorModeDialog();
         }
+    }
+    
+    public void onNotificationToggle(View view)
+    {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("Notifications", ((CompoundButton)view).isChecked());
     }
 
     private void showAccessCodeDialog() {
