@@ -154,7 +154,8 @@
         android:padding="16dp"
         android:textOff="No"
         android:textOn="YES"
-        android:background="@color/settings_background"/>
+        android:background="@color/settings_background"
+        android:onClick="onNotificationToggle"/>
 
     <View
         android:layout_width="match_parent"
