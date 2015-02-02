@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
@@ -35,6 +36,8 @@ public class SettingsPW extends BaseActionBarActivity implements
         ConfirmDialogFragment.OnConfirmClickListener,
         AccessCodeDialogFragment.AccessCodeDialogListener,
         AuthTask.AuthTaskHandler {
+    
+    private final String TAG = getClass().getSimpleName();
 
     private static final int REQUEST_PRIMARY = 1002;
     private static final int REQUEST_PARALLEL = 1003;
@@ -220,6 +223,8 @@ public class SettingsPW extends BaseActionBarActivity implements
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("Notifications", cbNotificationsAllowed.isChecked());
+        editor.commit();
+        Log.i(TAG, "Notifications Changed to: " + cbNotificationsAllowed.isChecked());
     }
 
     private void showAccessCodeDialog() {
