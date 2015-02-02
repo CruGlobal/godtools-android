@@ -219,7 +219,7 @@ public class SettingsPW extends BaseActionBarActivity implements
     {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean("Notifications", ((CompoundButton)view).isChecked());
+        editor.putBoolean("Notifications", cbNotificationsAllowed.isChecked());
     }
 
     private void showAccessCodeDialog() {
