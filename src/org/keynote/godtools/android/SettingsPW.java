@@ -44,6 +44,7 @@ public class SettingsPW extends BaseActionBarActivity implements
     CompoundButton cbTranslatorMode;
     Typeface mAlternateTypeface;
     String primaryLanguageCode;
+    CompoundButton cbNotificationsAllowed;
 
     ProgressDialog pdLoading;
 
@@ -62,6 +63,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         rlMainLanguage = (RelativeLayout) findViewById(R.id.rlMainLanguage);
         rlParallelLanguage = (RelativeLayout) findViewById(R.id.rlParallelLanguage);
         cbTranslatorMode = (CompoundButton) findViewById(R.id.cbTranslatorMode);
+        cbNotificationsAllowed = (CompoundButton) findViewById(R.id.notification_switch); 
 
         // set click listeners
         rlParallelLanguage.setOnClickListener(this);
@@ -72,6 +74,10 @@ public class SettingsPW extends BaseActionBarActivity implements
         boolean isTranslatorEnabled = settings.getBoolean("TranslatorMode", false);
         primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
+        
+        settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean allowNotifications = settings.getBoolean("Notifications", true);
+        cbNotificationsAllowed.setChecked(allowNotifications);
 
         handleLanguagesWithAlternateFonts(primaryLanguageCode);
         tvMainLanguage = new SnuffyAlternateTypefaceTextView(tvMainLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.BOLD).get();
