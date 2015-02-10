@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -121,23 +120,32 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         vLoading = findViewById(R.id.contLoading);
         tvTask = (TextView) findViewById(R.id.tvTask);
-
+        
+        TextView tvFirst = (TextView) findViewById(R.id.tv_first);
+        TextView tvSecond = (TextView) findViewById(R.id.tv_second);
+        TextView tvThird = (TextView) findViewById(R.id.tv_third);
+        TextView tvFourth = (TextView) findViewById(R.id.tv_fourth);
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         justSwitchedToTranslatorMode = settings.getBoolean(JUST_SWITCHED, false);
 
         packageList = getPackageList(); // get the packages for the primary language
-
-        fm = getSupportFragmentManager();
-        packageFrag = (PackageListFragment) fm.findFragmentByTag(TAG_LIST);
-        if (packageFrag == null)
+        
+        for (GTPackage gtPackage : packageList)
         {
-            packageFrag = PackageListFragment.newInstance(languagePrimary, packageList, isTranslatorModeEnabled());
-            FragmentTransaction ft = fm.beginTransaction();
-            // ft.add(R.id.contList, packageFrag, TAG_LIST);
-            ft.commit();
+            
         }
+        
+//        fm = getSupportFragmentManager();
+//        packageFrag = (PackageListFragment) fm.findFragmentByTag(TAG_LIST);
+//        if (packageFrag == null)
+//        {
+//            packageFrag = PackageListFragment.newInstance(languagePrimary, packageList, isTranslatorModeEnabled());
+//            FragmentTransaction ft = fm.beginTransaction();
+//            // ft.add(R.id.contList, packageFrag, TAG_LIST);
+//            ft.commit();
+//        }
 
         // Make the Settings button highlight when pressed (without defining a separate image)
 //        ImageButton button = (ImageButton) findViewById(R.id.homescreen_settings_button);

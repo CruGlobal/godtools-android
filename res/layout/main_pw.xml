@@ -25,14 +25,15 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="10dp"
         android:background="#95b9b9b9"
-        android:id="@+id/kgp_layout"
+        android:id="@+id/first_layout"
         android:clickable="true"
-        android:layout_above="@+id/satisfied_layout">
+        android:layout_above="@+id/second_layout"
+        >
 
         <ImageView
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:id="@+id/iv_kgp"
+            android:id="@+id/iv_first"
             android:src="@drawable/gt4_homescreen_kgpicon"
             android:background="#00ffffff"/>
 
@@ -40,7 +41,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:text="Knowing God Personally"
-            android:id="@+id/tv_kgp"
+            android:id="@+id/tv_first"
             android:background="#00ffffff"
             android:textSize="25dp"
             android:paddingLeft="20dp"
@@ -57,14 +58,14 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="10dp"
         android:background="#95828282"
-        android:id="@+id/satisfied_layout"
+        android:id="@+id/second_layout"
         android:clickable="true"
-        android:layout_above="@+id/fourlaws_layout">
+        android:layout_above="@+id/third_layout">
 
         <ImageView
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:id="@+id/iv_satisfied"
+            android:id="@+id/iv_second"
             android:src="@drawable/gt4_homescreen_satisfiedicon"
             android:background="#00ffffff"/>
 
@@ -72,7 +73,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:text="Satisfied?"
-            android:id="@+id/tv_satisfied"
+            android:id="@+id/tv_second"
             android:background="#00ffffff"
             android:textSize="25dp"
             android:paddingLeft="20dp"
@@ -89,14 +90,14 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="10dp"
         android:background="#95b9b9b9"
-        android:id="@+id/fourlaws_layout"
+        android:id="@+id/third_layout"
         android:clickable="true"
-        android:layout_above="@+id/everystudent_layout">
+        android:layout_above="@+id/fourth_layout">
 
         <ImageView
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:id="@+id/iv_fourlaws"
+            android:id="@+id/iv_third"
             android:src="@drawable/gt4_homescreen_4lawsicon"
             android:background="#00ffffff"/>
 
@@ -104,7 +105,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:text="The Four Spiritual Laws"
-            android:id="@+id/tv_fourlaws"
+            android:id="@+id/tv_third"
             android:background="#00ffffff"
             android:textSize="25dp"
             android:paddingLeft="20dp"
@@ -121,13 +122,13 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="25dp"
         android:background="#95828282"
-        android:id="@+id/everystudent_layout"
+        android:id="@+id/fourth_layout"
         android:clickable="true">
 
         <ImageView
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:id="@+id/iv_everystudent"
+            android:id="@+id/iv_fourth"
             android:src="@drawable/gt4_homescreen_esicon"
             android:background="#00ffffff"/>
 
@@ -135,7 +136,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:text="Everystudent.com"
-            android:id="@+id/tv_everystudent"
+            android:id="@+id/tv_fourth"
             android:background="#00ffffff"
             android:textSize="25dp"
             android:paddingLeft="20dp"
