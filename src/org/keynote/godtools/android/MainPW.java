@@ -67,9 +67,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         MetaTask.MetaTaskHandler, View.OnClickListener
 {
     private static final String TAG = "MainPW";
-    private static final String TAG_LIST = "PackageList";
     private static final int REQUEST_SETTINGS = 1001;
-    private static final String PREFS_NAME = "GodTools";
     private static final String JUST_SWITCHED = "justSwitched";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
