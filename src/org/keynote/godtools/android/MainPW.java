@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -342,6 +343,22 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.homescreen_menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.homescreen_settings:
+                onCmd_settings(null);
+                return true;
+            case R.id.homescreen_share:
+                doCmdShare(null);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
