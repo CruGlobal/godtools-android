@@ -89,8 +89,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private List<GTPackage> packageList;
     
     private List<HomescreenLayout> layouts;
-    
-    PackageListFragment packageFrag;
+
     View vLoading;
     TextView tvTask;
     FrameLayout frameLayout;
@@ -380,7 +379,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 SnuffyApplication app = (SnuffyApplication) getApplication();
                 app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
 
-                refreshPackageFragmentList(settings, false);
+                refreshPackageList(settings, false);
                 createTheHomeScreen();
 
                 break;
@@ -405,7 +404,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 {
                     languagePrimary = primaryCode;
                     packageList = getPackageList();
-                    packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
+                    showLayoutsWithPackages();
                 }
 
                 String code = data.getStringExtra("parallelCode");
@@ -445,7 +444,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 // refresh the list
                 String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 
-                refreshPackageFragmentList(settings, true);
+                refreshPackageList(settings, true);
 
                 if (!languagePrimary.equalsIgnoreCase(primaryCode))
                 {
@@ -468,7 +467,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
      *                     has no packages available.  This is true when leaving translator mode in a language with all
      *                     drafts and no published live versions.
      */
-    private void refreshPackageFragmentList(SharedPreferences settings, boolean withFallback)
+    private void refreshPackageList(SharedPreferences settings, boolean withFallback)
     {
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
         packageList = getPackageList();
@@ -481,7 +480,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             languagePrimary = "en";
             packageList = getPackageList();
         }
-        packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
+        showLayoutsWithPackages();
     }
 
 
@@ -498,7 +497,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         super.onPause();
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor ed = settings.edit();
-        ed.commit();
+        ed.apply();
     }
 
     @Override
@@ -569,7 +568,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
              * saved in the settings and when true, this will refresh the packages available.
              */
             packageList = getPackageList();
-            packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
+            showLayoutsWithPackages();
         }
 
         noPackages = false;
@@ -589,7 +588,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         supportInvalidateOptionsMenu();
         tvTask.setText(msg);
         vLoading.setVisibility(View.VISIBLE);
-        packageFrag.disable();
 
         if (refreshButton != null)
         {
@@ -611,7 +609,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PRIMARY, langCode);
-            editor.commit();
+            editor.apply();
 
             GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
             gtl.setDownloaded(true);
@@ -625,7 +623,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             else
             {
                 packageList = getPackageList();
-                packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
+                showLayoutsWithPackages();
                 hideLoading();
             }
             createTheHomeScreen();
@@ -636,7 +634,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PARALLEL, langCode);
-            editor.commit();
+            editor.apply();
 
             GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
             gtl.setDownloaded(true);
@@ -657,7 +655,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         {
             Toast.makeText(MainPW.this, "Drafts have been updated", Toast.LENGTH_SHORT).show();
             packageList = getPackageList();
-            packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
+            showLayoutsWithPackages();
             hideLoading();
             createTheHomeScreen();
         }
@@ -666,7 +664,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             languagePrimary = langCode;
             packageList = getPackageList();
 
-            packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
+            showLayoutsWithPackages();
 
             hideLoading();
             createTheHomeScreen();
@@ -715,7 +713,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(JUST_SWITCHED, switched);
-        editor.commit();
+        editor.apply();
     }
 
     @Override
@@ -819,7 +817,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))
         {
             packageList = getPackageList();
-            packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
+            showLayoutsWithPackages();
         }
 
         hideLoading();
@@ -842,7 +840,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         {
 
             packageList = getPackageList();
-            packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
+            showLayoutsWithPackages();
             Toast.makeText(MainPW.this, "Failed to download drafts", Toast.LENGTH_SHORT).show();
 
         }
@@ -920,7 +918,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         supportInvalidateOptionsMenu();
         tvTask.setText("");
         vLoading.setVisibility(View.GONE);
-        packageFrag.enable();
 
         if (refreshButton != null)
         {
