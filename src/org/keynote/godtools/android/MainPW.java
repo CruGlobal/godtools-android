@@ -12,17 +12,18 @@ import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +46,7 @@ import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.http.NotificationRegistrationTask;
 import org.keynote.godtools.android.http.NotificationUpdateTask;
+import org.keynote.godtools.android.model.HomescreenLayout;
 import org.keynote.godtools.android.notifications.NotificationInfo;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
@@ -62,7 +64,7 @@ import java.util.TimerTask;
 
 public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
         DownloadTask.DownloadTaskHandler,
-        MetaTask.MetaTaskHandler
+        MetaTask.MetaTaskHandler, View.OnClickListener
 {
     private static final String TAG = "MainPW";
     private static final String TAG_LIST = "PackageList";
@@ -86,8 +88,10 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private boolean mSetupNeeded;
     private String languagePrimary;
     private List<GTPackage> packageList;
+    
+    private List<HomescreenLayout> layouts;
+    
     PackageListFragment packageFrag;
-    FragmentManager fm;
     View vLoading;
     TextView tvTask;
     FrameLayout frameLayout;
@@ -118,13 +122,15 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_pw);
 
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        context = getApplicationContext();
         vLoading = findViewById(R.id.contLoading);
         tvTask = (TextView) findViewById(R.id.tvTask);
         
-        TextView tvFirst = (TextView) findViewById(R.id.tv_first);
-        TextView tvSecond = (TextView) findViewById(R.id.tv_second);
-        TextView tvThird = (TextView) findViewById(R.id.tv_third);
-        TextView tvFourth = (TextView) findViewById(R.id.tv_fourth);
+        setupLayout();
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
@@ -132,10 +138,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         packageList = getPackageList(); // get the packages for the primary language
         
-        for (GTPackage gtPackage : packageList)
-        {
-            
-        }
+        showLayoutsWithPackages();
+        
         
 //        fm = getSupportFragmentManager();
 //        packageFrag = (PackageListFragment) fm.findFragmentByTag(TAG_LIST);
@@ -230,10 +234,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 //            shareButton.setVisibility(View.VISIBLE);
 //            shareButton.setEnabled(true);
 //        }
-
-        mSetupNeeded = true;
-        context = getApplicationContext();
-
+        
         Log.i(TAG, regid);
         // Check device for Play Services APK. If check succeeds, proceed with GCM registration.
         if (checkPlayServices())
@@ -269,6 +270,72 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         Log.i(TAG, regid);
         
         if (!justSwitchedToTranslatorMode) startTimer(); // don't start timer when switching to translator mode
+    }
+    
+    private void setupLayout()
+    {
+        layouts = new ArrayList<HomescreenLayout>();
+        
+        HomescreenLayout first = new HomescreenLayout();
+
+        first.setLayout((LinearLayout) findViewById(R.id.first_layout));
+        first.setTextView((TextView) findViewById(R.id.tv_first));
+        first.setImageView((ImageView) findViewById(R.id.iv_first));
+        layouts.add(first);
+
+        HomescreenLayout second = new HomescreenLayout();
+
+        second.setLayout((LinearLayout) findViewById(R.id.second_layout));
+        second.setTextView((TextView) findViewById(R.id.tv_second));
+        second.setImageView((ImageView) findViewById(R.id.iv_second));
+        layouts.add(second);
+
+        HomescreenLayout third = new HomescreenLayout();
+
+        third.setLayout((LinearLayout) findViewById(R.id.third_layout));
+        third.setTextView((TextView) findViewById(R.id.tv_third));
+        third.setImageView((ImageView) findViewById(R.id.iv_third));
+        layouts.add(third);
+
+        HomescreenLayout fourth = new HomescreenLayout();
+
+        fourth.setLayout((LinearLayout) findViewById(R.id.fourth_layout));
+        fourth.setTextView((TextView) findViewById(R.id.tv_fourth));
+        fourth.setImageView((ImageView) findViewById(R.id.iv_fourth));
+        layouts.add(fourth);
+
+    }
+    
+    private void showLayoutsWithPackages()
+    {
+        // now there will only be four packages shown on the homescreen
+        for (int i = 0; i < 4; i++)
+        {
+            if (packageList.size() > i)
+            {
+                GTPackage gtPackage = packageList.get(i);
+                HomescreenLayout layout = layouts.get(i);
+                
+                gtPackage.setLayout(layout);
+
+                layout.getLayout().setVisibility(View.VISIBLE);
+                layout.getLayout().setClickable(true);
+                layout.getLayout().setOnClickListener(this);
+                layout.getTextView().setText(gtPackage.getName());
+                
+                if ("kgp".equals(gtPackage.getCode())) layout.getImageView().setImageResource(R.drawable.gt4_homescreen_kgpicon);
+                if ("fourlaws".equals(gtPackage.getCode())) layout.getImageView().setImageResource(R.drawable.gt4_homescreen_4lawsicon);
+                if ("satisfied".equals(gtPackage.getCode())) layout.getImageView().setImageResource(R.drawable.gt4_homescreen_satisfiedicon);
+                if ("everystudent".equals(gtPackage.getCode())) layout.getImageView().setImageResource(R.drawable.gt4_homescreen_esicon);
+
+            }
+            else
+            {
+                HomescreenLayout layout = layouts.get(i);
+                layout.getLayout().setVisibility(View.INVISIBLE);
+                layout.getLayout().setClickable(false);
+            }
+        }           
     }
 
     @Override
@@ -395,7 +462,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         {
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PRIMARY, "en");
-            editor.commit();
+            editor.apply();
             languagePrimary = "en";
             packageList = getPackageList();
         }
@@ -423,28 +490,14 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     protected void onResume()
     {
         super.onResume();
-        // Setup is only done on first resume,
-        // else we resize the screen elements smaller and smaller each time.
-        if (mSetupNeeded)
-        {
-            doSetup(1000);    // 1 second delay required to make sure activity fully created
-            // - is there something we can test for that is better than a fixed timeout?
-        }
+        doSetup();
     }
 
-    private void doSetup(int delay)
+    private void doSetup()
     {
-        new Handler().postDelayed(new Runnable()
-        {
-            public void run()
-            {
-                createTheHomeScreen();
-                getScreenSize();
-                showTheHomeScreen();
-                mSetupNeeded = false;
-            }
-        }, delay);  // delay can be required to make sure activity fully created - is there something we can test for that is better than a fixed timeout?
-
+        createTheHomeScreen();
+        getScreenSize();
+        showTheHomeScreen();
     }
 
     private void getScreenSize()
@@ -506,29 +559,12 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         noPackages = false;
 
-        // resize contList
-        try
-        {
-            int childHeight = packageFrag.getListView().getChildAt(0).getHeight();
-            int childWidth = packageFrag.getListView().getChildAt(0).getWidth();
-            int totalHeight = childHeight * packageList.size();
-            packageFrag.getListView().setLayoutParams(new FrameLayout.LayoutParams(childWidth, totalHeight));
-
-            // Once the resizing is successful the boolean is changed to false the the list is not refreshed continually
-
-            justSwitchedToTranslatorMode = false;
-            switchedToTranslatorMode(false);
-        } catch (Exception e)
-        {
-            Log.e("error", e.getMessage(), e);
-        }
+        justSwitchedToTranslatorMode = false;
+        switchedToTranslatorMode(false);
     }
 
     private void showTheHomeScreen()
     {
-        // Now that it is resized - show it
-//        ViewGroup container = (ViewGroup) findViewById(R.id.homescreen_container);
-//        container.setVisibility(View.VISIBLE);
         trackScreenVisit();
     }
 
@@ -809,6 +845,19 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         }
 
         hideLoading();
+    }
+
+    @Override
+    public void onClick(View view)
+    {
+        for (GTPackage gtPackage : packageList)
+        {
+            if (view.getId() == gtPackage.getLayout().getLayout().getId())
+            {
+                Log.i(TAG, "clicked: " + gtPackage.getCode());
+                onPackageSelected(gtPackage);
+            }
+        }
     }
 
     private class UpdateDraftListTask extends AsyncTask<Object, Void, Boolean>
