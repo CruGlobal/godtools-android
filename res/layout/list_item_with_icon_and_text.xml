@@ -4,7 +4,7 @@
   android:orientation="horizontal"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:background="#5ba5a5a5"
+  android:background="#95b9b9b9"
   android:weightSum="1">
   <!-- android:layout_height="?android:attr/listPreferredItemHeight"-->
     <ImageView 

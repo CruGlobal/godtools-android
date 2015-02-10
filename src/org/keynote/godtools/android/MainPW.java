@@ -22,7 +22,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -115,21 +114,14 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        // requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
 
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.main_pw);
 
         vLoading = findViewById(R.id.contLoading);
         tvTask = (TextView) findViewById(R.id.tvTask);
-        //frameLayout = (FrameLayout) findViewById(R.id.contList);
-        // tableLayout = (RelativeLayout) findViewById(R.id.full_table);
+
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");

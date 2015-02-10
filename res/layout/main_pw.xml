@@ -17,6 +17,133 @@
         android:contentDescription="homescreen_icon"/>
 
     <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:background="#95b9b9b9"
+        android:id="@+id/kgp_layout"
+        android:clickable="true"
+        android:layout_above="@+id/satisfied_layout">
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/iv_kgp"
+            android:src="@drawable/gt4_homescreen_kgpicon"
+            android:background="#00ffffff"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Knowing God Personally"
+            android:id="@+id/tv_kgp"
+            android:background="#00ffffff"
+            android:textSize="25dp"
+            android:paddingLeft="20dp"
+            android:gravity="center_vertical"
+            android:textColor="#ff3a3a3a"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:background="#95828282"
+        android:id="@+id/satisfied_layout"
+        android:clickable="true"
+        android:layout_above="@+id/fourlaws_layout">
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/iv_satisfied"
+            android:src="@drawable/gt4_homescreen_satisfiedicon"
+            android:background="#00ffffff"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Satisfied?"
+            android:id="@+id/tv_satisfied"
+            android:background="#00ffffff"
+            android:textSize="25dp"
+            android:paddingLeft="20dp"
+            android:gravity="center_vertical"
+            android:textColor="#ff3a3a3a"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:background="#95b9b9b9"
+        android:id="@+id/fourlaws_layout"
+        android:clickable="true"
+        android:layout_above="@+id/everystudent_layout">
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/iv_fourlaws"
+            android:src="@drawable/gt4_homescreen_4lawsicon"
+            android:background="#00ffffff"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="The Four Spiritual Laws"
+            android:id="@+id/tv_fourlaws"
+            android:background="#00ffffff"
+            android:textSize="25dp"
+            android:paddingLeft="20dp"
+            android:gravity="center_vertical"
+            android:textColor="#ff3a3a3a"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="25dp"
+        android:background="#95828282"
+        android:id="@+id/everystudent_layout"
+        android:clickable="true">
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/iv_everystudent"
+            android:src="@drawable/gt4_homescreen_esicon"
+            android:background="#00ffffff"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Everystudent.com"
+            android:id="@+id/tv_everystudent"
+            android:background="#00ffffff"
+            android:textSize="25dp"
+            android:paddingLeft="20dp"
+            android:gravity="center_vertical"
+            android:textColor="#ff3a3a3a"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/contLoading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,45 +167,5 @@
             android:textSize="16sp"/>
 
     </LinearLayout>
-
-    <include
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/list_item_with_icon_and_text"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/homescreen_kgp"
-        android:layout_above="@+id/homescreen_satisfied"
-        android:layout_marginBottom="10dp"/>
-
-    <include
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/list_item_with_icon_and_text"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/homescreen_satisfied"
-        android:layout_above="@+id/homescreen_4sl"
-        android:layout_marginBottom="10dp"/>
-
-    <include
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/list_item_with_icon_and_text"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/homescreen_4sl"
-        android:layout_above="@+id/homescreen_everystudent"
-        android:layout_marginBottom="10dp"/>
-
-    <include
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/list_item_with_icon_and_text"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="25dp"
-        android:id="@+id/homescreen_everystudent"/>
 
 </RelativeLayout>
