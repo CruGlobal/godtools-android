@@ -18,7 +18,11 @@
     <color name="highlight_bottom">#ffcf9600</color>
     <!--  buttons themselves are white -->
     <color name="toolbar_fg">#ffffffff</color>
-
+    <!-- turquoise -->
+    <color name="toolbar_turquoise">#40E0D0</color>
+    <!-- black -->
+    <color name="black">#000000</color>
+    
     <!--20% translucent white-->
     <color name="homescreen_settingsbutton_onpress">#32ffffff</color>
     <!-- 90% translucent white-->

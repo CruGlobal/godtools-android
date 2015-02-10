@@ -9,24 +9,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.*;
 import android.provider.Settings;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -121,7 +115,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -134,8 +128,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         vLoading = findViewById(R.id.contLoading);
         tvTask = (TextView) findViewById(R.id.tvTask);
-        frameLayout = (FrameLayout) findViewById(R.id.contList);
-        tableLayout = (RelativeLayout) findViewById(R.id.full_table);
+        //frameLayout = (FrameLayout) findViewById(R.id.contList);
+        // tableLayout = (RelativeLayout) findViewById(R.id.full_table);
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
@@ -149,93 +143,93 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         {
             packageFrag = PackageListFragment.newInstance(languagePrimary, packageList, isTranslatorModeEnabled());
             FragmentTransaction ft = fm.beginTransaction();
-            ft.add(R.id.contList, packageFrag, TAG_LIST);
+            // ft.add(R.id.contList, packageFrag, TAG_LIST);
             ft.commit();
         }
 
         // Make the Settings button highlight when pressed (without defining a separate image)
-        ImageButton button = (ImageButton) findViewById(R.id.homescreen_settings_button);
-        button.setOnTouchListener(new OnTouchListener()
-        {
-            @Override
-            public boolean onTouch(View arg0, MotionEvent me)
-            {
-                ImageButton button = (ImageButton) arg0;
-                Drawable d = button.getBackground();
-                PorterDuffColorFilter grayFilter =
-                        new PorterDuffColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_ATOP);
+//        ImageButton button = (ImageButton) findViewById(R.id.homescreen_settings_button);
+//        button.setOnTouchListener(new OnTouchListener()
+//        {
+//            @Override
+//            public boolean onTouch(View arg0, MotionEvent me)
+//            {
+//                ImageButton button = (ImageButton) arg0;
+//                Drawable d = button.getBackground();
+//                PorterDuffColorFilter grayFilter =
+//                        new PorterDuffColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_ATOP);
+//
+//                if (me.getAction() == MotionEvent.ACTION_DOWN)
+//                {
+//                    d.setColorFilter(grayFilter);
+//                    button.invalidate();
+//                    return false;
+//                }
+//                else if (me.getAction() == MotionEvent.ACTION_UP)
+//                {
+//                    d.setColorFilter(null);
+//                    button.invalidate();
+//                    return false;
+//                }
+//                else
+//                    return false;
+//            }
+//        });
 
-                if (me.getAction() == MotionEvent.ACTION_DOWN)
-                {
-                    d.setColorFilter(grayFilter);
-                    button.invalidate();
-                    return false;
-                }
-                else if (me.getAction() == MotionEvent.ACTION_UP)
-                {
-                    d.setColorFilter(null);
-                    button.invalidate();
-                    return false;
-                }
-                else
-                    return false;
-            }
-        });
 
+//        shareButton = (ImageButton) findViewById(R.id.export_button);
+//        shareButton.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View view)
+//            {
+//                doCmdShare(view);
+//            }
+//        });
+//
+//        addButton = (ImageButton) findViewById(R.id.homescreen_add_button);
+//        refreshButton = (ImageButton) findViewById(R.id.refresh_button);
+//        refreshButton.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View view)
+//            {
+//                onCmd_refresh(null);
+//            }
+//        });
+//
+//        addButton = (ImageButton) findViewById(R.id.homescreen_add_button);
 
-        shareButton = (ImageButton) findViewById(R.id.export_button);
-        shareButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                doCmdShare(view);
-            }
-        });
-
-        addButton = (ImageButton) findViewById(R.id.homescreen_add_button);
-        refreshButton = (ImageButton) findViewById(R.id.refresh_button);
-        refreshButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                onCmd_refresh(null);
-            }
-        });
-
-        addButton = (ImageButton) findViewById(R.id.homescreen_add_button);
-
-        if (settings.getBoolean("TranslatorMode", false))
-        {
-            addButton.setVisibility(View.VISIBLE);
-            addButton.setEnabled(true);
-
-            refreshButton.setVisibility(View.VISIBLE);
-            refreshButton.setEnabled(true);
-            refreshButton.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View view)
-                {
-                    onCmd_refresh(null);
-                }
-            });
-
-            shareButton.setVisibility(View.INVISIBLE);
-            shareButton.setEnabled(false);
-        }
-        else
-        {
-            addButton.setVisibility(View.INVISIBLE);
-            addButton.setEnabled(false);
-
-            refreshButton.setVisibility(View.INVISIBLE);
-            refreshButton.setEnabled(false);
-
-            shareButton.setVisibility(View.VISIBLE);
-            shareButton.setEnabled(true);
-        }
+//        if (settings.getBoolean("TranslatorMode", false))
+//        {
+//            addButton.setVisibility(View.VISIBLE);
+//            addButton.setEnabled(true);
+//
+//            refreshButton.setVisibility(View.VISIBLE);
+//            refreshButton.setEnabled(true);
+//            refreshButton.setOnClickListener(new View.OnClickListener()
+//            {
+//                @Override
+//                public void onClick(View view)
+//                {
+//                    onCmd_refresh(null);
+//                }
+//            });
+//
+//            shareButton.setVisibility(View.INVISIBLE);
+//            shareButton.setEnabled(false);
+//        }
+//        else
+//        {
+//            addButton.setVisibility(View.INVISIBLE);
+//            addButton.setEnabled(false);
+//
+//            refreshButton.setVisibility(View.INVISIBLE);
+//            refreshButton.setEnabled(false);
+//
+//            shareButton.setVisibility(View.VISIBLE);
+//            shareButton.setEnabled(true);
+//        }
 
         mSetupNeeded = true;
         context = getApplicationContext();
@@ -275,6 +269,14 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         Log.i(TAG, regid);
         
         if (!justSwitchedToTranslatorMode) startTimer(); // don't start timer when switching to translator mode
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.homescreen_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -525,8 +527,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private void showTheHomeScreen()
     {
         // Now that it is resized - show it
-        ViewGroup container = (ViewGroup) findViewById(R.id.homescreen_container);
-        container.setVisibility(View.VISIBLE);
+//        ViewGroup container = (ViewGroup) findViewById(R.id.homescreen_container);
+//        container.setVisibility(View.VISIBLE);
         trackScreenVisit();
     }
 

@@ -4,8 +4,7 @@
   android:orientation="horizontal"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:padding="6dip"
-  android:background="#f0f0f0"
+  android:background="#5ba5a5a5"
   android:weightSum="1">
   <!-- android:layout_height="?android:attr/listPreferredItemHeight"-->
     <ImageView 
@@ -14,7 +13,8 @@
         android:layout_height="60dp"
         android:gravity="center"
      	android:src="@drawable/icon"
-        android:layout_gravity="center"/>
+        android:background="#00ffffff"
+        android:layout_gravity="bottom|left|top"/>
      
     <TextView 
 	    android:id="@+id/list1Text"
@@ -28,13 +28,7 @@
      	android:ellipsize="none"
      	android:layout_marginLeft="4dip"
         android:layout_gravity="center_vertical"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:background="#00ffffff"/>
 
-    <ImageView
-        android:id="@+id/arrow"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:src="@drawable/homescreen_menu_arrow_2x"
-        android:layout_gravity="center_vertical|right"/>
-    
 </LinearLayout>

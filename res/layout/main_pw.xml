@@ -3,188 +3,18 @@
     android:id="@+id/homescreen"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/gt4_homescreen_background_ip4">
 
-    <!--  the container -->
-    <RelativeLayout
-        android:id="@+id/homescreen_container"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_x="20px"
-        android:layout_y="20px"
-        android:background="@drawable/homescreen_background"
-        android:visibility="invisible">
-
-        <!-- the linen background, vignettte and white table background (not needed?)  -->
-        <ImageView
-            android:id="@+id/vignette_background"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_x="0px"
-            android:layout_y="0px"
-            android:scaleType="fitXY"
-            android:src="@drawable/homescreen_background_linen_vignette"/>
-
-        <ImageView
-            android:id="@+id/logo"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="125dp"
-            android:layout_height="96dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="40dp"
-            android:layout_marginTop="20dp"
-            android:layout_x="200px"
-            android:layout_y="30px"
-            android:src="@drawable/homescreen_godtools_logo_2x"/>
-
-        <ImageButton
-            android:id="@+id/export_button"
-            android:layout_width="100dp"
-            android:layout_height="68dp"
-            android:src="@drawable/homescreen_export_button_2x"
-            android:scaleType="centerCrop"
-            android:background="#00ffffff"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_below="@+id/full_table"
-            android:layout_alignLeft="@+id/full_table"/>
-
-        <RelativeLayout
-            android:id="@+id/full_table"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/logo"
-            android:layout_centerHorizontal="true"
-            >
-
-            <FrameLayout
-                android:id="@+id/contList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="15dp"
-                android:background="#ffffffff">
-
-            </FrameLayout>
-
-        </RelativeLayout>
-
-        <!-- the 4 corners of the frame -->
-        <ImageView
-            android:id="@+id/top_left"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_alignLeft="@+id/full_table"
-            android:layout_alignTop="@+id/full_table"
-            android:src="@drawable/homescreen_menu_nw_2x"/>
-
-        <ImageView
-            android:id="@+id/top_right"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_alignRight="@+id/full_table"
-            android:layout_alignTop="@+id/full_table"
-            android:src="@drawable/homescreen_menu_ne_2x"/>
-
-        <ImageView
-            android:id="@+id/bottom_left"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_alignBottom="@+id/full_table"
-            android:layout_alignLeft="@+id/full_table"
-            android:src="@drawable/homescreen_menu_sw_2x"
-            />
-
-        <ImageView
-            android:id="@+id/bottom_right"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_alignBottom="@+id/full_table"
-            android:layout_alignRight="@+id/full_table"
-            android:src="@drawable/homescreen_menu_se_2x"/>
-
-        <!-- the 4 sides of the frame -->
-        <ImageView
-            android:id="@+id/top_side"
-            android:layout_width="250dp"
-            android:layout_height="22dp"
-            android:layout_alignTop="@+id/full_table"
-            android:layout_toLeftOf="@+id/top_right"
-            android:layout_toRightOf="@+id/top_left"
-            android:src="@drawable/homescreen_menu_n_repeat"
-            android:scaleType="centerCrop"/>
-
-        <ImageView
-            android:id="@+id/bottom_side"
-            android:layout_width="250dp"
-            android:layout_height="22dp"
-            android:layout_alignBottom="@+id/full_table"
-            android:layout_toLeftOf="@+id/bottom_right"
-            android:layout_toRightOf="@+id/bottom_left"
-            android:src="@drawable/homescreen_menu_s_repeat"
-            android:scaleType="centerCrop"/>
-
-        <ImageView
-            android:id="@+id/left_side"
-            android:layout_width="22dp"
-            android:layout_height="250dp"
-            android:layout_above="@+id/bottom_left"
-            android:layout_alignLeft="@+id/full_table"
-            android:layout_below="@+id/top_left"
-            android:src="@drawable/homescreen_menu_w_repeat"
-            android:cropToPadding="false"
-            android:scaleType="centerCrop"/>
-
-        <ImageView
-            android:id="@+id/right_side"
-            android:layout_width="22dp"
-            android:layout_height="250dp"
-            android:layout_above="@+id/bottom_right"
-            android:layout_alignRight="@+id/full_table"
-            android:layout_below="@+id/top_right"
-            android:src="@drawable/homescreen_menu_e_repeat"
-            android:scaleType="centerCrop"/>
-
-        <!-- the settings button -->
-        <ImageButton
-            android:id="@+id/homescreen_settings_button"
-            android:layout_width="100dp"
-            android:layout_height="68dp"
-            android:layout_x="480px"
-            android:layout_y="800px"
-            android:background="@drawable/homescreen_settings_button_2x"
-            android:onClick="onCmd_settings"
-            android:layout_below="@+id/full_table"
-            android:layout_alignRight="@+id/full_table"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"/>
-
-        <!-- the refresh button -->
-        <ImageButton
-            android:id="@+id/refresh_button"
-            android:layout_width="100dp"
-            android:layout_height="68dp"
-            android:background="@drawable/homescreen_refresh_button_2x"
-            android:layout_below="@+id/full_table"
-            android:layout_alignLeft="@+id/full_table"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"/>
-
-        <!-- the add button -->
-        <ImageButton
-            android:id="@+id/homescreen_add_button"
-            android:layout_width="100dp"
-            android:layout_height="68dp"
-            android:background="@drawable/homescreen_add_button_2x"
-            android:layout_below="@+id/full_table"
-            android:layout_toRightOf="@+id/refresh_button"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"
-            android:onClick="onCmd_add"/>
-
-    </RelativeLayout>
+    <ImageView
+        android:id="@+id/homescreen_icon"
+        android:layout_width="120dp"
+        android:layout_height="112.5dp"
+        android:src="@drawable/gt4_home_bookicon"
+        android:background="#00ffffff"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:contentDescription="homescreen_icon"/>
 
     <LinearLayout
         android:id="@+id/contLoading"
@@ -210,5 +40,45 @@
             android:textSize="16sp"/>
 
     </LinearLayout>
+
+    <include
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/list_item_with_icon_and_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/homescreen_kgp"
+        android:layout_above="@+id/homescreen_satisfied"
+        android:layout_marginBottom="10dp"/>
+
+    <include
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/list_item_with_icon_and_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/homescreen_satisfied"
+        android:layout_above="@+id/homescreen_4sl"
+        android:layout_marginBottom="10dp"/>
+
+    <include
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/list_item_with_icon_and_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/homescreen_4sl"
+        android:layout_above="@+id/homescreen_everystudent"
+        android:layout_marginBottom="10dp"/>
+
+    <include
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/list_item_with_icon_and_text"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="25dp"
+        android:id="@+id/homescreen_everystudent"/>
 
 </RelativeLayout>
