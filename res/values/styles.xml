@@ -21,8 +21,6 @@
     <!-- New GodTools IP4 layout -->
     <style name="GodToolsIP4" parent="Theme.AppCompat">
         <item name="android:windowFullscreen">false</item>
-        <!--<item name="android:background">@color/black</item>-->
-        <!--<item name="background">@color/black</item>-->
         <item name="android:actionBarStyle">@style/GodToolsIP4ToolBar</item>
         <item name="actionBarStyle">@style/GodToolsIP4ToolBar</item>
     </style>

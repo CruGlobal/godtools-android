@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
@@ -75,7 +74,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
         handleLanguagesWithAlternateFonts(primaryLanguageCode);
-        tvMainLanguage = new SnuffyAlternateTypefaceTextView(tvMainLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.BOLD).get();
+        tvMainLanguage = new SnuffyAlternateTypefaceTextView(tvMainLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.NORMAL).get();
         tvParallelLanguage = new SnuffyAlternateTypefaceTextView(tvParallelLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.BOLD).get();
 
         // set up translator switch
@@ -285,7 +284,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("Authorization_Draft", authorization);
-        editor.commit();
+        editor.apply();
 
         setTranslatorMode(true);
         setResult(RESULT_PREVIEW_MODE_ENABLED);
@@ -304,7 +303,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("TranslatorMode", isEnabled);
-        editor.commit();
+        editor.apply();
     }
 
     private String capitalizeFirstLetter(String word) {

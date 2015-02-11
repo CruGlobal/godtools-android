@@ -100,8 +100,9 @@
 
     <!-- Settings Activity -->
     <string name="settings_title">Settings</string>
-    <string name="settings_main_language">Main Language</string>
-    <string name="settings_parallel_language">Parallel Language</string>
+    <string name="settings_main_language">Language:</string>
+    <string name="settings_parallel_language">Parallel Language*:</string>
+    <string name="settings_parallel_inf">*If you are interacting with someone who has a different native language</string>
     <string name="settings_about">About GodTools</string>
     <string name="settings_current_language">This is the current Language</string>
     <string name="settings_explanation">You can select a primary and parallel language that you can switch to at any time</string>
