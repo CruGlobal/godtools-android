@@ -4,8 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gt4_homescreen_background_ip4"
-    android:nestedScrollingEnabled="false">
+    android:background="@drawable/gt4_homescreen_background_ip4">
 
     <ImageView
         android:id="@+id/homescreen_icon"
