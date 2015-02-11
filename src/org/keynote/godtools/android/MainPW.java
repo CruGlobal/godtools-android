@@ -137,17 +137,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         packageList = getPackageList(); // get the packages for the primary language
         
         showLayoutsWithPackages();
-        
-        
-//        fm = getSupportFragmentManager();
-//        packageFrag = (PackageListFragment) fm.findFragmentByTag(TAG_LIST);
-//        if (packageFrag == null)
-//        {
-//            packageFrag = PackageListFragment.newInstance(languagePrimary, packageList, isTranslatorModeEnabled());
-//            FragmentTransaction ft = fm.beginTransaction();
-//            // ft.add(R.id.contList, packageFrag, TAG_LIST);
-//            ft.commit();
-//        }
 
         // Make the Settings button highlight when pressed (without defining a separate image)
 //        ImageButton button = (ImageButton) findViewById(R.id.homescreen_settings_button);
@@ -337,6 +326,23 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        if (settings.getBoolean("TranslatorMode", false))
+        {
+            menu.findItem(R.id.homescreen_add).setVisible(true);
+            menu.findItem(R.id.homescreen_refresh).setVisible(true);
+        }
+        else
+        {
+            menu.findItem(R.id.homescreen_add).setVisible(false);
+            menu.findItem(R.id.homescreen_refresh).setVisible(false);
+        }
+        
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
         MenuInflater inflater = getMenuInflater();
@@ -354,6 +360,12 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 return true;
             case R.id.homescreen_share:
                 doCmdShare(null);
+                return true;
+            case R.id.homescreen_add:
+                onCmd_add(null);
+                return true;
+            case R.id.homescreen_refresh:
+                onCmd_refresh(null);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
