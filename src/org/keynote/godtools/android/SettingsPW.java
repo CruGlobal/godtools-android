@@ -53,8 +53,12 @@ public class SettingsPW extends BaseActionBarActivity implements
         setContentView(R.layout.settings);
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setCustomView(R.layout.titlebar_centered_title);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setTitle(R.string.settings_title);
+        actionBar.setDisplayShowTitleEnabled(true);
 
         tvMainLanguage = (TextView) findViewById(R.id.tvMainLanguage);
         tvParallelLanguage = (TextView) findViewById(R.id.tvParallelLanguage);
