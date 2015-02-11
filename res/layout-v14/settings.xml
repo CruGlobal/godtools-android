@@ -75,7 +75,7 @@
     <RelativeLayout
         android:id="@+id/rlMainLanguage"
         android:layout_width="match_parent"
-        android:background="@drawable/settings_language_bg"
+        android:background="#00ffffff"
         android:layout_height="60dp"
         android:layout_marginTop="15dp">
 
@@ -105,12 +105,11 @@
             android:layout_alignBottom="@+id/left_color_block_2"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:background="#ffffffff"
-            />
+            android:background="#ffffffff" />
 
         <TextView
             android:id="@+id/tvMainLanguage"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textSize="22dp"
             android:textColor="#ffffffff"
@@ -118,7 +117,8 @@
             android:gravity="center_vertical"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/left_color_block_2"
-            android:paddingLeft="20dp"/>
+            android:paddingLeft="20dp"
+            android:background="#32cdcdcd"/>
 
         <ImageView
             android:src="@drawable/ic_language_indicator"
@@ -135,7 +135,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="22dp"
-        android:paddingLeft="16dp"
         android:textColor="#ffffffff"
         android:text="@string/settings_parallel_language"
         android:gravity="center_vertical"
@@ -146,27 +145,58 @@
     <RelativeLayout
         android:id="@+id/rlParallelLanguage"
         android:layout_width="match_parent"
-        android:background="@drawable/settings_language_bg"
-        android:layout_height="40dp"
-        android:paddingRight="40dp"
-        android:paddingLeft="40dp">
+        android:layout_height="60dp"
+        android:layout_marginTop="15dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:id="@+id/top_white_border_3"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#ffffffff" />
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="56dp"
+            android:id="@+id/left_color_block_3"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/top_white_border_3"
+            android:background="@color/toolbar_turquoise"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:id="@+id/bottom_white_border_3"
+            android:layout_alignBottom="@+id/left_color_block_3"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#ffffffff" />
 
         <TextView
             android:id="@+id/tvParallelLanguage"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:textSize="22dp"
             android:textColor="#ffffffff"
             android:text="@string/none"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/left_color_block_3"
+            android:layout_toEndOf="@+id/left_color_block_3"
+            android:paddingLeft="20dp"
+            android:background="#32cdcdcd"/>
 
         <ImageView
             android:src="@drawable/ic_language_indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:tint="@color/settings_listitem_item" />
+            android:tint="#ffffffff" />
     </RelativeLayout>
 
 
@@ -179,38 +209,14 @@
     <TextView
         android:padding="16dp"
         android:id="@+id/tvDescription"
-        android:background="@drawable/settings_language_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="italic"
-        android:textColor="@color/gray_60"
-        android:text="@string/settings_explanation"
-        android:gravity="center_vertical" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/gray_20" />
-
-    <TextView
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp"
-        android:id="@+id/tvTranslatorModeDescription"
-        android:background="@drawable/settings_language_bg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="italic"
-        android:textColor="@color/gray_60"
-        android:text="@string/settings_translator_message"
-        android:gravity="center_vertical" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/gray_20" />
+        android:textSize="22dp"
+        android:textColor="#ffffffff"
+        android:text="@string/settings_parallel_info"
+        android:gravity="center_vertical"
+        android:clickable="false"
+        android:focusableInTouchMode="false"/>
 
     <TextView
         android:id="@+id/tvAbout"
@@ -219,9 +225,9 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:paddingLeft="16dp"
-        android:textColor="@color/gray_60"
+        android:textColor="#ffffffff"
         android:text="@string/settings_about"
-        android:gravity="center_vertical"
+        android:gravity="center_vertical|center_horizontal"
         android:paddingTop="16dp"
         android:paddingBottom="16dp" />
 

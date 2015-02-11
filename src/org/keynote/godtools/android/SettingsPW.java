@@ -75,7 +75,7 @@ public class SettingsPW extends BaseActionBarActivity implements
 
         handleLanguagesWithAlternateFonts(primaryLanguageCode);
         tvMainLanguage = new SnuffyAlternateTypefaceTextView(tvMainLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.NORMAL).get();
-        tvParallelLanguage = new SnuffyAlternateTypefaceTextView(tvParallelLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.BOLD).get();
+        tvParallelLanguage = new SnuffyAlternateTypefaceTextView(tvParallelLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.NORMAL).get();
 
         // set up translator switch
         cbTranslatorMode.setChecked(isTranslatorEnabled);
