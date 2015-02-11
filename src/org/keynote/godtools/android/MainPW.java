@@ -692,7 +692,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     {
         if (isTranslatorModeEnabled())
         {
-            List<GTPackage> packageByLanguage = GTPackage.getPackageByLanguage(MainPW.this, languagePrimary);
+            // only return draft packages with translator mode
+            List<GTPackage> packageByLanguage = GTPackage.getDraftPackages(MainPW.this, languagePrimary);
             if("en".equals(languagePrimary))
             {
                 removeEveryStudent(packageByLanguage);
