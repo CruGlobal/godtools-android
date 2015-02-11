@@ -13,5 +13,15 @@
           android:title="@string/share"
           app:showAsAction="ifRoom" />
           
+    <item
+        android:id="@+id/homescreen_add"
+        android:icon="@drawable/ic_action_add_to_queue"
+        android:title="@string/add"
+        app:showAsAction="ifRoom" />
     
+    <item
+        android:id="@+id/homescreen_refresh"
+        android:icon="@drawable/ic_action_refresh"
+        android:title="@string/refresh"
+        app:showAsAction="ifRoom" />
 </menu>

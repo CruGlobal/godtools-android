@@ -112,6 +112,8 @@
     <!-- Main Activity-->
     <string name="main_actionbar_translator">Translator Preview Mode</string>
     <string name="share">Share</string>
+    <string name="add">Add</string>
+    <string name="refresh">Refresh</string>
 
     <!-- Language Dialog -->
     <string name="dialog_language_title">Language Settings</string>
