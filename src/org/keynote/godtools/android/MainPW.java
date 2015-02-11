@@ -21,11 +21,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -84,7 +82,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private int mPageTop;
     private int mPageWidth;
     private int mPageHeight;
-    private boolean mSetupNeeded;
     private String languagePrimary;
     private List<GTPackage> packageList;
     
@@ -92,10 +89,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     View vLoading;
     TextView tvTask;
-    FrameLayout frameLayout;
-    RelativeLayout tableLayout;
     ImageButton refreshButton;
-    ImageButton shareButton;
     GoogleCloudMessaging gcm;
     Context context;
     String regid = "";
@@ -103,7 +97,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     /**
      * When clicked, dialog to launch a new translation is opened
      */
-    ImageButton addButton;
     boolean isDownloading;
     boolean noPackages = false;
     boolean justSwitchedToTranslatorMode;
@@ -272,16 +265,16 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         switch (item.getItemId())
         {
             case R.id.homescreen_settings:
-                onCmd_settings(null);
+                onCmd_settings();
                 return true;
             case R.id.homescreen_share:
-                doCmdShare(null);
+                doCmdShare();
                 return true;
             case R.id.homescreen_add:
-                onCmd_add(null);
+                onCmd_add();
                 return true;
             case R.id.homescreen_refresh:
-                onCmd_refresh(null);
+                onCmd_refresh();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -411,14 +404,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         showLayoutsWithPackages();
     }
 
-
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        Log.d(TAG, "onStart");
-    }
-
     @Override
     protected void onPause()
     {
@@ -439,7 +424,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     {
         createTheHomeScreen();
         getScreenSize();
-        showTheHomeScreen();
     }
 
     private void getScreenSize()
@@ -503,10 +487,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         justSwitchedToTranslatorMode = false;
         switchedToTranslatorMode(false);
-    }
-
-    private void showTheHomeScreen()
-    {
         trackScreenVisit();
     }
 
@@ -894,13 +874,13 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         intent.putExtra("PageHeight", mPageHeight);
     }
 
-    public void onCmd_settings(View view)
+    private void onCmd_settings()
     {
         Intent intent = new Intent(this, SettingsPW.class);
         startActivityForResult(intent, REQUEST_SETTINGS);
     }
 
-    public void onCmd_refresh(View view)
+    private void onCmd_refresh()
     {
         if (Device.isConnected(MainPW.this))
         {
@@ -930,7 +910,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         }
     }
 
-    public void onCmd_add(View view)
+    private void onCmd_add()
     {
         if (Device.isConnected(MainPW.this))
         {
@@ -991,7 +971,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i)
                 {
-                    if (noPackages) onCmd_settings(null);
+                    if (noPackages) onCmd_settings();
                 }
             });
 
@@ -1036,7 +1016,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         return possiblePackages;
     }
 
-    public void doCmdShare(View v)
+    private void doCmdShare()
     {
         String msgBody = getString(R.string.app_share_link);
 
