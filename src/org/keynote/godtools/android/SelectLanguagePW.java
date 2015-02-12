@@ -1,12 +1,12 @@
 package org.keynote.godtools.android;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +31,8 @@ import java.util.List;
 
 public class SelectLanguagePW extends BaseActionBarActivity implements AdapterView.OnItemClickListener
 {
-
+    private final String TAG = getClass().getSimpleName();
+    
     ListView mList;
     SharedPreferences settings;
     List<GTLanguage> languageList;
@@ -104,10 +105,15 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             }
         });
 
+        setList();
+    }
+    
+    public void setList()
+    {
         LanguageAdapter adapter = new LanguageAdapter(this, languageList, mAlternateTypeface);
         adapter.setCurrentLanguage(currentLanguage);
         mList.setAdapter(adapter);
-        mList.setOnItemClickListener(this);
+        mList.setOnItemClickListener(this);        
     }
 
     @Override
@@ -115,22 +121,10 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     {
 
         GTLanguage gtl = languageList.get(position);
-        if (!gtl.isDownloaded() && !Device.isConnected(SelectLanguagePW.this))
-        {
-            Toast.makeText(SelectLanguagePW.this, "No internet connection, resources needs to be downloaded.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (gtl.getLanguageCode().equalsIgnoreCase(currentLanguage))
-        {
-            finish();
-        }
-
-        Intent returnIntent = new Intent();
-
+        
         if (isMainLang)
         {
-            returnIntent.putExtra("primaryCode", gtl.getLanguageCode());
+            // set selected language as new primary
             if (gtl.isDownloaded())
             {
                 SharedPreferences.Editor editor = settings.edit();
@@ -141,38 +135,36 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                     editor.putString(GTLanguage.KEY_PARALLEL, "");
                 }
                 editor.apply();
-
-                setResult(RESULT_CHANGED_PRIMARY, returnIntent);
+                
+                setList();
 
             }
+            // download and set as primary
             else
             {
-                setResult(RESULT_DOWNLOAD_PRIMARY, returnIntent);
-
+                Log.i(TAG, "Download: " + gtl.getLanguageName());
+                // todo: download
             }
 
         }
         else
         {
-
-            returnIntent.putExtra("parallelCode", gtl.getLanguageCode());
-
+            // set selected language as parallel
             if (gtl.isDownloaded())
             {
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString(GTLanguage.KEY_PARALLEL, gtl.getLanguageCode());
                 editor.apply();
-
-                setResult(RESULT_CHANGED_PARALLEL, returnIntent);
+                
+                setList();
             }
+            // download and set as parallel
             else
             {
-                setResult(RESULT_DOWNLOAD_PARALLEL, returnIntent);
+                Log.i(TAG, "Download: " + gtl.getLanguageName());
+                // todo: download
             }
-
         }
-
-        finish();
     }
 
     private void removeLanguageFromList(List<GTLanguage> list, String code)
@@ -228,13 +220,12 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            GTLanguage gtl = mLanguageList.get(position);
+            final GTLanguage gtl = mLanguageList.get(position);
             holder.tvLanguage.setTypeface(mAlternateTypeface, Typeface.NORMAL);
             holder.tvLanguage.setText(gtl.getLanguageName());
             
             if (gtl.isDownloaded())
             {
-                holder.ivDownloaded.setVisibility(View.VISIBLE);
                 holder.tvDownload.setText(R.string.delete);
             }
             else
@@ -245,12 +236,23 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
             if (gtl.getLanguageCode().equalsIgnoreCase(currentLanguage))
             {
+                holder.ivDownloaded.setVisibility(View.VISIBLE);
                 holder.layout.setBackgroundColor(getResources().getColor(R.color.smokey));
             }
             else
             {
+                holder.ivDownloaded.setVisibility(View.INVISIBLE);
                 holder.layout.setBackgroundColor(Color.TRANSPARENT);
             }
+            
+            holder.tvDownload.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    itemOnClickAction(gtl);
+                }
+            });
 
             return convertView;
         }
@@ -279,6 +281,22 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         else
         {
             mAlternateTypeface = Typeface.DEFAULT;
+        }
+    }
+    
+    private void itemOnClickAction(GTLanguage language)
+    {
+        // if downloading, check for internet connection;
+        if (!language.isDownloaded() && !Device.isConnected(SelectLanguagePW.this))
+        {
+            Toast.makeText(SelectLanguagePW.this, "No internet connection, resources needs to be downloaded.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Delete
+        if (language.getLanguageCode().equalsIgnoreCase(currentLanguage))
+        {
+            Log.i(TAG,"Current language selected");
         }
     }
 }
