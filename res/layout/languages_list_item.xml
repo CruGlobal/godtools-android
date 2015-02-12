@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="40dp">
+    android:layout_height="wrap_content"
+    android:id="@+id/language_item">
+    
+    <RelativeLayout
+        android:id="@+id/content_block"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:clickable="false">
+    
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#ffffff"/>
 
     <ImageView
         android:layout_width="45dp"
         android:layout_height="match_parent"
         android:id="@+id/iv_downloaded"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:visibility="visible"
+        android:src="@drawable/gt4_downloads_checkmark"
+        android:padding="10dp"/>
 
     <TextView
         android:background="@drawable/settings_language_bg"
@@ -46,6 +61,20 @@
         android:layout_height="match_parent"
         android:id="@+id/pb_dowloading"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignParentLeft="true"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#ffffff"
+        android:layout_alignParentBottom="true"/>
+        
+        </RelativeLayout>
+    
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="25dp"
+        android:layout_below="@+id/content_block"/>
 
 </RelativeLayout>

@@ -12,8 +12,6 @@
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:divider="#ffffffff"
-        android:dividerHeight="2dp"
         android:layout_marginTop="75dp" />
 
 

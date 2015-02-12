@@ -14,6 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -213,8 +215,11 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 convertView = mInflater.inflate(R.layout.languages_list_item, parent, false);
 
                 holder = new ViewHolder();
+                holder.layout = (RelativeLayout) convertView.findViewById(R.id.content_block);
                 holder.tvLanguage = (TextView) convertView.findViewById(R.id.tvLanguageName);
-                holder.ivDownload = (ImageView) convertView.findViewById(R.id.ivDownloadLanguage);
+                holder.ivDownloaded = (ImageView) convertView.findViewById(R.id.iv_downloaded);
+                holder.tvDownload = (TextView) convertView.findViewById(R.id.tv_download);
+                holder.pbDownloading = (ProgressBar) convertView.findViewById(R.id.pb_dowloading);
 
                 convertView.setTag(holder);
             }
@@ -225,14 +230,26 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
             GTLanguage gtl = mLanguageList.get(position);
             holder.tvLanguage.setTypeface(mAlternateTypeface, Typeface.NORMAL);
-            holder.tvLanguage.setTextColor(mContext.getResources().getColor(R.color.gray_60));
             holder.tvLanguage.setText(gtl.getLanguageName());
-            holder.ivDownload.setVisibility(gtl.isDownloaded() ? View.GONE : View.VISIBLE);
+            
+            if (gtl.isDownloaded())
+            {
+                holder.ivDownloaded.setVisibility(View.VISIBLE);
+                holder.tvDownload.setText(R.string.delete);
+            }
+            else
+            {
+                holder.ivDownloaded.setVisibility(View.INVISIBLE);
+                holder.tvDownload.setText(R.string.download);
+            }
 
             if (gtl.getLanguageCode().equalsIgnoreCase(currentLanguage))
             {
-                holder.tvLanguage.setTextColor(mContext.getResources().getColor(R.color.settings_listitem_item));
-                holder.tvLanguage.setTypeface(mAlternateTypeface, Typeface.BOLD);
+                holder.layout.setBackgroundColor(getResources().getColor(R.color.smokey));
+            }
+            else
+            {
+                holder.layout.setBackgroundColor(Color.TRANSPARENT);
             }
 
             return convertView;
@@ -240,8 +257,11 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
         private class ViewHolder
         {
+            public RelativeLayout layout;
             public TextView tvLanguage;
-            public ImageView ivDownload;
+            public ImageView ivDownloaded;
+            public TextView tvDownload;
+            public ProgressBar pbDownloading;
         }
 
         public void setCurrentLanguage(String currentLanguage)

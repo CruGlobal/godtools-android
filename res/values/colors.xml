@@ -38,6 +38,8 @@
     <color name="gray_80">#2f2f2f</color>
     <color name="gray_20">#d2d2d2</color>
     <color name="gray_60">#5F5F5F</color>
+    
+    <color name="smokey">#64CDCDCD</color>
 
     <color name="black_translucent_20">#32000000</color>
 

@@ -119,6 +119,10 @@
     <!-- Language Dialog -->
     <string name="dialog_language_title">Language Settings</string>
     <string name="dialog_language_body">"Would you like to set %s as the default language?"</string>
+    
+    <!-- Language List -->
+    <string name="download">Download</string>
+    <string name="delete">Delete</string>
 
     <!-- Translator Mode Dialog -->
     <string name="dialog_translator_mode_title">Exit Preview Mode?</string>
