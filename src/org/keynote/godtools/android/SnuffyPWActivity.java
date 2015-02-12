@@ -399,7 +399,7 @@ public class SnuffyPWActivity extends Activity
         ed.putInt("currPage", mPagerCurrentItem);
         ed.putString("currLanguageCode", getLanguage());
         // TODO: when we can display About or other pages, save that state too so we can restore that too.
-        ed.commit();
+        ed.apply();
         
         
     }
@@ -538,7 +538,7 @@ public class SnuffyPWActivity extends Activity
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor ed = settings.edit();
         ed.putString("currLanguageCode", languageCode);
-        ed.commit();
+        ed.apply();
 
         mPages.clear();
         mPages = null;

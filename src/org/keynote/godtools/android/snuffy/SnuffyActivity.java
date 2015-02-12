@@ -1,8 +1,5 @@
 package org.keynote.godtools.android.snuffy;
 
-import java.util.Iterator;
-import java.util.Vector;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -24,16 +21,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.AbsoluteLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
+
+import java.util.Iterator;
+import java.util.Vector;
 
 public class SnuffyActivity extends Activity {
 	private static final String TAG = "SnuffyActivity";
@@ -335,7 +333,7 @@ public class SnuffyActivity extends Activity {
         ed.putInt("currPage", mPagerCurrentItem);
         ed.putString("currLanguageCode", getLanguage());
         // TODO: when we can display About or other pages, save that state too so we can restore that too.
-        ed.commit();
+        ed.apply();
 	}
 	
 	@Override
@@ -468,7 +466,7 @@ public class SnuffyActivity extends Activity {
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor ed = settings.edit();
         ed.putString("currLanguageCode", languageCode);
-        ed.commit();
+        ed.apply();
 
 		hideTheToolBar();
 

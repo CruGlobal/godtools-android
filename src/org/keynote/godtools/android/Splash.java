@@ -185,7 +185,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 		{
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putBoolean("firstLaunch", false);
-			editor.commit();
+			editor.apply();
 		}
 		return isFirst;
 	}
@@ -478,7 +478,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 		{
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putString(GTLanguage.KEY_PRIMARY, langCode);
-			editor.commit();
+			editor.apply();
 
 			GTLanguage gtl = new GTLanguage(langCode);
 			gtl.setDownloaded(true);

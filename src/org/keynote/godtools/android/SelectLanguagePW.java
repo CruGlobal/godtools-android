@@ -138,7 +138,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 {
                     editor.putString(GTLanguage.KEY_PARALLEL, "");
                 }
-                editor.commit();
+                editor.apply();
 
                 setResult(RESULT_CHANGED_PRIMARY, returnIntent);
 
@@ -159,7 +159,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             {
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString(GTLanguage.KEY_PARALLEL, gtl.getLanguageCode());
-                editor.commit();
+                editor.apply();
 
                 setResult(RESULT_CHANGED_PARALLEL, returnIntent);
             }
