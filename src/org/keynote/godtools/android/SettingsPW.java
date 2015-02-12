@@ -155,7 +155,6 @@ public class SettingsPW extends BaseActionBarActivity implements
             }
             case RESULT_DOWNLOAD_PRIMARY:
             case RESULT_DOWNLOAD_PARALLEL:
-                finish();
                 break;
         }
 

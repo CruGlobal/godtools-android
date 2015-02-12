@@ -1,6 +1,7 @@
 package org.keynote.godtools.android;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -20,6 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.keynote.godtools.android.business.GTLanguage;
+import org.keynote.godtools.android.http.DownloadTask;
+import org.keynote.godtools.android.http.GodToolsApiClient;
+import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
@@ -29,7 +33,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-public class SelectLanguagePW extends BaseActionBarActivity implements AdapterView.OnItemClickListener
+public class SelectLanguagePW extends BaseActionBarActivity implements AdapterView.OnItemClickListener, DownloadTask.DownloadTaskHandler
 {
     private final String TAG = getClass().getSimpleName();
     
@@ -111,6 +115,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     public void setList()
     {
         LanguageAdapter adapter = new LanguageAdapter(this, languageList, mAlternateTypeface);
+        Log.i(TAG, "current language: " + currentLanguage);
         adapter.setCurrentLanguage(currentLanguage);
         mList.setAdapter(adapter);
         mList.setOnItemClickListener(this);        
@@ -119,22 +124,21 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     {
-
         GTLanguage gtl = languageList.get(position);
+        Log.i(TAG, "Selected: " + gtl.getLanguageName());
         
+        Intent returnIntent = new Intent();
+
         if (isMainLang)
         {
+            returnIntent.putExtra("primaryCode", gtl.getLanguageCode());
             // set selected language as new primary
             if (gtl.isDownloaded())
             {
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString(GTLanguage.KEY_PRIMARY, gtl.getLanguageCode());
+                setAsPrimaryOrParallel(GTLanguage.KEY_PRIMARY, gtl.getLanguageCode());
+                currentLanguage = gtl.getLanguageCode();
 
-                if (gtl.getLanguageCode().equalsIgnoreCase(parallelLanguage))
-                {
-                    editor.putString(GTLanguage.KEY_PARALLEL, "");
-                }
-                editor.apply();
+                setResult(RESULT_CHANGED_PRIMARY, returnIntent);
                 
                 setList();
 
@@ -143,18 +147,27 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             else
             {
                 Log.i(TAG, "Download: " + gtl.getLanguageName());
-                // todo: download
+                
+                setResult(RESULT_DOWNLOAD_PRIMARY, returnIntent);
+
+                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                        gtl.getLanguageCode(),
+                        "primary",
+                        settings.getString("Authorization_Generic", ""),
+                        this);
             }
 
         }
         else
         {
+            returnIntent.putExtra("parallelCode", gtl.getLanguageCode());
+            
             // set selected language as parallel
             if (gtl.isDownloaded())
             {
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString(GTLanguage.KEY_PARALLEL, gtl.getLanguageCode());
-                editor.apply();
+                setAsPrimaryOrParallel(GTLanguage.KEY_PARALLEL, gtl.getLanguageCode());
+
+                setResult(RESULT_CHANGED_PARALLEL, returnIntent);
                 
                 setList();
             }
@@ -162,9 +175,27 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             else
             {
                 Log.i(TAG, "Download: " + gtl.getLanguageName());
+
+                setResult(RESULT_DOWNLOAD_PARALLEL, returnIntent);
+                primaryLanguage = gtl.getLanguageCode();
+                
                 // todo: download
             }
         }
+    }
+    
+    private void setAsPrimaryOrParallel(String setAs, String langCode)
+    {
+        if (GTLanguage.KEY_PRIMARY.equals(setAs))
+        {
+            if (langCode.equalsIgnoreCase(parallelLanguage))
+            {
+                setAsPrimaryOrParallel(GTLanguage.KEY_PARALLEL, "");
+            }
+        }
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(setAs, langCode);
+        editor.apply();
     }
 
     private void removeLanguageFromList(List<GTLanguage> list, String code)
@@ -177,6 +208,28 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 break;
             }
         }
+    }
+
+    @Override
+    public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
+    {
+        Log.i(TAG, "Download Successful");
+        
+        if (isMainLang)
+        {
+            currentLanguage = langCode;
+        }
+        else
+        {
+            primaryLanguage = langCode;
+        }
+        setList();
+    }
+
+    @Override
+    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
+    {
+
     }
 
     private class LanguageAdapter extends ArrayAdapter<GTLanguage>
