@@ -54,7 +54,8 @@
             android:name=".SelectLanguagePW"
             android:label="Select Language"
             android:screenOrientation="portrait"
-            android:parentActivityName="org.keynote.godtools.android.SettingsPW">
+            android:parentActivityName="org.keynote.godtools.android.SettingsPW"
+            android:theme="@style/GodToolsIP4">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

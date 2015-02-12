@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,11 +49,18 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         mList.setCacheColorHint(Color.TRANSPARENT);
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setCustomView(R.layout.titlebar_centered_title);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
 
         String languageType = getIntent().getStringExtra("languageType");
         setTitle("Select " + languageType);
+
+        TextView titleBar = (TextView) actionBar.getCustomView().findViewById(R.id.titlebar_title);
+        titleBar.setText(languageType);
+        
+        actionBar.setDisplayShowTitleEnabled(true);
 
         languageList = GTLanguage.getAll(this);
 

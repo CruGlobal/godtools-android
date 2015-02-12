@@ -57,6 +57,10 @@ public class SettingsPW extends BaseActionBarActivity implements
         actionBar.setCustomView(R.layout.titlebar_centered_title);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
+        
+        TextView titleBar = (TextView) actionBar.getCustomView().findViewById(R.id.titlebar_title);
+        titleBar.setText(R.string.settings_title);
+        
         actionBar.setTitle(R.string.settings_title);
         actionBar.setDisplayShowTitleEnabled(true);
 
