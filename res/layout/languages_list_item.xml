@@ -4,28 +4,48 @@
     android:layout_height="40dp">
 
     <ImageView
-        android:layout_centerVertical="true"
-        android:layout_marginRight="12dp"
-        android:layout_alignParentRight="true"
-        android:id="@+id/ivDownloadLanguage"
-        android:tint="@color/gray_60"
-        android:background="@android:color/transparent"
-        android:layout_width="wrap_content"
-        android:scaleType="centerInside"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_download_pressed"/>
+        android:layout_width="45dp"
+        android:layout_height="match_parent"
+        android:id="@+id/iv_downloaded"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
 
     <TextView
         android:background="@drawable/settings_language_bg"
         android:id="@+id/tvLanguageName"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentLeft="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="English"
-        android:textSize="18sp"
+        android:textSize="22dp"
         android:paddingLeft="12dp"
         android:gravity="center_vertical"
-        android:textColor="@color/gray_60" />
+        android:textColor="#ffffffff"
+        android:layout_toRightOf="@+id/iv_downloaded"
+        android:layout_toLeftOf="@+id/tv_download"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="Download"
+        android:id="@+id/tv_download"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textColor="#ffffffff"
+        android:textSize="20dp"
+        android:layout_marginRight="15dp"
+        android:gravity="center_vertical"
+        android:clickable="true"/>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="45dp"
+        android:layout_height="match_parent"
+        android:id="@+id/pb_dowloading"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"/>
 
 </RelativeLayout>
