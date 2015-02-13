@@ -200,12 +200,6 @@
     </RelativeLayout>
 
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/gray_20" />
-
-
     <TextView
         android:padding="16dp"
         android:id="@+id/tvDescription"
