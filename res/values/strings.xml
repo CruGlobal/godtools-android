@@ -123,6 +123,7 @@
     <!-- Language List -->
     <string name="download">Download</string>
     <string name="delete">Delete</string>
+    <string name="retry">Retry</string>
 
     <!-- Translator Mode Dialog -->
     <string name="dialog_translator_mode_title">Exit Preview Mode?</string>

@@ -46,7 +46,10 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     Boolean isTranslator;
     Typeface mAlternateTypeface;
     String languageType;
+    Intent returnIntent;
     boolean isMainLang;
+    
+    LanguageAdapter.ViewHolder currentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -70,22 +73,13 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         
         actionBar.setDisplayShowTitleEnabled(true);
 
+        languageList = GTLanguage.getAll(this);
+
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         primaryLanguage = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         parallelLanguage = settings.getString(GTLanguage.KEY_PARALLEL, "");
         isTranslator = settings.getBoolean("TranslatorMode", false);
         
-        setLanguageList();
-
-        handleLanguagesWithAlternateFonts(primaryLanguage);
-
-        setList();
-    }
-    
-    private void setLanguageList()
-    {
-        languageList = GTLanguage.getAll(this);
-
         if (languageType.equalsIgnoreCase("Main Language"))
         {
             currentLanguage = primaryLanguage;
@@ -116,6 +110,10 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 return result1.getLanguageName().compareTo(result2.getLanguageName());
             }
         });
+
+        handleLanguagesWithAlternateFonts(primaryLanguage);
+
+        setList();
     }
     
     private void downloadLanguage(String langCode)
@@ -140,7 +138,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         GTLanguage gtl = languageList.get(position);
         Log.i(TAG, "Selected: " + gtl.getLanguageName());
         
-        Intent returnIntent = new Intent();
+        returnIntent = new Intent();
 
         if (isMainLang)
         {
@@ -161,10 +159,8 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             {
                 Log.i(TAG, "Download: " + gtl.getLanguageName());
 
-                LanguageAdapter.ViewHolder viewHolder = (LanguageAdapter.ViewHolder) view.getTag();
-                viewHolder.pbDownloading.setVisibility(View.VISIBLE);
-                
-                setResult(RESULT_DOWNLOAD_PRIMARY, returnIntent);
+                currentView = (LanguageAdapter.ViewHolder) view.getTag();
+                currentView.pbDownloading.setVisibility(View.VISIBLE);
 
                 downloadLanguage(gtl.getLanguageCode());
             }
@@ -188,10 +184,10 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             {
                 Log.i(TAG, "Download: " + gtl.getLanguageName());
 
-                setResult(RESULT_DOWNLOAD_PARALLEL, returnIntent);
-                primaryLanguage = gtl.getLanguageCode();
+                LanguageAdapter.ViewHolder viewHolder = (LanguageAdapter.ViewHolder) view.getTag();
+                viewHolder.pbDownloading.setVisibility(View.VISIBLE);
                 
-                // todo: download
+                downloadLanguage(gtl.getLanguageCode());
             }
         }
     }
@@ -205,6 +201,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 setAsPrimaryOrParallel(GTLanguage.KEY_PARALLEL, "");
             }
         }
+
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(setAs, langCode);
         editor.apply();
@@ -227,16 +224,24 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     {
         Log.i(TAG, "Download Successful");
         
+        SnuffyApplication app = (SnuffyApplication) getApplication();
+        GTLanguage gtLanguage = GTLanguage.getLanguage(app.getApplicationContext(), langCode);
+        gtLanguage.setDownloaded(true);
+        gtLanguage.update(app.getApplicationContext());
+        
         if (isMainLang)
         {
+            setResult(RESULT_CHANGED_PRIMARY, returnIntent);
             currentLanguage = langCode;
+            app.setAppLocale(langCode);
+            setAsPrimaryOrParallel(GTLanguage.KEY_PRIMARY, langCode);
         }
         else
         {
+            setResult(RESULT_CHANGED_PARALLEL, returnIntent);
             primaryLanguage = langCode;
+            setAsPrimaryOrParallel(GTLanguage.KEY_PARALLEL, langCode);
         }
-        
-        setLanguageList();
         
         setList();
     }
@@ -244,7 +249,11 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     @Override
     public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
     {
-
+        Log.i(TAG, "Download Failed");
+        
+        currentView.pbDownloading.setVisibility(View.INVISIBLE);
+        currentView.ivDownloaded.setImageResource(R.drawable.gt4_downloads_erroricon);
+        currentView.tvDownload.setText(R.string.retry);
     }
 
     private class LanguageAdapter extends ArrayAdapter<GTLanguage>

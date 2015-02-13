@@ -316,7 +316,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             {
                 // start the download
                 String code = data.getStringExtra("primaryCode");
-                showLoading("Downloading resources...");
+
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         code,
                         "primary",
