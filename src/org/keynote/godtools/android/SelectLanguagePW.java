@@ -45,6 +45,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     String currentLanguage;
     Boolean isTranslator;
     Typeface mAlternateTypeface;
+    String languageType;
     boolean isMainLang;
 
     @Override
@@ -61,7 +62,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
 
-        String languageType = getIntent().getStringExtra("languageType");
+        languageType = getIntent().getStringExtra("languageType");
         setTitle("Select " + languageType);
 
         TextView titleBar = (TextView) actionBar.getCustomView().findViewById(R.id.titlebar_title);
@@ -69,14 +70,21 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         
         actionBar.setDisplayShowTitleEnabled(true);
 
-        languageList = GTLanguage.getAll(this);
-
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         primaryLanguage = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         parallelLanguage = settings.getString(GTLanguage.KEY_PARALLEL, "");
         isTranslator = settings.getBoolean("TranslatorMode", false);
+        
+        setLanguageList();
 
         handleLanguagesWithAlternateFonts(primaryLanguage);
+
+        setList();
+    }
+    
+    private void setLanguageList()
+    {
+        languageList = GTLanguage.getAll(this);
 
         if (languageType.equalsIgnoreCase("Main Language"))
         {
@@ -108,8 +116,13 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 return result1.getLanguageName().compareTo(result2.getLanguageName());
             }
         });
-
-        setList();
+    }
+    
+    private void downloadLanguage(String langCode)
+    {
+        
+        GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                langCode, "primary", settings.getString("Authorization_Generic", ""), this);
     }
     
     public void setList()
@@ -147,14 +160,13 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             else
             {
                 Log.i(TAG, "Download: " + gtl.getLanguageName());
+
+                LanguageAdapter.ViewHolder viewHolder = (LanguageAdapter.ViewHolder) view.getTag();
+                viewHolder.pbDownloading.setVisibility(View.VISIBLE);
                 
                 setResult(RESULT_DOWNLOAD_PRIMARY, returnIntent);
 
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        gtl.getLanguageCode(),
-                        "primary",
-                        settings.getString("Authorization_Generic", ""),
-                        this);
+                downloadLanguage(gtl.getLanguageCode());
             }
 
         }
@@ -223,6 +235,9 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         {
             primaryLanguage = langCode;
         }
+        
+        setLanguageList();
+        
         setList();
     }
 
@@ -283,7 +298,6 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             }
             else
             {
-                holder.ivDownloaded.setVisibility(View.INVISIBLE);
                 holder.tvDownload.setText(R.string.download);
             }
 
@@ -346,10 +360,14 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             return;
         }
 
-        // Delete
-        if (language.getLanguageCode().equalsIgnoreCase(currentLanguage))
+        if (!language.isDownloaded())
         {
-            Log.i(TAG,"Current language selected");
+            Log.i(TAG, "Download");
+            downloadLanguage(language.getLanguageCode());
+        }
+        else
+        {
+            Log.i(TAG, "Delete");
         }
     }
 }
