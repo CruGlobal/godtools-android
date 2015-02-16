@@ -532,8 +532,17 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
 	private void goToMainActivity()
 	{
-		Intent intent = new Intent(this, MainPW.class);
-		startActivity(intent);
-		finish();
+        if (settings.getBoolean("TranslatorMode", false))
+        {
+            Intent intent = new Intent(this, PreviewModeMainPW.class);
+            startActivity(intent);
+            finish();
+        }
+        else
+        {
+            Intent intent = new Intent(this, MainPW.class);
+            startActivity(intent);
+            finish();
+        }
 	}
 }

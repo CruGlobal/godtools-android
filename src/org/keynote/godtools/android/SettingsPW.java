@@ -295,6 +295,9 @@ public class SettingsPW extends BaseActionBarActivity implements
 
         setTranslatorMode(true);
         setResult(RESULT_PREVIEW_MODE_ENABLED);
+        
+        Intent intent = new Intent(this, PreviewModeMainPW.class);
+        startActivity(intent);
         finish();
     }
 

@@ -132,6 +132,11 @@
 
     <!-- Access Code Dialog -->
     <string name="dialog_access_code_title">Enter Access Code:</string>
+    
+    <!-- Preview Mode -->
+    <string name="pull_down_info">pull to refresh drafts</string>
+    <string name="preview_mode">[Preview Mode]</string>
+    <string name="preview_mode_title">Preview Mode</string>
 
     <!-- Shared Strings -->
     <string name="ok">OK</string>

@@ -29,6 +29,14 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/GodToolsIP4"/>
+        
+        <activity 
+            android:name=".PreviewModeMainPW"
+            android:label="@string/app_title"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/GodToolsIP4" />
+                  
 
         <activity
             android:name="About"
