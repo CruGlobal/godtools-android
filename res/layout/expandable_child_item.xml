@@ -28,10 +28,11 @@
      	android:src="@drawable/gt4_homescreen_deletedrafticon"
         android:background="#00ffffff"
         android:clickable="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"/>
+        android:paddingLeft="10dp"
+        android:paddingTop="20dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        />
 
     <ImageView
         android:id="@+id/publishDraft"
@@ -40,11 +41,11 @@
         android:gravity="center"
         android:src="@drawable/gt4_homescreen_publishdrafticon"
         android:background="#00ffffff"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:clickable="true"/>
+        android:clickable="true"
+        android:paddingLeft="10dp"
+        android:paddingTop="20dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"/>
 
     <ImageView
         android:id="@+id/createDraft"
@@ -53,11 +54,11 @@
         android:gravity="center"
         android:src="@drawable/gt4_homescreen_createdrafticon"
         android:background="#00ffffff"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:clickable="true"/>
+        android:clickable="true"
+        android:paddingLeft="10dp"
+        android:paddingTop="20dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"/>
         
         </LinearLayout>
 

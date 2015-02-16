@@ -30,7 +30,6 @@ import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.expandableList.ExpandableListAdapter;
-import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.DraftCreationTask;
 import org.keynote.godtools.android.http.DraftPublishTask;
@@ -47,7 +46,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class PreviewModeMainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
+public class PreviewModeMainPW extends BaseActionBarActivity implements
         DownloadTask.DownloadTaskHandler,
         MetaTask.MetaTaskHandler, View.OnClickListener
 {
@@ -96,8 +95,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
         titleBar.setText(R.string.preview_mode_title);
 
         context = getApplicationContext();
-        
-        // setupLayout();
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
@@ -106,27 +103,42 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
         packageList = getPackageList(); // get the packages for the primary language
         
         listView = (ExpandableListView) findViewById(R.id.expandable_list);
-        listAdapter = new ExpandableListAdapter(this, packageList);
+        listAdapter = new ExpandableListAdapter(this, packageList, languagePrimary);
         listView.setAdapter(listAdapter);
-        listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener()
-        {
-            int lastExpandedPosition = -1;
-
-            @Override
-            public void onGroupExpand(int groupPosition)
-            {
-                if (groupPosition != lastExpandedPosition)
-                    listView.collapseGroup(lastExpandedPosition);
-                lastExpandedPosition = groupPosition;
-            }
-        });
         
         listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener()
         {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long l)
             {
-                return false;
+                TextView textView = (TextView) view.findViewById(R.id.tv_trans_view);
+                String packageName = (String) textView.getText();
+                Log.i(TAG, "Clicked: " + packageName);
+                
+                for (GTPackage gtPackage : packageList)
+                {
+                    if (packageName.equals(gtPackage.getName()))
+                    {
+                        if (gtPackage.getCode().equalsIgnoreCase("everystudent"))
+                        {
+                            Intent intent = new Intent(context, EveryStudent.class);
+                            intent.putExtra("PackageName", gtPackage.getCode());
+                            addPageFrameToIntent(intent);
+                            startActivity(intent);
+                            return true;
+                        }
+
+                        Intent intent = new Intent(context, SnuffyPWActivity.class);
+                        intent.putExtra("PackageName", gtPackage.getCode());
+                        intent.putExtra("LanguageCode", gtPackage.getLanguage());
+                        intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
+                        intent.putExtra("Status", gtPackage.getStatus());
+                        addPageFrameToIntent(intent);
+                        startActivity(intent);
+                    }
+                }
+                
+                return true;
             }
         });
     }
@@ -232,22 +244,12 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
             }
             case RESULT_PREVIEW_MODE_DISABLED:
             {
-                // refresh the list
-                String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-
-                refreshPackageList(settings, true);
-
-                if (!languagePrimary.equalsIgnoreCase(primaryCode))
-                {
-                    SnuffyApplication app = (SnuffyApplication) getApplication();
-                    app.setAppLocale(primaryCode);
-                }
-
-                Toast.makeText(PreviewModeMainPW.this, "Translator preview mode is disabled", Toast.LENGTH_LONG).show();
-
+                // This should not happen but just in case
+                
+                Intent intent = new Intent(this, MainPW.class);
+                startActivity(intent);
                 finish();
-                startActivity(getIntent());
-
+                
                 break;
             }
         }
@@ -464,36 +466,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
         editor.apply();
     }
 
-    @Override
-    public void onPackageSelected(final GTPackage gtPackage)
-    {
-        if (gtPackage.getCode().equalsIgnoreCase("everystudent"))
-        {
-            Intent intent = new Intent(this, EveryStudent.class);
-            intent.putExtra("PackageName", gtPackage.getCode());
-            addPageFrameToIntent(intent);
-            startActivity(intent);
-            return;
-        }
-
-        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-        if (isTranslatorModeEnabled() && "draft".equalsIgnoreCase(gtPackage.getStatus()))
-        {
-            presentFinalizeDraftOption(gtPackage, settings);
-        }
-        else
-        {
-            Intent intent = new Intent(this, SnuffyPWActivity.class);
-            intent.putExtra("PackageName", gtPackage.getCode());
-            intent.putExtra("LanguageCode", gtPackage.getLanguage());
-            intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
-            intent.putExtra("Status", gtPackage.getStatus());
-            addPageFrameToIntent(intent);
-            startActivity(intent);
-        }
-    }
-
     /**
      * Dialog example taken from:
      * http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android
@@ -531,13 +503,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
-                        Intent intent = new Intent(PreviewModeMainPW.this, SnuffyPWActivity.class);
-                        intent.putExtra("PackageName", gtPackage.getCode());
-                        intent.putExtra("LanguageCode", gtPackage.getLanguage());
-                        intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
-                        intent.putExtra("Status", gtPackage.getStatus());
-                        addPageFrameToIntent(intent);
-                        startActivity(intent);
                         break;
                 }
             }
@@ -546,7 +511,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Do you want to publish this draft?")
                 .setPositiveButton("Yes, it's ready!", dialogClickListener)
-                .setNegativeButton("No, I just need to see it.", dialogClickListener)
+                .setNegativeButton("No, I changed my mind.", dialogClickListener)
                 .show();
     }
 
@@ -606,14 +571,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
     @Override
     public void onClick(View view)
     {
-        for (GTPackage gtPackage : packageList)
-        {
-            if (view.getId() == gtPackage.getLayout().getLayout().getId())
-            {
-                Log.i(TAG, "clicked: " + gtPackage.getCode());
-                onPackageSelected(gtPackage);
-            }
-        }
+        Log.i(TAG, "View clicked");
     }
 
     private class UpdateDraftListTask extends AsyncTask<Object, Void, Boolean>

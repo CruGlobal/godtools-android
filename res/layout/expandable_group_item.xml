@@ -39,11 +39,11 @@
     
     <ImageView
         android:layout_width="35dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/sub_menu"
         android:src="@drawable/gt4_homescreen_draftgripc"
         android:layout_gravity="center_vertical"
-        android:layout_marginRight="10dp"/>
+        android:paddingRight="10dp"/>
         
         </LinearLayout>>
 
