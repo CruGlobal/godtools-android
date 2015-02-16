@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ExpandableListView;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +29,7 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.everystudent.EveryStudent;
+import org.keynote.godtools.android.expandableList.ExpandableListAdapter;
 import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.DraftCreationTask;
@@ -38,16 +38,13 @@ import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
-import org.keynote.godtools.android.expandableList.ExpandableListAdapter;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
 
 
 public class PreviewModeMainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
@@ -68,24 +65,14 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
     private String languagePrimary;
     private List<GTPackage> packageList;
 
-    View vLoading;
-    TextView tvTask;
-    ImageButton refreshButton;
     Context context;
-    Timer timer;
-    /**
-     * When clicked, dialog to launch a new translation is opened
-     */
-    boolean isDownloading;
+
     boolean noPackages = false;
     boolean justSwitchedToTranslatorMode;
     SharedPreferences settings;
     
     ExpandableListAdapter listAdapter;
     ExpandableListView listView;
-    List<String> listDataHeader;
-    List<String> childList;
-    HashMap<String, List<String>> listDataChild;
 
     /**
      * Called when the activity is first created.
@@ -215,7 +202,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
                 }
 
                 String code = data.getStringExtra("parallelCode");
-                showLoading("Downloading resources...");
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         code,
                         "parallel",
@@ -233,8 +219,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
                     SnuffyApplication app = (SnuffyApplication) getApplication();
                     app.setAppLocale(primaryCode);
                 }
-
-                showLoading("Downloading drafts...");
 
                 GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", this);
 
@@ -372,19 +356,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
         justSwitchedToTranslatorMode = false;
         switchedToTranslatorMode(false);
         trackScreenVisit();
-    }
-
-    private void showLoading(String msg)
-    {
-        isDownloading = true;
-        supportInvalidateOptionsMenu();
-        tvTask.setText(msg);
-        vLoading.setVisibility(View.VISIBLE);
-
-        if (refreshButton != null)
-        {
-            refreshButton.setEnabled(false);
-        }
     }
 
     @Override
@@ -546,7 +517,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
                                     public void draftTaskComplete()
                                     {
                                         Toast.makeText(getApplicationContext(), "Draft has been published", Toast.LENGTH_SHORT).show();
-                                        showLoading("Updating drafts");
                                         GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", PreviewModeMainPW.this);
                                     }
 
@@ -698,7 +668,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i)
                         {
-                            timer.cancel();
                             finish();
                         }
                     })
@@ -740,12 +709,10 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
 
             if (isTranslatorModeEnabled())
             {
-                showLoading("Updating drafts...");
                 GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", this);
             }
             else
             {
-                showLoading("Updating resources...");
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         languagePrimary,
                         "primary",
@@ -803,7 +770,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
                                 public void draftTaskComplete()
                                 {
                                     Toast.makeText(getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT);
-                                    showLoading("Updating drafts...");
                                     GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", PreviewModeMainPW.this);
                                 }
 

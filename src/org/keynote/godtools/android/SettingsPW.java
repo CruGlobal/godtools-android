@@ -251,7 +251,9 @@ public class SettingsPW extends BaseActionBarActivity implements
                 // disable translator mode
                 setResult(RESULT_PREVIEW_MODE_DISABLED);
                 setTranslatorMode(false);
-
+                
+                Intent intent = new Intent(this, MainPW.class);
+                startActivity(intent);
                 finish();
 
             } else {
