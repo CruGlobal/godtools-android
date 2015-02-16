@@ -10,11 +10,12 @@
         android:id="@+id/homescreen_icon"
         android:layout_width="120dp"
         android:layout_height="112.5dp"
-        android:src="@drawable/gt4_home_bookicon"
+        android:src="@drawable/gt4_home_bookicon_previewmode"
         android:background="#00ffffff"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:contentDescription="homescreen_icon"/>
+        android:contentDescription="homescreen_icon"
+        android:baselineAlignBottom="false"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -31,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="false"
         android:id="@+id/expandable_list"
-        android:layout_marginTop="300dp"
+        android:layout_marginTop="250dp"
         android:layout_marginBottom="15dp"/>
 
 </RelativeLayout>

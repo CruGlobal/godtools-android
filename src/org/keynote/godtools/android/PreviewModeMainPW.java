@@ -38,7 +38,7 @@ import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
-import org.keynote.godtools.android.utils.ExpandableListAdapter;
+import org.keynote.godtools.android.expandableList.ExpandableListAdapter;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -118,38 +118,30 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
 
         packageList = getPackageList(); // get the packages for the primary language
         
-        showLayoutsWithPackages();
-        
         listView = (ExpandableListView) findViewById(R.id.expandable_list);
-        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
+        listAdapter = new ExpandableListAdapter(this, packageList);
         listView.setAdapter(listAdapter);
         listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener()
         {
             int lastExpandedPosition = -1;
-            
+
             @Override
             public void onGroupExpand(int groupPosition)
             {
-                if (groupPosition != lastExpandedPosition) listView.collapseGroup(lastExpandedPosition);
+                if (groupPosition != lastExpandedPosition)
+                    listView.collapseGroup(lastExpandedPosition);
                 lastExpandedPosition = groupPosition;
             }
         });
-    }
-    
-    private void showLayoutsWithPackages()
-    {
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
         
-        // child list needs one item to show expandable menu
-        childList = new ArrayList<String>(1);
-        childList.add("");
-        
-       for (GTPackage gtPackage : packageList)
-       {
-           listDataHeader.add(gtPackage.getName());
-           listDataChild.put(gtPackage.getName(), childList);
-       }
+        listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener()
+        {
+            @Override
+            public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long l)
+            {
+                return false;
+            }
+        });
     }
 
     @Override
@@ -220,7 +212,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
                 {
                     languagePrimary = primaryCode;
                     packageList = getPackageList();
-                    showLayoutsWithPackages();
                 }
 
                 String code = data.getStringExtra("parallelCode");
@@ -296,7 +287,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
             languagePrimary = "en";
             packageList = getPackageList();
         }
-        showLayoutsWithPackages();
     }
 
     @Override
@@ -375,7 +365,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
              * saved in the settings and when true, this will refresh the packages available.
              */
             packageList = getPackageList();
-            showLayoutsWithPackages();
         }
 
         noPackages = false;
@@ -426,7 +415,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
             else
             {
                 packageList = getPackageList();
-                showLayoutsWithPackages();
             }
             createTheHomeScreen();
         }
@@ -456,15 +444,12 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
         {
             Toast.makeText(PreviewModeMainPW.this, "Drafts have been updated", Toast.LENGTH_SHORT).show();
             packageList = getPackageList();
-            showLayoutsWithPackages();
             createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase("draft_primary"))
         {
             languagePrimary = langCode;
             packageList = getPackageList();
-
-            showLayoutsWithPackages();
 
             createTheHomeScreen();
         }
@@ -609,7 +594,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
         if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))
         {
             packageList = getPackageList();
-            showLayoutsWithPackages();
         }
 
         Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
@@ -631,7 +615,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements PackageL
         {
 
             packageList = getPackageList();
-            showLayoutsWithPackages();
             Toast.makeText(PreviewModeMainPW.this, "Failed to download drafts", Toast.LENGTH_SHORT).show();
 
         }
