@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.keynote.godtools.android.business.GTLanguage;
+import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
@@ -50,6 +51,8 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     boolean isMainLang;
     boolean downloadOnly;
     
+    SnuffyApplication app;
+    
     LanguageAdapter.ViewHolder currentView;
 
     @Override
@@ -76,22 +79,11 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
         languageList = GTLanguage.getAll(this);
 
+        app = (SnuffyApplication) getApplication();
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         primaryLanguage = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         parallelLanguage = settings.getString(GTLanguage.KEY_PARALLEL, "");
         isTranslator = settings.getBoolean("TranslatorMode", false);
-        
-        if (languageType.equalsIgnoreCase("Main Language"))
-        {
-            currentLanguage = primaryLanguage;
-            isMainLang = true;
-        }
-        else if (languageType.equalsIgnoreCase("Parallel Language"))
-        {
-            currentLanguage = parallelLanguage;
-            isMainLang = false;
-            removeLanguageFromList(languageList, primaryLanguage);
-        }
 
         if (!isTranslator)
         {
@@ -125,6 +117,18 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     
     public void setList()
     {
+        if (languageType.equalsIgnoreCase("Main Language"))
+        {
+            currentLanguage = primaryLanguage;
+            isMainLang = true;
+        }
+        else if (languageType.equalsIgnoreCase("Parallel Language"))
+        {
+            currentLanguage = parallelLanguage;
+            isMainLang = false;
+            removeLanguageFromList(languageList, primaryLanguage);
+        }
+        
         LanguageAdapter adapter = new LanguageAdapter(this, languageList, mAlternateTypeface);
         Log.i(TAG, "current language: " + currentLanguage);
         adapter.setCurrentLanguage(currentLanguage);
@@ -176,7 +180,8 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             if (gtl.isDownloaded())
             {
                 setAsPrimaryOrParallel(GTLanguage.KEY_PARALLEL, gtl.getLanguageCode());
-
+                parallelLanguage = gtl.getLanguageCode();
+                
                 setResult(RESULT_CHANGED_PARALLEL, returnIntent);
                 
                 setList();
@@ -187,8 +192,9 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 Log.i(TAG, "Download: " + gtl.getLanguageName());
                 downloadOnly = false;
 
-                LanguageAdapter.ViewHolder viewHolder = (LanguageAdapter.ViewHolder) view.getTag();
-                viewHolder.pbDownloading.setVisibility(View.VISIBLE);
+                currentView = (LanguageAdapter.ViewHolder) view.getTag();
+                currentView.tvDownload.setText(R.string.downloading);
+                currentView.pbDownloading.setVisibility(View.VISIBLE);
                 
                 downloadLanguage(gtl.getLanguageCode());
             }
@@ -227,15 +233,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     {
         Log.i(TAG, "Download Successful: " + langCode);
         
-        SnuffyApplication app = (SnuffyApplication) getApplication();
-        GTLanguage gtLanguage = GTLanguage.getLanguage(app.getApplicationContext(), langCode);
-        gtLanguage.setDownloaded(true);
-        gtLanguage.update(app.getApplicationContext());
-        
-        for (GTLanguage language : languageList)
-        {
-            if (language.getLanguageCode().equals(langCode)) language.setDownloaded(true);
-        }
+        updateDownloadedStatus(langCode, true);
         
         if (!downloadOnly)
         {
@@ -249,12 +247,27 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             else
             {
                 setResult(RESULT_CHANGED_PARALLEL, returnIntent);
-                primaryLanguage = langCode;
+                parallelLanguage = langCode;
                 setAsPrimaryOrParallel(GTLanguage.KEY_PARALLEL, langCode);
             }
         }
         
         setList();
+    }
+    
+    private void updateDownloadedStatus(String langCode, boolean downloaded)
+    {
+        if (downloaded)
+        {
+            GTLanguage gtLanguage = GTLanguage.getLanguage(app.getApplicationContext(), langCode);
+            gtLanguage.setDownloaded(downloaded);
+            gtLanguage.update(app.getApplicationContext());
+        }
+        
+        for (GTLanguage language : languageList)
+        {
+            if (language.getLanguageCode().equals(langCode)) language.setDownloaded(downloaded);
+        }
     }
 
     @Override
@@ -380,19 +393,24 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             Toast.makeText(SelectLanguagePW.this, "No internet connection, resources needs to be downloaded.", Toast.LENGTH_SHORT).show();
             return;
         }
+        
+        currentView.pbDownloading.setVisibility(View.VISIBLE);
+        downloadOnly = true;
 
         if (!language.isDownloaded())
         {
             Log.i(TAG, "Download");
             currentView.tvDownload.setText(R.string.downloading);
-            currentView.pbDownloading.setVisibility(View.VISIBLE);
-            downloadOnly = true;
             
             downloadLanguage(language.getLanguageCode());
         }
         else
         {
             Log.i(TAG, "Delete");
+            updateDownloadedStatus(language.getLanguageCode(), false);
+            DBAdapter adapter = DBAdapter.getInstance(this);
+            adapter.deleteGTLanguage(language.getLanguageCode());
+            setList();
         }
     }
 }
