@@ -151,7 +151,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             if (gtl.isDownloaded())
             {
                 setAsPrimaryOrParallel(GTLanguage.KEY_PRIMARY, gtl.getLanguageCode());
-                currentLanguage = gtl.getLanguageCode();
+                primaryLanguage = gtl.getLanguageCode();
 
                 setResult(RESULT_CHANGED_PRIMARY, returnIntent);
                 
@@ -240,7 +240,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             if (isMainLang)
             {
                 setResult(RESULT_CHANGED_PRIMARY, returnIntent);
-                currentLanguage = langCode;
+                primaryLanguage = langCode;
                 app.setAppLocale(langCode);
                 setAsPrimaryOrParallel(GTLanguage.KEY_PRIMARY, langCode);
             }

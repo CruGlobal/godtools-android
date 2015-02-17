@@ -5,12 +5,10 @@ import android.util.Log;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -19,6 +17,8 @@ import java.io.IOException;
  */
 public class DraftCreationTask extends AsyncTask<Object, Void, Integer>
 {
+    private final String TAG = getClass().getSimpleName();
+    
     private final DraftTaskHandler taskHandler;
 
     public DraftCreationTask(DraftTaskHandler taskHandler)
@@ -65,6 +65,8 @@ public class DraftCreationTask extends AsyncTask<Object, Void, Integer>
     @Override
     protected void onPostExecute(Integer responseStatusCode)
     {
+        Log.i(TAG, "Response Code: " + responseStatusCode);
+        
         if(responseStatusCode.equals(201))
         {
             taskHandler.draftTaskComplete();

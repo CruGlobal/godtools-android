@@ -327,6 +327,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                             case DialogInterface.BUTTON_POSITIVE:
                                 
                                 broadcastManager.sendBroadcast(startBroadcast());
+                                Log.i(TAG, "Creating Draft");
                                 
                                 GodToolsApiClient.createDraft(settings.getString("Authorization_Draft", ""),
                                         languagePrimary,

@@ -40,7 +40,6 @@ import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.http.DownloadTask;
-import org.keynote.godtools.android.http.DraftCreationTask;
 import org.keynote.godtools.android.http.DraftPublishTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
@@ -49,15 +48,12 @@ import org.keynote.godtools.android.http.NotificationUpdateTask;
 import org.keynote.godtools.android.model.HomescreenLayout;
 import org.keynote.godtools.android.notifications.NotificationInfo;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
-import org.keynote.godtools.android.utils.Device;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -516,17 +512,10 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             gtl.setDownloaded(true);
             gtl.update(MainPW.this);
 
-            if (isTranslatorModeEnabled())
-            {
-                // check for draft_primary
-                GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), langCode, "draft_primary", this);
-            }
-            else
-            {
-                packageList = getPackageList();
-                showLayoutsWithPackages();
-                hideLoading();
-            }
+            packageList = getPackageList();
+            showLayoutsWithPackages();
+            hideLoading();
+            
             createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase("parallel"))
@@ -541,15 +530,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             gtl.setDownloaded(true);
             gtl.update(MainPW.this);
 
-            if (isTranslatorModeEnabled())
-            {
-                // check for draft_parallel
-                GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), langCode, "draft_parallel", this);
-            }
-            else
-            {
-                hideLoading();
-            }
+            hideLoading();
             createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase("draft"))
@@ -579,35 +560,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private List<GTPackage> getPackageList()
     {
-        if (isTranslatorModeEnabled())
-        {
-            // only return draft packages with translator mode
-            List<GTPackage> packageByLanguage = GTPackage.getDraftPackages(MainPW.this, languagePrimary);
-            if("en".equals(languagePrimary))
-            {
-                removeEveryStudent(packageByLanguage);
-            }
-            return packageByLanguage;
-        }
-        else
-        {
-            return GTPackage.getLivePackages(MainPW.this, languagePrimary);
-        }
-    }
-
-    private void removeEveryStudent(List<GTPackage> packages)
-    {
-        Iterator<GTPackage> i = packages.iterator();
-        for(; i.hasNext(); )
-        {
-            if(i.next().getCode().equals(GTPackage.EVERYSTUDENT_PACKAGE_CODE)) i.remove();
-        }
-    }
-
-    private boolean isTranslatorModeEnabled()
-    {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        return settings.getBoolean("TranslatorMode", false);
+        return GTPackage.getLivePackages(MainPW.this, languagePrimary);
     }
 
     private void switchedToTranslatorMode(boolean switched)
@@ -630,22 +583,13 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             return;
         }
 
-        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-        if (isTranslatorModeEnabled() && "draft".equalsIgnoreCase(gtPackage.getStatus()))
-        {
-            presentFinalizeDraftOption(gtPackage, settings);
-        }
-        else
-        {
-            Intent intent = new Intent(this, SnuffyPWActivity.class);
-            intent.putExtra("PackageName", gtPackage.getCode());
-            intent.putExtra("LanguageCode", gtPackage.getLanguage());
-            intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
-            intent.putExtra("Status", gtPackage.getStatus());
-            addPageFrameToIntent(intent);
-            startActivity(intent);
-        }
+        Intent intent = new Intent(this, SnuffyPWActivity.class);
+        intent.putExtra("PackageName", gtPackage.getCode());
+        intent.putExtra("LanguageCode", gtPackage.getLanguage());
+        intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
+        intent.putExtra("Status", gtPackage.getStatus());
+        addPageFrameToIntent(intent);
+        startActivity(intent);
     }
 
     /**
@@ -873,108 +817,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         startActivityForResult(intent, REQUEST_SETTINGS);
     }
 
-    private void onCmd_refresh()
-    {
-        if (Device.isConnected(MainPW.this))
-        {
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-
-            if (isTranslatorModeEnabled())
-            {
-                showLoading("Updating drafts...");
-                GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", this);
-            }
-            else
-            {
-                showLoading("Updating resources...");
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        languagePrimary,
-                        "primary",
-                        settings.getString("Authorization_Generic", ""),
-                        this);
-            }
-
-
-        }
-        else
-        {
-            Toast.makeText(MainPW.this, "Internet connection is required", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void onCmd_add()
-    {
-        if (Device.isConnected(MainPW.this))
-        {
-            final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-            AlertDialog.Builder b = new AlertDialog.Builder(this);
-            b.setTitle("Start a draft for: ");
-
-            final LinkedHashMap<String, String> possiblePackagesForDraft = getPossiblePackagesForDraft();
-
-            final String[] packageNames = new ArrayList<String>(possiblePackagesForDraft.values()).toArray(new String[possiblePackagesForDraft.size()]);
-
-            b.setItems(packageNames, new DialogInterface.OnClickListener()
-            {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which)
-                {
-
-                    dialog.dismiss();
-
-                    int i = 0;
-                    String packageCode = null;
-                    for (Map.Entry<String, String> entry : possiblePackagesForDraft.entrySet())
-                    {
-                        if (i == which)
-                        {
-                            packageCode = entry.getKey();
-                            break;
-                        }
-                        i++;
-                    }
-                    GodToolsApiClient.createDraft(settings.getString("Authorization_Draft", ""),
-                            languagePrimary,
-                            packageCode,
-                            new DraftCreationTask.DraftTaskHandler()
-                            {
-                                @Override
-                                public void draftTaskComplete()
-                                {
-                                    Toast.makeText(getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT);
-                                    showLoading("Updating drafts...");
-                                    GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", MainPW.this);
-                                }
-
-                                @Override
-                                public void draftTaskFailure()
-                                {
-                                    Toast.makeText(getApplicationContext(), "Failed to create a new draft", Toast.LENGTH_SHORT);
-                                }
-                            });
-                }
-
-            });
-
-            b.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-            {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i)
-                {
-                    if (noPackages) onCmd_settings();
-                }
-            });
-
-            b.show();
-        }
-        else
-        {
-            Toast.makeText(MainPW.this, "Internet connection is required", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     private LinkedHashMap<String, String> getPossiblePackagesForDraft()
     {
