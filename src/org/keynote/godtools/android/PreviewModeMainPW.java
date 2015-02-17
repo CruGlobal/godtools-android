@@ -28,25 +28,22 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
+import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.expandableList.ExpandableListAdapter;
 import org.keynote.godtools.android.http.DownloadTask;
-import org.keynote.godtools.android.http.DraftCreationTask;
-import org.keynote.godtools.android.http.DraftPublishTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class PreviewModeMainPW extends BaseActionBarActivity implements
@@ -161,7 +158,29 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             @Override
             public void onReceive(Context context, Intent intent)
             {
-                
+                if (BroadcastUtil.ACTION_START.equals(intent.getAction())) Log.i(TAG, "Action started");
+                else if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
+                {
+                    Log.i(TAG, "Action Done");
+
+                    Type type = (Type) intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE);
+                    
+                    switch (type)
+                    {
+                        case DOWNLOAD_TASK:
+                            break;
+                        case DRAFT_CREATION_TASK:
+                            GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", PreviewModeMainPW.this);
+                            break;
+                        case DRAFT_PUBLISH_TASK:
+                            GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", PreviewModeMainPW.this);
+                            break;
+                        case META_TASK:
+                            break;
+                        case ERROR:
+                            break;
+                    }
+                }
             }
         };
         
@@ -498,55 +517,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         editor.apply();
     }
 
-    /**
-     * Dialog example taken from:
-     * http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android
-     */
-    private void presentFinalizeDraftOption(final GTPackage gtPackage, final SharedPreferences settings)
-    {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which)
-            {
-                switch (which)
-                {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        GodToolsApiClient.publishDraft(settings.getString("Authorization_Draft", ""),
-                                gtPackage.getLanguage(),
-                                gtPackage.getCode(),
-                                new DraftPublishTask.DraftTaskHandler()
-                                {
-                                    @Override
-                                    public void draftTaskComplete()
-                                    {
-                                        Toast.makeText(getApplicationContext(), "Draft has been published", Toast.LENGTH_SHORT).show();
-                                        GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", PreviewModeMainPW.this);
-                                    }
-
-                                    @Override
-                                    public void draftTaskFailure()
-                                    {
-                                        Toast.makeText(getApplicationContext(), "Failed to publish draft", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-
-                        startActivity(getIntent());
-                        break;
-
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        break;
-                }
-            }
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Do you want to publish this draft?")
-                .setPositiveButton("Yes, it's ready!", dialogClickListener)
-                .setNegativeButton("No, I changed my mind.", dialogClickListener)
-                .show();
-    }
-
     @Override
     public void metaTaskComplete(InputStream is, String langCode, String tag)
     {
@@ -564,8 +534,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         }
 
         Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
-
-
     }
 
     @Override
@@ -574,30 +542,21 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
         if (tag.equalsIgnoreCase("draft"))
         {
-
             Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
-
         }
         else if (tag.equalsIgnoreCase("draft_primary"))
         {
-
             packageList = getPackageList();
             Toast.makeText(PreviewModeMainPW.this, "Failed to download drafts", Toast.LENGTH_SHORT).show();
-
         }
         else if (tag.equalsIgnoreCase("draft_parallel"))
         {
-
             // do nothing
-
         }
         else if (tag.equalsIgnoreCase("primary") || tag.equalsIgnoreCase("parallel"))
         {
-
             Toast.makeText(PreviewModeMainPW.this, "Failed to download resources", Toast.LENGTH_SHORT).show();
-
         }
-
     }
 
     @Override
@@ -716,80 +675,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                         settings.getString("Authorization_Generic", ""),
                         this);
             }
-
-
-        }
-        else
-        {
-            Toast.makeText(PreviewModeMainPW.this, "Internet connection is required", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void onCmd_add()
-    {
-        if (Device.isConnected(PreviewModeMainPW.this))
-        {
-            final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-            AlertDialog.Builder b = new AlertDialog.Builder(this);
-            b.setTitle("Start a draft for: ");
-
-            final LinkedHashMap<String, String> possiblePackagesForDraft = getPossiblePackagesForDraft();
-
-            final String[] packageNames = new ArrayList<String>(possiblePackagesForDraft.values()).toArray(new String[possiblePackagesForDraft.size()]);
-
-            b.setItems(packageNames, new DialogInterface.OnClickListener()
-            {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which)
-                {
-
-                    dialog.dismiss();
-
-                    int i = 0;
-                    String packageCode = null;
-                    for (Map.Entry<String, String> entry : possiblePackagesForDraft.entrySet())
-                    {
-                        if (i == which)
-                        {
-                            packageCode = entry.getKey();
-                            break;
-                        }
-                        i++;
-                    }
-                    GodToolsApiClient.createDraft(settings.getString("Authorization_Draft", ""),
-                            languagePrimary,
-                            packageCode,
-                            new DraftCreationTask.DraftTaskHandler()
-                            {
-                                @Override
-                                public void draftTaskComplete()
-                                {
-                                    Toast.makeText(getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT);
-                                    GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", PreviewModeMainPW.this);
-                                }
-
-                                @Override
-                                public void draftTaskFailure()
-                                {
-                                    Toast.makeText(getApplicationContext(), "Failed to create a new draft", Toast.LENGTH_SHORT);
-                                }
-                            });
-                }
-
-            });
-
-            b.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-            {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i)
-                {
-                    if (noPackages) onCmd_settings();
-                }
-            });
-
-            b.show();
         }
         else
         {

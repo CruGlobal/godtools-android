@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.http.DraftCreationTask;
 import org.keynote.godtools.android.http.DraftPublishTask;
@@ -26,9 +27,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.keynote.godtools.android.broadcast.BroadcastUtil.draftCreationBroadcast;
-import static org.keynote.godtools.android.broadcast.BroadcastUtil.draftPublishBroadcast;
 import static org.keynote.godtools.android.broadcast.BroadcastUtil.startBroadcast;
+import static org.keynote.godtools.android.broadcast.BroadcastUtil.stopBroadcast;
 
 /**
  * Created by matthewfrederick on 2/16/15.
@@ -271,13 +271,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             public void draftTaskComplete()
                                             {
                                                 Toast.makeText(context, "Draft has been published", Toast.LENGTH_SHORT).show();
-                                                broadcastManager.sendBroadcast(draftPublishBroadcast());
+                                                broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_PUBLISH_TASK));
                                             }
 
                                             @Override
                                             public void draftTaskFailure()
                                             {
                                                 Toast.makeText(context, "Failed to publish draft", Toast.LENGTH_SHORT).show();
+                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR));
                                             }
                                         });
                                 break;
@@ -316,13 +317,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             public void draftTaskComplete()
                                             {
                                                 Toast.makeText(context.getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT);
-                                                broadcastManager.sendBroadcast(draftCreationBroadcast());
+                                                broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_CREATION_TASK));
                                             }
 
                                             @Override
                                             public void draftTaskFailure()
                                             {
                                                 Toast.makeText(context.getApplicationContext(), "Failed to create a new draft", Toast.LENGTH_SHORT);
+                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR));
                                             }
                                         });
                                 break;

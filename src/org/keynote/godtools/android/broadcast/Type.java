@@ -8,5 +8,6 @@ public enum Type
     DOWNLOAD_TASK,
     DRAFT_CREATION_TASK,
     DRAFT_PUBLISH_TASK,
-    META_TASK
+    META_TASK,
+    ERROR
 }
