@@ -2,6 +2,7 @@ package org.keynote.godtools.android;
 
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
@@ -63,15 +66,20 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     private int mPageHeight;
     private String languagePrimary;
     private List<GTPackage> packageList;
+    
+    private LocalBroadcastManager broadcastManager;
+    private BroadcastReceiver broadcastReceiver;
 
     Context context;
 
     boolean noPackages = false;
     boolean justSwitchedToTranslatorMode;
+    
     SharedPreferences settings;
     
     ExpandableListAdapter listAdapter;
     ExpandableListView listView;
+    
 
     /**
      * Called when the activity is first created.
@@ -95,6 +103,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         titleBar.setText(R.string.preview_mode_title);
 
         context = getApplicationContext();
+        setupBroadcastReceiver();
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
@@ -141,6 +150,29 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 return true;
             }
         });
+    }
+    
+    private void setupBroadcastReceiver()
+    {
+        broadcastManager = LocalBroadcastManager.getInstance(context);
+        
+        broadcastReceiver = new BroadcastReceiver()
+        {
+            @Override
+            public void onReceive(Context context, Intent intent)
+            {
+                
+            }
+        };
+        
+        broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.startFilter());
+        broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.stopFilter());
+    }
+    
+    private void removeBroadcastReceiver()
+    {
+        broadcastManager.unregisterReceiver(broadcastReceiver);
+        broadcastReceiver = null;        
     }
 
     @Override
@@ -642,6 +674,13 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        removeBroadcastReceiver();
     }
 
     private void addPageFrameToIntent(Intent intent)

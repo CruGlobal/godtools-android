@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +17,18 @@ import android.widget.Toast;
 
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.business.GTPackage;
+import org.keynote.godtools.android.http.DraftCreationTask;
 import org.keynote.godtools.android.http.DraftPublishTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
+import org.keynote.godtools.android.utils.Device;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static org.keynote.godtools.android.broadcast.BroadcastUtil.draftCreationBroadcast;
+import static org.keynote.godtools.android.broadcast.BroadcastUtil.draftPublishBroadcast;
+import static org.keynote.godtools.android.broadcast.BroadcastUtil.startBroadcast;
 
 /**
  * Created by matthewfrederick on 2/16/15.
@@ -37,6 +45,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
     private List<GTPackage> packages;
     private GTPackage currentPackage;
     private String languagePrimary;
+    private LocalBroadcastManager broadcastManager;
 
     int lastExpandedPosition = -1;
     
@@ -50,6 +59,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
 
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
+        broadcastManager = LocalBroadcastManager.getInstance(context);
 
         // child list needs one item to show expandable menu
         List<String> childList = new ArrayList<String>(1);
@@ -111,9 +121,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
     {
         final String packageCode = (String) getGroup(groupPosition);
         
+        GTPackage localPackage = null;
+        
         for (GTPackage gtPackage : packages)
         {
-            if (packageCode.equals(gtPackage.getCode())) currentPackage = gtPackage;
+            if (packageCode.equals(gtPackage.getCode())) localPackage = gtPackage;
         }
         
         if (convertView == null)
@@ -123,13 +135,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         }
 
         TextView textView = (TextView) convertView.findViewById(R.id.tv_trans_view);
-        textView.setText(currentPackage.getName());
+        textView.setText(localPackage.getName());
 
         ImageView icon = (ImageView) convertView.findViewById(R.id.iv_trans_view);
 
-        if ("kgp".equals(currentPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_kgpicon);
-        if ("fourlaws".equals(currentPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_4lawsicon);
-        if ("satisfied".equals(currentPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_satisfiedicon);
+        if ("kgp".equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_kgpicon);
+        if ("fourlaws".equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_4lawsicon);
+        if ("satisfied".equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_satisfiedicon);
         
         ImageView subMenu = (ImageView) convertView.findViewById(R.id.sub_menu);
         
@@ -170,12 +182,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
     {
-        final String packageCode = (String) getGroup(groupPosition);
-
-        for (GTPackage gtPackage : packages)
-        {
-            if (packageCode.equals(gtPackage.getCode())) currentPackage = gtPackage;
-        }
+        setCurrentPackage(groupPosition);
         
         if (convertView == null)
         {
@@ -184,11 +191,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         }
         
         ImageView delete = (ImageView) convertView.findViewById(R.id.deleteDraft);
+        delete.setOnClickListener(this);
         
         ImageView publish = (ImageView) convertView.findViewById(R.id.publishDraft);
         publish.setOnClickListener(this);
         
         ImageView create = (ImageView) convertView.findViewById(R.id.createDraft);
+        create.setOnClickListener(this);
 
         return convertView;
     }
@@ -196,16 +205,28 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition)
     {
+        Log.i(TAG, "Child clicked: " + groupPosition);
         return false;
     }
 
     @Override
     public void onClick(View view)
     {
+
+        Log.i(TAG, "Clicked: " + currentPackage.getCode());
+        
+        if (!Device.isConnected(context))
+        {
+            Toast.makeText(context.getApplicationContext(), "Internet connection is required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        
         switch (view.getId())
         {
-            case R.id.publishDraft:
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener()
+            case R.id.deleteDraft:
+                DialogInterface.OnClickListener deleteClickListener = new DialogInterface.OnClickListener()
                 {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which)
@@ -213,6 +234,34 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                         switch (which)
                         {
                             case DialogInterface.BUTTON_POSITIVE:
+                                // delete not available in API
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                dialogInterface.cancel();
+                                break;
+                        }
+                    }
+                };
+
+                builder.setMessage("Are you sure you want to delete this draft?")
+                        .setPositiveButton(R.string.yes, deleteClickListener)
+                        .setNegativeButton(R.string.no, deleteClickListener)
+                        .show();
+                
+                break;
+            
+            case R.id.publishDraft:
+                DialogInterface.OnClickListener publishClickListener = new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which)
+                    {
+                        switch (which)
+                        {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                
+                                broadcastManager.sendBroadcast(startBroadcast());
+                                
                                 GodToolsApiClient.publishDraft(settings.getString("Authorization_Draft", ""),
                                         currentPackage.getLanguage(),
                                         currentPackage.getCode(),
@@ -222,6 +271,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             public void draftTaskComplete()
                                             {
                                                 Toast.makeText(context, "Draft has been published", Toast.LENGTH_SHORT).show();
+                                                broadcastManager.sendBroadcast(draftPublishBroadcast());
                                             }
 
                                             @Override
@@ -233,17 +283,75 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
+                                dialogInterface.cancel();
                                 break;
                         }
                     }
                 };
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setMessage("Do you want to publish this draft?")
-                        .setPositiveButton("Yes, it's ready!", dialogClickListener)
-                        .setNegativeButton("No, I changed my mind.", dialogClickListener)
+                        .setPositiveButton("Yes, it's ready!", publishClickListener)
+                        .setNegativeButton("No, I changed my mind.", publishClickListener)
                         .show();
                 break;
+            
+            case R.id.createDraft:
+                DialogInterface.OnClickListener createClickListener = new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which)
+                    {
+                        switch (which)
+                        {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                
+                                broadcastManager.sendBroadcast(startBroadcast());
+                                
+                                GodToolsApiClient.createDraft(settings.getString("Authorization_Draft", ""),
+                                        languagePrimary,
+                                        currentPackage.getCode(),
+                                        new DraftCreationTask.DraftTaskHandler()
+                                        {
+                                            @Override
+                                            public void draftTaskComplete()
+                                            {
+                                                Toast.makeText(context.getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT);
+                                                broadcastManager.sendBroadcast(draftCreationBroadcast());
+                                            }
+
+                                            @Override
+                                            public void draftTaskFailure()
+                                            {
+                                                Toast.makeText(context.getApplicationContext(), "Failed to create a new draft", Toast.LENGTH_SHORT);
+                                            }
+                                        });
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                dialogInterface.cancel();
+                                break;
+                        }
+                    }
+                };
+                
+                builder.setTitle("Start a draft for: " + currentPackage.getName())
+                        .setPositiveButton(R.string.yes, createClickListener)
+                        .setNegativeButton(R.string.no, createClickListener)
+                        .show();
         }
     }
+    
+    private void setCurrentPackage(int groupPosition)
+    {
+        final String packageCode = (String) getGroup(groupPosition);
+
+        for (GTPackage gtPackage : packages)
+        {
+            if (packageCode.equals(gtPackage.getCode()))
+            {
+                Log.i(TAG, "Current Package: " + gtPackage.getCode());
+                currentPackage = gtPackage;
+            }
+        }            
+    }
+
 }
