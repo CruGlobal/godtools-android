@@ -40,6 +40,9 @@
     <color name="gray_60">#5F5F5F</color>
     
     <color name="smokey">#64CDCDCD</color>
+    
+    <color name="new_draft_opacity">#14FFFFFF</color>
+    <color name="current_draft_opacity">#95b9b9b9</color>
 
     <color name="black_translucent_20">#32000000</color>
     

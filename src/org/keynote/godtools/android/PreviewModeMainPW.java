@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -63,6 +64,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     private int mPageHeight;
     private String languagePrimary;
     private List<GTPackage> packageList;
+    private SwipeRefreshLayout swipeRefreshLayout;
     
     private LocalBroadcastManager broadcastManager;
     private BroadcastReceiver broadcastReceiver;
@@ -88,6 +90,17 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.preview_mode_main_pw);
+        
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                Log.i(TAG, "Starting refresh");
+                onCmd_refresh();
+            }
+        });
 
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -106,12 +119,15 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         justSwitchedToTranslatorMode = settings.getBoolean(JUST_SWITCHED, false);
 
-        packageList = getPackageList(); // get the packages for the primary language
-        
+        getPackageList(); // get the packages for the primary language
+    }
+    
+    private void setupExpandableList()
+    {
         listView = (ExpandableListView) findViewById(R.id.expandable_list);
         listAdapter = new ExpandableListAdapter(this, packageList, languagePrimary);
         listView.setAdapter(listAdapter);
-        
+
         listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener()
         {
             @Override
@@ -120,7 +136,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 TextView textView = (TextView) view.findViewById(R.id.tv_trans_view);
                 String packageName = (String) textView.getText();
                 Log.i(TAG, "Clicked: " + packageName);
-                
+
                 for (GTPackage gtPackage : packageList)
                 {
                     if (packageName.equals(gtPackage.getName()))
@@ -143,7 +159,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                         startActivity(intent);
                     }
                 }
-                
+
                 return true;
             }
         });
@@ -264,7 +280,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 if (!languagePrimary.equalsIgnoreCase(primaryCode))
                 {
                     languagePrimary = primaryCode;
-                    packageList = getPackageList();
+                    getPackageList();
                 }
 
                 String code = data.getStringExtra("parallelCode");
@@ -317,7 +333,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     private void refreshPackageList(SharedPreferences settings, boolean withFallback)
     {
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
-        packageList = getPackageList();
+        getPackageList();
 
         if(withFallback && packageList.isEmpty())
         {
@@ -325,7 +341,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             editor.putString(GTLanguage.KEY_PRIMARY, "en");
             editor.apply();
             languagePrimary = "en";
-            packageList = getPackageList();
+            getPackageList();
         }
     }
 
@@ -404,7 +420,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
              * packageFrag need to be refreshed based on the newly downloaded items. The justSwitchedToTranslatorMode is
              * saved in the settings and when true, this will refresh the packages available.
              */
-            packageList = getPackageList();
+            getPackageList();
         }
 
         noPackages = false;
@@ -441,7 +457,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             }
             else
             {
-                packageList = getPackageList();
+                getPackageList();
             }
             createTheHomeScreen();
         }
@@ -470,13 +486,16 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         else if (tag.equalsIgnoreCase("draft"))
         {
             Toast.makeText(PreviewModeMainPW.this, "Drafts have been updated", Toast.LENGTH_SHORT).show();
-            packageList = getPackageList();
+            getPackageList();
             createTheHomeScreen();
+            
+            swipeRefreshLayout.setRefreshing(false);
+            Log.i(TAG, "Done refreshing");
         }
         else if (tag.equalsIgnoreCase("draft_primary"))
         {
             languagePrimary = langCode;
-            packageList = getPackageList();
+            getPackageList();
 
             createTheHomeScreen();
         }
@@ -486,15 +505,62 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         }
     }
 
-    private List<GTPackage> getPackageList()
+    private void getPackageList()
     {
+        boolean kgpPresent = false;
+        boolean satisfiedPresent = false;
+        boolean fourlawsPresent = false;
+        
         // only return draft packages with translator mode
         List<GTPackage> packageByLanguage = GTPackage.getDraftPackages(PreviewModeMainPW.this, languagePrimary);
         if("en".equals(languagePrimary))
         {
             removeEveryStudent(packageByLanguage);
         }
-        return packageByLanguage;
+
+        Log.i(TAG, "Package size: " + packageByLanguage.size());
+
+        for (GTPackage gtPackage : packageByLanguage)
+        {
+
+            if ("kgp".equals(gtPackage.getCode())) kgpPresent = true;
+            if ("satisfied".equals(gtPackage.getCode())) satisfiedPresent = true;
+            if ("fourlaws".equals(gtPackage.getCode())) fourlawsPresent = true;
+        }
+
+        if (!kgpPresent || !satisfiedPresent || !fourlawsPresent)
+        {
+            
+            if (!kgpPresent)
+            {
+                GTPackage kgpPack = new GTPackage();
+                kgpPack.setCode("draftkgp");
+                kgpPack.setName("Knowing God Personally");
+                packageByLanguage.add(kgpPack);
+            }
+
+            if (!satisfiedPresent)
+            {
+                GTPackage satPack = new GTPackage();
+                satPack.setCode("draftsatisfied");
+                satPack.setName("Satisfied?");
+                packageByLanguage.add(satPack);
+            }
+
+            if (!fourlawsPresent)
+            {
+                GTPackage fourLawPack = new GTPackage();
+                fourLawPack.setCode("draftfourlaws");
+                fourLawPack.setName("The Four Spiritual Laws");
+                packageByLanguage.add(fourLawPack);
+            }
+        }
+
+        Log.i(TAG, "Package Size v2: " + packageByLanguage.size());
+        
+        packageList = packageByLanguage;
+        
+        setupExpandableList();
     }
 
     private void removeEveryStudent(List<GTPackage> packages)
@@ -533,10 +599,12 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
         if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))
         {
-            packageList = getPackageList();
+            getPackageList();
         }
 
         Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
+        swipeRefreshLayout.setRefreshing(false);
+        Log.i(TAG, "Done refreshing");
     }
 
     @Override
@@ -549,7 +617,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         }
         else if (tag.equalsIgnoreCase("draft_primary"))
         {
-            packageList = getPackageList();
+            getPackageList();
             Toast.makeText(PreviewModeMainPW.this, "Failed to download drafts", Toast.LENGTH_SHORT).show();
         }
         else if (tag.equalsIgnoreCase("draft_parallel"))
@@ -665,19 +733,8 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         {
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
+            GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", this);
 
-            if (isTranslatorModeEnabled())
-            {
-                GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", this);
-            }
-            else
-            {
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        languagePrimary,
-                        "primary",
-                        settings.getString("Authorization_Generic", ""),
-                        this);
-            }
         }
         else
         {
