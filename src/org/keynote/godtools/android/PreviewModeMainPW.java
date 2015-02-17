@@ -170,14 +170,17 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                         case DOWNLOAD_TASK:
                             break;
                         case DRAFT_CREATION_TASK:
+                            Log.i(TAG, "Create broadcast received");
                             GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", PreviewModeMainPW.this);
                             break;
                         case DRAFT_PUBLISH_TASK:
+                            Log.i(TAG, "Publish broadcast received");
                             GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", PreviewModeMainPW.this);
                             break;
                         case META_TASK:
                             break;
                         case ERROR:
+                            Log.i(TAG, "Error");
                             break;
                     }
                 }

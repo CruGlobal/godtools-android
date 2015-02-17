@@ -37,7 +37,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
 {
     private final SharedPreferences settings;
     private final String PREFS_NAME = "GodTools";
-    private final String TAG = getClass().getSimpleName();    
+    private final String TAG = getClass().getSimpleName();
+    
+    private final String KGP = "kgp";
+    private final String FOUR_LAWS = "fourlaws";
+    private final String SATISFIED = "satisfied";
     
     private Context context;
     private List<String> listDataHeader;
@@ -65,14 +69,60 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         List<String> childList = new ArrayList<String>(1);
         childList.add("");
 
-        for (GTPackage gtPackage : packages)
+        boolean kgpPresent = false;
+        boolean satisfiedPresent = false;
+        boolean fourlawsPresent = false;
+        
+        Log.i(TAG, "Package size: " + this.packages.size());
+        
+        for (GTPackage gtPackage : this.packages)
         {
             listDataHeader.add(gtPackage.getCode());
             listDataChild.put(gtPackage.getCode(), childList);
+            
+            if (KGP.equals(gtPackage.getCode())) kgpPresent = true;
+            if (SATISFIED.equals(gtPackage.getCode())) satisfiedPresent = true;
+            if (FOUR_LAWS.equals(gtPackage.getCode())) fourlawsPresent = true;
         }
+        
+        if (!kgpPresent)
+        {
+            addPackage(KGP);      
+        }
+        
+        if (!satisfiedPresent)
+        {
+            addPackage(SATISFIED);   
+        }
+        
+        if (!fourlawsPresent)
+        {
+            addPackage(FOUR_LAWS);   
+        }
+        
+        Log.i(TAG, "Package Size v2: " + this.packages.size());
     }
     
-    
+    private void addPackage(String code)
+    {
+        GTPackage gtPackage = new GTPackage();
+        gtPackage.setCode("draft" + code);
+        
+        if (KGP.equals(code))
+        {
+            gtPackage.setName("Knowing God Personally"); 
+        }
+        else if (FOUR_LAWS.equals(code))
+        {
+            gtPackage.setName("The Four Spiritual Laws");    
+        }
+        else if (SATISFIED.equals(code))
+        {
+            gtPackage.setName("Satisfied?");   
+        }
+        
+        packages.add(gtPackage);
+    }
     
     @Override
     public int getGroupCount()
@@ -130,7 +180,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         
         if (convertView == null)
         {
-            LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView  = inflater.inflate(R.layout.expandable_group_item, null);
         }
 
@@ -139,9 +189,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
 
         ImageView icon = (ImageView) convertView.findViewById(R.id.iv_trans_view);
 
-        if ("kgp".equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_kgpicon);
-        if ("fourlaws".equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_4lawsicon);
-        if ("satisfied".equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_satisfiedicon);
+        if (KGP.equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_kgpicon);
+        if (FOUR_LAWS.equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_4lawsicon);
+        if (SATISFIED.equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_satisfiedicon);
+        
+        if (localPackage.getCode().contains("draft"))
+        {
+            icon.setImageResource(android.R.color.transparent);
+        }
         
         ImageView subMenu = (ImageView) convertView.findViewById(R.id.sub_menu);
         
@@ -316,14 +371,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             @Override
                                             public void draftTaskComplete()
                                             {
-                                                Toast.makeText(context.getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT);
+                                                Toast.makeText(context.getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT).show();
                                                 broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_CREATION_TASK));
                                             }
 
                                             @Override
                                             public void draftTaskFailure()
                                             {
-                                                Toast.makeText(context.getApplicationContext(), "Failed to create a new draft", Toast.LENGTH_SHORT);
+                                                Toast.makeText(context.getApplicationContext(), "Failed to create a new draft", Toast.LENGTH_SHORT).show();
                                                 broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR));
                                             }
                                         });
