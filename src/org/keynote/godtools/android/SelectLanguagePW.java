@@ -50,6 +50,10 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     Intent returnIntent;
     boolean isMainLang;
     boolean downloadOnly;
+    int index;
+    int top;
+    View localView;
+    
     
     SnuffyApplication app;
     
@@ -134,13 +138,24 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         adapter.setCurrentLanguage(currentLanguage);
         mList.setAdapter(adapter);
         mList.setOnItemClickListener(this);
+        
+        mList.setSelectionFromTop(index, top);
+    }
+    
+    private void setListLocation()
+    {
+        index = mList.getFirstVisiblePosition();
+        localView = mList.getChildAt(0);
+        top = (localView == null) ? 0 : (localView.getTop() - mList.getPaddingTop());    
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-    {
+    {   
         GTLanguage gtl = languageList.get(position);
         Log.i(TAG, "Selected: " + gtl.getLanguageName());
+        
+        setListLocation();
         
         returnIntent = new Intent();
 
@@ -387,6 +402,8 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     
     private void itemOnClickAction(GTLanguage language)
     {
+        setListLocation();
+        
         // if downloading, check for internet connection;
         if (!language.isDownloaded() && !Device.isConnected(SelectLanguagePW.this))
         {

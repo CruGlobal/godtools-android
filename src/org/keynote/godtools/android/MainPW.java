@@ -40,7 +40,6 @@ import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.http.DownloadTask;
-import org.keynote.godtools.android.http.DraftPublishTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.http.NotificationRegistrationTask;
@@ -590,63 +589,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         intent.putExtra("Status", gtPackage.getStatus());
         addPageFrameToIntent(intent);
         startActivity(intent);
-    }
-
-    /**
-     * Dialog example taken from:
-     * http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android
-     */
-    private void presentFinalizeDraftOption(final GTPackage gtPackage, final SharedPreferences settings)
-    {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which)
-            {
-                switch (which)
-                {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        GodToolsApiClient.publishDraft(settings.getString("Authorization_Draft", ""),
-                                gtPackage.getLanguage(),
-                                gtPackage.getCode(),
-                                new DraftPublishTask.DraftTaskHandler()
-                                {
-                                    @Override
-                                    public void draftTaskComplete()
-                                    {
-                                        Toast.makeText(getApplicationContext(), "Draft has been published", Toast.LENGTH_SHORT).show();
-                                        showLoading("Updating drafts");
-                                        GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", MainPW.this);
-                                    }
-
-                                    @Override
-                                    public void draftTaskFailure()
-                                    {
-                                        Toast.makeText(getApplicationContext(), "Failed to publish draft", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-
-                        startActivity(getIntent());
-                        break;
-
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        Intent intent = new Intent(MainPW.this, SnuffyPWActivity.class);
-                        intent.putExtra("PackageName", gtPackage.getCode());
-                        intent.putExtra("LanguageCode", gtPackage.getLanguage());
-                        intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
-                        intent.putExtra("Status", gtPackage.getStatus());
-                        addPageFrameToIntent(intent);
-                        startActivity(intent);
-                        break;
-                }
-            }
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Do you want to publish this draft?")
-                .setPositiveButton("Yes, it's ready!", dialogClickListener)
-                .setNegativeButton("No, I just need to see it.", dialogClickListener)
-                .show();
     }
 
     @Override
