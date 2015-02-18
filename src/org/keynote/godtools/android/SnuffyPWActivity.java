@@ -213,8 +213,7 @@ public class SnuffyPWActivity extends Activity
     {
         public int getCount()
         {
-            int n = mPages.size();
-            return n;
+            return mPages.size();
         }
 
         public Object instantiateItem(View collection, int position)

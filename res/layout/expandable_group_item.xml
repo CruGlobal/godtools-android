@@ -53,6 +53,6 @@
         android:layout_gravity="center_vertical"
         android:paddingRight="10dp"/>
         
-        </LinearLayout>>
+        </LinearLayout>
 
 </LinearLayout>

@@ -1,7 +1,6 @@
 package org.keynote.godtools.android.http;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -43,9 +42,7 @@ public class AuthTask extends AsyncTask<Object, Void, String> {
             HttpResponse response = httpClient.execute(request);
             statusCode = response.getStatusLine().getStatusCode();
 
-            String authorization = response.getFirstHeader("Authorization").getValue();
-
-            return authorization;
+            return response.getFirstHeader("Authorization").getValue();
 
         } catch (Exception e) {
             e.printStackTrace();

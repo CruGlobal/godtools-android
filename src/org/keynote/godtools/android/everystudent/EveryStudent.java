@@ -23,13 +23,13 @@ import android.widget.SimpleExpandableListAdapter;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.snuffy.SnuffyApplication;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 public class EveryStudent extends ExpandableListActivity {
 	public static final String NAME = "NAME";
@@ -163,7 +163,7 @@ public class EveryStudent extends ExpandableListActivity {
 					}
 					
 					if (!tempmap.containsKey(category)) {
-						tempmap.put(category, (List<Map<String,String>>) new ArrayList<Map<String,String>>());
+						tempmap.put(category, new ArrayList<Map<String,String>>());
 					}
 					HashMap<String,String> map = new HashMap<String,String>();
 					map.put(NAME, title);

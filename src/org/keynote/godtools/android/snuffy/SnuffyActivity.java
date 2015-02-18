@@ -169,8 +169,7 @@ public class SnuffyActivity extends Activity {
 	
 	private class MyPagerAdapter extends PagerAdapter {
 		public int getCount() {
-			int n = mPages.size();
-			return n;
+			return mPages.size();
 		}
 
 		public Object instantiateItem(View collection, int position) {
@@ -219,14 +218,14 @@ public class SnuffyActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		
-		if (((SnuffyApplication)getApplication()).languageExists(mAppPackage, getLanguage()) == false) {
+		if (!((SnuffyApplication) getApplication()).languageExists(mAppPackage, getLanguage())) {
 			// e.g. user deleted curr language in Choose Language dialog and then cancelled the dialog.
 			setLanguage(getLanguageDefault());	// reset to default language
 			mPagerCurrentItem = 0; 				// reset to opening page			
 			mSetupRequired = true;
 		}		
 		
-		if (mSetupRequired == false) {
+		if (!mSetupRequired) {
 			// package processing has been done - this is resume after pause - not after create
 			return;
 		}

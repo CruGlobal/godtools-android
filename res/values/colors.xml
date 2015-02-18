@@ -1,8 +1,6 @@
 <resources>
     <color name="about_text">#000</color>
     <color name="about_background">#fff</color>
-    <color name="info_text">#000</color>
-    <color name="selected_background">#fff</color>
 
     <color name="es_article_background">#fff</color>
     <color name="es_article_foreground">#000</color>

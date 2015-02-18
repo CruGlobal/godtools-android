@@ -13,6 +13,9 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import org.keynote.godtools.android.R;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,10 +32,6 @@ import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
 public class EveryStudentDatabase {
 
@@ -170,9 +169,7 @@ public class EveryStudentDatabase {
     	
     	String[] offsetArray = offsets.split(" ");
     	ArrayList<String> o = new ArrayList<String>();
-    	for (String s : offsetArray) {
-    		o.add(s);
-    	}
+        Collections.addAll(o, offsetArray);
     	
     	while (o.size() > 0) {
     		int col = Integer.valueOf(o.get(0)); o.remove(0);

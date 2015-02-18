@@ -1,15 +1,5 @@
 package org.keynote.godtools.android.snuffy;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -25,9 +15,20 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
+
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 public class SnuffyPageMenuActivity extends ListActivity {
 	private static String TAG = "SnuffyPageMenuActivity";
@@ -72,7 +73,7 @@ public class SnuffyPageMenuActivity extends ListActivity {
 		for (SnuffyPage page: pages) {
 			map = new HashMap<String, Object>();
 			map.put("label", page.mDescription);
-			map.put("image", page.mThumbnail.toString());
+			map.put("image", page.mThumbnail);
 			mList.add(map);			
 		}
 		

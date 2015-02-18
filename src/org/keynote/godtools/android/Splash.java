@@ -208,11 +208,9 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
 		// check first if the we support the phones language
 		GTLanguage gtlPhone = GTLanguage.getLanguage(this, languagePhone);
-		if (gtlPhone == null)
-			return false;
+        return gtlPhone != null && !languagePrimary.equalsIgnoreCase(languagePhone);
 
-		return !languagePrimary.equalsIgnoreCase(languagePhone);
-	}
+    }
 
 	/**
 	 * Copies the english resources from assets to internal storage,
@@ -244,8 +242,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 		@Override
 		protected Void doInBackground(Void... voids)
 		{
-			;
-			AssetManager manager = mContext.getAssets();
+            AssetManager manager = mContext.getAssets();
 
 			File resourcesDir = new File(documentsDir, "resources");
 			resourcesDir.mkdir();

@@ -30,17 +30,16 @@
             android:id="@+id/textView"
             android:textSize="15dp"
             android:layout_marginLeft="15dp"
-            android:layout_below="@+id/homescreen_icon"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="20dp"/>
         
         <ExpandableListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="false"
             android:id="@+id/expandable_list"
-            android:layout_marginTop="250dp"
-            android:layout_marginBottom="15dp"
-            android:groupIndicator="@null"/>
+            android:groupIndicator="@null"
+            android:paddingTop="250dp"
+            android:paddingBottom="15dp"/>
 
         <ImageView
             android:layout_width="wrap_content"

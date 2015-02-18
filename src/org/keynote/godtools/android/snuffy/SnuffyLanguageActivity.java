@@ -109,12 +109,12 @@ public class SnuffyLanguageActivity extends ListActivity {
 	    if (status.equalsIgnoreCase("UNLOADED")) {
 	    	menu.add(Menu.NONE, CMD_DOWNLOAD, Menu.NONE, R.string.download_language);
 	    }
-	    if (status.equalsIgnoreCase("UNLOADED") == false) {
+	    if (!status.equalsIgnoreCase("UNLOADED")) {
 	    	menu.add(Menu.NONE, CMD_SWITCH, Menu.NONE, R.string.switch_to_language);
 	    }	    
-	}; 
-	
-	@Override 
+	}
+
+    @Override
 	public boolean onContextItemSelected(MenuItem item) { 
        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo(); 
        int languageIndex = (int)this.getListView().getItemIdAtPosition(info.position); // wont that be same as position?
@@ -171,14 +171,13 @@ public class SnuffyLanguageActivity extends ListActivity {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		String status = (String)(mList.get(position).get("status"));
-		if (status.equalsIgnoreCase("UNLOADED") == false) {
+		if (!status.equalsIgnoreCase("UNLOADED")) {
 			doCmd_SwitchLanguage(position);
 			return;
 		}
 		if (status.equalsIgnoreCase("UNLOADED")) {
 			doCmd_DownloadLanguage(position);
-			return;
-		}
+        }
 	}
 	
 	private void doCmd_DownloadLanguage(int languageIndex) {
@@ -250,7 +249,7 @@ public class SnuffyLanguageActivity extends ListActivity {
 			InputStream isImage;
 			try {
 				boolean bImageFromAsset = false; // the icons for all languages have been downloaded
-				if (bImageFromAsset == false) {
+				if (!bImageFromAsset) {
 					//  need this code when the files have been downloaded
 					try {
 						Uri uri = Uri.parse("file://" + value);
@@ -354,11 +353,11 @@ public class SnuffyLanguageActivity extends ListActivity {
 		}
 		finally {
 			if (bin != null) {
-				try {bin.close();} catch (Exception e) {};
+				try {bin.close();} catch (Exception e) {}
 			}
 			if (fin != null) {
-				try {fin.close();} catch (Exception e) {};
-			}
+				try {fin.close();} catch (Exception e) {}
+            }
 		}			
 	}
 	
@@ -426,7 +425,7 @@ public class SnuffyLanguageActivity extends ListActivity {
 				int total = 0;
 				int count;
 	
-				while ((isCancelled() == false) && ((count = input.read(data)) != -1)) {
+				while ((!isCancelled()) && ((count = input.read(data)) != -1)) {
 					total += count;
 					if (fileLength < 0) {
 						publishProgress(total, total);						
@@ -442,12 +441,12 @@ public class SnuffyLanguageActivity extends ListActivity {
 				input.close();
 				
 				// 2. Unzip the file into our persistent storage area 
-				if (isCancelled() == false) {
+				if (!isCancelled()) {
 					new Decompress().unzip(new File(tempFileName), documentsDir);
 				}
 				
 				// 3. Process the downloaded files
-				if (isCancelled() == false) {
+				if (!isCancelled()) {
 					if (mLanguageCode.length() == 0) {
 						String downloadedIndex = documentsDir.getPath() + "/repoFile.xml";
 						String renamedIndex    = documentsDir.getPath() + "/repoIndex.xml"; // TODO: could build packagename into this filename

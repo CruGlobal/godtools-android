@@ -446,7 +446,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         }
 
         left = rect.left + (rect.width() - width) / 2;
-        top = 0 + (rect.height() - height) / 2;
+        top = (rect.height() - height) / 2;
 
         mPageLeft = left;
         mPageTop = top;

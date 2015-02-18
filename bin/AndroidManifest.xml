@@ -19,16 +19,15 @@
 		</activity>
 
 		<activity android:name=".MainPW"							         android:label="@string/app_name" 			       android:screenOrientation="portrait"/>
-        <activity android:name="LanguagesActivity" 					     android:label="@string/languages_activity_title"  android:screenOrientation="portrait"/>
         		
 		<activity android:name="About"                                   android:label="@string/app_name_about"        android:theme="@android:style/Theme.Dialog"
 																													   android:screenOrientation="portrait"/>
-		<activity android:name="Kgp"                                     android:label="@string/app_name_kgp"></activity>
-        <activity android:name="Satisfied"                               android:label="@string/app_name_satisfied"></activity>
-		<activity android:name="SpiritualLaws"                           android:label="@string/app_name_sl"></activity>
-		<activity android:name="GalleryHelp"                             android:label="@string/app_name_gallery_help" android:theme="@android:style/Theme.Dialog"></activity>
-		<activity android:name=".everystudent.EveryStudent"              android:label="@string/app_name_everystudent" android:theme="@android:style/Theme.Light"></activity>
-		<activity android:name=".everystudent.EveryStudentView"          android:label="@string/app_name_everystudent" android:theme="@android:style/Theme.Light"></activity>
+		<activity android:name="Kgp"                                     android:label="@string/app_name_kgp"/>
+        <activity android:name="Satisfied"                               android:label="@string/app_name_satisfied"/>
+		<activity android:name="SpiritualLaws"                           android:label="@string/app_name_sl"/>
+		<activity android:name="GalleryHelp"                             android:label="@string/app_name_gallery_help" android:theme="@android:style/Theme.Dialog"/>
+		<activity android:name=".everystudent.EveryStudent"              android:label="@string/app_name_everystudent" android:theme="@android:style/Theme.Light"/>
+		<activity android:name=".everystudent.EveryStudentView"          android:label="@string/app_name_everystudent" android:theme="@android:style/Theme.Light"/>
 		<activity android:name=".everystudent.EveryStudentSearchResults" android:label="@string/app_name_everystudent" android:theme="@android:style/Theme.Light">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -48,7 +47,7 @@
         <activity android:name=".snuffy.SnuffyAboutActivity"    android:label="@string/app_title" android:screenOrientation="portrait"/>
         <activity android:name=".snuffy.SnuffyPageMenuActivity" android:label="@string/app_title" android:screenOrientation="portrait" android:theme="@android:style/Theme.Light"/>
         <activity android:name=".snuffy.SnuffyLanguageActivity" android:label="@string/app_title" android:screenOrientation="portrait" android:theme="@android:style/Theme.Light"/>
-		<activity android:name=".snuffy.SnuffyHelpActivity"     android:label="@string/app_title" android:screenOrientation="portrait" android:theme="@android:style/Theme.Dialog"></activity>
+		<activity android:name=".snuffy.SnuffyHelpActivity"     android:label="@string/app_title" android:screenOrientation="portrait" android:theme="@android:style/Theme.Dialog"/>
                    
 
     </application>
