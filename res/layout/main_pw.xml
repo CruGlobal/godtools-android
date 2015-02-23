@@ -43,10 +43,11 @@
             android:text="Knowing God Personally"
             android:id="@+id/tv_first"
             android:background="#00ffffff"
-            android:textSize="25dp"
+            android:textSize="22dp"
             android:paddingLeft="20dp"
             android:gravity="center_vertical"
-            android:textColor="#ff3a3a3a"/>
+            android:textColor="#ff3a3a3a"
+            android:paddingRight="15dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -75,10 +76,11 @@
             android:text="Satisfied?"
             android:id="@+id/tv_second"
             android:background="#00ffffff"
-            android:textSize="25dp"
+            android:textSize="22dp"
             android:paddingLeft="20dp"
             android:gravity="center_vertical"
-            android:textColor="#ff3a3a3a"/>
+            android:textColor="#ff3a3a3a"
+            android:paddingRight="15dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -107,10 +109,11 @@
             android:text="The Four Spiritual Laws"
             android:id="@+id/tv_third"
             android:background="#00ffffff"
-            android:textSize="25dp"
+            android:textSize="22dp"
             android:paddingLeft="20dp"
             android:gravity="center_vertical"
-            android:textColor="#ff3a3a3a"/>
+            android:textColor="#ff3a3a3a"
+            android:paddingRight="15dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -138,10 +141,11 @@
             android:text="Everystudent.com"
             android:id="@+id/tv_fourth"
             android:background="#00ffffff"
-            android:textSize="25dp"
+            android:textSize="22dp"
             android:paddingLeft="20dp"
             android:gravity="center_vertical"
-            android:textColor="#ff3a3a3a"/>
+            android:textColor="#ff3a3a3a"
+            android:paddingRight="15dp"/>
     </LinearLayout>
 
     <LinearLayout

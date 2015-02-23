@@ -17,7 +17,8 @@
     <!--  buttons themselves are white -->
     <color name="toolbar_fg">#ffffffff</color>
     <!-- turquoise -->
-    <color name="toolbar_turquoise">#40E0D0</color>
+    <!-- This is "Cru Bright Blue" used in the Cru Logo-->
+    <color name="toolbar_turquoise">#3eb1c8</color>
     <!-- black -->
     <color name="black">#000000</color>
     
