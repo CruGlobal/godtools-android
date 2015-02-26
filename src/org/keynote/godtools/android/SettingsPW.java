@@ -42,6 +42,7 @@ public class SettingsPW extends BaseActionBarActivity implements
     TextView tvMainLanguage, tvParallelLanguage, tvAbout;
     RelativeLayout rlMainLanguage, rlParallelLanguage;
     CompoundButton cbTranslatorMode;
+    CompoundButton cbNotificationsAllowed;
     Typeface mAlternateTypeface;
     String primaryLanguageCode;
 
@@ -70,6 +71,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         rlMainLanguage = (RelativeLayout) findViewById(R.id.rlMainLanguage);
         rlParallelLanguage = (RelativeLayout) findViewById(R.id.rlParallelLanguage);
         cbTranslatorMode = (CompoundButton) findViewById(R.id.cbTranslatorMode);
+        cbNotificationsAllowed = (CompoundButton) findViewById(R.id.cbNotification);
 
         // set click listeners
         rlParallelLanguage.setOnClickListener(this);
@@ -78,6 +80,8 @@ public class SettingsPW extends BaseActionBarActivity implements
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean isTranslatorEnabled = settings.getBoolean("TranslatorMode", false);
+        boolean allowNotifications = settings.getBoolean("Notifications", true);
+        cbNotificationsAllowed.setChecked(allowNotifications);
         primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
@@ -309,6 +313,14 @@ public class SettingsPW extends BaseActionBarActivity implements
         Toast.makeText(SettingsPW.this, "Invalid Access Code", Toast.LENGTH_SHORT).show();
         cbTranslatorMode.setChecked(false);
         cbTranslatorMode.setEnabled(true);
+    }
+    
+    public void onNotificationToggle(View view)
+    {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("Notifications", cbNotificationsAllowed.isChecked());
+        editor.apply();
     }
 
     private void setTranslatorMode(boolean isEnabled) {

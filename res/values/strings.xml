@@ -109,6 +109,7 @@
     <string name="settings_select">Select</string>
     <string name="settings_translator_mode">Preview Mode (Translators)</string>
     <string name="settings_translator_message">If you are a GodTools translator wanting to see your latest translations, enable "Preview Mode"</string>
+    <string name="settings_notificiation">Allow Notifications</string>
 
     <!-- Main Activity-->
     <string name="main_actionbar_translator">Translator Preview Mode</string>

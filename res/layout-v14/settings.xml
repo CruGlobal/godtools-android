@@ -40,7 +40,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/top_white_border_2"
-            android:background="#fff0a030"/>
+            android:background="@color/orange"/>
 
         <ImageView
             android:layout_width="match_parent"
@@ -109,7 +109,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/top_white_border_3"
-            android:background="#fff0a030"/>
+            android:background="@color/orange"/>
 
         <ImageView
             android:layout_width="match_parent"
@@ -159,7 +159,61 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="25dp"
+        android:background="#32cdcdcd"
+        android:id="@+id/notification_layout">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:id="@+id/top_white_border_notice"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#ffffffff" />
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="56dp"
+            android:id="@+id/left_color_block_notice"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/top_white_border_notice"
+            android:background="@color/orange"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:id="@+id/bottom_white_border_notice"
+            android:layout_alignBottom="@+id/cbNotification"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#ffffffff"/>
+
+        <Switch
+            android:background="#00ffffff"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="@string/settings_notificiation"
+            android:textColor="#ffffffff"
+            android:textSize="22dp"
+            android:id="@+id/cbNotification"
+            android:checked="true"
+            android:onClick="onNotificationToggle"
+            android:textOff="OFF"
+            android:textOn="ON"
+            android:layout_toRightOf="@+id/left_color_block_notice"
+            android:layout_toEndOf="@+id/left_color_block_notice"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:gravity="center_vertical"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="55dp"
         android:background="#32cdcdcd"
         android:id="@+id/translator_layout">
 
