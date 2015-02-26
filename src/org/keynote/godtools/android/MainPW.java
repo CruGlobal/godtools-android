@@ -51,7 +51,6 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -757,40 +756,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     {
         Intent intent = new Intent(this, SettingsPW.class);
         startActivityForResult(intent, REQUEST_SETTINGS);
-    }
-
-
-    private LinkedHashMap<String, String> getPossiblePackagesForDraft()
-    {
-        // start with an ArrayList the length of number of packages. it will never be bigger than that.
-        LinkedHashMap<String, String> possiblePackages = new LinkedHashMap<String, String>(packageList.size());
-
-        // start with an list of (unfortuantely) hard coded packages
-        possiblePackages.put("kgp", "Knowing God Personally");
-        possiblePackages.put("fourlaws", "Four Spiritual Laws");
-        possiblePackages.put("satisfied", "Satisfied?");
-
-        // loop through the list of loaded packages, and stick in the name of any existing packages (already translated)
-        for (GTPackage gtPackage : packageList)
-        {
-            if ("live".equalsIgnoreCase(gtPackage.getStatus()) &&
-                    possiblePackages.containsKey(gtPackage.getCode()))
-            {
-                possiblePackages.put(gtPackage.getCode(), gtPackage.getName());
-            }
-        }
-
-        // loop through the list again and remove any that are already in 'draft' status
-        for (GTPackage gtPackage : packageList)
-        {
-            if ("draft".equalsIgnoreCase(gtPackage.getStatus()) &&
-                    possiblePackages.containsKey(gtPackage.getCode()))
-            {
-                possiblePackages.remove(gtPackage.getCode());
-            }
-        }
-
-        return possiblePackages;
     }
 
     private void doCmdShare()
