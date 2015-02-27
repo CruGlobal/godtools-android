@@ -18,8 +18,8 @@
     <color name="toolbar_fg">#ffffffff</color>
     <!-- turquoise -->
     <!-- This is "Cru Bright Blue" used in the Cru Logo-->
-    <color name="toolbar_turquoise">#3eb1c8</color>
-    <color name="orange">#fff0a030</color>
+    <color name="cru_bright_blue">#3eb1c8</color>
+    <color name="cru_gold">#f9b625</color>
     <!-- black -->
     <color name="black">#000000</color>
     

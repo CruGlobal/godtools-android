@@ -40,7 +40,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/top_white_border_2"
-            android:background="@color/orange"/>
+            android:background="@color/cru_gold"/>
 
         <ImageView
             android:layout_width="match_parent"
@@ -109,7 +109,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/top_white_border_3"
-            android:background="@color/orange"/>
+            android:background="@color/cru_gold"/>
 
         <ImageView
             android:layout_width="match_parent"
@@ -179,7 +179,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/top_white_border_notice"
-            android:background="@color/orange"/>
+            android:background="@color/cru_gold"/>
 
         <ImageView
             android:layout_width="match_parent"
@@ -234,7 +234,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/top_white_border"
-            android:background="@color/toolbar_turquoise"/>
+            android:background="@color/cru_bright_blue"/>
 
         <ImageView
             android:layout_width="match_parent"
