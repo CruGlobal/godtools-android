@@ -6,7 +6,7 @@
 
     <ImageView
         android:id="@+id/ivSplash"
-        android:src="@drawable/godtools_splashscreen_2x_borderless"
+        android:src="@drawable/gt4_splashscreen_ip4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitCenter"
