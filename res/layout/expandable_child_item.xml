@@ -15,26 +15,12 @@
     
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="175dp"
+        android:layout_width="125dp"
         android:layout_height="60dp"
         android:background="@drawable/gt4_homescreen_draftpopover_iconsonly"
         android:layout_marginRight="10dp">
-    
-    <ImageView 
-    	android:id="@+id/deleteDraft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-     	android:src="@drawable/gt4_homescreen_deletedrafticon"
-        android:background="#00ffffff"
-        android:clickable="true"
-        android:paddingLeft="10dp"
-        android:paddingTop="20dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="10dp"
-        />
 
-    <ImageView
+        <ImageView
         android:id="@+id/publishDraft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

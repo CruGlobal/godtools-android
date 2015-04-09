@@ -210,9 +210,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
             convertView = inflater.inflate(R.layout.expandable_child_item, null);
         }
         
-        ImageView delete = (ImageView) convertView.findViewById(R.id.deleteDraft);
-        delete.setOnClickListener(this);
-        
         ImageView publish = (ImageView) convertView.findViewById(R.id.publishDraft);
         publish.setOnClickListener(this);
         
@@ -245,31 +242,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         
         switch (view.getId())
         {
-            case R.id.deleteDraft:
-                DialogInterface.OnClickListener deleteClickListener = new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int which)
-                    {
-                        switch (which)
-                        {
-                            case DialogInterface.BUTTON_POSITIVE:
-                                // delete not available in API
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                dialogInterface.cancel();
-                                break;
-                        }
-                    }
-                };
-
-                builder.setMessage("Are you sure you want to delete this draft?")
-                        .setPositiveButton(R.string.yes, deleteClickListener)
-                        .setNegativeButton(R.string.no, deleteClickListener)
-                        .show();
-                
-                break;
-            
             case R.id.publishDraft:
                 DialogInterface.OnClickListener publishClickListener = new DialogInterface.OnClickListener()
                 {
