@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<bitmap
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:src="@drawable/homescreen_menu_w_2x"
-  android:tileMode="repeat">
-</bitmap>

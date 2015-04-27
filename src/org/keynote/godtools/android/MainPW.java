@@ -9,29 +9,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.*;
 import android.provider.Settings;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
+
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,35 +41,28 @@ import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.http.DownloadTask;
-import org.keynote.godtools.android.http.DraftCreationTask;
-import org.keynote.godtools.android.http.DraftPublishTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.http.NotificationRegistrationTask;
 import org.keynote.godtools.android.http.NotificationUpdateTask;
+import org.keynote.godtools.android.model.HomescreenLayout;
 import org.keynote.godtools.android.notifications.NotificationInfo;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
-import org.keynote.godtools.android.utils.Device;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
         DownloadTask.DownloadTaskHandler,
-        MetaTask.MetaTaskHandler
+        MetaTask.MetaTaskHandler, View.OnClickListener
 {
     private static final String TAG = "MainPW";
-    private static final String TAG_LIST = "PackageList";
     private static final int REQUEST_SETTINGS = 1001;
-    private static final String PREFS_NAME = "GodTools";
     private static final String JUST_SWITCHED = "justSwitched";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -91,17 +78,14 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private int mPageTop;
     private int mPageWidth;
     private int mPageHeight;
-    private boolean mSetupNeeded;
     private String languagePrimary;
     private List<GTPackage> packageList;
-    PackageListFragment packageFrag;
-    FragmentManager fm;
+    
+    private List<HomescreenLayout> layouts;
+
     View vLoading;
     TextView tvTask;
-    FrameLayout frameLayout;
-    RelativeLayout tableLayout;
     ImageButton refreshButton;
-    ImageButton shareButton;
     GoogleCloudMessaging gcm;
     Context context;
     String regid = "";
@@ -109,7 +93,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     /**
      * When clicked, dialog to launch a new translation is opened
      */
-    ImageButton addButton;
     boolean isDownloading;
     boolean noPackages = false;
     boolean justSwitchedToTranslatorMode;
@@ -121,125 +104,43 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main_pw);
+
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setCustomView(R.layout.titlebar_centered_title);
+        TextView titleBar = (TextView) actionBar.getCustomView().findViewById(R.id.titlebar_title);
+        titleBar.setText(R.string.app_title);
 
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.main_pw);
-
+        context = getApplicationContext();
         vLoading = findViewById(R.id.contLoading);
         tvTask = (TextView) findViewById(R.id.tvTask);
-        frameLayout = (FrameLayout) findViewById(R.id.contList);
-        tableLayout = (RelativeLayout) findViewById(R.id.full_table);
+        
+        setupLayout();
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        
+        if (settings.getBoolean("TranslatorMode", false))
+        {
+            Intent intent = new Intent(this, PreviewModeMainPW.class);
+            startActivity(intent);
+            finish();
+        }
+        
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         justSwitchedToTranslatorMode = settings.getBoolean(JUST_SWITCHED, false);
 
         packageList = getPackageList(); // get the packages for the primary language
-
-        fm = getSupportFragmentManager();
-        packageFrag = (PackageListFragment) fm.findFragmentByTag(TAG_LIST);
-        if (packageFrag == null)
-        {
-            packageFrag = PackageListFragment.newInstance(languagePrimary, packageList, isTranslatorModeEnabled());
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.add(R.id.contList, packageFrag, TAG_LIST);
-            ft.commit();
-        }
-
-        // Make the Settings button highlight when pressed (without defining a separate image)
-        ImageButton button = (ImageButton) findViewById(R.id.homescreen_settings_button);
-        button.setOnTouchListener(new OnTouchListener()
-        {
-            @Override
-            public boolean onTouch(View arg0, MotionEvent me)
-            {
-                ImageButton button = (ImageButton) arg0;
-                Drawable d = button.getBackground();
-                PorterDuffColorFilter grayFilter =
-                        new PorterDuffColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_ATOP);
-
-                if (me.getAction() == MotionEvent.ACTION_DOWN)
-                {
-                    d.setColorFilter(grayFilter);
-                    button.invalidate();
-                    return false;
-                }
-                else if (me.getAction() == MotionEvent.ACTION_UP)
-                {
-                    d.setColorFilter(null);
-                    button.invalidate();
-                    return false;
-                }
-                else
-                    return false;
-            }
-        });
-
-
-        shareButton = (ImageButton) findViewById(R.id.export_button);
-        shareButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                doCmdShare(view);
-            }
-        });
-
-        addButton = (ImageButton) findViewById(R.id.homescreen_add_button);
-        refreshButton = (ImageButton) findViewById(R.id.refresh_button);
-        refreshButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                onCmd_refresh(null);
-            }
-        });
-
-        addButton = (ImageButton) findViewById(R.id.homescreen_add_button);
-
-        if (settings.getBoolean("TranslatorMode", false))
-        {
-            addButton.setVisibility(View.VISIBLE);
-            addButton.setEnabled(true);
-
-            refreshButton.setVisibility(View.VISIBLE);
-            refreshButton.setEnabled(true);
-            refreshButton.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View view)
-                {
-                    onCmd_refresh(null);
-                }
-            });
-
-            shareButton.setVisibility(View.INVISIBLE);
-            shareButton.setEnabled(false);
-        }
-        else
-        {
-            addButton.setVisibility(View.INVISIBLE);
-            addButton.setEnabled(false);
-
-            refreshButton.setVisibility(View.INVISIBLE);
-            refreshButton.setEnabled(false);
-
-            shareButton.setVisibility(View.VISIBLE);
-            shareButton.setEnabled(true);
-        }
-
-        mSetupNeeded = true;
-        context = getApplicationContext();
-
+        
+        showLayoutsWithPackages();
+        
         Log.i(TAG, regid);
         // Check device for Play Services APK. If check succeeds, proceed with GCM registration.
         if (checkPlayServices())
@@ -276,6 +177,97 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         
         if (!justSwitchedToTranslatorMode) startTimer(); // don't start timer when switching to translator mode
     }
+    
+    private void setupLayout()
+    {
+        layouts = new ArrayList<HomescreenLayout>();
+        
+        HomescreenLayout first = new HomescreenLayout();
+
+        first.setLayout((LinearLayout) findViewById(R.id.first_layout));
+        first.setTextView((TextView) findViewById(R.id.tv_first));
+        first.setImageView((ImageView) findViewById(R.id.iv_first));
+        layouts.add(first);
+
+        HomescreenLayout second = new HomescreenLayout();
+
+        second.setLayout((LinearLayout) findViewById(R.id.second_layout));
+        second.setTextView((TextView) findViewById(R.id.tv_second));
+        second.setImageView((ImageView) findViewById(R.id.iv_second));
+        layouts.add(second);
+
+        HomescreenLayout third = new HomescreenLayout();
+
+        third.setLayout((LinearLayout) findViewById(R.id.third_layout));
+        third.setTextView((TextView) findViewById(R.id.tv_third));
+        third.setImageView((ImageView) findViewById(R.id.iv_third));
+        layouts.add(third);
+
+        HomescreenLayout fourth = new HomescreenLayout();
+
+        fourth.setLayout((LinearLayout) findViewById(R.id.fourth_layout));
+        fourth.setTextView((TextView) findViewById(R.id.tv_fourth));
+        fourth.setImageView((ImageView) findViewById(R.id.iv_fourth));
+        layouts.add(fourth);
+
+    }
+    
+    private void showLayoutsWithPackages()
+    {
+        // now there will only be four packages shown on the homescreen
+        for (int i = 0; i < 4; i++)
+        {
+            if (packageList.size() > i)
+            {
+                GTPackage gtPackage = packageList.get(i);
+                HomescreenLayout layout = layouts.get(i);
+                
+                gtPackage.setLayout(layout);
+
+                layout.getLayout().setVisibility(View.VISIBLE);
+                layout.getLayout().setClickable(true);
+                layout.getLayout().setOnClickListener(this);
+                layout.getTextView().setText(gtPackage.getName());
+                
+                if ("kgp".equals(gtPackage.getCode())) layout.getImageView().setImageResource(R.drawable.gt4_homescreen_kgpicon);
+                if ("fourlaws".equals(gtPackage.getCode())) layout.getImageView().setImageResource(R.drawable.gt4_homescreen_4lawsicon);
+                if ("satisfied".equals(gtPackage.getCode())) layout.getImageView().setImageResource(R.drawable.gt4_homescreen_satisfiedicon);
+                if ("everystudent".equals(gtPackage.getCode())) layout.getImageView().setImageResource(R.drawable.gt4_homescreen_esicon);
+
+            }
+            else
+            {
+                HomescreenLayout layout = layouts.get(i);
+                layout.getLayout().setVisibility(View.INVISIBLE);
+                layout.getLayout().setClickable(false);
+            }
+        }           
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.homescreen_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.homescreen_settings:
+                onCmd_settings();
+                return true;
+            case R.id.homescreen_share:
+                doCmdShare();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -296,7 +288,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 SnuffyApplication app = (SnuffyApplication) getApplication();
                 app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
 
-                refreshPackageFragmentList(settings, false);
+                refreshPackageList(settings, false);
                 createTheHomeScreen();
 
                 break;
@@ -305,7 +297,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             {
                 // start the download
                 String code = data.getStringExtra("primaryCode");
-                showLoading("Downloading resources...");
+
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         code,
                         "primary",
@@ -321,7 +313,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 {
                     languagePrimary = primaryCode;
                     packageList = getPackageList();
-                    packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
+                    showLayoutsWithPackages();
                 }
 
                 String code = data.getStringExtra("parallelCode");
@@ -361,7 +353,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 // refresh the list
                 String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 
-                refreshPackageFragmentList(settings, true);
+                refreshPackageList(settings, true);
 
                 if (!languagePrimary.equalsIgnoreCase(primaryCode))
                 {
@@ -384,7 +376,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
      *                     has no packages available.  This is true when leaving translator mode in a language with all
      *                     drafts and no published live versions.
      */
-    private void refreshPackageFragmentList(SharedPreferences settings, boolean withFallback)
+    private void refreshPackageList(SharedPreferences settings, boolean withFallback)
     {
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
         packageList = getPackageList();
@@ -393,19 +385,11 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         {
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PRIMARY, "en");
-            editor.commit();
+            editor.apply();
             languagePrimary = "en";
             packageList = getPackageList();
         }
-        packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
-    }
-
-
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        Log.d(TAG, "onStart");
+        showLayoutsWithPackages();
     }
 
     @Override
@@ -414,35 +398,20 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         super.onPause();
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor ed = settings.edit();
-        ed.commit();
+        ed.apply();
     }
 
     @Override
     protected void onResume()
     {
         super.onResume();
-        // Setup is only done on first resume,
-        // else we resize the screen elements smaller and smaller each time.
-        if (mSetupNeeded)
-        {
-            doSetup(1000);    // 1 second delay required to make sure activity fully created
-            // - is there something we can test for that is better than a fixed timeout?
-        }
+        doSetup();
     }
 
-    private void doSetup(int delay)
+    private void doSetup()
     {
-        new Handler().postDelayed(new Runnable()
-        {
-            public void run()
-            {
-                createTheHomeScreen();
-                getScreenSize();
-                showTheHomeScreen();
-                mSetupNeeded = false;
-            }
-        }, delay);  // delay can be required to make sure activity fully created - is there something we can test for that is better than a fixed timeout?
-
+        createTheHomeScreen();
+        getScreenSize();
     }
 
     private void getScreenSize()
@@ -476,7 +445,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         }
 
         left = rect.left + (rect.width() - width) / 2;
-        top = 0 + (rect.height() - height) / 2;
+        top = (rect.height() - height) / 2;
 
         mPageLeft = left;
         mPageTop = top;
@@ -499,34 +468,13 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
              * saved in the settings and when true, this will refresh the packages available.
              */
             packageList = getPackageList();
-            packageFrag.refreshList(languagePrimary, isTranslatorModeEnabled(), packageList);
+            showLayoutsWithPackages();
         }
 
         noPackages = false;
 
-        // resize contList
-        try
-        {
-            int childHeight = packageFrag.getListView().getChildAt(0).getHeight();
-            int childWidth = packageFrag.getListView().getChildAt(0).getWidth();
-            int totalHeight = childHeight * packageList.size();
-            packageFrag.getListView().setLayoutParams(new FrameLayout.LayoutParams(childWidth, totalHeight));
-
-            // Once the resizing is successful the boolean is changed to false the the list is not refreshed continually
-
-            justSwitchedToTranslatorMode = false;
-            switchedToTranslatorMode(false);
-        } catch (Exception e)
-        {
-            Log.e("error", e.getMessage(), e);
-        }
-    }
-
-    private void showTheHomeScreen()
-    {
-        // Now that it is resized - show it
-        ViewGroup container = (ViewGroup) findViewById(R.id.homescreen_container);
-        container.setVisibility(View.VISIBLE);
+        justSwitchedToTranslatorMode = false;
+        switchedToTranslatorMode(false);
         trackScreenVisit();
     }
 
@@ -536,7 +484,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         supportInvalidateOptionsMenu();
         tvTask.setText(msg);
         vLoading.setVisibility(View.VISIBLE);
-        packageFrag.disable();
 
         if (refreshButton != null)
         {
@@ -558,23 +505,16 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PRIMARY, langCode);
-            editor.commit();
+            editor.apply();
 
             GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
             gtl.setDownloaded(true);
             gtl.update(MainPW.this);
 
-            if (isTranslatorModeEnabled())
-            {
-                // check for draft_primary
-                GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), langCode, "draft_primary", this);
-            }
-            else
-            {
-                packageList = getPackageList();
-                packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
-                hideLoading();
-            }
+            packageList = getPackageList();
+            showLayoutsWithPackages();
+            hideLoading();
+            
             createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase("parallel"))
@@ -583,28 +523,20 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PARALLEL, langCode);
-            editor.commit();
+            editor.apply();
 
             GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
             gtl.setDownloaded(true);
             gtl.update(MainPW.this);
 
-            if (isTranslatorModeEnabled())
-            {
-                // check for draft_parallel
-                GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), langCode, "draft_parallel", this);
-            }
-            else
-            {
-                hideLoading();
-            }
+            hideLoading();
             createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase("draft"))
         {
             Toast.makeText(MainPW.this, "Drafts have been updated", Toast.LENGTH_SHORT).show();
             packageList = getPackageList();
-            packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
+            showLayoutsWithPackages();
             hideLoading();
             createTheHomeScreen();
         }
@@ -613,7 +545,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             languagePrimary = langCode;
             packageList = getPackageList();
 
-            packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
+            showLayoutsWithPackages();
 
             hideLoading();
             createTheHomeScreen();
@@ -627,34 +559,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private List<GTPackage> getPackageList()
     {
-        if (isTranslatorModeEnabled())
-        {
-            List<GTPackage> packageByLanguage = GTPackage.getPackageByLanguage(MainPW.this, languagePrimary);
-            if("en".equals(languagePrimary))
-            {
-                removeEveryStudent(packageByLanguage);
-            }
-            return packageByLanguage;
-        }
-        else
-        {
-            return GTPackage.getLivePackages(MainPW.this, languagePrimary);
-        }
-    }
-
-    private void removeEveryStudent(List<GTPackage> packages)
-    {
-        Iterator<GTPackage> i = packages.iterator();
-        for(; i.hasNext(); )
-        {
-            if(i.next().getCode().equals(GTPackage.EVERYSTUDENT_PACKAGE_CODE)) i.remove();
-        }
-    }
-
-    private boolean isTranslatorModeEnabled()
-    {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        return settings.getBoolean("TranslatorMode", false);
+        return GTPackage.getLivePackages(MainPW.this, languagePrimary);
     }
 
     private void switchedToTranslatorMode(boolean switched)
@@ -662,7 +567,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(JUST_SWITCHED, switched);
-        editor.commit();
+        editor.apply();
     }
 
     @Override
@@ -677,79 +582,13 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             return;
         }
 
-        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-        if (isTranslatorModeEnabled() && "draft".equalsIgnoreCase(gtPackage.getStatus()))
-        {
-            presentFinalizeDraftOption(gtPackage, settings);
-        }
-        else
-        {
-            Intent intent = new Intent(this, SnuffyPWActivity.class);
-            intent.putExtra("PackageName", gtPackage.getCode());
-            intent.putExtra("LanguageCode", gtPackage.getLanguage());
-            intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
-            intent.putExtra("Status", gtPackage.getStatus());
-            addPageFrameToIntent(intent);
-            startActivity(intent);
-        }
-    }
-
-    /**
-     * Dialog example taken from:
-     * http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android
-     */
-    private void presentFinalizeDraftOption(final GTPackage gtPackage, final SharedPreferences settings)
-    {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which)
-            {
-                switch (which)
-                {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        GodToolsApiClient.publishDraft(settings.getString("Authorization_Draft", ""),
-                                gtPackage.getLanguage(),
-                                gtPackage.getCode(),
-                                new DraftPublishTask.DraftTaskHandler()
-                                {
-                                    @Override
-                                    public void draftTaskComplete()
-                                    {
-                                        Toast.makeText(getApplicationContext(), "Draft has been published", Toast.LENGTH_SHORT).show();
-                                        showLoading("Updating drafts");
-                                        GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", MainPW.this);
-                                    }
-
-                                    @Override
-                                    public void draftTaskFailure()
-                                    {
-                                        Toast.makeText(getApplicationContext(), "Failed to publish draft", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-
-                        startActivity(getIntent());
-                        break;
-
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        Intent intent = new Intent(MainPW.this, SnuffyPWActivity.class);
-                        intent.putExtra("PackageName", gtPackage.getCode());
-                        intent.putExtra("LanguageCode", gtPackage.getLanguage());
-                        intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
-                        intent.putExtra("Status", gtPackage.getStatus());
-                        addPageFrameToIntent(intent);
-                        startActivity(intent);
-                        break;
-                }
-            }
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Do you want to publish this draft?")
-                .setPositiveButton("Yes, it's ready!", dialogClickListener)
-                .setNegativeButton("No, I just need to see it.", dialogClickListener)
-                .show();
+        Intent intent = new Intent(this, SnuffyPWActivity.class);
+        intent.putExtra("PackageName", gtPackage.getCode());
+        intent.putExtra("LanguageCode", gtPackage.getLanguage());
+        intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
+        intent.putExtra("Status", gtPackage.getStatus());
+        addPageFrameToIntent(intent);
+        startActivity(intent);
     }
 
     @Override
@@ -766,7 +605,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))
         {
             packageList = getPackageList();
-            packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
+            showLayoutsWithPackages();
         }
 
         hideLoading();
@@ -789,7 +628,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         {
 
             packageList = getPackageList();
-            packageFrag.refreshList(langCode, isTranslatorModeEnabled(), packageList);
+            showLayoutsWithPackages();
             Toast.makeText(MainPW.this, "Failed to download drafts", Toast.LENGTH_SHORT).show();
 
         }
@@ -807,6 +646,19 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         }
 
         hideLoading();
+    }
+
+    @Override
+    public void onClick(View view)
+    {
+        for (GTPackage gtPackage : packageList)
+        {
+            if (view.getId() == gtPackage.getLayout().getLayout().getId())
+            {
+                Log.i(TAG, "clicked: " + gtPackage.getCode());
+                onPackageSelected(gtPackage);
+            }
+        }
     }
 
     private class UpdateDraftListTask extends AsyncTask<Object, Void, Boolean>
@@ -854,7 +706,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         supportInvalidateOptionsMenu();
         tvTask.setText("");
         vLoading.setVisibility(View.GONE);
-        packageFrag.enable();
 
         if (refreshButton != null)
         {
@@ -902,149 +753,13 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         intent.putExtra("PageHeight", mPageHeight);
     }
 
-    public void onCmd_settings(View view)
+    private void onCmd_settings()
     {
         Intent intent = new Intent(this, SettingsPW.class);
         startActivityForResult(intent, REQUEST_SETTINGS);
     }
 
-    public void onCmd_refresh(View view)
-    {
-        if (Device.isConnected(MainPW.this))
-        {
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-
-            if (isTranslatorModeEnabled())
-            {
-                showLoading("Updating drafts...");
-                GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", this);
-            }
-            else
-            {
-                showLoading("Updating resources...");
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        languagePrimary,
-                        "primary",
-                        settings.getString("Authorization_Generic", ""),
-                        this);
-            }
-
-
-        }
-        else
-        {
-            Toast.makeText(MainPW.this, "Internet connection is required", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void onCmd_add(View view)
-    {
-        if (Device.isConnected(MainPW.this))
-        {
-            final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-            AlertDialog.Builder b = new AlertDialog.Builder(this);
-            b.setTitle("Start a draft for: ");
-
-            final LinkedHashMap<String, String> possiblePackagesForDraft = getPossiblePackagesForDraft();
-
-            final String[] packageNames = new ArrayList<String>(possiblePackagesForDraft.values()).toArray(new String[possiblePackagesForDraft.size()]);
-
-            b.setItems(packageNames, new DialogInterface.OnClickListener()
-            {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which)
-                {
-
-                    dialog.dismiss();
-
-                    int i = 0;
-                    String packageCode = null;
-                    for (Map.Entry<String, String> entry : possiblePackagesForDraft.entrySet())
-                    {
-                        if (i == which)
-                        {
-                            packageCode = entry.getKey();
-                            break;
-                        }
-                        i++;
-                    }
-                    GodToolsApiClient.createDraft(settings.getString("Authorization_Draft", ""),
-                            languagePrimary,
-                            packageCode,
-                            new DraftCreationTask.DraftTaskHandler()
-                            {
-                                @Override
-                                public void draftTaskComplete()
-                                {
-                                    Toast.makeText(getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT);
-                                    showLoading("Updating drafts...");
-                                    GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", MainPW.this);
-                                }
-
-                                @Override
-                                public void draftTaskFailure()
-                                {
-                                    Toast.makeText(getApplicationContext(), "Failed to create a new draft", Toast.LENGTH_SHORT);
-                                }
-                            });
-                }
-
-            });
-
-            b.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-            {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i)
-                {
-                    if (noPackages) onCmd_settings(null);
-                }
-            });
-
-            b.show();
-        }
-        else
-        {
-            Toast.makeText(MainPW.this, "Internet connection is required", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private LinkedHashMap<String, String> getPossiblePackagesForDraft()
-    {
-        // start with an ArrayList the length of number of packages. it will never be bigger than that.
-        LinkedHashMap<String, String> possiblePackages = new LinkedHashMap<String, String>(packageList.size());
-
-        // start with an list of (unfortuantely) hard coded packages
-        possiblePackages.put("kgp", "Knowing God Personally");
-        possiblePackages.put("fourlaws", "Four Spiritual Laws");
-        possiblePackages.put("satisfied", "Satisfied?");
-
-        // loop through the list of loaded packages, and stick in the name of any existing packages (already translated)
-        for (GTPackage gtPackage : packageList)
-        {
-            if ("live".equalsIgnoreCase(gtPackage.getStatus()) &&
-                    possiblePackages.containsKey(gtPackage.getCode()))
-            {
-                possiblePackages.put(gtPackage.getCode(), gtPackage.getName());
-            }
-        }
-
-        // loop through the list again and remove any that are already in 'draft' status
-        for (GTPackage gtPackage : packageList)
-        {
-            if ("draft".equalsIgnoreCase(gtPackage.getStatus()) &&
-                    possiblePackages.containsKey(gtPackage.getCode()))
-            {
-                possiblePackages.remove(gtPackage.getCode());
-            }
-        }
-
-        return possiblePackages;
-    }
-
-    public void doCmdShare(View v)
+    private void doCmdShare()
     {
         String msgBody = getString(R.string.app_share_link);
 
@@ -1143,7 +858,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(PROPERTY_REG_ID, regId);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
-        editor.commit();
+        editor.apply();
     }
 
     private static int getAppVersion(Context context) 

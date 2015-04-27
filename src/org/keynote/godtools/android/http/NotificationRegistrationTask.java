@@ -1,8 +1,6 @@
 package org.keynote.godtools.android.http;
 
-import android.nfc.Tag;
 import android.os.AsyncTask;
-import android.provider.Settings;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;

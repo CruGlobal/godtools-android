@@ -1,12 +1,5 @@
 package org.keynote.godtools.android;
 
-import java.util.HashMap;
-
-import org.keynote.godtools.android.utils.BasicZoomControl;
-import org.keynote.godtools.android.utils.ImageZoomView;
-import org.keynote.godtools.android.utils.KeyListener;
-import org.keynote.godtools.android.utils.LongPressZoomListener;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +18,13 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
+
+import org.keynote.godtools.android.utils.BasicZoomControl;
+import org.keynote.godtools.android.utils.ImageZoomView;
+import org.keynote.godtools.android.utils.KeyListener;
+import org.keynote.godtools.android.utils.LongPressZoomListener;
+
+import java.util.HashMap;
 
 public class Gallery extends Activity {
 
@@ -91,8 +91,7 @@ public class Gallery extends Activity {
         slideRightOut = AnimationUtils.loadAnimation(this, R.anim.slide_right_out);
         
         if (images.length > 0) {
-	    	byte[] byteArrayForBitmap = new byte[17*1024];
-	    	opt.inTempStorage =  byteArrayForBitmap;
+	    	opt.inTempStorage = new byte[17*1024];
 	    	
 	    	int num = 0;
 	    	if (images.length > 2) {

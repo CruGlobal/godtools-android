@@ -74,7 +74,7 @@ public class SnuffyPageMenuPWActivity extends ListActivity {
 		for (SnuffyPage page: pages) {
 			map = new HashMap<String, Object>();
 			map.put("label", page.mDescription);
-			map.put("image", page.mThumbnail.toString());
+			map.put("image", page.mThumbnail);
 			mList.add(map);
 		}
 

@@ -1,8 +1,10 @@
 package org.keynote.godtools.android;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -213,8 +215,7 @@ public class SnuffyPWActivity extends Activity
     {
         public int getCount()
         {
-            int n = mPages.size();
-            return n;
+            return mPages.size();
         }
 
         public Object instantiateItem(View collection, int position)
@@ -399,7 +400,7 @@ public class SnuffyPWActivity extends Activity
         ed.putInt("currPage", mPagerCurrentItem);
         ed.putString("currLanguageCode", getLanguage());
         // TODO: when we can display About or other pages, save that state too so we can restore that too.
-        ed.commit();
+        ed.apply();
         
         
     }
@@ -538,7 +539,7 @@ public class SnuffyPWActivity extends Activity
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor ed = settings.edit();
         ed.putString("currLanguageCode", languageCode);
-        ed.commit();
+        ed.apply();
 
         mPages.clear();
         mPages = null;
@@ -556,22 +557,39 @@ public class SnuffyPWActivity extends Activity
 
     private void switchLanguage()
     {
-
-        if (isUsingPrimaryLanguage)
+        if (isParallelLanguageSet && mParallelPackage != null)
         {
-            mConfigFileName = mConfigParallel;
-            isUsingPrimaryLanguage = false;
+            if (isUsingPrimaryLanguage)
+            {
+                mConfigFileName = mConfigParallel;
+                isUsingPrimaryLanguage = false;
 
+            }
+            else
+            {
+                mConfigFileName = mConfigPrimary;
+                isUsingPrimaryLanguage = true;
+            }
+
+            mPager.setAdapter(null);
+            doSetup(0);
         }
         else
         {
-            mConfigFileName = mConfigPrimary;
-            isUsingPrimaryLanguage = true;
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.alternate_language)
+                    .setMessage(R.string.alternate_language_message)
+                    .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i)
+                        {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .create();
+            builder.show();
         }
-
-
-        mPager.setAdapter(null);
-        doSetup(0);
 
     }
 
@@ -605,10 +623,7 @@ public class SnuffyPWActivity extends Activity
         // enable this feature if the the parallel language is set
         // and a translation is available for this package
         MenuItem switchItem = menu.findItem(R.id.CMD_SWITCH_LANGUAGE);
-        if (isParallelLanguageSet && mParallelPackage != null)
-            switchItem.setVisible(true);
-        else
-            switchItem.setVisible(false);
+        switchItem.setVisible(true);
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 

@@ -100,21 +100,32 @@
 
     <!-- Settings Activity -->
     <string name="settings_title">Settings</string>
-    <string name="settings_main_language">Main Language</string>
-    <string name="settings_parallel_language">Parallel Language</string>
+    <string name="settings_main_language">Language:</string>
+    <string name="settings_parallel_language">Parallel Language*:</string>
+    <string name="settings_parallel_info">*Tap screen during presentation and use "Switch Language" to toggle language. Option is not shown if booklet is not available.</string>
     <string name="settings_about">About GodTools</string>
     <string name="settings_current_language">This is the current Language</string>
     <string name="settings_explanation">You can select a primary and parallel language that you can switch to at any time</string>
     <string name="settings_select">Select</string>
-    <string name="settings_translator_mode">Preview Mode</string>
+    <string name="settings_translator_mode">Preview Mode (Translators)</string>
     <string name="settings_translator_message">If you are a GodTools translator wanting to see your latest translations, enable "Preview Mode"</string>
+    <string name="settings_notificiation">Allow Notifications</string>
 
     <!-- Main Activity-->
     <string name="main_actionbar_translator">Translator Preview Mode</string>
+    <string name="share">Share</string>
+    <string name="add">Add</string>
+    <string name="refresh">Refresh</string>
 
     <!-- Language Dialog -->
     <string name="dialog_language_title">Language Settings</string>
     <string name="dialog_language_body">"Would you like to set %s as the default language?"</string>
+    
+    <!-- Language List -->
+    <string name="download">Download</string>
+    <string name="downloading">Downloading</string>
+    <string name="delete">Delete</string>
+    <string name="retry">Retry</string>
 
     <!-- Translator Mode Dialog -->
     <string name="dialog_translator_mode_title">Exit Preview Mode?</string>
@@ -122,6 +133,11 @@
 
     <!-- Access Code Dialog -->
     <string name="dialog_access_code_title">Enter Access Code:</string>
+    
+    <!-- Preview Mode -->
+    <string name="pull_down_info">pull to refresh drafts</string>
+    <string name="preview_mode">[Preview Mode]</string>
+    <string name="preview_mode_title">Preview Mode</string>
 
     <!-- Shared Strings -->
     <string name="ok">OK</string>
@@ -130,5 +146,8 @@
     <string name="no">No</string>
     <string name="none">None</string>
     <string name="send">Send</string>
+    
+    <string name="alternate_language">Alternate Language</string>
+    <string name="alternate_language_message">The parallel language selected is not available for this tool.</string>
 
 </resources>

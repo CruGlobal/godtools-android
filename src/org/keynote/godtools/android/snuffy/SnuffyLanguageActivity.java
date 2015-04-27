@@ -1,5 +1,36 @@
 package org.keynote.godtools.android.snuffy;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ListActivity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+import org.keynote.godtools.android.R;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,38 +47,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ListActivity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import android.content.Intent;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import org.keynote.godtools.android.R;
 
 public class SnuffyLanguageActivity extends ListActivity {
 	private static final String TAG = "SnuffyLanguageActivity";
@@ -72,11 +71,11 @@ public class SnuffyLanguageActivity extends ListActivity {
 		
 		// the from array specifies which keys from the map
 		// we want to view in our ListView
-		String[] from = { "label1", "label2", "image", "status" };
+		String[] from = { "label1", "image", "status" };
 		
 		// the to array specifies the views from the xml layout
 		// on which we want to display the values defined in the from array
-		int[] to = { R.id.list2Text1, R.id.list2Text2, R.id.list2Image};
+		int[] to = { R.id.list2Text1, R.id.list2Image};
 		
 		mLanguageCode = getIntent().getStringExtra("LanguageCode");
 		mPackageName  = getIntent().getStringExtra("PackageName");
@@ -110,12 +109,12 @@ public class SnuffyLanguageActivity extends ListActivity {
 	    if (status.equalsIgnoreCase("UNLOADED")) {
 	    	menu.add(Menu.NONE, CMD_DOWNLOAD, Menu.NONE, R.string.download_language);
 	    }
-	    if (status.equalsIgnoreCase("UNLOADED") == false) {
+	    if (!status.equalsIgnoreCase("UNLOADED")) {
 	    	menu.add(Menu.NONE, CMD_SWITCH, Menu.NONE, R.string.switch_to_language);
 	    }	    
-	}; 
-	
-	@Override 
+	}
+
+    @Override
 	public boolean onContextItemSelected(MenuItem item) { 
        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo(); 
        int languageIndex = (int)this.getListView().getItemIdAtPosition(info.position); // wont that be same as position?
@@ -172,14 +171,13 @@ public class SnuffyLanguageActivity extends ListActivity {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		String status = (String)(mList.get(position).get("status"));
-		if (status.equalsIgnoreCase("UNLOADED") == false) {
+		if (!status.equalsIgnoreCase("UNLOADED")) {
 			doCmd_SwitchLanguage(position);
 			return;
 		}
 		if (status.equalsIgnoreCase("UNLOADED")) {
 			doCmd_DownloadLanguage(position);
-			return;
-		}
+        }
 	}
 	
 	private void doCmd_DownloadLanguage(int languageIndex) {
@@ -251,7 +249,7 @@ public class SnuffyLanguageActivity extends ListActivity {
 			InputStream isImage;
 			try {
 				boolean bImageFromAsset = false; // the icons for all languages have been downloaded
-				if (bImageFromAsset == false) {
+				if (!bImageFromAsset) {
 					//  need this code when the files have been downloaded
 					try {
 						Uri uri = Uri.parse("file://" + value);
@@ -355,11 +353,11 @@ public class SnuffyLanguageActivity extends ListActivity {
 		}
 		finally {
 			if (bin != null) {
-				try {bin.close();} catch (Exception e) {};
+				try {bin.close();} catch (Exception e) {}
 			}
 			if (fin != null) {
-				try {fin.close();} catch (Exception e) {};
-			}
+				try {fin.close();} catch (Exception e) {}
+            }
 		}			
 	}
 	
@@ -427,7 +425,7 @@ public class SnuffyLanguageActivity extends ListActivity {
 				int total = 0;
 				int count;
 	
-				while ((isCancelled() == false) && ((count = input.read(data)) != -1)) {
+				while ((!isCancelled()) && ((count = input.read(data)) != -1)) {
 					total += count;
 					if (fileLength < 0) {
 						publishProgress(total, total);						
@@ -443,12 +441,12 @@ public class SnuffyLanguageActivity extends ListActivity {
 				input.close();
 				
 				// 2. Unzip the file into our persistent storage area 
-				if (isCancelled() == false) {
+				if (!isCancelled()) {
 					new Decompress().unzip(new File(tempFileName), documentsDir);
 				}
 				
 				// 3. Process the downloaded files
-				if (isCancelled() == false) {
+				if (!isCancelled()) {
 					if (mLanguageCode.length() == 0) {
 						String downloadedIndex = documentsDir.getPath() + "/repoFile.xml";
 						String renamedIndex    = documentsDir.getPath() + "/repoIndex.xml"; // TODO: could build packagename into this filename

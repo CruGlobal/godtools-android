@@ -3,6 +3,7 @@ package org.keynote.godtools.android.business;
 import android.content.Context;
 
 import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.model.HomescreenLayout;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class GTPackage {
     private String configFileName;
     private String status;
     private String icon;
+    private HomescreenLayout layout;
 
     public long getId() {
         return id;
@@ -81,6 +83,16 @@ public class GTPackage {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public HomescreenLayout getLayout()
+    {
+        return layout;
+    }
+
+    public void setLayout(HomescreenLayout layout)
+    {
+        this.layout = layout;
     }
 
     public static GTPackage getPackage(Context context, String code, String language, String status){

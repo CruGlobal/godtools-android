@@ -8,12 +8,8 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.TextView;
-
-import org.keynote.godtools.android.snuffy.SnuffyApplication;
-import org.w3c.dom.Text;
 
 public class About extends Activity {
  
@@ -74,8 +70,7 @@ public class About extends Activity {
 					.setPositiveButton(R.string.ok, null);
 			AlertDialog alert = builder.create();
 			alert.show();
-			return;
-		}
+        }
 	}
 	
     @Override

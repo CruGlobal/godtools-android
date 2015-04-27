@@ -56,7 +56,6 @@ public class SnuffyApplication extends Application {
                     .setPositiveButton(R.string.ok, null);
             AlertDialog alert = builder.create();
             alert.show();
-            return;
         }
     }
 

@@ -185,7 +185,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 		{
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putBoolean("firstLaunch", false);
-			editor.commit();
+			editor.apply();
 		}
 		return isFirst;
 	}
@@ -208,11 +208,9 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
 		// check first if the we support the phones language
 		GTLanguage gtlPhone = GTLanguage.getLanguage(this, languagePhone);
-		if (gtlPhone == null)
-			return false;
+        return gtlPhone != null && !languagePrimary.equalsIgnoreCase(languagePhone);
 
-		return !languagePrimary.equalsIgnoreCase(languagePhone);
-	}
+    }
 
 	/**
 	 * Copies the english resources from assets to internal storage,
@@ -244,8 +242,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 		@Override
 		protected Void doInBackground(Void... voids)
 		{
-			;
-			AssetManager manager = mContext.getAssets();
+            AssetManager manager = mContext.getAssets();
 
 			File resourcesDir = new File(documentsDir, "resources");
 			resourcesDir.mkdir();
@@ -478,7 +475,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 		{
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putString(GTLanguage.KEY_PRIMARY, langCode);
-			editor.commit();
+			editor.apply();
 
 			GTLanguage gtl = new GTLanguage(langCode);
 			gtl.setDownloaded(true);
@@ -532,8 +529,17 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
 	private void goToMainActivity()
 	{
-		Intent intent = new Intent(this, MainPW.class);
-		startActivity(intent);
-		finish();
+        if (settings.getBoolean("TranslatorMode", false))
+        {
+            Intent intent = new Intent(this, PreviewModeMainPW.class);
+            startActivity(intent);
+            finish();
+        }
+        else
+        {
+            Intent intent = new Intent(this, MainPW.class);
+            startActivity(intent);
+            finish();
+        }
 	}
 }
