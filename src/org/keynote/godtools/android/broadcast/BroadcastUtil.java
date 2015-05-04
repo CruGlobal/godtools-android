@@ -14,6 +14,7 @@ public final class BroadcastUtil
     public static final String ACTION_RUNNING = BroadcastUtil.class.getName() + ".ACTION_RUNNING";
     public static final String ACTION_STOP = BroadcastUtil.class.getName() + ".ACTION_STOP";
     public static final String ACTION_TYPE = BroadcastUtil.class.getName() + ".ACTION_TYPE";
+    public static final String ACTION_FAIL = BroadcastUtil.class.getName() + ".ACTION_FAIL";
     
     public static Intent startBroadcast()
     {
@@ -23,6 +24,13 @@ public final class BroadcastUtil
     public static Intent stopBroadcast(Type type)
     {
         Intent intent = new Intent(ACTION_STOP);
+        intent.putExtra(ACTION_TYPE, type);
+        return intent;
+    }
+
+    public static Intent failBroadcast(Type type)
+    {
+        Intent intent = new Intent(ACTION_FAIL);
         intent.putExtra(ACTION_TYPE, type);
         return intent;
     }
@@ -40,5 +48,10 @@ public final class BroadcastUtil
     public static IntentFilter stopFilter()
     {
         return new IntentFilter(ACTION_STOP);
+    }
+
+    public static IntentFilter failedFilter()
+    {
+        return new IntentFilter(ACTION_FAIL);
     }
 }
