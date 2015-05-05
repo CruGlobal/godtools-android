@@ -16,7 +16,7 @@ public class AuthTask extends AsyncTask<Object, Void, String> {
     private AuthTaskHandler taskHandler;
     private int statusCode;
 
-    public static interface AuthTaskHandler {
+    public interface AuthTaskHandler {
         void authComplete(String authorization);
 
         void authFailed();

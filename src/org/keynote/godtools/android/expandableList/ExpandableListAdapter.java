@@ -263,14 +263,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             public void draftTaskComplete()
                                             {
                                                 Toast.makeText(context, "Draft has been published", Toast.LENGTH_SHORT).show();
-                                                broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_PUBLISH_TASK));
+                                                broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_PUBLISH_TASK, null));
                                             }
 
                                             @Override
                                             public void draftTaskFailure()
                                             {
                                                 Toast.makeText(context, "Failed to publish draft", Toast.LENGTH_SHORT).show();
-                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR));
+                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR, null));
                                             }
                                         });
                                 break;
@@ -310,14 +310,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             public void draftTaskComplete()
                                             {
                                                 Toast.makeText(context.getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT).show();
-                                                broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_CREATION_TASK));
+                                                broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_CREATION_TASK, null));
                                             }
 
                                             @Override
                                             public void draftTaskFailure()
                                             {
                                                 Toast.makeText(context.getApplicationContext(), "Failed to create a new draft", Toast.LENGTH_SHORT).show();
-                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR));
+                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR, null));
                                             }
                                         });
                                 break;

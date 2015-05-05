@@ -24,10 +24,10 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
-import org.keynote.godtools.android.http.AuthTask;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
+import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
@@ -39,17 +39,17 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Locale;
 
+import static org.keynote.godtools.android.utils.Constants.KEY_NEW_LANGUAGE;
+import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+
 
 public class Splash extends Activity implements DownloadTask.DownloadTaskHandler, MetaTask.MetaTaskHandler
 {
 	private static final String TAG = Splash.class.getSimpleName();
 
 	protected boolean _active = true;
-	protected int _splashTime = 2000;
-	private static final String PREFS_NAME = "GodTools";
-	private static final String KEY_NEW_LANGUAGE = "new_language";
-	private static final String KEY_UPDATE_PRIMARY = "update_primary";
-	private static final String KEY_UPDATE_PARALLEL = "update_parallel";
 
 	private String languagePhone;
 	private String languagePrimary;
@@ -85,90 +85,38 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 		languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 		languageParallel = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
+		setupBroadcastReceiver();
+
 		if (isFirstLaunch())
 		{
+			Log.i(TAG, "First Launch");
 			new PrepareInitialContentTask((SnuffyApplication) getApplication()).execute((Void) null);
 			if(Device.isConnected(Splash.this) &&
 					settings.getString("Authorization_Generic", "").equals(""))
 			{
-				GodToolsApiClient.authenticateGeneric(new AuthTask.AuthTaskHandler()
-				{
-					@Override
-					public void authComplete(String authorization)
-					{
-						SharedPreferences.Editor editor = settings.edit();
-						editor.putString("Authorization_Generic", authorization);
-						editor.apply();
-						Log.i(TAG, "Now Authorized");
-						checkForUpdates();
-					}
-
-					@Override
-					public void authFailed()
-					{
-						Log.e(TAG, "Failed getting auth token.");
-					}
-				});
+				Log.i(TAG, "Starting backgound service");
+				BackgroundService.authenticateGeneric(this);
 			}
 		}
 		else if(settings.getString("Authorization_Generic", "").equals(""))
 		{
-			GodToolsApiClient.authenticateGeneric(new AuthTask.AuthTaskHandler()
-			{
-				@Override
-				public void authComplete(String authorization)
-				{
-					SharedPreferences.Editor editor = settings.edit();
-					editor.putString("Authorization_Generic", authorization);
-					editor.apply();
-					Log.i(TAG, "Now Authorized");
-					checkForUpdates();
-				}
-
-				@Override
-				public void authFailed()
-				{
-					Log.e(TAG, "Failed getting auth token.");
-					goToMainActivity();
-				}
-			});
+			BackgroundService.authenticateGeneric(this);
 		}
 		else if (Device.isConnected(Splash.this))
 		{
-			checkForUpdates();
+			goToMainActivity();
 		}
 		else
 		{
-			// thread for displaying the SplashScreen
-			Thread splashThread = new Thread()
-			{
-				@Override
-				public void run()
-				{
-					try
-					{
-						int waited = 0;
-						while (_active && (waited < _splashTime))
-						{
-							sleep(100);
-							if (_active)
-							{
-								waited += 100;
-							}
-						}
-					} catch (InterruptedException e)
-					{
-						// do nothing
-					} finally
-					{
-
-						goToMainActivity();
-
-					}
-				}
-			};
-			splashThread.start();
+			goToMainActivity();
 		}
+	}
+
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		removeBroadcastReceiver();
 	}
 
 	private void setupBroadcastReceiver()
@@ -180,8 +128,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 			@Override
 			public void onReceive(Context context, Intent intent)
 			{
-				if (BroadcastUtil.ACTION_START.equals(intent.getAction())) Log.i(TAG, "Action started");
-				else if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
+				if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
 				{
 					Log.i(TAG, "Action Done");
 
@@ -191,18 +138,24 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 					{
 						case AUTH:
 							Log.i(TAG, "Auth Task complete");
+							checkForUpdates();
 							break;
 						case DOWNLOAD_TASK:
 							break;
 						case DRAFT_CREATION_TASK:
 							Log.i(TAG, "Create broadcast received");
-							GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", Splash.this);
+							GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""),
+									languagePrimary, "draft", Splash.this);
 							break;
 						case DRAFT_PUBLISH_TASK:
 							Log.i(TAG, "Publish broadcast received");
-							GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", Splash.this);
+							GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""),
+									languagePrimary, "draft_primary", Splash.this);
 							break;
 						case META_TASK:
+							break;
+						case FAIL:
+							Log.i(TAG, "Task Failed");
 							break;
 						case ERROR:
 							Log.i(TAG, "Error");
@@ -214,6 +167,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
 		broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.startFilter());
 		broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.stopFilter());
+		broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.failedFilter());
 	}
 
 	private void removeBroadcastReceiver()
@@ -263,11 +217,9 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
 	private boolean shouldUpdateLanguageSettings()
 	{
-
 		// check first if the we support the phones language
 		GTLanguage gtlPhone = GTLanguage.getLanguage(this, languagePhone);
         return gtlPhone != null && !languagePrimary.equalsIgnoreCase(languagePhone);
-
     }
 
 	/**
@@ -364,19 +316,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 			}
 
 			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void aVoid)
-		{
-			if (Device.isConnected(mContext))
-			{
-				checkForUpdates();
-			}
-			else
-			{
-				goToMainActivity();
-			}
 		}
 	}
 
@@ -515,7 +454,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 	private void checkForUpdates()
 	{
 		showLoading(getString(R.string.check_update));
-		GodToolsApiClient.getListOfPackages(settings.getString("Authorization_Generic", ""), "meta", Splash.this);
+		BackgroundService.getListOfPackages(this);
 	}
 
 	@Override

@@ -15,11 +15,24 @@ public class Constants
      */
     public static final String SENDER = "SENDER";
 
+    public static final String KEY_NEW_LANGUAGE = "new_language";
+    public static final String KEY_UPDATE_PRIMARY = "update_primary";
+    public static final String KEY_UPDATE_PARALLEL = "update_parallel";
+
+    public static final String META = "meta";
+
+    public static final String META_IS = "meta_is";
+    public static final String META_LANG_CODE = "meta_lang_code";
+    public static final String META_TAG = "meta_tag";
+
+
+
     /**
      * App preferences name
      */
     public static final String PREFS_NAME = "GodTools";
 
+    public static final String AUTH_CODE = "Authorization_Generic";
 
     /** constants used to specify the task that was run. */
 
@@ -28,15 +41,5 @@ public class Constants
      */
     public static final int AUTHENTICATE_GENERIC = 0;
 
-    /** constants used to specify the sender of the intent to be run */
-
-    /**
-     * Intent was sent by the splash class
-     */
-    public static final int SPLASH = 0;
-
-    /**
-     * Intent was sent by the Main class
-     */
-    public static final int MAIN = 1;
+    public static final int GET_LIST_OF_PACKAGES = 1;
 }
