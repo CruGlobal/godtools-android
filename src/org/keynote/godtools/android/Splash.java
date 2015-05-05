@@ -1,12 +1,14 @@
 package org.keynote.godtools.android;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -16,6 +18,8 @@ import android.widget.TextView;
 
 import com.crittercism.app.Crittercism;
 
+import org.keynote.godtools.android.broadcast.BroadcastUtil;
+import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
@@ -38,7 +42,7 @@ import java.util.Locale;
 
 public class Splash extends Activity implements DownloadTask.DownloadTaskHandler, MetaTask.MetaTaskHandler
 {
-	private static final String LOG_TAG = Splash.class.getSimpleName();
+	private static final String TAG = Splash.class.getSimpleName();
 
 	protected boolean _active = true;
 	protected int _splashTime = 2000;
@@ -54,6 +58,9 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
 	private GTLanguage gtlPrimary;
 	private GTLanguage gtlParallel;
+
+	private LocalBroadcastManager broadcastManager;
+	private BroadcastReceiver broadcastReceiver;
 
 	TextView tvTask;
 	ProgressBar progressBar;
@@ -92,14 +99,14 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 						SharedPreferences.Editor editor = settings.edit();
 						editor.putString("Authorization_Generic", authorization);
 						editor.apply();
-						Log.i(LOG_TAG, "Now Authorized");
+						Log.i(TAG, "Now Authorized");
 						checkForUpdates();
 					}
 
 					@Override
 					public void authFailed()
 					{
-						Log.e(LOG_TAG, "Failed getting auth token.");
+						Log.e(TAG, "Failed getting auth token.");
 					}
 				});
 			}
@@ -114,14 +121,14 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 					SharedPreferences.Editor editor = settings.edit();
 					editor.putString("Authorization_Generic", authorization);
 					editor.apply();
-					Log.i(LOG_TAG, "Now Authorized");
+					Log.i(TAG, "Now Authorized");
 					checkForUpdates();
 				}
 
 				@Override
 				public void authFailed()
 				{
-					Log.e(LOG_TAG, "Failed getting auth token.");
+					Log.e(TAG, "Failed getting auth token.");
 					goToMainActivity();
 				}
 			});
@@ -162,6 +169,57 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 			};
 			splashThread.start();
 		}
+	}
+
+	private void setupBroadcastReceiver()
+	{
+		broadcastManager = LocalBroadcastManager.getInstance(this);
+
+		broadcastReceiver = new BroadcastReceiver()
+		{
+			@Override
+			public void onReceive(Context context, Intent intent)
+			{
+				if (BroadcastUtil.ACTION_START.equals(intent.getAction())) Log.i(TAG, "Action started");
+				else if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
+				{
+					Log.i(TAG, "Action Done");
+
+					Type type = (Type) intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE);
+
+					switch (type)
+					{
+						case AUTH:
+							Log.i(TAG, "Auth Task complete");
+							break;
+						case DOWNLOAD_TASK:
+							break;
+						case DRAFT_CREATION_TASK:
+							Log.i(TAG, "Create broadcast received");
+							GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", Splash.this);
+							break;
+						case DRAFT_PUBLISH_TASK:
+							Log.i(TAG, "Publish broadcast received");
+							GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", Splash.this);
+							break;
+						case META_TASK:
+							break;
+						case ERROR:
+							Log.i(TAG, "Error");
+							break;
+					}
+				}
+			}
+		};
+
+		broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.startFilter());
+		broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.stopFilter());
+	}
+
+	private void removeBroadcastReceiver()
+	{
+		broadcastManager.unregisterReceiver(broadcastReceiver);
+		broadcastReceiver = null;
 	}
 
 	@Override

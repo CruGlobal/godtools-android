@@ -17,6 +17,11 @@ import org.keynote.godtools.android.http.MetaTask;
 
 import java.io.InputStream;
 
+import static org.keynote.godtools.android.utils.Constants.AUTHENTICATE_GENERIC;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.SENDER;
+import static org.keynote.godtools.android.utils.Constants.TYPE;
+
 /**
  * Created by matthewfrederick on 5/4/15.
  */
@@ -24,10 +29,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
 {
     private final String TAG = getClass().getSimpleName();
 
-    private static final String TYPE = "TYPE";
-    private static final String PREFS_NAME = "GodTools";
 
-    private static final int AUTHENTICATE_GENERIC = 0;
 
     private LocalBroadcastManager broadcastManager;
     private SharedPreferences settings;
@@ -70,10 +72,11 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         return intent;
     }
 
-    public static void authenticateGeneric(Context context)
+    public static void authenticateGeneric(Context context, int sender)
     {
-        final Bundle extras = new Bundle(1);
+        final Bundle extras = new Bundle(2);
         extras.putInt(TYPE, AUTHENTICATE_GENERIC);
+        extras.putInt(SENDER, sender);
         Intent intent = baseIntent(context, extras);
         context.startService(intent);
     }
