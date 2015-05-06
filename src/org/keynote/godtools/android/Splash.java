@@ -24,9 +24,6 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
-import org.keynote.godtools.android.http.DownloadTask;
-import org.keynote.godtools.android.http.GodToolsApiClient;
-import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
@@ -42,10 +39,11 @@ import java.util.Locale;
 import static org.keynote.godtools.android.utils.Constants.KEY_NEW_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.META_IS;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 
 
-public class Splash extends Activity implements DownloadTask.DownloadTaskHandler, MetaTask.MetaTaskHandler
+public class Splash extends Activity
 {
 	private static final String TAG = Splash.class.getSimpleName();
 
@@ -142,20 +140,13 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 							break;
 						case DOWNLOAD_TASK:
 							break;
-						case DRAFT_CREATION_TASK:
-							Log.i(TAG, "Create broadcast received");
-							GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""),
-									languagePrimary, "draft", Splash.this);
-							break;
-						case DRAFT_PUBLISH_TASK:
-							Log.i(TAG, "Publish broadcast received");
-							GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""),
-									languagePrimary, "draft_primary", Splash.this);
-							break;
 						case META_TASK:
+							List<GTLanguage> languageList = (List<GTLanguage>) intent.getSerializableExtra(META_IS);
+							new UpdatePackageListTask().execute(languageList);
 							break;
 						case FAIL:
 							Log.i(TAG, "Task Failed");
+							goToMainActivity();
 							break;
 						case ERROR:
 							Log.i(TAG, "Error");
@@ -319,7 +310,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 		}
 	}
 
-	private class UpdatePackageListTask extends AsyncTask<InputStream, Void, Void>
+	private class UpdatePackageListTask extends AsyncTask<List<GTLanguage>, Void, Void>
 	{
 		DBAdapter mAdapter;
 
@@ -331,11 +322,9 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 		}
 
 		@Override
-		protected Void doInBackground(InputStream... params)
+		protected Void doInBackground(List<GTLanguage>... params)
 		{
-			InputStream is = params[0];
-			// update the database
-			List<GTLanguage> languageList = GTPackageReader.processMetaResponse(is);
+			List<GTLanguage> languageList = params[0];
 			mAdapter.open();
 			for (GTLanguage gtl : languageList)
 			{
@@ -384,21 +373,13 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 					languagePhone = ((SnuffyApplication) getApplication()).getDeviceLocale().getLanguage();
 					Locale mLocale = new Locale(languagePhone);
 					showLoading(String.format(getString(R.string.download_resources), mLocale.getDisplayName()));
-					GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-							languagePhone,
-							KEY_NEW_LANGUAGE,
-							settings.getString("Authorization_Generic", ""),
-							Splash.this);
+					BackgroundService.downloadLanguagePack(Splash.this, languagePhone, KEY_NEW_LANGUAGE);
 				}
 				else if (!gtlPrimary.isDownloaded())
 				{
 					// update resources for the primary language
 					showLoading(String.format(getString(R.string.update_resources), gtlPrimary.getLanguageName()));
-					GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-							languagePrimary,
-							KEY_UPDATE_PRIMARY,
-							settings.getString("Authorization_Generic", ""),
-							Splash.this);
+					BackgroundService.downloadLanguagePack(Splash.this, languagePrimary, KEY_UPDATE_PRIMARY);
 				}
 				else
 				{
@@ -412,11 +393,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 				{
 					// update resources for the primary language
 					showLoading(String.format(getString(R.string.update_resources), gtlPrimary.getLanguageName()));
-					GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-							languagePrimary,
-							KEY_UPDATE_PRIMARY,
-							settings.getString("Authorization_Generic", ""),
-							Splash.this);
+					BackgroundService.downloadLanguagePack(Splash.this, languagePrimary, KEY_UPDATE_PRIMARY);
 				}
 				else
 				{
@@ -424,11 +401,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 					if (gtlParallel != null && !gtlParallel.isDownloaded())
 					{
 						showLoading(String.format(getString(R.string.update_resources), gtlParallel.getLanguageName()));
-						GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-								gtlParallel.getLanguageCode(),
-								KEY_UPDATE_PARALLEL,
-								settings.getString("Authorization_Generic", ""),
-								Splash.this);
+						BackgroundService.downloadLanguagePack(Splash.this, gtlParallel.getLanguageCode(), KEY_UPDATE_PARALLEL);
 					}
 					else
 					{
@@ -455,73 +428,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 	{
 		showLoading(getString(R.string.check_update));
 		BackgroundService.getListOfPackages(this);
-	}
-
-	@Override
-	public void metaTaskComplete(InputStream is, String langCode, String tag)
-	{
-		new UpdatePackageListTask().execute(is);
-	}
-
-	@Override
-	public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
-	{
-		hideLoading();
-
-		if (tag.equalsIgnoreCase(KEY_NEW_LANGUAGE))
-		{
-			SharedPreferences.Editor editor = settings.edit();
-			editor.putString(GTLanguage.KEY_PRIMARY, langCode);
-			editor.apply();
-
-			GTLanguage gtl = new GTLanguage(langCode);
-			gtl.setDownloaded(true);
-			gtl.update(Splash.this);
-
-			SnuffyApplication app = (SnuffyApplication) getApplication();
-			app.setAppLocale(langCode);
-
-			goToMainActivity();
-		}
-		else if (tag.equalsIgnoreCase(KEY_UPDATE_PRIMARY))
-		{
-			gtlPrimary.setDownloaded(true);
-			gtlPrimary.update(Splash.this);
-
-			if (gtlParallel != null && !gtlParallel.isDownloaded())
-			{
-				showLoading(String.format(getString(R.string.update_resources), gtlParallel.getLanguageName()));
-				GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-						gtlParallel.getLanguageCode(),
-						KEY_UPDATE_PARALLEL,
-						settings.getString("Authorization_Generic", ""),
-						Splash.this);
-			}
-			else
-			{
-				goToMainActivity();
-			}
-		}
-		else if (tag.equalsIgnoreCase(KEY_UPDATE_PARALLEL))
-		{
-			gtlParallel.setDownloaded(true);
-			gtlParallel.update(Splash.this);
-
-			goToMainActivity();
-		}
-	}
-
-	@Override
-	public void metaTaskFailure(InputStream is, String langCode, String tag)
-	{
-		goToMainActivity();
-	}
-
-	@Override
-	public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
-	{
-		// TODO: show dialog to inform the user that the download failed
-		finish();
 	}
 
 	private void goToMainActivity()

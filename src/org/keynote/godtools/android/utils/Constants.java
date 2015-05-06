@@ -19,11 +19,18 @@ public class Constants
     public static final String KEY_UPDATE_PRIMARY = "update_primary";
     public static final String KEY_UPDATE_PARALLEL = "update_parallel";
 
+    public static final String KEY_PRIMARY = "primary";
+    public static final String KEY_PARALLEL = "parallel";
+
+
+
     public static final String META = "meta";
 
     public static final String META_IS = "meta_is";
-    public static final String META_LANG_CODE = "meta_lang_code";
-    public static final String META_TAG = "meta_tag";
+    public static final String LANG_CODE = "lang_code";
+    public static final String BACKGROUND_TASK_TAG = "task_tag";
+    public static final String DRAFT = "draft";
+    public static final String DRAFT_PRIMARY = "draft";
 
 
 
@@ -42,4 +49,8 @@ public class Constants
     public static final int AUTHENTICATE_GENERIC = 0;
 
     public static final int GET_LIST_OF_PACKAGES = 1;
+
+    public static final int GET_LIST_OF_DRAFTS = 2;
+
+    public static final int DOWNLOAD_LANGUAGE_PACK = 3;
 }
