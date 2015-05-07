@@ -10,11 +10,6 @@ public class Constants
      */
     public static final String TYPE = "TYPE";
 
-    /**
-     * Used as the key to sender of background service for intent extras
-     */
-    public static final String SENDER = "SENDER";
-
     public static final String KEY_NEW_LANGUAGE = "new_language";
     public static final String KEY_UPDATE_PRIMARY = "update_primary";
     public static final String KEY_UPDATE_PARALLEL = "update_parallel";
@@ -26,12 +21,8 @@ public class Constants
 
     public static final String META = "meta";
 
-    public static final String META_IS = "meta_is";
     public static final String LANG_CODE = "lang_code";
     public static final String BACKGROUND_TASK_TAG = "task_tag";
-    public static final String DRAFT = "draft";
-    public static final String DRAFT_PRIMARY = "draft";
-
 
 
     /**

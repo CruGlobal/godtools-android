@@ -60,6 +60,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
+
 
 public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
         DownloadTask.DownloadTaskHandler,
@@ -86,7 +89,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private LocalBroadcastManager broadcastManager;
     private BroadcastReceiver broadcastReceiver;
     private String languagePrimary;
-    private String languageParallel;
     
     private List<HomescreenLayout> layouts;
 
@@ -399,7 +401,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         code,
-                        "primary",
+                        KEY_PRIMARY,
                         settings.getString("Authorization_Generic", ""),
                         this);
                 break;
@@ -419,7 +421,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 showLoading("Downloading resources...");
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         code,
-                        "parallel",
+                        KEY_PARALLEL,
                         settings.getString("Authorization_Generic", ""),
                         this);
                 break;
@@ -524,10 +526,10 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         window.getDecorView().getWindowVisibleDisplayFrame(rect);
 
         rect.top = 0;
-        int width = rect.width();
-        int height = rect.height();
-        int left = rect.left;
-        int top = rect.top;
+        int width;
+        int height;
+        int left;
+        int top;
 
         double aspectRatioTarget = (double) MainPW.REFERENCE_DEVICE_WIDTH / (double) MainPW.REFERENCE_DEVICE_HEIGHT;
         double aspectRatio = (double) rect.width() / (double) rect.height();
@@ -594,7 +596,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
     {
 
-        if (tag.equalsIgnoreCase("primary"))
+        if (tag.equalsIgnoreCase(KEY_PRIMARY))
         {
             languagePrimary = langCode;
 
@@ -616,7 +618,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             
             createTheHomeScreen();
         }
-        else if (tag.equalsIgnoreCase("parallel"))
+        else if (tag.equalsIgnoreCase(KEY_PARALLEL))
         {
 
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -731,13 +733,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             Toast.makeText(MainPW.this, "Failed to download drafts", Toast.LENGTH_SHORT).show();
 
         }
-        else if (tag.equalsIgnoreCase("draft_parallel"))
-        {
-
-            // do nothing
-
-        }
-        else if (tag.equalsIgnoreCase("primary") || tag.equalsIgnoreCase("parallel"))
+        else if (tag.equalsIgnoreCase(KEY_PRIMARY) || tag.equalsIgnoreCase(KEY_PARALLEL))
         {
 
             Toast.makeText(MainPW.this, "Failed to download resources", Toast.LENGTH_SHORT).show();
