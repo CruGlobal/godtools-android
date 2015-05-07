@@ -2,7 +2,6 @@ package org.keynote.godtools.android.broadcast;
 
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
 
 /**
  * Created by matthewfrederick on 2/17/15.
@@ -22,11 +21,10 @@ public final class BroadcastUtil
         return new Intent(ACTION_START);
     }
     
-    public static Intent stopBroadcast(Type type, Bundle extras)
+    public static Intent stopBroadcast(Type type)
     {
         Intent intent = new Intent(ACTION_STOP);
         intent.putExtra(ACTION_TYPE, type);
-        if (extras != null) intent.putExtras(extras);
         return intent;
     }
 

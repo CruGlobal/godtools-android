@@ -5,8 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -20,26 +18,10 @@ import com.crittercism.app.Crittercism;
 
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
-import org.keynote.godtools.android.business.GTLanguage;
-import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.business.GTPackageReader;
-import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.List;
-import java.util.Locale;
-
-import static org.keynote.godtools.android.utils.Constants.KEY_NEW_LANGUAGE;
-import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PARALLEL;
-import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PRIMARY;
-import static org.keynote.godtools.android.utils.Constants.META_IS;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 
 
@@ -48,14 +30,6 @@ public class Splash extends Activity
 	private static final String TAG = Splash.class.getSimpleName();
 
 	protected boolean _active = true;
-
-	private String languagePhone;
-	private String languagePrimary;
-	private String languageParallel;
-	private boolean isFirst;
-
-	private GTLanguage gtlPrimary;
-	private GTLanguage gtlParallel;
 
 	private LocalBroadcastManager broadcastManager;
 	private BroadcastReceiver broadcastReceiver;
@@ -80,29 +54,26 @@ public class Splash extends Activity
 		Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
 
 		settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-		languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-		languageParallel = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
 		setupBroadcastReceiver();
 
+		// if this is a first launch
 		if (isFirstLaunch())
 		{
 			Log.i(TAG, "First Launch");
-			new PrepareInitialContentTask((SnuffyApplication) getApplication()).execute((Void) null);
+
+			// set up files
+			BackgroundService.firstSetup((SnuffyApplication) getApplication());
+
+			// if connected to the internet and not auth code (why would there be? It is
+			// the first run.
 			if(Device.isConnected(Splash.this) &&
 					settings.getString("Authorization_Generic", "").equals(""))
 			{
+				// get an auth code
 				Log.i(TAG, "Starting backgound service");
 				BackgroundService.authenticateGeneric(this);
 			}
-		}
-		else if(settings.getString("Authorization_Generic", "").equals(""))
-		{
-			BackgroundService.authenticateGeneric(this);
-		}
-		else if (Device.isConnected(Splash.this))
-		{
-			goToMainActivity();
 		}
 		else
 		{
@@ -135,14 +106,18 @@ public class Splash extends Activity
 					switch (type)
 					{
 						case AUTH:
+							// user is authorized. This is the first run
+
 							Log.i(TAG, "Auth Task complete");
+							// check for updates.
 							checkForUpdates();
 							break;
 						case DOWNLOAD_TASK:
+							goToMainActivity();
 							break;
 						case META_TASK:
-							List<GTLanguage> languageList = (List<GTLanguage>) intent.getSerializableExtra(META_IS);
-							new UpdatePackageListTask().execute(languageList);
+							Log.i(TAG, "Meta complete");
+							showLoading("Updating");
 							break;
 						case FAIL:
 							Log.i(TAG, "Task Failed");
@@ -183,14 +158,7 @@ public class Splash extends Activity
 
 	private boolean isFirstLaunch()
 	{
-		isFirst = settings.getBoolean("firstLaunch", true);
-		if (isFirst)
-		{
-			SharedPreferences.Editor editor = settings.edit();
-			editor.putBoolean("firstLaunch", false);
-			editor.apply();
-		}
-		return isFirst;
+		return settings.getBoolean("firstLaunch", true);
 	}
 
 	private void showLoading(String msg)
@@ -200,233 +168,11 @@ public class Splash extends Activity
 		progressBar.setVisibility(View.VISIBLE);
 	}
 
-	private void hideLoading()
-	{
-		tvTask.setVisibility(View.GONE);
-		progressBar.setVisibility(View.GONE);
-	}
-
-	private boolean shouldUpdateLanguageSettings()
-	{
-		// check first if the we support the phones language
-		GTLanguage gtlPhone = GTLanguage.getLanguage(this, languagePhone);
-        return gtlPhone != null && !languagePrimary.equalsIgnoreCase(languagePhone);
-    }
-
-	/**
-	 * Copies the english resources from assets to internal storage,
-	 * then saves package information on the database.
-	 */
-	private class PrepareInitialContentTask extends AsyncTask<Void, Void, Void>
-	{
-
-		Context mContext;
-		SnuffyApplication mApp;
-		File documentsDir;
-		DBAdapter adapter;
-
-		public PrepareInitialContentTask(SnuffyApplication app)
-		{
-			mContext = app.getApplicationContext();
-			documentsDir = app.getDocumentsDir();
-			adapter = DBAdapter.getInstance(mContext);
-			mApp = app;
-		}
-
-		@Override
-		protected void onPreExecute()
-		{
-			super.onPreExecute();
-			showLoading(getString(R.string.copy_files));
-		}
-
-		@Override
-		protected Void doInBackground(Void... voids)
-		{
-            AssetManager manager = mContext.getAssets();
-
-			File resourcesDir = new File(documentsDir, "resources");
-			resourcesDir.mkdir();
-
-			Log.i("resourceDir", resourcesDir.getAbsolutePath());
-
-			try
-			{
-				// copy the files from assets/english to documents directory
-				String[] files = manager.list("english");
-				for (String fileName : files)
-				{
-					InputStream is = manager.open("english/" + fileName);
-					File outFile = new File(resourcesDir, fileName);
-					OutputStream os = new FileOutputStream(outFile);
-
-					copyFile(is, os);
-					is.close();
-					is = null;
-					os.flush();
-					os.close();
-					os = null;
-				}
-
-				// meta.xml file contains the list of supported languages
-				InputStream metaStream = manager.open("meta.xml");
-				List<GTLanguage> languageList = GTPackageReader.processMetaResponse(metaStream);
-				for (GTLanguage gtl : languageList)
-				{
-					gtl.addToDatabase(mContext);
-				}
-
-				// contents.xml file contains information about the bundled english resources
-				InputStream contentsStream = manager.open("contents.xml");
-				List<GTPackage> packageList = GTPackageReader.processContentFile(contentsStream);
-				for (GTPackage gtp : packageList)
-				{
-					Log.i("addingDB", gtp.getName());
-					gtp.addToDatabase(mContext);
-				}
-
-				// Add Every Student to database
-				GTPackage everyStudent = new GTPackage();
-				everyStudent.setCode(GTPackage.EVERYSTUDENT_PACKAGE_CODE);
-				everyStudent.setName("Every Student");
-				everyStudent.setIcon("homescreen_everystudent_icon_2x.png");
-				everyStudent.setStatus("live");
-				everyStudent.setLanguage("en");
-				everyStudent.setVersion(1.1);
-
-				everyStudent.addToDatabase(mContext);
-
-				// english resources should be marked as downloaded
-				GTLanguage gtlEnglish = new GTLanguage("en");
-				gtlEnglish.setDownloaded(true);
-				gtlEnglish.update(mContext);
-
-			} catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-
-			return null;
-		}
-	}
-
-	private class UpdatePackageListTask extends AsyncTask<List<GTLanguage>, Void, Void>
-	{
-		DBAdapter mAdapter;
-
-		@Override
-		protected void onPreExecute()
-		{
-			super.onPreExecute();
-			mAdapter = DBAdapter.getInstance(Splash.this);
-		}
-
-		@Override
-		protected Void doInBackground(List<GTLanguage>... params)
-		{
-			List<GTLanguage> languageList = params[0];
-			mAdapter.open();
-			for (GTLanguage gtl : languageList)
-			{
-				// check if language is already in the db
-				GTLanguage dbLanguage = mAdapter.getGTLanguage(gtl.getLanguageCode());
-				if (dbLanguage == null)
-				{
-					mAdapter.insertGTLanguage(gtl);
-				}
-				else
-				{
-					// don't forget that a previously downloaded language was already downloaded.
-					gtl.setDownloaded(dbLanguage.isDownloaded());
-					mAdapter.updateGTLanguage(gtl);
-				}
-
-				dbLanguage = mAdapter.getGTLanguage(gtl.getLanguageCode());
-				for (GTPackage gtp : gtl.getPackages())
-				{
-					// check if a new package is available for download or an existing package has been updated
-					GTPackage dbPackage = mAdapter.getGTPackage(gtp.getCode(), gtp.getLanguage(), gtp.getStatus());
-					if (dbPackage == null || (gtp.getVersion() > dbPackage.getVersion()))
-					{
-						dbLanguage.setDownloaded(false);
-					}
-				}
-
-				mAdapter.updateGTLanguage(dbLanguage);
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void aVoid)
-		{
-			super.onPostExecute(aVoid);
-
-			gtlPrimary = mAdapter.getGTLanguage(languagePrimary);
-			gtlParallel = mAdapter.getGTLanguage(languageParallel);
-
-			if (isFirst)
-			{
-				if (shouldUpdateLanguageSettings())
-				{
-					// download resources for the phone's language
-					languagePhone = ((SnuffyApplication) getApplication()).getDeviceLocale().getLanguage();
-					Locale mLocale = new Locale(languagePhone);
-					showLoading(String.format(getString(R.string.download_resources), mLocale.getDisplayName()));
-					BackgroundService.downloadLanguagePack(Splash.this, languagePhone, KEY_NEW_LANGUAGE);
-				}
-				else if (!gtlPrimary.isDownloaded())
-				{
-					// update resources for the primary language
-					showLoading(String.format(getString(R.string.update_resources), gtlPrimary.getLanguageName()));
-					BackgroundService.downloadLanguagePack(Splash.this, languagePrimary, KEY_UPDATE_PRIMARY);
-				}
-				else
-				{
-					goToMainActivity();
-				}
-
-			}
-			else
-			{
-				if (!gtlPrimary.isDownloaded())
-				{
-					// update resources for the primary language
-					showLoading(String.format(getString(R.string.update_resources), gtlPrimary.getLanguageName()));
-					BackgroundService.downloadLanguagePack(Splash.this, languagePrimary, KEY_UPDATE_PRIMARY);
-				}
-				else
-				{
-					// update the resources for the parallel language
-					if (gtlParallel != null && !gtlParallel.isDownloaded())
-					{
-						showLoading(String.format(getString(R.string.update_resources), gtlParallel.getLanguageName()));
-						BackgroundService.downloadLanguagePack(Splash.this, gtlParallel.getLanguageCode(), KEY_UPDATE_PARALLEL);
-					}
-					else
-					{
-						goToMainActivity();
-					}
-
-				}
-			}
-			mAdapter.close();
-		}
-	}
-
-	private void copyFile(InputStream in, OutputStream out) throws IOException
-	{
-		byte[] buffer = new byte[1024];
-		int read;
-		while ((read = in.read(buffer)) != -1)
-		{
-			out.write(buffer, 0, read);
-		}
-	}
-
 	private void checkForUpdates()
 	{
 		showLoading(getString(R.string.check_update));
+
+		// This will be a meta task
 		BackgroundService.getListOfPackages(this);
 	}
 

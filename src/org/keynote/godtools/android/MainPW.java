@@ -3,6 +3,7 @@ package org.keynote.godtools.android;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -22,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,6 +36,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.keynote.godtools.android.broadcast.BroadcastUtil;
+import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
@@ -47,6 +50,7 @@ import org.keynote.godtools.android.http.NotificationRegistrationTask;
 import org.keynote.godtools.android.http.NotificationUpdateTask;
 import org.keynote.godtools.android.model.HomescreenLayout;
 import org.keynote.godtools.android.notifications.NotificationInfo;
+import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 import java.io.IOException;
@@ -78,8 +82,11 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private int mPageTop;
     private int mPageWidth;
     private int mPageHeight;
-    private String languagePrimary;
     private List<GTPackage> packageList;
+    private LocalBroadcastManager broadcastManager;
+    private BroadcastReceiver broadcastReceiver;
+    private String languagePrimary;
+    private String languageParallel;
     
     private List<HomescreenLayout> layouts;
 
@@ -124,6 +131,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         tvTask = (TextView) findViewById(R.id.tvTask);
         
         setupLayout();
+        setupBroadcastReceiver();
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         
@@ -132,6 +140,20 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             Intent intent = new Intent(this, PreviewModeMainPW.class);
             startActivity(intent);
             finish();
+        }
+
+        if (!isFirstLaunch())
+        {
+            if (settings.getString("Authorization_Generic", "").equals(""))
+            {
+                showLoading("Updating");
+                BackgroundService.authenticateGeneric(this);
+            }
+            else
+            {
+                showLoading("Updating");
+                BackgroundService.getListOfPackages(this);
+            }
         }
         
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
@@ -176,6 +198,83 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         Log.i(TAG, regid);
         
         if (!justSwitchedToTranslatorMode) startTimer(); // don't start timer when switching to translator mode
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        removeBroadcastReceiver();
+    }
+
+    private void setupBroadcastReceiver()
+    {
+        broadcastManager = LocalBroadcastManager.getInstance(this);
+
+        broadcastReceiver = new BroadcastReceiver()
+        {
+            @Override
+            public void onReceive(Context context, Intent intent)
+            {
+                if (BroadcastUtil.ACTION_START.equals(intent.getAction())) showLoading("Updating");
+                if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
+                {
+                    Log.i(TAG, "Action Done");
+
+                    Type type = (Type) intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE);
+
+                    switch (type)
+                    {
+                        case AUTH:
+                            Log.i(TAG, "Auth Task complete");
+                            BackgroundService.getListOfPackages(MainPW.this);
+                            break;
+                        case DOWNLOAD_TASK:
+                            Log.i(TAG, "Download complete");
+                            packageList = getPackageList();
+                            showLayoutsWithPackages();
+                            hideLoading();
+                            createTheHomeScreen();
+                            break;
+                        case META_TASK:
+                            Log.i(TAG, "Meta complete");
+                            break;
+                        case FAIL:
+                            Log.i(TAG, "Task Failed");
+                            packageList = getPackageList();
+                            showLayoutsWithPackages();
+                            hideLoading();
+                            createTheHomeScreen();
+                            break;
+                        case ERROR:
+                            Log.i(TAG, "Error");
+                            break;
+                    }
+                }
+            }
+        };
+
+        broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.startFilter());
+        broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.stopFilter());
+        broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.failedFilter());
+    }
+
+    private void removeBroadcastReceiver()
+    {
+        broadcastManager.unregisterReceiver(broadcastReceiver);
+        broadcastReceiver = null;
+    }
+
+    private boolean isFirstLaunch()
+    {
+        boolean isFirst = settings.getBoolean("firstLaunch", true);
+        if (isFirst)
+        {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("firstLaunch", false);
+            editor.apply();
+        }
+        return isFirst;
     }
     
     private void setupLayout()

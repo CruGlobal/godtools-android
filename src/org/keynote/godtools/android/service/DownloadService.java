@@ -19,7 +19,7 @@ import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
  */
 public class DownloadService
 {
-    public static void downloadComplete(String url, String filePath, String langCode, String tag, Context context, SnuffyApplication app)
+    public static void downloadComplete(String langCode, String tag, Context context, SnuffyApplication app)
     {
         DBAdapter mAdapter = DBAdapter.getInstance(context);
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
