@@ -13,7 +13,6 @@ public class Constants
     public static final String KEY_NEW_LANGUAGE = "new_language";
     public static final String KEY_UPDATE_PRIMARY = "update_primary";
     public static final String KEY_UPDATE_PARALLEL = "update_parallel";
-
     public static final String KEY_PRIMARY = "primary";
     public static final String KEY_PARALLEL = "parallel";
 

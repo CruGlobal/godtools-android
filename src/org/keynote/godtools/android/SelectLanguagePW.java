@@ -426,7 +426,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             Log.i(TAG, "Delete");
             updateDownloadedStatus(language.getLanguageCode(), false);
             DBAdapter adapter = DBAdapter.getInstance(this);
-            adapter.deleteGTLanguage(language.getLanguageCode());
+            adapter.deletePackages(language.getLanguageCode(), "live");
             setList();
         }
     }
