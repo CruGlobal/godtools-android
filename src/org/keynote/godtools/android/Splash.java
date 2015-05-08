@@ -18,6 +18,7 @@ import com.crittercism.app.Crittercism;
 
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
+import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
@@ -55,12 +56,18 @@ public class Splash extends Activity
 
 		settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
+
 		setupBroadcastReceiver();
 
 		// if this is a first launch
 		if (isFirstLaunch())
 		{
 			Log.i(TAG, "First Launch");
+
+			// set english as primary language on first start
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putString(GTLanguage.KEY_PRIMARY, "en");
+			editor.apply();
 
 			// set up files
 			BackgroundService.firstSetup((SnuffyApplication) getApplication());
