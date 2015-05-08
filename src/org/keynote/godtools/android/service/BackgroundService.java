@@ -139,16 +139,6 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         context.startService(intent);
     }
 
-    public static void getListOfDrafts(Context context, String language, String tag)
-    {
-        final Bundle extras = new Bundle(3);
-        extras.putInt(TYPE, GET_LIST_OF_DRAFTS);
-        extras.putString(LANG_CODE, language);
-        extras.putString(BACKGROUND_TASK_TAG, tag);
-        Intent intent = baseIntent(context, extras);
-        context.startService(intent);
-    }
-
     public static void downloadLanguagePack(Context context, String langCode, String tag)
     {
         final Bundle extras = new Bundle(3);
