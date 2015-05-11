@@ -3,8 +3,6 @@ package org.keynote.godtools.android.broadcast;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import static org.keynote.godtools.android.utils.Constants.TYPE;
-
 /**
  * Created by matthewfrederick on 2/17/15.
  */
@@ -25,14 +23,14 @@ public final class BroadcastUtil
     public static Intent stopBroadcast(Type type)
     {
         Intent intent = new Intent(ACTION_STOP);
-        intent.putExtra(TYPE, type);
+        intent.putExtra(ACTION_TYPE, type);
         return intent;
     }
 
     public static Intent failBroadcast(Type type)
     {
         Intent intent = new Intent(ACTION_FAIL);
-        intent.putExtra(TYPE, type);
+        intent.putExtra(ACTION_TYPE, type);
         return intent;
     }
 

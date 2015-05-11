@@ -24,7 +24,6 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
-import static org.keynote.godtools.android.utils.Constants.TYPE;
 
 
 public class Splash extends Activity
@@ -135,7 +134,7 @@ public class Splash extends Activity
 
                 if (BroadcastUtil.ACTION_FAIL.equals(intent.getAction()))
                 {
-                    Log.i(TAG, "Action Failed: " + intent.getStringExtra(TYPE));
+                    Log.i(TAG, "Action Failed: " + intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE));
                     goToMainActivity();
                 }
 			}

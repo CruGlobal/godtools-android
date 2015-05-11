@@ -250,7 +250,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
                 if (BroadcastUtil.ACTION_FAIL.equals(intent.getAction()))
                 {
-                    Log.i(TAG, "Action Failed: " + intent.getStringExtra(TYPE));
+                    Log.i(TAG, "Action Failed: " + intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE));
                     packageList = getPackageList();
                     showLayoutsWithPackages();
                     hideLoading();
