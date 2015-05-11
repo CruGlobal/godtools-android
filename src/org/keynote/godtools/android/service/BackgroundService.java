@@ -163,7 +163,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
     @Override
     public void authFailed()
     {
-        broadcastManager.sendBroadcast(BroadcastUtil.failBroadcast(Type.FAIL));
+        broadcastManager.sendBroadcast(BroadcastUtil.failBroadcast(Type.AUTH));
     }
 
     @Override
@@ -177,7 +177,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
     @Override
     public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
     {
-        broadcastManager.sendBroadcast(BroadcastUtil.failBroadcast(Type.FAIL));
+        broadcastManager.sendBroadcast(BroadcastUtil.failBroadcast(Type.DOWNLOAD_TASK));
     }
 
     @Override
@@ -193,7 +193,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
     @Override
     public void metaTaskFailure(InputStream is, String langCode, String tag)
     {
-        broadcastManager.sendBroadcast(BroadcastUtil.failBroadcast(Type.FAIL));
+        broadcastManager.sendBroadcast(BroadcastUtil.failBroadcast(Type.META_TASK));
     }
 
     private class UpdatePackageListTask extends AsyncTask<InputStream, Void, Void>

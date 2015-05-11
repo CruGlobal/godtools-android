@@ -24,6 +24,7 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.TYPE;
 
 
 public class Splash extends Activity
@@ -126,15 +127,17 @@ public class Splash extends Activity
 							Log.i(TAG, "Meta complete");
 							showLoading("Updating");
 							break;
-						case FAIL:
-							Log.i(TAG, "Task Failed");
-							goToMainActivity();
-							break;
 						case ERROR:
 							Log.i(TAG, "Error");
 							break;
 					}
 				}
+
+                if (BroadcastUtil.ACTION_FAIL.equals(intent.getAction()))
+                {
+                    Log.i(TAG, "Action Failed: " + intent.getStringExtra(TYPE));
+                    goToMainActivity();
+                }
 			}
 		};
 

@@ -62,6 +62,7 @@ import java.util.TimerTask;
 
 import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.TYPE;
 
 
 public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
@@ -241,17 +242,19 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                         case META_TASK:
                             Log.i(TAG, "Meta complete");
                             break;
-                        case FAIL:
-                            Log.i(TAG, "Task Failed");
-                            packageList = getPackageList();
-                            showLayoutsWithPackages();
-                            hideLoading();
-                            createTheHomeScreen();
-                            break;
                         case ERROR:
                             Log.i(TAG, "Error");
                             break;
                     }
+                }
+
+                if (BroadcastUtil.ACTION_FAIL.equals(intent.getAction()))
+                {
+                    Log.i(TAG, "Action Failed: " + intent.getStringExtra(TYPE));
+                    packageList = getPackageList();
+                    showLayoutsWithPackages();
+                    hideLoading();
+                    createTheHomeScreen();
                 }
             }
         };

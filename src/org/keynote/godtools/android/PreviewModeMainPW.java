@@ -47,6 +47,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static org.keynote.godtools.android.utils.Constants.TYPE;
+
 
 public class PreviewModeMainPW extends BaseActionBarActivity implements
         DownloadTask.DownloadTaskHandler,
@@ -203,15 +205,17 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                             break;
                         case META_TASK:
                             break;
-                        case FAIL:
-                            Log.i(TAG, "Task Failed");
-                            getPackageList();
-                            createTheHomeScreen();
-                            break;
                         case ERROR:
                             Log.i(TAG, "Error");
                             break;
                     }
+                }
+
+                if (BroadcastUtil.ACTION_FAIL.equals(intent.getAction()))
+                {
+                    Log.i(TAG, "Action Failed: " + intent.getStringExtra(TYPE));
+                    getPackageList();
+                    createTheHomeScreen();
                 }
             }
         };

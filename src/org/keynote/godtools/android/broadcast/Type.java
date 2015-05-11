@@ -10,6 +10,5 @@ public enum Type
     DRAFT_CREATION_TASK,
     DRAFT_PUBLISH_TASK,
     META_TASK,
-    FAIL,
     ERROR
 }
