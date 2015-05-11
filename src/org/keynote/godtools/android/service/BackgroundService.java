@@ -114,8 +114,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
 
     private void initialContentTask(SnuffyApplication app)
     {
-        PrepareInitialContentTask initialContentTask = new PrepareInitialContentTask();
-        initialContentTask.run(app.getApplicationContext(), app.getDocumentsDir());
+        PrepareInitialContentTask.run(app.getApplicationContext(), app.getDocumentsDir());
     }
 
     public static void authenticateGeneric(Context context)

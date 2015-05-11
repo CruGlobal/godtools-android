@@ -25,7 +25,7 @@ public class PrepareInitialContentTask
      * then saves package information on the database.
      */
 
-    public void run(Context mContext, File documentsDir)
+    public static void run(Context mContext, File documentsDir)
     {
         AssetManager manager = mContext.getAssets();
 
@@ -91,7 +91,7 @@ public class PrepareInitialContentTask
         }
     }
 
-    private void copyFile(InputStream in, OutputStream out) throws IOException
+    private static void copyFile(InputStream in, OutputStream out) throws IOException
     {
         byte[] buffer = new byte[1024];
         int read;
