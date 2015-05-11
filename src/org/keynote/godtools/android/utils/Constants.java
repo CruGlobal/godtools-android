@@ -23,6 +23,8 @@ public class Constants
     public static final String LANG_CODE = "lang_code";
     public static final String BACKGROUND_TASK_TAG = "task_tag";
 
+    public static final String COUNT = "count";
+
 
     /**
      * App preferences name

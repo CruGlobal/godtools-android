@@ -49,6 +49,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import static org.keynote.godtools.android.utils.Constants.COUNT;
+
 public class SnuffyPWActivity extends Activity
 {
     private static final String TAG = "SnuffyActivity";
@@ -165,22 +167,26 @@ public class SnuffyPWActivity extends Activity
         if (mAppPackage.equalsIgnoreCase("kgp") || mAppPackage.equalsIgnoreCase("fourlaws"))
         {
             startTimer();
-            
-            GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""),
-                    regid, NotificationInfo.AFTER_1_PRESENTATION, new NotificationUpdateTask.NotificationUpdateTaskHandler()
-                    {
-                        @Override
-                        public void registrationComplete(String regId)
-                        {
-                            Log.i(NotificationInfo.NOTIFICATION_TAG, "1 Presentation Notification notice sent to API");
-                        }
 
-                        @Override
-                        public void registrationFailed()
+            // This notificaiton has been upated to only be sent after the app has been opened 3 times
+            if (settings.getInt(COUNT, 0) == 3)
+            {
+                GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""),
+                        regid, NotificationInfo.AFTER_1_PRESENTATION, new NotificationUpdateTask.NotificationUpdateTaskHandler()
                         {
-                            Log.e(NotificationInfo.NOTIFICATION_TAG, "1 Presentation notification notice failed to send to API");
-                        }
-                    });
+                            @Override
+                            public void registrationComplete(String regId)
+                            {
+                                Log.i(NotificationInfo.NOTIFICATION_TAG, "1 Presentation Notification notice sent to API");
+                            }
+
+                            @Override
+                            public void registrationFailed()
+                            {
+                                Log.e(NotificationInfo.NOTIFICATION_TAG, "1 Presentation notification notice failed to send to API");
+                            }
+                        });
+            }
 
             GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""),
                     regid, NotificationInfo.AFTER_10_PRESENTATIONS, new NotificationUpdateTask.NotificationUpdateTaskHandler()

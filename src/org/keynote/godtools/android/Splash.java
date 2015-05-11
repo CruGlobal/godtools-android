@@ -23,6 +23,7 @@ import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
+import static org.keynote.godtools.android.utils.Constants.COUNT;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 
 
@@ -185,6 +186,12 @@ public class Splash extends Activity
 
 	private void goToMainActivity()
 	{
+		// count the number of times the app is used. (for notificaitons)
+		SharedPreferences.Editor editor = settings.edit();
+		int count = settings.getInt(COUNT, 0);
+		editor.putInt(COUNT, count + 1);
+		editor.apply();
+
         if (settings.getBoolean("TranslatorMode", false))
         {
             Intent intent = new Intent(this, PreviewModeMainPW.class);
