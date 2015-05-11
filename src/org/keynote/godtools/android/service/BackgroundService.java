@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -12,8 +11,6 @@ import android.util.Log;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
-import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.http.APITasks;
 import org.keynote.godtools.android.http.AuthTask;
@@ -23,13 +20,9 @@ import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 import java.io.InputStream;
-import java.util.List;
 
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.BACKGROUND_TASK_TAG;
-import static org.keynote.godtools.android.utils.Constants.KEY_NEW_LANGUAGE;
-import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PARALLEL;
-import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.LANG_CODE;
 import static org.keynote.godtools.android.utils.Constants.META;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
@@ -179,7 +172,8 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
     {
         Log.i(TAG, "Update Package List Task");
         // this will cause download task to be run.
-        new UpdatePackageListTask().doInBackground(is);
+        UpdatePackageListTask.run(is, adapter, isFirstLaunch(), (SnuffyApplication) getApplication(),
+                languagePrimary, languageParallel, BackgroundService.this);
 
         broadcastManager.sendBroadcast(BroadcastUtil.stopBroadcast(Type.META_TASK));
     }
@@ -188,100 +182,6 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
     public void metaTaskFailure(InputStream is, String langCode, String tag)
     {
         broadcastManager.sendBroadcast(BroadcastUtil.failBroadcast(Type.META_TASK));
-    }
-
-    private class UpdatePackageListTask extends AsyncTask<InputStream, Void, Void>
-    {
-        @Override
-        protected Void doInBackground(InputStream... params)
-        {
-            Log.i(TAG, "Update Package List Backgroupd");
-
-            InputStream is = params[0];
-            List<GTLanguage> languageList = GTPackageReader.processMetaResponse(is);
-
-            Log.i(TAG, "List Size: " + languageList.size());
-
-            adapter.open();
-
-            for (GTLanguage gtl : languageList)
-            {
-                // check if language is already in the db
-                GTLanguage dbLanguage = adapter.getGTLanguage(gtl.getLanguageCode());
-                if (dbLanguage == null)
-                {
-                    adapter.insertGTLanguage(gtl);
-                }
-                else
-                {
-                    // don't forget that a previously downloaded language was already downloaded.
-                    gtl.setDownloaded(dbLanguage.isDownloaded());
-                    adapter.updateGTLanguage(gtl);
-                }
-
-                dbLanguage = adapter.getGTLanguage(gtl.getLanguageCode());
-                for (GTPackage gtp : gtl.getPackages())
-                {
-                    // check if a new package is available for download or an existing package has been updated
-                    GTPackage dbPackage = adapter.getGTPackage(gtp.getCode(), gtp.getLanguage(), gtp.getStatus());
-                    if (dbPackage == null || (gtp.getVersion() > dbPackage.getVersion()))
-                    {
-                        dbLanguage.setDownloaded(false);
-                    }
-                }
-
-                adapter.updateGTLanguage(dbLanguage);
-            }
-
-            GTLanguage gtlPrimary = adapter.getGTLanguage(languagePrimary);
-            GTLanguage gtlParallel = adapter.getGTLanguage(languageParallel);
-
-            if (isFirstLaunch())
-            {
-                if (shouldUpdateLanguageSettings())
-                {
-                    // download resources for the phone's language
-                    String languagePhone = ((SnuffyApplication) getApplication()).getDeviceLocale().getLanguage();
-                    BackgroundService.downloadLanguagePack(BackgroundService.this, languagePhone, KEY_NEW_LANGUAGE);
-                }
-                else if (!gtlPrimary.isDownloaded())
-                {
-                    BackgroundService.downloadLanguagePack(BackgroundService.this, languagePrimary, KEY_UPDATE_PRIMARY);
-                }
-            }
-            else
-            {
-                Log.i(TAG, "Not First Launch");
-
-                if (!gtlPrimary.isDownloaded())
-                {
-                    BackgroundService.downloadLanguagePack(BackgroundService.this, languagePrimary, KEY_UPDATE_PRIMARY);
-                }
-                else
-                {
-                    // update the resources for the parallel language
-                    if (gtlParallel != null && !gtlParallel.isDownloaded())
-                    {
-                        BackgroundService.downloadLanguagePack(BackgroundService.this, gtlParallel.getLanguageCode(), KEY_UPDATE_PARALLEL);
-                    }
-                    else
-                    {
-                        broadcastManager.sendBroadcast(BroadcastUtil.stopBroadcast(Type.DOWNLOAD_TASK));
-                    }
-                }
-            }
-            adapter.close();
-
-            return null;
-        }
-    }
-
-    private boolean shouldUpdateLanguageSettings()
-    {
-        // check first if the we support the phones language
-        String languagePhone = ((SnuffyApplication) getApplication()).getDeviceLocale().getLanguage();
-        GTLanguage gtlPhone = GTLanguage.getLanguage(this, languagePhone);
-        return gtlPhone != null && !languagePrimary.equalsIgnoreCase(languagePhone);
     }
 
     private boolean isFirstLaunch()
