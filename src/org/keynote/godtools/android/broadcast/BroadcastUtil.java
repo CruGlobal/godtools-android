@@ -11,7 +11,6 @@ public final class BroadcastUtil
     private final String TAG = getClass().getSimpleName();
 
     public static final String ACTION_START = BroadcastUtil.class.getName() + ".ACTION_START";
-    public static final String ACTION_RUNNING = BroadcastUtil.class.getName() + ".ACTION_RUNNING";
     public static final String ACTION_STOP = BroadcastUtil.class.getName() + ".ACTION_STOP";
     public static final String ACTION_TYPE = BroadcastUtil.class.getName() + ".ACTION_TYPE";
     public static final String ACTION_FAIL = BroadcastUtil.class.getName() + ".ACTION_FAIL";

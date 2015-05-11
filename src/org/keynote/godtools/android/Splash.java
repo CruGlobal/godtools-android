@@ -127,15 +127,17 @@ public class Splash extends Activity
 							Log.i(TAG, "Meta complete");
 							showLoading("Updating");
 							break;
-						case FAIL:
-							Log.i(TAG, "Task Failed");
-							goToMainActivity();
-							break;
 						case ERROR:
 							Log.i(TAG, "Error");
 							break;
 					}
 				}
+
+                if (BroadcastUtil.ACTION_FAIL.equals(intent.getAction()))
+                {
+                    Log.i(TAG, "Action Failed: " + intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE));
+                    goToMainActivity();
+                }
 			}
 		};
 

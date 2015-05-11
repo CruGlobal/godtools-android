@@ -16,8 +16,6 @@ public class Constants
     public static final String KEY_PRIMARY = "primary";
     public static final String KEY_PARALLEL = "parallel";
 
-
-
     public static final String META = "meta";
 
     public static final String LANG_CODE = "lang_code";

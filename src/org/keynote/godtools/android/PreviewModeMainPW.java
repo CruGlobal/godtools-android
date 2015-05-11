@@ -203,15 +203,17 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                             break;
                         case META_TASK:
                             break;
-                        case FAIL:
-                            Log.i(TAG, "Task Failed");
-                            getPackageList();
-                            createTheHomeScreen();
-                            break;
                         case ERROR:
                             Log.i(TAG, "Error");
                             break;
                     }
+                }
+
+                if (BroadcastUtil.ACTION_FAIL.equals(intent.getAction()))
+                {
+                    Log.i(TAG, "Action Failed: " + intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE));
+                    getPackageList();
+                    createTheHomeScreen();
                 }
             }
         };
