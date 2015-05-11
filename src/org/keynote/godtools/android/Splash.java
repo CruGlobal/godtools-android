@@ -191,7 +191,9 @@ public class Splash extends Activity
 		// count the number of times the app is used. (for notificaitons)
 		SharedPreferences.Editor editor = settings.edit();
 		int count = settings.getInt(COUNT, 0);
-		editor.putInt(COUNT, count + 1);
+        count++;
+        Log.i(TAG, "App opened " + count + " times");
+		editor.putInt(COUNT, count);
 		editor.apply();
 
         if (settings.getBoolean("TranslatorMode", false))
