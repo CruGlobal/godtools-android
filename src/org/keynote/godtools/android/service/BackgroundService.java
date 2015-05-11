@@ -16,6 +16,7 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.http.APITasks;
 import org.keynote.godtools.android.http.AuthTask;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
@@ -29,12 +30,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-import static org.keynote.godtools.android.utils.Constants.AUTHENTICATE_GENERIC;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.BACKGROUND_TASK_TAG;
-import static org.keynote.godtools.android.utils.Constants.DOWNLOAD_LANGUAGE_PACK;
-import static org.keynote.godtools.android.utils.Constants.GET_LIST_OF_DRAFTS;
-import static org.keynote.godtools.android.utils.Constants.GET_LIST_OF_PACKAGES;
 import static org.keynote.godtools.android.utils.Constants.KEY_NEW_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PRIMARY;
@@ -79,26 +76,28 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         broadcastManager.sendBroadcast(BroadcastUtil.startBroadcast());
         Log.i(TAG, "Action Started: " + intent.getIntExtra(TYPE, -1));
 
-        int type = intent.getIntExtra(TYPE, -1);
-        switch (type)
+
+        if (APITasks.AUTHENTICATE_GENERIC.equals(intent.getSerializableExtra(TYPE)))
         {
-            case AUTHENTICATE_GENERIC:
-                GodToolsApiClient.authenticateGeneric(this);
-                break;
-            case GET_LIST_OF_PACKAGES:
-                GodToolsApiClient.getListOfPackages(settings.getString(AUTH_CODE, ""),
-                        META, this);
-                break;
-            case GET_LIST_OF_DRAFTS:
-                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_CODE, ""),
-                        intent.getStringExtra(LANG_CODE),
-                        intent.getStringExtra(BACKGROUND_TASK_TAG), this);
-                break;
-            case DOWNLOAD_LANGUAGE_PACK:
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        intent.getStringExtra(LANG_CODE),
-                        intent.getStringExtra(BACKGROUND_TASK_TAG),
-                        settings.getString(AUTH_CODE, ""), this);
+            GodToolsApiClient.authenticateGeneric(this);
+        }
+        else if (APITasks.GET_LIST_OF_PACKAGES.equals(intent.getSerializableExtra(TYPE)))
+        {
+            GodToolsApiClient.getListOfPackages(settings.getString(AUTH_CODE, ""),
+                    META, this);
+        }
+        else if (APITasks.GET_LIST_OF_DRAFTS.equals(intent.getSerializableExtra(TYPE)))
+        {
+            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_CODE, ""),
+                    intent.getStringExtra(LANG_CODE),
+                    intent.getStringExtra(BACKGROUND_TASK_TAG), this);
+        }
+        else if (APITasks.DOWNLOAD_LANGUAGE_PACK.equals(intent.getSerializableExtra(TYPE)))
+        {
+            GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                    intent.getStringExtra(LANG_CODE),
+                    intent.getStringExtra(BACKGROUND_TASK_TAG),
+                    settings.getString(AUTH_CODE, ""), this);
         }
     }
 
@@ -126,7 +125,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
     public static void authenticateGeneric(Context context)
     {
         final Bundle extras = new Bundle(1);
-        extras.putInt(TYPE, AUTHENTICATE_GENERIC);
+        extras.putSerializable(TYPE, APITasks.AUTHENTICATE_GENERIC);
         Intent intent = baseIntent(context, extras);
         context.startService(intent);
     }
@@ -134,7 +133,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
     public static void getListOfPackages(Context context)
     {
         final Bundle extras = new Bundle(1);
-        extras.putInt(TYPE, GET_LIST_OF_PACKAGES);
+        extras.putSerializable(TYPE, APITasks.GET_LIST_OF_PACKAGES);
         Intent intent = baseIntent(context, extras);
         context.startService(intent);
     }
@@ -142,7 +141,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
     public static void downloadLanguagePack(Context context, String langCode, String tag)
     {
         final Bundle extras = new Bundle(3);
-        extras.putInt(TYPE, DOWNLOAD_LANGUAGE_PACK);
+        extras.putSerializable(TYPE, APITasks.DOWNLOAD_LANGUAGE_PACK);
         extras.putString(LANG_CODE, langCode);
         extras.putString(BACKGROUND_TASK_TAG, tag);
         Intent intent = baseIntent(context, extras);

@@ -28,17 +28,4 @@ public class Constants
     public static final String PREFS_NAME = "GodTools";
 
     public static final String AUTH_CODE = "Authorization_Generic";
-
-    /** constants used to specify the task that was run. */
-
-    /**
-     * Used to specify that the generic authentication task was run
-     */
-    public static final int AUTHENTICATE_GENERIC = 0;
-
-    public static final int GET_LIST_OF_PACKAGES = 1;
-
-    public static final int GET_LIST_OF_DRAFTS = 2;
-
-    public static final int DOWNLOAD_LANGUAGE_PACK = 3;
 }
