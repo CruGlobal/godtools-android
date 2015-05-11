@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -23,11 +22,7 @@ import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
@@ -74,7 +69,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
     protected void onHandleIntent(Intent intent)
     {
         broadcastManager.sendBroadcast(BroadcastUtil.startBroadcast());
-        Log.i(TAG, "Action Started: " + intent.getIntExtra(TYPE, -1));
+        Log.i(TAG, "Action Started: " + intent.getSerializableExtra(TYPE));
 
 
         if (APITasks.AUTHENTICATE_GENERIC.equals(intent.getSerializableExtra(TYPE)))
@@ -119,7 +114,8 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
 
     private void initialContentTask(SnuffyApplication app)
     {
-        new PrepareInitialContentTask(app).execute((Void) null);
+        PrepareInitialContentTask initialContentTask = new PrepareInitialContentTask();
+        initialContentTask.run(app.getApplicationContext(), app.getDocumentsDir());
     }
 
     public static void authenticateGeneric(Context context)
@@ -278,110 +274,6 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
             adapter.close();
 
             return null;
-        }
-    }
-
-    /**
-     * Copies the english resources from assets to internal storage,
-     * then saves package information on the database.
-     */
-    private class PrepareInitialContentTask extends AsyncTask<Void, Void, Void>
-    {
-
-        Context mContext;
-        SnuffyApplication mApp;
-        File documentsDir;
-
-        public PrepareInitialContentTask(SnuffyApplication app)
-        {
-            mContext = app.getApplicationContext();
-            documentsDir = app.getDocumentsDir();
-            mApp = app;
-        }
-
-        @Override
-        protected void onPreExecute()
-        {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids)
-        {
-            AssetManager manager = mContext.getAssets();
-
-            File resourcesDir = new File(documentsDir, "resources");
-            resourcesDir.mkdir();
-
-            Log.i("resourceDir", resourcesDir.getAbsolutePath());
-
-            try
-            {
-                // copy the files from assets/english to documents directory
-                String[] files = manager.list("english");
-                for (String fileName : files)
-                {
-                    InputStream is = manager.open("english/" + fileName);
-                    File outFile = new File(resourcesDir, fileName);
-                    OutputStream os = new FileOutputStream(outFile);
-
-                    copyFile(is, os);
-                    is.close();
-                    is = null;
-                    os.flush();
-                    os.close();
-                    os = null;
-                }
-
-                // meta.xml file contains the list of supported languages
-                InputStream metaStream = manager.open("meta.xml");
-                List<GTLanguage> languageList = GTPackageReader.processMetaResponse(metaStream);
-                for (GTLanguage gtl : languageList)
-                {
-                    gtl.addToDatabase(mContext);
-                }
-
-                // contents.xml file contains information about the bundled english resources
-                InputStream contentsStream = manager.open("contents.xml");
-                List<GTPackage> packageList = GTPackageReader.processContentFile(contentsStream);
-                for (GTPackage gtp : packageList)
-                {
-                    Log.i("addingDB", gtp.getName());
-                    gtp.addToDatabase(mContext);
-                }
-
-                // Add Every Student to database
-                GTPackage everyStudent = new GTPackage();
-                everyStudent.setCode(GTPackage.EVERYSTUDENT_PACKAGE_CODE);
-                everyStudent.setName("Every Student");
-                everyStudent.setIcon("homescreen_everystudent_icon_2x.png");
-                everyStudent.setStatus("live");
-                everyStudent.setLanguage("en");
-                everyStudent.setVersion(1.1);
-
-                everyStudent.addToDatabase(mContext);
-
-                // english resources should be marked as downloaded
-                GTLanguage gtlEnglish = new GTLanguage("en");
-                gtlEnglish.setDownloaded(true);
-                gtlEnglish.update(mContext);
-
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-    }
-
-    private void copyFile(InputStream in, OutputStream out) throws IOException
-    {
-        byte[] buffer = new byte[1024];
-        int read;
-        while ((read = in.read(buffer)) != -1)
-        {
-            out.write(buffer, 0, read);
         }
     }
 
