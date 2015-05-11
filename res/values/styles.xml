@@ -3,7 +3,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat">
-        <item name="android:windowFullscreen">true</item>
+         <item name="android:windowFullscreen">true</item>
         <item name="android:actionBarStyle">@style/GodToolsActionBar</item>
         <item name="actionBarStyle">@style/GodToolsActionBar</item>
     </style>
@@ -16,6 +16,21 @@
     <style name="GodToolsActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="android:background">@color/settings_listitem_item</item>
         <item name="background">@color/settings_listitem_item</item>
+    </style>
+    
+    <!-- New GodTools IP4 layout -->
+    <style name="GodToolsIP4" parent="Theme.AppCompat">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:actionBarStyle">@style/GodToolsIP4ToolBar</item>
+        <item name="actionBarStyle">@style/GodToolsIP4ToolBar</item>
+    </style>
+    
+    <style name="GodToolsIP4ToolBar" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="android:background">@color/cru_bright_blue</item>
+        <item name="background">@color/cru_bright_blue</item>
+        <item name="android:icon">@android:color/transparent</item>
+        <item name="android:displayOptions">showHome</item>
+        <item name="displayOptions">showHome</item>
     </style>
 
     

@@ -2,145 +2,269 @@
 <LinearLayout
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#ffffff"
+    android:background="@drawable/gt4_homescreen_background_ip4"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:textSize="18sp"
-        android:paddingLeft="16dp"
-        android:textColor="@color/gray_60"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/language"
         android:text="@string/settings_main_language"
-        android:gravity="center_vertical" />
+        android:layout_marginTop="20dp"
+        android:textSize="22dp"
+        android:layout_marginLeft="35dp"
+        android:textColor="#ffffffff"/>
 
     <RelativeLayout
         android:id="@+id/rlMainLanguage"
         android:layout_width="match_parent"
-        android:background="@drawable/settings_language_bg"
-        android:layout_height="40dp"
-        android:paddingRight="40dp"
-        android:paddingLeft="40dp">
+        android:background="#00ffffff"
+        android:layout_height="60dp"
+        android:layout_marginTop="15dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:id="@+id/top_white_border_2"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#ffffffff" />
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="56dp"
+            android:id="@+id/left_color_block_2"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/top_white_border_2"
+            android:background="@color/cru_gold"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:id="@+id/bottom_white_border_2"
+            android:layout_alignBottom="@+id/left_color_block_2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#ffffffff" />
 
         <TextView
-            android:textStyle="bold"
             android:id="@+id/tvMainLanguage"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:textSize="18sp"
-            android:textColor="@color/settings_listitem_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="22dp"
+            android:textColor="#ffffffff"
             android:text="@string/settings_main_language"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/left_color_block_2"
+            android:paddingLeft="20dp"
+            android:background="#32cdcdcd"/>
 
         <ImageView
             android:src="@drawable/ic_language_indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:tint="@color/settings_listitem_item" />
-    </RelativeLayout>
+            android:tint="#ffffffff"
+            android:layout_gravity="right"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/gray_20" />
+    </RelativeLayout>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:textSize="18sp"
-        android:paddingLeft="16dp"
-        android:textColor="@color/gray_60"
+        android:layout_height="wrap_content"
+        android:textSize="22dp"
+        android:textColor="#ffffffff"
         android:text="@string/settings_parallel_language"
-        android:gravity="center_vertical" />
+        android:gravity="center_vertical"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/parallel_lang"/>
 
     <RelativeLayout
         android:id="@+id/rlParallelLanguage"
         android:layout_width="match_parent"
-        android:background="@drawable/settings_language_bg"
-        android:layout_height="40dp"
-        android:paddingRight="40dp"
-        android:paddingLeft="40dp">
+        android:layout_height="60dp"
+        android:layout_marginTop="15dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:id="@+id/top_white_border_3"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#ffffffff" />
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="56dp"
+            android:id="@+id/left_color_block_3"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/top_white_border_3"
+            android:background="@color/cru_gold"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:id="@+id/bottom_white_border_3"
+            android:layout_alignBottom="@+id/left_color_block_3"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#ffffffff" />
 
         <TextView
-            android:textStyle="bold"
             android:id="@+id/tvParallelLanguage"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:textSize="18sp"
-            android:textColor="@color/settings_listitem_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="22dp"
+            android:textColor="#ffffffff"
             android:text="@string/none"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/left_color_block_3"
+            android:layout_toEndOf="@+id/left_color_block_3"
+            android:paddingLeft="20dp"
+            android:background="#32cdcdcd"/>
 
         <ImageView
             android:src="@drawable/ic_language_indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:tint="@color/settings_listitem_item" />
+            android:tint="#ffffffff" />
     </RelativeLayout>
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/gray_20" />
 
 
     <TextView
         android:padding="16dp"
         android:id="@+id/tvDescription"
-        android:background="@drawable/settings_language_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="italic"
-        android:textColor="@color/gray_60"
-        android:text="@string/settings_explanation"
-        android:gravity="center_vertical" />
+        android:textSize="18dp"
+        android:textColor="#ffffffff"
+        android:text="@string/settings_parallel_info"
+        android:gravity="center_vertical"
+        android:clickable="false"
+        android:focusableInTouchMode="false"/>
 
-    <View
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/gray_20" />
+        android:layout_height="60dp"
+        android:background="#32cdcdcd"
+        android:id="@+id/notification_layout">
 
-    <TextView
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp"
-        android:id="@+id/tvTranslatorModeDescription"
-        android:background="@drawable/settings_language_bg"
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:id="@+id/top_white_border_notice"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#ffffffff" />
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="56dp"
+            android:id="@+id/left_color_block_notice"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/top_white_border_notice"
+            android:background="@color/cru_gold"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:id="@+id/bottom_white_border_notice"
+            android:layout_alignBottom="@+id/cbNotification"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#ffffffff"/>
+
+        <Switch
+            android:background="#00ffffff"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="@string/settings_notificiation"
+            android:textColor="#ffffffff"
+            android:textSize="22dp"
+            android:id="@+id/cbNotification"
+            android:checked="true"
+            android:onClick="onNotificationToggle"
+            android:textOff="OFF"
+            android:textOn="ON"
+            android:layout_toRightOf="@+id/left_color_block_notice"
+            android:layout_toEndOf="@+id/left_color_block_notice"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:gravity="center_vertical"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="italic"
-        android:textColor="@color/gray_60"
-        android:text="@string/settings_translator_message"
-        android:gravity="center_vertical" />
+        android:layout_height="60dp"
+        android:layout_marginTop="55dp"
+        android:background="#32cdcdcd"
+        android:id="@+id/translator_layout">
 
-    <Switch
-        android:background="@drawable/settings_language_bg"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/settings_translator_mode"
-        android:textColor="@color/gray_60"
-        android:textSize="18sp"
-        android:id="@+id/cbTranslatorMode"
-        android:layout_gravity="right"
-        android:checked="false"
-        android:padding="16dp"
-        android:onClick="onToggleClicked"
-        android:textOff="OFF"
-        android:textOn="ON"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:id="@+id/top_white_border"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#ffffffff" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/gray_20" />
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="56dp"
+            android:id="@+id/left_color_block"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/top_white_border"
+            android:background="@color/cru_bright_blue"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:id="@+id/bottom_white_border"
+            android:layout_alignBottom="@+id/left_color_block"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#ffffffff"/>
+
+        <Switch
+            android:background="#00ffffff"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="@string/settings_translator_mode"
+            android:textColor="#ffffffff"
+            android:textSize="22dp"
+            android:id="@+id/cbTranslatorMode"
+            android:checked="false"
+            android:onClick="onToggleClicked"
+            android:textOff="OFF"
+            android:textOn="ON"
+            android:layout_above="@+id/bottom_white_border"
+            android:layout_toRightOf="@+id/left_color_block"
+            android:layout_toEndOf="@+id/left_color_block"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:gravity="center_vertical"/>
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tvAbout"
@@ -149,9 +273,9 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:paddingLeft="16dp"
-        android:textColor="@color/gray_60"
+        android:textColor="#ffffffff"
         android:text="@string/settings_about"
-        android:gravity="center_vertical"
+        android:gravity="center_vertical|center_horizontal"
         android:paddingTop="16dp"
         android:paddingBottom="16dp" />
 

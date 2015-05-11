@@ -1,7 +1,5 @@
 package org.keynote.godtools.android.everystudent;
 
-import java.util.HashMap;
-
 import android.app.SearchManager;
 import android.content.ContentProvider;
 import android.content.ContentResolver;

@@ -2,7 +2,7 @@
 <LinearLayout
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#ffffff"
+    android:background="@drawable/gt4_homescreen_background_ip4"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
@@ -12,8 +12,7 @@
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:divider="@color/gray_20"
-        android:dividerHeight="1px"></ListView>
+        android:layout_marginTop="75dp" />
 
 
 </LinearLayout>

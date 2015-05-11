@@ -8,6 +8,8 @@ import java.util.Locale;
 
 public class Device {
 
+
+
     public static boolean isConnected(Context context) {
 
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

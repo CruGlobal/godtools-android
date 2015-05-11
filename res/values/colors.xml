@@ -1,8 +1,6 @@
 <resources>
     <color name="about_text">#000</color>
     <color name="about_background">#fff</color>
-    <color name="info_text">#000</color>
-    <color name="selected_background">#fff</color>
 
     <color name="es_article_background">#fff</color>
     <color name="es_article_foreground">#000</color>
@@ -18,7 +16,13 @@
     <color name="highlight_bottom">#ffcf9600</color>
     <!--  buttons themselves are white -->
     <color name="toolbar_fg">#ffffffff</color>
-
+    <!-- turquoise -->
+    <!-- This is "Cru Bright Blue" used in the Cru Logo-->
+    <color name="cru_bright_blue">#3eb1c8</color>
+    <color name="cru_gold">#f9b625</color>
+    <!-- black -->
+    <color name="black">#000000</color>
+    
     <!--20% translucent white-->
     <color name="homescreen_settingsbutton_onpress">#32ffffff</color>
     <!-- 90% translucent white-->
@@ -34,8 +38,15 @@
     <color name="gray_80">#2f2f2f</color>
     <color name="gray_20">#d2d2d2</color>
     <color name="gray_60">#5F5F5F</color>
+    
+    <color name="smokey">#64CDCDCD</color>
+    
+    <color name="new_draft_opacity">#14FFFFFF</color>
+    <color name="current_draft_opacity">#95b9b9b9</color>
 
     <color name="black_translucent_20">#32000000</color>
+    
+    
 
 
 </resources>

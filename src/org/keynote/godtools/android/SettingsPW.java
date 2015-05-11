@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
@@ -43,6 +42,7 @@ public class SettingsPW extends BaseActionBarActivity implements
     TextView tvMainLanguage, tvParallelLanguage, tvAbout;
     RelativeLayout rlMainLanguage, rlParallelLanguage;
     CompoundButton cbTranslatorMode;
+    CompoundButton cbNotificationsAllowed;
     Typeface mAlternateTypeface;
     String primaryLanguageCode;
 
@@ -54,8 +54,16 @@ public class SettingsPW extends BaseActionBarActivity implements
         setContentView(R.layout.settings);
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setCustomView(R.layout.titlebar_centered_title);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
+        
+        TextView titleBar = (TextView) actionBar.getCustomView().findViewById(R.id.titlebar_title);
+        titleBar.setText(R.string.settings_title);
+        
+        actionBar.setTitle(R.string.settings_title);
+        actionBar.setDisplayShowTitleEnabled(true);
 
         tvMainLanguage = (TextView) findViewById(R.id.tvMainLanguage);
         tvParallelLanguage = (TextView) findViewById(R.id.tvParallelLanguage);
@@ -63,6 +71,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         rlMainLanguage = (RelativeLayout) findViewById(R.id.rlMainLanguage);
         rlParallelLanguage = (RelativeLayout) findViewById(R.id.rlParallelLanguage);
         cbTranslatorMode = (CompoundButton) findViewById(R.id.cbTranslatorMode);
+        cbNotificationsAllowed = (CompoundButton) findViewById(R.id.cbNotification);
 
         // set click listeners
         rlParallelLanguage.setOnClickListener(this);
@@ -71,12 +80,14 @@ public class SettingsPW extends BaseActionBarActivity implements
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean isTranslatorEnabled = settings.getBoolean("TranslatorMode", false);
+        boolean allowNotifications = settings.getBoolean("Notifications", true);
+        cbNotificationsAllowed.setChecked(allowNotifications);
         primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
         handleLanguagesWithAlternateFonts(primaryLanguageCode);
-        tvMainLanguage = new SnuffyAlternateTypefaceTextView(tvMainLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.BOLD).get();
-        tvParallelLanguage = new SnuffyAlternateTypefaceTextView(tvParallelLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.BOLD).get();
+        tvMainLanguage = new SnuffyAlternateTypefaceTextView(tvMainLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.NORMAL).get();
+        tvParallelLanguage = new SnuffyAlternateTypefaceTextView(tvParallelLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.NORMAL).get();
 
         // set up translator switch
         cbTranslatorMode.setChecked(isTranslatorEnabled);
@@ -148,7 +159,6 @@ public class SettingsPW extends BaseActionBarActivity implements
             }
             case RESULT_DOWNLOAD_PRIMARY:
             case RESULT_DOWNLOAD_PARALLEL:
-                finish();
                 break;
         }
 
@@ -179,9 +189,21 @@ public class SettingsPW extends BaseActionBarActivity implements
     }
 
     public void onToggleClicked(View view) {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean on = ((CompoundButton) view).isChecked();
+
+        if(on && !settings.getString("Authorization_Draft", "").isEmpty())
+        {
+            ((CompoundButton) view).setChecked(true);
+            cbTranslatorMode.setEnabled(true);
+            setTranslatorMode(true);
+            setResult(RESULT_PREVIEW_MODE_ENABLED);
+            finish();
+            return;
+        }
+
         view.setEnabled(false);
 
-        boolean on = ((CompoundButton) view).isChecked();
         if (on) {
 
             if (Device.isConnected(SettingsPW.this))
@@ -233,6 +255,9 @@ public class SettingsPW extends BaseActionBarActivity implements
                 // disable translator mode
                 setResult(RESULT_PREVIEW_MODE_DISABLED);
                 setTranslatorMode(false);
+                
+                Intent intent = new Intent(this, MainPW.class);
+                startActivity(intent);
                 finish();
 
             } else {
@@ -272,10 +297,13 @@ public class SettingsPW extends BaseActionBarActivity implements
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("Authorization_Draft", authorization);
-        editor.commit();
+        editor.apply();
 
         setTranslatorMode(true);
         setResult(RESULT_PREVIEW_MODE_ENABLED);
+        
+        Intent intent = new Intent(this, PreviewModeMainPW.class);
+        startActivity(intent);
         finish();
     }
 
@@ -286,12 +314,20 @@ public class SettingsPW extends BaseActionBarActivity implements
         cbTranslatorMode.setChecked(false);
         cbTranslatorMode.setEnabled(true);
     }
+    
+    public void onNotificationToggle(View view)
+    {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("Notifications", cbNotificationsAllowed.isChecked());
+        editor.apply();
+    }
 
     private void setTranslatorMode(boolean isEnabled) {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("TranslatorMode", isEnabled);
-        editor.commit();
+        editor.apply();
     }
 
     private String capitalizeFirstLetter(String word) {

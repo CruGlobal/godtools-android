@@ -1,5 +1,7 @@
 package org.keynote.godtools.android.snuffy;
 
+import android.util.Log;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -7,8 +9,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import android.util.Log;
 
 public class Decompress {
 	private static final String TAG = "Decompress";
@@ -52,7 +52,7 @@ public class Decompress {
 		f = new File(parent);
 		if (!f.isDirectory()) {
 			boolean success = f.mkdirs();
-			if (success == false)
+			if (!success)
 				Log.e(TAG, "Cant create dir: " + fileName);
 		}
 	}

@@ -1,17 +1,5 @@
 package org.keynote.godtools.android.everystudent;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.Settings;
-
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
@@ -29,7 +17,20 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
+import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.Settings;
 import org.keynote.godtools.android.utils.GoogleAnalytics;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EveryStudentView extends Activity{
 
@@ -99,7 +100,7 @@ public class EveryStudentView extends Activity{
 			
 			recordScreenView(title);
 		} else {
-			Toast.makeText(getBaseContext(), "Could not load the content.", Toast.LENGTH_LONG);
+			Toast.makeText(getBaseContext(), "Could not load the content.", Toast.LENGTH_LONG).show();
 			this.finish();
 		}
 	}

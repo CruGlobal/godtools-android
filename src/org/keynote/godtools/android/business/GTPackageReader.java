@@ -1,7 +1,5 @@
 package org.keynote.godtools.android.business;
 
-import android.util.Log;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;

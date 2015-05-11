@@ -3,26 +3,6 @@ package org.keynote.godtools.android.snuffy;
 // TODO: We can load our own fonts:
 // 		http://www.barebonescoder.com/2010/05/android-development-using-custom-fonts/
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.keynote.godtools.android.R;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,7 +13,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.Handler;
 import android.text.ClipboardManager;
 import android.text.TextUtils.TruncateAt;
@@ -50,6 +29,25 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.keynote.godtools.android.R;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Vector;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 public class PackageReader {
 	private static final String TAG = "PackageReader";
@@ -721,7 +719,7 @@ public class PackageReader {
 		if (yPos == 0) {
 			yPos = mYOffset + yOffset;
 			// add the default offset too
-			if ((bUrlMode || bPhoneMode || bEmailMode) == false) {		// url and like  buttons are not offset from text above
+			if (!(bUrlMode || bPhoneMode || bEmailMode)) {		// url and like  buttons are not offset from text above
 				yPos += mYOffsetPerItem;
 				mNumOffsetItems ++;
 			}
@@ -1229,7 +1227,7 @@ public class PackageReader {
         
         // add the disclosure indicator at the right of the button
         
-        if (bAllUrlMode == false) {        	
+        if (!bAllUrlMode) {
 	        ImageView iv = new ImageView(mContext);
 	        //SnuffyDisclosureIndicator di = new SnuffyDisclosureIndicator(mContext);
 	        //iv.setImageDrawable(di);
@@ -2288,7 +2286,7 @@ public class PackageReader {
 		String modifier 	= getStringAttributeValue (el, "modifier", "");
 		
 		align = "right";
-		boolean bResize = ((w > 0) && (h > 0)) ? false : true;
+		boolean bResize = (!((w > 0) && (h > 0)));
 		textSize 	= textSize * size / 100.0f;
 		color		= setColorAlphaVal(color, labelAlpha);
 		x			= getScaledXValue(x);
@@ -2341,7 +2339,7 @@ public class PackageReader {
 		Log.d(TAG, content);
 		Log.d(TAG, "x=" + Integer.toString(x));
 		Log.d(TAG, "w=" + Integer.toString(w));
-		boolean bResize = ((el.getAttribute("w").length() > 0) && (el.getAttribute("h").length() > 0)) ? false : true;
+		boolean bResize = (!((el.getAttribute("w").length() > 0) && (el.getAttribute("h").length() > 0)));
 		textSize 	= textSize * size / 100.0f;
 		color		= setColorAlphaVal(color, labelAlpha);
 		x			= getScaledXValue(x);
@@ -2389,7 +2387,7 @@ public class PackageReader {
 			x = 0;
 			w = REFERENCE_DEVICE_WIDTH;
 		}
-		boolean bResize = ((el.getAttribute("w").length() > 0) && (el.getAttribute("h").length() > 0)) ? false : true;
+		boolean bResize = (!((el.getAttribute("w").length() > 0) && (el.getAttribute("h").length() > 0)));
 		textSize 	= textSize * size / 100.0f;
 		color		= setColorAlphaVal(color, labelAlpha);
 		x			= getScaledXValue(x);
@@ -2431,7 +2429,7 @@ public class PackageReader {
 		int h				= getIntegerAttributeValue(el, "h", 80);
 		String modifier 	= getStringAttributeValue (el, "modifier", "bold-italics");
 		
-		boolean bResize = ((el.getAttribute("w").length() > 0) && (el.getAttribute("h").length() > 0)) ? false : true;
+		boolean bResize = (!((el.getAttribute("w").length() > 0) && (el.getAttribute("h").length() > 0)));
 		textSize 	= textSize * size / 100.0f;
 		color		= setColorAlphaVal(color, labelAlpha);
 		x			= getScaledXValue(x);

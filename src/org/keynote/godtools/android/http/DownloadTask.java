@@ -6,8 +6,6 @@ import android.os.AsyncTask;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
@@ -25,10 +23,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
 
 public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
@@ -36,7 +30,6 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
     private DownloadTaskHandler mTaskHandler;
     private Context mContext;
     private String url, filePath, tag, langCode;
-    private String authorization;
 
     public static interface DownloadTaskHandler {
         void downloadTaskComplete(String url, String filePath, String langCode, String tag);
@@ -55,7 +48,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
         url = params[0].toString();
         filePath = params[1].toString();
         tag = params[2].toString();
-        authorization = params[3].toString();
+        String authorization = params[3].toString();
         langCode = params[4].toString();
 
         try {

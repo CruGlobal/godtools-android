@@ -3,188 +3,150 @@
     android:id="@+id/homescreen"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/gt4_homescreen_background_ip4">
 
-    <!--  the container -->
-    <RelativeLayout
-        android:id="@+id/homescreen_container"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_x="20px"
-        android:layout_y="20px"
-        android:background="@drawable/homescreen_background"
-        android:visibility="invisible">
+    <ImageView
+        android:id="@+id/homescreen_icon"
+        android:layout_width="120dp"
+        android:layout_height="112.5dp"
+        android:src="@drawable/gt4_home_bookicon"
+        android:background="#00ffffff"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:contentDescription="homescreen_icon"/>
 
-        <!-- the linen background, vignettte and white table background (not needed?)  -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:background="#95b9b9b9"
+        android:id="@+id/first_layout"
+        android:clickable="true"
+        android:layout_above="@+id/second_layout"
+        >
+
         <ImageView
-            android:id="@+id/vignette_background"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_x="0px"
-            android:layout_y="0px"
-            android:scaleType="fitXY"
-            android:src="@drawable/homescreen_background_linen_vignette"/>
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/iv_first"
+            android:src="@drawable/gt4_homescreen_kgpicon"
+            android:background="#00ffffff"/>
 
-        <ImageView
-            android:id="@+id/logo"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="125dp"
-            android:layout_height="96dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="40dp"
-            android:layout_marginTop="20dp"
-            android:layout_x="200px"
-            android:layout_y="30px"
-            android:src="@drawable/homescreen_godtools_logo_2x"/>
-
-        <ImageButton
-            android:id="@+id/export_button"
-            android:layout_width="100dp"
-            android:layout_height="68dp"
-            android:src="@drawable/homescreen_export_button_2x"
-            android:scaleType="centerCrop"
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Knowing God Personally"
+            android:id="@+id/tv_first"
             android:background="#00ffffff"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_below="@+id/full_table"
-            android:layout_alignLeft="@+id/full_table"/>
+            android:textSize="22dp"
+            android:paddingLeft="20dp"
+            android:gravity="center_vertical"
+            android:textColor="#ffffffff"
+            android:paddingRight="15dp"/>
+    </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/full_table"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/logo"
-            android:layout_centerHorizontal="true"
-            >
-
-            <FrameLayout
-                android:id="@+id/contList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="15dp"
-                android:background="#ffffffff">
-
-            </FrameLayout>
-
-        </RelativeLayout>
-
-        <!-- the 4 corners of the frame -->
-        <ImageView
-            android:id="@+id/top_left"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_alignLeft="@+id/full_table"
-            android:layout_alignTop="@+id/full_table"
-            android:src="@drawable/homescreen_menu_nw_2x"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:background="#95828282"
+        android:id="@+id/second_layout"
+        android:clickable="true"
+        android:layout_above="@+id/third_layout">
 
         <ImageView
-            android:id="@+id/top_right"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_alignRight="@+id/full_table"
-            android:layout_alignTop="@+id/full_table"
-            android:src="@drawable/homescreen_menu_ne_2x"/>
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/iv_second"
+            android:src="@drawable/gt4_homescreen_satisfiedicon"
+            android:background="#00ffffff"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Satisfied?"
+            android:id="@+id/tv_second"
+            android:background="#00ffffff"
+            android:textSize="22dp"
+            android:paddingLeft="20dp"
+            android:gravity="center_vertical"
+            android:textColor="#ffffffff"
+            android:paddingRight="15dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:background="#95b9b9b9"
+        android:id="@+id/third_layout"
+        android:clickable="true"
+        android:layout_above="@+id/fourth_layout">
 
         <ImageView
-            android:id="@+id/bottom_left"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_alignBottom="@+id/full_table"
-            android:layout_alignLeft="@+id/full_table"
-            android:src="@drawable/homescreen_menu_sw_2x"
-            />
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/iv_third"
+            android:src="@drawable/gt4_homescreen_4lawsicon"
+            android:background="#00ffffff"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="The Four Spiritual Laws"
+            android:id="@+id/tv_third"
+            android:background="#00ffffff"
+            android:textSize="22dp"
+            android:paddingLeft="20dp"
+            android:gravity="center_vertical"
+            android:textColor="#ffffffff"
+            android:paddingRight="15dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="25dp"
+        android:background="#95828282"
+        android:id="@+id/fourth_layout"
+        android:clickable="true">
 
         <ImageView
-            android:id="@+id/bottom_right"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_alignBottom="@+id/full_table"
-            android:layout_alignRight="@+id/full_table"
-            android:src="@drawable/homescreen_menu_se_2x"/>
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/iv_fourth"
+            android:src="@drawable/gt4_homescreen_esicon"
+            android:background="#00ffffff"/>
 
-        <!-- the 4 sides of the frame -->
-        <ImageView
-            android:id="@+id/top_side"
-            android:layout_width="250dp"
-            android:layout_height="22dp"
-            android:layout_alignTop="@+id/full_table"
-            android:layout_toLeftOf="@+id/top_right"
-            android:layout_toRightOf="@+id/top_left"
-            android:src="@drawable/homescreen_menu_n_repeat"
-            android:scaleType="centerCrop"/>
-
-        <ImageView
-            android:id="@+id/bottom_side"
-            android:layout_width="250dp"
-            android:layout_height="22dp"
-            android:layout_alignBottom="@+id/full_table"
-            android:layout_toLeftOf="@+id/bottom_right"
-            android:layout_toRightOf="@+id/bottom_left"
-            android:src="@drawable/homescreen_menu_s_repeat"
-            android:scaleType="centerCrop"/>
-
-        <ImageView
-            android:id="@+id/left_side"
-            android:layout_width="22dp"
-            android:layout_height="250dp"
-            android:layout_above="@+id/bottom_left"
-            android:layout_alignLeft="@+id/full_table"
-            android:layout_below="@+id/top_left"
-            android:src="@drawable/homescreen_menu_w_repeat"
-            android:cropToPadding="false"
-            android:scaleType="centerCrop"/>
-
-        <ImageView
-            android:id="@+id/right_side"
-            android:layout_width="22dp"
-            android:layout_height="250dp"
-            android:layout_above="@+id/bottom_right"
-            android:layout_alignRight="@+id/full_table"
-            android:layout_below="@+id/top_right"
-            android:src="@drawable/homescreen_menu_e_repeat"
-            android:scaleType="centerCrop"/>
-
-        <!-- the settings button -->
-        <ImageButton
-            android:id="@+id/homescreen_settings_button"
-            android:layout_width="100dp"
-            android:layout_height="68dp"
-            android:layout_x="480px"
-            android:layout_y="800px"
-            android:background="@drawable/homescreen_settings_button_2x"
-            android:onClick="onCmd_settings"
-            android:layout_below="@+id/full_table"
-            android:layout_alignRight="@+id/full_table"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"/>
-
-        <!-- the refresh button -->
-        <ImageButton
-            android:id="@+id/refresh_button"
-            android:layout_width="100dp"
-            android:layout_height="68dp"
-            android:background="@drawable/homescreen_refresh_button_2x"
-            android:layout_below="@+id/full_table"
-            android:layout_alignLeft="@+id/full_table"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"/>
-
-        <!-- the add button -->
-        <ImageButton
-            android:id="@+id/homescreen_add_button"
-            android:layout_width="100dp"
-            android:layout_height="68dp"
-            android:background="@drawable/homescreen_add_button_2x"
-            android:layout_below="@+id/full_table"
-            android:layout_toRightOf="@+id/refresh_button"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"
-            android:onClick="onCmd_add"/>
-
-    </RelativeLayout>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Everystudent.com"
+            android:id="@+id/tv_fourth"
+            android:background="#00ffffff"
+            android:textSize="22dp"
+            android:paddingLeft="20dp"
+            android:gravity="center_vertical"
+            android:textColor="#ffffffff"
+            android:paddingRight="15dp"/>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/contLoading"

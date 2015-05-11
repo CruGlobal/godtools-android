@@ -1,6 +1,7 @@
 package org.keynote.godtools.android.http;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -16,6 +17,8 @@ import java.io.IOException;
  */
 public class DraftCreationTask extends AsyncTask<Object, Void, Integer>
 {
+    private final String TAG = getClass().getSimpleName();
+    
     private final DraftTaskHandler taskHandler;
 
     public DraftCreationTask(DraftTaskHandler taskHandler)
@@ -34,6 +37,7 @@ public class DraftCreationTask extends AsyncTask<Object, Void, Integer>
     {
         String url = params[0].toString();
         String authorization = params[1].toString();
+
 
         HttpPost request = new HttpPost(url);
         request.setHeader("Accept", "application/xml");
@@ -61,6 +65,8 @@ public class DraftCreationTask extends AsyncTask<Object, Void, Integer>
     @Override
     protected void onPostExecute(Integer responseStatusCode)
     {
+        Log.i(TAG, "Response Code: " + responseStatusCode);
+        
         if(responseStatusCode.equals(201))
         {
             taskHandler.draftTaskComplete();

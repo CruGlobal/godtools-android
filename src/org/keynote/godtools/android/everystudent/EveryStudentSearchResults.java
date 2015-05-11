@@ -1,14 +1,5 @@
 package org.keynote.godtools.android.everystudent;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.keynote.godtools.android.R;
-
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -33,9 +24,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
+
+import org.keynote.godtools.android.R;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EveryStudentSearchResults extends ListActivity {
 	private String mQuery;
@@ -173,14 +173,13 @@ public class EveryStudentSearchResults extends ListActivity {
 			
 			if (mCursor == null) {
 				myCount = getString(R.string.search_no_results,
-						new Object[] { mQuery });
+                        mQuery);
 			} else {
 				// Display the number of results
 				int count = mCursor.getCount();
-				String countString = getResources().getQuantityString(
+				myCount = getResources().getQuantityString(
 						R.plurals.search_results, count,
 						new Object[] { count, mQuery });
-				myCount = countString;
 			
 				adapter = createAdapter (EveryStudentSearchResults.this, mCursor);
 			}

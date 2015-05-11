@@ -67,9 +67,11 @@ public class MetaTask extends AsyncTask<Object, Void, InputStream> {
     @Override
     protected void onPostExecute(InputStream inputStream) {
 
-        if (statusCode == HttpStatus.SC_OK) {
+        if (statusCode == HttpStatus.SC_OK) 
+        {
             metaTaskHandler.metaTaskComplete(inputStream, langCode, tag);
-        } else {
+        } else 
+        {
             metaTaskHandler.metaTaskFailure(inputStream, langCode, tag);
         }
     }

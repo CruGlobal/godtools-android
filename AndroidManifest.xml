@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.keynote.godtools.android"
-    android:versionCode="4"
-    android:versionName="4.0"
+    android:versionCode="12"
+    android:versionName="4.0.1"
     android:installLocation="preferExternal">
 
     <application
@@ -27,7 +27,16 @@
             android:name=".MainPW"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/GodToolsIP4"/>
+        
+        <activity 
+            android:name=".PreviewModeMainPW"
+            android:label="@string/app_title"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/GodToolsIP4" />
+                  
 
         <activity
             android:name="About"
@@ -40,11 +49,12 @@
             android:label="@string/settings_title"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainPW">
+            android:parentActivityName=".MainPW"
+            android:theme="@style/GodToolsIP4">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.keynote.godtools.android.Main" />
+                android:value="org.keynote.godtools.android.MainPW" />
 
         </activity>
 
@@ -52,7 +62,8 @@
             android:name=".SelectLanguagePW"
             android:label="Select Language"
             android:screenOrientation="portrait"
-            android:parentActivityName="org.keynote.godtools.android.SettingsPW">
+            android:parentActivityName="org.keynote.godtools.android.SettingsPW"
+            android:theme="@style/GodToolsIP4">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -137,6 +148,16 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light" />
 
+        <receiver android:name=".notifications.GcmBroadcastReceiver"
+                  android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="org.keynote.godtools.android" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".notifications.GcmIntentService" />
+        <meta-data android:name="com.google.android.gms.version"
+                   android:value="@integer/google_play_services_version" />
     </application>
 
     <uses-sdk
@@ -151,5 +172,14 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <!--<uses-permission android:name="android.permission.GET_ACCOUNTS"/>-->
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+
+    <permission android:name="org.keynote.godtools.android.permission.C2D_MESSAGE"
+                android:protectionLevel="signature" />
+    <uses-permission android:name="org.keynote.godtools.android.permission.C2D_MESSAGE" />
+
+
 
 </manifest>

@@ -95,6 +95,8 @@ public class PackageListFragment extends ListFragment
 		mAdapter.refresh(packages);
 	}
 
+
+
 	public void disable()
 	{
 		mAdapter.disableClick();
@@ -158,7 +160,6 @@ public class PackageListFragment extends ListFragment
                     holder = new ViewHolder();
                     holder.icon = (ImageView) convertView.findViewById(R.id.list2Image);
                     holder.packageName = (TextView) convertView.findViewById(R.id.list2Text1);
-                    holder.status = (TextView) convertView.findViewById(R.id.list2Text2);
                 }
                 else
                 {
