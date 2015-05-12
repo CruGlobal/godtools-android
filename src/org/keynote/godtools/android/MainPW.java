@@ -95,10 +95,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     Context context;
     String regid = "";
     Timer timer;
-    /**
-     * When clicked, dialog to launch a new translation is opened
-     */
-    boolean isDownloading;
     boolean noPackages = false;
     boolean justSwitchedToTranslatorMode;
     SharedPreferences settings;
@@ -580,7 +576,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private void showLoading()
     {
-        isDownloading = true;
         supportInvalidateOptionsMenu();
 
         setSupportProgressBarIndeterminateVisibility(true);
@@ -791,7 +786,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private void hideLoading()
     {
-        isDownloading = false;
         supportInvalidateOptionsMenu();
 
         setSupportProgressBarIndeterminateVisibility(false);
