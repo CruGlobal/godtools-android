@@ -75,7 +75,7 @@ public class Splash extends Activity
 			// if connected to the internet and not auth code (why would there be? It is
 			// the first run.
 			if(Device.isConnected(Splash.this) &&
-					settings.getString("Authorization_Generic", "").equals(""))
+					"".equals(settings.getString("Authorization_Generic", "")))
 			{
 				// get an auth code
 				Log.i(TAG, "Starting backgound service");
@@ -158,8 +158,10 @@ public class Splash extends Activity
 		return true;
 	}
 
+
+
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent msg)
+	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
 		_active = false;
 		return true;
