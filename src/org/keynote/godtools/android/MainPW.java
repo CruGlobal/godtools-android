@@ -62,7 +62,6 @@ import java.util.TimerTask;
 
 import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
-import static org.keynote.godtools.android.utils.Constants.TYPE;
 
 
 public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
@@ -117,6 +116,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
 
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
         setContentView(R.layout.main_pw);
 
         getWindow().setFlags(
@@ -147,14 +148,14 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         if (!isFirstLaunch())
         {
-            if (settings.getString("Authorization_Generic", "").equals(""))
+            if ("".equals(settings.getString("Authorization_Generic", "")))
             {
-                showLoading("Updating");
+                showLoading();
                 BackgroundService.authenticateGeneric(this);
             }
             else
             {
-                showLoading("Updating");
+                showLoading();
                 BackgroundService.getListOfPackages(this);
             }
         }
@@ -219,7 +220,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             @Override
             public void onReceive(Context context, Intent intent)
             {
-                if (BroadcastUtil.ACTION_START.equals(intent.getAction())) showLoading("Updating");
+                if (BroadcastUtil.ACTION_START.equals(intent.getAction())) showLoading();
                 if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
                 {
                     Log.i(TAG, "Action Done");
@@ -354,6 +355,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.homescreen_menu, menu);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -421,7 +423,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 }
 
                 String code = data.getStringExtra("parallelCode");
-                showLoading("Downloading resources...");
+                showLoading();
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         code,
                         KEY_PARALLEL,
@@ -440,7 +442,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                     app.setAppLocale(primaryCode);
                 }
 
-                showLoading("Downloading drafts...");
+                showLoading();
 
                 GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", this);
 
@@ -582,17 +584,12 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         trackScreenVisit();
     }
 
-    private void showLoading(String msg)
+    private void showLoading()
     {
         isDownloading = true;
         supportInvalidateOptionsMenu();
-        tvTask.setText(msg);
-        vLoading.setVisibility(View.VISIBLE);
 
-        if (refreshButton != null)
-        {
-            refreshButton.setEnabled(false);
-        }
+        setSupportProgressBarIndeterminateVisibility(true);
     }
 
     @Override
@@ -802,13 +799,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     {
         isDownloading = false;
         supportInvalidateOptionsMenu();
-        tvTask.setText("");
-        vLoading.setVisibility(View.GONE);
 
-        if (refreshButton != null)
-        {
-            refreshButton.setEnabled(true);
-        }
+        setSupportProgressBarIndeterminateVisibility(false);
     }
 
     @Override
