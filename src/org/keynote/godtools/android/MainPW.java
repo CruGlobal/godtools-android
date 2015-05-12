@@ -24,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -92,9 +91,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     
     private List<HomescreenLayout> layouts;
 
-    View vLoading;
-    TextView tvTask;
-    ImageButton refreshButton;
     GoogleCloudMessaging gcm;
     Context context;
     String regid = "";
@@ -131,8 +127,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         titleBar.setText(R.string.app_title);
 
         context = getApplicationContext();
-        vLoading = findViewById(R.id.contLoading);
-        tvTask = (TextView) findViewById(R.id.tvTask);
         
         setupLayout();
         setupBroadcastReceiver();
