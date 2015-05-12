@@ -889,7 +889,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private String getRegistrationId(Context context)
     {
         String registrationId = settings.getString(PROPERTY_REG_ID, "");
-        if (registrationId.isEmpty()) {
+        if (registrationId == null || registrationId.isEmpty()) {
             Log.i(TAG, "Registration not found.");
             return "";
         }
@@ -910,7 +910,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
-                String msg = "";
+                String msg;
                 try {
                     if (gcm == null) {
                         gcm = GoogleCloudMessaging.getInstance(context);
