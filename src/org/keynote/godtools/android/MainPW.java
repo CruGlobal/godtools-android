@@ -370,8 +370,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     {
         super.onActivityResult(requestCode, resultCode, data);
 
-        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
         switch (resultCode)
         {
             /* It's possible that both primary and parallel languages that were previously downloaded were changed at the same time.
@@ -384,7 +382,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 SnuffyApplication app = (SnuffyApplication) getApplication();
                 app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
 
-                refreshPackageList(settings, false);
+                refreshPackageList(false);
                 createTheHomeScreen();
 
                 break;
@@ -449,7 +447,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 // refresh the list
                 String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 
-                refreshPackageList(settings, true);
+                refreshPackageList(true);
 
                 if (!languagePrimary.equalsIgnoreCase(primaryCode))
                 {
@@ -472,7 +470,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
      *                     has no packages available.  This is true when leaving translator mode in a language with all
      *                     drafts and no published live versions.
      */
-    private void refreshPackageList(SharedPreferences settings, boolean withFallback)
+    private void refreshPackageList(boolean withFallback)
     {
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
         packageList = getPackageList();
@@ -492,7 +490,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     protected void onPause()
     {
         super.onPause();
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor ed = settings.edit();
         ed.apply();
     }
@@ -592,7 +589,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             SnuffyApplication app = (SnuffyApplication) getApplication();
             app.setAppLocale(langCode);
 
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PRIMARY, langCode);
             editor.apply();
@@ -609,8 +605,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         }
         else if (tag.equalsIgnoreCase(KEY_PARALLEL))
         {
-
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PARALLEL, langCode);
             editor.apply();
@@ -654,7 +648,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private void switchedToTranslatorMode(boolean switched)
     {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(JUST_SWITCHED, switched);
         editor.apply();
@@ -777,8 +770,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         protected void onPostExecute(Boolean shouldDownload)
         {
             super.onPostExecute(shouldDownload);
-
-            final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
             GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), settings.getString("Authorization_Draft", ""), langCode, tag, MainPW.this);
         }
