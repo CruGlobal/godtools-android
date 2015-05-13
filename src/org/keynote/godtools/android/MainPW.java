@@ -233,6 +233,9 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                         case META_TASK:
                             Log.i(TAG, "Meta complete");
                             break;
+                        case ENABLE_TRANSLATOR:
+                            finish();
+                            break;
                         case ERROR:
                             Log.i(TAG, "Error");
                             break;
