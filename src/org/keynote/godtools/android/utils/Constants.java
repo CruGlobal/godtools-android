@@ -28,4 +28,6 @@ public class Constants
     public static final String PREFS_NAME = "GodTools";
 
     public static final String AUTH_CODE = "Authorization_Generic";
+
+    public static final String AUTH_DRAFT = "Authorization_Draft";
 }
