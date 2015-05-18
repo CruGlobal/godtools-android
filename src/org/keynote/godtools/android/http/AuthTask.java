@@ -13,24 +13,28 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
-public class AuthTask extends AsyncTask<Object, Void, String> {
+public class AuthTask extends AsyncTask<Object, Void, String>
+{
 
     private AuthTaskHandler taskHandler;
     private int statusCode;
     private static final String TAG = AuthTask.class.getSimpleName();
 
-    public interface AuthTaskHandler {
+    public interface AuthTaskHandler
+    {
         void authComplete(String authorization);
 
         void authFailed();
     }
 
-    public AuthTask(AuthTaskHandler listener) {
+    public AuthTask(AuthTaskHandler listener)
+    {
         taskHandler = listener;
     }
 
     @Override
-    protected String doInBackground(Object... params) {
+    protected String doInBackground(Object... params)
+    {
 
         String url = params[0].toString();
         HttpParams httpParams = new BasicHttpParams();
@@ -86,12 +90,16 @@ public class AuthTask extends AsyncTask<Object, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String s) {
+    protected void onPostExecute(String s)
+    {
         super.onPostExecute(s);
 
-        if (statusCode == HttpStatus.SC_NO_CONTENT) {
+        if (statusCode == HttpStatus.SC_NO_CONTENT)
+        {
             taskHandler.authComplete(s);
-        } else {
+        }
+        else
+        {
             taskHandler.authFailed();
         }
 
