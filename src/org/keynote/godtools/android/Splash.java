@@ -46,6 +46,13 @@ public class Splash extends Activity
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+
+        settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        if (!isFirstLaunch())
+        {
+            goToMainActivity();
+        }
+
 		setContentView(R.layout.splash_pw);
 
 		tvTask = (TextView) findViewById(R.id.tvTask);
@@ -54,38 +61,27 @@ public class Splash extends Activity
 		// Enable crash reporting
 		Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
 
-		settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-
 		setupBroadcastReceiver();
 
-		// if this is a first launch
-		if (isFirstLaunch())
-		{
-			Log.i(TAG, "First Launch");
+        Log.i(TAG, "First Launch");
 
-			// set english as primary language on first start
-			SharedPreferences.Editor editor = settings.edit();
-			editor.putString(GTLanguage.KEY_PRIMARY, "en");
-			editor.apply();
+        // set english as primary language on first start
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(GTLanguage.KEY_PRIMARY, "en");
+        editor.apply();
 
-			// set up files
-			BackgroundService.firstSetup((SnuffyApplication) getApplication());
+        // set up files
+        BackgroundService.firstSetup((SnuffyApplication) getApplication());
 
-			// if connected to the internet and not auth code (why would there be? It is
-			// the first run.
-			if(Device.isConnected(Splash.this) &&
-					"".equals(settings.getString("Authorization_Generic", "")))
-			{
-				// get an auth code
-				Log.i(TAG, "Starting backgound service");
-				BackgroundService.authenticateGeneric(this);
-			}
-		}
-		else
-		{
-			goToMainActivity();
-		}
+        // if connected to the internet and not auth code (why would there be? It is
+        // the first run.
+        if(Device.isConnected(Splash.this) &&
+                "".equals(settings.getString("Authorization_Generic", "")))
+        {
+            // get an auth code
+            Log.i(TAG, "Starting backgound service");
+            BackgroundService.authenticateGeneric(this);
+        }
 	}
 
 	@Override
