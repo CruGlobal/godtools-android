@@ -44,7 +44,6 @@ import org.keynote.godtools.android.utils.Device;
 
 import java.io.InputStream;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
@@ -72,12 +71,12 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     private LocalBroadcastManager broadcastManager;
     private BroadcastReceiver broadcastReceiver;
 
+    private SharedPreferences settings;
+
     Context context;
 
     boolean noPackages = false;
     boolean justSwitchedToTranslatorMode;
-    
-    SharedPreferences settings;
     
     ExpandableListAdapter listAdapter;
     ExpandableListView listView;
@@ -263,8 +262,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     {
         super.onActivityResult(requestCode, resultCode, data);
 
-        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
         switch (resultCode)
         {
             /* It's possible that both primary and parallel languages that were previously downloaded were changed at the same time.
@@ -277,7 +274,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 SnuffyApplication app = (SnuffyApplication) getApplication();
                 app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
 
-                refreshPackageList(settings, false);
+                refreshPackageList(false);
                 createTheHomeScreen();
 
                 break;
@@ -351,7 +348,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
      *                     has no packages available.  This is true when leaving translator mode in a language with all
      *                     drafts and no published live versions.
      */
-    private void refreshPackageList(SharedPreferences settings, boolean withFallback)
+    private void refreshPackageList(boolean withFallback)
     {
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
         getPackageList();
@@ -370,7 +367,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     protected void onPause()
     {
         super.onPause();
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor ed = settings.edit();
         ed.apply();
     }
@@ -399,10 +395,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         window.getDecorView().getWindowVisibleDisplayFrame(rect);
 
         rect.top = 0;
-        int width = rect.width();
-        int height = rect.height();
-        int left = rect.left;
-        int top = rect.top;
+        int width, height, left, top;
 
         double aspectRatioTarget = (double) PreviewModeMainPW.REFERENCE_DEVICE_WIDTH / (double) PreviewModeMainPW.REFERENCE_DEVICE_HEIGHT;
         double aspectRatio = (double) rect.width() / (double) rect.height();
@@ -462,7 +455,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             SnuffyApplication app = (SnuffyApplication) getApplication();
             app.setAppLocale(langCode);
 
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PRIMARY, langCode);
             editor.apply();
@@ -484,8 +476,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         }
         else if (tag.equalsIgnoreCase("parallel"))
         {
-
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PARALLEL, langCode);
             editor.apply();
@@ -498,9 +488,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             {
                 // check for draft_parallel
                 GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), langCode, "draft_parallel", this);
-            }
-            else
-            {
             }
             createTheHomeScreen();
         }
@@ -595,13 +582,11 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
     private boolean isTranslatorModeEnabled()
     {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         return settings.getBoolean("TranslatorMode", false);
     }
 
     private void switchedToTranslatorMode(boolean switched)
     {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(JUST_SWITCHED, switched);
         editor.apply();
@@ -640,10 +625,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         {
             getPackageList();
             Toast.makeText(PreviewModeMainPW.this, "Failed to download drafts", Toast.LENGTH_SHORT).show();
-        }
-        else if (tag.equalsIgnoreCase("draft_parallel"))
-        {
-            // do nothing
         }
         else if (tag.equalsIgnoreCase("primary") || tag.equalsIgnoreCase("parallel"))
         {
@@ -689,8 +670,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         protected void onPostExecute(Boolean shouldDownload)
         {
             super.onPostExecute(shouldDownload);
-
-            final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
             GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), settings.getString(AUTH_DRAFT, ""), langCode, tag, PreviewModeMainPW.this);
         }
@@ -752,8 +731,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     {
         if (Device.isConnected(PreviewModeMainPW.this))
         {
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
             GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), languagePrimary, "draft", this);
 
         }
@@ -761,39 +738,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         {
             Toast.makeText(PreviewModeMainPW.this, "Internet connection is required", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private LinkedHashMap<String, String> getPossiblePackagesForDraft()
-    {
-        // start with an ArrayList the length of number of packages. it will never be bigger than that.
-        LinkedHashMap<String, String> possiblePackages = new LinkedHashMap<String, String>(packageList.size());
-
-        // start with an list of (unfortuantely) hard coded packages
-        possiblePackages.put("kgp", "Knowing God Personally");
-        possiblePackages.put("fourlaws", "Four Spiritual Laws");
-        possiblePackages.put("satisfied", "Satisfied?");
-
-        // loop through the list of loaded packages, and stick in the name of any existing packages (already translated)
-        for (GTPackage gtPackage : packageList)
-        {
-            if ("live".equalsIgnoreCase(gtPackage.getStatus()) &&
-                    possiblePackages.containsKey(gtPackage.getCode()))
-            {
-                possiblePackages.put(gtPackage.getCode(), gtPackage.getName());
-            }
-        }
-
-        // loop through the list again and remove any that are already in 'draft' status
-        for (GTPackage gtPackage : packageList)
-        {
-            if ("draft".equalsIgnoreCase(gtPackage.getStatus()) &&
-                    possiblePackages.containsKey(gtPackage.getCode()))
-            {
-                possiblePackages.remove(gtPackage.getCode());
-            }
-        }
-
-        return possiblePackages;
     }
 
     private void doCmdShare()
