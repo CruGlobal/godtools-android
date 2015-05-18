@@ -11,9 +11,9 @@ public final class BroadcastUtil
     private final String TAG = getClass().getSimpleName();
 
     public static final String ACTION_START = BroadcastUtil.class.getName() + ".ACTION_START";
-    public static final String ACTION_RUNNING = BroadcastUtil.class.getName() + ".ACTION_RUNNING";
     public static final String ACTION_STOP = BroadcastUtil.class.getName() + ".ACTION_STOP";
     public static final String ACTION_TYPE = BroadcastUtil.class.getName() + ".ACTION_TYPE";
+    public static final String ACTION_FAIL = BroadcastUtil.class.getName() + ".ACTION_FAIL";
     
     public static Intent startBroadcast()
     {
@@ -27,18 +27,25 @@ public final class BroadcastUtil
         return intent;
     }
 
+    public static Intent failBroadcast(Type type)
+    {
+        Intent intent = new Intent(ACTION_FAIL);
+        intent.putExtra(ACTION_TYPE, type);
+        return intent;
+    }
+
     public static IntentFilter startFilter()
     {
         return new IntentFilter(ACTION_START);
     }
 
-    public static IntentFilter runningFilter()
-    {
-        return new IntentFilter(ACTION_RUNNING);
-    }
-
     public static IntentFilter stopFilter()
     {
         return new IntentFilter(ACTION_STOP);
+    }
+
+    public static IntentFilter failedFilter()
+    {
+        return new IntentFilter(ACTION_FAIL);
     }
 }

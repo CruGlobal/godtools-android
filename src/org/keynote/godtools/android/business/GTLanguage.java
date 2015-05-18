@@ -4,10 +4,11 @@ import android.content.Context;
 
 import org.keynote.godtools.android.dao.DBAdapter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
-public class GTLanguage {
+public class GTLanguage implements Serializable {
 
     public static final String KEY_PRIMARY = "languagePrimary";
     public static final String KEY_PARALLEL = "languageParallel";
@@ -109,4 +110,20 @@ public class GTLanguage {
         adapter.updateGTLanguage(this);
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o == this)
+        {
+            return true;
+        }
+
+        if (!(o instanceof GTLanguage))
+        {
+            return false;
+        }
+
+        GTLanguage second = (GTLanguage) o;
+        return this.getLanguageCode().equals(second.getLanguageCode());
+    }
 }

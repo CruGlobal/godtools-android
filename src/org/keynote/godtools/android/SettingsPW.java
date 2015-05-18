@@ -7,7 +7,9 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import org.keynote.godtools.android.broadcast.BroadcastUtil;
+import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
 import org.keynote.godtools.android.fragments.ConfirmDialogFragment;
@@ -26,16 +30,21 @@ import org.keynote.godtools.android.snuffy.SnuffyAlternateTypefaceTextView;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
+import org.keynote.godtools.android.utils.Strings;
 import org.keynote.godtools.android.utils.Typefaces;
 
 import java.util.Locale;
+
+import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 
 public class SettingsPW extends BaseActionBarActivity implements
         View.OnClickListener,
         ConfirmDialogFragment.OnConfirmClickListener,
         AccessCodeDialogFragment.AccessCodeDialogListener,
-        AuthTask.AuthTaskHandler {
+        AuthTask.AuthTaskHandler
+{
 
+    private static final String TAG = SettingsPW.class.getSimpleName();
     private static final int REQUEST_PRIMARY = 1002;
     private static final int REQUEST_PARALLEL = 1003;
 
@@ -49,7 +58,8 @@ public class SettingsPW extends BaseActionBarActivity implements
     ProgressDialog pdLoading;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
 
@@ -58,10 +68,10 @@ public class SettingsPW extends BaseActionBarActivity implements
         actionBar.setCustomView(R.layout.titlebar_centered_title);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
-        
+
         TextView titleBar = (TextView) actionBar.getCustomView().findViewById(R.id.titlebar_title);
         titleBar.setText(R.string.settings_title);
-        
+
         actionBar.setTitle(R.string.settings_title);
         actionBar.setDisplayShowTitleEnabled(true);
 
@@ -98,9 +108,12 @@ public class SettingsPW extends BaseActionBarActivity implements
         tvMainLanguage.setText(primaryName);
 
         // set value for parallel language view
-        if (parallelLanguageCode.isEmpty()) {
+        if (Strings.isNullOrEmpty(parallelLanguageCode))
+        {
             tvParallelLanguage.setText(getString(R.string.none));
-        } else {
+        }
+        else
+        {
             Locale localeParallel = new Locale(parallelLanguageCode);
             String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName());
             tvParallelLanguage.setText(parallelName);
@@ -110,14 +123,17 @@ public class SettingsPW extends BaseActionBarActivity implements
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode != RESULT_CANCELED)
             setResult(resultCode, data);
 
-        switch (resultCode) {
-            case RESULT_CHANGED_PRIMARY: {
+        switch (resultCode)
+        {
+            case RESULT_CHANGED_PRIMARY:
+            {
                 String languagePrimary = data.getStringExtra("primaryCode");
                 SnuffyApplication app = (SnuffyApplication) getApplication();
                 app.setAppLocale(languagePrimary);
@@ -135,9 +151,12 @@ public class SettingsPW extends BaseActionBarActivity implements
                 SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                 String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
-                if (parallelLanguageCode.isEmpty()) {
+                if (Strings.isNullOrEmpty(parallelLanguageCode))
+                {
                     tvParallelLanguage.setText(getString(R.string.none));
-                } else {
+                }
+                else
+                {
                     Locale localeParallel = new Locale(parallelLanguageCode);
                     String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName());
                     tvParallelLanguage.setText(parallelName);
@@ -146,7 +165,8 @@ public class SettingsPW extends BaseActionBarActivity implements
                 trackScreenEvent("Change Primary Language");
                 break;
             }
-            case RESULT_CHANGED_PARALLEL: {
+            case RESULT_CHANGED_PARALLEL:
+            {
 
                 // set value for parallel language view
                 String languageParallel = data.getStringExtra("parallelCode");
@@ -165,11 +185,13 @@ public class SettingsPW extends BaseActionBarActivity implements
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v)
+    {
 
         Intent intent = new Intent(SettingsPW.this, SelectLanguagePW.class);
 
-        switch (v.getId()) {
+        switch (v.getId())
+        {
             case R.id.rlMainLanguage:
                 intent.putExtra("languageType", "Main Language");
                 startActivityForResult(intent, REQUEST_PRIMARY);
@@ -188,42 +210,48 @@ public class SettingsPW extends BaseActionBarActivity implements
 
     }
 
-    public void onToggleClicked(View view) {
+    public void onToggleClicked(View view)
+    {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean on = ((CompoundButton) view).isChecked();
 
-        if(on && !settings.getString("Authorization_Draft", "").isEmpty())
+        if (on && !Strings.isNullOrEmpty(settings.getString(AUTH_DRAFT, "")))
         {
             ((CompoundButton) view).setChecked(true);
             cbTranslatorMode.setEnabled(true);
-            setTranslatorMode(true);
-            setResult(RESULT_PREVIEW_MODE_ENABLED);
-            finish();
+            GodToolsApiClient.verifyStatusOfAuthToken(settings.getString(AUTH_DRAFT, ""), this);
+
             return;
         }
 
         view.setEnabled(false);
 
-        if (on) {
+        if (on)
+        {
 
             if (Device.isConnected(SettingsPW.this))
                 showAccessCodeDialog();
-            else {
+            else
+            {
                 Toast.makeText(SettingsPW.this, "Internet connection is needed to enable translator mode", Toast.LENGTH_SHORT).show();
                 ((CompoundButton) view).setChecked(false);
                 view.setEnabled(true);
             }
 
 
-        } else {
+        }
+        else
+        {
             showExitTranslatorModeDialog();
         }
     }
 
-    private void showAccessCodeDialog() {
+    private void showAccessCodeDialog()
+    {
         FragmentManager fm = getSupportFragmentManager();
         DialogFragment frag = (DialogFragment) fm.findFragmentByTag("access_dialog");
-        if (frag == null) {
+        if (frag == null)
+        {
             frag = new AccessCodeDialogFragment();
             frag.setCancelable(false);
             frag.show(fm, "access_dialog");
@@ -231,10 +259,12 @@ public class SettingsPW extends BaseActionBarActivity implements
     }
 
 
-    private void showExitTranslatorModeDialog() {
+    private void showExitTranslatorModeDialog()
+    {
         FragmentManager fm = getSupportFragmentManager();
         DialogFragment frag = (DialogFragment) fm.findFragmentByTag("confirm_dialog");
-        if (frag == null) {
+        if (frag == null)
+        {
             frag = ConfirmDialogFragment.newInstance(
                     getString(R.string.dialog_translator_mode_title),
                     getString(R.string.dialog_translator_mode_body),
@@ -247,20 +277,25 @@ public class SettingsPW extends BaseActionBarActivity implements
     }
 
     @Override
-    public void onConfirmClick(boolean positive, String tag) {
+    public void onConfirmClick(boolean positive, String tag)
+    {
 
-        if (tag.equalsIgnoreCase("ExitTranslatorMode")) {
+        if (tag.equalsIgnoreCase("ExitTranslatorMode"))
+        {
 
-            if (positive) {
+            if (positive)
+            {
                 // disable translator mode
                 setResult(RESULT_PREVIEW_MODE_DISABLED);
                 setTranslatorMode(false);
-                
+                LocalBroadcastManager.getInstance(this).sendBroadcast(BroadcastUtil.stopBroadcast(Type.DISABLE_TRANSLATOR));
                 Intent intent = new Intent(this, MainPW.class);
                 startActivity(intent);
                 finish();
 
-            } else {
+            }
+            else
+            {
                 cbTranslatorMode.setChecked(true);
             }
 
@@ -270,20 +305,27 @@ public class SettingsPW extends BaseActionBarActivity implements
     }
 
     @Override
-    public void onAccessDialogClick(boolean positive, String accessCode) {
+    public void onAccessDialogClick(boolean positive, String accessCode)
+    {
 
-        if (positive) {
+        if (positive)
+        {
             // start the authentication
-            if (accessCode.isEmpty()) {
+            if (accessCode.isEmpty())
+            {
                 Toast.makeText(SettingsPW.this, "Invalid Access Code", Toast.LENGTH_SHORT).show();
                 cbTranslatorMode.setChecked(false);
                 cbTranslatorMode.setEnabled(true);
-            } else {
+            }
+            else
+            {
                 showLoading("Authenticating access code");
                 GodToolsApiClient.authenticateAccessCode(accessCode, this);
             }
 
-        } else {
+        }
+        else
+        {
             cbTranslatorMode.setChecked(false);
         }
 
@@ -291,30 +333,47 @@ public class SettingsPW extends BaseActionBarActivity implements
     }
 
     @Override
-    public void authComplete(String authorization) {
-        pdLoading.dismiss();
+    public void authComplete(String authorization)
+    {
+        Log.i(TAG, "Auth Complete");
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("Authorization_Draft", authorization);
-        editor.apply();
+        if (pdLoading != null) pdLoading.dismiss();
+
+        if (!Strings.isNullOrEmpty(authorization))
+        {
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(AUTH_DRAFT, authorization);
+            editor.apply();
+        }
 
         setTranslatorMode(true);
         setResult(RESULT_PREVIEW_MODE_ENABLED);
-        
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(BroadcastUtil.stopBroadcast(Type.ENABLE_TRANSLATOR));
         Intent intent = new Intent(this, PreviewModeMainPW.class);
         startActivity(intent);
         finish();
     }
 
     @Override
-    public void authFailed() {
-        pdLoading.dismiss();
-        Toast.makeText(SettingsPW.this, "Invalid Access Code", Toast.LENGTH_SHORT).show();
-        cbTranslatorMode.setChecked(false);
+    public void authFailed()
+    {
+        Log.i(TAG, "Auth Failed");
+
+        if (pdLoading != null) pdLoading.dismiss();
+
+        // clear out saved Draft access token if auth failed
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(AUTH_DRAFT, null);
+        editor.apply();
+
+        Toast.makeText(SettingsPW.this, "Please try again.", Toast.LENGTH_SHORT).show();
         cbTranslatorMode.setEnabled(true);
+        onToggleClicked(findViewById(R.id.cbTranslatorMode));
     }
-    
+
     public void onNotificationToggle(View view)
     {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -323,18 +382,21 @@ public class SettingsPW extends BaseActionBarActivity implements
         editor.apply();
     }
 
-    private void setTranslatorMode(boolean isEnabled) {
+    private void setTranslatorMode(boolean isEnabled)
+    {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("TranslatorMode", isEnabled);
         editor.apply();
     }
 
-    private String capitalizeFirstLetter(String word) {
+    private String capitalizeFirstLetter(String word)
+    {
         return Character.toUpperCase(word.charAt(0)) + word.substring(1);
     }
 
-    private void showLoading(String msg) {
+    private void showLoading(String msg)
+    {
         pdLoading = new ProgressDialog(SettingsPW.this);
         pdLoading.setCancelable(false);
         pdLoading.setMessage(msg);
@@ -342,17 +404,21 @@ public class SettingsPW extends BaseActionBarActivity implements
 
     }
 
-    private void handleLanguagesWithAlternateFonts(String mAppLanguage) {
-        if (LanguagesNotSupportedByDefaultFont.contains(mAppLanguage)) {
+    private void handleLanguagesWithAlternateFonts(String mAppLanguage)
+    {
+        if (LanguagesNotSupportedByDefaultFont.contains(mAppLanguage))
+        {
             mAlternateTypeface = Typefaces.get(getApplication(), LanguagesNotSupportedByDefaultFont.getPathToAlternateFont(mAppLanguage));
-        } else {
+        }
+        else
+        {
             mAlternateTypeface = Typeface.DEFAULT;
         }
     }
 
     private Tracker getGoogleAnalyticsTracker()
     {
-        return ((SnuffyApplication)getApplication()).getTracker();
+        return ((SnuffyApplication) getApplication()).getTracker();
     }
 
     private void trackScreenEvent(String event)
