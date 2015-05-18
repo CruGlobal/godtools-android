@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
@@ -42,6 +43,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         AccessCodeDialogFragment.AccessCodeDialogListener,
         AuthTask.AuthTaskHandler {
 
+    private static final String TAG = SettingsPW.class.getSimpleName();
     private static final int REQUEST_PRIMARY = 1002;
     private static final int REQUEST_PARALLEL = 1003;
 
@@ -202,12 +204,8 @@ public class SettingsPW extends BaseActionBarActivity implements
         {
             ((CompoundButton) view).setChecked(true);
             cbTranslatorMode.setEnabled(true);
-            setTranslatorMode(true);
-            setResult(RESULT_PREVIEW_MODE_ENABLED);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(BroadcastUtil.stopBroadcast(Type.ENABLE_TRANSLATOR));
-            Intent intent = new Intent(this, PreviewModeMainPW.class);
-            startActivity(intent);
-            finish();
+            GodToolsApiClient.verifyStatusOfAuthToken(settings.getString(AUTH_DRAFT, ""), this);
+
             return;
         }
 
@@ -301,12 +299,17 @@ public class SettingsPW extends BaseActionBarActivity implements
 
     @Override
     public void authComplete(String authorization) {
-        pdLoading.dismiss();
+        Log.i(TAG, "Auth Complete");
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("Authorization_Draft", authorization);
-        editor.apply();
+        if (pdLoading != null) pdLoading.dismiss();
+
+        if (!Strings.isNullOrEmpty(authorization))
+        {
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(AUTH_DRAFT, authorization);
+            editor.apply();
+        }
 
         setTranslatorMode(true);
         setResult(RESULT_PREVIEW_MODE_ENABLED);
@@ -319,16 +322,19 @@ public class SettingsPW extends BaseActionBarActivity implements
 
     @Override
     public void authFailed() {
-        pdLoading.dismiss();
+        Log.i(TAG, "Auth Failed");
+
+        if (pdLoading != null) pdLoading.dismiss();
+
         // clear out saved Draft access token if auth failed
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(AUTH_DRAFT, null);
         editor.apply();
-        Toast.makeText(SettingsPW.this, "Invalid Access Code. Please try again.", Toast.LENGTH_SHORT).show();
-        cbTranslatorMode.setChecked(false);
+
+        Toast.makeText(SettingsPW.this, "Please try again.", Toast.LENGTH_SHORT).show();
         cbTranslatorMode.setEnabled(true);
-        onToggleClicked(null);
+        onToggleClicked(findViewById(R.id.cbTranslatorMode));
     }
     
     public void onNotificationToggle(View view)
