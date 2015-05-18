@@ -49,6 +49,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+
 public class SnuffyPWActivity extends Activity
 {
     private static final String TAG = "SnuffyActivity";
@@ -712,7 +714,7 @@ public class SnuffyPWActivity extends Activity
         showLoading("Updating page...");
 
         GodToolsApiClient.downloadDraftPage((SnuffyApplication) getApplication(),
-                settings.getString("Authorization_Draft", ""),
+                settings.getString(AUTH_DRAFT, ""),
                 mAppLanguage,
                 mAppPackage,
                 currentPage.getPageId(),

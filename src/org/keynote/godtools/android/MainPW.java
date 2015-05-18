@@ -59,6 +59,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
 
@@ -442,7 +443,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
                 showLoading();
 
-                GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", this);
+                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), languagePrimary, "draft_primary", this);
 
                 Toast.makeText(MainPW.this, "Translator preview mode is enabled", Toast.LENGTH_LONG).show();
                 switchedToTranslatorMode(true);
@@ -781,7 +782,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         {
             super.onPostExecute(shouldDownload);
 
-            GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), settings.getString("Authorization_Draft", ""), langCode, tag, MainPW.this);
+            GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), settings.getString(AUTH_DRAFT, ""), langCode, tag, MainPW.this);
         }
     }
 

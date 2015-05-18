@@ -47,6 +47,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+
 
 public class PreviewModeMainPW extends BaseActionBarActivity implements
         DownloadTask.DownloadTaskHandler,
@@ -195,11 +197,11 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                             break;
                         case DRAFT_CREATION_TASK:
                             Log.i(TAG, "Create broadcast received");
-                            GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", PreviewModeMainPW.this);
+                            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), languagePrimary, "draft", PreviewModeMainPW.this);
                             break;
                         case DRAFT_PUBLISH_TASK:
                             Log.i(TAG, "Publish broadcast received");
-                            GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", PreviewModeMainPW.this);
+                            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), languagePrimary, "draft_primary", PreviewModeMainPW.this);
                             break;
                         case META_TASK:
                             break;
@@ -321,7 +323,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                     app.setAppLocale(primaryCode);
                 }
 
-                GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", this);
+                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), languagePrimary, "draft_primary", this);
 
                 Toast.makeText(PreviewModeMainPW.this, "Translator preview mode is enabled", Toast.LENGTH_LONG).show();
                 switchedToTranslatorMode(true);
@@ -472,7 +474,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             if (isTranslatorModeEnabled())
             {
                 // check for draft_primary
-                GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), langCode, "draft_primary", this);
+                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), langCode, "draft_primary", this);
             }
             else
             {
@@ -495,7 +497,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             if (isTranslatorModeEnabled())
             {
                 // check for draft_parallel
-                GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), langCode, "draft_parallel", this);
+                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), langCode, "draft_parallel", this);
             }
             else
             {
@@ -690,7 +692,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
             final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-            GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), settings.getString("Authorization_Draft", ""), langCode, tag, PreviewModeMainPW.this);
+            GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), settings.getString(AUTH_DRAFT, ""), langCode, tag, PreviewModeMainPW.this);
         }
     }
 
@@ -752,7 +754,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         {
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-            GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", this);
+            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), languagePrimary, "draft", this);
 
         }
         else

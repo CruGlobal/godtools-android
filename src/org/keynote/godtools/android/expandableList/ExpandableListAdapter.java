@@ -30,6 +30,7 @@ import java.util.List;
 
 import static org.keynote.godtools.android.broadcast.BroadcastUtil.startBroadcast;
 import static org.keynote.godtools.android.broadcast.BroadcastUtil.stopBroadcast;
+import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 
 /**
  * Created by matthewfrederick on 2/16/15.
@@ -254,7 +255,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                 
                                 broadcastManager.sendBroadcast(startBroadcast());
                                 
-                                GodToolsApiClient.publishDraft(settings.getString("Authorization_Draft", ""),
+                                GodToolsApiClient.publishDraft(settings.getString(AUTH_DRAFT, ""),
                                         currentPackage.getLanguage(),
                                         currentPackage.getCode(),
                                         new DraftPublishTask.DraftTaskHandler()
@@ -301,7 +302,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                 broadcastManager.sendBroadcast(startBroadcast());
                                 Log.i(TAG, "Creating Draft");
                                 
-                                GodToolsApiClient.createDraft(settings.getString("Authorization_Draft", ""),
+                                GodToolsApiClient.createDraft(settings.getString(AUTH_DRAFT, ""),
                                         languagePrimary,
                                         currentPackage.getCode(),
                                         new DraftCreationTask.DraftTaskHandler()
