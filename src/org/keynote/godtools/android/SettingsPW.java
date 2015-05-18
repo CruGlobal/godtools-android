@@ -29,9 +29,12 @@ import org.keynote.godtools.android.snuffy.SnuffyAlternateTypefaceTextView;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
+import org.keynote.godtools.android.utils.Strings;
 import org.keynote.godtools.android.utils.Typefaces;
 
 import java.util.Locale;
+
+import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 
 public class SettingsPW extends BaseActionBarActivity implements
         View.OnClickListener,
@@ -101,7 +104,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         tvMainLanguage.setText(primaryName);
 
         // set value for parallel language view
-        if (parallelLanguageCode.isEmpty()) {
+        if (Strings.isNullOrEmpty(parallelLanguageCode)) {
             tvParallelLanguage.setText(getString(R.string.none));
         } else {
             Locale localeParallel = new Locale(parallelLanguageCode);
@@ -138,7 +141,7 @@ public class SettingsPW extends BaseActionBarActivity implements
                 SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                 String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
-                if (parallelLanguageCode.isEmpty()) {
+                if (Strings.isNullOrEmpty(parallelLanguageCode)) {
                     tvParallelLanguage.setText(getString(R.string.none));
                 } else {
                     Locale localeParallel = new Locale(parallelLanguageCode);
@@ -195,7 +198,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean on = ((CompoundButton) view).isChecked();
 
-        if(on && !settings.getString("Authorization_Draft", "").isEmpty())
+        if(on && !Strings.isNullOrEmpty(settings.getString(AUTH_DRAFT, "")))
         {
             ((CompoundButton) view).setChecked(true);
             cbTranslatorMode.setEnabled(true);
@@ -317,9 +320,15 @@ public class SettingsPW extends BaseActionBarActivity implements
     @Override
     public void authFailed() {
         pdLoading.dismiss();
-        Toast.makeText(SettingsPW.this, "Invalid Access Code", Toast.LENGTH_SHORT).show();
+        // clear out saved Draft access token if auth failed
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(AUTH_DRAFT, null);
+        editor.apply();
+        Toast.makeText(SettingsPW.this, "Invalid Access Code. Please try again.", Toast.LENGTH_SHORT).show();
         cbTranslatorMode.setChecked(false);
         cbTranslatorMode.setEnabled(true);
+        onToggleClicked(null);
     }
     
     public void onNotificationToggle(View view)
