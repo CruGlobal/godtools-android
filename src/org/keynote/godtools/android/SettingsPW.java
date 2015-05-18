@@ -320,9 +320,15 @@ public class SettingsPW extends BaseActionBarActivity implements
     @Override
     public void authFailed() {
         pdLoading.dismiss();
-        Toast.makeText(SettingsPW.this, "Invalid Access Code", Toast.LENGTH_SHORT).show();
+        // clear out saved Draft access token if auth failed
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(AUTH_DRAFT, null);
+        editor.apply();
+        Toast.makeText(SettingsPW.this, "Invalid Access Code. Please try again.", Toast.LENGTH_SHORT).show();
         cbTranslatorMode.setChecked(false);
         cbTranslatorMode.setEnabled(true);
+        onToggleClicked(null);
     }
     
     public void onNotificationToggle(View view)
