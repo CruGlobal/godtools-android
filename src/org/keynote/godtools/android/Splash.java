@@ -24,7 +24,6 @@ import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
-import static org.keynote.godtools.android.utils.Constants.COUNT;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 
 
@@ -55,12 +54,14 @@ public class Splash extends Activity
             goToMainActivity();
         }
 
+
 		// Enable crash reporting
 		Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
 
+        setContentView(R.layout.splash_pw);
+
         tvTask = (TextView) findViewById(R.id.tvTask);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-
 
         setupBroadcastReceiver();
 
