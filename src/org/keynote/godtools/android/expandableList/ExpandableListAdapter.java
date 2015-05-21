@@ -33,6 +33,7 @@ import static org.keynote.godtools.android.broadcast.BroadcastUtil.stopBroadcast
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 
 /**
@@ -41,7 +42,6 @@ import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 public class ExpandableListAdapter extends BaseExpandableListAdapter implements View.OnClickListener
 {
     private final SharedPreferences settings;
-    private final String PREFS_NAME = "GodTools";
     private final String TAG = getClass().getSimpleName();
     
     private Context context;
