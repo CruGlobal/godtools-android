@@ -21,6 +21,8 @@ public class Constants
     public static final String LANG_CODE = "lang_code";
     public static final String BACKGROUND_TASK_TAG = "task_tag";
 
+    public static final String COUNT = "count";
+
 
     /**
      * App preferences name
@@ -28,4 +30,6 @@ public class Constants
     public static final String PREFS_NAME = "GodTools";
 
     public static final String AUTH_CODE = "Authorization_Generic";
+
+    public static final String AUTH_DRAFT = "Authorization_Draft";
 }

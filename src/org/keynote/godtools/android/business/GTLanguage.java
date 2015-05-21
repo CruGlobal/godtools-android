@@ -110,4 +110,20 @@ public class GTLanguage implements Serializable {
         adapter.updateGTLanguage(this);
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o == this)
+        {
+            return true;
+        }
+
+        if (!(o instanceof GTLanguage))
+        {
+            return false;
+        }
+
+        GTLanguage second = (GTLanguage) o;
+        return this.getLanguageCode().equals(second.getLanguageCode());
+    }
 }
