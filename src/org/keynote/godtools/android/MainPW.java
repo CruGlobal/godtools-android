@@ -24,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -62,7 +61,6 @@ import java.util.TimerTask;
 
 import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
-import static org.keynote.godtools.android.utils.Constants.TYPE;
 
 
 public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
@@ -93,17 +91,10 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     
     private List<HomescreenLayout> layouts;
 
-    View vLoading;
-    TextView tvTask;
-    ImageButton refreshButton;
     GoogleCloudMessaging gcm;
     Context context;
     String regid = "";
     Timer timer;
-    /**
-     * When clicked, dialog to launch a new translation is opened
-     */
-    boolean isDownloading;
     boolean noPackages = false;
     boolean justSwitchedToTranslatorMode;
     SharedPreferences settings;
@@ -117,6 +108,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
 
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
         setContentView(R.layout.main_pw);
 
         getWindow().setFlags(
@@ -130,8 +123,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         titleBar.setText(R.string.app_title);
 
         context = getApplicationContext();
-        vLoading = findViewById(R.id.contLoading);
-        tvTask = (TextView) findViewById(R.id.tvTask);
         
         setupLayout();
         setupBroadcastReceiver();
@@ -147,14 +138,14 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         if (!isFirstLaunch())
         {
-            if (settings.getString("Authorization_Generic", "").equals(""))
+            if ("".equals(settings.getString("Authorization_Generic", "")))
             {
-                showLoading("Updating");
+                showLoading();
                 BackgroundService.authenticateGeneric(this);
             }
             else
             {
-                showLoading("Updating");
+                showLoading();
                 BackgroundService.getListOfPackages(this);
             }
         }
@@ -219,7 +210,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             @Override
             public void onReceive(Context context, Intent intent)
             {
-                if (BroadcastUtil.ACTION_START.equals(intent.getAction())) showLoading("Updating");
+                if (BroadcastUtil.ACTION_START.equals(intent.getAction())) showLoading();
                 if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
                 {
                     Log.i(TAG, "Action Done");
@@ -241,6 +232,9 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                             break;
                         case META_TASK:
                             Log.i(TAG, "Meta complete");
+                            break;
+                        case ENABLE_TRANSLATOR:
+                            finish();
                             break;
                         case ERROR:
                             Log.i(TAG, "Error");
@@ -354,6 +348,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.homescreen_menu, menu);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -378,8 +373,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     {
         super.onActivityResult(requestCode, resultCode, data);
 
-        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
         switch (resultCode)
         {
             /* It's possible that both primary and parallel languages that were previously downloaded were changed at the same time.
@@ -392,7 +385,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 SnuffyApplication app = (SnuffyApplication) getApplication();
                 app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
 
-                refreshPackageList(settings, false);
+                refreshPackageList(false);
                 createTheHomeScreen();
 
                 break;
@@ -421,7 +414,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 }
 
                 String code = data.getStringExtra("parallelCode");
-                showLoading("Downloading resources...");
+                showLoading();
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         code,
                         KEY_PARALLEL,
@@ -440,7 +433,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                     app.setAppLocale(primaryCode);
                 }
 
-                showLoading("Downloading drafts...");
+                showLoading();
 
                 GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", this);
 
@@ -457,7 +450,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 // refresh the list
                 String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 
-                refreshPackageList(settings, true);
+                refreshPackageList(true);
 
                 if (!languagePrimary.equalsIgnoreCase(primaryCode))
                 {
@@ -480,7 +473,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
      *                     has no packages available.  This is true when leaving translator mode in a language with all
      *                     drafts and no published live versions.
      */
-    private void refreshPackageList(SharedPreferences settings, boolean withFallback)
+    private void refreshPackageList(boolean withFallback)
     {
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
         packageList = getPackageList();
@@ -500,7 +493,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     protected void onPause()
     {
         super.onPause();
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor ed = settings.edit();
         ed.apply();
     }
@@ -582,17 +574,11 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         trackScreenVisit();
     }
 
-    private void showLoading(String msg)
+    private void showLoading()
     {
-        isDownloading = true;
         supportInvalidateOptionsMenu();
-        tvTask.setText(msg);
-        vLoading.setVisibility(View.VISIBLE);
 
-        if (refreshButton != null)
-        {
-            refreshButton.setEnabled(false);
-        }
+        setSupportProgressBarIndeterminateVisibility(true);
     }
 
     @Override
@@ -606,7 +592,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             SnuffyApplication app = (SnuffyApplication) getApplication();
             app.setAppLocale(langCode);
 
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PRIMARY, langCode);
             editor.apply();
@@ -623,8 +608,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         }
         else if (tag.equalsIgnoreCase(KEY_PARALLEL))
         {
-
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PARALLEL, langCode);
             editor.apply();
@@ -668,7 +651,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private void switchedToTranslatorMode(boolean switched)
     {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(JUST_SWITCHED, switched);
         editor.apply();
@@ -792,23 +774,15 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         {
             super.onPostExecute(shouldDownload);
 
-            final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
             GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), settings.getString("Authorization_Draft", ""), langCode, tag, MainPW.this);
         }
     }
 
     private void hideLoading()
     {
-        isDownloading = false;
         supportInvalidateOptionsMenu();
-        tvTask.setText("");
-        vLoading.setVisibility(View.GONE);
 
-        if (refreshButton != null)
-        {
-            refreshButton.setEnabled(true);
-        }
+        setSupportProgressBarIndeterminateVisibility(false);
     }
 
     @Override
@@ -903,7 +877,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private String getRegistrationId(Context context)
     {
         String registrationId = settings.getString(PROPERTY_REG_ID, "");
-        if (registrationId.isEmpty()) {
+        if (registrationId == null || registrationId.isEmpty()) {
             Log.i(TAG, "Registration not found.");
             return "";
         }
@@ -924,7 +898,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
-                String msg = "";
+                String msg;
                 try {
                     if (gcm == null) {
                         gcm = GoogleCloudMessaging.getInstance(context);

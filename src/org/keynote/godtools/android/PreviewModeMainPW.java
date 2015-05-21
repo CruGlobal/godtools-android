@@ -203,6 +203,9 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                             break;
                         case META_TASK:
                             break;
+                        case DISABLE_TRANSLATOR:
+                            finish();
+                            break;
                         case ERROR:
                             Log.i(TAG, "Error");
                             break;
