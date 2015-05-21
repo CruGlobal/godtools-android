@@ -89,6 +89,9 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         parallelLanguage = settings.getString(GTLanguage.KEY_PARALLEL, "");
         isTranslator = settings.getBoolean("TranslatorMode", false);
 
+        Log.i(TAG, "primary: " + primaryLanguage);
+        Log.i(TAG, "parallel: " + parallelLanguage);
+
         if (!isTranslator)
         {
             Iterator<GTLanguage> i = languageList.iterator();
@@ -426,7 +429,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             Log.i(TAG, "Delete");
             updateDownloadedStatus(language.getLanguageCode(), false);
             DBAdapter adapter = DBAdapter.getInstance(this);
-            adapter.deleteGTLanguage(language.getLanguageCode());
+            adapter.deletePackages(language.getLanguageCode(), "live");
             setList();
         }
     }

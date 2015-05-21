@@ -20,7 +20,7 @@ public class MetaTask extends AsyncTask<Object, Void, InputStream> {
     private String tag, langCode;
     private MetaTaskHandler metaTaskHandler;
 
-    public static interface MetaTaskHandler {
+    public interface MetaTaskHandler {
         void metaTaskComplete(InputStream is, String langCode, String tag);
 
         void metaTaskFailure(InputStream is, String langCode, String tag);

@@ -117,8 +117,6 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
                 adapter.upsertGTPackage(gtp);
             }
 
-            adapter.close();
-
             // delete package.zip and contents.xml
             zipfile.delete();
             contentFile.delete();

@@ -38,6 +38,7 @@ import org.keynote.godtools.android.expandableList.ExpandableListAdapter;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
+import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
@@ -183,7 +184,14 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                     
                     switch (type)
                     {
+                        case AUTH:
+                            Log.i(TAG, "Auth Task complete");
+                            BackgroundService.getListOfPackages(PreviewModeMainPW.this);
+                            break;
                         case DOWNLOAD_TASK:
+                            Log.i(TAG, "Download complete");
+                            getPackageList();
+                            createTheHomeScreen();
                             break;
                         case DRAFT_CREATION_TASK:
                             Log.i(TAG, "Create broadcast received");
@@ -195,16 +203,27 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                             break;
                         case META_TASK:
                             break;
+                        case DISABLE_TRANSLATOR:
+                            finish();
+                            break;
                         case ERROR:
                             Log.i(TAG, "Error");
                             break;
                     }
+                }
+
+                if (BroadcastUtil.ACTION_FAIL.equals(intent.getAction()))
+                {
+                    Log.i(TAG, "Action Failed: " + intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE));
+                    getPackageList();
+                    createTheHomeScreen();
                 }
             }
         };
         
         broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.startFilter());
         broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.stopFilter());
+        broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.failedFilter());
     }
     
     private void removeBroadcastReceiver()

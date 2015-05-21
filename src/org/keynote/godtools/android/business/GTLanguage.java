@@ -4,10 +4,11 @@ import android.content.Context;
 
 import org.keynote.godtools.android.dao.DBAdapter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
-public class GTLanguage {
+public class GTLanguage implements Serializable {
 
     public static final String KEY_PRIMARY = "languagePrimary";
     public static final String KEY_PARALLEL = "languageParallel";
