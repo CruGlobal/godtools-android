@@ -31,6 +31,9 @@ import java.util.List;
 import static org.keynote.godtools.android.broadcast.BroadcastUtil.startBroadcast;
 import static org.keynote.godtools.android.broadcast.BroadcastUtil.stopBroadcast;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
+import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 
 /**
  * Created by matthewfrederick on 2/16/15.
@@ -40,10 +43,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
     private final SharedPreferences settings;
     private final String PREFS_NAME = "GodTools";
     private final String TAG = getClass().getSimpleName();
-    
-    private final String KGP = "kgp";
-    private final String FOUR_LAWS = "fourlaws";
-    private final String SATISFIED = "satisfied";
     
     private Context context;
     private List<String> listDataHeader;

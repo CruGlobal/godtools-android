@@ -1,7 +1,7 @@
 package org.keynote.godtools.android.utils;
 
 /**
- * Created by matthewfrederick on 5/5/15.
+ * Constants class used for all of application
  */
 public class Constants
 {
@@ -32,4 +32,13 @@ public class Constants
     public static final String AUTH_CODE = "Authorization_Generic";
 
     public static final String AUTH_DRAFT = "Authorization_Draft";
+
+    /**
+     * package codes
+     */
+
+    public static final String KGP = "kgp";
+    public static final String FOUR_LAWS = "fourlaws";
+    public static final String SATISFIED = "satisfied";
+    public static final String EVERY_STUDENT = "everystudent";
 }

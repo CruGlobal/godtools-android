@@ -47,6 +47,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
+import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 
 
 public class PreviewModeMainPW extends BaseActionBarActivity implements
@@ -531,9 +534,9 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         for (GTPackage gtPackage : packageByLanguage)
         {
 
-            if ("kgp".equals(gtPackage.getCode())) kgpPresent = true;
-            if ("satisfied".equals(gtPackage.getCode())) satisfiedPresent = true;
-            if ("fourlaws".equals(gtPackage.getCode())) fourlawsPresent = true;
+            if (KGP.equals(gtPackage.getCode())) kgpPresent = true;
+            if (SATISFIED.equals(gtPackage.getCode())) satisfiedPresent = true;
+            if (FOUR_LAWS.equals(gtPackage.getCode())) fourlawsPresent = true;
         }
 
         if (!kgpPresent || !satisfiedPresent || !fourlawsPresent)

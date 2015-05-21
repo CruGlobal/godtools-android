@@ -60,8 +60,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
+import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 
 
 public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
@@ -331,13 +335,13 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 layout.getLayout().setOnClickListener(this);
                 layout.getTextView().setText(gtPackage.getName());
 
-                if ("kgp".equals(gtPackage.getCode()))
+                if (KGP.equals(gtPackage.getCode()))
                     layout.getImageView().setImageResource(R.drawable.gt4_homescreen_kgpicon);
-                if ("fourlaws".equals(gtPackage.getCode()))
+                if (FOUR_LAWS.equals(gtPackage.getCode()))
                     layout.getImageView().setImageResource(R.drawable.gt4_homescreen_4lawsicon);
-                if ("satisfied".equals(gtPackage.getCode()))
+                if (SATISFIED.equals(gtPackage.getCode()))
                     layout.getImageView().setImageResource(R.drawable.gt4_homescreen_satisfiedicon);
-                if ("everystudent".equals(gtPackage.getCode()))
+                if (EVERY_STUDENT.equals(gtPackage.getCode()))
                     layout.getImageView().setImageResource(R.drawable.gt4_homescreen_esicon);
 
             }
