@@ -287,7 +287,6 @@ public class SettingsPW extends BaseActionBarActivity implements
             {
                 // disable translator mode
                 setResult(RESULT_PREVIEW_MODE_DISABLED);
-                setTranslatorMode(false);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(BroadcastUtil.stopBroadcast(Type.DISABLE_TRANSLATOR));
                 Intent intent = new Intent(this, MainPW.class);
                 startActivity(intent);

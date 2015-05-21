@@ -134,13 +134,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        if (settings.getBoolean("TranslatorMode", false))
-        {
-            Intent intent = new Intent(this, PreviewModeMainPW.class);
-            startActivity(intent);
-            finish();
-        }
-
         if (!isFirstLaunch())
         {
             if ("".equals(settings.getString("Authorization_Generic", "")))
@@ -148,10 +141,17 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 showLoading();
                 BackgroundService.authenticateGeneric(this);
             }
-            else
+            else if (!settings.getBoolean("TranslatorMode", false))
             {
                 showLoading();
                 BackgroundService.getListOfPackages(this);
+
+            }
+            else
+            {
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putBoolean("TranslatorMode", false);
+                editor.apply();
             }
         }
 
