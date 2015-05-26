@@ -21,6 +21,7 @@ public class DBContract
         public static final String COL_CONFIG_FILE_NAME = "config_file_name";
         public static final String COL_STATUS = "status";
         public static final String COL_ICON = "icon";
+        public static final String UPDATE_TABLE_NAME = "gtpackages_old";
 
 
         public static final String SQL_CREATE_GTPACKAGES = "CREATE TABLE "
@@ -36,6 +37,15 @@ public class DBContract
 
         public static final String SQL_DELETE_GTPACKAGES = "DROP TABLE IF EXISTS "
                 + GTPackageTable.TABLE_NAME;
+
+        public static final String SQL_DELETE_OLD_GTPACKAGES = "DROP TABLE IF EXISTS "
+                + GTPackageTable.UPDATE_TABLE_NAME;
+
+        public static final String SQL_RENAME_GTPACKAGES = "ALTER TABLE " + TABLE_NAME
+                + " RENAME TO " + UPDATE_TABLE_NAME;
+
+        public static final String SQL_COPY_GTPACKAGES = "INSERT INTO " + TABLE_NAME
+                + " SELECT * FROM " + UPDATE_TABLE_NAME;
     }
 
     public static abstract class GTLanguageTable implements BaseColumns
@@ -44,15 +54,31 @@ public class DBContract
         public static final String COL_CODE = "code";
         public static final String COL_IS_DOWNLOADED = "is_downloaded";
         public static final String COL_IS_DRAFT = "is_draft";
+        public static final String COL_NAME = "name";
+        public static final String UPDATE_TABLE_NAME = "gtlanguages_old";
 
         public static final String SQL_CREATE_GTLANGUAGES = "CREATE TABLE "
                 + GTLanguageTable.TABLE_NAME + "("
                 + GTLanguageTable._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP
                 + GTLanguageTable.COL_CODE + TEXT_TYPE + COMMA_SEP
                 + GTLanguageTable.COL_IS_DOWNLOADED + INTEGER_TYPE + COMMA_SEP
-                + GTLanguageTable.COL_IS_DRAFT + INTEGER_TYPE + ")";
+                + GTLanguageTable.COL_IS_DRAFT + INTEGER_TYPE + COMMA_SEP
+                + GTLanguageTable.COL_NAME + TEXT_TYPE + ")";
 
         public static final String SQL_DELETE_GTLANGUAGES = "DROP TABLE IF EXISTS "
-                + GTLanguageTable.TABLE_NAME;
+                + GTPackageTable.TABLE_NAME;
+
+        public static final String SQL_DELETE_OLD_GTLANGUAGES = "DROP TABLE IF EXISTS "
+                + GTLanguageTable.UPDATE_TABLE_NAME;
+
+        public static final String SQL_RENAME_GTLANGUAGES = "ALTER TABLE " + TABLE_NAME
+                + " RENAME TO " + UPDATE_TABLE_NAME;
+
+        public static final String SQL_COPY_GTLLANGUAGES_V1 = "INSERT INTO " + TABLE_NAME
+                + " (" + GTLanguageTable._ID + COMMA_SEP
+                + GTLanguageTable.COL_CODE + COMMA_SEP
+                + GTLanguageTable.COL_IS_DOWNLOADED + COMMA_SEP
+                + GTLanguageTable.COL_IS_DRAFT + ")" +
+                " SELECT * FROM " + UPDATE_TABLE_NAME ;
     }
 }
