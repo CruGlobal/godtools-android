@@ -211,6 +211,8 @@ public class DBAdapter
             listGTPackages.add(gtPackage);
         }
 
+        cursor.close();
+
         return listGTPackages;
     }
 
@@ -245,6 +247,8 @@ public class DBAdapter
         }
 
         Locale.setDefault(current);
+
+        cursor.close();
 
         return listGTLanguages;
     }
