@@ -34,8 +34,19 @@ public class GTPackageReader {
             {
                 Element elLanguage = (Element) nlLanguages.item(i);
                 String languageCode = elLanguage.getAttribute("code");
+                String languageName = elLanguage.getAttribute("name");
 
-                GTLanguage gtl = new GTLanguage(languageCode);
+                GTLanguage gtl;
+
+                if (languageName == null || languageName.isEmpty())
+                {
+                   gtl = new GTLanguage(languageCode);
+                }
+                else
+                {
+                    gtl = new GTLanguage(languageCode, languageName);
+                }
+
                 List<GTPackage> packageList = new ArrayList<GTPackage>();
                 boolean isDraft = true; // Assume language is draft
 

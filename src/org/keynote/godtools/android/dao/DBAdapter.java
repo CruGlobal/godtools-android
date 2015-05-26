@@ -63,6 +63,7 @@ public class DBAdapter
         cv.put(DBContract.GTLanguageTable.COL_CODE, gtLanguage.getLanguageCode());
         cv.put(DBContract.GTLanguageTable.COL_IS_DOWNLOADED, gtLanguage.isDownloaded());
         cv.put(DBContract.GTLanguageTable.COL_IS_DRAFT, gtLanguage.isDraft());
+        cv.put(DBContract.GTLanguageTable.COL_NAME, gtLanguage.getLanguageName());
 
         return db.insert(DBContract.GTLanguageTable.TABLE_NAME, null, cv);
     }
@@ -88,14 +89,6 @@ public class DBAdapter
                 DBContract.GTLanguageTable.COL_CODE, code);
         List<GTLanguage> languages = queryGTLanguage(selection);
         return languages.size() > 0 ? languages.get(0) : null;
-    }
-    
-    public void deleteGTLanguage(String code)
-    {
-        String selection = String.format("%s = '%s'",
-                DBContract.GTLanguageTable.COL_CODE, code);
-        
-        db.delete(DBContract.GTLanguageTable.TABLE_NAME, selection, null);
     }
 
     public List<GTPackage> getGTPackageByLanguage(String language)
@@ -161,6 +154,7 @@ public class DBAdapter
         ContentValues cv = new ContentValues();
         cv.put(DBContract.GTLanguageTable.COL_IS_DOWNLOADED, gtl.isDownloaded());
         cv.put(DBContract.GTLanguageTable.COL_IS_DRAFT, gtl.isDraft());
+        cv.put(DBContract.GTLanguageTable.COL_NAME, gtl.getLanguageName());
 
         String where = String.format("%s = '%s'",
                 DBContract.GTLanguageTable.COL_CODE, gtl.getLanguageCode());
@@ -211,6 +205,8 @@ public class DBAdapter
             listGTPackages.add(gtPackage);
         }
 
+        cursor.close();
+
         return listGTPackages;
     }
 
@@ -219,7 +215,8 @@ public class DBAdapter
         String[] projection = {DBContract.GTLanguageTable._ID,
                 DBContract.GTLanguageTable.COL_CODE,
                 DBContract.GTLanguageTable.COL_IS_DOWNLOADED,
-                DBContract.GTLanguageTable.COL_IS_DRAFT
+                DBContract.GTLanguageTable.COL_IS_DRAFT,
+                DBContract.GTLanguageTable.COL_NAME
         };
 
         Cursor cursor = db.query(DBContract.GTLanguageTable.TABLE_NAME, projection, selection, null, null, null, null);
@@ -235,8 +232,19 @@ public class DBAdapter
             String code = cursor.getString(cursor.getColumnIndex(DBContract.GTLanguageTable.COL_CODE));
             boolean isDownloaded = cursor.getInt(cursor.getColumnIndex(DBContract.GTLanguageTable.COL_IS_DOWNLOADED)) > 0;
             boolean isDraft = cursor.getInt(cursor.getColumnIndex(DBContract.GTLanguageTable.COL_IS_DRAFT)) > 0;
+            String name = cursor.getString(cursor.getColumnIndex(DBContract.GTLanguageTable.COL_NAME));
 
-            GTLanguage gtl = new GTLanguage(code);
+            GTLanguage gtl;
+
+            if (name == null || name.isEmpty())
+            {
+                gtl = new GTLanguage(code);
+            }
+            else
+            {
+                gtl = new GTLanguage(code, name);
+            }
+
             gtl.setId(id);
             gtl.setDownloaded(isDownloaded);
             gtl.setDraft(isDraft);
@@ -245,6 +253,8 @@ public class DBAdapter
         }
 
         Locale.setDefault(current);
+
+        cursor.close();
 
         return listGTLanguages;
     }
