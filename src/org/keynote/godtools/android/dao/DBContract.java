@@ -38,6 +38,9 @@ public class DBContract
         public static final String SQL_DELETE_GTPACKAGES = "DROP TABLE IF EXISTS "
                 + GTPackageTable.TABLE_NAME;
 
+        // although these methods are not being used they are here for consistancy between the two tables.
+        // They may also be used in future updates.
+
         public static final String SQL_DELETE_OLD_GTPACKAGES = "DROP TABLE IF EXISTS "
                 + GTPackageTable.UPDATE_TABLE_NAME;
 
