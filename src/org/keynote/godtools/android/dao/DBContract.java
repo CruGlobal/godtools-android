@@ -24,7 +24,7 @@ public class DBContract
         public static final String UPDATE_TABLE_NAME = "gtpackages_old";
 
 
-        public static final String SQL_CREATE_GTPACKAGES = "CREATE TABLE "
+        public static final String SQL_CREATE_GTPACKAGES = "CREATE TABLE IF NOT EXISTS"
                 + GTPackageTable.TABLE_NAME + "("
                 + GTPackageTable._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP
                 + GTPackageTable.COL_CODE + TEXT_TYPE + COMMA_SEP
@@ -57,7 +57,7 @@ public class DBContract
         public static final String COL_NAME = "name";
         public static final String UPDATE_TABLE_NAME = "gtlanguages_old";
 
-        public static final String SQL_CREATE_GTLANGUAGES = "CREATE TABLE "
+        public static final String SQL_CREATE_GTLANGUAGES = "CREATE TABLE IF NOT EXISTS"
                 + GTLanguageTable.TABLE_NAME + "("
                 + GTLanguageTable._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP
                 + GTLanguageTable.COL_CODE + TEXT_TYPE + COMMA_SEP

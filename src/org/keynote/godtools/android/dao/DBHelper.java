@@ -32,17 +32,14 @@ public class DBHelper extends SQLiteOpenHelper
         {
             // rename tables to save data
             sqLiteDatabase.execSQL(DBContract.GTLanguageTable.SQL_RENAME_GTLANGUAGES);
-            sqLiteDatabase.execSQL(DBContract.GTPackageTable.SQL_RENAME_GTPACKAGES);
 
-            // create new tables
+            // create new table
             onCreate(sqLiteDatabase);
 
-            // copy old data to new tables
-            sqLiteDatabase.execSQL(DBContract.GTPackageTable.SQL_COPY_GTPACKAGES);
+            // copy old data to new table
             sqLiteDatabase.execSQL(DBContract.GTLanguageTable.SQL_COPY_GTLLANGUAGES_V1);
 
-            // delete old tables
-            sqLiteDatabase.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_GTPACKAGES);
+            // delete old table
             sqLiteDatabase.execSQL(
                     DBContract.GTLanguageTable.SQL_DELETE_OLD_GTLANGUAGES);
         }
