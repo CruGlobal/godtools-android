@@ -40,7 +40,7 @@
         android:layout_toRightOf="@+id/iv_downloaded"
         android:layout_toLeftOf="@+id/tv_download"
         android:textStyle="bold"
-        android:layout_marginRight="10dp"/>
+        />
 
     <TextView
         android:layout_width="wrap_content"
