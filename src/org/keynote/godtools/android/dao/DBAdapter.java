@@ -89,14 +89,6 @@ public class DBAdapter
         List<GTLanguage> languages = queryGTLanguage(selection);
         return languages.size() > 0 ? languages.get(0) : null;
     }
-    
-    public void deleteGTLanguage(String code)
-    {
-        String selection = String.format("%s = '%s'",
-                DBContract.GTLanguageTable.COL_CODE, code);
-        
-        db.delete(DBContract.GTLanguageTable.TABLE_NAME, selection, null);
-    }
 
     public List<GTPackage> getGTPackageByLanguage(String language)
     {
@@ -211,6 +203,8 @@ public class DBAdapter
             listGTPackages.add(gtPackage);
         }
 
+        cursor.close();
+
         return listGTPackages;
     }
 
@@ -245,6 +239,8 @@ public class DBAdapter
         }
 
         Locale.setDefault(current);
+
+        cursor.close();
 
         return listGTLanguages;
     }
