@@ -146,7 +146,7 @@ public class SettingsPW extends BaseActionBarActivity implements
                     tvParallelLanguage.setText(parallelName);
                 }
 
-                trackScreenEvent("Change Primary Language");
+                trackScreenEvent("Change Primary Language", "Language Change");
                 break;
             }
             case RESULT_CHANGED_PARALLEL: {
@@ -157,7 +157,7 @@ public class SettingsPW extends BaseActionBarActivity implements
                 String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName());
                 tvParallelLanguage.setText(parallelName);
 
-                trackScreenEvent("Change Parallel Language");
+                trackScreenEvent("Change Parallel Language", "Language Change");
                 break;
             }
             case RESULT_DOWNLOAD_PRIMARY:
@@ -328,6 +328,10 @@ public class SettingsPW extends BaseActionBarActivity implements
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("Notifications", cbNotificationsAllowed.isChecked());
         editor.apply();
+
+        String event = cbNotificationsAllowed.isChecked() ? "Turned ON" : "Turned Off";
+
+        trackScreenEvent(event, "Notification State");
     }
 
     private void setTranslatorMode(boolean isEnabled) {
@@ -362,12 +366,12 @@ public class SettingsPW extends BaseActionBarActivity implements
         return ((SnuffyApplication)getApplication()).getTracker();
     }
 
-    private void trackScreenEvent(String event)
+    private void trackScreenEvent(String event, String category)
     {
         Tracker tracker = getGoogleAnalyticsTracker();
         tracker.setScreenName("Settings");
         tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Language Change")
+                .setCategory(category)
                 .setAction(event)
                 .setLabel(event)
                 .build());
