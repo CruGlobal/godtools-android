@@ -23,8 +23,10 @@ public class GTLanguage implements Serializable {
     public GTLanguage() {
     }
 
-    public GTLanguage(String languageCode) {
+    public GTLanguage(String languageCode)
+    {
         this.languageCode = languageCode;
+
 
         Locale locale = new Locale(languageCode);
         String name = locale.getDisplayName();
@@ -34,6 +36,12 @@ public class GTLanguage implements Serializable {
         if ("mn-mn".equals(locale.getDisplayName())) name = "mongolian";
 
         this.languageName = Character.toUpperCase(name.charAt(0)) + name.substring(1);
+    }
+
+    public GTLanguage(String languageCode, String languageName) {
+
+        this.languageName = languageName;
+        this.languageCode = languageCode;
     }
 
     public long getId() {
