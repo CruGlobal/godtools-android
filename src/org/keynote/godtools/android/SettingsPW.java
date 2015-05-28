@@ -15,14 +15,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
 import org.keynote.godtools.android.fragments.ConfirmDialogFragment;
+import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.AuthTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.snuffy.SnuffyAlternateTypefaceTextView;
@@ -109,7 +107,7 @@ public class SettingsPW extends BaseActionBarActivity implements
             tvParallelLanguage.setText(parallelName);
         }
 
-        trackScreenActivity();
+        EventTracker.track(getApp(), "Settings", primaryLanguageCode);
     }
 
     @Override
@@ -146,7 +144,8 @@ public class SettingsPW extends BaseActionBarActivity implements
                     tvParallelLanguage.setText(parallelName);
                 }
 
-                trackScreenEvent("Change Primary Language", "Language Change");
+                EventTracker.track(getApp(), "Settings", "Language Change",
+                        "Change Primary Language");
                 break;
             }
             case RESULT_CHANGED_PARALLEL: {
@@ -157,7 +156,8 @@ public class SettingsPW extends BaseActionBarActivity implements
                 String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName());
                 tvParallelLanguage.setText(parallelName);
 
-                trackScreenEvent("Change Parallel Language", "Language Change");
+                EventTracker.track(getApp(), "Settings",
+                        "Language Change", "Change Parallel Language");
                 break;
             }
             case RESULT_DOWNLOAD_PRIMARY:
@@ -329,9 +329,9 @@ public class SettingsPW extends BaseActionBarActivity implements
         editor.putBoolean("Notifications", cbNotificationsAllowed.isChecked());
         editor.apply();
 
-        String event = cbNotificationsAllowed.isChecked() ? "Turned ON" : "Turned Off";
+        String event = cbNotificationsAllowed.isChecked() ? "Turned ON" : "Turned OFF";
 
-        trackScreenEvent(event, "Notification State");
+        EventTracker.track(getApp(), "Notification State", event);
     }
 
     private void setTranslatorMode(boolean isEnabled) {
@@ -361,29 +361,8 @@ public class SettingsPW extends BaseActionBarActivity implements
         }
     }
 
-    private Tracker getGoogleAnalyticsTracker()
+    private SnuffyApplication getApp()
     {
-        return ((SnuffyApplication)getApplication()).getTracker();
-    }
-
-    private void trackScreenEvent(String event, String category)
-    {
-        Tracker tracker = getGoogleAnalyticsTracker();
-        tracker.setScreenName("Settings");
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory(category)
-                .setAction(event)
-                .setLabel(event)
-                .build());
-    }
-
-    private void trackScreenActivity()
-    {
-        Tracker tracker = getGoogleAnalyticsTracker();
-        tracker.setScreenName("Settings");
-        tracker.send(new HitBuilders.AppViewBuilder()
-                .setCustomDimension(1, "Settings")
-                .setCustomDimension(2, primaryLanguageCode)
-                .build());
+        return (SnuffyApplication) getApplication();
     }
 }

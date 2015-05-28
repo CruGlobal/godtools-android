@@ -29,8 +29,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -42,6 +40,7 @@ import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.fragments.PackageListFragment;
+import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
@@ -168,6 +167,9 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             if (regid.isEmpty())
             {
                 registerInBackground();
+                // since when an app is first registered notifications are probably on,
+                // send first state to Google Analytics
+                EventTracker.track(getApp(), "HomeScreen", "Notification State", "Turned ON");
             }
 
             // send notification update each time app is used for notification type 1
@@ -571,7 +573,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         justSwitchedToTranslatorMode = false;
         switchedToTranslatorMode(false);
-        trackScreenVisit();
+        EventTracker.track(getApp(), "HomeScreen", languagePrimary);
     }
 
     private void showLoading()
@@ -841,19 +843,9 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         startActivity(Intent.createChooser(share, "Select how you would like to share"));
     }
 
-    private Tracker getGoogleAnalyticsTracker()
+    private SnuffyApplication getApp()
     {
-        return ((SnuffyApplication) getApplication()).getTracker();
-    }
-
-    private void trackScreenVisit()
-    {
-        Tracker tracker = getGoogleAnalyticsTracker();
-        tracker.setScreenName("HomeScreen");
-        tracker.send(new HitBuilders.AppViewBuilder()
-                .setCustomDimension(1, "HomeScreen")
-                .setCustomDimension(2, languagePrimary)
-                .build());
+        return (SnuffyApplication) getApplication();
     }
 
     private boolean checkPlayServices()
