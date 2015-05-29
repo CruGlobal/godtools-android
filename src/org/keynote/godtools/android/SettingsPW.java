@@ -331,7 +331,7 @@ public class SettingsPW extends BaseActionBarActivity implements
 
         String event = cbNotificationsAllowed.isChecked() ? "Turned ON" : "Turned OFF";
 
-        EventTracker.track(getApp(), "Notification State", event);
+        EventTracker.track(getApp(),"Settings", "Notification State", event);
     }
 
     private void setTranslatorMode(boolean isEnabled) {
