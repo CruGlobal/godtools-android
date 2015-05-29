@@ -295,22 +295,9 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tvAbout"
-        android:background="@drawable/settings_language_bg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:paddingLeft="16dp"
-        android:textColor="#ffffffff"
-        android:text="@string/settings_about"
-        android:gravity="center_vertical|center_horizontal"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"/>
-
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".5"/>
+        android:layout_weight="1.5"/>
 
 </LinearLayout>
