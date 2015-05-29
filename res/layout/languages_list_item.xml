@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/filler_english"
-        android:textSize="22dp"
+        android:textSize="22sp"
         android:paddingLeft="12dp"
         android:gravity="center_vertical"
         android:textColor="#ffffffff"
