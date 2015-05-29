@@ -19,7 +19,7 @@
             android:background="#00ffffff"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
-            android:contentDescription="homescreen_icon"
+            android:contentDescription="@string/description_homescreen_icon"
             android:baselineAlignBottom="false"/>
     
         <TextView
