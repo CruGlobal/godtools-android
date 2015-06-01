@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -25,6 +26,7 @@ import org.keynote.godtools.android.fragments.ConfirmDialogFragment;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.AuthTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
+import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyAlternateTypefaceTextView;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
@@ -32,6 +34,8 @@ import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
 
 import java.util.Locale;
+
+import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
 
 public class SettingsPW extends BaseActionBarActivity implements
         View.OnClickListener,
@@ -333,7 +337,10 @@ public class SettingsPW extends BaseActionBarActivity implements
 
         String event = cbNotificationsAllowed.isChecked() ? "Turned ON" : "Turned OFF";
 
-        EventTracker.track(getApp(),"Settings", "Notification State", event);
+        EventTracker.track(getApp(), "Settings", "Notification State", event);
+
+        String notificationsOn = cbNotificationsAllowed.isChecked() ? "TRUE" : "FALSE";
+        updateDeviceWithAPI(notificationsOn);
     }
 
     private void setTranslatorMode(boolean isEnabled) {
@@ -360,6 +367,18 @@ public class SettingsPW extends BaseActionBarActivity implements
             mAlternateTypeface = Typefaces.get(getApplication(), LanguagesNotSupportedByDefaultFont.getPathToAlternateFont(mAppLanguage));
         } else {
             mAlternateTypeface = Typeface.DEFAULT;
+        }
+    }
+
+    private void updateDeviceWithAPI(String notificationsOn)
+    {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String registrationId = settings.getString(REGISTRATION_ID, "");
+        String deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        if (!Strings.isNullOrEmpty(registrationId) && !Strings.isNullOrEmpty(deviceId))
+        {
+            BackgroundService.registerDevice(getApplicationContext(), registrationId, deviceId, notificationsOn);
         }
     }
 

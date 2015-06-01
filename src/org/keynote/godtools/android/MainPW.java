@@ -44,7 +44,6 @@ import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
-import org.keynote.godtools.android.http.NotificationRegistrationTask;
 import org.keynote.godtools.android.http.NotificationUpdateTask;
 import org.keynote.godtools.android.model.HomescreenLayout;
 import org.keynote.godtools.android.notifications.NotificationInfo;
@@ -60,6 +59,8 @@ import java.util.TimerTask;
 
 import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.APP_VERSION;
+import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
 
 
 public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
@@ -70,9 +71,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private static final int REQUEST_SETTINGS = 1001;
     private static final String JUST_SWITCHED = "justSwitched";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
-    public static final String PROPERTY_REG_ID = "registration_id";
-    private static final String PROPERTY_APP_VERSION = "appVersion";
 
     String SENDER_ID = "237513440670";
 
@@ -868,7 +866,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private String getRegistrationId(Context context)
     {
-        String registrationId = settings.getString(PROPERTY_REG_ID, "");
+        String registrationId = settings.getString(REGISTRATION_ID, "");
         if (registrationId == null || registrationId.isEmpty()) {
             Log.i(TAG, "Registration not found.");
             return "";
@@ -876,7 +874,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         // Check if app was updated; if so, it must clear the registration ID
         // since the existing regID is not guaranteed to work with the new
         // app version.
-        int registeredVersion = settings.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
+        int registeredVersion = settings.getInt(APP_VERSION, Integer.MIN_VALUE);
         int currentVersion = getAppVersion(context);
         if (registeredVersion != currentVersion)
         {
@@ -920,8 +918,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         int appVersion = getAppVersion(context);
         Log.i(TAG, "Saving regId on app version " + appVersion);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString(PROPERTY_REG_ID, regId);
-        editor.putInt(PROPERTY_APP_VERSION, appVersion);
+        editor.putString(REGISTRATION_ID, regId);
+        editor.putInt(APP_VERSION, appVersion);
         editor.apply();
     }
 
@@ -939,21 +937,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private void sendRegistrationIdToBackend() 
     {
-       String deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-       GodToolsApiClient.registerDeviceForNotifications(regid, deviceId, new NotificationRegistrationTask.NotificationTaskHandler()
-       {
-           @Override
-           public void registrationComplete(String status)
-           {
-               Log.i(NotificationInfo.NOTIFICATION_TAG, "API Registration Complete");
-           }
-
-           @Override
-           public void registrationFailed()
-           {
-               Log.i(NotificationInfo.NOTIFICATION_TAG, "API Registration Failed");
-           }
-       });
+        String deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        BackgroundService.registerDevice(context, regid, deviceId);
     }
     
     private void startTimer()

@@ -30,4 +30,9 @@ public class Constants
     public static final String PREFS_NAME = "GodTools";
 
     public static final String AUTH_CODE = "Authorization_Generic";
+
+    public static final String REGISTRATION_ID = "registration_id";
+    public static final String APP_VERSION = "appVersion";
+    public static final String DEVICE_ID = "device_id";
+    public static final String NOTIFICATIONS_ON = "notifications_on";
 }
