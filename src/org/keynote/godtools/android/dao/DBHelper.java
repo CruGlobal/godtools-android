@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper
 {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "resource.db";
 
 
@@ -26,9 +26,29 @@ public class DBHelper extends SQLiteOpenHelper
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2)
     {
-        sqLiteDatabase.execSQL(DBContract.GTPackageTable.SQL_DELETE_GTPACKAGES);
-        sqLiteDatabase.execSQL(
-                DBContract.GTLanguageTable.SQL_DELETE_GTLANGUAGES);
-        onCreate(sqLiteDatabase);
+        // switching to version two adds a name column to the language table
+        // the logic below will ensure that no data is lost from the current tables
+        if (i2 == 2)
+        {
+            // rename tables to save data
+            sqLiteDatabase.execSQL(DBContract.GTLanguageTable.SQL_RENAME_GTLANGUAGES);
+
+            // create new table
+            onCreate(sqLiteDatabase);
+
+            // copy old data to new table
+            sqLiteDatabase.execSQL(DBContract.GTLanguageTable.SQL_COPY_GTLLANGUAGES_V1);
+
+            // delete old table
+            sqLiteDatabase.execSQL(
+                    DBContract.GTLanguageTable.SQL_DELETE_OLD_GTLANGUAGES);
+        }
+        else
+        {
+            sqLiteDatabase.execSQL(DBContract.GTPackageTable.SQL_DELETE_GTPACKAGES);
+            sqLiteDatabase.execSQL(DBContract.GTLanguageTable.SQL_DELETE_GTLANGUAGES);
+
+            onCreate(sqLiteDatabase);
+        }
     }
 }

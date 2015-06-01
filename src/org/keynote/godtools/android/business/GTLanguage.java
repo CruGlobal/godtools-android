@@ -23,8 +23,10 @@ public class GTLanguage implements Serializable {
     public GTLanguage() {
     }
 
-    public GTLanguage(String languageCode) {
+    public GTLanguage(String languageCode)
+    {
         this.languageCode = languageCode;
+
 
         Locale locale = new Locale(languageCode);
         String name = locale.getDisplayName();
@@ -34,6 +36,12 @@ public class GTLanguage implements Serializable {
         if ("mn-mn".equals(locale.getDisplayName())) name = "mongolian";
 
         this.languageName = Character.toUpperCase(name.charAt(0)) + name.substring(1);
+    }
+
+    public GTLanguage(String languageCode, String languageName) {
+
+        this.languageName = languageName;
+        this.languageCode = languageCode;
     }
 
     public long getId() {
@@ -95,13 +103,24 @@ public class GTLanguage implements Serializable {
     public static List<GTLanguage> getAll(Context context) {
         DBAdapter adapter = DBAdapter.getInstance(context);
         adapter.open();
+
         return adapter.getAllLanguages();
     }
 
-    public long addToDatabase(Context context) {
+    public void addToDatabase(Context context) {
         DBAdapter adapter = DBAdapter.getInstance(context);
         adapter.open();
-        return adapter.insertGTLanguage(this);
+
+        GTLanguage dbLanguage = adapter.getGTLanguage(languageCode);
+        if (dbLanguage == null)
+        {
+            adapter.insertGTLanguage(this);
+        }
+        else
+        {
+            this.setDownloaded(dbLanguage.isDownloaded());
+            adapter.updateGTLanguage(this);
+        }
     }
 
     public void update(Context context) {
