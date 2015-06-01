@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.common.base.Strings;
 
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
@@ -30,7 +31,6 @@ import org.keynote.godtools.android.snuffy.SnuffyAlternateTypefaceTextView;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
-import org.keynote.godtools.android.utils.Strings;
 import org.keynote.godtools.android.utils.Typefaces;
 
 import java.util.Locale;
