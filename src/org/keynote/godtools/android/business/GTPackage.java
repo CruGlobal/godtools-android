@@ -101,12 +101,6 @@ public class GTPackage {
         return adapter.getGTPackage(code, language, status);
     }
 
-    public static List<GTPackage> getPackageByLanguage(Context context, String language){
-        DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
-        return adapter.getGTPackageByLanguage(language);
-    }
-
     public static List<GTPackage> getLivePackages(Context context, String language){
         DBAdapter adapter = DBAdapter.getInstance(context);
         adapter.open();
