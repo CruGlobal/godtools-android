@@ -22,7 +22,6 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.Settings;
 import org.keynote.godtools.android.utils.GoogleAnalytics;
 
 import java.util.Arrays;
@@ -31,6 +30,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 
 public class EveryStudentView extends Activity{
 
@@ -50,7 +51,7 @@ public class EveryStudentView extends Activity{
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		super.onCreate(savedInstanceState);
 		
-        SharedPreferences settings = getSharedPreferences(Settings.PREFNAME, 0);
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         if (settings.getBoolean("wakelock", true)) {
         	PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);  
             wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");  
