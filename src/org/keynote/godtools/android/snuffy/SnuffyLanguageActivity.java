@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -249,25 +248,18 @@ public class SnuffyLanguageActivity extends ListActivity {
 			InputStream isImage;
 			try {
 				boolean bImageFromAsset = false; // the icons for all languages have been downloaded
-				if (!bImageFromAsset) {
-					//  need this code when the files have been downloaded
-					try {
-						Uri uri = Uri.parse("file://" + value);
-						isImage = getContentResolver().openInputStream(uri);
-					}
-					catch (IOException e) {
-						// repoFile.xml points to en.png but the icons folder in payload only contains en@2X.png !!
-						// so try with that name before complaining
-						Uri uri = Uri.parse("file://" + value.replace(".png", "@2x.png"));
-						isImage = getContentResolver().openInputStream(uri);						
-					}
-				}
-				else {
-					// the code above wont handle assets (perhaps because assets are compressed)
-					// So we handle those explicitly
-					isImage = getAssets().open(value, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
-				}
-	        	Bitmap bm = BitmapFactory.decodeStream(isImage);
+				//  need this code when the files have been downloaded
+				try {
+                    Uri uri = Uri.parse("file://" + value);
+                    isImage = getContentResolver().openInputStream(uri);
+                }
+                catch (IOException e) {
+                    // repoFile.xml points to en.png but the icons folder in payload only contains en@2X.png !!
+                    // so try with that name before complaining
+                    Uri uri = Uri.parse("file://" + value.replace(".png", "@2x.png"));
+                    isImage = getContentResolver().openInputStream(uri);
+                }
+				Bitmap bm = BitmapFactory.decodeStream(isImage);
 				isImage.close();
 				
 				v.setImageBitmap(bm);

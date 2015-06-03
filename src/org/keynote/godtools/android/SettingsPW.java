@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.common.base.Strings;
 
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
@@ -101,6 +102,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         tvMainLanguage.setText(primaryName);
 
         // set value for parallel language view
+        assert parallelLanguageCode != null;
         if (parallelLanguageCode.isEmpty()) {
             tvParallelLanguage.setText(getString(R.string.none));
         } else {
@@ -138,6 +140,7 @@ public class SettingsPW extends BaseActionBarActivity implements
                 SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                 String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
+                assert parallelLanguageCode != null;
                 if (parallelLanguageCode.isEmpty()) {
                     tvParallelLanguage.setText(getString(R.string.none));
                 } else {
@@ -195,7 +198,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean on = ((CompoundButton) view).isChecked();
 
-        if(on && !settings.getString("Authorization_Draft", "").isEmpty())
+        if(on && !Strings.isNullOrEmpty(settings.getString("Authorization_Draft", "")))
         {
             ((CompoundButton) view).setChecked(true);
             cbTranslatorMode.setEnabled(true);

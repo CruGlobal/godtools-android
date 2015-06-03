@@ -139,7 +139,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         }
 
         TextView textView = (TextView) convertView.findViewById(R.id.tv_trans_view);
-        textView.setText(localPackage.getName());
+        textView.setText(localPackage != null ? localPackage.getName() : "");
 
         ImageView icon = (ImageView) convertView.findViewById(R.id.iv_trans_view);
 

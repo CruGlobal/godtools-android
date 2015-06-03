@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.common.base.Strings;
 
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.http.DownloadTask;
@@ -137,7 +138,7 @@ public class SnuffyPWActivity extends Activity
 
 
         // get package if parallel language is set
-        if (!langParallel.isEmpty())
+        if (!Strings.isNullOrEmpty(langParallel))
         {
             isParallelLanguageSet = true;
             mParallelPackage = GTPackage.getPackage(this, mAppPackage, langParallel, "live");
@@ -294,8 +295,8 @@ public class SnuffyPWActivity extends Activity
                 mPages = null;
                 mAboutView = null;
                 SnuffyApplication app = (SnuffyApplication) getApplication();
-                app.mPages = mPages;
-                app.mAboutView = mAboutView;
+                app.mPages = null;
+                app.mAboutView = null;
                 app.mPackageTitle = mPackageTitle;
                 mPages = new Vector<SnuffyPage>(0);
 
@@ -316,7 +317,7 @@ public class SnuffyPWActivity extends Activity
         if (!bSuccess)
         { // now testing is done - only show msg on failure
             Toast.makeText(SnuffyPWActivity.this.getApplicationContext(),
-                    bSuccess ? "Package processing succeeded" : "Package processing failed",
+                    "Package processing failed",
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -558,8 +559,8 @@ public class SnuffyPWActivity extends Activity
         mPages.clear();
         mPages = null;
         mAboutView = null;
-        ((SnuffyApplication) getApplication()).mPages = mPages;
-        ((SnuffyApplication) getApplication()).mAboutView = mAboutView;
+        ((SnuffyApplication) getApplication()).mPages = null;
+        ((SnuffyApplication) getApplication()).mAboutView = null;
         mPages = new Vector<SnuffyPage>(0);
         mPagerAdapter.notifyDataSetChanged(); // try to clear cached views (SnuffyPages) in pager, else they will display until we navigate away and back.
         if (bResetToFirstPage)

@@ -247,8 +247,8 @@ public class SnuffyActivity extends Activity {
 				mPages = null;
 				mAboutView = null;
 				SnuffyApplication app = (SnuffyApplication)getApplication();
-				app.mPages     		= mPages;
-				app.mAboutView 		= mAboutView;
+				app.mPages     		= null;
+				app.mAboutView 		= null;
 				app.mPackageTitle 	= mPackageTitle;
 				mPages = new Vector<SnuffyPage>(0);
 				mPagerAdapter.notifyDataSetChanged(); // try to clear cached views (SnuffyPages) in pager, else they will display until we navigate away and back.
@@ -265,7 +265,7 @@ public class SnuffyActivity extends Activity {
 	private void completeSetup(boolean bSuccess) {
 		if (!bSuccess) { // now testing is done - only show msg on failure
 			Toast.makeText(SnuffyActivity.this.getApplicationContext(),
-					bSuccess ? "Package processing succeeded" : "Package processing failed",
+					"Package processing failed",
 							Toast.LENGTH_SHORT).show();
 			return;
 		}
@@ -472,8 +472,8 @@ public class SnuffyActivity extends Activity {
 		mPages.clear();
 		mPages = null;
 		mAboutView = null;
-		((SnuffyApplication)getApplication()).mPages     = mPages;
-		((SnuffyApplication)getApplication()).mAboutView = mAboutView;				
+		((SnuffyApplication)getApplication()).mPages     = null;
+		((SnuffyApplication)getApplication()).mAboutView = null;
 		mPages = new Vector<SnuffyPage>(0);
 		mPagerAdapter.notifyDataSetChanged(); // try to clear cached views (SnuffyPages) in pager, else they will display until we navigate away and back.
 		if (bResetToFirstPage)

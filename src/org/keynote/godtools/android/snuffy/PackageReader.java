@@ -258,7 +258,7 @@ public class PackageReader {
             }
         }
 
-        return (currPage != null);
+        return true;
     }
 
     private SnuffyPage processPageFilePW(InputStream isPage, Element elPage, String pageFileName){
@@ -536,7 +536,7 @@ public class PackageReader {
 			}
 		}
 
-		return (currPage != null);
+		return true;
 	}
 
 
@@ -1852,7 +1852,8 @@ public class PackageReader {
             // center heading vertically
 
         	// h specified. assume there is a heading and only a heading.
-      		SnuffyLayoutParams lp = (SnuffyLayoutParams)tvHeading.getLayoutParams();
+            assert tvHeading != null;
+            SnuffyLayoutParams lp = (SnuffyLayoutParams)tvHeading.getLayoutParams();
        		tvHeading.measure(
 					MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY), 
 					MeasureSpec.UNSPECIFIED);
@@ -1942,7 +1943,8 @@ public class PackageReader {
 				// grad_shad_E_title:...
 	       		ImageView iv = new ImageView(mContext);
 	    		iv.setTag(new Integer(566));
-	        	iv.setLayoutParams(new SnuffyLayoutParams(
+                assert bmNE != null;
+                iv.setLayoutParams(new SnuffyLayoutParams(
 	        			getScaledXValue(bmE.getWidth()), 
 	        			lpTitleContainer.height - getScaledYValue(bmNE.getHeight()) - DROPSHADOW_INSETY, 
 	        			lpTitleContainer.x + lpTitleContainer.width - DROPSHADOW_INSETX,
@@ -2058,8 +2060,9 @@ public class PackageReader {
             tvArrow.setTextSize(10);
             tvArrow.setPadding(0, 3, 0, 0);
             subTitleContainer.addView(tvArrow);
-           
-      		SnuffyLayoutParams lp = (SnuffyLayoutParams)tvSubTitle.getLayoutParams();
+
+            assert tvSubTitle != null;
+            SnuffyLayoutParams lp = (SnuffyLayoutParams)tvSubTitle.getLayoutParams();
       		tvSubTitle.measure(
 					MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY), 
 					MeasureSpec.UNSPECIFIED);
@@ -2286,7 +2289,6 @@ public class PackageReader {
 		String modifier 	= getStringAttributeValue (el, "modifier", "");
 		
 		align = "right";
-		boolean bResize = (!((w > 0) && (h > 0)));
 		textSize 	= textSize * size / 100.0f;
 		color		= setColorAlphaVal(color, labelAlpha);
 		x			= getScaledXValue(x);
@@ -2295,12 +2297,11 @@ public class PackageReader {
 		h			= getScaledYValue(h);
 		
 		y = y - (int)(0.35*textSize); // eliminate the leading TODO: this is not accurate enough - can we get the metrics and do it that way?
-		bResize = true;
 
        	TextView tv = new TextView(mContext);
     	tv.setLayoutParams(new SnuffyLayoutParams(
-    			w==0 ? LayoutParams.WRAP_CONTENT : w, 
-    			bResize ? LayoutParams.WRAP_CONTENT : h, 
+    			w==0 ? LayoutParams.WRAP_CONTENT : w,
+                LayoutParams.WRAP_CONTENT,
     			x, y));
         tv.setText(content);
 		tv.setGravity(getGravityFromAlign(align) + Gravity.TOP);

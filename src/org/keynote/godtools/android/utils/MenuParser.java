@@ -68,6 +68,7 @@ public class MenuParser {
         } catch (IOException e) {
             throw new InflateException("Error inflating menu XML", e);
         } catch (RuntimeException e) {
+            assert parser != null;
             parser.close();
             parser = null;
         } finally {
@@ -85,12 +86,10 @@ public class MenuParser {
         int eventType = parser.getEventType();
         String tagName;
         boolean lookingForEndOfUnknownTag = false;
-        String unknownTagName = null;
 
         int index = 0;
 
-        boolean reachedEndOfMenu = false;
-        while (!reachedEndOfMenu) {
+        while (true) {
 
             switch (eventType) {
                 case XmlPullParser.START_TAG:
