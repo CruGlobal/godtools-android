@@ -161,7 +161,6 @@ public class PackageReader
                     isMain.close();
                 } catch (IOException e)
                 {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -275,7 +274,6 @@ public class PackageReader
                     pageInputStream.close();
                 } catch (IOException e)
                 {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -473,7 +471,6 @@ public class PackageReader
                     isMain.close();
                 } catch (IOException e)
                 {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -595,7 +592,6 @@ public class PackageReader
                     isPage.close();
                 } catch (IOException e)
                 {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -1102,7 +1098,7 @@ public class PackageReader
                             @Override
                             public void run()
                             {
-                                // TODO Auto-generated method stub
+
                             }
                         };
 
@@ -1899,24 +1895,6 @@ public class PackageReader
             int y2PosVLine = Math.max(lpHeading.y + tvHeading.getMeasuredHeight(), lpSubHeading.y + tvSubHeading.getMeasuredHeight()) - (2 * PEEK_VLINE_YMARGIN) + HEADING_BOTTOM_PADDING;
             vLine = getVRView(Color.BLACK, xPosVLine, y1PosVLine, y2PosVLine, 1);
         }
-        // This code is apparently not required but I can't work out how subheading gets positioned anyway
-//        if ((bStraightMode || bClearMode) && (tvHeading != null) && (tvSubHeading != null)) {
-//        	// layout title container with heading above and subheading below
-//    		SnuffyLayoutParams lpHeading    = (SnuffyLayoutParams)tvHeading   .getLayoutParams();
-//    		SnuffyLayoutParams lpSubHeading = (SnuffyLayoutParams)tvSubHeading.getLayoutParams();
-//
-//    		tvHeading.measure(
-//					MeasureSpec.makeMeasureSpec(lpHeading.width, MeasureSpec.EXACTLY), 
-//					MeasureSpec.UNSPECIFIED);
-//    		lpHeading = (SnuffyLayoutParams)tvHeading.getLayoutParams();
-//    		tvSubHeading.measure(
-//					MeasureSpec.makeMeasureSpec(lpSubHeading.width, MeasureSpec.EXACTLY), 
-//					MeasureSpec.UNSPECIFIED);
-//    		lpSubHeading = (SnuffyLayoutParams)tvSubHeading.getLayoutParams();
-//
-//    		lpSubHeading.y = lpHeading.y + tvHeading.getMeasuredHeight() + 0; // TODO: some separation needed between the heading and the subheading below?
-//     		tvSubHeading.setLayoutParams(lpSubHeading);
-//        }        
 
         titleHeight = getScaledYValue(titleHeight);
         if (titleHeight == 0)
@@ -2677,7 +2655,6 @@ public class PackageReader
                     isImage.close();
                 } catch (IOException e)
                 {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -2709,7 +2686,6 @@ public class PackageReader
                     isImage.close();
                 } catch (IOException e)
                 {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -2736,7 +2712,6 @@ public class PackageReader
                     isImage.close();
                 } catch (IOException e)
                 {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
