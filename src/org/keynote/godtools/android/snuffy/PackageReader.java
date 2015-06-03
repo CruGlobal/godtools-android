@@ -234,9 +234,6 @@ public class PackageReader
         } catch (SAXException e)
         {
             Log.e(TAG, "processMainPackageFile failed: " + e.toString());
-        } finally
-        {
-
         }
         Log.d(TAG, ">>> processMainPackageFile ends");
         return bSuccess;
@@ -256,7 +253,7 @@ public class PackageReader
         try
         {
             pageInputStream = new BufferedInputStream(new FileInputStream(mAppRef.get().getDocumentsDir().getPath() + "/" + pageFileName));
-            currPage = processPageFilePW(pageInputStream, pageElement, pageFileName);
+            currPage = processPageFilePW(pageInputStream, pageFileName);
             currPage.mDescription = description;
             //currPage.mThumbnail   = Uri.parse("file:///android_asset/" + mThumbsFolderName + thumbFileName).toString();
             currPage.mThumbnail = thumbFileName;
@@ -282,7 +279,7 @@ public class PackageReader
         return true;
     }
 
-    private SnuffyPage processPageFilePW(InputStream isPage, Element elPage, String pageFileName)
+    private SnuffyPage processPageFilePW(InputStream isPage, String pageFileName)
     {
         Log.d(TAG, ">>> processPageFile starts");
 
@@ -309,8 +306,8 @@ public class PackageReader
                 mYFooterTop = mPageHeight;
                 mNumOffsetItems = 0;
                 addCover(snuffyPage);
-                processBackgroundPW(elPage, root, snuffyPage);
-                processPageElements(elPage, root, snuffyPage);
+                processBackgroundPW(root, snuffyPage);
+                processPageElements(root, snuffyPage);
 
                 snuffyPage.setPageIdFromFilename(pageFileName);
 
@@ -352,15 +349,12 @@ public class PackageReader
         {
             Log.e(TAG, "processPageFile failed: " + e.toString());
             snuffyPage = null;
-        } finally
-        {
-
         }
         Log.d(TAG, ">>> processPageFile ends");
         return snuffyPage;
     }
 
-    private void processBackgroundPW(Element elPage, Element root, SnuffyPage currPage)
+    private void processBackgroundPW(Element root, SnuffyPage currPage)
     {
         String watermark = root.getAttribute("watermark");        // 	either this
         String backgroundImage = root.getAttribute("backgroundimage");    // 	or this
@@ -545,9 +539,6 @@ public class PackageReader
         } catch (SAXException e)
         {
             Log.e(TAG, "processMainPackageFile failed: " + e.toString());
-        } finally
-        {
-
         }
         Log.d(TAG, ">>> processMainPackageFile ends");
         return bSuccess;
@@ -574,7 +565,7 @@ public class PackageReader
             {
                 isPage = new BufferedInputStream(new FileInputStream(mAppRef.get().getDocumentsDir().getPath() + "/" + pageFileName));
             }
-            currPage = processPageFile(isPage, elPage);
+            currPage = processPageFile(isPage);
             currPage.mDescription = description;
             //currPage.mThumbnail   = Uri.parse("file:///android_asset/" + mThumbsFolderName + thumbFileName).toString();
             currPage.mThumbnail = mThumbsFolderName + thumbFileName;
@@ -601,7 +592,7 @@ public class PackageReader
     }
 
 
-    private SnuffyPage processPageFile(InputStream isPage, Element elPage)
+    private SnuffyPage processPageFile(InputStream isPage)
     {
         Log.d(TAG, ">>> processPageFile starts");
 
@@ -628,8 +619,8 @@ public class PackageReader
                 mYFooterTop = mPageHeight;
                 mNumOffsetItems = 0;
                 addCover(currPage);
-                processBackground(elPage, root, currPage);
-                processPageElements(elPage, root, currPage);
+                processBackground(root, currPage);
+                processPageElements(root, currPage);
                 switch (iPass)
                 {
                     case 1:
@@ -668,9 +659,6 @@ public class PackageReader
         {
             Log.e(TAG, "processPageFile failed: " + e.toString());
             currPage = null;
-        } finally
-        {
-
         }
         Log.d(TAG, ">>> processPageFile ends");
         return currPage;
@@ -687,7 +675,7 @@ public class PackageReader
         currPage.setCover(theCover); // save obj refs into page for hideActivePanel() method
     }
 
-    private void processBackground(Element elPage, Element root, SnuffyPage currPage)
+    private void processBackground(Element root, SnuffyPage currPage)
     {
         String watermark = root.getAttribute("watermark");        // 	either this
         String backgroundImage = root.getAttribute("backgroundimage");    // 	or this
@@ -747,7 +735,7 @@ public class PackageReader
         }
     }
 
-    private void processPageElements(Element elPage, Element root, SnuffyPage currPage)
+    private void processPageElements(Element root, SnuffyPage currPage)
     {
         int numButtons = 0; // buttons are numbered from 1 to 9 and used as tag ranges: 1-9, 11-19 etc
         Vector<String> urlsOnpage = new Vector<String>(0);
@@ -758,19 +746,19 @@ public class PackageReader
             {
                 Element el = (Element) node;
                 if (el.getTagName().equalsIgnoreCase("button"))
-                    processButton(elPage, root, currPage, el, ++numButtons, urlsOnpage);
+                    processButton(currPage, el, ++numButtons, urlsOnpage);
                 if (el.getTagName().equalsIgnoreCase("question"))
-                    processQuestion(elPage, root, currPage, el);
+                    processQuestion(currPage, el);
                 if (el.getTagName().equalsIgnoreCase("text"))
-                    processText(elPage, root, currPage, el);
+                    processText(currPage, el);
                 if (el.getTagName().equalsIgnoreCase("title"))
-                    processTitle(elPage, root, currPage, el);
+                    processTitle(currPage, el);
             }
             node = node.getNextSibling();
         }
     }
 
-    private void processButton(Element elPage, Element root, SnuffyPage currPage, Element elButton, int iButton, Vector<String> urlsOnpage)
+    private void processButton(SnuffyPage currPage, Element elButton, int iButton, Vector<String> urlsOnpage)
     {
         int iTagButtonContainer = iButton + 100;
         int iTagButtonPanel = iButton + 1000;
@@ -860,7 +848,7 @@ public class PackageReader
 
             theContainer.setLayoutParams(new SnuffyLayoutParams(buttonWidth,
                     yPosInContainer, BUTTON_MARGINX, yPos));
-            processButtonButton(elPage, root, currPage, elButton, 1000 + iButton, false, theContainer);
+            processButtonButton(elButton, 1000 + iButton, false, theContainer);
             SnuffyLayoutParams lpContainer = (SnuffyLayoutParams) (theContainer.getLayoutParams());
             yPosInContainer = lpContainer.height; // we add to bottom of the container
 
@@ -879,15 +867,14 @@ public class PackageReader
             currPage.addView(theContainer);
             mYOffset = yPos + yPosInContainer;
 
-            processButtonPanel(elPage, root, currPage, elButton, iButton, urlsOnpage);
+            processButtonPanel(currPage, elButton, iButton, urlsOnpage);
 
             final SnuffyLayout panel = (SnuffyLayout) (currPage.findViewWithTag(iTagButtonPanel));
-            final Vector<String> finalUrlsOnPage = urlsOnpage;
             if (bAllUrlMode)
             {
 
                 String content = "";
-                for (String aFinalUrlsOnPage : finalUrlsOnPage)
+                for (String aFinalUrlsOnPage : urlsOnpage)
                 {
                     content += "http://" + aFinalUrlsOnPage + "\n";
                 }
@@ -1208,7 +1195,7 @@ public class PackageReader
         }
     }
 
-    private void processButtonButton(Element elPage, Element root, SnuffyPage currPage, Element elButton, int iButton, Boolean bExpanded,
+    private void processButtonButton(Element elButton, int iButton, Boolean bExpanded,
                                      SnuffyLayout theContainer)
     {
         // Add the button to its container.
@@ -1316,16 +1303,15 @@ public class PackageReader
             ImageView iv = new ImageView(mContext);
             //SnuffyDisclosureIndicator di = new SnuffyDisclosureIndicator(mContext);
             //iv.setImageDrawable(di);
-            int diSize = buttonHeight;
             if (bExpanded)
             {
                 iv.setImageResource(R.drawable.disclosure_indicator_maximized);
-                iv.setLayoutParams(new SnuffyLayoutParams(diSize, diSize, containerWidth - diSize - getScaledXValue(0), lp.y + 2));
+                iv.setLayoutParams(new SnuffyLayoutParams(buttonHeight, buttonHeight, containerWidth - buttonHeight - getScaledXValue(0), lp.y + 2));
             }
             else
             {
                 iv.setImageResource(R.drawable.disclosure_indicator_minimized);
-                iv.setLayoutParams(new SnuffyLayoutParams(diSize, diSize, containerWidth - diSize + getScaledXValue(5), lp.y + 2));
+                iv.setLayoutParams(new SnuffyLayoutParams(buttonHeight, buttonHeight, containerWidth - buttonHeight + getScaledXValue(5), lp.y + 2));
             }
             theContainer.addView(iv);
         }
@@ -1338,7 +1324,7 @@ public class PackageReader
         theContainer.setTag(iButton);
     }
 
-    private void processButtonPanel(Element elPage, Element root, SnuffyPage currPage, Element elButton, int iButton, Vector<String> urlsOnPage)
+    private void processButtonPanel(SnuffyPage currPage, Element elButton, int iButton, Vector<String> urlsOnPage)
     {
         final int PANEL_XMARGIN = 5;        // from edge of page to panel
         final int PANEL_YMARGIN = 5;        // from edge of page to panel
@@ -1365,7 +1351,7 @@ public class PackageReader
                 Element el = (Element) node;
                 mYOffsetInPanel += getScaledYValue(PANEL_ITEM_DEFAULT_YOFFSET);
                 if (el.getTagName().equalsIgnoreCase("text"))
-                    processButtonPanelText(elPage, elPanel, el, theContainer, panelWidth);
+                    processButtonPanelText(elPanel, el, theContainer, panelWidth);
                 if (el.getTagName().equalsIgnoreCase("image"))
                     processButtonPanelImage(elPanel, el, theContainer, panelWidth);
                 if (el.getTagName().equalsIgnoreCase("button"))
@@ -1375,7 +1361,7 @@ public class PackageReader
         }
 
         theButton.setLayoutParams(new SnuffyLayoutParams(panelWidth, 0, 0, 2)); // yPos=2 to allow for the HR drawn when not in panel
-        processButtonButton(elPage, root, currPage, elButton, iButton, true, theButton);
+        processButtonButton(elButton, iButton, true, theButton);
         thePanel.addView(theButton);
         SnuffyLayoutParams lpButton = (SnuffyLayoutParams) (theButton.getLayoutParams());
         int buttonHeight = lpButton.height + lpButton.y;
@@ -1481,7 +1467,7 @@ public class PackageReader
         }
     }
 
-    private void processButtonPanelText(Element elPage, Element elPanel, Element elText, SnuffyLayout theContainer, int panelWidth)
+    private void processButtonPanelText(Element elPanel, Element elText, SnuffyLayout theContainer, int panelWidth)
     {
         final int PANEL_TEXT_LEFT_MARGIN = 10;    // from panel edge to text contained in it.
         final int PANEL_TEXT_RIGHT_MARGIN = 15;    // from panel edge to text contained in it.
@@ -1560,7 +1546,7 @@ public class PackageReader
             mYOffsetMaxInPanel = mYOffsetInPanel;
     }
 
-    private void processQuestion(Element elPage, Element root, SnuffyPage currPage, Element elQuestion)
+    private void processQuestion(SnuffyPage currPage, Element elQuestion)
     {
         Vector<Element> vTexts = getChildrenWithName(elQuestion, "text");
         int numTexts = vTexts.size();
@@ -1576,7 +1562,7 @@ public class PackageReader
             for (int i = 0; i < numTexts; i++)
             {
                 Element elText = vTexts.elementAt(i);
-                processQuestionText(elPage, elQuestion, elText, questionContainer);
+                processQuestionText(elText, questionContainer);
             }
             // place at bottom of page with a margin below
             int yOffset = yBase;
@@ -1672,7 +1658,7 @@ public class PackageReader
         }
     }
 
-    private void processQuestionText(Element elPage, Element elQuestion, Element elText, SnuffyLayout container)
+    private void processQuestionText(Element elText, SnuffyLayout container)
     {
         String content = elText.getTextContent();
         int xPos = getIntegerAttributeValue(elText, "x", 0);
@@ -1729,7 +1715,7 @@ public class PackageReader
         container.addView(tv);
     }
 
-    private void processText(Element elPage, Element root, SnuffyPage currPage, Element elText)
+    private void processText(SnuffyPage currPage, Element elText)
     {
 
         String content = elText.getTextContent(); // note that CRLF in textContent is significant
@@ -1793,7 +1779,7 @@ public class PackageReader
         mYOffset = yPos + tv.getMeasuredHeight();
     }
 
-    private void processTitle(Element elPage, Element root, SnuffyPage currPage, Element elTitle)
+    private void processTitle(SnuffyPage currPage, Element elTitle)
     {
         String titleMode = getStringAttributeValue(elTitle, "mode", "");    // plain/clear/straight/peek (default is plain)
         int titleHeight = getIntegerAttributeValue(elTitle, "h", 0);
@@ -1820,7 +1806,7 @@ public class PackageReader
         TextView tvSubTitle = null;
         View vLine = null;
 
-        if (elNumber != null) tvNumber = createTitleNumberFromElement(elNumber, titleMode);
+        if (elNumber != null) tvNumber = createTitleNumberFromElement(elNumber);
         if (elHeading != null) tvHeading = createTitleHeadingFromElement(elHeading, titleMode);
         if (elSubHeading != null)
             tvSubHeading = createTitleSubHeadingFromElement(elSubHeading, titleMode);
@@ -1891,9 +1877,8 @@ public class PackageReader
             lpSubHeading = (SnuffyLayoutParams) tvSubHeading.getLayoutParams();
 
             int xPosVLine = lpSubHeading.x - (PEEK_HEADING_XSEPARATION / 2);
-            int y1PosVLine = PEEK_VLINE_YMARGIN;
             int y2PosVLine = Math.max(lpHeading.y + tvHeading.getMeasuredHeight(), lpSubHeading.y + tvSubHeading.getMeasuredHeight()) - (2 * PEEK_VLINE_YMARGIN) + HEADING_BOTTOM_PADDING;
-            vLine = getVRView(Color.BLACK, xPosVLine, y1PosVLine, y2PosVLine, 1);
+            vLine = getVRView(Color.BLACK, xPosVLine, PEEK_VLINE_YMARGIN, y2PosVLine, 1);
         }
 
         titleHeight = getScaledYValue(titleHeight);
@@ -2173,7 +2158,7 @@ public class PackageReader
                     MeasureSpec.UNSPECIFIED);
             lp = (SnuffyLayoutParams) tvSubTitle.getLayoutParams();
             tvArrow.setLayoutParams(new SnuffyLayoutParams(
-                    LayoutParams.FILL_PARENT,
+                    LayoutParams.MATCH_PARENT,
                     getScaledYValue(SUBTITLE_PEEK_OFFSET),
                     0, lp.y + tvSubTitle.getMeasuredHeight() + getScaledYValue(SUBTITLE_BOTTOM_PADDING)));
 
@@ -2189,8 +2174,6 @@ public class PackageReader
 
             SnuffyLayoutParams lpSubTitleContainer = new SnuffyLayoutParams(subTitleWidth, subTitleHeight, 0, yBefore);
             // grad_shad_E_subtitle:...
-            final int yBeforeE = yBefore;
-            final int yAfterE = yAfter;
             SnuffyLayoutParams lpTemp = new SnuffyLayoutParams(
                     DROPSHADOW_SUBLENGTHX,
                     lpSubTitleContainer.height - DROPSHADOW_INSETY,
@@ -2297,7 +2280,7 @@ public class PackageReader
 
                             TranslateAnimation taE = new TranslateAnimation(
                                     Animation.ABSOLUTE, 0, Animation.ABSOLUTE, 0,
-                                    Animation.ABSOLUTE, 0, Animation.ABSOLUTE, yBeforeE - yAfterE);
+                                    Animation.ABSOLUTE, 0, Animation.ABSOLUTE, yBefore - yAfter);
                             taE.setDuration(THIS_ANIMATION_DURATION);
                             startAnimationOnViewWithTag(titleClippingContainer, 556, taE);
 
@@ -2361,7 +2344,7 @@ public class PackageReader
 
                             TranslateAnimation taE = new TranslateAnimation(
                                     Animation.ABSOLUTE, 0, Animation.ABSOLUTE, 0,
-                                    Animation.ABSOLUTE, 0, Animation.ABSOLUTE, yAfterE - yBeforeE);
+                                    Animation.ABSOLUTE, 0, Animation.ABSOLUTE, yAfter - yBefore);
                             taE.setDuration(THIS_ANIMATION_DURATION);
                             startAnimationOnViewWithTag(titleClippingContainer, 556, taE);
 
@@ -2389,7 +2372,7 @@ public class PackageReader
         mYOffset += titleMarginY + titleHeight + (bHasPeekPanel ? subTitlePeekOffset : 0);
     }
 
-    private TextView createTitleNumberFromElement(Element el, String titleMode)
+    private TextView createTitleNumberFromElement(Element el)
     {
         // Note: the x,y positioning here is relative to the "title" frame that encloses them
         //boolean bPeekMode 	 	= (titleMode.equalsIgnoreCase("peek"));
@@ -2398,14 +2381,13 @@ public class PackageReader
         String content = el.getTextContent();
         int color = getColorAttributeValue(el, "color", mBackgroundColor);
         float labelAlpha = getFloatAttributeValue(el, "alpha", 1.0f);
-        String align = "";
+        String align = "right";
         int size = getIntegerAttributeValue(el, "size", 100);
         int x = getIntegerAttributeValue(el, "x", 10);
         int y = getIntegerAttributeValue(el, "y", 5);
         int w = getIntegerAttributeValue(el, "w", 40);
         String modifier = getStringAttributeValue(el, "modifier", "");
 
-        align = "right";
         textSize = textSize * size / 100.0f;
         color = setColorAlphaVal(color, labelAlpha);
         x = getScaledXValue(x);
@@ -2961,12 +2943,6 @@ public class PackageReader
         {
             mToRunOnEnd = toRunOnEnd;
             mDelay = 0;
-        }
-
-        public SimpleAnimationListener(Runnable toRunOnEnd, long delay)
-        {
-            mToRunOnEnd = toRunOnEnd;
-            mDelay = delay;
         }
 
         @Override
