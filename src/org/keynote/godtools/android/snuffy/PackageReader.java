@@ -1949,8 +1949,8 @@ public class PackageReader {
            		ImageView iv = new ImageView(mContext);
         		iv.setTag(566);
             	iv.setLayoutParams(new SnuffyLayoutParams(
-            			DROPSHADOW_LENGTHX, 
-            			lpTitleContainer.height - DROPSHADOW_INSETY - 0, 
+            			DROPSHADOW_LENGTHX,
+                        lpTitleContainer.height - DROPSHADOW_INSETY,
             			lpTitleContainer.width - DROPSHADOW_INSETX, 
                			lpTitleContainer.y));
         		iv.setImageBitmap(bmE);
@@ -2044,8 +2044,8 @@ public class PackageReader {
         	final int yBeforeE = yBefore;
         	final int yAfterE  = yAfter;
         	SnuffyLayoutParams lpTemp = new SnuffyLayoutParams(
-        			DROPSHADOW_SUBLENGTHX, 
-        			lpSubTitleContainer.height - DROPSHADOW_INSETY - 0, 
+        			DROPSHADOW_SUBLENGTHX,
+                    lpSubTitleContainer.height - DROPSHADOW_INSETY,
         			lpSubTitleContainer.width  - DROPSHADOW_INSETX, 
         			yBefore);
     		Bitmap bmE = getBitmapFromAssetOrFile(mContext, "grad_shad_E.png");
