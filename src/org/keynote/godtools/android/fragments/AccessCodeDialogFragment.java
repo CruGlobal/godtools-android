@@ -19,7 +19,7 @@ import org.keynote.godtools.android.R;
 public class AccessCodeDialogFragment extends DialogFragment {
 
     public interface AccessCodeDialogListener {
-        public void onAccessDialogClick(boolean positive, String accessCode);
+        void onAccessDialogClick(boolean positive, String accessCode);
     }
 
     private AccessCodeDialogListener mListener;

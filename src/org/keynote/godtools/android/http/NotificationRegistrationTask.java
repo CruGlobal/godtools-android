@@ -21,7 +21,7 @@ public class NotificationRegistrationTask extends AsyncTask<Object, Void, String
     private int statusCode;
     private String TAG = "NotificationRegistrationTask";
 
-    public static interface NotificationTaskHandler
+    public interface NotificationTaskHandler
     {
         void registrationComplete(String regId);
 
