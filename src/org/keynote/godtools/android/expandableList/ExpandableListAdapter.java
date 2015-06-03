@@ -37,13 +37,8 @@ import static org.keynote.godtools.android.broadcast.BroadcastUtil.stopBroadcast
 public class ExpandableListAdapter extends BaseExpandableListAdapter implements View.OnClickListener
 {
     private final SharedPreferences settings;
-    private final String PREFS_NAME = "GodTools";
     private final String TAG = getClass().getSimpleName();
-    
-    private final String KGP = "kgp";
-    private final String FOUR_LAWS = "fourlaws";
-    private final String SATISFIED = "satisfied";
-    
+
     private Context context;
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listDataChild;
@@ -60,6 +55,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         this.packages = packages;
         this.languagePrimary = languagePrimary;
 
+        String PREFS_NAME = "GodTools";
         settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
         listDataHeader = new ArrayList<String>();
@@ -145,8 +141,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
 
         LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.group_main);
 
+        String KGP = "kgp";
         if (KGP.equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_kgpicon);
+        String FOUR_LAWS = "fourlaws";
         if (FOUR_LAWS.equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_4lawsicon);
+        String SATISFIED = "satisfied";
         if (SATISFIED.equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_satisfiedicon);
         
         if (localPackage.getCode().contains("draft"))

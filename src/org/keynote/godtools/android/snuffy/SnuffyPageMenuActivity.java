@@ -34,7 +34,6 @@ import java.util.Vector;
 public class SnuffyPageMenuActivity extends ListActivity {
 	private static String TAG = "SnuffyPageMenuActivity";
 	private boolean mFromAssets;
-	private String mPackageName;
 	private String mLanguageCode;
 	private String mDocumentsDir;
 
@@ -50,7 +49,7 @@ public class SnuffyPageMenuActivity extends ListActivity {
 		setContentView(R.layout.page_menu);
 		
 		mLanguageCode = getIntent().getStringExtra("LanguageCode");
-		mPackageName  = getIntent().getStringExtra("PackageName");
+		String mPackageName = getIntent().getStringExtra("PackageName");
 		SnuffyApplication app = (SnuffyApplication)getApplication();
   		mFromAssets		  	= app.languageExistsAsAsset(mPackageName, mLanguageCode);
   		mDocumentsDir		= app.getDocumentsDir().getPath();
