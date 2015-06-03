@@ -1242,9 +1242,9 @@ public class PackageReader {
 				if (el.getTagName().equalsIgnoreCase("text"))
 		       		processButtonPanelText  (elPage, elPanel, el,           theContainer, panelWidth);
 				if (el.getTagName().equalsIgnoreCase("image"))
-		       		processButtonPanelImage (elPage, elPanel, el,           theContainer, panelWidth);
+		       		processButtonPanelImage (elPanel, el,           theContainer, panelWidth);
 				if (el.getTagName().equalsIgnoreCase("button"))
-		       		processButtonPanelButton(elPage, elPanel, el, currPage, theContainer, panelWidth, urlsOnPage);
+		       		processButtonPanelButton(el, currPage, theContainer, panelWidth, urlsOnPage);
 			}		
 			node = node.getNextSibling();
 		}		
@@ -1276,17 +1276,8 @@ public class PackageReader {
        	currPage.addView(thePanel);
 	}
 
-	private void processButtonPanelButton(Element elPage, Element elPanel, Element elButton, SnuffyPage currPage, SnuffyLayout theContainer, int panelWidth, Vector<String> urlsOnPage) {
-		// Called for a button in a panel. E.g. the url button below
-		/*
-			<button>
-				<buttontext>Still not sure who Jesus is?</buttontext>
-				<panel>
-					<button mode="url">www.whyjesus.com.au</button>
-				</panel>
-			</button>		
-		*/
-		// assume mode = url for now (what other possibilities are there? Only "allurl"?)
+	private void processButtonPanelButton(Element elButton, SnuffyPage currPage, SnuffyLayout theContainer, int panelWidth, Vector<String> urlsOnPage) {
+
 		final float DEFAULT_BUTTON_TEXT_SIZE = 19.0f;
 		final int   BUTTON_MARGIN = 20;
 				
@@ -1321,7 +1312,7 @@ public class PackageReader {
 		setupUrlButtonHandler(currPage, button, mode, content);
 	}
 	
-	private void processButtonPanelImage(Element elPage, Element elPanel, Element elImage, SnuffyLayout theContainer, int panelWidth) {
+	private void processButtonPanelImage(Element elPanel, Element elImage, SnuffyLayout theContainer, int panelWidth) {
        	// inherited value
 		int yBase		= getIntegerAttributeValue(elPanel, "y", mYOffsetInPanel);
 		// own values
