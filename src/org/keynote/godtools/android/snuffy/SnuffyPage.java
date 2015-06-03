@@ -89,13 +89,6 @@ public class SnuffyPage extends SnuffyLayout {
         requestLayout();
         forceLayout();
 	}
-	
-	public void showPanel(View panel, View forButton) {
-        mActivePanel = panel;
-        mHiddenButton = forButton;
-        requestLayout();
-        forceLayout();
-	}
 
     public UUID getPageId()
     {
