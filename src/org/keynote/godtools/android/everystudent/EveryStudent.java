@@ -53,7 +53,7 @@ public class EveryStudent extends ExpandableListActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		super.onCreate(savedInstanceState);
 
-		EveryStudentPersistance esp = null;
+		EveryStudentPersistance esp;
 		esp = (EveryStudentPersistance) getLastNonConfigurationInstance();
 
 		if (esp != null && esp.getmAdapter() != null && esp.getmTopics() != null && esp.getmCategories() != null) {

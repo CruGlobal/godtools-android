@@ -397,10 +397,10 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         window.getDecorView().getWindowVisibleDisplayFrame(rect);
 
         rect.top = 0;
-        int width = rect.width();
-        int height = rect.height();
-        int left = rect.left;
-        int top = rect.top;
+        int width;
+        int height;
+        int left;
+        int top;
 
         double aspectRatioTarget = (double) PreviewModeMainPW.REFERENCE_DEVICE_WIDTH / (double) PreviewModeMainPW.REFERENCE_DEVICE_HEIGHT;
         double aspectRatio = (double) rect.width() / (double) rect.height();

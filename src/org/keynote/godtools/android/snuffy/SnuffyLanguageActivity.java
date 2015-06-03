@@ -248,7 +248,6 @@ public class SnuffyLanguageActivity extends ListActivity {
 			
 			InputStream isImage;
 			try {
-				boolean bImageFromAsset = false; // the icons for all languages have been downloaded
 				//  need this code when the files have been downloaded
 				try {
                     Uri uri = Uri.parse("file://" + value);
@@ -291,7 +290,7 @@ public class SnuffyLanguageActivity extends ListActivity {
 	
 	private void updateLanguageList() {
 		File documentsDir = ((SnuffyApplication)getApplication()).getDocumentsDir();
-		Document 			xmlDoc 	= null;
+		Document 			xmlDoc;
 		FileInputStream 	fin 	= null;
 		BufferedInputStream	bin 	= null;
 		File repoFile = new File(documentsDir + "/repoIndex.xml");

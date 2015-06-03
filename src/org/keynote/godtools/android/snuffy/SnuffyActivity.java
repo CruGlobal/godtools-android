@@ -108,9 +108,6 @@ public class SnuffyActivity extends Activity {
 	
 		mToolBar = createToolbar();
 		
-		// restore state from prefs
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-		
 		// Now we are called from GodTools - do not restore current page 
 		//mPagerCurrentItem = settings.getInt("currPage", 0);
 		// always start at 0

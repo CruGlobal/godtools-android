@@ -167,7 +167,7 @@ public class PackageReader {
 
         boolean bSuccess = false;
 
-        Document xmlDoc	= null;
+        Document xmlDoc;
         try {
             xmlDoc = DocumentBuilderFactory
                     .newInstance()
@@ -234,7 +234,7 @@ public class PackageReader {
 
         pageFileName = "resources/" + pageFileName;
 
-        SnuffyPage	currPage = null;
+        SnuffyPage	currPage;
         InputStream pageInputStream = null;
         try {
             pageInputStream = new BufferedInputStream(new FileInputStream(mAppRef.get().getDocumentsDir().getPath() + "/" + pageFileName));
@@ -440,7 +440,7 @@ public class PackageReader {
 
 		boolean bSuccess = false;
 		
-        Document xmlDoc	= null; 
+        Document xmlDoc;
         try {
         	xmlDoc = DocumentBuilderFactory
         				.newInstance()
@@ -507,7 +507,7 @@ public class PackageReader {
 
    		pageFileName  =  "Packages/" + mPackageName + "/" + mLanguageCode + "/" + pageFileName;
 
-		SnuffyPage	currPage = null;
+		SnuffyPage	currPage;
 		InputStream isPage = null;
 		try {
 			if (mFromAssets) {
@@ -545,7 +545,7 @@ public class PackageReader {
 
     	SnuffyPage currPage = null;
 
-        Document xmlDoc	= null;
+        Document xmlDoc;
         try {
         	xmlDoc = DocumentBuilderFactory
         				.newInstance()
@@ -688,33 +688,19 @@ public class PackageReader {
 	private void processButton(Element elPage, Element root, SnuffyPage currPage, Element elButton, int iButton, Vector<String> urlsOnpage) {
 		int iTagButtonContainer = iButton + 100;
 		int iTagButtonPanel     = iButton + 1000;
-		String mode		   = getStringAttributeValue (elButton, "mode", "");
-		boolean bBigMode   = mode.equalsIgnoreCase("big");
+		String mode		   = getStringAttributeValue(elButton, "mode", "");
 		final boolean bUrlMode    = mode.equalsIgnoreCase("url");
 		final boolean bAllUrlMode = mode.equalsIgnoreCase("allurl");
 		final boolean bPhoneMode  = mode.equalsIgnoreCase("phone");
 		final boolean bEmailMode  = mode.equalsIgnoreCase("email");
-		int xPos		= getIntegerAttributeValue(elButton, "x", BUTTON_MARGINX);
 		int yPos		= getIntegerAttributeValue(elButton, "y", 0);
-		int width		= getIntegerAttributeValue(elButton, "w", REFERENCE_DEVICE_WIDTH);
 		int size		= getIntegerAttributeValue(elButton, "size", 100);
 		int yOffset		= getIntegerAttributeValue(elButton, "yoffset", 0);
-		String align	= getStringAttributeValue (elButton, "textalign", (bUrlMode || bPhoneMode || bEmailMode|| bBigMode) ? "center" : "left");
 		String label	= getStringAttributeValue (elButton, "label", "");
-//		String modifier = getStringAttributeValue (elButton, "modifier", "");
-//		float alpha		= getFloatAttributeValue  (elButton, "alpha", 1.0f);
-//		int color		= getColorAttributeValue  (elButton, "color", Color.WHITE);
 		
-				
-		xPos	= getScaledXValue(xPos);
+
 		yPos	= getScaledYValue(yPos);
-		width	= getScaledXValue(width);
 		yOffset = getScaledYValue(yOffset);
-//		color	= setColorAlphaVal(color, alpha);
-		if (align.equalsIgnoreCase("center")) {
-			xPos = 0;
-			width = mPageWidth;
-		}
 
 		if (yPos == 0) {
 			yPos = mYOffset + yOffset;
@@ -806,7 +792,6 @@ public class PackageReader {
 	       
 			final SnuffyLayout panel = (SnuffyLayout)(currPage.findViewWithTag(new Integer(iTagButtonPanel)));
 			final Vector<String> finalUrlsOnPage = urlsOnpage;
-			final SnuffyPage finalCurrPage = currPage;
 			if (bAllUrlMode) {
 				
 				String content = "";
@@ -1031,22 +1016,6 @@ public class PackageReader {
 							}
 						};
 						
-						final Runnable animOut2 = new Runnable() {
-							/*
-							 * IOS version: method = expand
-							 * Slide the panel down
-							 * 		set panel frame = button frame
-							 * 		BEGIN ANIMATION (0.25 sec)
-							 * 			set panel frame = expanded frame
-							 * 			set 5 shadow views around that frame to expanded size
-							 * 		COMMIT ANIMATION
-							*/
-							@Override
-							public void run() {
-								
-							}
-						};
-						
 						final Runnable animOut1 = new Runnable() {
 							/*
 							 * IOS version: method = showShadow
@@ -1080,8 +1049,6 @@ public class PackageReader {
 								theButton.setVisibility(View.INVISIBLE);
 								shadView.setVisibility(View.VISIBLE);
 								panel   .setVisibility(View.VISIBLE);
-	//							shadView.bringToFront();
-	//							panel   .bringToFront();
 								
 								thePage.requestLayout();
 								thePage.forceLayout();
@@ -1150,7 +1117,7 @@ public class PackageReader {
 		else
 			content	= getTextContentImmediate (elButtonText);	// used with paneltext
 		Element elImage = getChildElementNamed(elButton, "image");
-		String mode		= getStringAttributeValue (elButton, "mode", "");
+		String mode		= getStringAttributeValue(elButton, "mode", "");
 		boolean bAllUrlMode = mode.equalsIgnoreCase("allurl");
 		boolean bUrlMode 	= mode.equalsIgnoreCase("url");
 		boolean bBigMode 	= mode.equalsIgnoreCase("big");
@@ -1158,8 +1125,7 @@ public class PackageReader {
 		int width		= getIntegerAttributeValue(elButton, "w", Math.min(containerWidth, 280));	// 280 is precise limit set in iPhone version
 		int size		= getIntegerAttributeValue(elButton, "size", 100);
 		if (elButtonText != null)
-			size		= getIntegerAttributeValue (elButtonText, "size", 100);		
-		int yOffset		= getIntegerAttributeValue(elButton, "yoffset", 0);
+			size		= getIntegerAttributeValue (elButtonText, "size", 100);
 		String align	= getStringAttributeValue (elButton, "textalign", (bUrlMode || bBigMode || bAllUrlMode) ? "center" : "left");
 		String modifier = getStringAttributeValue (elButton, "modifier", "");
 		float alpha		= getFloatAttributeValue  (elButton, "alpha", 1.0f);
@@ -1364,14 +1330,12 @@ public class PackageReader {
 		int yPos		= getIntegerAttributeValue(elImage, "y", 0);
 		int width		= getIntegerAttributeValue(elImage, "w", 0);
 		int height		= getIntegerAttributeValue(elImage, "h", 0);
-		int xOffset		= getIntegerAttributeValue(elImage, "xoffset" , 0);
 		int yOffset		= getIntegerAttributeValue(elImage, "yoffset" , 0);
 		String align	= getStringAttributeValue (elImage, "align"   , getStringAttributeValue (elPanel, "align", "left")); // v2 align or textalign here?
 		xPos	= getScaledXValue(xPos);
 		yPos	= getScaledYValue(yPos);
 		width	= getScaledXValue(width);
 		height	= getScaledYValue(height);
-		xOffset	= getScaledXValue(xOffset);
 		yOffset	= getScaledYValue(yOffset);
 		if (align.equalsIgnoreCase("center")) {
 			xPos = (panelWidth-width)/2;
@@ -1579,7 +1543,6 @@ public class PackageReader {
 		int xPos		= getIntegerAttributeValue(elText, "x", 0);
 		int yPos		= getIntegerAttributeValue(elText, "y", 0);
 		int width		= getIntegerAttributeValue(elText, "w", REFERENCE_DEVICE_WIDTH);
-		int height		= getIntegerAttributeValue(elText, "h", 0);
 		int size		= getIntegerAttributeValue(elText, "size"     , 100);
 		String align	= getStringAttributeValue (elText, "textalign", "right");
 		String modifier = getStringAttributeValue (elText, "modifier" , "bold-italics");
@@ -1587,9 +1550,6 @@ public class PackageReader {
 		int color		= getColorAttributeValue  (elText, "color"    , Color.WHITE);
 				
 		xPos	= getScaledXValue(xPos);
-		yPos	= getScaledYValue(yPos);
-		width	= getScaledXValue(width);
-		height	= getScaledYValue(height);
 		color	= setColorAlphaVal(color, alpha);
 		if (align.equalsIgnoreCase("center")) {
 			xPos = 0;
@@ -1670,9 +1630,9 @@ public class PackageReader {
 		
        	TextView tv = new TextView(mContext);
     	tv.setLayoutParams(new SnuffyLayoutParams(
-    			width==0 ? LayoutParams.WRAP_CONTENT : width, 
-    			LayoutParams.WRAP_CONTENT, 
-    			xPos, yPos));
+                width == 0 ? LayoutParams.WRAP_CONTENT : width,
+                LayoutParams.WRAP_CONTENT,
+                xPos, yPos));
         tv.setText(content);
         tv.setGravity(getGravityFromAlign(align));
 		if(mAlternateTypeface != null)
@@ -1691,7 +1651,6 @@ public class PackageReader {
 		tv.measure(
 					MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY), 
 					MeasureSpec.UNSPECIFIED);
-		lp = (SnuffyLayoutParams)tv.getLayoutParams();
         mYOffset = yPos + tv.getMeasuredHeight();
 	}
 	
@@ -1746,8 +1705,8 @@ public class PackageReader {
         int titleMarginY 		= getScaledYValue(bPeekMode ? 0 : TITLE_FRAME_YMARGIN);
         int subTitleMarginX 	= getScaledXValue(SUBTITLE_FRAME_MARGIN);
         int subTitlePeekOffset 	= getScaledYValue(SUBTITLE_PEEK_OFFSET);
-        int titleWidth    = mPageWidth;
-        int subTitleWidth = mPageWidth;
+        int titleWidth;
+        int subTitleWidth;
         if (bClearMode) {
         	titleContainer.setBackgroundColor(Color.TRANSPARENT);
         	titleWidth = mPageWidth - titleMarginX; // TODO: Why not 2x margin (left and right?)
@@ -1897,7 +1856,6 @@ public class PackageReader {
         final int DROPSHADOW_LENGTHY	= getScaledYValue(30);
         final int DROPSHADOW_SUBLENGTHX	= getScaledXValue(20);
         final int DROPSHADOW_SUBLENGTHY	= getScaledYValue(20);
-        final int ROUNDRECT_RADIUSX		= getScaledXValue(10); // both X and Y?
         
   		SnuffyLayoutParams lpTitleContainer = (SnuffyLayoutParams)titleContainer.getLayoutParams();
         if (bStraightMode) {
@@ -2277,14 +2235,14 @@ public class PackageReader {
 		//boolean bStraightMode 	= (titleMode.equalsIgnoreCase("straight"));
 		float textSize		= 4*DEFAULT_TEXT_SIZE; 
 		String content		= el.getTextContent();
-		int color			= getColorAttributeValue  (el, "color", mBackgroundColor);
-		float labelAlpha	= getFloatAttributeValue  (el, "alpha", 1.0f);
-		String alignment	= getStringAttributeValue (el, "alignment", "right");			// both supported
-		String align		= getStringAttributeValue (el, "textalign", alignment);			// both supported
+		int color			= getColorAttributeValue(el, "color", mBackgroundColor);
+		float labelAlpha	= getFloatAttributeValue(el, "alpha", 1.0f);
+		String alignment	= getStringAttributeValue(el, "alignment", "right");			// both supported
+		String align		= getStringAttributeValue(el, "textalign", alignment);			// both supported
 		int size			= getIntegerAttributeValue(el, "size"     , 100);
 		int x				= getIntegerAttributeValue(el, "x",  10);
 		int y				= getIntegerAttributeValue(el, "y",   5);
-		int w				= getIntegerAttributeValue(el, "w",  40);
+		int w				= getIntegerAttributeValue(el, "w", 40);
 		int h				= getIntegerAttributeValue(el, "h", 150);
 		String modifier 	= getStringAttributeValue (el, "modifier", "");
 		
@@ -2294,7 +2252,6 @@ public class PackageReader {
 		x			= getScaledXValue(x);
 		y			= getScaledYValue(y);
 		w			= getScaledXValue(w);
-		h			= getScaledYValue(h);
 		
 		y = y - (int)(0.35*textSize); // eliminate the leading TODO: this is not accurate enough - can we get the metrics and do it that way?
 
