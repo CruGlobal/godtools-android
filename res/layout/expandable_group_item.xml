@@ -33,7 +33,7 @@
     <TextView 
 	    android:id="@+id/tv_trans_view"
     	android:text="TextView" 
-    	android:layout_width="wrap_content"
+    	android:layout_width="0dp"
      	android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#303030"
      	android:layout_height="wrap_content"
