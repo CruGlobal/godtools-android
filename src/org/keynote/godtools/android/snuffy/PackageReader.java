@@ -1198,11 +1198,11 @@ public class PackageReader {
 	        //iv.setImageDrawable(di);
 	        int diSize = buttonHeight;
 	        if (bExpanded){
-	        	iv.setImageResource(R.drawable.disclosure_indicator_maximized);
+	        	iv.setImageResource(R.drawable.expander_ic_maximized);
 		        iv.setLayoutParams(new SnuffyLayoutParams(diSize, diSize, containerWidth - diSize - getScaledXValue(0), lp.y+2));
 	        }
 	        else {
-	        	iv.setImageResource(R.drawable.disclosure_indicator_minimized);
+	        	iv.setImageResource(R.drawable.expander_ic_minimized);
 		        iv.setLayoutParams(new SnuffyLayoutParams(diSize, diSize, containerWidth - diSize + getScaledXValue(5), lp.y+2));
 	        }
 	        theContainer.addView(iv);
