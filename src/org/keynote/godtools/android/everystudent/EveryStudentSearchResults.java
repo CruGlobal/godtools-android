@@ -179,7 +179,7 @@ public class EveryStudentSearchResults extends ListActivity {
 				int count = mCursor.getCount();
 				myCount = getResources().getQuantityString(
 						R.plurals.search_results, count,
-						new Object[] { count, mQuery });
+						count, mQuery);
 			
 				adapter = createAdapter (EveryStudentSearchResults.this, mCursor);
 			}
