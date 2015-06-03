@@ -76,7 +76,6 @@ public class SnuffyLanguageActivity extends ListActivity {
 		// on which we want to display the values defined in the from array
 		int[] to = { R.id.list2Text1, R.id.list2Image};
 
-		String mLanguageCode = getIntent().getStringExtra("LanguageCode");
 		mPackageName  = getIntent().getStringExtra("PackageName");
 		
 		// TODO: consider case where device rotated - this code may need to move

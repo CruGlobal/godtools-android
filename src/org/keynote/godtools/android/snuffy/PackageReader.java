@@ -2398,13 +2398,11 @@ public class PackageReader
         String content = el.getTextContent();
         int color = getColorAttributeValue(el, "color", mBackgroundColor);
         float labelAlpha = getFloatAttributeValue(el, "alpha", 1.0f);
-        String alignment = getStringAttributeValue(el, "alignment", "right");            // both supported
-        String align = getStringAttributeValue(el, "textalign", alignment);            // both supported
+        String align = "";
         int size = getIntegerAttributeValue(el, "size", 100);
         int x = getIntegerAttributeValue(el, "x", 10);
         int y = getIntegerAttributeValue(el, "y", 5);
         int w = getIntegerAttributeValue(el, "w", 40);
-        int h = getIntegerAttributeValue(el, "h", 150);
         String modifier = getStringAttributeValue(el, "modifier", "");
 
         align = "right";

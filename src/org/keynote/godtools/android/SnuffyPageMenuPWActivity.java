@@ -50,7 +50,6 @@ public class SnuffyPageMenuPWActivity extends ListActivity {
 		setContentView(R.layout.page_menu);
 
 		mLanguageCode = getIntent().getStringExtra("LanguageCode");
-		String mPackageName = getIntent().getStringExtra("PackageName");
 		SnuffyApplication app = (SnuffyApplication)getApplication();
   		mFromAssets		  	= false;
         mFilesDir		= app.getDocumentsDir().getPath() + "/resources";

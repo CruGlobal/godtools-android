@@ -142,6 +142,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.group_main);
 
         String KGP = "kgp";
+        assert localPackage != null;
         if (KGP.equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_kgpicon);
         String FOUR_LAWS = "fourlaws";
         if (FOUR_LAWS.equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_4lawsicon);
