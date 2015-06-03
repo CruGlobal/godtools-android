@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -161,7 +162,7 @@ public class Splash extends Activity
 
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
     {
         _active = false;
         return true;
