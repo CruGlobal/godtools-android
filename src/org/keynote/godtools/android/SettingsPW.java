@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
@@ -34,7 +35,15 @@ import org.keynote.godtools.android.utils.Typefaces;
 
 import java.util.Locale;
 
-public class SettingsPW extends BaseActionBarActivity implements
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.RESULT_PREVIEW_MODE_ENABLED;
+import static org.keynote.godtools.android.utils.Constants.RESULT_PREVIEW_MODE_DISABLED;
+
+public class SettingsPW extends ActionBarActivity implements
         View.OnClickListener,
         ConfirmDialogFragment.OnConfirmClickListener,
         AccessCodeDialogFragment.AccessCodeDialogListener,

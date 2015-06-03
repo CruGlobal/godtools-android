@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -61,9 +62,16 @@ import java.util.TimerTask;
 
 import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.RESULT_PREVIEW_MODE_ENABLED;
+import static org.keynote.godtools.android.utils.Constants.RESULT_PREVIEW_MODE_DISABLED;
 
 
-public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
+public class MainPW extends ActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
         DownloadTask.DownloadTaskHandler,
         MetaTask.MetaTaskHandler, View.OnClickListener
 {
