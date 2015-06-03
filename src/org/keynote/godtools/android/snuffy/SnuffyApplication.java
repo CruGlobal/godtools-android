@@ -61,7 +61,7 @@ public class SnuffyApplication extends Application {
 
     public File getDocumentsDir() {
         File documentsDir = null;
-        if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             documentsDir = getExternalFilesDir(null);
         }
         if (documentsDir == null) {
