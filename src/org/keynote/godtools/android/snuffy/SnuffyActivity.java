@@ -31,7 +31,6 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
 
-import java.util.Iterator;
 import java.util.Vector;
 
 public class SnuffyActivity extends Activity {
@@ -359,13 +358,15 @@ public class SnuffyActivity extends Activity {
 	}
 	
 	private void addClickHandlersToAllPages() {
-		Iterator<SnuffyPage> iter = mPages.iterator();
-		
-		while (iter.hasNext()) {
-			iter.next().setOnClickListener(new View.OnClickListener() {
-				
+
+		for (SnuffyPage mPage : mPages)
+		{
+			mPage.setOnClickListener(new View.OnClickListener()
+			{
+
 				@Override
-				public void onClick(View v) {
+				public void onClick(View v)
+				{
 					toggleTheToolBar();
 				}
 			});
@@ -373,10 +374,10 @@ public class SnuffyActivity extends Activity {
 	}
 	
 	private void addCallingActivityToAllPages() {
-		Iterator<SnuffyPage> iter = mPages.iterator();
-		
-		while (iter.hasNext()) {
-			iter.next().mCallingActivity = this; // the SnuffyActivity owns most pages except the about page - which will be set explicitly
+
+		for (SnuffyPage mPage : mPages)
+		{
+			mPage.mCallingActivity = this; // the SnuffyActivity owns most pages except the about page - which will be set explicitly
 		}		
 	}
 	

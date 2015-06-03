@@ -471,11 +471,10 @@ public class SnuffyPWActivity extends Activity
 
     private void addCallingActivityToAllPages()
     {
-        Iterator<SnuffyPage> iter = mPages.iterator();
 
-        while (iter.hasNext())
+        for (SnuffyPage mPage : mPages)
         {
-            iter.next().mCallingActivity = this; // the SnuffyActivity owns most pages except the about page - which will be set explicitly
+            mPage.mCallingActivity = this; // the SnuffyActivity owns most pages except the about page - which will be set explicitly
         }
     }
 
