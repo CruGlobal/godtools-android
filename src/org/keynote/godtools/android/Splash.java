@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.crittercism.app.Crittercism;
+import com.google.common.base.Strings;
 
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
@@ -65,13 +66,20 @@ public class Splash extends Activity
         {
             Log.i(TAG, "First Launch");
 
-            // set english as primary language on first start
+            // get the default language of the device os
+            String deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
+            // set to english in case nothing is found.
+            if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = "en";
+
+            Log.i(TAG, deviceDefaultLanguage);
+
+            // set primary language on first start
             SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, "en");
+            editor.putString(GTLanguage.KEY_PRIMARY, deviceDefaultLanguage);
             editor.apply();
 
             // set up files
-            BackgroundService.firstSetup((SnuffyApplication) getApplication());
+            BackgroundService.firstSetup(getApp());
 
             // if connected to the internet and not auth code (why would there be? It is
             // the first run.
@@ -209,5 +217,10 @@ public class Splash extends Activity
             startActivity(intent);
             finish();
         }
+    }
+
+    private SnuffyApplication getApp()
+    {
+        return (SnuffyApplication) getApplication();
     }
 }

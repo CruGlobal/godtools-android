@@ -4,7 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import java.util.Locale;
+import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 public class Device {
 
@@ -25,7 +25,7 @@ public class Device {
         return false;
     }
 
-    public static String getDefaultLanguage(){
-        return Locale.getDefault().getLanguage();
+    public static String getDefaultLanguage(SnuffyApplication application){
+        return application.getDeviceLocale().getLanguage();
     }
 }
