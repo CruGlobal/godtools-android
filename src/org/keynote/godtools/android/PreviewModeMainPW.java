@@ -48,6 +48,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.REFERENCE_DEVICE_HEIGHT;
+import static org.keynote.godtools.android.utils.Constants.REFERENCE_DEVICE_WIDTH;
+import static org.keynote.godtools.android.utils.Constants.REQUEST_SETTINGS;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PARALLEL;
@@ -61,11 +64,6 @@ public class PreviewModeMainPW extends ActionBarActivity implements
         MetaTask.MetaTaskHandler, View.OnClickListener
 {
     private static final String TAG = "PreviewModeMainPW";
-    private static final int REQUEST_SETTINGS = 1001;
-    private static final String JUST_SWITCHED = "justSwitched";
-
-    public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
-    public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
 
     private int mPageLeft;
     private int mPageTop;
@@ -79,9 +77,6 @@ public class PreviewModeMainPW extends ActionBarActivity implements
     private BroadcastReceiver broadcastReceiver;
 
     Context context;
-
-    boolean noPackages = false;
-    boolean justSwitchedToTranslatorMode;
     
     SharedPreferences settings;
     
@@ -126,7 +121,6 @@ public class PreviewModeMainPW extends ActionBarActivity implements
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-        justSwitchedToTranslatorMode = settings.getBoolean(JUST_SWITCHED, false);
 
         getPackageList(); // get the packages for the primary language
     }
@@ -332,7 +326,6 @@ public class PreviewModeMainPW extends ActionBarActivity implements
                 GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", this);
 
                 Toast.makeText(PreviewModeMainPW.this, "Translator preview mode is enabled", Toast.LENGTH_LONG).show();
-                switchedToTranslatorMode(true);
 
                 finish();
                 startActivity(getIntent());
@@ -410,7 +403,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
         int left;
         int top;
 
-        double aspectRatioTarget = (double) PreviewModeMainPW.REFERENCE_DEVICE_WIDTH / (double) PreviewModeMainPW.REFERENCE_DEVICE_HEIGHT;
+        double aspectRatioTarget = (double) REFERENCE_DEVICE_WIDTH / (double) REFERENCE_DEVICE_HEIGHT;
         double aspectRatio = (double) rect.width() / (double) rect.height();
 
         if (aspectRatio > aspectRatioTarget)
@@ -439,21 +432,8 @@ public class PreviewModeMainPW extends ActionBarActivity implements
          * This method is called each time the UI needs to be refreshed.
          */
 
-        // If no packages are available for a language, then fallback to English
-        if (justSwitchedToTranslatorMode)
-        {
-            /*
-             * When switching to translator mode, the MainPW activity is restarted. However, the packageList and
-             * packageFrag need to be refreshed based on the newly downloaded items. The justSwitchedToTranslatorMode is
-             * saved in the settings and when true, this will refresh the packages available.
-             */
-            getPackageList();
-        }
+        getPackageList();
 
-        noPackages = false;
-
-        justSwitchedToTranslatorMode = false;
-        switchedToTranslatorMode(false);
         trackScreenVisit();
     }
 
@@ -601,14 +581,6 @@ public class PreviewModeMainPW extends ActionBarActivity implements
     {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         return settings.getBoolean("TranslatorMode", false);
-    }
-
-    private void switchedToTranslatorMode(boolean switched)
-    {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean(JUST_SWITCHED, switched);
-        editor.apply();
     }
 
     @Override
