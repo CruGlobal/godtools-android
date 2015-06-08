@@ -1,7 +1,7 @@
 package org.keynote.godtools.android.utils;
 
 /**
- * Created by matthewfrederick on 5/5/15.
+ * Class containing constants used through out the GodTools Application
  */
 public class Constants
 {
@@ -60,4 +60,15 @@ public class Constants
      * Standard god tools result: disabled translator mode
      */
     public static final int RESULT_PREVIEW_MODE_DISABLED = 2345;
+
+    public static final String REG_ID = "registration_id";
+    public static final String APP_VERSION = "appVersion";
+
+    public static final int REQUEST_SETTINGS = 1001;
+    public final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    public static final String SENDER_ID = "237513440670";
+
+    public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
+    public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
 }

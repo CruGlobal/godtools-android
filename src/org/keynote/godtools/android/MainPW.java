@@ -55,25 +55,22 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static org.keynote.godtools.android.utils.Constants.APP_VERSION;
+import static org.keynote.godtools.android.utils.Constants.PLAY_SERVICES_RESOLUTION_REQUEST;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.REFERENCE_DEVICE_HEIGHT;
+import static org.keynote.godtools.android.utils.Constants.REFERENCE_DEVICE_WIDTH;
+import static org.keynote.godtools.android.utils.Constants.REG_ID;
+import static org.keynote.godtools.android.utils.Constants.REQUEST_SETTINGS;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.SENDER_ID;
 
 
 public class MainPW extends ActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
         View.OnClickListener
 {
     private static final String TAG = "MainPW";
-    private static final int REQUEST_SETTINGS = 1001;
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
-    public static final String PROPERTY_REG_ID = "registration_id";
-    private static final String PROPERTY_APP_VERSION = "appVersion";
-
-    String SENDER_ID = "237513440670";
-
-    public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
-    public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
 
     private int mPageLeft;
     private int mPageTop;
@@ -443,7 +440,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         int left;
         int top;
 
-        double aspectRatioTarget = (double) MainPW.REFERENCE_DEVICE_WIDTH / (double) MainPW.REFERENCE_DEVICE_HEIGHT;
+        double aspectRatioTarget = (double) REFERENCE_DEVICE_WIDTH / (double) REFERENCE_DEVICE_HEIGHT;
         double aspectRatio = (double) rect.width() / (double) rect.height();
 
         if (aspectRatio > aspectRatioTarget)
@@ -610,7 +607,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
 
     private String getRegistrationId(Context context)
     {
-        String registrationId = settings.getString(PROPERTY_REG_ID, "");
+        String registrationId = settings.getString(REG_ID, "");
         if (registrationId == null || registrationId.isEmpty()) {
             Log.i(TAG, "Registration not found.");
             return "";
@@ -618,7 +615,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         // Check if app was updated; if so, it must clear the registration ID
         // since the existing regID is not guaranteed to work with the new
         // app version.
-        int registeredVersion = settings.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
+        int registeredVersion = settings.getInt(APP_VERSION, Integer.MIN_VALUE);
         int currentVersion = getAppVersion(context);
         if (registeredVersion != currentVersion)
         {
@@ -662,8 +659,8 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         int appVersion = getAppVersion(context);
         Log.i(TAG, "Saving regId on app version " + appVersion);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString(PROPERTY_REG_ID, regId);
-        editor.putInt(PROPERTY_APP_VERSION, appVersion);
+        editor.putString(REG_ID, regId);
+        editor.putInt(APP_VERSION, appVersion);
         editor.apply();
     }
 
