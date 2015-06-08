@@ -43,7 +43,7 @@ public class DownloadService
 
             app.setAppLocale(langCode);
         }
-        else if (tag.equalsIgnoreCase(KEY_UPDATE_PRIMARY))
+        else if (KEY_UPDATE_PRIMARY.equalsIgnoreCase(tag))
         {
             gtlPrimary.setDownloaded(true);
             gtlPrimary.update(context);
@@ -53,12 +53,12 @@ public class DownloadService
                 BackgroundService.downloadLanguagePack(context, gtlParallel.getLanguageCode(), KEY_UPDATE_PARALLEL);
             }
         }
-        else if (tag.equalsIgnoreCase(KEY_UPDATE_PARALLEL))
+        else if (KEY_UPDATE_PARALLEL.equalsIgnoreCase(tag))
         {
             gtlParallel.setDownloaded(true);
             gtlParallel.update(context);
         }
-        else if (tag.equalsIgnoreCase(KEY_PRIMARY))
+        else if (KEY_PRIMARY.equalsIgnoreCase(tag))
         {
             app.setAppLocale(langCode);
 
@@ -71,7 +71,7 @@ public class DownloadService
             gtl.update(context);
 
         }
-        else if (tag.equalsIgnoreCase(KEY_PARALLEL))
+        else if (KEY_PARALLEL.equalsIgnoreCase(tag))
         {
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PARALLEL, langCode);
@@ -80,7 +80,6 @@ public class DownloadService
             GTLanguage gtl = GTLanguage.getLanguage(context, langCode);
             gtl.setDownloaded(true);
             gtl.update(context);
-
         }
     }
 }

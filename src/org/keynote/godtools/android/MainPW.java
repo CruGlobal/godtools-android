@@ -28,7 +28,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -40,12 +39,9 @@ import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.fragments.PackageListFragment;
-import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
-import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.http.NotificationRegistrationTask;
 import org.keynote.godtools.android.http.NotificationUpdateTask;
 import org.keynote.godtools.android.model.HomescreenLayout;
@@ -54,30 +50,21 @@ import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
-import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
-import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PARALLEL;
-import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PRIMARY;
-import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PARALLEL;
-import static org.keynote.godtools.android.utils.Constants.RESULT_PREVIEW_MODE_ENABLED;
-import static org.keynote.godtools.android.utils.Constants.RESULT_PREVIEW_MODE_DISABLED;
+import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
 
 
 public class MainPW extends ActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
-        DownloadTask.DownloadTaskHandler,
-        MetaTask.MetaTaskHandler, View.OnClickListener
+        View.OnClickListener
 {
     private static final String TAG = "MainPW";
     private static final int REQUEST_SETTINGS = 1001;
-    private static final String JUST_SWITCHED = "justSwitched";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     public static final String PROPERTY_REG_ID = "registration_id";
@@ -103,8 +90,6 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
     Context context;
     String regid = "";
     Timer timer;
-    boolean noPackages = false;
-    boolean justSwitchedToTranslatorMode;
     SharedPreferences settings;
 
     /**
@@ -159,7 +144,6 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         }
         
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-        justSwitchedToTranslatorMode = settings.getBoolean(JUST_SWITCHED, false);
 
         packageList = getPackageList(); // get the packages for the primary language
         
@@ -199,7 +183,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         }
         Log.i(TAG, regid);
         
-        if (!justSwitchedToTranslatorMode) startTimer(); // don't start timer when switching to translator mode
+        startTimer();
     }
 
     @Override
@@ -236,7 +220,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
                             packageList = getPackageList();
                             showLayoutsWithPackages();
                             hideLoading();
-                            createTheHomeScreen();
+                            trackScreenVisit();
                             break;
                         case META_TASK:
                             Log.i(TAG, "Meta complete");
@@ -256,7 +240,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
                     packageList = getPackageList();
                     showLayoutsWithPackages();
                     hideLoading();
-                    createTheHomeScreen();
+                    trackScreenVisit();
                 }
             }
         };
@@ -394,82 +378,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
                 app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
 
                 refreshPackageList(false);
-                createTheHomeScreen();
-
-                break;
-            }
-            case RESULT_DOWNLOAD_PRIMARY:
-            {
-                // start the download
-                String code = data.getStringExtra("primaryCode");
-
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        code,
-                        KEY_PRIMARY,
-                        settings.getString("Authorization_Generic", ""),
-                        this);
-                break;
-            }
-            case RESULT_DOWNLOAD_PARALLEL:
-            {
-                // refresh the list if the primary language was changed
-                String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-                if (!languagePrimary.equalsIgnoreCase(primaryCode))
-                {
-                    languagePrimary = primaryCode;
-                    packageList = getPackageList();
-                    showLayoutsWithPackages();
-                }
-
-                String code = data.getStringExtra("parallelCode");
-                showLoading();
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        code,
-                        KEY_PARALLEL,
-                        settings.getString("Authorization_Generic", ""),
-                        this);
-                break;
-            }
-            case RESULT_PREVIEW_MODE_ENABLED:
-            {
-                // refresh the list
-                String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-
-                if (!languagePrimary.equalsIgnoreCase(primaryCode))
-                {
-                    SnuffyApplication app = (SnuffyApplication) getApplication();
-                    app.setAppLocale(primaryCode);
-                }
-
-                showLoading();
-
-                GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", this);
-
-                Toast.makeText(MainPW.this, "Translator preview mode is enabled", Toast.LENGTH_LONG).show();
-                switchedToTranslatorMode(true);
-
-                finish();
-                startActivity(getIntent());
-
-                break;
-            }
-            case RESULT_PREVIEW_MODE_DISABLED:
-            {
-                // refresh the list
-                String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-
-                refreshPackageList(true);
-
-                if (!languagePrimary.equalsIgnoreCase(primaryCode))
-                {
-                    SnuffyApplication app = (SnuffyApplication) getApplication();
-                    app.setAppLocale(primaryCode);
-                }
-
-                Toast.makeText(MainPW.this, "Translator preview mode is disabled", Toast.LENGTH_LONG).show();
-
-                finish();
-                startActivity(getIntent());
+                trackScreenVisit();
 
                 break;
             }
@@ -514,7 +423,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
 
     private void doSetup()
     {
-        createTheHomeScreen();
+        trackScreenVisit();
         getScreenSize();
     }
 
@@ -557,31 +466,6 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         mPageHeight = height;
     }
 
-    private void createTheHomeScreen()
-    {
-        /*
-         * This method is called each time the UI needs to be refreshed.
-         */
-
-        // If no packages are available for a language, then fallback to English
-        if (justSwitchedToTranslatorMode)
-        {
-            /*
-             * When switching to translator mode, the MainPW activity is restarted. However, the packageList and
-             * packageFrag need to be refreshed based on the newly downloaded items. The justSwitchedToTranslatorMode is
-             * saved in the settings and when true, this will refresh the packages available.
-             */
-            packageList = getPackageList();
-            showLayoutsWithPackages();
-        }
-
-        noPackages = false;
-
-        justSwitchedToTranslatorMode = false;
-        switchedToTranslatorMode(false);
-        trackScreenVisit();
-    }
-
     private void showLoading()
     {
         supportInvalidateOptionsMenu();
@@ -589,79 +473,9 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         setSupportProgressBarIndeterminateVisibility(true);
     }
 
-    @Override
-    public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
-    {
-
-        if (tag.equalsIgnoreCase(KEY_PRIMARY))
-        {
-            languagePrimary = langCode;
-
-            SnuffyApplication app = (SnuffyApplication) getApplication();
-            app.setAppLocale(langCode);
-
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, langCode);
-            editor.apply();
-
-            GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
-            gtl.setDownloaded(true);
-            gtl.update(MainPW.this);
-
-            packageList = getPackageList();
-            showLayoutsWithPackages();
-            hideLoading();
-            
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase(KEY_PARALLEL))
-        {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PARALLEL, langCode);
-            editor.apply();
-
-            GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
-            gtl.setDownloaded(true);
-            gtl.update(MainPW.this);
-
-            hideLoading();
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase("draft"))
-        {
-            Toast.makeText(MainPW.this, "Drafts have been updated", Toast.LENGTH_SHORT).show();
-            packageList = getPackageList();
-            showLayoutsWithPackages();
-            hideLoading();
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase("draft_primary"))
-        {
-            languagePrimary = langCode;
-            packageList = getPackageList();
-
-            showLayoutsWithPackages();
-
-            hideLoading();
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase("draft_parallel"))
-        {
-            hideLoading();
-            createTheHomeScreen();
-        }
-    }
-
     private List<GTPackage> getPackageList()
     {
         return GTPackage.getLivePackages(MainPW.this, languagePrimary);
-    }
-
-    private void switchedToTranslatorMode(boolean switched)
-    {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean(JUST_SWITCHED, switched);
-        editor.apply();
     }
 
     @Override
@@ -686,57 +500,6 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
     }
 
     @Override
-    public void metaTaskComplete(InputStream is, String langCode, String tag)
-    {
-        // process the input stream
-        new UpdateDraftListTask().execute(is, langCode, tag);
-    }
-
-    @Override
-    public void metaTaskFailure(InputStream is, String langCode, String tag)
-    {
-
-        if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))
-        {
-            packageList = getPackageList();
-            showLayoutsWithPackages();
-        }
-
-        hideLoading();
-        Toast.makeText(MainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
-
-
-    }
-
-    @Override
-    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
-    {
-
-        if (tag.equalsIgnoreCase("draft"))
-        {
-
-            Toast.makeText(MainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
-
-        }
-        else if (tag.equalsIgnoreCase("draft_primary"))
-        {
-
-            packageList = getPackageList();
-            showLayoutsWithPackages();
-            Toast.makeText(MainPW.this, "Failed to download drafts", Toast.LENGTH_SHORT).show();
-
-        }
-        else if (tag.equalsIgnoreCase(KEY_PRIMARY) || tag.equalsIgnoreCase(KEY_PARALLEL))
-        {
-
-            Toast.makeText(MainPW.this, "Failed to download resources", Toast.LENGTH_SHORT).show();
-
-        }
-
-        hideLoading();
-    }
-
-    @Override
     public void onClick(View view)
     {
         for (GTPackage gtPackage : packageList)
@@ -746,43 +509,6 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
                 Log.i(TAG, "clicked: " + gtPackage.getCode());
                 onPackageSelected(gtPackage);
             }
-        }
-    }
-
-    private class UpdateDraftListTask extends AsyncTask<Object, Void, Boolean>
-    {
-        boolean mNewDraftsAvailable;
-        String tag, langCode;
-
-        @Override
-        protected void onPreExecute()
-        {
-            super.onPreExecute();
-            mNewDraftsAvailable = false;
-        }
-
-        @Override
-        protected Boolean doInBackground(Object... params)
-        {
-
-            InputStream is = (InputStream) params[0];
-            langCode = params[1].toString();
-            tag = params[2].toString();
-
-            List<GTLanguage> languageList = GTPackageReader.processMetaResponse(is);
-
-            GTLanguage language = languageList.get(0);
-            List<GTPackage> packagesDraft = language.getPackages();
-
-            return packagesDraft.size() != 0;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean shouldDownload)
-        {
-            super.onPostExecute(shouldDownload);
-
-            GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), settings.getString("Authorization_Draft", ""), langCode, tag, MainPW.this);
         }
     }
 
