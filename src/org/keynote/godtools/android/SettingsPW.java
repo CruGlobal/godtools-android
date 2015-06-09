@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -25,8 +26,10 @@ import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
 import org.keynote.godtools.android.fragments.ConfirmDialogFragment;
+import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.AuthTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
+import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyAlternateTypefaceTextView;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
@@ -109,8 +112,7 @@ public class SettingsPW extends ActionBarActivity implements
         tvMainLanguage.setText(primaryName);
 
         // set value for parallel language view
-        assert parallelLanguageCode != null;
-        if (parallelLanguageCode.isEmpty()) {
+        if (Strings.isNullOrEmpty(parallelLanguageCode)) {
             tvParallelLanguage.setText(getString(R.string.none));
         } else {
             Locale localeParallel = new Locale(parallelLanguageCode);
@@ -118,7 +120,7 @@ public class SettingsPW extends ActionBarActivity implements
             tvParallelLanguage.setText(parallelName);
         }
 
-        trackScreenActivity();
+        EventTracker.track(getApp(), "Settings", primaryLanguageCode);
     }
 
     @Override
@@ -147,8 +149,7 @@ public class SettingsPW extends ActionBarActivity implements
                 SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                 String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
-                assert parallelLanguageCode != null;
-                if (parallelLanguageCode.isEmpty()) {
+                if (Strings.isNullOrEmpty(parallelLanguageCode)) {
                     tvParallelLanguage.setText(getString(R.string.none));
                 } else {
                     Locale localeParallel = new Locale(parallelLanguageCode);
@@ -156,7 +157,8 @@ public class SettingsPW extends ActionBarActivity implements
                     tvParallelLanguage.setText(parallelName);
                 }
 
-                trackScreenEvent("Change Primary Language");
+                EventTracker.track(getApp(), "Settings", "Language Change",
+                        "Change Primary Language");
                 break;
             }
             case RESULT_CHANGED_PARALLEL: {
@@ -167,7 +169,8 @@ public class SettingsPW extends ActionBarActivity implements
                 String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName());
                 tvParallelLanguage.setText(parallelName);
 
-                trackScreenEvent("Change Parallel Language");
+                EventTracker.track(getApp(), "Settings",
+                        "Language Change", "Change Parallel Language");
                 break;
             }
             case RESULT_DOWNLOAD_PRIMARY:
@@ -333,6 +336,13 @@ public class SettingsPW extends ActionBarActivity implements
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("Notifications", cbNotificationsAllowed.isChecked());
         editor.apply();
+
+        String event = cbNotificationsAllowed.isChecked() ? "Turned ON" : "Turned OFF";
+
+        EventTracker.track(getApp(), "Settings", "Notification State", event);
+
+        String notificationsOn = cbNotificationsAllowed.isChecked() ? "TRUE" : "FALSE";
+        updateDeviceWithAPI(notificationsOn);
     }
 
     private void setTranslatorMode(boolean isEnabled) {
@@ -362,29 +372,20 @@ public class SettingsPW extends ActionBarActivity implements
         }
     }
 
-    private Tracker getGoogleAnalyticsTracker()
+    private void updateDeviceWithAPI(String notificationsOn)
     {
-        return ((SnuffyApplication)getApplication()).getTracker();
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String registrationId = settings.getString(REGISTRATION_ID, "");
+        String deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        if (!Strings.isNullOrEmpty(registrationId) && !Strings.isNullOrEmpty(deviceId))
+        {
+            BackgroundService.registerDevice(getApplicationContext(), registrationId, deviceId, notificationsOn);
+        }
     }
 
-    private void trackScreenEvent(String event)
+    private SnuffyApplication getApp()
     {
-        Tracker tracker = getGoogleAnalyticsTracker();
-        tracker.setScreenName("Settings");
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Language Change")
-                .setAction(event)
-                .setLabel(event)
-                .build());
-    }
-
-    private void trackScreenActivity()
-    {
-        Tracker tracker = getGoogleAnalyticsTracker();
-        tracker.setScreenName("Settings");
-        tracker.send(new HitBuilders.AppViewBuilder()
-                .setCustomDimension(1, "Settings")
-                .setCustomDimension(2, primaryLanguageCode)
-                .build());
+        return (SnuffyApplication) getApplication();
     }
 }

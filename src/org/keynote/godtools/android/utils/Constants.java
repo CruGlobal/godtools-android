@@ -61,9 +61,6 @@ public class Constants
      */
     public static final int RESULT_PREVIEW_MODE_DISABLED = 2345;
 
-    public static final String REG_ID = "registration_id";
-    public static final String APP_VERSION = "appVersion";
-
     public static final int REQUEST_SETTINGS = 1001;
     public final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -71,4 +68,9 @@ public class Constants
 
     public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
     public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
+
+    public static final String REGISTRATION_ID = "registration_id";
+    public static final String APP_VERSION = "appVersion";
+    public static final String DEVICE_ID = "device_id";
+    public static final String NOTIFICATIONS_ON = "notifications_on";
 }
