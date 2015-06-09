@@ -40,9 +40,7 @@ import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
-import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
-import org.keynote.godtools.android.http.NotificationRegistrationTask;
 import org.keynote.godtools.android.http.NotificationUpdateTask;
 import org.keynote.godtools.android.model.HomescreenLayout;
 import org.keynote.godtools.android.notifications.NotificationInfo;
@@ -60,7 +58,7 @@ import static org.keynote.godtools.android.utils.Constants.PLAY_SERVICES_RESOLUT
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.REFERENCE_DEVICE_HEIGHT;
 import static org.keynote.godtools.android.utils.Constants.REFERENCE_DEVICE_WIDTH;
-import static org.keynote.godtools.android.utils.Constants.REG_ID;
+import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
 import static org.keynote.godtools.android.utils.Constants.REQUEST_SETTINGS;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
@@ -220,7 +218,6 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
                             packageList = getPackageList();
                             showLayoutsWithPackages();
                             hideLoading();
-                            trackScreenVisit();
                             break;
                         case META_TASK:
                             Log.i(TAG, "Meta complete");
@@ -240,7 +237,6 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
                     packageList = getPackageList();
                     showLayoutsWithPackages();
                     hideLoading();
-                    trackScreenVisit();
                 }
             }
         };
@@ -378,8 +374,6 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
                 app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
 
                 refreshPackageList(false);
-                trackScreenVisit();
-
                 break;
             }
         }
@@ -423,7 +417,6 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
 
     private void doSetup()
     {
-        trackScreenVisit();
         getScreenSize();
     }
 
@@ -652,7 +645,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         int appVersion = getAppVersion(context);
         Log.i(TAG, "Saving regId on app version " + appVersion);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString(REG_ID, regId);
+        editor.putString(REGISTRATION_ID, regId);
         editor.putInt(APP_VERSION, appVersion);
         editor.apply();
     }

@@ -17,8 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.common.base.Strings;
 
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
@@ -39,12 +37,13 @@ import org.keynote.godtools.android.utils.Typefaces;
 import java.util.Locale;
 
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
-import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PARALLEL;
-import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PARALLEL;
-import static org.keynote.godtools.android.utils.Constants.RESULT_PREVIEW_MODE_ENABLED;
+import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.RESULT_PREVIEW_MODE_DISABLED;
+import static org.keynote.godtools.android.utils.Constants.RESULT_PREVIEW_MODE_ENABLED;
 
 public class SettingsPW extends ActionBarActivity implements
         View.OnClickListener,
