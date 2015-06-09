@@ -25,9 +25,6 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
@@ -35,6 +32,7 @@ import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.expandableList.ExpandableListAdapter;
+import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
@@ -44,7 +42,6 @@ import org.keynote.godtools.android.utils.Device;
 
 import java.io.InputStream;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -397,10 +394,10 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         window.getDecorView().getWindowVisibleDisplayFrame(rect);
 
         rect.top = 0;
-        int width = rect.width();
-        int height = rect.height();
-        int left = rect.left;
-        int top = rect.top;
+        int width;
+        int height;
+        int left;
+        int top;
 
         double aspectRatioTarget = (double) PreviewModeMainPW.REFERENCE_DEVICE_WIDTH / (double) PreviewModeMainPW.REFERENCE_DEVICE_HEIGHT;
         double aspectRatio = (double) rect.width() / (double) rect.height();
@@ -446,7 +443,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
         justSwitchedToTranslatorMode = false;
         switchedToTranslatorMode(false);
-        trackScreenVisit();
+        EventTracker.track(getApp(), "Translator Page", languagePrimary);
     }
 
     @Override
@@ -497,9 +494,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 // check for draft_parallel
                 GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), langCode, "draft_parallel", this);
             }
-            else
-            {
-            }
+
             createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase("draft"))
@@ -639,10 +634,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             getPackageList();
             Toast.makeText(PreviewModeMainPW.this, "Failed to download drafts", Toast.LENGTH_SHORT).show();
         }
-        else if (tag.equalsIgnoreCase("draft_parallel"))
-        {
-            // do nothing
-        }
         else if (tag.equalsIgnoreCase("primary") || tag.equalsIgnoreCase("parallel"))
         {
             Toast.makeText(PreviewModeMainPW.this, "Failed to download resources", Toast.LENGTH_SHORT).show();
@@ -761,39 +752,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         }
     }
 
-    private LinkedHashMap<String, String> getPossiblePackagesForDraft()
-    {
-        // start with an ArrayList the length of number of packages. it will never be bigger than that.
-        LinkedHashMap<String, String> possiblePackages = new LinkedHashMap<String, String>(packageList.size());
-
-        // start with an list of (unfortuantely) hard coded packages
-        possiblePackages.put("kgp", "Knowing God Personally");
-        possiblePackages.put("fourlaws", "Four Spiritual Laws");
-        possiblePackages.put("satisfied", "Satisfied?");
-
-        // loop through the list of loaded packages, and stick in the name of any existing packages (already translated)
-        for (GTPackage gtPackage : packageList)
-        {
-            if ("live".equalsIgnoreCase(gtPackage.getStatus()) &&
-                    possiblePackages.containsKey(gtPackage.getCode()))
-            {
-                possiblePackages.put(gtPackage.getCode(), gtPackage.getName());
-            }
-        }
-
-        // loop through the list again and remove any that are already in 'draft' status
-        for (GTPackage gtPackage : packageList)
-        {
-            if ("draft".equalsIgnoreCase(gtPackage.getStatus()) &&
-                    possiblePackages.containsKey(gtPackage.getCode()))
-            {
-                possiblePackages.remove(gtPackage.getCode());
-            }
-        }
-
-        return possiblePackages;
-    }
-
     private void doCmdShare()
     {
         String msgBody = getString(R.string.app_share_link);
@@ -804,18 +762,8 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         startActivity(Intent.createChooser(share, "Select how you would like to share"));
     }
 
-    private Tracker getGoogleAnalyticsTracker()
+    private SnuffyApplication getApp()
     {
-        return ((SnuffyApplication) getApplication()).getTracker();
-    }
-
-    private void trackScreenVisit()
-    {
-        Tracker tracker = getGoogleAnalyticsTracker();
-        tracker.setScreenName("HomeScreen");
-        tracker.send(new HitBuilders.AppViewBuilder()
-                .setCustomDimension(1, "HomeScreen")
-                .setCustomDimension(2, languagePrimary)
-                .build());
+        return (SnuffyApplication) getApplication();
     }
 }

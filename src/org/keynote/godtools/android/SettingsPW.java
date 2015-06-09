@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -15,16 +16,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+import com.google.common.base.Strings;
 
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
 import org.keynote.godtools.android.fragments.ConfirmDialogFragment;
+import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.AuthTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
+import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyAlternateTypefaceTextView;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
@@ -32,6 +34,8 @@ import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
 
 import java.util.Locale;
+
+import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
 
 public class SettingsPW extends BaseActionBarActivity implements
         View.OnClickListener,
@@ -42,7 +46,7 @@ public class SettingsPW extends BaseActionBarActivity implements
     private static final int REQUEST_PRIMARY = 1002;
     private static final int REQUEST_PARALLEL = 1003;
 
-    TextView tvMainLanguage, tvParallelLanguage, tvAbout;
+    TextView tvMainLanguage, tvParallelLanguage;
     RelativeLayout rlMainLanguage, rlParallelLanguage;
     CompoundButton cbTranslatorMode;
     CompoundButton cbNotificationsAllowed;
@@ -70,7 +74,6 @@ public class SettingsPW extends BaseActionBarActivity implements
 
         tvMainLanguage = (TextView) findViewById(R.id.tvMainLanguage);
         tvParallelLanguage = (TextView) findViewById(R.id.tvParallelLanguage);
-        tvAbout = (TextView) findViewById(R.id.tvAbout);
         rlMainLanguage = (RelativeLayout) findViewById(R.id.rlMainLanguage);
         rlParallelLanguage = (RelativeLayout) findViewById(R.id.rlParallelLanguage);
         cbTranslatorMode = (CompoundButton) findViewById(R.id.cbTranslatorMode);
@@ -79,7 +82,6 @@ public class SettingsPW extends BaseActionBarActivity implements
         // set click listeners
         rlParallelLanguage.setOnClickListener(this);
         rlMainLanguage.setOnClickListener(this);
-        tvAbout.setOnClickListener(this);
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean isTranslatorEnabled = settings.getBoolean("TranslatorMode", false);
@@ -101,7 +103,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         tvMainLanguage.setText(primaryName);
 
         // set value for parallel language view
-        if (parallelLanguageCode.isEmpty()) {
+        if (Strings.isNullOrEmpty(parallelLanguageCode)) {
             tvParallelLanguage.setText(getString(R.string.none));
         } else {
             Locale localeParallel = new Locale(parallelLanguageCode);
@@ -109,7 +111,7 @@ public class SettingsPW extends BaseActionBarActivity implements
             tvParallelLanguage.setText(parallelName);
         }
 
-        trackScreenActivity();
+        EventTracker.track(getApp(), "Settings", primaryLanguageCode);
     }
 
     @Override
@@ -138,7 +140,7 @@ public class SettingsPW extends BaseActionBarActivity implements
                 SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                 String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
-                if (parallelLanguageCode.isEmpty()) {
+                if (Strings.isNullOrEmpty(parallelLanguageCode)) {
                     tvParallelLanguage.setText(getString(R.string.none));
                 } else {
                     Locale localeParallel = new Locale(parallelLanguageCode);
@@ -146,7 +148,8 @@ public class SettingsPW extends BaseActionBarActivity implements
                     tvParallelLanguage.setText(parallelName);
                 }
 
-                trackScreenEvent("Change Primary Language");
+                EventTracker.track(getApp(), "Settings", "Language Change",
+                        "Change Primary Language");
                 break;
             }
             case RESULT_CHANGED_PARALLEL: {
@@ -157,7 +160,8 @@ public class SettingsPW extends BaseActionBarActivity implements
                 String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName());
                 tvParallelLanguage.setText(parallelName);
 
-                trackScreenEvent("Change Parallel Language");
+                EventTracker.track(getApp(), "Settings",
+                        "Language Change", "Change Parallel Language");
                 break;
             }
             case RESULT_DOWNLOAD_PRIMARY:
@@ -182,11 +186,6 @@ public class SettingsPW extends BaseActionBarActivity implements
                 intent.putExtra("languageType", "Parallel Language");
                 startActivityForResult(intent, REQUEST_PARALLEL);
                 break;
-
-            case R.id.tvAbout:
-                intent = new Intent(SettingsPW.this, About.class);
-                startActivity(intent);
-                break;
         }
 
     }
@@ -195,7 +194,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean on = ((CompoundButton) view).isChecked();
 
-        if(on && !settings.getString("Authorization_Draft", "").isEmpty())
+        if(on && !Strings.isNullOrEmpty(settings.getString("Authorization_Draft", "")))
         {
             ((CompoundButton) view).setChecked(true);
             cbTranslatorMode.setEnabled(true);
@@ -328,6 +327,13 @@ public class SettingsPW extends BaseActionBarActivity implements
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("Notifications", cbNotificationsAllowed.isChecked());
         editor.apply();
+
+        String event = cbNotificationsAllowed.isChecked() ? "Turned ON" : "Turned OFF";
+
+        EventTracker.track(getApp(), "Settings", "Notification State", event);
+
+        String notificationsOn = cbNotificationsAllowed.isChecked() ? "TRUE" : "FALSE";
+        updateDeviceWithAPI(notificationsOn);
     }
 
     private void setTranslatorMode(boolean isEnabled) {
@@ -357,29 +363,20 @@ public class SettingsPW extends BaseActionBarActivity implements
         }
     }
 
-    private Tracker getGoogleAnalyticsTracker()
+    private void updateDeviceWithAPI(String notificationsOn)
     {
-        return ((SnuffyApplication)getApplication()).getTracker();
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String registrationId = settings.getString(REGISTRATION_ID, "");
+        String deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        if (!Strings.isNullOrEmpty(registrationId) && !Strings.isNullOrEmpty(deviceId))
+        {
+            BackgroundService.registerDevice(getApplicationContext(), registrationId, deviceId, notificationsOn);
+        }
     }
 
-    private void trackScreenEvent(String event)
+    private SnuffyApplication getApp()
     {
-        Tracker tracker = getGoogleAnalyticsTracker();
-        tracker.setScreenName("Settings");
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Language Change")
-                .setAction(event)
-                .setLabel(event)
-                .build());
-    }
-
-    private void trackScreenActivity()
-    {
-        Tracker tracker = getGoogleAnalyticsTracker();
-        tracker.setScreenName("Settings");
-        tracker.send(new HitBuilders.AppViewBuilder()
-                .setCustomDimension(1, "Settings")
-                .setCustomDimension(2, primaryLanguageCode)
-                .build());
+        return (SnuffyApplication) getApplication();
     }
 }
