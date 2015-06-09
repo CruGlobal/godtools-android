@@ -52,7 +52,7 @@ public class SettingsPW extends ActionBarActivity implements
     private static final int REQUEST_PRIMARY = 1002;
     private static final int REQUEST_PARALLEL = 1003;
 
-    TextView tvMainLanguage, tvParallelLanguage, tvAbout;
+    TextView tvMainLanguage, tvParallelLanguage;
     RelativeLayout rlMainLanguage, rlParallelLanguage;
     CompoundButton cbTranslatorMode;
     CompoundButton cbNotificationsAllowed;
@@ -80,7 +80,6 @@ public class SettingsPW extends ActionBarActivity implements
 
         tvMainLanguage = (TextView) findViewById(R.id.tvMainLanguage);
         tvParallelLanguage = (TextView) findViewById(R.id.tvParallelLanguage);
-        tvAbout = (TextView) findViewById(R.id.tvAbout);
         rlMainLanguage = (RelativeLayout) findViewById(R.id.rlMainLanguage);
         rlParallelLanguage = (RelativeLayout) findViewById(R.id.rlParallelLanguage);
         cbTranslatorMode = (CompoundButton) findViewById(R.id.cbTranslatorMode);
@@ -89,7 +88,6 @@ public class SettingsPW extends ActionBarActivity implements
         // set click listeners
         rlParallelLanguage.setOnClickListener(this);
         rlMainLanguage.setOnClickListener(this);
-        tvAbout.setOnClickListener(this);
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean isTranslatorEnabled = settings.getBoolean("TranslatorMode", false);
@@ -193,11 +191,6 @@ public class SettingsPW extends ActionBarActivity implements
             case R.id.rlParallelLanguage:
                 intent.putExtra("languageType", "Parallel Language");
                 startActivityForResult(intent, REQUEST_PARALLEL);
-                break;
-
-            case R.id.tvAbout:
-                intent = new Intent(SettingsPW.this, About.class);
-                startActivity(intent);
                 break;
         }
 
