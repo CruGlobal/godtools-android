@@ -878,7 +878,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private String getRegistrationId(Context context)
     {
-        String registrationId = settings.getString(PROPERTY_REG_ID, "");
+        String registrationId = settings.getString(REGISTRATION_ID, "");
         if (registrationId == null || registrationId.isEmpty())
         {
             Log.i(TAG, "Registration not found.");
