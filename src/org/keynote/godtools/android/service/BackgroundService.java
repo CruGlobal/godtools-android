@@ -66,7 +66,10 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
     @Override
     protected void onHandleIntent(Intent intent)
     {
-        broadcastManager.sendBroadcast(BroadcastUtil.startBroadcast());
+        // don't show the loading icon for registering device.
+        if (!APITasks.REGISTER_DEVICE.equals(intent.getSerializableExtra(TYPE)))
+            broadcastManager.sendBroadcast(BroadcastUtil.startBroadcast());
+
         Log.i(TAG, "Action Started: " + intent.getSerializableExtra(TYPE));
 
 
