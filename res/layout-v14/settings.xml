@@ -2,26 +2,35 @@
 <LinearLayout
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/gt4_homescreen_background_ip4"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:background="@drawable/gt4_homescreen_background_ip4">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"/>
 
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/language"
         android:text="@string/settings_main_language"
-        android:layout_marginTop="20dp"
-        android:textSize="22dp"
+        android:textSize="22sp"
         android:layout_marginLeft="35dp"
         android:textColor="#ffffffff"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <RelativeLayout
         android:id="@+id/rlMainLanguage"
         android:layout_width="match_parent"
         android:background="#00ffffff"
-        android:layout_height="60dp"
-        android:layout_marginTop="15dp">
+        android:layout_height="60dp">
 
         <ImageView
             android:layout_width="match_parent"
@@ -55,7 +64,7 @@
             android:id="@+id/tvMainLanguage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textSize="22dp"
+            android:textSize="22sp"
             android:textColor="#ffffffff"
             android:text="@string/settings_main_language"
             android:gravity="center_vertical"
@@ -75,22 +84,30 @@
 
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="22dp"
+        android:textSize="22sp"
         android:textColor="#ffffffff"
         android:text="@string/settings_parallel_language"
         android:gravity="center_vertical"
         android:layout_marginLeft="35dp"
-        android:layout_marginTop="20dp"
         android:id="@+id/parallel_lang"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <RelativeLayout
         android:id="@+id/rlParallelLanguage"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="15dp">
+        android:layout_height="60dp">
 
         <ImageView
             android:layout_width="match_parent"
@@ -124,7 +141,7 @@
             android:id="@+id/tvParallelLanguage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textSize="22dp"
+            android:textSize="22sp"
             android:textColor="#ffffffff"
             android:text="@string/none"
             android:gravity="center_vertical"
@@ -145,16 +162,24 @@
 
 
     <TextView
-        android:padding="16dp"
         android:id="@+id/tvDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textColor="#ffffffff"
         android:text="@string/settings_parallel_info"
         android:gravity="center_vertical"
         android:clickable="false"
-        android:focusableInTouchMode="false"/>
+        android:focusableInTouchMode="false"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -196,7 +221,7 @@
             android:layout_height="fill_parent"
             android:text="@string/settings_notificiation"
             android:textColor="#ffffffff"
-            android:textSize="22dp"
+            android:textSize="22sp"
             android:id="@+id/cbNotification"
             android:checked="true"
             android:onClick="onNotificationToggle"
@@ -210,10 +235,14 @@
 
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="55dp"
         android:background="#32cdcdcd"
         android:id="@+id/translator_layout">
 
@@ -251,7 +280,7 @@
             android:layout_height="fill_parent"
             android:text="@string/settings_translator_mode"
             android:textColor="#ffffffff"
-            android:textSize="22dp"
+            android:textSize="22sp"
             android:id="@+id/cbTranslatorMode"
             android:checked="false"
             android:onClick="onToggleClicked"
@@ -266,17 +295,9 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tvAbout"
-        android:background="@drawable/settings_language_bg"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:paddingLeft="16dp"
-        android:textColor="#ffffffff"
-        android:text="@string/settings_about"
-        android:gravity="center_vertical|center_horizontal"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1.5"/>
 
 </LinearLayout>
