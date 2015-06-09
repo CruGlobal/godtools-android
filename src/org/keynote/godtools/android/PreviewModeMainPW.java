@@ -25,9 +25,6 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
@@ -35,6 +32,7 @@ import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.expandableList.ExpandableListAdapter;
+import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
@@ -50,7 +48,6 @@ import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KGP;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
-
 
 public class PreviewModeMainPW extends BaseActionBarActivity implements
         DownloadTask.DownloadTaskHandler,
@@ -444,7 +441,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
         justSwitchedToTranslatorMode = false;
         switchedToTranslatorMode(false);
-        trackScreenVisit();
+        EventTracker.track(getApp(), "Translator Page", languagePrimary);
     }
 
     @Override
@@ -753,18 +750,8 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         startActivity(Intent.createChooser(share, "Select how you would like to share"));
     }
 
-    private Tracker getGoogleAnalyticsTracker()
+    private SnuffyApplication getApp()
     {
-        return ((SnuffyApplication) getApplication()).getTracker();
-    }
-
-    private void trackScreenVisit()
-    {
-        Tracker tracker = getGoogleAnalyticsTracker();
-        tracker.setScreenName("HomeScreen");
-        tracker.send(new HitBuilders.AppViewBuilder()
-                .setCustomDimension(1, "HomeScreen")
-                .setCustomDimension(2, languagePrimary)
-                .build());
+        return (SnuffyApplication) getApplication();
     }
 }

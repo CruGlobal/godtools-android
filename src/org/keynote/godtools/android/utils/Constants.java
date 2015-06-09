@@ -41,4 +41,9 @@ public class Constants
     public static final String FOUR_LAWS = "fourlaws";
     public static final String SATISFIED = "satisfied";
     public static final String EVERY_STUDENT = "everystudent";
+
+    public static final String REGISTRATION_ID = "registration_id";
+    public static final String APP_VERSION = "appVersion";
+    public static final String DEVICE_ID = "device_id";
+    public static final String NOTIFICATIONS_ON = "notifications_on";
 }

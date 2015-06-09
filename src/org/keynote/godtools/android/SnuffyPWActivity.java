@@ -28,10 +28,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import org.keynote.godtools.android.business.GTPackage;
+import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.NotificationUpdateTask;
@@ -870,30 +868,19 @@ public class SnuffyPWActivity extends Activity
 
     }
 
-    private Tracker getGoogleAnalyticsTracker()
+    private SnuffyApplication getApp()
     {
-        return ((SnuffyApplication) getApplication()).getTracker();
+        return (SnuffyApplication) getApplication();
     }
 
     private void trackScreenEvent(String event)
     {
-        Tracker tracker = getGoogleAnalyticsTracker();
-        tracker.setScreenName(mAppPackage);
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Menu event")
-                .setAction(event)
-                .setLabel(event)
-                .build());
+        EventTracker.track(getApp(), mAppPackage, "Menu Event", event);
     }
 
     private void trackScreenActivity(String activity)
     {
-        Tracker tracker = getGoogleAnalyticsTracker();
-        tracker.setScreenName(activity);
-        tracker.send(new HitBuilders.AppViewBuilder()
-                .setCustomDimension(1, activity)
-                .setCustomDimension(2, mAppLanguage)
-                .build());
+        EventTracker.track(getApp(), activity, mAppLanguage);
     }
 
     private void startTimer()
