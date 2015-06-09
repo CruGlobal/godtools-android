@@ -13,7 +13,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
 /**
- * Created by matthewfrederick on 12/31/14.
+ * Async task used to register a device to receive notificaitons.
  */
 public class NotificationRegistrationTask extends AsyncTask<Object, Void, String>
 {
@@ -21,7 +21,7 @@ public class NotificationRegistrationTask extends AsyncTask<Object, Void, String
     private int statusCode;
     private String TAG = "NotificationRegistrationTask";
 
-    public static interface NotificationTaskHandler
+    public interface NotificationTaskHandler
     {
         void registrationComplete(String regId);
 
@@ -38,11 +38,13 @@ public class NotificationRegistrationTask extends AsyncTask<Object, Void, String
     {
         String url = objects[0].toString();
         String deviceId = objects[1].toString();
+        String notificationsOn = objects[2].toString();
 
         HttpPost request = new HttpPost(url);
         Log.i(TAG, url);
         Log.i(TAG, deviceId);
         request.setHeader("deviceId", deviceId);
+        request.setHeader("notificationsOn", notificationsOn);
         HttpParams httpParams = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParams, 10000);
         HttpConnectionParams.setSoTimeout(httpParams, 10000);
