@@ -17,13 +17,13 @@ public class EventTracker
     /**
      * Track a screen visit
      */
-    public static void track(SnuffyApplication app, String screenName, String dim2)
+    public static void track(SnuffyApplication app, String screenName, String dimension2)
     {
         Tracker tracker = app.getTracker();
         tracker.setScreenName(screenName);
         tracker.send(new HitBuilders.AppViewBuilder()
                 .setCustomDimension(1, screenName)
-                .setCustomDimension(2, dim2)
+                .setCustomDimension(2, dimension2)
                 .build());
     }
 
