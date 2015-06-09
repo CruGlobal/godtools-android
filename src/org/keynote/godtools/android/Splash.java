@@ -186,17 +186,17 @@ public class Splash extends Activity
 
     private void goToMainActivity()
     {
+        // so now that we are expiring the translator code after 12 hours we will auto "log out" the
+        // user when the app is restarted.
+
         if (settings.getBoolean("TranslatorMode", false))
         {
-            Intent intent = new Intent(this, PreviewModeMainPW.class);
-            startActivity(intent);
-            finish();
+            settings.edit().putBoolean("TranslatorMode", false).apply();
         }
-        else
-        {
-            Intent intent = new Intent(this, MainPW.class);
-            startActivity(intent);
-            finish();
-        }
+
+        Intent intent = new Intent(this, MainPW.class);
+        startActivity(intent);
+        finish();
+
     }
 }
