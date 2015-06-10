@@ -138,17 +138,11 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 showLoading();
                 BackgroundService.authenticateGeneric(this);
             }
-            else if (!settings.getBoolean("TranslatorMode", false))
+            else
             {
                 showLoading();
                 BackgroundService.getListOfPackages(this);
-
-            }
-            else
-            {
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putBoolean("TranslatorMode", false);
-                editor.apply();
+                settings.edit().putBoolean("TranslatorMode", false).apply();
             }
         }
 
