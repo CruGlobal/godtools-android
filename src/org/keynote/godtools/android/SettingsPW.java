@@ -60,6 +60,11 @@ public class SettingsPW extends BaseActionBarActivity implements
 
     ProgressDialog pdLoading;
 
+    // since the authFail method is used for either the wrong pass code or an expired pass code, we
+    // need separate messages for each situation. If translatorModeExpired=false, then use wrong pass
+    // code message. If true use expired message.
+    boolean translatorModeExpired = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -218,6 +223,9 @@ public class SettingsPW extends BaseActionBarActivity implements
             cbTranslatorMode.setEnabled(true);
             GodToolsApiClient.verifyStatusOfAuthToken(settings.getString(AUTH_DRAFT, ""), this);
 
+            // if Auth fails from this it is because the auth token is expired.
+            translatorModeExpired = true;
+
             return;
         }
 
@@ -227,7 +235,11 @@ public class SettingsPW extends BaseActionBarActivity implements
         {
 
             if (Device.isConnected(SettingsPW.this))
+            {
+                // if auth fails here it is because of the wrong pass code.
+                translatorModeExpired = false;
                 showAccessCodeDialog();
+            }
             else
             {
                 Toast.makeText(SettingsPW.this, "Internet connection is needed to enable translator mode", Toast.LENGTH_SHORT).show();
@@ -365,7 +377,14 @@ public class SettingsPW extends BaseActionBarActivity implements
         editor.putString(AUTH_DRAFT, null);
         editor.apply();
 
-        Toast.makeText(SettingsPW.this, "Please try again.", Toast.LENGTH_SHORT).show();
+        if (translatorModeExpired)
+        {
+            Toast.makeText(SettingsPW.this, getString(R.string.expired_passcode), Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Toast.makeText(SettingsPW.this, getString(R.string.wrong_passcode), Toast.LENGTH_SHORT).show();
+        }
         cbTranslatorMode.setEnabled(true);
         onToggleClicked(findViewById(R.id.cbTranslatorMode));
     }
