@@ -61,6 +61,8 @@ public class SettingsPW extends BaseActionBarActivity implements
 
     ProgressDialog pdLoading;
 
+    SharedPreferences settings;
+
     // since the authFail method is used for either the wrong pass code or an expired pass code, we
     // need separate messages for each situation. If translatorModeExpired=false, then use wrong pass
     // code message. If true use expired message.
@@ -95,7 +97,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         rlParallelLanguage.setOnClickListener(this);
         rlMainLanguage.setOnClickListener(this);
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean isTranslatorEnabled = settings.getBoolean("TranslatorMode", false);
         boolean allowNotifications = settings.getBoolean("Notifications", true);
         cbNotificationsAllowed.setChecked(allowNotifications);
@@ -277,7 +279,6 @@ public class SettingsPW extends BaseActionBarActivity implements
 
     public void onToggleClicked(View view)
     {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean on = ((CompoundButton) view).isChecked();
 
         if (on && !Strings.isNullOrEmpty(settings.getString(AUTH_DRAFT, "")))
@@ -297,7 +298,6 @@ public class SettingsPW extends BaseActionBarActivity implements
 
         if (on)
         {
-
             if (Device.isConnected(SettingsPW.this))
             {
                 // if auth fails here it is because of the wrong pass code.
@@ -310,8 +310,6 @@ public class SettingsPW extends BaseActionBarActivity implements
                 ((CompoundButton) view).setChecked(false);
                 view.setEnabled(true);
             }
-
-
         }
         else
         {
@@ -397,7 +395,6 @@ public class SettingsPW extends BaseActionBarActivity implements
 
     public void onNotificationToggle(View view)
     {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("Notifications", cbNotificationsAllowed.isChecked());
         editor.apply();
@@ -438,7 +435,6 @@ public class SettingsPW extends BaseActionBarActivity implements
 
     private void updateDeviceWithAPI(String notificationsOn)
     {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String registrationId = settings.getString(REGISTRATION_ID, "");
         String deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
