@@ -46,4 +46,9 @@ public class Constants
     public static final String APP_VERSION = "appVersion";
     public static final String DEVICE_ID = "device_id";
     public static final String NOTIFICATIONS_ON = "notifications_on";
+
+    public static final String ACCESS_CODE = "access_code";
+    public static final String TRANSLATOR_MODE = "TranslatorMode";
+    public static final String TRANSLATOR_MODE_EXPIRED = "translator_mode_expired";
+    public static final String STATUS_CODE = "status_code";
 }

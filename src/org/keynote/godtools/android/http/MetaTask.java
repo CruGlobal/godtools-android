@@ -23,7 +23,7 @@ public class MetaTask extends AsyncTask<Object, Void, InputStream> {
     public interface MetaTaskHandler {
         void metaTaskComplete(InputStream is, String langCode, String tag);
 
-        void metaTaskFailure(InputStream is, String langCode, String tag);
+        void metaTaskFailure(InputStream is, String langCode, String tag, int statusCode);
     }
 
     public MetaTask(MetaTaskHandler listener) {
@@ -54,7 +54,7 @@ public class MetaTask extends AsyncTask<Object, Void, InputStream> {
             HttpResponse response = httpClient.execute(request);
             statusCode = response.getStatusLine().getStatusCode();
 
-            Log.i("Status", "" + statusCode);
+            Log.i("MetaTask", "Status: " + statusCode);
 
             return response.getEntity().getContent();
 
@@ -72,7 +72,7 @@ public class MetaTask extends AsyncTask<Object, Void, InputStream> {
             metaTaskHandler.metaTaskComplete(inputStream, langCode, tag);
         } else 
         {
-            metaTaskHandler.metaTaskFailure(inputStream, langCode, tag);
+            metaTaskHandler.metaTaskFailure(inputStream, langCode, tag, statusCode);
         }
     }
 }

@@ -11,8 +11,8 @@ import java.util.UUID;
 
 public class GodToolsApiClient {
 
-    // private static final String BASE_URL = "http://GodToolsAPI-Stage-1291189452.us-east-1.elb.amazonaws.com/godtools-api/rest/";
-    private static final String BASE_URL = "https://api.godtoolsapp.com/godtools-api/rest/";
+    private static final String BASE_URL = "http://GodToolsAPI-Stage-1291189452.us-east-1.elb.amazonaws.com/godtools-api/rest/";
+    // private static final String BASE_URL = "https://api.godtoolsapp.com/godtools-api/rest/";
     private static final String ENDPOINT_META = "meta/";
     private static final String ENDPOINT_PACKAGES = "packages/";
     private static final String ENDPOINT_TRANSLATIONS = "translations/";
@@ -47,14 +47,14 @@ public class GodToolsApiClient {
     }
 
     public static void authenticateAccessCode(String accessCode, AuthTask.AuthTaskHandler taskHandler){
-        AuthTask authTask = new AuthTask(taskHandler);
+        AuthTask authTask = new AuthTask(taskHandler, true, false);
         String url = BASE_URL + ENDPOINT_AUTH + accessCode;
-        authTask.execute(url);
+        authTask.execute(url, accessCode);
     }
 
     public static void verifyStatusOfAuthToken(String authToken, AuthTask.AuthTaskHandler taskHandler)
     {
-        AuthTask authTask = new AuthTask(taskHandler);
+        AuthTask authTask = new AuthTask(taskHandler, false, true);
         String url = BASE_URL + ENDPOINT_AUTH;
         authTask.execute(url, authToken);
     }

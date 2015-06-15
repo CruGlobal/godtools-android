@@ -691,7 +691,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     }
 
     @Override
-    public void metaTaskFailure(InputStream is, String langCode, String tag)
+    public void metaTaskFailure(InputStream is, String langCode, String tag, int statusCode)
     {
 
         if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))

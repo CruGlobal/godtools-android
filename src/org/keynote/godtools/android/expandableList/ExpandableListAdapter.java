@@ -77,7 +77,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         }
     }
 
-    
     @Override
     public int getGroupCount()
     {
@@ -267,10 +266,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             }
 
                                             @Override
-                                            public void draftTaskFailure()
+                                            public void draftTaskFailure(int statusCode)
                                             {
                                                 Toast.makeText(context, "Failed to publish draft", Toast.LENGTH_SHORT).show();
-                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR));
+                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR, statusCode));
                                             }
                                         });
                                 break;
@@ -314,10 +313,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             }
 
                                             @Override
-                                            public void draftTaskFailure()
+                                            public void draftTaskFailure(int code)
                                             {
                                                 Toast.makeText(context.getApplicationContext(), "Failed to create a new draft", Toast.LENGTH_SHORT).show();
-                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR));
+
+                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR, code));
                                             }
                                         });
                                 break;
@@ -348,5 +348,4 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
             }
         }            
     }
-
 }

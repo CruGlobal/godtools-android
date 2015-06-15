@@ -7,7 +7,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.google.common.base.Strings;
+
+import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
@@ -23,20 +27,26 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 import java.io.InputStream;
 
+import static org.keynote.godtools.android.utils.Constants.ACCESS_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
+import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.BACKGROUND_TASK_TAG;
+import static org.keynote.godtools.android.utils.Constants.DEVICE_ID;
 import static org.keynote.godtools.android.utils.Constants.LANG_CODE;
 import static org.keynote.godtools.android.utils.Constants.META;
 import static org.keynote.godtools.android.utils.Constants.NOTIFICATIONS_ON;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
-import static org.keynote.godtools.android.utils.Constants.DEVICE_ID;
 import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 import static org.keynote.godtools.android.utils.Constants.TYPE;
 
 /**
  * Created by matthewfrederick on 5/4/15.
  */
-public class BackgroundService extends IntentService implements AuthTask.AuthTaskHandler, MetaTask.MetaTaskHandler, DownloadTask.DownloadTaskHandler, NotificationRegistrationTask.NotificationTaskHandler
+public class BackgroundService extends IntentService implements AuthTask.AuthTaskHandler,
+        MetaTask.MetaTaskHandler,
+        DownloadTask.DownloadTaskHandler,
+        NotificationRegistrationTask.NotificationTaskHandler
 {
     private final String TAG = getClass().getSimpleName();
 
@@ -84,7 +94,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         }
         else if (APITasks.GET_LIST_OF_DRAFTS.equals(intent.getSerializableExtra(TYPE)))
         {
-            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_CODE, ""),
+            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
                     intent.getStringExtra(LANG_CODE),
                     intent.getStringExtra(BACKGROUND_TASK_TAG), this);
         }
@@ -101,6 +111,14 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
                     intent.getStringExtra(REGISTRATION_ID),
                     intent.getStringExtra(DEVICE_ID),
                     intent.getStringExtra(NOTIFICATIONS_ON), this);
+        }
+        else if (APITasks.AUTHENTICATE_ACCESS_CODE.equals(intent.getSerializableExtra(TYPE)))
+        {
+            GodToolsApiClient.authenticateAccessCode(intent.getStringExtra(ACCESS_CODE), this);
+        }
+        else if (APITasks.VERIFY_ACCESS_CODE.equals(intent.getSerializableExtra(TYPE)))
+        {
+            GodToolsApiClient.verifyStatusOfAuthToken(intent.getStringExtra(ACCESS_CODE), this);
         }
     }
 
@@ -167,20 +185,77 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         context.startService(intent);
     }
 
-    @Override
-    public void authComplete(String authorization)
+    public static void authenticateAccessCode(Context context, String accessCode)
     {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("Authorization_Generic", authorization);
-        editor.apply();
-        Log.i(TAG, "Now Authorized");
+        final Bundle extras = new Bundle(2);
+        extras.putSerializable(TYPE, APITasks.AUTHENTICATE_ACCESS_CODE);
+        extras.putString(ACCESS_CODE, accessCode);
+        Intent intent = baseIntent(context, extras);
+        context.startService(intent);
+    }
 
-        broadcastManager.sendBroadcast(BroadcastUtil.stopBroadcast(Type.AUTH));
+    public static void verifyStatusOfAuthToken(Context context, String accessCode)
+    {
+        final Bundle extras = new Bundle(2);
+        extras.putSerializable(TYPE, APITasks.VERIFY_ACCESS_CODE);
+        extras.putString(ACCESS_CODE, accessCode);
+        Intent intent = baseIntent(context, extras);
+        context.startService(intent);
+    }
+
+    public static void getListOfDrafts(Context context, String langCode, String tag)
+    {
+        final Bundle extras = new Bundle(3);
+        extras.putSerializable(TYPE, APITasks.GET_LIST_OF_DRAFTS);
+        extras.putString(LANG_CODE, langCode);
+        extras.putString(BACKGROUND_TASK_TAG, tag);
+        Intent intent = baseIntent(context, extras);
+        context.startService(intent);
     }
 
     @Override
-    public void authFailed()
+    public void authComplete(String authorization, boolean authenticateAccessCode, boolean verifyStatus)
     {
+        Log.i(TAG, "Now Authorized");
+
+        if (authenticateAccessCode)
+        {
+            if (!Strings.isNullOrEmpty(authorization))
+            {
+                settings.edit().putString(AUTH_DRAFT, authorization).apply();
+                settings.edit().putBoolean(TRANSLATOR_MODE, true).apply();
+
+                broadcastManager.sendBroadcast(BroadcastUtil.stopBroadcast(Type.ENABLE_TRANSLATOR));
+            }
+        }
+        else if (verifyStatus)
+        {
+            broadcastManager.sendBroadcast(BroadcastUtil.stopBroadcast(Type.ENABLE_TRANSLATOR));
+        }
+        else
+        {
+            settings.edit().putString(AUTH_CODE, authorization).apply();
+
+            broadcastManager.sendBroadcast(BroadcastUtil.stopBroadcast(Type.AUTH));
+        }
+    }
+
+    @Override
+    public void authFailed(boolean authenticateAccessCode, boolean verifyStatus)
+    {
+        Log.i(TAG, "Auth Failed");
+
+        if (authenticateAccessCode)
+        {
+            settings.edit().putString(AUTH_DRAFT, null).apply();
+            Toast.makeText(BackgroundService.this, getString(R.string.wrong_passcode), Toast.LENGTH_SHORT).show();
+        }
+        else if (verifyStatus)
+        {
+            settings.edit().putString(AUTH_DRAFT, null).apply();
+            Toast.makeText(BackgroundService.this, getString(R.string.expired_passcode), Toast.LENGTH_LONG).show();
+        }
+
         broadcastManager.sendBroadcast(BroadcastUtil.failBroadcast(Type.AUTH));
     }
 
@@ -210,7 +285,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
     }
 
     @Override
-    public void metaTaskFailure(InputStream is, String langCode, String tag)
+    public void metaTaskFailure(InputStream is, String langCode, String tag, int statusCode)
     {
         broadcastManager.sendBroadcast(BroadcastUtil.failBroadcast(Type.META_TASK));
     }

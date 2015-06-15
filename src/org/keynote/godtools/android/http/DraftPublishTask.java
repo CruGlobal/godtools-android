@@ -26,7 +26,7 @@ public class DraftPublishTask extends AsyncTask<Object, Void, Integer>
     public static interface DraftTaskHandler
     {
         void draftTaskComplete();
-        void draftTaskFailure();
+        void draftTaskFailure(int statusCode);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class DraftPublishTask extends AsyncTask<Object, Void, Integer>
         }
         else
         {
-            taskHandler.draftTaskFailure();
+            taskHandler.draftTaskFailure(responseStatusCode);
         }
     }
 }

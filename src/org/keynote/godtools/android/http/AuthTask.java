@@ -20,16 +20,29 @@ public class AuthTask extends AsyncTask<Object, Void, String>
     private int statusCode;
     private static final String TAG = AuthTask.class.getSimpleName();
 
+    // lets the task know that the access code is being authenticated
+    private boolean authenticateAccessCode = false;
+
+    // lets the task know that the access code status is being verified
+    private boolean verifyStatus = false;
+
     public interface AuthTaskHandler
     {
-        void authComplete(String authorization);
+        void authComplete(String authorization, boolean authenticateAccessCode, boolean verifyStatus);
 
-        void authFailed();
+        void authFailed(boolean authenticateAccessCode, boolean verifyStatus);
     }
 
     public AuthTask(AuthTaskHandler listener)
     {
         taskHandler = listener;
+    }
+
+    public AuthTask(AuthTaskHandler listener, boolean authenticateAccessCode, boolean verifyStatus)
+    {
+        taskHandler = listener;
+        this.authenticateAccessCode = authenticateAccessCode;
+        this.verifyStatus = verifyStatus;
     }
 
     @Override
@@ -45,7 +58,7 @@ public class AuthTask extends AsyncTask<Object, Void, String>
 
         HttpResponse response;
 
-        if (params.length > 1)
+        if (verifyStatus)
         {
             Log.i(TAG, "verifying auth token");
             String authToken = params[1].toString();
@@ -96,11 +109,11 @@ public class AuthTask extends AsyncTask<Object, Void, String>
 
         if (statusCode == HttpStatus.SC_NO_CONTENT)
         {
-            taskHandler.authComplete(s);
+            taskHandler.authComplete(s, authenticateAccessCode, verifyStatus);
         }
         else
         {
-            taskHandler.authFailed();
+            taskHandler.authFailed(authenticateAccessCode, verifyStatus);
         }
 
     }
