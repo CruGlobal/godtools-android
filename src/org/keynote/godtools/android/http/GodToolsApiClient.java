@@ -11,8 +11,8 @@ import java.util.UUID;
 
 public class GodToolsApiClient {
 
-    private static final String BASE_URL = "http://GodToolsAPI-Stage-1291189452.us-east-1.elb.amazonaws.com/godtools-api/rest/";
-    // private static final String BASE_URL = "https://api.godtoolsapp.com/godtools-api/rest/";
+    // private static final String BASE_URL = "http://GodToolsAPI-Stage-1291189452.us-east-1.elb.amazonaws.com/godtools-api/rest/";
+    private static final String BASE_URL = "https://api.godtoolsapp.com/godtools-api/rest/";
     private static final String ENDPOINT_META = "meta/";
     private static final String ENDPOINT_PACKAGES = "packages/";
     private static final String ENDPOINT_TRANSLATIONS = "translations/";
