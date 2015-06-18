@@ -11,18 +11,18 @@
          -->
     <item
         android:id="@+id/CMD_SWITCH_LANGUAGE"
-        android:title="Switch Language"
+        android:title="@string/menu_switch_language"
         android:icon="@drawable/button_switch"/>
     <item
         android:id="@+id/CMD_REFRESH_PAGE"
-        android:title="Update Page (draft)" />
+        android:title="@string/menu_update_page" />
     <item
         android:id="@+id/CMD_CONTENT"
         android:title="@string/menu_item_contents"
         android:icon="@drawable/button_contents" />
     <item
         android:id="@+id/CMD_FLIP"
-        android:title="Flip"
+        android:title="@string/menu_flip"
         android:icon="@drawable/button_switch" />
     <item
         android:id="@+id/CMD_FIRST_PAGE"

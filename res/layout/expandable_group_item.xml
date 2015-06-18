@@ -32,7 +32,7 @@
      
     <TextView 
 	    android:id="@+id/tv_trans_view"
-    	android:text="TextView" 
+    	android:text="@string/filler_textview"
     	android:layout_width="0dp"
      	android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#303030"
