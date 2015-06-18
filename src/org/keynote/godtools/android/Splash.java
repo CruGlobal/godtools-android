@@ -74,7 +74,7 @@ public class Splash extends Activity
         // get the default language of the device os
         String deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
         // set to english in case nothing is found.
-        if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = "en";
+        if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = ENGLISH_DEFAULT;
 
         Log.i(TAG, deviceDefaultLanguage);
 
