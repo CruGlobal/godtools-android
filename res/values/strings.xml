@@ -110,6 +110,8 @@
     <string name="settings_translator_mode">Preview Mode (Translators)</string>
     <string name="settings_translator_message">If you are a GodTools translator wanting to see your latest translations, enable "Preview Mode"</string>
     <string name="settings_notificiation">Allow Notifications</string>
+    <string name="wrong_passcode">Please try again</string>
+    <string name="expired_passcode">Preview mode session expired</string>
 
     <!-- Main Activity-->
     <string name="main_actionbar_translator">Translator Preview Mode</string>

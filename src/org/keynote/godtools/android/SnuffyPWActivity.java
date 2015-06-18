@@ -47,7 +47,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.COUNT;
+
+import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
+import static org.keynote.godtools.android.utils.Constants.KGP;
 
 public class SnuffyPWActivity extends Activity
 {
@@ -162,11 +167,11 @@ public class SnuffyPWActivity extends Activity
         
         regid = settings.getString(PROPERTY_REG_ID, "");
         
-        if (mAppPackage.equalsIgnoreCase("kgp") || mAppPackage.equalsIgnoreCase("fourlaws"))
+        if (mAppPackage.equalsIgnoreCase(KGP) || mAppPackage.equalsIgnoreCase(FOUR_LAWS))
         {
             startTimer();
 
-            GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""),
+            GodToolsApiClient.updateNotification(settings.getString(AUTH_CODE, ""),
                     regid, NotificationInfo.AFTER_10_PRESENTATIONS, new NotificationUpdateTask.NotificationUpdateTaskHandler()
                     {
                         @Override
@@ -368,7 +373,7 @@ public class SnuffyPWActivity extends Activity
 
                 if (settings.getInt(COUNT, 0) >= 3)
                 {
-                    if ((mAppPackage.equalsIgnoreCase("kgp") && position == 7) || (mAppPackage.equalsIgnoreCase("fourlaws") && position == 6))
+                    if ((mAppPackage.equalsIgnoreCase(KGP) && position == 7) || (mAppPackage.equalsIgnoreCase(FOUR_LAWS) && position == 6))
                     {
                         Log.i(TAG, "App used 3 times and prayer page reached.");
                         GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""),
@@ -626,7 +631,7 @@ public class SnuffyPWActivity extends Activity
         // enable this feature just for one specific situation
         // matches corresponding items in doCmdFlip() below
         MenuItem flipItem = menu.findItem(R.id.CMD_FLIP);
-        if (mAppPackage.equalsIgnoreCase("kgp")
+        if (mAppPackage.equalsIgnoreCase(KGP)
                 && (mAppLanguage.equalsIgnoreCase("en_heartbeat") || mAppLanguage.equalsIgnoreCase("et_heartbeat")))
             flipItem.setVisible(true);
         else
@@ -724,7 +729,7 @@ public class SnuffyPWActivity extends Activity
         showLoading("Updating page...");
 
         GodToolsApiClient.downloadDraftPage((SnuffyApplication) getApplication(),
-                settings.getString("Authorization_Draft", ""),
+                settings.getString(AUTH_DRAFT, ""),
                 mAppLanguage,
                 mAppPackage,
                 currentPage.getPageId(),
