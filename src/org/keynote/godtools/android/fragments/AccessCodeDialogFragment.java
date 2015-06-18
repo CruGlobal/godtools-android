@@ -92,19 +92,19 @@ public class AccessCodeDialogFragment extends DialogFragment {
             // code field is empty
            if (accessCode.isEmpty())
            {
-               mListener.onAccessDialogClick(false);
+               mListener.onAccessDialogClick(false, accessCode);
                Toast.makeText(getActivity(), "Invalid Access Code", Toast.LENGTH_SHORT).show();
            }
            else
            {
                // authenticate code
-               mListener.onAccessDialogClick(true);
+               mListener.onAccessDialogClick(true, accessCode);
                BackgroundService.authenticateAccessCode(getActivity(), accessCode);
            }
         }
         else
         {
-            mListener.onAccessDialogClick(false);
+            mListener.onAccessDialogClick(false, accessCode);
         }
     }
 }
