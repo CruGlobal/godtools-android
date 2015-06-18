@@ -46,6 +46,7 @@ import static org.keynote.godtools.android.utils.Constants.PARALLEL_CODE;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.PRIMARY_CODE;
 import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PARALLEL;
@@ -170,10 +171,13 @@ public class SettingsPW extends ActionBarActivity implements
                             // this would mean that the access code has been verified, go to preview mode
 
                             if (pdLoading != null) pdLoading.dismiss();
+                            settings.edit().putBoolean(TRANSLATOR_MODE, true).apply();
 
                             startActivity(new Intent(SettingsPW.this, PreviewModeMainPW.class));
                             finish();
                             break;
+                        case DISABLE_TRANSLATOR:
+                            settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
                         case ERROR:
                             Log.i(TAG, "Error");
                             break;
