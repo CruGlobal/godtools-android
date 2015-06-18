@@ -2,6 +2,7 @@ package org.keynote.godtools.android;
 
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +11,8 @@ import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -32,6 +35,7 @@ import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.expandableList.ExpandableListAdapter;
+import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
@@ -44,10 +48,16 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
+import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.SATISFIED;
+import static org.keynote.godtools.android.utils.Constants.STATUS_CODE;
 
 public class PreviewModeMainPW extends BaseActionBarActivity implements
         DownloadTask.DownloadTaskHandler,
-        MetaTask.MetaTaskHandler, View.OnClickListener
+        MetaTask.MetaTaskHandler, View.OnClickListener,
+        AccessCodeDialogFragment.AccessCodeDialogListener
 {
     private static final String TAG = "PreviewModeMainPW";
     private static final int REQUEST_SETTINGS = 1001;
@@ -67,15 +77,17 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     private LocalBroadcastManager broadcastManager;
     private BroadcastReceiver broadcastReceiver;
 
+    private SharedPreferences settings;
+
     Context context;
 
     boolean noPackages = false;
     boolean justSwitchedToTranslatorMode;
     
-    SharedPreferences settings;
-    
     ExpandableListAdapter listAdapter;
     ExpandableListView listView;
+
+    ProgressDialog pdLoading;
     
 
     /**
@@ -172,12 +184,15 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             @Override
             public void onReceive(Context context, Intent intent)
             {
+
+                if (pdLoading != null) pdLoading.dismiss();
+
                 if (BroadcastUtil.ACTION_START.equals(intent.getAction())) Log.i(TAG, "Action started");
                 else if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
                 {
-                    Log.i(TAG, "Action Done");
-
                     Type type = (Type) intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE);
+
+                    Log.i(TAG, "Action Done, TYPE: " + type.toString());
                     
                     switch (type)
                     {
@@ -192,16 +207,21 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                             break;
                         case DRAFT_CREATION_TASK:
                             Log.i(TAG, "Create broadcast received");
-                            GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", PreviewModeMainPW.this);
+                            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
+                                    languagePrimary, "draft", PreviewModeMainPW.this);
                             break;
                         case DRAFT_PUBLISH_TASK:
                             Log.i(TAG, "Publish broadcast received");
-                            GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", PreviewModeMainPW.this);
+                            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
+                                    languagePrimary, "draft_primary", PreviewModeMainPW.this);
                             break;
                         case META_TASK:
                             break;
                         case DISABLE_TRANSLATOR:
                             finish();
+                            break;
+                        case ENABLE_TRANSLATOR:
+                            onCmd_refresh();
                             break;
                         case ERROR:
                             Log.i(TAG, "Error");
@@ -212,6 +232,13 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 if (BroadcastUtil.ACTION_FAIL.equals(intent.getAction()))
                 {
                     Log.i(TAG, "Action Failed: " + intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE));
+
+                    if (intent.getIntExtra(STATUS_CODE, 0) == 401)
+                    {
+                        Toast.makeText(PreviewModeMainPW.this, getString(R.string.expired_passcode),
+                                Toast.LENGTH_LONG).show();
+                        showAccessCodeDialog();
+                    }
                     getPackageList();
                     createTheHomeScreen();
                 }
@@ -258,8 +285,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     {
         super.onActivityResult(requestCode, resultCode, data);
 
-        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
         switch (resultCode)
         {
             /* It's possible that both primary and parallel languages that were previously downloaded were changed at the same time.
@@ -272,7 +297,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 SnuffyApplication app = (SnuffyApplication) getApplication();
                 app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
 
-                refreshPackageList(settings, false);
+                refreshPackageList(false);
                 createTheHomeScreen();
 
                 break;
@@ -318,9 +343,11 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                     app.setAppLocale(primaryCode);
                 }
 
-                GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft_primary", this);
+                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
+                        languagePrimary, "draft_primary", this);
 
-                Toast.makeText(PreviewModeMainPW.this, "Translator preview mode is enabled", Toast.LENGTH_LONG).show();
+                Toast.makeText(PreviewModeMainPW.this, "Translator preview mode is enabled",
+                        Toast.LENGTH_LONG).show();
                 switchedToTranslatorMode(true);
 
                 finish();
@@ -346,7 +373,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
      *                     has no packages available.  This is true when leaving translator mode in a language with all
      *                     drafts and no published live versions.
      */
-    private void refreshPackageList(SharedPreferences settings, boolean withFallback)
+    private void refreshPackageList(boolean withFallback)
     {
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
         getPackageList();
@@ -365,7 +392,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     protected void onPause()
     {
         super.onPause();
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor ed = settings.edit();
         ed.apply();
     }
@@ -394,10 +420,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         window.getDecorView().getWindowVisibleDisplayFrame(rect);
 
         rect.top = 0;
-        int width;
-        int height;
-        int left;
-        int top;
+        int width, height, left, top;
 
         double aspectRatioTarget = (double) PreviewModeMainPW.REFERENCE_DEVICE_WIDTH / (double) PreviewModeMainPW.REFERENCE_DEVICE_HEIGHT;
         double aspectRatio = (double) rect.width() / (double) rect.height();
@@ -457,7 +480,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             SnuffyApplication app = (SnuffyApplication) getApplication();
             app.setAppLocale(langCode);
 
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PRIMARY, langCode);
             editor.apply();
@@ -469,7 +491,8 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             if (isTranslatorModeEnabled())
             {
                 // check for draft_primary
-                GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), langCode, "draft_primary", this);
+                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
+                        langCode, "draft_primary", this);
             }
             else
             {
@@ -479,8 +502,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         }
         else if (tag.equalsIgnoreCase("parallel"))
         {
-
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PARALLEL, langCode);
             editor.apply();
@@ -492,14 +513,15 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             if (isTranslatorModeEnabled())
             {
                 // check for draft_parallel
-                GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), langCode, "draft_parallel", this);
+                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
+                        langCode, "draft_parallel", this);
             }
-
             createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase("draft"))
         {
-            Toast.makeText(PreviewModeMainPW.this, "Drafts have been updated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PreviewModeMainPW.this, "Drafts have been updated",
+                    Toast.LENGTH_SHORT).show();
             getPackageList();
             createTheHomeScreen();
             
@@ -537,9 +559,9 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         for (GTPackage gtPackage : packageByLanguage)
         {
 
-            if ("kgp".equals(gtPackage.getCode())) kgpPresent = true;
-            if ("satisfied".equals(gtPackage.getCode())) satisfiedPresent = true;
-            if ("fourlaws".equals(gtPackage.getCode())) fourlawsPresent = true;
+            if (KGP.equals(gtPackage.getCode())) kgpPresent = true;
+            if (SATISFIED.equals(gtPackage.getCode())) satisfiedPresent = true;
+            if (FOUR_LAWS.equals(gtPackage.getCode())) fourlawsPresent = true;
         }
 
         if (!kgpPresent || !satisfiedPresent || !fourlawsPresent)
@@ -588,13 +610,11 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
     private boolean isTranslatorModeEnabled()
     {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         return settings.getBoolean("TranslatorMode", false);
     }
 
     private void switchedToTranslatorMode(boolean switched)
     {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(JUST_SWITCHED, switched);
         editor.apply();
@@ -608,15 +628,25 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     }
 
     @Override
-    public void metaTaskFailure(InputStream is, String langCode, String tag)
+    public void metaTaskFailure(InputStream is, String langCode, String tag, int statusCode)
     {
+        if (401 == statusCode)
+        {
+            showAccessCodeDialog();
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.expired_passcode),
+                    Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts",
+                    Toast.LENGTH_SHORT).show();
+        }
 
         if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))
         {
             getPackageList();
         }
 
-        Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
         swipeRefreshLayout.setRefreshing(false);
         Log.i(TAG, "Done refreshing");
     }
@@ -627,16 +657,19 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
         if (tag.equalsIgnoreCase("draft"))
         {
-            Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts",
+                    Toast.LENGTH_SHORT).show();
         }
         else if (tag.equalsIgnoreCase("draft_primary"))
         {
             getPackageList();
-            Toast.makeText(PreviewModeMainPW.this, "Failed to download drafts", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PreviewModeMainPW.this, "Failed to download drafts",
+                    Toast.LENGTH_SHORT).show();
         }
         else if (tag.equalsIgnoreCase("primary") || tag.equalsIgnoreCase("parallel"))
         {
-            Toast.makeText(PreviewModeMainPW.this, "Failed to download resources", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PreviewModeMainPW.this, "Failed to download resources",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -679,9 +712,8 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         {
             super.onPostExecute(shouldDownload);
 
-            final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-            GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), settings.getString("Authorization_Draft", ""), langCode, tag, PreviewModeMainPW.this);
+            GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(),
+                    settings.getString(AUTH_DRAFT, ""), langCode, tag, PreviewModeMainPW.this);
         }
     }
 
@@ -741,14 +773,14 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     {
         if (Device.isConnected(PreviewModeMainPW.this))
         {
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-            GodToolsApiClient.getListOfDrafts(settings.getString("Authorization_Draft", ""), languagePrimary, "draft", this);
+            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
+                    languagePrimary, "draft", this);
 
         }
         else
         {
-            Toast.makeText(PreviewModeMainPW.this, "Internet connection is required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PreviewModeMainPW.this, "Internet connection is required",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -765,5 +797,39 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     private SnuffyApplication getApp()
     {
         return (SnuffyApplication) getApplication();
+    }
+
+    private void showAccessCodeDialog()
+    {
+        FragmentManager fm = getSupportFragmentManager();
+        DialogFragment frag = (DialogFragment) fm.findFragmentByTag("access_dialog");
+        if (frag == null)
+        {
+            frag = new AccessCodeDialogFragment();
+            frag.setCancelable(false);
+            frag.show(fm, "access_dialog");
+        }
+    }
+
+    @Override
+    public void onAccessDialogClick(boolean success)
+    {
+        if (!success)
+        {
+            if (pdLoading != null) pdLoading.dismiss();
+        }
+        else
+        {
+            showLoading("Authenticating access code");
+        }
+    }
+
+    private void showLoading(String msg)
+    {
+        pdLoading = new ProgressDialog(PreviewModeMainPW.this);
+        pdLoading.setCancelable(false);
+        pdLoading.setMessage(msg);
+        pdLoading.show();
+
     }
 }

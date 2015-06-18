@@ -47,9 +47,16 @@ public class GodToolsApiClient {
     }
 
     public static void authenticateAccessCode(String accessCode, AuthTask.AuthTaskHandler taskHandler){
-        AuthTask authTask = new AuthTask(taskHandler);
+        AuthTask authTask = new AuthTask(taskHandler, true, false);
         String url = BASE_URL + ENDPOINT_AUTH + accessCode;
-        authTask.execute(url);
+        authTask.execute(url, accessCode);
+    }
+
+    public static void verifyStatusOfAuthToken(String authToken, AuthTask.AuthTaskHandler taskHandler)
+    {
+        AuthTask authTask = new AuthTask(taskHandler, false, true);
+        String url = BASE_URL + ENDPOINT_AUTH;
+        authTask.execute(url, authToken);
     }
 
     public static void downloadDrafts(SnuffyApplication app, String authorization, String langCode, String tag, DownloadTask.DownloadTaskHandler taskHandler){
