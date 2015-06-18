@@ -351,7 +351,6 @@ public class PreviewModeMainPW extends ActionBarActivity implements
 
                 Toast.makeText(PreviewModeMainPW.this, "Translator preview mode is enabled",
                         Toast.LENGTH_LONG).show();
-                switchedToTranslatorMode(true);
 
                 finish();
                 startActivity(getIntent());
@@ -795,7 +794,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
     }
 
     @Override
-    public void onAccessDialogClick(boolean success)
+    public void onAccessDialogClick(boolean success, String accessCode)
     {
         if (!success)
         {
