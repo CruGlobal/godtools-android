@@ -37,13 +37,11 @@ public class Splash extends Activity
     private static final String TAG = Splash.class.getSimpleName();
 
     protected boolean _active = true;
-
+    private TextView tvTask;
+    private ProgressBar progressBar;
+    private SharedPreferences settings;
     private LocalBroadcastManager broadcastManager;
     private BroadcastReceiver broadcastReceiver;
-
-    TextView tvTask;
-    ProgressBar progressBar;
-    SharedPreferences settings;
 
     /**
      * Called when the activity is first created.
@@ -59,9 +57,8 @@ public class Splash extends Activity
             goToMainActivity();
         }
 
-
-		// Enable crash reporting
-		Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
+        // Enable crash reporting
+        Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
 
         setContentView(R.layout.splash_pw);
 
