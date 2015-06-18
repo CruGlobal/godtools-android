@@ -50,11 +50,11 @@ public class Splash extends Activity
         super.onCreate(savedInstanceState);
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
         if (!isFirstLaunch())
         {
             goToMainActivity();
         }
-
 
 		// Enable crash reporting
 		Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
@@ -68,20 +68,18 @@ public class Splash extends Activity
 
         Log.i(TAG, "First Launch");
 
-            // get the default language of the device os
-            String deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
-            // set to english in case nothing is found.
-            if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = "en";
+        // get the default language of the device os
+        String deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
+        // set to english in case nothing is found.
+        if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = "en";
 
-            Log.i(TAG, deviceDefaultLanguage);
+        Log.i(TAG, deviceDefaultLanguage);
 
-            // set primary language on first start
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, deviceDefaultLanguage);
-            editor.apply();
+        // set primary language on first start
+        settings.edit().putString(GTLanguage.KEY_PRIMARY, deviceDefaultLanguage).apply();
 
-            // set up files
-            BackgroundService.firstSetup(getApp());
+        // set up files
+        BackgroundService.firstSetup(getApp());
 
         // if connected to the internet and not auth code (why would there be? It is
         // the first run.
@@ -120,7 +118,6 @@ public class Splash extends Activity
                     {
                         case AUTH:
                             // user is authorized. This is the first run
-
                             Log.i(TAG, "Auth Task complete");
                             // check for updates.
                             checkForUpdates();
