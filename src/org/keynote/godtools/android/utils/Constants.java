@@ -16,6 +16,8 @@ public class Constants
     public static final String KEY_PRIMARY = "primary";
     public static final String KEY_PARALLEL = "parallel";
     public static final String KEY_DRAFT = "draft";
+    public static final String KEY_DRAFT_PRIMARY = "draft_primary";
+    public static final String KEY_DRAFT_PARALLEL = "draft_parallel";
 
     public static final String PRIMARY_CODE = "primaryCode";
     public static final String PARALLEL_CODE = "parallelCode";
