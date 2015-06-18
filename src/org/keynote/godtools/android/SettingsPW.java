@@ -38,6 +38,7 @@ import java.util.Locale;
 
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 public class SettingsPW extends BaseActionBarActivity implements
         View.OnClickListener,
@@ -162,10 +163,13 @@ public class SettingsPW extends BaseActionBarActivity implements
                             // this would mean that the access code has been verified, go to preview mode
 
                             if (pdLoading != null) pdLoading.dismiss();
+                            settings.edit().putBoolean(TRANSLATOR_MODE, true).apply();
 
                             startActivity(new Intent(SettingsPW.this, PreviewModeMainPW.class));
                             finish();
                             break;
+                        case DISABLE_TRANSLATOR:
+                            settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
                         case ERROR:
                             Log.i(TAG, "Error");
                             break;
