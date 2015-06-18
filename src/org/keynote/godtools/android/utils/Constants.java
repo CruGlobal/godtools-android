@@ -17,6 +17,9 @@ public class Constants
     public static final String KEY_PARALLEL = "parallel";
     public static final String KEY_DRAFT = "draft";
 
+    public static final String PRIMARY_CODE = "primaryCode";
+    public static final String PARALLEL_CODE = "parallelCode";
+
     public static final String META = "meta";
 
     public static final String LANG_CODE = "lang_code";
@@ -102,6 +105,7 @@ public class Constants
     public static final String APP_VERSION = "appVersion";
     public static final String DEVICE_ID = "device_id";
     public static final String NOTIFICATIONS_ON = "notifications_on";
+    public static final String NOTIFICATIONS = "Notifications";
 
     public static final String ACCESS_CODE = "access_code";
     public static final String TRANSLATOR_MODE = "TranslatorMode";
