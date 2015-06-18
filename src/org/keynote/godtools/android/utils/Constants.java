@@ -15,6 +15,7 @@ public class Constants
     public static final String KEY_UPDATE_PARALLEL = "update_parallel";
     public static final String KEY_PRIMARY = "primary";
     public static final String KEY_PARALLEL = "parallel";
+    public static final String KEY_DRAFT = "draft";
 
     public static final String META = "meta";
 
@@ -25,13 +26,28 @@ public class Constants
 
 
     /**
-     * App preferences name
+     * Intent Constants
+     */
+    public static final String PACKAGE_NAME = "PackageName";
+    public static final String LANGUAGE_CODE = "LanguageCode";
+    public static final String CONFIG_FILE_NAME = "ConfigFileName";
+    public static final String STATUS = "Status";
+    public static final String PAGE_LEFT = "PageLeft";
+    public static final String PAGE_TOP = "PageTop";
+    public static final String PAGE_WIDTH = "PageWidth";
+    public static final String PAGE_HEIGHT = "PageHeight";
+    public static final String ALLOW_FLIP = "AllowFlip";
+    public static final String PACKAGE_TITLE = "PackageTitle";
+
+    /**
+     * App preferences
      */
     public static final String PREFS_NAME = "GodTools";
-
     public static final String AUTH_CODE = "Authorization_Generic";
-
     public static final String FIRST_LAUNCH = "firstLaunch";
+    public static final String LANGUAGE_PARALLEL = "languageParallel";
+    public static final String CURRENT_PAGE = "currPage";
+    public static final String CURRENT_LANGUAGE_CODE = "currLanguageCode";
 
     /**
      * Standard god tools result: selected a primary language
@@ -94,4 +110,7 @@ public class Constants
 
     public static final String EMPTY_STRING = "";
     public static final String ENGLISH_DEFAULT = "en";
+
+    public static final String EN_HEARTBEAT = "en_heartbeat";
+    public static final String ET_HEARTBEAT = "et_heartbeat";
 }

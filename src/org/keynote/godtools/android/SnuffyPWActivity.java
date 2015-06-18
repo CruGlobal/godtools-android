@@ -29,8 +29,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.common.base.Strings;
 
 import org.keynote.godtools.android.business.GTPackage;
@@ -52,23 +50,41 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import static org.keynote.godtools.android.utils.Constants.ALLOW_FLIP;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
-import static org.keynote.godtools.android.utils.Constants.COUNT;
-
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.CONFIG_FILE_NAME;
+import static org.keynote.godtools.android.utils.Constants.COUNT;
+import static org.keynote.godtools.android.utils.Constants.CURRENT_LANGUAGE_CODE;
+import static org.keynote.godtools.android.utils.Constants.CURRENT_PAGE;
+import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.EN_HEARTBEAT;
+import static org.keynote.godtools.android.utils.Constants.ET_HEARTBEAT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
+import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.LANGUAGE_CODE;
+import static org.keynote.godtools.android.utils.Constants.LANGUAGE_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.PACKAGE_NAME;
+import static org.keynote.godtools.android.utils.Constants.PACKAGE_TITLE;
+import static org.keynote.godtools.android.utils.Constants.PAGE_HEIGHT;
+import static org.keynote.godtools.android.utils.Constants.PAGE_LEFT;
+import static org.keynote.godtools.android.utils.Constants.PAGE_TOP;
+import static org.keynote.godtools.android.utils.Constants.PAGE_WIDTH;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
+import static org.keynote.godtools.android.utils.Constants.STATUS;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 public class SnuffyPWActivity extends Activity
 {
-    private static final String TAG = "SnuffyActivity";
-
-    private static final String PREFS_NAME = "GodTools";
+    private static final String TAG = SnuffyPWActivity.class.getSimpleName();
 
     private String mAppPackage;
     private String mConfigFileName;
-    private String mAppLanguage = "en";
-    private String mAppLanguageDefault = "en";
+    private String mAppLanguage = ENGLISH_DEFAULT;
+    private String mAppLanguageDefault = ENGLISH_DEFAULT;
     private Typeface mAlternateTypeface;
     private Vector<SnuffyPage> mPages = new Vector<SnuffyPage>(0);
     private SnuffyPage mAboutView;
@@ -84,15 +100,14 @@ public class SnuffyPWActivity extends Activity
     private String mPackageStatus;
     private ProcessPackageAsync mProcessPackageAsync;
     private GestureDetector MyGestureDetector;
-    public static final String PROPERTY_REG_ID = "registration_id";
 
     private String mConfigPrimary, mConfigParallel;
     private GTPackage mParallelPackage;
     private boolean isUsingPrimaryLanguage, isParallelLanguageSet;
     
-    SharedPreferences settings;
-    String regid;
-    Timer timer;
+    private SharedPreferences settings;
+    private String regid;
+    private Timer timer;
 
     public void setLanguage(String languageCode)
     {
@@ -120,18 +135,16 @@ public class SnuffyPWActivity extends Activity
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
-        Log.i("Activity", "SnuffyPWActivity");
-
-        mAppPackage = getIntent().getStringExtra("PackageName");        // "kgp"
-        mAppLanguage = getIntent().getStringExtra("LanguageCode");      // "en"
-        mConfigFileName = getIntent().getStringExtra("ConfigFileName");
-        mPackageStatus = getIntent().getStringExtra("Status"); // live = draft
-        mPageLeft = getIntent().getIntExtra("PageLeft", 0);
-        mPageTop = getIntent().getIntExtra("PageTop", 0);
-        mPageWidth = getIntent().getIntExtra("PageWidth", 320);         // set defaults but they will not be used
-        mPageHeight = getIntent().getIntExtra("PageHeight", 480);       // caller will always determine these and pass them in
+        mAppPackage = getIntent().getStringExtra(PACKAGE_NAME);        // "kgp"
+        mAppLanguage = getIntent().getStringExtra(LANGUAGE_CODE);      // "en"
+        mConfigFileName = getIntent().getStringExtra(CONFIG_FILE_NAME);
+        mPackageStatus = getIntent().getStringExtra(STATUS); // live = draft
+        mPageLeft = getIntent().getIntExtra(PAGE_LEFT, 0);
+        mPageTop = getIntent().getIntExtra(PAGE_TOP, 0);
+        mPageWidth = getIntent().getIntExtra(PAGE_WIDTH, 320);         // set defaults but they will not be used
+        mPageHeight = getIntent().getIntExtra(PAGE_HEIGHT, 480);       // caller will always determine these and pass them in
         Log.i("ScreenSize", "Left = " + mPageLeft + ", Top = " + mPageTop + ", Width = " + mPageWidth + ", Height = " + mPageHeight);
-        getIntent().putExtra("AllowFlip", false);
+        getIntent().putExtra(ALLOW_FLIP, false);
 
         setContentView(R.layout.snuffy_main);
         trackScreenActivity(mAppPackage + "-0");
@@ -141,7 +154,7 @@ public class SnuffyPWActivity extends Activity
 
         // check if parallel language is set
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String langParallel = settings.getString("languageParallel", "");
+        String langParallel = settings.getString(LANGUAGE_PARALLEL, EMPTY_STRING);
 
 
         // get package if parallel language is set
@@ -160,8 +173,6 @@ public class SnuffyPWActivity extends Activity
         // always start at 0
         mPagerCurrentItem = 0;
 
-        // not appropriate from God tools: setLanguage(settings.getString("currLanguageCode", getLanguageDefault()));
-        // TODO: when we can display About or other pages, save that state too so we can restore that too.
 
         handleLanguagesWithAlternateFonts();
 
@@ -170,7 +181,7 @@ public class SnuffyPWActivity extends Activity
         // We reduce this now to 100 msec since we are not measuring the device size here
         // since that is done in GodTools which calls us and passes the dimensions in.
         
-        regid = settings.getString(PROPERTY_REG_ID, "");
+        regid = settings.getString(REGISTRATION_ID, "");
         
         if (mAppPackage.equalsIgnoreCase(KGP) || mAppPackage.equalsIgnoreCase(FOUR_LAWS))
         {
@@ -247,13 +258,11 @@ public class SnuffyPWActivity extends Activity
         @Override
         public void finishUpdate(View arg0)
         {
-            // TODO Auto-generated method stub
         }
 
         @Override
         public void restoreState(Parcelable arg0, ClassLoader arg1)
         {
-            // TODO Auto-generated method stub
         }
 
         @Override
@@ -329,7 +338,7 @@ public class SnuffyPWActivity extends Activity
             return;
         }
 
-        addClickHandlersToAllPages();    // TODO: could this just be mPager.setOnClickLIstner?
+        addClickHandlersToAllPages();
         addCallingActivityToAllPages();
         mAboutView = mPages.elementAt(0);
         mPages.remove(mAboutView);
@@ -417,11 +426,9 @@ public class SnuffyPWActivity extends Activity
     protected void onPause()
     {
         super.onPause();
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor ed = settings.edit();
-        ed.putInt("currPage", mPagerCurrentItem);
-        ed.putString("currLanguageCode", getLanguage());
-        // TODO: when we can display About or other pages, save that state too so we can restore that too.
+        ed.putInt(CURRENT_PAGE, mPagerCurrentItem);
+        ed.putString(CURRENT_LANGUAGE_CODE, getLanguage());
         ed.apply();
         
         
@@ -488,12 +495,12 @@ public class SnuffyPWActivity extends Activity
     {
         // Note: We have disabled this menu item if this package does not have both
         // of these language codes defined or curr language is not one of them.
-        getIntent().putExtra("AllowFlip", true); // allow called intent to show the flip command
+        getIntent().putExtra(ALLOW_FLIP, true); // allow called intent to show the flip command
 
-        if (mAppLanguage.equalsIgnoreCase("en_heartbeat"))
-            switchLanguages("et_heartbeat", false);
-        else if (mAppLanguage.equalsIgnoreCase("et_heartbeat"))
-            switchLanguages("en_heartbeat", false);
+        if (EN_HEARTBEAT.equalsIgnoreCase(mAppLanguage))
+            switchLanguages(ET_HEARTBEAT, false);
+        else if (ET_HEARTBEAT.equalsIgnoreCase(mAppLanguage))
+            switchLanguages(EN_HEARTBEAT, false);
         // no other flip actions defined
     }
 
@@ -505,7 +512,7 @@ public class SnuffyPWActivity extends Activity
     private void doCmdHelp()
     {
         Intent intent = new Intent(this, SnuffyHelpActivity.class);
-        intent.putExtra("PackageTitle", mPackageTitle);
+        intent.putExtra(PACKAGE_TITLE, mPackageTitle);
         startActivity(intent);
     }
 
@@ -532,8 +539,8 @@ public class SnuffyPWActivity extends Activity
     public void doCmdShowPageMenu(View v)
     {
         Intent intent = new Intent(this, SnuffyPageMenuPWActivity.class);
-        intent.putExtra("LanguageCode", mAppLanguage);
-        intent.putExtra("PackageName", mAppPackage);
+        intent.putExtra(LANGUAGE_CODE, mAppLanguage);
+        intent.putExtra(PACKAGE_NAME, mAppPackage);
         startActivityForResult(intent, 0);
     }
 
@@ -559,7 +566,7 @@ public class SnuffyPWActivity extends Activity
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor ed = settings.edit();
-        ed.putString("currLanguageCode", languageCode);
+        ed.putString(CURRENT_LANGUAGE_CODE, languageCode);
         ed.apply();
 
         mPages.clear();
@@ -636,7 +643,7 @@ public class SnuffyPWActivity extends Activity
         // matches corresponding items in doCmdFlip() below
         MenuItem flipItem = menu.findItem(R.id.CMD_FLIP);
         if (mAppPackage.equalsIgnoreCase(KGP)
-                && (mAppLanguage.equalsIgnoreCase("en_heartbeat") || mAppLanguage.equalsIgnoreCase("et_heartbeat")))
+                && (mAppLanguage.equalsIgnoreCase(EN_HEARTBEAT) || mAppLanguage.equalsIgnoreCase(ET_HEARTBEAT)))
             flipItem.setVisible(true);
         else
             flipItem.setVisible(false);
@@ -648,7 +655,7 @@ public class SnuffyPWActivity extends Activity
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        if ("draft".equalsIgnoreCase(mPackageStatus) && settings.getBoolean("TranslatorMode", false))
+        if (KEY_DRAFT.equalsIgnoreCase(mPackageStatus) && settings.getBoolean(TRANSLATOR_MODE, false))
         {
             menu.findItem(R.id.CMD_REFRESH_PAGE).setVisible(true);
         }
@@ -727,7 +734,6 @@ public class SnuffyPWActivity extends Activity
 
     private void refreshPage()
     {
-        final SharedPreferences settings = getSharedPreferences("GodTools", MODE_PRIVATE);
         SnuffyPage currentPage = mPages.get(mPagerCurrentItem);
 
         showLoading("Updating page...");
@@ -829,7 +835,6 @@ public class SnuffyPWActivity extends Activity
         @Override
         protected void onProgressUpdate(Integer... progress)
         {
-            // TODO: How can we get processPackage to call this?
             mProgressDialog.setMax(progress[1]);
             mProgressDialog.setProgress(progress[0]);
         }
@@ -838,7 +843,6 @@ public class SnuffyPWActivity extends Activity
         protected void onPostExecute(Integer result)
         {
             dismissDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);
-            // TODO: COMPLETE PROCESSING ON MAIN THREAD
             completeSetup(result != 0);
         }
     }
