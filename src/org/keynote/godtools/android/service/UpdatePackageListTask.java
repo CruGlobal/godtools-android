@@ -1,6 +1,7 @@
 package org.keynote.godtools.android.service;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -18,6 +19,7 @@ import java.util.List;
 import static org.keynote.godtools.android.utils.Constants.KEY_NEW_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 
 /**
  * Created by matthewfrederick on 5/11/15.
@@ -67,15 +69,32 @@ public class UpdatePackageListTask
         }
 
         GTLanguage gtlPrimary = adapter.getGTLanguage(languagePrimary);
+
+        // if default os language is not available go back to english.
+        if (gtlPrimary == null || gtlPrimary.isDraft())
+        {
+            Log.i(TAG, "Language not found. Going to English");
+            gtlPrimary = adapter.getGTLanguage("en");
+            languagePrimary = "en";
+            SharedPreferences settings = app.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(GTLanguage.KEY_PRIMARY, "en");
+            editor.apply();
+        }
+
+        Log.i(TAG, languagePrimary);
+
+
         GTLanguage gtlParallel = adapter.getGTLanguage(languageParallel);
 
         if (firstLaunch)
         {
             if (shouldUpdateLanguageSettings(app, languagePrimary, context))
             {
-                // download resources for the phone's language
-                String languagePhone = app.getDeviceLocale().getLanguage();
-                BackgroundService.downloadLanguagePack(context, languagePhone, KEY_NEW_LANGUAGE);
+                // This did check for the default language of the os previously; however, this
+                // was not a good spot for it to happen. Now, the os defualt is already in the
+                // `languagePrimary` variable.
+                BackgroundService.downloadLanguagePack(context, languagePrimary, KEY_NEW_LANGUAGE);
             }
             else if (!gtlPrimary.isDownloaded())
             {
