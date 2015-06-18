@@ -31,6 +31,8 @@ public class Constants
 
     public static final String AUTH_CODE = "Authorization_Generic";
 
+    public static final String FIRST_LAUNCH = "firstLaunch";
+
     /**
      * Standard god tools result: selected a primary language
      */
@@ -89,4 +91,7 @@ public class Constants
     public static final String TRANSLATOR_MODE = "TranslatorMode";
     public static final String TRANSLATOR_MODE_EXPIRED = "translator_mode_expired";
     public static final String STATUS_CODE = "status_code";
+
+    public static final String EMPTY_STRING = "";
+    public static final String ENGLISH_DEFAULT = "en";
 }
