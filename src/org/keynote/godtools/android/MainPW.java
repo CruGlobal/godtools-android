@@ -53,6 +53,13 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
+import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
+import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 import static org.keynote.godtools.android.utils.Constants.APP_VERSION;
 import static org.keynote.godtools.android.utils.Constants.PLAY_SERVICES_RESOLUTION_REQUEST;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
@@ -78,7 +85,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
     private LocalBroadcastManager broadcastManager;
     private BroadcastReceiver broadcastReceiver;
     private String languagePrimary;
-    
+
     private List<HomescreenLayout> layouts;
 
     GoogleCloudMessaging gcm;
@@ -111,18 +118,11 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         titleBar.setText(R.string.app_title);
 
         context = getApplicationContext();
-        
+
         setupLayout();
         setupBroadcastReceiver();
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        
-        if (settings.getBoolean("TranslatorMode", false))
-        {
-            Intent intent = new Intent(this, PreviewModeMainPW.class);
-            startActivity(intent);
-            finish();
-        }
 
         if (!isFirstLaunch())
         {
@@ -135,15 +135,16 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
             {
                 showLoading();
                 BackgroundService.getListOfPackages(this);
+                settings.edit().putBoolean("TranslatorMode", false).apply();
             }
         }
-        
+
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
 
         packageList = getPackageList(); // get the packages for the primary language
-        
+
         showLayoutsWithPackages();
-        
+
         Log.i(TAG, regid);
         // Check device for Play Services APK. If check succeeds, proceed with GCM registration.
         if (checkPlayServices())
@@ -161,22 +162,24 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
             }
 
             // send notification update each time app is used for notification type 1
-            GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""), 
+            GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""),
                     regid, NotificationInfo.NOT_USED_2_WEEKS, new NotificationUpdateTask.NotificationUpdateTaskHandler()
-            {
-                @Override
-                public void registrationComplete(String regId)
-                {
-                    Log.i(NotificationInfo.NOTIFICATION_TAG, "Used Notification notice sent to API");
-                }
+                    {
+                        @Override
+                        public void registrationComplete(String regId)
+                        {
+                            Log.i(NotificationInfo.NOTIFICATION_TAG, "Used Notification notice sent to API");
+                        }
 
-                @Override
-                public void registrationFailed()
-                {
-                    Log.e(NotificationInfo.NOTIFICATION_TAG, "Used notification notice failed to send to API");
-                }
-            });
-        } else {
+                        @Override
+                        public void registrationFailed()
+                        {
+                            Log.e(NotificationInfo.NOTIFICATION_TAG, "Used notification notice failed to send to API");
+                        }
+                    });
+        }
+        else
+        {
             Log.i(TAG, "No valid Google Play Services APK found.");
         }
         Log.i(TAG, regid);
@@ -263,11 +266,11 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         }
         return isFirst;
     }
-    
+
     private void setupLayout()
     {
         layouts = new ArrayList<HomescreenLayout>();
-        
+
         HomescreenLayout first = new HomescreenLayout();
 
         first.setLayout((LinearLayout) findViewById(R.id.first_layout));
@@ -297,7 +300,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         layouts.add(fourth);
 
     }
-    
+
     private void showLayoutsWithPackages()
     {
         // now there will only be four packages shown on the homescreen
@@ -307,18 +310,22 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
             {
                 GTPackage gtPackage = packageList.get(i);
                 HomescreenLayout layout = layouts.get(i);
-                
+
                 gtPackage.setLayout(layout);
 
                 layout.getLayout().setVisibility(View.VISIBLE);
                 layout.getLayout().setClickable(true);
                 layout.getLayout().setOnClickListener(this);
                 layout.getTextView().setText(gtPackage.getName());
-                
-                if ("kgp".equals(gtPackage.getCode())) layout.getImageView().setImageResource(R.drawable.gt4_homescreen_kgpicon);
-                if ("fourlaws".equals(gtPackage.getCode())) layout.getImageView().setImageResource(R.drawable.gt4_homescreen_4lawsicon);
-                if ("satisfied".equals(gtPackage.getCode())) layout.getImageView().setImageResource(R.drawable.gt4_homescreen_satisfiedicon);
-                if ("everystudent".equals(gtPackage.getCode())) layout.getImageView().setImageResource(R.drawable.gt4_homescreen_esicon);
+
+                if (KGP.equals(gtPackage.getCode()))
+                    layout.getImageView().setImageResource(R.drawable.gt4_homescreen_kgpicon);
+                if (FOUR_LAWS.equals(gtPackage.getCode()))
+                    layout.getImageView().setImageResource(R.drawable.gt4_homescreen_4lawsicon);
+                if (SATISFIED.equals(gtPackage.getCode()))
+                    layout.getImageView().setImageResource(R.drawable.gt4_homescreen_satisfiedicon);
+                if (EVERY_STUDENT.equals(gtPackage.getCode()))
+                    layout.getImageView().setImageResource(R.drawable.gt4_homescreen_esicon);
 
             }
             else
@@ -327,7 +334,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
                 layout.getLayout().setVisibility(View.INVISIBLE);
                 layout.getLayout().setClickable(false);
             }
-        }           
+        }
     }
 
 
@@ -389,7 +396,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
         packageList = getPackageList();
 
-        if(withFallback && packageList.isEmpty())
+        if (withFallback && packageList.isEmpty())
         {
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PRIMARY, "en");
@@ -422,7 +429,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
 
     private void getScreenSize()
     {
-		/*
+        /*
          * Although these measurements are not used on this screen, they are passed to and used by
 		 * the following screens. At some point maybe all layouts can be updated to relative layout.
 		 */
@@ -594,7 +601,8 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
     private String getRegistrationId(Context context)
     {
         String registrationId = settings.getString(REGISTRATION_ID, "");
-        if (registrationId == null || registrationId.isEmpty()) {
+        if (registrationId == null || registrationId.isEmpty())
+        {
             Log.i(TAG, "Registration not found.");
             return "";
         }
@@ -611,13 +619,18 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         return registrationId;
     }
 
-    private void registerInBackground() {
-        new AsyncTask<Void, Void, String>() {
+    private void registerInBackground()
+    {
+        new AsyncTask<Void, Void, String>()
+        {
             @Override
-            protected String doInBackground(Void... params) {
+            protected String doInBackground(Void... params)
+            {
                 String msg;
-                try {
-                    if (gcm == null) {
+                try
+                {
+                    if (gcm == null)
+                    {
                         gcm = GoogleCloudMessaging.getInstance(context);
                     }
                     regid = gcm.register(SENDER_ID);
@@ -627,7 +640,8 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
 
                     // Persist the regID - no need to register again.
                     storeRegistrationId(context, regid);
-                } catch (IOException ex) {
+                } catch (IOException ex)
+                {
                     msg = "Error :" + ex.getMessage();
                 }
                 return msg;
@@ -641,7 +655,8 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         }.execute(null, null, null);
     }
 
-    private void storeRegistrationId(Context context, String regId) {
+    private void storeRegistrationId(Context context, String regId)
+    {
         int appVersion = getAppVersion(context);
         Log.i(TAG, "Saving regId on app version " + appVersion);
         SharedPreferences.Editor editor = settings.edit();
@@ -650,24 +665,26 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         editor.apply();
     }
 
-    private static int getAppVersion(Context context) 
+    private static int getAppVersion(Context context)
     {
-        try {
+        try
+        {
             PackageInfo packageInfo = context.getPackageManager()
                     .getPackageInfo(context.getPackageName(), 0);
             return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException e)
+        {
             // should never happen
             throw new RuntimeException("Could not get package name: " + e);
         }
     }
 
-    private void sendRegistrationIdToBackend() 
+    private void sendRegistrationIdToBackend()
     {
         String deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         BackgroundService.registerDevice(context, regid, deviceId);
     }
-    
+
     private void startTimer()
     {
         TimerTask timerTask = new TimerTask()
@@ -676,7 +693,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
             public void run()
             {
                 Log.i(TAG, "Timer complete");
-                
+
                 if (isAppInForeground())
                 {
                     Log.i(TAG, "App is in foreground");
@@ -702,17 +719,17 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
                 }
             }
         };
-        
+
         timer = new Timer("1.5MinuteTimer");
         timer.schedule(timerTask, 90000); //1.5 minutes
         Log.i(TAG, "Timer scheduled");
     }
-    
+
     private boolean isAppInForeground()
     {
         ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> services = activityManager.getRunningTasks(1);
-        
+
         return (services.get(0).topActivity.getPackageName()
                 .equalsIgnoreCase(getApplicationContext().getPackageName()));
     }

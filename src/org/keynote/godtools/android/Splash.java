@@ -24,7 +24,6 @@ import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
-import static org.keynote.godtools.android.utils.Constants.COUNT;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 
 
@@ -48,45 +47,42 @@ public class Splash extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        if (!isFirstLaunch())
+        {
+            goToMainActivity();
+        }
+
+
+		// Enable crash reporting
+		Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
+
         setContentView(R.layout.splash_pw);
 
         tvTask = (TextView) findViewById(R.id.tvTask);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        // Enable crash reporting
-        Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
-
-        settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-
         setupBroadcastReceiver();
 
-        // if this is a first launch
-        if (isFirstLaunch())
+        Log.i(TAG, "First Launch");
+
+        // set english as primary language on first start
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(GTLanguage.KEY_PRIMARY, "en");
+        editor.apply();
+
+        // set up files
+        BackgroundService.firstSetup((SnuffyApplication) getApplication());
+
+        // if connected to the internet and not auth code (why would there be? It is
+        // the first run.
+        if (Device.isConnected(Splash.this) &&
+                "".equals(settings.getString("Authorization_Generic", "")))
         {
-            Log.i(TAG, "First Launch");
-
-            // set english as primary language on first start
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, "en");
-            editor.apply();
-
-            // set up files
-            BackgroundService.firstSetup((SnuffyApplication) getApplication());
-
-            // if connected to the internet and not auth code (why would there be? It is
-            // the first run.
-            if (Device.isConnected(Splash.this) &&
-                    "".equals(settings.getString("Authorization_Generic", "")))
-            {
-                // get an auth code
-                Log.i(TAG, "Starting backgound service");
-                BackgroundService.authenticateGeneric(this);
-            }
-        }
-        else
-        {
-            goToMainActivity();
+            // get an auth code
+            Log.i(TAG, "Starting backgound service");
+            BackgroundService.authenticateGeneric(this);
         }
     }
 
@@ -190,25 +186,17 @@ public class Splash extends Activity
 
     private void goToMainActivity()
     {
-        // count the number of times the app is used. (for notificaitons)
-        SharedPreferences.Editor editor = settings.edit();
-        int count = settings.getInt(COUNT, 0);
-        count++;
-        Log.i(TAG, "App opened " + count + " times");
-        editor.putInt(COUNT, count);
-        editor.apply();
+        // so now that we are expiring the translator code after 12 hours we will auto "log out" the
+        // user when the app is restarted.
 
         if (settings.getBoolean("TranslatorMode", false))
         {
-            Intent intent = new Intent(this, PreviewModeMainPW.class);
-            startActivity(intent);
-            finish();
+            settings.edit().putBoolean("TranslatorMode", false).apply();
         }
-        else
-        {
-            Intent intent = new Intent(this, MainPW.class);
-            startActivity(intent);
-            finish();
-        }
+
+        Intent intent = new Intent(this, MainPW.class);
+        startActivity(intent);
+        finish();
+
     }
 }

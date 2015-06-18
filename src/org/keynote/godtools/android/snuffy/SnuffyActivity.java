@@ -33,6 +33,8 @@ import org.keynote.godtools.android.utils.Typefaces;
 
 import java.util.Vector;
 
+import static org.keynote.godtools.android.utils.Constants.KGP;
+
 public class SnuffyActivity extends Activity {
 	private static final String TAG = "SnuffyActivity";
 
@@ -40,7 +42,7 @@ public class SnuffyActivity extends Activity {
 
 	// these 3 could be set at runtime by our caller
 	// but now we set them from the extra data in our intent
-	private String				mAppPackage  = "kgp";	// "kgp", "satisfied", "4Laws"
+	private String				mAppPackage  = KGP;	// "kgp", "satisfied", "4Laws"
 	private String				mAppLanguage = "en";	// "en"
 	private String				mAppLanguageDefault = "en";
 	private Typeface			mAlternateTypeface;

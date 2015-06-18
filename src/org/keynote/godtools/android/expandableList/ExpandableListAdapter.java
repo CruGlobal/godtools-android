@@ -30,6 +30,11 @@ import java.util.List;
 
 import static org.keynote.godtools.android.broadcast.BroadcastUtil.startBroadcast;
 import static org.keynote.godtools.android.broadcast.BroadcastUtil.stopBroadcast;
+import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
+import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 
 /**
  * Created by matthewfrederick on 2/16/15.
@@ -38,7 +43,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
 {
     private final SharedPreferences settings;
     private final String TAG = getClass().getSimpleName();
-
+    
     private Context context;
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listDataChild;
@@ -73,7 +78,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         }
     }
 
-    
     @Override
     public int getGroupCount()
     {
@@ -254,7 +258,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                 
                                 broadcastManager.sendBroadcast(startBroadcast());
                                 
-                                GodToolsApiClient.publishDraft(settings.getString("Authorization_Draft", ""),
+                                GodToolsApiClient.publishDraft(settings.getString(AUTH_DRAFT, ""),
                                         currentPackage.getLanguage(),
                                         currentPackage.getCode(),
                                         new DraftPublishTask.DraftTaskHandler()
@@ -267,10 +271,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             }
 
                                             @Override
-                                            public void draftTaskFailure()
+                                            public void draftTaskFailure(int statusCode)
                                             {
                                                 Toast.makeText(context, "Failed to publish draft", Toast.LENGTH_SHORT).show();
-                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR));
+                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR, statusCode));
                                             }
                                         });
                                 break;
@@ -301,7 +305,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                 broadcastManager.sendBroadcast(startBroadcast());
                                 Log.i(TAG, "Creating Draft");
                                 
-                                GodToolsApiClient.createDraft(settings.getString("Authorization_Draft", ""),
+                                GodToolsApiClient.createDraft(settings.getString(AUTH_DRAFT, ""),
                                         languagePrimary,
                                         currentPackage.getCode(),
                                         new DraftCreationTask.DraftTaskHandler()
@@ -314,10 +318,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             }
 
                                             @Override
-                                            public void draftTaskFailure()
+                                            public void draftTaskFailure(int code)
                                             {
                                                 Toast.makeText(context.getApplicationContext(), "Failed to create a new draft", Toast.LENGTH_SHORT).show();
-                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR));
+
+                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR, code));
                                             }
                                         });
                                 break;
@@ -348,5 +353,4 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
             }
         }            
     }
-
 }

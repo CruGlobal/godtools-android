@@ -13,8 +13,10 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.service.BackgroundService;
 
 public class AccessCodeDialogFragment extends DialogFragment {
 
@@ -48,7 +50,7 @@ public class AccessCodeDialogFragment extends DialogFragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    mListener.onAccessDialogClick(true, v.getText().toString());
+                    handleAction(true, v.getText().toString());
                     dismiss();
                     handled = true;
                 }
@@ -68,16 +70,41 @@ public class AccessCodeDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         // check if empty
                         String code = etAccessCode.getText().toString();
-                        mListener.onAccessDialogClick(true, code);
+                        handleAction(true, code);
                     }
                 })
                 .setNegativeButton(negative, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mListener.onAccessDialogClick(false, null);
+                        handleAction(false, null);
+                        dismiss();
                     }
                 });
 
         return builder.create();
+    }
+
+    private void handleAction(Boolean positive, String accessCode)
+    {
+        // positive button is pushed
+        if (positive)
+        {
+            // code field is empty
+           if (accessCode.isEmpty())
+           {
+               mListener.onAccessDialogClick(false);
+               Toast.makeText(getActivity(), "Invalid Access Code", Toast.LENGTH_SHORT).show();
+           }
+           else
+           {
+               // authenticate code
+               mListener.onAccessDialogClick(true);
+               BackgroundService.authenticateAccessCode(getActivity(), accessCode);
+           }
+        }
+        else
+        {
+            mListener.onAccessDialogClick(false);
+        }
     }
 }

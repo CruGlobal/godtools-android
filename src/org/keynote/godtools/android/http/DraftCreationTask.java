@@ -29,7 +29,7 @@ public class DraftCreationTask extends AsyncTask<Object, Void, Integer>
     public interface DraftTaskHandler
     {
         void draftTaskComplete();
-        void draftTaskFailure();
+        void draftTaskFailure(int code);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class DraftCreationTask extends AsyncTask<Object, Void, Integer>
         }
         else
         {
-            taskHandler.draftTaskFailure();
+            taskHandler.draftTaskFailure(responseStatusCode);
         }
     }
 }

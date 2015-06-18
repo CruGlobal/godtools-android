@@ -69,8 +69,24 @@ public class Constants
     public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
     public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
 
+    public static final String AUTH_DRAFT = "Authorization_Draft";
+
+    /**
+     * package codes
+     */
+
+    public static final String KGP = "kgp";
+    public static final String FOUR_LAWS = "fourlaws";
+    public static final String SATISFIED = "satisfied";
+    public static final String EVERY_STUDENT = "everystudent";
+
     public static final String REGISTRATION_ID = "registration_id";
     public static final String APP_VERSION = "appVersion";
     public static final String DEVICE_ID = "device_id";
     public static final String NOTIFICATIONS_ON = "notifications_on";
+
+    public static final String ACCESS_CODE = "access_code";
+    public static final String TRANSLATOR_MODE = "TranslatorMode";
+    public static final String TRANSLATOR_MODE_EXPIRED = "translator_mode_expired";
+    public static final String STATUS_CODE = "status_code";
 }

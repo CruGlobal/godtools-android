@@ -30,6 +30,7 @@ import org.keynote.godtools.android.utils.Device;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -140,6 +141,9 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
             isMainLang = false;
             removeLanguageFromList(languageList, primaryLanguage);
         }
+
+        // There are sometimes duplicates of languages.
+        languageList = removeDuplicates(languageList);
         
         LanguageAdapter adapter = new LanguageAdapter(this, languageList, mAlternateTypeface);
         Log.i(TAG, "current language: " + currentLanguage);
@@ -148,6 +152,17 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
         mList.setOnItemClickListener(this);
         
         mList.setSelectionFromTop(index, top);
+    }
+
+    private List<GTLanguage> removeDuplicates(List<GTLanguage> original)
+    {
+        List<GTLanguage> secondList = new ArrayList<GTLanguage>();
+        for (GTLanguage language : original)
+        {
+            if (!secondList.contains(language)) secondList.add(language);
+        }
+
+        return secondList;
     }
     
     private void setListLocation()

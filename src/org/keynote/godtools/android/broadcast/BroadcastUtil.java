@@ -3,6 +3,8 @@ package org.keynote.godtools.android.broadcast;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import static org.keynote.godtools.android.utils.Constants.STATUS_CODE;
+
 /**
  * Created by matthewfrederick on 2/17/15.
  */
@@ -22,8 +24,14 @@ public final class BroadcastUtil
     
     public static Intent stopBroadcast(Type type)
     {
+        return stopBroadcast(type, 0);
+    }
+
+    public static Intent stopBroadcast(Type type, int code)
+    {
         Intent intent = new Intent(ACTION_STOP);
         intent.putExtra(ACTION_TYPE, type);
+        intent.putExtra(STATUS_CODE, code);
         return intent;
     }
 
