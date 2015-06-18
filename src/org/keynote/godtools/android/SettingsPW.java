@@ -40,6 +40,7 @@ import java.util.Locale;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.LANGUAGE_TYPE;
 import static org.keynote.godtools.android.utils.Constants.NOTIFICATIONS;
 import static org.keynote.godtools.android.utils.Constants.PARALLEL_CODE;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
@@ -272,12 +273,12 @@ public class SettingsPW extends ActionBarActivity implements
         switch (v.getId())
         {
             case R.id.rlMainLanguage:
-                intent.putExtra("languageType", "Main Language");
+                intent.putExtra(LANGUAGE_TYPE, "Main Language");
                 startActivityForResult(intent, REQUEST_PRIMARY);
                 break;
 
             case R.id.rlParallelLanguage:
-                intent.putExtra("languageType", "Parallel Language");
+                intent.putExtra(LANGUAGE_TYPE, "Parallel Language");
                 startActivityForResult(intent, REQUEST_PARALLEL);
                 break;
         }

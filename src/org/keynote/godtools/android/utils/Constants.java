@@ -41,6 +41,7 @@ public class Constants
     public static final String PAGE_HEIGHT = "PageHeight";
     public static final String ALLOW_FLIP = "AllowFlip";
     public static final String PACKAGE_TITLE = "PackageTitle";
+    public static final String LANGUAGE_TYPE = "langaugeType";
 
     /**
      * App preferences
