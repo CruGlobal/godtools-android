@@ -125,7 +125,8 @@ public class SettingsPW extends ActionBarActivity implements
         setupBroadcastReceiver();
 
         // set value for parallel language view
-        if (Strings.isNullOrEmpty(parallelLanguageCode)) {
+        if (Strings.isNullOrEmpty(parallelLanguageCode))
+        {
             tvParallelLanguage.setText(getString(R.string.none));
         }
         else
