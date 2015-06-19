@@ -50,7 +50,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
-import static org.keynote.godtools.android.utils.Constants.CONFIG_FILE_NAME;
 import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
@@ -60,7 +59,6 @@ import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.KGP;
-import static org.keynote.godtools.android.utils.Constants.LANGUAGE_CODE;
 import static org.keynote.godtools.android.utils.Constants.PACKAGE_NAME;
 import static org.keynote.godtools.android.utils.Constants.PAGE_HEIGHT;
 import static org.keynote.godtools.android.utils.Constants.PAGE_LEFT;
@@ -73,7 +71,6 @@ import static org.keynote.godtools.android.utils.Constants.REQUEST_SETTINGS;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
-import static org.keynote.godtools.android.utils.Constants.STATUS;
 import static org.keynote.godtools.android.utils.Constants.STATUS_CODE;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
