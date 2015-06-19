@@ -6,17 +6,20 @@ import android.net.NetworkInfo;
 
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
-public class Device {
+public class Device
+{
 
 
-
-    public static boolean isConnected(Context context) {
+    public static boolean isConnected(Context context)
+    {
 
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo[] allNetworks = cm.getAllNetworkInfo();
 
-        for (NetworkInfo networkInfo : allNetworks) {
-            if (networkInfo.isAvailable() && networkInfo.isConnected()) {
+        for (NetworkInfo networkInfo : allNetworks)
+        {
+            if (networkInfo.isAvailable() && networkInfo.isConnected())
+            {
                 return true;
             }
 
@@ -25,7 +28,8 @@ public class Device {
         return false;
     }
 
-    public static String getDefaultLanguage(SnuffyApplication application){
+    public static String getDefaultLanguage(SnuffyApplication application)
+    {
         return application.getDeviceLocale().getLanguage();
     }
 }
