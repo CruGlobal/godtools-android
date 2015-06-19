@@ -3,25 +3,35 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.1'
+        classpath 'com.android.tools.build:gradle:1.2.3'
     }
 }
 apply plugin: 'com.android.application'
+
+version '4.0.1'
+
+def generateVersionCode(version) {
+    def code = 0;
+    version.replaceAll('[^0-9\\.]','').split('\\.').each{
+        code = (1000 * code) + Integer.valueOf(it);
+    }
+    return code;
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:19.1.+'
+    compile 'com.android.support:appcompat-v7:22.2.0'
     compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.google.android.gms:play-services:4.3.23'
-    compile 'com.android.support:support-annotations:20.0.0'
+    compile 'com.android.support:support-annotations:22.2.0'
     compile 'com.google.guava:guava:18.0'
 }
 
 android {
-    compileSdkVersion 19
+    compileSdkVersion 22
     buildToolsVersion '19.1.0'
     sourceSets {
         main {
@@ -46,9 +56,27 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
-    defaultConfig {}
-    productFlavors {
+    defaultConfig {
+        applicationId "org.keynote.godtools.android"
+        versionName project.version
+        versionCode generateVersionCode(project.version)
+
+        minSdkVersion 10
+        targetSdkVersion 22
     }
+    productFlavors {}
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+
+            buildConfigField("String", "BASE_URL", "\"http://GodToolsAPI-Stage-1291189452.us-east-1.elb.amazonaws.com/godtools-api/rest/\"")
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            buildConfigField("String", "BASE_URL", "\"https://api.godtoolsapp.com/godtools-api/rest/\"")
+        }
     }
 }
