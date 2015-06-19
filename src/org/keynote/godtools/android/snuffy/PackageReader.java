@@ -50,17 +50,14 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class PackageReader
 {
-    private static final String TAG = "PackageReader";
+    public static final int REFERENCE_DEVICE_HEIGHT = 480;    // pixels on iPhone - including status bar
 
     // Note that these coords are those used in the Package .XML files.
     // They are based on an original iPhone (480x320), with the status bar removed
     // The similar specs in Main.java and the HomeScreen layout in the GodTools app are based on
     // an iPhone4S with retina display (960x640), with the status bar removed.
-
-    //public static final int		REFERENCE_DEVICE_HEIGHT = 460;	// pixels on iPhone - not including status bar
-    public static final int REFERENCE_DEVICE_HEIGHT = 480;    // pixels on iPhone - including status bar
     public static final int REFERENCE_DEVICE_WIDTH = 320;    // pixels on iPhone - full width
-
+    private static final String TAG = PackageReader.class.getSimpleName();
     private static final float DEFAULT_TEXT_SIZE = 17.0f;
     private static final float DEFAULT_BUTTON_TEXT_SIZE = 20.0f;
     private static final float DEFAULT_QUESTION_TEXT_SIZE = 20.0f;
@@ -76,10 +73,9 @@ public class PackageReader
     private static final int MIN_MARGIN_ABOVE_FOOTER = 5;
     private static final int MAX_YOFFSET = 100;
     private static final float HR_ALPHA = 0.25f;
-
+    static Hashtable<String, Bitmap> bitmapCache = new Hashtable<String, Bitmap>();
     private WeakReference<SnuffyApplication>
             mAppRef;
-
     private Context mContext;
     private int mPageWidth;
     private int mPageHeight;
@@ -88,7 +84,6 @@ public class PackageReader
     private Vector<SnuffyPage> mPages;
     private String mPackageTitle;
     private Typeface mAlternateTypeface;
-
     private String mImageFolderName;
     private String mThumbsFolderName;
     private String mSharedFolderName;
@@ -107,11 +102,6 @@ public class PackageReader
     public String getPackageTitle()
     {
         return mPackageTitle;
-    }
-
-    public interface ProgressCallback
-    {
-        void updateProgress(int curr, int max);
     }
 
     public boolean processPackagePW(SnuffyApplication app,
@@ -255,7 +245,6 @@ public class PackageReader
             pageInputStream = new BufferedInputStream(new FileInputStream(mAppRef.get().getDocumentsDir().getPath() + "/" + pageFileName));
             currPage = processPageFilePW(pageInputStream, pageFileName);
             currPage.mDescription = description;
-            //currPage.mThumbnail   = Uri.parse("file:///android_asset/" + mThumbsFolderName + thumbFileName).toString();
             currPage.mThumbnail = thumbFileName;
             mPages.add(currPage);
         } catch (IOException e)
@@ -2560,48 +2549,6 @@ public class PackageReader
                 .get();
     }
 
-    static Hashtable<String, Bitmap> bitmapCache = new Hashtable<String, Bitmap>();
-
-//	private Bitmap getBitmap(Context context, String imageFileName) {
-//		if (mFromAssets)
-//			return getBitmapFromAsset(context, imageFileName);
-//		else
-//			return getBitmapFromFile(context, imageFileName);
-//	}
-//	
-//	private Bitmap getBitmapFromAsset(Context context, String imageFileName) {
-//		if (bitmapCache.containsKey(imageFileName)) {
-//			return bitmapCache.get(imageFileName);
-//		}
-//		String path = mImageFolderName + imageFileName;
-//		try {
-//			InputStream isImage = context.getAssets().open(path, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
-//        	//return BitmapFactory.decodeStream(isImage);			
-//        	Bitmap b = BitmapFactory.decodeStream(isImage);
-//        	mTotalBitmapSpace += b.getRowBytes() * b.getHeight();
-//        	Log.d("BITMAPS", imageFileName + ": " + b.getRowBytes() * b.getHeight());
-//        	bitmapCache.put(imageFileName, b);
-//        	return b;
-//			
-//		} catch (IOException e) {
-//			// try the next path instead
-//		}		
-//		path = mSharedFolderName + imageFileName;
-//		try {
-//			InputStream isImage = context.getAssets().open(path, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
-//        	//return BitmapFactory.decodeStream(isImage);			
-//        	Bitmap b = BitmapFactory.decodeStream(isImage);
-//        	mTotalBitmapSpace += b.getRowBytes() * b.getHeight();
-//        	Log.d("BITMAPS", imageFileName + ": " + b.getRowBytes() * b.getHeight());
-//        	bitmapCache.put(imageFileName, b);
-//        	return b;
-//			
-//		} catch (IOException e) {
-//			Log.e(TAG, "Cannot open or read bitmap file: " + imageFileName);
-//			return null;
-//		}		
-//	}
-
     private Bitmap getBitmapFromAssetOrFile(Context context, String imageFileName)
     {
         // 1. first try the cache
@@ -2697,6 +2644,46 @@ public class PackageReader
             }
         }
     }
+
+//	private Bitmap getBitmap(Context context, String imageFileName) {
+//		if (mFromAssets)
+//			return getBitmapFromAsset(context, imageFileName);
+//		else
+//			return getBitmapFromFile(context, imageFileName);
+//	}
+//	
+//	private Bitmap getBitmapFromAsset(Context context, String imageFileName) {
+//		if (bitmapCache.containsKey(imageFileName)) {
+//			return bitmapCache.get(imageFileName);
+//		}
+//		String path = mImageFolderName + imageFileName;
+//		try {
+//			InputStream isImage = context.getAssets().open(path, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
+//        	//return BitmapFactory.decodeStream(isImage);			
+//        	Bitmap b = BitmapFactory.decodeStream(isImage);
+//        	mTotalBitmapSpace += b.getRowBytes() * b.getHeight();
+//        	Log.d("BITMAPS", imageFileName + ": " + b.getRowBytes() * b.getHeight());
+//        	bitmapCache.put(imageFileName, b);
+//        	return b;
+//			
+//		} catch (IOException e) {
+//			// try the next path instead
+//		}		
+//		path = mSharedFolderName + imageFileName;
+//		try {
+//			InputStream isImage = context.getAssets().open(path, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
+//        	//return BitmapFactory.decodeStream(isImage);			
+//        	Bitmap b = BitmapFactory.decodeStream(isImage);
+//        	mTotalBitmapSpace += b.getRowBytes() * b.getHeight();
+//        	Log.d("BITMAPS", imageFileName + ": " + b.getRowBytes() * b.getHeight());
+//        	bitmapCache.put(imageFileName, b);
+//        	return b;
+//			
+//		} catch (IOException e) {
+//			Log.e(TAG, "Cannot open or read bitmap file: " + imageFileName);
+//			return null;
+//		}		
+//	}
 
     private Bitmap getBitmapFromStream(String imageFileName, InputStream isImage)
     {
@@ -2933,39 +2920,6 @@ public class PackageReader
         titleClippingContainer.bringToFront();
     }
 
-    private class SimpleAnimationListener implements Animation.AnimationListener
-    {
-
-        private Runnable mToRunOnEnd;
-        private long mDelay;
-
-        public SimpleAnimationListener(Runnable toRunOnEnd)
-        {
-            mToRunOnEnd = toRunOnEnd;
-            mDelay = 0;
-        }
-
-        @Override
-        public void onAnimationStart(Animation animation)
-        {
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation)
-        {
-        }
-
-        @Override
-        public void onAnimationEnd(Animation animation)
-        {
-            if (mDelay == 0)
-                new Handler().post(mToRunOnEnd);
-            else
-                new Handler().postDelayed(mToRunOnEnd, mDelay);
-        }
-
-    }
-
     private void setupUrlButtonHandler(SnuffyPage currPage, View button, String mode, String content)
     {
         final boolean bUrlMode = mode.equalsIgnoreCase("url");
@@ -3075,5 +3029,43 @@ public class PackageReader
             });
 
         }
+    }
+
+    public interface ProgressCallback
+    {
+        void updateProgress(int curr, int max);
+    }
+
+    private class SimpleAnimationListener implements Animation.AnimationListener
+    {
+
+        private Runnable mToRunOnEnd;
+        private long mDelay;
+
+        public SimpleAnimationListener(Runnable toRunOnEnd)
+        {
+            mToRunOnEnd = toRunOnEnd;
+            mDelay = 0;
+        }
+
+        @Override
+        public void onAnimationStart(Animation animation)
+        {
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation)
+        {
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation)
+        {
+            if (mDelay == 0)
+                new Handler().post(mToRunOnEnd);
+            else
+                new Handler().postDelayed(mToRunOnEnd, mDelay);
+        }
+
     }
 }
