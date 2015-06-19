@@ -157,14 +157,20 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                             startActivity(intent);
                             return true;
                         }
-
-                        Intent intent = new Intent(context, SnuffyPWActivity.class);
-                        intent.putExtra("PackageName", gtPackage.getCode());
-                        intent.putExtra("LanguageCode", gtPackage.getLanguage());
-                        intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
-                        intent.putExtra("Status", gtPackage.getStatus());
-                        addPageFrameToIntent(intent);
-                        startActivity(intent);
+                        else if (gtPackage.isAvailable())
+                        {
+                            Intent intent = new Intent(context, SnuffyPWActivity.class);
+                            intent.putExtra("PackageName", gtPackage.getCode());
+                            intent.putExtra("LanguageCode", gtPackage.getLanguage());
+                            intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
+                            intent.putExtra("Status", gtPackage.getStatus());
+                            addPageFrameToIntent(intent);
+                            startActivity(intent);
+                        }
+                        else
+                        {
+                            Toast.makeText(context, "Package not yet created", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
 
@@ -572,6 +578,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 GTPackage kgpPack = new GTPackage();
                 kgpPack.setCode("draftkgp");
                 kgpPack.setName("Knowing God Personally");
+                kgpPack.setAvailable(false);
                 packageByLanguage.add(kgpPack);
             }
 
@@ -580,6 +587,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 GTPackage satPack = new GTPackage();
                 satPack.setCode("draftsatisfied");
                 satPack.setName("Satisfied?");
+                satPack.setAvailable(false);
                 packageByLanguage.add(satPack);
             }
 
@@ -588,6 +596,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 GTPackage fourLawPack = new GTPackage();
                 fourLawPack.setCode("draftfourlaws");
                 fourLawPack.setName("The Four Spiritual Laws");
+                fourLawPack.setAvailable(false);
                 packageByLanguage.add(fourLawPack);
             }
         }
