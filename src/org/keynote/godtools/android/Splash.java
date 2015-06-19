@@ -198,12 +198,10 @@ public class Splash extends Activity
         {
             settings.edit().putBoolean("TranslatorMode", false).apply();
         }
-        else
-        {
-            Intent intent = new Intent(this, MainPW.class);
-            startActivity(intent);
-            finish();
-        }
+
+        Intent intent = new Intent(this, MainPW.class);
+        startActivity(intent);
+        finish();
     }
 
     private SnuffyApplication getApp()
