@@ -128,8 +128,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         justSwitchedToTranslatorMode = settings.getBoolean(JUST_SWITCHED, false);
-
-        getPackageList(); // get the packages for the primary language
     }
     
     private void setupExpandableList()
@@ -400,6 +398,8 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     protected void onResume()
     {
         super.onResume();
+        swipeRefreshLayout.setRefreshing(true);
+        onCmd_refresh();
         doSetup();
     }
 
@@ -779,7 +779,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         }
         else
         {
-            Toast.makeText(PreviewModeMainPW.this, "Internet connection is required",
+            Toast.makeText(PreviewModeMainPW.this, "Internet connection is required to refresh",
                     Toast.LENGTH_SHORT).show();
         }
     }
