@@ -15,7 +15,7 @@ import java.util.Hashtable;
  */
 public class Typefaces
 {
-	private static final String TAG = "Typefaces";
+	private static final String TAG = Typefaces.class.getSimpleName();
 
 	private static final Hashtable<String, Typeface> cache = new Hashtable<String, Typeface>();
 
