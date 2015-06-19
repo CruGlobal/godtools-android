@@ -89,7 +89,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
     private String languagePrimary;
     private List<GTPackage> packageList;
     private SwipeRefreshLayout swipeRefreshLayout;
-    
+
     private LocalBroadcastManager broadcastManager;
     private BroadcastReceiver broadcastReceiver;
 
@@ -109,7 +109,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.preview_mode_main_pw);
-        
+
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
@@ -140,7 +140,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
         swipeRefreshLayout.setRefreshing(true);
         onCmd_refresh();
     }
-    
+
     private void setupExpandableList()
     {
         ExpandableListView listView = (ExpandableListView) findViewById(R.id.expandable_list);
@@ -189,11 +189,11 @@ public class PreviewModeMainPW extends ActionBarActivity implements
             }
         });
     }
-    
+
     private void setupBroadcastReceiver()
     {
         broadcastManager = LocalBroadcastManager.getInstance(context);
-        
+
         broadcastReceiver = new BroadcastReceiver()
         {
             @Override
@@ -202,13 +202,14 @@ public class PreviewModeMainPW extends ActionBarActivity implements
 
                 if (pdLoading != null) pdLoading.dismiss();
 
-                if (BroadcastUtil.ACTION_START.equals(intent.getAction())) Log.i(TAG, "Action started");
+                if (BroadcastUtil.ACTION_START.equals(intent.getAction()))
+                    Log.i(TAG, "Action started");
                 else if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
                 {
                     Type type = (Type) intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE);
 
                     Log.i(TAG, "Action Done, TYPE: " + type.toString());
-                    
+
                     switch (type)
                     {
                         case AUTH:
@@ -259,16 +260,16 @@ public class PreviewModeMainPW extends ActionBarActivity implements
                 }
             }
         };
-        
+
         broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.startFilter());
         broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.stopFilter());
         broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.failedFilter());
     }
-    
+
     private void removeBroadcastReceiver()
     {
         broadcastManager.unregisterReceiver(broadcastReceiver);
-        broadcastReceiver = null;        
+        broadcastReceiver = null;
     }
 
     @Override
@@ -333,7 +334,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, EMPTY_STRING);
         getPackageList();
 
-        if(withFallback && packageList.isEmpty())
+        if (withFallback && packageList.isEmpty())
         {
             settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
             languagePrimary = ENGLISH_DEFAULT;
@@ -363,7 +364,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
 
     private void getScreenSize()
     {
-		/*
+        /*
          * Although these measurements are not used on this screen, they are passed to and used by
 		 * the following screens. At some point maybe all layouts can be updated to relative layout.
 		 */
@@ -459,7 +460,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
                     Toast.LENGTH_SHORT).show();
             getPackageList();
             createTheHomeScreen();
-            
+
             swipeRefreshLayout.setRefreshing(false);
             Log.i(TAG, "Done refreshing");
         }
@@ -481,10 +482,10 @@ public class PreviewModeMainPW extends ActionBarActivity implements
         boolean kgpPresent = false;
         boolean satisfiedPresent = false;
         boolean fourlawsPresent = false;
-        
+
         // only return draft packages with translator mode
         List<GTPackage> packageByLanguage = GTPackage.getDraftPackages(PreviewModeMainPW.this, languagePrimary);
-        if("en".equals(languagePrimary))
+        if ("en".equals(languagePrimary))
         {
             removeEveryStudent(packageByLanguage);
         }
@@ -501,7 +502,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
 
         if (!kgpPresent || !satisfiedPresent || !fourlawsPresent)
         {
-            
+
             if (!kgpPresent)
             {
                 GTPackage kgpPack = new GTPackage();
@@ -531,18 +532,18 @@ public class PreviewModeMainPW extends ActionBarActivity implements
         }
 
         Log.i(TAG, "Package Size v2: " + packageByLanguage.size());
-        
+
         packageList = packageByLanguage;
-        
+
         setupExpandableList();
     }
 
     private void removeEveryStudent(List<GTPackage> packages)
     {
         Iterator<GTPackage> i = packages.iterator();
-        for(; i.hasNext(); )
+        for (; i.hasNext(); )
         {
-            if(i.next().getCode().equals(GTPackage.EVERYSTUDENT_PACKAGE_CODE)) i.remove();
+            if (i.next().getCode().equals(GTPackage.EVERYSTUDENT_PACKAGE_CODE)) i.remove();
         }
     }
 
@@ -608,42 +609,6 @@ public class PreviewModeMainPW extends ActionBarActivity implements
     public void onClick(View view)
     {
         Log.i(TAG, "View clicked");
-    }
-
-    private class UpdateDraftListTask extends AsyncTask<Object, Void, Boolean>
-    {
-        String tag, langCode;
-
-        @Override
-        protected void onPreExecute()
-        {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Boolean doInBackground(Object... params)
-        {
-
-            InputStream is = (InputStream) params[0];
-            langCode = params[1].toString();
-            tag = params[2].toString();
-
-            List<GTLanguage> languageList = GTPackageReader.processMetaResponse(is);
-
-            GTLanguage language = languageList.get(0);
-            List<GTPackage> packagesDraft = language.getPackages();
-
-            return packagesDraft.size() != 0;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean shouldDownload)
-        {
-            super.onPostExecute(shouldDownload);
-
-            GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(),
-                    settings.getString(AUTH_DRAFT, ""), langCode, tag, PreviewModeMainPW.this);
-        }
     }
 
     @Override
@@ -760,5 +725,41 @@ public class PreviewModeMainPW extends ActionBarActivity implements
         pdLoading.setMessage(msg);
         pdLoading.show();
 
+    }
+
+    private class UpdateDraftListTask extends AsyncTask<Object, Void, Boolean>
+    {
+        String tag, langCode;
+
+        @Override
+        protected void onPreExecute()
+        {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Boolean doInBackground(Object... params)
+        {
+
+            InputStream is = (InputStream) params[0];
+            langCode = params[1].toString();
+            tag = params[2].toString();
+
+            List<GTLanguage> languageList = GTPackageReader.processMetaResponse(is);
+
+            GTLanguage language = languageList.get(0);
+            List<GTPackage> packagesDraft = language.getPackages();
+
+            return packagesDraft.size() != 0;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean shouldDownload)
+        {
+            super.onPostExecute(shouldDownload);
+
+            GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(),
+                    settings.getString(AUTH_DRAFT, ""), langCode, tag, PreviewModeMainPW.this);
+        }
     }
 }
