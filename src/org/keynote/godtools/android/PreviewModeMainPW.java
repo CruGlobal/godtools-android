@@ -172,7 +172,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                         }
                         else
                         {
-                            Toast.makeText(context, "Package not yet created", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, getString(R.string.package_not_created), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -791,7 +791,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         }
         else
         {
-            Toast.makeText(PreviewModeMainPW.this, "Internet connection is required to refresh",
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.refresh_no_net),
                     Toast.LENGTH_SHORT).show();
         }
     }
