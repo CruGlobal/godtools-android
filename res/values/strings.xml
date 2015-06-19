@@ -121,6 +121,7 @@
     <string name="share">Share</string>
     <string name="add">Add</string>
     <string name="refresh">Refresh</string>
+    <string name="share_prompt">Select how you would like to share</string>
 
     <!-- Language Dialog -->
     <string name="dialog_language_title">Language Settings</string>

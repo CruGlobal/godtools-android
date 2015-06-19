@@ -844,7 +844,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
         share.putExtra(Intent.EXTRA_TEXT, msgBody);
-        startActivity(Intent.createChooser(share, "Select how you would like to share"));
+        startActivity(Intent.createChooser(share, getString(R.string.share_prompt)));
     }
 
     private SnuffyApplication getApp()
