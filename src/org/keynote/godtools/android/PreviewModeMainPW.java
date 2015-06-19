@@ -128,6 +128,9 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         justSwitchedToTranslatorMode = settings.getBoolean(JUST_SWITCHED, false);
+
+        swipeRefreshLayout.setRefreshing(true);
+        onCmd_refresh();
     }
     
     private void setupExpandableList()
@@ -298,8 +301,10 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             case RESULT_CHANGED_PRIMARY:
             case RESULT_CHANGED_PARALLEL:
             {
-                SnuffyApplication app = (SnuffyApplication) getApplication();
-                app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
+                getApp().setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
+
+                swipeRefreshLayout.setRefreshing(true);
+                onCmd_refresh();
 
                 refreshPackageList(false);
                 createTheHomeScreen();
@@ -404,8 +409,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     protected void onResume()
     {
         super.onResume();
-        swipeRefreshLayout.setRefreshing(true);
-        onCmd_refresh();
         doSetup();
     }
 
