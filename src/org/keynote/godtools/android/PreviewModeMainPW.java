@@ -140,7 +140,8 @@ public class PreviewModeMainPW extends ActionBarActivity implements
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
 
-        getPackageList(); // get the packages for the primary language
+        swipeRefreshLayout.setRefreshing(true);
+        onCmd_refresh();
     }
     
     private void setupExpandableList()
@@ -170,14 +171,20 @@ public class PreviewModeMainPW extends ActionBarActivity implements
                             startActivity(intent);
                             return true;
                         }
-
-                        Intent intent = new Intent(context, SnuffyPWActivity.class);
-                        intent.putExtra(PACKAGE_NAME, gtPackage.getCode());
-                        intent.putExtra(LANGUAGE_CODE, gtPackage.getLanguage());
-                        intent.putExtra(CONFIG_FILE_NAME, gtPackage.getConfigFileName());
-                        intent.putExtra(STATUS, gtPackage.getStatus());
-                        addPageFrameToIntent(intent);
-                        startActivity(intent);
+                        else if (gtPackage.isAvailable())
+                        {
+                            Intent intent = new Intent(context, SnuffyPWActivity.class);
+                            intent.putExtra("PackageName", gtPackage.getCode());
+                            intent.putExtra("LanguageCode", gtPackage.getLanguage());
+                            intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
+                            intent.putExtra("Status", gtPackage.getStatus());
+                            addPageFrameToIntent(intent);
+                            startActivity(intent);
+                        }
+                        else
+                        {
+                            Toast.makeText(context, getString(R.string.package_not_created), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
 
@@ -307,7 +314,11 @@ public class PreviewModeMainPW extends ActionBarActivity implements
             case RESULT_CHANGED_PRIMARY:
             case RESULT_CHANGED_PARALLEL:
             {
-                getApp().setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, EMPTY_STRING));
+                getApp().setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
+
+                swipeRefreshLayout.setRefreshing(true);
+                onCmd_refresh();
+
                 refreshPackageList(false);
                 createTheHomeScreen();
                 break;
@@ -499,6 +510,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
                 GTPackage kgpPack = new GTPackage();
                 kgpPack.setCode("draftkgp");
                 kgpPack.setName("Knowing God Personally");
+                kgpPack.setAvailable(false);
                 packageByLanguage.add(kgpPack);
             }
 
@@ -507,6 +519,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
                 GTPackage satPack = new GTPackage();
                 satPack.setCode("draftsatisfied");
                 satPack.setName("Satisfied?");
+                satPack.setAvailable(false);
                 packageByLanguage.add(satPack);
             }
 
@@ -515,6 +528,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
                 GTPackage fourLawPack = new GTPackage();
                 fourLawPack.setCode("draftfourlaws");
                 fourLawPack.setName("The Four Spiritual Laws");
+                fourLawPack.setAvailable(false);
                 packageByLanguage.add(fourLawPack);
             }
         }
@@ -697,7 +711,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
         }
         else
         {
-            Toast.makeText(PreviewModeMainPW.this, "Internet connection is required",
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.refresh_no_net),
                     Toast.LENGTH_SHORT).show();
         }
     }

@@ -21,6 +21,16 @@ public class GTPackage {
     private String icon;
     private HomescreenLayout layout;
 
+    // in preview mode, all packages are shown; however, a package may not actually be available
+    // to view.
+    private boolean available;
+
+    // set available to true as default
+    public GTPackage()
+    {
+        this.setAvailable(true);
+    }
+
     public long getId() {
         return id;
     }
@@ -93,6 +103,16 @@ public class GTPackage {
     public void setLayout(HomescreenLayout layout)
     {
         this.layout = layout;
+    }
+
+    public boolean isAvailable()
+    {
+        return available;
+    }
+
+    public void setAvailable(boolean available)
+    {
+        this.available = available;
     }
 
     public static GTPackage getPackage(Context context, String code, String language, String status){
