@@ -8,16 +8,6 @@ buildscript {
 }
 apply plugin: 'com.android.application'
 
-version '4.0.1'
-
-def generateVersionCode(version) {
-    def code = 0;
-    version.replaceAll('[^0-9\\.]','').split('\\.').each{
-        code = (1000 * code) + Integer.valueOf(it);
-    }
-    return code;
-}
-
 repositories {
     mavenCentral()
 }
@@ -58,8 +48,8 @@ android {
     }
     defaultConfig {
         applicationId "org.keynote.godtools.android"
-        versionName project.version
-        versionCode generateVersionCode(project.version)
+        versionName '4.0.1'
+        versionCode 12
 
         minSdkVersion 10
         targetSdkVersion 22
