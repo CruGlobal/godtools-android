@@ -129,7 +129,8 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
         justSwitchedToTranslatorMode = settings.getBoolean(JUST_SWITCHED, false);
 
-        getPackageList(); // get the packages for the primary language
+        swipeRefreshLayout.setRefreshing(true);
+        onCmd_refresh();
     }
     
     private void setupExpandableList()
@@ -159,14 +160,20 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                             startActivity(intent);
                             return true;
                         }
-
-                        Intent intent = new Intent(context, SnuffyPWActivity.class);
-                        intent.putExtra("PackageName", gtPackage.getCode());
-                        intent.putExtra("LanguageCode", gtPackage.getLanguage());
-                        intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
-                        intent.putExtra("Status", gtPackage.getStatus());
-                        addPageFrameToIntent(intent);
-                        startActivity(intent);
+                        else if (gtPackage.isAvailable())
+                        {
+                            Intent intent = new Intent(context, SnuffyPWActivity.class);
+                            intent.putExtra("PackageName", gtPackage.getCode());
+                            intent.putExtra("LanguageCode", gtPackage.getLanguage());
+                            intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
+                            intent.putExtra("Status", gtPackage.getStatus());
+                            addPageFrameToIntent(intent);
+                            startActivity(intent);
+                        }
+                        else
+                        {
+                            Toast.makeText(context, getString(R.string.package_not_created), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
 
@@ -294,8 +301,10 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             case RESULT_CHANGED_PRIMARY:
             case RESULT_CHANGED_PARALLEL:
             {
-                SnuffyApplication app = (SnuffyApplication) getApplication();
-                app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
+                getApp().setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
+
+                swipeRefreshLayout.setRefreshing(true);
+                onCmd_refresh();
 
                 refreshPackageList(false);
                 createTheHomeScreen();
@@ -572,6 +581,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 GTPackage kgpPack = new GTPackage();
                 kgpPack.setCode("draftkgp");
                 kgpPack.setName("Knowing God Personally");
+                kgpPack.setAvailable(false);
                 packageByLanguage.add(kgpPack);
             }
 
@@ -580,6 +590,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 GTPackage satPack = new GTPackage();
                 satPack.setCode("draftsatisfied");
                 satPack.setName("Satisfied?");
+                satPack.setAvailable(false);
                 packageByLanguage.add(satPack);
             }
 
@@ -588,6 +599,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 GTPackage fourLawPack = new GTPackage();
                 fourLawPack.setCode("draftfourlaws");
                 fourLawPack.setName("The Four Spiritual Laws");
+                fourLawPack.setAvailable(false);
                 packageByLanguage.add(fourLawPack);
             }
         }
@@ -779,7 +791,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         }
         else
         {
-            Toast.makeText(PreviewModeMainPW.this, "Internet connection is required",
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.refresh_no_net),
                     Toast.LENGTH_SHORT).show();
         }
     }
