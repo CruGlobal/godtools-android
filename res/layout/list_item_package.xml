@@ -35,7 +35,7 @@
         android:gravity="center"
         android:textColor="#000"
         android:textSize="19sp"
-        android:text="Knowing God Personally"
+        android:text="@string/menu_item_kgp"
         android:layout_centerHorizontal="true"
         />
 

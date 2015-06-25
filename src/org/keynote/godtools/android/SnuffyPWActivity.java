@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -27,6 +28,8 @@ import android.widget.AbsoluteLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.common.base.Strings;
 
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
@@ -47,23 +50,41 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import static org.keynote.godtools.android.utils.Constants.ALLOW_FLIP;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
-import static org.keynote.godtools.android.utils.Constants.COUNT;
-
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.CONFIG_FILE_NAME;
+import static org.keynote.godtools.android.utils.Constants.COUNT;
+import static org.keynote.godtools.android.utils.Constants.CURRENT_LANGUAGE_CODE;
+import static org.keynote.godtools.android.utils.Constants.CURRENT_PAGE;
+import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.EN_HEARTBEAT;
+import static org.keynote.godtools.android.utils.Constants.ET_HEARTBEAT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
+import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.LANGUAGE_CODE;
+import static org.keynote.godtools.android.utils.Constants.LANGUAGE_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.PACKAGE_NAME;
+import static org.keynote.godtools.android.utils.Constants.PACKAGE_TITLE;
+import static org.keynote.godtools.android.utils.Constants.PAGE_HEIGHT;
+import static org.keynote.godtools.android.utils.Constants.PAGE_LEFT;
+import static org.keynote.godtools.android.utils.Constants.PAGE_TOP;
+import static org.keynote.godtools.android.utils.Constants.PAGE_WIDTH;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
+import static org.keynote.godtools.android.utils.Constants.STATUS;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 public class SnuffyPWActivity extends Activity
 {
-    private static final String TAG = "SnuffyActivity";
-
-    private static final String PREFS_NAME = "GodTools";
-
+    private static final String TAG = SnuffyPWActivity.class.getSimpleName();
+    private static final int DIALOG_PROCESS_PACKAGE_PROGRESS = 1;
     private String mAppPackage;
     private String mConfigFileName;
-    private String mAppLanguage = "en";
-    private String mAppLanguageDefault = "en";
+    private String mAppLanguage = ENGLISH_DEFAULT;
+    private String mAppLanguageDefault = ENGLISH_DEFAULT;
     private Typeface mAlternateTypeface;
     private Vector<SnuffyPage> mPages = new Vector<SnuffyPage>(0);
     private SnuffyPage mAboutView;
@@ -79,34 +100,32 @@ public class SnuffyPWActivity extends Activity
     private String mPackageStatus;
     private ProcessPackageAsync mProcessPackageAsync;
     private GestureDetector MyGestureDetector;
-    public static final String PROPERTY_REG_ID = "registration_id";
-
     private String mConfigPrimary, mConfigParallel;
     private GTPackage mParallelPackage;
     private boolean isUsingPrimaryLanguage, isParallelLanguageSet;
-    
-    SharedPreferences settings;
-    String regid;
-    Timer timer;
-
-    public void setLanguage(String languageCode)
-    {
-        mAppLanguage = languageCode;
-    }
+    private SharedPreferences settings;
+    private String regid;
+    private Timer timer;
+    private ProgressDialog mProgressDialog;
 
     public String getLanguage()
     {
         return mAppLanguage;
     }
 
-    public void setLanguageDefault(String languageCode)
+    public void setLanguage(String languageCode)
     {
-        mAppLanguageDefault = languageCode;
+        mAppLanguage = languageCode;
     }
 
     public String getLanguageDefault()
     {
         return mAppLanguageDefault;
+    }
+
+    public void setLanguageDefault(String languageCode)
+    {
+        mAppLanguageDefault = languageCode;
     }
 
     @Override
@@ -115,18 +134,16 @@ public class SnuffyPWActivity extends Activity
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
-        Log.i("Activity", "SnuffyPWActivity");
-
-        mAppPackage = getIntent().getStringExtra("PackageName");        // "kgp"
-        mAppLanguage = getIntent().getStringExtra("LanguageCode");      // "en"
-        mConfigFileName = getIntent().getStringExtra("ConfigFileName");
-        mPackageStatus = getIntent().getStringExtra("Status"); // live = draft
-        mPageLeft = getIntent().getIntExtra("PageLeft", 0);
-        mPageTop = getIntent().getIntExtra("PageTop", 0);
-        mPageWidth = getIntent().getIntExtra("PageWidth", 320);         // set defaults but they will not be used
-        mPageHeight = getIntent().getIntExtra("PageHeight", 480);       // caller will always determine these and pass them in
+        mAppPackage = getIntent().getStringExtra(PACKAGE_NAME);        // "kgp"
+        mAppLanguage = getIntent().getStringExtra(LANGUAGE_CODE);      // "en"
+        mConfigFileName = getIntent().getStringExtra(CONFIG_FILE_NAME);
+        mPackageStatus = getIntent().getStringExtra(STATUS); // live = draft
+        mPageLeft = getIntent().getIntExtra(PAGE_LEFT, 0);
+        mPageTop = getIntent().getIntExtra(PAGE_TOP, 0);
+        mPageWidth = getIntent().getIntExtra(PAGE_WIDTH, 320);         // set defaults but they will not be used
+        mPageHeight = getIntent().getIntExtra(PAGE_HEIGHT, 480);       // caller will always determine these and pass them in
         Log.i("ScreenSize", "Left = " + mPageLeft + ", Top = " + mPageTop + ", Width = " + mPageWidth + ", Height = " + mPageHeight);
-        getIntent().putExtra("AllowFlip", false);
+        getIntent().putExtra(ALLOW_FLIP, false);
 
         setContentView(R.layout.snuffy_main);
         trackScreenActivity(mAppPackage + "-0");
@@ -136,11 +153,11 @@ public class SnuffyPWActivity extends Activity
 
         // check if parallel language is set
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String langParallel = settings.getString("languageParallel", "");
+        String langParallel = settings.getString(LANGUAGE_PARALLEL, EMPTY_STRING);
 
 
         // get package if parallel language is set
-        if (!langParallel.isEmpty())
+        if (!Strings.isNullOrEmpty(langParallel))
         {
             isParallelLanguageSet = true;
             mParallelPackage = GTPackage.getPackage(this, mAppPackage, langParallel, "live");
@@ -155,8 +172,6 @@ public class SnuffyPWActivity extends Activity
         // always start at 0
         mPagerCurrentItem = 0;
 
-        // not appropriate from God tools: setLanguage(settings.getString("currLanguageCode", getLanguageDefault()));
-        // TODO: when we can display About or other pages, save that state too so we can restore that too.
 
         handleLanguagesWithAlternateFonts();
 
@@ -164,9 +179,9 @@ public class SnuffyPWActivity extends Activity
         // - is there something we can test for that is better than a fixed timeout?
         // We reduce this now to 100 msec since we are not measuring the device size here
         // since that is done in GodTools which calls us and passes the dimensions in.
-        
-        regid = settings.getString(PROPERTY_REG_ID, "");
-        
+
+        regid = settings.getString(REGISTRATION_ID, "");
+
         if (mAppPackage.equalsIgnoreCase(KGP) || mAppPackage.equalsIgnoreCase(FOUR_LAWS))
         {
             startTimer();
@@ -200,63 +215,6 @@ public class SnuffyPWActivity extends Activity
 
     }
 
-    private class MyPagerAdapter extends PagerAdapter
-    {
-        public int getCount()
-        {
-            return mPages.size();
-        }
-
-        public Object instantiateItem(View collection, int position)
-        {
-            View view = mPages.elementAt(position);
-            ((ViewPager) collection).addView(view, 0);
-            return view;
-        }
-
-        @Override
-        public void destroyItem(View arg0, int arg1, Object arg2)
-        {
-            ((ViewPager) arg0).removeView((View) arg2);
-        }
-
-        @Override
-        public boolean isViewFromObject(View arg0, Object arg1)
-        {
-            return arg0 == ((View) arg1);
-        }
-
-        @Override
-        public int getItemPosition(Object object)
-        {
-            // was return POSITION_UNCHANGED; but then showed cached pages from prev language after we rebuilt pages for new language
-            return POSITION_NONE; // force view to redisplay
-        }
-
-        @Override
-        public Parcelable saveState()
-        {
-            return null;
-        }
-
-        @Override
-        public void finishUpdate(View arg0)
-        {
-            // TODO Auto-generated method stub
-        }
-
-        @Override
-        public void restoreState(Parcelable arg0, ClassLoader arg1)
-        {
-            // TODO Auto-generated method stub
-        }
-
-        @Override
-        public void startUpdate(View arg0)
-        {
-        }
-    }
-
     protected void onResume()
     {
         super.onResume();
@@ -276,13 +234,13 @@ public class SnuffyPWActivity extends Activity
     {
         super.onStop();
         Log.i(TAG, "Activity stopped");
-        
+
         if (timer != null)
         {
             timer.cancel();
             Log.i(NotificationInfo.NOTIFICATION_TAG, "Share Timer stopped");
         }
-        
+
     }
 
     private void doSetup(int delay)
@@ -297,8 +255,8 @@ public class SnuffyPWActivity extends Activity
                 mPages = null;
                 mAboutView = null;
                 SnuffyApplication app = (SnuffyApplication) getApplication();
-                app.mPages = mPages;
-                app.mAboutView = mAboutView;
+                app.mPages = null;
+                app.mAboutView = null;
                 app.mPackageTitle = mPackageTitle;
                 mPages = new Vector<SnuffyPage>(0);
 
@@ -319,12 +277,12 @@ public class SnuffyPWActivity extends Activity
         if (!bSuccess)
         { // now testing is done - only show msg on failure
             Toast.makeText(SnuffyPWActivity.this.getApplicationContext(),
-                    bSuccess ? "Package processing succeeded" : "Package processing failed",
+                    "Package processing failed",
                     Toast.LENGTH_SHORT).show();
             return;
         }
 
-        addClickHandlersToAllPages();    // TODO: could this just be mPager.setOnClickLIstner?
+        addClickHandlersToAllPages();
         addCallingActivityToAllPages();
         mAboutView = mPages.elementAt(0);
         mPages.remove(mAboutView);
@@ -412,18 +370,16 @@ public class SnuffyPWActivity extends Activity
     protected void onPause()
     {
         super.onPause();
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor ed = settings.edit();
-        ed.putInt("currPage", mPagerCurrentItem);
-        ed.putString("currLanguageCode", getLanguage());
-        // TODO: when we can display About or other pages, save that state too so we can restore that too.
+        ed.putInt(CURRENT_PAGE, mPagerCurrentItem);
+        ed.putString(CURRENT_LANGUAGE_CODE, getLanguage());
         ed.apply();
-        
-        
+
+
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState)
+    protected void onSaveInstanceState(@NonNull Bundle outState)
     {
         // Save data that is to be preserved across configuration changes.
         // This method is called to retrieve per-instance state from an activity before being killed
@@ -435,7 +391,6 @@ public class SnuffyPWActivity extends Activity
 
         // we dont have any of this yet. We use prefs so the curr pos even survives a total restart.
     }
-
 
     private void resizeTheActivity()
     {
@@ -472,11 +427,10 @@ public class SnuffyPWActivity extends Activity
 
     private void addCallingActivityToAllPages()
     {
-        Iterator<SnuffyPage> iter = mPages.iterator();
 
-        while (iter.hasNext())
+        for (SnuffyPage mPage : mPages)
         {
-            iter.next().mCallingActivity = this; // the SnuffyActivity owns most pages except the about page - which will be set explicitly
+            mPage.mCallingActivity = this; // the SnuffyActivity owns most pages except the about page - which will be set explicitly
         }
     }
 
@@ -484,12 +438,12 @@ public class SnuffyPWActivity extends Activity
     {
         // Note: We have disabled this menu item if this package does not have both
         // of these language codes defined or curr language is not one of them.
-        getIntent().putExtra("AllowFlip", true); // allow called intent to show the flip command
+        getIntent().putExtra(ALLOW_FLIP, true); // allow called intent to show the flip command
 
-        if (mAppLanguage.equalsIgnoreCase("en_heartbeat"))
-            switchLanguages("et_heartbeat", false);
-        else if (mAppLanguage.equalsIgnoreCase("et_heartbeat"))
-            switchLanguages("en_heartbeat", false);
+        if (EN_HEARTBEAT.equalsIgnoreCase(mAppLanguage))
+            switchLanguages(ET_HEARTBEAT, false);
+        else if (ET_HEARTBEAT.equalsIgnoreCase(mAppLanguage))
+            switchLanguages(EN_HEARTBEAT, false);
         // no other flip actions defined
     }
 
@@ -501,7 +455,7 @@ public class SnuffyPWActivity extends Activity
     private void doCmdHelp()
     {
         Intent intent = new Intent(this, SnuffyHelpActivity.class);
-        intent.putExtra("PackageTitle", mPackageTitle);
+        intent.putExtra(PACKAGE_TITLE, mPackageTitle);
         startActivity(intent);
     }
 
@@ -528,8 +482,8 @@ public class SnuffyPWActivity extends Activity
     public void doCmdShowPageMenu(View v)
     {
         Intent intent = new Intent(this, SnuffyPageMenuPWActivity.class);
-        intent.putExtra("LanguageCode", mAppLanguage);
-        intent.putExtra("PackageName", mAppPackage);
+        intent.putExtra(LANGUAGE_CODE, mAppLanguage);
+        intent.putExtra(PACKAGE_NAME, mAppPackage);
         startActivityForResult(intent, 0);
     }
 
@@ -555,14 +509,14 @@ public class SnuffyPWActivity extends Activity
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor ed = settings.edit();
-        ed.putString("currLanguageCode", languageCode);
+        ed.putString(CURRENT_LANGUAGE_CODE, languageCode);
         ed.apply();
 
         mPages.clear();
         mPages = null;
         mAboutView = null;
-        ((SnuffyApplication) getApplication()).mPages = mPages;
-        ((SnuffyApplication) getApplication()).mAboutView = mAboutView;
+        ((SnuffyApplication) getApplication()).mPages = null;
+        ((SnuffyApplication) getApplication()).mAboutView = null;
         mPages = new Vector<SnuffyPage>(0);
         mPagerAdapter.notifyDataSetChanged(); // try to clear cached views (SnuffyPages) in pager, else they will display until we navigate away and back.
         if (bResetToFirstPage)
@@ -632,7 +586,7 @@ public class SnuffyPWActivity extends Activity
         // matches corresponding items in doCmdFlip() below
         MenuItem flipItem = menu.findItem(R.id.CMD_FLIP);
         if (mAppPackage.equalsIgnoreCase(KGP)
-                && (mAppLanguage.equalsIgnoreCase("en_heartbeat") || mAppLanguage.equalsIgnoreCase("et_heartbeat")))
+                && (mAppLanguage.equalsIgnoreCase(EN_HEARTBEAT) || mAppLanguage.equalsIgnoreCase(ET_HEARTBEAT)))
             flipItem.setVisible(true);
         else
             flipItem.setVisible(false);
@@ -644,7 +598,7 @@ public class SnuffyPWActivity extends Activity
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        if ("draft".equalsIgnoreCase(mPackageStatus) && settings.getBoolean("TranslatorMode", false))
+        if (KEY_DRAFT.equalsIgnoreCase(mPackageStatus) && settings.getBoolean(TRANSLATOR_MODE, false))
         {
             menu.findItem(R.id.CMD_REFRESH_PAGE).setVisible(true);
         }
@@ -723,7 +677,6 @@ public class SnuffyPWActivity extends Activity
 
     private void refreshPage()
     {
-        final SharedPreferences settings = getSharedPreferences("GodTools", MODE_PRIVATE);
         SnuffyPage currentPage = mPages.get(mPagerCurrentItem);
 
         showLoading("Updating page...");
@@ -753,9 +706,6 @@ public class SnuffyPWActivity extends Activity
                 });
     }
 
-    private ProgressDialog mProgressDialog;
-    private static final int DIALOG_PROCESS_PACKAGE_PROGRESS = 1;
-
     @Override
     protected Dialog onCreateDialog(int id)
     {
@@ -772,80 +722,6 @@ public class SnuffyPWActivity extends Activity
                 return mProgressDialog;
             default:
                 return null;
-        }
-    }
-
-    private class ProcessPackageAsync
-            extends AsyncTask<String, Integer, Integer>
-            implements PackageReader.ProgressCallback
-    {
-
-        @Override
-        protected void onPreExecute()
-        {
-            super.onPreExecute();
-            if (mProgressDialog != null)
-            {
-                mProgressDialog.setProgress(0);
-                mProgressDialog.setMax(1);
-            }
-            showDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);
-        }
-
-        @Override
-        protected Integer doInBackground(String... params)
-        {
-            // params are not used
-            Boolean bSuccess = false;
-            PackageReader packageReader = new PackageReader();
-            try
-            {
-                bSuccess = packageReader.processPackagePW(
-                        (SnuffyApplication) getApplication(),
-                        mPageWidth, mPageHeight,
-                        mConfigFileName, mPages,
-                        ProcessPackageAsync.this,
-                        mAlternateTypeface
-                );
-            } catch (Exception e)
-            {
-                Log.e(TAG, "processPackage failed: " + e.toString());
-                e.printStackTrace();
-            }
-            if (bSuccess)
-                mPackageTitle = packageReader.getPackageTitle();
-            return bSuccess ? 1 : 0;  // could not get Boolean return value to work so use Integer instead!
-        }
-
-        public void updateProgress(int curr, int max)
-        {
-            onProgressUpdate(curr, max);
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... progress)
-        {
-            // TODO: How can we get processPackage to call this?
-            mProgressDialog.setMax(progress[1]);
-            mProgressDialog.setProgress(progress[0]);
-        }
-
-        @Override
-        protected void onPostExecute(Integer result)
-        {
-            dismissDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);
-            // TODO: COMPLETE PROCESSING ON MAIN THREAD
-            completeSetup(result != 0);
-        }
-    }
-
-    private class MyGestureListener extends GestureDetector.SimpleOnGestureListener
-    {
-        @Override
-        public boolean onSingleTapUp(MotionEvent e)
-        {
-            openOptionsMenu();
-            return super.onSingleTapUp(e);
         }
     }
 
@@ -912,5 +788,132 @@ public class SnuffyPWActivity extends Activity
         timer = new Timer("1.5ShareTimer");
         timer.schedule(timerTask, 90000); //1.5 minutes
         Log.i(TAG, "Timer scheduled");
+    }
+
+    private class MyPagerAdapter extends PagerAdapter
+    {
+        public int getCount()
+        {
+            return mPages.size();
+        }
+
+        public Object instantiateItem(View collection, int position)
+        {
+            View view = mPages.elementAt(position);
+            ((ViewPager) collection).addView(view, 0);
+            return view;
+        }
+
+        @Override
+        public void destroyItem(View arg0, int arg1, Object arg2)
+        {
+            ((ViewPager) arg0).removeView((View) arg2);
+        }
+
+        @Override
+        public boolean isViewFromObject(View arg0, Object arg1)
+        {
+            return arg0 == arg1;
+        }
+
+        @Override
+        public int getItemPosition(Object object)
+        {
+            // was return POSITION_UNCHANGED; but then showed cached pages from prev language after we rebuilt pages for new language
+            return POSITION_NONE; // force view to redisplay
+        }
+
+        @Override
+        public Parcelable saveState()
+        {
+            return null;
+        }
+
+        @Override
+        public void finishUpdate(View arg0)
+        {
+        }
+
+        @Override
+        public void restoreState(Parcelable arg0, ClassLoader arg1)
+        {
+        }
+
+        @Override
+        public void startUpdate(View arg0)
+        {
+        }
+    }
+
+    private class ProcessPackageAsync
+            extends AsyncTask<String, Integer, Integer>
+            implements PackageReader.ProgressCallback
+    {
+
+        @Override
+        protected void onPreExecute()
+        {
+            super.onPreExecute();
+            if (mProgressDialog != null)
+            {
+                mProgressDialog.setProgress(0);
+                mProgressDialog.setMax(1);
+            }
+            showDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);
+        }
+
+        @Override
+        protected Integer doInBackground(String... params)
+        {
+            // params are not used
+            Boolean bSuccess = false;
+            PackageReader packageReader = new PackageReader();
+            try
+            {
+                bSuccess = packageReader.processPackagePW(
+                        (SnuffyApplication) getApplication(),
+                        mPageWidth, mPageHeight,
+                        mConfigFileName, mPages,
+                        ProcessPackageAsync.this,
+                        mAlternateTypeface
+                );
+            } catch (Exception e)
+            {
+                Log.e(TAG, "processPackage failed: " + e.toString());
+                e.printStackTrace();
+            }
+            if (bSuccess)
+                mPackageTitle = packageReader.getPackageTitle();
+            return bSuccess ? 1 : 0;  // could not get Boolean return value to work so use Integer instead!
+        }
+
+        public void updateProgress(int curr, int max)
+        {
+            onProgressUpdate(curr, max);
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress)
+        {
+            mProgressDialog.setMax(progress[1]);
+            mProgressDialog.setProgress(progress[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Integer result)
+        {
+            dismissDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);
+            completeSetup(result != 0);
+        }
+    }
+
+    private class MyGestureListener extends GestureDetector.SimpleOnGestureListener
+    {
+        @Override
+        public boolean onSingleTapUp(MotionEvent e)
+        {
+            openOptionsMenu();
+            return super.onSingleTapUp(e);
+        }
     }
 }

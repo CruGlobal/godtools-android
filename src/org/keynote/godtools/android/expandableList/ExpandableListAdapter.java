@@ -60,6 +60,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         this.packages = packages;
         this.languagePrimary = languagePrimary;
 
+        String PREFS_NAME = "GodTools";
         settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
         listDataHeader = new ArrayList<String>();
@@ -138,14 +139,18 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         }
 
         TextView textView = (TextView) convertView.findViewById(R.id.tv_trans_view);
-        textView.setText(localPackage.getName());
+        textView.setText(localPackage != null ? localPackage.getName() : "");
 
         ImageView icon = (ImageView) convertView.findViewById(R.id.iv_trans_view);
 
         LinearLayout layout = (LinearLayout) convertView.findViewById(R.id.group_main);
 
+        String KGP = "kgp";
+        assert localPackage != null;
         if (KGP.equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_kgpicon);
+        String FOUR_LAWS = "fourlaws";
         if (FOUR_LAWS.equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_4lawsicon);
+        String SATISFIED = "satisfied";
         if (SATISFIED.equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_satisfiedicon);
         
         if (localPackage.getCode().contains("draft"))

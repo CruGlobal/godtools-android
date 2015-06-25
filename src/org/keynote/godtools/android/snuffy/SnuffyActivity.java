@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -30,7 +31,6 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
 
-import java.util.Iterator;
 import java.util.Vector;
 
 import static org.keynote.godtools.android.utils.Constants.KGP;
@@ -109,9 +109,6 @@ public class SnuffyActivity extends Activity {
 	
 		mToolBar = createToolbar();
 		
-		// restore state from prefs
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-		
 		// Now we are called from GodTools - do not restore current page 
 		//mPagerCurrentItem = settings.getInt("currPage", 0);
 		// always start at 0
@@ -187,7 +184,7 @@ public class SnuffyActivity extends Activity {
 
 		@Override
 		public boolean isViewFromObject(View arg0, Object arg1) {
-			return arg0 == ((View) arg1);
+			return arg0 == arg1;
 		}
 
 		@Override
@@ -249,8 +246,8 @@ public class SnuffyActivity extends Activity {
 				mPages = null;
 				mAboutView = null;
 				SnuffyApplication app = (SnuffyApplication)getApplication();
-				app.mPages     		= mPages;
-				app.mAboutView 		= mAboutView;
+				app.mPages     		= null;
+				app.mAboutView 		= null;
 				app.mPackageTitle 	= mPackageTitle;
 				mPages = new Vector<SnuffyPage>(0);
 				mPagerAdapter.notifyDataSetChanged(); // try to clear cached views (SnuffyPages) in pager, else they will display until we navigate away and back.
@@ -267,7 +264,7 @@ public class SnuffyActivity extends Activity {
 	private void completeSetup(boolean bSuccess) {
 		if (!bSuccess) { // now testing is done - only show msg on failure
 			Toast.makeText(SnuffyActivity.this.getApplicationContext(),
-					bSuccess ? "Package processing succeeded" : "Package processing failed",
+					"Package processing failed",
 							Toast.LENGTH_SHORT).show();
 			return;
 		}
@@ -338,7 +335,7 @@ public class SnuffyActivity extends Activity {
 	}
 	
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
+	protected void onSaveInstanceState(@NonNull Bundle outState) {
 		// Save data that is to be preserved across configuration changes.
 		// This method is called to retrieve per-instance state from an activity before being killed 
 		// so that the state can be restored in onCreate(Bundle) or onRestoreInstanceState(Bundle)
@@ -363,13 +360,15 @@ public class SnuffyActivity extends Activity {
 	}
 	
 	private void addClickHandlersToAllPages() {
-		Iterator<SnuffyPage> iter = mPages.iterator();
-		
-		while (iter.hasNext()) {
-			iter.next().setOnClickListener(new View.OnClickListener() {
-				
+
+		for (SnuffyPage mPage : mPages)
+		{
+			mPage.setOnClickListener(new View.OnClickListener()
+			{
+
 				@Override
-				public void onClick(View v) {
+				public void onClick(View v)
+				{
 					toggleTheToolBar();
 				}
 			});
@@ -377,10 +376,10 @@ public class SnuffyActivity extends Activity {
 	}
 	
 	private void addCallingActivityToAllPages() {
-		Iterator<SnuffyPage> iter = mPages.iterator();
-		
-		while (iter.hasNext()) {
-			iter.next().mCallingActivity = this; // the SnuffyActivity owns most pages except the about page - which will be set explicitly
+
+		for (SnuffyPage mPage : mPages)
+		{
+			mPage.mCallingActivity = this; // the SnuffyActivity owns most pages except the about page - which will be set explicitly
 		}		
 	}
 	
@@ -474,8 +473,8 @@ public class SnuffyActivity extends Activity {
 		mPages.clear();
 		mPages = null;
 		mAboutView = null;
-		((SnuffyApplication)getApplication()).mPages     = mPages;
-		((SnuffyApplication)getApplication()).mAboutView = mAboutView;				
+		((SnuffyApplication)getApplication()).mPages     = null;
+		((SnuffyApplication)getApplication()).mAboutView = null;
 		mPages = new Vector<SnuffyPage>(0);
 		mPagerAdapter.notifyDataSetChanged(); // try to clear cached views (SnuffyPages) in pager, else they will display until we navigate away and back.
 		if (bResetToFirstPage)

@@ -8,12 +8,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -53,8 +53,7 @@ public class SnuffyLanguageActivity extends ListActivity {
 	
 	private ArrayList<HashMap<String, Object>> mList = new ArrayList<HashMap<String, Object>>(4);
 	private String mPackageName;
-	private String mLanguageCode;
-    public static final int DIALOG_DOWNLOAD_INDEX_PROGRESS = 0;
+	public static final int DIALOG_DOWNLOAD_INDEX_PROGRESS = 0;
     public static final int DIALOG_DOWNLOAD_LANGUAGE_PROGRESS = 1;
     private ProgressDialog mProgressDialog;
     private DownloadFileAsync mDownloadFileAsync;
@@ -76,8 +75,7 @@ public class SnuffyLanguageActivity extends ListActivity {
 		// the to array specifies the views from the xml layout
 		// on which we want to display the values defined in the from array
 		int[] to = { R.id.list2Text1, R.id.list2Image};
-		
-		mLanguageCode = getIntent().getStringExtra("LanguageCode");
+
 		mPackageName  = getIntent().getStringExtra("PackageName");
 		
 		// TODO: consider case where device rotated - this code may need to move
@@ -234,7 +232,7 @@ public class SnuffyLanguageActivity extends ListActivity {
 		}
 
 		@Override
-		public void setViewImage(ImageView v, String value) {
+		public void setViewImage(@NonNull ImageView v, String value) {
 			
 			if (value.equalsIgnoreCase("LOADED" )
 			||  value.equalsIgnoreCase("BUILTIN")) {
@@ -248,26 +246,18 @@ public class SnuffyLanguageActivity extends ListActivity {
 			
 			InputStream isImage;
 			try {
-				boolean bImageFromAsset = false; // the icons for all languages have been downloaded
-				if (!bImageFromAsset) {
-					//  need this code when the files have been downloaded
-					try {
-						Uri uri = Uri.parse("file://" + value);
-						isImage = getContentResolver().openInputStream(uri);
-					}
-					catch (IOException e) {
-						// repoFile.xml points to en.png but the icons folder in payload only contains en@2X.png !!
-						// so try with that name before complaining
-						Uri uri = Uri.parse("file://" + value.replace(".png", "@2x.png"));
-						isImage = getContentResolver().openInputStream(uri);						
-					}
-				}
-				else {
-					// the code above wont handle assets (perhaps because assets are compressed)
-					// So we handle those explicitly
-					isImage = getAssets().open(value, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
-				}
-	        	Bitmap bm = BitmapFactory.decodeStream(isImage);
+				//  need this code when the files have been downloaded
+				try {
+                    Uri uri = Uri.parse("file://" + value);
+                    isImage = getContentResolver().openInputStream(uri);
+                }
+                catch (IOException e) {
+                    // repoFile.xml points to en.png but the icons folder in payload only contains en@2X.png !!
+                    // so try with that name before complaining
+                    Uri uri = Uri.parse("file://" + value.replace(".png", "@2x.png"));
+                    isImage = getContentResolver().openInputStream(uri);
+                }
+				Bitmap bm = BitmapFactory.decodeStream(isImage);
 				isImage.close();
 				
 				v.setImageBitmap(bm);
@@ -298,7 +288,7 @@ public class SnuffyLanguageActivity extends ListActivity {
 	
 	private void updateLanguageList() {
 		File documentsDir = ((SnuffyApplication)getApplication()).getDocumentsDir();
-		Document 			xmlDoc 	= null;
+		Document 			xmlDoc;
 		FileInputStream 	fin 	= null;
 		BufferedInputStream	bin 	= null;
 		File repoFile = new File(documentsDir + "/repoIndex.xml");

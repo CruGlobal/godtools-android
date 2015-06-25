@@ -79,7 +79,7 @@ public class EveryStudentSearchResults extends ListActivity {
 //FIXME			FlurryAgent.onEvent(FlurryAPI.FlurryPrefix + LOGTAG, params);
 //FIXME			FlurryAgent.onPageView();
 			
-			EveryStudentSearchResultsPersistance essrp = null;
+			EveryStudentSearchResultsPersistance essrp;
 			essrp = (EveryStudentSearchResultsPersistance) getLastNonConfigurationInstance();
 			
 			if (essrp != null && essrp.getmAdapter() != null && essrp.getCursor() != null && essrp.getQuery() != null && essrp.getCount() != null) {
@@ -179,7 +179,7 @@ public class EveryStudentSearchResults extends ListActivity {
 				int count = mCursor.getCount();
 				myCount = getResources().getQuantityString(
 						R.plurals.search_results, count,
-						new Object[] { count, mQuery });
+						count, mQuery);
 			
 				adapter = createAdapter (EveryStudentSearchResults.this, mCursor);
 			}

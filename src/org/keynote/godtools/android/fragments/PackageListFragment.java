@@ -30,7 +30,7 @@ public class PackageListFragment extends ListFragment
 
 	public interface OnPackageSelectedListener
 	{
-		public void onPackageSelected(GTPackage gtPackage);
+		void onPackageSelected(GTPackage gtPackage);
 	}
 
 	private String languageCode;
