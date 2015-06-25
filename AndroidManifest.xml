@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.keynote.godtools.android"
-    android:versionCode="12"
-    android:versionName="4.0.1"
     android:installLocation="preferExternal">
 
     <application
@@ -151,13 +149,29 @@
         <service android:name=".notifications.GcmIntentService" />
         <service android:name=".service.BackgroundService"
                  android:exported="false" />
+
+        <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
+                  android:enabled="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.google.android.gms.analytics.AnalyticsService"
+                 android:enabled="true"
+                 android:exported="false"/>
+
+        <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+                  android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+
         <meta-data android:name="com.google.android.gms.version"
                    android:value="@integer/google_play_services_version" />
     </application>
 
-    <uses-sdk
-        android:minSdkVersion="10"
-        android:targetSdkVersion="19" />
     <supports-screens
         android:smallScreens="false"
         android:resizeable="false" />
