@@ -127,7 +127,7 @@ public class Splash extends Activity
                             break;
                         case META_TASK:
                             Log.i(TAG, "Meta complete");
-                            showLoading("Updating");
+                            showLoading(getString(R.string.update));
                             break;
                         case ERROR:
                             Log.i(TAG, "Error");

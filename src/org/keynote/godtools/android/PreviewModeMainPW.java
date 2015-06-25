@@ -346,7 +346,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
                         languagePrimary, "draft_primary", this);
 
-                Toast.makeText(PreviewModeMainPW.this, "Translator preview mode is enabled",
+                Toast.makeText(PreviewModeMainPW.this, getString(R.string.translator_enabled),
                         Toast.LENGTH_LONG).show();
                 switchedToTranslatorMode(true);
 
@@ -520,7 +520,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         }
         else if (tag.equalsIgnoreCase("draft"))
         {
-            Toast.makeText(PreviewModeMainPW.this, "Drafts have been updated",
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.drafts_updated),
                     Toast.LENGTH_SHORT).show();
             getPackageList();
             createTheHomeScreen();
@@ -571,7 +571,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             {
                 GTPackage kgpPack = new GTPackage();
                 kgpPack.setCode("draftkgp");
-                kgpPack.setName("Knowing God Personally");
+                kgpPack.setName(getString(R.string.menu_item_kgp));
                 packageByLanguage.add(kgpPack);
             }
 
@@ -579,7 +579,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             {
                 GTPackage satPack = new GTPackage();
                 satPack.setCode("draftsatisfied");
-                satPack.setName("Satisfied?");
+                satPack.setName(getString(R.string.menu_item_satisfied));
                 packageByLanguage.add(satPack);
             }
 
@@ -587,7 +587,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             {
                 GTPackage fourLawPack = new GTPackage();
                 fourLawPack.setCode("draftfourlaws");
-                fourLawPack.setName("The Four Spiritual Laws");
+                fourLawPack.setName(getString(R.string.menu_item_4laws));
                 packageByLanguage.add(fourLawPack);
             }
         }
@@ -638,7 +638,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         }
         else
         {
-            Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts",
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_update_draft),
                     Toast.LENGTH_SHORT).show();
         }
 
@@ -657,18 +657,18 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
         if (tag.equalsIgnoreCase("draft"))
         {
-            Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts",
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_update_draft),
                     Toast.LENGTH_SHORT).show();
         }
         else if (tag.equalsIgnoreCase("draft_primary"))
         {
             getPackageList();
-            Toast.makeText(PreviewModeMainPW.this, "Failed to download drafts",
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_download_draft),
                     Toast.LENGTH_SHORT).show();
         }
         else if (tag.equalsIgnoreCase("primary") || tag.equalsIgnoreCase("parallel"))
         {
-            Toast.makeText(PreviewModeMainPW.this, "Failed to download resources",
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_download_resources),
                     Toast.LENGTH_SHORT).show();
         }
     }
@@ -779,7 +779,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         }
         else
         {
-            Toast.makeText(PreviewModeMainPW.this, "Internet connection is required",
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.internet_needed),
                     Toast.LENGTH_SHORT).show();
         }
     }
@@ -791,7 +791,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
         share.putExtra(Intent.EXTRA_TEXT, msgBody);
-        startActivity(Intent.createChooser(share, "Select how you would like to share"));
+        startActivity(Intent.createChooser(share, getString(R.string.select_share)));
     }
 
     private SnuffyApplication getApp()
@@ -820,7 +820,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         }
         else
         {
-            showLoading("Authenticating access code");
+            showLoading(getString(R.string.authenticate_code));
         }
     }
 
