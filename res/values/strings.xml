@@ -118,6 +118,8 @@
     <!-- Preview Mode -->
     <string name="pull_down_info">pull to refresh drafts</string>
     <string name="preview_mode_title">Preview Mode</string>
+    <string name="package_not_created">Package not yet created</string>
+    <string name="refresh_no_net">Internet connection is required to refresh</string>
 
     <!-- Shared Strings -->
     <string name="ok">OK</string>
