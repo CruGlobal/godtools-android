@@ -27,7 +27,7 @@ import org.keynote.godtools.android.utils.Device;
 
 import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
 import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
-import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAUL;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
@@ -76,7 +76,7 @@ public class Splash extends Activity
         // get the default language of the device os
         String deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
         // set to english in case nothing is found.
-        if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = ENGLISH_DEFAUL;
+        if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = ENGLISH_DEFAULT;
 
         Log.i(TAG, deviceDefaultLanguage);
 

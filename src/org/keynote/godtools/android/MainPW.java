@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -58,30 +59,36 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static org.keynote.godtools.android.utils.Constants.APP_VERSION;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
+import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
+import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.KGP;
-import static org.keynote.godtools.android.utils.Constants.SATISFIED;
-import static org.keynote.godtools.android.utils.Constants.APP_VERSION;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.REFERENCE_DEVICE_HEIGHT;
+import static org.keynote.godtools.android.utils.Constants.REFERENCE_DEVICE_WIDTH;
 import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
+import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.SATISFIED;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 
-public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
+public class MainPW extends ActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
         DownloadTask.DownloadTaskHandler,
         MetaTask.MetaTaskHandler, View.OnClickListener
 {
-    private static final String TAG = "MainPW";
+    private static final String TAG = MainPW.class.getSimpleName();
     private static final int REQUEST_SETTINGS = 1001;
-    private static final String JUST_SWITCHED = "justSwitched";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     String SENDER_ID = "237513440670";
-
-    public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
-    public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
 
     private int mPageLeft;
     private int mPageTop;
@@ -96,7 +103,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     GoogleCloudMessaging gcm;
     Context context;
-    String regid = "";
+    String regid = EMPTY_STRING;
     Timer timer;
     boolean noPackages = false;
     boolean justSwitchedToTranslatorMode;
@@ -134,7 +141,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         if (!isFirstLaunch())
         {
-            if ("".equals(settings.getString("Authorization_Generic", "")))
+            if (EMPTY_STRING.equals(settings.getString(AUTH_GENERIC, EMPTY_STRING)))
             {
                 showLoading();
                 BackgroundService.authenticateGeneric(this);
@@ -143,12 +150,11 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             {
                 showLoading();
                 BackgroundService.getListOfPackages(this);
-                settings.edit().putBoolean("TranslatorMode", false).apply();
+                settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
             }
         }
 
-        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-        justSwitchedToTranslatorMode = settings.getBoolean(JUST_SWITCHED, false);
+        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
 
         packageList = getPackageList(); // get the packages for the primary language
 
@@ -171,7 +177,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             }
 
             // send notification update each time app is used for notification type 1
-            GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""),
+            GodToolsApiClient.updateNotification(settings.getString(AUTH_GENERIC, EMPTY_STRING),
                     regid, NotificationInfo.NOT_USED_2_WEEKS, new NotificationUpdateTask.NotificationUpdateTaskHandler()
                     {
                         @Override
@@ -269,13 +275,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private boolean isFirstLaunch()
     {
-        boolean isFirst = settings.getBoolean("firstLaunch", true);
-        if (isFirst)
-        {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("firstLaunch", false);
-            editor.apply();
-        }
+        boolean isFirst = settings.getBoolean(FIRST_LAUNCH, true);
+        if (isFirst) settings.edit().putBoolean(FIRST_LAUNCH, false).apply();
         return isFirst;
     }
 
@@ -389,86 +390,10 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             case RESULT_CHANGED_PRIMARY:
             case RESULT_CHANGED_PARALLEL:
             {
-                SnuffyApplication app = (SnuffyApplication) getApplication();
-                app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
+                getApp().setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, EMPTY_STRING));
 
                 refreshPackageList(false);
                 createTheHomeScreen();
-
-                break;
-            }
-            case RESULT_DOWNLOAD_PRIMARY:
-            {
-                // start the download
-                String code = data.getStringExtra("primaryCode");
-
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        code,
-                        KEY_PRIMARY,
-                        settings.getString("Authorization_Generic", ""),
-                        this);
-                break;
-            }
-            case RESULT_DOWNLOAD_PARALLEL:
-            {
-                // refresh the list if the primary language was changed
-                String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-                if (!languagePrimary.equalsIgnoreCase(primaryCode))
-                {
-                    languagePrimary = primaryCode;
-                    packageList = getPackageList();
-                    showLayoutsWithPackages();
-                }
-
-                String code = data.getStringExtra("parallelCode");
-                showLoading();
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        code,
-                        KEY_PARALLEL,
-                        settings.getString("Authorization_Generic", ""),
-                        this);
-                break;
-            }
-            case RESULT_PREVIEW_MODE_ENABLED:
-            {
-                // refresh the list
-                String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-
-                if (!languagePrimary.equalsIgnoreCase(primaryCode))
-                {
-                    SnuffyApplication app = (SnuffyApplication) getApplication();
-                    app.setAppLocale(primaryCode);
-                }
-
-                showLoading();
-
-                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), languagePrimary, "draft_primary", this);
-
-                Toast.makeText(MainPW.this, "Translator preview mode is enabled", Toast.LENGTH_LONG).show();
-                switchedToTranslatorMode(true);
-
-                finish();
-                startActivity(getIntent());
-
-                break;
-            }
-            case RESULT_PREVIEW_MODE_DISABLED:
-            {
-                // refresh the list
-                String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-
-                refreshPackageList(true);
-
-                if (!languagePrimary.equalsIgnoreCase(primaryCode))
-                {
-                    SnuffyApplication app = (SnuffyApplication) getApplication();
-                    app.setAppLocale(primaryCode);
-                }
-
-                Toast.makeText(MainPW.this, "Translator preview mode is disabled", Toast.LENGTH_LONG).show();
-
-                finish();
-                startActivity(getIntent());
 
                 break;
             }
@@ -488,9 +413,9 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         if (withFallback && packageList.isEmpty())
         {
             SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, "en");
+            editor.putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
             editor.apply();
-            languagePrimary = "en";
+            languagePrimary = ENGLISH_DEFAULT;
             packageList = getPackageList();
         }
         showLayoutsWithPackages();
@@ -533,7 +458,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         int left;
         int top;
 
-        double aspectRatioTarget = (double) MainPW.REFERENCE_DEVICE_WIDTH / (double) MainPW.REFERENCE_DEVICE_HEIGHT;
+        double aspectRatioTarget = (double) REFERENCE_DEVICE_WIDTH / (double) REFERENCE_DEVICE_HEIGHT;
         double aspectRatio = (double) rect.width() / (double) rect.height();
 
         if (aspectRatio > aspectRatioTarget)
@@ -576,8 +501,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         noPackages = false;
 
-        justSwitchedToTranslatorMode = false;
-        switchedToTranslatorMode(false);
         EventTracker.track(getApp(), "HomeScreen", languagePrimary);
     }
 
@@ -626,41 +549,11 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             hideLoading();
             createTheHomeScreen();
         }
-        else if (tag.equalsIgnoreCase("draft"))
-        {
-            Toast.makeText(MainPW.this, "Drafts have been updated", Toast.LENGTH_SHORT).show();
-            packageList = getPackageList();
-            showLayoutsWithPackages();
-            hideLoading();
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase("draft_primary"))
-        {
-            languagePrimary = langCode;
-            packageList = getPackageList();
-
-            showLayoutsWithPackages();
-
-            hideLoading();
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase("draft_parallel"))
-        {
-            hideLoading();
-            createTheHomeScreen();
-        }
     }
 
     private List<GTPackage> getPackageList()
     {
         return GTPackage.getLivePackages(MainPW.this, languagePrimary);
-    }
-
-    private void switchedToTranslatorMode(boolean switched)
-    {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean(JUST_SWITCHED, switched);
-        editor.apply();
     }
 
     @Override
@@ -873,11 +766,11 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private String getRegistrationId(Context context)
     {
-        String registrationId = settings.getString(REGISTRATION_ID, "");
+        String registrationId = settings.getString(REGISTRATION_ID, EMPTY_STRING);
         if (Strings.isNullOrEmpty(registrationId))
         {
             Log.i(TAG, "Registration not found.");
-            return "";
+            return EMPTY_STRING;
         }
         // Check if app was updated; if so, it must clear the registration ID
         // since the existing regID is not guaranteed to work with the new
@@ -887,7 +780,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         if (registeredVersion != currentVersion)
         {
             Log.i(TAG, "App version changed.");
-            return "";
+            return EMPTY_STRING;
         }
         return registrationId;
     }
@@ -907,7 +800,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                         gcm = GoogleCloudMessaging.getInstance(context);
                     }
                     regid = gcm.register(SENDER_ID);
-                    msg = "Device registered, registration ID=" + regid;
+                    msg = "Device registered, registration ID = " + regid;
 
                     sendRegistrationIdToBackend();
 
@@ -970,7 +863,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 if (isAppInForeground())
                 {
                     Log.i(TAG, "App is in foreground");
-                    GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""),
+                    GodToolsApiClient.updateNotification(settings.getString(AUTH_GENERIC, EMPTY_STRING),
                             regid, NotificationInfo.AFTER_3_USES, new NotificationUpdateTask.NotificationUpdateTaskHandler()
                             {
                                 @Override
