@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -51,17 +52,24 @@ import java.util.List;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.RESULT_PREVIEW_MODE_DISABLED;
+import static org.keynote.godtools.android.utils.Constants.RESULT_PREVIEW_MODE_ENABLED;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 import static org.keynote.godtools.android.utils.Constants.STATUS_CODE;
 
-public class PreviewModeMainPW extends BaseActionBarActivity implements
+
+public class PreviewModeMainPW extends ActionBarActivity implements
         DownloadTask.DownloadTaskHandler,
         MetaTask.MetaTaskHandler, View.OnClickListener,
         AccessCodeDialogFragment.AccessCodeDialogListener
 {
-    private static final String TAG = "PreviewModeMainPW";
+    private static final String TAG = PreviewModeMainPW.class.getSimpleName();
     private static final int REQUEST_SETTINGS = 1001;
-    private static final String JUST_SWITCHED = "justSwitched";
 
     public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
     public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
@@ -82,7 +90,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     Context context;
 
     boolean noPackages = false;
-    boolean justSwitchedToTranslatorMode;
     
     ExpandableListAdapter listAdapter;
     ExpandableListView listView;
@@ -127,7 +134,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-        justSwitchedToTranslatorMode = settings.getBoolean(JUST_SWITCHED, false);
 
         swipeRefreshLayout.setRefreshing(true);
         onCmd_refresh();
@@ -357,7 +363,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
                 Toast.makeText(PreviewModeMainPW.this, getString(R.string.translator_enabled),
                         Toast.LENGTH_LONG).show();
-                switchedToTranslatorMode(true);
 
                 finish();
                 startActivity(getIntent());
@@ -456,25 +461,11 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
     private void createTheHomeScreen()
     {
-        /*
-         * This method is called each time the UI needs to be refreshed.
-         */
 
-        // If no packages are available for a language, then fallback to English
-        if (justSwitchedToTranslatorMode)
-        {
-            /*
-             * When switching to translator mode, the MainPW activity is restarted. However, the packageList and
-             * packageFrag need to be refreshed based on the newly downloaded items. The justSwitchedToTranslatorMode is
-             * saved in the settings and when true, this will refresh the packages available.
-             */
-            getPackageList();
-        }
+        getPackageList();
 
         noPackages = false;
 
-        justSwitchedToTranslatorMode = false;
-        switchedToTranslatorMode(false);
         EventTracker.track(getApp(), "Translator Page", languagePrimary);
     }
 
@@ -623,13 +614,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     private boolean isTranslatorModeEnabled()
     {
         return settings.getBoolean("TranslatorMode", false);
-    }
-
-    private void switchedToTranslatorMode(boolean switched)
-    {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean(JUST_SWITCHED, switched);
-        editor.apply();
     }
 
     @Override

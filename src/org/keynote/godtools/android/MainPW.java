@@ -105,8 +105,6 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
     Context context;
     String regid = EMPTY_STRING;
     Timer timer;
-    boolean noPackages = false;
-    boolean justSwitchedToTranslatorMode;
     SharedPreferences settings;
 
     /**
@@ -199,8 +197,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         }
         Log.i(TAG, regid);
 
-        if (!justSwitchedToTranslatorMode)
-            startTimer(); // don't start timer when switching to translator mode
+        startTimer();
     }
 
     @Override
@@ -237,7 +234,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
                             packageList = getPackageList();
                             showLayoutsWithPackages();
                             hideLoading();
-                            createTheHomeScreen();
+                            sendPageEvent();
                             break;
                         case META_TASK:
                             Log.i(TAG, "Meta complete");
@@ -257,7 +254,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
                     packageList = getPackageList();
                     showLayoutsWithPackages();
                     hideLoading();
-                    createTheHomeScreen();
+                    sendPageEvent();
                 }
             }
         };
@@ -391,10 +388,8 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
             case RESULT_CHANGED_PARALLEL:
             {
                 getApp().setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, EMPTY_STRING));
-
                 refreshPackageList(false);
-                createTheHomeScreen();
-
+                sendPageEvent();
                 break;
             }
         }
@@ -407,14 +402,12 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
      */
     private void refreshPackageList(boolean withFallback)
     {
-        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
+        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, EMPTY_STRING);
         packageList = getPackageList();
 
         if (withFallback && packageList.isEmpty())
         {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
-            editor.apply();
+            settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
             languagePrimary = ENGLISH_DEFAULT;
             packageList = getPackageList();
         }
@@ -438,7 +431,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
 
     private void doSetup()
     {
-        createTheHomeScreen();
+        sendPageEvent();
         getScreenSize();
     }
 
@@ -481,33 +474,14 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         mPageHeight = height;
     }
 
-    private void createTheHomeScreen()
+    private void sendPageEvent()
     {
-        /*
-         * This method is called each time the UI needs to be refreshed.
-         */
-
-        // If no packages are available for a language, then fallback to English
-        if (justSwitchedToTranslatorMode)
-        {
-            /*
-             * When switching to translator mode, the MainPW activity is restarted. However, the packageList and
-             * packageFrag need to be refreshed based on the newly downloaded items. The justSwitchedToTranslatorMode is
-             * saved in the settings and when true, this will refresh the packages available.
-             */
-            packageList = getPackageList();
-            showLayoutsWithPackages();
-        }
-
-        noPackages = false;
-
         EventTracker.track(getApp(), "HomeScreen", languagePrimary);
     }
 
     private void showLoading()
     {
         supportInvalidateOptionsMenu();
-
         setSupportProgressBarIndeterminateVisibility(true);
     }
 
@@ -519,8 +493,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         {
             languagePrimary = langCode;
 
-            SnuffyApplication app = (SnuffyApplication) getApplication();
-            app.setAppLocale(langCode);
+            getApp().setAppLocale(langCode);
 
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(GTLanguage.KEY_PRIMARY, langCode);
@@ -534,7 +507,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
             showLayoutsWithPackages();
             hideLoading();
 
-            createTheHomeScreen();
+            sendPageEvent();
         }
         else if (tag.equalsIgnoreCase(KEY_PARALLEL))
         {
@@ -547,7 +520,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
             gtl.update(MainPW.this);
 
             hideLoading();
-            createTheHomeScreen();
+            sendPageEvent();
         }
     }
 

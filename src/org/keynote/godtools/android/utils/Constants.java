@@ -52,8 +52,6 @@ public class Constants
     public static final String DEVICE_ID = "device_id";
     public static final String NOTIFICATIONS_ON = "notifications_on";
 
-    public static final String TRANSLATOR_MODE_EXPIRED = "translator_mode_expired";
-
     /**
      * Standard god tools result: selected a primary language
      */
