@@ -28,7 +28,7 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import java.io.InputStream;
 
 import static org.keynote.godtools.android.utils.Constants.ACCESS_CODE;
-import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
+import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.BACKGROUND_TASK_TAG;
 import static org.keynote.godtools.android.utils.Constants.DEVICE_ID;
@@ -89,7 +89,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         }
         else if (APITasks.GET_LIST_OF_PACKAGES.equals(intent.getSerializableExtra(TYPE)))
         {
-            GodToolsApiClient.getListOfPackages(settings.getString(AUTH_CODE, ""),
+            GodToolsApiClient.getListOfPackages(settings.getString(AUTH_GENERIC, ""),
                     META, this);
         }
         else if (APITasks.GET_LIST_OF_DRAFTS.equals(intent.getSerializableExtra(TYPE)))
@@ -103,7 +103,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
             GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                     intent.getStringExtra(LANG_CODE),
                     intent.getStringExtra(BACKGROUND_TASK_TAG),
-                    settings.getString(AUTH_CODE, ""), this);
+                    settings.getString(AUTH_GENERIC, ""), this);
         }
         else if (APITasks.REGISTER_DEVICE.equals(intent.getSerializableExtra(TYPE)))
         {
@@ -234,7 +234,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         }
         else
         {
-            settings.edit().putString(AUTH_CODE, authorization).apply();
+            settings.edit().putString(AUTH_GENERIC, authorization).apply();
 
             broadcastManager.sendBroadcast(BroadcastUtil.stopBroadcast(Type.AUTH));
         }

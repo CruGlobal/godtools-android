@@ -25,7 +25,12 @@ import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
+import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
+import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAUL;
+import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 
 public class Splash extends Activity
@@ -71,7 +76,7 @@ public class Splash extends Activity
         // get the default language of the device os
         String deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
         // set to english in case nothing is found.
-        if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = "en";
+        if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = ENGLISH_DEFAUL;
 
         Log.i(TAG, deviceDefaultLanguage);
 
@@ -84,7 +89,7 @@ public class Splash extends Activity
         // if connected to the internet and not auth code (why would there be? It is
         // the first run.
         if (Device.isConnected(Splash.this) &&
-                "".equals(settings.getString("Authorization_Generic", "")))
+                EMPTY_STRING.equals(settings.getString(AUTH_GENERIC, EMPTY_STRING)))
         {
             // get an auth code
             Log.i(TAG, "Starting backgound service");
@@ -171,7 +176,7 @@ public class Splash extends Activity
 
     private boolean isFirstLaunch()
     {
-        return settings.getBoolean("firstLaunch", true);
+        return settings.getBoolean(FIRST_LAUNCH, true);
     }
 
     private void showLoading(String msg)
@@ -194,9 +199,9 @@ public class Splash extends Activity
         // so now that we are expiring the translator code after 12 hours we will auto "log out" the
         // user when the app is restarted.
 
-        if (settings.getBoolean("TranslatorMode", false))
+        if (settings.getBoolean(TRANSLATOR_MODE, false))
         {
-            settings.edit().putBoolean("TranslatorMode", false).apply();
+            settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
         }
 
         Intent intent = new Intent(this, MainPW.class);

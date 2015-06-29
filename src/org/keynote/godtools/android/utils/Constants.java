@@ -23,16 +23,20 @@ public class Constants
 
     public static final String COUNT = "count";
 
+    public static final String ENGLISH_DEFAUL = "en";
+    public static final String EMPTY_STRING = "";
+
 
     /**
      * App preferences name
      */
     public static final String PREFS_NAME = "GodTools";
-
-    public static final String AUTH_CODE = "Authorization_Generic";
-
+    public static final String AUTH_GENERIC = "Authorization_Generic";
     public static final String AUTH_DRAFT = "Authorization_Draft";
-
+    public static final String FIRST_LAUNCH = "firstLaunch";
+    public static final String ACCESS_CODE = "access_code";
+    public static final String TRANSLATOR_MODE = "TranslatorMode";
+    public static final String STATUS_CODE = "status_code";
     /**
      * package codes
      */
@@ -47,8 +51,6 @@ public class Constants
     public static final String DEVICE_ID = "device_id";
     public static final String NOTIFICATIONS_ON = "notifications_on";
 
-    public static final String ACCESS_CODE = "access_code";
-    public static final String TRANSLATOR_MODE = "TranslatorMode";
     public static final String TRANSLATOR_MODE_EXPIRED = "translator_mode_expired";
-    public static final String STATUS_CODE = "status_code";
+
 }

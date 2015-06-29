@@ -47,7 +47,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
+import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.COUNT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
@@ -170,7 +170,7 @@ public class SnuffyPWActivity extends Activity
         {
             startTimer();
 
-            GodToolsApiClient.updateNotification(settings.getString(AUTH_CODE, ""),
+            GodToolsApiClient.updateNotification(settings.getString(AUTH_GENERIC, ""),
                     regid, NotificationInfo.AFTER_10_PRESENTATIONS, new NotificationUpdateTask.NotificationUpdateTaskHandler()
                     {
                         @Override
