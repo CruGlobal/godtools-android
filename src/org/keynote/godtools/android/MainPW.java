@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
@@ -24,19 +23,15 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
-import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
-import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.http.NotificationUpdateTask;
 import org.keynote.godtools.android.model.HomescreenLayout;
 import org.keynote.godtools.android.notifications.NotificationInfo;
@@ -45,13 +40,11 @@ import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
 import static org.keynote.godtools.android.utils.Constants.CONFIG_FILE_NAME;
 import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
@@ -59,8 +52,6 @@ import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
 import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
-import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
-import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.KGP;
 import static org.keynote.godtools.android.utils.Constants.LANGUAGE_CODE;
 import static org.keynote.godtools.android.utils.Constants.PACKAGE_NAME;
@@ -79,8 +70,7 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 
 public class MainPW extends ActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
-        DownloadTask.DownloadTaskHandler,
-        MetaTask.MetaTaskHandler, View.OnClickListener
+        View.OnClickListener
 {
     private static final String TAG = MainPW.class.getSimpleName();
     private static final int REQUEST_SETTINGS = 1001;
@@ -441,41 +431,6 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         setSupportProgressBarIndeterminateVisibility(true);
     }
 
-    @Override
-    public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
-    {
-
-        if (tag.equalsIgnoreCase(KEY_PRIMARY))
-        {
-            languagePrimary = langCode;
-
-            getApp().setAppLocale(langCode);
-
-            settings.edit().putString(GTLanguage.KEY_PRIMARY, langCode).apply();
-
-            GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
-            gtl.setDownloaded(true);
-            gtl.update(MainPW.this);
-
-            packageList = getPackageList();
-            showLayoutsWithPackages();
-            hideLoading();
-
-            sendPageEvent();
-        }
-        else if (tag.equalsIgnoreCase(KEY_PARALLEL))
-        {
-            settings.edit().putString(GTLanguage.KEY_PARALLEL, langCode).apply();
-
-            GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
-            gtl.setDownloaded(true);
-            gtl.update(MainPW.this);
-
-            hideLoading();
-            sendPageEvent();
-        }
-    }
-
     private List<GTPackage> getPackageList()
     {
         return GTPackage.getLivePackages(MainPW.this, languagePrimary);
@@ -484,6 +439,8 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
     @Override
     public void onPackageSelected(final GTPackage gtPackage)
     {
+        Log.i(TAG, "Opening: " + gtPackage.getName());
+
         if (gtPackage.getCode().equalsIgnoreCase("everystudent"))
         {
             Intent intent = new Intent(this, EveryStudent.class);
@@ -503,103 +460,17 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
     }
 
     @Override
-    public void metaTaskComplete(InputStream is, String langCode, String tag)
-    {
-        // process the input stream
-        new UpdateDraftListTask().execute(is, langCode, tag);
-    }
-
-    @Override
-    public void metaTaskFailure(InputStream is, String langCode, String tag, int statusCode)
-    {
-
-        if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))
-        {
-            packageList = getPackageList();
-            showLayoutsWithPackages();
-        }
-
-        hideLoading();
-        Toast.makeText(MainPW.this, getString(R.string.failed_update_draft), Toast.LENGTH_SHORT).show();
-
-
-    }
-
-    @Override
-    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
-    {
-
-        if (tag.equalsIgnoreCase("draft"))
-        {
-
-            Toast.makeText(MainPW.this, getString(R.string.failed_download_draft), Toast.LENGTH_SHORT).show();
-
-        }
-        else if (tag.equalsIgnoreCase("draft_primary"))
-        {
-
-            packageList = getPackageList();
-            showLayoutsWithPackages();
-            Toast.makeText(MainPW.this, getString(R.string.failed_download_draft), Toast.LENGTH_SHORT).show();
-
-        }
-        else if (tag.equalsIgnoreCase(KEY_PRIMARY) || tag.equalsIgnoreCase(KEY_PARALLEL))
-        {
-
-            Toast.makeText(MainPW.this, getString(R.string.failed_download_resources), Toast.LENGTH_SHORT).show();
-
-        }
-
-        hideLoading();
-    }
-
-    @Override
     public void onClick(View view)
     {
         for (GTPackage gtPackage : packageList)
         {
+            if (gtPackage.getLayout() == null) continue;
+
             if (view.getId() == gtPackage.getLayout().getLayout().getId())
             {
                 Log.i(TAG, "clicked: " + gtPackage.getCode());
                 onPackageSelected(gtPackage);
             }
-        }
-    }
-
-    private class UpdateDraftListTask extends AsyncTask<Object, Void, Boolean>
-    {
-        boolean mNewDraftsAvailable;
-        String tag, langCode;
-
-        @Override
-        protected void onPreExecute()
-        {
-            super.onPreExecute();
-            mNewDraftsAvailable = false;
-        }
-
-        @Override
-        protected Boolean doInBackground(Object... params)
-        {
-
-            InputStream is = (InputStream) params[0];
-            langCode = params[1].toString();
-            tag = params[2].toString();
-
-            List<GTLanguage> languageList = GTPackageReader.processMetaResponse(is);
-
-            GTLanguage language = languageList.get(0);
-            List<GTPackage> packagesDraft = language.getPackages();
-
-            return packagesDraft.size() != 0;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean shouldDownload)
-        {
-            super.onPostExecute(shouldDownload);
-
-            GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), settings.getString(AUTH_DRAFT, EMPTY_STRING), langCode, tag, MainPW.this);
         }
     }
 
