@@ -595,7 +595,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         }
 
         hideLoading();
-        Toast.makeText(MainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainPW.this, getString(R.string.failed_update_draft), Toast.LENGTH_SHORT).show();
 
 
     }
@@ -607,7 +607,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         if (tag.equalsIgnoreCase("draft"))
         {
 
-            Toast.makeText(MainPW.this, getString(R.string.failed_update_draft), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainPW.this, getString(R.string.failed_download_draft), Toast.LENGTH_SHORT).show();
 
         }
         else if (tag.equalsIgnoreCase("draft_primary"))
