@@ -1,19 +1,15 @@
 package org.keynote.godtools.android;
 
 
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -30,11 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.common.base.Strings;
-
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
@@ -49,19 +40,20 @@ import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.http.NotificationUpdateTask;
 import org.keynote.godtools.android.model.HomescreenLayout;
 import org.keynote.godtools.android.notifications.NotificationInfo;
+import org.keynote.godtools.android.notifications.NotificationService;
 import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
+import org.keynote.godtools.android.utils.Device;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static org.keynote.godtools.android.utils.Constants.APP_VERSION;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
+import static org.keynote.godtools.android.utils.Constants.CONFIG_FILE_NAME;
 import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
@@ -70,13 +62,19 @@ import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.LANGUAGE_CODE;
+import static org.keynote.godtools.android.utils.Constants.PACKAGE_NAME;
+import static org.keynote.godtools.android.utils.Constants.PAGE_HEIGHT;
+import static org.keynote.godtools.android.utils.Constants.PAGE_LEFT;
+import static org.keynote.godtools.android.utils.Constants.PAGE_TOP;
+import static org.keynote.godtools.android.utils.Constants.PAGE_WIDTH;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.REFERENCE_DEVICE_HEIGHT;
 import static org.keynote.godtools.android.utils.Constants.REFERENCE_DEVICE_WIDTH;
-import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
+import static org.keynote.godtools.android.utils.Constants.STATUS;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 
@@ -86,9 +84,6 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
 {
     private static final String TAG = MainPW.class.getSimpleName();
     private static final int REQUEST_SETTINGS = 1001;
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
-    String SENDER_ID = "237513440670";
 
     private int mPageLeft;
     private int mPageTop;
@@ -101,7 +96,6 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
 
     private List<HomescreenLayout> layouts;
 
-    GoogleCloudMessaging gcm;
     Context context;
     String regid = EMPTY_STRING;
     Timer timer;
@@ -158,44 +152,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
 
         showLayoutsWithPackages();
 
-        Log.i(TAG, regid);
-        // Check device for Play Services APK. If check succeeds, proceed with GCM registration.
-        if (checkPlayServices())
-        {
-            Log.i(TAG, "Registering Device");
-            gcm = GoogleCloudMessaging.getInstance(this);
-            regid = getRegistrationId(context);
-
-            if (regid.isEmpty())
-            {
-                registerInBackground();
-                // since when an app is first registered notifications are probably on,
-                // send first state to Google Analytics
-                EventTracker.track(getApp(), "HomeScreen", "Notification State", "Turned ON");
-            }
-
-            // send notification update each time app is used for notification type 1
-            GodToolsApiClient.updateNotification(settings.getString(AUTH_GENERIC, EMPTY_STRING),
-                    regid, NotificationInfo.NOT_USED_2_WEEKS, new NotificationUpdateTask.NotificationUpdateTaskHandler()
-                    {
-                        @Override
-                        public void registrationComplete(String regId)
-                        {
-                            Log.i(NotificationInfo.NOTIFICATION_TAG, "Used Notification notice sent to API");
-                        }
-
-                        @Override
-                        public void registrationFailed()
-                        {
-                            Log.e(NotificationInfo.NOTIFICATION_TAG, "Used notification notice failed to send to API");
-                        }
-                    });
-        }
-        else
-        {
-            Log.i(TAG, "No valid Google Play Services APK found.");
-        }
-        Log.i(TAG, regid);
+        NotificationService.registerDevice(context, MainPW.this);
 
         startTimer();
     }
@@ -418,8 +375,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
     protected void onPause()
     {
         super.onPause();
-        SharedPreferences.Editor ed = settings.edit();
-        ed.apply();
+        settings.edit().apply();
     }
 
     @Override
@@ -495,9 +451,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
 
             getApp().setAppLocale(langCode);
 
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, langCode);
-            editor.apply();
+            settings.edit().putString(GTLanguage.KEY_PRIMARY, langCode).apply();
 
             GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
             gtl.setDownloaded(true);
@@ -511,9 +465,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         }
         else if (tag.equalsIgnoreCase(KEY_PARALLEL))
         {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PARALLEL, langCode);
-            editor.apply();
+            settings.edit().putString(GTLanguage.KEY_PARALLEL, langCode).apply();
 
             GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
             gtl.setDownloaded(true);
@@ -535,17 +487,17 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         if (gtPackage.getCode().equalsIgnoreCase("everystudent"))
         {
             Intent intent = new Intent(this, EveryStudent.class);
-            intent.putExtra("PackageName", gtPackage.getCode());
+            intent.putExtra(PACKAGE_NAME, gtPackage.getCode());
             addPageFrameToIntent(intent);
             startActivity(intent);
             return;
         }
 
         Intent intent = new Intent(this, SnuffyPWActivity.class);
-        intent.putExtra("PackageName", gtPackage.getCode());
-        intent.putExtra("LanguageCode", gtPackage.getLanguage());
-        intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
-        intent.putExtra("Status", gtPackage.getStatus());
+        intent.putExtra(PACKAGE_NAME, gtPackage.getCode());
+        intent.putExtra(LANGUAGE_CODE, gtPackage.getLanguage());
+        intent.putExtra(CONFIG_FILE_NAME, gtPackage.getConfigFileName());
+        intent.putExtra(STATUS, gtPackage.getStatus());
         addPageFrameToIntent(intent);
         startActivity(intent);
     }
@@ -647,7 +599,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         {
             super.onPostExecute(shouldDownload);
 
-            GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), settings.getString(AUTH_DRAFT, ""), langCode, tag, MainPW.this);
+            GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), settings.getString(AUTH_DRAFT, EMPTY_STRING), langCode, tag, MainPW.this);
         }
     }
 
@@ -692,10 +644,10 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
 
     private void addPageFrameToIntent(Intent intent)
     {
-        intent.putExtra("PageLeft", mPageLeft);
-        intent.putExtra("PageTop", mPageTop);
-        intent.putExtra("PageWidth", mPageWidth);
-        intent.putExtra("PageHeight", mPageHeight);
+        intent.putExtra(PAGE_LEFT, mPageLeft);
+        intent.putExtra(PAGE_TOP, mPageTop);
+        intent.putExtra(PAGE_WIDTH, mPageWidth);
+        intent.putExtra(PAGE_HEIGHT, mPageHeight);
     }
 
     private void onCmd_settings()
@@ -719,111 +671,6 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         return (SnuffyApplication) getApplication();
     }
 
-    private boolean checkPlayServices()
-    {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS)
-        {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode))
-            {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this, PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            }
-            else
-            {
-                Log.i(TAG, "This device is not supported.");
-            }
-            return false;
-        }
-        return true;
-    }
-
-    private String getRegistrationId(Context context)
-    {
-        String registrationId = settings.getString(REGISTRATION_ID, EMPTY_STRING);
-        if (Strings.isNullOrEmpty(registrationId))
-        {
-            Log.i(TAG, "Registration not found.");
-            return EMPTY_STRING;
-        }
-        // Check if app was updated; if so, it must clear the registration ID
-        // since the existing regID is not guaranteed to work with the new
-        // app version.
-        int registeredVersion = settings.getInt(APP_VERSION, Integer.MIN_VALUE);
-        int currentVersion = getAppVersion(context);
-        if (registeredVersion != currentVersion)
-        {
-            Log.i(TAG, "App version changed.");
-            return EMPTY_STRING;
-        }
-        return registrationId;
-    }
-
-    private void registerInBackground()
-    {
-        new AsyncTask<Void, Void, String>()
-        {
-            @Override
-            protected String doInBackground(Void... params)
-            {
-                String msg;
-                try
-                {
-                    if (gcm == null)
-                    {
-                        gcm = GoogleCloudMessaging.getInstance(context);
-                    }
-                    regid = gcm.register(SENDER_ID);
-                    msg = "Device registered, registration ID = " + regid;
-
-                    sendRegistrationIdToBackend();
-
-                    // Persist the regID - no need to register again.
-                    storeRegistrationId(context, regid);
-                } catch (IOException ex)
-                {
-                    msg = "Error :" + ex.getMessage();
-                }
-                return msg;
-            }
-
-            @Override
-            protected void onPostExecute(String msg)
-            {
-                Log.i(TAG, msg);
-            }
-        }.execute(null, null, null);
-    }
-
-    private void storeRegistrationId(Context context, String regId)
-    {
-        int appVersion = getAppVersion(context);
-        Log.i(TAG, "Saving regId on app version " + appVersion);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(REGISTRATION_ID, regId);
-        editor.putInt(APP_VERSION, appVersion);
-        editor.apply();
-    }
-
-    private static int getAppVersion(Context context)
-    {
-        try
-        {
-            PackageInfo packageInfo = context.getPackageManager()
-                    .getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e)
-        {
-            // should never happen
-            throw new RuntimeException("Could not get package name: " + e);
-        }
-    }
-
-    private void sendRegistrationIdToBackend()
-    {
-        String deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-        BackgroundService.registerDevice(context, regid, deviceId);
-    }
-
     private void startTimer()
     {
         TimerTask timerTask = new TimerTask()
@@ -833,7 +680,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
             {
                 Log.i(TAG, "Timer complete");
 
-                if (isAppInForeground())
+                if (Device.isAppInforeground(context))
                 {
                     Log.i(TAG, "App is in foreground");
                     GodToolsApiClient.updateNotification(settings.getString(AUTH_GENERIC, EMPTY_STRING),
@@ -862,14 +709,5 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
         timer = new Timer("1.5MinuteTimer");
         timer.schedule(timerTask, 90000); //1.5 minutes
         Log.i(TAG, "Timer scheduled");
-    }
-
-    private boolean isAppInForeground()
-    {
-        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> services = activityManager.getRunningTasks(1);
-
-        return (services.get(0).topActivity.getPackageName()
-                .equalsIgnoreCase(getApplicationContext().getPackageName()));
     }
 }

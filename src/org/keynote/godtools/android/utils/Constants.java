@@ -38,10 +38,10 @@ public class Constants
     public static final String ACCESS_CODE = "access_code";
     public static final String TRANSLATOR_MODE = "TranslatorMode";
     public static final String STATUS_CODE = "status_code";
+
     /**
      * package codes
      */
-
     public static final String KGP = "kgp";
     public static final String FOUR_LAWS = "fourlaws";
     public static final String SATISFIED = "satisfied";
@@ -51,6 +51,18 @@ public class Constants
     public static final String APP_VERSION = "appVersion";
     public static final String DEVICE_ID = "device_id";
     public static final String NOTIFICATIONS_ON = "notifications_on";
+
+    /**
+     * Intent extras
+     */
+    public static final String PAGE_LEFT = "PageLeft";
+    public static final String PAGE_TOP = "PageTop";
+    public static final String PAGE_WIDTH = "PageWidth";
+    public static final String PAGE_HEIGHT = "PageHeight";
+    public static final String PACKAGE_NAME = "PackageName";
+    public static final String LANGUAGE_CODE = "LanguageCode";
+    public static final String CONFIG_FILE_NAME = "ConfigFileName";
+    public static final String STATUS = "Status";
 
     /**
      * Standard god tools result: selected a primary language
