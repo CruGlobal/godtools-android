@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.common.base.Strings;
 
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
@@ -873,7 +874,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private String getRegistrationId(Context context)
     {
         String registrationId = settings.getString(REGISTRATION_ID, "");
-        if (registrationId == null || registrationId.isEmpty())
+        if (Strings.isNullOrEmpty(registrationId))
         {
             Log.i(TAG, "Registration not found.");
             return "";
