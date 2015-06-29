@@ -15,6 +15,7 @@ import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.Html;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -25,6 +26,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AbsoluteLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -515,9 +517,19 @@ public class SnuffyPWActivity extends Activity
 
     public void doCmdShare(View v)
     {
-        String msgBody = getString(R.string.app_email_body); // "Get the %@1 App by going to the following link:\n%@2";
-        msgBody = msgBody.replace("%1", mPackageTitle);
-        msgBody = msgBody.replace("%2", getLinkForPackage());
+
+        String subjectLine = "Our conversation about " + mPackageTitle + " today";
+
+        String msgBody = "";
+
+        Log.i(TAG, mAppPackage);
+        
+        if (mAppPackage.equalsIgnoreCase("kgp")) msgBody = getString(R.string.kgp_share);
+        else if (mAppPackage.equalsIgnoreCase("fourlaws")) msgBody = getString(R.string.fourlaws_share);
+        else if (mAppPackage.equalsIgnoreCase("satisfied")) msgBody = getString(R.string.satisfied_share);
+        else msgBody = getString(R.string.everystudent_share); //every student
+
+        msgBody = msgBody.replace("%1", mAppLanguage);
 
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");

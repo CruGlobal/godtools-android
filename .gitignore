@@ -10,8 +10,8 @@
 **/*.class
  
 # generated files 
-bin/ 
-gen/ 
+bin/
+gen/
 out/
 build/
  
@@ -21,6 +21,7 @@ local.properties
 /.idea/
 /snuffy-android.iml
 /.gradle/
+.gradle
 
 # OS specific annoyances
 **/*.DS_Store
