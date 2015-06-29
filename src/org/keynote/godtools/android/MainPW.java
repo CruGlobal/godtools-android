@@ -444,7 +444,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
                 GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), languagePrimary, "draft_primary", this);
 
-                Toast.makeText(MainPW.this, "Translator preview mode is enabled", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainPW.this, getString(R.string.translator_enabled), Toast.LENGTH_LONG).show();
                 switchedToTranslatorMode(true);
 
                 finish();
@@ -465,7 +465,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                     app.setAppLocale(primaryCode);
                 }
 
-                Toast.makeText(MainPW.this, "Translator preview mode is disabled", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainPW.this, getString(R.string.translator_disabled), Toast.LENGTH_LONG).show();
 
                 finish();
                 startActivity(getIntent());
@@ -702,7 +702,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         }
 
         hideLoading();
-        Toast.makeText(MainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainPW.this, getString(R.string.failed_update_draft), Toast.LENGTH_SHORT).show();
 
 
     }
@@ -714,7 +714,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         if (tag.equalsIgnoreCase("draft"))
         {
 
-            Toast.makeText(MainPW.this, getString(R.string.failed_update_draft), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainPW.this, getString(R.string.failed_download_draft), Toast.LENGTH_SHORT).show();
 
         }
         else if (tag.equalsIgnoreCase("draft_primary"))
