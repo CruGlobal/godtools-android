@@ -53,8 +53,7 @@ public class SnuffyLanguageActivity extends ListActivity {
 	
 	private ArrayList<HashMap<String, Object>> mList = new ArrayList<HashMap<String, Object>>(4);
 	private String mPackageName;
-	private String mLanguageCode;
-    public static final int DIALOG_DOWNLOAD_INDEX_PROGRESS = 0;
+	public static final int DIALOG_DOWNLOAD_INDEX_PROGRESS = 0;
     public static final int DIALOG_DOWNLOAD_LANGUAGE_PROGRESS = 1;
     private ProgressDialog mProgressDialog;
     private DownloadFileAsync mDownloadFileAsync;
@@ -76,8 +75,8 @@ public class SnuffyLanguageActivity extends ListActivity {
 		// the to array specifies the views from the xml layout
 		// on which we want to display the values defined in the from array
 		int[] to = { R.id.list2Text1, R.id.list2Image};
-		
-		mLanguageCode = getIntent().getStringExtra("LanguageCode");
+
+		String mLanguageCode = getIntent().getStringExtra("LanguageCode");
 		mPackageName  = getIntent().getStringExtra("PackageName");
 		
 		// TODO: consider case where device rotated - this code may need to move
