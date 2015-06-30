@@ -32,6 +32,9 @@ import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.BACKGROUND_TASK_TAG;
 import static org.keynote.godtools.android.utils.Constants.DEVICE_ID;
+import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
 import static org.keynote.godtools.android.utils.Constants.LANG_CODE;
 import static org.keynote.godtools.android.utils.Constants.META;
 import static org.keynote.godtools.android.utils.Constants.NOTIFICATIONS_ON;
@@ -41,7 +44,7 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 import static org.keynote.godtools.android.utils.Constants.TYPE;
 
 /**
- * Created by matthewfrederick on 5/4/15.
+ * Background service class used to interact with GodTools API
  */
 public class BackgroundService extends IntentService implements AuthTask.AuthTaskHandler,
         MetaTask.MetaTaskHandler,
@@ -68,8 +71,8 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         super.onCreate();
         broadcastManager = LocalBroadcastManager.getInstance(this);
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-        languageParallel = settings.getString(GTLanguage.KEY_PARALLEL, "");
+        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
+        languageParallel = settings.getString(GTLanguage.KEY_PARALLEL, EMPTY_STRING);
         adapter = DBAdapter.getInstance(this);
     }
 
@@ -89,12 +92,12 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         }
         else if (APITasks.GET_LIST_OF_PACKAGES.equals(intent.getSerializableExtra(TYPE)))
         {
-            GodToolsApiClient.getListOfPackages(settings.getString(AUTH_GENERIC, ""),
+            GodToolsApiClient.getListOfPackages(settings.getString(AUTH_GENERIC, EMPTY_STRING),
                     META, this);
         }
         else if (APITasks.GET_LIST_OF_DRAFTS.equals(intent.getSerializableExtra(TYPE)))
         {
-            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
+            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, EMPTY_STRING),
                     intent.getStringExtra(LANG_CODE),
                     intent.getStringExtra(BACKGROUND_TASK_TAG), this);
         }
@@ -103,7 +106,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
             GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                     intent.getStringExtra(LANG_CODE),
                     intent.getStringExtra(BACKGROUND_TASK_TAG),
-                    settings.getString(AUTH_GENERIC, ""), this);
+                    settings.getString(AUTH_GENERIC, EMPTY_STRING), this);
         }
         else if (APITasks.REGISTER_DEVICE.equals(intent.getSerializableExtra(TYPE)))
         {
@@ -203,16 +206,6 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         context.startService(intent);
     }
 
-    public static void getListOfDrafts(Context context, String langCode, String tag)
-    {
-        final Bundle extras = new Bundle(3);
-        extras.putSerializable(TYPE, APITasks.GET_LIST_OF_DRAFTS);
-        extras.putString(LANG_CODE, langCode);
-        extras.putString(BACKGROUND_TASK_TAG, tag);
-        Intent intent = baseIntent(context, extras);
-        context.startService(intent);
-    }
-
     @Override
     public void authComplete(String authorization, boolean authenticateAccessCode, boolean verifyStatus)
     {
@@ -292,7 +285,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
 
     private boolean isFirstLaunch()
     {
-        return settings.getBoolean("firstLaunch", true);
+        return settings.getBoolean(FIRST_LAUNCH, true);
     }
 
     @Override
