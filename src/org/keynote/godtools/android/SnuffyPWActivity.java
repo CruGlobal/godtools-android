@@ -48,8 +48,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
 import static org.keynote.godtools.android.utils.Constants.CONFIG_FILE_NAME;
 import static org.keynote.godtools.android.utils.Constants.COUNT;
 import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
@@ -69,7 +69,7 @@ import static org.keynote.godtools.android.utils.Constants.STATUS;
 public class SnuffyPWActivity extends Activity
 {
     private static final String TAG = SnuffyPWActivity.class.getSimpleName();
-
+    private static final int DIALOG_PROCESS_PACKAGE_PROGRESS = 1;
     private String mAppPackage;
     private String mConfigFileName;
     private String mAppLanguage = ENGLISH_DEFAULT;
@@ -88,23 +88,22 @@ public class SnuffyPWActivity extends Activity
     private String mPackageStatus;
     private ProcessPackageAsync mProcessPackageAsync;
     private GestureDetector MyGestureDetector;
-
     private String mConfigPrimary, mConfigParallel;
     private GTPackage mParallelPackage;
     private boolean isUsingPrimaryLanguage, isParallelLanguageSet;
-    
     private SharedPreferences settings;
     private String regid;
     private Timer timer;
-
-    private void setLanguage(String languageCode)
-    {
-        mAppLanguage = languageCode;
-    }
+    private ProgressDialog mProgressDialog;
 
     private String getLanguage()
     {
         return mAppLanguage;
+    }
+
+    private void setLanguage(String languageCode)
+    {
+        mAppLanguage = languageCode;
     }
 
     @Override
@@ -154,9 +153,9 @@ public class SnuffyPWActivity extends Activity
         // TODO: when we can display About or other pages, save that state too so we can restore that too.
 
         handleLanguagesWithAlternateFonts();
-        
+
         regid = settings.getString(REGISTRATION_ID, EMPTY_STRING);
-        
+
         if (mAppPackage.equalsIgnoreCase(KGP) || mAppPackage.equalsIgnoreCase(FOUR_LAWS))
         {
             startTimer();
@@ -187,63 +186,6 @@ public class SnuffyPWActivity extends Activity
         }
     }
 
-    private class MyPagerAdapter extends PagerAdapter
-    {
-        public int getCount()
-        {
-            return mPages.size();
-        }
-
-        public Object instantiateItem(ViewGroup collection, int position)
-        {
-            View view = mPages.elementAt(position);
-            collection.addView(view, 0);
-            return view;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup viewGroup, int position, Object object)
-        {
-            viewGroup.removeView((View) object);
-        }
-
-        @Override
-        public boolean isViewFromObject(View arg0, Object arg1)
-        {
-            return arg0 == arg1;
-        }
-
-        @Override
-        public int getItemPosition(Object object)
-        {
-            // was return POSITION_UNCHANGED; but then showed cached pages from prev language after we rebuilt pages for new language
-            return POSITION_NONE; // force view to redisplay
-        }
-
-        @Override
-        public Parcelable saveState()
-        {
-            return null;
-        }
-
-        @Override
-        public void finishUpdate(ViewGroup arg0)
-        {
-            // TODO Auto-generated method stub
-        }
-
-        @Override
-        public void restoreState(Parcelable arg0, ClassLoader arg1)
-        {
-            // TODO Auto-generated method stub
-        }
-
-        @Override
-        public void startUpdate(ViewGroup arg0)
-        {
-        }
-    }
-
     protected void onResume()
     {
         super.onResume();
@@ -263,13 +205,13 @@ public class SnuffyPWActivity extends Activity
     {
         super.onStop();
         Log.i(TAG, "Activity stopped");
-        
+
         if (timer != null)
         {
             timer.cancel();
             Log.i(NotificationInfo.NOTIFICATION_TAG, "Share Timer stopped");
         }
-        
+
     }
 
     private void doSetup(int delay)
@@ -404,8 +346,8 @@ public class SnuffyPWActivity extends Activity
         ed.putString("currLanguageCode", getLanguage());
         // TODO: when we can display About or other pages, save that state too so we can restore that too.
         ed.apply();
-        
-        
+
+
     }
 
     private void resizeTheActivity()
@@ -718,9 +660,6 @@ public class SnuffyPWActivity extends Activity
                 });
     }
 
-    private ProgressDialog mProgressDialog;
-    private static final int DIALOG_PROCESS_PACKAGE_PROGRESS = 1;
-
     @Override
     protected Dialog onCreateDialog(int id)
     {
@@ -737,6 +676,128 @@ public class SnuffyPWActivity extends Activity
                 return mProgressDialog;
             default:
                 return null;
+        }
+    }
+
+    private void showLoading(String msg)
+    {
+        RelativeLayout updatingDraftLayout = (RelativeLayout) findViewById(R.id.updatingDraft);
+        updatingDraftLayout.setVisibility(View.VISIBLE);
+
+        TextView updatingPage = (TextView) findViewById(R.id.updatingPageTextView);
+        updatingPage.setText(msg);
+    }
+
+    private void hideLoading()
+    {
+        TextView updatingPage = (TextView) findViewById(R.id.updatingPageTextView);
+        updatingPage.setText(EMPTY_STRING);
+
+        RelativeLayout updatingDraftLayout = (RelativeLayout) findViewById(R.id.updatingDraft);
+        updatingDraftLayout.setVisibility(View.GONE);
+
+    }
+
+    private SnuffyApplication getApp()
+    {
+        return (SnuffyApplication) getApplication();
+    }
+
+    private void trackScreenEvent(String event)
+    {
+        EventTracker.track(getApp(), mAppPackage, "Menu Event", event);
+    }
+
+    private void trackScreenActivity(String activity)
+    {
+        EventTracker.track(getApp(), activity, mAppLanguage);
+    }
+
+    private void startTimer()
+    {
+        TimerTask timerTask = new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                Log.i(TAG, "Timer complete");
+                GodToolsApiClient.updateNotification(settings.getString(AUTH_GENERIC, EMPTY_STRING),
+                        regid, NotificationInfo.DAY_AFTER_SHARE, new NotificationUpdateTask.NotificationUpdateTaskHandler()
+                        {
+                            @Override
+                            public void registrationComplete(String regId)
+                            {
+                                Log.i(NotificationInfo.NOTIFICATION_TAG, "Day After Share Notification notice sent to API");
+                            }
+
+                            @Override
+                            public void registrationFailed()
+                            {
+                                Log.e(NotificationInfo.NOTIFICATION_TAG, "Day After Share notification notice failed to send to API");
+                            }
+                        });
+            }
+        };
+
+        timer = new Timer("1.5ShareTimer");
+        timer.schedule(timerTask, 90000); //1.5 minutes
+        Log.i(TAG, "Timer scheduled");
+    }
+
+    private class MyPagerAdapter extends PagerAdapter
+    {
+        public int getCount()
+        {
+            return mPages.size();
+        }
+
+        public Object instantiateItem(ViewGroup collection, int position)
+        {
+            View view = mPages.elementAt(position);
+            collection.addView(view, 0);
+            return view;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup viewGroup, int position, Object object)
+        {
+            viewGroup.removeView((View) object);
+        }
+
+        @Override
+        public boolean isViewFromObject(View arg0, Object arg1)
+        {
+            return arg0 == arg1;
+        }
+
+        @Override
+        public int getItemPosition(Object object)
+        {
+            // was return POSITION_UNCHANGED; but then showed cached pages from prev language after we rebuilt pages for new language
+            return POSITION_NONE; // force view to redisplay
+        }
+
+        @Override
+        public Parcelable saveState()
+        {
+            return null;
+        }
+
+        @Override
+        public void finishUpdate(ViewGroup arg0)
+        {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void restoreState(Parcelable arg0, ClassLoader arg1)
+        {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void startUpdate(ViewGroup arg0)
+        {
         }
     }
 
@@ -812,70 +873,5 @@ public class SnuffyPWActivity extends Activity
             openOptionsMenu();
             return super.onSingleTapUp(e);
         }
-    }
-
-    private void showLoading(String msg)
-    {
-        RelativeLayout updatingDraftLayout = (RelativeLayout) findViewById(R.id.updatingDraft);
-        updatingDraftLayout.setVisibility(View.VISIBLE);
-
-        TextView updatingPage = (TextView) findViewById(R.id.updatingPageTextView);
-        updatingPage.setText(msg);
-    }
-
-    private void hideLoading()
-    {
-        TextView updatingPage = (TextView) findViewById(R.id.updatingPageTextView);
-        updatingPage.setText(EMPTY_STRING);
-
-        RelativeLayout updatingDraftLayout = (RelativeLayout) findViewById(R.id.updatingDraft);
-        updatingDraftLayout.setVisibility(View.GONE);
-
-    }
-
-    private SnuffyApplication getApp()
-    {
-        return (SnuffyApplication) getApplication();
-    }
-
-    private void trackScreenEvent(String event)
-    {
-        EventTracker.track(getApp(), mAppPackage, "Menu Event", event);
-    }
-
-    private void trackScreenActivity(String activity)
-    {
-        EventTracker.track(getApp(), activity, mAppLanguage);
-    }
-
-    private void startTimer()
-    {
-        TimerTask timerTask = new TimerTask()
-        {
-            @Override
-            public void run()
-            {
-                Log.i(TAG, "Timer complete");
-                GodToolsApiClient.updateNotification(settings.getString(AUTH_GENERIC, EMPTY_STRING),
-                        regid, NotificationInfo.DAY_AFTER_SHARE, new NotificationUpdateTask.NotificationUpdateTaskHandler()
-                        {
-                            @Override
-                            public void registrationComplete(String regId)
-                            {
-                                Log.i(NotificationInfo.NOTIFICATION_TAG, "Day After Share Notification notice sent to API");
-                            }
-
-                            @Override
-                            public void registrationFailed()
-                            {
-                                Log.e(NotificationInfo.NOTIFICATION_TAG, "Day After Share notification notice failed to send to API");
-                            }
-                        });
-            }
-        };
-
-        timer = new Timer("1.5ShareTimer");
-        timer.schedule(timerTask, 90000); //1.5 minutes
-        Log.i(TAG, "Timer scheduled");
     }
 }
