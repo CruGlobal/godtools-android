@@ -37,6 +37,7 @@ public class Constants
     public static final String FIRST_LAUNCH = "firstLaunch";
     public static final String ACCESS_CODE = "access_code";
     public static final String TRANSLATOR_MODE = "TranslatorMode";
+    public static final String NOTIFICATIONS = "Notifications";
     public static final String STATUS_CODE = "status_code";
 
     /**
@@ -63,6 +64,9 @@ public class Constants
     public static final String LANGUAGE_CODE = "LanguageCode";
     public static final String CONFIG_FILE_NAME = "ConfigFileName";
     public static final String STATUS = "Status";
+    public static final String LANGUAGE_TYPE = "languageType";
+    public static final String MAIN_LANGUAGE = "Main Language";
+    public static final String PARALLEL_LANGUAGE = "Parallel Language";
 
     /**
      * Standard god tools result: selected a primary language
@@ -88,5 +92,8 @@ public class Constants
      * Standard god tools result: disabled translator mode
      */
     public static final int RESULT_PREVIEW_MODE_DISABLED = 2345;
+
+    public static final int REQUEST_PRIMARY = 1002;
+    public static final int REQUEST_PARALLEL = 1003;
 
 }

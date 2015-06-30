@@ -38,7 +38,15 @@ import org.keynote.godtools.android.utils.Typefaces;
 import java.util.Locale;
 
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.LANGUAGE_TYPE;
+import static org.keynote.godtools.android.utils.Constants.MAIN_LANGUAGE;
+import static org.keynote.godtools.android.utils.Constants.NOTIFICATIONS;
+import static org.keynote.godtools.android.utils.Constants.PARALLEL_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
+import static org.keynote.godtools.android.utils.Constants.REQUEST_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.REQUEST_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
@@ -55,27 +63,19 @@ public class SettingsPW extends ActionBarActivity implements
 {
 
     private static final String TAG = SettingsPW.class.getSimpleName();
-    private static final int REQUEST_PRIMARY = 1002;
-    private static final int REQUEST_PARALLEL = 1003;
 
     private LocalBroadcastManager broadcastManager;
     private BroadcastReceiver broadcastReceiver;
 
-    TextView tvMainLanguage, tvParallelLanguage;
-    RelativeLayout rlMainLanguage, rlParallelLanguage;
-    CompoundButton cbTranslatorMode;
-    CompoundButton cbNotificationsAllowed;
-    Typeface mAlternateTypeface;
-    String primaryLanguageCode;
+    private TextView tvMainLanguage;
+    private TextView tvParallelLanguage;
+    private CompoundButton cbTranslatorMode;
+    private CompoundButton cbNotificationsAllowed;
+    private Typeface mAlternateTypeface;
 
-    ProgressDialog pdLoading;
+    private ProgressDialog pdLoading;
 
-    SharedPreferences settings;
-
-    // since the authFail method is used for either the wrong pass code or an expired pass code, we
-    // need separate messages for each situation. If translatorModeExpired=false, then use wrong pass
-    // code message. If true use expired message.
-    boolean translatorModeExpired = false;
+    private SharedPreferences settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -97,8 +97,8 @@ public class SettingsPW extends ActionBarActivity implements
 
         tvMainLanguage = (TextView) findViewById(R.id.tvMainLanguage);
         tvParallelLanguage = (TextView) findViewById(R.id.tvParallelLanguage);
-        rlMainLanguage = (RelativeLayout) findViewById(R.id.rlMainLanguage);
-        rlParallelLanguage = (RelativeLayout) findViewById(R.id.rlParallelLanguage);
+        RelativeLayout rlMainLanguage = (RelativeLayout) findViewById(R.id.rlMainLanguage);
+        RelativeLayout rlParallelLanguage = (RelativeLayout) findViewById(R.id.rlParallelLanguage);
         cbTranslatorMode = (CompoundButton) findViewById(R.id.cbTranslatorMode);
         cbNotificationsAllowed = (CompoundButton) findViewById(R.id.cbNotification);
 
@@ -107,11 +107,11 @@ public class SettingsPW extends ActionBarActivity implements
         rlMainLanguage.setOnClickListener(this);
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        boolean isTranslatorEnabled = settings.getBoolean("TranslatorMode", false);
-        boolean allowNotifications = settings.getBoolean("Notifications", true);
+        boolean isTranslatorEnabled = settings.getBoolean(TRANSLATOR_MODE, false);
+        boolean allowNotifications = settings.getBoolean(NOTIFICATIONS, true);
         cbNotificationsAllowed.setChecked(allowNotifications);
-        primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-        String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
+        String primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
+        String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, EMPTY_STRING);
 
         handleLanguagesWithAlternateFonts(primaryLanguageCode);
         tvMainLanguage = new SnuffyAlternateTypefaceTextView(tvMainLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.NORMAL).get();
@@ -230,8 +230,7 @@ public class SettingsPW extends ActionBarActivity implements
                 tvMainLanguage.setText(primaryName);
 
                 // set value for parallel language view
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-                String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
+                String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, EMPTY_STRING);
 
                 if (Strings.isNullOrEmpty(parallelLanguageCode))
                 {
@@ -277,12 +276,12 @@ public class SettingsPW extends ActionBarActivity implements
         switch (v.getId())
         {
             case R.id.rlMainLanguage:
-                intent.putExtra("languageType", "Main Language");
+                intent.putExtra(LANGUAGE_TYPE, MAIN_LANGUAGE);
                 startActivityForResult(intent, REQUEST_PRIMARY);
                 break;
 
             case R.id.rlParallelLanguage:
-                intent.putExtra("languageType", "Parallel Language");
+                intent.putExtra(LANGUAGE_TYPE, PARALLEL_LANGUAGE);
                 startActivityForResult(intent, REQUEST_PARALLEL);
                 break;
         }
@@ -293,15 +292,12 @@ public class SettingsPW extends ActionBarActivity implements
     {
         boolean on = ((CompoundButton) view).isChecked();
 
-        if (on && !Strings.isNullOrEmpty(settings.getString(AUTH_DRAFT, "")))
+        if (on && !Strings.isNullOrEmpty(settings.getString(AUTH_DRAFT, EMPTY_STRING)))
         {
             ((CompoundButton) view).setChecked(true);
             cbTranslatorMode.setEnabled(true);
             BackgroundService.verifyStatusOfAuthToken(getApplicationContext(),
-                    settings.getString(AUTH_DRAFT, ""));
-
-            // if Auth fails from this it is because the auth token is expired.
-            translatorModeExpired = true;
+                    settings.getString(AUTH_DRAFT, EMPTY_STRING));
 
             return;
         }
@@ -312,8 +308,6 @@ public class SettingsPW extends ActionBarActivity implements
         {
             if (Device.isConnected(SettingsPW.this))
             {
-                // if auth fails here it is because of the wrong pass code.
-                translatorModeExpired = false;
                 showAccessCodeDialog();
             }
             else
@@ -407,9 +401,7 @@ public class SettingsPW extends ActionBarActivity implements
 
     public void onNotificationToggle(View view)
     {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean("Notifications", cbNotificationsAllowed.isChecked());
-        editor.apply();
+        settings.edit().putBoolean(NOTIFICATIONS, cbNotificationsAllowed.isChecked()).apply();
 
         String event = cbNotificationsAllowed.isChecked() ? "Turned ON" : "Turned OFF";
 
@@ -430,7 +422,6 @@ public class SettingsPW extends ActionBarActivity implements
         pdLoading.setCancelable(false);
         pdLoading.setMessage(msg);
         pdLoading.show();
-
     }
 
     private void handleLanguagesWithAlternateFonts(String mAppLanguage)
@@ -447,7 +438,7 @@ public class SettingsPW extends ActionBarActivity implements
 
     private void updateDeviceWithAPI(String notificationsOn)
     {
-        String registrationId = settings.getString(REGISTRATION_ID, "");
+        String registrationId = settings.getString(REGISTRATION_ID, EMPTY_STRING);
         String deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
         if (!Strings.isNullOrEmpty(registrationId) && !Strings.isNullOrEmpty(deviceId))
