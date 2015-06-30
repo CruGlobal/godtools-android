@@ -85,11 +85,6 @@ public class Constants
     public static final int RESULT_DOWNLOAD_PARALLEL = 2002;
 
     /**
-     * Standard god tools result: enabled translator mode
-     */
-    public static final int RESULT_PREVIEW_MODE_ENABLED = 1234;
-
-    /**
      * Standard god tools result: disabled translator mode
      */
     public static final int RESULT_PREVIEW_MODE_DISABLED = 2345;
