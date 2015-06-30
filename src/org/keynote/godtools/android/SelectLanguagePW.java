@@ -50,7 +50,7 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 public class SelectLanguagePW extends ActionBarActivity implements AdapterView.OnItemClickListener, DownloadTask.DownloadTaskHandler
 {
     private final String TAG = getClass().getSimpleName();
-    
+
     private ListView mList;
     private SharedPreferences settings;
     private List<GTLanguage> languageList;
@@ -68,7 +68,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
 
 
     private SnuffyApplication app;
-    
+
     private LanguageAdapter.ViewHolder currentView;
 
     @Override
@@ -90,7 +90,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
 
         TextView titleBar = (TextView) actionBar.getCustomView().findViewById(R.id.titlebar_title);
         titleBar.setText(languageType);
-        
+
         actionBar.setDisplayShowTitleEnabled(true);
 
         languageList = GTLanguage.getAll(this);
@@ -107,7 +107,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
         if (!isTranslator)
         {
             Iterator<GTLanguage> i = languageList.iterator();
-            for (; i.hasNext();)
+            for (; i.hasNext(); )
             {
                 GTLanguage lang = i.next();
                 if (lang.isDraft()) i.remove();
@@ -127,13 +127,13 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
 
         setList();
     }
-    
+
     private void downloadLanguage(String langCode)
     {
         GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                 langCode, "primary", settings.getString(AUTH_GENERIC, EMPTY_STRING), this);
     }
-    
+
     private void setList()
     {
         if (languageType.equalsIgnoreCase(MAIN_LANGUAGE))
@@ -150,13 +150,13 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
 
         // There are sometimes duplicates of languages.
         languageList = removeDuplicates(languageList);
-        
+
         LanguageAdapter adapter = new LanguageAdapter(this, languageList);
         Log.i(TAG, "current language: " + currentLanguage);
         adapter.setCurrentLanguage(currentLanguage);
         mList.setAdapter(adapter);
         mList.setOnItemClickListener(this);
-        
+
         mList.setSelectionFromTop(index, top);
     }
 
@@ -170,22 +170,22 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
 
         return secondList;
     }
-    
+
     private void setListLocation()
     {
         index = mList.getFirstVisiblePosition();
         View localView = mList.getChildAt(0);
-        top = (localView == null) ? 0 : (localView.getTop() - mList.getPaddingTop());    
+        top = (localView == null) ? 0 : (localView.getTop() - mList.getPaddingTop());
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-    {   
+    {
         GTLanguage gtl = languageList.get(position);
         Log.i(TAG, "Selected: " + gtl.getLanguageName());
-        
+
         setListLocation();
-        
+
         returnIntent = new Intent();
 
         if (isMainLang)
@@ -198,7 +198,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
                 primaryLanguage = gtl.getLanguageCode();
 
                 setResult(RESULT_CHANGED_PRIMARY, returnIntent);
-                
+
                 setList();
 
             }
@@ -219,15 +219,15 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
         else
         {
             returnIntent.putExtra("parallelCode", gtl.getLanguageCode());
-            
+
             // set selected language as parallel
             if (gtl.isDownloaded())
             {
                 setAsPrimaryOrParallel(GTLanguage.KEY_PARALLEL, gtl.getLanguageCode());
                 parallelLanguage = gtl.getLanguageCode();
-                
+
                 setResult(RESULT_CHANGED_PARALLEL, returnIntent);
-                
+
                 setList();
             }
             // download and set as parallel
@@ -239,12 +239,12 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
                 currentView = (LanguageAdapter.ViewHolder) view.getTag();
                 currentView.tvDownload.setText(R.string.downloading);
                 currentView.pbDownloading.setVisibility(View.VISIBLE);
-                
+
                 downloadLanguage(gtl.getLanguageCode());
             }
         }
     }
-    
+
     private void setAsPrimaryOrParallel(String setAs, String langCode)
     {
         if (GTLanguage.KEY_PRIMARY.equals(setAs))
@@ -276,9 +276,9 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
     public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
     {
         Log.i(TAG, "Download Successful: " + langCode);
-        
+
         updateDownloadedStatus(langCode, true);
-        
+
         if (!downloadOnly)
         {
             if (isMainLang)
@@ -295,10 +295,10 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
                 setAsPrimaryOrParallel(GTLanguage.KEY_PARALLEL, langCode);
             }
         }
-        
+
         setList();
     }
-    
+
     private void updateDownloadedStatus(String langCode, boolean downloaded)
     {
         if (downloaded)
@@ -307,7 +307,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
             gtLanguage.setDownloaded(true);
             gtLanguage.update(app.getApplicationContext());
         }
-        
+
         for (GTLanguage language : languageList)
         {
             if (language.getLanguageCode().equals(langCode)) language.setDownloaded(downloaded);
@@ -318,10 +318,53 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
     public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
     {
         Log.i(TAG, "Download Failed");
-        
+
         currentView.pbDownloading.setVisibility(View.INVISIBLE);
         currentView.ivDownloaded.setImageResource(R.drawable.gt4_downloads_erroricon);
         currentView.tvDownload.setText(R.string.retry);
+    }
+
+    private void handleLanguagesWithAlternateFonts(String mAppLanguage)
+    {
+        if (LanguagesNotSupportedByDefaultFont.contains(mAppLanguage))
+        {
+            mAlternateTypeface = Typefaces.get(getApplication(), LanguagesNotSupportedByDefaultFont.getPathToAlternateFont(mAppLanguage));
+        }
+        else
+        {
+            mAlternateTypeface = Typeface.DEFAULT;
+        }
+    }
+
+    private void itemOnClickAction(GTLanguage language)
+    {
+        setListLocation();
+
+        // if downloading, check for internet connection;
+        if (!language.isDownloaded() && !Device.isConnected(SelectLanguagePW.this))
+        {
+            Toast.makeText(SelectLanguagePW.this, getString(R.string.internet_needed), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        currentView.pbDownloading.setVisibility(View.VISIBLE);
+        downloadOnly = true;
+
+        if (!language.isDownloaded())
+        {
+            Log.i(TAG, "Download");
+            currentView.tvDownload.setText(R.string.downloading);
+
+            downloadLanguage(language.getLanguageCode());
+        }
+        else
+        {
+            Log.i(TAG, "Delete");
+            updateDownloadedStatus(language.getLanguageCode(), false);
+            DBAdapter adapter = DBAdapter.getInstance(this);
+            adapter.deletePackages(language.getLanguageCode(), "live");
+            setList();
+        }
     }
 
     private class LanguageAdapter extends ArrayAdapter<GTLanguage>
@@ -363,7 +406,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
             final GTLanguage gtl = mLanguageList.get(position);
             holder.tvLanguage.setTypeface(mAlternateTypeface, Typeface.NORMAL);
             holder.tvLanguage.setText(gtl.getLanguageName());
-            
+
             if (gtl.isDownloaded())
             {
                 holder.tvDownload.setText(R.string.delete);
@@ -383,7 +426,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
                 holder.ivDownloaded.setVisibility(View.INVISIBLE);
                 holder.layout.setBackgroundColor(Color.TRANSPARENT);
             }
-            
+
             holder.tvDownload.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -397,6 +440,11 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
             return convertView;
         }
 
+        public void setCurrentLanguage(String currentLanguage)
+        {
+            this.currentLanguage = currentLanguage;
+        }
+
         private class ViewHolder
         {
             public RelativeLayout layout;
@@ -404,54 +452,6 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
             public ImageView ivDownloaded;
             public TextView tvDownload;
             public ProgressBar pbDownloading;
-        }
-
-        public void setCurrentLanguage(String currentLanguage)
-        {
-            this.currentLanguage = currentLanguage;
-        }
-    }
-
-    private void handleLanguagesWithAlternateFonts(String mAppLanguage)
-    {
-        if (LanguagesNotSupportedByDefaultFont.contains(mAppLanguage))
-        {
-            mAlternateTypeface = Typefaces.get(getApplication(), LanguagesNotSupportedByDefaultFont.getPathToAlternateFont(mAppLanguage));
-        }
-        else
-        {
-            mAlternateTypeface = Typeface.DEFAULT;
-        }
-    }
-    
-    private void itemOnClickAction(GTLanguage language)
-    {
-        setListLocation();
-        
-        // if downloading, check for internet connection;
-        if (!language.isDownloaded() && !Device.isConnected(SelectLanguagePW.this))
-        {
-            Toast.makeText(SelectLanguagePW.this, getString(R.string.internet_needed), Toast.LENGTH_SHORT).show();
-            return;
-        }
-        
-        currentView.pbDownloading.setVisibility(View.VISIBLE);
-        downloadOnly = true;
-
-        if (!language.isDownloaded())
-        {
-            Log.i(TAG, "Download");
-            currentView.tvDownload.setText(R.string.downloading);
-            
-            downloadLanguage(language.getLanguageCode());
-        }
-        else
-        {
-            Log.i(TAG, "Delete");
-            updateDownloadedStatus(language.getLanguageCode(), false);
-            DBAdapter adapter = DBAdapter.getInstance(this);
-            adapter.deletePackages(language.getLanguageCode(), "live");
-            setList();
         }
     }
 }
