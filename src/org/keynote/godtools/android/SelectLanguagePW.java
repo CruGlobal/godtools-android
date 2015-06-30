@@ -36,34 +36,40 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
+import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.LANGUAGE_TYPE;
+import static org.keynote.godtools.android.utils.Constants.MAIN_LANGUAGE;
+import static org.keynote.godtools.android.utils.Constants.PARALLEL_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 public class SelectLanguagePW extends ActionBarActivity implements AdapterView.OnItemClickListener, DownloadTask.DownloadTaskHandler
 {
     private final String TAG = getClass().getSimpleName();
     
-    ListView mList;
-    SharedPreferences settings;
-    List<GTLanguage> languageList;
+    private ListView mList;
+    private SharedPreferences settings;
+    private List<GTLanguage> languageList;
 
-    String primaryLanguage, parallelLanguage;
-    String currentLanguage;
-    Boolean isTranslator;
-    Typeface mAlternateTypeface;
-    String languageType;
-    Intent returnIntent;
-    boolean isMainLang;
-    boolean downloadOnly;
-    int index;
-    int top;
-    View localView;
+    private String primaryLanguage;
+    private String parallelLanguage;
+    private String currentLanguage;
+    private Typeface mAlternateTypeface;
+    private String languageType;
+    private Intent returnIntent;
+    private boolean isMainLang;
+    private boolean downloadOnly;
+    private int index;
+    private int top;
+
+
+    private SnuffyApplication app;
     
-    
-    SnuffyApplication app;
-    
-    LanguageAdapter.ViewHolder currentView;
+    private LanguageAdapter.ViewHolder currentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -79,7 +85,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
 
-        languageType = getIntent().getStringExtra("languageType");
+        languageType = getIntent().getStringExtra(LANGUAGE_TYPE);
         setTitle(getString(R.string.settings_select) + languageType);
 
         TextView titleBar = (TextView) actionBar.getCustomView().findViewById(R.id.titlebar_title);
@@ -91,9 +97,9 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
 
         app = (SnuffyApplication) getApplication();
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        primaryLanguage = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-        parallelLanguage = settings.getString(GTLanguage.KEY_PARALLEL, "");
-        isTranslator = settings.getBoolean("TranslatorMode", false);
+        primaryLanguage = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
+        parallelLanguage = settings.getString(GTLanguage.KEY_PARALLEL, EMPTY_STRING);
+        Boolean isTranslator = settings.getBoolean(TRANSLATOR_MODE, false);
 
         Log.i(TAG, "primary: " + primaryLanguage);
         Log.i(TAG, "parallel: " + parallelLanguage);
@@ -125,17 +131,17 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
     private void downloadLanguage(String langCode)
     {
         GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                langCode, "primary", settings.getString("Authorization_Generic", ""), this);
+                langCode, "primary", settings.getString(AUTH_GENERIC, EMPTY_STRING), this);
     }
     
-    public void setList()
+    private void setList()
     {
-        if (languageType.equalsIgnoreCase("Main Language"))
+        if (languageType.equalsIgnoreCase(MAIN_LANGUAGE))
         {
             currentLanguage = primaryLanguage;
             isMainLang = true;
         }
-        else if (languageType.equalsIgnoreCase("Parallel Language"))
+        else if (languageType.equalsIgnoreCase(PARALLEL_LANGUAGE))
         {
             currentLanguage = parallelLanguage;
             isMainLang = false;
@@ -145,7 +151,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
         // There are sometimes duplicates of languages.
         languageList = removeDuplicates(languageList);
         
-        LanguageAdapter adapter = new LanguageAdapter(this, languageList, mAlternateTypeface);
+        LanguageAdapter adapter = new LanguageAdapter(this, languageList);
         Log.i(TAG, "current language: " + currentLanguage);
         adapter.setCurrentLanguage(currentLanguage);
         mList.setAdapter(adapter);
@@ -168,7 +174,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
     private void setListLocation()
     {
         index = mList.getFirstVisiblePosition();
-        localView = mList.getChildAt(0);
+        View localView = mList.getChildAt(0);
         top = (localView == null) ? 0 : (localView.getTop() - mList.getPaddingTop());    
     }
 
@@ -245,7 +251,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
         {
             if (langCode.equalsIgnoreCase(parallelLanguage))
             {
-                setAsPrimaryOrParallel(GTLanguage.KEY_PARALLEL, "");
+                setAsPrimaryOrParallel(GTLanguage.KEY_PARALLEL, EMPTY_STRING);
             }
         }
 
@@ -298,7 +304,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
         if (downloaded)
         {
             GTLanguage gtLanguage = GTLanguage.getLanguage(app.getApplicationContext(), langCode);
-            gtLanguage.setDownloaded(downloaded);
+            gtLanguage.setDownloaded(true);
             gtLanguage.update(app.getApplicationContext());
         }
         
@@ -320,19 +326,14 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
 
     private class LanguageAdapter extends ArrayAdapter<GTLanguage>
     {
-
-        private Context mContext;
-        private LayoutInflater mInflater;
-        private List<GTLanguage> mLanguageList;
+        private final LayoutInflater mInflater;
+        private final List<GTLanguage> mLanguageList;
         private String currentLanguage;
-        private Typeface tp;
 
-        public LanguageAdapter(Context context, List<GTLanguage> objects, Typeface typeface)
+        public LanguageAdapter(Context context, List<GTLanguage> objects)
         {
             super(context, R.layout.languages_list_item, objects);
-            this.mContext = context;
             this.mLanguageList = objects;
-            this.tp = typeface;
             this.mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
