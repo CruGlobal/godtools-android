@@ -44,16 +44,16 @@ import static org.keynote.godtools.android.utils.Constants.LANGUAGE_TYPE;
 import static org.keynote.godtools.android.utils.Constants.MAIN_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.NOTIFICATIONS;
 import static org.keynote.godtools.android.utils.Constants.PARALLEL_LANGUAGE;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
 import static org.keynote.godtools.android.utils.Constants.REQUEST_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.REQUEST_PRIMARY;
-import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
-import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
-import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PARALLEL;
-import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.RESULT_PREVIEW_MODE_DISABLED;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 
 public class SettingsPW extends ActionBarActivity implements
@@ -128,7 +128,8 @@ public class SettingsPW extends ActionBarActivity implements
         setupBroadcastReceiver();
 
         // set value for parallel language view
-        if (Strings.isNullOrEmpty(parallelLanguageCode)) {
+        if (Strings.isNullOrEmpty(parallelLanguageCode))
+        {
             tvParallelLanguage.setText(getString(R.string.none));
         }
         else
