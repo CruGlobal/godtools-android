@@ -93,7 +93,7 @@ public class AccessCodeDialogFragment extends DialogFragment {
            if (accessCode.isEmpty())
            {
                mListener.onAccessDialogClick(false);
-               Toast.makeText(getActivity(), "Invalid Access Code", Toast.LENGTH_SHORT).show();
+               Toast.makeText(getActivity(), getString(R.string.invalid_code), Toast.LENGTH_SHORT).show();
            }
            else
            {

@@ -14,10 +14,11 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.Splash;
-import org.keynote.godtools.android.notifications.GcmBroadcastReceiver;
+
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 
 /**
- * Created by matthewfrederick on 12/19/14.
+ * GCM Intent Service
  */
 public class GcmIntentService extends IntentService
 {
@@ -28,7 +29,7 @@ public class GcmIntentService extends IntentService
         super("GcmIntentService");
     }
 
-    public static final String TAG = "GcmIntentService";
+    public static final String TAG = GcmIntentService.class.getSimpleName();
     
     Intent resultIntent;
 
@@ -85,7 +86,7 @@ public class GcmIntentService extends IntentService
     {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.homescreen_godtools_logo)
-                .setContentTitle("GodTools")
+                .setContentTitle(PREFS_NAME)
                 .setContentText(msg)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                 .setAutoCancel(true);

@@ -115,6 +115,7 @@
 
     <!-- Access Code Dialog -->
     <string name="dialog_access_code_title">Enter Access Code:</string>
+    <string name="invalid_code">Invalid Access Code</string>
     
     <!-- Preview Mode -->
     <string name="pull_down_info">pull to refresh drafts</string>
