@@ -7,18 +7,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
+import static org.keynote.godtools.android.utils.Constants.NOTIFICATIONS;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+
 /**
- * Created by matthewfrederick on 12/19/14.
+ * Google Cloud Messages receiver
  */
 public class GcmBroadcastReceiver extends WakefulBroadcastReceiver
 {
-    private static final String PREFS_NAME = "GodTools";
     
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE);
-        boolean notificationsOn = settings.getBoolean("Notifications", true);
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        boolean notificationsOn = settings.getBoolean(NOTIFICATIONS, true);
         
         if (notificationsOn)
         {
