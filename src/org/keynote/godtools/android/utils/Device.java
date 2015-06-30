@@ -32,7 +32,7 @@ public class Device {
         return application.getDeviceLocale().getLanguage();
     }
 
-    public static boolean isAppInforeground(Context context)
+    public static boolean isAppInForeground(Context context)
     {
         ActivityManager manager = (ActivityManager) context.getApplicationContext().
                 getSystemService(Context.ACTIVITY_SERVICE);

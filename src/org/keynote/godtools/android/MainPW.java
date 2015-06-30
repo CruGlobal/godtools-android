@@ -551,7 +551,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
             {
                 Log.i(TAG, "Timer complete");
 
-                if (Device.isAppInforeground(context))
+                if (Device.isAppInForeground(context))
                 {
                     String regid = settings.getString(REGISTRATION_ID, EMPTY_STRING);
                     Log.i(TAG, "App is in foreground, RegId: " + regid);
