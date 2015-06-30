@@ -7,6 +7,8 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
+import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.KEY_NEW_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
@@ -15,7 +17,7 @@ import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 
 /**
- * Created by matthewfrederick on 5/6/15.
+ * Download Service used to work with downloaded content
  */
 public class DownloadService
 {
@@ -24,8 +26,8 @@ public class DownloadService
         DBAdapter mAdapter = DBAdapter.getInstance(context);
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
-        String languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-        String languageParallel  = settings.getString(GTLanguage.KEY_PARALLEL, "");
+        String languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
+        String languageParallel  = settings.getString(GTLanguage.KEY_PARALLEL, EMPTY_STRING);
 
         GTLanguage gtlPrimary = mAdapter.getGTLanguage(languagePrimary);
         GTLanguage gtlParallel = mAdapter.getGTLanguage(languageParallel);
@@ -33,9 +35,7 @@ public class DownloadService
 
         if (tag.equalsIgnoreCase(KEY_NEW_LANGUAGE))
         {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, langCode);
-            editor.apply();
+            settings.edit().putString(GTLanguage.KEY_PRIMARY, langCode).apply();
 
             GTLanguage gtl = new GTLanguage(langCode);
             gtl.setDownloaded(true);
@@ -62,9 +62,7 @@ public class DownloadService
         {
             app.setAppLocale(langCode);
 
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, langCode);
-            editor.apply();
+            settings.edit().putString(GTLanguage.KEY_PRIMARY, langCode).apply();
 
             GTLanguage gtl = GTLanguage.getLanguage(context, langCode);
             gtl.setDownloaded(true);
@@ -73,9 +71,7 @@ public class DownloadService
         }
         else if (tag.equalsIgnoreCase(KEY_PARALLEL))
         {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PARALLEL, langCode);
-            editor.apply();
+            settings.edit().putString(GTLanguage.KEY_PARALLEL, langCode).apply();
 
             GTLanguage gtl = GTLanguage.getLanguage(context, langCode);
             gtl.setDownloaded(true);
