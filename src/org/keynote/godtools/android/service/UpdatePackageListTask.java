@@ -16,17 +16,18 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import java.io.InputStream;
 import java.util.List;
 
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.KEY_NEW_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 
 /**
- * Created by matthewfrederick on 5/11/15.
+ * Used to update package list with new input stream content
  */
 public class UpdatePackageListTask
 {
-    private static final String TAG = "UpdatePackageListTask";
+    private static final String TAG = UpdatePackageListTask.class.getSimpleName();
 
     public static void run(InputStream is, DBAdapter adapter, boolean firstLaunch, SnuffyApplication app,
                            String languagePrimary, String languageParallel, Context context)
@@ -74,16 +75,13 @@ public class UpdatePackageListTask
         if (gtlPrimary == null || gtlPrimary.isDraft())
         {
             Log.i(TAG, "Language not found. Going to English");
-            gtlPrimary = adapter.getGTLanguage("en");
-            languagePrimary = "en";
+            gtlPrimary = adapter.getGTLanguage(ENGLISH_DEFAULT);
+            languagePrimary = ENGLISH_DEFAULT;
             SharedPreferences settings = app.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, "en");
-            editor.apply();
+            settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
         }
 
         Log.i(TAG, languagePrimary);
-
 
         GTLanguage gtlParallel = adapter.getGTLanguage(languageParallel);
 
