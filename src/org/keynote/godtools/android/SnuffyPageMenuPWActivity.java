@@ -33,13 +33,12 @@ import java.util.Map;
 import java.util.Vector;
 
 public class SnuffyPageMenuPWActivity extends ListActivity {
-	private static String TAG = "SnuffyPageMenuActivity";
+	private static final String TAG = SnuffyPageMenuPWActivity.class.getSimpleName();
 	private boolean mFromAssets;
-	private String mPackageName;
 	private String mLanguageCode;
 	private String mFilesDir;
 
-	List<HashMap<String, Object>> mList = new ArrayList<HashMap<String, Object>>(2);
+	private final List<HashMap<String, Object>> mList = new ArrayList<HashMap<String, Object>>(2);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +50,6 @@ public class SnuffyPageMenuPWActivity extends ListActivity {
 		setContentView(R.layout.page_menu);
 
 		mLanguageCode = getIntent().getStringExtra("LanguageCode");
-		mPackageName  = getIntent().getStringExtra("PackageName");
 		SnuffyApplication app = (SnuffyApplication)getApplication();
   		mFromAssets		  	= false;
         mFilesDir		= app.getDocumentsDir().getPath() + "/resources";
@@ -79,7 +77,7 @@ public class SnuffyPageMenuPWActivity extends ListActivity {
 			mList.add(map);
 		}
 
-		SimpleImageAdapter adapter = new SimpleImageAdapter(this, mList, R.layout.list_item_with_icon_and_text, from, to);
+		SimpleImageAdapter adapter = new SimpleImageAdapter(this, mList, from, to);
 		setListAdapter(adapter);
 	}
 
@@ -92,9 +90,9 @@ public class SnuffyPageMenuPWActivity extends ListActivity {
 	private class SimpleImageAdapter extends SimpleAdapter {
 
 		public SimpleImageAdapter(Context context,
-				List<? extends Map<String, ?>> data, int resource,
-				String[] from, int[] to) {
-			super(context, data, resource, from, to);
+								  List<? extends Map<String, ?>> data,
+								  String[] from, int[] to) {
+			super(context, data, R.layout.list_item_with_icon_and_text, from, to);
 		}
 
 		@Override
