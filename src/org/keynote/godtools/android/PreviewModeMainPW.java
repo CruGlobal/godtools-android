@@ -50,16 +50,24 @@ import java.util.Iterator;
 import java.util.List;
 
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.CONFIG_FILE_NAME;
+import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.LANGUAGE_CODE;
+import static org.keynote.godtools.android.utils.Constants.PACKAGE_NAME;
+import static org.keynote.godtools.android.utils.Constants.PAGE_HEIGHT;
+import static org.keynote.godtools.android.utils.Constants.PAGE_LEFT;
+import static org.keynote.godtools.android.utils.Constants.PAGE_TOP;
+import static org.keynote.godtools.android.utils.Constants.PAGE_WIDTH;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.REFERENCE_DEVICE_HEIGHT;
+import static org.keynote.godtools.android.utils.Constants.REFERENCE_DEVICE_WIDTH;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
-import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PARALLEL;
-import static org.keynote.godtools.android.utils.Constants.RESULT_DOWNLOAD_PRIMARY;
-import static org.keynote.godtools.android.utils.Constants.RESULT_PREVIEW_MODE_DISABLED;
-import static org.keynote.godtools.android.utils.Constants.RESULT_PREVIEW_MODE_ENABLED;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
+import static org.keynote.godtools.android.utils.Constants.STATUS;
 import static org.keynote.godtools.android.utils.Constants.STATUS_CODE;
 
 
@@ -70,9 +78,6 @@ public class PreviewModeMainPW extends ActionBarActivity implements
 {
     private static final String TAG = PreviewModeMainPW.class.getSimpleName();
     private static final int REQUEST_SETTINGS = 1001;
-
-    public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
-    public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
 
     private int mPageLeft;
     private int mPageTop;
@@ -87,14 +92,9 @@ public class PreviewModeMainPW extends ActionBarActivity implements
 
     private SharedPreferences settings;
 
-    Context context;
+    private Context context;
 
-    boolean noPackages = false;
-    
-    ExpandableListAdapter listAdapter;
-    ExpandableListView listView;
-
-    ProgressDialog pdLoading;
+    private ProgressDialog pdLoading;
     
 
     /**
@@ -133,7 +133,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
         setupBroadcastReceiver();
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
 
         swipeRefreshLayout.setRefreshing(true);
         onCmd_refresh();
@@ -141,8 +141,8 @@ public class PreviewModeMainPW extends ActionBarActivity implements
     
     private void setupExpandableList()
     {
-        listView = (ExpandableListView) findViewById(R.id.expandable_list);
-        listAdapter = new ExpandableListAdapter(this, packageList, languagePrimary);
+        ExpandableListView listView = (ExpandableListView) findViewById(R.id.expandable_list);
+        ExpandableListAdapter listAdapter = new ExpandableListAdapter(this, packageList, languagePrimary);
         listView.setAdapter(listAdapter);
 
         listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener()
@@ -161,7 +161,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
                         if (gtPackage.getCode().equalsIgnoreCase("everystudent"))
                         {
                             Intent intent = new Intent(context, EveryStudent.class);
-                            intent.putExtra("PackageName", gtPackage.getCode());
+                            intent.putExtra(PACKAGE_NAME, gtPackage.getCode());
                             addPageFrameToIntent(intent);
                             startActivity(intent);
                             return true;
@@ -169,10 +169,10 @@ public class PreviewModeMainPW extends ActionBarActivity implements
                         else if (gtPackage.isAvailable())
                         {
                             Intent intent = new Intent(context, SnuffyPWActivity.class);
-                            intent.putExtra("PackageName", gtPackage.getCode());
-                            intent.putExtra("LanguageCode", gtPackage.getLanguage());
-                            intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
-                            intent.putExtra("Status", gtPackage.getStatus());
+                            intent.putExtra(PACKAGE_NAME, gtPackage.getCode());
+                            intent.putExtra(LANGUAGE_CODE, gtPackage.getLanguage());
+                            intent.putExtra(CONFIG_FILE_NAME, gtPackage.getConfigFileName());
+                            intent.putExtra(STATUS, gtPackage.getStatus());
                             addPageFrameToIntent(intent);
                             startActivity(intent);
                         }
@@ -215,17 +215,15 @@ public class PreviewModeMainPW extends ActionBarActivity implements
                             break;
                         case DOWNLOAD_TASK:
                             Log.i(TAG, "Download complete");
-                            getPackageList();
-                            createTheHomeScreen();
                             break;
                         case DRAFT_CREATION_TASK:
                             Log.i(TAG, "Create broadcast received");
-                            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
+                            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, EMPTY_STRING),
                                     languagePrimary, "draft", PreviewModeMainPW.this);
                             break;
                         case DRAFT_PUBLISH_TASK:
                             Log.i(TAG, "Publish broadcast received");
-                            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
+                            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, EMPTY_STRING),
                                     languagePrimary, "draft_primary", PreviewModeMainPW.this);
                             break;
                         case META_TASK:
@@ -307,98 +305,13 @@ public class PreviewModeMainPW extends ActionBarActivity implements
             case RESULT_CHANGED_PRIMARY:
             case RESULT_CHANGED_PARALLEL:
             {
-                getApp().setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
+                getApp().setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, EMPTY_STRING));
 
                 swipeRefreshLayout.setRefreshing(true);
                 onCmd_refresh();
 
-                refreshPackageList(false);
-                createTheHomeScreen();
-
                 break;
             }
-            case RESULT_DOWNLOAD_PRIMARY:
-            {
-                // start the download
-                String code = data.getStringExtra("primaryCode");
-
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        code,
-                        "primary",
-                        settings.getString("Authorization_Generic", ""),
-                        this);
-                break;
-            }
-            case RESULT_DOWNLOAD_PARALLEL:
-            {
-                // refresh the list if the primary language was changed
-                String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-                if (!languagePrimary.equalsIgnoreCase(primaryCode))
-                {
-                    languagePrimary = primaryCode;
-                    getPackageList();
-                }
-
-                String code = data.getStringExtra("parallelCode");
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        code,
-                        "parallel",
-                        settings.getString("Authorization_Generic", ""),
-                        this);
-                break;
-            }
-            case RESULT_PREVIEW_MODE_ENABLED:
-            {
-                // refresh the list
-                String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-
-                if (!languagePrimary.equalsIgnoreCase(primaryCode))
-                {
-                    SnuffyApplication app = (SnuffyApplication) getApplication();
-                    app.setAppLocale(primaryCode);
-                }
-
-                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
-                        languagePrimary, "draft_primary", this);
-
-                Toast.makeText(PreviewModeMainPW.this, getString(R.string.translator_enabled),
-                        Toast.LENGTH_LONG).show();
-
-                finish();
-                startActivity(getIntent());
-
-                break;
-            }
-            case RESULT_PREVIEW_MODE_DISABLED:
-            {
-                // This should not happen but just in case
-                
-                Intent intent = new Intent(this, MainPW.class);
-                startActivity(intent);
-                finish();
-                
-                break;
-            }
-        }
-    }
-
-    /**
-     * @param withFallback specifies when true will fallback to English if the primary language code
-     *                     has no packages available.  This is true when leaving translator mode in a language with all
-     *                     drafts and no published live versions.
-     */
-    private void refreshPackageList(boolean withFallback)
-    {
-        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
-        getPackageList();
-
-        if(withFallback && packageList.isEmpty())
-        {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, "en");
-            editor.apply();
-            languagePrimary = "en";
-            getPackageList();
         }
     }
 
@@ -406,8 +319,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
     protected void onPause()
     {
         super.onPause();
-        SharedPreferences.Editor ed = settings.edit();
-        ed.apply();
+        settings.edit().apply();
     }
 
     @Override
@@ -436,7 +348,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
         rect.top = 0;
         int width, height, left, top;
 
-        double aspectRatioTarget = (double) PreviewModeMainPW.REFERENCE_DEVICE_WIDTH / (double) PreviewModeMainPW.REFERENCE_DEVICE_HEIGHT;
+        double aspectRatioTarget = (double) REFERENCE_DEVICE_WIDTH / (double) REFERENCE_DEVICE_HEIGHT;
         double aspectRatio = (double) rect.width() / (double) rect.height();
 
         if (aspectRatio > aspectRatioTarget)
@@ -461,78 +373,25 @@ public class PreviewModeMainPW extends ActionBarActivity implements
 
     private void createTheHomeScreen()
     {
-
         getPackageList();
-
-        noPackages = false;
-
         EventTracker.track(getApp(), "Translator Page", languagePrimary);
     }
 
     @Override
     public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
     {
-
-        if (tag.equalsIgnoreCase("primary"))
-        {
-            languagePrimary = langCode;
-
-            SnuffyApplication app = (SnuffyApplication) getApplication();
-            app.setAppLocale(langCode);
-
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, langCode);
-            editor.apply();
-
-            GTLanguage gtl = GTLanguage.getLanguage(PreviewModeMainPW.this, langCode);
-            gtl.setDownloaded(true);
-            gtl.update(PreviewModeMainPW.this);
-
-            if (isTranslatorModeEnabled())
-            {
-                // check for draft_primary
-                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
-                        langCode, "draft_primary", this);
-            }
-            else
-            {
-                getPackageList();
-            }
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase("parallel"))
-        {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PARALLEL, langCode);
-            editor.apply();
-
-            GTLanguage gtl = GTLanguage.getLanguage(PreviewModeMainPW.this, langCode);
-            gtl.setDownloaded(true);
-            gtl.update(PreviewModeMainPW.this);
-
-            if (isTranslatorModeEnabled())
-            {
-                // check for draft_parallel
-                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
-                        langCode, "draft_parallel", this);
-            }
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase("draft"))
+        if (tag.equalsIgnoreCase("draft"))
         {
             Toast.makeText(PreviewModeMainPW.this, getString(R.string.drafts_updated),
                     Toast.LENGTH_SHORT).show();
-            getPackageList();
             createTheHomeScreen();
-            
+
             swipeRefreshLayout.setRefreshing(false);
             Log.i(TAG, "Done refreshing");
         }
         else if (tag.equalsIgnoreCase("draft_primary"))
         {
             languagePrimary = langCode;
-            getPackageList();
-
             createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase("draft_parallel"))
@@ -549,7 +408,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
         
         // only return draft packages with translator mode
         List<GTPackage> packageByLanguage = GTPackage.getDraftPackages(PreviewModeMainPW.this, languagePrimary);
-        if("en".equals(languagePrimary))
+        if(ENGLISH_DEFAULT.equals(languagePrimary))
         {
             removeEveryStudent(packageByLanguage);
         }
@@ -611,11 +470,6 @@ public class PreviewModeMainPW extends ActionBarActivity implements
         }
     }
 
-    private boolean isTranslatorModeEnabled()
-    {
-        return settings.getBoolean("TranslatorMode", false);
-    }
-
     @Override
     public void metaTaskComplete(InputStream is, String langCode, String tag)
     {
@@ -644,7 +498,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
         }
 
         swipeRefreshLayout.setRefreshing(false);
-        Log.i(TAG, "Done refreshing");
+        Log.i(TAG, "Meta Failed: Done refreshing");
     }
 
     @Override
@@ -677,15 +531,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
 
     private class UpdateDraftListTask extends AsyncTask<Object, Void, Boolean>
     {
-        boolean mNewDraftsAvailable;
         String tag, langCode;
-
-        @Override
-        protected void onPreExecute()
-        {
-            super.onPreExecute();
-            mNewDraftsAvailable = false;
-        }
 
         @Override
         protected Boolean doInBackground(Object... params)
@@ -709,7 +555,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
             super.onPostExecute(shouldDownload);
 
             GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(),
-                    settings.getString(AUTH_DRAFT, ""), langCode, tag, PreviewModeMainPW.this);
+                    settings.getString(AUTH_DRAFT, EMPTY_STRING), langCode, tag, PreviewModeMainPW.this);
         }
     }
 
@@ -753,10 +599,10 @@ public class PreviewModeMainPW extends ActionBarActivity implements
 
     private void addPageFrameToIntent(Intent intent)
     {
-        intent.putExtra("PageLeft", mPageLeft);
-        intent.putExtra("PageTop", mPageTop);
-        intent.putExtra("PageWidth", mPageWidth);
-        intent.putExtra("PageHeight", mPageHeight);
+        intent.putExtra(PAGE_LEFT, mPageLeft);
+        intent.putExtra(PAGE_TOP, mPageTop);
+        intent.putExtra(PAGE_WIDTH, mPageWidth);
+        intent.putExtra(PAGE_HEIGHT, mPageHeight);
     }
 
     private void onCmd_settings()
@@ -769,9 +615,8 @@ public class PreviewModeMainPW extends ActionBarActivity implements
     {
         if (Device.isConnected(PreviewModeMainPW.this))
         {
-            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
+            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, EMPTY_STRING),
                     languagePrimary, "draft", this);
-
         }
         else
         {
@@ -826,6 +671,5 @@ public class PreviewModeMainPW extends ActionBarActivity implements
         pdLoading.setCancelable(false);
         pdLoading.setMessage(msg);
         pdLoading.show();
-
     }
 }
