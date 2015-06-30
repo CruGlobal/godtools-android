@@ -35,7 +35,7 @@ public class UpdatePackageListTask
 
         List<GTLanguage> languageList = GTPackageReader.processMetaResponse(is);
 
-        Log.i(TAG, "List Size: " + languageList.size());
+        Log.i(TAG, "Language List Size: " + languageList.size());
 
         adapter.open();
 

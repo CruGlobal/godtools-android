@@ -56,44 +56,49 @@ public class Splash extends Activity
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
+        // Enable crash reporting
+        Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
+
         if (!isFirstLaunch())
         {
             goToMainActivity();
+            finish();
         }
-
-		// Enable crash reporting
-		Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
-
-        setContentView(R.layout.splash_pw);
-
-        tvTask = (TextView) findViewById(R.id.tvTask);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-
-        setupBroadcastReceiver();
-
-        Log.i(TAG, "First Launch");
-
-        // get the default language of the device os
-        String deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
-        // set to english in case nothing is found.
-        if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = ENGLISH_DEFAULT;
-
-        Log.i(TAG, deviceDefaultLanguage);
-
-        // set primary language on first start
-        settings.edit().putString(GTLanguage.KEY_PRIMARY, deviceDefaultLanguage).apply();
-
-        // set up files
-        BackgroundService.firstSetup(getApp());
-
-        // if connected to the internet and not auth code (why would there be? It is
-        // the first run.
-        if (Device.isConnected(Splash.this) &&
-                EMPTY_STRING.equals(settings.getString(AUTH_GENERIC, EMPTY_STRING)))
+        else
         {
-            // get an auth code
-            Log.i(TAG, "Starting backgound service");
-            BackgroundService.authenticateGeneric(this);
+
+            setContentView(R.layout.splash_pw);
+
+            tvTask = (TextView) findViewById(R.id.tvTask);
+            progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+            setupBroadcastReceiver();
+
+            Log.i(TAG, "First Launch");
+
+            // get the default language of the device os
+            String deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
+            // set to english in case nothing is found.
+            if (Strings.isNullOrEmpty(deviceDefaultLanguage))
+                deviceDefaultLanguage = ENGLISH_DEFAULT;
+
+            Log.i(TAG, deviceDefaultLanguage);
+
+            // set primary language on first start
+            settings.edit().putString(GTLanguage.KEY_PRIMARY, deviceDefaultLanguage).apply();
+
+            // set up files
+            BackgroundService.firstSetup(getApp());
+
+            // if connected to the internet and not auth code (why would there be? It is
+            // the first run.
+            if (Device.isConnected(Splash.this) &&
+                    EMPTY_STRING.equals(settings.getString(AUTH_GENERIC, EMPTY_STRING)))
+            {
+                // get an auth code
+                Log.i(TAG, "Starting backgound service");
+                BackgroundService.authenticateGeneric(this);
+            }
         }
     }
 
@@ -101,7 +106,10 @@ public class Splash extends Activity
     protected void onDestroy()
     {
         super.onDestroy();
-        removeBroadcastReceiver();
+        if (isFirstLaunch())
+        {
+            removeBroadcastReceiver();
+        }
     }
 
     private void setupBroadcastReceiver()

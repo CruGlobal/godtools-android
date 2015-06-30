@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
@@ -14,6 +15,8 @@ import java.util.Locale;
 
 public class DBAdapter
 {
+
+    private static final String TAG = DBAdapter.class.getSimpleName();
 
     private static DBAdapter instance;
     private DBHelper helper;
@@ -45,6 +48,8 @@ public class DBAdapter
 
     public long insertGTPackage(GTPackage gtPackage)
     {
+        Log.i(TAG, "Inserting GT Package: " + gtPackage.getName());
+
         ContentValues cv = new ContentValues();
         cv.put(DBContract.GTPackageTable.COL_CODE, gtPackage.getCode());
         cv.put(DBContract.GTPackageTable.COL_NAME, gtPackage.getName());
@@ -126,6 +131,8 @@ public class DBAdapter
 
     public void upsertGTPackage(GTPackage gtp)
     {
+        Log.i(TAG, "Upserting package: " + gtp.getName());
+
         ContentValues cv = new ContentValues();
 
         cv.put(DBContract.GTPackageTable.COL_NAME, gtp.getName());
