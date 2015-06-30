@@ -62,6 +62,7 @@ import static org.keynote.godtools.android.utils.Constants.PAGE_WIDTH;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.REFERENCE_DEVICE_HEIGHT;
 import static org.keynote.godtools.android.utils.Constants.REFERENCE_DEVICE_WIDTH;
+import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
@@ -86,10 +87,9 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
 
     private List<HomescreenLayout> layouts;
 
-    Context context;
-    String regid = EMPTY_STRING;
-    Timer timer;
-    SharedPreferences settings;
+    private Context context;
+    private Timer timer;
+    private SharedPreferences settings;
 
     /**
      * Called when the activity is first created.
@@ -553,7 +553,8 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
 
                 if (Device.isAppInforeground(context))
                 {
-                    Log.i(TAG, "App is in foreground");
+                    String regid = settings.getString(REGISTRATION_ID, EMPTY_STRING);
+                    Log.i(TAG, "App is in foreground, RegId: " + regid);
                     GodToolsApiClient.updateNotification(settings.getString(AUTH_GENERIC, EMPTY_STRING),
                             regid, NotificationInfo.AFTER_3_USES, new NotificationUpdateTask.NotificationUpdateTaskHandler()
                             {
