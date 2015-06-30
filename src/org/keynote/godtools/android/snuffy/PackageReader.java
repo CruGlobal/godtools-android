@@ -530,7 +530,6 @@ public class PackageReader {
 				try {
 					isPage.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -805,12 +804,10 @@ public class PackageReader {
 	        processButtonPanel(elPage, root, currPage, elButton, Integer.valueOf(iButton), urlsOnpage);
 	       
 			final SnuffyLayout panel = (SnuffyLayout)(currPage.findViewWithTag(Integer.valueOf(iTagButtonPanel)));
-			final Vector<String> finalUrlsOnPage = urlsOnpage;
-			final SnuffyPage finalCurrPage = currPage;
-			if (bAllUrlMode) {
+            if (bAllUrlMode) {
 				
 				String content = "";
-				Iterator<String> iter = finalUrlsOnPage.iterator();
+				Iterator<String> iter = urlsOnpage.iterator();
 				while (iter.hasNext()) {
 					content += "http://" + iter.next() + "\n";
 				}
@@ -1231,14 +1228,13 @@ public class PackageReader {
 	        ImageView iv = new ImageView(mContext);
 	        //SnuffyDisclosureIndicator di = new SnuffyDisclosureIndicator(mContext);
 	        //iv.setImageDrawable(di);
-	        int diSize = buttonHeight;
-	        if (bExpanded){
+            if (bExpanded){
 	        	iv.setImageResource(R.drawable.disclosure_indicator_maximized);
-		        iv.setLayoutParams(new SnuffyLayoutParams(diSize, diSize, containerWidth - diSize - getScaledXValue(0), lp.y+2));
+		        iv.setLayoutParams(new SnuffyLayoutParams(buttonHeight, buttonHeight, containerWidth - buttonHeight - getScaledXValue(0), lp.y+2));
 	        }
 	        else {
 	        	iv.setImageResource(R.drawable.disclosure_indicator_minimized);
-		        iv.setLayoutParams(new SnuffyLayoutParams(diSize, diSize, containerWidth - diSize + getScaledXValue(5), lp.y+2));
+		        iv.setLayoutParams(new SnuffyLayoutParams(buttonHeight, buttonHeight, containerWidth - buttonHeight + getScaledXValue(5), lp.y+2));
 	        }
 	        theContainer.addView(iv);
         }
@@ -1786,9 +1782,8 @@ public class PackageReader {
     		lpSubHeading = (SnuffyLayoutParams)tvSubHeading.getLayoutParams();
      		
      		int xPosVLine  = lpSubHeading.x - (PEEK_HEADING_XSEPARATION/2);
-     		int y1PosVLine =  PEEK_VLINE_YMARGIN;
-     		int y2PosVLine =  Math.max(lpHeading.y + tvHeading.getMeasuredHeight(), lpSubHeading.y + tvSubHeading.getMeasuredHeight()) - (2*PEEK_VLINE_YMARGIN) + HEADING_BOTTOM_PADDING;
-     		vLine = getVRView(Color.BLACK, xPosVLine, y1PosVLine, y2PosVLine, 1);
+            int y2PosVLine =  Math.max(lpHeading.y + tvHeading.getMeasuredHeight(), lpSubHeading.y + tvSubHeading.getMeasuredHeight()) - (2*PEEK_VLINE_YMARGIN) + HEADING_BOTTOM_PADDING;
+     		vLine = getVRView(Color.BLACK, xPosVLine, PEEK_VLINE_YMARGIN, y2PosVLine, 1);
         }
         // This code is apparently not required but I can't work out how subheading gets positioned anyway
 //        if ((bStraightMode || bClearMode) && (tvHeading != null) && (tvSubHeading != null)) {
@@ -2081,9 +2076,7 @@ public class PackageReader {
             
      		SnuffyLayoutParams lpSubTitleContainer = new SnuffyLayoutParams(subTitleWidth, subTitleHeight, 0, yBefore);
 			// grad_shad_E_subtitle:...
-        	final int yBeforeE = yBefore;
-        	final int yAfterE  = yAfter;
-        	SnuffyLayoutParams lpTemp = new SnuffyLayoutParams(
+            SnuffyLayoutParams lpTemp = new SnuffyLayoutParams(
         			DROPSHADOW_SUBLENGTHX, 
         			lpSubTitleContainer.height - DROPSHADOW_INSETY - 0, 
         			lpSubTitleContainer.width  - DROPSHADOW_INSETX, 
@@ -2180,7 +2173,7 @@ public class PackageReader {
 
 							TranslateAnimation taE = new TranslateAnimation(
 									Animation.ABSOLUTE, 0, Animation.ABSOLUTE, 0,
-									Animation.ABSOLUTE, 0, Animation.ABSOLUTE, yBeforeE - yAfterE);
+									Animation.ABSOLUTE, 0, Animation.ABSOLUTE, yBefore - yAfter);
 							taE.setDuration(THIS_ANIMATION_DURATION); 
 							startAnimationOnViewWithTag(titleClippingContainer, 556, taE);	
 							
@@ -2240,7 +2233,7 @@ public class PackageReader {
 							
 							TranslateAnimation taE = new TranslateAnimation(
 									Animation.ABSOLUTE, 0, Animation.ABSOLUTE, 0,
-									Animation.ABSOLUTE, 0, Animation.ABSOLUTE, yAfterE - yBeforeE);
+									Animation.ABSOLUTE, 0, Animation.ABSOLUTE, yAfter - yBefore);
 							taE.setDuration(THIS_ANIMATION_DURATION); 
 							startAnimationOnViewWithTag(titleClippingContainer, 556, taE);	
 							
