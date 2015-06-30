@@ -7,16 +7,16 @@
 	<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:id="@+id/language_menu_container" 
 		android:visibility="invisible"
-		android:layout_width="540px"
-		android:layout_height="810px"
+		android:layout_width="540dp"
+		android:layout_height="810dp"
 		android:layout_x="0px"
-		android:layout_y="75px"
+		android:layout_y="75dp"
 		android:background="@drawable/homescreen_background">
 
 		<ImageView 
 			android:id="@+id/language_menu_vignette"
-			android:layout_width="640px"
-			android:layout_height="960px"
+			android:layout_width="640dp"
+			android:layout_height="960dp"
 			android:layout_x="0px"
 			android:layout_y="0px"
 			android:scaleType="fitXY"
@@ -29,11 +29,11 @@
 		  android:layout_height="match_parent">
 		   	<TextView
 				android:id="@+id/language_menu_title"
-		    	android:layout_height="88px" 
+		    	android:layout_height="88dp"
 		    	android:layout_width="match_parent"
 		    	android:background="@drawable/language_menu_title_background"
 		    	android:text="@string/languages_activity_title"
-		    	android:textSize="40px"
+		    	android:textSize="40sp"
 		    	android:textColor="#ffffff"
 		    	android:textStyle="bold"
 		    	android:gravity="center_horizontal|center_vertical"/>

@@ -16,7 +16,7 @@ public class ConfirmDialogFragment extends DialogFragment {
     private static final String ARGS_NEGATIVE = "negative";
 
     public interface OnConfirmClickListener {
-        public void onConfirmClick(boolean positive, String tag);
+        void onConfirmClick(boolean positive, String tag);
     }
 
     private OnConfirmClickListener mListener;
