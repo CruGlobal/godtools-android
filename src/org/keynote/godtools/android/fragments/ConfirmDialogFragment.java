@@ -7,21 +7,18 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
-public class ConfirmDialogFragment extends DialogFragment {
+public class ConfirmDialogFragment extends DialogFragment
+{
 
     private static final String ARGS_TAG = "tag";
     private static final String ARGS_TITLE = "title";
     private static final String ARGS_MESSAGE = "message";
     private static final String ARGS_POSITIVE = "positive";
     private static final String ARGS_NEGATIVE = "negative";
-
-    public interface OnConfirmClickListener {
-        void onConfirmClick(boolean positive, String tag);
-    }
-
     private OnConfirmClickListener mListener;
 
-    public static DialogFragment newInstance(String title, String message, String positive, String negative, String tag) {
+    public static DialogFragment newInstance(String title, String message, String positive, String negative, String tag)
+    {
         DialogFragment frag = new ConfirmDialogFragment();
         Bundle args = new Bundle();
         args.putString(ARGS_TAG, tag);
@@ -36,13 +33,15 @@ public class ConfirmDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Activity activity)
+    {
         super.onAttach(activity);
         mListener = (OnConfirmClickListener) activity;
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState)
+    {
 
         final String tag = getArguments().getString(ARGS_TAG);
         String title = getArguments().getString(ARGS_TITLE);
@@ -54,22 +53,31 @@ public class ConfirmDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle(title)
                 .setMessage(body)
-                .setPositiveButton(positive, new DialogInterface.OnClickListener() {
+                .setPositiveButton(positive, new DialogInterface.OnClickListener()
+                {
 
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
                         mListener.onConfirmClick(true, tag);
                     }
                 })
 
-                .setNegativeButton(negative, new DialogInterface.OnClickListener() {
+                .setNegativeButton(negative, new DialogInterface.OnClickListener()
+                {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
                         mListener.onConfirmClick(false, tag);
                     }
                 });
 
 
         return builder.create();
+    }
+
+    public interface OnConfirmClickListener
+    {
+        void onConfirmClick(boolean positive, String tag);
     }
 }

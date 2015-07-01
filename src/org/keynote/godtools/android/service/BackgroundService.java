@@ -28,8 +28,8 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import java.io.InputStream;
 
 import static org.keynote.godtools.android.utils.Constants.ACCESS_CODE;
-import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
 import static org.keynote.godtools.android.utils.Constants.BACKGROUND_TASK_TAG;
 import static org.keynote.godtools.android.utils.Constants.DEVICE_ID;
 import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
@@ -63,6 +63,82 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
     public BackgroundService()
     {
         super("BackgroundService");
+    }
+
+    public static Intent baseIntent(Context context, Bundle extras)
+    {
+        Intent intent = new Intent(context, BackgroundService.class);
+        if (extras != null)
+        {
+            intent.putExtras(extras);
+        }
+        return intent;
+    }
+
+    public static void firstSetup(SnuffyApplication app)
+    {
+        BackgroundService service = new BackgroundService();
+        service.initialContentTask(app);
+    }
+
+    public static void authenticateGeneric(Context context)
+    {
+        final Bundle extras = new Bundle(1);
+        extras.putSerializable(TYPE, APITasks.AUTHENTICATE_GENERIC);
+        Intent intent = baseIntent(context, extras);
+        context.startService(intent);
+    }
+
+    public static void getListOfPackages(Context context)
+    {
+        final Bundle extras = new Bundle(1);
+        extras.putSerializable(TYPE, APITasks.GET_LIST_OF_PACKAGES);
+        Intent intent = baseIntent(context, extras);
+        context.startService(intent);
+    }
+
+    public static void downloadLanguagePack(Context context, String langCode, String tag)
+    {
+        final Bundle extras = new Bundle(3);
+        extras.putSerializable(TYPE, APITasks.DOWNLOAD_LANGUAGE_PACK);
+        extras.putString(LANG_CODE, langCode);
+        extras.putString(BACKGROUND_TASK_TAG, tag);
+        Intent intent = baseIntent(context, extras);
+        context.startService(intent);
+    }
+
+    public static void registerDevice(Context context, String regId, String deviceID)
+    {
+        registerDevice(context, regId, deviceID, "TRUE");
+    }
+
+    public static void registerDevice(Context context, String regId, String deviceID, String notificationsOn)
+    {
+        final Bundle extras = new Bundle(4);
+        extras.putSerializable(TYPE, APITasks.REGISTER_DEVICE);
+        extras.putString(REGISTRATION_ID, regId);
+        extras.putString(DEVICE_ID, deviceID);
+        extras.putString(NOTIFICATIONS_ON, notificationsOn);
+        Intent intent = baseIntent(context, extras);
+        context.startService(intent);
+    }
+
+    public static void authenticateAccessCode(Context context, String accessCode)
+    {
+        final Bundle extras = new Bundle(2);
+        extras.putSerializable(TYPE, APITasks.AUTHENTICATE_ACCESS_CODE);
+        extras.putString(ACCESS_CODE, accessCode);
+        Intent intent = baseIntent(context, extras);
+        context.startService(intent);
+    }
+
+    public static void verifyStatusOfAuthToken(Context context, String accessCode)
+    {
+        final Bundle extras = new Bundle(2);
+        extras.putSerializable(TYPE, APITasks.VERIFY_ACCESS_CODE);
+        extras.putString(ACCESS_CODE, accessCode);
+        Intent intent = baseIntent(context, extras);
+        context.startService(intent);
     }
 
     @Override
@@ -125,85 +201,9 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         }
     }
 
-    public static Intent baseIntent(Context context, Bundle extras)
-    {
-        Intent intent = new Intent(context, BackgroundService.class);
-        if (extras != null)
-        {
-            intent.putExtras(extras);
-        }
-        return intent;
-    }
-
-    public static void firstSetup(SnuffyApplication app)
-    {
-        BackgroundService service = new BackgroundService();
-        service.initialContentTask(app);
-    }
-
     private void initialContentTask(SnuffyApplication app)
     {
         PrepareInitialContentTask.run(app.getApplicationContext(), app.getDocumentsDir());
-    }
-
-    public static void authenticateGeneric(Context context)
-    {
-        final Bundle extras = new Bundle(1);
-        extras.putSerializable(TYPE, APITasks.AUTHENTICATE_GENERIC);
-        Intent intent = baseIntent(context, extras);
-        context.startService(intent);
-    }
-
-    public static void getListOfPackages(Context context)
-    {
-        final Bundle extras = new Bundle(1);
-        extras.putSerializable(TYPE, APITasks.GET_LIST_OF_PACKAGES);
-        Intent intent = baseIntent(context, extras);
-        context.startService(intent);
-    }
-
-    public static void downloadLanguagePack(Context context, String langCode, String tag)
-    {
-        final Bundle extras = new Bundle(3);
-        extras.putSerializable(TYPE, APITasks.DOWNLOAD_LANGUAGE_PACK);
-        extras.putString(LANG_CODE, langCode);
-        extras.putString(BACKGROUND_TASK_TAG, tag);
-        Intent intent = baseIntent(context, extras);
-        context.startService(intent);
-    }
-
-    public static void registerDevice(Context context, String regId, String deviceID)
-    {
-        registerDevice(context, regId, deviceID, "TRUE");
-    }
-
-    public static void registerDevice(Context context, String regId, String deviceID, String notificationsOn)
-    {
-        final Bundle extras = new Bundle(4);
-        extras.putSerializable(TYPE, APITasks.REGISTER_DEVICE);
-        extras.putString(REGISTRATION_ID, regId);
-        extras.putString(DEVICE_ID, deviceID);
-        extras.putString(NOTIFICATIONS_ON, notificationsOn);
-        Intent intent = baseIntent(context, extras);
-        context.startService(intent);
-    }
-
-    public static void authenticateAccessCode(Context context, String accessCode)
-    {
-        final Bundle extras = new Bundle(2);
-        extras.putSerializable(TYPE, APITasks.AUTHENTICATE_ACCESS_CODE);
-        extras.putString(ACCESS_CODE, accessCode);
-        Intent intent = baseIntent(context, extras);
-        context.startService(intent);
-    }
-
-    public static void verifyStatusOfAuthToken(Context context, String accessCode)
-    {
-        final Bundle extras = new Bundle(2);
-        extras.putSerializable(TYPE, APITasks.VERIFY_ACCESS_CODE);
-        extras.putString(ACCESS_CODE, accessCode);
-        Intent intent = baseIntent(context, extras);
-        context.startService(intent);
     }
 
     @Override

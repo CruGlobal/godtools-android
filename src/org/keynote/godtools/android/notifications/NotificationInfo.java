@@ -6,7 +6,7 @@ package org.keynote.godtools.android.notifications;
 public final class NotificationInfo
 {
     public static final String NOTIFICATION_TAG = "Notifications";
-    
+
     public static final int NOT_USED_2_WEEKS = 1;
     public static final int AFTER_1_PRESENTATION = 2;
     public static final int AFTER_10_PRESENTATIONS = 3;

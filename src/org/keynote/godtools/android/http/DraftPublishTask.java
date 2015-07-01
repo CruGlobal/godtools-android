@@ -23,12 +23,6 @@ public class DraftPublishTask extends AsyncTask<Object, Void, Integer>
         this.taskHandler = taskHandler;
     }
 
-    public interface DraftTaskHandler
-    {
-        void draftTaskComplete();
-        void draftTaskFailure(int statusCode);
-    }
-
     @Override
     protected Integer doInBackground(Object... params)
     {
@@ -50,8 +44,7 @@ public class DraftPublishTask extends AsyncTask<Object, Void, Integer>
         try
         {
             return httpClient.execute(request).getStatusLine().getStatusCode();
-        }
-        catch (IOException e)
+        } catch (IOException e)
         {
             e.printStackTrace();
             return null;
@@ -61,7 +54,7 @@ public class DraftPublishTask extends AsyncTask<Object, Void, Integer>
     @Override
     protected void onPostExecute(Integer responseStatusCode)
     {
-        if(responseStatusCode.equals(204))
+        if (responseStatusCode.equals(204))
         {
             taskHandler.draftTaskComplete();
         }
@@ -69,5 +62,12 @@ public class DraftPublishTask extends AsyncTask<Object, Void, Integer>
         {
             taskHandler.draftTaskFailure(responseStatusCode);
         }
+    }
+
+    public interface DraftTaskHandler
+    {
+        void draftTaskComplete();
+
+        void draftTaskFailure(int statusCode);
     }
 }

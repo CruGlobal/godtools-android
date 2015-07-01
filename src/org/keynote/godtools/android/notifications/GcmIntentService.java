@@ -23,15 +23,13 @@ import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 public class GcmIntentService extends IntentService
 {
     public static final int NOTIFICATION_ID = 1;
+    public static final String TAG = GcmIntentService.class.getSimpleName();
+    Intent resultIntent;
 
     public GcmIntentService()
     {
         super("GcmIntentService");
     }
-
-    public static final String TAG = GcmIntentService.class.getSimpleName();
-    
-    Intent resultIntent;
 
     @Override
     protected void onHandleIntent(Intent intent)
@@ -63,8 +61,7 @@ public class GcmIntentService extends IntentService
                 try
                 {
                     type = Integer.parseInt(extras.getString("type"));
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                     type = 0;
                 }
@@ -90,7 +87,7 @@ public class GcmIntentService extends IntentService
                 .setContentText(msg)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                 .setAutoCancel(true);
-        
+
 
         if (type == NotificationInfo.DAY_AFTER_SHARE)
         {
@@ -110,7 +107,7 @@ public class GcmIntentService extends IntentService
         }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        
+
         mBuilder.setContentIntent(pendingIntent);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

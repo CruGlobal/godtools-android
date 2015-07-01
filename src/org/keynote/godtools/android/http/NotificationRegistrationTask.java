@@ -21,13 +21,6 @@ public class NotificationRegistrationTask extends AsyncTask<Object, Void, String
     private int statusCode;
     private String TAG = "NotificationRegistrationTask";
 
-    public interface NotificationTaskHandler
-    {
-        void registrationComplete(String regId);
-
-        void registrationFailed();
-    }
-
     public NotificationRegistrationTask(NotificationTaskHandler listener)
     {
         taskHandler = listener;
@@ -55,8 +48,7 @@ public class NotificationRegistrationTask extends AsyncTask<Object, Void, String
         {
             HttpResponse response = httpClient.execute(request);
             statusCode = response.getStatusLine().getStatusCode();
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
             return null;
@@ -74,5 +66,12 @@ public class NotificationRegistrationTask extends AsyncTask<Object, Void, String
         else taskHandler.registrationFailed();
 
         Log.i(TAG, "Code: " + statusCode);
+    }
+
+    public interface NotificationTaskHandler
+    {
+        void registrationComplete(String regId);
+
+        void registrationFailed();
     }
 }

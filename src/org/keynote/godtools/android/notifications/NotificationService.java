@@ -37,15 +37,22 @@ public class NotificationService extends IntentService
     private static final String TAG = NotificationService.class.getSimpleName();
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
+    private static Activity callingActivity;
     private String regid = EMPTY_STRING;
     private SharedPreferences settings;
     private GoogleCloudMessaging gcm;
-    private static Activity callingActivity;
 
     public NotificationService()
     {
         super(TAG);
+    }
+
+    public static void registerDevice(Context context, Activity activity)
+    {
+        callingActivity = activity;
+
+        Intent intent = new Intent(context, NotificationService.class);
+        context.startService(intent);
     }
 
     @Override
@@ -96,15 +103,6 @@ public class NotificationService extends IntentService
 
         Log.i(TAG, regid);
     }
-
-    public static void registerDevice(Context context, Activity activity)
-    {
-        callingActivity = activity;
-
-        Intent intent = new Intent(context, NotificationService.class);
-        context.startService(intent);
-    }
-
 
     private boolean checkPlayServices()
     {

@@ -38,13 +38,11 @@ public class Splash extends Activity
     private static final String TAG = Splash.class.getSimpleName();
 
     protected boolean _active = true;
-
-    private LocalBroadcastManager broadcastManager;
-    private BroadcastReceiver broadcastReceiver;
-
     TextView tvTask;
     ProgressBar progressBar;
     SharedPreferences settings;
+    private LocalBroadcastManager broadcastManager;
+    private BroadcastReceiver broadcastReceiver;
 
     /**
      * Called when the activity is first created.

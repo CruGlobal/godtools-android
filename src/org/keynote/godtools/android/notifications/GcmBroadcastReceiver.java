@@ -15,13 +15,13 @@ import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
  */
 public class GcmBroadcastReceiver extends WakefulBroadcastReceiver
 {
-    
+
     @Override
     public void onReceive(Context context, Intent intent)
     {
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         boolean notificationsOn = settings.getBoolean(NOTIFICATIONS, true);
-        
+
         if (notificationsOn)
         {
             // Explicitly specify that GcmIntentService will handle the intent.

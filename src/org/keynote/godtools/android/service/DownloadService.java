@@ -27,7 +27,7 @@ public class DownloadService
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
         String languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
-        String languageParallel  = settings.getString(GTLanguage.KEY_PARALLEL, EMPTY_STRING);
+        String languageParallel = settings.getString(GTLanguage.KEY_PARALLEL, EMPTY_STRING);
 
         GTLanguage gtlPrimary = mAdapter.getGTLanguage(languagePrimary);
         GTLanguage gtlParallel = mAdapter.getGTLanguage(languageParallel);

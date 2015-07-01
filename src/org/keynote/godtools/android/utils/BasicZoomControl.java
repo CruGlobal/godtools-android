@@ -34,32 +34,43 @@ import java.util.Observer;
  * The BasicZoomControl is responsible for controlling a ZoomState. It makes
  * sure that pan movement follows the finger, that limits are satisfied and that
  * we can zoom into specific positions.
- * 
+ * <p/>
  * In order to implement these control mechanisms access to certain content and
  * view state data is required which is made possible through the
  * ZoomContentViewState.
  */
-public class BasicZoomControl implements Observer {
+public class BasicZoomControl implements Observer
+{
 
-    /** Minimum zoom level limit */
+    /**
+     * Minimum zoom level limit
+     */
     private static final float MIN_ZOOM = 1;
 
-    /** Maximum zoom level limit */
+    /**
+     * Maximum zoom level limit
+     */
     private static final float MAX_ZOOM = 3;
 
-    /** Zoom state under control */
+    /**
+     * Zoom state under control
+     */
     private final ZoomState mState = new ZoomState();
 
-    /** Object holding aspect quotient of view and content */
+    /**
+     * Object holding aspect quotient of view and content
+     */
     private AspectQuotient mAspectQuotient;
 
     /**
      * Set reference object holding aspect quotient
-     * 
+     *
      * @param aspectQuotient Object holding aspect quotient
      */
-    public void setAspectQuotient(AspectQuotient aspectQuotient) {
-        if (mAspectQuotient != null) {
+    public void setAspectQuotient(AspectQuotient aspectQuotient)
+    {
+        if (mAspectQuotient != null)
+        {
             mAspectQuotient.deleteObserver(this);
         }
 
@@ -69,21 +80,23 @@ public class BasicZoomControl implements Observer {
 
     /**
      * Get zoom state being controlled
-     * 
+     *
      * @return The zoom state
      */
-    public ZoomState getZoomState() {
+    public ZoomState getZoomState()
+    {
         return mState;
     }
 
     /**
      * Zoom
-     * 
+     *
      * @param f Factor of zoom to apply
      * @param x X-coordinate of invariant position
      * @param y Y-coordinate of invariant position
      */
-    public void zoom(float f, float x, float y) {
+    public void zoom(float f, float x, float y)
+    {
         final float aspectQuotient = mAspectQuotient.get();
 
         final float prevZoomX = mState.getZoomX(aspectQuotient);
@@ -106,11 +119,12 @@ public class BasicZoomControl implements Observer {
 
     /**
      * Pan
-     * 
+     *
      * @param dx Amount to pan in x-dimension
      * @param dy Amount to pan in y-dimension
      */
-    public void pan(float dx, float dy) {
+    public void pan(float dx, float dy)
+    {
         final float aspectQuotient = mAspectQuotient.get();
 
         mState.setPanX(mState.getPanX() + dx / mState.getZoomX(aspectQuotient));
@@ -123,21 +137,26 @@ public class BasicZoomControl implements Observer {
 
     /**
      * Help function to figure out max delta of pan from center position.
-     * 
+     *
      * @param zoom Zoom value
      * @return Max delta of pan
      */
-    public float getMaxPanDelta(float zoom) {
+    public float getMaxPanDelta(float zoom)
+    {
         return Math.max(0f, .5f * ((zoom - 1) / zoom));
     }
 
     /**
      * Force zoom to stay within limits
      */
-    private void limitZoom() {
-        if (mState.getZoom() < MIN_ZOOM) {
+    private void limitZoom()
+    {
+        if (mState.getZoom() < MIN_ZOOM)
+        {
             mState.setZoom(MIN_ZOOM);
-        } else if (mState.getZoom() > MAX_ZOOM) {
+        }
+        else if (mState.getZoom() > MAX_ZOOM)
+        {
             mState.setZoom(MAX_ZOOM);
         }
     }
@@ -145,7 +164,8 @@ public class BasicZoomControl implements Observer {
     /**
      * Force pan to stay within limits
      */
-    private void limitPan() {
+    private void limitPan()
+    {
         final float aspectQuotient = mAspectQuotient.get();
 
         final float zoomX = mState.getZoomX(aspectQuotient);
@@ -156,23 +176,28 @@ public class BasicZoomControl implements Observer {
         final float panMinY = .5f - getMaxPanDelta(zoomY);
         final float panMaxY = .5f + getMaxPanDelta(zoomY);
 
-        if (mState.getPanX() < panMinX) {
+        if (mState.getPanX() < panMinX)
+        {
             mState.setPanX(panMinX);
         }
-        if (mState.getPanX() > panMaxX) {
+        if (mState.getPanX() > panMaxX)
+        {
             mState.setPanX(panMaxX);
         }
-        if (mState.getPanY() < panMinY) {
+        if (mState.getPanY() < panMinY)
+        {
             mState.setPanY(panMinY);
         }
-        if (mState.getPanY() > panMaxY) {
+        if (mState.getPanY() > panMaxY)
+        {
             mState.setPanY(panMaxY);
         }
     }
 
     // Observable interface implementation
 
-    public void update(Observable observable, Object data) {
+    public void update(Observable observable, Object data)
+    {
         limitZoom();
         limitPan();
     }

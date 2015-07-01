@@ -8,23 +8,23 @@ import java.util.Map;
  */
 public class LanguagesNotSupportedByDefaultFont
 {
-	private static final Map<String, String> languageCodeSet = new HashMap<String, String>();
+    private static final Map<String, String> languageCodeSet = new HashMap<String, String>();
 
-	static
-	{
-		languageCodeSet.put("ta", "fonts/FreeSerif.ttf");
-		languageCodeSet.put("th", "fonts/FreeSerif.ttf");
-		languageCodeSet.put("ko", "fonts/UnGraphic.ttf");
-		languageCodeSet.put("bo", "fonts/Tibetan.ttf");
-	}
+    static
+    {
+        languageCodeSet.put("ta", "fonts/FreeSerif.ttf");
+        languageCodeSet.put("th", "fonts/FreeSerif.ttf");
+        languageCodeSet.put("ko", "fonts/UnGraphic.ttf");
+        languageCodeSet.put("bo", "fonts/Tibetan.ttf");
+    }
 
-	public static boolean contains(String languageCode)
-	{
-		return languageCodeSet.containsKey(languageCode);
-	}
+    public static boolean contains(String languageCode)
+    {
+        return languageCodeSet.containsKey(languageCode);
+    }
 
-	public static String getPathToAlternateFont(String languageCode)
-	{
-		return languageCodeSet.get(languageCode);
-	}
+    public static String getPathToAlternateFont(String languageCode)
+    {
+        return languageCodeSet.get(languageCode);
+    }
 }

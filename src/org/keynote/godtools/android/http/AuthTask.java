@@ -16,22 +16,14 @@ import org.apache.http.params.HttpParams;
 public class AuthTask extends AsyncTask<Object, Void, String>
 {
 
+    private static final String TAG = AuthTask.class.getSimpleName();
     private AuthTaskHandler taskHandler;
     private int statusCode;
-    private static final String TAG = AuthTask.class.getSimpleName();
-
     // lets the task know that the access code is being authenticated
     private boolean authenticateAccessCode = false;
 
     // lets the task know that the access code status is being verified
     private boolean verifyStatus = false;
-
-    public interface AuthTaskHandler
-    {
-        void authComplete(String authorization, boolean authenticateAccessCode, boolean verifyStatus);
-
-        void authFailed(boolean authenticateAccessCode, boolean verifyStatus);
-    }
 
     public AuthTask(AuthTaskHandler listener)
     {
@@ -116,5 +108,12 @@ public class AuthTask extends AsyncTask<Object, Void, String>
             taskHandler.authFailed(authenticateAccessCode, verifyStatus);
         }
 
+    }
+
+    public interface AuthTaskHandler
+    {
+        void authComplete(String authorization, boolean authenticateAccessCode, boolean verifyStatus);
+
+        void authFailed(boolean authenticateAccessCode, boolean verifyStatus);
     }
 }
