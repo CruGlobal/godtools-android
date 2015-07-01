@@ -79,7 +79,7 @@ public class EveryStudentSearchResults extends ListActivity {
 //FIXME			FlurryAgent.onEvent(FlurryAPI.FlurryPrefix + LOGTAG, params);
 //FIXME			FlurryAgent.onPageView();
 			
-			EveryStudentSearchResultsPersistance essrp = null;
+			EveryStudentSearchResultsPersistance essrp;
 			essrp = (EveryStudentSearchResultsPersistance) getLastNonConfigurationInstance();
 			
 			if (essrp != null && essrp.getmAdapter() != null && essrp.getCursor() != null && essrp.getQuery() != null && essrp.getCount() != null) {

@@ -48,10 +48,8 @@ public class PrepareInitialContentTask
 
                 copyFile(is, os);
                 is.close();
-                is = null;
                 os.flush();
                 os.close();
-                os = null;
             }
 
             // meta.xml file contains the list of supported languages

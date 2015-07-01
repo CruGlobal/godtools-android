@@ -67,7 +67,6 @@ public class EveryStudentView extends Activity{
 		if (cur.moveToFirst()) {
 			title = cur.getString(cur.getColumnIndex(EveryStudentDatabase.TITLE));
 			category = cur.getString(cur.getColumnIndex(EveryStudentDatabase.CATEGORY));
-			String highlightTerms = null;
 			setTitle(title);
 			String text = cur.getString(cur.getColumnIndex(EveryStudentDatabase.CONTENT)).replaceFirst("\n", "").trim();
 			if (getIntent().getStringExtra(SearchManager.QUERY) != null) {
@@ -75,7 +74,6 @@ public class EveryStudentView extends Activity{
 				Spannable str = (Spannable) content.getText();
 				
 				String query = getIntent().getStringExtra(SearchManager.QUERY).trim();
-				highlightTerms = query;
 				String[] terms = query.split("[\\s]");
 				List<String> termsList = Arrays.asList(terms);
 				String pattern = "";

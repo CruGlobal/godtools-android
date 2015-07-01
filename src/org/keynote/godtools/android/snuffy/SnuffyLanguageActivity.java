@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -76,7 +77,6 @@ public class SnuffyLanguageActivity extends ListActivity {
 		// on which we want to display the values defined in the from array
 		int[] to = { R.id.list2Text1, R.id.list2Image};
 
-		String mLanguageCode = getIntent().getStringExtra("LanguageCode");
 		mPackageName  = getIntent().getStringExtra("PackageName");
 		
 		// TODO: consider case where device rotated - this code may need to move
@@ -233,7 +233,7 @@ public class SnuffyLanguageActivity extends ListActivity {
 		}
 
 		@Override
-		public void setViewImage(ImageView v, String value) {
+		public void setViewImage(@NonNull ImageView v, String value) {
 			
 			if (value.equalsIgnoreCase("LOADED" )
 			||  value.equalsIgnoreCase("BUILTIN")) {
@@ -297,7 +297,7 @@ public class SnuffyLanguageActivity extends ListActivity {
 	
 	private void updateLanguageList() {
 		File documentsDir = ((SnuffyApplication)getApplication()).getDocumentsDir();
-		Document 			xmlDoc 	= null;
+		Document 			xmlDoc;
 		FileInputStream 	fin 	= null;
 		BufferedInputStream	bin 	= null;
 		File repoFile = new File(documentsDir + "/repoIndex.xml");

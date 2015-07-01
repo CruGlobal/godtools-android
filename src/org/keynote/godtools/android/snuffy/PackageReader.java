@@ -167,7 +167,7 @@ public class PackageReader {
 
         boolean bSuccess = false;
 
-        Document xmlDoc	= null;
+        Document xmlDoc;
         try {
             xmlDoc = DocumentBuilderFactory
                     .newInstance()
@@ -440,7 +440,7 @@ public class PackageReader {
 
 		boolean bSuccess = false;
 		
-        Document xmlDoc	= null; 
+        Document xmlDoc;
         try {
         	xmlDoc = DocumentBuilderFactory
         				.newInstance()
@@ -544,7 +544,7 @@ public class PackageReader {
 
     	SnuffyPage currPage = null;
 
-        Document xmlDoc	= null;
+        Document xmlDoc;
         try {
         	xmlDoc = DocumentBuilderFactory
         				.newInstance()
@@ -700,20 +700,10 @@ public class PackageReader {
 		int yOffset		= getIntegerAttributeValue(elButton, "yoffset", 0);
 		String align	= getStringAttributeValue (elButton, "textalign", (bUrlMode || bPhoneMode || bEmailMode|| bBigMode) ? "center" : "left");
 		String label	= getStringAttributeValue (elButton, "label", "");
-//		String modifier = getStringAttributeValue (elButton, "modifier", "");
-//		float alpha		= getFloatAttributeValue  (elButton, "alpha", 1.0f);
-//		int color		= getColorAttributeValue  (elButton, "color", Color.WHITE);
 		
-				
-		xPos	= getScaledXValue(xPos);
+
 		yPos	= getScaledYValue(yPos);
-		width	= getScaledXValue(width);
 		yOffset = getScaledYValue(yOffset);
-//		color	= setColorAlphaVal(color, alpha);
-		if (align.equalsIgnoreCase("center")) {
-			xPos = 0;
-			width = mPageWidth;
-		}
 
 		if (yPos == 0) {
 			yPos = mYOffset + yOffset;
@@ -782,7 +772,7 @@ public class PackageReader {
 		   	
 		   	theContainer.setLayoutParams(new SnuffyLayoutParams(buttonWidth,
 		   																yPosInContainer, BUTTON_MARGINX, yPos));
-		   	processButtonButton(elPage, root, currPage, elButton, Integer.valueOf(1000+iButton), false, theContainer);
+		   	processButtonButton(elPage, root, currPage, elButton, 1000 + iButton, false, theContainer);
 	        SnuffyLayoutParams lpContainer = (SnuffyLayoutParams)(theContainer.getLayoutParams());
 	        yPosInContainer = lpContainer.height; // we add to bottom of the container
 		   	
@@ -797,13 +787,13 @@ public class PackageReader {
 	        int buttonHeight = yPosInContainer;
 	       	theContainer.setLayoutParams(new SnuffyLayoutParams(buttonWidth, buttonHeight, BUTTON_MARGINX, yPos));
 	       	theContainer.setBackgroundColor(Color.TRANSPARENT);
-	        theContainer.setTag(Integer.valueOf(iTagButtonContainer));
+	        theContainer.setTag(iTagButtonContainer);
 	       	currPage.addView(theContainer);
 	        mYOffset = yPos + yPosInContainer;
 	        
-	        processButtonPanel(elPage, root, currPage, elButton, Integer.valueOf(iButton), urlsOnpage);
+	        processButtonPanel(elPage, root, currPage, elButton, iButton, urlsOnpage);
 	       
-			final SnuffyLayout panel = (SnuffyLayout)(currPage.findViewWithTag(Integer.valueOf(iTagButtonPanel)));
+			final SnuffyLayout panel = (SnuffyLayout)(currPage.findViewWithTag(iTagButtonPanel));
             if (bAllUrlMode) {
 				
 				String content = "";
@@ -1028,22 +1018,6 @@ public class PackageReader {
 							}
 						};
 						
-						final Runnable animOut2 = new Runnable() {
-							/*
-							 * IOS version: method = expand
-							 * Slide the panel down
-							 * 		set panel frame = button frame
-							 * 		BEGIN ANIMATION (0.25 sec)
-							 * 			set panel frame = expanded frame
-							 * 			set 5 shadow views around that frame to expanded size
-							 * 		COMMIT ANIMATION
-							*/
-							@Override
-							public void run() {
-								
-							}
-						};
-						
 						final Runnable animOut1 = new Runnable() {
 							/*
 							 * IOS version: method = showShadow
@@ -1155,8 +1129,7 @@ public class PackageReader {
 		int width		= getIntegerAttributeValue(elButton, "w", Math.min(containerWidth, 280));	// 280 is precise limit set in iPhone version
 		int size		= getIntegerAttributeValue(elButton, "size", 100);
 		if (elButtonText != null)
-			size		= getIntegerAttributeValue (elButtonText, "size", 100);		
-		int yOffset		= getIntegerAttributeValue(elButton, "yoffset", 0);
+			size		= getIntegerAttributeValue (elButtonText, "size", 100);
 		String align	= getStringAttributeValue (elButton, "textalign", (bUrlMode || bBigMode || bAllUrlMode) ? "center" : "left");
 		String modifier = getStringAttributeValue (elButton, "modifier", "");
 		float alpha		= getFloatAttributeValue  (elButton, "alpha", 1.0f);
@@ -1244,7 +1217,7 @@ public class PackageReader {
         
        	theContainer.setLayoutParams(new SnuffyLayoutParams(lpContainer.width, lpContainer.height + yPosInContainer, lpContainer.x, lpContainer.y));
         
-        theContainer.setTag(Integer.valueOf(iButton));
+        theContainer.setTag(iButton);
 	}
 
 	private void processButtonPanel(Element elPage, Element root, SnuffyPage currPage, Element elButton, int iButton, Vector<String> urlsOnPage) {
@@ -1300,7 +1273,7 @@ public class PackageReader {
        	int yPanelTop = 50;
       	thePanel.setLayoutParams(new SnuffyLayoutParams(panelWidth, PANEL_YMARGIN + buttonHeight + containerHeight + PANEL_YMARGIN, PANEL_XMARGIN, yPanelTop));
       	thePanel.setBackgroundColor(mBackgroundColor);
-      	thePanel.setTag(Integer.valueOf(1000+iButton));
+      	thePanel.setTag(1000 + iButton);
 		thePanel.setVisibility(View.INVISIBLE); // hide it initially - will be animated into position on click on its owner button.
        	// CANT DO THIS? thePanel.setAlpha(0.0f);				// also hides it
        	
@@ -1367,7 +1340,6 @@ public class PackageReader {
 		yPos	= getScaledYValue(yPos);
 		width	= getScaledXValue(width);
 		height	= getScaledYValue(height);
-		xOffset	= getScaledXValue(xOffset);
 		yOffset	= getScaledYValue(yOffset);
 		if (align.equalsIgnoreCase("center")) {
 			xPos = (panelWidth-width)/2;
@@ -1585,7 +1557,6 @@ public class PackageReader {
 		xPos	= getScaledXValue(xPos);
 		yPos	= getScaledYValue(yPos);
 		width	= getScaledXValue(width);
-		height	= getScaledYValue(height);
 		color	= setColorAlphaVal(color, alpha);
 		if (align.equalsIgnoreCase("center")) {
 			xPos = 0;
@@ -1687,7 +1658,6 @@ public class PackageReader {
 		tv.measure(
 					MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY), 
 					MeasureSpec.UNSPECIFIED);
-		lp = (SnuffyLayoutParams)tv.getLayoutParams();
         mYOffset = yPos + tv.getMeasuredHeight();
 	}
 	
@@ -1723,7 +1693,7 @@ public class PackageReader {
         if (elPeekPanel  != null)	tvSubTitle   = createSubTitleFromElement       (elPeekPanel);
         
         final SnuffyLayout titleContainer = new SnuffyLayout(mContext);
-   		titleContainer.setTag(Integer.valueOf(560));
+   		titleContainer.setTag(560);
 
    		final SnuffyLayout titleClippingContainer = new SnuffyLayout(mContext);
    		// contains titleContainer, subtitleContainer and their shadows
@@ -1742,8 +1712,8 @@ public class PackageReader {
         int titleMarginY 		= getScaledYValue(bPeekMode ? 0 : TITLE_FRAME_YMARGIN);
         int subTitleMarginX 	= getScaledXValue(SUBTITLE_FRAME_MARGIN);
         int subTitlePeekOffset 	= getScaledYValue(SUBTITLE_PEEK_OFFSET);
-        int titleWidth    = mPageWidth;
-        int subTitleWidth = mPageWidth;
+        int titleWidth;
+        int subTitleWidth;
         if (bClearMode) {
         	titleContainer.setBackgroundColor(Color.TRANSPARENT);
         	titleWidth = mPageWidth - titleMarginX; // TODO: Why not 2x margin (left and right?)
@@ -1891,14 +1861,13 @@ public class PackageReader {
         final int DROPSHADOW_LENGTHY	= getScaledYValue(30);
         final int DROPSHADOW_SUBLENGTHX	= getScaledXValue(20);
         final int DROPSHADOW_SUBLENGTHY	= getScaledYValue(20);
-        final int ROUNDRECT_RADIUSX		= getScaledXValue(10); // both X and Y?
         
   		SnuffyLayoutParams lpTitleContainer = (SnuffyLayoutParams)titleContainer.getLayoutParams();
         if (bStraightMode) {
     		Bitmap bmTop = getBitmapFromAssetOrFile(mContext, "grad_shad_bot.png");
     		if (bmTop != null) {
            		ImageView iv = new ImageView(mContext);
-           		iv.setTag(Integer.valueOf(561));
+           		iv.setTag(561);
            		iv.setLayoutParams(new SnuffyLayoutParams(lpTitleContainer.width, getScaledYValue(bmTop.getHeight()), 	
             			lpTitleContainer.x, lpTitleContainer.y - bmTop.getHeight() + getScaledYValue(DROPSHADOW_INSETTOP)));
         		iv.setImageBitmap(bmTop);
@@ -1908,7 +1877,7 @@ public class PackageReader {
     		Bitmap bmBot = getBitmapFromAssetOrFile(mContext, "grad_shad_top.png");
     		if (bmBot != null) {
            		ImageView iv = new ImageView(mContext);
-           		iv.setTag(Integer.valueOf(562));
+           		iv.setTag(562);
             	iv.setLayoutParams(new SnuffyLayoutParams(lpTitleContainer.width, getScaledYValue(bmBot.getHeight()),
             			lpTitleContainer.x, lpTitleContainer.y + lpTitleContainer.height - DROPSHADOW_INSETBOT));
         		iv.setImageBitmap(bmBot);
@@ -1921,7 +1890,7 @@ public class PackageReader {
 			if (bmNE != null) {
 				// grad_shad_NE_title:...
 	       		ImageView iv = new ImageView(mContext);
-	    		iv.setTag(Integer.valueOf(561));
+	    		iv.setTag(561);
 	        	iv.setLayoutParams(new SnuffyLayoutParams(
 	        			getScaledXValue(bmNE.getWidth()), 
 	        			getScaledYValue(bmNE.getHeight()), 
@@ -1936,7 +1905,7 @@ public class PackageReader {
 	  		if (bmE != null) {
 				// grad_shad_E_title:...
 	       		ImageView iv = new ImageView(mContext);
-	    		iv.setTag(Integer.valueOf(566));
+	    		iv.setTag(566);
 	        	iv.setLayoutParams(new SnuffyLayoutParams(
 	        			getScaledXValue(bmE.getWidth()), 
 	        			lpTitleContainer.height - getScaledYValue(bmNE.getHeight()) - DROPSHADOW_INSETY, 
@@ -1951,7 +1920,7 @@ public class PackageReader {
 	  		if (bmSE != null) {
 				// grad_shad_SE_title:...
 	       		ImageView iv = new ImageView(mContext);
-	    		iv.setTag(Integer.valueOf(563));
+	    		iv.setTag(563);
 	        	iv.setLayoutParams(new SnuffyLayoutParams(
 	        			getScaledXValue(bmSE.getWidth()), 
 	        			getScaledYValue(bmSE.getHeight()), 
@@ -1966,7 +1935,7 @@ public class PackageReader {
 	  		if (bmS != null) {
 				// grad_shad_S_title:...
 	       		ImageView iv = new ImageView(mContext);
-	    		iv.setTag(Integer.valueOf(562));
+	    		iv.setTag(562);
 	        	iv.setLayoutParams(new SnuffyLayoutParams(
 	        			lpTitleContainer.width - DROPSHADOW_INSETX, 
 	        			getScaledYValue(bmS.getHeight()), 
@@ -1983,10 +1952,10 @@ public class PackageReader {
     		if (bmE != null) {
     			// grad_shad_E_title:...
            		ImageView iv = new ImageView(mContext);
-        		iv.setTag(Integer.valueOf(566));
+        		iv.setTag(566);
             	iv.setLayoutParams(new SnuffyLayoutParams(
-            			DROPSHADOW_LENGTHX, 
-            			lpTitleContainer.height - DROPSHADOW_INSETY - 0, 
+            			DROPSHADOW_LENGTHX,
+                        lpTitleContainer.height - DROPSHADOW_INSETY,
             			lpTitleContainer.width - DROPSHADOW_INSETX, 
                			lpTitleContainer.y));
         		iv.setImageBitmap(bmE);
@@ -1997,7 +1966,7 @@ public class PackageReader {
     		if (bmS != null) {
     			// grad_shad_S_title:...
            		ImageView iv = new ImageView(mContext);
-        		iv.setTag(Integer.valueOf(562));
+        		iv.setTag(562);
             	iv.setLayoutParams(new SnuffyLayoutParams(
             			lpTitleContainer.width - DROPSHADOW_INSETX,
             			DROPSHADOW_LENGTHY,
@@ -2011,7 +1980,7 @@ public class PackageReader {
     		if (bmSE != null) {
     			// grad_shad_SE_title:...
            		ImageView iv = new ImageView(mContext);
-        		iv.setTag(Integer.valueOf(563));
+        		iv.setTag(563);
             	iv.setLayoutParams(new SnuffyLayoutParams(
             			DROPSHADOW_LENGTHX,
             			DROPSHADOW_LENGTHY,
@@ -2034,7 +2003,7 @@ public class PackageReader {
         if (bHasPeekPanel) { //i.e. (tvSubTitle != null)
         	
             final SnuffyLayout subTitleContainer = new SnuffyLayout(mContext);
-       		subTitleContainer.setTag(Integer.valueOf(550));
+       		subTitleContainer.setTag(550);
        	             
     		// layout subtitle container with textview and arrow
            	subTitleContainer.setBackgroundResource(R.drawable.round_botright_box);
@@ -2077,14 +2046,14 @@ public class PackageReader {
      		SnuffyLayoutParams lpSubTitleContainer = new SnuffyLayoutParams(subTitleWidth, subTitleHeight, 0, yBefore);
 			// grad_shad_E_subtitle:...
             SnuffyLayoutParams lpTemp = new SnuffyLayoutParams(
-        			DROPSHADOW_SUBLENGTHX, 
-        			lpSubTitleContainer.height - DROPSHADOW_INSETY - 0, 
+        			DROPSHADOW_SUBLENGTHX,
+                    lpSubTitleContainer.height - DROPSHADOW_INSETY,
         			lpSubTitleContainer.width  - DROPSHADOW_INSETX, 
         			yBefore);
     		Bitmap bmE = getBitmapFromAssetOrFile(mContext, "grad_shad_E.png");
     		if (bmE != null) {
            		ImageView iv = new ImageView(mContext);
-        		iv.setTag(Integer.valueOf(556));
+        		iv.setTag(556);
             	iv.setLayoutParams(lpTemp);
         		iv.setScaleType(ImageView.ScaleType.FIT_XY);
     			iv.setImageBitmap(bmE);
@@ -2104,7 +2073,7 @@ public class PackageReader {
            	Bitmap bmS = getBitmapFromAssetOrFile(mContext, "grad_shad_S.png");
        		if (bmS != null) {
           		ImageView iv = new ImageView(mContext);
-        		iv.setTag(Integer.valueOf(552));
+        		iv.setTag(552);
             	iv.setLayoutParams(lpTemp);
             	iv.setScaleType(ImageView.ScaleType.FIT_XY);
             	iv.setImageBitmap(bmS);
@@ -2124,7 +2093,7 @@ public class PackageReader {
             Bitmap bmSE = getBitmapFromAssetOrFile(mContext, "grad_shad_SE.png");
     		if (bmSE != null) {
            		ImageView iv = new ImageView(mContext);
-        		iv.setTag(Integer.valueOf(553));
+        		iv.setTag(553);
             	iv.setLayoutParams(lpTemp);
          		iv.setImageBitmap(bmSE);
          		iv.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -2269,8 +2238,6 @@ public class PackageReader {
 		String content		= el.getTextContent();
 		int color			= getColorAttributeValue  (el, "color", mBackgroundColor);
 		float labelAlpha	= getFloatAttributeValue  (el, "alpha", 1.0f);
-		String alignment	= getStringAttributeValue (el, "alignment", "right");			// both supported
-		String align		= getStringAttributeValue (el, "textalign", alignment);			// both supported
 		int size			= getIntegerAttributeValue(el, "size"     , 100);
 		int x				= getIntegerAttributeValue(el, "x",  10);
 		int y				= getIntegerAttributeValue(el, "y",   5);
@@ -2278,8 +2245,8 @@ public class PackageReader {
 		int h				= getIntegerAttributeValue(el, "h", 150);
 		String modifier 	= getStringAttributeValue (el, "modifier", "");
 		
-		align = "right";
-		boolean bResize = (!((w > 0) && (h > 0)));
+		String align = "right";
+		boolean bResize;
 		textSize 	= textSize * size / 100.0f;
 		color		= setColorAlphaVal(color, labelAlpha);
 		x			= getScaledXValue(x);
@@ -2735,19 +2702,19 @@ public class PackageReader {
 	}
 
 	private void setLayoutParamsOfViewWithTag(View parentView, int tagValue, SnuffyLayoutParams lp) {
-		View v = parentView.findViewWithTag(Integer.valueOf(tagValue));
+		View v = parentView.findViewWithTag(tagValue);
 		if (v != null)
 			v.setLayoutParams(lp);			
 	}
 
 	private void startAnimationOnViewWithTag(View parentView, int tagValue, Animation a) {
-		View v = parentView.findViewWithTag(Integer.valueOf(tagValue));
+		View v = parentView.findViewWithTag(tagValue);
 		if (v != null)
 			v.startAnimation(a);			
 	}
 
 	private void bringSubViewWithTagToFront(View parentView, int tagValue) {
-		View v = parentView.findViewWithTag(Integer.valueOf(tagValue));
+		View v = parentView.findViewWithTag(tagValue);
 		if (v != null)
 			v.bringToFront(); // should that be v.bringSubViewToFront() ?
 	}
