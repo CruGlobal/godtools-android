@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#f0f0f0"
-    android:padding="5dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#f0f0f0"
+                android:padding="5dp">
 
     <ImageView
         android:id="@+id/ivIcon"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:scaleType="fitCenter"
-        android:layout_marginRight="10dp"/>
+        android:layout_marginRight="10dp"
+        android:scaleType="fitCenter"/>
 
     <View
         android:id="@+id/vGray"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_alignTop="@+id/ivIcon"
         android:layout_alignBottom="@+id/ivIcon"
         android:layout_alignLeft="@+id/ivIcon"
         android:layout_alignRight="@+id/ivIcon"
+        android:layout_alignTop="@+id/ivIcon"
         android:background="#90000000"
         android:visibility="gone"/>
 
@@ -28,31 +28,31 @@
         android:id="@+id/tvPackageName"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@+id/ivIcon"
-        android:layout_alignTop="@+id/ivIcon"
         android:layout_alignBottom="@+id/ivIcon"
-        android:paddingTop="10dp"
+        android:layout_alignTop="@+id/ivIcon"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/ivIcon"
         android:gravity="center"
+        android:paddingTop="10dp"
+        android:text="@string/menu_item_kgp"
         android:textColor="#000"
         android:textSize="19sp"
-        android:text="@string/menu_item_kgp"
-        android:layout_centerHorizontal="true"
         />
 
     <ImageView
         android:id="@+id/arrow"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:src="@drawable/homescreen_menu_arrow_2x"
-        android:layout_alignTop="@+id/tvPackageName"
         android:layout_alignBottom="@+id/tvPackageName"
-        android:layout_toRightOf="@+id/tvPackageName"
+        android:layout_alignParentEnd="false"
         android:layout_alignParentRight="true"
-        android:scaleType="fitEnd"
-        android:layout_marginTop="20dp"
+        android:layout_alignTop="@+id/tvPackageName"
         android:layout_marginBottom="20dp"
         android:layout_marginRight="10dp"
-        android:layout_alignParentEnd="false"
-        android:maxWidth="25dp"/>
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/tvPackageName"
+        android:maxWidth="25dp"
+        android:scaleType="fitEnd"
+        android:src="@drawable/homescreen_menu_arrow_2x"/>
 
 </RelativeLayout>

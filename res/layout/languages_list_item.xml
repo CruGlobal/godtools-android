@@ -1,78 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/language_item">
-    
+<RelativeLayout android:id="@+id/language_item"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
     <RelativeLayout
         android:id="@+id/content_block"
         android:layout_width="fill_parent"
         android:layout_height="60dp"
         android:clickable="false">
-    
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:background="#ffffff"/>
 
-    <ImageView
-        android:layout_width="45dp"
-        android:layout_height="match_parent"
-        android:id="@+id/iv_downloaded"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:visibility="visible"
-        android:src="@drawable/gt4_downloads_checkmark"
-        android:padding="10dp"/>
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="#ffffff"/>
 
-    <TextView
-        android:background="@drawable/settings_language_bg"
-        android:id="@+id/tvLanguageName"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="false"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/filler_english"
-        android:textSize="22sp"
-        android:paddingLeft="12dp"
-        android:gravity="center_vertical"
-        android:textColor="#ffffffff"
-        android:layout_toRightOf="@+id/iv_downloaded"
-        android:layout_toLeftOf="@+id/tv_download"
-        android:textStyle="bold"
-        android:layout_marginRight="5dp"/>
+        <ImageView
+            android:id="@+id/iv_downloaded"
+            android:layout_width="45dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:padding="10dp"
+            android:src="@drawable/gt4_downloads_checkmark"
+            android:visibility="visible"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:text="@string/download"
-        android:id="@+id/tv_download"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:textColor="#ffffffff"
-        android:textSize="20sp"
-        android:layout_marginRight="15dp"
-        android:gravity="center_vertical"
-        android:clickable="true"/>
+        <TextView
+            android:id="@+id/tvLanguageName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/tv_download"
+            android:layout_toRightOf="@+id/iv_downloaded"
+            android:background="@drawable/settings_language_bg"
+            android:gravity="center_vertical"
+            android:paddingLeft="12dp"
+            android:text="@string/filler_english"
+            android:textColor="#ffffffff"
+            android:textSize="22sp"
+            android:textStyle="bold"/>
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleSmall"
-        android:layout_width="45dp"
-        android:layout_height="match_parent"
-        android:id="@+id/pb_dowloading"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:visibility="invisible"/>
+        <TextView
+            android:id="@+id/tv_download"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:text="@string/download"
+            android:textColor="#ffffffff"
+            android:textSize="20sp"/>
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:background="#ffffff"
-        android:layout_alignParentBottom="true"/>
-        
-        </RelativeLayout>
-    
+        <ProgressBar
+            android:id="@+id/pb_dowloading"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="45dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_alignParentBottom="true"
+            android:background="#ffffff"/>
+
+    </RelativeLayout>
+
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="25dp"

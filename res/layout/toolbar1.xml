@@ -1,49 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--  See http://www.cannonade.net/blog.php?id=1521 -->
 
-<LinearLayout 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/toolbar1"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:orientation="vertical">
+<LinearLayout android:id="@+id/toolbar1"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
-<View style="@style/ToolBarSep" />
+    <View style="@style/ToolBarSep"/>
 
-<TableLayout style="@style/Toolbar"
-	android:stretchColumns="0,1,2,3,4"
-	>
-	<TableRow>
-	
-		<ImageButton style="@style/ToolbarButton"
-			android:src="@drawable/rewind"
-			android:text=""
-			android:onClick="doCmdGoToFirstPage">
-		</ImageButton>
-		<ImageButton style="@style/ToolbarButton"
-			android:src="@drawable/action"
-			android:text=""
-			android:onClick="doCmdShare">			
-		</ImageButton>
-		<ImageButton style="@style/ToolbarButton"
-			android:src="@drawable/menu"
-			android:text=""
-			android:onClick="doCmdShowPageMenu">			
-		</ImageButton>
-		<ImageButton style="@style/ToolbarButton"
-			android:src="@drawable/globe"
-			android:text=""
-			android:onClick="doCmdChooseLanguage">			
-		</ImageButton>
-		<ImageButton style="@style/ToolbarButton"
-			android:src="@drawable/info"
-			android:text=""
-			android:onClick="doCmdInfo">			
-		</ImageButton>
-		<ImageButton style="@style/ToolbarButton"
-			android:src="@drawable/fast_forward" 
-			android:text=""
-			android:onClick="doCmdGoToLastPage">			
-		</ImageButton>
-	</TableRow>
-</TableLayout>
+    <TableLayout
+        style="@style/Toolbar"
+        android:stretchColumns="0,1,2,3,4"
+        >
+
+        <TableRow>
+
+            <ImageButton
+                style="@style/ToolbarButton"
+                android:onClick="doCmdGoToFirstPage"
+                android:src="@drawable/rewind"
+                android:text="">
+            </ImageButton>
+
+            <ImageButton
+                style="@style/ToolbarButton"
+                android:onClick="doCmdShare"
+                android:src="@drawable/action"
+                android:text="">
+            </ImageButton>
+
+            <ImageButton
+                style="@style/ToolbarButton"
+                android:onClick="doCmdShowPageMenu"
+                android:src="@drawable/menu"
+                android:text="">
+            </ImageButton>
+
+            <ImageButton
+                style="@style/ToolbarButton"
+                android:onClick="doCmdChooseLanguage"
+                android:src="@drawable/globe"
+                android:text="">
+            </ImageButton>
+
+            <ImageButton
+                style="@style/ToolbarButton"
+                android:onClick="doCmdInfo"
+                android:src="@drawable/info"
+                android:text="">
+            </ImageButton>
+
+            <ImageButton
+                style="@style/ToolbarButton"
+                android:onClick="doCmdGoToLastPage"
+                android:src="@drawable/fast_forward"
+                android:text="">
+            </ImageButton>
+        </TableRow>
+    </TableLayout>
 </LinearLayout>

@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical"
+              android:padding="5dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:bufferType="spannable"
+        android:gravity="center_vertical"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/snippet"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:padding="5dp">
-    <TextView
-            android:id="@+id/title"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-		    android:textSize="18sp"
-		    android:gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:bufferType="spannable" />
-    <TextView
-            android:id="@+id/snippet"
-    		android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" android:bufferType="spannable" />
+        android:layout_height="wrap_content"
+        android:bufferType="spannable"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
 </LinearLayout>

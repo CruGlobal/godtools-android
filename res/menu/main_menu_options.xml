@@ -11,44 +11,44 @@
          -->
     <item
         android:id="@+id/CMD_SWITCH_LANGUAGE"
-        android:title="@string/menu_switch_language"
-        android:icon="@drawable/button_switch"/>
+        android:icon="@drawable/button_switch"
+        android:title="@string/menu_switch_language"/>
     <item
         android:id="@+id/CMD_REFRESH_PAGE"
-        android:title="@string/menu_update_page" />
+        android:title="@string/menu_update_page"/>
     <item
         android:id="@+id/CMD_CONTENT"
-        android:title="@string/menu_item_contents"
-        android:icon="@drawable/button_contents" />
+        android:icon="@drawable/button_contents"
+        android:title="@string/menu_item_contents"/>
     <item
         android:id="@+id/CMD_FLIP"
-        android:title="@string/menu_flip"
-        android:icon="@drawable/button_switch" />
+        android:icon="@drawable/button_switch"
+        android:title="@string/menu_flip"/>
     <item
         android:id="@+id/CMD_FIRST_PAGE"
-        android:title="@string/menu_item_first_page"
         android:icon="@drawable/rewind_grey"
-        android:visible="false" />
+        android:title="@string/menu_item_first_page"
+        android:visible="false"/>
     <item
         android:id="@+id/CMD_EMAIL"
-        android:title="@string/menu_item_email"
-        android:icon="@drawable/button_export" />
+        android:icon="@drawable/button_export"
+        android:title="@string/menu_item_email"/>
     <item
         android:id="@+id/CMD_LANGUAGES"
-        android:title="@string/menu_item_languages"
         android:icon="@drawable/globe_grey"
-        android:visible="false" />
+        android:title="@string/menu_item_languages"
+        android:visible="false"/>
     <item
         android:id="@+id/CMD_ABOUT"
-        android:title="@string/menu_about"
-        android:icon="@drawable/button_info" />
+        android:icon="@drawable/button_info"
+        android:title="@string/menu_about"/>
     <item
         android:id="@+id/CMD_LAST_PAGE"
-        android:title="@string/menu_item_last_page"
         android:icon="@drawable/fast_forward_grey"
-        android:visible="false" />
+        android:title="@string/menu_item_last_page"
+        android:visible="false"/>
     <item
         android:id="@+id/CMD_HELP"
-        android:title="@string/menu_item_help"
-        android:icon="@drawable/button_help" />
+        android:icon="@drawable/button_help"
+        android:title="@string/menu_item_help"/>
 </menu>

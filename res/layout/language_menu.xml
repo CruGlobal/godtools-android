@@ -1,51 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android" 
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
-	
-	<!--  the container -->
-	<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:id="@+id/language_menu_container" 
-		android:visibility="invisible"
-		android:layout_width="540dp"
-		android:layout_height="810dp"
-		android:layout_x="0px"
-		android:layout_y="75dp"
-		android:background="@drawable/homescreen_background">
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 
-		<ImageView 
-			android:id="@+id/language_menu_vignette"
-			android:layout_width="640dp"
-			android:layout_height="960dp"
-			android:layout_x="0px"
-			android:layout_y="0px"
-			android:scaleType="fitXY"
-			android:src="@drawable/homescreen_background_linen_vignette"/>
+    <!--  the container -->
+    <AbsoluteLayout android:id="@+id/language_menu_container"
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="540dp"
+                    android:layout_height="810dp"
+                    android:layout_x="0px"
+                    android:layout_y="75dp"
+                    android:background="@drawable/homescreen_background"
+                    android:visibility="invisible">
 
-		<LinearLayout
-		  android:id="@+id/language_menu_container2"
-		  android:orientation="vertical"
-		  android:layout_width="match_parent"
-		  android:layout_height="match_parent">
-		   	<TextView
-				android:id="@+id/language_menu_title"
-		    	android:layout_height="88dp"
-		    	android:layout_width="match_parent"
-		    	android:background="@drawable/language_menu_title_background"
-		    	android:text="@string/languages_activity_title"
-		    	android:textSize="40sp"
-		    	android:textColor="#ffffff"
-		    	android:textStyle="bold"
-		    	android:gravity="center_horizontal|center_vertical"/>
-		    	
-		  	<!--  TODO?  use:	android:cacheColorHint="#ff0000"  -->
-			<ListView android:id="@android:id/list"
-		    	android:layout_height="0dip" 
-		    	android:layout_width="match_parent"
-		    	android:layout_weight="1"
-		    	android:divider="#e4e5e7"
-		    	android:dividerHeight="1.0sp"/> <!-- stack overflow article claims we need the .0 -->
-		    
-		</LinearLayout>
-	</AbsoluteLayout>
+        <ImageView
+            android:id="@+id/language_menu_vignette"
+            android:layout_width="640dp"
+            android:layout_height="960dp"
+            android:layout_x="0px"
+            android:layout_y="0px"
+            android:scaleType="fitXY"
+            android:src="@drawable/homescreen_background_linen_vignette"/>
+
+        <LinearLayout
+            android:id="@+id/language_menu_container2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/language_menu_title"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:background="@drawable/language_menu_title_background"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/languages_activity_title"
+                android:textColor="#ffffff"
+                android:textSize="40sp"
+                android:textStyle="bold"/>
+
+            <!--  TODO?  use:	android:cacheColorHint="#ff0000"  -->
+            <ListView
+                android:id="@android:id/list"
+                android:layout_width="match_parent"
+                android:layout_height="0dip"
+                android:layout_weight="1"
+                android:divider="#e4e5e7"
+                android:dividerHeight="1.0sp"/>
+            <!-- stack overflow article claims we need the .0 -->
+
+        </LinearLayout>
+    </AbsoluteLayout>
 </AbsoluteLayout>

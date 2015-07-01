@@ -100,7 +100,7 @@
     <!-- Main Activity-->
     <string name="share">Share</string>
     <string name="share_prompt">Select how you would like to share</string>
-    
+
     <!-- Language List -->
     <string name="download">Download</string>
     <string name="downloading">Downloading</string>
@@ -116,7 +116,7 @@
     <!-- Access Code Dialog -->
     <string name="dialog_access_code_title">Enter Access Code:</string>
     <string name="invalid_code">Invalid Access Code</string>
-    
+
     <!-- Preview Mode -->
     <string name="pull_down_info">pull to refresh drafts</string>
     <string name="preview_mode_title">Preview Mode</string>
@@ -136,12 +136,12 @@
     <string name="failed_download_resources">Failed to download resources</string>
     <string name="success">Success!</string>
     <string name="internet_needed">An internet connection is needed to complete this request</string>
-    
+
     <string name="alternate_language">Alternate Language</string>
     <string name="alternate_language_message">The parallel language selected is not available for this tool.</string>
-    
+
     <string name="description_homescreen_icon">homescreen_icon</string>
-    
+
     <!-- these are just filler strings used in the code, but here to be consistent -->
     <string name="filler_textview">TextView</string>
     <string name="filler_english">English</string>

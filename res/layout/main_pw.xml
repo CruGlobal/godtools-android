@@ -10,114 +10,114 @@
         android:id="@+id/homescreen_icon"
         android:layout_width="120dp"
         android:layout_height="112.5dp"
-        android:src="@drawable/gt4_home_bookicon"
-        android:background="#00ffffff"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:contentDescription="@string/description_homescreen_icon"/>
+        android:background="#00ffffff"
+        android:contentDescription="@string/description_homescreen_icon"
+        android:src="@drawable/gt4_home_bookicon"/>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/first_layout"
         android:layout_width="fill_parent"
         android:layout_height="70dp"
+        android:layout_above="@+id/second_layout"
         android:layout_alignParentBottom="false"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="10dp"
         android:background="#95b9b9b9"
-        android:id="@+id/first_layout"
         android:clickable="true"
-        android:layout_above="@+id/second_layout"
+        android:orientation="horizontal"
         >
 
         <ImageView
+            android:id="@+id/iv_first"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:id="@+id/iv_first"
-            android:src="@drawable/gt4_homescreen_kgpicon"
-            android:background="#00ffffff"/>
+            android:background="#00ffffff"
+            android:src="@drawable/gt4_homescreen_kgpicon"/>
 
         <TextView
+            android:id="@+id/tv_first"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="@string/menu_item_kgp"
-            android:id="@+id/tv_first"
             android:background="#00ffffff"
-            android:textSize="22sp"
-            android:paddingLeft="20dp"
             android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="15dp"
+            android:text="@string/menu_item_kgp"
             android:textColor="#ffffffff"
-            android:paddingRight="15dp"/>
+            android:textSize="22sp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/second_layout"
         android:layout_width="fill_parent"
         android:layout_height="70dp"
+        android:layout_above="@+id/third_layout"
         android:layout_alignParentBottom="false"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="10dp"
         android:background="#95828282"
-        android:id="@+id/second_layout"
         android:clickable="true"
-        android:layout_above="@+id/third_layout">
+        android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/iv_second"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:id="@+id/iv_second"
-            android:src="@drawable/gt4_homescreen_satisfiedicon"
-            android:background="#00ffffff"/>
+            android:background="#00ffffff"
+            android:src="@drawable/gt4_homescreen_satisfiedicon"/>
 
         <TextView
+            android:id="@+id/tv_second"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="@string/menu_item_satisfied"
-            android:id="@+id/tv_second"
             android:background="#00ffffff"
-            android:textSize="22sp"
-            android:paddingLeft="20dp"
             android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="15dp"
+            android:text="@string/menu_item_satisfied"
             android:textColor="#ffffffff"
-            android:paddingRight="15dp"/>
+            android:textSize="22sp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/third_layout"
         android:layout_width="fill_parent"
         android:layout_height="70dp"
+        android:layout_above="@+id/fourth_layout"
         android:layout_alignParentBottom="false"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="10dp"
         android:background="#95b9b9b9"
-        android:id="@+id/third_layout"
         android:clickable="true"
-        android:layout_above="@+id/fourth_layout">
+        android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/iv_third"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:id="@+id/iv_third"
-            android:src="@drawable/gt4_homescreen_4lawsicon"
-            android:background="#00ffffff"/>
+            android:background="#00ffffff"
+            android:src="@drawable/gt4_homescreen_4lawsicon"/>
 
         <TextView
+            android:id="@+id/tv_third"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="@string/menu_item_4laws"
-            android:id="@+id/tv_third"
             android:background="#00ffffff"
-            android:textSize="22sp"
-            android:paddingLeft="20dp"
             android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="15dp"
+            android:text="@string/menu_item_4laws"
             android:textColor="#ffffffff"
-            android:paddingRight="15dp"/>
+            android:textSize="22sp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/fourth_layout"
         android:layout_width="fill_parent"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"
@@ -125,27 +125,27 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="25dp"
         android:background="#95828282"
-        android:id="@+id/fourth_layout"
-        android:clickable="true">
+        android:clickable="true"
+        android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/iv_fourth"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:id="@+id/iv_fourth"
-            android:src="@drawable/gt4_homescreen_esicon"
-            android:background="#00ffffff"/>
+            android:background="#00ffffff"
+            android:src="@drawable/gt4_homescreen_esicon"/>
 
         <TextView
+            android:id="@+id/tv_fourth"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="@string/menu_item_everystudent"
-            android:id="@+id/tv_fourth"
             android:background="#00ffffff"
-            android:textSize="22sp"
-            android:paddingLeft="20dp"
             android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="15dp"
+            android:text="@string/menu_item_everystudent"
             android:textColor="#ffffffff"
-            android:paddingRight="15dp"/>
+            android:textSize="22sp"/>
     </LinearLayout>
 
 </RelativeLayout>
