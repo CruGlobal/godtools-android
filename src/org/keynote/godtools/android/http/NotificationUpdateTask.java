@@ -19,6 +19,7 @@ import org.json.JSONObject;
 /**
  * Created by matthewfrederick on 1/5/15.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class NotificationUpdateTask extends AsyncTask<Object, Void, String>
 {
     private NotificationUpdateTaskHandler taskHandler;

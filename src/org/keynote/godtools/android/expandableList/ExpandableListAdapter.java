@@ -39,6 +39,7 @@ import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 /**
  * Created by matthewfrederick on 2/16/15.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class ExpandableListAdapter extends BaseExpandableListAdapter implements View.OnClickListener
 {
     private final SharedPreferences settings;

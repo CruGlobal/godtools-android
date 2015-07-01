@@ -3,6 +3,7 @@ package org.keynote.godtools.android.notifications;
 /**
  * Created by matthewfrederick on 1/7/15.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public final class NotificationInfo
 {
     public static final String NOTIFICATION_TAG = "Notifications";

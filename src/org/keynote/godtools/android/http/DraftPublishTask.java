@@ -14,6 +14,7 @@ import java.io.IOException;
 /**
  * Created by ryancarlson on 9/10/14.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class DraftPublishTask extends AsyncTask<Object, Void, Integer>
 {
     private final DraftTaskHandler taskHandler;

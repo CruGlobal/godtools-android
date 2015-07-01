@@ -3,6 +3,7 @@ package org.keynote.godtools.android.http;
 /**
  * Created by matthewfrederick on 5/11/15.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public enum APITasks
 {
     AUTHENTICATE_GENERIC,

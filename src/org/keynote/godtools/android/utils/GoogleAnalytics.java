@@ -7,6 +7,7 @@ import com.google.android.gms.analytics.Tracker;
 /**
  * Created by ryancarlson on 4/21/14.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class GoogleAnalytics
 {
     static Tracker tracker;

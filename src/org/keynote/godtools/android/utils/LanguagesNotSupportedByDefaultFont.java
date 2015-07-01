@@ -6,6 +6,7 @@ import java.util.Map;
 /**
  * Created by ryancarlson on 4/17/14.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class LanguagesNotSupportedByDefaultFont
 {
     private static final Map<String, String> languageCodeSet = new HashMap<String, String>();

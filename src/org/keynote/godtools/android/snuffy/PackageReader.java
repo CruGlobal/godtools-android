@@ -51,7 +51,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class PackageReader
 {
-    //public static final int		REFERENCE_DEVICE_HEIGHT = 460;	// pixels on iPhone - not including status bar
     public static final int REFERENCE_DEVICE_HEIGHT = 480;    // pixels on iPhone - including status bar
 
     // Note that these coords are those used in the Package .XML files.

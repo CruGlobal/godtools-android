@@ -8,6 +8,7 @@ import static org.keynote.godtools.android.utils.Constants.STATUS_CODE;
 /**
  * Created by matthewfrederick on 2/17/15.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public final class BroadcastUtil
 {
     public static final String ACTION_START = BroadcastUtil.class.getName() + ".ACTION_START";

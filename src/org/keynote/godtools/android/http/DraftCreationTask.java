@@ -15,6 +15,7 @@ import java.io.IOException;
 /**
  * Created by ryancarlson on 9/10/14.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class DraftCreationTask extends AsyncTask<Object, Void, Integer>
 {
     private final String TAG = getClass().getSimpleName();
