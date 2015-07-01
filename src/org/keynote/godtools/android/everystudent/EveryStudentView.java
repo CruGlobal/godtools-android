@@ -22,25 +22,24 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.Settings;
 import org.keynote.godtools.android.utils.GoogleAnalytics;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+
 public class EveryStudentView extends Activity
 {
-
-    public static final String LOGTAG = "EveryStudentView";
-    String title = "";
-    String category = "";
-    private long lastTime = System.currentTimeMillis();
+    String title = EMPTY_STRING;
+    String category = EMPTY_STRING;
     private PowerManager.WakeLock wl = null;
 
+    @SuppressWarnings("ResourceType")
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -49,7 +48,7 @@ public class EveryStudentView extends Activity
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
 
-        SharedPreferences settings = getSharedPreferences(Settings.PREFNAME, 0);
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         if (settings.getBoolean("wakelock", true))
         {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -62,7 +61,7 @@ public class EveryStudentView extends Activity
         TextView content = (TextView) this.findViewById(R.id.everystudent_content);
 
         Uri uri = getIntent().getData();
-        Cursor cur = managedQuery(uri, null, null, null, null);
+        Cursor cur = getContentResolver().query(uri, null, null, null, null);
 
         if (cur.moveToFirst())
         {
@@ -103,20 +102,22 @@ public class EveryStudentView extends Activity
                 content.setText(text);
             }
 
-            recordScreenView(title);
+            recordScreenView();
         }
         else
         {
             Toast.makeText(getBaseContext(), "Could not load the content.", Toast.LENGTH_LONG).show();
             this.finish();
         }
+
+        cur.close();
     }
 
-    private void recordScreenView(String title)
+    private void recordScreenView()
     {
         Tracker tracker = GoogleAnalytics.getTracker(getApplicationContext());
 
-        tracker.setScreenName("everystudent-" + massageTitleToTrainCase(title));
+        tracker.setScreenName("everystudent-" + massageTitleToTrainCase());
 
         tracker.send(new HitBuilders.AppViewBuilder()
                 .setCustomDimension(1, "everystudent")
@@ -125,7 +126,7 @@ public class EveryStudentView extends Activity
                 .build());
     }
 
-    private String massageTitleToTrainCase(String titleWithPunctAndWhitespace)
+    private String massageTitleToTrainCase()
     {
         return title.replaceAll("\\p{Punct}]", "").toLowerCase().replaceAll("\\s", "-");
     }
@@ -146,13 +147,6 @@ public class EveryStudentView extends Activity
     protected void onPause()
     {
         super.onPause();
-        long viewtime = (System.currentTimeMillis() - lastTime) / 1000;
-        lastTime = System.currentTimeMillis();
-        if (viewtime > 0)
-        {
-            HashMap<String, String> params = new HashMap<String, String>();
-            params.put("Time", category + ":" + title + ":" + String.valueOf(viewtime));
-        }
         if (wl != null)
             wl.release();
     }
@@ -161,7 +155,6 @@ public class EveryStudentView extends Activity
     protected void onResume()
     {
         super.onResume();
-        lastTime = System.currentTimeMillis();
         if (wl != null)
             wl.acquire();
     }
