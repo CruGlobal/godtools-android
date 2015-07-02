@@ -54,6 +54,8 @@ import static org.keynote.godtools.android.utils.Constants.CONFIG_FILE_NAME;
 import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
+import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.KGP;
 import static org.keynote.godtools.android.utils.Constants.LANGUAGE_CODE;
 import static org.keynote.godtools.android.utils.Constants.PACKAGE_NAME;
@@ -517,7 +519,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
             Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_download_draft),
                     Toast.LENGTH_SHORT).show();
         }
-        else if (tag.equalsIgnoreCase("primary") || tag.equalsIgnoreCase("parallel"))
+        else if (tag.equalsIgnoreCase(KEY_PRIMARY) || tag.equalsIgnoreCase(KEY_PARALLEL))
         {
             Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_download_resources),
                     Toast.LENGTH_SHORT).show();

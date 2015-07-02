@@ -39,6 +39,7 @@ import java.util.List;
 import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
 import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.LANGUAGE_TYPE;
 import static org.keynote.godtools.android.utils.Constants.MAIN_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.PARALLEL_LANGUAGE;
@@ -131,7 +132,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
     private void downloadLanguage(String langCode)
     {
         GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                langCode, "primary", settings.getString(AUTH_GENERIC, EMPTY_STRING), this);
+                langCode, KEY_PRIMARY, settings.getString(AUTH_GENERIC, EMPTY_STRING), this);
     }
 
     private void setList()

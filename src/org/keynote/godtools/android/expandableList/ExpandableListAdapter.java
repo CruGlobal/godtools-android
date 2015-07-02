@@ -31,6 +31,7 @@ import java.util.List;
 import static org.keynote.godtools.android.broadcast.BroadcastUtil.startBroadcast;
 import static org.keynote.godtools.android.broadcast.BroadcastUtil.stopBroadcast;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KGP;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
@@ -67,7 +68,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
 
         // child list needs one item to show expandable menu
         List<String> childList = new ArrayList<String>(1);
-        childList.add("");
+        childList.add(EMPTY_STRING);
 
         for (GTPackage gtPackage : this.packages)
         {
@@ -255,7 +256,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
 
                                 broadcastManager.sendBroadcast(startBroadcast());
 
-                                GodToolsApiClient.publishDraft(settings.getString(AUTH_DRAFT, ""),
+                                GodToolsApiClient.publishDraft(settings.getString(AUTH_DRAFT, EMPTY_STRING),
                                         currentPackage.getLanguage(),
                                         currentPackage.getCode(),
                                         new DraftPublishTask.DraftTaskHandler()
@@ -302,7 +303,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                 broadcastManager.sendBroadcast(startBroadcast());
                                 Log.i(TAG, "Creating Draft");
 
-                                GodToolsApiClient.createDraft(settings.getString(AUTH_DRAFT, ""),
+                                GodToolsApiClient.createDraft(settings.getString(AUTH_DRAFT, EMPTY_STRING),
                                         languagePrimary,
                                         currentPackage.getCode(),
                                         new DraftCreationTask.DraftTaskHandler()

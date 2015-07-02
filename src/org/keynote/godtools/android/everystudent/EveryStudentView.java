@@ -65,7 +65,7 @@ public class EveryStudentView extends Activity
             title = cur.getString(cur.getColumnIndex(EveryStudentDatabase.TITLE));
             category = cur.getString(cur.getColumnIndex(EveryStudentDatabase.CATEGORY));
             setTitle(title);
-            String text = cur.getString(cur.getColumnIndex(EveryStudentDatabase.CONTENT)).replaceFirst("\n", "").trim();
+            String text = cur.getString(cur.getColumnIndex(EveryStudentDatabase.CONTENT)).replaceFirst("\n", EMPTY_STRING).trim();
             if (getIntent().getStringExtra(SearchManager.QUERY) != null)
             {
                 content.setText(text, TextView.BufferType.SPANNABLE);
@@ -74,7 +74,7 @@ public class EveryStudentView extends Activity
                 String query = getIntent().getStringExtra(SearchManager.QUERY).trim();
                 String[] terms = query.split("[\\s]");
                 List<String> termsList = Arrays.asList(terms);
-                String pattern = "";
+                String pattern = EMPTY_STRING;
 
                 Iterator<String> itr = termsList.iterator();
                 while (itr.hasNext())
@@ -125,7 +125,7 @@ public class EveryStudentView extends Activity
 
     private String massageTitleToTrainCase()
     {
-        return title.replaceAll("\\p{Punct}]", "").toLowerCase().replaceAll("\\s", "-");
+        return title.replaceAll("\\p{Punct}]", EMPTY_STRING).toLowerCase().replaceAll("\\s", "-");
     }
 
     @Override

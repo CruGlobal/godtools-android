@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+
 public class DBAdapter
 {
 
@@ -231,7 +233,7 @@ public class DBAdapter
         List<GTLanguage> listGTLanguages = new ArrayList<GTLanguage>();
 
         Locale current = Locale.getDefault();
-        Locale.setDefault(new Locale("en"));
+        Locale.setDefault(new Locale(ENGLISH_DEFAULT));
 
         while (cursor.moveToNext())
         {

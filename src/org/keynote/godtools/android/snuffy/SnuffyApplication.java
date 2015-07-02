@@ -19,6 +19,9 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.Vector;
 
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+
 public class SnuffyApplication extends Application
 {
 
@@ -37,8 +40,8 @@ public class SnuffyApplication extends Application
         super.onCreate();
 
         mDeviceLocale = Locale.getDefault();
-        SharedPreferences settings = getSharedPreferences("GodTools", MODE_PRIVATE);
-        String primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
         setAppLocale(primaryLanguageCode);
 
     }

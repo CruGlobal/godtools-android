@@ -37,6 +37,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
+
 public class EveryStudentSearchResults extends ListActivity
 {
     public static final int DIALOG_LOADING = 0;
@@ -266,7 +268,7 @@ public class EveryStudentSearchResults extends ListActivity
 
             String[] terms = mQuery.split("[\\s]");
             List<String> termsList = Arrays.asList(terms);
-            String pattern = "";
+            String pattern = EMPTY_STRING;
 
             Iterator<String> itr = termsList.iterator();
             while (itr.hasNext())

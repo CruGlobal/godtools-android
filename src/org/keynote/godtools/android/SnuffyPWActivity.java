@@ -237,7 +237,7 @@ public class SnuffyPWActivity extends Activity
                 resizeTheActivity();
 
                 mProcessPackageAsync = new ProcessPackageAsync();
-                mProcessPackageAsync.execute("");
+                mProcessPackageAsync.execute(EMPTY_STRING);
             }
         }, delay);  // delay can be required to make sure activity fully created - is there something we can test for that is better than a fixed timeout?
 
@@ -305,7 +305,7 @@ public class SnuffyPWActivity extends Activity
                     if ((mAppPackage.equalsIgnoreCase(KGP) && position == 7) || (mAppPackage.equalsIgnoreCase(FOUR_LAWS) && position == 6))
                     {
                         Log.i(TAG, "App used 3 times and prayer page reached.");
-                        GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""),
+                        GodToolsApiClient.updateNotification(settings.getString(AUTH_GENERIC, EMPTY_STRING),
                                 regid, NotificationInfo.AFTER_1_PRESENTATION, new NotificationUpdateTask.NotificationUpdateTaskHandler()
                                 {
                                     @Override

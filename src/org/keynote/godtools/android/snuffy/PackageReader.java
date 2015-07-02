@@ -49,6 +49,8 @@ import java.util.Vector;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
+
 public class PackageReader
 {
     public static final int REFERENCE_DEVICE_HEIGHT = 480;    // pixels on iPhone - including status bar
@@ -756,7 +758,7 @@ public class PackageReader
     {
         int iTagButtonContainer = iButton + 100;
         int iTagButtonPanel = iButton + 1000;
-        String mode = getStringAttributeValue(elButton, "mode", "");
+        String mode = getStringAttributeValue(elButton, "mode", EMPTY_STRING);
         boolean bBigMode = mode.equalsIgnoreCase("big");
         final boolean bUrlMode = mode.equalsIgnoreCase("url");
         final boolean bAllUrlMode = mode.equalsIgnoreCase("allurl");
@@ -768,7 +770,7 @@ public class PackageReader
         int size = getIntegerAttributeValue(elButton, "size", 100);
         int yOffset = getIntegerAttributeValue(elButton, "yoffset", 0);
         String align = getStringAttributeValue(elButton, "textalign", (bUrlMode || bPhoneMode || bEmailMode || bBigMode) ? "center" : "left");
-        String label = getStringAttributeValue(elButton, "label", "");
+        String label = getStringAttributeValue(elButton, "label", EMPTY_STRING);
 
 
         yPos = getScaledYValue(yPos);
@@ -871,7 +873,7 @@ public class PackageReader
             if (bAllUrlMode)
             {
 
-                String content = "";
+                String content = EMPTY_STRING;
                 Iterator<String> iter = urlsOnpage.iterator();
                 while (iter.hasNext())
                 {
@@ -1218,7 +1220,7 @@ public class PackageReader
         else
             content = getTextContentImmediate(elButtonText);    // used with paneltext
         Element elImage = getChildElementNamed(elButton, "image");
-        String mode = getStringAttributeValue(elButton, "mode", "");
+        String mode = getStringAttributeValue(elButton, "mode", EMPTY_STRING);
         boolean bAllUrlMode = mode.equalsIgnoreCase("allurl");
         boolean bUrlMode = mode.equalsIgnoreCase("url");
         boolean bBigMode = mode.equalsIgnoreCase("big");
@@ -1228,7 +1230,7 @@ public class PackageReader
         if (elButtonText != null)
             size = getIntegerAttributeValue(elButtonText, "size", 100);
         String align = getStringAttributeValue(elButton, "textalign", (bUrlMode || bBigMode || bAllUrlMode) ? "center" : "left");
-        String modifier = getStringAttributeValue(elButton, "modifier", "");
+        String modifier = getStringAttributeValue(elButton, "modifier", EMPTY_STRING);
         float alpha = getFloatAttributeValue(elButton, "alpha", 1.0f);
         int color = getColorAttributeValue(elButton, "color", Color.WHITE);
 
@@ -1495,7 +1497,7 @@ public class PackageReader
         int yOffset = getIntegerAttributeValue(elText, "yoffset", 0);
         int size = getIntegerAttributeValue(elText, "size", 100);
         String align = getStringAttributeValue(elText, "textalign", getStringAttributeValue(elPanel, "textalign", "left"));
-        String modifier = getStringAttributeValue(elText, "modifier", "");
+        String modifier = getStringAttributeValue(elText, "modifier", EMPTY_STRING);
         float alpha = getFloatAttributeValue(elText, "alpha", 1.0f);
         int color = getColorAttributeValue(elText, "color", Color.WHITE);
 
@@ -1595,7 +1597,7 @@ public class PackageReader
             if (content.length() > 0)
             {
                 content = content.trim(); // eliminate trailing newlines, e.g. 4Laws/en/02.xml
-                String mode = getStringAttributeValue(elQuestion, "mode", "");
+                String mode = getStringAttributeValue(elQuestion, "mode", EMPTY_STRING);
                 boolean bStraightMode = mode.equalsIgnoreCase("straight");
                 //int h			= getIntegerAttributeValue(elQuestion, "h"      , 0);
                 int xPos = getIntegerAttributeValue(elQuestion, "x", 0);
@@ -1740,7 +1742,7 @@ public class PackageReader
         int width = getIntegerAttributeValue(elText, "w", REFERENCE_DEVICE_WIDTH);
         int size = getIntegerAttributeValue(elText, "size", 100);
         String align = getStringAttributeValue(elText, "textalign", "left");
-        String modifier = getStringAttributeValue(elText, "modifier", "");
+        String modifier = getStringAttributeValue(elText, "modifier", EMPTY_STRING);
         float alpha = getFloatAttributeValue(elText, "alpha", 1.0f);
         int color = getColorAttributeValue(elText, "color", Color.WHITE);
 
@@ -1795,12 +1797,12 @@ public class PackageReader
 
     private void processTitle(Element elPage, Element root, SnuffyPage currPage, Element elTitle)
     {
-        String titleMode = getStringAttributeValue(elTitle, "mode", "");    // plain/clear/straight/peek (default is plain)
+        String titleMode = getStringAttributeValue(elTitle, "mode", EMPTY_STRING);    // plain/clear/straight/peek (default is plain)
         int titleHeight = getIntegerAttributeValue(elTitle, "h", 0);
         boolean bPeekMode = titleMode.equalsIgnoreCase("peek");
         boolean bStraightMode = titleMode.equalsIgnoreCase("straight");
         boolean bClearMode = titleMode.equalsIgnoreCase("clear");
-        boolean bPlainMode = titleMode.equalsIgnoreCase("plain") || titleMode.equalsIgnoreCase("");
+        boolean bPlainMode = titleMode.equalsIgnoreCase("plain") || titleMode.equalsIgnoreCase(EMPTY_STRING);
 
         // In peek mode there is white background, heading is on left, subheading is on right and peek panel drops down below (0 margin at top), round corner at BR
         // In plain mode (used in KGP and about.xml) there is white background, flush with left margin, 20 pixels from top, round corners at TR, BR
@@ -2415,7 +2417,7 @@ public class PackageReader
         int y = getIntegerAttributeValue(el, "y", 5);
         int w = getIntegerAttributeValue(el, "w", 40);
         int h = getIntegerAttributeValue(el, "h", 150);
-        String modifier = getStringAttributeValue(el, "modifier", "");
+        String modifier = getStringAttributeValue(el, "modifier", EMPTY_STRING);
 
         String align = "right";
         boolean bResize;
@@ -2460,7 +2462,7 @@ public class PackageReader
         int y = getIntegerAttributeValue(el, "y", bPeekMode ? 10 : 5);
         int w = getIntegerAttributeValue(el, "w", bPeekMode ? 95 : 240);
         int h = getIntegerAttributeValue(el, "h", bPeekMode ? 100 : 150);
-        String modifier = getStringAttributeValue(el, "modifier", bPeekMode ? "" : "bold");
+        String modifier = getStringAttributeValue(el, "modifier", bPeekMode ? EMPTY_STRING : "bold");
 
         if (bStraightMode)
         {
@@ -2515,7 +2517,7 @@ public class PackageReader
         int y = getIntegerAttributeValue(el, "y", bPeekMode ? 0 : (bPlainMode ? 0 : 82));
         int w = getIntegerAttributeValue(el, "w", bPeekMode ? 175 : (bPlainMode ? 290 : 320));
         int h = getIntegerAttributeValue(el, "h", bPeekMode ? 120 : (bPlainMode ? 0 : 23));
-        String modifier = getStringAttributeValue(el, "modifier", "");
+        String modifier = getStringAttributeValue(el, "modifier", EMPTY_STRING);
 
         if (bStraightMode)
         {
@@ -2825,7 +2827,7 @@ public class PackageReader
                 return node.getNodeValue();
             node = node.getNextSibling();
         }
-        return "";
+        return EMPTY_STRING;
     }
 
     private Vector<Element> getChildrenWithName(Element elParent, String elementName)

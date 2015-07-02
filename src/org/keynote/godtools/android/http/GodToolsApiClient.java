@@ -9,6 +9,8 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import java.io.File;
 import java.util.UUID;
 
+import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
+
 public class GodToolsApiClient
 {
 
@@ -25,7 +27,7 @@ public class GodToolsApiClient
     {
         MetaTask metaTask = new MetaTask(taskHandler);
         String url = BASE_URL + ENDPOINT_META;
-        metaTask.execute(url, authorization, "", tag);
+        metaTask.execute(url, authorization, EMPTY_STRING, tag);
     }
 
     public static void getListOfDrafts(String authorization, String language, String tag, MetaTask.MetaTaskHandler taskHandler)
@@ -128,7 +130,6 @@ public class GodToolsApiClient
     private static void download(Context context, String url, String filePath, String tag, String authorization, String langCode, DownloadTask.DownloadTaskHandler taskHandler)
     {
         DownloadTask downloadTask = new DownloadTask(context, taskHandler);
-        //downloadTask.execute(url, filePath, tag);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
         {
