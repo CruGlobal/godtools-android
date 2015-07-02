@@ -109,12 +109,6 @@ public class SnuffyApplication extends Application
         return fileExists(testFileName);
     }
 
-    public boolean languageExists(String packageName, String languageCode)
-    {
-        String testFileName = "Packages/" + packageName + "/" + languageCode + ".xml";
-        return assetExists(testFileName) || fileExists(testFileName);
-    }
-
     public Tracker getTracker()
     {
         if (tracker == null)
