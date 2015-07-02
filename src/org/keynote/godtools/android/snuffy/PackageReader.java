@@ -2664,9 +2664,9 @@ public class PackageReader
                     {
                         e.printStackTrace();
                         if (bPhoneMode)
-                            Toast.makeText(mContext, "Cannot launch dialler", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, mContext.getString(R.string.cannot_dial), Toast.LENGTH_SHORT).show();
                         if (bEmailMode)
-                            Toast.makeText(mContext, "Cannot launch email app", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, mContext.getString(R.string.cannot_email), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -2692,7 +2692,7 @@ public class PackageReader
                     builder.setCancelable(true);
                     if (bUrlMode)
                     {
-                        builder.setPositiveButton("Open",
+                        builder.setPositiveButton(mContext.getString(R.string.open),
                                 new DialogInterface.OnClickListener()
                                 {
                                     public void onClick(DialogInterface dialog, int id)
@@ -2706,7 +2706,7 @@ public class PackageReader
                                         } catch (Exception e)
                                         {
                                             e.printStackTrace();
-                                            Toast.makeText(mContext, "Cannot launch browser", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(mContext, mContext.getString(R.string.cannot_launch_browser), Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
@@ -2719,7 +2719,9 @@ public class PackageReader
                                     // This code - to send an email with subject and body - is similar
                                     // to code in SnuffyActivity: doCmdShare. Can we abstract to a common function?
 
-                                    String subjectLine = mPackageTitle + (bAllUrlMode ? " - websites to assist you" : " - a website to assist you");
+                                    String subjectLine = mPackageTitle + (bAllUrlMode ?
+                                            mContext.getString(R.string.multi_website_assist) :
+                                            mContext.getString(R.string.single_website_assist));
                                     // stick to plain text - Android cannot reliably send HTML email and anyway
                                     // most receivers will turn the link into a hyperlink automatically
 
