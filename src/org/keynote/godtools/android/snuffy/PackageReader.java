@@ -1563,24 +1563,6 @@ public class PackageReader
             int y2PosVLine = Math.max(lpHeading.y + tvHeading.getMeasuredHeight(), lpSubHeading.y + tvSubHeading.getMeasuredHeight()) - (2 * PEEK_VLINE_YMARGIN) + HEADING_BOTTOM_PADDING;
             vLine = getVRView(Color.BLACK, xPosVLine, PEEK_VLINE_YMARGIN, y2PosVLine, 1);
         }
-        // This code is apparently not required but I can't work out how subheading gets positioned anyway
-//        if ((bStraightMode || bClearMode) && (tvHeading != null) && (tvSubHeading != null)) {
-//        	// layout title container with heading above and subheading below
-//    		SnuffyLayoutParams lpHeading    = (SnuffyLayoutParams)tvHeading   .getLayoutParams();
-//    		SnuffyLayoutParams lpSubHeading = (SnuffyLayoutParams)tvSubHeading.getLayoutParams();
-//
-//    		tvHeading.measure(
-//					MeasureSpec.makeMeasureSpec(lpHeading.width, MeasureSpec.EXACTLY), 
-//					MeasureSpec.UNSPECIFIED);
-//    		lpHeading = (SnuffyLayoutParams)tvHeading.getLayoutParams();
-//    		tvSubHeading.measure(
-//					MeasureSpec.makeMeasureSpec(lpSubHeading.width, MeasureSpec.EXACTLY), 
-//					MeasureSpec.UNSPECIFIED);
-//    		lpSubHeading = (SnuffyLayoutParams)tvSubHeading.getLayoutParams();
-//
-//    		lpSubHeading.y = lpHeading.y + tvHeading.getMeasuredHeight() + 0; // TODO: some separation needed between the heading and the subheading below?
-//     		tvSubHeading.setLayoutParams(lpSubHeading);
-//        }        
 
         titleHeight = getScaledYValue(titleHeight);
         if (titleHeight == 0)
@@ -2008,9 +1990,6 @@ public class PackageReader
                             setLayoutParamsOfViewWithTag(titleClippingContainer, 556, lpAfterE);
                             setLayoutParamsOfViewWithTag(titleClippingContainer, 552, lpAfterS);
                             setLayoutParamsOfViewWithTag(titleClippingContainer, 553, lpAfterSE);
-                            //thePage.requestLayout();
-                            //thePage.forceLayout();
-                            //thePage.invalidate();							
                         }
                     };
 
@@ -2359,46 +2338,6 @@ public class PackageReader
             }
         }
     }
-
-//	private Bitmap getBitmap(Context context, String imageFileName) {
-//		if (mFromAssets)
-//			return getBitmapFromAsset(context, imageFileName);
-//		else
-//			return getBitmapFromFile(context, imageFileName);
-//	}
-//	
-//	private Bitmap getBitmapFromAsset(Context context, String imageFileName) {
-//		if (bitmapCache.containsKey(imageFileName)) {
-//			return bitmapCache.get(imageFileName);
-//		}
-//		String path = mImageFolderName + imageFileName;
-//		try {
-//			InputStream isImage = context.getAssets().open(path, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
-//        	//return BitmapFactory.decodeStream(isImage);			
-//        	Bitmap b = BitmapFactory.decodeStream(isImage);
-//        	mTotalBitmapSpace += b.getRowBytes() * b.getHeight();
-//        	Log.d("BITMAPS", imageFileName + ": " + b.getRowBytes() * b.getHeight());
-//        	bitmapCache.put(imageFileName, b);
-//        	return b;
-//			
-//		} catch (IOException e) {
-//			// try the next path instead
-//		}		
-//		path = mSharedFolderName + imageFileName;
-//		try {
-//			InputStream isImage = context.getAssets().open(path, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
-//        	//return BitmapFactory.decodeStream(isImage);			
-//        	Bitmap b = BitmapFactory.decodeStream(isImage);
-//        	mTotalBitmapSpace += b.getRowBytes() * b.getHeight();
-//        	Log.d("BITMAPS", imageFileName + ": " + b.getRowBytes() * b.getHeight());
-//        	bitmapCache.put(imageFileName, b);
-//        	return b;
-//			
-//		} catch (IOException e) {
-//			Log.e(TAG, "Cannot open or read bitmap file: " + imageFileName);
-//			return null;
-//		}		
-//	}
 
     private Bitmap getBitmapFromStream(String imageFileName, InputStream isImage)
     {
