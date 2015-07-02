@@ -20,6 +20,7 @@ import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 /**
  * GCM Intent Service
  */
+@SuppressWarnings("StatementWithEmptyBody")
 public class GcmIntentService extends IntentService
 {
     public static final int NOTIFICATION_ID = 1;

@@ -197,13 +197,9 @@ public class EveryStudentDatabase
         {
             int col = Integer.valueOf(o.get(0));
             o.remove(0);
-            @SuppressWarnings("unused")
-            int term = Integer.valueOf(o.get(0));
             o.remove(0);
             int offset = Integer.valueOf(o.get(0));
             o.remove(0);
-            @SuppressWarnings("unused")
-            int size = Integer.valueOf(o.get(0));
             o.remove(0);
             rank += colWeight[col] * 1 / (Math.pow(offset, 0.333) + 1);
         }

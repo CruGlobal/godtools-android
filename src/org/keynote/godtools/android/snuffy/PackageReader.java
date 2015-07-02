@@ -271,7 +271,7 @@ public class PackageReader
             }
         }
 
-        return (currPage != null);
+        return true;
     }
 
     private SnuffyPage processPageFilePW(InputStream isPage, Element elPage, String pageFileName)
@@ -584,7 +584,7 @@ public class PackageReader
             }
         }
 
-        return (currPage != null);
+        return true;
     }
 
 
@@ -764,12 +764,9 @@ public class PackageReader
         final boolean bAllUrlMode = mode.equalsIgnoreCase("allurl");
         final boolean bPhoneMode = mode.equalsIgnoreCase("phone");
         final boolean bEmailMode = mode.equalsIgnoreCase("email");
-        int xPos = getIntegerAttributeValue(elButton, "x", BUTTON_MARGINX);
         int yPos = getIntegerAttributeValue(elButton, "y", 0);
-        int width = getIntegerAttributeValue(elButton, "w", REFERENCE_DEVICE_WIDTH);
         int size = getIntegerAttributeValue(elButton, "size", 100);
         int yOffset = getIntegerAttributeValue(elButton, "yoffset", 0);
-        String align = getStringAttributeValue(elButton, "textalign", (bUrlMode || bPhoneMode || bEmailMode || bBigMode) ? "center" : "left");
         String label = getStringAttributeValue(elButton, "label", EMPTY_STRING);
 
 
@@ -1444,7 +1441,6 @@ public class PackageReader
         int yPos = getIntegerAttributeValue(elImage, "y", 0);
         int width = getIntegerAttributeValue(elImage, "w", 0);
         int height = getIntegerAttributeValue(elImage, "h", 0);
-        int xOffset = getIntegerAttributeValue(elImage, "xoffset", 0);
         int yOffset = getIntegerAttributeValue(elImage, "yoffset", 0);
         String align = getStringAttributeValue(elImage, "align", getStringAttributeValue(elPanel, "align", "left")); // v2 align or textalign here?
         xPos = getScaledXValue(xPos);
@@ -1676,7 +1672,6 @@ public class PackageReader
         int xPos = getIntegerAttributeValue(elText, "x", 0);
         int yPos = getIntegerAttributeValue(elText, "y", 0);
         int width = getIntegerAttributeValue(elText, "w", REFERENCE_DEVICE_WIDTH);
-        int height = getIntegerAttributeValue(elText, "h", 0);
         int size = getIntegerAttributeValue(elText, "size", 100);
         String align = getStringAttributeValue(elText, "textalign", "right");
         String modifier = getStringAttributeValue(elText, "modifier", "bold-italics");
@@ -1962,6 +1957,7 @@ public class PackageReader
             // center heading vertically
 
             // h specified. assume there is a heading and only a heading.
+            assert tvHeading != null;
             SnuffyLayoutParams lp = (SnuffyLayoutParams) tvHeading.getLayoutParams();
             tvHeading.measure(
                     MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY),
@@ -2058,6 +2054,7 @@ public class PackageReader
                 // grad_shad_E_title:...
                 ImageView iv = new ImageView(mContext);
                 iv.setTag(566);
+                assert bmNE != null;
                 iv.setLayoutParams(new SnuffyLayoutParams(
                         getScaledXValue(bmE.getWidth()),
                         lpTitleContainer.height - getScaledYValue(bmNE.getHeight()) - DROPSHADOW_INSETY,
@@ -2182,6 +2179,7 @@ public class PackageReader
             tvArrow.setPadding(0, 3, 0, 0);
             subTitleContainer.addView(tvArrow);
 
+            assert tvSubTitle != null;
             SnuffyLayoutParams lp = (SnuffyLayoutParams) tvSubTitle.getLayoutParams();
             tvSubTitle.measure(
                     MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY),
@@ -2433,7 +2431,7 @@ public class PackageReader
         TextView tv = new TextView(mContext);
         tv.setLayoutParams(new SnuffyLayoutParams(
                 w == 0 ? LayoutParams.WRAP_CONTENT : w,
-                bResize ? LayoutParams.WRAP_CONTENT : h,
+                LayoutParams.WRAP_CONTENT,
                 x, y));
         tv.setText(content);
         tv.setGravity(getGravityFromAlign(align) + Gravity.TOP);

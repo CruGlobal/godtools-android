@@ -27,6 +27,7 @@ import java.util.List;
 
 import static org.keynote.godtools.android.utils.Constants.DRAFT;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class DownloadTask extends AsyncTask<Object, Void, Boolean>
 {
 

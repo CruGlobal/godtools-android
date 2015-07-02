@@ -31,7 +31,6 @@ import android.widget.TextView;
 import org.keynote.godtools.android.R;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -76,10 +75,6 @@ public class EveryStudentSearchResults extends ListActivity
         }
         else if (Intent.ACTION_SEARCH.equals(intent.getAction()))
         {
-            // handles a search query
-
-            HashMap<String, String> params = new HashMap<String, String>();
-            params.put("Query", mQuery);
 //FIXME			FlurryAgent.onEvent(FlurryAPI.FlurryPrefix + LOGTAG, params);
 //FIXME			FlurryAgent.onPageView();
 

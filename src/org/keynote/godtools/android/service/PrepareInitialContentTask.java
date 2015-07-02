@@ -20,6 +20,7 @@ import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 /**
  * Used to set up initial content for app
  */
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class PrepareInitialContentTask
 {
     /**
