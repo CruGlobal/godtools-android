@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="horizontal"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:background="#95b9b9b9"
-  android:weightSum="1">
-  <!-- android:layout_height="?android:attr/listPreferredItemHeight"-->
-    <ImageView 
-    	android:id="@+id/list1Image"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#95b9b9b9"
+    android:orientation="horizontal"
+    android:weightSum="1">
+    <!-- android:layout_height="?android:attr/listPreferredItemHeight"-->
+    <ImageView
+        android:id="@+id/list1Image"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:gravity="center"
-     	android:src="@drawable/icon"
+        android:layout_gravity="bottom|left|top"
         android:background="#00ffffff"
-        android:layout_gravity="bottom|left|top"/>
-     
-    <TextView 
-	    android:id="@+id/list1Text"
-    	android:text="TextView" 
-    	android:layout_width="wrap_content"
-     	android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#303030"
-     	android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-     	android:singleLine="false"
-     	android:ellipsize="none"
-     	android:layout_marginLeft="4dip"
+        android:gravity="center"
+        android:src="@drawable/icon"/>
+
+    <TextView
+        android:id="@+id/list1Text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_marginLeft="4dip"
         android:layout_weight="1"
-        android:background="#00ffffff"/>
+        android:background="#00ffffff"
+        android:ellipsize="none"
+        android:gravity="center_vertical"
+        android:singleLine="false"
+        android:text="@string/filler_textview"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#303030"/>
 
 </LinearLayout>

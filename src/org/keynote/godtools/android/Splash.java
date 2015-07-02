@@ -25,7 +25,12 @@ import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
+import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
+import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 
 public class Splash extends Activity
@@ -33,13 +38,11 @@ public class Splash extends Activity
     private static final String TAG = Splash.class.getSimpleName();
 
     protected boolean _active = true;
-
-    private LocalBroadcastManager broadcastManager;
-    private BroadcastReceiver broadcastReceiver;
-
     TextView tvTask;
     ProgressBar progressBar;
     SharedPreferences settings;
+    private LocalBroadcastManager broadcastManager;
+    private BroadcastReceiver broadcastReceiver;
 
     /**
      * Called when the activity is first created.
@@ -51,44 +54,49 @@ public class Splash extends Activity
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
+        // Enable crash reporting
+        Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
+
         if (!isFirstLaunch())
         {
             goToMainActivity();
+            finish();
         }
-
-		// Enable crash reporting
-		Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
-
-        setContentView(R.layout.splash_pw);
-
-        tvTask = (TextView) findViewById(R.id.tvTask);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-
-        setupBroadcastReceiver();
-
-        Log.i(TAG, "First Launch");
-
-        // get the default language of the device os
-        String deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
-        // set to english in case nothing is found.
-        if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = "en";
-
-        Log.i(TAG, deviceDefaultLanguage);
-
-        // set primary language on first start
-        settings.edit().putString(GTLanguage.KEY_PRIMARY, deviceDefaultLanguage).apply();
-
-        // set up files
-        BackgroundService.firstSetup(getApp());
-
-        // if connected to the internet and not auth code (why would there be? It is
-        // the first run.
-        if (Device.isConnected(Splash.this) &&
-                "".equals(settings.getString("Authorization_Generic", "")))
+        else
         {
-            // get an auth code
-            Log.i(TAG, "Starting backgound service");
-            BackgroundService.authenticateGeneric(this);
+
+            setContentView(R.layout.splash_pw);
+
+            tvTask = (TextView) findViewById(R.id.tvTask);
+            progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+            setupBroadcastReceiver();
+
+            Log.i(TAG, "First Launch");
+
+            // get the default language of the device os
+            String deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
+            // set to english in case nothing is found.
+            if (Strings.isNullOrEmpty(deviceDefaultLanguage))
+                deviceDefaultLanguage = ENGLISH_DEFAULT;
+
+            Log.i(TAG, deviceDefaultLanguage);
+
+            // set primary language on first start
+            settings.edit().putString(GTLanguage.KEY_PRIMARY, deviceDefaultLanguage).apply();
+
+            // set up files
+            BackgroundService.firstSetup(getApp());
+
+            // if connected to the internet and not auth code (why would there be? It is
+            // the first run.
+            if (Device.isConnected(Splash.this) &&
+                    EMPTY_STRING.equals(settings.getString(AUTH_GENERIC, EMPTY_STRING)))
+            {
+                // get an auth code
+                Log.i(TAG, "Starting backgound service");
+                BackgroundService.authenticateGeneric(this);
+            }
         }
     }
 
@@ -96,7 +104,10 @@ public class Splash extends Activity
     protected void onDestroy()
     {
         super.onDestroy();
-        removeBroadcastReceiver();
+        if (isFirstLaunch())
+        {
+            removeBroadcastReceiver();
+        }
     }
 
     private void setupBroadcastReceiver()
@@ -127,7 +138,7 @@ public class Splash extends Activity
                             break;
                         case META_TASK:
                             Log.i(TAG, "Meta complete");
-                            showLoading("Updating");
+                            showLoading(getString(R.string.update));
                             break;
                         case ERROR:
                             Log.i(TAG, "Error");
@@ -171,7 +182,7 @@ public class Splash extends Activity
 
     private boolean isFirstLaunch()
     {
-        return settings.getBoolean("firstLaunch", true);
+        return settings.getBoolean(FIRST_LAUNCH, true);
     }
 
     private void showLoading(String msg)
@@ -194,9 +205,9 @@ public class Splash extends Activity
         // so now that we are expiring the translator code after 12 hours we will auto "log out" the
         // user when the app is restarted.
 
-        if (settings.getBoolean("TranslatorMode", false))
+        if (settings.getBoolean(TRANSLATOR_MODE, false))
         {
-            settings.edit().putBoolean("TranslatorMode", false).apply();
+            settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
         }
 
         Intent intent = new Intent(this, MainPW.class);

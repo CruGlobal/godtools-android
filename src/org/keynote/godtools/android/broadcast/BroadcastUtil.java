@@ -8,20 +8,20 @@ import static org.keynote.godtools.android.utils.Constants.STATUS_CODE;
 /**
  * Created by matthewfrederick on 2/17/15.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public final class BroadcastUtil
 {
-    private final String TAG = getClass().getSimpleName();
-
     public static final String ACTION_START = BroadcastUtil.class.getName() + ".ACTION_START";
     public static final String ACTION_STOP = BroadcastUtil.class.getName() + ".ACTION_STOP";
     public static final String ACTION_TYPE = BroadcastUtil.class.getName() + ".ACTION_TYPE";
     public static final String ACTION_FAIL = BroadcastUtil.class.getName() + ".ACTION_FAIL";
-    
+    private final String TAG = getClass().getSimpleName();
+
     public static Intent startBroadcast()
     {
         return new Intent(ACTION_START);
     }
-    
+
     public static Intent stopBroadcast(Type type)
     {
         return stopBroadcast(type, 0);

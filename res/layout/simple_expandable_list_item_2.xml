@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@android:id/text1"
-    android:layout_width="fill_parent"
-    android:textAppearance="?android:attr/textAppearanceMedium"
-    android:textSize="16dip"
-    android:paddingTop="2dip"
-	android:paddingBottom="2dip"
-	android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-	android:layout_height="?android:attr/listPreferredItemHeight"
-	android:gravity="center_vertical"
-	android:textStyle="normal" />
+<TextView android:id="@android:id/text1"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          android:layout_width="fill_parent"
+          android:layout_height="?android:attr/listPreferredItemHeight"
+          android:gravity="center_vertical"
+          android:paddingBottom="2dip"
+          android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+          android:paddingTop="2dip"
+          android:textAppearance="?android:attr/textAppearanceMedium"
+          android:textSize="16sp"
+          android:textStyle="normal"/>

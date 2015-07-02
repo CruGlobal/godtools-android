@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:shape="rectangle">
-  <!--  Correct left/right corner definition - Works in API 12 and above -->
-  <!-- http://code.google.com/p/android/issues/detail?id=9161 -->
-  <corners 	android:radius="25dip"
-    android:bottomLeftRadius="0dip"
-  	android:topLeftRadius="0dip"
-  	android:topRightRadius="0dip"/>
-  <solid android:color="#fff"/>
-  <size android:width="100dip" android:height="100dip"/>    
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!--  Correct left/right corner definition - Works in API 12 and above -->
+    <!-- http://code.google.com/p/android/issues/detail?id=9161 -->
+    <corners
+        android:bottomLeftRadius="0dip"
+        android:radius="25dip"
+        android:topLeftRadius="0dip"
+        android:topRightRadius="0dip"/>
+    <solid android:color="#fff"/>
+    <size
+        android:width="100dip"
+        android:height="100dip"/>
 </shape>

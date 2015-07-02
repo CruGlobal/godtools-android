@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,160 +32,181 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-public class SnuffyPageMenuPWActivity extends ListActivity {
-	private static String TAG = "SnuffyPageMenuActivity";
-	private boolean mFromAssets;
-	private String mPackageName;
-	private String mLanguageCode;
-	private String mFilesDir;
+import static org.keynote.godtools.android.utils.Constants.LANGUAGE_CODE;
 
-	List<HashMap<String, Object>> mList = new ArrayList<HashMap<String, Object>>(2);
+public class SnuffyPageMenuPWActivity extends ListActivity
+{
+    private static final String TAG = SnuffyPageMenuPWActivity.class.getSimpleName();
+    private final List<HashMap<String, Object>> mList = new ArrayList<HashMap<String, Object>>(2);
+    private boolean mFromAssets;
+    private String mLanguageCode;
+    private String mFilesDir;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
         getWindow().setFlags(
-        		WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.page_menu);
+        setContentView(R.layout.page_menu);
 
-		mLanguageCode = getIntent().getStringExtra("LanguageCode");
-		mPackageName  = getIntent().getStringExtra("PackageName");
-		SnuffyApplication app = (SnuffyApplication)getApplication();
-  		mFromAssets		  	= false;
-        mFilesDir		= app.getDocumentsDir().getPath() + "/resources";
+        mLanguageCode = getIntent().getStringExtra(LANGUAGE_CODE);
+        SnuffyApplication app = (SnuffyApplication) getApplication();
+        mFromAssets = false;
+        mFilesDir = app.getDocumentsDir().getPath() + "/resources";
 
-  		setTitle(app.mPackageTitle);
+        setTitle(app.mPackageTitle);
 
-		// see also : http://stackoverflow.com/questions/6852876/android-about-listview-and-simpleadapter
-		// see also: http://android-developers.blogspot.com.au/2009/02/android-layout-tricks-1.html
+        // see also : http://stackoverflow.com/questions/6852876/android-about-listview-and-simpleadapter
+        // see also: http://android-developers.blogspot.com.au/2009/02/android-layout-tricks-1.html
 
-		HashMap<String, Object> map;
+        HashMap<String, Object> map;
 
-		// the from array specifies which keys from the map
-		// we want to view in our ListView
-		String[] from = { "label", "image" };
+        // the from array specifies which keys from the map
+        // we want to view in our ListView
+        String[] from = {"label", "image"};
 
-		// the to array specifies the views from the xml layout
-		// on which we want to display the values defined in the from array
-		int[] to = { R.id.list1Text, R.id.list1Image };
+        // the to array specifies the views from the xml layout
+        // on which we want to display the values defined in the from array
+        int[] to = {R.id.list1Text, R.id.list1Image};
 
-		Vector<SnuffyPage> pages = app.mPages;
-		for (SnuffyPage page: pages) {
-			map = new HashMap<String, Object>();
-			map.put("label", page.mDescription);
-			map.put("image", page.mThumbnail);
-			mList.add(map);
-		}
+        Vector<SnuffyPage> pages = app.mPages;
+        for (SnuffyPage page : pages)
+        {
+            map = new HashMap<String, Object>();
+            map.put("label", page.mDescription);
+            map.put("image", page.mThumbnail);
+            mList.add(map);
+        }
 
-		SimpleImageAdapter adapter = new SimpleImageAdapter(this, mList, R.layout.list_item_with_icon_and_text, from, to);
-		setListAdapter(adapter);
-	}
+        SimpleImageAdapter adapter = new SimpleImageAdapter(this, mList, from, to);
+        setListAdapter(adapter);
+    }
 
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		setResult(RESULT_FIRST_USER + position);
-		finish();
-	}
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id)
+    {
+        setResult(RESULT_FIRST_USER + position);
+        finish();
+    }
 
-	private class SimpleImageAdapter extends SimpleAdapter {
+    private Bitmap getBitmapFromAssetOrFile(Context context, String imageFileName)
+    {
+        // a path is passed such as: /Packages/kgp/en_US/thumbs/uspagethumb_10.png
 
-		public SimpleImageAdapter(Context context,
-				List<? extends Map<String, ?>> data, int resource,
-				String[] from, int[] to) {
-			super(context, data, resource, from, to);
-		}
+        // first the package-specific folder
+        String path = imageFileName;
+        InputStream isImage = null;
+        try
+        {
+            if (mFromAssets)
+                isImage = context.getAssets().open(path, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
+            else
+            {
+                isImage = new BufferedInputStream(new FileInputStream(mFilesDir + "/" + path));
+            }
+            return BitmapFactory.decodeStream(isImage);
 
-		@Override
-		public void setViewImage(ImageView v, String value) {
-			Log.d(TAG, "setViewImage: " + value);
+        } catch (IOException e)
+        {
+            // try the next path instead
+        } finally
+        {
+            if (isImage != null)
+            {
+                try
+                {
+                    isImage.close();
+                } catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
 
-			try {
-				Bitmap bm = getBitmapFromAssetOrFile(getApplicationContext(), value);
-				v.setImageBitmap(bm);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+        // next the package-specific folder with a @2x
+        path = imageFileName.replace(".png", "@2x.png");
+        isImage = null;
+        try
+        {
+            if (mFromAssets)
+                isImage = context.getAssets().open(path, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
+            else
+            {
+                Log.d(TAG, "getBitmapFromAssetOrFile:" + mFilesDir + "/" + path);
+                isImage = new BufferedInputStream(new FileInputStream(mFilesDir + "/" + path));
+            }
+            return BitmapFactory.decodeStream(isImage);
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent)
-		{
-			View view = super.getView(position, convertView, parent);
+        } catch (IOException e)
+        {
+            Log.e(TAG, "Cannot open or read bitmap file: " + imageFileName);
+            return null;
+        } finally
+        {
+            if (isImage != null)
+            {
+                try
+                {
+                    isImage.close();
+                } catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
 
-			if(LanguagesNotSupportedByDefaultFont.contains(mLanguageCode))
-			{
-				if(view instanceof LinearLayout)
-				{
-					LinearLayout layout = (LinearLayout) view;
-					for(int i = 0; i < layout.getChildCount(); i++)
-					{
-						if(layout.getChildAt(i) instanceof TextView)
-						{
-							TextView internalTextView = (TextView) layout.getChildAt(i);
-							internalTextView.setTypeface(Typefaces.get(getApplicationContext(), LanguagesNotSupportedByDefaultFont.getPathToAlternateFont(mLanguageCode)));
-						}
-					}
-				}
-			}
+    }
 
-			return view;
-		}
-	}
+    private class SimpleImageAdapter extends SimpleAdapter
+    {
 
-	private Bitmap getBitmapFromAssetOrFile(Context context, String imageFileName) {
-		// a path is passed such as: /Packages/kgp/en_US/thumbs/uspagethumb_10.png
+        public SimpleImageAdapter(Context context,
+                                  List<? extends Map<String, ?>> data,
+                                  String[] from, int[] to)
+        {
+            super(context, data, R.layout.list_item_with_icon_and_text, from, to);
+        }
 
-		// first the package-specific folder
-		String path = imageFileName;
-		InputStream isImage = null;
-		try {
-			if (mFromAssets)
-				isImage = context.getAssets().open(path, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
-			else {
-				isImage = new BufferedInputStream(new FileInputStream(mFilesDir + "/" + path));
-			}
-        	return BitmapFactory.decodeStream(isImage);
+        @Override
+        public void setViewImage(@NonNull ImageView v, String value)
+        {
+            Log.d(TAG, "setViewImage: " + value);
 
-		} catch (IOException e) {
-			// try the next path instead
-		}
-		finally {
-			if (isImage != null) {
-				try {
-					isImage.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+            try
+            {
+                Bitmap bm = getBitmapFromAssetOrFile(getApplicationContext(), value);
+                v.setImageBitmap(bm);
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
 
-		// next the package-specific folder with a @2x
-		path = imageFileName.replace(".png", "@2x.png");
-		isImage = null;
-		try {
-			if (mFromAssets)
-				isImage = context.getAssets().open(path, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
-			else {
-				Log.d (TAG, "getBitmapFromAssetOrFile:" + mFilesDir + "/" + path);
-				isImage = new BufferedInputStream(new FileInputStream(mFilesDir + "/" + path));
-			}
-        	return BitmapFactory.decodeStream(isImage);
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent)
+        {
+            View view = super.getView(position, convertView, parent);
 
-		} catch (IOException e) {
-			Log.e(TAG, "Cannot open or read bitmap file: " + imageFileName);
-			return null;
-		}
-		finally {
-			if (isImage != null) {
-				try {
-					isImage.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+            if (LanguagesNotSupportedByDefaultFont.contains(mLanguageCode))
+            {
+                if (view instanceof LinearLayout)
+                {
+                    LinearLayout layout = (LinearLayout) view;
+                    for (int i = 0; i < layout.getChildCount(); i++)
+                    {
+                        if (layout.getChildAt(i) instanceof TextView)
+                        {
+                            TextView internalTextView = (TextView) layout.getChildAt(i);
+                            internalTextView.setTypeface(Typefaces.get(getApplicationContext(), LanguagesNotSupportedByDefaultFont.getPathToAlternateFont(mLanguageCode)));
+                        }
+                    }
+                }
+            }
 
-	}
+            return view;
+        }
+    }
 }

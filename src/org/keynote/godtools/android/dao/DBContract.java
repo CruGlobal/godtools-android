@@ -82,6 +82,6 @@ public class DBContract
                 + GTLanguageTable.COL_CODE + COMMA_SEP
                 + GTLanguageTable.COL_IS_DOWNLOADED + COMMA_SEP
                 + GTLanguageTable.COL_IS_DRAFT + ")" +
-                " SELECT * FROM " + UPDATE_TABLE_NAME ;
+                " SELECT * FROM " + UPDATE_TABLE_NAME;
     }
 }

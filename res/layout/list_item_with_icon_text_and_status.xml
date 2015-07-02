@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="horizontal"
-  android:layout_width="match_parent"
-  android:layout_height="54dip"
-  android:background="#f0f0f0"
-  android:padding="4dip">
-  <!-- android:layout_height="?android:attr/listPreferredItemHeight"-->
-    <ImageView 
-    	android:id="@+id/list2Image"
-    	android:layout_width="40dip" 
-     	android:gravity="left"
-     	android:layout_gravity="left"
-     	android:layout_height="match_parent" 
-     	android:scaleType="centerInside"
-     	android:src="@drawable/icon"/>
-     	
-     	<LinearLayout
-     		android:orientation="vertical"
-	    	android:layout_weight="1"
-  			android:layout_width="0dip"
-  			android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="54dip"
+    android:background="#f0f0f0"
+    android:orientation="horizontal"
+    android:padding="4dip">
+    <!-- android:layout_height="?android:attr/listPreferredItemHeight"-->
+    <ImageView
+        android:id="@+id/list2Image"
+        android:layout_width="40dip"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:gravity="left"
+        android:scaleType="centerInside"
+        android:src="@drawable/icon"/>
 
-		    <TextView 
-			    android:id="@+id/list2Text1"
-		    	android:text="TextView" 
-	 			android:layout_height="0dip"		    	
-		    	android:layout_width="match_parent"
-		    	android:layout_weight="1.2"
-		     	android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#303030"
-		     	android:gravity="center_vertical"
-		     	android:singleLine="true"
-		     	android:ellipsize="end"
-				android:padding="0dip"		     	
-		     	android:layout_marginLeft="4dip"
-		     	android:layout_marginRight="4dip"/>
-        </LinearLayout>
+    <LinearLayout
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/list2Text1"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_marginLeft="4dip"
+            android:layout_marginRight="4dip"
+            android:layout_weight="1.2"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:padding="0dip"
+            android:singleLine="true"
+            android:text="@string/filler_textview"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#303030"/>
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/arrow"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:src="@drawable/homescreen_menu_arrow_2x"
-        android:layout_gravity="center_vertical|right"/>
+        android:layout_gravity="center_vertical|right"
+        android:src="@drawable/homescreen_menu_arrow_2x"/>
 
 </LinearLayout>

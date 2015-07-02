@@ -28,10 +28,13 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import java.io.InputStream;
 
 import static org.keynote.godtools.android.utils.Constants.ACCESS_CODE;
-import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
 import static org.keynote.godtools.android.utils.Constants.BACKGROUND_TASK_TAG;
 import static org.keynote.godtools.android.utils.Constants.DEVICE_ID;
+import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
 import static org.keynote.godtools.android.utils.Constants.LANG_CODE;
 import static org.keynote.godtools.android.utils.Constants.META;
 import static org.keynote.godtools.android.utils.Constants.NOTIFICATIONS_ON;
@@ -41,7 +44,7 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 import static org.keynote.godtools.android.utils.Constants.TYPE;
 
 /**
- * Created by matthewfrederick on 5/4/15.
+ * Background service class used to interact with GodTools API
  */
 public class BackgroundService extends IntentService implements AuthTask.AuthTaskHandler,
         MetaTask.MetaTaskHandler,
@@ -62,66 +65,6 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         super("BackgroundService");
     }
 
-    @Override
-    public void onCreate()
-    {
-        super.onCreate();
-        broadcastManager = LocalBroadcastManager.getInstance(this);
-        settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-        languageParallel = settings.getString(GTLanguage.KEY_PARALLEL, "");
-        adapter = DBAdapter.getInstance(this);
-    }
-
-    @Override
-    protected void onHandleIntent(Intent intent)
-    {
-        // don't show the loading icon for registering device.
-        if (!APITasks.REGISTER_DEVICE.equals(intent.getSerializableExtra(TYPE)))
-            broadcastManager.sendBroadcast(BroadcastUtil.startBroadcast());
-
-        Log.i(TAG, "Action Started: " + intent.getSerializableExtra(TYPE));
-
-
-        if (APITasks.AUTHENTICATE_GENERIC.equals(intent.getSerializableExtra(TYPE)))
-        {
-            GodToolsApiClient.authenticateGeneric(this);
-        }
-        else if (APITasks.GET_LIST_OF_PACKAGES.equals(intent.getSerializableExtra(TYPE)))
-        {
-            GodToolsApiClient.getListOfPackages(settings.getString(AUTH_CODE, ""),
-                    META, this);
-        }
-        else if (APITasks.GET_LIST_OF_DRAFTS.equals(intent.getSerializableExtra(TYPE)))
-        {
-            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
-                    intent.getStringExtra(LANG_CODE),
-                    intent.getStringExtra(BACKGROUND_TASK_TAG), this);
-        }
-        else if (APITasks.DOWNLOAD_LANGUAGE_PACK.equals(intent.getSerializableExtra(TYPE)))
-        {
-            GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                    intent.getStringExtra(LANG_CODE),
-                    intent.getStringExtra(BACKGROUND_TASK_TAG),
-                    settings.getString(AUTH_CODE, ""), this);
-        }
-        else if (APITasks.REGISTER_DEVICE.equals(intent.getSerializableExtra(TYPE)))
-        {
-            GodToolsApiClient.registerDeviceForNotifications(
-                    intent.getStringExtra(REGISTRATION_ID),
-                    intent.getStringExtra(DEVICE_ID),
-                    intent.getStringExtra(NOTIFICATIONS_ON), this);
-        }
-        else if (APITasks.AUTHENTICATE_ACCESS_CODE.equals(intent.getSerializableExtra(TYPE)))
-        {
-            GodToolsApiClient.authenticateAccessCode(intent.getStringExtra(ACCESS_CODE), this);
-        }
-        else if (APITasks.VERIFY_ACCESS_CODE.equals(intent.getSerializableExtra(TYPE)))
-        {
-            GodToolsApiClient.verifyStatusOfAuthToken(intent.getStringExtra(ACCESS_CODE), this);
-        }
-    }
-
     public static Intent baseIntent(Context context, Bundle extras)
     {
         Intent intent = new Intent(context, BackgroundService.class);
@@ -136,11 +79,6 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
     {
         BackgroundService service = new BackgroundService();
         service.initialContentTask(app);
-    }
-
-    private void initialContentTask(SnuffyApplication app)
-    {
-        PrepareInitialContentTask.run(app.getApplicationContext(), app.getDocumentsDir());
     }
 
     public static void authenticateGeneric(Context context)
@@ -203,14 +141,69 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         context.startService(intent);
     }
 
-    public static void getListOfDrafts(Context context, String langCode, String tag)
+    @Override
+    public void onCreate()
     {
-        final Bundle extras = new Bundle(3);
-        extras.putSerializable(TYPE, APITasks.GET_LIST_OF_DRAFTS);
-        extras.putString(LANG_CODE, langCode);
-        extras.putString(BACKGROUND_TASK_TAG, tag);
-        Intent intent = baseIntent(context, extras);
-        context.startService(intent);
+        super.onCreate();
+        broadcastManager = LocalBroadcastManager.getInstance(this);
+        settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
+        languageParallel = settings.getString(GTLanguage.KEY_PARALLEL, EMPTY_STRING);
+        adapter = DBAdapter.getInstance(this);
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent)
+    {
+        // don't show the loading icon for registering device.
+        if (!APITasks.REGISTER_DEVICE.equals(intent.getSerializableExtra(TYPE)))
+            broadcastManager.sendBroadcast(BroadcastUtil.startBroadcast());
+
+        Log.i(TAG, "Action Started: " + intent.getSerializableExtra(TYPE));
+
+
+        if (APITasks.AUTHENTICATE_GENERIC.equals(intent.getSerializableExtra(TYPE)))
+        {
+            GodToolsApiClient.authenticateGeneric(this);
+        }
+        else if (APITasks.GET_LIST_OF_PACKAGES.equals(intent.getSerializableExtra(TYPE)))
+        {
+            GodToolsApiClient.getListOfPackages(settings.getString(AUTH_GENERIC, EMPTY_STRING),
+                    META, this);
+        }
+        else if (APITasks.GET_LIST_OF_DRAFTS.equals(intent.getSerializableExtra(TYPE)))
+        {
+            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, EMPTY_STRING),
+                    intent.getStringExtra(LANG_CODE),
+                    intent.getStringExtra(BACKGROUND_TASK_TAG), this);
+        }
+        else if (APITasks.DOWNLOAD_LANGUAGE_PACK.equals(intent.getSerializableExtra(TYPE)))
+        {
+            GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                    intent.getStringExtra(LANG_CODE),
+                    intent.getStringExtra(BACKGROUND_TASK_TAG),
+                    settings.getString(AUTH_GENERIC, EMPTY_STRING), this);
+        }
+        else if (APITasks.REGISTER_DEVICE.equals(intent.getSerializableExtra(TYPE)))
+        {
+            GodToolsApiClient.registerDeviceForNotifications(
+                    intent.getStringExtra(REGISTRATION_ID),
+                    intent.getStringExtra(DEVICE_ID),
+                    intent.getStringExtra(NOTIFICATIONS_ON), this);
+        }
+        else if (APITasks.AUTHENTICATE_ACCESS_CODE.equals(intent.getSerializableExtra(TYPE)))
+        {
+            GodToolsApiClient.authenticateAccessCode(intent.getStringExtra(ACCESS_CODE), this);
+        }
+        else if (APITasks.VERIFY_ACCESS_CODE.equals(intent.getSerializableExtra(TYPE)))
+        {
+            GodToolsApiClient.verifyStatusOfAuthToken(intent.getStringExtra(ACCESS_CODE), this);
+        }
+    }
+
+    private void initialContentTask(SnuffyApplication app)
+    {
+        PrepareInitialContentTask.run(app.getApplicationContext(), app.getDocumentsDir());
     }
 
     @Override
@@ -234,7 +227,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         }
         else
         {
-            settings.edit().putString(AUTH_CODE, authorization).apply();
+            settings.edit().putString(AUTH_GENERIC, authorization).apply();
 
             broadcastManager.sendBroadcast(BroadcastUtil.stopBroadcast(Type.AUTH));
         }
@@ -292,7 +285,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
 
     private boolean isFirstLaunch()
     {
-        return settings.getBoolean("firstLaunch", true);
+        return settings.getBoolean(FIRST_LAUNCH, true);
     }
 
     @Override
