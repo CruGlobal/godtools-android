@@ -49,7 +49,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
-import static org.keynote.godtools.android.utils.Constants.PACKAGE_NAME;
 
 public class PackageReader
 {
@@ -82,13 +81,10 @@ public class PackageReader
     private Context mContext;
     private int mPageWidth;
     private int mPageHeight;
-    private String mPackageName;
-    private String mLanguageCode;
     private Vector<SnuffyPage> mPages;
     private String mPackageTitle;
     private Typeface mAlternateTypeface;
     private String mImageFolderName;
-    private String mThumbsFolderName;
     private String mSharedFolderName;
     private int mBackgroundColor;
     private int mYOffsetPerItem;
@@ -123,7 +119,6 @@ public class PackageReader
         mPages = pages;
         mTotalBitmapSpace = 0;
         mImageFolderName = "resources/";
-        mThumbsFolderName = "resources/";
         mSharedFolderName = "shared/";
         mFromAssets = false;
         mProgressCallback = progressCallback;
@@ -133,17 +128,17 @@ public class PackageReader
         bitmapCache.clear();
         mPages.clear();
 
-        String mainPackagefileName = "resources/" + packageConfigName;
+        String mainPackageFileName = "resources/" + packageConfigName;
         boolean bSuccess;
         InputStream isMain = null;
         try
         {
-            isMain = new BufferedInputStream(new FileInputStream(app.getDocumentsDir().getPath() + "/" + mainPackagefileName));
+            isMain = new BufferedInputStream(new FileInputStream(app.getDocumentsDir().getPath() + "/" + mainPackageFileName));
             bSuccess = processMainPackageFilePW(isMain);
 
         } catch (IOException e)
         {
-            Log.e(TAG, "Cannot open or read main package file: " + mainPackagefileName);
+            Log.e(TAG, "Cannot open or read main package file: " + mainPackageFileName);
             return false;
         } finally
         {
@@ -154,7 +149,6 @@ public class PackageReader
                     isMain.close();
                 } catch (IOException e)
                 {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -242,12 +236,12 @@ public class PackageReader
 
         pageFileName = "resources/" + pageFileName;
 
-        SnuffyPage currPage = null;
+        SnuffyPage currPage;
         InputStream pageInputStream = null;
         try
         {
             pageInputStream = new BufferedInputStream(new FileInputStream(mAppRef.get().getDocumentsDir().getPath() + "/" + pageFileName));
-            currPage = processPageFilePW(pageInputStream, pageElement, pageFileName);
+            currPage = processPageFilePW(pageInputStream, pageFileName);
             currPage.mDescription = description;
             //currPage.mThumbnail   = Uri.parse("file:///android_asset/" + mThumbsFolderName + thumbFileName).toString();
             currPage.mThumbnail = thumbFileName;
@@ -274,7 +268,7 @@ public class PackageReader
         return true;
     }
 
-    private SnuffyPage processPageFilePW(InputStream isPage, Element elPage, String pageFileName)
+    private SnuffyPage processPageFilePW(InputStream isPage, String pageFileName)
     {
         Log.d(TAG, ">>> processPageFile starts");
 
@@ -301,8 +295,8 @@ public class PackageReader
                 mYFooterTop = mPageHeight;
                 mNumOffsetItems = 0;
                 addCover(snuffyPage);
-                processBackgroundPW(elPage, root, snuffyPage);
-                processPageElements(elPage, root, snuffyPage);
+                processBackgroundPW(root, snuffyPage);
+                processPageElements(root, snuffyPage);
 
                 snuffyPage.setPageIdFromFilename(pageFileName);
 
@@ -349,7 +343,7 @@ public class PackageReader
         return snuffyPage;
     }
 
-    private void processBackgroundPW(Element elPage, Element root, SnuffyPage currPage)
+    private void processBackgroundPW(Element root, SnuffyPage currPage)
     {
         String watermark = root.getAttribute("watermark");        // 	either this
         String backgroundImage = root.getAttribute("backgroundimage");    // 	or this
@@ -405,260 +399,6 @@ public class PackageReader
                 currPage.addView(iv);
             }
         }
-    }
-
-    public boolean processPackage(SnuffyApplication app,
-                                  int pageWidth,
-                                  int pageHeight,
-                                  String packageName,
-                                  String languageCode,
-                                  Vector<SnuffyPage> pages,
-                                  ProgressCallback progressCallback,
-                                  Typeface alternateTypeface)
-    {
-        mAppRef = new WeakReference<SnuffyApplication>(app);
-        mContext = app.getApplicationContext();
-        mPageWidth = pageWidth;
-        mPageHeight = pageHeight;
-        mPackageName = packageName;
-        mLanguageCode = languageCode;
-        mPages = pages;
-        mTotalBitmapSpace = 0;
-        mImageFolderName = "Packages/" + mPackageName + "/shared/images/";
-        mThumbsFolderName = "Packages/" + mPackageName + "/shared/thumbs/";
-        mSharedFolderName = "Packages/shared/";
-        mFromAssets = app.languageExistsAsAsset(mPackageName, mLanguageCode);
-        mProgressCallback = progressCallback;
-        mAlternateTypeface = alternateTypeface;
-
-        // In the case where this package is replacing the previous package - release the memory occupied by the original
-        bitmapCache.clear();
-        mPages.clear();
-
-        // Now process the package files and build the views
-        String mainPackagefileName = "Packages/" + packageName + "/" + languageCode + ".xml";
-        boolean bSuccess;
-        InputStream isMain = null;
-        try
-        {
-            if (mFromAssets)
-                isMain = app.getAssets().open(mainPackagefileName, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
-            else
-                isMain = new BufferedInputStream(new FileInputStream(app.getDocumentsDir().getPath() + "/" + mainPackagefileName));
-            bSuccess = processMainPackageFile(isMain);
-
-        } catch (IOException e)
-        {
-            Log.e(TAG, "Cannot open or read main package file: " + mainPackagefileName);
-            return false;
-        } finally
-        {
-            if (isMain != null)
-            {
-                try
-                {
-                    isMain.close();
-                } catch (IOException e)
-                {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return bSuccess;
-    }
-
-
-    private boolean processMainPackageFile(InputStream isMain)
-    {
-        Log.d(TAG, ">>> processMainPackageFile starts");
-
-        boolean bSuccess = false;
-
-        Document xmlDoc;
-        try
-        {
-            xmlDoc = DocumentBuilderFactory
-                    .newInstance()
-                    .newDocumentBuilder()
-                    .parse(isMain);
-            org.w3c.dom.Element root = xmlDoc.getDocumentElement();
-            if (root == null)
-                throw new SAXException("XML Document has no root element");
-
-            NodeList nlPages = root.getElementsByTagName("page");
-            int numPages = nlPages.getLength();
-            if (numPages == 0)
-                throw new SAXException("Main Package file document must have at least one page node");
-            NodeList nlAbout = root.getElementsByTagName("about");
-            int numAbouts = nlAbout.getLength();
-            if (numAbouts != 1)
-                throw new SAXException("Main Package file document must have exactly one about node");
-            NodeList nlPackageName = root.getElementsByTagName(PACKAGE_NAME); // packagename seems to have superseded displayname as the name for this element
-            int numPackageNames = nlPackageName.getLength();
-            NodeList nlDisplayName = root.getElementsByTagName("displayname"); // but some files (e.g. 4Laws/ru.xml) still have displayname ?
-            int numDisplayNames = nlDisplayName.getLength();
-            if ((numPackageNames + numDisplayNames) != 1)
-                throw new SAXException("Main Package file document must have exactly one packagename or displayname node");
-            if (numPackageNames == 1)
-            {
-                Element elPackage = (Element) nlPackageName.item(0);
-                mPackageTitle = elPackage.getTextContent();
-            }
-            else
-            {
-                Element elPackage = (Element) nlDisplayName.item(0);
-                mPackageTitle = elPackage.getTextContent();
-            }
-
-            Element elAbout = (Element) nlAbout.item(0);
-            if (!processPage(elAbout))    // about will be page 0
-                return false;
-
-            mProgressCallback.updateProgress(0, numPages);
-            for (int i = 0; i < numPages; i++)
-            {
-                Element elPage = (Element) nlPages.item(i);
-                if (!processPage(elPage))
-                    return false;
-                mProgressCallback.updateProgress(i + 1, numPages);
-            }
-
-            bSuccess = true;
-        } catch (IOException e)
-        {
-            Log.e(TAG, "processMainPackageFile failed: " + e.toString());
-        } catch (ParserConfigurationException e)
-        {
-            Log.e(TAG, "processMainPackageFile failed: " + e.toString());
-        } catch (SAXException e)
-        {
-            Log.e(TAG, "processMainPackageFile failed: " + e.toString());
-        }
-        Log.d(TAG, ">>> processMainPackageFile ends");
-        return bSuccess;
-    }
-
-    private boolean processPage(Element elPage)
-    {
-        String thumbFileName = elPage.getAttribute("thumb");
-        String pageFileName = elPage.getAttribute("filename");
-        String description = elPage.getTextContent();
-        Log.d(TAG, ">>> processPage: " + pageFileName);
-
-        pageFileName = "Packages/" + mPackageName + "/" + mLanguageCode + "/" + pageFileName;
-
-        SnuffyPage currPage = null;
-        InputStream isPage = null;
-        try
-        {
-            if (mFromAssets)
-            {
-                isPage = mContext.getAssets().open(pageFileName, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
-            }
-            else
-            {
-                isPage = new BufferedInputStream(new FileInputStream(mAppRef.get().getDocumentsDir().getPath() + "/" + pageFileName));
-            }
-            currPage = processPageFile(isPage, elPage);
-            currPage.mDescription = description;
-            //currPage.mThumbnail   = Uri.parse("file:///android_asset/" + mThumbsFolderName + thumbFileName).toString();
-            currPage.mThumbnail = mThumbsFolderName + thumbFileName;
-            mPages.add(currPage);
-        } catch (IOException e)
-        {
-            Log.e(TAG, "Cannot open or read page file: " + pageFileName);
-            return false;
-        } finally
-        {
-            if (isPage != null)
-            {
-                try
-                {
-                    isPage.close();
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return true;
-    }
-
-
-    private SnuffyPage processPageFile(InputStream isPage, Element elPage)
-    {
-        Log.d(TAG, ">>> processPageFile starts");
-
-        SnuffyPage currPage = null;
-
-        Document xmlDoc;
-        try
-        {
-            xmlDoc = DocumentBuilderFactory
-                    .newInstance()
-                    .newDocumentBuilder()
-                    .parse(isPage);
-            Element root = xmlDoc.getDocumentElement();
-            if (root == null)
-                throw new SAXException("XML Document has no root element");
-
-            mYOffsetPerItem = getScaledYValue(DEFAULT_YOFFSET);
-            int SAVE = mTotalBitmapSpace;
-            for (int iPass = 1; iPass <= 2; iPass++)
-            {
-                currPage = new SnuffyPage(mContext);
-
-                mYOffset = 0;
-                mYFooterTop = mPageHeight;
-                mNumOffsetItems = 0;
-                addCover(currPage);
-                processBackground(elPage, root, currPage);
-                processPageElements(elPage, root, currPage);
-                switch (iPass)
-                {
-                    case 1:
-                    {
-                        if (mNumOffsetItems < 1)
-                        {
-                            // no second pass required
-                            iPass = 2; // force exit from loop
-                        }
-                        else
-                        {
-                            mYOffsetPerItem = (int) Math.round(
-                                    (double) ((mYFooterTop - getScaledYValue(MIN_MARGIN_ABOVE_FOOTER)) - (mYOffset - (mNumOffsetItems * getScaledYValue(DEFAULT_YOFFSET)))) /
-                                            (double) (mNumOffsetItems + 1));
-                            mYOffsetPerItem = Math.min(mYOffsetPerItem, getScaledYValue(MAX_YOFFSET));
-                            mYOffsetPerItem = Math.max(mYOffsetPerItem, 0);
-                            mTotalBitmapSpace = SAVE;
-                        }
-                        break;
-                    }
-                    case 2:
-                    {
-                        break;
-                    }
-                }
-            }
-        } catch (IOException e)
-        {
-            Log.e(TAG, "processPageFile failed: " + e.toString());
-            currPage = null;
-        } catch (ParserConfigurationException e)
-        {
-            Log.e(TAG, "processPageFile failed: " + e.toString());
-            currPage = null;
-        } catch (SAXException e)
-        {
-            Log.e(TAG, "processPageFile failed: " + e.toString());
-            currPage = null;
-        }
-        Log.d(TAG, ">>> processPageFile ends");
-        return currPage;
-
     }
 
     private void addCover(SnuffyPage currPage)
@@ -671,67 +411,7 @@ public class PackageReader
         currPage.setCover(theCover); // save obj refs into page for hideActivePanel() method
     }
 
-    private void processBackground(Element elPage, Element root, SnuffyPage currPage)
-    {
-        String watermark = root.getAttribute("watermark");        // 	either this
-        String backgroundImage = root.getAttribute("backgroundimage");    // 	or this
-        //int numButtons = Integer.valueOf(root.getAttribute("buttons"), 10); // but redundant since we get it from the DOM below
-        String shadows = getStringAttributeValue(root, "shadows", "yes");
-
-        mBackgroundColor = Color.parseColor(getStringAttributeValue(root, "color", DEFAULT_BACKGROUND_COLOR));
-        currPage.setBackgroundColor(mBackgroundColor);
-        currPage.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        //currPage.setOrientation(LinearLayout.VERTICAL); // only used with LinearLayout
-
-        if (backgroundImage.length() > 0)
-        {
-            Bitmap bm = getBitmapFromAssetOrFile(mContext, backgroundImage);
-            if (bm != null)
-            {
-                ImageView iv = new ImageView(mContext);
-                iv.setLayoutParams(new SnuffyLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 0, 0));
-                iv.setImageBitmap(bm);
-                iv.setScaleType(ImageView.ScaleType.FIT_XY);
-                currPage.addView(iv);
-            }
-        }
-        if (watermark.length() > 0)
-        {
-            Bitmap bm = getBitmapFromAssetOrFile(mContext, watermark);
-            if (bm != null)
-            {
-                ImageView iv = new ImageView(mContext);
-                iv.setLayoutParams(new SnuffyLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 0, 0));
-                iv.setImageBitmap(bm);
-                iv.setScaleType(ImageView.ScaleType.FIT_XY);
-                currPage.addView(iv);
-            }
-        }
-        if (shadows.equalsIgnoreCase("yes"))
-        {
-            Bitmap bmTop = getBitmapFromAssetOrFile(mContext, "grad_shad_top.png");
-            if (bmTop != null)
-            {
-                ImageView iv = new ImageView(mContext);
-                iv.setLayoutParams(new SnuffyLayoutParams(LayoutParams.MATCH_PARENT, getScaledYValue(bmTop.getHeight()), 0, 0));
-                iv.setImageBitmap(bmTop);
-                iv.setScaleType(ImageView.ScaleType.FIT_XY);
-                currPage.addView(iv);
-
-            }
-            Bitmap bmBot = getBitmapFromAssetOrFile(mContext, "grad_shad_bot.png");
-            if (bmBot != null)
-            {
-                ImageView iv = new ImageView(mContext);
-                iv.setLayoutParams(new SnuffyLayoutParams(LayoutParams.MATCH_PARENT, getScaledYValue(bmBot.getHeight()), 0, mPageHeight - getScaledYValue(bmBot.getHeight())));
-                iv.setImageBitmap(bmBot);
-                iv.setScaleType(ImageView.ScaleType.FIT_XY);
-                currPage.addView(iv);
-            }
-        }
-    }
-
-    private void processPageElements(Element elPage, Element root, SnuffyPage currPage)
+    private void processPageElements(Element root, SnuffyPage currPage)
     {
         int numButtons = 0; // buttons are numbered from 1 to 9 and used as tag ranges: 1-9, 11-19 etc
         Vector<String> urlsOnpage = new Vector<String>(0);
@@ -742,24 +422,23 @@ public class PackageReader
             {
                 Element el = (Element) node;
                 if (el.getTagName().equalsIgnoreCase("button"))
-                    processButton(elPage, root, currPage, el, ++numButtons, urlsOnpage);
+                    processButton(currPage, el, ++numButtons, urlsOnpage);
                 if (el.getTagName().equalsIgnoreCase("question"))
-                    processQuestion(elPage, root, currPage, el);
+                    processQuestion(currPage, el);
                 if (el.getTagName().equalsIgnoreCase("text"))
-                    processText(elPage, root, currPage, el);
+                    processText(currPage, el);
                 if (el.getTagName().equalsIgnoreCase("title"))
-                    processTitle(elPage, root, currPage, el);
+                    processTitle(currPage, el);
             }
             node = node.getNextSibling();
         }
     }
 
-    private void processButton(Element elPage, Element root, SnuffyPage currPage, Element elButton, int iButton, Vector<String> urlsOnpage)
+    private void processButton(SnuffyPage currPage, Element elButton, int iButton, Vector<String> urlsOnpage)
     {
         int iTagButtonContainer = iButton + 100;
         int iTagButtonPanel = iButton + 1000;
         String mode = getStringAttributeValue(elButton, "mode", EMPTY_STRING);
-        boolean bBigMode = mode.equalsIgnoreCase("big");
         final boolean bUrlMode = mode.equalsIgnoreCase("url");
         final boolean bAllUrlMode = mode.equalsIgnoreCase("allurl");
         final boolean bPhoneMode = mode.equalsIgnoreCase("phone");
@@ -845,7 +524,7 @@ public class PackageReader
 
             theContainer.setLayoutParams(new SnuffyLayoutParams(buttonWidth,
                     yPosInContainer, BUTTON_MARGINX, yPos));
-            processButtonButton(elPage, root, currPage, elButton, 1000 + iButton, false, theContainer);
+            processButtonButton(elButton, 1000 + iButton, false, theContainer);
             SnuffyLayoutParams lpContainer = (SnuffyLayoutParams) (theContainer.getLayoutParams());
             yPosInContainer = lpContainer.height; // we add to bottom of the container
 
@@ -864,7 +543,7 @@ public class PackageReader
             currPage.addView(theContainer);
             mYOffset = yPos + yPosInContainer;
 
-            processButtonPanel(elPage, root, currPage, elButton, iButton, urlsOnpage);
+            processButtonPanel(currPage, elButton, iButton, urlsOnpage);
 
             final SnuffyLayout panel = (SnuffyLayout) (currPage.findViewWithTag(iTagButtonPanel));
             if (bAllUrlMode)
@@ -909,12 +588,6 @@ public class PackageReader
 
                 final int DROPSHADOW_X = getScaledXValue(10);    // The 30 pixel wide image will be shrunk to this size
                 final int DROPSHADOW_Y = getScaledYValue(10);    // The 30 pixel wide image will be shrunk to this size
-                //final int TAG_SHAD_NE = 549;
-                //final int TAG_SHAD_E  = 546;
-                //final int TAG_SHAD_SE = 543;
-                //final int TAG_SHAD_S  = 542;
-                //final int TAG_SHAD_SW = 541;
-                //final int TAG_SHADOW  = 2000;	// + iButton
 
                 final SnuffyLayout shadView = new SnuffyLayout(mContext);
                 //shadView.setTag(new Integer(TAG_SHADOW+iButton));
@@ -1194,7 +867,7 @@ public class PackageReader
         }
     }
 
-    private void processButtonButton(Element elPage, Element root, SnuffyPage currPage, Element elButton, int iButton, Boolean bExpanded,
+    private void processButtonButton(Element elButton, int iButton, Boolean bExpanded,
                                      SnuffyLayout theContainer)
     {
         // Add the button to its container.
@@ -1323,7 +996,7 @@ public class PackageReader
         theContainer.setTag(iButton);
     }
 
-    private void processButtonPanel(Element elPage, Element root, SnuffyPage currPage, Element elButton, int iButton, Vector<String> urlsOnPage)
+    private void processButtonPanel(SnuffyPage currPage, Element elButton, int iButton, Vector<String> urlsOnPage)
     {
         final int PANEL_XMARGIN = 5;        // from edge of page to panel
         final int PANEL_YMARGIN = 5;        // from edge of page to panel
@@ -1350,17 +1023,17 @@ public class PackageReader
                 Element el = (Element) node;
                 mYOffsetInPanel += getScaledYValue(PANEL_ITEM_DEFAULT_YOFFSET);
                 if (el.getTagName().equalsIgnoreCase("text"))
-                    processButtonPanelText(elPage, elPanel, el, theContainer, panelWidth);
+                    processButtonPanelText(elPanel, el, theContainer, panelWidth);
                 if (el.getTagName().equalsIgnoreCase("image"))
-                    processButtonPanelImage(elPage, elPanel, el, theContainer, panelWidth);
+                    processButtonPanelImage(elPanel, el, theContainer, panelWidth);
                 if (el.getTagName().equalsIgnoreCase("button"))
-                    processButtonPanelButton(elPage, elPanel, el, currPage, theContainer, panelWidth, urlsOnPage);
+                    processButtonPanelButton(el, currPage, theContainer, panelWidth, urlsOnPage);
             }
             node = node.getNextSibling();
         }
 
         theButton.setLayoutParams(new SnuffyLayoutParams(panelWidth, 0, 0, 2)); // yPos=2 to allow for the HR drawn when not in panel
-        processButtonButton(elPage, root, currPage, elButton, iButton, true, theButton);
+        processButtonButton(elButton, iButton, true, theButton);
         thePanel.addView(theButton);
         SnuffyLayoutParams lpButton = (SnuffyLayoutParams) (theButton.getLayoutParams());
         int buttonHeight = lpButton.height + lpButton.y;
@@ -1386,7 +1059,7 @@ public class PackageReader
         currPage.addView(thePanel);
     }
 
-    private void processButtonPanelButton(Element elPage, Element elPanel, Element elButton, SnuffyPage currPage, SnuffyLayout theContainer, int panelWidth, Vector<String> urlsOnPage)
+    private void processButtonPanelButton(Element elButton, SnuffyPage currPage, SnuffyLayout theContainer, int panelWidth, Vector<String> urlsOnPage)
     {
         // Called for a button in a panel. E.g. the url button below
 		/*
@@ -1432,7 +1105,7 @@ public class PackageReader
         setupUrlButtonHandler(currPage, button, mode, content);
     }
 
-    private void processButtonPanelImage(Element elPage, Element elPanel, Element elImage, SnuffyLayout theContainer, int panelWidth)
+    private void processButtonPanelImage(Element elPanel, Element elImage, SnuffyLayout theContainer, int panelWidth)
     {
         // inherited value
         int yBase = getIntegerAttributeValue(elPanel, "y", mYOffsetInPanel);
@@ -1475,7 +1148,7 @@ public class PackageReader
         }
     }
 
-    private void processButtonPanelText(Element elPage, Element elPanel, Element elText, SnuffyLayout theContainer, int panelWidth)
+    private void processButtonPanelText(Element elPanel, Element elText, SnuffyLayout theContainer, int panelWidth)
     {
         final int PANEL_TEXT_LEFT_MARGIN = 10;    // from panel edge to text contained in it.
         final int PANEL_TEXT_RIGHT_MARGIN = 15;    // from panel edge to text contained in it.
@@ -1554,7 +1227,7 @@ public class PackageReader
             mYOffsetMaxInPanel = mYOffsetInPanel;
     }
 
-    private void processQuestion(Element elPage, Element root, SnuffyPage currPage, Element elQuestion)
+    private void processQuestion(SnuffyPage currPage, Element elQuestion)
     {
         Vector<Element> vTexts = getChildrenWithName(elQuestion, "text");
         int numTexts = vTexts.size();
@@ -1570,7 +1243,7 @@ public class PackageReader
             for (int i = 0; i < numTexts; i++)
             {
                 Element elText = vTexts.elementAt(i);
-                processQuestionText(elPage, elQuestion, elText, questionContainer);
+                processQuestionText(elText, questionContainer);
             }
             // place at bottom of page with a margin below
             int yOffset = yBase;
@@ -1666,7 +1339,7 @@ public class PackageReader
         }
     }
 
-    private void processQuestionText(Element elPage, Element elQuestion, Element elText, SnuffyLayout container)
+    private void processQuestionText(Element elText, SnuffyLayout container)
     {
         String content = elText.getTextContent();
         int xPos = getIntegerAttributeValue(elText, "x", 0);
@@ -1725,7 +1398,7 @@ public class PackageReader
         container.addView(tv);
     }
 
-    private void processText(Element elPage, Element root, SnuffyPage currPage, Element elText)
+    private void processText(SnuffyPage currPage, Element elText)
     {
 
         String content = elText.getTextContent(); // note that CRLF in textContent is significant
@@ -1789,7 +1462,7 @@ public class PackageReader
         mYOffset = yPos + tv.getMeasuredHeight();
     }
 
-    private void processTitle(Element elPage, Element root, SnuffyPage currPage, Element elTitle)
+    private void processTitle(SnuffyPage currPage, Element elTitle)
     {
         String titleMode = getStringAttributeValue(elTitle, "mode", EMPTY_STRING);    // plain/clear/straight/peek (default is plain)
         int titleHeight = getIntegerAttributeValue(elTitle, "h", 0);
@@ -1816,7 +1489,7 @@ public class PackageReader
         TextView tvSubTitle = null;
         View vLine = null;
 
-        if (elNumber != null) tvNumber = createTitleNumberFromElement(elNumber, titleMode);
+        if (elNumber != null) tvNumber = createTitleNumberFromElement(elNumber);
         if (elHeading != null) tvHeading = createTitleHeadingFromElement(elHeading, titleMode);
         if (elSubHeading != null)
             tvSubHeading = createTitleSubHeadingFromElement(elSubHeading, titleMode);
@@ -2186,7 +1859,7 @@ public class PackageReader
                     MeasureSpec.UNSPECIFIED);
             lp = (SnuffyLayoutParams) tvSubTitle.getLayoutParams();
             tvArrow.setLayoutParams(new SnuffyLayoutParams(
-                    LayoutParams.FILL_PARENT,
+                    LayoutParams.MATCH_PARENT,
                     getScaledYValue(SUBTITLE_PEEK_OFFSET),
                     0, lp.y + tvSubTitle.getMeasuredHeight() + getScaledYValue(SUBTITLE_BOTTOM_PADDING)));
 
@@ -2400,7 +2073,7 @@ public class PackageReader
         mYOffset += titleMarginY + titleHeight + (bHasPeekPanel ? subTitlePeekOffset : 0);
     }
 
-    private TextView createTitleNumberFromElement(Element el, String titleMode)
+    private TextView createTitleNumberFromElement(Element el)
     {
         // Note: the x,y positioning here is relative to the "title" frame that encloses them
         //boolean bPeekMode 	 	= (titleMode.equalsIgnoreCase("peek"));
@@ -2413,20 +2086,16 @@ public class PackageReader
         int x = getIntegerAttributeValue(el, "x", 10);
         int y = getIntegerAttributeValue(el, "y", 5);
         int w = getIntegerAttributeValue(el, "w", 40);
-        int h = getIntegerAttributeValue(el, "h", 150);
         String modifier = getStringAttributeValue(el, "modifier", EMPTY_STRING);
 
         String align = "right";
-        boolean bResize;
         textSize = textSize * size / 100.0f;
         color = setColorAlphaVal(color, labelAlpha);
         x = getScaledXValue(x);
         y = getScaledYValue(y);
         w = getScaledXValue(w);
-        h = getScaledYValue(h);
 
         y = y - (int) (0.35 * textSize); // eliminate the leading TODO: this is not accurate enough - can we get the metrics and do it that way?
-        bResize = true;
 
         TextView tv = new TextView(mContext);
         tv.setLayoutParams(new SnuffyLayoutParams(
@@ -3092,12 +2761,6 @@ public class PackageReader
         {
             mToRunOnEnd = toRunOnEnd;
             mDelay = 0;
-        }
-
-        public SimpleAnimationListener(Runnable toRunOnEnd, long delay)
-        {
-            mToRunOnEnd = toRunOnEnd;
-            mDelay = delay;
         }
 
         @Override
