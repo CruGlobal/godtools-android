@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.text.Spannable;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
@@ -37,7 +36,6 @@ public class EveryStudentView extends Activity
 {
     String title = EMPTY_STRING;
     String category = EMPTY_STRING;
-    private PowerManager.WakeLock wl = null;
 
     @SuppressWarnings("ResourceType")
     @Override
@@ -51,8 +49,7 @@ public class EveryStudentView extends Activity
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         if (settings.getBoolean("wakelock", true))
         {
-            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
 
         setContentView(R.layout.everystudent_view);
@@ -129,34 +126,6 @@ public class EveryStudentView extends Activity
     private String massageTitleToTrainCase()
     {
         return title.replaceAll("\\p{Punct}]", "").toLowerCase().replaceAll("\\s", "-");
-    }
-
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop()
-    {
-        super.onStop();
-    }
-
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-        if (wl != null)
-            wl.release();
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        if (wl != null)
-            wl.acquire();
     }
 
     @Override

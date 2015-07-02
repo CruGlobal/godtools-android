@@ -160,11 +160,11 @@ public class GTPackage
         this.available = available;
     }
 
-    public long addToDatabase(Context context)
+    public void addToDatabase(Context context)
     {
         DBAdapter adapter = DBAdapter.getInstance(context);
         adapter.open();
-        return adapter.insertGTPackage(this);
+        adapter.insertGTPackage(this);
     }
 
     public void update(Context context)

@@ -278,13 +278,13 @@ public class EveryStudentDatabase
             }
         }
 
-        public long insertArticle(String category, String title, String content)
+        public void insertArticle(String category, String title, String content)
         {
             ContentValues initialValues = new ContentValues();
             initialValues.put(CATEGORY, category);
             initialValues.put(TITLE, title);
             initialValues.put(CONTENT, content);
-            return mDatabase.insert(TABLE_NAME, null, initialValues);
+            mDatabase.insert(TABLE_NAME, null, initialValues);
         }
     }
 

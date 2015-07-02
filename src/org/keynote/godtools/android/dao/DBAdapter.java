@@ -62,7 +62,7 @@ public class DBAdapter
         return db.insert(DBContract.GTPackageTable.TABLE_NAME, null, cv);
     }
 
-    public long insertGTLanguage(GTLanguage gtLanguage)
+    public void insertGTLanguage(GTLanguage gtLanguage)
     {
         ContentValues cv = new ContentValues();
         cv.put(DBContract.GTLanguageTable.COL_CODE, gtLanguage.getLanguageCode());
@@ -70,7 +70,7 @@ public class DBAdapter
         cv.put(DBContract.GTLanguageTable.COL_IS_DRAFT, gtLanguage.isDraft());
         cv.put(DBContract.GTLanguageTable.COL_NAME, gtLanguage.getLanguageName());
 
-        return db.insert(DBContract.GTLanguageTable.TABLE_NAME, null, cv);
+        db.insert(DBContract.GTLanguageTable.TABLE_NAME, null, cv);
     }
 
     public List<GTLanguage> getAllLanguages()
