@@ -2276,7 +2276,7 @@ public class PackageReader
             final SnuffyLayoutParams lpAfterSE = new SnuffyLayoutParams(lpTemp.width, lpTemp.height, lpTemp.x, yAfterSE);
 
             orderTitleViews(titleClippingContainer);
-            final SnuffyPage thePage = (SnuffyPage) currPage;
+            final SnuffyPage thePage = currPage;
             titleContainer.setOnClickListener(new View.OnClickListener()
             {
 

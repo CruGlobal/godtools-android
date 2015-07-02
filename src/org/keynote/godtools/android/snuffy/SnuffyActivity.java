@@ -285,24 +285,11 @@ public class SnuffyActivity extends Activity
             @Override
             public void onPageScrolled(int arg0, float arg1, int arg2)
             {
-                //Log.d(TAG, "onPageScrolled");
             }
 
             @Override
             public void onPageScrollStateChanged(int state)
             {
-                // arg0 is 0, 1 or 2 and m_currItem contains more info
-                //switch (state) {
-                //case ViewPager.SCROLL_STATE_IDLE:
-                //	Log.d(TAG, "onPageScrollStateChanged: IDLE");
-                //	break;
-                //case ViewPager.SCROLL_STATE_DRAGGING:
-                //	Log.d(TAG, "onPageScrollStateChanged: DRAGGING");
-                //	break;
-                //case ViewPager.SCROLL_STATE_SETTLING:
-                //	Log.d(TAG, "onPageScrollStateChanged: SETTLING");
-                //	break;
-                //}
             }
         });
     }
@@ -577,13 +564,6 @@ public class SnuffyActivity extends Activity
                 mProgressDialog.setProgress(0);
                 mProgressDialog.setMax(1); //harmless values to start with to avoid seeing "Nan"
                 // Can't support cancel - would leave app undefined. Processing does not take more than a few seconds so no need.
-                //mProgressDialog.setOnCancelListener(new OnCancelListener() {
-                //
-                //	@Override
-                //	public void onCancel(DialogInterface dialog) {
-                //		mProcessPackageAsync.cancel(false);
-                //	}
-                //});
                 mProgressDialog.show();
                 return mProgressDialog;
             default:
@@ -614,7 +594,7 @@ public class SnuffyActivity extends Activity
         @Override
         public boolean isViewFromObject(View arg0, Object arg1)
         {
-            return arg0 == ((View) arg1);
+            return arg0 == arg1;
         }
 
         @Override
@@ -633,13 +613,11 @@ public class SnuffyActivity extends Activity
         @Override
         public void finishUpdate(View arg0)
         {
-            // TODO Auto-generated method stub
         }
 
         @Override
         public void restoreState(Parcelable arg0, ClassLoader arg1)
         {
-            // TODO Auto-generated method stub
         }
 
         @Override
