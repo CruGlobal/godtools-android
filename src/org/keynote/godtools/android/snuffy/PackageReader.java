@@ -226,9 +226,6 @@ public class PackageReader
         } catch (SAXException e)
         {
             Log.e(TAG, "processMainPackageFile failed: " + e.toString());
-        } finally
-        {
-
         }
         Log.d(TAG, ">>> processMainPackageFile ends");
         return bSuccess;
@@ -345,9 +342,6 @@ public class PackageReader
         {
             Log.e(TAG, "processPageFile failed: " + e.toString());
             snuffyPage = null;
-        } finally
-        {
-
         }
         Log.d(TAG, ">>> processPageFile ends");
         return snuffyPage;
@@ -539,9 +533,6 @@ public class PackageReader
         } catch (SAXException e)
         {
             Log.e(TAG, "processMainPackageFile failed: " + e.toString());
-        } finally
-        {
-
         }
         Log.d(TAG, ">>> processMainPackageFile ends");
         return bSuccess;
@@ -662,9 +653,6 @@ public class PackageReader
         {
             Log.e(TAG, "processPageFile failed: " + e.toString());
             currPage = null;
-        } finally
-        {
-
         }
         Log.d(TAG, ">>> processPageFile ends");
         return currPage;
