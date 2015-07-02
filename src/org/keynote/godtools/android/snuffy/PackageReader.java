@@ -43,7 +43,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -875,10 +874,9 @@ public class PackageReader
             {
 
                 String content = EMPTY_STRING;
-                Iterator<String> iter = urlsOnpage.iterator();
-                while (iter.hasNext())
+                for (String anUrlsOnpage : urlsOnpage)
                 {
-                    content += "http://" + iter.next() + "\n";
+                    content += "http://" + anUrlsOnpage + "\n";
                 }
                 setupUrlButtonHandler(currPage, theContainer, mode, content);
             }
