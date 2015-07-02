@@ -130,6 +130,14 @@
     <string name="package_not_created">Package not yet created</string>
     <string name="refresh_no_net">Internet connection is required to refresh</string>
 
+    <!-- Package Reader -->
+    <string name="open">Open</string>
+    <string name="cannot_launch_browser">Cannot launch browser</string>
+    <string name="multi_website_assist"> - websites to assist you</string>
+    <string name="single_website_assist"> - a website to assist you</string>
+    <string name="cannot_dial">Cannot launch dialler</string>
+    <string name="cannot_email">Cannot launch email app</string>
+
     <!-- Shared Strings -->
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
