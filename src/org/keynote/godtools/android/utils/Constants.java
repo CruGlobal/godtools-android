@@ -23,6 +23,10 @@ public class Constants
     public static final String ENGLISH_DEFAULT = "en";
     public static final String EMPTY_STRING = "";
 
+    public static final String DRAFT = "draft";
+    public static final String DRAFT_PRIMARY = "draft_primary";
+    public static final String DRAFT_PARALLEL = "draft_parallel";
+
 
     public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
     public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width

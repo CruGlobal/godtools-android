@@ -9,6 +9,7 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import java.io.File;
 import java.util.UUID;
 
+import static org.keynote.godtools.android.utils.Constants.DRAFT;
 import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
 
 public class GodToolsApiClient
@@ -87,7 +88,7 @@ public class GodToolsApiClient
         download(app.getApplicationContext(),
                 url,
                 filePath,
-                "draft",
+                DRAFT,
                 authorization,
                 languageCode,
                 taskHandler);

@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import static org.keynote.godtools.android.utils.Constants.LANGUAGE_CODE;
+
 public class SnuffyPageMenuPWActivity extends ListActivity
 {
     private static final String TAG = SnuffyPageMenuPWActivity.class.getSimpleName();
@@ -50,7 +52,7 @@ public class SnuffyPageMenuPWActivity extends ListActivity
 
         setContentView(R.layout.page_menu);
 
-        mLanguageCode = getIntent().getStringExtra("LanguageCode");
+        mLanguageCode = getIntent().getStringExtra(LANGUAGE_CODE);
         SnuffyApplication app = (SnuffyApplication) getApplication();
         mFromAssets = false;
         mFilesDir = app.getDocumentsDir().getPath() + "/resources";

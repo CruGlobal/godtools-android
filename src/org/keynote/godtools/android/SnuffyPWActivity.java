@@ -52,6 +52,7 @@ import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
 import static org.keynote.godtools.android.utils.Constants.CONFIG_FILE_NAME;
 import static org.keynote.godtools.android.utils.Constants.COUNT;
+import static org.keynote.godtools.android.utils.Constants.DRAFT;
 import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
@@ -65,6 +66,7 @@ import static org.keynote.godtools.android.utils.Constants.PAGE_WIDTH;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
 import static org.keynote.godtools.android.utils.Constants.STATUS;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 public class SnuffyPWActivity extends Activity
 {
@@ -552,7 +554,7 @@ public class SnuffyPWActivity extends Activity
         MenuItem switchItem = menu.findItem(R.id.CMD_SWITCH_LANGUAGE);
         switchItem.setVisible(true);
 
-        if ("draft".equalsIgnoreCase(mPackageStatus) && settings.getBoolean("TranslatorMode", false))
+        if (DRAFT.equalsIgnoreCase(mPackageStatus) && settings.getBoolean(TRANSLATOR_MODE, false))
         {
             menu.findItem(R.id.CMD_REFRESH_PAGE).setVisible(true);
         }

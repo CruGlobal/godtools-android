@@ -441,7 +441,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
     {
         Log.i(TAG, "Opening: " + gtPackage.getName());
 
-        if (gtPackage.getCode().equalsIgnoreCase("everystudent"))
+        if (gtPackage.getCode().equalsIgnoreCase(EVERY_STUDENT))
         {
             Intent intent = new Intent(this, EveryStudent.class);
             intent.putExtra(PACKAGE_NAME, gtPackage.getCode());

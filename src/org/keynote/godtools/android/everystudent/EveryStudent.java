@@ -38,7 +38,6 @@ public class EveryStudent extends ExpandableListActivity
     public static final String ROWID = "ROWID";
 
     public static final int DIALOG_LOADING = 0;
-    public static final String LOGTAG = "EveryStudent";
     private static ExpandableListAdapter mAdapter;
     private static ParserThread mParserThread;
     private List<List<Map<String, String>>> mTopics;

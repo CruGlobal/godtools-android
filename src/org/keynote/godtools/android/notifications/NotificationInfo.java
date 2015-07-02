@@ -1,12 +1,14 @@
 package org.keynote.godtools.android.notifications;
 
+import static org.keynote.godtools.android.utils.Constants.NOTIFICATIONS;
+
 /**
  * Created by matthewfrederick on 1/7/15.
  */
 @SuppressWarnings("DefaultFileTemplate")
 public final class NotificationInfo
 {
-    public static final String NOTIFICATION_TAG = "Notifications";
+    public static final String NOTIFICATION_TAG = NOTIFICATIONS;
 
     public static final int NOT_USED_2_WEEKS = 1;
     public static final int AFTER_1_PRESENTATION = 2;

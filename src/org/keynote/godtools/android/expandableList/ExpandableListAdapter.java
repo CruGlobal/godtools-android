@@ -31,6 +31,7 @@ import java.util.List;
 import static org.keynote.godtools.android.broadcast.BroadcastUtil.startBroadcast;
 import static org.keynote.godtools.android.broadcast.BroadcastUtil.stopBroadcast;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.DRAFT;
 import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KGP;
@@ -151,7 +152,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         if (SATISFIED.equals(localPackage.getCode()))
             icon.setImageResource(R.drawable.gt4_homescreen_satisfiedicon);
 
-        if (localPackage.getCode().contains("draft"))
+        if (localPackage.getCode().contains(DRAFT))
         {
             textView.setTextColor(context.getResources().getColor(android.R.color.white));
             icon.setImageResource(android.R.color.transparent);

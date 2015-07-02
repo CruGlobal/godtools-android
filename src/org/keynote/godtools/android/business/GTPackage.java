@@ -7,10 +7,12 @@ import org.keynote.godtools.android.model.HomescreenLayout;
 
 import java.util.List;
 
+import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
+
 public class GTPackage
 {
 
-    public static final String EVERYSTUDENT_PACKAGE_CODE = "everystudent";
+    public static final String EVERYSTUDENT_PACKAGE_CODE = EVERY_STUDENT;
 
     private long id;
     private String code;

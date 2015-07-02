@@ -50,6 +50,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
+import static org.keynote.godtools.android.utils.Constants.PACKAGE_NAME;
 
 public class PackageReader
 {
@@ -188,7 +189,7 @@ public class PackageReader
             int numAbouts = nlAbout.getLength();
             if (numAbouts != 1)
                 throw new SAXException("Main Package file document must have exactly one about node");
-            NodeList nlPackageName = root.getElementsByTagName("packagename"); // packagename seems to have superseded displayname as the name for this element
+            NodeList nlPackageName = root.getElementsByTagName(PACKAGE_NAME); // packagename seems to have superseded displayname as the name for this element
             int numPackageNames = nlPackageName.getLength();
             NodeList nlDisplayName = root.getElementsByTagName("displayname"); // but some files (e.g. 4Laws/ru.xml) still have displayname ?
             int numDisplayNames = nlDisplayName.getLength();
@@ -495,7 +496,7 @@ public class PackageReader
             int numAbouts = nlAbout.getLength();
             if (numAbouts != 1)
                 throw new SAXException("Main Package file document must have exactly one about node");
-            NodeList nlPackageName = root.getElementsByTagName("packagename"); // packagename seems to have superseded displayname as the name for this element
+            NodeList nlPackageName = root.getElementsByTagName(PACKAGE_NAME); // packagename seems to have superseded displayname as the name for this element
             int numPackageNames = nlPackageName.getLength();
             NodeList nlDisplayName = root.getElementsByTagName("displayname"); // but some files (e.g. 4Laws/ru.xml) still have displayname ?
             int numDisplayNames = nlDisplayName.getLength();

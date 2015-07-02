@@ -51,8 +51,12 @@ import java.util.List;
 
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.CONFIG_FILE_NAME;
+import static org.keynote.godtools.android.utils.Constants.DRAFT;
+import static org.keynote.godtools.android.utils.Constants.DRAFT_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.DRAFT_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
@@ -160,7 +164,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
                 {
                     if (packageName.equals(gtPackage.getName()))
                     {
-                        if (gtPackage.getCode().equalsIgnoreCase("everystudent"))
+                        if (gtPackage.getCode().equalsIgnoreCase(EVERY_STUDENT))
                         {
                             Intent intent = new Intent(context, EveryStudent.class);
                             intent.putExtra(PACKAGE_NAME, gtPackage.getCode());
@@ -222,12 +226,12 @@ public class PreviewModeMainPW extends ActionBarActivity implements
                         case DRAFT_CREATION_TASK:
                             Log.i(TAG, "Create broadcast received");
                             GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, EMPTY_STRING),
-                                    languagePrimary, "draft", PreviewModeMainPW.this);
+                                    languagePrimary, DRAFT, PreviewModeMainPW.this);
                             break;
                         case DRAFT_PUBLISH_TASK:
                             Log.i(TAG, "Publish broadcast received");
                             GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, EMPTY_STRING),
-                                    languagePrimary, "draft_primary", PreviewModeMainPW.this);
+                                    languagePrimary, DRAFT_PRIMARY, PreviewModeMainPW.this);
                             break;
                         case META_TASK:
                             break;
@@ -383,7 +387,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
     @Override
     public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
     {
-        if (tag.equalsIgnoreCase("draft"))
+        if (tag.equalsIgnoreCase(DRAFT))
         {
             Toast.makeText(PreviewModeMainPW.this, getString(R.string.drafts_updated),
                     Toast.LENGTH_SHORT).show();
@@ -392,12 +396,12 @@ public class PreviewModeMainPW extends ActionBarActivity implements
             swipeRefreshLayout.setRefreshing(false);
             Log.i(TAG, "Done refreshing");
         }
-        else if (tag.equalsIgnoreCase("draft_primary"))
+        else if (tag.equalsIgnoreCase(DRAFT_PRIMARY))
         {
             languagePrimary = langCode;
             createTheHomeScreen();
         }
-        else if (tag.equalsIgnoreCase("draft_parallel"))
+        else if (tag.equalsIgnoreCase(DRAFT_PARALLEL))
         {
             createTheHomeScreen();
         }
@@ -495,7 +499,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
                     Toast.LENGTH_SHORT).show();
         }
 
-        if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))
+        if (tag.equalsIgnoreCase(DRAFT) || tag.equalsIgnoreCase(DRAFT_PRIMARY))
         {
             getPackageList();
         }
@@ -508,12 +512,12 @@ public class PreviewModeMainPW extends ActionBarActivity implements
     public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
     {
 
-        if (tag.equalsIgnoreCase("draft"))
+        if (tag.equalsIgnoreCase(DRAFT))
         {
             Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_update_draft),
                     Toast.LENGTH_SHORT).show();
         }
-        else if (tag.equalsIgnoreCase("draft_primary"))
+        else if (tag.equalsIgnoreCase(DRAFT_PRIMARY))
         {
             getPackageList();
             Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_download_draft),
@@ -589,7 +593,7 @@ public class PreviewModeMainPW extends ActionBarActivity implements
         if (Device.isConnected(PreviewModeMainPW.this))
         {
             GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, EMPTY_STRING),
-                    languagePrimary, "draft", this);
+                    languagePrimary, DRAFT, this);
         }
         else
         {

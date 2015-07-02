@@ -25,6 +25,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import static org.keynote.godtools.android.utils.Constants.DRAFT;
+
 public class DownloadTask extends AsyncTask<Object, Void, Boolean>
 {
 
@@ -105,9 +107,9 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean>
             adapter.open();
 
             // delete packages
-            if (tag.contains("draft"))
+            if (tag.contains(DRAFT))
             {
-                adapter.deletePackages(langCode, "draft");
+                adapter.deletePackages(langCode, DRAFT);
             }
 
             // save the parsed packages to database
