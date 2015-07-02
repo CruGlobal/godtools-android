@@ -94,9 +94,6 @@
             android:value=".everystudent.EveryStudentSearchResults" />
 
         <activity
-            android:name=".snuffy.SnuffyActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".snuffy.SnuffyAboutActivity"
             android:label="@string/app_title"
             android:screenOrientation="portrait"
