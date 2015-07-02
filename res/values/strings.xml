@@ -112,6 +112,14 @@
     <string name="dialog_translator_mode_body">Drafts will not be displayed</string>
     <string name="translator_enabled">Translator preview mode is enabled</string>
     <string name="translator_disabled">Translator preview mode is disabled</string>
+    <string name="draft_published">Draft has been published</string>
+    <string name="draft_publish_fail">Failed to publish draft</string>
+    <string name="draft_publish_message">Do you want to publish this draft?</string>
+    <string name="draft_publish_confirm">Yes, it's ready!</string>
+    <string name="draft_publish_negative">No, I changed my mind.</string>
+    <string name="draft_created">Draft has been created</string>
+    <string name="draft_create_failed">Failed to create a new draft</string>
+    <string name="draft_start_message">Start a draft for: </string>
 
     <!-- Access Code Dialog -->
     <string name="dialog_access_code_title">Enter Access Code:</string>
