@@ -13,6 +13,7 @@ repositories {
 }
 
 dependencies {
+    // Not updating appcompat to highest version because it will break the actionbar
     //noinspection GradleDependency
     compile 'com.android.support:appcompat-v7:19.1.0'
     compile fileTree(dir: 'libs', include: '*.jar')
@@ -52,5 +53,9 @@ android {
     productFlavors {
     }
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+        }
     }
 }
