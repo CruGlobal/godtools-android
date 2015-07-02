@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.keynote.godtools.android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="org.keynote.godtools.android"
     android:versionCode="12"
     android:versionName="4.0.1"
     android:installLocation="preferExternal">
 
     <application
+        android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:description="@string/app_description"
         android:name=".snuffy.SnuffyApplication"
         android:theme="@style/AppTheme">
-        <!--android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"> -->
+
         <activity
             android:name="Splash"
             android:label="@string/app_name"
@@ -43,7 +45,8 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTop"
             android:parentActivityName=".MainPW"
-            android:theme="@style/GodToolsIP4">
+            android:theme="@style/GodToolsIP4"
+            tools:ignore="UnusedAttribute">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -56,7 +59,8 @@
             android:label="Select Language"
             android:screenOrientation="portrait"
             android:parentActivityName="org.keynote.godtools.android.SettingsPW"
-            android:theme="@style/GodToolsIP4">
+            android:theme="@style/GodToolsIP4"
+            tools:ignore="UnusedAttribute">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -87,7 +91,8 @@
 
         <provider
             android:name=".everystudent.EveryStudentProvider"
-            android:authorities="org.keynote.godtools.android.everystudent.EveryStudentProvider" />
+            android:authorities="org.keynote.godtools.android.everystudent.EveryStudentProvider"
+            android:exported="false"/>
 
         <meta-data
             android:name="android.app.default_searchable"
@@ -134,7 +139,8 @@
 
     <uses-sdk
         android:minSdkVersion="10"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="22"
+        tools:ignore="ManifestOrder"/>
     <supports-screens
         android:smallScreens="false"
         android:resizeable="false" />
