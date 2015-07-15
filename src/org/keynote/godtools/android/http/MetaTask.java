@@ -17,13 +17,13 @@ import java.io.InputStream;
 public class MetaTask extends AsyncTask<Object, Void, InputStream> {
 
     private int statusCode;
-    private String tag, langCode;
+    private String tag;
     private MetaTaskHandler metaTaskHandler;
 
     public interface MetaTaskHandler {
-        void metaTaskComplete(InputStream is, String langCode, String tag);
+        void metaTaskComplete(InputStream is, String tag);
 
-        void metaTaskFailure(InputStream is, String langCode, String tag, int statusCode);
+        void metaTaskFailure(InputStream is, String tag, int statusCode);
     }
 
     public MetaTask(MetaTaskHandler listener) {
@@ -34,15 +34,9 @@ public class MetaTask extends AsyncTask<Object, Void, InputStream> {
     protected InputStream doInBackground(Object... params) {
 
         String url = params[0].toString();
-        String authorization = params[1].toString();
-        langCode = params[2].toString();
         tag = params[3].toString();
 
-        HttpGet request = new HttpGet(url);
-        request.setHeader("Accept", "application/xml");
-        request.setHeader("Content-type", "application/xml");
-        request.setHeader("Authorization", authorization);
-        request.setHeader("Interpreter", "1");
+        HttpGet getDownloadUrlRequest = new HttpGet(url);
 
         HttpParams httpParams = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParams, 10000);
@@ -50,15 +44,23 @@ public class MetaTask extends AsyncTask<Object, Void, InputStream> {
 
         HttpClient httpClient = new DefaultHttpClient(httpParams);
 
-        try {
-            HttpResponse response = httpClient.execute(request);
-            statusCode = response.getStatusLine().getStatusCode();
+        try
+        {
+            HttpResponse getDownloadUrlResponse = httpClient.execute(getDownloadUrlRequest);
+            statusCode = getDownloadUrlResponse.getStatusLine().getStatusCode();
 
             Log.i("MetaTask", "Status: " + statusCode);
 
-            return response.getEntity().getContent();
+            HttpGet getMetaFileRequest = new HttpGet(getDownloadUrlResponse.getFirstHeader("Location").getValue());
 
-        } catch (Exception e) {
+            HttpResponse getMetaFileResponse = httpClient.execute(getMetaFileRequest);
+
+            statusCode = getMetaFileResponse.getStatusLine().getStatusCode();
+
+            return getMetaFileResponse.getEntity().getContent();
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
             return null;
         }
@@ -69,10 +71,10 @@ public class MetaTask extends AsyncTask<Object, Void, InputStream> {
 
         if (statusCode == HttpStatus.SC_OK) 
         {
-            metaTaskHandler.metaTaskComplete(inputStream, langCode, tag);
+            metaTaskHandler.metaTaskComplete(inputStream, tag);
         } else 
         {
-            metaTaskHandler.metaTaskFailure(inputStream, langCode, tag, statusCode);
+            metaTaskHandler.metaTaskFailure(inputStream, tag, statusCode);
         }
     }
 }
