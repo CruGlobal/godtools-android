@@ -1,63 +1,55 @@
 package org.keynote.godtools.android.http;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
-public class MetaTask extends AsyncTask<Object, Void, InputStream> {
+public class MetaTask extends AsyncTask<Object, Void, InputStream>
+{
 
     private int statusCode;
     private String tag;
     private MetaTaskHandler metaTaskHandler;
 
-    public interface MetaTaskHandler {
+    public interface MetaTaskHandler
+    {
         void metaTaskComplete(InputStream is, String tag);
 
         void metaTaskFailure(InputStream is, String tag, int statusCode);
     }
 
-    public MetaTask(MetaTaskHandler listener) {
+    public MetaTask(MetaTaskHandler listener)
+    {
         metaTaskHandler = listener;
     }
 
     @Override
-    protected InputStream doInBackground(Object... params) {
+    protected InputStream doInBackground(Object... params)
+    {
+        tag = params[1].toString();
 
         String url = params[0].toString();
-        tag = params[3].toString();
-
-        HttpGet getDownloadUrlRequest = new HttpGet(url);
-
-        HttpParams httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParams, 10000);
-        HttpConnectionParams.setSoTimeout(httpParams, 10000);
-
-        HttpClient httpClient = new DefaultHttpClient(httpParams);
 
         try
         {
-            HttpResponse getDownloadUrlResponse = httpClient.execute(getDownloadUrlRequest);
-            statusCode = getDownloadUrlResponse.getStatusLine().getStatusCode();
+            HttpURLConnection getDownloadUrlConnection = getHttpURLConnection(url);
 
-            Log.i("MetaTask", "Status: " + statusCode);
+            getDownloadUrlConnection.connect();
 
-            HttpGet getMetaFileRequest = new HttpGet(getDownloadUrlResponse.getFirstHeader("Location").getValue());
+            String locationHeader = getDownloadUrlConnection.getHeaderField("Location");
 
-            HttpResponse getMetaFileResponse = httpClient.execute(getMetaFileRequest);
+            HttpURLConnection downloadMetaFileConnection = getHttpURLConnection(locationHeader);
 
-            statusCode = getMetaFileResponse.getStatusLine().getStatusCode();
+            downloadMetaFileConnection.connect();
 
-            return getMetaFileResponse.getEntity().getContent();
+            statusCode = downloadMetaFileConnection.getResponseCode();
+
+            return downloadMetaFileConnection.getInputStream();
         }
         catch (Exception e)
         {
@@ -67,14 +59,24 @@ public class MetaTask extends AsyncTask<Object, Void, InputStream> {
     }
 
     @Override
-    protected void onPostExecute(InputStream inputStream) {
-
+    protected void onPostExecute(InputStream inputStream)
+    {
         if (statusCode == HttpStatus.SC_OK) 
         {
             metaTaskHandler.metaTaskComplete(inputStream, tag);
-        } else 
+        }
+        else
         {
             metaTaskHandler.metaTaskFailure(inputStream, tag, statusCode);
         }
+    }
+
+    private HttpURLConnection getHttpURLConnection(String url) throws IOException
+    {
+        HttpURLConnection getDownloadUrlConnection = (HttpURLConnection) new URL(url).openConnection();
+        getDownloadUrlConnection.setReadTimeout(10000 /* milliseconds */);
+        getDownloadUrlConnection.setConnectTimeout(15000 /* milliseconds */);
+        getDownloadUrlConnection.setRequestMethod("GET");
+        return getDownloadUrlConnection;
     }
 }

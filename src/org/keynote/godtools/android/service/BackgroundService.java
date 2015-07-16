@@ -274,7 +274,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
     }
 
     @Override
-    public void metaTaskComplete(InputStream is, String langCode, String tag)
+    public void metaTaskComplete(InputStream is, String tag)
     {
         Log.i(TAG, "Update Package List Task");
         // this will cause download task to be run.
@@ -285,7 +285,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
     }
 
     @Override
-    public void metaTaskFailure(InputStream is, String langCode, String tag, int statusCode)
+    public void metaTaskFailure(InputStream is, String tag, int statusCode)
     {
         broadcastManager.sendBroadcast(BroadcastUtil.failBroadcast(Type.META_TASK));
     }

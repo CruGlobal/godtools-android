@@ -11,8 +11,8 @@ import java.util.UUID;
 
 public class GodToolsApiClient {
 
-//    private static final String BASE_URL = "http://GodToolsAPI-Stage-1291189452.us-east-1.elb.amazonaws.com/godtools-api/rest/";
-    private static final String BASE_URL = "https://api.godtoolsapp.com/godtools-api/rest/v2/";
+    private static final String BASE_URL = "https://api.stage.godtoolsapp.com/godtools-api/rest/v2/";
+//    private static final String BASE_URL = "http://localhost:8080/godtools-api/rest/v2/";
     private static final String ENDPOINT_META = "meta/";
     private static final String ENDPOINT_PACKAGES = "packages/";
     private static final String ENDPOINT_TRANSLATIONS = "translations/";
@@ -23,13 +23,13 @@ public class GodToolsApiClient {
     public static void getListOfPackages(String authorization, String tag, MetaTask.MetaTaskHandler taskHandler){
         MetaTask metaTask = new MetaTask(taskHandler);
         String url = BASE_URL + ENDPOINT_META;
-        metaTask.execute(url, authorization, "", tag);
+        metaTask.execute(url, tag);
     }
 
     public static void getListOfDrafts(String authorization, String language, String tag, MetaTask.MetaTaskHandler taskHandler){
         MetaTask draftTask = new MetaTask(taskHandler);
         String url = BASE_URL + ENDPOINT_META + language;
-        draftTask.execute(url, authorization, language, tag);
+        draftTask.execute(url, tag);
     }
 
     public static void downloadLanguagePack(SnuffyApplication app, String langCode, String tag, String authorization, DownloadTask.DownloadTaskHandler taskHandler) {

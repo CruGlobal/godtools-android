@@ -684,14 +684,14 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     }
 
     @Override
-    public void metaTaskComplete(InputStream is, String langCode, String tag)
+    public void metaTaskComplete(InputStream is, String tag)
     {
         // process the input stream
-        new UpdateDraftListTask().execute(is, langCode, tag);
+        new UpdateDraftListTask().execute(is, tag);
     }
 
     @Override
-    public void metaTaskFailure(InputStream is, String langCode, String tag, int statusCode)
+    public void metaTaskFailure(InputStream is, String tag, int statusCode)
     {
 
         if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))
