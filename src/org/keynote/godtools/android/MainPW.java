@@ -684,16 +684,14 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     }
 
     @Override
-    public void metaTaskComplete(InputStream is, String tag)
+    public void metaTaskComplete(List<GTLanguage> languageList,  String tag)
     {
-        // process the input stream
-        new UpdateDraftListTask().execute(is, tag);
+        new UpdateDraftListTask().execute(languageList, tag);
     }
 
     @Override
-    public void metaTaskFailure(InputStream is, String tag, int statusCode)
+    public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode)
     {
-
         if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))
         {
             packageList = getPackageList();
@@ -702,8 +700,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         hideLoading();
         Toast.makeText(MainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
-
-
     }
 
     @Override

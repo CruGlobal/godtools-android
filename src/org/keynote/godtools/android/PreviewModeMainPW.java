@@ -633,14 +633,14 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     }
 
     @Override
-    public void metaTaskComplete(InputStream is,String tag)
+    public void metaTaskComplete(List<GTLanguage> languageList,String tag)
     {
         // process the input stream
-        new UpdateDraftListTask().execute(is, tag);
+        new UpdateDraftListTask().execute(languageList, tag);
     }
 
     @Override
-    public void metaTaskFailure(InputStream is, String tag, int statusCode)
+    public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode)
     {
         if (401 == statusCode)
         {

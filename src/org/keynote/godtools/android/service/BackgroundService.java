@@ -26,6 +26,7 @@ import org.keynote.godtools.android.notifications.NotificationInfo;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 import java.io.InputStream;
+import java.util.List;
 
 import static org.keynote.godtools.android.utils.Constants.ACCESS_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
@@ -274,18 +275,18 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
     }
 
     @Override
-    public void metaTaskComplete(InputStream is, String tag)
+    public void metaTaskComplete(List<GTLanguage> languageList, String tag)
     {
         Log.i(TAG, "Update Package List Task");
         // this will cause download task to be run.
-        UpdatePackageListTask.run(is, adapter, isFirstLaunch(), (SnuffyApplication) getApplication(),
+        UpdatePackageListTask.run(languageList, adapter, isFirstLaunch(), (SnuffyApplication) getApplication(),
                 languagePrimary, languageParallel, BackgroundService.this);
 
         broadcastManager.sendBroadcast(BroadcastUtil.stopBroadcast(Type.META_TASK));
     }
 
     @Override
-    public void metaTaskFailure(InputStream is, String tag, int statusCode)
+    public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode)
     {
         broadcastManager.sendBroadcast(BroadcastUtil.failBroadcast(Type.META_TASK));
     }

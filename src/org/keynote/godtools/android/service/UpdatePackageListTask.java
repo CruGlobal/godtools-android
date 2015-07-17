@@ -35,6 +35,11 @@ public class UpdatePackageListTask
 
         List<GTLanguage> languageList = GTPackageReader.processMetaResponse(is);
 
+        run(languageList, adapter, firstLaunch, app, languagePrimary, languageParallel, context);
+    }
+
+    public static void run(List<GTLanguage> languageList, DBAdapter adapter, boolean firstLaunch, SnuffyApplication app, String languagePrimary, String languageParallel, Context context)
+    {
         Log.i(TAG, "List Size: " + languageList.size());
 
         adapter.open();
