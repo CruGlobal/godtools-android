@@ -38,18 +38,9 @@ public class MetaTask extends AsyncTask<Object, Void, InputStream>
         try
         {
             HttpURLConnection getDownloadUrlConnection = getHttpURLConnection(url);
-
             getDownloadUrlConnection.connect();
-
-            String locationHeader = getDownloadUrlConnection.getHeaderField("Location");
-
-            HttpURLConnection downloadMetaFileConnection = getHttpURLConnection(locationHeader);
-
-            downloadMetaFileConnection.connect();
-
-            statusCode = downloadMetaFileConnection.getResponseCode();
-
-            return downloadMetaFileConnection.getInputStream();
+            statusCode = getDownloadUrlConnection.getResponseCode();
+            return getDownloadUrlConnection.getInputStream();
         }
         catch (Exception e)
         {
