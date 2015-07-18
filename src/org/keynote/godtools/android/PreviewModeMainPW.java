@@ -237,7 +237,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         code,
                         "primary",
-                        settings.getString("Authorization_Generic", ""),
                         this);
                 break;
             }
@@ -255,7 +254,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         code,
                         "parallel",
-                        settings.getString("Authorization_Generic", ""),
                         this);
                 break;
             }

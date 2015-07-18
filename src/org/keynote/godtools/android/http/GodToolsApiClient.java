@@ -33,18 +33,11 @@ public class GodToolsApiClient {
         draftTask.execute(url, tag);
     }
 
-    public static void downloadLanguagePack(SnuffyApplication app, String langCode, String tag, String authorization, DownloadTask.DownloadTaskHandler taskHandler) {
+    public static void downloadLanguagePack(SnuffyApplication app, String langCode, String tag, DownloadTask.DownloadTaskHandler taskHandler) {
         String url = BASE_URL_V2 + ENDPOINT_PACKAGES + langCode;
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + File.separator + "package.zip";
 
         download(app.getApplicationContext(), url, filePath, tag, null, langCode, taskHandler);
-    }
-
-    public static void authenticateGeneric(AuthTask.AuthTaskHandler taskHandler)
-    {
-        AuthTask authTask = new AuthTask(taskHandler);
-        String url = BASE_URL + ENDPOINT_AUTH;
-        authTask.execute(url);
     }
 
     public static void authenticateAccessCode(String accessCode, AuthTask.AuthTaskHandler taskHandler){

@@ -198,7 +198,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         gtl.getLanguageCode(),
                         "primary",
-                        settings.getString("Authorization_Generic", ""), this);
+                        this);
             }
         }
         else
@@ -228,7 +228,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         gtl.getLanguageCode(),
                         "primary",
-                        settings.getString("Authorization_Generic", ""), this);            }
+                        this);            }
         }
     }
 
@@ -393,7 +393,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                     language.getLanguageCode(),
                     "primary",
-                    settings.getString("Authorization_Generic", ""), this);
+                    this);
         }
         else
         {

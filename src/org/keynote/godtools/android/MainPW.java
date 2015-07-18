@@ -319,7 +319,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         data.getStringExtra("primaryCode"),
                         KEY_PRIMARY,
-                        settings.getString("Authorization_Generic", ""),
                         this);
                 break;
             }
@@ -339,7 +338,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         code,
                         KEY_PARALLEL,
-                        settings.getString("Authorization_Generic", ""),
                         this);
                 break;
             }
