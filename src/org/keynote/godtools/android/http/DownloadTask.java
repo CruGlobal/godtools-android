@@ -47,17 +47,11 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
         try {
 
-            HttpURLConnection getDownloadUrlConnection = getHttpURLConnection(url);
+            HttpURLConnection connection = getHttpURLConnection(url);
 
-            getDownloadUrlConnection.connect();
+            connection.connect();
 
-            String locationHeader = getDownloadUrlConnection.getHeaderField("Location");
-
-            HttpURLConnection downloadPackageFileConnection = getHttpURLConnection(locationHeader);
-
-            downloadPackageFileConnection.connect();
-
-            DataInputStream dis = new DataInputStream(downloadPackageFileConnection.getInputStream());
+            DataInputStream dis = new DataInputStream(connection.getInputStream());
 
             File zipfile = new File(filePath);
             String parentDir = zipfile.getParent();

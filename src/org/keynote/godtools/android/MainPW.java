@@ -3,7 +3,6 @@ package org.keynote.godtools.android;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -33,11 +31,9 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import org.keynote.godtools.android.broadcast.BroadcastUtil;
-import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.business.GTPackageReader;
+import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
@@ -49,16 +45,15 @@ import org.keynote.godtools.android.http.handlers.NoOpMetaTaskHandler;
 import org.keynote.godtools.android.model.HomescreenLayout;
 import org.keynote.godtools.android.notifications.NotificationInfo;
 import org.keynote.godtools.android.service.BackgroundService;
+import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
@@ -73,6 +68,7 @@ import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
 
 public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
         DownloadTask.DownloadTaskHandler,
+        MetaTask.MetaTaskHandler,
         View.OnClickListener
 {
     private static final String TAG = "MainPW";
@@ -89,18 +85,16 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private int mPageTop;
     private int mPageWidth;
     private int mPageHeight;
+
     private List<GTPackage> packageList;
-    private LocalBroadcastManager broadcastManager;
-    private BroadcastReceiver broadcastReceiver;
     private String languagePrimary;
 
     private List<HomescreenLayout> layouts;
 
     GoogleCloudMessaging gcm;
-    Context context;
     String regid = "";
     Timer timer;
-    boolean noPackages = false;
+
     boolean justSwitchedToTranslatorMode;
     SharedPreferences settings;
 
@@ -127,19 +121,15 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         TextView titleBar = (TextView) actionBar.getCustomView().findViewById(R.id.titlebar_title);
         titleBar.setText(R.string.app_title);
 
-        context = getApplicationContext();
-
         setupLayout();
-        setupBroadcastReceiver();
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         if (!isFirstLaunch())
         {
-                showLoading();
-                GodToolsApiClient.getListOfPackages(META,
-                        new NoOpMetaTaskHandler());
-                settings.edit().putBoolean("TranslatorMode", false).apply();
+            showLoading();
+            GodToolsApiClient.getListOfPackages(META,this);
+            settings.edit().putBoolean("TranslatorMode", false).apply();
         }
 
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
@@ -155,7 +145,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         {
             Log.i(TAG, "Registering Device");
             gcm = GoogleCloudMessaging.getInstance(this);
-            regid = getRegistrationId(context);
+            regid = getRegistrationId(getApplicationContext());
 
             if (regid.isEmpty())
             {
@@ -190,76 +180,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         if (!justSwitchedToTranslatorMode)
             startTimer(); // don't start timer when switching to translator mode
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-        removeBroadcastReceiver();
-    }
-
-    private void setupBroadcastReceiver()
-    {
-        broadcastManager = LocalBroadcastManager.getInstance(this);
-
-        broadcastReceiver = new BroadcastReceiver()
-        {
-            @Override
-            public void onReceive(Context context, Intent intent)
-            {
-                if (BroadcastUtil.ACTION_START.equals(intent.getAction())) showLoading();
-                if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
-                {
-                    Log.i(TAG, "Action Done");
-
-                    Type type = (Type) intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE);
-
-                    switch (type)
-                    {
-                        case AUTH:
-                            Log.i(TAG, "Auth Task complete");
-                            GodToolsApiClient.getListOfPackages(META,new NoOpMetaTaskHandler());
-                            break;
-                        case DOWNLOAD_TASK:
-                            Log.i(TAG, "Download complete");
-                            packageList = getPackageList();
-                            showLayoutsWithPackages();
-                            hideLoading();
-                            createTheHomeScreen();
-                            break;
-                        case META_TASK:
-                            Log.i(TAG, "Meta complete");
-                            break;
-                        case ENABLE_TRANSLATOR:
-                            finish();
-                            break;
-                        case ERROR:
-                            Log.i(TAG, "Error");
-                            break;
-                    }
-                }
-
-                if (BroadcastUtil.ACTION_FAIL.equals(intent.getAction()))
-                {
-                    Log.i(TAG, "Action Failed: " + intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE));
-                    packageList = getPackageList();
-                    showLayoutsWithPackages();
-                    hideLoading();
-                    createTheHomeScreen();
-                }
-            }
-        };
-
-        broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.startFilter());
-        broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.stopFilter());
-        broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.failedFilter());
-    }
-
-    private void removeBroadcastReceiver()
-    {
-        broadcastManager.unregisterReceiver(broadcastReceiver);
-        broadcastReceiver = null;
     }
 
     private boolean isFirstLaunch()
@@ -395,10 +315,9 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             case RESULT_DOWNLOAD_PRIMARY:
             {
                 // start the download
-                String code = data.getStringExtra("primaryCode");
-
+                showLoading();
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        code,
+                        data.getStringExtra("primaryCode"),
                         KEY_PRIMARY,
                         settings.getString("Authorization_Generic", ""),
                         this);
@@ -569,8 +488,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             showLayoutsWithPackages();
         }
 
-        noPackages = false;
-
         justSwitchedToTranslatorMode = false;
         switchedToTranslatorMode(false);
         EventTracker.track(getApp(), "HomeScreen", languagePrimary);
@@ -581,69 +498,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         supportInvalidateOptionsMenu();
 
         setSupportProgressBarIndeterminateVisibility(true);
-    }
-
-    @Override
-    public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
-    {
-
-        if (tag.equalsIgnoreCase(KEY_PRIMARY))
-        {
-            languagePrimary = langCode;
-
-            SnuffyApplication app = (SnuffyApplication) getApplication();
-            app.setAppLocale(langCode);
-
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, langCode);
-            editor.apply();
-
-            GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
-            gtl.setDownloaded(true);
-            gtl.update(MainPW.this);
-
-            packageList = getPackageList();
-            showLayoutsWithPackages();
-            hideLoading();
-
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase(KEY_PARALLEL))
-        {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PARALLEL, langCode);
-            editor.apply();
-
-            GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
-            gtl.setDownloaded(true);
-            gtl.update(MainPW.this);
-
-            hideLoading();
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase("draft"))
-        {
-            Toast.makeText(MainPW.this, "Drafts have been updated", Toast.LENGTH_SHORT).show();
-            packageList = getPackageList();
-            showLayoutsWithPackages();
-            hideLoading();
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase("draft_primary"))
-        {
-            languagePrimary = langCode;
-            packageList = getPackageList();
-
-            showLayoutsWithPackages();
-
-            hideLoading();
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase("draft_parallel"))
-        {
-            hideLoading();
-            createTheHomeScreen();
-        }
     }
 
     private List<GTPackage> getPackageList()
@@ -679,33 +533,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         startActivity(intent);
     }
 
-    @Override
-    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
-    {
 
-        if (tag.equalsIgnoreCase("draft"))
-        {
-
-            Toast.makeText(MainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
-
-        }
-        else if (tag.equalsIgnoreCase("draft_primary"))
-        {
-
-            packageList = getPackageList();
-            showLayoutsWithPackages();
-            Toast.makeText(MainPW.this, "Failed to download drafts", Toast.LENGTH_SHORT).show();
-
-        }
-        else if (tag.equalsIgnoreCase(KEY_PRIMARY) || tag.equalsIgnoreCase(KEY_PARALLEL))
-        {
-
-            Toast.makeText(MainPW.this, "Failed to download resources", Toast.LENGTH_SHORT).show();
-
-        }
-
-        hideLoading();
-    }
 
     @Override
     public void onClick(View view)
@@ -839,7 +667,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 {
                     if (gcm == null)
                     {
-                        gcm = GoogleCloudMessaging.getInstance(context);
+                        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
                     }
                     regid = gcm.register(SENDER_ID);
                     msg = "Device registered, registration ID=" + regid;
@@ -847,7 +675,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                     sendRegistrationIdToBackend();
 
                     // Persist the regID - no need to register again.
-                    storeRegistrationId(context, regid);
+                    storeRegistrationId(getApplicationContext(), regid);
                 } catch (IOException ex)
                 {
                     msg = "Error :" + ex.getMessage();
@@ -889,8 +717,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private void sendRegistrationIdToBackend()
     {
-        String deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-        BackgroundService.registerDevice(context, regid, deviceId);
+        String deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        BackgroundService.registerDevice(getApplicationContext(), regid, deviceId);
     }
 
     private void startTimer()
@@ -940,5 +768,107 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         return (services.get(0).topActivity.getPackageName()
                 .equalsIgnoreCase(getApplicationContext().getPackageName()));
+    }
+
+    @Override
+    public void metaTaskComplete(List<GTLanguage> languageList, String tag)
+    {
+        UpdatePackageListTask.run(languageList,DBAdapter.getInstance(this));
+
+        hideLoading();
+    }
+
+    @Override
+    public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode)
+    {
+        hideLoading();
+    }
+
+    @Override
+    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
+    {
+        if (tag.equalsIgnoreCase("draft"))
+        {
+
+            Toast.makeText(MainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
+
+        }
+        else if (tag.equalsIgnoreCase("draft_primary"))
+        {
+
+            packageList = getPackageList();
+            showLayoutsWithPackages();
+            Toast.makeText(MainPW.this, "Failed to download drafts", Toast.LENGTH_SHORT).show();
+
+        }
+        else if (tag.equalsIgnoreCase(KEY_PRIMARY) || tag.equalsIgnoreCase(KEY_PARALLEL))
+        {
+
+            Toast.makeText(MainPW.this, "Failed to download resources", Toast.LENGTH_SHORT).show();
+
+        }
+
+        hideLoading();
+    }
+
+    @Override
+    public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
+    {
+        if (tag.equalsIgnoreCase(KEY_PRIMARY))
+        {
+            languagePrimary = langCode;
+
+            getApp().setAppLocale(langCode);
+
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(GTLanguage.KEY_PRIMARY, langCode);
+            editor.apply();
+
+            GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
+            gtl.setDownloaded(true);
+            gtl.update(MainPW.this);
+
+            packageList = getPackageList();
+            showLayoutsWithPackages();
+            hideLoading();
+
+            createTheHomeScreen();
+        }
+        else if (tag.equalsIgnoreCase(KEY_PARALLEL))
+        {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(GTLanguage.KEY_PARALLEL, langCode);
+            editor.apply();
+
+            GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
+            gtl.setDownloaded(true);
+            gtl.update(MainPW.this);
+
+            hideLoading();
+            createTheHomeScreen();
+        }
+        else if (tag.equalsIgnoreCase("draft"))
+        {
+            Toast.makeText(MainPW.this, "Drafts have been updated", Toast.LENGTH_SHORT).show();
+            packageList = getPackageList();
+            showLayoutsWithPackages();
+            hideLoading();
+            createTheHomeScreen();
+        }
+        else if (tag.equalsIgnoreCase("draft_primary"))
+        {
+            languagePrimary = langCode;
+            packageList = getPackageList();
+
+            showLayoutsWithPackages();
+
+            hideLoading();
+            createTheHomeScreen();
+        }
+        else if (tag.equalsIgnoreCase("draft_parallel"))
+        {
+            hideLoading();
+            createTheHomeScreen();
+        }
     }
 }

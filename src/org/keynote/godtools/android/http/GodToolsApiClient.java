@@ -34,7 +34,7 @@ public class GodToolsApiClient {
     }
 
     public static void downloadLanguagePack(SnuffyApplication app, String langCode, String tag, String authorization, DownloadTask.DownloadTaskHandler taskHandler) {
-        String url = BASE_URL + ENDPOINT_PACKAGES + langCode;
+        String url = BASE_URL_V2 + ENDPOINT_PACKAGES + langCode;
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + File.separator + "package.zip";
 
         download(app.getApplicationContext(), url, filePath, tag, null, langCode, taskHandler);

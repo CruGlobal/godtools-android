@@ -143,13 +143,7 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler
     @Override
     public void metaTaskComplete(List<GTLanguage> languageList, String tag)
     {
-        UpdatePackageListTask.run(languageList,
-                DBAdapter.getInstance(this),
-                isFirstLaunch(),
-                getApp(),
-                settings.getString(LANG_CODE, ""),
-                "",
-                this);
+        UpdatePackageListTask.run(languageList,DBAdapter.getInstance(this));
 
         goToMainActivity();
     }
