@@ -58,7 +58,8 @@ import static org.keynote.godtools.android.utils.Constants.STATUS_CODE;
 
 public class PreviewModeMainPW extends BaseActionBarActivity implements
         DownloadTask.DownloadTaskHandler,
-        MetaTask.MetaTaskHandler, View.OnClickListener,
+        MetaTask.MetaTaskHandler,
+        View.OnClickListener,
         AccessCodeDialogFragment.AccessCodeDialogListener
 {
     private static final String TAG = "PreviewModeMainPW";
@@ -75,9 +76,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     private String languagePrimary;
     private List<GTPackage> packageList;
     private SwipeRefreshLayout swipeRefreshLayout;
-    
-    private LocalBroadcastManager broadcastManager;
-    private BroadcastReceiver broadcastReceiver;
 
     private SharedPreferences settings;
 
@@ -125,7 +123,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         titleBar.setText(R.string.preview_mode_title);
 
         context = getApplicationContext();
-        setupBroadcastReceiver();
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
@@ -182,87 +179,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 return true;
             }
         });
-    }
-    
-    private void setupBroadcastReceiver()
-    {
-        broadcastManager = LocalBroadcastManager.getInstance(context);
-        
-        broadcastReceiver = new BroadcastReceiver()
-        {
-            @Override
-            public void onReceive(Context context, Intent intent)
-            {
-
-                if (pdLoading != null) pdLoading.dismiss();
-
-                if (BroadcastUtil.ACTION_START.equals(intent.getAction())) Log.i(TAG, "Action started");
-                else if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
-                {
-                    Type type = (Type) intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE);
-
-                    Log.i(TAG, "Action Done, TYPE: " + type.toString());
-                    
-                    switch (type)
-                    {
-                        case AUTH:
-                            Log.i(TAG, "Auth Task complete");
-                            GodToolsApiClient.getListOfPackages(META,PreviewModeMainPW.this);
-                            break;
-                        case DOWNLOAD_TASK:
-                            Log.i(TAG, "Download complete");
-                            getPackageList();
-                            createTheHomeScreen();
-                            break;
-                        case DRAFT_CREATION_TASK:
-                            Log.i(TAG, "Create broadcast received");
-                            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
-                                    languagePrimary, "draft", PreviewModeMainPW.this);
-                            break;
-                        case DRAFT_PUBLISH_TASK:
-                            Log.i(TAG, "Publish broadcast received");
-                            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
-                                    languagePrimary, "draft_primary", PreviewModeMainPW.this);
-                            break;
-                        case META_TASK:
-                            break;
-                        case DISABLE_TRANSLATOR:
-                            finish();
-                            break;
-                        case ENABLE_TRANSLATOR:
-                            onCmd_refresh();
-                            break;
-                        case ERROR:
-                            Log.i(TAG, "Error");
-                            break;
-                    }
-                }
-
-                if (BroadcastUtil.ACTION_FAIL.equals(intent.getAction()))
-                {
-                    Log.i(TAG, "Action Failed: " + intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE));
-
-                    if (intent.getIntExtra(STATUS_CODE, 0) == 401)
-                    {
-                        Toast.makeText(PreviewModeMainPW.this, getString(R.string.expired_passcode),
-                                Toast.LENGTH_LONG).show();
-                        showAccessCodeDialog();
-                    }
-                    getPackageList();
-                    createTheHomeScreen();
-                }
-            }
-        };
-        
-        broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.startFilter());
-        broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.stopFilter());
-        broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.failedFilter());
-    }
-    
-    private void removeBroadcastReceiver()
-    {
-        broadcastManager.unregisterReceiver(broadcastReceiver);
-        broadcastReceiver = null;        
     }
 
     @Override
@@ -760,13 +676,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-        removeBroadcastReceiver();
     }
 
     private void addPageFrameToIntent(Intent intent)

@@ -117,12 +117,6 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         setList();
     }
     
-    private void downloadLanguage(String langCode)
-    {
-        GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                langCode, "primary", settings.getString("Authorization_Generic", ""), this);
-    }
-    
     public void setList()
     {
         if (languageType.equalsIgnoreCase("Main Language"))
@@ -183,7 +177,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             // set selected language as new primary
             if (gtl.isDownloaded())
             {
-                setAsPrimaryOrParallel(GTLanguage.KEY_PRIMARY, gtl.getLanguageCode());
+                storeLanguageCode(GTLanguage.KEY_PRIMARY, gtl.getLanguageCode());
                 primaryLanguage = gtl.getLanguageCode();
 
                 setResult(RESULT_CHANGED_PRIMARY, returnIntent);
@@ -201,9 +195,11 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 currentView.tvDownload.setText(R.string.downloading);
                 currentView.pbDownloading.setVisibility(View.VISIBLE);
 
-                downloadLanguage(gtl.getLanguageCode());
+                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                        gtl.getLanguageCode(),
+                        "primary",
+                        settings.getString("Authorization_Generic", ""), this);
             }
-
         }
         else
         {
@@ -212,7 +208,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             // set selected language as parallel
             if (gtl.isDownloaded())
             {
-                setAsPrimaryOrParallel(GTLanguage.KEY_PARALLEL, gtl.getLanguageCode());
+                storeLanguageCode(GTLanguage.KEY_PARALLEL, gtl.getLanguageCode());
                 parallelLanguage = gtl.getLanguageCode();
                 
                 setResult(RESULT_CHANGED_PARALLEL, returnIntent);
@@ -228,24 +224,33 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 currentView = (LanguageAdapter.ViewHolder) view.getTag();
                 currentView.tvDownload.setText(R.string.downloading);
                 currentView.pbDownloading.setVisibility(View.VISIBLE);
-                
-                downloadLanguage(gtl.getLanguageCode());
-            }
+
+                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                        gtl.getLanguageCode(),
+                        "primary",
+                        settings.getString("Authorization_Generic", ""), this);            }
         }
     }
-    
-    private void setAsPrimaryOrParallel(String setAs, String langCode)
+
+
+    /*
+      This is an "intelligent setter".  It will take the value in language code and store it in the device settings as
+      either the primary or parallel language code.  If the user is setting the primary language code to what the
+      parallel language code is currently stored as, then the parallel language code is cleared out.  Otherwise,
+      primary and parallel would be the same, which is rather pointless.
+     */
+    private void storeLanguageCode(String primaryOrParallel, String languageCode)
     {
-        if (GTLanguage.KEY_PRIMARY.equals(setAs))
+        if (GTLanguage.KEY_PRIMARY.equals(primaryOrParallel))
         {
-            if (langCode.equalsIgnoreCase(parallelLanguage))
+            if (languageCode.equalsIgnoreCase(parallelLanguage))
             {
-                setAsPrimaryOrParallel(GTLanguage.KEY_PARALLEL, "");
+                storeLanguageCode(GTLanguage.KEY_PARALLEL, "");
             }
         }
 
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString(setAs, langCode);
+        editor.putString(primaryOrParallel, languageCode);
         editor.apply();
     }
 
@@ -259,58 +264,6 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 break;
             }
         }
-    }
-
-    @Override
-    public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
-    {
-        Log.i(TAG, "Download Successful: " + langCode);
-        
-        updateDownloadedStatus(langCode, true);
-        
-        if (!downloadOnly)
-        {
-            if (isMainLang)
-            {
-                setResult(RESULT_CHANGED_PRIMARY, returnIntent);
-                primaryLanguage = langCode;
-                app.setAppLocale(langCode);
-                setAsPrimaryOrParallel(GTLanguage.KEY_PRIMARY, langCode);
-            }
-            else
-            {
-                setResult(RESULT_CHANGED_PARALLEL, returnIntent);
-                parallelLanguage = langCode;
-                setAsPrimaryOrParallel(GTLanguage.KEY_PARALLEL, langCode);
-            }
-        }
-        
-        setList();
-    }
-    
-    private void updateDownloadedStatus(String langCode, boolean downloaded)
-    {
-        if (downloaded)
-        {
-            GTLanguage gtLanguage = GTLanguage.getLanguage(app.getApplicationContext(), langCode);
-            gtLanguage.setDownloaded(downloaded);
-            gtLanguage.update(app.getApplicationContext());
-        }
-        
-        for (GTLanguage language : languageList)
-        {
-            if (language.getLanguageCode().equals(langCode)) language.setDownloaded(downloaded);
-        }
-    }
-
-    @Override
-    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
-    {
-        Log.i(TAG, "Download Failed");
-        
-        currentView.pbDownloading.setVisibility(View.INVISIBLE);
-        currentView.ivDownloaded.setImageResource(R.drawable.gt4_downloads_erroricon);
-        currentView.tvDownload.setText(R.string.retry);
     }
 
     private class LanguageAdapter extends ArrayAdapter<GTLanguage>
@@ -436,8 +389,11 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         {
             Log.i(TAG, "Download");
             currentView.tvDownload.setText(R.string.downloading);
-            
-            downloadLanguage(language.getLanguageCode());
+
+            GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                    language.getLanguageCode(),
+                    "primary",
+                    settings.getString("Authorization_Generic", ""), this);
         }
         else
         {
@@ -447,5 +403,57 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             adapter.deletePackages(language.getLanguageCode(), "live");
             setList();
         }
+    }
+
+    @Override
+    public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
+    {
+        Log.i(TAG, "Download Successful: " + langCode);
+
+        updateDownloadedStatus(langCode, true);
+
+        if (!downloadOnly)
+        {
+            if (isMainLang)
+            {
+                setResult(RESULT_CHANGED_PRIMARY, returnIntent);
+                primaryLanguage = langCode;
+                app.setAppLocale(langCode);
+                storeLanguageCode(GTLanguage.KEY_PRIMARY, langCode);
+            }
+            else
+            {
+                setResult(RESULT_CHANGED_PARALLEL, returnIntent);
+                parallelLanguage = langCode;
+                storeLanguageCode(GTLanguage.KEY_PARALLEL, langCode);
+            }
+        }
+
+        setList();
+    }
+
+    private void updateDownloadedStatus(String langCode, boolean downloaded)
+    {
+        if (downloaded)
+        {
+            GTLanguage gtLanguage = GTLanguage.getLanguage(app.getApplicationContext(), langCode);
+            gtLanguage.setDownloaded(downloaded);
+            gtLanguage.update(app.getApplicationContext());
+        }
+
+        for (GTLanguage language : languageList)
+        {
+            if (language.getLanguageCode().equals(langCode)) language.setDownloaded(downloaded);
+        }
+    }
+
+    @Override
+    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
+    {
+        Log.i(TAG, "Download Failed");
+
+        currentView.pbDownloading.setVisibility(View.INVISIBLE);
+        currentView.ivDownloaded.setImageResource(R.drawable.gt4_downloads_erroricon);
+        currentView.tvDownload.setText(R.string.retry);
     }
 }
