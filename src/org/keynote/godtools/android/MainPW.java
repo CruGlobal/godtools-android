@@ -45,6 +45,7 @@ import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.http.NotificationUpdateTask;
+import org.keynote.godtools.android.http.handlers.NoOpMetaTaskHandler;
 import org.keynote.godtools.android.model.HomescreenLayout;
 import org.keynote.godtools.android.notifications.NotificationInfo;
 import org.keynote.godtools.android.service.BackgroundService;
@@ -57,12 +58,14 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.META;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 import static org.keynote.godtools.android.utils.Constants.APP_VERSION;
 import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
@@ -70,7 +73,7 @@ import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
 
 public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
         DownloadTask.DownloadTaskHandler,
-        MetaTask.MetaTaskHandler, View.OnClickListener
+        View.OnClickListener
 {
     private static final String TAG = "MainPW";
     private static final int REQUEST_SETTINGS = 1001;
@@ -133,17 +136,10 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         if (!isFirstLaunch())
         {
-            if ("".equals(settings.getString("Authorization_Generic", "")))
-            {
                 showLoading();
-                BackgroundService.authenticateGeneric(this);
-            }
-            else
-            {
-                showLoading();
-                BackgroundService.getListOfPackages(this);
+                GodToolsApiClient.getListOfPackages(META,
+                        new NoOpMetaTaskHandler());
                 settings.edit().putBoolean("TranslatorMode", false).apply();
-            }
         }
 
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
@@ -223,7 +219,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                     {
                         case AUTH:
                             Log.i(TAG, "Auth Task complete");
-                            BackgroundService.getListOfPackages(MainPW.this);
+                            GodToolsApiClient.getListOfPackages(META,new NoOpMetaTaskHandler());
                             break;
                         case DOWNLOAD_TASK:
                             Log.i(TAG, "Download complete");
@@ -441,7 +437,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
                 showLoading();
 
-                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), languagePrimary, "draft_primary", this);
+                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), languagePrimary, "draft_primary", new NoOpMetaTaskHandler());
 
                 Toast.makeText(MainPW.this, "Translator preview mode is enabled", Toast.LENGTH_LONG).show();
                 switchedToTranslatorMode(true);
@@ -684,25 +680,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     }
 
     @Override
-    public void metaTaskComplete(List<GTLanguage> languageList,  String tag)
-    {
-        new UpdateDraftListTask().execute(languageList, tag);
-    }
-
-    @Override
-    public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode)
-    {
-        if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))
-        {
-            packageList = getPackageList();
-            showLayoutsWithPackages();
-        }
-
-        hideLoading();
-        Toast.makeText(MainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
     {
 
@@ -740,43 +717,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 Log.i(TAG, "clicked: " + gtPackage.getCode());
                 onPackageSelected(gtPackage);
             }
-        }
-    }
-
-    private class UpdateDraftListTask extends AsyncTask<Object, Void, Boolean>
-    {
-        boolean mNewDraftsAvailable;
-        String tag, langCode;
-
-        @Override
-        protected void onPreExecute()
-        {
-            super.onPreExecute();
-            mNewDraftsAvailable = false;
-        }
-
-        @Override
-        protected Boolean doInBackground(Object... params)
-        {
-
-            InputStream is = (InputStream) params[0];
-            langCode = params[1].toString();
-            tag = params[2].toString();
-
-            List<GTLanguage> languageList = GTPackageReader.processMetaResponse(is);
-
-            GTLanguage language = languageList.get(0);
-            List<GTPackage> packagesDraft = language.getPackages();
-
-            return packagesDraft.size() != 0;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean shouldDownload)
-        {
-            super.onPostExecute(shouldDownload);
-
-            GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(), settings.getString(AUTH_DRAFT, ""), langCode, tag, MainPW.this);
         }
     }
 

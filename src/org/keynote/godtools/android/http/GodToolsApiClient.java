@@ -21,7 +21,7 @@ public class GodToolsApiClient {
     private static final String ENDPOINT_AUTH = "auth/";
     private static final String ENDPOINT_NOTIFICATIONS = "notification/";
 
-    public static void getListOfPackages(String authorization, String tag, MetaTask.MetaTaskHandler taskHandler){
+    public static void getListOfPackages(String tag, MetaTask.MetaTaskHandler taskHandler){
         MetaTask metaTask = new MetaTask(taskHandler);
         String url = BASE_URL_V2 + ENDPOINT_META;
         metaTask.execute(url, tag);

@@ -48,9 +48,11 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.META;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 import static org.keynote.godtools.android.utils.Constants.STATUS_CODE;
 
@@ -205,7 +207,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                     {
                         case AUTH:
                             Log.i(TAG, "Auth Task complete");
-                            BackgroundService.getListOfPackages(PreviewModeMainPW.this);
+                            GodToolsApiClient.getListOfPackages(META,PreviewModeMainPW.this);
                             break;
                         case DOWNLOAD_TASK:
                             Log.i(TAG, "Download complete");

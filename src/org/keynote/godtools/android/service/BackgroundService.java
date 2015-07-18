@@ -90,8 +90,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         }
         else if (APITasks.GET_LIST_OF_PACKAGES.equals(intent.getSerializableExtra(TYPE)))
         {
-            GodToolsApiClient.getListOfPackages(settings.getString(AUTH_CODE, ""),
-                    META, this);
+            GodToolsApiClient.getListOfPackages(META, this);
         }
         else if (APITasks.GET_LIST_OF_DRAFTS.equals(intent.getSerializableExtra(TYPE)))
         {
@@ -131,33 +130,6 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
             intent.putExtras(extras);
         }
         return intent;
-    }
-
-    public static void firstSetup(SnuffyApplication app)
-    {
-        BackgroundService service = new BackgroundService();
-        service.initialContentTask(app);
-    }
-
-    private void initialContentTask(SnuffyApplication app)
-    {
-        PrepareInitialContentTask.run(app.getApplicationContext(), app.getDocumentsDir());
-    }
-
-    public static void authenticateGeneric(Context context)
-    {
-        final Bundle extras = new Bundle(1);
-        extras.putSerializable(TYPE, APITasks.AUTHENTICATE_GENERIC);
-        Intent intent = baseIntent(context, extras);
-        context.startService(intent);
-    }
-
-    public static void getListOfPackages(Context context)
-    {
-        final Bundle extras = new Bundle(1);
-        extras.putSerializable(TYPE, APITasks.GET_LIST_OF_PACKAGES);
-        Intent intent = baseIntent(context, extras);
-        context.startService(intent);
     }
 
     public static void downloadLanguagePack(Context context, String langCode, String tag)
@@ -279,8 +251,6 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
     {
         Log.i(TAG, "Update Package List Task");
         // this will cause download task to be run.
-        UpdatePackageListTask.run(languageList, adapter, isFirstLaunch(), (SnuffyApplication) getApplication(),
-                languagePrimary, languageParallel, BackgroundService.this);
 
         broadcastManager.sendBroadcast(BroadcastUtil.stopBroadcast(Type.META_TASK));
     }
