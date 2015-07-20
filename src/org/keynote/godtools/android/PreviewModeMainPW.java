@@ -3,17 +3,14 @@ package org.keynote.godtools.android;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
@@ -28,11 +25,9 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.keynote.godtools.android.broadcast.BroadcastUtil;
-import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.business.GTPackageReader;
+import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.expandableList.ExpandableListAdapter;
 import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
@@ -40,21 +35,17 @@ import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
-import org.keynote.godtools.android.service.BackgroundService;
+import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
-import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
-import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KGP;
-import static org.keynote.godtools.android.utils.Constants.META;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
-import static org.keynote.godtools.android.utils.Constants.STATUS_CODE;
 
 public class PreviewModeMainPW extends BaseActionBarActivity implements
         DownloadTask.DownloadTaskHandler,
@@ -259,35 +250,15 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             }
             case RESULT_PREVIEW_MODE_ENABLED:
             {
-                // refresh the list
-                String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-
-                if (!languagePrimary.equalsIgnoreCase(primaryCode))
-                {
-                    SnuffyApplication app = (SnuffyApplication) getApplication();
-                    app.setAppLocale(primaryCode);
-                }
-
                 GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
                         languagePrimary, "draft_primary", this);
 
                 Toast.makeText(PreviewModeMainPW.this, "Translator preview mode is enabled",
                         Toast.LENGTH_LONG).show();
-                switchedToTranslatorMode(true);
 
                 finish();
                 startActivity(getIntent());
 
-                break;
-            }
-            case RESULT_PREVIEW_MODE_DISABLED:
-            {
-                // This should not happen but just in case
-                
-                Intent intent = new Intent(this, MainPW.class);
-                startActivity(intent);
-                finish();
-                
                 break;
             }
         }
@@ -389,81 +360,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
         noPackages = false;
 
-        justSwitchedToTranslatorMode = false;
-        switchedToTranslatorMode(false);
         EventTracker.track(getApp(), "Translator Page", languagePrimary);
-    }
-
-    @Override
-    public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
-    {
-
-        if (tag.equalsIgnoreCase("primary"))
-        {
-            languagePrimary = langCode;
-
-            SnuffyApplication app = (SnuffyApplication) getApplication();
-            app.setAppLocale(langCode);
-
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, langCode);
-            editor.apply();
-
-            GTLanguage gtl = GTLanguage.getLanguage(PreviewModeMainPW.this, langCode);
-            gtl.setDownloaded(true);
-            gtl.update(PreviewModeMainPW.this);
-
-            if (isTranslatorModeEnabled())
-            {
-                // check for draft_primary
-                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
-                        langCode, "draft_primary", this);
-            }
-            else
-            {
-                getPackageList();
-            }
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase("parallel"))
-        {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PARALLEL, langCode);
-            editor.apply();
-
-            GTLanguage gtl = GTLanguage.getLanguage(PreviewModeMainPW.this, langCode);
-            gtl.setDownloaded(true);
-            gtl.update(PreviewModeMainPW.this);
-
-            if (isTranslatorModeEnabled())
-            {
-                // check for draft_parallel
-                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
-                        langCode, "draft_parallel", this);
-            }
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase("draft"))
-        {
-            Toast.makeText(PreviewModeMainPW.this, "Drafts have been updated",
-                    Toast.LENGTH_SHORT).show();
-            getPackageList();
-            createTheHomeScreen();
-            
-            swipeRefreshLayout.setRefreshing(false);
-            Log.i(TAG, "Done refreshing");
-        }
-        else if (tag.equalsIgnoreCase("draft_primary"))
-        {
-            languagePrimary = langCode;
-            getPackageList();
-
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase("draft_parallel"))
-        {
-            createTheHomeScreen();
-        }
     }
 
     private void getPackageList()
@@ -536,113 +433,10 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         }
     }
 
-    private boolean isTranslatorModeEnabled()
-    {
-        return settings.getBoolean("TranslatorMode", false);
-    }
-
-    private void switchedToTranslatorMode(boolean switched)
-    {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean(JUST_SWITCHED, switched);
-        editor.apply();
-    }
-
-    @Override
-    public void metaTaskComplete(List<GTLanguage> languageList,String tag)
-    {
-        // process the input stream
-        new UpdateDraftListTask().execute(languageList, tag);
-    }
-
-    @Override
-    public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode)
-    {
-        if (401 == statusCode)
-        {
-            showAccessCodeDialog();
-            Toast.makeText(PreviewModeMainPW.this, getString(R.string.expired_passcode),
-                    Toast.LENGTH_LONG).show();
-        }
-        else
-        {
-            Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts",
-                    Toast.LENGTH_SHORT).show();
-        }
-
-        if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))
-        {
-            getPackageList();
-        }
-
-        swipeRefreshLayout.setRefreshing(false);
-        Log.i(TAG, "Done refreshing");
-    }
-
-    @Override
-    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
-    {
-
-        if (tag.equalsIgnoreCase("draft"))
-        {
-            Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts",
-                    Toast.LENGTH_SHORT).show();
-        }
-        else if (tag.equalsIgnoreCase("draft_primary"))
-        {
-            getPackageList();
-            Toast.makeText(PreviewModeMainPW.this, "Failed to download drafts",
-                    Toast.LENGTH_SHORT).show();
-        }
-        else if (tag.equalsIgnoreCase("primary") || tag.equalsIgnoreCase("parallel"))
-        {
-            Toast.makeText(PreviewModeMainPW.this, "Failed to download resources",
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
-
     @Override
     public void onClick(View view)
     {
         Log.i(TAG, "View clicked");
-    }
-
-    private class UpdateDraftListTask extends AsyncTask<Object, Void, Boolean>
-    {
-        boolean mNewDraftsAvailable;
-        String tag, langCode;
-
-        @Override
-        protected void onPreExecute()
-        {
-            super.onPreExecute();
-            mNewDraftsAvailable = false;
-        }
-
-        @Override
-        protected Boolean doInBackground(Object... params)
-        {
-
-            InputStream is = (InputStream) params[0];
-            langCode = params[1].toString();
-            tag = params[2].toString();
-
-            List<GTLanguage> languageList = GTPackageReader.processMetaResponse(is);
-
-            GTLanguage language = languageList.get(0);
-            List<GTPackage> packagesDraft = language.getPackages();
-
-            return packagesDraft.size() != 0;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean shouldDownload)
-        {
-            super.onPostExecute(shouldDownload);
-
-            GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(),
-                    settings.getString(AUTH_DRAFT, ""), langCode, tag, PreviewModeMainPW.this);
-        }
     }
 
     @Override
@@ -697,6 +491,11 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
                     languagePrimary, "draft", this);
 
+            GodToolsApiClient.downloadDrafts(getApp(),
+                    settings.getString(AUTH_DRAFT, ""),
+                    languagePrimary,
+                    "draft",
+                    this);
         }
         else
         {
@@ -752,5 +551,84 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         pdLoading.setMessage(msg);
         pdLoading.show();
 
+    }
+
+    @Override
+    public void metaTaskComplete(List<GTLanguage> languageList,String tag)
+    {
+        UpdatePackageListTask.run(languageList, DBAdapter.getInstance(this));
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode)
+    {
+        if (401 == statusCode)
+        {
+            showAccessCodeDialog();
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.expired_passcode),
+                    Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))
+        {
+            getPackageList();
+        }
+
+        swipeRefreshLayout.setRefreshing(false);
+        Log.i(TAG, "Done refreshing");
+    }
+
+    @Override
+    public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
+    {
+        if (tag.equalsIgnoreCase("draft"))
+        {
+            Toast.makeText(PreviewModeMainPW.this, "Drafts have been updated",
+                    Toast.LENGTH_SHORT).show();
+            getPackageList();
+            createTheHomeScreen();
+
+            swipeRefreshLayout.setRefreshing(false);
+            Log.i(TAG, "Done refreshing");
+        }
+        else if (tag.equalsIgnoreCase("draft_primary"))
+        {
+            languagePrimary = langCode;
+            getPackageList();
+
+            createTheHomeScreen();
+        }
+        else if (tag.equalsIgnoreCase("draft_parallel"))
+        {
+            createTheHomeScreen();
+        }
+    }
+
+    @Override
+    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
+    {
+
+        if (tag.equalsIgnoreCase("draft"))
+        {
+            Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else if (tag.equalsIgnoreCase("draft_primary"))
+        {
+            getPackageList();
+            Toast.makeText(PreviewModeMainPW.this, "Failed to download drafts",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else if (tag.equalsIgnoreCase("primary") || tag.equalsIgnoreCase("parallel"))
+        {
+            Toast.makeText(PreviewModeMainPW.this, "Failed to download resources",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 }

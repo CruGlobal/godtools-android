@@ -28,8 +28,8 @@ public class GodToolsApiClient {
     }
 
     public static void getListOfDrafts(String authorization, String language, String tag, MetaTask.MetaTaskHandler taskHandler){
-        MetaTask draftTask = new MetaTask(taskHandler);
-        String url = BASE_URL_V2 + ENDPOINT_META + language;
+        DraftMetaTask draftTask = new DraftMetaTask(taskHandler, authorization);
+        String url = BASE_URL + ENDPOINT_META + language;
         draftTask.execute(url, tag);
     }
 

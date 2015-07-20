@@ -3,6 +3,8 @@ package org.keynote.godtools.android.http;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.google.common.base.Strings;
+
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
@@ -43,11 +45,12 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
         url = params[0].toString();
         filePath = params[1].toString();
         tag = params[2].toString();
+        String authorization = (String) params[3];
         langCode = params[4].toString();
 
         try {
 
-            HttpURLConnection connection = getHttpURLConnection(url);
+            HttpURLConnection connection = getHttpURLConnection(url, authorization);
 
             connection.connect();
 
@@ -130,12 +133,17 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
     }
 
-    private HttpURLConnection getHttpURLConnection(String url) throws IOException
+    private HttpURLConnection getHttpURLConnection(String url, String authorization) throws IOException
     {
         HttpURLConnection getDownloadUrlConnection = (HttpURLConnection) new URL(url).openConnection();
         getDownloadUrlConnection.setReadTimeout(10000 /* milliseconds */);
         getDownloadUrlConnection.setConnectTimeout(15000 /* milliseconds */);
         getDownloadUrlConnection.setRequestMethod("GET");
+
+        if(!Strings.isNullOrEmpty(authorization))
+        {
+            getDownloadUrlConnection.setRequestProperty("Authorization", authorization);
+        }
         return getDownloadUrlConnection;
     }
 

@@ -67,7 +67,7 @@ public class MetaTask extends AsyncTask<Object, Void, List<GTLanguage>>
         }
     }
 
-    private HttpURLConnection getHttpURLConnection(String url) throws IOException
+    protected HttpURLConnection getHttpURLConnection(String url) throws IOException
     {
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setReadTimeout(10000 /* milliseconds */);
