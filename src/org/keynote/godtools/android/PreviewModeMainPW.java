@@ -557,7 +557,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     public void metaTaskComplete(List<GTLanguage> languageList,String tag)
     {
         UpdatePackageListTask.run(languageList, DBAdapter.getInstance(this));
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -608,6 +607,8 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         {
             createTheHomeScreen();
         }
+
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
