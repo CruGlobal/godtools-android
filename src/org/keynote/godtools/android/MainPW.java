@@ -1,21 +1,12 @@
 package org.keynote.godtools.android;
 
 
-import android.app.ActivityManager;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Rect;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,10 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
@@ -40,21 +27,15 @@ import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
-import org.keynote.godtools.android.http.NotificationUpdateTask;
-import org.keynote.godtools.android.http.handlers.NoOpMetaTaskHandler;
 import org.keynote.godtools.android.model.HomescreenLayout;
-import org.keynote.godtools.android.notifications.NotificationInfo;
-import org.keynote.godtools.android.service.BackgroundService;
+import org.keynote.godtools.android.notifications.GoogleCloudMessagingClient;
+import org.keynote.godtools.android.notifications.NotificationsClient;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
@@ -62,8 +43,6 @@ import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.KGP;
 import static org.keynote.godtools.android.utils.Constants.META;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
-import static org.keynote.godtools.android.utils.Constants.APP_VERSION;
-import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
 
 
 public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
@@ -73,10 +52,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 {
     private static final String TAG = "MainPW";
     private static final int REQUEST_SETTINGS = 1001;
-    private static final String JUST_SWITCHED = "justSwitched";
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
-    String SENDER_ID = "237513440670";
 
     public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
     public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
@@ -91,11 +66,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private List<HomescreenLayout> layouts;
 
-    GoogleCloudMessaging gcm;
-    String regid = "";
-    Timer timer;
-
-    boolean justSwitchedToTranslatorMode;
     SharedPreferences settings;
 
     /**
@@ -104,6 +74,9 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
 
         super.onCreate(savedInstanceState);
@@ -123,8 +96,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         setupLayout();
 
-        settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
         if (!isFirstLaunch())
         {
             showLoading();
@@ -132,54 +103,21 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             settings.edit().putBoolean("TranslatorMode", false).apply();
         }
 
-        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-        justSwitchedToTranslatorMode = settings.getBoolean(JUST_SWITCHED, false);
-
         packageList = getPackageList(); // get the packages for the primary language
 
         showLayoutsWithPackages();
 
-        Log.i(TAG, regid);
-        // Check device for Play Services APK. If check succeeds, proceed with GCM registration.
-        if (checkPlayServices())
-        {
-            Log.i(TAG, "Registering Device");
-            gcm = GoogleCloudMessaging.getInstance(this);
-            regid = getRegistrationId(getApplicationContext());
+        GoogleCloudMessagingClient googleCloudMessagingClient = GoogleCloudMessagingClient.getInstance(getApplicationContext(),
+                (SnuffyApplication) getApplication(),
+                this,
+                settings);
 
-            if (regid.isEmpty())
-            {
-                registerInBackground();
-                // since when an app is first registered notifications are probably on,
-                // send first state to Google Analytics
-                EventTracker.track(getApp(), "HomeScreen", "Notification State", "Turned ON");
-            }
+        NotificationsClient notificationsClient = NotificationsClient.getInstance(getApplicationContext(), settings);
 
-            // send notification update each time app is used for notification type 1
-            GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""),
-                    regid, NotificationInfo.NOT_USED_2_WEEKS, new NotificationUpdateTask.NotificationUpdateTaskHandler()
-                    {
-                        @Override
-                        public void registrationComplete(String regId)
-                        {
-                            Log.i(NotificationInfo.NOTIFICATION_TAG, "Used Notification notice sent to API");
-                        }
+        googleCloudMessagingClient.registerForNotificationsIfNecessary(TAG);
 
-                        @Override
-                        public void registrationFailed()
-                        {
-                            Log.e(NotificationInfo.NOTIFICATION_TAG, "Used notification notice failed to send to API");
-                        }
-                    });
-        }
-        else
-        {
-            Log.i(TAG, "No valid Google Play Services APK found.");
-        }
-        Log.i(TAG, regid);
-
-        if (!justSwitchedToTranslatorMode)
-            startTimer(); // don't start timer when switching to translator mode
+        notificationsClient.sendLastUsageUpdateToGodToolsAPI();
+        notificationsClient.startTimerForTrackingAppUsageTime();
     }
 
     private boolean isFirstLaunch()
@@ -341,29 +279,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                         this);
                 break;
             }
-            case RESULT_PREVIEW_MODE_ENABLED:
-            {
-                // refresh the list
-                String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-
-                if (!languagePrimary.equalsIgnoreCase(primaryCode))
-                {
-                    SnuffyApplication app = (SnuffyApplication) getApplication();
-                    app.setAppLocale(primaryCode);
-                }
-
-                showLoading();
-
-                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), languagePrimary, "draft_primary", new NoOpMetaTaskHandler());
-
-                Toast.makeText(MainPW.this, "Translator preview mode is enabled", Toast.LENGTH_LONG).show();
-                switchedToTranslatorMode(true);
-
-                finish();
-                startActivity(getIntent());
-
-                break;
-            }
             case RESULT_PREVIEW_MODE_DISABLED:
             {
                 // refresh the list
@@ -470,24 +385,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private void createTheHomeScreen()
     {
-        /*
-         * This method is called each time the UI needs to be refreshed.
-         */
-
-        // If no packages are available for a language, then fallback to English
-        if (justSwitchedToTranslatorMode)
-        {
-            /*
-             * When switching to translator mode, the MainPW activity is restarted. However, the packageList and
-             * packageFrag need to be refreshed based on the newly downloaded items. The justSwitchedToTranslatorMode is
-             * saved in the settings and when true, this will refresh the packages available.
-             */
-            packageList = getPackageList();
-            showLayoutsWithPackages();
-        }
-
-        justSwitchedToTranslatorMode = false;
-        switchedToTranslatorMode(false);
         EventTracker.track(getApp(), "HomeScreen", languagePrimary);
     }
 
@@ -501,13 +398,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private List<GTPackage> getPackageList()
     {
         return GTPackage.getLivePackages(MainPW.this, languagePrimary);
-    }
-
-    private void switchedToTranslatorMode(boolean switched)
-    {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean(JUST_SWITCHED, switched);
-        editor.apply();
     }
 
     @Override
@@ -531,8 +421,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         startActivity(intent);
     }
 
-
-
     @Override
     public void onClick(View view)
     {
@@ -551,38 +439,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         supportInvalidateOptionsMenu();
 
         setSupportProgressBarIndeterminateVisibility(false);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if (keyCode == KeyEvent.KEYCODE_MENU)
-        {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setCancelable(false)
-                    .setMessage(R.string.quit_dialog_message)
-                    .setPositiveButton(R.string.quit_dialog_confirm, new DialogInterface.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i)
-                        {
-                            timer.cancel();
-                            finish();
-                        }
-                    })
-                    .setNegativeButton(R.string.quit_dialog_cancel, new DialogInterface.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i)
-                        {
-                            dialogInterface.cancel();
-                        }
-                    });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     private void addPageFrameToIntent(Intent intent)
@@ -614,160 +470,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         return (SnuffyApplication) getApplication();
     }
 
-    private boolean checkPlayServices()
-    {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS)
-        {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode))
-            {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this, PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            }
-            else
-            {
-                Log.i(TAG, "This device is not supported.");
-            }
-            return false;
-        }
-        return true;
-    }
-
-    private String getRegistrationId(Context context)
-    {
-        String registrationId = settings.getString(REGISTRATION_ID, "");
-        if (registrationId == null || registrationId.isEmpty())
-        {
-            Log.i(TAG, "Registration not found.");
-            return "";
-        }
-        // Check if app was updated; if so, it must clear the registration ID
-        // since the existing regID is not guaranteed to work with the new
-        // app version.
-        int registeredVersion = settings.getInt(APP_VERSION, Integer.MIN_VALUE);
-        int currentVersion = getAppVersion(context);
-        if (registeredVersion != currentVersion)
-        {
-            Log.i(TAG, "App version changed.");
-            return "";
-        }
-        return registrationId;
-    }
-
-    private void registerInBackground()
-    {
-        new AsyncTask<Void, Void, String>()
-        {
-            @Override
-            protected String doInBackground(Void... params)
-            {
-                String msg;
-                try
-                {
-                    if (gcm == null)
-                    {
-                        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
-                    }
-                    regid = gcm.register(SENDER_ID);
-                    msg = "Device registered, registration ID=" + regid;
-
-                    sendRegistrationIdToBackend();
-
-                    // Persist the regID - no need to register again.
-                    storeRegistrationId(getApplicationContext(), regid);
-                } catch (IOException ex)
-                {
-                    msg = "Error :" + ex.getMessage();
-                }
-                return msg;
-            }
-
-            @Override
-            protected void onPostExecute(String msg)
-            {
-                Log.i(TAG, msg);
-            }
-        }.execute(null, null, null);
-    }
-
-    private void storeRegistrationId(Context context, String regId)
-    {
-        int appVersion = getAppVersion(context);
-        Log.i(TAG, "Saving regId on app version " + appVersion);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(REGISTRATION_ID, regId);
-        editor.putInt(APP_VERSION, appVersion);
-        editor.apply();
-    }
-
-    private static int getAppVersion(Context context)
-    {
-        try
-        {
-            PackageInfo packageInfo = context.getPackageManager()
-                    .getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e)
-        {
-            // should never happen
-            throw new RuntimeException("Could not get package name: " + e);
-        }
-    }
-
-    private void sendRegistrationIdToBackend()
-    {
-        String deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-        BackgroundService.registerDevice(getApplicationContext(), regid, deviceId);
-    }
-
-    private void startTimer()
-    {
-        TimerTask timerTask = new TimerTask()
-        {
-            @Override
-            public void run()
-            {
-                Log.i(TAG, "Timer complete");
-
-                if (isAppInForeground())
-                {
-                    Log.i(TAG, "App is in foreground");
-                    GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""),
-                            regid, NotificationInfo.AFTER_3_USES, new NotificationUpdateTask.NotificationUpdateTaskHandler()
-                            {
-                                @Override
-                                public void registrationComplete(String regId)
-                                {
-                                    Log.i(NotificationInfo.NOTIFICATION_TAG, "3 Uses Notification notice sent to API");
-                                }
-
-                                @Override
-                                public void registrationFailed()
-                                {
-                                    Log.e(NotificationInfo.NOTIFICATION_TAG, "3 Uses notification notice failed to send to API");
-                                }
-                            });
-                }
-                else
-                {
-                    Log.i(TAG, "App not in foreground, canceling timer");
-                }
-            }
-        };
-
-        timer = new Timer("1.5MinuteTimer");
-        timer.schedule(timerTask, 90000); //1.5 minutes
-        Log.i(TAG, "Timer scheduled");
-    }
-
-    private boolean isAppInForeground()
-    {
-        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> services = activityManager.getRunningTasks(1);
-
-        return (services.get(0).topActivity.getPackageName()
-                .equalsIgnoreCase(getApplicationContext().getPackageName()));
-    }
-
     @Override
     public void metaTaskComplete(List<GTLanguage> languageList, String tag)
     {
@@ -779,33 +481,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     @Override
     public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode)
     {
-        hideLoading();
-    }
-
-    @Override
-    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
-    {
-        if (tag.equalsIgnoreCase("draft"))
-        {
-
-            Toast.makeText(MainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
-
-        }
-        else if (tag.equalsIgnoreCase("draft_primary"))
-        {
-
-            packageList = getPackageList();
-            showLayoutsWithPackages();
-            Toast.makeText(MainPW.this, "Failed to download drafts", Toast.LENGTH_SHORT).show();
-
-        }
-        else if (tag.equalsIgnoreCase(KEY_PRIMARY) || tag.equalsIgnoreCase(KEY_PARALLEL))
-        {
-
-            Toast.makeText(MainPW.this, "Failed to download resources", Toast.LENGTH_SHORT).show();
-
-        }
-
         hideLoading();
     }
 
@@ -828,8 +503,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
             packageList = getPackageList();
             showLayoutsWithPackages();
-            hideLoading();
 
+            hideLoading();
             createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase(KEY_PARALLEL))
@@ -845,28 +520,18 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             hideLoading();
             createTheHomeScreen();
         }
-        else if (tag.equalsIgnoreCase("draft"))
-        {
-            Toast.makeText(MainPW.this, "Drafts have been updated", Toast.LENGTH_SHORT).show();
-            packageList = getPackageList();
-            showLayoutsWithPackages();
-            hideLoading();
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase("draft_primary"))
-        {
-            languagePrimary = langCode;
-            packageList = getPackageList();
+    }
 
-            showLayoutsWithPackages();
-
-            hideLoading();
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase("draft_parallel"))
+    @Override
+    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
+    {
+        if (tag.equalsIgnoreCase(KEY_PRIMARY) || tag.equalsIgnoreCase(KEY_PARALLEL))
         {
-            hideLoading();
-            createTheHomeScreen();
+
+            Toast.makeText(MainPW.this, "Failed to download resources", Toast.LENGTH_SHORT).show();
+
         }
+
+        hideLoading();
     }
 }
