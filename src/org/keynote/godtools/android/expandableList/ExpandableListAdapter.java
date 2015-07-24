@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.keynote.godtools.android.PreviewModeMainPW;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTPackage;
@@ -258,6 +259,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             public void draftTaskComplete()
                                             {
                                                 Toast.makeText(context, "Draft has been published", Toast.LENGTH_SHORT).show();
+                                                ((PreviewModeMainPW)context).refreshDrafts();
                                             }
 
                                             @Override
@@ -302,6 +304,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             public void draftTaskComplete()
                                             {
                                                 Toast.makeText(context.getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT).show();
+                                                ((PreviewModeMainPW)context).refreshDrafts();
                                             }
 
                                             @Override

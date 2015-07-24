@@ -401,7 +401,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         startActivityForResult(intent, REQUEST_SETTINGS);
     }
 
-    private void refreshDrafts()
+    public void refreshDrafts()
     {
         if (Device.isConnected(PreviewModeMainPW.this))
         {
