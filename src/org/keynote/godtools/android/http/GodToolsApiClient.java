@@ -9,8 +9,12 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import java.io.File;
 import java.util.UUID;
 
-public class GodToolsApiClient {
+import static org.keynote.godtools.android.utils.Constants.DRAFT;
 
+public class GodToolsApiClient
+{
+
+    // private static final String BASE_URL = "http://GodToolsAPI-Stage-1291189452.us-east-1.elb.amazonaws.com/godtools-api/rest/";
     private static final String BASE_URL_V2 = "https://api.stage.godtoolsapp.com/godtools-api/rest/v2/";
     private static final String BASE_URL = "https://api.stage.godtoolsapp.com/godtools-api/rest/";
 //    private static final String BASE_URL = "http://localhost:8080/godtools-api/rest/v2/";
@@ -40,7 +44,8 @@ public class GodToolsApiClient {
         download(app.getApplicationContext(), url, filePath, tag, null, langCode, taskHandler);
     }
 
-    public static void authenticateAccessCode(String accessCode, AuthTask.AuthTaskHandler taskHandler){
+    public static void authenticateAccessCode(String accessCode, AuthTask.AuthTaskHandler taskHandler)
+    {
         AuthTask authTask = new AuthTask(taskHandler, true, false);
         String url = BASE_URL + ENDPOINT_AUTH + accessCode;
         authTask.execute(url, accessCode);
@@ -53,7 +58,8 @@ public class GodToolsApiClient {
         authTask.execute(url, authToken);
     }
 
-    public static void downloadDrafts(SnuffyApplication app, String authorization, String langCode, String tag, DownloadTask.DownloadTaskHandler taskHandler){
+    public static void downloadDrafts(SnuffyApplication app, String authorization, String langCode, String tag, DownloadTask.DownloadTaskHandler taskHandler)
+    {
         String url = BASE_URL + ENDPOINT_DRAFTS + langCode + "?compressed=true";
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + File.separator + "package.zip";
 
@@ -73,7 +79,7 @@ public class GodToolsApiClient {
         download(app.getApplicationContext(),
                 url,
                 filePath,
-                "draft",
+                DRAFT,
                 authorization,
                 languageCode,
                 taskHandler);
@@ -106,20 +112,23 @@ public class GodToolsApiClient {
         new NotificationRegistrationTask(taskHandler).execute(url, deviceId, registrationsOn);
     }
 
-    public static void updateNotification(String authcode, String registrationId, int notificationType,  NotificationUpdateTask.NotificationUpdateTaskHandler taskHandler)
+    public static void updateNotification(String authcode, String registrationId, int notificationType, NotificationUpdateTask.NotificationUpdateTaskHandler taskHandler)
     {
         String url = BASE_URL + ENDPOINT_NOTIFICATIONS + "update";
 
         new NotificationUpdateTask(taskHandler).execute(url, authcode, registrationId, notificationType);
     }
 
-    private static void download(Context context, String url, String filePath, String tag, String authorization, String langCode, DownloadTask.DownloadTaskHandler taskHandler) {
+    private static void download(Context context, String url, String filePath, String tag, String authorization, String langCode, DownloadTask.DownloadTaskHandler taskHandler)
+    {
         DownloadTask downloadTask = new DownloadTask(context, taskHandler);
-        //downloadTask.execute(url, filePath, tag);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {
             downloadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, filePath, tag, authorization, langCode);
-        } else {
+        }
+        else
+        {
             downloadTask.execute(url, filePath, tag, authorization, langCode);
         }
 

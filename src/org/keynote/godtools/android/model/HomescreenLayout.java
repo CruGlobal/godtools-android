@@ -7,6 +7,7 @@ import android.widget.TextView;
 /**
  * Created by matthewfrederick on 2/10/15.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class HomescreenLayout
 {
     private LinearLayout layout;

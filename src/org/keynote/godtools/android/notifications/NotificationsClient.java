@@ -35,7 +35,7 @@ public class NotificationsClient
 
     public void sendLastUsageUpdateToGodToolsAPI()
     {
-        String authorization = userSettings.getString(Constants.AUTH_CODE,"");
+        String authorization = userSettings.getString(Constants.AUTH_GENERIC, Constants.EMPTY_STRING);
         String registrationId = NotificationUtilities.getStoredRegistrationId(context, userSettings);
 
         // send notification update each time app is used for notification type 1
@@ -75,7 +75,7 @@ public class NotificationsClient
 
     private void sendNumberOfUsagesUpdateToGodToolsAPI()
     {
-        String authorization = userSettings.getString(Constants.AUTH_CODE,"");
+        String authorization = userSettings.getString(Constants.AUTH_GENERIC, Constants.EMPTY_STRING);
         String registrationId = NotificationUtilities.getStoredRegistrationId(context, userSettings);
 
         GodToolsApiClient.updateNotification(authorization, registrationId, NotificationInfo.AFTER_3_USES, new NotificationUpdateTask.NotificationUpdateTaskHandler()

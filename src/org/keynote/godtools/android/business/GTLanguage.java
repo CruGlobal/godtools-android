@@ -8,7 +8,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
-public class GTLanguage implements Serializable {
+public class GTLanguage implements Serializable
+{
 
     public static final String KEY_PRIMARY = "languagePrimary";
     public static final String KEY_PARALLEL = "languageParallel";
@@ -20,7 +21,8 @@ public class GTLanguage implements Serializable {
     private boolean draft;
     private List<GTPackage> listPackages;
 
-    public GTLanguage() {
+    public GTLanguage()
+    {
     }
 
     public GTLanguage(String languageCode)
@@ -38,49 +40,75 @@ public class GTLanguage implements Serializable {
         this.languageName = Character.toUpperCase(name.charAt(0)) + name.substring(1);
     }
 
-    public GTLanguage(String languageCode, String languageName) {
+    public GTLanguage(String languageCode, String languageName)
+    {
 
         this.languageName = languageName;
         this.languageCode = languageCode;
     }
 
-    public long getId() {
+    public static GTLanguage getLanguage(Context context, String languageCode)
+    {
+        DBAdapter adapter = DBAdapter.getInstance(context);
+        adapter.open();
+        return adapter.getGTLanguage(languageCode);
+    }
+
+    public static List<GTLanguage> getAll(Context context)
+    {
+        DBAdapter adapter = DBAdapter.getInstance(context);
+        adapter.open();
+
+        return adapter.getAllLanguages();
+    }
+
+    public long getId()
+    {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(long id)
+    {
         this.id = id;
     }
 
-    public String getLanguageName() {
+    public String getLanguageName()
+    {
         return languageName;
     }
 
-    public String getLanguageCode() {
-        return languageCode;
-    }
-
-    public void setLanguageCode(String languageCode) {
-        this.languageCode = languageCode;
-    }
-
-    public void setLanguageName(String languageName) {
+    public void setLanguageName(String languageName)
+    {
         this.languageName = languageName;
     }
 
-    public boolean isDownloaded() {
+    public String getLanguageCode()
+    {
+        return languageCode;
+    }
+
+    public void setLanguageCode(String languageCode)
+    {
+        this.languageCode = languageCode;
+    }
+
+    public boolean isDownloaded()
+    {
         return downloaded;
     }
 
-    public void setDownloaded(boolean downloaded) {
+    public void setDownloaded(boolean downloaded)
+    {
         this.downloaded = downloaded;
     }
 
-    public List<GTPackage> getPackages() {
+    public List<GTPackage> getPackages()
+    {
         return listPackages;
     }
 
-    public void setPackages(List<GTPackage> listPackages) {
+    public void setPackages(List<GTPackage> listPackages)
+    {
         this.listPackages = listPackages;
     }
 
@@ -94,20 +122,8 @@ public class GTLanguage implements Serializable {
         this.draft = draft;
     }
 
-    public static GTLanguage getLanguage(Context context, String languageCode) {
-        DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
-        return adapter.getGTLanguage(languageCode);
-    }
-
-    public static List<GTLanguage> getAll(Context context) {
-        DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
-
-        return adapter.getAllLanguages();
-    }
-
-    public void addToDatabase(Context context) {
+    public void addToDatabase(Context context)
+    {
         DBAdapter adapter = DBAdapter.getInstance(context);
         adapter.open();
 
@@ -123,7 +139,8 @@ public class GTLanguage implements Serializable {
         }
     }
 
-    public void update(Context context) {
+    public void update(Context context)
+    {
         DBAdapter adapter = DBAdapter.getInstance(context);
         adapter.open();
         adapter.updateGTLanguage(this);

@@ -3,7 +3,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat">
-         <item name="android:windowFullscreen">true</item>
+        <item name="android:windowFullscreen">true</item>
         <item name="android:actionBarStyle">@style/GodToolsActionBar</item>
         <item name="actionBarStyle">@style/GodToolsActionBar</item>
     </style>
@@ -17,14 +17,14 @@
         <item name="android:background">@color/settings_listitem_item</item>
         <item name="background">@color/settings_listitem_item</item>
     </style>
-    
+
     <!-- New GodTools IP4 layout -->
     <style name="GodToolsIP4" parent="Theme.AppCompat">
         <item name="android:windowFullscreen">true</item>
         <item name="android:actionBarStyle">@style/GodToolsIP4ToolBar</item>
         <item name="actionBarStyle">@style/GodToolsIP4ToolBar</item>
     </style>
-    
+
     <style name="GodToolsIP4ToolBar" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="android:background">@color/cru_bright_blue</item>
         <item name="background">@color/cru_bright_blue</item>
@@ -33,30 +33,33 @@
         <item name="displayOptions">showHome</item>
     </style>
 
-    
+
     <!--  Snuffy toolbar styles  -->
-	<style name="Toolbar">
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_height">44dip</item>
-		<item name="android:background">@drawable/toolbar_background</item>
-	</style>
-	<style name="ToolbarButton">
-		<item name="android:layout_width">44dip</item>
-		<item name="android:layout_height">44dip</item>
-		<item name="android:padding">12dip</item>
-		<item name="android:layout_centerVertical">true</item>
-		<item name="android:scaleType">fitCenter</item>
-		<item name="android:background">@drawable/toolbar_background</item>
-		<item name="android:tint">@color/toolbar_fg</item>
-	</style>
-	<style name="ToolbarButtonRight" parent="@style/ToolbarButton">
-		<item name="android:layout_alignParentRight">true</item>
-	</style>
-	<style name="ToolBarSep">
-		<item name="android:background">#444</item>
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_height">1px</item>
-	</style>
-    
-    
+    <style name="Toolbar">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">44dip</item>
+        <item name="android:background">@drawable/toolbar_background</item>
+    </style>
+
+    <style name="ToolbarButton">
+        <item name="android:layout_width">44dip</item>
+        <item name="android:layout_height">44dip</item>
+        <item name="android:padding">12dip</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:background">@drawable/toolbar_background</item>
+        <item name="android:tint">@color/toolbar_fg</item>
+    </style>
+
+    <style name="ToolbarButtonRight" parent="@style/ToolbarButton">
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
+
+    <style name="ToolBarSep">
+        <item name="android:background">#444</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">1px</item>
+    </style>
+
+
 </resources>

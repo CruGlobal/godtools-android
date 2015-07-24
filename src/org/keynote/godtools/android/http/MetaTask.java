@@ -7,7 +7,6 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackageReader;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -55,13 +54,12 @@ public class MetaTask extends AsyncTask<Object, Void, List<GTLanguage>>
     }
 
     @Override
-    protected void onPostExecute(List<GTLanguage> languageList)
-    {
+    protected void onPostExecute(List<GTLanguage> languageList) {
+
         if (statusCode == HttpStatus.SC_OK) 
         {
             metaTaskHandler.metaTaskComplete(languageList, tag);
-        }
-        else
+        } else 
         {
             metaTaskHandler.metaTaskFailure(languageList, tag, statusCode);
         }

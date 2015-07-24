@@ -11,9 +11,18 @@ import org.keynote.godtools.android.dao.DBAdapter;
 import java.io.InputStream;
 import java.util.List;
 
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.KEY_NEW_LANGUAGE;
+import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+
+/**
+ * Used to update package list with new input stream content
+ */
 public class UpdatePackageListTask
 {
-    private static final String TAG = "UpdatePackageListTask";
+    private static final String TAG = UpdatePackageListTask.class.getSimpleName();
 
     public static void run(InputStream is, DBAdapter adapter)
     {
