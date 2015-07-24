@@ -1,6 +1,5 @@
 package org.keynote.godtools.android.service;
 
-import android.content.Context;
 import android.util.Log;
 
 import org.keynote.godtools.android.business.GTLanguage;
@@ -9,6 +8,8 @@ import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 public class UpdatePackageListTask
@@ -50,13 +51,34 @@ public class UpdatePackageListTask
             {
                 // check if a new package is available for download or an existing package has been updated
                 GTPackage dbPackage = adapter.getGTPackage(gtp.getCode(), gtp.getLanguage(), gtp.getStatus());
-                if (dbPackage == null || (gtp.getVersion() > dbPackage.getVersion()))
+                if (dbPackage == null || newerVersionExists(gtp.getVersion(), dbPackage.getVersion()))
                 {
                     dbLanguage.setDownloaded(false);
+                    break;
                 }
             }
 
             adapter.updateGTLanguage(dbLanguage);
         }
+    }
+
+    /*
+        For an explanation of how the decimal number portion is extracted to compare the minor version numbers,
+        see: http://stackoverflow.com/questions/10383392/extract-number-decimal-in-bigdecimal
+     */
+    private static boolean newerVersionExists(double remoteVersion, double localVersion)
+    {
+        // convert to string first to avoid floating point issues
+        BigDecimal wrappedRemoteVersion = new BigDecimal(String.valueOf(remoteVersion));
+        BigDecimal wrappedLocalVersion = new BigDecimal(String.valueOf(localVersion));
+
+        // check the major version number portion.  if removeVersion is higher, then return true.
+        // otherwise continue on to minor version number portion
+        if(wrappedRemoteVersion.intValue() > wrappedLocalVersion.intValue()) return true;
+
+        int integerRemoteMinorVersion = wrappedRemoteVersion.subtract(wrappedRemoteVersion.setScale(0, RoundingMode.FLOOR)).movePointRight(wrappedRemoteVersion.scale()).intValue();
+        int integerLocalMinorVersion = wrappedLocalVersion.subtract(wrappedLocalVersion.setScale(0, RoundingMode.FLOOR)).movePointRight(wrappedLocalVersion.scale()).intValue();
+
+        return integerRemoteMinorVersion > integerLocalMinorVersion;
     }
 }
