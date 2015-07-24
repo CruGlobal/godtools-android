@@ -452,8 +452,19 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     {
         Log.i(TAG, "Download Failed");
 
-        currentView.pbDownloading.setVisibility(View.INVISIBLE);
-        currentView.ivDownloaded.setImageResource(R.drawable.gt4_downloads_erroricon);
-        currentView.tvDownload.setText(R.string.retry);
+        if(isTranslator)
+        {
+            setResult(RESULT_CHANGED_PRIMARY, returnIntent);
+            primaryLanguage = langCode;
+            app.setAppLocale(langCode);
+            storeLanguageCode(GTLanguage.KEY_PRIMARY, langCode);
+            setList();
+        }
+        else
+        {
+            currentView.pbDownloading.setVisibility(View.INVISIBLE);
+            currentView.ivDownloaded.setImageResource(R.drawable.gt4_downloads_erroricon);
+            currentView.tvDownload.setText(R.string.retry);
+        }
     }
 }

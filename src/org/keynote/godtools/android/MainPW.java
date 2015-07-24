@@ -202,7 +202,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -397,10 +396,13 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     {
         for (GTPackage gtPackage : packageList)
         {
+            Log.i(TAG, view.getId() + " " + gtPackage.getLayout().getLayout().getId());
+
             if (view.getId() == gtPackage.getLayout().getLayout().getId())
             {
                 Log.i(TAG, "clicked: " + gtPackage.getCode());
                 onPackageSelected(gtPackage);
+                break;
             }
         }
     }
