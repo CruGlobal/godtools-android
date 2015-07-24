@@ -14,23 +14,23 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.Splash;
-import org.keynote.godtools.android.notifications.GcmBroadcastReceiver;
+
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 
 /**
- * Created by matthewfrederick on 12/19/14.
+ * GCM Intent Service
  */
+@SuppressWarnings("StatementWithEmptyBody")
 public class GcmIntentService extends IntentService
 {
     public static final int NOTIFICATION_ID = 1;
+    public static final String TAG = GcmIntentService.class.getSimpleName();
+    Intent resultIntent;
 
     public GcmIntentService()
     {
         super("GcmIntentService");
     }
-
-    public static final String TAG = "GcmIntentService";
-    
-    Intent resultIntent;
 
     @Override
     protected void onHandleIntent(Intent intent)
@@ -62,8 +62,7 @@ public class GcmIntentService extends IntentService
                 try
                 {
                     type = Integer.parseInt(extras.getString("type"));
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                     type = 0;
                 }
@@ -85,11 +84,11 @@ public class GcmIntentService extends IntentService
     {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.homescreen_godtools_logo)
-                .setContentTitle("GodTools")
+                .setContentTitle(PREFS_NAME)
                 .setContentText(msg)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                 .setAutoCancel(true);
-        
+
 
         if (type == NotificationInfo.DAY_AFTER_SHARE)
         {
@@ -109,7 +108,7 @@ public class GcmIntentService extends IntentService
         }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        
+
         mBuilder.setContentIntent(pendingIntent);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

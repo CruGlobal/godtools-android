@@ -22,25 +22,25 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
+import static org.keynote.godtools.android.utils.Constants.DRAFT;
+
+@SuppressWarnings("ResultOfMethodCallIgnored")
+public class DownloadTask extends AsyncTask<Object, Void, Boolean>
+{
 
     private DownloadTaskHandler mTaskHandler;
     private Context mContext;
     private String url, filePath, tag, langCode;
 
-    public static interface DownloadTaskHandler {
-        void downloadTaskComplete(String url, String filePath, String langCode, String tag);
-
-        void downloadTaskFailure(String url, String filePath, String langCode, String tag);
-    }
-
-    public DownloadTask(Context context, DownloadTaskHandler taskHandler) {
+    public DownloadTask(Context context, DownloadTaskHandler taskHandler)
+    {
         this.mTaskHandler = taskHandler;
         this.mContext = context;
     }
 
     @Override
-    protected Boolean doInBackground(Object... params) {
+    protected Boolean doInBackground(Object... params)
+    {
 
         url = params[0].toString();
         filePath = params[1].toString();
@@ -88,12 +88,14 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             adapter.open();
 
             // delete packages
-            if (tag.contains("draft")) {
-                adapter.deletePackages(langCode, "draft");
+            if (tag.contains(DRAFT))
+            {
+                adapter.deletePackages(langCode, DRAFT);
             }
 
             // save the parsed packages to database
-            for (GTPackage gtp : packageList) {
+            for (GTPackage gtp : packageList)
+            {
                 adapter.upsertGTPackage(gtp);
             }
 
@@ -109,8 +111,9 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
             File[] fileList = unzipDir.listFiles();
             File oldFile;
-            for (int i = 0; i < fileList.length; i++) {
-                oldFile = fileList[i];
+            for (File aFileList : fileList)
+            {
+                oldFile = aFileList;
                 inputStream = new FileInputStream(oldFile);
                 outputStream = new FileOutputStream(resourcesDir + File.separator + oldFile.getName());
                 copyFile(inputStream, outputStream);
@@ -126,7 +129,9 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
             return true;
 
-        } catch (Exception e) {
+        } 
+        catch (Exception e)
+        {
             e.printStackTrace();
             return false;
         }
@@ -148,7 +153,8 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean isSuccessful) {
+    protected void onPostExecute(Boolean isSuccessful)
+    {
 
         if (isSuccessful)
             mTaskHandler.downloadTaskComplete(url, filePath, langCode, tag);
@@ -157,11 +163,20 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
     }
 
-    private void copyFile(InputStream in, OutputStream out) throws IOException {
+    private void copyFile(InputStream in, OutputStream out) throws IOException
+    {
         byte[] buffer = new byte[1024];
         int read;
-        while ((read = in.read(buffer)) != -1) {
+        while ((read = in.read(buffer)) != -1)
+        {
             out.write(buffer, 0, read);
         }
+    }
+
+    public interface DownloadTaskHandler
+    {
+        void downloadTaskComplete(String url, String filePath, String langCode, String tag);
+
+        void downloadTaskFailure(String url, String filePath, String langCode, String tag);
     }
 }

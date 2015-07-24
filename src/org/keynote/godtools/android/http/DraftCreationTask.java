@@ -15,21 +15,16 @@ import java.io.IOException;
 /**
  * Created by ryancarlson on 9/10/14.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class DraftCreationTask extends AsyncTask<Object, Void, Integer>
 {
     private final String TAG = getClass().getSimpleName();
-    
+
     private final DraftTaskHandler taskHandler;
 
     public DraftCreationTask(DraftTaskHandler taskHandler)
     {
         this.taskHandler = taskHandler;
-    }
-
-    public static interface DraftTaskHandler
-    {
-        void draftTaskComplete();
-        void draftTaskFailure(int code);
     }
 
     @Override
@@ -54,8 +49,7 @@ public class DraftCreationTask extends AsyncTask<Object, Void, Integer>
         try
         {
             return httpClient.execute(request).getStatusLine().getStatusCode();
-        }
-        catch (IOException e)
+        } catch (IOException e)
         {
             e.printStackTrace();
             return null;
@@ -66,8 +60,8 @@ public class DraftCreationTask extends AsyncTask<Object, Void, Integer>
     protected void onPostExecute(Integer responseStatusCode)
     {
         Log.i(TAG, "Response Code: " + responseStatusCode);
-        
-        if(responseStatusCode.equals(201))
+
+        if (responseStatusCode.equals(201))
         {
             taskHandler.draftTaskComplete();
         }
@@ -75,5 +69,12 @@ public class DraftCreationTask extends AsyncTask<Object, Void, Integer>
         {
             taskHandler.draftTaskFailure(responseStatusCode);
         }
+    }
+
+    public interface DraftTaskHandler
+    {
+        void draftTaskComplete();
+
+        void draftTaskFailure(int code);
     }
 }

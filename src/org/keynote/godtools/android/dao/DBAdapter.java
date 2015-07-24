@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
@@ -12,8 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+
 public class DBAdapter
 {
+
+    private static final String TAG = DBAdapter.class.getSimpleName();
 
     private static DBAdapter instance;
     private DBHelper helper;
@@ -45,6 +50,8 @@ public class DBAdapter
 
     public long insertGTPackage(GTPackage gtPackage)
     {
+        Log.i(TAG, "Inserting GT Package: " + gtPackage.getName());
+
         ContentValues cv = new ContentValues();
         cv.put(DBContract.GTPackageTable.COL_CODE, gtPackage.getCode());
         cv.put(DBContract.GTPackageTable.COL_NAME, gtPackage.getName());
@@ -57,7 +64,7 @@ public class DBAdapter
         return db.insert(DBContract.GTPackageTable.TABLE_NAME, null, cv);
     }
 
-    public long insertGTLanguage(GTLanguage gtLanguage)
+    public void insertGTLanguage(GTLanguage gtLanguage)
     {
         ContentValues cv = new ContentValues();
         cv.put(DBContract.GTLanguageTable.COL_CODE, gtLanguage.getLanguageCode());
@@ -65,7 +72,7 @@ public class DBAdapter
         cv.put(DBContract.GTLanguageTable.COL_IS_DRAFT, gtLanguage.isDraft());
         cv.put(DBContract.GTLanguageTable.COL_NAME, gtLanguage.getLanguageName());
 
-        return db.insert(DBContract.GTLanguageTable.TABLE_NAME, null, cv);
+        db.insert(DBContract.GTLanguageTable.TABLE_NAME, null, cv);
     }
 
     public List<GTLanguage> getAllLanguages()
@@ -126,6 +133,8 @@ public class DBAdapter
 
     public void upsertGTPackage(GTPackage gtp)
     {
+        Log.i(TAG, "Upserting package: " + gtp.getName());
+
         ContentValues cv = new ContentValues();
 
         cv.put(DBContract.GTPackageTable.COL_NAME, gtp.getName());
@@ -224,7 +233,7 @@ public class DBAdapter
         List<GTLanguage> listGTLanguages = new ArrayList<GTLanguage>();
 
         Locale current = Locale.getDefault();
-        Locale.setDefault(new Locale("en"));
+        Locale.setDefault(new Locale(ENGLISH_DEFAULT));
 
         while (cursor.moveToNext())
         {

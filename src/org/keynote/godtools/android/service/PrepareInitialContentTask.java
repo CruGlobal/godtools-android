@@ -15,9 +15,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+
 /**
- * Created by matthewfrederick on 5/11/15.
+ * Used to set up initial content for app
  */
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class PrepareInitialContentTask
 {
     /**
@@ -46,10 +49,8 @@ public class PrepareInitialContentTask
 
                 copyFile(is, os);
                 is.close();
-                is = null;
                 os.flush();
                 os.close();
-                os = null;
             }
 
             // meta.xml file contains the list of supported languages
@@ -75,13 +76,13 @@ public class PrepareInitialContentTask
             everyStudent.setName("Every Student");
             everyStudent.setIcon("homescreen_everystudent_icon_2x.png");
             everyStudent.setStatus("live");
-            everyStudent.setLanguage("en");
+            everyStudent.setLanguage(ENGLISH_DEFAULT);
             everyStudent.setVersion(1.1);
 
             everyStudent.addToDatabase(mContext);
 
             // english resources should be marked as downloaded
-            GTLanguage gtlEnglish = new GTLanguage("en");
+            GTLanguage gtlEnglish = new GTLanguage(ENGLISH_DEFAULT);
             gtlEnglish.setDownloaded(true);
             gtlEnglish.update(mContext);
 

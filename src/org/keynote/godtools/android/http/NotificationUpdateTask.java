@@ -19,18 +19,12 @@ import org.json.JSONObject;
 /**
  * Created by matthewfrederick on 1/5/15.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class NotificationUpdateTask extends AsyncTask<Object, Void, String>
 {
     private NotificationUpdateTaskHandler taskHandler;
     private int statusCode = 0;
     private String TAG = "NotificationUpdateTask";
-
-    public static interface NotificationUpdateTaskHandler
-    {
-        void registrationComplete(String regId);
-
-        void registrationFailed();
-    }
 
     public NotificationUpdateTask(NotificationUpdateTaskHandler listener)
     {
@@ -78,8 +72,7 @@ public class NotificationUpdateTask extends AsyncTask<Object, Void, String>
 
             HttpResponse response = httpClient.execute(request);
             statusCode = response.getStatusLine().getStatusCode();
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
             return null;
@@ -97,5 +90,12 @@ public class NotificationUpdateTask extends AsyncTask<Object, Void, String>
         else taskHandler.registrationFailed();
 
         Log.i(TAG, "Code: " + statusCode);
+    }
+
+    public interface NotificationUpdateTaskHandler
+    {
+        void registrationComplete(String regId);
+
+        void registrationFailed();
     }
 }

@@ -23,8 +23,8 @@ import org.keynote.godtools.android.http.NotificationRegistrationTask;
 import org.keynote.godtools.android.notifications.NotificationInfo;
 
 import static org.keynote.godtools.android.utils.Constants.ACCESS_CODE;
-import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.AUTH_GENERIC;
 import static org.keynote.godtools.android.utils.Constants.DEVICE_ID;
 import static org.keynote.godtools.android.utils.Constants.NOTIFICATIONS_ON;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
@@ -33,7 +33,7 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 import static org.keynote.godtools.android.utils.Constants.TYPE;
 
 /**
- * Created by matthewfrederick on 5/4/15.
+ * Background service class used to interact with GodTools API
  */
 public class BackgroundService extends IntentService implements AuthTask.AuthTaskHandler,
         NotificationRegistrationTask.NotificationTaskHandler
@@ -154,7 +154,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         }
         else
         {
-            settings.edit().putString(AUTH_CODE, authorization).apply();
+            settings.edit().putString(AUTH_GENERIC, authorization).apply();
 
             broadcastManager.sendBroadcast(BroadcastUtil.stopBroadcast(Type.AUTH));
         }

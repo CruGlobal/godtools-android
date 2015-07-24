@@ -26,9 +26,11 @@ import org.keynote.godtools.android.utils.Device;
 
 import java.util.List;
 
-import static org.keynote.godtools.android.utils.Constants.LANG_CODE;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
 import static org.keynote.godtools.android.utils.Constants.META;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 /*
     Logic flow:
@@ -61,37 +63,42 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
+        // Enable crash reporting
+        Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
+
         if (!isFirstLaunch())
         {
             goToMainActivity();
+            finish();
         }
+        else
+        {
 
-		// Enable crash reporting
-		Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
+            setContentView(R.layout.splash_pw);
 
-        setContentView(R.layout.splash_pw);
+            tvTask = (TextView) findViewById(R.id.tvTask);
+            progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        tvTask = (TextView) findViewById(R.id.tvTask);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+            Log.i(TAG, "First Launch");
 
-        Log.i(TAG, "First Launch");
+            // get the default language of the device os
+            String deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
+            // set to english in case nothing is found.
+            if (Strings.isNullOrEmpty(deviceDefaultLanguage))
+                deviceDefaultLanguage = ENGLISH_DEFAULT;
 
-        // get the default language of the device os
-        String deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
-        // set to english in case nothing is found.
-        if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = "en";
+            Log.i(TAG, deviceDefaultLanguage);
 
-        Log.i(TAG, deviceDefaultLanguage);
+            // set primary language on first start
+            settings.edit().putString(GTLanguage.KEY_PRIMARY, deviceDefaultLanguage).apply();
 
-        // set primary language on first start
-        settings.edit().putString(GTLanguage.KEY_PRIMARY, deviceDefaultLanguage).apply();
+            // set up files
+            PrepareInitialContentTask.run(getApp().getApplicationContext(), getApp().getDocumentsDir());
 
-        // set up files
-        PrepareInitialContentTask.run(getApp().getApplicationContext(), getApp().getDocumentsDir());
+            showLoading(getString(R.string.check_update));
 
-        showLoading(getString(R.string.check_update));
-
-        GodToolsApiClient.getListOfPackages(META,this);
+            GodToolsApiClient.getListOfPackages(META, this);
+        }
     }
 
     @Override
@@ -110,7 +117,7 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler
 
     private boolean isFirstLaunch()
     {
-        return settings.getBoolean("firstLaunch", true);
+        return settings.getBoolean(FIRST_LAUNCH, true);
     }
 
     private void showLoading(String msg)
@@ -125,9 +132,9 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler
         // so now that we are expiring the translator code after 12 hours we will auto "log out" the
         // user when the app is restarted.
 
-        if (settings.getBoolean("TranslatorMode", false))
+        if (settings.getBoolean(TRANSLATOR_MODE, false))
         {
-            settings.edit().putBoolean("TranslatorMode", false).apply();
+            settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
         }
 
         Intent intent = new Intent(this, MainPW.class);
@@ -143,7 +150,7 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler
     @Override
     public void metaTaskComplete(List<GTLanguage> languageList, String tag)
     {
-        UpdatePackageListTask.run(languageList,DBAdapter.getInstance(this));
+        UpdatePackageListTask.run(languageList, DBAdapter.getInstance(this));
 
         goToMainActivity();
     }

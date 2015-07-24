@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.keynote.godtools.android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="org.keynote.godtools.android"
     android:versionCode="12"
     android:versionName="4.0.1"
     android:installLocation="preferExternal">
 
     <application
+        android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:description="@string/app_description"
         android:name=".snuffy.SnuffyApplication"
         android:theme="@style/AppTheme">
-        <!--android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"> -->
+
         <activity
             android:name="Splash"
             android:label="@string/app_name"
@@ -43,7 +45,8 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTop"
             android:parentActivityName=".MainPW"
-            android:theme="@style/GodToolsIP4">
+            android:theme="@style/GodToolsIP4"
+            tools:ignore="UnusedAttribute">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -56,7 +59,8 @@
             android:label="Select Language"
             android:screenOrientation="portrait"
             android:parentActivityName="org.keynote.godtools.android.SettingsPW"
-            android:theme="@style/GodToolsIP4">
+            android:theme="@style/GodToolsIP4"
+            tools:ignore="UnusedAttribute">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -64,21 +68,6 @@
 
         </activity>
 
-
-        <activity
-            android:name="Kgp"
-            android:label="@string/app_name_kgp" />
-
-        <activity
-            android:name="Satisfied"
-            android:label="@string/app_name_satisfied" />
-        <activity
-            android:name="SpiritualLaws"
-            android:label="@string/app_name_sl" />
-        <activity
-            android:name="GalleryHelp"
-            android:label="@string/app_name_gallery_help"
-            android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".everystudent.EveryStudent"
             android:label="@string/app_name_everystudent"
@@ -102,30 +91,18 @@
 
         <provider
             android:name=".everystudent.EveryStudentProvider"
-            android:authorities="org.keynote.godtools.android.everystudent.EveryStudentProvider" />
+            android:authorities="org.keynote.godtools.android.everystudent.EveryStudentProvider"
+            android:exported="false"/>
 
         <meta-data
             android:name="android.app.default_searchable"
             android:value=".everystudent.EveryStudentSearchResults" />
 
         <activity
-            android:name=".snuffy.SnuffyActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".snuffy.SnuffyAboutActivity"
             android:label="@string/app_title"
             android:screenOrientation="portrait"
             android:theme="@style/SnuffyTheme" />
-        <activity
-            android:name=".snuffy.SnuffyPageMenuActivity"
-            android:label="@string/app_title"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light" />
-        <activity
-            android:name=".snuffy.SnuffyLanguageActivity"
-            android:label="@string/app_title"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light" />
         <activity
             android:name=".snuffy.SnuffyHelpActivity"
             android:label="@string/app_title"
@@ -148,16 +125,43 @@
                 <category android:name="org.keynote.godtools.android" />
             </intent-filter>
         </receiver>
+
         <service android:name=".notifications.GcmIntentService" />
+
         <service android:name=".service.BackgroundService"
                  android:exported="false" />
+        <service android:name=".notifications.NotificationService"
+                 android:exported="false" />
+
         <meta-data android:name="com.google.android.gms.version"
                    android:value="@integer/google_play_services_version" />
+
+        <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
+                  android:enabled="true"
+                  tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.google.android.gms.analytics.AnalyticsService"
+                 android:enabled="true"
+                 android:exported="false"/>
+
+        <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+                  android:exported="true"
+                  tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+
     </application>
 
     <uses-sdk
         android:minSdkVersion="10"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="22"
+        tools:ignore="ManifestOrder"/>
     <supports-screens
         android:smallScreens="false"
         android:resizeable="false" />

@@ -3,6 +3,7 @@ package org.keynote.godtools.android.broadcast;
 /**
  * Created by matthewfrederick on 2/17/15.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public enum Type
 {
     AUTH,
