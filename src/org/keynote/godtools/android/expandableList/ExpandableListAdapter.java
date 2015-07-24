@@ -50,7 +50,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
     private List<GTPackage> packages;
     private GTPackage currentPackage;
     private String languagePrimary;
-    private LocalBroadcastManager broadcastManager;
 
     int lastExpandedPosition = -1;
     
@@ -64,7 +63,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
 
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
-        broadcastManager = LocalBroadcastManager.getInstance(context);
 
         // child list needs one item to show expandable menu
         List<String> childList = new ArrayList<String>(1);
@@ -148,18 +146,18 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         if (FOUR_LAWS.equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_4lawsicon);
         if (SATISFIED.equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_satisfiedicon);
         
-        if (localPackage.getCode().contains("draft"))
+        if (localPackage.isAvailable())
+        {
+            textView.setTextColor(context.getResources().getColor(android.R.color.black));
+            layout.setBackgroundColor(context.getResources().getColor(R.color.current_draft_opacity));
+            convertView.findViewById(R.id.icon_line).setVisibility(View.INVISIBLE);
+        }
+        else
         {
             textView.setTextColor(context.getResources().getColor(android.R.color.white));
             icon.setImageResource(android.R.color.transparent);
             layout.setBackgroundColor(context.getResources().getColor(R.color.new_draft_opacity));
             convertView.findViewById(R.id.icon_line).setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            textView.setTextColor(context.getResources().getColor(android.R.color.black));
-            layout.setBackgroundColor(context.getResources().getColor(R.color.current_draft_opacity));
-            convertView.findViewById(R.id.icon_line).setVisibility(View.INVISIBLE);
         }
 
         ImageView subMenu = (ImageView) convertView.findViewById(R.id.sub_menu);
@@ -250,9 +248,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                         switch (which)
                         {
                             case DialogInterface.BUTTON_POSITIVE:
-                                
-                                broadcastManager.sendBroadcast(startBroadcast());
-                                
+
                                 GodToolsApiClient.publishDraft(settings.getString(AUTH_DRAFT, ""),
                                         currentPackage.getLanguage(),
                                         currentPackage.getCode(),
@@ -262,14 +258,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             public void draftTaskComplete()
                                             {
                                                 Toast.makeText(context, "Draft has been published", Toast.LENGTH_SHORT).show();
-                                                broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_PUBLISH_TASK));
                                             }
 
                                             @Override
                                             public void draftTaskFailure(int statusCode)
                                             {
                                                 Toast.makeText(context, "Failed to publish draft", Toast.LENGTH_SHORT).show();
-                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR, statusCode));
                                             }
                                         });
                                 break;
@@ -297,7 +291,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                         {
                             case DialogInterface.BUTTON_POSITIVE:
                                 
-                                broadcastManager.sendBroadcast(startBroadcast());
                                 Log.i(TAG, "Creating Draft");
                                 
                                 GodToolsApiClient.createDraft(settings.getString(AUTH_DRAFT, ""),
@@ -309,15 +302,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             public void draftTaskComplete()
                                             {
                                                 Toast.makeText(context.getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT).show();
-                                                broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_CREATION_TASK));
                                             }
 
                                             @Override
                                             public void draftTaskFailure(int code)
                                             {
                                                 Toast.makeText(context.getApplicationContext(), "Failed to create a new draft", Toast.LENGTH_SHORT).show();
-
-                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR, code));
                                             }
                                         });
                                 break;

@@ -29,7 +29,7 @@ public class GodToolsApiClient {
 
     public static void getListOfDrafts(String authorization, String language, String tag, MetaTask.MetaTaskHandler taskHandler){
         DraftMetaTask draftTask = new DraftMetaTask(taskHandler, authorization);
-        String url = BASE_URL + ENDPOINT_META + language;
+        String url = BASE_URL_V2 + ENDPOINT_META + language;
         draftTask.execute(url, tag);
     }
 
@@ -54,7 +54,7 @@ public class GodToolsApiClient {
     }
 
     public static void downloadDrafts(SnuffyApplication app, String authorization, String langCode, String tag, DownloadTask.DownloadTaskHandler taskHandler){
-        String url = BASE_URL + ENDPOINT_DRAFTS + langCode + "?compressed=true";
+        String url = BASE_URL_V2 + ENDPOINT_DRAFTS + langCode + "?compressed=true";
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + File.separator + "package.zip";
 
         download(app.getApplicationContext(), url, filePath, tag, authorization, langCode, taskHandler);
@@ -84,7 +84,7 @@ public class GodToolsApiClient {
                                    String packageCode,
                                    DraftCreationTask.DraftTaskHandler taskHandler)
     {
-        String url = BASE_URL + ENDPOINT_TRANSLATIONS + languageCode + File.separator + packageCode;
+        String url = BASE_URL_V2 + ENDPOINT_TRANSLATIONS + languageCode + File.separator + packageCode;
 
         new DraftCreationTask(taskHandler).execute(url, authorization);
     }
@@ -94,7 +94,7 @@ public class GodToolsApiClient {
                                     String packageCode,
                                     DraftPublishTask.DraftTaskHandler taskHandler)
     {
-        String url = BASE_URL + ENDPOINT_TRANSLATIONS + languageCode + File.separator + packageCode;
+        String url = BASE_URL_V2 + ENDPOINT_TRANSLATIONS + languageCode + File.separator + packageCode;
 
         new DraftPublishTask(taskHandler).execute(url, authorization);
     }

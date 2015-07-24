@@ -43,7 +43,7 @@ public class DraftPublishTask extends AsyncTask<Object, Void, Integer>
 
         HttpParams httpParams = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParams, 10000);
-        HttpConnectionParams.setSoTimeout(httpParams, 10000);
+        HttpConnectionParams.setSoTimeout(httpParams, 30000);
 
         HttpClient httpClient = new DefaultHttpClient(httpParams);
 
@@ -54,14 +54,14 @@ public class DraftPublishTask extends AsyncTask<Object, Void, Integer>
         catch (IOException e)
         {
             e.printStackTrace();
-            return null;
+            return 400;
         }
     }
 
     @Override
     protected void onPostExecute(Integer responseStatusCode)
     {
-        if(responseStatusCode.equals(204))
+        if(responseStatusCode / 100 == 2)
         {
             taskHandler.draftTaskComplete();
         }

@@ -250,35 +250,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
                 break;
             }
-            case RESULT_DOWNLOAD_PRIMARY:
-            {
-                // start the download
-                showLoading();
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        data.getStringExtra("primaryCode"),
-                        KEY_PRIMARY,
-                        this);
-                break;
-            }
-            case RESULT_DOWNLOAD_PARALLEL:
-            {
-                // refresh the list if the primary language was changed
-                String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-                if (!languagePrimary.equalsIgnoreCase(primaryCode))
-                {
-                    languagePrimary = primaryCode;
-                    packageList = getPackageList();
-                    showLayoutsWithPackages();
-                }
-
-                String code = data.getStringExtra("parallelCode");
-                showLoading();
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        code,
-                        KEY_PARALLEL,
-                        this);
-                break;
-            }
             case RESULT_PREVIEW_MODE_DISABLED:
             {
                 // refresh the list

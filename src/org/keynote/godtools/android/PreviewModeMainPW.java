@@ -72,9 +72,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
     Context context;
 
-    boolean noPackages = false;
-    boolean justSwitchedToTranslatorMode;
-    
     ExpandableListAdapter listAdapter;
     ExpandableListView listView;
 
@@ -99,7 +96,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             public void onRefresh()
             {
                 Log.i(TAG, "Starting refresh");
-                onCmd_refresh();
+                refreshDrafts();
             }
         });
 
@@ -117,10 +114,8 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-        justSwitchedToTranslatorMode = settings.getBoolean(JUST_SWITCHED, false);
 
-        swipeRefreshLayout.setRefreshing(true);
-        onCmd_refresh();
+        refreshDrafts();
     }
     
     private void setupExpandableList()
@@ -207,52 +202,21 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
              * If only one or the other were changed, no harm in running this code, but we do need to make sure the main screen updates
              * if the both were changed.  If if both were changed RESULT_CHANGED_PARALLEL were not added here, then the home screen would
              * not reflect the changed primary language*/
+
+            default:
+                refreshDrafts();
             case RESULT_CHANGED_PRIMARY:
             case RESULT_CHANGED_PARALLEL:
             {
                 getApp().setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
+                languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
 
-                swipeRefreshLayout.setRefreshing(true);
-                onCmd_refresh();
+                getPackageList();
 
-                refreshPackageList(false);
-                createTheHomeScreen();
-
-                break;
-            }
-            case RESULT_DOWNLOAD_PRIMARY:
-            {
-                // start the download
-                String code = data.getStringExtra("primaryCode");
-
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        code,
-                        "primary",
-                        this);
-                break;
-            }
-            case RESULT_DOWNLOAD_PARALLEL:
-            {
-                // refresh the list if the primary language was changed
-                String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-                if (!languagePrimary.equalsIgnoreCase(primaryCode))
-                {
-                    languagePrimary = primaryCode;
-                    getPackageList();
-                }
-
-                String code = data.getStringExtra("parallelCode");
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                        code,
-                        "parallel",
-                        this);
                 break;
             }
             case RESULT_PREVIEW_MODE_ENABLED:
             {
-                GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
-                        languagePrimary, "draft_primary", this);
-
                 Toast.makeText(PreviewModeMainPW.this, "Translator preview mode is enabled",
                         Toast.LENGTH_LONG).show();
 
@@ -261,26 +225,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
                 break;
             }
-        }
-    }
-
-    /**
-     * @param withFallback specifies when true will fallback to English if the primary language code
-     *                     has no packages available.  This is true when leaving translator mode in a language with all
-     *                     drafts and no published live versions.
-     */
-    private void refreshPackageList(boolean withFallback)
-    {
-        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
-        getPackageList();
-
-        if(withFallback && packageList.isEmpty())
-        {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, "en");
-            editor.apply();
-            languagePrimary = "en";
-            getPackageList();
         }
     }
 
@@ -296,12 +240,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     protected void onResume()
     {
         super.onResume();
-        doSetup();
-    }
-
-    private void doSetup()
-    {
-        createTheHomeScreen();
+        getPackageList();
         getScreenSize();
     }
 
@@ -341,28 +280,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         mPageHeight = height;
     }
 
-    private void createTheHomeScreen()
-    {
-        /*
-         * This method is called each time the UI needs to be refreshed.
-         */
-
-        // If no packages are available for a language, then fallback to English
-        if (justSwitchedToTranslatorMode)
-        {
-            /*
-             * When switching to translator mode, the MainPW activity is restarted. However, the packageList and
-             * packageFrag need to be refreshed based on the newly downloaded items. The justSwitchedToTranslatorMode is
-             * saved in the settings and when true, this will refresh the packages available.
-             */
-            getPackageList();
-        }
-
-        noPackages = false;
-
-        EventTracker.track(getApp(), "Translator Page", languagePrimary);
-    }
-
     private void getPackageList()
     {
         boolean kgpPresent = false;
@@ -392,7 +309,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             if (!kgpPresent)
             {
                 GTPackage kgpPack = new GTPackage();
-                kgpPack.setCode("draftkgp");
+                kgpPack.setCode("kgp");
                 kgpPack.setName("Knowing God Personally");
                 kgpPack.setAvailable(false);
                 packageByLanguage.add(kgpPack);
@@ -401,7 +318,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             if (!satisfiedPresent)
             {
                 GTPackage satPack = new GTPackage();
-                satPack.setCode("draftsatisfied");
+                satPack.setCode("satisfied");
                 satPack.setName("Satisfied?");
                 satPack.setAvailable(false);
                 packageByLanguage.add(satPack);
@@ -410,7 +327,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             if (!fourlawsPresent)
             {
                 GTPackage fourLawPack = new GTPackage();
-                fourLawPack.setCode("draftfourlaws");
+                fourLawPack.setCode("fourlaws");
                 fourLawPack.setName("The Four Spiritual Laws");
                 fourLawPack.setAvailable(false);
                 packageByLanguage.add(fourLawPack);
@@ -484,10 +401,12 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         startActivityForResult(intent, REQUEST_SETTINGS);
     }
 
-    private void onCmd_refresh()
+    private void refreshDrafts()
     {
         if (Device.isConnected(PreviewModeMainPW.this))
         {
+            swipeRefreshLayout.setRefreshing(true);
+
             GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
                     languagePrimary, "draft", this);
 
@@ -565,13 +484,11 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         if (401 == statusCode)
         {
             showAccessCodeDialog();
-            Toast.makeText(PreviewModeMainPW.this, getString(R.string.expired_passcode),
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.expired_passcode), Toast.LENGTH_LONG).show();
         }
         else
         {
-            Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
         }
 
         if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))
@@ -588,10 +505,8 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     {
         if (tag.equalsIgnoreCase("draft"))
         {
-            Toast.makeText(PreviewModeMainPW.this, "Drafts have been updated",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(PreviewModeMainPW.this, "Drafts have been updated", Toast.LENGTH_SHORT).show();
             getPackageList();
-            createTheHomeScreen();
 
             swipeRefreshLayout.setRefreshing(false);
             Log.i(TAG, "Done refreshing");
@@ -600,12 +515,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         {
             languagePrimary = langCode;
             getPackageList();
-
-            createTheHomeScreen();
-        }
-        else if (tag.equalsIgnoreCase("draft_parallel"))
-        {
-            createTheHomeScreen();
         }
 
         swipeRefreshLayout.setRefreshing(false);
@@ -631,5 +540,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             Toast.makeText(PreviewModeMainPW.this, "Failed to download resources",
                     Toast.LENGTH_SHORT).show();
         }
+
+        swipeRefreshLayout.setRefreshing(false);
     }
 }
