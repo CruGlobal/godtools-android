@@ -15,7 +15,6 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.business.GTLanguage;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.Locale;
 import java.util.Vector;
 
@@ -30,9 +29,8 @@ public class SnuffyApplication extends Application
     public SnuffyPage mAboutView;
     public String mPackageTitle;
 
-    public Tracker tracker;
-
-    public Locale mDeviceLocale, mAppLocale;
+    private Locale mDeviceLocale;
+    private Locale mAppLocale;
 
     @Override
     public void onCreate()
@@ -81,45 +79,9 @@ public class SnuffyApplication extends Application
         return documentsDir;
     }
 
-    public boolean assetExists(String fileName)
-    {
-        try
-        {
-            InputStream is = getAssets().open(fileName);
-            is.close();
-            return true;
-        } catch (Exception e)
-        {
-            return false;
-        }
-    }
-
-    public boolean fileExists(String fileName)
-    {
-        File f = new File(getDocumentsDir() + "/" + fileName);
-        return f.exists();
-    }
-
-    public boolean languageExistsAsAsset(String packageName, String languageCode)
-    {
-        String testFileName = "Packages/" + packageName + "/" + languageCode + ".xml";
-        return assetExists(testFileName);
-    }
-
-    public boolean languageExistsAsFile(String packageName, String languageCode)
-    {
-        String testFileName = "Packages/" + packageName + "/" + languageCode + ".xml";
-        return fileExists(testFileName);
-    }
-
     public Tracker getTracker()
     {
-        if (tracker == null)
-        {
             return org.keynote.godtools.android.utils.GoogleAnalytics.getTracker(this);
-        }
-
-        return tracker;
     }
 
     public void setAppLocale(String languageCode)
