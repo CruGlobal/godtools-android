@@ -80,7 +80,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
 
     private List<HomescreenLayout> layouts;
 
-    SharedPreferences settings;
+    private SharedPreferences settings;
 
     /**
      * Called when the activity is first created.
@@ -89,7 +89,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
     public void onCreate(Bundle savedInstanceState)
     {
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
 
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
 
@@ -264,7 +264,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
      *                     has no packages available.  This is true when leaving translator mode in a language with all
      *                     drafts and no published live versions.
      */
-    private void refreshPackageList(boolean withFallback)
+    private void refreshPackageList(@SuppressWarnings("SameParameterValue") boolean withFallback)
     {
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, EMPTY_STRING);
         packageList = getPackageList();
@@ -484,9 +484,7 @@ public class MainPW extends ActionBarActivity implements PackageListFragment.OnP
     {
         if (tag.equalsIgnoreCase(KEY_PRIMARY) || tag.equalsIgnoreCase(KEY_PARALLEL))
         {
-
-            Toast.makeText(MainPW.this, "Failed to download resources", Toast.LENGTH_SHORT).show();
-
+            Toast.makeText(MainPW.this, getString(R.string.failed_download_resources), Toast.LENGTH_SHORT).show();
         }
 
         hideLoading();
