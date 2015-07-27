@@ -16,8 +16,6 @@ public class Constants
     public static final String KEY_PRIMARY = "primary";
     public static final String KEY_PARALLEL = "parallel";
     public static final String META = "meta";
-    public static final String LANG_CODE = "lang_code";
-    public static final String BACKGROUND_TASK_TAG = "task_tag";
 
     public static final String COUNT = "count";
     public static final String ENGLISH_DEFAULT = "en";
