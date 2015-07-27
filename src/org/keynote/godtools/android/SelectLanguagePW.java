@@ -38,6 +38,7 @@ import java.util.List;
 
 import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.LANGUAGE_TYPE;
 import static org.keynote.godtools.android.utils.Constants.MAIN_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.PARALLEL_LANGUAGE;
@@ -46,7 +47,8 @@ import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PARALL
 import static org.keynote.godtools.android.utils.Constants.RESULT_CHANGED_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
-public class SelectLanguagePW extends ActionBarActivity implements AdapterView.OnItemClickListener, DownloadTask.DownloadTaskHandler
+public class SelectLanguagePW extends ActionBarActivity implements
+        AdapterView.OnItemClickListener, DownloadTask.DownloadTaskHandler
 {
     private final String TAG = getClass().getSimpleName();
 
@@ -64,7 +66,6 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
     private boolean downloadOnly;
     private int index;
     private int top;
-
 
     private SnuffyApplication app;
 
@@ -127,7 +128,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
         setList();
     }
     
-    public void setList()
+    private void setList()
     {
         if (languageType.equalsIgnoreCase(MAIN_LANGUAGE))
         {
@@ -205,9 +206,9 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
                 currentView.tvDownload.setText(R.string.downloading);
                 currentView.pbDownloading.setVisibility(View.VISIBLE);
 
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                GodToolsApiClient.downloadLanguagePack(app,
                         gtl.getLanguageCode(),
-                        "primary",
+                        KEY_PRIMARY,
                         this);
             }
         }
@@ -235,9 +236,9 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
                 currentView.tvDownload.setText(R.string.downloading);
                 currentView.pbDownloading.setVisibility(View.VISIBLE);
 
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                GodToolsApiClient.downloadLanguagePack(app,
                         gtl.getLanguageCode(),
-                        "primary",
+                        KEY_PRIMARY,
                         this);            }
         }
     }
@@ -255,7 +256,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
         {
             if (languageCode.equalsIgnoreCase(parallelLanguage))
             {
-                storeLanguageCode(GTLanguage.KEY_PARALLEL, "");
+                storeLanguageCode(GTLanguage.KEY_PARALLEL, EMPTY_STRING);
             }
         }
 
@@ -278,8 +279,8 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
 
     private class LanguageAdapter extends ArrayAdapter<GTLanguage>
     {
-        private LayoutInflater mInflater;
-        private List<GTLanguage> mLanguageList;
+        private final LayoutInflater mInflater;
+        private final List<GTLanguage> mLanguageList;
         private String currentLanguage;
 
         public LanguageAdapter(Context context, List<GTLanguage> objects)
@@ -383,7 +384,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
         // if downloading, check for internet connection;
         if (!language.isDownloaded() && !Device.isConnected(SelectLanguagePW.this))
         {
-            Toast.makeText(SelectLanguagePW.this, "No internet connection, resources needs to be downloaded.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SelectLanguagePW.this, getString(R.string.internet_needed), Toast.LENGTH_SHORT).show();
             return;
         }
         
@@ -397,7 +398,7 @@ public class SelectLanguagePW extends ActionBarActivity implements AdapterView.O
 
             GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                     language.getLanguageCode(),
-                    "primary",
+                    KEY_PRIMARY,
                     this);
         }
         else
