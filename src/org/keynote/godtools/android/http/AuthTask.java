@@ -17,18 +17,13 @@ public class AuthTask extends AsyncTask<Object, Void, String>
 {
 
     private static final String TAG = AuthTask.class.getSimpleName();
-    private AuthTaskHandler taskHandler;
+    private final AuthTaskHandler taskHandler;
     private int statusCode;
     // lets the task know that the access code is being authenticated
     private boolean authenticateAccessCode = false;
 
     // lets the task know that the access code status is being verified
     private boolean verifyStatus = false;
-
-    public AuthTask(AuthTaskHandler listener)
-    {
-        taskHandler = listener;
-    }
 
     public AuthTask(AuthTaskHandler listener, boolean authenticateAccessCode, boolean verifyStatus)
     {

@@ -28,8 +28,8 @@ import static org.keynote.godtools.android.utils.Constants.DRAFT;
 public class DownloadTask extends AsyncTask<Object, Void, Boolean>
 {
 
-    private DownloadTaskHandler mTaskHandler;
-    private Context mContext;
+    private final DownloadTaskHandler mTaskHandler;
+    private final Context mContext;
     private String url, filePath, tag, langCode;
 
     public DownloadTask(Context context, DownloadTaskHandler taskHandler)
