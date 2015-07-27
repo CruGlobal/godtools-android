@@ -46,10 +46,14 @@ import java.util.List;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.CONFIG_FILE_NAME;
 import static org.keynote.godtools.android.utils.Constants.DRAFT;
+import static org.keynote.godtools.android.utils.Constants.DRAFT_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.DRAFT_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.EMPTY_STRING;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
+import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.KGP;
 import static org.keynote.godtools.android.utils.Constants.LANGUAGE_CODE;
 import static org.keynote.godtools.android.utils.Constants.PACKAGE_NAME;
@@ -495,11 +499,11 @@ public class PreviewModeMainPW extends ActionBarActivity implements
         }
         else
         {
-            Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts",
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_download_draft),
                     Toast.LENGTH_SHORT).show();
         }
 
-        if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))
+        if (tag.equalsIgnoreCase(DRAFT) || tag.equalsIgnoreCase(DRAFT_PRIMARY))
         {
             getPackageList();
         }
@@ -511,9 +515,9 @@ public class PreviewModeMainPW extends ActionBarActivity implements
     @Override
     public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
     {
-        if (tag.equalsIgnoreCase("draft"))
+        if (tag.equalsIgnoreCase(DRAFT))
         {
-            Toast.makeText(PreviewModeMainPW.this, "Drafts have been updated",
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.drafts_updated),
                     Toast.LENGTH_SHORT).show();
             getPackageList();
             createTheHomeScreen();
@@ -521,14 +525,14 @@ public class PreviewModeMainPW extends ActionBarActivity implements
             swipeRefreshLayout.setRefreshing(false);
             Log.i(TAG, "Done refreshing");
         }
-        else if (tag.equalsIgnoreCase("draft_primary"))
+        else if (tag.equalsIgnoreCase(DRAFT_PRIMARY))
         {
             languagePrimary = langCode;
             getPackageList();
 
             createTheHomeScreen();
         }
-        else if (tag.equalsIgnoreCase("draft_parallel"))
+        else if (tag.equalsIgnoreCase(DRAFT_PARALLEL))
         {
             createTheHomeScreen();
         }
@@ -540,20 +544,20 @@ public class PreviewModeMainPW extends ActionBarActivity implements
     public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
     {
 
-        if (tag.equalsIgnoreCase("draft"))
+        if (tag.equalsIgnoreCase(DRAFT))
         {
-            Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts",
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_update_draft),
                     Toast.LENGTH_SHORT).show();
         }
-        else if (tag.equalsIgnoreCase("draft_primary"))
+        else if (tag.equalsIgnoreCase(DRAFT_PRIMARY))
         {
             getPackageList();
-            Toast.makeText(PreviewModeMainPW.this, "Failed to download drafts",
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_download_draft),
                     Toast.LENGTH_SHORT).show();
         }
-        else if (tag.equalsIgnoreCase("primary") || tag.equalsIgnoreCase("parallel"))
+        else if (tag.equalsIgnoreCase(KEY_PRIMARY) || tag.equalsIgnoreCase(KEY_PARALLEL))
         {
-            Toast.makeText(PreviewModeMainPW.this, "Failed to download resources",
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_download_resources),
                     Toast.LENGTH_SHORT).show();
         }
     }
