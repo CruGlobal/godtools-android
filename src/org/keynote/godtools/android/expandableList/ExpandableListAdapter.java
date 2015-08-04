@@ -29,7 +29,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.keynote.godtools.android.broadcast.BroadcastUtil.startBroadcast;
+import static org.keynote.godtools.android.broadcast.BroadcastUtil.draftBroadcast;
+import static org.keynote.godtools.android.broadcast.BroadcastUtil.failBroadcast;
 import static org.keynote.godtools.android.broadcast.BroadcastUtil.stopBroadcast;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
@@ -51,6 +52,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
     private List<GTPackage> packages;
     private GTPackage currentPackage;
     private String languagePrimary;
+    private LocalBroadcastManager broadcastManager;
 
     int lastExpandedPosition = -1;
     
@@ -64,6 +66,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
 
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
+        broadcastManager = LocalBroadcastManager.getInstance(context);
 
         // child list needs one item to show expandable menu
         List<String> childList = new ArrayList<String>(1);
@@ -249,7 +252,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                         switch (which)
                         {
                             case DialogInterface.BUTTON_POSITIVE:
-
+                                
+                                broadcastManager.sendBroadcast(draftBroadcast());
+                                
                                 GodToolsApiClient.publishDraft(settings.getString(AUTH_DRAFT, ""),
                                         currentPackage.getLanguage(),
                                         currentPackage.getCode(),
@@ -258,6 +263,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             @Override
                                             public void draftTaskComplete()
                                             {
+                                                broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_PUBLISH_TASK));
                                                 Toast.makeText(context, "Draft has been published", Toast.LENGTH_SHORT).show();
                                                 ((PreviewModeMainPW)context).refreshDrafts();
                                             }
@@ -265,6 +271,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             @Override
                                             public void draftTaskFailure(int statusCode)
                                             {
+                                                broadcastManager.sendBroadcast(failBroadcast(Type.DRAFT_PUBLISH_TASK));
                                                 Toast.makeText(context, "Failed to publish draft", Toast.LENGTH_SHORT).show();
                                             }
                                         });
@@ -293,6 +300,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                         {
                             case DialogInterface.BUTTON_POSITIVE:
                                 
+                                broadcastManager.sendBroadcast(draftBroadcast());
                                 Log.i(TAG, "Creating Draft");
                                 
                                 GodToolsApiClient.createDraft(settings.getString(AUTH_DRAFT, ""),
@@ -303,6 +311,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             @Override
                                             public void draftTaskComplete()
                                             {
+                                                broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_CREATION_TASK));
                                                 Toast.makeText(context.getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT).show();
                                                 ((PreviewModeMainPW)context).refreshDrafts();
                                             }
@@ -310,6 +319,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             @Override
                                             public void draftTaskFailure(int code)
                                             {
+                                                broadcastManager.sendBroadcast(failBroadcast(Type.DRAFT_CREATION_TASK));
                                                 Toast.makeText(context.getApplicationContext(), "Failed to create a new draft", Toast.LENGTH_SHORT).show();
                                             }
                                         });

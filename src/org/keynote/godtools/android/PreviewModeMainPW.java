@@ -3,6 +3,7 @@ package org.keynote.godtools.android;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
@@ -25,13 +27,14 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.keynote.godtools.android.broadcast.BroadcastUtil;
+import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.expandableList.ExpandableListAdapter;
 import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
-import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
@@ -67,6 +70,9 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     private String languagePrimary;
     private List<GTPackage> packageList;
     private SwipeRefreshLayout swipeRefreshLayout;
+
+    private LocalBroadcastManager broadcastManager;
+    private BroadcastReceiver broadcastReceiver;
 
     private SharedPreferences settings;
 
@@ -111,6 +117,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         titleBar.setText(R.string.preview_mode_title);
 
         context = getApplicationContext();
+        setupBroadcastReceiver();
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
@@ -167,6 +174,54 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         });
     }
 
+    private void setupBroadcastReceiver()
+    {
+        broadcastManager = LocalBroadcastManager.getInstance(context);
+
+        broadcastReceiver = new BroadcastReceiver()
+        {
+            @Override
+            public void onReceive(Context context, Intent intent)
+            {
+
+                if (pdLoading != null) pdLoading.dismiss();
+
+                if (BroadcastUtil.ACTION_DRAFT_START.equals(intent.getAction()))
+                {
+                    showLoading("Connecting with server");
+                }
+                else if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
+                {
+                    pdLoading.hide();
+
+                    Type type = (Type) intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE);
+
+                    if (Type.DISABLE_TRANSLATOR.equals(type))
+                    {
+                        Toast.makeText(PreviewModeMainPW.this, "Translator preview mode is disabled",
+                                Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                }
+
+                if (BroadcastUtil.ACTION_FAIL.equals(intent.getAction()))
+                {
+                    pdLoading.hide();
+                }
+            }
+        };
+
+        broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.startDraftFilter());
+        broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.stopFilter());
+        broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.failedFilter());
+    }
+
+    private void removeBroadcastReceiver()
+    {
+        broadcastManager.unregisterReceiver(broadcastReceiver);
+        broadcastReceiver = null;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -215,16 +270,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
                 break;
             }
-            case RESULT_PREVIEW_MODE_ENABLED:
-            {
-                Toast.makeText(PreviewModeMainPW.this, "Translator preview mode is enabled",
-                        Toast.LENGTH_LONG).show();
-
-                finish();
-                startActivity(getIntent());
-
-                break;
-            }
         }
     }
 
@@ -242,6 +287,13 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         super.onResume();
         getPackageList();
         getScreenSize();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        removeBroadcastReceiver();
     }
 
     private void getScreenSize()
