@@ -79,19 +79,19 @@ public class NotificationsClient
         String registrationId = NotificationUtilities.getStoredRegistrationId(context, userSettings);
 
         GodToolsApiClient.updateNotification(authorization, registrationId, NotificationInfo.AFTER_3_USES, new NotificationUpdateTask.NotificationUpdateTaskHandler()
-                {
-                    @Override
-                    public void registrationComplete(String regId)
-                    {
-                        Log.i(NotificationInfo.NOTIFICATION_TAG, "3 Uses Notification notice sent to API");
-                    }
+        {
+            @Override
+            public void registrationComplete(String regId)
+            {
+                Log.i(NotificationInfo.NOTIFICATION_TAG, "3 Uses Notification notice sent to API");
+            }
 
-                    @Override
-                    public void registrationFailed()
-                    {
-                        Log.e(NotificationInfo.NOTIFICATION_TAG, "3 Uses notification notice failed to send to API");
-                    }
-                });
+            @Override
+            public void registrationFailed()
+            {
+                Log.e(NotificationInfo.NOTIFICATION_TAG, "3 Uses notification notice failed to send to API");
+            }
+        });
     }
 
     private boolean isAppInForeground()
@@ -103,3 +103,4 @@ public class NotificationsClient
                 .equalsIgnoreCase(context.getPackageName()));
     }
 }
+
