@@ -13,7 +13,6 @@ public class GodToolsApiClient {
 
     private static final String BASE_URL_V2 = "https://api.stage.godtoolsapp.com/godtools-api/rest/v2/";
     private static final String BASE_URL = "https://api.stage.godtoolsapp.com/godtools-api/rest/";
-//    private static final String BASE_URL = "http://localhost:8080/godtools-api/rest/v2/";
     private static final String ENDPOINT_META = "meta/";
     private static final String ENDPOINT_PACKAGES = "packages/";
     private static final String ENDPOINT_TRANSLATIONS = "translations/";
