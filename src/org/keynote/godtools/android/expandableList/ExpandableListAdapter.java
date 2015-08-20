@@ -265,7 +265,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             {
                                                 broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_PUBLISH_TASK));
                                                 Toast.makeText(context, "Draft has been published", Toast.LENGTH_SHORT).show();
-                                                ((PreviewModeMainPW)context).refreshDrafts();
                                             }
 
                                             @Override
@@ -313,7 +312,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             {
                                                 broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_CREATION_TASK));
                                                 Toast.makeText(context.getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT).show();
-                                                ((PreviewModeMainPW)context).refreshDrafts();
                                             }
 
                                             @Override
