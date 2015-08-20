@@ -1,10 +1,13 @@
 package org.keynote.godtools.android;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.keynote.godtools.android.broadcast.BroadcastUtil;
+import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
@@ -66,6 +71,9 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private List<HomescreenLayout> layouts;
 
+    private LocalBroadcastManager broadcastManager;
+    private BroadcastReceiver broadcastReceiver;
+
     SharedPreferences settings;
 
     /**
@@ -93,6 +101,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         actionBar.setCustomView(R.layout.titlebar_centered_title);
         TextView titleBar = (TextView) actionBar.getCustomView().findViewById(R.id.titlebar_title);
         titleBar.setText(R.string.app_title);
+
+        setupBroadcastReceiver();
 
         setupLayout();
 
@@ -203,6 +213,56 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     }
 
     @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        removeBroadcastReceiver();
+    }
+
+    private void setupBroadcastReceiver()
+    {
+        broadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+
+        broadcastReceiver = new BroadcastReceiver()
+        {
+            @Override
+            public void onReceive(Context context, Intent intent)
+            {
+                 if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
+                {
+                    Type type = (Type) intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE);
+
+                    if (Type.ENABLE_TRANSLATOR.equals(type))
+                    {
+                        // refresh the list
+                        String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+
+                        refreshPackageList(true);
+
+                        if (!languagePrimary.equalsIgnoreCase(primaryCode))
+                        {
+                            SnuffyApplication app = (SnuffyApplication) getApplication();
+                            app.setAppLocale(primaryCode);
+                        }
+
+                        Toast.makeText(MainPW.this, "Translator preview mode is enabled", Toast.LENGTH_LONG).show();
+
+                        finish();
+                    }
+                }
+            }
+        };
+
+        broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.stopFilter());
+    }
+
+    private void removeBroadcastReceiver()
+    {
+        broadcastManager.unregisterReceiver(broadcastReceiver);
+        broadcastReceiver = null;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
         MenuInflater inflater = getMenuInflater();
@@ -246,26 +306,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
                 refreshPackageList(false);
                 createTheHomeScreen();
-
-                break;
-            }
-            case RESULT_PREVIEW_MODE_DISABLED:
-            {
-                // refresh the list
-                String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-
-                refreshPackageList(true);
-
-                if (!languagePrimary.equalsIgnoreCase(primaryCode))
-                {
-                    SnuffyApplication app = (SnuffyApplication) getApplication();
-                    app.setAppLocale(primaryCode);
-                }
-
-                Toast.makeText(MainPW.this, "Translator preview mode is disabled", Toast.LENGTH_LONG).show();
-
-                finish();
-                startActivity(getIntent());
 
                 break;
             }

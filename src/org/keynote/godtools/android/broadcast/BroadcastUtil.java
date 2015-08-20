@@ -10,9 +10,8 @@ import static org.keynote.godtools.android.utils.Constants.STATUS_CODE;
  */
 public final class BroadcastUtil
 {
-    private final String TAG = getClass().getSimpleName();
-
     public static final String ACTION_START = BroadcastUtil.class.getName() + ".ACTION_START";
+    public static final String ACTION_DRAFT_START = BroadcastUtil.class.getName() + ".DRAFT_START";
     public static final String ACTION_STOP = BroadcastUtil.class.getName() + ".ACTION_STOP";
     public static final String ACTION_TYPE = BroadcastUtil.class.getName() + ".ACTION_TYPE";
     public static final String ACTION_FAIL = BroadcastUtil.class.getName() + ".ACTION_FAIL";
@@ -20,6 +19,11 @@ public final class BroadcastUtil
     public static Intent startBroadcast()
     {
         return new Intent(ACTION_START);
+    }
+
+    public static Intent draftBroadcast()
+    {
+        return new Intent(ACTION_DRAFT_START);
     }
     
     public static Intent stopBroadcast(Type type)
@@ -45,6 +49,11 @@ public final class BroadcastUtil
     public static IntentFilter startFilter()
     {
         return new IntentFilter(ACTION_START);
+    }
+
+    public static IntentFilter startDraftFilter()
+    {
+        return new IntentFilter(ACTION_DRAFT_START);
     }
 
     public static IntentFilter stopFilter()
