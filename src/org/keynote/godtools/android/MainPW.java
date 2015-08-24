@@ -628,7 +628,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         }
         else if (tag.equalsIgnoreCase("draft"))
         {
-            Toast.makeText(MainPW.this, "Drafts have been updated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainPW.this, getString(R.string.drafts_updated), Toast.LENGTH_SHORT).show();
             packageList = getPackageList();
             showLayoutsWithPackages();
             hideLoading();
