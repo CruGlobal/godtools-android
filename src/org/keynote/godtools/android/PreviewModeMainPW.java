@@ -184,23 +184,27 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             public void onReceive(Context context, Intent intent)
             {
 
-                if (pdLoading != null) pdLoading.dismiss();
-
                 if (BroadcastUtil.ACTION_DRAFT_START.equals(intent.getAction()))
                 {
                     showLoading("Connecting with server");
                 }
                 else if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
                 {
-                    pdLoading.hide();
 
                     Type type = (Type) intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE);
 
                     if (Type.DISABLE_TRANSLATOR.equals(type))
                     {
+                        pdLoading.hide();
+
                         Toast.makeText(PreviewModeMainPW.this, "Translator preview mode is disabled",
                                 Toast.LENGTH_LONG).show();
+
                         finish();
+                    }
+                    else
+                    {
+                        refreshDrafts();
                     }
                 }
 
@@ -560,13 +564,17 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             Toast.makeText(PreviewModeMainPW.this, "Drafts have been updated", Toast.LENGTH_SHORT).show();
             getPackageList();
 
-            swipeRefreshLayout.setRefreshing(false);
             Log.i(TAG, "Done refreshing");
         }
         else if (tag.equalsIgnoreCase("draft_primary"))
         {
             languagePrimary = langCode;
             getPackageList();
+        }
+
+        if(pdLoading != null && pdLoading.isShowing())
+        {
+            pdLoading.hide();
         }
 
         swipeRefreshLayout.setRefreshing(false);
@@ -591,6 +599,11 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         {
             Toast.makeText(PreviewModeMainPW.this, "Failed to download resources",
                     Toast.LENGTH_SHORT).show();
+        }
+
+        if(pdLoading != null && pdLoading.isShowing())
+        {
+            pdLoading.hide();
         }
 
         swipeRefreshLayout.setRefreshing(false);

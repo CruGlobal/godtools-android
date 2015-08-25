@@ -61,37 +61,40 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
+        // Enable crash reporting
+        Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
+
         if (!isFirstLaunch())
         {
             goToMainActivity();
         }
+        else
+        {
+            setContentView(R.layout.splash_pw);
 
-		// Enable crash reporting
-		Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
+            tvTask = (TextView) findViewById(R.id.tvTask);
+            progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        setContentView(R.layout.splash_pw);
+            Log.i(TAG, "First Launch");
 
-        tvTask = (TextView) findViewById(R.id.tvTask);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+            // get the default language of the device os
+            String deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
+            // set to english in case nothing is found.
+            if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = "en";
 
-        Log.i(TAG, "First Launch");
+            Log.i(TAG, deviceDefaultLanguage);
 
-        // get the default language of the device os
-        String deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
-        // set to english in case nothing is found.
-        if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = "en";
+            // set primary language on first start
+            settings.edit().putString(GTLanguage.KEY_PRIMARY, deviceDefaultLanguage).apply();
 
-        Log.i(TAG, deviceDefaultLanguage);
+            // set up files
+            PrepareInitialContentTask.run(getApp().getApplicationContext(), getApp().getDocumentsDir());
 
-        // set primary language on first start
-        settings.edit().putString(GTLanguage.KEY_PRIMARY, deviceDefaultLanguage).apply();
+            showLoading(getString(R.string.check_update));
 
-        // set up files
-        PrepareInitialContentTask.run(getApp().getApplicationContext(), getApp().getDocumentsDir());
+            GodToolsApiClient.getListOfPackages(META,this);
+        }
 
-        showLoading(getString(R.string.check_update));
-
-        GodToolsApiClient.getListOfPackages(META,this);
     }
 
     @Override

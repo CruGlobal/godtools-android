@@ -31,34 +31,34 @@ public class UpdatePackageListTask
 
         adapter.open();
 
-        for (GTLanguage gtl : languageList)
+        for (GTLanguage languageFromMetaDownload : languageList)
         {
             // check if language is already in the db
-            GTLanguage dbLanguage = adapter.getGTLanguage(gtl.getLanguageCode());
-            if (dbLanguage == null)
+            GTLanguage languageRetrievedFromDatabase = adapter.getGTLanguage(languageFromMetaDownload.getLanguageCode());
+            if (languageRetrievedFromDatabase == null)
             {
-                adapter.insertGTLanguage(gtl);
+                adapter.insertGTLanguage(languageFromMetaDownload);
             }
             else
             {
                 // don't forget that a previously downloaded language was already downloaded.
-                gtl.setDownloaded(dbLanguage.isDownloaded());
-                adapter.updateGTLanguage(gtl);
+                languageFromMetaDownload.setDownloaded(languageRetrievedFromDatabase.isDownloaded());
+                adapter.updateGTLanguage(languageFromMetaDownload);
             }
 
-            dbLanguage = adapter.getGTLanguage(gtl.getLanguageCode());
-            for (GTPackage gtp : gtl.getPackages())
+            languageRetrievedFromDatabase = adapter.getGTLanguage(languageFromMetaDownload.getLanguageCode());
+            for (GTPackage packageFromMetaDownload : languageFromMetaDownload.getPackages())
             {
                 // check if a new package is available for download or an existing package has been updated
-                GTPackage dbPackage = adapter.getGTPackage(gtp.getCode(), gtp.getLanguage(), gtp.getStatus());
-                if (dbPackage == null || newerVersionExists(gtp.getVersion(), dbPackage.getVersion()))
+                GTPackage packageRetrievedFromDatabase = adapter.getGTPackage(packageFromMetaDownload.getCode(), packageFromMetaDownload.getLanguage(), packageFromMetaDownload.getStatus());
+                if (packageRetrievedFromDatabase == null || newerVersionExists(packageFromMetaDownload.getVersion(), packageRetrievedFromDatabase.getVersion()))
                 {
-                    dbLanguage.setDownloaded(false);
+                    languageRetrievedFromDatabase.setDownloaded(false);
                     break;
                 }
             }
 
-            adapter.updateGTLanguage(dbLanguage);
+            adapter.updateGTLanguage(languageRetrievedFromDatabase);
         }
     }
 

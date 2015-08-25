@@ -436,14 +436,17 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     {
         if (downloaded)
         {
-            GTLanguage gtLanguage = GTLanguage.getLanguage(app.getApplicationContext(), langCode);
-            gtLanguage.setDownloaded(downloaded);
-            gtLanguage.update(app.getApplicationContext());
+            GTLanguage languageRetrievedFromDatabase = GTLanguage.getLanguage(app.getApplicationContext(), langCode);
+            languageRetrievedFromDatabase.setDownloaded(downloaded);
+            languageRetrievedFromDatabase.update(app.getApplicationContext());
         }
 
-        for (GTLanguage language : languageList)
+        for (GTLanguage languageFromDisplayedLanguageList : languageList)
         {
-            if (language.getLanguageCode().equals(langCode)) language.setDownloaded(downloaded);
+            if (languageFromDisplayedLanguageList.getLanguageCode().equals(langCode))
+            {
+                languageFromDisplayedLanguageList.setDownloaded(downloaded);
+            }
         }
     }
 
