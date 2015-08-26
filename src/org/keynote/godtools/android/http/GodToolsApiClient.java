@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 
+import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 import java.io.File;
@@ -11,8 +12,8 @@ import java.util.UUID;
 
 public class GodToolsApiClient {
 
-    private static final String BASE_URL_V2 = "https://api.stage.godtoolsapp.com/godtools-api/rest/v2/";
-    private static final String BASE_URL = "https://api.stage.godtoolsapp.com/godtools-api/rest/";
+    private static final String BASE_URL_V2 = BuildConfig.BASE_URL_V2;
+    private static final String BASE_URL = BuildConfig.BASE_URL;
 //    private static final String BASE_URL = "http://localhost:8080/godtools-api/rest/v2/";
     private static final String ENDPOINT_META = "meta/";
     private static final String ENDPOINT_PACKAGES = "packages/";
