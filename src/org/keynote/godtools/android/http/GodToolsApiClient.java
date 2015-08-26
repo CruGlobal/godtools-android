@@ -14,7 +14,6 @@ public class GodToolsApiClient {
 
     private static final String BASE_URL_V2 = BuildConfig.BASE_URL_V2;
     private static final String BASE_URL = BuildConfig.BASE_URL;
-//    private static final String BASE_URL = "http://localhost:8080/godtools-api/rest/v2/";
     private static final String ENDPOINT_META = "meta/";
     private static final String ENDPOINT_PACKAGES = "packages/";
     private static final String ENDPOINT_TRANSLATIONS = "translations/";
