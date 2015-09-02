@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.1'
+        classpath 'com.android.tools.build:gradle:1.3.0'
     }
 }
 apply plugin: 'com.android.application'
@@ -13,10 +13,13 @@ repositories {
 }
 
 dependencies {
+    // some dependencies will not be updated as these particular versions are needed by the app.
+    //noinspection GradleDependency
     compile 'com.android.support:appcompat-v7:19.1.+'
     compile fileTree(dir: 'libs', include: '*.jar')
+    //noinspection GradleDependency
     compile 'com.google.android.gms:play-services:4.3.23'
-    compile 'com.android.support:support-annotations:20.0.0'
+    compile 'com.android.support:support-annotations:23.0.0'
     compile 'com.google.guava:guava:18.0'
 }
 
@@ -50,5 +53,13 @@ android {
     productFlavors {
     }
     buildTypes {
+        debug {
+            buildConfigField "String", "BASE_URL_V2", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/v2/\""
+            buildConfigField "String", "BASE_URL", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/\""
+        }
+        release {
+            buildConfigField "String", "BASE_URL_V2", "\"https://api.godtoolsapp.com/godtools-api/rest/v2/\""
+            buildConfigField "String", "BASE_URL", "\"https://api.godtoolsapp.com/godtools-api/rest/\""
+        }
     }
 }
