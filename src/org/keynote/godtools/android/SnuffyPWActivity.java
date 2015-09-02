@@ -510,34 +510,39 @@ public class SnuffyPWActivity extends Activity
         String subject = getString(R.string.app_email_subject);
         subject = subject.replace("%1", mPackageTitle);
 
-        String msgBody = "";
-
-        if (KGP.equalsIgnoreCase(mAppPackage) || FOUR_LAWS.equalsIgnoreCase(mAppPackage))
-        {
-            msgBody = getString(R.string.kgp_four_laws_share);
-            msgBody = msgBody.replace("%2", mAppPackage);
-        }
-        else if (SATISFIED.equalsIgnoreCase(mAppPackage))
-        {
-            msgBody = getString(R.string.satisfied_share);
-        }
-
-        msgBody = msgBody.replace("%1", mAppLanguage);
-
-        if (mPagerCurrentItem > 0)
-        {
-            msgBody = msgBody.replace("%3", "/" + String.valueOf(mPagerCurrentItem));
-        }
-        else
-        {
-            msgBody = msgBody.replace("%3", "");
-        }
-
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
         share.putExtra(Intent.EXTRA_SUBJECT, subject);
-        share.putExtra(Intent.EXTRA_TEXT, msgBody);
+        share.putExtra(Intent.EXTRA_TEXT, buildMessageBody());
         startActivity(Intent.createChooser(share, "Select how you would like to share"));
+    }
+
+    private String buildMessageBody()
+    {
+        String messageBody = "";
+
+        if (KGP.equalsIgnoreCase(mAppPackage) || FOUR_LAWS.equalsIgnoreCase(mAppPackage))
+        {
+            messageBody = getString(R.string.kgp_four_laws_share);
+            messageBody = messageBody.replace("%2", mAppPackage);
+        }
+        else if (SATISFIED.equalsIgnoreCase(mAppPackage))
+        {
+            messageBody = getString(R.string.satisfied_share);
+        }
+
+        messageBody = messageBody.replace("%1", mAppLanguage);
+
+        if (mPagerCurrentItem > 0)
+        {
+            messageBody = messageBody.replace("%3", "/" + String.valueOf(mPagerCurrentItem));
+        }
+        else
+        {
+            messageBody = messageBody.replace("%3", "");
+        }
+
+        return messageBody;
     }
 
     public void doCmdShowPageMenu(View v)
