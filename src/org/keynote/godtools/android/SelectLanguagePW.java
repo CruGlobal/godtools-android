@@ -75,7 +75,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         actionBar.setDisplayShowHomeEnabled(false);
 
         languageType = getIntent().getStringExtra("languageType");
-        setTitle("Select " + languageType);
+        setTitle(getString(R.string.settings_select) + languageType);
 
         TextView titleBar = (TextView) actionBar.getCustomView().findViewById(R.id.titlebar_title);
         titleBar.setText(languageType);
@@ -378,7 +378,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         // if downloading, check for internet connection;
         if (!language.isDownloaded() && !Device.isConnected(SelectLanguagePW.this))
         {
-            Toast.makeText(SelectLanguagePW.this, "No internet connection, resources needs to be downloaded.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SelectLanguagePW.this, getString(R.string.internet_needed), Toast.LENGTH_SHORT).show();
             return;
         }
         
