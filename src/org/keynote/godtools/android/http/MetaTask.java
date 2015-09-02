@@ -1,78 +1,78 @@
 package org.keynote.godtools.android.http;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
+import org.keynote.godtools.android.business.GTLanguage;
+import org.keynote.godtools.android.business.GTPackageReader;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
 
-public class MetaTask extends AsyncTask<Object, Void, InputStream> {
+public class MetaTask extends AsyncTask<Object, Void, List<GTLanguage>>
+{
 
     private int statusCode;
-    private String tag, langCode;
+    private String tag;
     private MetaTaskHandler metaTaskHandler;
 
-    public interface MetaTaskHandler {
-        void metaTaskComplete(InputStream is, String langCode, String tag);
+    public interface MetaTaskHandler
+    {
+        void metaTaskComplete(List<GTLanguage> languageList, String tag);
 
-        void metaTaskFailure(InputStream is, String langCode, String tag, int statusCode);
+        void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode);
     }
 
-    public MetaTask(MetaTaskHandler listener) {
+    public MetaTask(MetaTaskHandler listener)
+    {
         metaTaskHandler = listener;
     }
 
     @Override
-    protected InputStream doInBackground(Object... params) {
+    protected List<GTLanguage> doInBackground(Object... params)
+    {
+        tag = params[1].toString();
 
         String url = params[0].toString();
-        String authorization = params[1].toString();
-        langCode = params[2].toString();
-        tag = params[3].toString();
 
-        HttpGet request = new HttpGet(url);
-        request.setHeader("Accept", "application/xml");
-        request.setHeader("Content-type", "application/xml");
-        request.setHeader("Authorization", authorization);
-        request.setHeader("Interpreter", "1");
-
-        HttpParams httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParams, 10000);
-        HttpConnectionParams.setSoTimeout(httpParams, 10000);
-
-        HttpClient httpClient = new DefaultHttpClient(httpParams);
-
-        try {
-            HttpResponse response = httpClient.execute(request);
-            statusCode = response.getStatusLine().getStatusCode();
-
-            Log.i("MetaTask", "Status: " + statusCode);
-
-            return response.getEntity().getContent();
-
-        } catch (Exception e) {
+        try
+        {
+            HttpURLConnection getDownloadUrlConnection = getHttpURLConnection(url);
+            getDownloadUrlConnection.connect();
+            statusCode = getDownloadUrlConnection.getResponseCode();
+            return GTPackageReader.processMetaResponse(getDownloadUrlConnection.getInputStream());
+        }
+        catch (Exception e)
+        {
+            // ensure that failure code is exectued in "onPostExecute"
+            statusCode = 502;
             e.printStackTrace();
             return null;
         }
     }
 
     @Override
-    protected void onPostExecute(InputStream inputStream) {
-
+    protected void onPostExecute(List<GTLanguage> languageList)
+    {
         if (statusCode == HttpStatus.SC_OK) 
         {
-            metaTaskHandler.metaTaskComplete(inputStream, langCode, tag);
-        } else 
-        {
-            metaTaskHandler.metaTaskFailure(inputStream, langCode, tag, statusCode);
+            metaTaskHandler.metaTaskComplete(languageList, tag);
         }
+        else
+        {
+            metaTaskHandler.metaTaskFailure(languageList, tag, statusCode);
+        }
+    }
+
+    protected HttpURLConnection getHttpURLConnection(String url) throws IOException
+    {
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.setReadTimeout(10000 /* milliseconds */);
+        connection.setConnectTimeout(15000 /* milliseconds */);
+        connection.setRequestMethod("GET");
+        return connection;
     }
 }

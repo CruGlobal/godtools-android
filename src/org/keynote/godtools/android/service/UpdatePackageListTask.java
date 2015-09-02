@@ -1,136 +1,84 @@
 package org.keynote.godtools.android.service;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import org.keynote.godtools.android.broadcast.BroadcastUtil;
-import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
-import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
-import static org.keynote.godtools.android.utils.Constants.KEY_NEW_LANGUAGE;
-import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PARALLEL;
-import static org.keynote.godtools.android.utils.Constants.KEY_UPDATE_PRIMARY;
-import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
-
-/**
- * Created by matthewfrederick on 5/11/15.
- */
 public class UpdatePackageListTask
 {
     private static final String TAG = "UpdatePackageListTask";
 
-    public static void run(InputStream is, DBAdapter adapter, boolean firstLaunch, SnuffyApplication app,
-                           String languagePrimary, String languageParallel, Context context)
+    public static void run(InputStream is, DBAdapter adapter)
     {
         Log.i(TAG, "Update Package List Backgroupd");
 
         List<GTLanguage> languageList = GTPackageReader.processMetaResponse(is);
 
+        run(languageList, adapter);
+    }
+
+    public static void run(List<GTLanguage> languageList, DBAdapter adapter)
+    {
         Log.i(TAG, "List Size: " + languageList.size());
 
         adapter.open();
 
-        for (GTLanguage gtl : languageList)
+        for (GTLanguage languageFromMetaDownload : languageList)
         {
             // check if language is already in the db
-            GTLanguage dbLanguage = adapter.getGTLanguage(gtl.getLanguageCode());
-            if (dbLanguage == null)
+            GTLanguage languageRetrievedFromDatabase = adapter.getGTLanguage(languageFromMetaDownload.getLanguageCode());
+            if (languageRetrievedFromDatabase == null)
             {
-                adapter.insertGTLanguage(gtl);
+                adapter.insertGTLanguage(languageFromMetaDownload);
             }
             else
             {
                 // don't forget that a previously downloaded language was already downloaded.
-                gtl.setDownloaded(dbLanguage.isDownloaded());
-                adapter.updateGTLanguage(gtl);
+                languageFromMetaDownload.setDownloaded(languageRetrievedFromDatabase.isDownloaded());
+                adapter.updateGTLanguage(languageFromMetaDownload);
             }
 
-            dbLanguage = adapter.getGTLanguage(gtl.getLanguageCode());
-            for (GTPackage gtp : gtl.getPackages())
+            languageRetrievedFromDatabase = adapter.getGTLanguage(languageFromMetaDownload.getLanguageCode());
+            for (GTPackage packageFromMetaDownload : languageFromMetaDownload.getPackages())
             {
                 // check if a new package is available for download or an existing package has been updated
-                GTPackage dbPackage = adapter.getGTPackage(gtp.getCode(), gtp.getLanguage(), gtp.getStatus());
-                if (dbPackage == null || (gtp.getVersion() > dbPackage.getVersion()))
+                GTPackage packageRetrievedFromDatabase = adapter.getGTPackage(packageFromMetaDownload.getCode(), packageFromMetaDownload.getLanguage(), packageFromMetaDownload.getStatus());
+                if (packageRetrievedFromDatabase == null || newerVersionExists(packageFromMetaDownload.getVersion(), packageRetrievedFromDatabase.getVersion()))
                 {
-                    dbLanguage.setDownloaded(false);
+                    languageRetrievedFromDatabase.setDownloaded(false);
+                    break;
                 }
             }
 
-            adapter.updateGTLanguage(dbLanguage);
+            adapter.updateGTLanguage(languageRetrievedFromDatabase);
         }
-
-        GTLanguage gtlPrimary = adapter.getGTLanguage(languagePrimary);
-
-        // if default os language is not available go back to english.
-        if (gtlPrimary == null || gtlPrimary.isDraft())
-        {
-            Log.i(TAG, "Language not found. Going to English");
-            gtlPrimary = adapter.getGTLanguage("en");
-            languagePrimary = "en";
-            SharedPreferences settings = app.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, "en");
-            editor.apply();
-        }
-
-        Log.i(TAG, languagePrimary);
-
-
-        GTLanguage gtlParallel = adapter.getGTLanguage(languageParallel);
-
-        if (firstLaunch)
-        {
-            if (shouldUpdateLanguageSettings(app, languagePrimary, context))
-            {
-                // This did check for the default language of the os previously; however, this
-                // was not a good spot for it to happen. Now, the os defualt is already in the
-                // `languagePrimary` variable.
-                BackgroundService.downloadLanguagePack(context, languagePrimary, KEY_NEW_LANGUAGE);
-            }
-            else if (!gtlPrimary.isDownloaded())
-            {
-                BackgroundService.downloadLanguagePack(context, languagePrimary, KEY_UPDATE_PRIMARY);
-            }
-        }
-        else
-        {
-            Log.i(TAG, "Not First Launch");
-
-            if (!gtlPrimary.isDownloaded())
-            {
-                BackgroundService.downloadLanguagePack(context, languagePrimary, KEY_UPDATE_PRIMARY);
-            }
-            else
-            {
-                // update the resources for the parallel language
-                if (gtlParallel != null && !gtlParallel.isDownloaded())
-                {
-                    BackgroundService.downloadLanguagePack(context, gtlParallel.getLanguageCode(), KEY_UPDATE_PARALLEL);
-                }
-                else
-                {
-                    LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(context);
-                    broadcastManager.sendBroadcast(BroadcastUtil.stopBroadcast(Type.DOWNLOAD_TASK));
-                }
-            }
-        }
-        adapter.close();
     }
 
-    private static boolean shouldUpdateLanguageSettings(SnuffyApplication app, String languagePrimary, Context context)
+    /*
+        For an explanation of how the decimal number portion is extracted to compare the minor version numbers,
+        see: http://stackoverflow.com/questions/10383392/extract-number-decimal-in-bigdecimal
+     */
+    private static boolean newerVersionExists(double remoteVersion, double localVersion)
     {
-        // check first if the we support the phones language
-        String languagePhone = app.getDeviceLocale().getLanguage();
-        GTLanguage gtlPhone = GTLanguage.getLanguage(context, languagePhone);
-        return gtlPhone != null && !languagePrimary.equalsIgnoreCase(languagePhone);
+        // convert to string first to avoid floating point issues
+        BigDecimal wrappedRemoteVersion = new BigDecimal(String.valueOf(remoteVersion));
+        BigDecimal wrappedLocalVersion = new BigDecimal(String.valueOf(localVersion));
+
+        // check the major version number portion.  if removeVersion is higher, then return true.
+        // otherwise continue on to minor version number portion
+        if(wrappedRemoteVersion.intValue() > wrappedLocalVersion.intValue()) return true;
+
+        int integerRemoteMinorVersion = wrappedRemoteVersion.subtract(wrappedRemoteVersion.setScale(0, RoundingMode.FLOOR)).movePointRight(wrappedRemoteVersion.scale()).intValue();
+        int integerLocalMinorVersion = wrappedLocalVersion.subtract(wrappedLocalVersion.setScale(0, RoundingMode.FLOOR)).movePointRight(wrappedLocalVersion.scale()).intValue();
+
+        return integerRemoteMinorVersion > integerLocalMinorVersion;
     }
 }

@@ -310,7 +310,7 @@ public class SettingsPW extends BaseActionBarActivity implements
             }
             else
             {
-                Toast.makeText(SettingsPW.this, "Internet connection is needed to enable translator mode", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingsPW.this, getString(R.string.internet_needed), Toast.LENGTH_SHORT).show();
                 ((CompoundButton) view).setChecked(false);
                 view.setEnabled(true);
             }
@@ -391,7 +391,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         }
         else
         {
-            showLoading("Authenticating access code");
+            showLoading(getString(R.string.authenticate_code));
             cbTranslatorMode.setChecked(true);
             cbTranslatorMode.setEnabled(false);
         }
