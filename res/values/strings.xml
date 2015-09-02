@@ -85,9 +85,12 @@
     <string name="switch_to_language">Switch to language</string>
     <string name="remove_this_language">Are you sure you want to remove this language?</string>
 
-    <string name="app_email_body" formatted="false">Get the %1 App by going to the following link:\n%2</string>
-    <string name="app_email_link" formatted="false">http://www.godtoolsapp.com/?p=%1&amp;l=%2&amp;source=godtools-android&amp;campaign=app-sharing</string>
-    <string name="app_share_link" formatted="false">http://www.godtoolsapp.com/?source=godtools-android&amp;campaign=app-sharing</string>
+    <string name="app_email_body" formatted="false">Continue reading %1 by going to the following link:\n%2</string>
+    <!-- TODO: What is the correct wording for an email subject line? -->
+    <string name="app_email_subject">GodTools</string>
+    <!-- TODO: What is the correct wording for sharing the app without a package?-->
+    <string name="app_share_body_main_screen">View GodTools online at:\n%1</string>
+    <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
 
     <!-- Renderer Activity -->
     <string name="processing_package">Loading pages…</string>

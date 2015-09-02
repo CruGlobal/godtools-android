@@ -507,9 +507,10 @@ public class SnuffyPWActivity extends Activity
 
     private String getLinkForPackage()
     {
-        String link = getString(R.string.app_email_link); // http://www.godtoolsapp.com/?p=%1&l=%2
-        link = link.replace("%1", mAppPackage);
-        link = link.replace("%2", mAppLanguage);
+        String link = getString(R.string.app_share_link_base_link); // http://www.knowgod.com
+        link = link + "/" + mAppLanguage;
+        link = link + "/" + mAppPackage;
+        if (mPagerCurrentItem > 0) link = link + "/" + mPagerCurrentItem;
         return link;
     }
 
@@ -521,6 +522,7 @@ public class SnuffyPWActivity extends Activity
 
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
+        share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_email_subject));
         share.putExtra(Intent.EXTRA_TEXT, msgBody);
         startActivity(Intent.createChooser(share, "Select how you would like to share"));
     }
