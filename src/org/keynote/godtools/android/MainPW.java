@@ -245,7 +245,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                             app.setAppLocale(primaryCode);
                         }
 
-                        Toast.makeText(MainPW.this, "Translator preview mode is enabled", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainPW.this, getString(R.string.translator_enabled), Toast.LENGTH_LONG).show();
 
                         finish();
                     }
@@ -541,7 +541,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         if (tag.equalsIgnoreCase(KEY_PRIMARY) || tag.equalsIgnoreCase(KEY_PARALLEL))
         {
 
-            Toast.makeText(MainPW.this, "Failed to download resources", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainPW.this, getString(R.string.failed_download_resources), Toast.LENGTH_SHORT).show();
 
         }
 
