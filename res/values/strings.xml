@@ -88,6 +88,7 @@
     <string name="app_email_body" formatted="false">Continue reading %1 by going to the following link:\n%2</string>
     <string name="app_email_subject">Our conversation about %1 today</string>
     <!-- TODO: What is the correct wording for sharing the app without a package?-->
+    <string name="app_share_subject_main_screen">GodTools</string>
     <string name="app_share_body_main_screen">View GodTools online at:\n%1</string>
     <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
 
