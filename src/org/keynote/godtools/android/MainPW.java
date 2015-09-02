@@ -470,13 +470,13 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private void doCmdShare()
     {
-        String msgBody = getString(R.string.app_share_body_main_screen);
-        msgBody = msgBody.replace("%1", getString(R.string.app_share_link_base_link));
+        String messageBody = getString(R.string.app_share_body_main_screen);
+        messageBody = messageBody.replace("%1", getString(R.string.app_share_link_base_link));
 
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
         share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_share_subject_main_screen));
-        share.putExtra(Intent.EXTRA_TEXT, msgBody);
+        share.putExtra(Intent.EXTRA_TEXT, messageBody);
         startActivity(Intent.createChooser(share, "Select how you would like to share"));
     }
 
