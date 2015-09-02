@@ -19,7 +19,7 @@
             android:background="#00ffffff"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
-            android:contentDescription="homescreen_icon"
+            android:contentDescription="@string/description_homescreen_icon"
             android:baselineAlignBottom="false"/>
     
         <TextView
@@ -28,7 +28,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/pull_down_info"
             android:id="@+id/textView"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="20dp"/>
         

@@ -58,7 +58,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 {
     private static final String TAG = "PreviewModeMainPW";
     private static final int REQUEST_SETTINGS = 1001;
-    private static final String JUST_SWITCHED = "justSwitched";
 
     public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
     public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
@@ -186,7 +185,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
                 if (BroadcastUtil.ACTION_DRAFT_START.equals(intent.getAction()))
                 {
-                    showLoading("Connecting with server");
+                    showLoading(getString(R.string.connecting));
                 }
                 else if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
                 {
@@ -197,7 +196,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                     {
                         pdLoading.hide();
 
-                        Toast.makeText(PreviewModeMainPW.this, "Translator preview mode is disabled",
+                        Toast.makeText(PreviewModeMainPW.this, getString(R.string.translator_disabled),
                                 Toast.LENGTH_LONG).show();
 
                         finish();
@@ -365,8 +364,8 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             if (!kgpPresent)
             {
                 GTPackage kgpPack = new GTPackage();
-                kgpPack.setCode("kgp");
-                kgpPack.setName("Knowing God Personally");
+                kgpPack.setCode("draftkgp");
+                kgpPack.setName(getString(R.string.menu_item_kgp));
                 kgpPack.setAvailable(false);
                 packageByLanguage.add(kgpPack);
             }
@@ -374,8 +373,8 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             if (!satisfiedPresent)
             {
                 GTPackage satPack = new GTPackage();
-                satPack.setCode("satisfied");
-                satPack.setName("Satisfied?");
+                satPack.setCode("draftsatisfied");
+                satPack.setName(getString(R.string.menu_item_satisfied));
                 satPack.setAvailable(false);
                 packageByLanguage.add(satPack);
             }
@@ -383,8 +382,8 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             if (!fourlawsPresent)
             {
                 GTPackage fourLawPack = new GTPackage();
-                fourLawPack.setCode("fourlaws");
-                fourLawPack.setName("The Four Spiritual Laws");
+                fourLawPack.setCode("draftfourlaws");
+                fourLawPack.setName(getString(R.string.menu_item_4laws));
                 fourLawPack.setAvailable(false);
                 packageByLanguage.add(fourLawPack);
             }
@@ -474,7 +473,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         }
         else
         {
-            Toast.makeText(PreviewModeMainPW.this, getString(R.string.refresh_no_net),
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.internet_needed),
                     Toast.LENGTH_SHORT).show();
         }
     }
@@ -486,7 +485,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
         share.putExtra(Intent.EXTRA_TEXT, msgBody);
-        startActivity(Intent.createChooser(share, "Select how you would like to share"));
+        startActivity(Intent.createChooser(share, getString(R.string.select_share)));
     }
 
     private SnuffyApplication getApp()
@@ -515,7 +514,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         }
         else
         {
-            showLoading("Authenticating access code");
+            showLoading(getString(R.string.authenticate_code));
         }
     }
 
@@ -544,7 +543,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         }
         else
         {
-            Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_update_draft), Toast.LENGTH_SHORT).show();
         }
 
         if (tag.equalsIgnoreCase("draft") || tag.equalsIgnoreCase("draft_primary"))
@@ -561,7 +560,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     {
         if (tag.equalsIgnoreCase("draft"))
         {
-            Toast.makeText(PreviewModeMainPW.this, "Drafts have been updated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.drafts_updated), Toast.LENGTH_SHORT).show();
             getPackageList();
 
             Log.i(TAG, "Done refreshing");
@@ -586,18 +585,18 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
         if (tag.equalsIgnoreCase("draft"))
         {
-            Toast.makeText(PreviewModeMainPW.this, "Failed to update drafts",
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_update_draft),
                     Toast.LENGTH_SHORT).show();
         }
         else if (tag.equalsIgnoreCase("draft_primary"))
         {
             getPackageList();
-            Toast.makeText(PreviewModeMainPW.this, "Failed to download drafts",
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_download_draft),
                     Toast.LENGTH_SHORT).show();
         }
         else if (tag.equalsIgnoreCase("primary") || tag.equalsIgnoreCase("parallel"))
         {
-            Toast.makeText(PreviewModeMainPW.this, "Failed to download resources",
+            Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_download_resources),
                     Toast.LENGTH_SHORT).show();
         }
 

@@ -48,9 +48,8 @@ import java.util.TimerTask;
 import java.util.Vector;
 
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
-import static org.keynote.godtools.android.utils.Constants.COUNT;
-
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.COUNT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KGP;
 
@@ -319,7 +318,7 @@ public class SnuffyPWActivity extends Activity
         if (!bSuccess)
         { // now testing is done - only show msg on failure
             Toast.makeText(SnuffyPWActivity.this.getApplicationContext(),
-                    bSuccess ? "Package processing succeeded" : "Package processing failed",
+                    bSuccess ? getString(R.string.processing_succeded) : getString(R.string.processing_failed),
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -522,7 +521,7 @@ public class SnuffyPWActivity extends Activity
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
         share.putExtra(Intent.EXTRA_TEXT, msgBody);
-        startActivity(Intent.createChooser(share, "Select how you would like to share"));
+        startActivity(Intent.createChooser(share, getString(R.string.select_share)));
     }
 
     public void doCmdShowPageMenu(View v)
@@ -723,10 +722,10 @@ public class SnuffyPWActivity extends Activity
 
     private void refreshPage()
     {
-        final SharedPreferences settings = getSharedPreferences("GodTools", MODE_PRIVATE);
+        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SnuffyPage currentPage = mPages.get(mPagerCurrentItem);
 
-        showLoading("Updating page...");
+        showLoading(getString(R.string.update_page));
 
         GodToolsApiClient.downloadDraftPage((SnuffyApplication) getApplication(),
                 settings.getString(AUTH_DRAFT, ""),
@@ -740,14 +739,14 @@ public class SnuffyPWActivity extends Activity
                     {
                         Integer result = mProcessPackageAsync.doInBackground();
                         mProcessPackageAsync.onPostExecute(result);
-                        Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.success), Toast.LENGTH_SHORT).show();
                         hideLoading();
                     }
 
                     @Override
                     public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
                     {
-                        Toast.makeText(getApplicationContext(), "Error refreshing page", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.page_error), Toast.LENGTH_SHORT).show();
                         hideLoading();
                     }
                 });
