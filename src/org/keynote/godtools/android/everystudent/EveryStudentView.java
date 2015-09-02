@@ -100,7 +100,7 @@ public class EveryStudentView extends Activity{
 			
 			recordScreenView(title);
 		} else {
-			Toast.makeText(getBaseContext(), "Could not load the content.", Toast.LENGTH_LONG).show();
+			Toast.makeText(getBaseContext(), getString(R.string.could_not_load_content), Toast.LENGTH_LONG).show();
 			this.finish();
 		}
 	}
