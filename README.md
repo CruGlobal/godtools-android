@@ -18,4 +18,4 @@ Android project that produces snuffy based apps (eg GodTools)
 6 - After 3 uses longer than 1.5 minutes
 
 #### Gradle
-Gradle is now used to handle API base URLs. While being developed, the application will automatically use the stage API URL. Then, once the app is released the production API URL will be used. Both URLs can be found in the build.gradle file.
+Gradle is now used to handle API base URLs. While being developed, a "debug" version of the APK will be created, which will cause the stage API URL to be used. Once the application is released, a "release" version of the APK is created, which will then use the production version of the API URL. Both API URLs can be found in the build.gradle file.
