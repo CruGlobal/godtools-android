@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.keynote.godtools.android.PreviewModeMainPW;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTPackage;
@@ -28,7 +29,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.keynote.godtools.android.broadcast.BroadcastUtil.startBroadcast;
+import static org.keynote.godtools.android.broadcast.BroadcastUtil.draftBroadcast;
+import static org.keynote.godtools.android.broadcast.BroadcastUtil.failBroadcast;
 import static org.keynote.godtools.android.broadcast.BroadcastUtil.stopBroadcast;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
@@ -148,18 +150,18 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         if (FOUR_LAWS.equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_4lawsicon);
         if (SATISFIED.equals(localPackage.getCode())) icon.setImageResource(R.drawable.gt4_homescreen_satisfiedicon);
         
-        if (localPackage.getCode().contains("draft"))
+        if (localPackage.isAvailable())
+        {
+            textView.setTextColor(context.getResources().getColor(android.R.color.black));
+            layout.setBackgroundColor(context.getResources().getColor(R.color.current_draft_opacity));
+            convertView.findViewById(R.id.icon_line).setVisibility(View.INVISIBLE);
+        }
+        else
         {
             textView.setTextColor(context.getResources().getColor(android.R.color.white));
             icon.setImageResource(android.R.color.transparent);
             layout.setBackgroundColor(context.getResources().getColor(R.color.new_draft_opacity));
             convertView.findViewById(R.id.icon_line).setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            textView.setTextColor(context.getResources().getColor(android.R.color.black));
-            layout.setBackgroundColor(context.getResources().getColor(R.color.current_draft_opacity));
-            convertView.findViewById(R.id.icon_line).setVisibility(View.INVISIBLE);
         }
 
         ImageView subMenu = (ImageView) convertView.findViewById(R.id.sub_menu);
@@ -233,7 +235,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         
         if (!Device.isConnected(context))
         {
-            Toast.makeText(context.getApplicationContext(), "Internet connection is required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context.getApplicationContext(), context.getString(R.string.internet_needed), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -251,7 +253,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                         {
                             case DialogInterface.BUTTON_POSITIVE:
                                 
-                                broadcastManager.sendBroadcast(startBroadcast());
+                                broadcastManager.sendBroadcast(draftBroadcast());
                                 
                                 GodToolsApiClient.publishDraft(settings.getString(AUTH_DRAFT, ""),
                                         currentPackage.getLanguage(),
@@ -261,14 +263,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             @Override
                                             public void draftTaskComplete()
                                             {
-                                                Toast.makeText(context, "Draft has been published", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, context.getString(R.string.draft_published), Toast.LENGTH_SHORT).show();
                                                 broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_PUBLISH_TASK));
                                             }
 
                                             @Override
                                             public void draftTaskFailure(int statusCode)
                                             {
-                                                Toast.makeText(context, "Failed to publish draft", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, context.getString(R.string.draft_publish_fail), Toast.LENGTH_SHORT).show();
                                                 broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR, statusCode));
                                             }
                                         });
@@ -281,9 +283,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                     }
                 };
 
-                builder.setMessage("Do you want to publish this draft?")
-                        .setPositiveButton("Yes, it's ready!", publishClickListener)
-                        .setNegativeButton("No, I changed my mind.", publishClickListener)
+                builder.setMessage(context.getString(R.string.draft_publish_message))
+                        .setPositiveButton(context.getString(R.string.draft_publish_confirm), publishClickListener)
+                        .setNegativeButton(context.getString(R.string.draft_publish_negative), publishClickListener)
                         .show();
                 break;
             
@@ -297,7 +299,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                         {
                             case DialogInterface.BUTTON_POSITIVE:
                                 
-                                broadcastManager.sendBroadcast(startBroadcast());
+                                broadcastManager.sendBroadcast(draftBroadcast());
                                 Log.i(TAG, "Creating Draft");
                                 
                                 GodToolsApiClient.createDraft(settings.getString(AUTH_DRAFT, ""),
@@ -308,14 +310,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                             @Override
                                             public void draftTaskComplete()
                                             {
-                                                Toast.makeText(context.getApplicationContext(), "Draft has been created", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context.getApplicationContext(), context.getString(R.string.draft_created), Toast.LENGTH_SHORT).show();
                                                 broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_CREATION_TASK));
                                             }
 
                                             @Override
                                             public void draftTaskFailure(int code)
                                             {
-                                                Toast.makeText(context.getApplicationContext(), "Failed to create a new draft", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context.getApplicationContext(), context.getString(R.string.draft_create_failed), Toast.LENGTH_SHORT).show();
 
                                                 broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR, code));
                                             }
@@ -328,7 +330,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                     }
                 };
                 
-                builder.setTitle("Start a draft for: " + currentPackage.getName())
+                builder.setTitle(context.getString(R.string.draft_start_message) + currentPackage.getName())
                         .setPositiveButton(R.string.yes, createClickListener)
                         .setNegativeButton(R.string.no, createClickListener)
                         .show();

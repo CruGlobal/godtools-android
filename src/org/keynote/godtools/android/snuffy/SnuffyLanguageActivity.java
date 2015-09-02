@@ -367,8 +367,6 @@ public class SnuffyLanguageActivity extends ListActivity {
 		private int    mProgressDialogId;
 		
 		public DownloadFileAsync(String languageCode) {
-			//		"" = names, languages and icons for all
-			//		"en_US", "ru", "en" etc: full package for a single language
 			super();
 			mLanguageCode     = languageCode;
 			mProgressDialogId = (mLanguageCode.length() == 0) ? DIALOG_DOWNLOAD_INDEX_PROGRESS : DIALOG_DOWNLOAD_LANGUAGE_PROGRESS;

@@ -3,13 +3,8 @@ package org.keynote.godtools.android.http;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
+import com.google.common.base.Strings;
+
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
@@ -23,6 +18,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
@@ -48,33 +45,16 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
         url = params[0].toString();
         filePath = params[1].toString();
         tag = params[2].toString();
-        String authorization = params[3].toString();
+        String authorization = (String) params[3];
         langCode = params[4].toString();
 
         try {
-            HttpGet request = new HttpGet(url);
-            request.setHeader("Accept", "application/xml");
-            request.setHeader("Content-type", "application/xml");
-            request.setHeader("Authorization", authorization);
-            request.setHeader("Interpreter", "1");
 
-            HttpParams httpParams = new BasicHttpParams();
-            HttpConnectionParams.setConnectionTimeout(httpParams, 10000);
-            HttpConnectionParams.setSoTimeout(httpParams, 30000);
+            HttpURLConnection connection = getHttpURLConnection(url, authorization);
 
-            HttpClient httpClient = new DefaultHttpClient(httpParams);
-            HttpResponse response;
-            try
-            {
-                response = httpClient.execute(request);
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-                return false;
-            }
+            connection.connect();
 
-            DataInputStream dis = new DataInputStream(response.getEntity().getContent());
+            DataInputStream dis = new DataInputStream(connection.getInputStream());
 
             File zipfile = new File(filePath);
             String parentDir = zipfile.getParent();
@@ -151,6 +131,20 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             return false;
         }
 
+    }
+
+    private HttpURLConnection getHttpURLConnection(String url, String authorization) throws IOException
+    {
+        HttpURLConnection getDownloadUrlConnection = (HttpURLConnection) new URL(url).openConnection();
+        getDownloadUrlConnection.setReadTimeout(30000 /* milliseconds */);
+        getDownloadUrlConnection.setConnectTimeout(10000 /* milliseconds */);
+        getDownloadUrlConnection.setRequestMethod("GET");
+
+        if(!Strings.isNullOrEmpty(authorization))
+        {
+            getDownloadUrlConnection.setRequestProperty("Authorization", authorization);
+        }
+        return getDownloadUrlConnection;
     }
 
     @Override

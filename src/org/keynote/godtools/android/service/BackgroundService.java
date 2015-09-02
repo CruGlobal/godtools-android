@@ -18,22 +18,14 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.http.APITasks;
 import org.keynote.godtools.android.http.AuthTask;
-import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
-import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.http.NotificationRegistrationTask;
 import org.keynote.godtools.android.notifications.NotificationInfo;
-import org.keynote.godtools.android.snuffy.SnuffyApplication;
-
-import java.io.InputStream;
 
 import static org.keynote.godtools.android.utils.Constants.ACCESS_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
-import static org.keynote.godtools.android.utils.Constants.BACKGROUND_TASK_TAG;
 import static org.keynote.godtools.android.utils.Constants.DEVICE_ID;
-import static org.keynote.godtools.android.utils.Constants.LANG_CODE;
-import static org.keynote.godtools.android.utils.Constants.META;
 import static org.keynote.godtools.android.utils.Constants.NOTIFICATIONS_ON;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
@@ -44,8 +36,6 @@ import static org.keynote.godtools.android.utils.Constants.TYPE;
  * Created by matthewfrederick on 5/4/15.
  */
 public class BackgroundService extends IntentService implements AuthTask.AuthTaskHandler,
-        MetaTask.MetaTaskHandler,
-        DownloadTask.DownloadTaskHandler,
         NotificationRegistrationTask.NotificationTaskHandler
 {
     private final String TAG = getClass().getSimpleName();
@@ -82,30 +72,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
 
         Log.i(TAG, "Action Started: " + intent.getSerializableExtra(TYPE));
 
-
-        if (APITasks.AUTHENTICATE_GENERIC.equals(intent.getSerializableExtra(TYPE)))
-        {
-            GodToolsApiClient.authenticateGeneric(this);
-        }
-        else if (APITasks.GET_LIST_OF_PACKAGES.equals(intent.getSerializableExtra(TYPE)))
-        {
-            GodToolsApiClient.getListOfPackages(settings.getString(AUTH_CODE, ""),
-                    META, this);
-        }
-        else if (APITasks.GET_LIST_OF_DRAFTS.equals(intent.getSerializableExtra(TYPE)))
-        {
-            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
-                    intent.getStringExtra(LANG_CODE),
-                    intent.getStringExtra(BACKGROUND_TASK_TAG), this);
-        }
-        else if (APITasks.DOWNLOAD_LANGUAGE_PACK.equals(intent.getSerializableExtra(TYPE)))
-        {
-            GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
-                    intent.getStringExtra(LANG_CODE),
-                    intent.getStringExtra(BACKGROUND_TASK_TAG),
-                    settings.getString(AUTH_CODE, ""), this);
-        }
-        else if (APITasks.REGISTER_DEVICE.equals(intent.getSerializableExtra(TYPE)))
+        if (APITasks.REGISTER_DEVICE.equals(intent.getSerializableExtra(TYPE)))
         {
             GodToolsApiClient.registerDeviceForNotifications(
                     intent.getStringExtra(REGISTRATION_ID),
@@ -130,43 +97,6 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
             intent.putExtras(extras);
         }
         return intent;
-    }
-
-    public static void firstSetup(SnuffyApplication app)
-    {
-        BackgroundService service = new BackgroundService();
-        service.initialContentTask(app);
-    }
-
-    private void initialContentTask(SnuffyApplication app)
-    {
-        PrepareInitialContentTask.run(app.getApplicationContext(), app.getDocumentsDir());
-    }
-
-    public static void authenticateGeneric(Context context)
-    {
-        final Bundle extras = new Bundle(1);
-        extras.putSerializable(TYPE, APITasks.AUTHENTICATE_GENERIC);
-        Intent intent = baseIntent(context, extras);
-        context.startService(intent);
-    }
-
-    public static void getListOfPackages(Context context)
-    {
-        final Bundle extras = new Bundle(1);
-        extras.putSerializable(TYPE, APITasks.GET_LIST_OF_PACKAGES);
-        Intent intent = baseIntent(context, extras);
-        context.startService(intent);
-    }
-
-    public static void downloadLanguagePack(Context context, String langCode, String tag)
-    {
-        final Bundle extras = new Bundle(3);
-        extras.putSerializable(TYPE, APITasks.DOWNLOAD_LANGUAGE_PACK);
-        extras.putString(LANG_CODE, langCode);
-        extras.putString(BACKGROUND_TASK_TAG, tag);
-        Intent intent = baseIntent(context, extras);
-        context.startService(intent);
     }
 
     public static void registerDevice(Context context, String regId, String deviceID)
@@ -199,16 +129,6 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         final Bundle extras = new Bundle(2);
         extras.putSerializable(TYPE, APITasks.VERIFY_ACCESS_CODE);
         extras.putString(ACCESS_CODE, accessCode);
-        Intent intent = baseIntent(context, extras);
-        context.startService(intent);
-    }
-
-    public static void getListOfDrafts(Context context, String langCode, String tag)
-    {
-        final Bundle extras = new Bundle(3);
-        extras.putSerializable(TYPE, APITasks.GET_LIST_OF_DRAFTS);
-        extras.putString(LANG_CODE, langCode);
-        extras.putString(BACKGROUND_TASK_TAG, tag);
         Intent intent = baseIntent(context, extras);
         context.startService(intent);
     }
@@ -257,42 +177,6 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         }
 
         broadcastManager.sendBroadcast(BroadcastUtil.failBroadcast(Type.AUTH));
-    }
-
-    @Override
-    public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
-    {
-        Log.i(TAG, "Download Complete");
-        DownloadService.downloadComplete(langCode, tag, BackgroundService.this, (SnuffyApplication) getApplication());
-        broadcastManager.sendBroadcast(BroadcastUtil.stopBroadcast(Type.DOWNLOAD_TASK));
-    }
-
-    @Override
-    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
-    {
-        broadcastManager.sendBroadcast(BroadcastUtil.failBroadcast(Type.DOWNLOAD_TASK));
-    }
-
-    @Override
-    public void metaTaskComplete(InputStream is, String langCode, String tag)
-    {
-        Log.i(TAG, "Update Package List Task");
-        // this will cause download task to be run.
-        UpdatePackageListTask.run(is, adapter, isFirstLaunch(), (SnuffyApplication) getApplication(),
-                languagePrimary, languageParallel, BackgroundService.this);
-
-        broadcastManager.sendBroadcast(BroadcastUtil.stopBroadcast(Type.META_TASK));
-    }
-
-    @Override
-    public void metaTaskFailure(InputStream is, String langCode, String tag, int statusCode)
-    {
-        broadcastManager.sendBroadcast(BroadcastUtil.failBroadcast(Type.META_TASK));
-    }
-
-    private boolean isFirstLaunch()
-    {
-        return settings.getBoolean("firstLaunch", true);
     }
 
     @Override
