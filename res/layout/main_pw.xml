@@ -14,7 +14,7 @@
         android:background="#00ffffff"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:contentDescription="homescreen_icon"/>
+        android:contentDescription="@string/description_homescreen_icon"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -40,10 +40,10 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="Knowing God Personally"
+            android:text="@string/menu_item_kgp"
             android:id="@+id/tv_first"
             android:background="#00ffffff"
-            android:textSize="22dp"
+            android:textSize="22sp"
             android:paddingLeft="20dp"
             android:gravity="center_vertical"
             android:textColor="#ffffffff"
@@ -73,10 +73,10 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="Satisfied?"
+            android:text="@string/menu_item_satisfied"
             android:id="@+id/tv_second"
             android:background="#00ffffff"
-            android:textSize="22dp"
+            android:textSize="22sp"
             android:paddingLeft="20dp"
             android:gravity="center_vertical"
             android:textColor="#ffffffff"
@@ -106,10 +106,10 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="The Four Spiritual Laws"
+            android:text="@string/menu_item_4laws"
             android:id="@+id/tv_third"
             android:background="#00ffffff"
-            android:textSize="22dp"
+            android:textSize="22sp"
             android:paddingLeft="20dp"
             android:gravity="center_vertical"
             android:textColor="#ffffffff"
@@ -138,10 +138,10 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="Everystudent.com"
+            android:text="@string/menu_item_everystudent"
             android:id="@+id/tv_fourth"
             android:background="#00ffffff"
-            android:textSize="22dp"
+            android:textSize="22sp"
             android:paddingLeft="20dp"
             android:gravity="center_vertical"
             android:textColor="#ffffffff"
