@@ -408,7 +408,7 @@ public class SnuffyActivity extends Activity {
 	}
 	
 	private String getLinkForPackage() {
-		String link = getString(R.string.app_email_link); // http://www.godtoolsapp.com/?p=%1&l=%2
+		String link = getString(R.string.app_share_link_base_link); // http://www.godtoolsapp.com/?p=%1&l=%2
 		link = link.replace("%1", mAppPackage);
 		link = link.replace("%2", mAppLanguage);
 		return link; 
