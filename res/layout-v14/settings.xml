@@ -219,7 +219,7 @@
             android:background="#00ffffff"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="@string/settings_notificiation"
+            android:text="@string/settings_notification"
             android:textColor="#ffffffff"
             android:textSize="22sp"
             android:id="@+id/cbNotification"

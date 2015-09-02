@@ -66,8 +66,8 @@
     <string name="about_suggestions">Please email us at %1$s with any questions or suggestions on how to make this app better.</string>
     <string name="about_copyright">Copyright Information</string>
     <string name="about_presentation">This presentation created and produced by Cru ©2014. All rights reserved.</string>
-    <string name="about_kgp">"Would You Like to Know God Personally?" ©1995-2010 Cru and Bright Media Foundation (BMF). All rights reserved.</string>
-    <string name="about_satisfied">"Satisfied?" ©2001-2010 Cru and Bright Media Foundation (BMF). All rights reserved.</string>
+    <string name="about_kgp">"Would You Like to Know God Personally?" ©1995–2010 Cru and Bright Media Foundation (BMF). All rights reserved.</string>
+    <string name="about_satisfied">"Satisfied?" ©2001–2010 Cru and Bright Media Foundation (BMF). All rights reserved.</string>
 
     <string name="gallery_help">The booklets in God Tools were designed to create a similar experience to that of using a real booklet. To advance to the next booklet page, simply swipe to the left. To return to the previous page, swipe to the right. To zoom, press and hold until your device vibrates; then without lifting your finger, drag up to zoom in or down to zoom out. Turning your device to landscape will automatically zoom the booklet page to fit horizontally, allowing you to more easily view the booklet.</string>
     <string name="snuffy_help">To advance to the next page, simply swipe to the left. To return to the previous page, swipe to the right. To show the menu you can tap in any area of the page other than on a button.</string>
@@ -78,8 +78,8 @@
     <string name="email">Email</string>
     <string name="copy">Copy</string>
     <string name="all_websites">All Websites</string>
-    <string name="loading_language_list">Loading languages...</string>
-    <string name="loading_requested_language">Loading requested language...</string>
+    <string name="loading_language_list">Loading languages…</string>
+    <string name="loading_requested_language">Loading requested language…</string>
     <string name="download_language">Download language</string>
     <string name="remove_language">Remove language</string>
     <string name="switch_to_language">Switch to language</string>
@@ -90,13 +90,13 @@
     <string name="app_share_link" formatted="false">http://www.godtoolsapp.com/?source=godtools-android&amp;campaign=app-sharing</string>
 
     <!-- Renderer Activity -->
-    <string name="processing_package">Loading pages...</string>
+    <string name="processing_package">Loading pages…</string>
 
     <!-- Splash Activity -->
-    <string name="copy_files">Initializing Content...</string>
-    <string name="check_update">Checking for updates...</string>
-    <string name="download_resources">Downloading %s resources...</string>
-    <string name="update_resources">Updating %s resources...</string>
+    <string name="copy_files">Initializing Content…</string>
+    <string name="check_update">Checking for updates…</string>
+    <string name="download_resources">Downloading %s resources…</string>
+    <string name="update_resources">Updating %s resources…</string>
 
     <!-- Settings Activity -->
     <string name="settings_title">Settings</string>
@@ -109,7 +109,7 @@
     <string name="settings_select">Select</string>
     <string name="settings_translator_mode">Preview Mode (Translators)</string>
     <string name="settings_translator_message">If you are a GodTools translator wanting to see your latest translations, enable "Preview Mode"</string>
-    <string name="settings_notificiation">Allow Notifications</string>
+    <string name="settings_notification">Allow Notifications</string>
     <string name="wrong_passcode">Please try again</string>
     <string name="expired_passcode">Preview mode session expired</string>
 
