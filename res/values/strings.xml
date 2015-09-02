@@ -86,8 +86,7 @@
     <string name="remove_this_language">Are you sure you want to remove this language?</string>
 
     <string name="app_email_body" formatted="false">Continue reading %1 by going to the following link:\n%2</string>
-    <!-- TODO: What is the correct wording for an email subject line? -->
-    <string name="app_email_subject">GodTools</string>
+    <string name="app_email_subject">Our conversation about %1 today</string>
     <!-- TODO: What is the correct wording for sharing the app without a package?-->
     <string name="app_share_body_main_screen">View GodTools online at:\n%1</string>
     <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
@@ -156,5 +155,11 @@
     
     <string name="alternate_language">Alternate Language</string>
     <string name="alternate_language_message">The parallel language selected is not available for this tool.</string>
+
+    <string name="kgp_four_laws_share" formatted="false">It was great talking with you today about how we can know God personally. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at www.knowgod.com/%1/%2%3</string>
+
+    <string name="satisfied_share" formatted="false">It was great talking with you today about how we can experience The Holy Spirit’s power in our lives. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at www.knowgod.com/%1/satisfied%3</string>
+
+    <string name="everystudent_share"><html>It was great talking with you today about your spiritual questions. I hope we can talk more about this soon. In the meantime, you can <a href="www.knowgod.com/">check out what we looked at today</a>.</html></string>
 
 </resources>

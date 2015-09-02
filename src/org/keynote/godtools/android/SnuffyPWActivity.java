@@ -48,11 +48,11 @@ import java.util.TimerTask;
 import java.util.Vector;
 
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
-import static org.keynote.godtools.android.utils.Constants.COUNT;
-
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.COUNT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 
 public class SnuffyPWActivity extends Activity
 {
@@ -505,24 +505,37 @@ public class SnuffyPWActivity extends Activity
         startActivity(intent);
     }
 
-    private String getLinkForPackage()
-    {
-        String link = getString(R.string.app_share_link_base_link); // http://www.knowgod.com
-        link = link + "/" + mAppLanguage;
-        link = link + "/" + mAppPackage;
-        if (mPagerCurrentItem > 0) link = link + "/" + mPagerCurrentItem;
-        return link;
-    }
-
     public void doCmdShare(View v)
     {
-        String msgBody = getString(R.string.app_email_body); // "Get the %@1 App by going to the following link:\n%@2";
-        msgBody = msgBody.replace("%1", mPackageTitle);
-        msgBody = msgBody.replace("%2", getLinkForPackage());
+        String subject = getString(R.string.app_email_subject);
+        subject = subject.replace("%1", mPackageTitle);
+
+        String msgBody = "";
+
+        if (KGP.equalsIgnoreCase(mAppPackage) || FOUR_LAWS.equalsIgnoreCase(mAppPackage))
+        {
+            msgBody = getString(R.string.kgp_four_laws_share);
+            msgBody = msgBody.replace("%2", mAppPackage);
+        }
+        else if (SATISFIED.equalsIgnoreCase(mAppPackage))
+        {
+            msgBody = getString(R.string.satisfied_share);
+        }
+
+        msgBody = msgBody.replace("%1", mAppLanguage);
+
+        if (mPagerCurrentItem > 0)
+        {
+            msgBody = msgBody.replace("%3", "/" + String.valueOf(mPagerCurrentItem));
+        }
+        else
+        {
+            msgBody = msgBody.replace("%3", "");
+        }
 
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
-        share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_email_subject));
+        share.putExtra(Intent.EXTRA_SUBJECT, subject);
         share.putExtra(Intent.EXTRA_TEXT, msgBody);
         startActivity(Intent.createChooser(share, "Select how you would like to share"));
     }
