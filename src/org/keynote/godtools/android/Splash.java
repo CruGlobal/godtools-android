@@ -26,9 +26,10 @@ import org.keynote.godtools.android.utils.Device;
 
 import java.util.List;
 
-import static org.keynote.godtools.android.utils.Constants.LANG_CODE;
+import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
 import static org.keynote.godtools.android.utils.Constants.META;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 /*
     Logic flow:
@@ -45,11 +46,9 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler
 {
     private static final String TAG = Splash.class.getSimpleName();
 
-    protected boolean _active = true;
-
-    TextView tvTask;
-    ProgressBar progressBar;
-    SharedPreferences settings;
+    private TextView tvTask;
+    private ProgressBar progressBar;
+    private SharedPreferences settings;
 
     /**
      * Called when the activity is first created.
@@ -100,20 +99,18 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        _active = false;
         return true;
     }
 
     @Override
     public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
     {
-        _active = false;
         return true;
     }
 
     private boolean isFirstLaunch()
     {
-        return settings.getBoolean("firstLaunch", true);
+        return settings.getBoolean(FIRST_LAUNCH, true);
     }
 
     private void showLoading(String msg)
@@ -128,9 +125,9 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler
         // so now that we are expiring the translator code after 12 hours we will auto "log out" the
         // user when the app is restarted.
 
-        if (settings.getBoolean("TranslatorMode", false))
+        if (settings.getBoolean(TRANSLATOR_MODE, false))
         {
-            settings.edit().putBoolean("TranslatorMode", false).apply();
+            settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
         }
 
         Intent intent = new Intent(this, MainPW.class);
