@@ -37,6 +37,7 @@ import org.keynote.godtools.android.utils.Typefaces;
 import java.util.Locale;
 
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
