@@ -35,30 +35,35 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
+
 public class SelectLanguagePW extends BaseActionBarActivity implements AdapterView.OnItemClickListener, DownloadTask.DownloadTaskHandler
 {
     private final String TAG = getClass().getSimpleName();
     
-    ListView mList;
-    SharedPreferences settings;
-    List<GTLanguage> languageList;
+    private ListView mList;
+    private SharedPreferences settings;
+    private List<GTLanguage> languageList;
 
-    String primaryLanguage, parallelLanguage;
-    String currentLanguage;
-    Boolean isTranslator;
-    Typeface mAlternateTypeface;
-    String languageType;
-    Intent returnIntent;
-    boolean isMainLang;
-    boolean downloadOnly;
-    int index;
-    int top;
-    View localView;
+    private String primaryLanguage;
+    private String parallelLanguage;
+    private String currentLanguage;
+    private Boolean isTranslator;
+    private Typeface mAlternateTypeface;
+    private String languageType;
+    private Intent returnIntent;
+    private boolean isMainLang;
+    private boolean downloadOnly;
+    private int index;
+    private int top;
+
+
+    private SnuffyApplication app;
     
-    
-    SnuffyApplication app;
-    
-    LanguageAdapter.ViewHolder currentView;
+    private LanguageAdapter.ViewHolder currentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -86,9 +91,9 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
         app = (SnuffyApplication) getApplication();
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        primaryLanguage = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+        primaryLanguage = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
         parallelLanguage = settings.getString(GTLanguage.KEY_PARALLEL, "");
-        isTranslator = settings.getBoolean("TranslatorMode", false);
+        isTranslator = settings.getBoolean(TRANSLATOR_MODE, false);
 
         Log.i(TAG, "primary: " + primaryLanguage);
         Log.i(TAG, "parallel: " + parallelLanguage);
@@ -117,7 +122,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         setList();
     }
     
-    public void setList()
+    private void setList()
     {
         if (languageType.equalsIgnoreCase("Main Language"))
         {
@@ -134,7 +139,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         // There are sometimes duplicates of languages.
         languageList = removeDuplicates(languageList);
         
-        LanguageAdapter adapter = new LanguageAdapter(this, languageList, mAlternateTypeface);
+        LanguageAdapter adapter = new LanguageAdapter(this, languageList);
         Log.i(TAG, "current language: " + currentLanguage);
         adapter.setCurrentLanguage(currentLanguage);
         mList.setAdapter(adapter);
@@ -157,7 +162,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     private void setListLocation()
     {
         index = mList.getFirstVisiblePosition();
-        localView = mList.getChildAt(0);
+        View localView = mList.getChildAt(0);
         top = (localView == null) ? 0 : (localView.getTop() - mList.getPaddingTop());    
     }
 
@@ -227,7 +232,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
                 GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
                         gtl.getLanguageCode(),
-                        "primary",
+                        KEY_PRIMARY,
                         this);            }
         }
     }
@@ -268,19 +273,14 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
     private class LanguageAdapter extends ArrayAdapter<GTLanguage>
     {
-
-        private Context mContext;
-        private LayoutInflater mInflater;
-        private List<GTLanguage> mLanguageList;
+        private final LayoutInflater mInflater;
+        private final List<GTLanguage> mLanguageList;
         private String currentLanguage;
-        private Typeface tp;
 
-        public LanguageAdapter(Context context, List<GTLanguage> objects, Typeface typeface)
+        public LanguageAdapter(Context context, List<GTLanguage> objects)
         {
             super(context, R.layout.languages_list_item, objects);
-            this.mContext = context;
             this.mLanguageList = objects;
-            this.tp = typeface;
             this.mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
@@ -437,7 +437,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         if (downloaded)
         {
             GTLanguage languageRetrievedFromDatabase = GTLanguage.getLanguage(app.getApplicationContext(), langCode);
-            languageRetrievedFromDatabase.setDownloaded(downloaded);
+            languageRetrievedFromDatabase.setDownloaded(true);
             languageRetrievedFromDatabase.update(app.getApplicationContext());
         }
 
