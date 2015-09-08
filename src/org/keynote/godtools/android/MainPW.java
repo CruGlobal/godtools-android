@@ -113,7 +113,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         if (!isFirstLaunch())
         {
             showLoading();
-            GodToolsApiClient.getListOfPackages(META,this);
+            GodToolsApiClient.getListOfPackages(META, this);
             settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
         }
 
@@ -232,7 +232,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             @Override
             public void onReceive(Context context, Intent intent)
             {
-                 if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
+                if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
                 {
                     Type type = (Type) intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE);
 
@@ -490,7 +490,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     @Override
     public void metaTaskComplete(List<GTLanguage> languageList, String tag)
     {
-        UpdatePackageListTask.run(languageList,DBAdapter.getInstance(this));
+        UpdatePackageListTask.run(languageList, DBAdapter.getInstance(this));
 
         hideLoading();
     }
