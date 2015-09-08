@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -48,14 +49,14 @@ import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+@SuppressWarnings({"ResultOfMethodCallIgnored", "deprecation"})
 public class SnuffyLanguageActivity extends ListActivity {
 	private static final String TAG = "SnuffyLanguageActivity";
 	
-	private ArrayList<HashMap<String, Object>> mList = new ArrayList<HashMap<String, Object>>(4);
+	private final ArrayList<HashMap<String, Object>> mList = new ArrayList<HashMap<String, Object>>(4);
 	private String mPackageName;
-	private String mLanguageCode;
-    public static final int DIALOG_DOWNLOAD_INDEX_PROGRESS = 0;
-    public static final int DIALOG_DOWNLOAD_LANGUAGE_PROGRESS = 1;
+	private static final int DIALOG_DOWNLOAD_INDEX_PROGRESS = 0;
+    private static final int DIALOG_DOWNLOAD_LANGUAGE_PROGRESS = 1;
     private ProgressDialog mProgressDialog;
     private DownloadFileAsync mDownloadFileAsync;
     private SimpleImageAdapter mAdapter;
@@ -76,12 +77,8 @@ public class SnuffyLanguageActivity extends ListActivity {
 		// the to array specifies the views from the xml layout
 		// on which we want to display the values defined in the from array
 		int[] to = { R.id.list2Text1, R.id.list2Image};
-		
-		mLanguageCode = getIntent().getStringExtra("LanguageCode");
+
 		mPackageName  = getIntent().getStringExtra("PackageName");
-		
-		// TODO: consider case where device rotated - this code may need to move
-		// languages are reloaded but progress dialog is not removed
 		
 		mAdapter = new SimpleImageAdapter(this, mList, R.layout.list_item_with_icon_text_and_status, from, to);
 		setListAdapter(mAdapter);
@@ -93,9 +90,9 @@ public class SnuffyLanguageActivity extends ListActivity {
 		mDownloadFileAsync.execute();
 	}
 	
-	static final int CMD_SWITCH   = Menu.FIRST;
-	static final int CMD_DOWNLOAD = Menu.FIRST+1;
-	static final int CMD_REMOVE   = Menu.FIRST+2;
+	private static final int CMD_SWITCH   = Menu.FIRST;
+	private static final int CMD_DOWNLOAD = Menu.FIRST+1;
+	private static final int CMD_REMOVE   = Menu.FIRST+2;
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) { 
 	    AdapterContextMenuInfo info = (AdapterContextMenuInfo)menuInfo; 
@@ -213,10 +210,6 @@ public class SnuffyLanguageActivity extends ListActivity {
 	}
 	
 	private void doCmd_SwitchLanguage(int languageIndex) {
-		// TODO: Cannot be done by caller.
-		// We need to switch to the new language here.
-		// So we can also switch languages to the built-in language if user deletes the current language
-
 		Intent intent = new Intent();
 		intent.putExtra("LanguageCode", (String)(mList.get(languageIndex).get("languagecode")));
 		setResult(RESULT_FIRST_USER + languageIndex, intent);
@@ -230,11 +223,10 @@ public class SnuffyLanguageActivity extends ListActivity {
 				List<? extends Map<String, ?>> data, int resource,
 				String[] from, int[] to) {
 			super(context, data, resource, from, to);
-			// TODO Auto-generated constructor stub
 		}
 
 		@Override
-		public void setViewImage(ImageView v, String value) {
+		public void setViewImage(@NonNull ImageView v, String value) {
 			
 			if (value.equalsIgnoreCase("LOADED" )
 			||  value.equalsIgnoreCase("BUILTIN")) {
@@ -249,6 +241,7 @@ public class SnuffyLanguageActivity extends ListActivity {
 			InputStream isImage;
 			try {
 				boolean bImageFromAsset = false; // the icons for all languages have been downloaded
+				//noinspection ConstantConditions
 				if (!bImageFromAsset) {
 					//  need this code when the files have been downloaded
 					try {
@@ -268,6 +261,7 @@ public class SnuffyLanguageActivity extends ListActivity {
 					isImage = getAssets().open(value, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
 				}
 	        	Bitmap bm = BitmapFactory.decodeStream(isImage);
+				assert isImage != null;
 				isImage.close();
 				
 				v.setImageBitmap(bm);
@@ -298,6 +292,7 @@ public class SnuffyLanguageActivity extends ListActivity {
 	
 	private void updateLanguageList() {
 		File documentsDir = ((SnuffyApplication)getApplication()).getDocumentsDir();
+		//noinspection UnusedAssignment
 		Document 			xmlDoc 	= null;
 		FileInputStream 	fin 	= null;
 		BufferedInputStream	bin 	= null;
@@ -312,8 +307,6 @@ public class SnuffyLanguageActivity extends ListActivity {
 	       	org.w3c.dom.Element root =  xmlDoc.getDocumentElement();
 	       	if (root == null)
 	       		throw new SAXException("XML Document has no root element");
-	       	
-	       	// TODO: Could also verify that the package node has id=the package name and status = "live"
 
 	       	NodeList nlLanguages = root.getElementsByTagName("language"); 
 	       	int numLanguages = nlLanguages.getLength();
@@ -323,11 +316,10 @@ public class SnuffyLanguageActivity extends ListActivity {
           	for (int i=0; i < numLanguages; i++) {
             	Element elLanguage = (Element)nlLanguages.item(i);
             	if (elLanguage.getAttribute("status").equalsIgnoreCase("live")) {
-            		// TODO: verify version and minimum_interpreter_version too
 	            	String localizedPackageName = elLanguage.getAttribute("name");
 	            	String iconFileName         = elLanguage.getAttribute("icon");
 	            	//String filesPath			= elLanguage.getAttribute("path");
-	            	String languageCode			= elLanguage.getAttribute("language_code"); // TODO: split EN_US to EN and US but if 2 letters then 2nd is ""
+	            	String languageCode			= elLanguage.getAttribute("language_code");
 	            	String languageName			= new Locale(languageCode.substring(0,2), "").getDisplayLanguage();
 	            	if (languageCode.equalsIgnoreCase("en_us"))
 	            		languageName = "English (United States)";
@@ -353,18 +345,22 @@ public class SnuffyLanguageActivity extends ListActivity {
 		}
 		finally {
 			if (bin != null) {
-				try {bin.close();} catch (Exception e) {}
+				try {bin.close();} catch (Exception e) {
+					Log.e(TAG, e.getMessage());
+				}
 			}
 			if (fin != null) {
-				try {fin.close();} catch (Exception e) {}
+				try {fin.close();} catch (Exception e) {
+					Log.e(TAG, e.getMessage());
+				}
             }
 		}			
 	}
 	
 	
 	private class DownloadFileAsync extends AsyncTask<String, Integer, String> {
-		private String mLanguageCode;
-		private int    mProgressDialogId;
+		private final String mLanguageCode;
+		private final int    mProgressDialogId;
 		
 		public DownloadFileAsync(String languageCode) {
 			super();
@@ -397,11 +393,11 @@ public class SnuffyLanguageActivity extends ListActivity {
 				URL url;
 				if (mLanguageCode.length() == 0) {
 					// loading languages index only
-					url = new URL(repoURL + "?ss=standard&segment=icon&p=" + mPackageName); // TODO: Ought to escape the packageName?
+					url = new URL(repoURL + "?ss=standard&segment=icon&p=" + mPackageName);
 				}
 				else {
 					// loading all data for a single language
-					url = new URL(repoURL + "?ss=standard&l=" + mLanguageCode + "&p=" + mPackageName); // TODO: Ought to escape the packageName?
+					url = new URL(repoURL + "?ss=standard&l=" + mLanguageCode + "&p=" + mPackageName);
 				}
 				Log.d(TAG, "Loading: " + url.toString());
 				URLConnection conn = url.openConnection();
@@ -447,7 +443,7 @@ public class SnuffyLanguageActivity extends ListActivity {
 				if (!isCancelled()) {
 					if (mLanguageCode.length() == 0) {
 						String downloadedIndex = documentsDir.getPath() + "/repoFile.xml";
-						String renamedIndex    = documentsDir.getPath() + "/repoIndex.xml"; // TODO: could build packagename into this filename
+						String renamedIndex    = documentsDir.getPath() + "/repoIndex.xml";
 						
 						// rename the repo index so it wont get overwritten by subsequent download of whole package
 						// which includes another file of the same name but different contents.
