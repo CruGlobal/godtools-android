@@ -40,13 +40,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "BooleanMethodIsAlwaysInverted"})
 public class PackageReader
 {
     //public static final int		REFERENCE_DEVICE_HEIGHT = 460;	// pixels on iPhone - not including status bar
@@ -165,7 +164,7 @@ public class PackageReader
 
         boolean bSuccess = false;
 
-        Document xmlDoc = null;
+        Document xmlDoc;
         try
         {
             xmlDoc = DocumentBuilderFactory
@@ -266,6 +265,7 @@ public class PackageReader
             }
         }
 
+        //noinspection ConstantConditions
         return (currPage != null);
     }
 
@@ -402,75 +402,13 @@ public class PackageReader
         }
     }
 
-    public boolean processPackage(SnuffyApplication app,
-                                  int pageWidth,
-                                  int pageHeight,
-                                  String packageName,
-                                  String languageCode,
-                                  Vector<SnuffyPage> pages,
-                                  ProgressCallback progressCallback,
-                                  Typeface alternateTypeface)
-    {
-        mAppRef = new WeakReference<SnuffyApplication>(app);
-        mContext = app.getApplicationContext();
-        mPageWidth = pageWidth;
-        mPageHeight = pageHeight;
-        mPackageName = packageName;
-        mLanguageCode = languageCode;
-        mPages = pages;
-        mTotalBitmapSpace = 0;
-        mImageFolderName = "Packages/" + mPackageName + "/shared/images/";
-        mThumbsFolderName = "Packages/" + mPackageName + "/shared/thumbs/";
-        mSharedFolderName = "Packages/shared/";
-        mFromAssets = app.languageExistsAsAsset(mPackageName, mLanguageCode);
-        mProgressCallback = progressCallback;
-        mAlternateTypeface = alternateTypeface;
-
-        // In the case where this package is replacing the previous package - release the memory occupied by the original
-        bitmapCache.clear();
-        mPages.clear();
-
-        // Now process the package files and build the views
-        String mainPackagefileName = "Packages/" + packageName + "/" + languageCode + ".xml";
-        boolean bSuccess;
-        InputStream isMain = null;
-        try
-        {
-            if (mFromAssets)
-                isMain = app.getAssets().open(mainPackagefileName, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
-            else
-                isMain = new BufferedInputStream(new FileInputStream(app.getDocumentsDir().getPath() + "/" + mainPackagefileName));
-            bSuccess = processMainPackageFile(isMain);
-
-        } catch (IOException e)
-        {
-            Log.e(TAG, "Cannot open or read main package file: " + mainPackagefileName);
-            return false;
-        } finally
-        {
-            if (isMain != null)
-            {
-                try
-                {
-                    isMain.close();
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return bSuccess;
-    }
-
-
     private boolean processMainPackageFile(InputStream isMain)
     {
         Log.d(TAG, ">>> processMainPackageFile starts");
 
         boolean bSuccess = false;
 
-        Document xmlDoc = null;
+        Document xmlDoc;
         try
         {
             xmlDoc = DocumentBuilderFactory
@@ -578,6 +516,7 @@ public class PackageReader
             }
         }
 
+        //noinspection ConstantConditions
         return (currPage != null);
     }
 
@@ -588,7 +527,7 @@ public class PackageReader
 
         SnuffyPage currPage = null;
 
-        Document xmlDoc = null;
+        Document xmlDoc;
         try
         {
             xmlDoc = DocumentBuilderFactory
@@ -765,16 +704,9 @@ public class PackageReader
         int yOffset = getIntegerAttributeValue(elButton, "yoffset", 0);
         String align = getStringAttributeValue(elButton, "textalign", (bUrlMode || bPhoneMode || bEmailMode || bBigMode) ? "center" : "left");
         String label = getStringAttributeValue(elButton, "label", "");
-//		String modifier = getStringAttributeValue (elButton, "modifier", "");
-//		float alpha		= getFloatAttributeValue  (elButton, "alpha", 1.0f);
-//		int color		= getColorAttributeValue  (elButton, "color", Color.WHITE);
 
-
-        xPos = getScaledXValue(xPos);
         yPos = getScaledYValue(yPos);
-        width = getScaledXValue(width);
         yOffset = getScaledYValue(yOffset);
-//		color	= setColorAlphaVal(color, alpha);
         if (align.equalsIgnoreCase("center"))
         {
             xPos = 0;
@@ -879,10 +811,9 @@ public class PackageReader
             {
 
                 String content = "";
-                Iterator<String> iter = urlsOnpage.iterator();
-                while (iter.hasNext())
+                for (String anUrlsOnpage : urlsOnpage)
                 {
-                    content += "http://" + iter.next() + "\n";
+                    content += "http://" + anUrlsOnpage + "\n";
                 }
                 setupUrlButtonHandler(currPage, theContainer, mode, content);
             }
@@ -1964,6 +1895,7 @@ public class PackageReader
             // center heading vertically
 
             // h specified. assume there is a heading and only a heading.
+            assert tvHeading != null;
             SnuffyLayoutParams lp = (SnuffyLayoutParams) tvHeading.getLayoutParams();
             tvHeading.measure(
                     MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY),
@@ -2061,6 +1993,7 @@ public class PackageReader
                 // grad_shad_E_title:...
                 ImageView iv = new ImageView(mContext);
                 iv.setTag(new Integer(566));
+                assert bmNE != null;
                 iv.setLayoutParams(new SnuffyLayoutParams(
                         getScaledXValue(bmE.getWidth()),
                         lpTitleContainer.height - getScaledYValue(bmNE.getHeight()) - DROPSHADOW_INSETY,
@@ -2114,7 +2047,7 @@ public class PackageReader
                 iv.setTag(new Integer(566));
                 iv.setLayoutParams(new SnuffyLayoutParams(
                         DROPSHADOW_LENGTHX,
-                        lpTitleContainer.height - DROPSHADOW_INSETY - 0,
+                        lpTitleContainer.height - DROPSHADOW_INSETY,
                         lpTitleContainer.width - DROPSHADOW_INSETX,
                         lpTitleContainer.y));
                 iv.setImageBitmap(bmE);
@@ -2185,6 +2118,7 @@ public class PackageReader
             tvArrow.setPadding(0, 3, 0, 0);
             subTitleContainer.addView(tvArrow);
 
+            assert tvSubTitle != null;
             SnuffyLayoutParams lp = (SnuffyLayoutParams) tvSubTitle.getLayoutParams();
             tvSubTitle.measure(
                     MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY),
@@ -2209,7 +2143,7 @@ public class PackageReader
             // grad_shad_E_subtitle:...
             SnuffyLayoutParams lpTemp = new SnuffyLayoutParams(
                     DROPSHADOW_SUBLENGTHX,
-                    lpSubTitleContainer.height - DROPSHADOW_INSETY - 0,
+                    lpSubTitleContainer.height - DROPSHADOW_INSETY,
                     lpSubTitleContainer.width - DROPSHADOW_INSETX,
                     yBefore);
             Bitmap bmE = getBitmapFromAssetOrFile(mContext, "grad_shad_E.png");
@@ -2268,7 +2202,7 @@ public class PackageReader
             final SnuffyLayoutParams lpAfterSE = new SnuffyLayoutParams(lpTemp.width, lpTemp.height, lpTemp.x, yAfterSE);
 
             orderTitleViews(titleClippingContainer);
-            final SnuffyPage thePage = (SnuffyPage) currPage;
+            final SnuffyPage thePage = currPage;
             titleContainer.setOnClickListener(new View.OnClickListener()
             {
 
@@ -2438,7 +2372,7 @@ public class PackageReader
         TextView tv = new TextView(mContext);
         tv.setLayoutParams(new SnuffyLayoutParams(
                 w == 0 ? LayoutParams.WRAP_CONTENT : w,
-                bResize ? LayoutParams.WRAP_CONTENT : h,
+                LayoutParams.WRAP_CONTENT,
                 x, y));
         tv.setText(content);
         tv.setGravity(getGravityFromAlign(align) + Gravity.TOP);
@@ -2835,7 +2769,7 @@ public class PackageReader
         View hr = new View(mContext);
         hr.setBackgroundColor(setColorAlphaVal(color, HR_ALPHA));
         hr.setLayoutParams(new SnuffyLayoutParams(
-                pageWidth - 2 * PackageReader.BUTTON_HR_MARGINX,
+                pageWidth,
                 1,
                 PackageReader.BUTTON_HR_MARGINX, yPos));
         return hr;
@@ -3047,6 +2981,7 @@ public class PackageReader
         void updateProgress(int curr, int max);
     }
 
+    @SuppressWarnings("unused")
     private class SimpleAnimationListener implements Animation.AnimationListener
     {
 
