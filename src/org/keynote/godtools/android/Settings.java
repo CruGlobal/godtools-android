@@ -3,16 +3,15 @@ package org.keynote.godtools.android;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-public class Settings extends PreferenceActivity {
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 
-	public static final String LOGTAG = "Settings";
-	public static final String PREFNAME = "GodTools";
+public class Settings extends PreferenceActivity {
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        this.getPreferenceManager().setSharedPreferencesName(PREFNAME);
+        this.getPreferenceManager().setSharedPreferencesName(PREFS_NAME);
         addPreferencesFromResource(R.xml.settings);
     }
     
