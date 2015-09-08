@@ -14,8 +14,6 @@ import com.google.common.base.Strings;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
-import org.keynote.godtools.android.business.GTLanguage;
-import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.http.APITasks;
 import org.keynote.godtools.android.http.AuthTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
@@ -42,10 +40,6 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
 
     private LocalBroadcastManager broadcastManager;
     private SharedPreferences settings;
-    private String languagePrimary;
-    private String languageParallel;
-
-    private DBAdapter adapter;
 
     public BackgroundService()
     {
@@ -58,9 +52,6 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         super.onCreate();
         broadcastManager = LocalBroadcastManager.getInstance(this);
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
-        languageParallel = settings.getString(GTLanguage.KEY_PARALLEL, "");
-        adapter = DBAdapter.getInstance(this);
     }
 
     @Override
@@ -89,7 +80,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         }
     }
 
-    public static Intent baseIntent(Context context, Bundle extras)
+    private static Intent baseIntent(Context context, Bundle extras)
     {
         Intent intent = new Intent(context, BackgroundService.class);
         if (extras != null)
