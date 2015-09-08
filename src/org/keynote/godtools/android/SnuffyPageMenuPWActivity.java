@@ -35,7 +35,6 @@ import java.util.Vector;
 public class SnuffyPageMenuPWActivity extends ListActivity {
 	private static String TAG = "SnuffyPageMenuActivity";
 	private boolean mFromAssets;
-	private String mPackageName;
 	private String mLanguageCode;
 	private String mFilesDir;
 
@@ -51,15 +50,11 @@ public class SnuffyPageMenuPWActivity extends ListActivity {
 		setContentView(R.layout.page_menu);
 
 		mLanguageCode = getIntent().getStringExtra("LanguageCode");
-		mPackageName  = getIntent().getStringExtra("PackageName");
 		SnuffyApplication app = (SnuffyApplication)getApplication();
   		mFromAssets		  	= false;
         mFilesDir		= app.getDocumentsDir().getPath() + "/resources";
 
   		setTitle(app.mPackageTitle);
-
-		// see also : http://stackoverflow.com/questions/6852876/android-about-listview-and-simpleadapter
-		// see also: http://android-developers.blogspot.com.au/2009/02/android-layout-tricks-1.html
 
 		HashMap<String, Object> map;
 

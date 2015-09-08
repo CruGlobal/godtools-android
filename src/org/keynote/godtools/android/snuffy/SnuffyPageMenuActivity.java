@@ -54,10 +54,7 @@ public class SnuffyPageMenuActivity extends ListActivity {
   		mFromAssets		  	= app.languageExistsAsAsset(mPackageName, mLanguageCode);
   		mDocumentsDir		= app.getDocumentsDir().getPath();
   		
-  		setTitle(app.mPackageTitle);		
-
-		// see also : http://stackoverflow.com/questions/6852876/android-about-listview-and-simpleadapter
-		// see also: http://android-developers.blogspot.com.au/2009/02/android-layout-tricks-1.html
+  		setTitle(app.mPackageTitle);
 		
 		HashMap<String, Object> map;
 
