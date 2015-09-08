@@ -46,16 +46,17 @@ import java.util.Vector;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+@SuppressWarnings("deprecation")
 public class PackageReader
 {
     //public static final int		REFERENCE_DEVICE_HEIGHT = 460;	// pixels on iPhone - not including status bar
-    public static final int REFERENCE_DEVICE_HEIGHT = 480;    // pixels on iPhone - including status bar
+    private static final int REFERENCE_DEVICE_HEIGHT = 480;    // pixels on iPhone - including status bar
 
     // Note that these coords are those used in the Package .XML files.
     // They are based on an original iPhone (480x320), with the status bar removed
     // The similar specs in Main.java and the HomeScreen layout in the GodTools app are based on
     // an iPhone4S with retina display (960x640), with the status bar removed.
-    public static final int REFERENCE_DEVICE_WIDTH = 320;    // pixels on iPhone - full width
+    private static final int REFERENCE_DEVICE_WIDTH = 320;    // pixels on iPhone - full width
     private static final String TAG = "PackageReader";
     private static final float DEFAULT_TEXT_SIZE = 17.0f;
     private static final float DEFAULT_BUTTON_TEXT_SIZE = 20.0f;
@@ -72,7 +73,7 @@ public class PackageReader
     private static final int MIN_MARGIN_ABOVE_FOOTER = 5;
     private static final int MAX_YOFFSET = 100;
     private static final float HR_ALPHA = 0.25f;
-    static Hashtable<String, Bitmap> bitmapCache = new Hashtable<String, Bitmap>();
+    private static final Hashtable<String, Bitmap> bitmapCache = new Hashtable<String, Bitmap>();
     private WeakReference<SnuffyApplication>
             mAppRef;
     private Context mContext;
@@ -158,7 +159,7 @@ public class PackageReader
         return bSuccess;
     }
 
-    public boolean processMainPackageFilePW(InputStream isMain)
+    private boolean processMainPackageFilePW(InputStream isMain)
     {
         Log.d(TAG, ">>> processMainPackageFile starts");
 
@@ -223,9 +224,6 @@ public class PackageReader
         } catch (SAXException e)
         {
             Log.e(TAG, "processMainPackageFile failed: " + e.toString());
-        } finally
-        {
-
         }
         Log.d(TAG, ">>> processMainPackageFile ends");
         return bSuccess;
@@ -341,9 +339,6 @@ public class PackageReader
         {
             Log.e(TAG, "processPageFile failed: " + e.toString());
             snuffyPage = null;
-        } finally
-        {
-
         }
         Log.d(TAG, ">>> processPageFile ends");
         return snuffyPage;
@@ -534,9 +529,6 @@ public class PackageReader
         } catch (SAXException e)
         {
             Log.e(TAG, "processMainPackageFile failed: " + e.toString());
-        } finally
-        {
-
         }
         Log.d(TAG, ">>> processMainPackageFile ends");
         return bSuccess;
@@ -657,9 +649,6 @@ public class PackageReader
         {
             Log.e(TAG, "processPageFile failed: " + e.toString());
             currPage = null;
-        } finally
-        {
-
         }
         Log.d(TAG, ">>> processPageFile ends");
         return currPage;
@@ -855,10 +844,10 @@ public class PackageReader
 
             // add 2 pixel thick horizontal rule above the button
             View hr;
-            hr = getHRView(Color.parseColor("#4c4c4c"), buttonWidth, BUTTON_HR_MARGINX, yPosInContainer, 1);
+            hr = getHRView(Color.parseColor("#4c4c4c"), buttonWidth, yPosInContainer);
             theContainer.addView(hr);
             yPosInContainer += 1;
-            hr = getHRView(Color.parseColor("#ffffff"), buttonWidth, BUTTON_HR_MARGINX, yPosInContainer, 1);
+            hr = getHRView(Color.parseColor("#ffffff"), buttonWidth, yPosInContainer);
             theContainer.addView(hr);
             yPosInContainer += 1;
 
@@ -869,10 +858,10 @@ public class PackageReader
             yPosInContainer = lpContainer.height; // we add to bottom of the container
 
             // add 2 pixel thick horizontal rule below the button
-            hr = getHRView(Color.parseColor("#4c4c4c"), buttonWidth, BUTTON_HR_MARGINX, yPosInContainer, 1);
+            hr = getHRView(Color.parseColor("#4c4c4c"), buttonWidth, yPosInContainer);
             theContainer.addView(hr);
             yPosInContainer += 1;
-            hr = getHRView(Color.parseColor("#ffffff"), buttonWidth, BUTTON_HR_MARGINX, yPosInContainer, 1);
+            hr = getHRView(Color.parseColor("#ffffff"), buttonWidth, yPosInContainer);
             theContainer.addView(hr);
             yPosInContainer += 1;
 
@@ -886,13 +875,11 @@ public class PackageReader
             processButtonPanel(elPage, root, currPage, elButton, new Integer(iButton), urlsOnpage);
 
             final SnuffyLayout panel = (SnuffyLayout) (currPage.findViewWithTag(new Integer(iTagButtonPanel)));
-            final Vector<String> finalUrlsOnPage = urlsOnpage;
-            final SnuffyPage finalCurrPage = currPage;
             if (bAllUrlMode)
             {
 
                 String content = "";
-                Iterator<String> iter = finalUrlsOnPage.iterator();
+                Iterator<String> iter = urlsOnpage.iterator();
                 while (iter.hasNext())
                 {
                     content += "http://" + iter.next() + "\n";
@@ -1267,8 +1254,8 @@ public class PackageReader
         int yOffset = getIntegerAttributeValue(elButton, "yoffset", 0);
         String align = getStringAttributeValue(elButton, "textalign", (bUrlMode || bBigMode || bAllUrlMode) ? "center" : "left");
         String modifier = getStringAttributeValue(elButton, "modifier", "");
-        float alpha = getFloatAttributeValue(elButton, "alpha", 1.0f);
-        int color = getColorAttributeValue(elButton, "color", Color.WHITE);
+        float alpha = getFloatAttributeValue(elButton);
+        int color = getColorAttributeValue(elButton, Color.WHITE);
 
         xPos = getScaledXValue(xPos);
         width = getScaledXValue(width);
@@ -1339,16 +1326,15 @@ public class PackageReader
             ImageView iv = new ImageView(mContext);
             //SnuffyDisclosureIndicator di = new SnuffyDisclosureIndicator(mContext);
             //iv.setImageDrawable(di);
-            int diSize = buttonHeight;
             if (bExpanded)
             {
                 iv.setImageResource(R.drawable.disclosure_indicator_maximized);
-                iv.setLayoutParams(new SnuffyLayoutParams(diSize, diSize, containerWidth - diSize - getScaledXValue(0), lp.y + 2));
+                iv.setLayoutParams(new SnuffyLayoutParams(buttonHeight, buttonHeight, containerWidth - buttonHeight - getScaledXValue(0), lp.y + 2));
             }
             else
             {
                 iv.setImageResource(R.drawable.disclosure_indicator_minimized);
-                iv.setLayoutParams(new SnuffyLayoutParams(diSize, diSize, containerWidth - diSize + getScaledXValue(5), lp.y + 2));
+                iv.setLayoutParams(new SnuffyLayoutParams(buttonHeight, buttonHeight, containerWidth - buttonHeight + getScaledXValue(5), lp.y + 2));
             }
             theContainer.addView(iv);
         }
@@ -1529,8 +1515,8 @@ public class PackageReader
         int size = getIntegerAttributeValue(elText, "size", 100);
         String align = getStringAttributeValue(elText, "textalign", getStringAttributeValue(elPanel, "textalign", "left"));
         String modifier = getStringAttributeValue(elText, "modifier", "");
-        float alpha = getFloatAttributeValue(elText, "alpha", 1.0f);
-        int color = getColorAttributeValue(elText, "color", Color.WHITE);
+        float alpha = getFloatAttributeValue(elText);
+        int color = getColorAttributeValue(elText, Color.WHITE);
 
         xPos = getScaledXValue(xPos);
         yPos = getScaledYValue(yPos);
@@ -1592,7 +1578,7 @@ public class PackageReader
 
     private void processQuestion(Element elPage, Element root, SnuffyPage currPage, Element elQuestion)
     {
-        Vector<Element> vTexts = getChildrenWithName(elQuestion, "text");
+        Vector<Element> vTexts = getChildrenWithName(elQuestion);
         int numTexts = vTexts.size();
         if (numTexts > 0)
         {
@@ -1637,8 +1623,8 @@ public class PackageReader
                 int size = getIntegerAttributeValue(elQuestion, "size", 100);
                 String align = getStringAttributeValue(elQuestion, "textalign", "right");
                 String modifier = getStringAttributeValue(elQuestion, "modifier", bStraightMode ? "bold" : "bold-italics");
-                float alpha = getFloatAttributeValue(elQuestion, "alpha", 1.0f);
-                int color = getColorAttributeValue(elQuestion, "color", bStraightMode ? mBackgroundColor : Color.WHITE);
+                float alpha = getFloatAttributeValue(elQuestion);
+                int color = getColorAttributeValue(elQuestion, bStraightMode ? mBackgroundColor : Color.WHITE);
 
                 //int yOffset		= getIntegerAttributeValue(elQuestion, "yoffset", 0);
 
@@ -1712,8 +1698,8 @@ public class PackageReader
         int size = getIntegerAttributeValue(elText, "size", 100);
         String align = getStringAttributeValue(elText, "textalign", "right");
         String modifier = getStringAttributeValue(elText, "modifier", "bold-italics");
-        float alpha = getFloatAttributeValue(elText, "alpha", 1.0f);
-        int color = getColorAttributeValue(elText, "color", Color.WHITE);
+        float alpha = getFloatAttributeValue(elText);
+        int color = getColorAttributeValue(elText, Color.WHITE);
 
         xPos = getScaledXValue(xPos);
         yPos = getScaledYValue(yPos);
@@ -1775,8 +1761,8 @@ public class PackageReader
         int size = getIntegerAttributeValue(elText, "size", 100);
         String align = getStringAttributeValue(elText, "textalign", "left");
         String modifier = getStringAttributeValue(elText, "modifier", "");
-        float alpha = getFloatAttributeValue(elText, "alpha", 1.0f);
-        int color = getColorAttributeValue(elText, "color", Color.WHITE);
+        float alpha = getFloatAttributeValue(elText);
+        int color = getColorAttributeValue(elText, Color.WHITE);
 
         xPos = getScaledXValue(xPos);
         yPos = getScaledYValue(yPos);
@@ -1926,9 +1912,8 @@ public class PackageReader
             lpSubHeading = (SnuffyLayoutParams) tvSubHeading.getLayoutParams();
 
             int xPosVLine = lpSubHeading.x - (PEEK_HEADING_XSEPARATION / 2);
-            int y1PosVLine = PEEK_VLINE_YMARGIN;
             int y2PosVLine = Math.max(lpHeading.y + tvHeading.getMeasuredHeight(), lpSubHeading.y + tvSubHeading.getMeasuredHeight()) - (2 * PEEK_VLINE_YMARGIN) + HEADING_BOTTOM_PADDING;
-            vLine = getVRView(Color.BLACK, xPosVLine, y1PosVLine, y2PosVLine, 1);
+            vLine = getVRView(xPosVLine, PEEK_VLINE_YMARGIN, y2PosVLine);
         }
 
         titleHeight = getScaledYValue(titleHeight);
@@ -2222,8 +2207,6 @@ public class PackageReader
 
             SnuffyLayoutParams lpSubTitleContainer = new SnuffyLayoutParams(subTitleWidth, subTitleHeight, 0, yBefore);
             // grad_shad_E_subtitle:...
-            final int yBeforeE = yBefore;
-            final int yAfterE = yAfter;
             SnuffyLayoutParams lpTemp = new SnuffyLayoutParams(
                     DROPSHADOW_SUBLENGTHX,
                     lpSubTitleContainer.height - DROPSHADOW_INSETY - 0,
@@ -2330,7 +2313,7 @@ public class PackageReader
 
                             TranslateAnimation taE = new TranslateAnimation(
                                     Animation.ABSOLUTE, 0, Animation.ABSOLUTE, 0,
-                                    Animation.ABSOLUTE, 0, Animation.ABSOLUTE, yBeforeE - yAfterE);
+                                    Animation.ABSOLUTE, 0, Animation.ABSOLUTE, yBefore - yAfter);
                             taE.setDuration(THIS_ANIMATION_DURATION);
                             startAnimationOnViewWithTag(titleClippingContainer, 556, taE);
 
@@ -2394,7 +2377,7 @@ public class PackageReader
 
                             TranslateAnimation taE = new TranslateAnimation(
                                     Animation.ABSOLUTE, 0, Animation.ABSOLUTE, 0,
-                                    Animation.ABSOLUTE, 0, Animation.ABSOLUTE, yAfterE - yBeforeE);
+                                    Animation.ABSOLUTE, 0, Animation.ABSOLUTE, yAfter - yBefore);
                             taE.setDuration(THIS_ANIMATION_DURATION);
                             startAnimationOnViewWithTag(titleClippingContainer, 556, taE);
 
@@ -2429,8 +2412,8 @@ public class PackageReader
         //boolean bStraightMode 	= (titleMode.equalsIgnoreCase("straight"));
         float textSize = 4 * DEFAULT_TEXT_SIZE;
         String content = el.getTextContent();
-        int color = getColorAttributeValue(el, "color", mBackgroundColor);
-        float labelAlpha = getFloatAttributeValue(el, "alpha", 1.0f);
+        int color = getColorAttributeValue(el, mBackgroundColor);
+        float labelAlpha = getFloatAttributeValue(el);
         String alignment = getStringAttributeValue(el, "alignment", "right");            // both supported
         String align = getStringAttributeValue(el, "textalign", alignment);            // both supported
         int size = getIntegerAttributeValue(el, "size", 100);
@@ -2474,8 +2457,8 @@ public class PackageReader
         boolean bStraightMode = (titleMode.equalsIgnoreCase("straight"));
         float textSize = bPeekMode ? 30 : DEFAULT_TEXT_SIZE;
         String content = el.getTextContent();
-        int color = getColorAttributeValue(el, "color", mBackgroundColor);
-        float labelAlpha = getFloatAttributeValue(el, "alpha", 1.0f);
+        int color = getColorAttributeValue(el, mBackgroundColor);
+        float labelAlpha = getFloatAttributeValue(el);
         String alignment = getStringAttributeValue(el, "alignment", bPeekMode ? "right" : "left");            // both supported
         String align = getStringAttributeValue(el, "textalign", alignment);                                // both supported
         int size = getIntegerAttributeValue(el, "size", 100);
@@ -2529,8 +2512,8 @@ public class PackageReader
         boolean bPlainMode = (titleMode.equalsIgnoreCase("plain"));
         float textSize = DEFAULT_TEXT_SIZE;
         String content = el.getTextContent();
-        int color = getColorAttributeValue(el, "color", mBackgroundColor);
-        float labelAlpha = getFloatAttributeValue(el, "alpha", 1.0f);
+        int color = getColorAttributeValue(el, mBackgroundColor);
+        float labelAlpha = getFloatAttributeValue(el);
         String alignment = getStringAttributeValue(el, "alignment", bPeekMode ? "left" : "center");        // both supported
         String align = getStringAttributeValue(el, "textalign", alignment);                            // both supported
         int size = getIntegerAttributeValue(el, "size", 100);
@@ -2577,9 +2560,9 @@ public class PackageReader
         // Note: the x,y positioning here is relative to the subtitle container frame that encloses them
         float textSize = DEFAULT_TEXT_SIZE;
         String content = el.getTextContent();
-        int color = getColorAttributeValue(el, "color", mBackgroundColor);
+        int color = getColorAttributeValue(el, mBackgroundColor);
         int bgColor = Color.TRANSPARENT;
-        float labelAlpha = getFloatAttributeValue(el, "alpha", 1.0f);
+        float labelAlpha = getFloatAttributeValue(el);
         String alignment = getStringAttributeValue(el, "alignment", "left");    // both supported
         String align = getStringAttributeValue(el, "textalign", alignment);    // both supported
         int size = getIntegerAttributeValue(el, "size", 100);
@@ -2739,20 +2722,20 @@ public class PackageReader
         return (textSize * (float) mPageHeight / (float) REFERENCE_DEVICE_HEIGHT) / scale;
     }
 
-    private int getColorAttributeValue(Element el, String attrName, int defaultValue)
+    private int getColorAttributeValue(Element el, int defaultValue)
     {
-        String s = el.getAttribute(attrName).trim();
+        String s = el.getAttribute("color").trim();
         if (s.length() == 0)
             return defaultValue;
         else
             return Color.parseColor(s);
     }
 
-    private float getFloatAttributeValue(Element el, String attrName, float defaultValue)
+    private float getFloatAttributeValue(Element el)
     {
-        String s = el.getAttribute(attrName).trim();
+        String s = el.getAttribute("alpha").trim();
         if (s.length() == 0)
-            return defaultValue;
+            return 1.0f;
         else
             return Float.valueOf(s);
     }
@@ -2808,7 +2791,7 @@ public class PackageReader
         return "";
     }
 
-    private Vector<Element> getChildrenWithName(Element elParent, String elementName)
+    private Vector<Element> getChildrenWithName(Element elParent)
     {
         Vector<Element> v = new Vector<Element>();
         Node node = elParent.getFirstChild();
@@ -2817,7 +2800,7 @@ public class PackageReader
             if (node.getNodeType() == Node.ELEMENT_NODE)
             {
                 Element el = (Element) node;
-                if (el.getTagName().equalsIgnoreCase(elementName))
+                if (el.getTagName().equalsIgnoreCase("text"))
                     v.add(el);
             }
             node = node.getNextSibling();
@@ -2839,31 +2822,31 @@ public class PackageReader
     private int getGravityFromAlign(String align)
     {
         if (align.equalsIgnoreCase("right"))
-            return Gravity.RIGHT;
+            return Gravity.END;
         else if (align.equalsIgnoreCase("left"))
-            return Gravity.LEFT;
+            return Gravity.START;
         else
             return Gravity.CENTER_HORIZONTAL;
 
     }
 
-    private View getHRView(int color, int pageWidth, int margin, int yPos, int thickness)
+    private View getHRView(int color, int pageWidth, int yPos)
     {
         View hr = new View(mContext);
         hr.setBackgroundColor(setColorAlphaVal(color, HR_ALPHA));
         hr.setLayoutParams(new SnuffyLayoutParams(
-                pageWidth - 2 * margin,
-                thickness,
-                margin, yPos));
+                pageWidth - 2 * PackageReader.BUTTON_HR_MARGINX,
+                1,
+                PackageReader.BUTTON_HR_MARGINX, yPos));
         return hr;
     }
 
-    private View getVRView(int color, int xPos, int y1Pos, int y2Pos, int thickness)
+    private View getVRView(int xPos, int y1Pos, int y2Pos)
     {
         View vr = new View(mContext);
-        vr.setBackgroundColor(setColorAlphaVal(color, HR_ALPHA));
+        vr.setBackgroundColor(setColorAlphaVal(Color.BLACK, HR_ALPHA));
         vr.setLayoutParams(new SnuffyLayoutParams(
-                thickness,
+                1,
                 y2Pos - y1Pos,
                 xPos, y1Pos));
         return vr;
@@ -3067,8 +3050,8 @@ public class PackageReader
     private class SimpleAnimationListener implements Animation.AnimationListener
     {
 
-        private Runnable mToRunOnEnd;
-        private long mDelay;
+        private final Runnable mToRunOnEnd;
+        private final long mDelay;
 
         public SimpleAnimationListener(Runnable toRunOnEnd)
         {
