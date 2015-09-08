@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,13 +32,12 @@ import java.util.Map;
 import java.util.Vector;
 
 public class SnuffyPageMenuActivity extends ListActivity {
-	private static String TAG = "SnuffyPageMenuActivity";
+	private static final String TAG = "SnuffyPageMenuActivity";
 	private boolean mFromAssets;
-	private String mPackageName;
 	private String mLanguageCode;
 	private String mDocumentsDir;
 
-	List<HashMap<String, Object>> mList = new ArrayList<HashMap<String, Object>>(2);
+	private final List<HashMap<String, Object>> mList = new ArrayList<HashMap<String, Object>>(2);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class SnuffyPageMenuActivity extends ListActivity {
 		setContentView(R.layout.page_menu);
 		
 		mLanguageCode = getIntent().getStringExtra("LanguageCode");
-		mPackageName  = getIntent().getStringExtra("PackageName");
+		String mPackageName = getIntent().getStringExtra("PackageName");
 		SnuffyApplication app = (SnuffyApplication)getApplication();
   		mFromAssets		  	= app.languageExistsAsAsset(mPackageName, mLanguageCode);
   		mDocumentsDir		= app.getDocumentsDir().getPath();
@@ -93,7 +93,7 @@ public class SnuffyPageMenuActivity extends ListActivity {
 		}
 
 		@Override
-		public void setViewImage(ImageView v, String value) {
+		public void setViewImage(@NonNull ImageView v, String value) {
 			Log.d(TAG, "setViewImage: " + value);
 			
 			try {
