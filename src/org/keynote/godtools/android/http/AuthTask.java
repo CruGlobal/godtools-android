@@ -33,11 +33,6 @@ public class AuthTask extends AsyncTask<Object, Void, String>
         void authFailed(boolean authenticateAccessCode, boolean verifyStatus);
     }
 
-    public AuthTask(AuthTaskHandler listener)
-    {
-        taskHandler = listener;
-    }
-
     public AuthTask(AuthTaskHandler listener, boolean authenticateAccessCode, boolean verifyStatus)
     {
         taskHandler = listener;
