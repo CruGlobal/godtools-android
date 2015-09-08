@@ -13,6 +13,7 @@ public class Constants
     public static final String KEY_PRIMARY = "primary";
     public static final String KEY_PARALLEL = "parallel";
     public static final String KEY_DRAFT = "draft";
+    public static final String KEY_DRAFT_PRIMARY = "draft_primary";
     public static final String META = "meta";
     public static final String COUNT = "count";
 
