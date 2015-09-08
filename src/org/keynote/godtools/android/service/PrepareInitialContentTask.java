@@ -16,14 +16,14 @@ import java.io.OutputStream;
 import java.util.List;
 
 /**
+ * Copies the english resources from assets to internal storage,
+ * then saves package information on the database.
+ *
  * Created by matthewfrederick on 5/11/15.
  */
+@SuppressWarnings({"UnusedAssignment", "ResultOfMethodCallIgnored"})
 public class PrepareInitialContentTask
 {
-    /**
-     * Copies the english resources from assets to internal storage,
-     * then saves package information on the database.
-     */
 
     public static void run(Context mContext, File documentsDir)
     {
