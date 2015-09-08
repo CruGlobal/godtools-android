@@ -41,7 +41,9 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
+import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
@@ -49,6 +51,7 @@ import static org.keynote.godtools.android.utils.Constants.KGP;
 import static org.keynote.godtools.android.utils.Constants.META;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 
 public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
@@ -59,8 +62,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private static final String TAG = "MainPW";
     private static final int REQUEST_SETTINGS = 1001;
 
-    public static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
-    public static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
+    private static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
+    private static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
 
     private int mPageLeft;
     private int mPageTop;
@@ -75,7 +78,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private LocalBroadcastManager broadcastManager;
     private BroadcastReceiver broadcastReceiver;
 
-    SharedPreferences settings;
+    private SharedPreferences settings;
 
     /**
      * Called when the activity is first created.
@@ -84,7 +87,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     public void onCreate(Bundle savedInstanceState)
     {
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
 
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
 
@@ -111,7 +114,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         {
             showLoading();
             GodToolsApiClient.getListOfPackages(META,this);
-            settings.edit().putBoolean("TranslatorMode", false).apply();
+            settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
         }
 
         packageList = getPackageList(); // get the packages for the primary language
@@ -133,11 +136,11 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private boolean isFirstLaunch()
     {
-        boolean isFirst = settings.getBoolean("firstLaunch", true);
+        boolean isFirst = settings.getBoolean(FIRST_LAUNCH, true);
         if (isFirst)
         {
             SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("firstLaunch", false);
+            editor.putBoolean(FIRST_LAUNCH, false);
             editor.apply();
         }
         return isFirst;
@@ -236,7 +239,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                     if (Type.ENABLE_TRANSLATOR.equals(type))
                     {
                         // refresh the list
-                        String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+                        String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
 
                         refreshPackageList(true);
 
@@ -325,10 +328,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         if (withFallback && packageList.isEmpty())
         {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, "en");
-            editor.apply();
-            languagePrimary = "en";
+            settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
+            languagePrimary = ENGLISH_DEFAULT;
             packageList = getPackageList();
         }
         showLayoutsWithPackages();
@@ -509,9 +510,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
             getApp().setAppLocale(langCode);
 
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PRIMARY, langCode);
-            editor.apply();
+            settings.edit().putString(GTLanguage.KEY_PRIMARY, langCode).apply();
 
             GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
             gtl.setDownloaded(true);
