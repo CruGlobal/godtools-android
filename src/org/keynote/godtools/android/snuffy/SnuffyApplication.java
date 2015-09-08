@@ -19,6 +19,9 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.Vector;
 
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+
 public class SnuffyApplication extends Application {
 
     // Hold pointers to our created objects for the current SnuffyActivity (if any)
@@ -26,17 +29,19 @@ public class SnuffyApplication extends Application {
     public SnuffyPage mAboutView;
     public String mPackageTitle;
 
-    public Tracker tracker;
+    @SuppressWarnings("unused")
+    private Tracker tracker;
 
-    public Locale mDeviceLocale, mAppLocale;
+    private Locale mDeviceLocale;
+    private Locale mAppLocale;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         mDeviceLocale = Locale.getDefault();
-        SharedPreferences settings = getSharedPreferences("GodTools", MODE_PRIVATE);
-        String primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
         setAppLocale(primaryLanguageCode);
 
     }
@@ -70,7 +75,7 @@ public class SnuffyApplication extends Application {
         return documentsDir;
     }
 
-    public boolean assetExists(String fileName) {
+    private boolean assetExists(String fileName) {
         try {
             InputStream is = getAssets().open(fileName);
             is.close();
@@ -80,7 +85,7 @@ public class SnuffyApplication extends Application {
         }
     }
 
-    public boolean fileExists(String fileName) {
+    private boolean fileExists(String fileName) {
         File f = new File(getDocumentsDir() + "/" + fileName);
         return f.exists();
     }
@@ -93,11 +98,6 @@ public class SnuffyApplication extends Application {
     public boolean languageExistsAsFile(String packageName, String languageCode) {
         String testFileName = "Packages/" + packageName + "/" + languageCode + ".xml";
         return fileExists(testFileName);
-    }
-
-    public boolean languageExists(String packageName, String languageCode) {
-        String testFileName = "Packages/" + packageName + "/" + languageCode + ".xml";
-        return assetExists(testFileName) || fileExists(testFileName);
     }
 
     public Tracker getTracker() {
