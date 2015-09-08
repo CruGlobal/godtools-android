@@ -767,7 +767,7 @@ public class PackageReader
                         final Runnable animOut1 = new Runnable()
                         {
                             /*
-							 * IOS version: method = showShadow
+                             * IOS version: method = showShadow
 							 * 		set shadow frames small around button
 							 * 		set mask view alpha to 0 and not hidden
 							 * 		tell page that expand is active (activeViewMasked)
