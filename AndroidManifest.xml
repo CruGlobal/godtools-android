@@ -103,11 +103,7 @@
             android:label="@string/app_title"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light" />
-        <activity
-            android:name=".snuffy.SnuffyLanguageActivity"
-            android:label="@string/app_title"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light" />
+
         <activity
             android:name=".snuffy.SnuffyHelpActivity"
             android:label="@string/app_title"
