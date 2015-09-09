@@ -64,17 +64,6 @@
 
         </activity>
 
-
-        <activity
-            android:name="Kgp"
-            android:label="@string/menu_item_kgp" />
-
-        <activity
-            android:name="Satisfied"
-            android:label="@string/menu_item_satisfied" />
-        <activity
-            android:name="SpiritualLaws"
-            android:label="@string/menu_item_4laws" />
         <activity
             android:name=".everystudent.EveryStudent"
             android:label="@string/app_name_everystudent"
