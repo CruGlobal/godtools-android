@@ -197,7 +197,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
                     if (Type.DISABLE_TRANSLATOR.equals(type))
                     {
-                        pdLoading.hide();
+                        if (pdLoading != null) pdLoading.hide();
 
                         Toast.makeText(PreviewModeMainPW.this, getString(R.string.translator_disabled),
                                 Toast.LENGTH_LONG).show();
@@ -212,7 +212,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
                 if (BroadcastUtil.ACTION_FAIL.equals(intent.getAction()))
                 {
-                    pdLoading.hide();
+                    if (pdLoading != null) pdLoading.hide();
                 }
             }
         };
