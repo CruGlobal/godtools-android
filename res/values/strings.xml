@@ -15,7 +15,6 @@
     <string name="menu_item_languages">Languages</string>
     <string name="menu_item_last_page">Last page</string>
     <string name="menu_item_help">Help</string>
-    <string name="languages_activity_title">Languages</string>
     <string name="menu_switch_language">Switch Language</string>
     <string name="menu_update_page">Update Page (draft)</string>
     <string name="menu_flip">Flip</string>
@@ -54,12 +53,6 @@
     <string name="email">Email</string>
     <string name="copy">Copy</string>
     <string name="all_websites">All Websites</string>
-    <string name="loading_language_list">Loading languages…</string>
-    <string name="loading_requested_language">Loading requested language…</string>
-    <string name="download_language">Download language</string>
-    <string name="remove_language">Remove language</string>
-    <string name="switch_to_language">Switch to language</string>
-    <string name="remove_this_language">Are you sure you want to remove this language?</string>
 
     <string name="app_email_subject">Our conversation about %1 today</string>
     <!-- TODO: What is the correct wording for sharing the app without a package?-->
