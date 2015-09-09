@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.everystudent;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -31,24 +32,22 @@ import android.widget.TextView;
 import org.keynote.godtools.android.R;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("deprecation")
 public class EveryStudentSearchResults extends ListActivity {
 	private String mQuery;
 	private Pattern mPattern;
 	
-	public static final int DIALOG_LOADING = 0;
+	private static final int DIALOG_LOADING = 0;
 
 	private static SearcherThread mSearcherThread;
 	private static MySimpleCursorAdapter mAdapter;
 	private static Cursor mCursor;
 	private static String mCount;
-
-	public static final String LOGTAG = "EveryStudentSearchResults";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -72,21 +71,14 @@ public class EveryStudentSearchResults extends ListActivity {
 			startActivity(wordIntent);
 			finish();
 		} else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			// handles a search query
-			
-			HashMap<String,String> params = new HashMap<String,String>();
-			params.put("Query", mQuery);
-//FIXME			FlurryAgent.onEvent(FlurryAPI.FlurryPrefix + LOGTAG, params);
-//FIXME			FlurryAgent.onPageView();
-			
-			EveryStudentSearchResultsPersistance essrp = null;
-			essrp = (EveryStudentSearchResultsPersistance) getLastNonConfigurationInstance();
+
+			EveryStudentSearchResultsPersistance essrp = (EveryStudentSearchResultsPersistance) getLastNonConfigurationInstance();
 			
 			if (essrp != null && essrp.getmAdapter() != null && essrp.getCursor() != null && essrp.getQuery() != null && essrp.getCount() != null) {
 				mCount = essrp.getCount();
 				mQuery = essrp.getQuery();
 				mCursor = essrp.getCursor();
-				mAdapter = createAdapter(EveryStudentSearchResults.this, mCursor);
+				mAdapter = createAdapter();
 				TextView text = (TextView) findViewById(R.id.text);
 		        text.setText(mCount);
 				setListAdapter(mAdapter);
@@ -127,7 +119,6 @@ public class EveryStudentSearchResults extends ListActivity {
 	public void onStop()
 	{
 	   super.onStop();
-//FIXME	   FlurryAgent.onEndSession(this);
 	}
 	
 	@Override
@@ -143,6 +134,7 @@ public class EveryStudentSearchResults extends ListActivity {
 		return null;
 	}
 	
+	@SuppressLint("HandlerLeak")
 	private class SearcherHandler extends Handler {
 	    @Override
 		public void handleMessage(Message msg) {
@@ -158,8 +150,7 @@ public class EveryStudentSearchResults extends ListActivity {
 	class SearcherThread extends Thread {
 	    Handler mHandler = new SearcherHandler();
 	    MySimpleCursorAdapter adapter;
-	    Cursor myCursor;
-	    String myCount;
+		String myCount;
 	    
 	    public String getCount() { return myCount; }
 	    public void setHandler(Handler h) { mHandler = h; }
@@ -179,15 +170,15 @@ public class EveryStudentSearchResults extends ListActivity {
 				int count = mCursor.getCount();
 				myCount = getResources().getQuantityString(
 						R.plurals.search_results, count,
-						new Object[] { count, mQuery });
+						count, mQuery);
 			
-				adapter = createAdapter (EveryStudentSearchResults.this, mCursor);
+				adapter = createAdapter ();
 			}
 			mHandler.sendEmptyMessage(0);
 		}
 	}
 	
-	private MySimpleCursorAdapter createAdapter(Context context, Cursor c) {
+	private MySimpleCursorAdapter createAdapter() {
 		// Specify the columns we want to display in the result
 		String[] from = new String[] { SearchManager.SUGGEST_COLUMN_TEXT_1,
 				SearchManager.SUGGEST_COLUMN_TEXT_2 };
@@ -201,7 +192,7 @@ public class EveryStudentSearchResults extends ListActivity {
 	
 	public class MySimpleCursorAdapter extends SimpleCursorAdapter {
 
-		public MySimpleCursorAdapter(Context context, int layout, Cursor c,
+		public MySimpleCursorAdapter(Context context, @SuppressWarnings("SameParameterValue") int layout, Cursor c,
 				String[] from, int[] to) {
 			super(context, layout, c, from, to);
 			this.c = c;
@@ -224,9 +215,10 @@ public class EveryStudentSearchResults extends ListActivity {
 			
 		}
 
-		private Cursor c;
-		private Context context;
+		private final Cursor c;
+		private final Context context;
 
+		@SuppressLint("InflateParams")
 		@Override
 		public View getView(int pos, View inView, ViewGroup parent) {
 			View v = inView;
