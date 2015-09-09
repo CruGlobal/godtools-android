@@ -33,126 +33,143 @@ import java.util.regex.Pattern;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 
 @SuppressWarnings("deprecation")
-public class EveryStudentView extends Activity{
+public class EveryStudentView extends Activity
+{
 
-	private String title = "";
+    private String title = "";
 
-	private PowerManager.WakeLock wl = null;
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
+    private PowerManager.WakeLock wl = null;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
         getWindow().setFlags(
-        		WindowManager.LayoutParams.FLAG_FULLSCREEN, 
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		super.onCreate(savedInstanceState);
-		
+        super.onCreate(savedInstanceState);
+
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        if (settings.getBoolean("wakelock", true)) {
-        	PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);  
-            wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");  
+        if (settings.getBoolean("wakelock", true))
+        {
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");
         }
-		
-		setContentView(R.layout.everystudent_view);
-		//noinspection ResourceType
-		this.getWindow().setWindowAnimations(android.R.anim.slide_in_left);
-		
-		TextView content = (TextView) this.findViewById(R.id.everystudent_content);
-		
-		Uri uri = getIntent().getData();
-		Cursor cur = managedQuery(uri, null, null, null, null);
-		
-		if (cur.moveToFirst()) {
-			title = cur.getString(cur.getColumnIndex(EveryStudentDatabase.TITLE));
-			setTitle(title);
-			String text = cur.getString(cur.getColumnIndex(EveryStudentDatabase.CONTENT)).replaceFirst("\n", "").trim();
-			if (getIntent().getStringExtra(SearchManager.QUERY) != null) {
-				content.setText(text, TextView.BufferType.SPANNABLE);
-				Spannable str = (Spannable) content.getText();
-				
-				String query = getIntent().getStringExtra(SearchManager.QUERY).trim();
-				String[] terms = query.split("[\\s]");
-				List<String> termsList = Arrays.asList(terms);
-				String pattern = "";
-				
-				Iterator<String> itr = termsList.iterator();
-				while (itr.hasNext()) {
-					pattern += itr.next().trim()+"[^\\s,\\.\\?:;]*";
-					if (itr.hasNext()) {
-						pattern += "|";
-					}
-				}
-				
-				Pattern myPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
-				Matcher myMatcher = myPattern.matcher(text);
-				while (myMatcher.find()) {
-					str.setSpan(new BackgroundColorSpan(android.graphics.Color.YELLOW), myMatcher.start(), myMatcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					str.setSpan(new ForegroundColorSpan(android.graphics.Color.BLACK), myMatcher.start(), myMatcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-				}
-			} else {
-				content.setText(text);
-			}
-			
-			recordScreenView();
-		} else {
-			Toast.makeText(getBaseContext(), getString(R.string.could_not_load_content), Toast.LENGTH_LONG).show();
-			this.finish();
-		}
-	}
 
-	private void recordScreenView()
-	{
-		Tracker tracker = GoogleAnalytics.getTracker(getApplicationContext());
+        setContentView(R.layout.everystudent_view);
+        //noinspection ResourceType
+        this.getWindow().setWindowAnimations(android.R.anim.slide_in_left);
 
-		tracker.setScreenName("everystudent-"  + massageTitleToTrainCase());
+        TextView content = (TextView) this.findViewById(R.id.everystudent_content);
 
-		tracker.send(new HitBuilders.AppViewBuilder()
-				.setCustomDimension(1, "everystudent")
-				.setCustomDimension(2, "en_classic")
-				.setCustomDimension(3, "en_classic-everystudent-1") //language-package-version_number
-				.build());
-	}
+        Uri uri = getIntent().getData();
+        Cursor cur = managedQuery(uri, null, null, null, null);
 
-	private String massageTitleToTrainCase()
-	{
-		return title.replaceAll("\\p{Punct}]", "").toLowerCase().replaceAll("\\s", "-");
-	}
+        if (cur.moveToFirst())
+        {
+            title = cur.getString(cur.getColumnIndex(EveryStudentDatabase.TITLE));
+            setTitle(title);
+            String text = cur.getString(cur.getColumnIndex(EveryStudentDatabase.CONTENT)).replaceFirst("\n", "").trim();
+            if (getIntent().getStringExtra(SearchManager.QUERY) != null)
+            {
+                content.setText(text, TextView.BufferType.SPANNABLE);
+                Spannable str = (Spannable) content.getText();
 
-	@Override
+                String query = getIntent().getStringExtra(SearchManager.QUERY).trim();
+                String[] terms = query.split("[\\s]");
+                List<String> termsList = Arrays.asList(terms);
+                String pattern = "";
+
+                Iterator<String> itr = termsList.iterator();
+                while (itr.hasNext())
+                {
+                    pattern += itr.next().trim() + "[^\\s,\\.\\?:;]*";
+                    if (itr.hasNext())
+                    {
+                        pattern += "|";
+                    }
+                }
+
+                Pattern myPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+                Matcher myMatcher = myPattern.matcher(text);
+                while (myMatcher.find())
+                {
+                    str.setSpan(new BackgroundColorSpan(android.graphics.Color.YELLOW), myMatcher.start(), myMatcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    str.setSpan(new ForegroundColorSpan(android.graphics.Color.BLACK), myMatcher.start(), myMatcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
+            else
+            {
+                content.setText(text);
+            }
+
+            recordScreenView();
+        }
+        else
+        {
+            Toast.makeText(getBaseContext(), getString(R.string.could_not_load_content), Toast.LENGTH_LONG).show();
+            this.finish();
+        }
+    }
+
+    private void recordScreenView()
+    {
+        Tracker tracker = GoogleAnalytics.getTracker(getApplicationContext());
+
+        tracker.setScreenName("everystudent-" + massageTitleToTrainCase());
+
+        tracker.send(new HitBuilders.AppViewBuilder()
+                .setCustomDimension(1, "everystudent")
+                .setCustomDimension(2, "en_classic")
+                .setCustomDimension(3, "en_classic-everystudent-1") //language-package-version_number
+                .build());
+    }
+
+    private String massageTitleToTrainCase()
+    {
+        return title.replaceAll("\\p{Punct}]", "").toLowerCase().replaceAll("\\s", "-");
+    }
+
+    @Override
     public void onStart()
     {
-       super.onStart();
+        super.onStart();
     }
-    
-	@Override
+
+    @Override
     public void onStop()
     {
-       super.onStop();
+        super.onStop();
     }
-	
-	@Override
-	protected void onPause() {
-		super.onPause();
-		if (wl != null)
-			wl.release();
-	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		if (wl != null)
-			wl.acquire();
-	}
-	
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    protected void onPause()
+    {
+        super.onPause();
+        if (wl != null)
+            wl.release();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        if (wl != null)
+            wl.acquire();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.everystudent, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
             case R.id.search:
                 onSearchRequested();
                 return true;
