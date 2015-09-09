@@ -4,7 +4,6 @@
     <string name="app_title">God Tools</string>
     <string name="menu_item_kgp">Knowing God Personally</string>
     <string name="menu_item_satisfied">Satisfied?</string>
-    <string name="menu_item_cwg">Connecting With God</string>
     <string name="menu_item_4laws">The Four Spiritual Laws</string>
     <string name="menu_item_everystudent">Everystudent.com</string>
     <string name="menu_item_first_page">First page</string>
@@ -22,8 +21,6 @@
     <string name="menu_flip">Flip</string>
 
     <string name="app_description">Campus Crusade for Christ</string>
-    <string name="app_name_about">About God Tools</string>
-    <string name="app_name_gallery_help">Booklet Help</string>
     <string name="app_name_everystudent">EveryStudent.com</string>
 
     <string name="settings">God Tools Settings</string>
@@ -46,19 +43,9 @@
 
     <string name="settings_description">Explore questions about life and God</string>
 
-    <string name="gallery_no_images">No Images To Display!</string>
-
     <string name="menu_search">Search</string>
     <string name="menu_about">About</string>
-    <string name="menu_help">Help</string>
 
-    <string name="about_suggestions">Please email us at %1$s with any questions or suggestions on how to make this app better.</string>
-    <string name="about_copyright">Copyright Information</string>
-    <string name="about_presentation">This presentation created and produced by Cru ©2014. All rights reserved.</string>
-    <string name="about_kgp">"Would You Like to Know God Personally?" ©1995–2010 Cru and Bright Media Foundation (BMF). All rights reserved.</string>
-    <string name="about_satisfied">"Satisfied?" ©2001–2010 Cru and Bright Media Foundation (BMF). All rights reserved.</string>
-
-    <string name="gallery_help">The booklets in God Tools were designed to create a similar experience to that of using a real booklet. To advance to the next booklet page, simply swipe to the left. To return to the previous page, swipe to the right. To zoom, press and hold until your device vibrates; then without lifting your finger, drag up to zoom in or down to zoom out. Turning your device to landscape will automatically zoom the booklet page to fit horizontally, allowing you to more easily view the booklet.</string>
     <string name="snuffy_help">To advance to the next page, simply swipe to the left. To return to the previous page, swipe to the right. To show the menu you can tap in any area of the page other than on a button.</string>
     <string name="snuffy_help_title" formatted="false">%1 help</string>
 
@@ -74,7 +61,6 @@
     <string name="switch_to_language">Switch to language</string>
     <string name="remove_this_language">Are you sure you want to remove this language?</string>
 
-    <string name="app_email_body" formatted="false">Continue reading %1 by going to the following link:\n%2</string>
     <string name="app_email_subject">Our conversation about %1 today</string>
     <!-- TODO: What is the correct wording for sharing the app without a package?-->
     <string name="app_share_subject_main_screen">GodTools</string>
@@ -83,7 +69,6 @@
 
     <!-- Renderer Activity -->
     <string name="processing_package">Loading pages…</string>
-    <string name="processing_succeded">Package processing succeeded</string>
     <string name="processing_failed">Package processing failed</string>
     <string name="select_share">Select how you would like to share</string>
     <string name="update_page">Updating page…</string>
@@ -91,10 +76,7 @@
 
 
     <!-- Splash Activity -->
-    <string name="copy_files">Initializing Content…</string>
     <string name="check_update">Checking for updates…</string>
-    <string name="download_resources">Downloading %s resources…</string>
-    <string name="update_resources">Updating %s resources…</string>
 
     <!-- Settings Activity -->
     <string name="settings_title">Settings</string>
@@ -103,7 +85,6 @@
     <string name="settings_parallel_info">*Tap screen during presentation and use "Switch Language" to toggle language. Option is not shown if booklet is not available.</string>
     <string name="settings_select">Select </string>
     <string name="settings_translator_mode">Preview Mode (Translators)</string>
-    <string name="settings_translator_message">If you are a GodTools translator wanting to see your latest translations, enable "Preview Mode"</string>
     <string name="settings_notification">Allow Notifications</string>
     <string name="wrong_passcode">Please try again</string>
     <string name="expired_passcode">Preview mode session expired</string>
@@ -141,7 +122,6 @@
     <string name="pull_down_info">pull to refresh drafts</string>
     <string name="preview_mode_title">Preview Mode</string>
     <string name="package_not_created">Package not yet created</string>
-    <string name="refresh_no_net">Internet connection is required to refresh</string>
     <string name="connecting">Connecting with server</string>
 
     <!-- Package Reader -->
