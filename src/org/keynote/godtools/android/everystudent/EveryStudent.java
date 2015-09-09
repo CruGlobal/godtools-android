@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.everystudent;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
@@ -31,20 +32,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("deprecation")
 public class EveryStudent extends ExpandableListActivity {
 	public static final String NAME = "NAME";
 	public static final String CONTENT = "CONTENT";
-	public static final String ROWID = "ROWID";
+	private static final String ROWID = "ROWID";
 
-	public static final int DIALOG_LOADING = 0;
+	private static final int DIALOG_LOADING = 0;
 
 	private static ExpandableListAdapter mAdapter;
 	private static ParserThread mParserThread;
 	
 	private List<List<Map<String, String>>> mTopics;
 	private List<Map<String, String>> mCategories;
-	
-	public static final String LOGTAG = "EveryStudent";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,8 +53,7 @@ public class EveryStudent extends ExpandableListActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		super.onCreate(savedInstanceState);
 
-		EveryStudentPersistance esp = null;
-		esp = (EveryStudentPersistance) getLastNonConfigurationInstance();
+		EveryStudentPersistance esp = (EveryStudentPersistance) getLastNonConfigurationInstance();
 
 		if (esp != null && esp.getmAdapter() != null && esp.getmTopics() != null && esp.getmCategories() != null) {
 			mAdapter = esp.getmAdapter();
@@ -84,24 +83,7 @@ public class EveryStudent extends ExpandableListActivity {
 		});
 
         trackScreenActivity();
-
-//FIXME		FlurryAgent.onEvent(FlurryAPI.FlurryPrefix + LOGTAG);
-//FIXME		FlurryAgent.onPageView();
 	}
-	
-	@Override
-    public void onStart()
-    {
-       super.onStart();
-//       FlurryAPI.onStartSession(this);
-    }
-    
-	@Override
-    public void onStop()
-    {
-       super.onStop();
-//FIXME       FlurryAgent.onEndSession(this);
-    }
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
@@ -120,6 +102,7 @@ public class EveryStudent extends ExpandableListActivity {
 		return new EveryStudentPersistance(mAdapter, mTopics, mCategories);
 	}
 	
+	@SuppressLint("HandlerLeak")
 	private class ParserHandler extends Handler {
 	    @Override
 		public void handleMessage(Message msg) {
@@ -134,8 +117,8 @@ public class EveryStudent extends ExpandableListActivity {
 	class ParserThread extends Thread {
 	    Handler mHandler = new ParserHandler();
 	    ExpandableListAdapter adapter;
-	    List<List<Map<String, String>>> topics = new ArrayList<List<Map<String, String>>>();
-		List<Map<String, String>> categories = new ArrayList<Map<String, String>>();
+	    final List<List<Map<String, String>>> topics = new ArrayList<List<Map<String, String>>>();
+		final List<Map<String, String>> categories = new ArrayList<Map<String, String>>();
 
 	    public void setHandler(Handler h) { mHandler = h; }
 	    public ExpandableListAdapter getAdapter() { return adapter; }

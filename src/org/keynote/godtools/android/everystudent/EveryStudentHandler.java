@@ -8,7 +8,7 @@ import java.util.Map;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class EveryStudentHandler extends DefaultHandler {
+class EveryStudentHandler extends DefaultHandler {
 	
 	private String currentElement = null;
 	private Map<String, String> curCatMap = null;
@@ -16,11 +16,11 @@ public class EveryStudentHandler extends DefaultHandler {
 	private Map<String, String> curTopicMap = null;
 	private StringBuffer curContent = null;
 	
-	private List<Map<String, String>> categoryData = new ArrayList<Map<String, String>>();
-	private List<List<Map<String, String>>> topicsData = new ArrayList<List<Map<String, String>>>();
+	private final List<Map<String, String>> categoryData = new ArrayList<Map<String, String>>();
+	private final List<List<Map<String, String>>> topicsData = new ArrayList<List<Map<String, String>>>();
 	
-	private String xmlCategory = "category";
-	private String xmlTopic = "item";
+	private final String xmlCategory = "category";
+	private final String xmlTopic = "item";
 		
 	@Override
     public void startElement (String uri, String name, String qName, Attributes atts)

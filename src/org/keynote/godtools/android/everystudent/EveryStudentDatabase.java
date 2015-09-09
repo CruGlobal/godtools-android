@@ -33,13 +33,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-public class EveryStudentDatabase {
+class EveryStudentDatabase {
 
     private static final int DATABASE_VERSION = 3; // Change this number when EveryStudent.xml is updated/changed.
     private static final String DATABASE_NAME = "godtools";
     private static final String TABLE_NAME = "everystudent";
-    public static final String ROWID = "rowid";
-    public static final String CATEGORY = "category";
+    private static final String ROWID = "rowid";
+    private static final String CATEGORY = "category";
     public static final String TITLE = "title";
     public static final String CONTENT = "content";
 	private final EveryStudentOpenHelper mDatabaseOpenHelper;
@@ -124,7 +124,7 @@ public class EveryStudentDatabase {
     	return rawQuery(sql, selectionArgs);
     }
     
-    public ArrayList<Result> searchCompile(String query) {
+    private ArrayList<Result> searchCompile(String query) {
     	Cursor rawData = getRawResults(query);
     	ArrayList<Result> resultList = new ArrayList<Result>();
 		if (rawData.moveToFirst()) {
@@ -141,7 +141,7 @@ public class EveryStudentDatabase {
 		return resultList;
     }
     
-    public Cursor buildSuggestionCursor(ArrayList<Result> s, int num) {
+    private Cursor buildSuggestionCursor(ArrayList<Result> s, int num) {
     	MatrixCursor suggestions = new MatrixCursor(new String[]{BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, SearchManager.SUGGEST_COLUMN_INTENT_DATA});
     	Collections.sort(s, new Comparator<Object>(){
             public int compare(Object o1, Object o2) {
@@ -173,11 +173,7 @@ public class EveryStudentDatabase {
     	
     	while (o.size() > 0) {
     		int col = Integer.valueOf(o.get(0)); o.remove(0);
-    		@SuppressWarnings("unused")
-			int term = Integer.valueOf(o.get(0)); o.remove(0);
     		int offset = Integer.valueOf(o.get(0)); o.remove(0);
-    		@SuppressWarnings("unused")
-			int size = Integer.valueOf(o.get(0)); o.remove(0);
     		rank += colWeight[col] * 1/(Math.pow(offset, 0.333)+1);
     	}
     	return rank;
@@ -188,10 +184,10 @@ public class EveryStudentDatabase {
      * Result Item
      */
     private class Result {
-        public int rowid;
-        public String row1;
-        public String row2;
-        public Double rank;
+        public final int rowid;
+        public final String row1;
+        public final String row2;
+        public final Double rank;
         
         public Result(int rowid, String row1, String row2, double rank){
             this.rowid = rowid;

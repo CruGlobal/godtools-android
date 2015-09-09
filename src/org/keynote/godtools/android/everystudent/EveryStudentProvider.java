@@ -7,6 +7,8 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import org.keynote.godtools.android.utils.GoogleAnalytics;
@@ -15,15 +17,14 @@ import org.keynote.godtools.android.utils.GoogleAnalytics;
  * Provides access to the EveryStudent database.
  */
 public class EveryStudentProvider extends ContentProvider {
-    String TAG = "EveryStudentProvider";
 
-    public static String AUTHORITY = "org.keynote.godtools.android.everystudent.EveryStudentProvider";
+    private static final String AUTHORITY = "org.keynote.godtools.android.everystudent.EveryStudentProvider";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/everystudent");
 
-    public static final String BASE_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.org.keynote.godtools.android.everystudent";
-    public static final String SEARCH_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.org.keynote.godtools.android.everystudent";
-    public static final String TITLE_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.org.keynote.godtools.android.everystudent.item";
-    public static final String CONTENT_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.org.keynote.godtools.android.everystudent.item";
+    private static final String BASE_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.org.keynote.godtools.android.everystudent";
+    private static final String SEARCH_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.org.keynote.godtools.android.everystudent";
+    private static final String TITLE_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.org.keynote.godtools.android.everystudent.item";
+    private static final String CONTENT_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.org.keynote.godtools.android.everystudent.item";
     
     private EveryStudentDatabase mEveryStudentDatabase;
 
@@ -57,7 +58,7 @@ public class EveryStudentProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
 
         switch (sURIMatcher.match(uri)) {
@@ -125,7 +126,7 @@ public class EveryStudentProvider extends ContentProvider {
     }
 
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         switch (sURIMatcher.match(uri)) {
         	case SEARCH_EVERYSTUDENT:
         		return SEARCH_MIME_TYPE;
@@ -144,17 +145,17 @@ public class EveryStudentProvider extends ContentProvider {
     }
 
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public Uri insert(@NonNull Uri uri, ContentValues values) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         throw new UnsupportedOperationException();
     }
 
