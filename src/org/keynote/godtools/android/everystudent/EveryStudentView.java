@@ -22,7 +22,6 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.Settings;
 import org.keynote.godtools.android.utils.GoogleAnalytics;
 
 import java.util.Arrays;

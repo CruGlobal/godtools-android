@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.keynote.godtools.android.PreviewModeMainPW;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTPackage;
@@ -30,7 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.keynote.godtools.android.broadcast.BroadcastUtil.draftBroadcast;
-import static org.keynote.godtools.android.broadcast.BroadcastUtil.failBroadcast;
 import static org.keynote.godtools.android.broadcast.BroadcastUtil.stopBroadcast;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
