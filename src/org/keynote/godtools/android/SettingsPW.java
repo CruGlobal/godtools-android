@@ -37,6 +37,7 @@ import org.keynote.godtools.android.utils.Typefaces;
 import java.util.Locale;
 
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
@@ -54,21 +55,15 @@ public class SettingsPW extends BaseActionBarActivity implements
     private LocalBroadcastManager broadcastManager;
     private BroadcastReceiver broadcastReceiver;
 
-    TextView tvMainLanguage, tvParallelLanguage;
-    RelativeLayout rlMainLanguage, rlParallelLanguage;
-    CompoundButton cbTranslatorMode;
-    CompoundButton cbNotificationsAllowed;
-    Typeface mAlternateTypeface;
-    String primaryLanguageCode;
+    private TextView tvMainLanguage;
+    private TextView tvParallelLanguage;
+    private CompoundButton cbTranslatorMode;
+    private CompoundButton cbNotificationsAllowed;
+    private Typeface mAlternateTypeface;
 
-    ProgressDialog pdLoading;
+    private ProgressDialog pdLoading;
 
-    SharedPreferences settings;
-
-    // since the authFail method is used for either the wrong pass code or an expired pass code, we
-    // need separate messages for each situation. If translatorModeExpired=false, then use wrong pass
-    // code message. If true use expired message.
-    boolean translatorModeExpired = false;
+    private SharedPreferences settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -90,8 +85,8 @@ public class SettingsPW extends BaseActionBarActivity implements
 
         tvMainLanguage = (TextView) findViewById(R.id.tvMainLanguage);
         tvParallelLanguage = (TextView) findViewById(R.id.tvParallelLanguage);
-        rlMainLanguage = (RelativeLayout) findViewById(R.id.rlMainLanguage);
-        rlParallelLanguage = (RelativeLayout) findViewById(R.id.rlParallelLanguage);
+        RelativeLayout rlMainLanguage = (RelativeLayout) findViewById(R.id.rlMainLanguage);
+        RelativeLayout rlParallelLanguage = (RelativeLayout) findViewById(R.id.rlParallelLanguage);
         cbTranslatorMode = (CompoundButton) findViewById(R.id.cbTranslatorMode);
         cbNotificationsAllowed = (CompoundButton) findViewById(R.id.cbNotification);
 
@@ -100,10 +95,10 @@ public class SettingsPW extends BaseActionBarActivity implements
         rlMainLanguage.setOnClickListener(this);
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        boolean isTranslatorEnabled = settings.getBoolean("TranslatorMode", false);
+        boolean isTranslatorEnabled = settings.getBoolean(TRANSLATOR_MODE, false);
         boolean allowNotifications = settings.getBoolean("Notifications", true);
         cbNotificationsAllowed.setChecked(allowNotifications);
-        primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+        String primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
         String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
         handleLanguagesWithAlternateFonts(primaryLanguageCode);
@@ -286,6 +281,7 @@ public class SettingsPW extends BaseActionBarActivity implements
     {
         boolean on = ((CompoundButton) view).isChecked();
 
+        boolean translatorModeExpired = false;
         if (on && !Strings.isNullOrEmpty(settings.getString(AUTH_DRAFT, "")))
         {
             ((CompoundButton) view).setChecked(true);
