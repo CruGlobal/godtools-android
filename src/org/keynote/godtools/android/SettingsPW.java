@@ -281,16 +281,12 @@ public class SettingsPW extends BaseActionBarActivity implements
     {
         boolean on = ((CompoundButton) view).isChecked();
 
-        boolean translatorModeExpired = false;
         if (on && !Strings.isNullOrEmpty(settings.getString(AUTH_DRAFT, "")))
         {
             ((CompoundButton) view).setChecked(true);
             cbTranslatorMode.setEnabled(true);
             BackgroundService.verifyStatusOfAuthToken(getApplicationContext(),
                     settings.getString(AUTH_DRAFT, ""));
-
-            // if Auth fails from this it is because the auth token is expired.
-            translatorModeExpired = true;
 
             return;
         }
@@ -301,8 +297,6 @@ public class SettingsPW extends BaseActionBarActivity implements
         {
             if (Device.isConnected(SettingsPW.this))
             {
-                // if auth fails here it is because of the wrong pass code.
-                translatorModeExpired = false;
                 showAccessCodeDialog();
             }
             else
