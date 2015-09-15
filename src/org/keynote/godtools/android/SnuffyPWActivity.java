@@ -59,8 +59,8 @@ import static org.keynote.godtools.android.utils.Constants.LANGUAGE_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.PROPERTY_REG_ID;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
+import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
-import static org.keynote.godtools.android.utils.Constants.WEB_URL;
 
 @SuppressWarnings("deprecation")
 public class SnuffyPWActivity extends Activity
@@ -488,12 +488,12 @@ public class SnuffyPWActivity extends Activity
         String messageBody = "";
 
         // http://www.knowgod.com/en
-        String webUrl = getString(R.string.app_share_link_base_link) + "/" + mAppLanguage;
+        String shareLink = getString(R.string.app_share_link_base_link) + "/" + mAppLanguage;
 
         if (KGP.equalsIgnoreCase(mAppPackage) || FOUR_LAWS.equalsIgnoreCase(mAppPackage))
         {
             // http://www.knowgod.com/en/kgp
-            webUrl = webUrl + "/" + mAppPackage;
+            shareLink = shareLink + "/" + mAppPackage;
 
             messageBody = getString(R.string.kgp_four_laws_share);
         }
@@ -505,10 +505,10 @@ public class SnuffyPWActivity extends Activity
         if (mPagerCurrentItem > 0)
         {
             // http://www.knowgod.com/en/kgp/5
-            webUrl =  webUrl + "/" + String.valueOf(mPagerCurrentItem);
+            shareLink =  shareLink + "/" + String.valueOf(mPagerCurrentItem);
         }
 
-        messageBody = messageBody.replace(WEB_URL, webUrl);
+        messageBody = messageBody.replace(SHARE_LINK, shareLink);
 
         return messageBody;
     }

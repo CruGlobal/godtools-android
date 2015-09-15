@@ -128,10 +128,10 @@
     <string name="alternate_language">Parallel Language</string>
     <string name="alternate_language_message">The parallel language selected is not available for this tool.</string>
 
-    <string name="kgp_four_laws_share" formatted="false">It was great talking with you today about how we can know God personally. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{web_url}}</string>
+    <string name="kgp_four_laws_share" formatted="false">It was great talking with you today about how we can know God personally. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
 
-    <string name="satisfied_share" formatted="false">It was great talking with you today about how we can experience The Holy Spirit’s power in our lives. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{web_url}}</string>
+    <string name="satisfied_share" formatted="false">It was great talking with you today about how we can experience The Holy Spirit’s power in our lives. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
 
-    <string name="everystudent_share">It was great talking with you today about your spiritual questions. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{web_url}}</string>
+    <string name="everystudent_share">It was great talking with you today about your spiritual questions. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
 
 </resources>
