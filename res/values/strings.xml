@@ -52,7 +52,6 @@
     <string name="update_page">Updating page…</string>
     <string name="page_error">Error refreshing page</string>
 
-
     <!-- Splash Activity -->
     <string name="check_update">Checking for updates…</string>
 
@@ -69,7 +68,6 @@
     <string name="authenticate_code">Authenticating access code</string>
 
     <!-- Main Activity-->
-    <string name="share">Share</string>
     <string name="share_prompt">Select how you would like to share</string>
     
     <!-- Language List -->
@@ -127,20 +125,13 @@
     <string name="success">Success!</string>
     <string name="internet_needed">An internet connection is needed to complete this request</string>
     
-    <string name="alternate_language">Alternate Language</string>
+    <string name="alternate_language">Parallel Language</string>
     <string name="alternate_language_message">The parallel language selected is not available for this tool.</string>
 
-    <string name="kgp_four_laws_share" formatted="false">It was great talking with you today about how we can know God personally. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at www.knowgod.com/%1/%2%3</string>
+    <string name="kgp_four_laws_share" formatted="false">It was great talking with you today about how we can know God personally. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{web_url}}</string>
 
-    <string name="satisfied_share" formatted="false">It was great talking with you today about how we can experience The Holy Spirit’s power in our lives. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at www.knowgod.com/%1/satisfied%3</string>
+    <string name="satisfied_share" formatted="false">It was great talking with you today about how we can experience The Holy Spirit’s power in our lives. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{web_url}}</string>
 
-    <string name="everystudent_share"><html>It was great talking with you today about your spiritual questions. I hope we can talk more about this soon. In the meantime, you can <a href="www.knowgod.com/">check out what we looked at today</a>.</html></string>
-    
-    <string name="description_homescreen_icon">homescreen_icon</string>
-    
-    <!-- these are just filler strings used in the code, but here to be consistent -->
-    <string name="filler_textview">TextView</string>
-    <string name="filler_english">English</string>
-
+    <string name="everystudent_share">It was great talking with you today about your spiritual questions. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{web_url}}</string>
 
 </resources>

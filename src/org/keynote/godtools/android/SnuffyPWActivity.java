@@ -47,7 +47,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import static org.keynote.godtools.android.utils.Constants.APPLICATION_NAME;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.COUNT;
@@ -475,9 +474,7 @@ public class SnuffyPWActivity extends Activity
 
     private void doCmdShare(View v)
     {
-        String messageBody = getString(R.string.app_share_body_main_screen);
-        messageBody = messageBody.replace(APPLICATION_NAME, getString(R.string.app_name));
-        messageBody = messageBody.replace(WEB_URL, "\n"+getString(R.string.app_share_link_base_link));
+        String messageBody = buildMessageBody();
 
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
@@ -490,26 +487,28 @@ public class SnuffyPWActivity extends Activity
     {
         String messageBody = "";
 
+        // http://www.knowgod.com/en
+        String webUrl = getString(R.string.app_share_link_base_link) + "/" + mAppLanguage;
+
         if (KGP.equalsIgnoreCase(mAppPackage) || FOUR_LAWS.equalsIgnoreCase(mAppPackage))
         {
+            // http://www.knowgod.com/en/kgp
+            webUrl = webUrl + "/" + mAppPackage;
+
             messageBody = getString(R.string.kgp_four_laws_share);
-            messageBody = messageBody.replace("%2", mAppPackage);
         }
         else if (SATISFIED.equalsIgnoreCase(mAppPackage))
         {
             messageBody = getString(R.string.satisfied_share);
         }
 
-        messageBody = messageBody.replace("%1", mAppLanguage);
-
         if (mPagerCurrentItem > 0)
         {
-            messageBody = messageBody.replace("%3", "/" + String.valueOf(mPagerCurrentItem));
+            // http://www.knowgod.com/en/kgp/5
+            webUrl =  webUrl + "/" + String.valueOf(mPagerCurrentItem);
         }
-        else
-        {
-            messageBody = messageBody.replace("%3", "");
-        }
+
+        messageBody = messageBody.replace(WEB_URL, webUrl);
 
         return messageBody;
     }

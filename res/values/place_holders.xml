@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- these are just filler strings used in the code, but should not be translated, so they
+     are kept seperate from the strings.xml -->
+    <string name="filler_textview">TextView</string>
+    <string name="filler_english">English</string>
+</resources>
