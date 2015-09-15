@@ -58,9 +58,9 @@
 
     <!-- Settings Activity -->
     <string name="settings_title">Settings</string>
-    <string name="settings_main_language">Language:</string>
-    <string name="settings_parallel_language">Parallel Language*:</string>
-    <string name="settings_parallel_info">*Tap screen during presentation and use "Switch Language" to toggle language. Option is not shown if booklet is not available.</string>
+    <string name="settings_main_language">Main Language:</string>
+    <string name="settings_parallel_language">Parallel Language:</string>
+    <string name="settings_parallel_info">Tap screen during presentation and use "Switch Language" to toggle language. Option is not shown if booklet is not available.</string>
     <string name="settings_select">Select </string>
     <string name="settings_translator_mode">Preview Mode (Translators)</string>
     <string name="settings_notification">Allow Notifications</string>
