@@ -4,15 +4,10 @@
     <string name="menu_item_kgp">Knowing God Personally</string>
     <string name="menu_item_satisfied">Satisfied?</string>
     <string name="menu_item_4laws">The Four Spiritual Laws</string>
-    <string name="menu_item_everystudent">Everystudent.com</string>
-    <string name="menu_item_first_page">First page</string>
+    <string name="menu_item_everystudent">Questions About Life And God?</string>
 
-    <!--It seems that this item should be called share and not email. Email would lead one
-    to think that they are emailing the maker of the app-->
-    <string name="menu_item_email">Share</string>
+    <string name="menu_item_share">Share</string>
     <string name="menu_item_contents">Contents</string>
-    <string name="menu_item_languages">Languages</string>
-    <string name="menu_item_last_page">Last page</string>
     <string name="menu_item_help">Help</string>
     <string name="menu_switch_language">Switch Language</string>
     <string name="menu_update_page">Update Page (draft)</string>

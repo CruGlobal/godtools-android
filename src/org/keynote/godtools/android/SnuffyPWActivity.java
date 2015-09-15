@@ -61,6 +61,7 @@ import static org.keynote.godtools.android.utils.Constants.PROPERTY_REG_ID;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
+@SuppressWarnings("deprecation")
 public class SnuffyPWActivity extends Activity
 {
     private static final String TAG = "SnuffyActivity";
@@ -92,12 +93,12 @@ public class SnuffyPWActivity extends Activity
     private String regid;
     private Timer timer;
 
-    public void setLanguage(String languageCode)
+    private void setLanguage(String languageCode)
     {
         mAppLanguage = languageCode;
     }
 
-    public String getLanguage()
+    private String getLanguage()
     {
         return mAppLanguage;
     }
@@ -463,11 +464,6 @@ public class SnuffyPWActivity extends Activity
         // no other flip actions defined
     }
 
-    public void doCmdGoToFirstPage(View v)
-    {
-        mPager.setCurrentItem(0);
-    }
-
     private void doCmdHelp()
     {
         Intent intent = new Intent(this, SnuffyHelpActivity.class);
@@ -475,7 +471,7 @@ public class SnuffyPWActivity extends Activity
         startActivity(intent);
     }
 
-    public void doCmdShare(View v)
+    private void doCmdShare(View v)
     {
         String subject = getString(R.string.app_email_subject);
         subject = subject.replace("%1", mPackageTitle);
@@ -515,7 +511,7 @@ public class SnuffyPWActivity extends Activity
         return messageBody;
     }
 
-    public void doCmdShowPageMenu(View v)
+    private void doCmdShowPageMenu(View v)
     {
         Intent intent = new Intent(this, SnuffyPageMenuPWActivity.class);
         intent.putExtra("LanguageCode", mAppLanguage);
@@ -599,15 +595,10 @@ public class SnuffyPWActivity extends Activity
 
     }
 
-    public void doCmdInfo(View v)
+    private void doCmdInfo(View v)
     {
         Intent intent = new Intent(this, SnuffyAboutActivity.class);
         startActivity(intent);
-    }
-
-    public void doCmdGoToLastPage(View v)
-    {
-        mPager.setCurrentItem(mPages.size() - 1);
     }
 
     @Override
@@ -653,18 +644,6 @@ public class SnuffyPWActivity extends Activity
             {
                 trackScreenEvent("About");
                 doCmdInfo(null);
-                break;
-            }
-            case R.id.CMD_FIRST_PAGE:
-            {
-                trackScreenEvent("First Page");
-                doCmdGoToFirstPage(null);
-                break;
-            }
-            case R.id.CMD_LAST_PAGE:
-            {
-                trackScreenEvent("Last Page");
-                doCmdGoToLastPage(null);
                 break;
             }
             case R.id.CMD_CONTENT:
