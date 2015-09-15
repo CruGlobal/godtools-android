@@ -47,6 +47,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import static org.keynote.godtools.android.utils.Constants.APPLICATION_NAME;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.COUNT;
@@ -60,6 +61,7 @@ import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.PROPERTY_REG_ID;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
+import static org.keynote.godtools.android.utils.Constants.WEB_URL;
 
 @SuppressWarnings("deprecation")
 public class SnuffyPWActivity extends Activity
@@ -473,14 +475,15 @@ public class SnuffyPWActivity extends Activity
 
     private void doCmdShare(View v)
     {
-        String subject = getString(R.string.app_email_subject);
-        subject = subject.replace("%1", mPackageTitle);
+        String messageBody = getString(R.string.app_share_body_main_screen);
+        messageBody = messageBody.replace(APPLICATION_NAME, getString(R.string.app_name));
+        messageBody = messageBody.replace(WEB_URL, "\n"+getString(R.string.app_share_link_base_link));
 
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
-        share.putExtra(Intent.EXTRA_SUBJECT, subject);
-        share.putExtra(Intent.EXTRA_TEXT, buildMessageBody());
-        startActivity(Intent.createChooser(share, getString(R.string.select_share)));
+        share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+        share.putExtra(Intent.EXTRA_TEXT, messageBody);
+        startActivity(Intent.createChooser(share, getString(R.string.share_prompt)));
     }
 
     private String buildMessageBody()

@@ -41,6 +41,7 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.keynote.godtools.android.utils.Constants.APPLICATION_NAME;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
 import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
@@ -52,6 +53,7 @@ import static org.keynote.godtools.android.utils.Constants.META;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
+import static org.keynote.godtools.android.utils.Constants.WEB_URL;
 
 
 public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
@@ -473,7 +475,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private void doCmdShare()
     {
         String messageBody = getString(R.string.app_share_body_main_screen);
-        messageBody = messageBody.replace("%1", getString(R.string.app_share_link_base_link));
+        messageBody = messageBody.replace(APPLICATION_NAME, getString(R.string.app_name));
+        messageBody = messageBody.replace(WEB_URL, "\n"+getString(R.string.app_share_link_base_link));
 
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");

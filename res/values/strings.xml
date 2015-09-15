@@ -40,9 +40,9 @@
     <string name="copy">Copy</string>
     <string name="all_websites">All Websites</string>
 
-    <string name="app_email_subject">Our conversation about %1 today</string>
+    <string name="app_email_subject">Our conversation about {{package_name}} today</string>
     <!-- TODO: What is the correct wording for sharing the app without a package?-->
-    <string name="app_share_body_main_screen">View God Tools online at:\n%1</string>
+    <string name="app_share_body_main_screen">View {{app_name}} online at:{{web_url}}</string>
     <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
 
     <!-- Renderer Activity -->
