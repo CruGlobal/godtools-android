@@ -487,7 +487,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
-        share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_share_subject_main_screen));
+        share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
         share.putExtra(Intent.EXTRA_TEXT, msgBody);
         startActivity(Intent.createChooser(share, getString(R.string.select_share)));
     }

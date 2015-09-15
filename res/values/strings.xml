@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">God Tools</string>
-    <string name="app_title">God Tools</string>
     <string name="menu_item_kgp">Knowing God Personally</string>
     <string name="menu_item_satisfied">Satisfied?</string>
     <string name="menu_item_4laws">The Four Spiritual Laws</string>
@@ -28,7 +27,7 @@
     <string name="title_toggle_wakelock">Keep Screen On</string>
     <string name="summary_toggle_wakelock">Keep the screen on while viewing Booklets and EveryStudent.com Articles</string>
 
-    <string name="quit_dialog_message">Are you sure you want to exit GodTools?</string>
+    <string name="quit_dialog_message">Are you sure you want to exit God Tools?</string>
     <string name="quit_dialog_confirm">Exit</string>
     <string name="quit_dialog_cancel">Cancel</string>
 
@@ -56,8 +55,7 @@
 
     <string name="app_email_subject">Our conversation about %1 today</string>
     <!-- TODO: What is the correct wording for sharing the app without a package?-->
-    <string name="app_share_subject_main_screen">GodTools</string>
-    <string name="app_share_body_main_screen">View GodTools online at:\n%1</string>
+    <string name="app_share_body_main_screen">View God Tools online at:\n%1</string>
     <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
 
     <!-- Renderer Activity -->

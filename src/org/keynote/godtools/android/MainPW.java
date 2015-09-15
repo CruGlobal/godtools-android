@@ -104,7 +104,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setCustomView(R.layout.titlebar_centered_title);
         TextView titleBar = (TextView) actionBar.getCustomView().findViewById(R.id.titlebar_title);
-        titleBar.setText(R.string.app_title);
+        titleBar.setText(R.string.app_name);
 
         setupBroadcastReceiver();
 
@@ -477,7 +477,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
-        share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_share_subject_main_screen));
+        share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
         share.putExtra(Intent.EXTRA_TEXT, messageBody);
         startActivity(Intent.createChooser(share, getString(R.string.share_prompt)));
     }
