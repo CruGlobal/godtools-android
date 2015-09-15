@@ -4,7 +4,6 @@
     <string name="menu_item_kgp">Knowing God Personally</string>
     <string name="menu_item_satisfied">Satisfied?</string>
     <string name="menu_item_4laws">The Four Spiritual Laws</string>
-    <string name="menu_item_everystudent">Questions About Life And God?</string>
 
     <string name="menu_item_share">Share</string>
     <string name="menu_item_contents">Contents</string>
@@ -13,8 +12,7 @@
     <string name="menu_update_page">Update Page (draft)</string>
     <string name="menu_flip">Flip</string>
 
-    <string name="app_description">Campus Crusade for Christ</string>
-    <string name="app_name_everystudent">EveryStudent.com</string>
+    <string name="app_name_everystudent">Questions About Life And God?</string>
 
     <string name="settings">God Tools Settings</string>
     <string name="title_toggle_analytics">Collect Usage Data</string>
