@@ -49,4 +49,17 @@ public class Constants
     public static final String LANGUAGE_PARALLEL = "languageParallel";
     public static final String ENGLISH_DEFAULT = "en";
     public static final String CURRENT_LANG_CODE = "currLanguageCode";
+
+    /**
+     * Place holder texts
+     *
+     * These are used to replace place holders in strings recourse file with actual data to be displayed
+     */
+
+    public static final String APPLICATION_NAME = "{{app_name}}";
+    public static final String PACKAGE_NAME = "{{package_name}}";
+    public static final String SEARCH_TERM = "{{search_term}}";
+    public static final String NUMBER_OF_RESULTS = "{{number_of_terms}}";
+    public static final String WEB_URL = "{{web_url}}";
+    public static final String SHARE_LINK = "{{share_link}}";
 }

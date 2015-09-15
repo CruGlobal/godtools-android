@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import org.keynote.godtools.android.R;
 
+import static org.keynote.godtools.android.utils.Constants.PACKAGE_NAME;
+
 public class SnuffyHelpActivity extends Activity
 {
 
@@ -17,7 +19,7 @@ public class SnuffyHelpActivity extends Activity
 
         String packageTitle = getIntent().getStringExtra("PackageTitle");
         String windowTitle = getString(R.string.snuffy_help_title);
-        windowTitle = windowTitle.replace("%1", packageTitle);
+        windowTitle = windowTitle.replace(PACKAGE_NAME, packageTitle);
         setTitle(windowTitle);
     }
 }
