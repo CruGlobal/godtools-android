@@ -26,6 +26,7 @@ import org.keynote.godtools.android.utils.Device;
 
 import java.util.List;
 
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
 import static org.keynote.godtools.android.utils.Constants.META;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
@@ -79,7 +80,7 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler
             // get the default language of the device os
             String deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
             // set to english in case nothing is found.
-            if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = "en";
+            if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = ENGLISH_DEFAULT;
 
             Log.i(TAG, deviceDefaultLanguage);
 
