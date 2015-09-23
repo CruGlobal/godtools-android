@@ -474,7 +474,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private void doCmdShare()
     {
-        String messageBody = getString(R.string.app_share_body_main_screen);
+        String messageBody = getString(R.string.share_general_subject);
         messageBody = messageBody.replace(APPLICATION_NAME, getString(R.string.app_name));
         messageBody = messageBody.replace(WEB_URL, "\n"+getString(R.string.app_share_link_base_link));
 

@@ -495,7 +495,7 @@ public class SnuffyPWActivity extends Activity
             // http://www.knowgod.com/en/kgp
             shareLink = shareLink + "/" + mAppPackage;
 
-            messageBody = getString(R.string.kgp_four_laws_share);
+            messageBody = getString(R.string.share_from_page_message);
         }
         else if (SATISFIED.equalsIgnoreCase(mAppPackage))
         {

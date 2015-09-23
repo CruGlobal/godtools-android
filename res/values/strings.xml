@@ -42,7 +42,7 @@
 
     <string name="app_email_subject">Our conversation about {{package_name}} today</string>
     <!-- TODO: What is the correct wording for sharing the app without a package?-->
-    <string name="app_share_body_main_screen">View {{app_name}} online at:{{web_url}}</string>
+    <string name="share_general_subject">View {{app_name}} online at:{{web_url}}</string>
     <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
 
     <!-- Renderer Activity -->
@@ -128,7 +128,7 @@
     <string name="alternate_language">Parallel Language</string>
     <string name="alternate_language_message">The parallel language selected is not available for this tool.</string>
 
-    <string name="kgp_four_laws_share" formatted="false">It was great talking with you today about how we can know God personally. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
+    <string name="share_from_page_message" formatted="false">It was great talking with you today about how we can know God personally. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
 
     <string name="satisfied_share" formatted="false">It was great talking with you today about how we can experience The Holy Spirit’s power in our lives. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
 
