@@ -265,12 +265,12 @@ public class SettingsPW extends BaseActionBarActivity implements
         switch (v.getId())
         {
             case R.id.rlMainLanguage:
-                intent.putExtra("languageType", "Main Language");
+                intent.putExtra("languageType", getString(R.string.settings_main_language));
                 startActivityForResult(intent, REQUEST_PRIMARY);
                 break;
 
             case R.id.rlParallelLanguage:
-                intent.putExtra("languageType", "Parallel Language");
+                intent.putExtra("languageType", getString(R.string.settings_parallel_language));
                 startActivityForResult(intent, REQUEST_PARALLEL);
                 break;
         }
