@@ -13,8 +13,7 @@
         android:src="@drawable/gt4_home_bookicon"
         android:background="#00ffffff"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:contentDescription="@string/description_homescreen_icon"/>
+        android:layout_marginTop="50dp" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -138,7 +137,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="@string/menu_item_everystudent"
+            android:text="@string/app_name_everystudent"
             android:id="@+id/tv_fourth"
             android:background="#00ffffff"
             android:textSize="22sp"
