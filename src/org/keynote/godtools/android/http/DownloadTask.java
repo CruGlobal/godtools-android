@@ -28,7 +28,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
     private Context mContext;
     private String url, filePath, tag, langCode;
 
-    public static interface DownloadTaskHandler {
+    public interface DownloadTaskHandler {
         void downloadTaskComplete(String url, String filePath, String langCode, String tag);
 
         void downloadTaskFailure(String url, String filePath, String langCode, String tag);

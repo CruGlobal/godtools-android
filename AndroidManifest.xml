@@ -64,21 +64,6 @@
 
         </activity>
 
-
-        <activity
-            android:name="Kgp"
-            android:label="@string/menu_item_kgp" />
-
-        <activity
-            android:name="Satisfied"
-            android:label="@string/menu_item_satisfied" />
-        <activity
-            android:name="SpiritualLaws"
-            android:label="@string/menu_item_4laws" />
-        <activity
-            android:name="GalleryHelp"
-            android:label="@string/app_name_gallery_help"
-            android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".everystudent.EveryStudent"
             android:label="@string/app_name_everystudent"
@@ -109,9 +94,6 @@
             android:value=".everystudent.EveryStudentSearchResults" />
 
         <activity
-            android:name=".snuffy.SnuffyActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".snuffy.SnuffyAboutActivity"
             android:label="@string/app_title"
             android:screenOrientation="portrait"
@@ -121,11 +103,7 @@
             android:label="@string/app_title"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light" />
-        <activity
-            android:name=".snuffy.SnuffyLanguageActivity"
-            android:label="@string/app_title"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light" />
+
         <activity
             android:name=".snuffy.SnuffyHelpActivity"
             android:label="@string/app_title"

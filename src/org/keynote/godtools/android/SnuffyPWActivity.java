@@ -50,20 +50,24 @@ import java.util.Vector;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.COUNT;
+import static org.keynote.godtools.android.utils.Constants.CURRENT_LANG_CODE;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
+import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.LANGUAGE_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.PROPERTY_REG_ID;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 public class SnuffyPWActivity extends Activity
 {
     private static final String TAG = "SnuffyActivity";
 
-    private static final String PREFS_NAME = "GodTools";
-
     private String mAppPackage;
     private String mConfigFileName;
-    private String mAppLanguage = "en";
-    private String mAppLanguageDefault = "en";
+    private String mAppLanguage = ENGLISH_DEFAULT;
     private Typeface mAlternateTypeface;
     private Vector<SnuffyPage> mPages = new Vector<SnuffyPage>(0);
     private SnuffyPage mAboutView;
@@ -79,15 +83,14 @@ public class SnuffyPWActivity extends Activity
     private String mPackageStatus;
     private ProcessPackageAsync mProcessPackageAsync;
     private GestureDetector MyGestureDetector;
-    public static final String PROPERTY_REG_ID = "registration_id";
 
     private String mConfigPrimary, mConfigParallel;
     private GTPackage mParallelPackage;
     private boolean isUsingPrimaryLanguage, isParallelLanguageSet;
     
-    SharedPreferences settings;
-    String regid;
-    Timer timer;
+    private SharedPreferences settings;
+    private String regid;
+    private Timer timer;
 
     public void setLanguage(String languageCode)
     {
@@ -97,16 +100,6 @@ public class SnuffyPWActivity extends Activity
     public String getLanguage()
     {
         return mAppLanguage;
-    }
-
-    public void setLanguageDefault(String languageCode)
-    {
-        mAppLanguageDefault = languageCode;
-    }
-
-    public String getLanguageDefault()
-    {
-        return mAppLanguageDefault;
     }
 
     @Override
@@ -136,7 +129,7 @@ public class SnuffyPWActivity extends Activity
 
         // check if parallel language is set
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String langParallel = settings.getString("languageParallel", "");
+        String langParallel = settings.getString(LANGUAGE_PARALLEL, "");
 
 
         // get package if parallel language is set
@@ -154,9 +147,6 @@ public class SnuffyPWActivity extends Activity
         // Now we are called from GodTools - do not restore current page
         // always start at 0
         mPagerCurrentItem = 0;
-
-        // not appropriate from God tools: setLanguage(settings.getString("currLanguageCode", getLanguageDefault()));
-        // TODO: when we can display About or other pages, save that state too so we can restore that too.
 
         handleLanguagesWithAlternateFonts();
 
@@ -200,6 +190,7 @@ public class SnuffyPWActivity extends Activity
 
     }
 
+    @SuppressWarnings("deprecation")
     private class MyPagerAdapter extends PagerAdapter
     {
         public int getCount()
@@ -223,7 +214,7 @@ public class SnuffyPWActivity extends Activity
         @Override
         public boolean isViewFromObject(View arg0, Object arg1)
         {
-            return arg0 == ((View) arg1);
+            return arg0 == arg1;
         }
 
         @Override
@@ -242,13 +233,11 @@ public class SnuffyPWActivity extends Activity
         @Override
         public void finishUpdate(View arg0)
         {
-            // TODO Auto-generated method stub
         }
 
         @Override
         public void restoreState(Parcelable arg0, ClassLoader arg1)
         {
-            // TODO Auto-generated method stub
         }
 
         @Override
@@ -296,9 +285,9 @@ public class SnuffyPWActivity extends Activity
                 mPages.clear();
                 mPages = null;
                 mAboutView = null;
-                SnuffyApplication app = (SnuffyApplication) getApplication();
-                app.mPages = mPages;
-                app.mAboutView = mAboutView;
+                SnuffyApplication app = getApp();
+                app.mPages = null;
+                app.mAboutView = null;
                 app.mPackageTitle = mPackageTitle;
                 mPages = new Vector<SnuffyPage>(0);
 
@@ -319,12 +308,12 @@ public class SnuffyPWActivity extends Activity
         if (!bSuccess)
         { // now testing is done - only show msg on failure
             Toast.makeText(SnuffyPWActivity.this.getApplicationContext(),
-                    bSuccess ? getString(R.string.processing_succeded) : getString(R.string.processing_failed),
+                    getString(R.string.processing_failed),
                     Toast.LENGTH_SHORT).show();
             return;
         }
 
-        addClickHandlersToAllPages();    // TODO: could this just be mPager.setOnClickLIstner?
+        addClickHandlersToAllPages();
         addCallingActivityToAllPages();
         mAboutView = mPages.elementAt(0);
         mPages.remove(mAboutView);
@@ -338,7 +327,7 @@ public class SnuffyPWActivity extends Activity
         if (mPagerCurrentItem >= mPages.size()) // if value from prefs (left over from running with different package?) is out-of-range
             mPagerCurrentItem = 0;                // reset to first page.
         mPager.setCurrentItem(mPagerCurrentItem);
-        SnuffyApplication app = (SnuffyApplication) getApplication();
+        SnuffyApplication app = getApp();
         app.mPages = mPages;
         app.mAboutView = mAboutView;
         app.mPackageTitle = mPackageTitle;
@@ -366,7 +355,7 @@ public class SnuffyPWActivity extends Activity
                     ((SnuffyPage) newPage).onEnterPage();
                 }
 
-                // This notificaiton has been upated to only be sent after the app has been opened 3 times
+                // This notification has been updated to only be sent after the app has been opened 3 times
                 // The api will only send a notice once, so it can be sent from here multiple times.
 
                 // if the prayer pages are ever moved this will need to be updated.
@@ -376,7 +365,7 @@ public class SnuffyPWActivity extends Activity
                     if ((mAppPackage.equalsIgnoreCase(KGP) && position == 7) || (mAppPackage.equalsIgnoreCase(FOUR_LAWS) && position == 6))
                     {
                         Log.i(TAG, "App used 3 times and prayer page reached.");
-                        GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""),
+                        GodToolsApiClient.updateNotification(settings.getString(AUTH_CODE, ""),
                                 regid, NotificationInfo.AFTER_1_PRESENTATION, new NotificationUpdateTask.NotificationUpdateTaskHandler()
                                 {
                                     @Override
@@ -398,7 +387,6 @@ public class SnuffyPWActivity extends Activity
             @Override
             public void onPageScrolled(int arg0, float arg1, int arg2)
             {
-                //Log.d(TAG, "onPageScrolled");
             }
 
             @Override
@@ -412,30 +400,13 @@ public class SnuffyPWActivity extends Activity
     protected void onPause()
     {
         super.onPause();
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor ed = settings.edit();
         ed.putInt("currPage", mPagerCurrentItem);
-        ed.putString("currLanguageCode", getLanguage());
-        // TODO: when we can display About or other pages, save that state too so we can restore that too.
+        ed.putString(CURRENT_LANG_CODE, getLanguage());
         ed.apply();
         
         
     }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
-        // Save data that is to be preserved across configuration changes.
-        // This method is called to retrieve per-instance state from an activity before being killed
-        // so that the state can be restored in onCreate(Bundle) or onRestoreInstanceState(Bundle)
-        // (the Bundle populated by this method will be passed to both).
-
-        super.onSaveInstanceState(outState);
-        //outState.putInt("xx"  , this.mxx);
-
-        // we dont have any of this yet. We use prefs so the curr pos even survives a total restart.
-    }
-
 
     private void resizeTheActivity()
     {
@@ -472,11 +443,10 @@ public class SnuffyPWActivity extends Activity
 
     private void addCallingActivityToAllPages()
     {
-        Iterator<SnuffyPage> iter = mPages.iterator();
 
-        while (iter.hasNext())
+        for (SnuffyPage mPage : mPages)
         {
-            iter.next().mCallingActivity = this; // the SnuffyActivity owns most pages except the about page - which will be set explicitly
+            mPage.mCallingActivity = this; // the SnuffyActivity owns most pages except the about page - which will be set explicitly
         }
     }
 
@@ -573,16 +543,15 @@ public class SnuffyPWActivity extends Activity
     {
         setLanguage(languageCode);
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor ed = settings.edit();
-        ed.putString("currLanguageCode", languageCode);
+        ed.putString(CURRENT_LANG_CODE, languageCode);
         ed.apply();
 
         mPages.clear();
         mPages = null;
         mAboutView = null;
-        ((SnuffyApplication) getApplication()).mPages = mPages;
-        ((SnuffyApplication) getApplication()).mAboutView = mAboutView;
+        getApp().mPages = null;
+        getApp().mAboutView = null;
         mPages = new Vector<SnuffyPage>(0);
         mPagerAdapter.notifyDataSetChanged(); // try to clear cached views (SnuffyPages) in pager, else they will display until we navigate away and back.
         if (bResetToFirstPage)
@@ -662,9 +631,7 @@ public class SnuffyPWActivity extends Activity
         MenuItem switchItem = menu.findItem(R.id.CMD_SWITCH_LANGUAGE);
         switchItem.setVisible(true);
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-        if ("draft".equalsIgnoreCase(mPackageStatus) && settings.getBoolean("TranslatorMode", false))
+        if (KEY_DRAFT.equalsIgnoreCase(mPackageStatus) && settings.getBoolean(TRANSLATOR_MODE, false))
         {
             menu.findItem(R.id.CMD_REFRESH_PAGE).setVisible(true);
         }
@@ -845,7 +812,6 @@ public class SnuffyPWActivity extends Activity
         @Override
         protected void onProgressUpdate(Integer... progress)
         {
-            // TODO: How can we get processPackage to call this?
             mProgressDialog.setMax(progress[1]);
             mProgressDialog.setProgress(progress[0]);
         }
@@ -854,7 +820,6 @@ public class SnuffyPWActivity extends Activity
         protected void onPostExecute(Integer result)
         {
             dismissDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);
-            // TODO: COMPLETE PROCESSING ON MAIN THREAD
             completeSetup(result != 0);
         }
     }
@@ -911,7 +876,7 @@ public class SnuffyPWActivity extends Activity
             public void run()
             {
                 Log.i(TAG, "Timer complete");
-                GodToolsApiClient.updateNotification(settings.getString("Authorization_Generic", ""),
+                GodToolsApiClient.updateNotification(settings.getString(AUTH_CODE, ""),
                         regid, NotificationInfo.DAY_AFTER_SHARE, new NotificationUpdateTask.NotificationUpdateTaskHandler()
                         {
                             @Override

@@ -23,7 +23,7 @@ public class DraftPublishTask extends AsyncTask<Object, Void, Integer>
         this.taskHandler = taskHandler;
     }
 
-    public static interface DraftTaskHandler
+    public interface DraftTaskHandler
     {
         void draftTaskComplete();
         void draftTaskFailure(int statusCode);

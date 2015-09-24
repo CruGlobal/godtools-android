@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.everystudent;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -31,263 +32,296 @@ import android.widget.TextView;
 import org.keynote.godtools.android.R;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EveryStudentSearchResults extends ListActivity {
-	private String mQuery;
-	private Pattern mPattern;
-	
-	public static final int DIALOG_LOADING = 0;
+@SuppressWarnings("deprecation")
+public class EveryStudentSearchResults extends ListActivity
+{
+    private static final int DIALOG_LOADING = 0;
+    private static SearcherThread mSearcherThread;
+    private static MySimpleCursorAdapter mAdapter;
+    private static Cursor mCursor;
+    private static String mCount;
+    private String mQuery;
+    private Pattern mPattern;
 
-	private static SearcherThread mSearcherThread;
-	private static MySimpleCursorAdapter mAdapter;
-	private static Cursor mCursor;
-	private static String mCount;
-
-	public static final String LOGTAG = "EveryStudentSearchResults";
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-        getWindow().setFlags(
-        		WindowManager.LayoutParams.FLAG_FULLSCREEN, 
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.search);
-
-		Intent intent = getIntent();
-		mQuery = intent.getStringExtra(SearchManager.QUERY);
-		
-		
-		if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-			// handles a click on a search suggestion; launches activity to show
-			// word
-			Intent wordIntent = new Intent(this, EveryStudentView.class);
-			wordIntent.setData(intent.getData());
-			wordIntent.putExtra(SearchManager.QUERY,
-					intent.getStringExtra(SearchManager.USER_QUERY));
-			startActivity(wordIntent);
-			finish();
-		} else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			// handles a search query
-			
-			HashMap<String,String> params = new HashMap<String,String>();
-			params.put("Query", mQuery);
-//FIXME			FlurryAgent.onEvent(FlurryAPI.FlurryPrefix + LOGTAG, params);
-//FIXME			FlurryAgent.onPageView();
-			
-			EveryStudentSearchResultsPersistance essrp = null;
-			essrp = (EveryStudentSearchResultsPersistance) getLastNonConfigurationInstance();
-			
-			if (essrp != null && essrp.getmAdapter() != null && essrp.getCursor() != null && essrp.getQuery() != null && essrp.getCount() != null) {
-				mCount = essrp.getCount();
-				mQuery = essrp.getQuery();
-				mCursor = essrp.getCursor();
-				mAdapter = createAdapter(EveryStudentSearchResults.this, mCursor);
-				TextView text = (TextView) findViewById(R.id.text);
-		        text.setText(mCount);
-				setListAdapter(mAdapter);
-			} else if (mSearcherThread != null && mSearcherThread.isAlive()) {
-				mSearcherThread.setHandler(new SearcherHandler());
-			} else {
-				mSearcherThread = new SearcherThread();
-				mSearcherThread.start();
-		        showDialog(DIALOG_LOADING);
-			}
-			
-			this.getListView().setOnItemClickListener(new OnItemClickListener() {
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id) {
-					Intent intent = new Intent(EveryStudentSearchResults.this, EveryStudentView.class);
-					Uri contentUri = Uri.withAppendedPath(EveryStudentProvider.CONTENT_URI, "content");
-					Uri contentUriRow = Uri.withAppendedPath(contentUri,String.valueOf(id));
-					intent.setData(contentUriRow);
-					intent.putExtra(SearchManager.QUERY, mQuery);
-					startActivity(intent);
-				}
-			});
-		}
-	}
-
-	@Override
-	public Object onRetainNonConfigurationInstance() {
-		return new EveryStudentSearchResultsPersistance(mAdapter, mCursor, mQuery, mCount);
-	}
-
-	@Override
-	public void onStart()
-	{
-	   super.onStart();
-	}
-	
-	@Override
-	public void onStop()
-	{
-	   super.onStop();
-//FIXME	   FlurryAgent.onEndSession(this);
-	}
-	
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		switch (id) {
-		case DIALOG_LOADING:
-			ProgressDialog pdlg = new ProgressDialog(this);
-			pdlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			pdlg.setMessage("Loading. Please wait...");
-			pdlg.setIndeterminate(true);
-			return pdlg;
-		}
-		return null;
-	}
-	
-	private class SearcherHandler extends Handler {
-	    @Override
-		public void handleMessage(Message msg) {
-	        TextView text = (TextView) findViewById(R.id.text);
-	        mCount = mSearcherThread.getCount();
-	        text.setText(mCount);
-	        mAdapter = mSearcherThread.getAdapter();
-	        setListAdapter(mAdapter);
-	        dismissDialog(DIALOG_LOADING);
-	    }
-	}
-	
-	class SearcherThread extends Thread {
-	    Handler mHandler = new SearcherHandler();
-	    MySimpleCursorAdapter adapter;
-	    Cursor myCursor;
-	    String myCount;
-	    
-	    public String getCount() { return myCount; }
-	    public void setHandler(Handler h) { mHandler = h; }
-		public MySimpleCursorAdapter getAdapter() { return adapter; }
-		
-		public void run() {
-			Looper.prepare();
-			
-			mCursor = managedQuery(EveryStudentProvider.CONTENT_URI, null,
-					null, new String[] { mQuery }, null);
-			
-			if (mCursor == null) {
-				myCount = getString(R.string.search_no_results,
-                        mQuery);
-			} else {
-				// Display the number of results
-				int count = mCursor.getCount();
-				myCount = getResources().getQuantityString(
-						R.plurals.search_results, count,
-						new Object[] { count, mQuery });
-			
-				adapter = createAdapter (EveryStudentSearchResults.this, mCursor);
-			}
-			mHandler.sendEmptyMessage(0);
-		}
-	}
-	
-	private MySimpleCursorAdapter createAdapter(Context context, Cursor c) {
-		// Specify the columns we want to display in the result
-		String[] from = new String[] { SearchManager.SUGGEST_COLUMN_TEXT_1,
-				SearchManager.SUGGEST_COLUMN_TEXT_2 };
-
-		// Specify the corresponding layout elements where we want the
-		// columns to go
-		int[] to = new int[] { R.id.title, R.id.snippet };
-		return new MySimpleCursorAdapter(EveryStudentSearchResults.this,
-				R.layout.search_result, mCursor, from, to);
-	}
-	
-	public class MySimpleCursorAdapter extends SimpleCursorAdapter {
-
-		public MySimpleCursorAdapter(Context context, int layout, Cursor c,
-				String[] from, int[] to) {
-			super(context, layout, c, from, to);
-			this.c = c;
-			this.context = context;
-			
-			
-			String[] terms = mQuery.split("[\\s]");
-			List<String> termsList = Arrays.asList(terms);
-			String pattern = "";
-
-			Iterator<String> itr = termsList.iterator();
-			while (itr.hasNext()) {
-				pattern += itr.next().trim()+"[^\\s,\\.\\?:;]*";
-				if (itr.hasNext()) {
-					pattern += "|";
-				}
-			}
-			mPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE
-					| Pattern.MULTILINE);
-			
-		}
-
-		private Cursor c;
-		private Context context;
-
-		@Override
-		public View getView(int pos, View inView, ViewGroup parent) {
-			View v = inView;
-			if (v == null) {
-				LayoutInflater inflater = (LayoutInflater) context
-						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				v = inflater.inflate(R.layout.search_result, null);
-			}
-			this.c.moveToPosition(pos);
-			TextView vTitle = (TextView) v.findViewById(R.id.title);
-			TextView vSnippet = (TextView) v.findViewById(R.id.snippet);
-			String title = this.c.getString(this.c
-					.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1));
-			String snippet = this.c.getString(this.c
-					.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_2));
-
-			vTitle.setText(title, TextView.BufferType.SPANNABLE);
-			vSnippet.setText(snippet, TextView.BufferType.SPANNABLE);
-
-			Spannable titleSpan = (Spannable) vTitle.getText();
-			Spannable snippetSpan = (Spannable) vSnippet.getText();
-
-			Matcher titleMatcher = mPattern.matcher(title);
-			while (titleMatcher.find()) {
-				titleSpan.setSpan(
-						new StyleSpan(android.graphics.Typeface.BOLD),
-						titleMatcher.start(), titleMatcher.end(),
-						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			}
-
-			Matcher snippetMatcher = mPattern.matcher(snippet);
-			while (snippetMatcher.find()) {
-				snippetSpan.setSpan(new BackgroundColorSpan(
-						android.graphics.Color.YELLOW), snippetMatcher.start(),
-						snippetMatcher.end(),
-						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-				snippetSpan.setSpan(new ForegroundColorSpan(
-						android.graphics.Color.BLACK), snippetMatcher.start(),
-						snippetMatcher.end(),
-						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			}
-
-			return (v);
-		}
-	}
-	
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public void onCreate(Bundle savedInstanceState)
+    {
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.search);
+
+        Intent intent = getIntent();
+        mQuery = intent.getStringExtra(SearchManager.QUERY);
+
+
+        if (Intent.ACTION_VIEW.equals(intent.getAction()))
+        {
+            // handles a click on a search suggestion; launches activity to show
+            // word
+            Intent wordIntent = new Intent(this, EveryStudentView.class);
+            wordIntent.setData(intent.getData());
+            wordIntent.putExtra(SearchManager.QUERY,
+                    intent.getStringExtra(SearchManager.USER_QUERY));
+            startActivity(wordIntent);
+            finish();
+        }
+        else if (Intent.ACTION_SEARCH.equals(intent.getAction()))
+        {
+
+            EveryStudentSearchResultsPersistance essrp = (EveryStudentSearchResultsPersistance) getLastNonConfigurationInstance();
+
+            if (essrp != null && essrp.getmAdapter() != null && essrp.getCursor() != null && essrp.getQuery() != null && essrp.getCount() != null)
+            {
+                mCount = essrp.getCount();
+                mQuery = essrp.getQuery();
+                mCursor = essrp.getCursor();
+                mAdapter = createAdapter();
+                TextView text = (TextView) findViewById(R.id.text);
+                text.setText(mCount);
+                setListAdapter(mAdapter);
+            }
+            else if (mSearcherThread != null && mSearcherThread.isAlive())
+            {
+                mSearcherThread.setHandler(new SearcherHandler());
+            }
+            else
+            {
+                mSearcherThread = new SearcherThread();
+                mSearcherThread.start();
+                showDialog(DIALOG_LOADING);
+            }
+
+            this.getListView().setOnItemClickListener(new OnItemClickListener()
+            {
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id)
+                {
+                    Intent intent = new Intent(EveryStudentSearchResults.this, EveryStudentView.class);
+                    Uri contentUri = Uri.withAppendedPath(EveryStudentProvider.CONTENT_URI, "content");
+                    Uri contentUriRow = Uri.withAppendedPath(contentUri, String.valueOf(id));
+                    intent.setData(contentUriRow);
+                    intent.putExtra(SearchManager.QUERY, mQuery);
+                    startActivity(intent);
+                }
+            });
+        }
+    }
+
+    @Override
+    public Object onRetainNonConfigurationInstance()
+    {
+        return new EveryStudentSearchResultsPersistance(mAdapter, mCursor, mQuery, mCount);
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id)
+    {
+        switch (id)
+        {
+            case DIALOG_LOADING:
+                ProgressDialog pdlg = new ProgressDialog(this);
+                pdlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                pdlg.setMessage("Loading. Please wait...");
+                pdlg.setIndeterminate(true);
+                return pdlg;
+        }
+        return null;
+    }
+
+    private MySimpleCursorAdapter createAdapter()
+    {
+        // Specify the columns we want to display in the result
+        String[] from = new String[]{SearchManager.SUGGEST_COLUMN_TEXT_1,
+                SearchManager.SUGGEST_COLUMN_TEXT_2};
+
+        // Specify the corresponding layout elements where we want the
+        // columns to go
+        int[] to = new int[]{R.id.title, R.id.snippet};
+        return new MySimpleCursorAdapter(EveryStudentSearchResults.this,
+                R.layout.search_result, mCursor, from, to);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.everystudent, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
             case R.id.search:
                 onSearchRequested();
                 return true;
             default:
                 return false;
+        }
+    }
+
+    @SuppressLint("HandlerLeak")
+    private class SearcherHandler extends Handler
+    {
+        @Override
+        public void handleMessage(Message msg)
+        {
+            TextView text = (TextView) findViewById(R.id.text);
+            mCount = mSearcherThread.getCount();
+            text.setText(mCount);
+            mAdapter = mSearcherThread.getAdapter();
+            setListAdapter(mAdapter);
+            dismissDialog(DIALOG_LOADING);
+        }
+    }
+
+    class SearcherThread extends Thread
+    {
+        Handler mHandler = new SearcherHandler();
+        MySimpleCursorAdapter adapter;
+        String myCount;
+
+        public String getCount()
+        {
+            return myCount;
+        }
+
+        public void setHandler(Handler h)
+        {
+            mHandler = h;
+        }
+
+        public MySimpleCursorAdapter getAdapter()
+        {
+            return adapter;
+        }
+
+        public void run()
+        {
+            Looper.prepare();
+
+            mCursor = managedQuery(EveryStudentProvider.CONTENT_URI, null,
+                    null, new String[]{mQuery}, null);
+
+            if (mCursor == null)
+            {
+                myCount = getString(R.string.search_no_results,
+                        mQuery);
+            }
+            else
+            {
+                // Display the number of results
+                int count = mCursor.getCount();
+                myCount = getResources().getQuantityString(
+                        R.plurals.search_results, count,
+                        count, mQuery);
+
+                adapter = createAdapter();
+            }
+            mHandler.sendEmptyMessage(0);
+        }
+    }
+
+    public class MySimpleCursorAdapter extends SimpleCursorAdapter
+    {
+
+        private final Cursor c;
+        private final Context context;
+        public MySimpleCursorAdapter(Context context, @SuppressWarnings("SameParameterValue") int layout, Cursor c,
+                                     String[] from, int[] to)
+        {
+            super(context, layout, c, from, to);
+            this.c = c;
+            this.context = context;
+
+
+            String[] terms = mQuery.split("[\\s]");
+            List<String> termsList = Arrays.asList(terms);
+            String pattern = "";
+
+            Iterator<String> itr = termsList.iterator();
+            while (itr.hasNext())
+            {
+                pattern += itr.next().trim() + "[^\\s,\\.\\?:;]*";
+                if (itr.hasNext())
+                {
+                    pattern += "|";
+                }
+            }
+            mPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE
+                    | Pattern.MULTILINE);
+
+        }
+
+        @SuppressLint("InflateParams")
+        @Override
+        public View getView(int pos, View inView, ViewGroup parent)
+        {
+            View v = inView;
+            if (v == null)
+            {
+                LayoutInflater inflater = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                v = inflater.inflate(R.layout.search_result, null);
+            }
+            this.c.moveToPosition(pos);
+            TextView vTitle = (TextView) v.findViewById(R.id.title);
+            TextView vSnippet = (TextView) v.findViewById(R.id.snippet);
+            String title = this.c.getString(this.c
+                    .getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1));
+            String snippet = this.c.getString(this.c
+                    .getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_2));
+
+            vTitle.setText(title, TextView.BufferType.SPANNABLE);
+            vSnippet.setText(snippet, TextView.BufferType.SPANNABLE);
+
+            Spannable titleSpan = (Spannable) vTitle.getText();
+            Spannable snippetSpan = (Spannable) vSnippet.getText();
+
+            Matcher titleMatcher = mPattern.matcher(title);
+            while (titleMatcher.find())
+            {
+                titleSpan.setSpan(
+                        new StyleSpan(android.graphics.Typeface.BOLD),
+                        titleMatcher.start(), titleMatcher.end(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
+            Matcher snippetMatcher = mPattern.matcher(snippet);
+            while (snippetMatcher.find())
+            {
+                snippetSpan.setSpan(new BackgroundColorSpan(
+                                android.graphics.Color.YELLOW), snippetMatcher.start(),
+                        snippetMatcher.end(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                snippetSpan.setSpan(new ForegroundColorSpan(
+                                android.graphics.Color.BLACK), snippetMatcher.start(),
+                        snippetMatcher.end(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
+            return (v);
         }
     }
 }

@@ -19,37 +19,47 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.Vector;
 
-public class SnuffyApplication extends Application {
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+
+public class SnuffyApplication extends Application
+{
 
     // Hold pointers to our created objects for the current SnuffyActivity (if any)
     public Vector<SnuffyPage> mPages;
     public SnuffyPage mAboutView;
     public String mPackageTitle;
 
-    public Tracker tracker;
+    @SuppressWarnings("unused")
+    private Tracker tracker;
 
-    public Locale mDeviceLocale, mAppLocale;
+    private Locale mDeviceLocale;
+    private Locale mAppLocale;
 
     @Override
-    public void onCreate() {
+    public void onCreate()
+    {
         super.onCreate();
 
         mDeviceLocale = Locale.getDefault();
-        SharedPreferences settings = getSharedPreferences("GodTools", MODE_PRIVATE);
-        String primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, "en");
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
         setAppLocale(primaryLanguageCode);
 
     }
 
-    public void sendEmailWithContent(Activity callingActivity, String subjectLine, String msgBody) {
-        try {
+    public void sendEmailWithContent(Activity callingActivity, String subjectLine, String msgBody)
+    {
+        try
+        {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setData(Uri.parse("mailto:"));
             intent.putExtra(Intent.EXTRA_SUBJECT, subjectLine);
             intent.putExtra(Intent.EXTRA_TEXT, msgBody);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             callingActivity.startActivity(Intent.createChooser(intent, getApplicationContext().getString(R.string.choose_your_email_provider)));
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             AlertDialog.Builder builder = new AlertDialog.Builder(callingActivity);
             builder.setMessage(R.string.unable_to_send_the_email)
                     .setCancelable(false)
@@ -59,56 +69,63 @@ public class SnuffyApplication extends Application {
         }
     }
 
-    public File getDocumentsDir() {
+    public File getDocumentsDir()
+    {
         File documentsDir = null;
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+        {
             documentsDir = getExternalFilesDir(null);
         }
-        if (documentsDir == null) {
+        if (documentsDir == null)
+        {
             documentsDir = getFilesDir();
         }
         return documentsDir;
     }
 
-    public boolean assetExists(String fileName) {
-        try {
+    private boolean assetExists(String fileName)
+    {
+        try
+        {
             InputStream is = getAssets().open(fileName);
             is.close();
             return true;
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             return false;
         }
     }
 
-    public boolean fileExists(String fileName) {
+    private boolean fileExists(String fileName)
+    {
         File f = new File(getDocumentsDir() + "/" + fileName);
         return f.exists();
     }
 
-    public boolean languageExistsAsAsset(String packageName, String languageCode) {
+    public boolean languageExistsAsAsset(String packageName, String languageCode)
+    {
         String testFileName = "Packages/" + packageName + "/" + languageCode + ".xml";
         return assetExists(testFileName);
     }
 
-    public boolean languageExistsAsFile(String packageName, String languageCode) {
+    public boolean languageExistsAsFile(String packageName, String languageCode)
+    {
         String testFileName = "Packages/" + packageName + "/" + languageCode + ".xml";
         return fileExists(testFileName);
     }
 
-    public boolean languageExists(String packageName, String languageCode) {
-        String testFileName = "Packages/" + packageName + "/" + languageCode + ".xml";
-        return assetExists(testFileName) || fileExists(testFileName);
-    }
-
-    public Tracker getTracker() {
-        if (tracker == null) {
+    public Tracker getTracker()
+    {
+        if (tracker == null)
+        {
             return org.keynote.godtools.android.utils.GoogleAnalytics.getTracker(this);
         }
 
         return tracker;
     }
 
-    public void setAppLocale(String languageCode) {
+    public void setAppLocale(String languageCode)
+    {
 
         mAppLocale = new Locale(languageCode);
 
@@ -119,12 +136,14 @@ public class SnuffyApplication extends Application {
                 getBaseContext().getResources().getDisplayMetrics());
     }
 
-    public Locale getDeviceLocale() {
+    public Locale getDeviceLocale()
+    {
         return mDeviceLocale;
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(Configuration newConfig)
+    {
         mDeviceLocale = newConfig.locale;
         super.onConfigurationChanged(newConfig);
 

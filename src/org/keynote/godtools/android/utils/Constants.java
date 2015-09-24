@@ -10,17 +10,11 @@ public class Constants
      */
     public static final String TYPE = "TYPE";
 
-    public static final String KEY_NEW_LANGUAGE = "new_language";
-    public static final String KEY_UPDATE_PRIMARY = "update_primary";
-    public static final String KEY_UPDATE_PARALLEL = "update_parallel";
     public static final String KEY_PRIMARY = "primary";
     public static final String KEY_PARALLEL = "parallel";
-
+    public static final String KEY_DRAFT = "draft";
+    public static final String KEY_DRAFT_PRIMARY = "draft_primary";
     public static final String META = "meta";
-
-    public static final String LANG_CODE = "lang_code";
-    public static final String BACKGROUND_TASK_TAG = "task_tag";
-
     public static final String COUNT = "count";
 
 
@@ -49,6 +43,10 @@ public class Constants
 
     public static final String ACCESS_CODE = "access_code";
     public static final String TRANSLATOR_MODE = "TranslatorMode";
-    public static final String TRANSLATOR_MODE_EXPIRED = "translator_mode_expired";
     public static final String STATUS_CODE = "status_code";
+    public static final String FIRST_LAUNCH = "firstLaunch";
+    public static final String PROPERTY_REG_ID = "registration_id";
+    public static final String LANGUAGE_PARALLEL = "languageParallel";
+    public static final String ENGLISH_DEFAULT = "en";
+    public static final String CURRENT_LANG_CODE = "currLanguageCode";
 }

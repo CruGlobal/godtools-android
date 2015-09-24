@@ -12,7 +12,7 @@ import android.widget.TextView;
  */
 public class SnuffyAlternateTypefaceTextView
 {
-	TextView textView;
+	private final TextView textView;
 
 	public SnuffyAlternateTypefaceTextView(TextView textView)
 	{
@@ -21,9 +21,6 @@ public class SnuffyAlternateTypefaceTextView
 
 	/**
 	 * Will set the typeface on underlying TextView if the @param alternateTypeface is not null.
-	 *
-	 * @param alternateTypeface
-	 * @return
 	 */
 	public SnuffyAlternateTypefaceTextView setAlternateTypeface(Typeface alternateTypeface)
 	{
@@ -36,10 +33,6 @@ public class SnuffyAlternateTypefaceTextView
 
     /**
      * Will set the typeface on underlying TextView if the @param alternateTypeface is not null.
-     *
-     * @param alternateTypeface
-     * @param style
-     * @return
      */
     public SnuffyAlternateTypefaceTextView setAlternateTypeface(Typeface alternateTypeface, int style){
 
@@ -52,8 +45,6 @@ public class SnuffyAlternateTypefaceTextView
 
 	/**
 	 * Get the underlying Android TextView
-	 *
-	 * @return
 	 */
 	public TextView get()
 	{
