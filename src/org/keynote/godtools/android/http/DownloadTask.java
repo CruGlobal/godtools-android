@@ -136,7 +136,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
     private HttpURLConnection getHttpURLConnection(String url, String authorization) throws IOException
     {
         HttpURLConnection getDownloadUrlConnection = (HttpURLConnection) new URL(url).openConnection();
-        getDownloadUrlConnection.setReadTimeout(30000 /* milliseconds */);
+        getDownloadUrlConnection.setReadTimeout(90000 /* milliseconds */);
         getDownloadUrlConnection.setConnectTimeout(10000 /* milliseconds */);
         getDownloadUrlConnection.setRequestMethod("GET");
 
