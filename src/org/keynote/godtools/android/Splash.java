@@ -201,6 +201,10 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler,
     @Override
     public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
     {
+        GTLanguage languageRetrievedFromDatabase = GTLanguage.getLanguage(getApp().getApplicationContext(), langCode);
+        languageRetrievedFromDatabase.setDownloaded(true);
+        languageRetrievedFromDatabase.update(getApp().getApplicationContext());
+
         goToMainActivity();
     }
 
