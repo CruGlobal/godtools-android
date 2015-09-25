@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.crittercism.app.Crittercism;
+import com.crashlytics.android.Crashlytics;
 import com.google.common.base.Strings;
 
 import org.keynote.godtools.android.business.GTLanguage;
