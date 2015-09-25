@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.crittercism.app.Crittercism;
+import com.crashlytics.android.Crashlytics;
 import com.google.common.base.Strings;
 
 import org.keynote.godtools.android.business.GTLanguage;
@@ -25,6 +25,8 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
 import java.util.List;
+
+import io.fabric.sdk.android.Fabric;
 
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
@@ -62,7 +64,7 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         // Enable crash reporting
-        Crittercism.initialize(getApplicationContext(), getString(R.string.key_crittercism));
+        Fabric.with(this, new Crashlytics());
 
         if (!isFirstLaunch())
         {
