@@ -110,7 +110,6 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         {
             currentLanguage = parallelLanguage;
             userIsSelectingPrimaryLanguage = false;
-            removeLanguageFromList(languageList, primaryLanguage);
         }
         // TODO: else???
 
@@ -143,6 +142,11 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
         // There are sometimes duplicates of languages.
         languageList = removeDuplicates(languageList);
+
+        if(!userIsSelectingPrimaryLanguage)
+        {
+            removeLanguageFromList(languageList, primaryLanguage);
+        }
 
         // sort the list alphabetically
         Collections.sort(languageList, new Comparator<GTLanguage>()
