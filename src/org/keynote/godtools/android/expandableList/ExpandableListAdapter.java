@@ -329,7 +329,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                     }
                 };
                 
-                builder.setTitle(context.getString(R.string.draft_start_message) + currentPackage.getName())
+                builder.setTitle(context.getString(R.string.draft_start_message))
                         .setPositiveButton(R.string.yes, createClickListener)
                         .setNegativeButton(R.string.no, createClickListener)
                         .show();
