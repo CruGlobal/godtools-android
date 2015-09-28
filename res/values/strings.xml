@@ -4,78 +4,59 @@
     <string name="menu_item_kgp">Knowing God Personally</string>
     <string name="menu_item_satisfied">Satisfied?</string>
     <string name="menu_item_4laws">The Four Spiritual Laws</string>
-
     <string name="menu_item_share">Share</string>
     <string name="menu_item_contents">Contents</string>
     <string name="menu_item_help">Help</string>
     <string name="menu_switch_language">Switch Language</string>
     <string name="menu_update_page">Update Page (draft)</string>
     <string name="menu_flip">Flip</string>
-
     <string name="app_name_everystudent">Questions About Life And God?</string>
-
     <string name="quit_dialog_message">Are you sure you want to exit God Tools?</string>
     <string name="quit_dialog_confirm">Exit</string>
     <string name="quit_dialog_cancel">Cancel</string>
-
     <string name="search_label">EveryStudent.com</string>
     <string name="search_hint">Search EveryStudent.com</string>
     <plurals name="search_results">
-        <item quantity="one">1 result for \"{{search_term}}\": </item>
-        <item quantity="other">{{number_or_results}} results for \"{{search_term}}\": </item>
+        <item quantity="one">1 result for \"{{search_term}}\":</item>
+        <item quantity="other">{{number_or_results}} results for \"{{search_term}}\":</item>
     </plurals>
     <string name="search_no_results">No results found for \"{{search_term}}\"</string>
-
     <string name="settings_description">Explore questions about life and God</string>
-
     <string name="menu_search">Search</string>
     <string name="menu_about">About</string>
-
     <string name="snuffy_help">To advance to the next page, simply swipe to the left. To return to the previous page, swipe to the right. To show the menu you can tap in any area of the page other than on a button.</string>
     <string name="snuffy_help_title" formatted="false">{{package_name}} Help</string>
-
     <string name="choose_your_email_provider">Choose your email provider</string>
     <string name="unable_to_send_the_email">Unable to send the email</string>
     <string name="email">Email</string>
     <string name="copy">Copy</string>
     <string name="all_websites">All Websites</string>
-
-    <string name="app_email_subject">Our conversation about {{package_name}} today</string>
-    <!-- TODO: What is the correct wording for sharing the app without a package?-->
-    <string name="share_general_subject">View {{app_name}} online at:{{web_url}}</string>
-    <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
-
     <!-- Renderer Activity -->
     <string name="processing_package">Loading pages…</string>
     <string name="processing_failed">Package processing failed</string>
     <string name="select_share">Select how you would like to share</string>
     <string name="update_page">Updating page…</string>
     <string name="page_error">Error refreshing page</string>
-
     <!-- Splash Activity -->
     <string name="check_update">Checking for updates…</string>
-
     <!-- Settings Activity -->
     <string name="settings_title">Settings</string>
     <string name="settings_main_language">Main Language:</string>
     <string name="settings_parallel_language">Parallel Language:</string>
-    <string name="settings_parallel_info">Tap screen during presentation and use "Switch Language" to toggle language. Option is not shown if booklet is not available.</string>
-    <string name="settings_select">Select </string>
+    <string name="settings_parallel_info">Tap screen during presentation and use \"Switch Language\" to toggle language. Option is not shown if booklet is not available.</string>
+    <string name="settings_select">Select</string>
     <string name="settings_translator_mode">Preview Mode (Translators)</string>
     <string name="settings_notification">Allow Notifications</string>
     <string name="wrong_passcode">Please try again</string>
     <string name="expired_passcode">Preview mode session expired</string>
     <string name="authenticate_code">Authenticating access code</string>
-
     <!-- Main Activity-->
     <string name="share_prompt">Select how you would like to share</string>
-    
     <!-- Language List -->
     <string name="download">Download</string>
     <string name="downloading">Downloading</string>
     <string name="delete">Delete</string>
     <string name="retry">Retry</string>
-
     <!-- Translator Mode Dialog -->
     <string name="dialog_translator_mode_title">Exit Preview Mode?</string>
     <string name="dialog_translator_mode_body">Drafts will not be displayed</string>
@@ -88,29 +69,24 @@
     <string name="draft_publish_negative">No, I changed my mind.</string>
     <string name="draft_created">Draft has been created</string>
     <string name="draft_create_failed">Failed to create a new draft</string>
-    <string name="draft_start_message">Start a draft for: </string>
-
+    <string name="draft_start_message">Create new draft?</string>
     <!-- Access Code Dialog -->
     <string name="dialog_access_code_title">Enter Access Code:</string>
     <string name="invalid_code">Invalid Access Code</string>
-    
     <!-- Preview Mode -->
     <string name="pull_down_info">pull to refresh drafts</string>
     <string name="preview_mode_title">Preview Mode</string>
     <string name="package_not_created">Package not yet created</string>
     <string name="connecting">Connecting with server</string>
-
     <!-- Package Reader -->
     <string name="open">Open</string>
     <string name="cannot_launch_browser">Cannot launch browser</string>
-    <string name="multi_website_assist"> - websites to assist you</string>
-    <string name="single_website_assist"> - a website to assist you</string>
+    <string name="multi_website_assist">- websites to assist you</string>
+    <string name="single_website_assist">- a website to assist you</string>
     <string name="cannot_dial">Cannot launch dialler</string>
     <string name="cannot_email">Cannot launch email app</string>
-
     <!-- Every Student-->
     <string name="could_not_load_content">Could not load the content</string>
-
     <!-- Shared Strings -->
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -124,14 +100,53 @@
     <string name="failed_download_resources">Failed to download resources</string>
     <string name="success">Success!</string>
     <string name="internet_needed">An internet connection is needed to complete this request</string>
-    
     <string name="alternate_language">Parallel Language</string>
     <string name="alternate_language_message">The parallel language selected is not available for this tool.</string>
+    <!-- Sharing -->
+    <string name="app_email_subject">Our conversation about {{package_name}} today</string>
+    <string name="share_general_subject">{{app_name}}</string>
+    <string name="share_general_message">Here’s the link to download the app we were looking at today: http://godtoolsapp.com
 
-    <string name="share_from_page_message" formatted="false">It was great talking with you today about how we can know God personally. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
+		Here’s a link to a web version of the app {{share_link}}
 
+		Enjoy exploring!</string>
+    <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
+    <string name="share_from_page_subject">{{app_name}}</string>
+    <string name="share_from_page_message" formatted="false">Here is the booklet we were looking at today. This link will take you to the web version of the page we were last looking at together:
+
+		Let’s talk more!
+
+		{{share_link}}</string>
     <string name="satisfied_share" formatted="false">It was great talking with you today about how we can experience The Holy Spirit’s power in our lives. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
-
     <string name="everystudent_share">It was great talking with you today about your spiritual questions. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
-
+    <!-- iOS -->
+    <string name="translator_mode">[ Translator Mode ]</string>
+    <string name="intro_share_instructions">Share with a friend</string>
+    <string name="intro_tool_instructions">Pick a tool</string>
+    <string name="intro_language_instructions">Pick a Language</string>
+    <string name="settings_language_none_selected">None Selected</string>
+    <string name="settings_parallel_info_tap">Tap screen during presentation to view menu.</string>
+    <string name="settings_parallel_info_switch_button">Will toggle the 2 languages</string>
+    <string name="settings_parallel_info_toggle_explaination">The toggle button will not show up in the menu if the booklet is not available in the parallel language</string>
+    <string name="menu_item_languages">Language</string>
+    <string name="access_code_placeholder">Passcode</string>
+    <string name="status_updating_resources">Updating resources...</string>
+    <string name="status_updating_drafts">Updating drafts...</string>
+    <string name="status_creating_drafts">Creating draft...</string>
+    <string name="status_publishing_drafts">Publishing draft...</string>
+    <string name="status_updating_menu">Updating menu...</string>
+    <string name="status_checking_for_updates">Checking for Updates...</string>
+    <string name="status_initial_setup">Initial Setup...</string>
+    <string name="status_downloading_resources">Downloading Resources...</string>
+    <string name="language_alert_title">Language Settings</string>
+    <string name="language_alert_body">Would you like to make {{language_name}} the default language?</string>
+    <string name="draft_refresh_message">Refreshing draft...</string>
+    <string name="draft_refresh_error">Refresh failure</string>
+    <string name="everystudent_title">Topics</string>
+    <string name="error_title">Error</string>
+    <string name="menu_download_bad_xml">Data was missing when asking the server for menu information.</string>
+    <string name="packages_download_error">There was an error downloading the packages</string>
+    <string name="page_download_error">There was an error downloading the page</string>
+    <string name="server_error">There were server issues encountered</string>
+    <string name="initial_setup_error_message">Unfortunately we could not load any resources. Please quit the app and reopen. If the problem persists contact support@godtoolsapp.com</string>
 </resources>
