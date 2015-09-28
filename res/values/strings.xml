@@ -1,44 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">God Tools</string>
-    <string name="app_title">God Tools</string>
     <string name="menu_item_kgp">Knowing God Personally</string>
     <string name="menu_item_satisfied">Satisfied?</string>
     <string name="menu_item_4laws">The Four Spiritual Laws</string>
-    <string name="menu_item_everystudent">Everystudent.com</string>
-    <string name="menu_item_first_page">First page</string>
 
-    <!--It seems that this item should be called share and not email. Email would lead one
-    to think that they are emailing the maker of the app-->
-    <string name="menu_item_email">Share</string>
+    <string name="menu_item_share">Share</string>
     <string name="menu_item_contents">Contents</string>
-    <string name="menu_item_languages">Languages</string>
-    <string name="menu_item_last_page">Last page</string>
     <string name="menu_item_help">Help</string>
     <string name="menu_switch_language">Switch Language</string>
     <string name="menu_update_page">Update Page (draft)</string>
     <string name="menu_flip">Flip</string>
 
-    <string name="app_description">Campus Crusade for Christ</string>
-    <string name="app_name_everystudent">EveryStudent.com</string>
+    <string name="app_name_everystudent">Questions About Life And God?</string>
 
-    <string name="settings">God Tools Settings</string>
-    <string name="title_toggle_analytics">Collect Usage Data</string>
-    <string name="summary_toggle_analytics">Allow God Tools to collect anonymous usage data for statistical purposes.</string>
-    <string name="title_toggle_wakelock">Keep Screen On</string>
-    <string name="summary_toggle_wakelock">Keep the screen on while viewing Booklets and EveryStudent.com Articles</string>
-
-    <string name="quit_dialog_message">Are you sure you want to exit GodTools?</string>
+    <string name="quit_dialog_message">Are you sure you want to exit God Tools?</string>
     <string name="quit_dialog_confirm">Exit</string>
     <string name="quit_dialog_cancel">Cancel</string>
 
     <string name="search_label">EveryStudent.com</string>
     <string name="search_hint">Search EveryStudent.com</string>
     <plurals name="search_results">
-        <item quantity="one">%1$d result for \"%2$s\": </item>
-        <item quantity="other">%1$d results for \"%2$s\": </item>
+        <item quantity="one">1 result for \"{{search_term}}\": </item>
+        <item quantity="other">{{number_or_results}} results for \"{{search_term}}\": </item>
     </plurals>
-    <string name="search_no_results">No results found for \"%s\"</string>
+    <string name="search_no_results">No results found for \"{{search_term}}\"</string>
 
     <string name="settings_description">Explore questions about life and God</string>
 
@@ -46,7 +32,7 @@
     <string name="menu_about">About</string>
 
     <string name="snuffy_help">To advance to the next page, simply swipe to the left. To return to the previous page, swipe to the right. To show the menu you can tap in any area of the page other than on a button.</string>
-    <string name="snuffy_help_title" formatted="false">%1 help</string>
+    <string name="snuffy_help_title" formatted="false">{{package_name}} Help</string>
 
     <string name="choose_your_email_provider">Choose your email provider</string>
     <string name="unable_to_send_the_email">Unable to send the email</string>
@@ -54,10 +40,9 @@
     <string name="copy">Copy</string>
     <string name="all_websites">All Websites</string>
 
-    <string name="app_email_subject">Our conversation about %1 today</string>
+    <string name="app_email_subject">Our conversation about {{package_name}} today</string>
     <!-- TODO: What is the correct wording for sharing the app without a package?-->
-    <string name="app_share_subject_main_screen">GodTools</string>
-    <string name="app_share_body_main_screen">View GodTools online at:\n%1</string>
+    <string name="share_general_subject">View {{app_name}} online at:{{web_url}}</string>
     <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
 
     <!-- Renderer Activity -->
@@ -67,15 +52,14 @@
     <string name="update_page">Updating page…</string>
     <string name="page_error">Error refreshing page</string>
 
-
     <!-- Splash Activity -->
     <string name="check_update">Checking for updates…</string>
 
     <!-- Settings Activity -->
     <string name="settings_title">Settings</string>
-    <string name="settings_main_language">Language:</string>
-    <string name="settings_parallel_language">Parallel Language*:</string>
-    <string name="settings_parallel_info">*Tap screen during presentation and use "Switch Language" to toggle language. Option is not shown if booklet is not available.</string>
+    <string name="settings_main_language">Main Language:</string>
+    <string name="settings_parallel_language">Parallel Language:</string>
+    <string name="settings_parallel_info">Tap screen during presentation and use "Switch Language" to toggle language. Option is not shown if booklet is not available.</string>
     <string name="settings_select">Select </string>
     <string name="settings_translator_mode">Preview Mode (Translators)</string>
     <string name="settings_notification">Allow Notifications</string>
@@ -84,7 +68,6 @@
     <string name="authenticate_code">Authenticating access code</string>
 
     <!-- Main Activity-->
-    <string name="share">Share</string>
     <string name="share_prompt">Select how you would like to share</string>
     
     <!-- Language List -->
@@ -142,20 +125,13 @@
     <string name="success">Success!</string>
     <string name="internet_needed">An internet connection is needed to complete this request</string>
     
-    <string name="alternate_language">Alternate Language</string>
+    <string name="alternate_language">Parallel Language</string>
     <string name="alternate_language_message">The parallel language selected is not available for this tool.</string>
 
-    <string name="kgp_four_laws_share" formatted="false">It was great talking with you today about how we can know God personally. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at www.knowgod.com/%1/%2%3</string>
+    <string name="share_from_page_message" formatted="false">It was great talking with you today about how we can know God personally. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
 
-    <string name="satisfied_share" formatted="false">It was great talking with you today about how we can experience The Holy Spirit’s power in our lives. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at www.knowgod.com/%1/satisfied%3</string>
+    <string name="satisfied_share" formatted="false">It was great talking with you today about how we can experience The Holy Spirit’s power in our lives. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
 
-    <string name="everystudent_share"><html>It was great talking with you today about your spiritual questions. I hope we can talk more about this soon. In the meantime, you can <a href="www.knowgod.com/">check out what we looked at today</a>.</html></string>
-    
-    <string name="description_homescreen_icon">homescreen_icon</string>
-    
-    <!-- these are just filler strings used in the code, but here to be consistent -->
-    <string name="filler_textview">TextView</string>
-    <string name="filler_english">English</string>
-
+    <string name="everystudent_share">It was great talking with you today about your spiritual questions. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
 
 </resources>

@@ -45,6 +45,7 @@ import org.keynote.godtools.android.utils.Device;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.keynote.godtools.android.utils.Constants.APPLICATION_NAME;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
@@ -55,6 +56,7 @@ import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.KGP;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
+import static org.keynote.godtools.android.utils.Constants.WEB_URL;
 
 public class PreviewModeMainPW extends BaseActionBarActivity implements
         DownloadTask.DownloadTaskHandler,
@@ -483,13 +485,15 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
     private void doCmdShare()
     {
-        String msgBody = getString(R.string.app_share_link_base_link);
+        String messageBody = getString(R.string.share_general_subject);
+        messageBody = messageBody.replace(APPLICATION_NAME, getString(R.string.app_name));
+        messageBody = messageBody.replace(WEB_URL, "\n"+getString(R.string.app_share_link_base_link));
 
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
-        share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_share_subject_main_screen));
-        share.putExtra(Intent.EXTRA_TEXT, msgBody);
-        startActivity(Intent.createChooser(share, getString(R.string.select_share)));
+        share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+        share.putExtra(Intent.EXTRA_TEXT, messageBody);
+        startActivity(Intent.createChooser(share, getString(R.string.share_prompt)));
     }
 
     private SnuffyApplication getApp()

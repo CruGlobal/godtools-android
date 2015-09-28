@@ -59,8 +59,10 @@ import static org.keynote.godtools.android.utils.Constants.LANGUAGE_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.PROPERTY_REG_ID;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
+import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
+@SuppressWarnings("deprecation")
 public class SnuffyPWActivity extends Activity
 {
     private static final String TAG = "SnuffyActivity";
@@ -92,12 +94,12 @@ public class SnuffyPWActivity extends Activity
     private String regid;
     private Timer timer;
 
-    public void setLanguage(String languageCode)
+    private void setLanguage(String languageCode)
     {
         mAppLanguage = languageCode;
     }
 
-    public String getLanguage()
+    private String getLanguage()
     {
         return mAppLanguage;
     }
@@ -463,11 +465,6 @@ public class SnuffyPWActivity extends Activity
         // no other flip actions defined
     }
 
-    public void doCmdGoToFirstPage(View v)
-    {
-        mPager.setCurrentItem(0);
-    }
-
     private void doCmdHelp()
     {
         Intent intent = new Intent(this, SnuffyHelpActivity.class);
@@ -475,47 +472,48 @@ public class SnuffyPWActivity extends Activity
         startActivity(intent);
     }
 
-    public void doCmdShare(View v)
+    private void doCmdShare(View v)
     {
-        String subject = getString(R.string.app_email_subject);
-        subject = subject.replace("%1", mPackageTitle);
+        String messageBody = buildMessageBody();
 
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
-        share.putExtra(Intent.EXTRA_SUBJECT, subject);
-        share.putExtra(Intent.EXTRA_TEXT, buildMessageBody());
-        startActivity(Intent.createChooser(share, getString(R.string.select_share)));
+        share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+        share.putExtra(Intent.EXTRA_TEXT, messageBody);
+        startActivity(Intent.createChooser(share, getString(R.string.share_prompt)));
     }
 
     private String buildMessageBody()
     {
         String messageBody = "";
 
+        // http://www.knowgod.com/en
+        String shareLink = getString(R.string.app_share_link_base_link) + "/" + mAppLanguage;
+
         if (KGP.equalsIgnoreCase(mAppPackage) || FOUR_LAWS.equalsIgnoreCase(mAppPackage))
         {
-            messageBody = getString(R.string.kgp_four_laws_share);
-            messageBody = messageBody.replace("%2", mAppPackage);
+            // http://www.knowgod.com/en/kgp
+            shareLink = shareLink + "/" + mAppPackage;
+
+            messageBody = getString(R.string.share_from_page_message);
         }
         else if (SATISFIED.equalsIgnoreCase(mAppPackage))
         {
             messageBody = getString(R.string.satisfied_share);
         }
 
-        messageBody = messageBody.replace("%1", mAppLanguage);
-
         if (mPagerCurrentItem > 0)
         {
-            messageBody = messageBody.replace("%3", "/" + String.valueOf(mPagerCurrentItem));
+            // http://www.knowgod.com/en/kgp/5
+            shareLink =  shareLink + "/" + String.valueOf(mPagerCurrentItem);
         }
-        else
-        {
-            messageBody = messageBody.replace("%3", "");
-        }
+
+        messageBody = messageBody.replace(SHARE_LINK, shareLink);
 
         return messageBody;
     }
 
-    public void doCmdShowPageMenu(View v)
+    private void doCmdShowPageMenu(View v)
     {
         Intent intent = new Intent(this, SnuffyPageMenuPWActivity.class);
         intent.putExtra("LanguageCode", mAppLanguage);
@@ -599,15 +597,10 @@ public class SnuffyPWActivity extends Activity
 
     }
 
-    public void doCmdInfo(View v)
+    private void doCmdInfo(View v)
     {
         Intent intent = new Intent(this, SnuffyAboutActivity.class);
         startActivity(intent);
-    }
-
-    public void doCmdGoToLastPage(View v)
-    {
-        mPager.setCurrentItem(mPages.size() - 1);
     }
 
     @Override
@@ -653,18 +646,6 @@ public class SnuffyPWActivity extends Activity
             {
                 trackScreenEvent("About");
                 doCmdInfo(null);
-                break;
-            }
-            case R.id.CMD_FIRST_PAGE:
-            {
-                trackScreenEvent("First Page");
-                doCmdGoToFirstPage(null);
-                break;
-            }
-            case R.id.CMD_LAST_PAGE:
-            {
-                trackScreenEvent("Last Page");
-                doCmdGoToLastPage(null);
                 break;
             }
             case R.id.CMD_CONTENT:
