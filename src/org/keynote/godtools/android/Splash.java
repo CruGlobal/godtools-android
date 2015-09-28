@@ -17,6 +17,7 @@ import com.google.common.base.Strings;
 
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.service.PrepareInitialContentTask;
@@ -41,11 +42,14 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
         - unpack bundled content
         - query API for latest available languages and packages
         - store latest languages and packages in local database
+        - download initial content for device language, if available
 
     If not first load:
         - go to main activity (home screen)
  */
-public class Splash extends Activity implements MetaTask.MetaTaskHandler
+public class Splash extends Activity implements MetaTask.MetaTaskHandler,
+        DownloadTask.DownloadTaskHandler
+
 {
     private static final String TAG = Splash.class.getSimpleName();
 
@@ -53,6 +57,7 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler
     private ProgressBar progressBar;
     private SharedPreferences settings;
 
+    private String deviceDefaultLanguage;
     /**
      * Called when the activity is first created.
      */
@@ -80,7 +85,8 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler
             Log.i(TAG, "First Launch");
 
             // get the default language of the device os
-            String deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
+            deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
+
             // set to english in case nothing is found.
             if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = ENGLISH_DEFAULT;
 
@@ -148,12 +154,65 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler
     {
         UpdatePackageListTask.run(languageList,DBAdapter.getInstance(this));
 
-        goToMainActivity();
+        // if the API has packages available for the device default language then download them
+        // this is determined by going through the results of the meta download
+        if(apiHasDeviceDefaultLanguage(languageList))
+        {
+            GodToolsApiClient.downloadLanguagePack(
+                    getApp(),
+                    deviceDefaultLanguage,
+                    "primary",
+                    this);
+        }
+        // if not, then switch back to English and download those latest resources
+        else
+        {
+            settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
+
+            GodToolsApiClient.downloadLanguagePack(
+                    getApp(),
+                    ENGLISH_DEFAULT,
+                    "primary",
+                    this);
+        }
+
+    }
+
+    private boolean apiHasDeviceDefaultLanguage(List<GTLanguage> languageList)
+    {
+        for(GTLanguage metaLanguageFromInitialDownload : languageList)
+        {
+            if(metaLanguageFromInitialDownload.getLanguageCode().equalsIgnoreCase(deviceDefaultLanguage) &&
+                    !metaLanguageFromInitialDownload.getPackages().isEmpty())
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode)
     {
+        goToMainActivity();
+    }
+
+    @Override
+    public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
+    {
+        GTLanguage languageRetrievedFromDatabase = GTLanguage.getLanguage(getApp().getApplicationContext(), langCode);
+        languageRetrievedFromDatabase.setDownloaded(true);
+        languageRetrievedFromDatabase.update(getApp().getApplicationContext());
+
+        goToMainActivity();
+    }
+
+    @Override
+    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
+    {
+        // if there was an error downloading resources, then switch the phone's language back to English since those are the
+        // resources that were bundled.  user would get a blank screen if not
+        settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
         goToMainActivity();
     }
 }
