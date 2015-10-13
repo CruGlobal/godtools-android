@@ -800,7 +800,11 @@ public class SnuffyPWActivity extends Activity
         @Override
         protected void onPostExecute(Integer result)
         {
-            dismissDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);
+            if(mProgressDialog != null &&
+                    mProgressDialog.isShowing())
+            {
+                dismissDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);
+            }
             completeSetup(result != 0);
         }
     }
