@@ -764,25 +764,28 @@ public class SnuffyPWActivity extends Activity
         protected Integer doInBackground(String... params)
         {
             // params are not used
-            Boolean bSuccess = false;
+            boolean success = false;
             PackageReader packageReader = new PackageReader();
             try
             {
-                bSuccess = packageReader.processPackagePW(
+                success = packageReader.processPackagePW(
                         (SnuffyApplication) getApplication(),
                         mPageWidth, mPageHeight,
                         mConfigFileName, mPages,
                         ProcessPackageAsync.this,
                         mAlternateTypeface
                 );
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Log.e(TAG, "processPackage failed: " + e.toString());
-                e.printStackTrace();
+                Crashlytics.logException(e);
             }
-            if (bSuccess)
+            if (success)
+            {
                 mPackageTitle = packageReader.getPackageTitle();
-            return bSuccess ? 1 : 0;  // could not get Boolean return value to work so use Integer instead!
+            }
+            return success ? 1 : 0;  // could not get Boolean return value to work so use Integer instead!
         }
 
         public void updateProgress(int curr, int max)
