@@ -288,9 +288,9 @@ public class SnuffyPWActivity extends Activity
                 mPages = null;
                 mAboutView = null;
                 SnuffyApplication app = getApp();
-                app.mPages = null;
-                app.mAboutView = null;
-                app.mPackageTitle = mPackageTitle;
+                app.setSnuffyPages(null);
+                app.aboutView = null;
+                app.packageTitle = mPackageTitle;
                 mPages = new Vector<SnuffyPage>(0);
 
                 /** No instance of pager adapter yet, it's only created on completeSetUp()**/
@@ -330,9 +330,9 @@ public class SnuffyPWActivity extends Activity
             mPagerCurrentItem = 0;                // reset to first page.
         mPager.setCurrentItem(mPagerCurrentItem);
         SnuffyApplication app = getApp();
-        app.mPages = mPages;
-        app.mAboutView = mAboutView;
-        app.mPackageTitle = mPackageTitle;
+        app.setSnuffyPages(mPages);
+        app.aboutView = mAboutView;
+        app.packageTitle = mPackageTitle;
 
         mPager.setOnPageChangeListener(new OnPageChangeListener()
         {
@@ -548,8 +548,8 @@ public class SnuffyPWActivity extends Activity
         mPages.clear();
         mPages = null;
         mAboutView = null;
-        getApp().mPages = null;
-        getApp().mAboutView = null;
+        getApp().setSnuffyPages(null);
+        getApp().aboutView = null;
         mPages = new Vector<SnuffyPage>(0);
         mPagerAdapter.notifyDataSetChanged(); // try to clear cached views (SnuffyPages) in pager, else they will display until we navigate away and back.
         if (bResetToFirstPage)
