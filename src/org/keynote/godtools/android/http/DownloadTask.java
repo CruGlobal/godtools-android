@@ -3,6 +3,7 @@ package org.keynote.godtools.android.http;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.common.base.Strings;
 
 import org.keynote.godtools.android.business.GTPackage;
@@ -21,6 +22,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+
+import io.fabric.sdk.android.services.common.Crash;
 
 public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
@@ -127,7 +130,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Crashlytics.logException(e);
             return false;
         }
 
