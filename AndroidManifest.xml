@@ -139,7 +139,7 @@
     </application>
 
     <uses-sdk
-        android:minSdkVersion="10"
+        android:minSdkVersion="14"
         android:targetSdkVersion="19" />
     <supports-screens
         android:smallScreens="false"
