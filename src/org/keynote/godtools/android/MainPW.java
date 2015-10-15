@@ -311,7 +311,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
 
                 refreshPackageList(false);
-                createTheHomeScreen();
+                EventTracker.track(getApp(), "HomeScreen", languagePrimary);
 
                 break;
             }
@@ -354,7 +354,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private void doSetup()
     {
-        createTheHomeScreen();
+        EventTracker.track(getApp(), "HomeScreen", languagePrimary);
         getScreenSize();
     }
 
@@ -395,11 +395,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         mPageTop = top;
         mPageWidth = width;
         mPageHeight = height;
-    }
-
-    private void createTheHomeScreen()
-    {
-        EventTracker.track(getApp(), "HomeScreen", languagePrimary);
     }
 
     private void showLoading()
@@ -523,7 +518,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             showLayoutsWithPackages();
 
             hideLoading();
-            createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase(KEY_PARALLEL))
         {
@@ -536,8 +530,9 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             gtl.update(MainPW.this);
 
             hideLoading();
-            createTheHomeScreen();
         }
+
+        EventTracker.track(getApp(), "HomeScreen", languagePrimary);
     }
 
     @Override
