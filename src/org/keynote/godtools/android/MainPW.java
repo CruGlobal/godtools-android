@@ -119,7 +119,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
         }
 
-        packageList = GTPackage.getLivePackages(MainPW.this, languagePrimary);
+        refreshPackageList();
 
         showLayoutsWithPackages();
 
@@ -243,7 +243,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                         // refresh the list
                         String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
 
-                        refreshPackageList(true);
+                        refreshPackageList();
 
                         if (!languagePrimary.equalsIgnoreCase(primaryCode))
                         {
@@ -310,7 +310,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 SnuffyApplication app = (SnuffyApplication) getApplication();
                 app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
 
-                refreshPackageList(false);
+                refreshPackageList();
                 EventTracker.track(getApp(), "HomeScreen", languagePrimary);
 
                 break;
@@ -318,17 +318,12 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         }
     }
 
-    /**
-     * @param withFallback specifies when true will fallback to English if the primary language code
-     *                     has no packages available.  This is true when leaving translator mode in a language with all
-     *                     drafts and no published live versions.
-     */
-    private void refreshPackageList(boolean withFallback)
+    private void refreshPackageList()
     {
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
         packageList = GTPackage.getLivePackages(MainPW.this, languagePrimary);
 
-        if (withFallback && packageList.isEmpty())
+        if (packageList.isEmpty())
         {
             settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
             languagePrimary = ENGLISH_DEFAULT;
