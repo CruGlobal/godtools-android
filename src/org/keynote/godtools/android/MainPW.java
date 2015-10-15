@@ -119,7 +119,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
         }
 
-        packageList = getPackageList(); // get the packages for the primary language
+        packageList = GTPackage.getLivePackages(MainPW.this, languagePrimary);
 
         showLayoutsWithPackages();
 
@@ -326,13 +326,13 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private void refreshPackageList(boolean withFallback)
     {
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
-        packageList = getPackageList();
+        packageList = GTPackage.getLivePackages(MainPW.this, languagePrimary);
 
         if (withFallback && packageList.isEmpty())
         {
             settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
             languagePrimary = ENGLISH_DEFAULT;
-            packageList = getPackageList();
+            packageList = GTPackage.getLivePackages(MainPW.this, languagePrimary);
         }
         showLayoutsWithPackages();
     }
@@ -402,11 +402,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         supportInvalidateOptionsMenu();
 
         setSupportProgressBarIndeterminateVisibility(true);
-    }
-
-    private List<GTPackage> getPackageList()
-    {
-        return GTPackage.getLivePackages(MainPW.this, languagePrimary);
     }
 
     @Override
@@ -514,7 +509,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             gtl.setDownloaded(true);
             gtl.update(MainPW.this);
 
-            packageList = getPackageList();
+            packageList = GTPackage.getLivePackages(MainPW.this, languagePrimary);
             showLayoutsWithPackages();
 
             hideLoading();
@@ -540,9 +535,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     {
         if (tag.equalsIgnoreCase(KEY_PRIMARY) || tag.equalsIgnoreCase(KEY_PARALLEL))
         {
-
             Toast.makeText(MainPW.this, getString(R.string.failed_download_resources), Toast.LENGTH_SHORT).show();
-
         }
 
         hideLoading();
