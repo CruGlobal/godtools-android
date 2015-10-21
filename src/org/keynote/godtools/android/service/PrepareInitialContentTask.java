@@ -72,7 +72,7 @@ public class PrepareInitialContentTask
             // Add Every Student to database
             GTPackage everyStudent = new GTPackage();
             everyStudent.setCode(GTPackage.EVERYSTUDENT_PACKAGE_CODE);
-            everyStudent.setName("Every Student");
+            everyStudent.setName("Questions about God?");
             everyStudent.setIcon("homescreen_everystudent_icon_2x.png");
             everyStudent.setStatus("live");
             everyStudent.setLanguage("en");
