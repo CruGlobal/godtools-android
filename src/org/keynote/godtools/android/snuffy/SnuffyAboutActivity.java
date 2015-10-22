@@ -15,7 +15,7 @@ public class SnuffyAboutActivity extends Activity
     {
         super.onCreate(savedInstanceState);
 
-        SnuffyPage aboutView = ((SnuffyApplication) getApplication()).mAboutView;
+        SnuffyPage aboutView = ((SnuffyApplication) getApplication()).aboutView;
         aboutView.mCallingActivity = this; // so AlertDialogs are hosted correctly
         setContentView(R.layout.about_snuffy);
         ScrollView scrollView = (ScrollView) findViewById(R.id.aboutScrollView);
@@ -26,7 +26,7 @@ public class SnuffyAboutActivity extends Activity
     protected void onDestroy()
     {
 
-        SnuffyPage aboutView = ((SnuffyApplication) getApplication()).mAboutView;
+        SnuffyPage aboutView = ((SnuffyApplication) getApplication()).aboutView;
         ViewGroup parent = (ViewGroup) aboutView.getParent();
         parent.removeView(aboutView);
 

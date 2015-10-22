@@ -26,22 +26,19 @@ public class SnuffyApplication extends Application
 {
 
     // Hold pointers to our created objects for the current SnuffyActivity (if any)
-    public Vector<SnuffyPage> mPages;
-    public SnuffyPage mAboutView;
-    public String mPackageTitle;
+    private Vector<SnuffyPage> snuffyPages;
+    public SnuffyPage aboutView;
+    public String packageTitle;
 
-    @SuppressWarnings("unused")
-    private Tracker tracker;
-
-    private Locale mDeviceLocale;
-    private Locale mAppLocale;
+    private Locale deviceLocale;
+    private Locale appLocale;
 
     @Override
     public void onCreate()
     {
         super.onCreate();
 
-        mDeviceLocale = Locale.getDefault();
+        deviceLocale = Locale.getDefault();
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
         setAppLocale(primaryLanguageCode);
@@ -116,40 +113,45 @@ public class SnuffyApplication extends Application
 
     public Tracker getTracker()
     {
-        if (tracker == null)
-        {
-            return org.keynote.godtools.android.utils.GoogleAnalytics.getTracker(this);
-        }
-
-        return tracker;
+        return org.keynote.godtools.android.utils.GoogleAnalytics.getTracker(this);
     }
 
     public void setAppLocale(String languageCode)
     {
 
-        mAppLocale = new Locale(languageCode);
+        appLocale = new Locale(languageCode);
 
-        Locale.setDefault(mAppLocale);
+        Locale.setDefault(appLocale);
         Configuration config = new Configuration();
-        config.locale = mAppLocale;
+        config.locale = appLocale;
         getBaseContext().getResources().updateConfiguration(config,
                 getBaseContext().getResources().getDisplayMetrics());
     }
 
     public Locale getDeviceLocale()
     {
-        return mDeviceLocale;
+        return deviceLocale;
+    }
+
+    public Vector<SnuffyPage> getSnuffyPages()
+    {
+        return snuffyPages;
+    }
+
+    public void setSnuffyPages(Vector<SnuffyPage> snuffyPages)
+    {
+        this.snuffyPages = snuffyPages;
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig)
     {
-        mDeviceLocale = newConfig.locale;
+        deviceLocale = newConfig.locale;
         super.onConfigurationChanged(newConfig);
 
-        Locale.setDefault(mAppLocale);
+        Locale.setDefault(appLocale);
         Configuration config = new Configuration();
-        config.locale = mAppLocale;
+        config.locale = appLocale;
         getBaseContext().getResources().updateConfiguration(config,
                 getBaseContext().getResources().getDisplayMetrics());
 

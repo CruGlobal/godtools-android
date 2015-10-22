@@ -119,7 +119,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
         }
 
-        packageList = getPackageList(); // get the packages for the primary language
+        refreshPackageList();
 
         showLayoutsWithPackages();
 
@@ -243,7 +243,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                         // refresh the list
                         String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
 
-                        refreshPackageList(true);
+                        refreshPackageList();
 
                         if (!languagePrimary.equalsIgnoreCase(primaryCode))
                         {
@@ -310,29 +310,24 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 SnuffyApplication app = (SnuffyApplication) getApplication();
                 app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
 
-                refreshPackageList(false);
-                createTheHomeScreen();
+                refreshPackageList();
+                EventTracker.track(getApp(), "HomeScreen", languagePrimary);
 
                 break;
             }
         }
     }
 
-    /**
-     * @param withFallback specifies when true will fallback to English if the primary language code
-     *                     has no packages available.  This is true when leaving translator mode in a language with all
-     *                     drafts and no published live versions.
-     */
-    private void refreshPackageList(boolean withFallback)
+    private void refreshPackageList()
     {
         languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
-        packageList = getPackageList();
+        packageList = GTPackage.getLivePackages(MainPW.this, languagePrimary);
 
-        if (withFallback && packageList.isEmpty())
+        if (packageList.isEmpty())
         {
             settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
             languagePrimary = ENGLISH_DEFAULT;
-            packageList = getPackageList();
+            packageList = GTPackage.getLivePackages(MainPW.this, languagePrimary);
         }
         showLayoutsWithPackages();
     }
@@ -354,7 +349,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private void doSetup()
     {
-        createTheHomeScreen();
+        EventTracker.track(getApp(), "HomeScreen", languagePrimary);
         getScreenSize();
     }
 
@@ -397,21 +392,11 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         mPageHeight = height;
     }
 
-    private void createTheHomeScreen()
-    {
-        EventTracker.track(getApp(), "HomeScreen", languagePrimary);
-    }
-
     private void showLoading()
     {
         supportInvalidateOptionsMenu();
 
         setSupportProgressBarIndeterminateVisibility(true);
-    }
-
-    private List<GTPackage> getPackageList()
-    {
-        return GTPackage.getLivePackages(MainPW.this, languagePrimary);
     }
 
     @Override
@@ -519,11 +504,10 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             gtl.setDownloaded(true);
             gtl.update(MainPW.this);
 
-            packageList = getPackageList();
+            packageList = GTPackage.getLivePackages(MainPW.this, languagePrimary);
             showLayoutsWithPackages();
 
             hideLoading();
-            createTheHomeScreen();
         }
         else if (tag.equalsIgnoreCase(KEY_PARALLEL))
         {
@@ -536,8 +520,9 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             gtl.update(MainPW.this);
 
             hideLoading();
-            createTheHomeScreen();
         }
+
+        EventTracker.track(getApp(), "HomeScreen", languagePrimary);
     }
 
     @Override
@@ -545,9 +530,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     {
         if (tag.equalsIgnoreCase(KEY_PRIMARY) || tag.equalsIgnoreCase(KEY_PARALLEL))
         {
-
             Toast.makeText(MainPW.this, getString(R.string.failed_download_resources), Toast.LENGTH_SHORT).show();
-
         }
 
         hideLoading();

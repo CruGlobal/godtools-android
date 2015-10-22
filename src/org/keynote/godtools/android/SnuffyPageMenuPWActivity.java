@@ -55,7 +55,7 @@ public class SnuffyPageMenuPWActivity extends ListActivity
         mFromAssets = false;
         mFilesDir = app.getDocumentsDir().getPath() + "/resources";
 
-        setTitle(app.mPackageTitle);
+        setTitle(app.packageTitle);
 
         HashMap<String, Object> map;
 
@@ -67,7 +67,7 @@ public class SnuffyPageMenuPWActivity extends ListActivity
         // on which we want to display the values defined in the from array
         int[] to = {R.id.list1Text, R.id.list1Image};
 
-        Vector<SnuffyPage> pages = app.mPages;
+        Vector<SnuffyPage> pages = app.getSnuffyPages();
         for (SnuffyPage page : pages)
         {
             map = new HashMap<String, Object>();
