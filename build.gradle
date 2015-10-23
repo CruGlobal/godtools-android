@@ -19,7 +19,7 @@ repositories {
 dependencies {
     // some dependencies will not be updated as these particular versions are needed by the app.
     //noinspection GradleDynamicVersion,GradleDependency
-    compile 'com.android.support:appcompat-v7:19.1.+'
+    compile 'com.android.support:appcompat-v7:22.2.0'
     compile fileTree(dir: 'libs', include: '*.jar')
     //noinspection GradleDependency
     compile 'com.google.android.gms:play-services:4.3.23'
@@ -32,8 +32,8 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '19.1.0'
+    compileSdkVersion 22
+    buildToolsVersion '22.0.1'
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
