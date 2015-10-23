@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.keynote.godtools.android"
-    android:versionCode="18"
-    android:versionName="4.1.2"
+    android:versionCode="19"
+    android:versionName="4.1.3"
     android:installLocation="preferExternal">
 
     <application
@@ -152,6 +152,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <permission android:name="org.keynote.godtools.android.permission.C2D_MESSAGE"
                 android:protectionLevel="signature" />
