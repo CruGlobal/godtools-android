@@ -86,7 +86,7 @@
 
         <provider
             android:name=".everystudent.EveryStudentProvider"
-            android:authorities="org.keynote.godtools.android.everystudent.EveryStudentProvider" />
+            android:authorities="@string/every_student_authority" />
 
         <meta-data
             android:name="android.app.default_searchable"
