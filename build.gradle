@@ -73,4 +73,9 @@ android {
             buildConfigField "String", "BASE_URL", "\"https://api.godtoolsapp.com/godtools-api/rest/\""
         }
     }
+
+    applicationVariants.all {
+        buildConfigField "String", "EVERY_STUDENT_AUTHORITY", '"' + applicationId + '.everystudent.EveryStudentProvider"'
+        resValue "string", "every_student_authority", applicationId + ".everystudent.EveryStudentProvider"
+    }
 }

@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.utils.GoogleAnalytics;
 
 /**
@@ -20,7 +21,7 @@ import org.keynote.godtools.android.utils.GoogleAnalytics;
 public class EveryStudentProvider extends ContentProvider
 {
 
-    private static final String AUTHORITY = "org.keynote.godtools.android.everystudent.EveryStudentProvider";
+    private static final String AUTHORITY = BuildConfig.EVERY_STUDENT_AUTHORITY;
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/everystudent");
 
     private static final String BASE_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.org.keynote.godtools.android.everystudent";

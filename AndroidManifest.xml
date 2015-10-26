@@ -86,7 +86,7 @@
 
         <provider
             android:name=".everystudent.EveryStudentProvider"
-            android:authorities="org.keynote.godtools.android.everystudent.EveryStudentProvider" />
+            android:authorities="@string/every_student_authority" />
 
         <meta-data
             android:name="android.app.default_searchable"
@@ -153,9 +153,9 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.GET_TASKS"/>
 
-    <permission android:name="org.keynote.godtools.android.permission.C2D_MESSAGE"
+    <permission android:name="${applicationId}.permission.C2D_MESSAGE"
                 android:protectionLevel="signature" />
-    <uses-permission android:name="org.keynote.godtools.android.permission.C2D_MESSAGE" />
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
 
 
 
