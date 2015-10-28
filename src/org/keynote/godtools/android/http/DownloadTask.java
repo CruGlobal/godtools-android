@@ -3,6 +3,7 @@ package org.keynote.godtools.android.http;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.common.base.Strings;
 
 import org.keynote.godtools.android.business.GTPackage;
@@ -47,6 +48,8 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
         tag = params[2].toString();
         String authorization = (String) params[3];
         langCode = params[4].toString();
+        int downloadResponseCode = -1;
+        int downloadContentLength = -1;
 
         try {
 
@@ -54,12 +57,19 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
             connection.connect();
 
+            downloadResponseCode = connection.getResponseCode();
+            downloadContentLength = connection.getContentLength();
+
             DataInputStream dis = new DataInputStream(connection.getInputStream());
 
             File zipfile = new File(filePath);
             String parentDir = zipfile.getParent();
             File unzipDir = new File(parentDir);
-            unzipDir.mkdirs();
+
+            if(!(unzipDir.mkdirs() && unzipDir.isDirectory()))
+            {
+                throw new RuntimeException("Unable to create directory");
+            }
 
             byte[] buffer = new byte[2048];
             int length;
@@ -127,7 +137,15 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Crashlytics.setString("url", url);
+            Crashlytics.setString("filePath", filePath);
+            Crashlytics.setString("tag", tag);
+            Crashlytics.setString("authorization", authorization);
+            Crashlytics.setString("langCode", langCode);
+            Crashlytics.setString("downloadResponseStatus", Integer.toString(downloadResponseCode));
+            Crashlytics.setString("downloadContentLength", Integer.toString(downloadContentLength));
+
+            Crashlytics.logException(e);
             return false;
         }
 

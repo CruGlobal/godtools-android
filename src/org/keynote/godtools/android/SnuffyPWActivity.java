@@ -28,6 +28,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.DownloadTask;
@@ -288,9 +290,9 @@ public class SnuffyPWActivity extends Activity
                 mPages = null;
                 mAboutView = null;
                 SnuffyApplication app = getApp();
-                app.mPages = null;
-                app.mAboutView = null;
-                app.mPackageTitle = mPackageTitle;
+                app.setSnuffyPages(null);
+                app.aboutView = null;
+                app.packageTitle = mPackageTitle;
                 mPages = new Vector<SnuffyPage>(0);
 
                 /** No instance of pager adapter yet, it's only created on completeSetUp()**/
@@ -330,9 +332,9 @@ public class SnuffyPWActivity extends Activity
             mPagerCurrentItem = 0;                // reset to first page.
         mPager.setCurrentItem(mPagerCurrentItem);
         SnuffyApplication app = getApp();
-        app.mPages = mPages;
-        app.mAboutView = mAboutView;
-        app.mPackageTitle = mPackageTitle;
+        app.setSnuffyPages(mPages);
+        app.aboutView = mAboutView;
+        app.packageTitle = mPackageTitle;
 
         mPager.setOnPageChangeListener(new OnPageChangeListener()
         {
@@ -548,8 +550,8 @@ public class SnuffyPWActivity extends Activity
         mPages.clear();
         mPages = null;
         mAboutView = null;
-        getApp().mPages = null;
-        getApp().mAboutView = null;
+        getApp().setSnuffyPages(null);
+        getApp().aboutView = null;
         mPages = new Vector<SnuffyPage>(0);
         mPagerAdapter.notifyDataSetChanged(); // try to clear cached views (SnuffyPages) in pager, else they will display until we navigate away and back.
         if (bResetToFirstPage)
@@ -764,25 +766,28 @@ public class SnuffyPWActivity extends Activity
         protected Integer doInBackground(String... params)
         {
             // params are not used
-            Boolean bSuccess = false;
+            boolean success = false;
             PackageReader packageReader = new PackageReader();
             try
             {
-                bSuccess = packageReader.processPackagePW(
+                success = packageReader.processPackagePW(
                         (SnuffyApplication) getApplication(),
                         mPageWidth, mPageHeight,
                         mConfigFileName, mPages,
                         ProcessPackageAsync.this,
                         mAlternateTypeface
                 );
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Log.e(TAG, "processPackage failed: " + e.toString());
-                e.printStackTrace();
+                Crashlytics.logException(e);
             }
-            if (bSuccess)
+            if (success)
+            {
                 mPackageTitle = packageReader.getPackageTitle();
-            return bSuccess ? 1 : 0;  // could not get Boolean return value to work so use Integer instead!
+            }
+            return success ? 1 : 0;  // could not get Boolean return value to work so use Integer instead!
         }
 
         public void updateProgress(int curr, int max)

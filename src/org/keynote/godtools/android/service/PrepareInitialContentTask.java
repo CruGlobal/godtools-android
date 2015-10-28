@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
 
+import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
@@ -72,7 +73,7 @@ public class PrepareInitialContentTask
             // Add Every Student to database
             GTPackage everyStudent = new GTPackage();
             everyStudent.setCode(GTPackage.EVERYSTUDENT_PACKAGE_CODE);
-            everyStudent.setName("Every Student");
+            everyStudent.setName(mContext.getString(R.string.app_name_everystudent));
             everyStudent.setIcon("homescreen_everystudent_icon_2x.png");
             everyStudent.setStatus("live");
             everyStudent.setLanguage("en");
