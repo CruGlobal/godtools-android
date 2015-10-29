@@ -53,7 +53,7 @@ public class SnuffyPageMenuPWActivity extends ListActivity
         mLanguageCode = getIntent().getStringExtra("LanguageCode");
         SnuffyApplication app = (SnuffyApplication) getApplication();
         mFromAssets = false;
-        mFilesDir = app.getDocumentsDir().getPath() + "/resources";
+        mFilesDir = app.getResourcesDir().getPath();
 
         setTitle(app.packageTitle);
 

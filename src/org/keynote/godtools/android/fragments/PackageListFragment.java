@@ -140,8 +140,7 @@ public class PackageListFragment extends ListFragment
 			this.mIsEnabled = true;
 
 			SnuffyApplication mApp = (SnuffyApplication) getActivity().getApplication();
-			resourcesDir = mApp.getDocumentsDir().getAbsolutePath() + "/resources/";
-
+			resourcesDir = mApp.getResourcesDir().getAbsolutePath() + "/";
 		}
 
 		@Override

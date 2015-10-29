@@ -27,12 +27,9 @@ import java.util.List;
 public class PrepareInitialContentTask
 {
 
-    public static void run(Context mContext, File documentsDir)
+    public static void run(Context mContext, File resourcesDir)
     {
         AssetManager manager = mContext.getAssets();
-
-        File resourcesDir = new File(documentsDir, "resources");
-        resourcesDir.mkdir();
 
         Log.i("resourceDir", resourcesDir.getAbsolutePath());
 
