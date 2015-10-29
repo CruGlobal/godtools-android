@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Environment;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.Tracker;
 
 import org.keynote.godtools.android.R;
@@ -72,6 +73,16 @@ public class SnuffyApplication extends Application
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
         {
             documentsDir = getExternalFilesDir(null);
+            if (documentsDir != null) {
+                Crashlytics.log("documentsDir: " + documentsDir.getPath());
+                if (!documentsDir.isDirectory()) {
+                    Crashlytics.log("documentsDir doesn't exist");
+                    if (!documentsDir.mkdirs()) {
+                        Crashlytics.log("unable to create documents directory, falling back to internal directory");
+                        documentsDir = null;
+                    }
+                }
+            }
         }
         if (documentsDir == null)
         {
