@@ -113,9 +113,7 @@ public class GodToolsApiClient {
 
     private static void download(SnuffyApplication app, String url, String filePath, String tag, String authorization,
                                  String langCode, DownloadTask.DownloadTaskHandler taskHandler) {
-        DownloadTask downloadTask =
-                new DownloadTask(app.getApplicationContext(), new File(app.getDocumentsDir(), "resources"),
-                                 taskHandler);
+        DownloadTask downloadTask = new DownloadTask(app.getApplicationContext(), app.getResourcesDir(), taskHandler);
 
         AsyncTaskCompat.executeParallel(downloadTask, url, filePath, tag, authorization, langCode);
     }

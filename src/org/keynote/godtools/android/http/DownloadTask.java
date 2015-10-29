@@ -100,12 +100,6 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             zipfile.delete();
             contentFile.delete();
 
-            // make sure resources directory exists
-            // XXX: should we handle this globally elsewhere?
-            if (!mResourcesDir.isDirectory() && !mResourcesDir.mkdirs()) {
-                throw new RuntimeException("Unable to create resources directory");
-            }
-
             // move files to main directory
             FileInputStream inputStream;
             FileOutputStream outputStream;
