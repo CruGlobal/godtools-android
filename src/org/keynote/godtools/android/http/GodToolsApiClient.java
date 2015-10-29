@@ -1,8 +1,7 @@
 package org.keynote.godtools.android.http;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Build;
+import android.support.v4.os.AsyncTaskCompat;
 
 import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
@@ -117,11 +116,6 @@ public class GodToolsApiClient {
         DownloadTask downloadTask = new DownloadTask(context, taskHandler);
         //downloadTask.execute(url, filePath, tag);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            downloadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, filePath, tag, authorization, langCode);
-        } else {
-            downloadTask.execute(url, filePath, tag, authorization, langCode);
-        }
-
+        AsyncTaskCompat.executeParallel(downloadTask, url, filePath, tag, authorization, langCode);
     }
 }
