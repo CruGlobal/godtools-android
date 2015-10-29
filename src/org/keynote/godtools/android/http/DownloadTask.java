@@ -2,6 +2,7 @@ package org.keynote.godtools.android.http;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.common.base.Strings;
@@ -10,6 +11,7 @@ import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.snuffy.Decompress;
+import org.keynote.godtools.android.utils.FileUtils;
 import org.keynote.godtools.android.utils.IOUtils;
 
 import java.io.File;
@@ -25,6 +27,8 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
     private DownloadTaskHandler mTaskHandler;
     private Context mContext;
+    @NonNull
+    private final File mResourcesDir;
     private String url, filePath, tag, langCode;
 
     public interface DownloadTaskHandler {
@@ -33,9 +37,10 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
         void downloadTaskFailure(String url, String filePath, String langCode, String tag);
     }
 
-    public DownloadTask(Context context, DownloadTaskHandler taskHandler) {
+    public DownloadTask(Context context, @NonNull final File resourcesDir, DownloadTaskHandler taskHandler) {
         this.mTaskHandler = taskHandler;
         this.mContext = context;
+        mResourcesDir = resourcesDir;
     }
 
     @Override
@@ -48,36 +53,34 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
         int downloadResponseCode = -1;
         int downloadContentLength = -1;
 
+        // get a temporary directory for extracting the zip file to
+        final File tmpDir = FileUtils.getTmpDir(mContext);
+        if (tmpDir == null) {
+            Crashlytics.logException(new Exception("unable to get temporary directory for download: " + url));
+            return false;
+        }
+
+        // download & extract zip file to tmp directory
+        HttpURLConnection conn = null;
         try {
+            conn = getHttpURLConnection(url, authorization);
+            downloadResponseCode = conn.getResponseCode();
+            downloadContentLength = conn.getContentLength();
 
-            HttpURLConnection connection = getHttpURLConnection(url, authorization);
-
-            connection.connect();
-
-            downloadResponseCode = connection.getResponseCode();
-            downloadContentLength = connection.getContentLength();
-
-            File zipfile = new File(filePath);
-
-            // get the temporary zip directory
-            File unzipDir = zipfile.getParentFile();
-            if (!unzipDir.isDirectory() && !unzipDir.mkdirs())
-            {
-                throw new RuntimeException("Unable to create zip download directory");
-            }
+            final File zipfile = new File(tmpDir, "package.zip");
 
             // output zip file
-            InputStream is = connection.getInputStream();
+            InputStream is = conn.getInputStream();
             FileOutputStream fout = new FileOutputStream(zipfile);
             IOUtils.copy(is, fout);
             is.close();
             fout.close();
 
             // unzip package.zip
-            new Decompress().unzip(zipfile, unzipDir);
+            new Decompress().unzip(zipfile, tmpDir);
 
             // parse content.xml
-            File contentFile = new File(unzipDir, "contents.xml");
+            File contentFile = new File(tmpDir, "contents.xml");
             List<GTPackage> packageList = GTPackageReader.processContentFile(contentFile);
 
             DBAdapter adapter = DBAdapter.getInstance(mContext);
@@ -97,9 +100,9 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             zipfile.delete();
             contentFile.delete();
 
-            // get resources directory
-            final File resourcesDir = new File(unzipDir.getParentFile(), "resources");
-            if (!resourcesDir.isDirectory() && !resourcesDir.mkdirs()) {
+            // make sure resources directory exists
+            // XXX: should we handle this globally elsewhere?
+            if (!mResourcesDir.isDirectory() && !mResourcesDir.mkdirs()) {
                 throw new RuntimeException("Unable to create resources directory");
             }
 
@@ -107,12 +110,12 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             FileInputStream inputStream;
             FileOutputStream outputStream;
 
-            File[] fileList = unzipDir.listFiles();
+            File[] fileList = tmpDir.listFiles();
             File oldFile;
             for (int i = 0; i < fileList.length; i++) {
                 oldFile = fileList[i];
                 inputStream = new FileInputStream(oldFile);
-                outputStream = new FileOutputStream(new File(resourcesDir, oldFile.getName()));
+                outputStream = new FileOutputStream(new File(mResourcesDir, oldFile.getName()));
 
                 IOUtils.copy(inputStream, outputStream);
 
@@ -122,11 +125,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
                 oldFile.delete();
             }
 
-            // delete unzip directory
-            unzipDir.delete();
-
             return true;
-
         } catch (Exception e) {
             Crashlytics.setString("url", url);
             Crashlytics.setString("filePath", filePath);
@@ -138,8 +137,12 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
             Crashlytics.logException(e);
             return false;
-        }
+        } finally {
+            IOUtils.closeQuietly(conn);
 
+            // delete unzip directory
+            FileUtils.deleteRecursive(tmpDir, false);
+        }
     }
 
     private HttpURLConnection getHttpURLConnection(String url, String authorization) throws IOException

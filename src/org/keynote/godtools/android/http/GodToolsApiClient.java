@@ -1,6 +1,5 @@
 package org.keynote.godtools.android.http;
 
-import android.content.Context;
 import android.support.v4.os.AsyncTaskCompat;
 
 import org.keynote.godtools.android.BuildConfig;
@@ -36,7 +35,7 @@ public class GodToolsApiClient {
         String url = BASE_URL_V2 + ENDPOINT_PACKAGES + langCode;
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + File.separator + "package.zip";
 
-        download(app.getApplicationContext(), url, filePath, tag, null, langCode, taskHandler);
+        download(app, url, filePath, tag, null, langCode, taskHandler);
     }
 
     public static void authenticateAccessCode(String accessCode, AuthTask.AuthTaskHandler taskHandler){
@@ -56,7 +55,7 @@ public class GodToolsApiClient {
         String url = BASE_URL_V2 + ENDPOINT_DRAFTS + langCode + "?compressed=true";
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + File.separator + "package.zip";
 
-        download(app.getApplicationContext(), url, filePath, tag, authorization, langCode, taskHandler);
+        download(app, url, filePath, tag, authorization, langCode, taskHandler);
     }
 
     public static void downloadDraftPage(SnuffyApplication app,
@@ -69,7 +68,7 @@ public class GodToolsApiClient {
         String url = BASE_URL + ENDPOINT_DRAFTS + languageCode + File.separator + packageCode + File.separator + "pages" + File.separator + pageId + "?compressed=true";
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + languageCode + File.separator + pageId + ".zip";
 
-        download(app.getApplicationContext(),
+        download(app,
                 url,
                 filePath,
                 "draft",
@@ -112,9 +111,11 @@ public class GodToolsApiClient {
         new NotificationUpdateTask(taskHandler).execute(url, authcode, registrationId, notificationType);
     }
 
-    private static void download(Context context, String url, String filePath, String tag, String authorization, String langCode, DownloadTask.DownloadTaskHandler taskHandler) {
-        DownloadTask downloadTask = new DownloadTask(context, taskHandler);
-        //downloadTask.execute(url, filePath, tag);
+    private static void download(SnuffyApplication app, String url, String filePath, String tag, String authorization,
+                                 String langCode, DownloadTask.DownloadTaskHandler taskHandler) {
+        DownloadTask downloadTask =
+                new DownloadTask(app.getApplicationContext(), new File(app.getDocumentsDir(), "resources"),
+                                 taskHandler);
 
         AsyncTaskCompat.executeParallel(downloadTask, url, filePath, tag, authorization, langCode);
     }
