@@ -10,15 +10,13 @@ import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.snuffy.Decompress;
+import org.keynote.godtools.android.utils.IOUtils;
 
-import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -70,18 +68,9 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
                 throw new RuntimeException("Unable to create zip download directory");
             }
 
-            byte[] buffer = new byte[2048];
-            int length;
-
+            // output zip file
             FileOutputStream fout = new FileOutputStream(zipfile);
-            BufferedOutputStream bufferOut = new BufferedOutputStream(fout, buffer.length);
-
-            while ((length = dis.read(buffer, 0, buffer.length)) != -1)
-                bufferOut.write(buffer, 0, length);
-
-            bufferOut.flush();
-            bufferOut.close();
-
+            IOUtils.copy(dis, fout);
             dis.close();
             fout.close();
 
@@ -125,7 +114,8 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
                 oldFile = fileList[i];
                 inputStream = new FileInputStream(oldFile);
                 outputStream = new FileOutputStream(new File(resourcesDir, oldFile.getName()));
-                copyFile(inputStream, outputStream);
+
+                IOUtils.copy(inputStream, outputStream);
 
                 inputStream.close();
                 outputStream.flush();
@@ -175,13 +165,5 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
         else
             mTaskHandler.downloadTaskFailure(url, filePath, langCode, tag);
 
-    }
-
-    private void copyFile(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[1024];
-        int read;
-        while ((read = in.read(buffer)) != -1) {
-            out.write(buffer, 0, read);
-        }
     }
 }

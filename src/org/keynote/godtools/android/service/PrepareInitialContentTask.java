@@ -8,6 +8,7 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
+import org.keynote.godtools.android.utils.IOUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -45,7 +46,8 @@ public class PrepareInitialContentTask
                 File outFile = new File(resourcesDir, fileName);
                 OutputStream os = new FileOutputStream(outFile);
 
-                copyFile(is, os);
+                IOUtils.copy(is, os);
+
                 is.close();
                 is = null;
                 os.flush();
@@ -89,16 +91,6 @@ public class PrepareInitialContentTask
         } catch (IOException e)
         {
             e.printStackTrace();
-        }
-    }
-
-    private static void copyFile(InputStream in, OutputStream out) throws IOException
-    {
-        byte[] buffer = new byte[1024];
-        int read;
-        while ((read = in.read(buffer)) != -1)
-        {
-            out.write(buffer, 0, read);
         }
     }
 }
