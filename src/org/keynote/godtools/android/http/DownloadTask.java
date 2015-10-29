@@ -42,7 +42,6 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(Object... params) {
-
         url = params[0].toString();
         filePath = params[1].toString();
         tag = params[2].toString();
@@ -63,12 +62,12 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             DataInputStream dis = new DataInputStream(connection.getInputStream());
 
             File zipfile = new File(filePath);
-            String parentDir = zipfile.getParent();
-            File unzipDir = new File(parentDir);
 
-            if(!(unzipDir.mkdirs() && unzipDir.isDirectory()))
+            // get the temporary zip directory
+            File unzipDir = zipfile.getParentFile();
+            if (!unzipDir.isDirectory() && !unzipDir.mkdirs())
             {
-                throw new RuntimeException("Unable to create directory");
+                throw new RuntimeException("Unable to create zip download directory");
             }
 
             byte[] buffer = new byte[2048];
@@ -90,8 +89,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             new Decompress().unzip(zipfile, unzipDir);
 
             // parse content.xml
-            String content = unzipDir + "/contents.xml";
-            File contentFile = new File(content);
+            File contentFile = new File(unzipDir, "contents.xml");
             List<GTPackage> packageList = GTPackageReader.processContentFile(contentFile);
 
             DBAdapter adapter = DBAdapter.getInstance(mContext);
@@ -111,9 +109,13 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             zipfile.delete();
             contentFile.delete();
 
+            // get resources directory
+            final File resourcesDir = new File(unzipDir.getParentFile(), "resources");
+            if (!resourcesDir.isDirectory() && !resourcesDir.mkdirs()) {
+                throw new RuntimeException("Unable to create resources directory");
+            }
+
             // move files to main directory
-            String mainDir = unzipDir.getParent();
-            String resourcesDir = mainDir + "/resources";
             FileInputStream inputStream;
             FileOutputStream outputStream;
 
@@ -122,7 +124,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             for (int i = 0; i < fileList.length; i++) {
                 oldFile = fileList[i];
                 inputStream = new FileInputStream(oldFile);
-                outputStream = new FileOutputStream(resourcesDir + File.separator + oldFile.getName());
+                outputStream = new FileOutputStream(new File(resourcesDir, oldFile.getName()));
                 copyFile(inputStream, outputStream);
 
                 inputStream.close();
