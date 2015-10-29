@@ -12,11 +12,11 @@ import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.snuffy.Decompress;
 import org.keynote.godtools.android.utils.IOUtils;
 
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -57,8 +57,6 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             downloadResponseCode = connection.getResponseCode();
             downloadContentLength = connection.getContentLength();
 
-            DataInputStream dis = new DataInputStream(connection.getInputStream());
-
             File zipfile = new File(filePath);
 
             // get the temporary zip directory
@@ -69,9 +67,10 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             }
 
             // output zip file
+            InputStream is = connection.getInputStream();
             FileOutputStream fout = new FileOutputStream(zipfile);
-            IOUtils.copy(dis, fout);
-            dis.close();
+            IOUtils.copy(is, fout);
+            is.close();
             fout.close();
 
             // unzip package.zip
