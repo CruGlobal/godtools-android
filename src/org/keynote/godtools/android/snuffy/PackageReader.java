@@ -124,17 +124,16 @@ public class PackageReader
         bitmapCache.clear();
         mPages.clear();
 
-        String mainPackagefileName = "resources/" + packageConfigName;
         boolean bSuccess;
         InputStream isMain = null;
         try
         {
-            isMain = new BufferedInputStream(new FileInputStream(app.getDocumentsDir().getPath() + "/" + mainPackagefileName));
+            isMain = new BufferedInputStream(new FileInputStream(app.getResourcesDir().getPath() + "/" + packageConfigName));
             bSuccess = processMainPackageFilePW(isMain);
 
         } catch (IOException e)
         {
-            Log.e(TAG, "Cannot open or read main package file: " + mainPackagefileName);
+            Log.e(TAG, "Cannot open or read main package file: " + packageConfigName);
             return false;
         } finally
         {

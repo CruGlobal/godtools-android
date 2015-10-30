@@ -8,7 +8,9 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.Tracker;
 
 import org.keynote.godtools.android.R;
@@ -72,12 +74,50 @@ public class SnuffyApplication extends Application
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
         {
             documentsDir = getExternalFilesDir(null);
+            if (documentsDir != null) {
+                Crashlytics.log("documentsDir: " + documentsDir.getPath());
+                if (!documentsDir.isDirectory()) {
+                    Crashlytics.log("documentsDir doesn't exist");
+                    if (!documentsDir.mkdirs()) {
+                        Crashlytics.log("unable to create documents directory, falling back to internal directory");
+                        documentsDir = null;
+                    }
+                }
+            }
         }
         if (documentsDir == null)
         {
             documentsDir = getFilesDir();
         }
         return documentsDir;
+    }
+
+    @NonNull
+    public File getResourcesDir() {
+        // prefer using external storage when available
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            final File root = getExternalFilesDir(null);
+            if (root != null) {
+                final File dir = new File(root, "resources");
+                Crashlytics.log("Potential External Resources Dir: " + dir);
+
+                // make sure the resources directory exists before returning
+                if (dir.isDirectory() || dir.mkdirs()) {
+                    return dir;
+                }
+
+                // log that we were unable to create external resources directory for any future exception/crash
+                Crashlytics.log("unable to create external resources directory");
+            }
+        }
+
+        // fallback to internal storage
+        final File dir = new File(getFilesDir(), "resources");
+        if (!dir.isDirectory() && !dir.mkdirs()) {
+            // we can't create an internal resources directory, log an error because something crazy may happen!
+            Crashlytics.log("unable to create internal resources directory: " + dir);
+        }
+        return dir;
     }
 
     private boolean assetExists(String fileName)

@@ -96,7 +96,7 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler,
             settings.edit().putString(GTLanguage.KEY_PRIMARY, deviceDefaultLanguage).apply();
 
             // set up files
-            PrepareInitialContentTask.run(getApp().getApplicationContext(), getApp().getDocumentsDir());
+            PrepareInitialContentTask.run(getApp().getApplicationContext(), getApp().getResourcesDir());
 
             showLoading(getString(R.string.check_update));
 
