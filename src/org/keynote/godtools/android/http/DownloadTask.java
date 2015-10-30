@@ -61,16 +61,16 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
         }
 
         // download & extract zip file to tmp directory
-        HttpURLConnection conn = null;
+        HttpURLConnection connection = null;
         try {
-            conn = getHttpURLConnection(url, authorization);
-            downloadResponseCode = conn.getResponseCode();
-            downloadContentLength = conn.getContentLength();
+            connection = getHttpURLConnection(url, authorization);
+            downloadResponseCode = connection.getResponseCode();
+            downloadContentLength = connection.getContentLength();
 
             final File zipfile = new File(tmpDir, "package.zip");
 
             // output zip file
-            InputStream is = conn.getInputStream();
+            InputStream is = connection.getInputStream();
             FileOutputStream fout = new FileOutputStream(zipfile);
             IOUtils.copy(is, fout);
             is.close();
@@ -132,7 +132,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             Crashlytics.logException(e);
             return false;
         } finally {
-            IOUtils.closeQuietly(conn);
+            IOUtils.closeQuietly(connection);
 
             // delete unzip directory
             FileUtils.deleteRecursive(tmpDir, false);
