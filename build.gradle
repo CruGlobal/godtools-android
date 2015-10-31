@@ -44,6 +44,9 @@ android {
     defaultConfig {
         versionName project.version
         versionCode buildVersionCode()
+
+        minSdkVersion 10
+        targetSdkVersion 22
     }
 
     sourceSets {
