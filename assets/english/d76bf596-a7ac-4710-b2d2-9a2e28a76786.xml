@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="3" color="#87101B" watermark="1c0ac553e8c0418833067e669b5f7bc23c3a9fe9.png">
+  <title mode="peek">
+    <heading gtapi-trx-id="131044e1-064a-4e57-accd-4bca7a0917d8" translate="true">The Present Danger</heading>
+    <subheading gtapi-trx-id="f606f6fd-8443-44f1-9cea-b5a38e00577e" translate="true">We cannot experience intimacy with God and enjoy all He has for us if we fail to depend on His Spirit.</subheading>
+    <peekpanel gtapi-trx-id="92cfd63b-4da6-481f-887e-eec3784f5335" translate="true">People who trust in their own efforts and strength to live the Christian life will experience failure and frustration, as those who live to please themselves rather than God.</peekpanel>
+  </title>
+  <button>
+    <buttontext gtapi-trx-id="9c8cfc32-6c7f-4516-8d3a-03cea8ff7b03" translate="true">We cannot live...</buttontext>
+    <panel>
+      <text gtapi-trx-id="f735b4aa-5691-4d83-861e-f6c98f721f90" size="111" translate="true">...the Christian life in our own strength.</text>
+      <text gtapi-trx-id="44377ff5-2b02-409a-b169-eaa9a1dfdb1f" modifier="italics" translate="true">Are you so foolish?  After beginning with the Spirit, are you now trying to attain your goal by human effort?
+(Galatians 3:3)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="41f67dd2-f053-4a81-900c-09363e0d3934" translate="true">We cannot enjoy...</buttontext>
+    <panel>
+      <text gtapi-trx-id="11bb73ff-f34a-462f-a866-c4004ef31c3b" size="111" translate="true">...all God desires for us if we live by our self centered desires.</text>
+      <text gtapi-trx-id="051243f6-8d73-4caf-a8f5-4facf1b3ed0b" modifier="italics" translate="true">For the sinful nature desires what is contrary to the Spirit, and the Spirit what is contrary to the sinful nature.  They are in conflict with each other, so that you do not do what you want.
+(Galatians 5:17)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="bc49a797-0467-46af-b836-10f930962859" translate="true">Three Kinds of Lifestyles</buttontext>
+    <panel textalign="center">
+      <image align="center" gtapi-trx-id="b5ee2cdd-eb40-47a4-a6a4-610a079f04ee" h="165" translate="true" w="280">79a035802d63dfbd2f79368c3825ac1492dc2086.png</image>
+      <text gtapi-trx-id="55c57d61-164a-4d08-8ff2-0ae0e14cee68" modifier="italics" size="92" textalign="center" translate="true">Brothers, I could not address you as spiritual, but as worldly - mere infants in Christ.  I gave you milk, not solid food, for you were not yet ready for it. Indeed, you are still not ready. You are still worldly. For since there is jealousy and quarreling among you, are you not worldly?  Are you not acting like mere men?
+(1 Corinthians 3:1-3)</text>
+    </panel>
+  </button>
+  <question gtapi-trx-id="7cf39e0e-9ad6-48a5-8e4f-c9452b5e6569" translate="true">How can we develop a lifestyle of depending on the Spirit?</question>
+</page>
