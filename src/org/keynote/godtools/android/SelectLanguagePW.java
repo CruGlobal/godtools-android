@@ -341,11 +341,11 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             return;
         }
 
-        currentView.pbDownloading.setVisibility(View.VISIBLE);
-
         if (!language.isDownloaded())
         {
             Log.i(TAG, "Download");
+
+            currentView.pbDownloading.setVisibility(View.VISIBLE);
 
             returnIntent = new Intent();
 
@@ -368,10 +368,13 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         else
         {
             Log.i(TAG, "Delete");
+
+            AsyncTaskCompat.execute(new DeletedPackageRemovalTask(language,
+                    (SnuffyApplication) getApplication()));
+
             updateDownloadedStatus(language.getLanguageCode(), false);
-            DBAdapter adapter = DBAdapter.getInstance(this);
-            adapter.deletePackages(language.getLanguageCode(), "live");
-            AsyncTaskCompat.execute(new DeletedPackageRemovalTask());
+
+            applyLanguageListToListView();
         }
     }
 
