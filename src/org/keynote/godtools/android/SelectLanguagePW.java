@@ -25,6 +25,8 @@ import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
+import org.keynote.godtools.android.tasks.DeletedPackageRemovalTask;
+import org.keynote.godtools.android.utils.AsyncTaskCompat;
 import org.keynote.godtools.android.utils.Device;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
@@ -369,6 +371,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             updateDownloadedStatus(language.getLanguageCode(), false);
             DBAdapter adapter = DBAdapter.getInstance(this);
             adapter.deletePackages(language.getLanguageCode(), "live");
+            AsyncTaskCompat.execute(new DeletedPackageRemovalTask());
         }
     }
 
