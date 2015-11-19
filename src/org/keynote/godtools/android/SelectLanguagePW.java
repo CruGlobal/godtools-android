@@ -57,7 +57,6 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     private String languageType;
     private Intent returnIntent;
     private boolean userIsSelectingPrimaryLanguage;
-    private boolean downloadOnly;
     private int index;
     private int top;
 
@@ -233,7 +232,6 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             else
             {
                 Log.i(TAG, "Download: " + selectedLanguage.getLanguageName());
-                downloadOnly = false;
 
                 currentView = (LanguageAdapter.ViewHolder) view.getTag();
                 currentView.tvDownload.setText(R.string.downloading);
@@ -273,7 +271,6 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             else
             {
                 Log.i(TAG, "Download: " + selectedLanguage.getLanguageName());
-                downloadOnly = false;
 
                 currentView = (LanguageAdapter.ViewHolder) view.getTag();
                 currentView.tvDownload.setText(R.string.downloading);
@@ -343,11 +340,22 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         }
 
         currentView.pbDownloading.setVisibility(View.VISIBLE);
-        downloadOnly = true;
 
         if (!language.isDownloaded())
         {
             Log.i(TAG, "Download");
+
+            returnIntent = new Intent();
+
+            if(userIsSelectingPrimaryLanguage)
+            {
+                returnIntent.putExtra("primaryCode", language.getLanguageCode());
+            }
+            else
+            {
+                returnIntent.putExtra("parallelCode", language.getLanguageCode());
+            }
+
             currentView.tvDownload.setText(R.string.downloading);
 
             GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
@@ -361,7 +369,6 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             updateDownloadedStatus(language.getLanguageCode(), false);
             DBAdapter adapter = DBAdapter.getInstance(this);
             adapter.deletePackages(language.getLanguageCode(), "live");
-            applyLanguageListToListView();
         }
     }
 
@@ -372,23 +379,20 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
         updateDownloadedStatus(langCode, true);
 
-        if (!downloadOnly)
+        if (userIsSelectingPrimaryLanguage)
         {
-            if (userIsSelectingPrimaryLanguage)
-            {
-                setResult(RESULT_CHANGED_PRIMARY, returnIntent);
-                primaryLanguage = langCode;
-                currentLanguage = langCode;
-                app.setAppLocale(langCode);
-                storeLanguageCodeInSettings(GTLanguage.KEY_PRIMARY, langCode);
-            }
-            else
-            {
-                setResult(RESULT_CHANGED_PARALLEL, returnIntent);
-                parallelLanguage = langCode;
-                currentLanguage = langCode;
-                storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, langCode);
-            }
+            setResult(RESULT_CHANGED_PRIMARY, returnIntent);
+            primaryLanguage = langCode;
+            currentLanguage = langCode;
+            app.setAppLocale(langCode);
+            storeLanguageCodeInSettings(GTLanguage.KEY_PRIMARY, langCode);
+        }
+        else
+        {
+            setResult(RESULT_CHANGED_PARALLEL, returnIntent);
+            parallelLanguage = langCode;
+            currentLanguage = langCode;
+            storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, langCode);
         }
 
         finish();
