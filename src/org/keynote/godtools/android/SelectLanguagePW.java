@@ -228,12 +228,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
                 setResult(RESULT_CHANGED_PRIMARY, returnIntent);
 
-                // this is set so that the view state is updated to reflect that the user just chose the selected language as primary language
-                // (applies the checkmark when the view is rendered)
-                primaryLanguage = selectedLanguage.getLanguageCode();
-                currentLanguage = selectedLanguage.getLanguageCode();
-
-                applyLanguageListToListView();
+                finish();
             }
             else
             {
@@ -272,12 +267,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
                 setResult(RESULT_CHANGED_PARALLEL, returnIntent);
 
-                // this is set so that the view state is updated to reflect that the user just chose the selected language as primary language
-                // (applies the checkmark when the view is rendered)
-                parallelLanguage = selectedLanguage.getLanguageCode();
-                currentLanguage = selectedLanguage.getLanguageCode();
-
-                applyLanguageListToListView();
+                finish();
             }
             // download and set as parallel
             else
@@ -401,7 +391,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             }
         }
 
-        applyLanguageListToListView();
+        finish();
     }
 
     private void updateDownloadedStatus(String langCode, boolean downloaded)
