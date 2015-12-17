@@ -11,6 +11,10 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+apply from: 'versioning.gradle'
+
+version '4.1.5-SNAPSHOT'
+
 repositories {
     mavenCentral()
     maven { url 'https://maven.fabric.io/public' }
@@ -34,6 +38,12 @@ dependencies {
 android {
     compileSdkVersion 22
     buildToolsVersion '22.0.1'
+
+    defaultConfig {
+        versionName project.version
+        versionCode buildVersionCode()
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -57,7 +67,6 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
-    defaultConfig {}
     productFlavors {
     }
     buildTypes {
