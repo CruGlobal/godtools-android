@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- New GodTools IP4 layout -->
+    <!-- Default GodTools theme -->
     <style name="Theme.GodTools" parent="Theme.AppCompat">
         <item name="android:windowFullscreen">true</item>
         <item name="android:actionBarStyle">@style/Widget.GodTools.ActionBar</item>
@@ -13,5 +13,18 @@
         <item name="android:icon">@android:color/transparent</item>
         <item name="android:displayOptions">showHome</item>
         <item name="displayOptions">showHome</item>
+    </style>
+
+    <!-- Default GodTools theme with a transparent ActionBar (used to get Action Overflow Button only) -->
+    <style name="Theme.GodTools.TransparentActionBar">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:actionBarStyle">@style/Widget.GodTools.ActionBar.Transparent</item>
+        <item name="actionBarStyle">@style/Widget.GodTools.ActionBar.Transparent</item>
+    </style>
+
+    <style name="Widget.GodTools.ActionBar.Transparent">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="background">@android:color/transparent</item>
     </style>
 </resources>

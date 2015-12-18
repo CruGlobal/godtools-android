@@ -1,6 +1,5 @@
 package org.keynote.godtools.android;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -15,6 +14,7 @@ import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -65,7 +65,7 @@ import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 @SuppressWarnings("deprecation")
-public class SnuffyPWActivity extends Activity
+public class SnuffyPWActivity extends AppCompatActivity
 {
     private static final String TAG = "SnuffyActivity";
 

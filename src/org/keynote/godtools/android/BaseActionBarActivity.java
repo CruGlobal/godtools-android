@@ -1,8 +1,8 @@
 package org.keynote.godtools.android;
 
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
-public class BaseActionBarActivity extends ActionBarActivity {
+public class BaseActionBarActivity extends AppCompatActivity {
 
     /**
      * Standard god tools result: selected a primary language

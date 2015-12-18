@@ -104,7 +104,8 @@
 
         <activity
             android:name=".SnuffyPWActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.GodTools.TransparentActionBar"/>
         <activity
             android:name=".SnuffyPageMenuPWActivity"
             android:label="@string/app_name"
