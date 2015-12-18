@@ -9,13 +9,12 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:name=".snuffy.SnuffyApplication"
-        android:theme="@style/SnuffyTheme">
-        <!--android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"> -->
+        android:theme="@style/Theme.GodTools">
         <activity
             android:name="Splash"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/SnuffyTheme">
+            android:theme="@style/Theme.GodTools">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -96,7 +95,7 @@
             android:name=".snuffy.SnuffyAboutActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/SnuffyTheme" />
+            android:theme="@style/Theme.GodTools" />
         <activity
             android:name=".snuffy.SnuffyPageMenuActivity"
             android:label="@string/app_name"
