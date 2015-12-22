@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.Vector;
 
+import io.fabric.sdk.android.Fabric;
+
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 
@@ -39,6 +41,9 @@ public class SnuffyApplication extends Application
     public void onCreate()
     {
         super.onCreate();
+
+        // Enable crash reporting
+        Fabric.with(this, new Crashlytics());
 
         deviceLocale = Locale.getDefault();
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
