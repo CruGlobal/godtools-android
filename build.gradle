@@ -42,6 +42,8 @@ android {
     buildToolsVersion '22.0.1'
 
     defaultConfig {
+        applicationId 'org.keynote.godtools.android'
+
         versionName project.version
         versionCode buildVersionCode()
 
