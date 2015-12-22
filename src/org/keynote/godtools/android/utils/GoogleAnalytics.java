@@ -1,7 +1,10 @@
 package org.keynote.godtools.android.utils;
 
 import android.content.Context;
+
 import com.google.android.gms.analytics.Tracker;
+
+import org.keynote.godtools.android.BuildConfig;
 
 /**
  * Created by ryancarlson on 4/21/14.
@@ -18,7 +21,7 @@ public class GoogleAnalytics
 			googleAnalytics.setLocalDispatchPeriod(GoogleAnalyticsConfig.DISPATCH_PERIOD);
 			googleAnalytics.setDryRun(GoogleAnalyticsConfig.IS_DRY_RUN);
 
-			return googleAnalytics.newTracker("UA-325725-50");
+			return googleAnalytics.newTracker(BuildConfig.GOOGLE_ANALYTICS_CLIENT_ID);
 		}
 
 		return tracker;
