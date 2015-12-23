@@ -16,12 +16,12 @@ public class DBAdapter
 {
 
     private static DBAdapter instance;
-    private DBHelper helper;
+    private GodToolsDatabase helper;
     private SQLiteDatabase db;
 
     private DBAdapter(Context context)
     {
-        helper = new DBHelper(context);
+        helper = GodToolsDatabase.getInstance(context);
     }
 
     public static DBAdapter getInstance(Context context)
