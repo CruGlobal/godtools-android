@@ -117,37 +117,31 @@ public class GTPackage {
 
     public static GTPackage getPackage(Context context, String code, String language, String status){
         DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
         return adapter.getGTPackage(code, language, status);
     }
 
     public static List<GTPackage> getPackageByLanguage(Context context, String language){
         DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
         return adapter.getGTPackageByLanguage(language);
     }
 
     public static List<GTPackage> getLivePackages(Context context, String language){
         DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
         return adapter.getLiveGTPackage(language);
     }
 
     public static List<GTPackage> getDraftPackages(Context context, String language) {
         DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
         return adapter.getDraftGTPackage(language);
     }
 
     public long addToDatabase(Context context){
         DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
         return adapter.insertGTPackage(this);
     }
 
     public void update(Context context) {
         DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
         adapter.upsertGTPackage(this);
     }
 }

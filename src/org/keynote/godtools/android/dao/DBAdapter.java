@@ -3,8 +3,9 @@ package org.keynote.godtools.android.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
+import org.ccci.gto.android.common.db.AbstractDao;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 
@@ -12,36 +13,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class DBAdapter
-{
+public class DBAdapter extends AbstractDao {
+    private static DBAdapter INSTANCE;
 
-    private static DBAdapter instance;
-    private GodToolsDatabase helper;
-    private SQLiteDatabase db;
-
-    private DBAdapter(Context context)
-    {
-        helper = GodToolsDatabase.getInstance(context);
+    private DBAdapter(@NonNull final Context context) {
+        super(GodToolsDatabase.getInstance(context));
     }
 
-    public static DBAdapter getInstance(Context context)
-    {
-        if (instance == null)
-            instance = new DBAdapter(context);
+    public static DBAdapter getInstance(@NonNull final Context context) {
+        synchronized (DBAdapter.class) {
+            if (INSTANCE == null) {
+                INSTANCE = new DBAdapter(context);
+            }
+        }
 
-        return instance;
+        return INSTANCE;
     }
-
-    public void open()
-    {
-        db = helper.getWritableDatabase();
-    }
-
-    public void close()
-    {
-        helper.close();
-    }
-
 
     public long insertGTPackage(GTPackage gtPackage)
     {
@@ -54,7 +41,7 @@ public class DBAdapter
         cv.put(DBContract.GTPackageTable.COL_STATUS, gtPackage.getStatus());
         cv.put(DBContract.GTPackageTable.COL_ICON, gtPackage.getIcon());
 
-        return db.insert(DBContract.GTPackageTable.TABLE_NAME, null, cv);
+        return getWritableDatabase().insert(DBContract.GTPackageTable.TABLE_NAME, null, cv);
     }
 
     public long insertGTLanguage(GTLanguage gtLanguage)
@@ -65,7 +52,7 @@ public class DBAdapter
         cv.put(DBContract.GTLanguageTable.COL_IS_DRAFT, gtLanguage.isDraft());
         cv.put(DBContract.GTLanguageTable.COL_NAME, gtLanguage.getLanguageName());
 
-        return db.insert(DBContract.GTLanguageTable.TABLE_NAME, null, cv);
+        return getWritableDatabase().insert(DBContract.GTLanguageTable.TABLE_NAME, null, cv);
     }
 
     public List<GTLanguage> getAllLanguages()
@@ -121,7 +108,7 @@ public class DBAdapter
                 DBContract.GTPackageTable.COL_LANGUAGE, language,
                 DBContract.GTPackageTable.COL_STATUS, status);
 
-        db.delete(DBContract.GTPackageTable.TABLE_NAME, selection, null);
+        getWritableDatabase().delete(DBContract.GTPackageTable.TABLE_NAME, selection, null);
     }
 
     public void upsertGTPackage(GTPackage gtp)
@@ -141,11 +128,11 @@ public class DBAdapter
                 DBContract.GTPackageTable.COL_LANGUAGE, gtp.getLanguage(),
                 DBContract.GTPackageTable.COL_STATUS, gtp.getStatus());
 
-        int numberOfAffectedRows = db.update(DBContract.GTPackageTable.TABLE_NAME, cv, where, null);
+        int numberOfAffectedRows = getWritableDatabase().update(DBContract.GTPackageTable.TABLE_NAME, cv, where, null);
 
         if (numberOfAffectedRows == 0)
         {
-            db.insert(DBContract.GTPackageTable.TABLE_NAME, null, cv);
+            getWritableDatabase().insert(DBContract.GTPackageTable.TABLE_NAME, null, cv);
         }
     }
 
@@ -159,7 +146,7 @@ public class DBAdapter
         String where = String.format("%s = '%s'",
                 DBContract.GTLanguageTable.COL_CODE, gtl.getLanguageCode());
 
-        db.update(DBContract.GTLanguageTable.TABLE_NAME, cv, where, null);
+        getWritableDatabase().update(DBContract.GTLanguageTable.TABLE_NAME, cv, where, null);
     }
 
     private List<GTPackage> queryGTPackage(String selection)
@@ -177,7 +164,8 @@ public class DBAdapter
 
         String order = DBContract.GTPackageTable._ID + " ASC";
 
-        Cursor cursor = db.query(DBContract.GTPackageTable.TABLE_NAME, projection, selection, null, null, null, order);
+        Cursor cursor = getReadableDatabase()
+                .query(DBContract.GTPackageTable.TABLE_NAME, projection, selection, null, null, null, order);
 
         List<GTPackage> listGTPackages = new ArrayList<GTPackage>();
 
@@ -219,7 +207,8 @@ public class DBAdapter
                 DBContract.GTLanguageTable.COL_NAME
         };
 
-        Cursor cursor = db.query(DBContract.GTLanguageTable.TABLE_NAME, projection, selection, null, null, null, null);
+        Cursor cursor = getReadableDatabase()
+                .query(DBContract.GTLanguageTable.TABLE_NAME, projection, selection, null, null, null, null);
 
         List<GTLanguage> listGTLanguages = new ArrayList<GTLanguage>();
 

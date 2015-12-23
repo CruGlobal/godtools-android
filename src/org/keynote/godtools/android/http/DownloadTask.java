@@ -84,7 +84,6 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             List<GTPackage> packageList = GTPackageReader.processContentFile(contentFile);
 
             DBAdapter adapter = DBAdapter.getInstance(mContext);
-            adapter.open();
 
             // delete packages
             if (tag.contains("draft")) {
