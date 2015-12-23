@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.db.AbstractDao;
 import org.ccci.gto.android.common.db.Mapper;
+import org.ccci.gto.android.common.db.Query;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 
@@ -171,50 +172,7 @@ public class DBAdapter extends AbstractDao {
 
     private List<GTPackage> queryGTPackage(String selection)
     {
-
-        String[] projection = {DBContract.GTPackageTable._ID,
-                DBContract.GTPackageTable.COL_CODE,
-                DBContract.GTPackageTable.COL_NAME,
-                DBContract.GTPackageTable.COL_LANGUAGE,
-                DBContract.GTPackageTable.COL_VERSION,
-                DBContract.GTPackageTable.COL_CONFIG_FILE_NAME,
-                DBContract.GTPackageTable.COL_STATUS,
-                DBContract.GTPackageTable.COL_ICON
-        };
-
-        String order = DBContract.GTPackageTable._ID + " ASC";
-
-        Cursor cursor = getReadableDatabase()
-                .query(DBContract.GTPackageTable.TABLE_NAME, projection, selection, null, null, null, order);
-
-        List<GTPackage> listGTPackages = new ArrayList<GTPackage>();
-
-        while (cursor.moveToNext())
-        {
-            long id = cursor.getLong(cursor.getColumnIndex(DBContract.GTPackageTable._ID));
-            String code = cursor.getString(cursor.getColumnIndex(DBContract.GTPackageTable.COL_CODE));
-            String name = cursor.getString(cursor.getColumnIndex(DBContract.GTPackageTable.COL_NAME));
-            String language = cursor.getString(cursor.getColumnIndex(DBContract.GTPackageTable.COL_LANGUAGE));
-            double version = cursor.getDouble(cursor.getColumnIndex(DBContract.GTPackageTable.COL_VERSION));
-            String configFileName = cursor.getString(cursor.getColumnIndex(DBContract.GTPackageTable.COL_CONFIG_FILE_NAME));
-            String status = cursor.getString(cursor.getColumnIndex(DBContract.GTPackageTable.COL_STATUS));
-            String icon = cursor.getString(cursor.getColumnIndex(DBContract.GTPackageTable.COL_ICON));
-
-            GTPackage gtPackage = new GTPackage();
-            gtPackage.setCode(code);
-            gtPackage.setName(name);
-            gtPackage.setLanguage(language);
-            gtPackage.setVersion(version);
-            gtPackage.setConfigFileName(configFileName);
-            gtPackage.setStatus(status);
-            gtPackage.setIcon(icon);
-
-            listGTPackages.add(gtPackage);
-        }
-
-        cursor.close();
-
-        return listGTPackages;
+        return get(Query.select(GTPackage.class).where(selection).orderBy(DBContract.GTPackageTable._ID));
     }
 
     private List<GTLanguage> queryGTLanguage(String selection)
