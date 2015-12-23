@@ -105,15 +105,6 @@ public class DBAdapter extends AbstractDao {
         return queryGTPackage(selection);
     }
 
-    public List<GTPackage> getLiveGTPackage(String language)
-    {
-        String selection = String.format("%s = '%s' AND %s = 'live'",
-                DBContract.GTPackageTable.COL_LANGUAGE, language,
-                DBContract.GTPackageTable.COL_STATUS);
-
-        return queryGTPackage(selection);
-    }
-
     public List<GTPackage> getDraftGTPackage(String language)
     {
         String selection = String.format("%s = '%s' AND %s = 'draft'",

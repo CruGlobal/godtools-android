@@ -2,14 +2,25 @@ package org.keynote.godtools.android.business;
 
 import android.content.Context;
 
+import com.google.common.base.Function;
+
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.model.HomescreenLayout;
 
 import java.util.List;
 
-public class GTPackage {
+import javax.annotation.Nullable;
 
+public class GTPackage {
     public static final String EVERYSTUDENT_PACKAGE_CODE = "everystudent";
+
+    public static final Function<GTPackage, String> FUNCTION_CODE = new Function<GTPackage, String>() {
+        @Nullable
+        @Override
+        public String apply(@Nullable final GTPackage input) {
+            return input != null ? input.code : null;
+        }
+    };
 
     private String code;
     private String name;
@@ -114,11 +125,6 @@ public class GTPackage {
     public static List<GTPackage> getPackageByLanguage(Context context, String language){
         DBAdapter adapter = DBAdapter.getInstance(context);
         return adapter.getGTPackageByLanguage(language);
-    }
-
-    public static List<GTPackage> getLivePackages(Context context, String language){
-        DBAdapter adapter = DBAdapter.getInstance(context);
-        return adapter.getLiveGTPackage(language);
     }
 
     public static List<GTPackage> getDraftPackages(Context context, String language) {
