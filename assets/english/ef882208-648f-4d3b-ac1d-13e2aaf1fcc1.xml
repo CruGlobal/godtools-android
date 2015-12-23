@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="1" color="#DC5C31" watermark="90458873df4460124f51a61d5e22e2c3d021a739.png">
+  <title mode="straight">
+    <heading gtapi-trx-id="09e36daa-998f-4ff7-a931-40d210d3c77e" size="111" textalign="center" translate="true" w="300" x="10">YOU CAN EXPRESS YOUR ATTITUDE TOWARDS GOD THROUGH PRAYER.</heading>
+    <subheading gtapi-trx-id="5bcdf851-6ba4-452f-b5f8-3ed38758ce61" size="100" textalign="center" translate="true">Prayer is simply talking with God.</subheading>
+  </title>
+  <button>
+    <buttontext gtapi-trx-id="bbdb4438-4c50-430c-bd47-084bf77294be" translate="true">Here is a suggested prayer</buttontext>
+    <panel>
+      <image align="center" h="2" w="280">abee0a62e8f904a4ad019cbb0b93cfc0cca44c35.png</image>
+      <text gtapi-trx-id="88a13a09-c5f6-4dd0-9fb3-88119738cf3c" modifier="italics" size="90" textalign="left" translate="true">Lord Jesus,</text>
+      <text gtapi-trx-id="453de523-1828-404b-be29-898ebc0bf8d5" modifier="italics" size="90" textalign="left" translate="true">I want to know you personally.</text>
+      <text gtapi-trx-id="f83226fc-3e6d-476e-a1fd-8b411b1cdcb3" modifier="italics" size="90" textalign="left" translate="true">I'm sorry for going my own way. Please forgive me for all my sin.</text>
+      <text gtapi-trx-id="8020a609-0984-43a7-81a8-be46cd573cc1" modifier="italics" size="90" textalign="left" translate="true">Thank you for dying on the cross to pay for my sin.</text>
+      <text gtapi-trx-id="74fa69ef-1a88-4fee-af2a-1b6884e6677c" modifier="italics" size="90" textalign="left" translate="true">I agree to turn from my old ways and follow you as my Saviour and Lord.</text>
+      <text gtapi-trx-id="4f1cebde-3801-4640-823e-7b90c8ed8cad" modifier="italics" size="90" textalign="left" translate="true">Please come and take first place in my life.</text>
+      <image align="center" h="2" w="280">abee0a62e8f904a4ad019cbb0b93cfc0cca44c35.png</image>
+      <text gtapi-trx-id="27972e9c-8ca5-47a9-935e-ae5f74b68f5f" size="90" textalign="center" translate="true">Could you say this to God and mean it?</text>
+      <text gtapi-trx-id="fdbc4e08-8d4f-4ff5-a6c2-f37b765f5351" size="90" textalign="center" translate="true">Is there anything stopping you from saying this right now?</text>
+    </panel>
+  </button>
+  <text gtapi-trx-id="51d896fa-67f7-42e1-aa4d-e0122d46a658" modifier="bold" size="110" textalign="left" translate="true" w="300" yoffset="12 ">Could you say this to God and mean it?</text>
+  <text gtapi-trx-id="7d191d5f-5a8c-40e2-8bab-feef609adeaf" modifier="bold" size="110" textalign="left" translate="true" w="300" yoffset="-24">Is there anything stopping you from saying this right now?</text>
+  <question gtapi-trx-id="035c27d5-97a3-48c9-aa10-a969ec12174e" mode="straight" size="100" translate="true">Jesus will come into your life as he promised.</question>
+</page>

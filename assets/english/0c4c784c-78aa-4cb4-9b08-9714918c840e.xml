@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="3" color="#FB8D08" watermark="1c0ac553e8c0418833067e669b5f7bc23c3a9fe9.png">
+  <title mode="peek">
+    <heading gtapi-trx-id="976ef295-46ce-4c79-afa7-0c6e141eda35" translate="true">The New Start</heading>
+    <subheading gtapi-trx-id="e2a274bf-1107-4bf1-a355-6b2883c99e35" translate="true">Now that you are filled with the Holy Spirit:</subheading>
+  </title>
+  <button>
+    <buttontext gtapi-trx-id="65b67b82-8fd8-4f2b-8f9d-313b2e836f75" translate="true">Thank God...</buttontext>
+    <panel>
+      <text gtapi-trx-id="8cc0562b-c4e4-4db2-bb10-ed6f5440632c" size="111" translate="true">...that the Spirit will enable you:</text>
+      <text gtapi-trx-id="d2f2a155-10f6-4ab6-9e91-0da19a7df2f4" translate="true">- To glorify Christ with your life.
+(John 16:14)</text>
+      <text gtapi-trx-id="7b3d2b5e-478f-4be0-be58-11e357ba2993" translate="true">- To grow in your understanding of God and His Word.
+(1 Corinthians 2:14,15)</text>
+      <text gtapi-trx-id="4f7ddd54-0d79-436d-af0d-8730b03b2015" translate="true">- To live a life pleasing to God.
+(Galatians 5:16-23)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="1639f0d8-571d-472d-a15a-4fbe00bc7330" translate="true">Remember Jesus' promise:</buttontext>
+    <panel>
+      <text gtapi-trx-id="7dd80a72-7ebf-41f7-9387-2bf3a7650786" modifier="italics" textalign="center" translate="true">"But you will receive power when the Holy Spirit comes on you; and you will be my witnesses in Jerusalem, and in all Judea and Samaria, and to the ends of the earth"
+(Acts 1:8)"</text>
+    </panel>
+  </button>
+  <text gtapi-trx-id="7741d4c6-433c-492c-9eee-473ee301b116" textalign="center" translate="true" w="300">If you would like more resources on the Holy Spirit, please go to:</text>
+  <button gtapi-trx-id="5c1304fd-0833-4120-b892-581edc3f6e6a" mode="url" tnt-trx-ref-value="www.campuscrusade.org" tnt-trx-translated="true" translate="true">www.cru.org/training-and-growth/classics/index.htm</button>
+</page>

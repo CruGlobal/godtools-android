@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="2" color="#7EB14F" watermark="90458873df4460124f51a61d5e22e2c3d021a739.png">
+  <title>
+    <number>1</number>
+    <heading gtapi-trx-id="087b7293-70aa-41c7-b6cc-5d397a4eb41b" translate="true">GOD LOVES YOU AND CREATED YOU TO KNOW HIM PERSONALLY.</heading>
+  </title>
+  <button>
+    <buttontext gtapi-trx-id="2c1f7198-f0a1-40cb-b71f-b50237866f15" translate="true">God Loves You</buttontext>
+    <panel>
+      <text gtapi-trx-id="8189a000-f7d3-4bc3-8eea-ef826c53dc5c" size="90" translate="true">God showed how much he loved us by sending his one and only Son into the world so that we might have eternal life through him.</text>
+      <text gtapi-trx-id="4919a9b7-f874-4362-87d5-c59ec8da754c" size="85" textalign="right" translate="true">- 1 John 4:9</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="f0ab9318-ed38-426d-946d-0668adb55f02" translate="true">God Wants You to Know Him</buttontext>
+    <panel>
+      <text gtapi-trx-id="90c1f8d1-39c0-49f8-b905-5bd7e850eef8" size="90" translate="true">"And this is the way to have eternal life - to know you, the only true God, and Jesus Christ, the one you sent to earth."</text>
+      <text gtapi-trx-id="df32c4e8-e832-4026-870e-cbde62215c5b" size="85" textalign="right" translate="true">- John 17:3</text>
+    </panel>
+  </button>
+  <question gtapi-trx-id="fae69b3b-e95b-4184-9bcd-211e35faa71c" translate="true">Why do you think most people 
+don't know God personally?</question>
+</page>

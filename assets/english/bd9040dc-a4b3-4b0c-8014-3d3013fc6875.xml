@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="6" color="#7EB14F" watermark="90458873df4460124f51a61d5e22e2c3d021a739.png">
+  <title>
+    <heading gtapi-trx-id="ef36067a-1620-407c-8ac5-0bc0175e2110" size="94" translate="true" w="285" x="10">HOW TO GROW AS A FOLLOWER OF JESUS:</heading>
+  </title>
+  <button>
+    <buttontext gtapi-trx-id="44d1491b-8c6e-4317-b706-181ac178a684" size="140" translate="true">G et to Know God</buttontext>
+    <panel>
+      <text gtapi-trx-id="680c943f-1c90-4704-9462-ba9aa66b2459" size="90" translate="true">Get to know God by reading the Bible daily.   (2 Timothy 3:14-17)</text>
+      <text gtapi-trx-id="455ca736-9082-4b2a-a6c8-ed018b748edb" size="90" translate="true">Begin with the gospel of John or Mark.</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="9dfc03e6-1903-4681-9026-7f3f459f49d8" size="140" translate="true">R espond</buttontext>
+    <panel>
+      <text gtapi-trx-id="933151b5-b6d8-4ba8-afa7-e1466bc3ad99" size="90" translate="true">Respond to God in prayer.</text>
+      <text gtapi-trx-id="b32d7c22-52c2-475e-974c-3fdbfe31c220" size="90" textalign="right" translate="true">(Phillipians 4:6)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="69cf56c1-c44e-47e5-9925-4bbae443738a" size="140" translate="true">O bey</buttontext>
+    <panel>
+      <text gtapi-trx-id="f8d16954-f28b-49e1-9332-3a8ecc34fa2b" size="90" translate="true">Obey God Moment by Moment.</text>
+      <text gtapi-trx-id="4fe11c37-1417-492c-9ad6-93ed9c4b5e8f" size="90" textalign="right" translate="true">(Luke 6:46-49)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="b0b3655d-17cf-4062-acec-55bdd22f4c05" size="140" translate="true">W alk</buttontext>
+    <panel>
+      <text gtapi-trx-id="5d5bfae0-2d08-41fc-98c9-0342a1e24a71" size="90" translate="true">Walk in the Power of the Holy Spirit.</text>
+      <text gtapi-trx-id="d5aa2a8a-1d2a-444d-a5e5-2b84822cceb1" size="90" textalign="right" translate="true">(Ephesians 3:14-21, 5:18)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="f5b41b17-cf97-4494-be03-ef3421aec8b5" size="140" translate="true">T ell Others</buttontext>
+    <panel>
+      <text gtapi-trx-id="3e6334e9-b558-4950-ba6f-2411a227e1b3" size="90" tnt-trx-ref-value="Tell others about Jesus through our life and words." tnt-trx-translated="true" translate="true">Tell others about Jesus through your life and words.</text>
+      <text gtapi-trx-id="edd20029-947e-41e5-9220-d76acf73f50b" size="90" textalign="right" translate="true">(Matthew 28:18-20;
+2 Corinthians 5:17-20;
+Ephesians 4:1)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="c8b50534-6b4b-46f5-8232-9fb429ad99ce" size="140" translate="true">H ave Fellowship</buttontext>
+    <panel>
+      <text gtapi-trx-id="e11332aa-e67c-4917-9e86-718c3c3bd629" size="90" translate="true">Have fellowship with other Christians.</text>
+      <text gtapi-trx-id="93784cbf-6e2e-479c-8e58-915c7c04fbf1" size="90" textalign="right" translate="true">(Hebrews 10:25; Acts 2:42-47)</text>
+      <text gtapi-trx-id="161d0e53-fce3-4dc1-a1b1-38368edc7be4" size="90" translate="true">Find a church where Jesus is worshipped and the Bible is taught.</text>
+    </panel>
+  </button>
+  <question gtapi-trx-id="16c35b12-5a40-48ed-80dd-dd3066fdb735" translate="true">Want to Know More?</question>
+</page>
