@@ -333,14 +333,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     }
 
     @Override
-    protected void onPause()
-    {
-        super.onPause();
-        SharedPreferences.Editor ed = settings.edit();
-        ed.apply();
-    }
-
-    @Override
     protected void onResume()
     {
         super.onResume();

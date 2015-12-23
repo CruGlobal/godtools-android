@@ -23,18 +23,18 @@ repositories {
 }
 
 dependencies {
-    // some dependencies will not be updated as these particular versions are needed by the app.
-    //noinspection GradleDynamicVersion,GradleDependency
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile fileTree(dir: 'libs', include: '*.jar')
+    //noinspection GradleDependency
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    //noinspection GradleDependency
+    compile 'com.android.support:support-annotations:22.2.1'
+
+    // keep this version of play services for now, newer versions may prompt users to upgrade before using the app
     //noinspection GradleDependency
     compile 'com.google.android.gms:play-services:4.3.23'
-    //noinspection GradleDependency
-    compile 'com.android.support:support-annotations:23.0.0'
+
+    compile 'com.crashlytics.sdk.android:crashlytics:2.5.5'
     compile 'com.google.guava:guava:18.0'
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
-        transitive = true;
-    }
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }
 
 android {
@@ -42,8 +42,15 @@ android {
     buildToolsVersion '22.0.1'
 
     defaultConfig {
+        applicationId 'org.keynote.godtools.android'
+
         versionName project.version
         versionCode buildVersionCode()
+
+        minSdkVersion 10
+        targetSdkVersion 22
+
+        buildConfigField "String", "GOOGLE_ANALYTICS_CLIENT_ID", "\"UA-325725-50\""
     }
 
     sourceSets {
