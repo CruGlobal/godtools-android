@@ -16,12 +16,6 @@ apply from: 'versioning.gradle'
 
 version '4.1.5-SNAPSHOT'
 
-repositories {
-    mavenLocal()
-    jcenter()
-    maven { url 'https://maven.fabric.io/public' }
-}
-
 dependencies {
     //noinspection GradleDependency
     compile 'com.android.support:appcompat-v7:22.2.1'
@@ -32,8 +26,8 @@ dependencies {
     //noinspection GradleDependency
     compile 'com.google.android.gms:play-services:4.3.23'
 
-    compile 'org.ccci.gto.android:gto-support-core:0.7.1'
-    compile 'org.ccci.gto.android:gto-support-db:0.7.1'
+    compile 'org.ccci.gto.android:gto-support-core:0.7.2-SNAPSHOT'
+    compile 'org.ccci.gto.android:gto-support-db:0.7.2-SNAPSHOT'
 
     compile 'com.crashlytics.sdk.android:crashlytics:2.5.5'
     compile 'com.google.guava:guava:18.0'
@@ -101,4 +95,18 @@ android {
         buildConfigField "String", "EVERY_STUDENT_AUTHORITY", '"' + applicationId + '.everystudent.EveryStudentProvider"'
         resValue "string", "every_student_authority", applicationId + ".everystudent.EveryStudentProvider"
     }
+}
+
+repositories {
+    mavenLocal()
+    jcenter()
+    maven {
+        name "maven.gcx.org"
+        url "https://maven.gcx.org/"
+        credentials {
+            username gcxMavenRepositoryUsername
+            password gcxMavenRepositoryPassword
+        }
+    }
+    maven { url 'https://maven.fabric.io/public' }
 }

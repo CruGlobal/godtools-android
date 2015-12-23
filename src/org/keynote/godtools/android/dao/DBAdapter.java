@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.db.AbstractDao;
+import org.ccci.gto.android.common.db.Mapper;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class DBAdapter extends AbstractDao {
+    private static final Mapper<GTPackage> GT_PACKAGE_MAPPER = new GTPackageMapper();
+
     private static DBAdapter INSTANCE;
 
     private DBAdapter(@NonNull final Context context) {
@@ -30,18 +33,35 @@ public class DBAdapter extends AbstractDao {
         return INSTANCE;
     }
 
-    public long insertGTPackage(GTPackage gtPackage)
-    {
-        ContentValues cv = new ContentValues();
-        cv.put(DBContract.GTPackageTable.COL_CODE, gtPackage.getCode());
-        cv.put(DBContract.GTPackageTable.COL_NAME, gtPackage.getName());
-        cv.put(DBContract.GTPackageTable.COL_LANGUAGE, gtPackage.getLanguage());
-        cv.put(DBContract.GTPackageTable.COL_VERSION, gtPackage.getVersion());
-        cv.put(DBContract.GTPackageTable.COL_CONFIG_FILE_NAME, gtPackage.getConfigFileName());
-        cv.put(DBContract.GTPackageTable.COL_STATUS, gtPackage.getStatus());
-        cv.put(DBContract.GTPackageTable.COL_ICON, gtPackage.getIcon());
+    @NonNull
+    @Override
+    protected String getTable(@NonNull final Class<?> clazz) {
+        if (GTPackage.class.equals(clazz)) {
+            return DBContract.GTPackageTable.TABLE_NAME;
+        }
 
-        return getWritableDatabase().insert(DBContract.GTPackageTable.TABLE_NAME, null, cv);
+        return super.getTable(clazz);
+    }
+
+    @NonNull
+    @Override
+    public String[] getFullProjection(@NonNull final Class<?> clazz) {
+        if (GTPackage.class.equals(clazz)) {
+            return DBContract.GTPackageTable.PROJECTION_ALL;
+        }
+
+        return super.getFullProjection(clazz);
+    }
+
+    @NonNull
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> Mapper<T> getMapper(@NonNull Class<T> clazz) {
+        if (GTPackage.class.equals(clazz)) {
+            return (Mapper<T>) GT_PACKAGE_MAPPER;
+        }
+
+        return super.getMapper(clazz);
     }
 
     public long insertGTLanguage(GTLanguage gtLanguage)
@@ -181,7 +201,6 @@ public class DBAdapter extends AbstractDao {
             String icon = cursor.getString(cursor.getColumnIndex(DBContract.GTPackageTable.COL_ICON));
 
             GTPackage gtPackage = new GTPackage();
-            gtPackage.setId(id);
             gtPackage.setCode(code);
             gtPackage.setName(name);
             gtPackage.setLanguage(language);

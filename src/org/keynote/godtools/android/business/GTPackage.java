@@ -11,7 +11,6 @@ public class GTPackage {
 
     public static final String EVERYSTUDENT_PACKAGE_CODE = "everystudent";
 
-    private long id;
     private String code;
     private String name;
     private double version;
@@ -29,14 +28,6 @@ public class GTPackage {
     public GTPackage()
     {
         this.setAvailable(true);
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getCode() {
@@ -137,7 +128,7 @@ public class GTPackage {
 
     public long addToDatabase(Context context){
         DBAdapter adapter = DBAdapter.getInstance(context);
-        return adapter.insertGTPackage(this);
+        return adapter.insert(this);
     }
 
     public void update(Context context) {

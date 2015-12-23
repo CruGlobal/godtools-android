@@ -23,6 +23,8 @@ public class DBContract
         public static final String COL_ICON = "icon";
         public static final String UPDATE_TABLE_NAME = "gtpackages_old";
 
+        public static final String[] PROJECTION_ALL =
+                {_ID, COL_CODE, COL_NAME, COL_LANGUAGE, COL_CONFIG_FILE_NAME, COL_ICON, COL_STATUS, COL_VERSION};
 
         public static final String SQL_CREATE_GTPACKAGES = "CREATE TABLE IF NOT EXISTS "
                 + GTPackageTable.TABLE_NAME + "("
