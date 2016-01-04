@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static org.ccci.gto.android.common.db.Expression.bind;
 import static org.ccci.gto.android.common.db.Expression.constant;
 import static org.ccci.gto.android.common.db.Expression.constants;
+import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.COL_CODE;
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.COL_NAME;
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.FIELD_CODE;
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.FIELD_LANGUAGE;
@@ -28,7 +29,12 @@ import java.util.List;
 public class LivePackagesLoader extends AsyncTaskSharedPreferencesChangeLoader<List<GTPackage>> {
     private final DBAdapter mDao;
 
-    private static final Query<GTPackage> BASE_QUERY = Query.select(GTPackage.class).orderBy(COL_NAME);
+    // SELECT FROM GTPackage
+    // ORDER BY
+    //   code = 'everystudent', # returns 1 for everystudent and 0 for others, which sorts everystudent after others
+    //   name                   # sorts based on name
+    private static final Query<GTPackage> BASE_QUERY =
+            Query.select(GTPackage.class).orderBy(COL_CODE + " = 'everystudent'," + COL_NAME);
     private static final Expression BASE_WHERE = FIELD_LANGUAGE.eq(bind()).and(FIELD_STATUS.eq(constant("live")));
 
     public LivePackagesLoader(@NonNull final Context context) {
