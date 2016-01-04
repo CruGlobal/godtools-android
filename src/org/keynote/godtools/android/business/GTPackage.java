@@ -1,6 +1,9 @@
 package org.keynote.godtools.android.business;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
+
+import com.google.common.base.Function;
 
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.model.HomescreenLayout;
@@ -8,10 +11,16 @@ import org.keynote.godtools.android.model.HomescreenLayout;
 import java.util.List;
 
 public class GTPackage {
-
     public static final String EVERYSTUDENT_PACKAGE_CODE = "everystudent";
 
-    private long id;
+    public static final Function<GTPackage, String> FUNCTION_CODE = new Function<GTPackage, String>() {
+        @Nullable
+        @Override
+        public String apply(@Nullable final GTPackage input) {
+            return input != null ? input.code : null;
+        }
+    };
+
     private String code;
     private String name;
     private double version;
@@ -29,14 +38,6 @@ public class GTPackage {
     public GTPackage()
     {
         this.setAvailable(true);
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getCode() {
@@ -117,37 +118,26 @@ public class GTPackage {
 
     public static GTPackage getPackage(Context context, String code, String language, String status){
         DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
         return adapter.getGTPackage(code, language, status);
     }
 
     public static List<GTPackage> getPackageByLanguage(Context context, String language){
         DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
         return adapter.getGTPackageByLanguage(language);
-    }
-
-    public static List<GTPackage> getLivePackages(Context context, String language){
-        DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
-        return adapter.getLiveGTPackage(language);
     }
 
     public static List<GTPackage> getDraftPackages(Context context, String language) {
         DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
         return adapter.getDraftGTPackage(language);
     }
 
     public long addToDatabase(Context context){
         DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
-        return adapter.insertGTPackage(this);
+        return adapter.insert(this);
     }
 
     public void update(Context context) {
         DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
         adapter.upsertGTPackage(this);
     }
 }

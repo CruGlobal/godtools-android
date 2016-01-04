@@ -1,6 +1,12 @@
 package org.keynote.godtools.android.dao;
 
+import static org.ccci.gto.android.common.db.Expression.field;
+
 import android.provider.BaseColumns;
+
+import org.ccci.gto.android.common.db.Expression.Field;
+import org.ccci.gto.android.common.db.Table;
+import org.keynote.godtools.android.business.GTPackage;
 
 public class DBContract
 {
@@ -13,6 +19,8 @@ public class DBContract
 
     public static abstract class GTPackageTable implements BaseColumns
     {
+        public static final Table<GTPackage> TABLE = Table.forClass(GTPackage.class);
+
         public static final String TABLE_NAME = "gtpackages";
         public static final String COL_CODE = "code";
         public static final String COL_NAME = "name";
@@ -23,6 +31,12 @@ public class DBContract
         public static final String COL_ICON = "icon";
         public static final String UPDATE_TABLE_NAME = "gtpackages_old";
 
+        public static final Field FIELD_CODE = field(TABLE, COL_CODE);
+        public static final Field FIELD_LANGUAGE = field(TABLE, COL_LANGUAGE);
+        public static final Field FIELD_STATUS = field(TABLE, COL_STATUS);
+
+        public static final String[] PROJECTION_ALL =
+                {_ID, COL_CODE, COL_NAME, COL_LANGUAGE, COL_CONFIG_FILE_NAME, COL_ICON, COL_STATUS, COL_VERSION};
 
         public static final String SQL_CREATE_GTPACKAGES = "CREATE TABLE IF NOT EXISTS "
                 + GTPackageTable.TABLE_NAME + "("

@@ -7,12 +7,12 @@ import android.support.annotation.NonNull;
 import com.crashlytics.android.Crashlytics;
 import com.google.common.base.Strings;
 
+import org.ccci.gto.android.common.util.IOUtils;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.snuffy.Decompress;
 import org.keynote.godtools.android.utils.FileUtils;
-import org.keynote.godtools.android.utils.IOUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -84,7 +84,6 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             List<GTPackage> packageList = GTPackageReader.processContentFile(contentFile);
 
             DBAdapter adapter = DBAdapter.getInstance(mContext);
-            adapter.open();
 
             // delete packages
             if (tag.contains("draft")) {

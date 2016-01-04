@@ -7,6 +7,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
@@ -21,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
@@ -37,6 +42,7 @@ import org.keynote.godtools.android.notifications.GoogleCloudMessagingClient;
 import org.keynote.godtools.android.notifications.NotificationsClient;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
+import org.keynote.godtools.android.support.v4.content.LivePackagesLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,12 +73,17 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     private static final int REFERENCE_DEVICE_HEIGHT = 960;    // pixels on iPhone w/retina - including title bar
     private static final int REFERENCE_DEVICE_WIDTH = 640;    // pixels on iPhone w/retina - full width
 
+    private static final int LOADER_LIVE_PACKAGES = 1;
+
+    private final PackagesLoaderCallbacks mLoaderCallbacksPackages = new PackagesLoaderCallbacks();
+
     private int mPageLeft;
     private int mPageTop;
     private int mPageWidth;
     private int mPageHeight;
 
-    private List<GTPackage> packageList;
+    @Nullable
+    private List<GTPackage> mPackages;
     private String languagePrimary;
 
     private List<HomescreenLayout> layouts;
@@ -82,14 +93,12 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private SharedPreferences settings;
 
-    /**
-     * Called when the activity is first created.
-     */
+    /* BEGIN lifecycle */
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
 
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
 
@@ -109,6 +118,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         titleBar.setText(R.string.app_name);
 
         setupBroadcastReceiver();
+        startLoaders();
 
         setupLayout();
 
@@ -118,8 +128,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             GodToolsApiClient.getListOfPackages(META, this);
             settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
         }
-
-        refreshPackageList();
 
         showLayoutsWithPackages();
 
@@ -134,6 +142,21 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         notificationsClient.sendLastUsageUpdateToGodToolsAPI();
         notificationsClient.startTimerForTrackingAppUsageTime();
+    }
+
+    void onLoadPackages(@Nullable final List<GTPackage> packages) {
+        mPackages = packages;
+        showLayoutsWithPackages();
+
+        // XXX: hack to keep languagePrimary in sync with the loaded packages
+        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
+    }
+
+    /* END lifecycle */
+
+    private void startLoaders() {
+        final LoaderManager manager = getSupportLoaderManager();
+        manager.initLoader(LOADER_LIVE_PACKAGES, null, mLoaderCallbacksPackages);
     }
 
     private boolean isFirstLaunch()
@@ -187,9 +210,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         // now there will only be four packages shown on the homescreen
         for (int i = 0; i < 4; i++)
         {
-            if (packageList.size() > i)
-            {
-                GTPackage gtPackage = packageList.get(i);
+            if (mPackages != null && mPackages.size() > i) {
+                GTPackage gtPackage = mPackages.get(i);
                 HomescreenLayout layout = layouts.get(i);
 
                 gtPackage.setLayout(layout);
@@ -242,8 +264,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                     {
                         // refresh the list
                         String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
-
-                        refreshPackageList();
 
                         if (!languagePrimary.equalsIgnoreCase(primaryCode))
                         {
@@ -307,29 +327,16 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             case RESULT_CHANGED_PRIMARY:
             case RESULT_CHANGED_PARALLEL:
             {
-                SnuffyApplication app = (SnuffyApplication) getApplication();
-                app.setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
+                final String currentLanguage = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
 
-                refreshPackageList();
-                EventTracker.track(getApp(), "HomeScreen", languagePrimary);
+                SnuffyApplication app = (SnuffyApplication) getApplication();
+                app.setAppLocale(currentLanguage);
+
+                EventTracker.track(getApp(), "HomeScreen", currentLanguage);
 
                 break;
             }
         }
-    }
-
-    private void refreshPackageList()
-    {
-        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
-        packageList = GTPackage.getLivePackages(MainPW.this, languagePrimary);
-
-        if (packageList.isEmpty())
-        {
-            settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
-            languagePrimary = ENGLISH_DEFAULT;
-            packageList = GTPackage.getLivePackages(MainPW.this, languagePrimary);
-        }
-        showLayoutsWithPackages();
     }
 
     @Override
@@ -341,7 +348,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private void doSetup()
     {
-        EventTracker.track(getApp(), "HomeScreen", languagePrimary);
+        EventTracker.track(getApp(), "HomeScreen", settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT));
         getScreenSize();
     }
 
@@ -415,15 +422,15 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     @Override
     public void onClick(View view)
     {
-        for (GTPackage gtPackage : packageList)
-        {
-            Log.i(TAG, view.getId() + " " + gtPackage.getLayout().getLayout().getId());
+        if (mPackages != null) {
+            for (GTPackage gtPackage : mPackages) {
+                Log.i(TAG, view.getId() + " " + gtPackage.getLayout().getLayout().getId());
 
-            if (view.getId() == gtPackage.getLayout().getLayout().getId())
-            {
-                Log.i(TAG, "clicked: " + gtPackage.getCode());
-                onPackageSelected(gtPackage);
-                break;
+                if (view.getId() == gtPackage.getLayout().getLayout().getId()) {
+                    Log.i(TAG, "clicked: " + gtPackage.getCode());
+                    onPackageSelected(gtPackage);
+                    break;
+                }
             }
         }
     }
@@ -486,18 +493,13 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     {
         if (tag.equalsIgnoreCase(KEY_PRIMARY))
         {
-            languagePrimary = langCode;
-
             getApp().setAppLocale(langCode);
-
-            settings.edit().putString(GTLanguage.KEY_PRIMARY, langCode).apply();
 
             GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
             gtl.setDownloaded(true);
             gtl.update(MainPW.this);
 
-            packageList = GTPackage.getLivePackages(MainPW.this, languagePrimary);
-            showLayoutsWithPackages();
+            settings.edit().putString(GTLanguage.KEY_PRIMARY, langCode).apply();
 
             hideLoading();
         }
@@ -514,7 +516,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             hideLoading();
         }
 
-        EventTracker.track(getApp(), "HomeScreen", languagePrimary);
+        EventTracker.track(getApp(), "HomeScreen", settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT));
     }
 
     @Override
@@ -526,5 +528,27 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         }
 
         hideLoading();
+    }
+
+    private class PackagesLoaderCallbacks extends SimpleLoaderCallbacks<List<GTPackage>> {
+        @Override
+        public Loader<List<GTPackage>> onCreateLoader(final int id, final Bundle args) {
+            switch (id) {
+                case LOADER_LIVE_PACKAGES:
+                    return new LivePackagesLoader(MainPW.this);
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public void onLoadFinished(@NonNull final Loader<List<GTPackage>> loader,
+                                   @Nullable final List<GTPackage> packages) {
+            switch (loader.getId()) {
+                case LOADER_LIVE_PACKAGES:
+                    onLoadPackages(packages);
+                    break;
+            }
+        }
     }
 }
