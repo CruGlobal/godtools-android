@@ -1,6 +1,7 @@
 package org.keynote.godtools.android.business;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import com.google.common.base.Function;
 
@@ -8,8 +9,6 @@ import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.model.HomescreenLayout;
 
 import java.util.List;
-
-import javax.annotation.Nullable;
 
 public class GTPackage {
     public static final String EVERYSTUDENT_PACKAGE_CODE = "everystudent";
