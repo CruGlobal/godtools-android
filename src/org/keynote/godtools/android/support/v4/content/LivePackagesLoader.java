@@ -31,10 +31,10 @@ public class LivePackagesLoader extends AsyncTaskSharedPreferencesChangeLoader<L
 
     // SELECT FROM GTPackage
     // ORDER BY
-    //   code = 'everystudent', # returns 1 for everystudent and 0 for others, which sorts everystudent after others
-    //   name                   # sorts based on name
-    private static final Query<GTPackage> BASE_QUERY =
-            Query.select(GTPackage.class).orderBy(COL_CODE + " = 'everystudent'," + COL_NAME);
+    //   CASE code WHEN 'everystudent' THEN 1 ELSE 0 END, # ORDER 'everystudent' last
+    //   name                                             # and rest by name
+    private static final Query<GTPackage> BASE_QUERY = Query.select(GTPackage.class)
+            .orderBy("CASE " + COL_CODE + " WHEN 'everystudent' THEN 1 ELSE 0 END, " + COL_NAME);
     private static final Expression BASE_WHERE = FIELD_LANGUAGE.eq(bind()).and(FIELD_STATUS.eq(constant("live")));
 
     public LivePackagesLoader(@NonNull final Context context) {
