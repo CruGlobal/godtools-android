@@ -86,6 +86,10 @@ public class DeletedPackageRemovalTask implements Runnable
         }
 
         dbAdapter.deletePackages(godToolsLanguage.getLanguageCode(), "live");
+        dbAdapter.deletePackages(godToolsLanguage.getLanguageCode(), "draft");
+
+        godToolsLanguage.setDownloaded(false);
+        dbAdapter.updateGTLanguage(godToolsLanguage);
     }
 
     private Set<String> extractPageFilenamesFromConfigXml(InputStream isMain)
