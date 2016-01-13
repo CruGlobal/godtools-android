@@ -219,10 +219,7 @@ public class SettingsPW extends BaseActionBarActivity implements
                 String primaryName = WordUtils.capitalize(localePrimary.getDisplayName(mDeviceLocale));
                 tvMainLanguage.setText(primaryName);
 
-                // set value for parallel language view
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
-                setParallelLanguageField(settings.getString(GTLanguage.KEY_PARALLEL, ""));
+                setParallelLanguageField(null);
 
                 EventTracker.track(getApp(), "Settings", "Language Change",
                         "Change Primary Language");
