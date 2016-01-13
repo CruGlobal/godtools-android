@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.common.base.Strings;
 
+import org.ccci.gto.android.common.util.LocaleCompat;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
@@ -111,8 +112,8 @@ public class SettingsPW extends BaseActionBarActivity implements
         cbTranslatorMode.setChecked(isTranslatorEnabled);
 
         // set value for primary language view
-        Locale localePrimary = new Locale(primaryLanguageCode);
-        String primaryName = capitalizeFirstLetter(localePrimary.getDisplayName());
+        Locale localePrimary = LocaleCompat.forLanguageTag(primaryLanguageCode);
+        String primaryName = capitalizeFirstLetter(localePrimary.getDisplayName(mDeviceLocale));
         tvMainLanguage.setText(primaryName);
 
         setupBroadcastReceiver();
@@ -123,8 +124,8 @@ public class SettingsPW extends BaseActionBarActivity implements
         }
         else
         {
-            Locale localeParallel = new Locale(parallelLanguageCode);
-            String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName());
+            Locale localeParallel = LocaleCompat.forLanguageTag(parallelLanguageCode);
+            String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName(mDeviceLocale));
             tvParallelLanguage.setText(parallelName);
         }
 
@@ -207,16 +208,14 @@ public class SettingsPW extends BaseActionBarActivity implements
             case RESULT_CHANGED_PRIMARY:
             {
                 String languagePrimary = data.getStringExtra("primaryCode");
-                SnuffyApplication app = (SnuffyApplication) getApplication();
-                app.setAppLocale(languagePrimary);
 
                 handleLanguagesWithAlternateFonts(languagePrimary);
                 tvMainLanguage = new SnuffyAlternateTypefaceTextView(tvMainLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.BOLD).get();
                 tvParallelLanguage = new SnuffyAlternateTypefaceTextView(tvParallelLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.BOLD).get();
 
                 // set value for primary language view
-                Locale localePrimary = new Locale(languagePrimary);
-                String primaryName = capitalizeFirstLetter(localePrimary.getDisplayName());
+                Locale localePrimary = LocaleCompat.forLanguageTag(languagePrimary);
+                String primaryName = capitalizeFirstLetter(localePrimary.getDisplayName(mDeviceLocale));
                 tvMainLanguage.setText(primaryName);
 
                 // set value for parallel language view
@@ -229,8 +228,8 @@ public class SettingsPW extends BaseActionBarActivity implements
                 }
                 else
                 {
-                    Locale localeParallel = new Locale(parallelLanguageCode);
-                    String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName());
+                    Locale localeParallel = LocaleCompat.forLanguageTag(parallelLanguageCode);
+                    String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName(mDeviceLocale));
                     tvParallelLanguage.setText(parallelName);
                 }
 
@@ -243,9 +242,8 @@ public class SettingsPW extends BaseActionBarActivity implements
 
                 // set value for parallel language view
                 String languageParallel = data.getStringExtra("parallelCode");
-                Locale localeParallel = new Locale(languageParallel);
-                String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName());
-                tvParallelLanguage.setText(parallelName);
+                Locale localeParallel = LocaleCompat.forLanguageTag(languageParallel);
+                tvParallelLanguage.setText(capitalizeFirstLetter(localeParallel.getDisplayName(mDeviceLocale)));
 
                 EventTracker.track(getApp(), "Settings",
                         "Language Change", "Change Parallel Language");
