@@ -63,6 +63,8 @@ public class SettingsPW extends BaseActionBarActivity implements
 
     private ProgressDialog pdLoading;
 
+    private final Locale mDeviceLocale = Locale.getDefault();
+
     private SharedPreferences settings;
 
     @Override

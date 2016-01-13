@@ -271,7 +271,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             case RESULT_CHANGED_PRIMARY:
             case RESULT_CHANGED_PARALLEL:
             {
-                getApp().setAppLocale(settings.getString(GTLanguage.KEY_PRIMARY, ""));
                 languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
 
                 getPackageList();

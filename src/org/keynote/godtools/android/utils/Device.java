@@ -24,8 +24,4 @@ public class Device {
 
         return false;
     }
-
-    public static String getDefaultLanguage(SnuffyApplication application){
-        return application.getDeviceLocale().getLanguage();
-    }
 }
