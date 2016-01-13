@@ -50,9 +50,10 @@ public class DeletedPackageRemovalTask implements Runnable
 
         for(GTPackage godToolsPackage : godToolsPackages)
         {
-            File configFile = new File(resourcesDirectory,godToolsPackage.getConfigFileName());
             try
             {
+                File configFile = new File(resourcesDirectory,godToolsPackage.getConfigFileName());
+
                 for(String pageFilename : extractPageFilenamesFromConfigXml(new FileInputStream(configFile)))
                 {
                     File pageFile = new File(resourcesDirectory + File.separator + pageFilename);
@@ -74,7 +75,14 @@ public class DeletedPackageRemovalTask implements Runnable
                                 godToolsPackage.getCode()),
                         fileNotFound);
             }
-
+            catch(Exception e)
+            {
+                Log.e(TAG,
+                        String.format("Config file for %s-%s not found",
+                                godToolsLanguage.getLanguageCode(),
+                                godToolsPackage.getCode()),
+                        e);
+            }
         }
 
         dbAdapter.deletePackages(godToolsLanguage.getLanguageCode(), "live");
