@@ -62,8 +62,6 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     private int index;
     private int top;
 
-    private final Locale mDeviceLocale = Locale.getDefault();
-
     private SnuffyApplication app;
 
     private LanguageAdapter.ViewHolder currentView;
@@ -135,7 +133,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
      */
     private void prepareLanguageList()
     {
-        languageList = GTLanguage.getAll(this, mDeviceLocale);
+        languageList = GTLanguage.getAll(this, Locale.getDefault());
 
         if (!isTranslator)
         {
