@@ -370,6 +370,16 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         {
             Log.i(TAG, "Delete");
 
+            try
+            {
+                ensureAtLeastOneLanguageIsDownloaded();
+            }
+            catch(IllegalStateException e)
+            {
+                Toast.makeText(getApplicationContext(), "At least one language must be downloaded", Toast.LENGTH_SHORT);
+                return;
+            }
+
             AsyncTaskCompat.execute(new DeletedPackageRemovalTask(language,
                     (SnuffyApplication) getApplication()));
 
@@ -377,6 +387,19 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
             applyLanguageListToListView();
         }
+    }
+
+    private void ensureAtLeastOneLanguageIsDownloaded()
+    {
+        int downloadedCount = 0;
+
+        for(GTLanguage language : languageList)
+        {
+            if(language.isDownloaded()) downloadedCount++;
+            if(downloadedCount > 1) break;
+        }
+
+        if(downloadedCount <= 1) throw new IllegalStateException();
     }
 
     @Override
