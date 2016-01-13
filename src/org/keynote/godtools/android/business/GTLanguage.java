@@ -107,14 +107,9 @@ public class GTLanguage implements Serializable {
         for(GTLanguage language : allLanguages)
         {
             String displayName = LocaleCompat.forLanguageTag(language.getLanguageCode()).getDisplayName(locale);
-            language.setLanguageName(capitalizeFirstLetter(displayName));
+            language.setLanguageName(WordUtils.capitalize(displayName));
         }
         return allLanguages;
-    }
-
-    private static String capitalizeFirstLetter(String word)
-    {
-        return Character.toUpperCase(word.charAt(0)) + word.substring(1);
     }
 
     public void addToDatabase(Context context) {
