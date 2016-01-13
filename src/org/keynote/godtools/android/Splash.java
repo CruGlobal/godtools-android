@@ -25,6 +25,7 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
 import java.util.List;
+import java.util.Locale;
 
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
@@ -54,7 +55,6 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler,
     private ProgressBar progressBar;
     private SharedPreferences settings;
 
-    private String deviceDefaultLanguage;
     /**
      * Called when the activity is first created.
      */
@@ -78,16 +78,8 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler,
 
             Log.i(TAG, "First Launch");
 
-            // get the default language of the device os
-            deviceDefaultLanguage = Device.getDefaultLanguage(getApp());
-
-            // set to english in case nothing is found.
-            if (Strings.isNullOrEmpty(deviceDefaultLanguage)) deviceDefaultLanguage = ENGLISH_DEFAULT;
-
-            Log.i(TAG, deviceDefaultLanguage);
-
             // set primary language on first start
-            settings.edit().putString(GTLanguage.KEY_PRIMARY, deviceDefaultLanguage).apply();
+            settings.edit().putString(GTLanguage.KEY_PRIMARY, Locale.getDefault().getLanguage()).apply();
 
             // set up files
             PrepareInitialContentTask.run(getApp().getApplicationContext(), getApp().getResourcesDir());
@@ -154,7 +146,7 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler,
         {
             GodToolsApiClient.downloadLanguagePack(
                     getApp(),
-                    deviceDefaultLanguage,
+                    Locale.getDefault().getLanguage(),
                     "primary",
                     this);
         }
@@ -176,7 +168,7 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler,
     {
         for(GTLanguage metaLanguageFromInitialDownload : languageList)
         {
-            if(metaLanguageFromInitialDownload.getLanguageCode().equalsIgnoreCase(deviceDefaultLanguage) &&
+            if(metaLanguageFromInitialDownload.getLanguageCode().equalsIgnoreCase(Locale.getDefault().getLanguage()) &&
                     !metaLanguageFromInitialDownload.getPackages().isEmpty())
             {
                 return true;

@@ -30,11 +30,13 @@ dependencies {
     compile 'com.crashlytics.sdk.android:crashlytics:2.5.5'
     compile 'com.google.guava:guava:18.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+
+    compile 'org.apache.commons:commons-lang3:3.4'
 }
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '23.0.1'
 
     // XXX: we need to remove usage of the Apache HttpClient
     useLibrary 'org.apache.http.legacy'

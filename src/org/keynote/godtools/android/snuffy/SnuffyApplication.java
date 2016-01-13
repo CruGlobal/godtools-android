@@ -34,9 +34,6 @@ public class SnuffyApplication extends Application
     public SnuffyPage aboutView;
     public String packageTitle;
 
-    private Locale deviceLocale;
-    private Locale appLocale;
-
     @Override
     public void onCreate()
     {
@@ -44,12 +41,6 @@ public class SnuffyApplication extends Application
 
         // Enable crash reporting
         Fabric.with(this, new Crashlytics());
-
-        deviceLocale = Locale.getDefault();
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
-        setAppLocale(primaryLanguageCode);
-
     }
 
     public void sendEmailWithContent(Activity callingActivity, String subjectLine, String msgBody)
@@ -160,24 +151,7 @@ public class SnuffyApplication extends Application
     {
         return org.keynote.godtools.android.utils.GoogleAnalytics.getTracker(this);
     }
-
-    public void setAppLocale(String languageCode)
-    {
-
-        appLocale = new Locale(languageCode);
-
-        Locale.setDefault(appLocale);
-        Configuration config = new Configuration();
-        config.locale = appLocale;
-        getBaseContext().getResources().updateConfiguration(config,
-                getBaseContext().getResources().getDisplayMetrics());
-    }
-
-    public Locale getDeviceLocale()
-    {
-        return deviceLocale;
-    }
-
+    
     public Vector<SnuffyPage> getSnuffyPages()
     {
         return snuffyPages;
@@ -186,19 +160,5 @@ public class SnuffyApplication extends Application
     public void setSnuffyPages(Vector<SnuffyPage> snuffyPages)
     {
         this.snuffyPages = snuffyPages;
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig)
-    {
-        deviceLocale = newConfig.locale;
-        super.onConfigurationChanged(newConfig);
-
-        Locale.setDefault(appLocale);
-        Configuration config = new Configuration();
-        config.locale = appLocale;
-        getBaseContext().getResources().updateConfiguration(config,
-                getBaseContext().getResources().getDisplayMetrics());
-
     }
 }
