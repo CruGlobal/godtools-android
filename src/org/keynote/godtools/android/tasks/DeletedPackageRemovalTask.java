@@ -50,7 +50,7 @@ public class DeletedPackageRemovalTask implements Runnable
 
         for(GTPackage godToolsPackage : godToolsPackages)
         {
-            File configFile = new File(resourcesDirectory + File.separator + godToolsPackage.getConfigFileName());
+            File configFile = new File(resourcesDirectory,godToolsPackage.getConfigFileName());
             try
             {
                 for(String pageFilename : extractPageFilenamesFromConfigXml(new FileInputStream(configFile)))
