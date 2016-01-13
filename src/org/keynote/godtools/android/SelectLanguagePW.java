@@ -20,13 +20,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.ccci.gto.android.common.util.AsyncTaskCompat;
 import org.keynote.godtools.android.business.GTLanguage;
-import org.keynote.godtools.android.dao.DBAdapter;
+
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.tasks.DeletedPackageRemovalTask;
-import org.keynote.godtools.android.utils.AsyncTaskCompat;
+
 import org.keynote.godtools.android.utils.Device;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
