@@ -34,8 +34,6 @@ public class SnuffyApplication extends Application
     public SnuffyPage aboutView;
     public String packageTitle;
 
-    private Locale deviceLocale;
-
     @Override
     public void onCreate()
     {
@@ -153,12 +151,7 @@ public class SnuffyApplication extends Application
     {
         return org.keynote.godtools.android.utils.GoogleAnalytics.getTracker(this);
     }
-
-    public Locale getDeviceLocale()
-    {
-        return deviceLocale;
-    }
-
+    
     public Vector<SnuffyPage> getSnuffyPages()
     {
         return snuffyPages;
@@ -167,18 +160,5 @@ public class SnuffyApplication extends Application
     public void setSnuffyPages(Vector<SnuffyPage> snuffyPages)
     {
         this.snuffyPages = snuffyPages;
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig)
-    {
-        deviceLocale = newConfig.locale;
-        super.onConfigurationChanged(newConfig);
-
-        Configuration config = new Configuration();
-        config.locale = Locale.getDefault();
-        getBaseContext().getResources().updateConfiguration(config,
-                getBaseContext().getResources().getDisplayMetrics());
-
     }
 }
