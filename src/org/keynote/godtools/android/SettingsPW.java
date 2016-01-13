@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.common.base.Strings;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.ccci.gto.android.common.util.LocaleCompat;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
@@ -113,7 +114,7 @@ public class SettingsPW extends BaseActionBarActivity implements
 
         // set value for primary language view
         Locale localePrimary = LocaleCompat.forLanguageTag(primaryLanguageCode);
-        String primaryName = capitalizeFirstLetter(localePrimary.getDisplayName(mDeviceLocale));
+        String primaryName = WordUtils.capitalize(localePrimary.getDisplayName(mDeviceLocale));
         tvMainLanguage.setText(primaryName);
 
         setupBroadcastReceiver();
@@ -125,7 +126,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         else
         {
             Locale localeParallel = LocaleCompat.forLanguageTag(parallelLanguageCode);
-            String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName(mDeviceLocale));
+            String parallelName = WordUtils.capitalize(localeParallel.getDisplayName(mDeviceLocale));
             tvParallelLanguage.setText(parallelName);
         }
 
@@ -215,7 +216,7 @@ public class SettingsPW extends BaseActionBarActivity implements
 
                 // set value for primary language view
                 Locale localePrimary = LocaleCompat.forLanguageTag(languagePrimary);
-                String primaryName = capitalizeFirstLetter(localePrimary.getDisplayName(mDeviceLocale));
+                String primaryName = WordUtils.capitalize(localePrimary.getDisplayName(mDeviceLocale));
                 tvMainLanguage.setText(primaryName);
 
                 // set value for parallel language view
@@ -229,7 +230,7 @@ public class SettingsPW extends BaseActionBarActivity implements
                 else
                 {
                     Locale localeParallel = LocaleCompat.forLanguageTag(parallelLanguageCode);
-                    String parallelName = capitalizeFirstLetter(localeParallel.getDisplayName(mDeviceLocale));
+                    String parallelName = WordUtils.capitalize(localeParallel.getDisplayName(mDeviceLocale));
                     tvParallelLanguage.setText(parallelName);
                 }
 
@@ -243,7 +244,7 @@ public class SettingsPW extends BaseActionBarActivity implements
                 // set value for parallel language view
                 String languageParallel = data.getStringExtra("parallelCode");
                 Locale localeParallel = LocaleCompat.forLanguageTag(languageParallel);
-                tvParallelLanguage.setText(capitalizeFirstLetter(localeParallel.getDisplayName(mDeviceLocale)));
+                tvParallelLanguage.setText(WordUtils.capitalize(localeParallel.getDisplayName(mDeviceLocale)));
 
                 EventTracker.track(getApp(), "Settings",
                         "Language Change", "Change Parallel Language");
@@ -400,11 +401,6 @@ public class SettingsPW extends BaseActionBarActivity implements
 
         String notificationsOn = cbNotificationsAllowed.isChecked() ? "TRUE" : "FALSE";
         updateDeviceWithAPI(notificationsOn);
-    }
-
-    private String capitalizeFirstLetter(String word)
-    {
-        return Character.toUpperCase(word.charAt(0)) + word.substring(1);
     }
 
     private void showLoading(String msg)

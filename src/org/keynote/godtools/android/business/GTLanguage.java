@@ -2,6 +2,7 @@ package org.keynote.godtools.android.business;
 
 import android.content.Context;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.ccci.gto.android.common.util.LocaleCompat;
 import org.keynote.godtools.android.dao.DBAdapter;
 
@@ -27,12 +28,8 @@ public class GTLanguage implements Serializable {
     public GTLanguage(String languageCode)
     {
         this.languageCode = languageCode;
-
-
-        Locale locale = LocaleCompat.forLanguageTag(languageCode);
-        String name = locale.getDisplayName();
-
-        this.languageName = Character.toUpperCase(name.charAt(0)) + name.substring(1);
+        this.languageName = WordUtils.capitalize(
+                LocaleCompat.forLanguageTag(languageCode).getDisplayName());
     }
 
     public GTLanguage(String languageCode, String languageName) {
