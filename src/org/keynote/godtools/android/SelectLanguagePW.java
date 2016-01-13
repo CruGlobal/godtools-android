@@ -380,10 +380,10 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
             if(language.getLanguageCode().equalsIgnoreCase(parallelLanguage))
             {
+                returnIntent = new Intent();
                 setResult(RESULT_CHANGED_PARALLEL, returnIntent);
-                parallelLanguage = language.getLanguageCode();
-                currentLanguage = language.getLanguageCode();
-                storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, language.getLanguageCode());
+                parallelLanguage = null;
+                storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, null);
             }
 
             AsyncTaskCompat.execute(new DeletedPackageRemovalTask(language,
