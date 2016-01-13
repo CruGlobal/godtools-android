@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="3" color="#87101B" watermark="1c0ac553e8c0418833067e669b5f7bc23c3a9fe9.png">
+  <title mode="peek">
+    <heading gtapi-trx-id="d70fdc91-1e3f-4572-945d-4fd178e3ae6c" size="86" translate="true" w="100">The Empowering Presence</heading>
+    <subheading gtapi-trx-id="44e85f5c-fcaa-401b-8d91-ffbb57be4e58" translate="true">We are filled with the Spirit by faith, enabling us to experience intimacy with God and enjoy all He has for us.</subheading>
+    <peekpanel gtapi-trx-id="ac4c13ef-2d9e-4ef2-bd43-1a8d1e0a2014" translate="true">The essence of the Christian life is what God does in and through us, not what we do for God. Christ's life is reproduced in the believer by the power of the Holy Spirit. To be filled with the Spirit is to be directed and empowered by Him.</peekpanel>
+  </title>
+  <button>
+    <buttontext gtapi-trx-id="a1a719a6-7d23-4da8-a180-6a91b5d37741" translate="true">By faith, we experience...</buttontext>
+    <panel>
+      <text gtapi-trx-id="28700be5-6a75-41cb-bd90-8f4d969c06f5" size="111" translate="true">...God's power through the Holy Spirit.</text>
+      <text gtapi-trx-id="df11e7e7-ad66-4e68-b4d7-e5583ecd7f4b" modifier="italics" textalign="center" translate="true">I pray that out of his glorious riches he may strengthen you with power through his Spirit in your inner being, so that Christ may dwell in your hearts through faith. (Ephesians 3:16, 17)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="3ea26042-4cda-4986-9435-dd96e3e13604" translate="true">Three important questions...</buttontext>
+    <panel>
+      <text gtapi-trx-id="b4592c25-9a30-4fee-94b5-52f944477efe" size="111" translate="true">...to ask yourself:</text>
+      <text gtapi-trx-id="114dd44f-c151-421f-96f3-4f9f79de679f" translate="true">1. Am I ready now to surrender control of my life to our Lord Jesus Christ? (Romans 12:1,2)</text>
+      <text gtapi-trx-id="70dfee15-929a-4e29-8dc8-4b3953e8f0ed" translate="true">2. Am I ready now to confess my sins? (1 John 1:9) Sin grieves God's Spirit. (Ephesians 4:30)
+But God in His love has forgiven all your sins - past, present, and future - because Christ has died for you.</text>
+      <text gtapi-trx-id="f9b99750-f8a9-4cea-8629-4ca0f235ccf0" translate="true">3. Do I sincerely desire to be directed and empowered by the Holy Spirit? (John 7:37-39)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="de604537-b463-4504-9b01-0a1faeecfb78" translate="true">By faith, claim...</buttontext>
+    <panel>
+      <text gtapi-trx-id="7797bdce-943d-4bae-bb89-49805235eb5c" size="111" translate="true">...the fullness of the Spirit according to His command and promise:</text>
+      <text gtapi-trx-id="009fc75e-1c0c-4277-93e8-ba1d1ab577d5" translate="true">God COMMANDS us to be filled with the Spirit.</text>
+      <text gtapi-trx-id="03fe26e8-78c4-484c-aeb4-62192fe14853" modifier="italics" textalign="center" translate="true">"…be filled with the Spirit" (Ephesians 5:18)</text>
+      <text gtapi-trx-id="a9407d04-e046-4dd2-af24-ff3b543332b2" translate="true">God PROMISES He will always answer when we pray according to His will.</text>
+      <text gtapi-trx-id="f2b405d1-53ce-4152-9b11-b23a327c811b" modifier="italics" textalign="center" translate="true">"This is the confidence that we have in approaching God: that if we ask anything according to his will, he hears us.  And if we know that he hears us - whatever we ask - we know that we have what we have asked of him." (1 John 5:14, 15)</text>
+    </panel>
+  </button>
+  <question gtapi-trx-id="1896d705-2cee-498b-92ae-e2d8d4700e00" translate="true">How to pray to be filled with the Holy Spirit…</question>
+</page>

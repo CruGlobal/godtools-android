@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.keynote.godtools.android"
-    android:versionCode="20"
-    android:versionName="4.1.4"
     android:installLocation="preferExternal">
 
     <application
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:name=".snuffy.SnuffyApplication"
-        android:theme="@style/AppTheme">
-        <!--android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"> -->
+        android:theme="@style/Theme.GodTools">
         <activity
             android:name="Splash"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/SnuffyTheme">
+            android:screenOrientation="userPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -26,23 +22,20 @@
             android:name=".MainPW"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/GodToolsIP4"/>
+            android:screenOrientation="userPortrait"/>
         
         <activity 
             android:name=".PreviewModeMainPW"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/GodToolsIP4" />
+            android:screenOrientation="userPortrait"/>
 
         <activity
             android:name=".SettingsPW"
             android:label="@string/settings_title"
-            android:screenOrientation="portrait"
+            android:screenOrientation="userPortrait"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainPW"
-            android:theme="@style/GodToolsIP4">
+            android:parentActivityName=".MainPW">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -53,9 +46,8 @@
         <activity
             android:name=".SelectLanguagePW"
             android:label="Select Language"
-            android:screenOrientation="portrait"
-            android:parentActivityName="org.keynote.godtools.android.SettingsPW"
-            android:theme="@style/GodToolsIP4">
+            android:screenOrientation="userPortrait"
+            android:parentActivityName="org.keynote.godtools.android.SettingsPW">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -95,27 +87,27 @@
         <activity
             android:name=".snuffy.SnuffyAboutActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/SnuffyTheme" />
+            android:screenOrientation="userPortrait"/>
         <activity
             android:name=".snuffy.SnuffyPageMenuActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
+            android:screenOrientation="userPortrait"
             android:theme="@android:style/Theme.Light" />
 
         <activity
             android:name=".snuffy.SnuffyHelpActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
+            android:screenOrientation="userPortrait"
             android:theme="@android:style/Theme.Dialog" />
 
         <activity
             android:name=".SnuffyPWActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="userPortrait"
+            android:theme="@style/Theme.GodTools.TransparentActionBar"/>
         <activity
             android:name=".SnuffyPageMenuPWActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
+            android:screenOrientation="userPortrait"
             android:theme="@android:style/Theme.Light" />
 
         <receiver android:name=".notifications.GcmBroadcastReceiver"
@@ -138,9 +130,6 @@
             android:value="4c6c9eb55214633c5eca4176c06b20bb8fd07a72" />
     </application>
 
-    <uses-sdk
-        android:minSdkVersion="10"
-        android:targetSdkVersion="22" />
     <supports-screens
         android:smallScreens="false"
         android:resizeable="false" />

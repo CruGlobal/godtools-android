@@ -96,20 +96,17 @@ public class GTLanguage implements Serializable {
 
     public static GTLanguage getLanguage(Context context, String languageCode) {
         DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
         return adapter.getGTLanguage(languageCode);
     }
 
     public static List<GTLanguage> getAll(Context context) {
         DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
 
         return adapter.getAllLanguages();
     }
 
     public void addToDatabase(Context context) {
         DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
 
         GTLanguage dbLanguage = adapter.getGTLanguage(languageCode);
         if (dbLanguage == null)
@@ -125,7 +122,6 @@ public class GTLanguage implements Serializable {
 
     public void update(Context context) {
         DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.open();
         adapter.updateGTLanguage(this);
     }
 

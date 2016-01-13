@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><page bigbuttons="2" color="#D95E00" watermark="7332eeca6be3275ed2ef9340c3dab5816f8b88e7.png">
+  <title mode="straight">
+    <heading gtapi-trx-id="f65b2688-f83a-4121-8c82-57f9e889586b" size="90" textalign="center" translate="true">THESE TWO CIRCLES REPRESENT TWO KINDS OF LIVES.</heading>
+  </title>
+  <button mode="big">
+    <image align="center">8dff16a77091e837820716028c231e6a9b2f3a6d.png</image>
+    <buttontext gtapi-trx-id="01d03eb0-56f2-488e-abb2-c688cea52cf1" size="90" translate="true">Self-Directed Life</buttontext>
+    <panel>
+      <text gtapi-trx-id="b5c91ec7-6c1b-4090-83fb-ac1e07590101" size="78" textalign="center" translate="true" w="265">s - Self is on the throne.</text>
+      <text gtapi-trx-id="001f5c24-aabd-483b-ab6c-b9e064a09375" size="78" textalign="center" translate="true" w="265">† - Christ is outside the life.</text>
+      <text gtapi-trx-id="8906846a-09d9-4cd3-83fd-879d59e20b62" size="78" textalign="center" translate="true" w="265">o - Interests are directed by self, often resulting in discord and frustration.</text>
+    </panel>
+  </button>
+  <button mode="big">
+    <image align="center">6dbf6a594b79742c6282f45e1853df6525362524.png</image>
+    <buttontext gtapi-trx-id="f4d5bc34-ad41-415b-af49-0e1a8d9529e1" size="90" translate="true">Christ-Directed Life</buttontext>
+    <panel>
+      <text gtapi-trx-id="db583108-9103-4819-b351-8bffb74bba8c" size="78" textalign="center" translate="true" w="265">† - Christ is in the life and on the throne.</text>
+      <text gtapi-trx-id="24b57ef6-b963-4b44-ac98-4f1af8f82d55" size="78" textalign="center" translate="true" w="265">s - Self is yielding to Christ.</text>
+      <text gtapi-trx-id="f45a6a36-dd42-468a-9dbb-f704788a806d" size="78" textalign="center" translate="true" w="265">o - Interests are directed by Christ, resulting in harmony with God's plan.</text>
+      <image align="center" h="2" w="260">abee0a62e8f904a4ad019cbb0b93cfc0cca44c35.png</image>
+      <text gtapi-trx-id="f5322d88-80e2-4da9-8ae3-6af2f464a30d" modifier="italics" textalign="center" translate="true" w="260">Which circle best represents your life?</text>
+      <text gtapi-trx-id="8b7f7645-fb10-4e50-8986-cd88503d2e67" modifier="italics" textalign="center" translate="true" w="260">Which circle would you like to have represent your life?</text>
+    </panel>
+  </button>
+  <question gtapi-trx-id="c0775670-8920-4b66-8cc9-c4a6bc87656d" mode="straight" size="96" translate="true">The following explains how you can receive Christ ...</question>
+</page>

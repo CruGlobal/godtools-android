@@ -4,11 +4,11 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
 
+import org.ccci.gto.android.common.util.IOUtils;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
-import org.keynote.godtools.android.utils.IOUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;

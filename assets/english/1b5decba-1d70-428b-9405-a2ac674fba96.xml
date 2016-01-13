@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><page color="#00759A" watermark="7332eeca6be3275ed2ef9340c3dab5816f8b88e7.png">
+  <title>
+    <number>1</number>
+    <heading gtapi-trx-id="abdb2fc7-049c-4c24-9853-1ad59ac55e64" size="110" translate="true">GOD LOVES YOU AND OFFERS A WONDERFUL PLAN FOR YOUR LIFE.</heading>
+  </title>
+  <button>
+    <buttontext gtapi-trx-id="af82e3fd-b785-4363-9349-21a3e9f63645" translate="true">God's Love</buttontext>
+    <panel>
+      <text gtapi-trx-id="8602c78c-1795-4857-9195-026f69badf19" translate="true">"For God so loved the world that He gave His one and only Son, that whoever believes in Him shall not perish but have eternal life."</text>
+      <text gtapi-trx-id="1148c3e0-879f-4ba3-96a8-d4b48adf64b0" size="80" textalign="right" translate="true">(John 3:16, NIV)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="f2abcea4-074e-4b1a-9c80-651adab20f1b" translate="true">God's Plan</buttontext>
+    <panel>
+      <text gtapi-trx-id="01278aca-0fc9-4bb4-bb50-a387d3b0fd21" size="97" translate="true">[Christ speaking] "I came that they might have life, and might have it abundantly" [that it might be full and meaningful].</text>
+      <text gtapi-trx-id="681e6951-6be7-4956-ad03-b499d8415575" size="80" textalign="right" translate="true">(John 10:10)</text>
+    </panel>
+  </button>
+  <question gtapi-trx-id="19d44e41-72ca-48f2-acad-c68b383a86e0" size="96" translate="true">Why is it that most people 
+are not experiencing the 
+abundant life?  Because...</question>
+</page>

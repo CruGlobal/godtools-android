@@ -29,8 +29,6 @@ public class UpdatePackageListTask
     {
         Log.i(TAG, "List Size: " + languageList.size());
 
-        adapter.open();
-
         for (GTLanguage languageFromMetaDownload : languageList)
         {
             // check if language is already in the db
