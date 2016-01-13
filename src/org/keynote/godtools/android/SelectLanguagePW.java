@@ -422,12 +422,9 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
     private void updateDownloadedStatus(String langCode, boolean downloaded)
     {
-        if (downloaded)
-        {
-            GTLanguage languageRetrievedFromDatabase = GTLanguage.getLanguage(app.getApplicationContext(), langCode);
-            languageRetrievedFromDatabase.setDownloaded(true);
-            languageRetrievedFromDatabase.update(app.getApplicationContext());
-        }
+        GTLanguage languageRetrievedFromDatabase = GTLanguage.getLanguage(app.getApplicationContext(), langCode);
+        languageRetrievedFromDatabase.setDownloaded(downloaded);
+        languageRetrievedFromDatabase.update(app.getApplicationContext());
 
         for (GTLanguage languageFromDisplayedLanguageList : languageList)
         {
