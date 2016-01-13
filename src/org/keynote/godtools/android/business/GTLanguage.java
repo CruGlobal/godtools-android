@@ -29,12 +29,8 @@ public class GTLanguage implements Serializable {
         this.languageCode = languageCode;
 
 
-        Locale locale = new Locale(languageCode);
+        Locale locale = LocaleCompat.forLanguageTag(languageCode);
         String name = locale.getDisplayName();
-
-        //for some reason not all codes seem to work across all phones
-        if ("am-et".equals(locale.getDisplayName())) name = "amharic";
-        if ("mn-mn".equals(locale.getDisplayName())) name = "mongolian";
 
         this.languageName = Character.toUpperCase(name.charAt(0)) + name.substring(1);
     }
