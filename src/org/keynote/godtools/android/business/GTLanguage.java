@@ -99,6 +99,10 @@ public class GTLanguage implements Serializable {
         return adapter.getAllLanguages();
     }
 
+    /**
+     * Gets all languages where the name is translated to the locale that is passed in
+     * via @param locale.
+     */
     public static List<GTLanguage> getAll(Context context, Locale locale) {
         DBAdapter adapter = DBAdapter.getInstance(context);
 
