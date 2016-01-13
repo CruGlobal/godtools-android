@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
@@ -60,7 +61,6 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     private boolean downloadOnly;
     private int index;
     private int top;
-
 
     private SnuffyApplication app;
 
@@ -133,7 +133,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
      */
     private void prepareLanguageList()
     {
-        languageList = GTLanguage.getAll(this);
+        languageList = GTLanguage.getAll(this, Locale.getDefault());
 
         if (!isTranslator)
         {
@@ -389,7 +389,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 setResult(RESULT_CHANGED_PRIMARY, returnIntent);
                 primaryLanguage = langCode;
                 currentLanguage = langCode;
-                app.setAppLocale(langCode);
+
                 storeLanguageCodeInSettings(GTLanguage.KEY_PRIMARY, langCode);
             }
             else
@@ -431,7 +431,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         {
             setResult(RESULT_CHANGED_PRIMARY, returnIntent);
             primaryLanguage = langCode;
-            app.setAppLocale(langCode);
+
             storeLanguageCodeInSettings(GTLanguage.KEY_PRIMARY, langCode);
             applyLanguageListToListView();
         }

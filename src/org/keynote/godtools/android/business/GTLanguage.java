@@ -2,6 +2,8 @@ package org.keynote.godtools.android.business;
 
 import android.content.Context;
 
+import org.apache.commons.lang3.text.WordUtils;
+import org.ccci.gto.android.common.util.LocaleCompat;
 import org.keynote.godtools.android.dao.DBAdapter;
 
 import java.io.Serializable;
@@ -26,16 +28,8 @@ public class GTLanguage implements Serializable {
     public GTLanguage(String languageCode)
     {
         this.languageCode = languageCode;
-
-
-        Locale locale = new Locale(languageCode);
-        String name = locale.getDisplayName();
-
-        //for some reason not all codes seem to work across all phones
-        if ("am-et".equals(locale.getDisplayName())) name = "amharic";
-        if ("mn-mn".equals(locale.getDisplayName())) name = "mongolian";
-
-        this.languageName = Character.toUpperCase(name.charAt(0)) + name.substring(1);
+        this.languageName = WordUtils.capitalize(
+                LocaleCompat.forLanguageTag(languageCode).getDisplayName());
     }
 
     public GTLanguage(String languageCode, String languageName) {
@@ -103,6 +97,23 @@ public class GTLanguage implements Serializable {
         DBAdapter adapter = DBAdapter.getInstance(context);
 
         return adapter.getAllLanguages();
+    }
+
+    /**
+     * Gets all languages where the name is translated to the locale that is passed in
+     * via @param locale.
+     */
+    public static List<GTLanguage> getAll(Context context, Locale locale) {
+        DBAdapter adapter = DBAdapter.getInstance(context);
+
+        List<GTLanguage> allLanguages = adapter.getAllLanguages();
+
+        for(GTLanguage language : allLanguages)
+        {
+            String displayName = LocaleCompat.forLanguageTag(language.getLanguageCode()).getDisplayName(locale);
+            language.setLanguageName(WordUtils.capitalize(displayName));
+        }
+        return allLanguages;
     }
 
     public void addToDatabase(Context context) {

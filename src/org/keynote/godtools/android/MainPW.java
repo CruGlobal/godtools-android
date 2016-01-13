@@ -262,15 +262,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
                     if (Type.ENABLE_TRANSLATOR.equals(type))
                     {
-                        // refresh the list
-                        String primaryCode = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
-
-                        if (!languagePrimary.equalsIgnoreCase(primaryCode))
-                        {
-                            SnuffyApplication app = (SnuffyApplication) getApplication();
-                            app.setAppLocale(primaryCode);
-                        }
-
                         Toast.makeText(MainPW.this, getString(R.string.translator_enabled), Toast.LENGTH_LONG).show();
 
                         finish();
@@ -328,9 +319,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             case RESULT_CHANGED_PARALLEL:
             {
                 final String currentLanguage = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
-
-                SnuffyApplication app = (SnuffyApplication) getApplication();
-                app.setAppLocale(currentLanguage);
 
                 EventTracker.track(getApp(), "HomeScreen", currentLanguage);
 
@@ -493,8 +481,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     {
         if (tag.equalsIgnoreCase(KEY_PRIMARY))
         {
-            getApp().setAppLocale(langCode);
-
             GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
             gtl.setDownloaded(true);
             gtl.update(MainPW.this);
