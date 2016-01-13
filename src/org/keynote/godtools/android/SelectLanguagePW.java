@@ -376,7 +376,8 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             }
             catch(IllegalStateException e)
             {
-                Toast.makeText(getApplicationContext(), "At least one language must be downloaded", Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(), "At least one language must be downloaded", Toast.LENGTH_SHORT)
+                        .show();
                 return;
             }
 
