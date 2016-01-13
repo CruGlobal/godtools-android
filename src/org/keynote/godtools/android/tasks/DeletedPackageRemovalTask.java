@@ -118,15 +118,16 @@ public class DeletedPackageRemovalTask implements Runnable
                 filenameSet.add(filenameAttribute.getNodeValue());
 
             }
-//            NodeList aboutNodeList = root.getElementsByTagName("about");
-//
-//            for(int i = 0; i < aboutNodeList.getLength(); i++)
-//            {
-//                Node pageNode = pagesNodeList.item(i);
-//                Node filenameAttribute = pageNode.getAttributes().getNamedItem("filename");
-//
-//                filenameSet.add(filenameAttribute.getNodeValue());
-//            }
+
+            NodeList aboutNodeList = root.getElementsByTagName("about");
+
+            for(int i = 0; i < aboutNodeList.getLength(); i++)
+            {
+                Node pageNode = pagesNodeList.item(i);
+                Node filenameAttribute = pageNode.getAttributes().getNamedItem("filename");
+
+                filenameSet.add(filenameAttribute.getNodeValue());
+            }
         }
         catch (SAXException e)
         {
