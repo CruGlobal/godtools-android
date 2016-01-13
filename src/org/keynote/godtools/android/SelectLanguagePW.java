@@ -42,6 +42,7 @@ import java.util.Locale;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.LANGUAGE_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
@@ -370,15 +371,19 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         {
             Log.i(TAG, "Delete");
 
-            try
+            if(language.getLanguageCode().equalsIgnoreCase(primaryLanguage))
             {
-                ensureAtLeastOneLanguageIsDownloaded();
-            }
-            catch(IllegalStateException e)
-            {
-                Toast.makeText(getApplicationContext(), "At least one language must be downloaded", Toast.LENGTH_SHORT)
+                Toast.makeText(getApplicationContext(), R.string.language_delete_primary, Toast.LENGTH_SHORT)
                         .show();
                 return;
+            }
+
+            if(language.getLanguageCode().equalsIgnoreCase(parallelLanguage))
+            {
+                setResult(RESULT_CHANGED_PARALLEL, returnIntent);
+                parallelLanguage = language.getLanguageCode();
+                currentLanguage = language.getLanguageCode();
+                storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, language.getLanguageCode());
             }
 
             AsyncTaskCompat.execute(new DeletedPackageRemovalTask(language,
@@ -388,19 +393,6 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
             applyLanguageListToListView();
         }
-    }
-
-    private void ensureAtLeastOneLanguageIsDownloaded()
-    {
-        int downloadedCount = 0;
-
-        for(GTLanguage language : languageList)
-        {
-            if(language.isDownloaded()) downloadedCount++;
-            if(downloadedCount > 1) break;
-        }
-
-        if(downloadedCount <= 1) throw new IllegalStateException();
     }
 
     @Override
