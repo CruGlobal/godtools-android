@@ -386,8 +386,11 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, null);
             }
 
-            AsyncTaskCompat.execute(new DeletedPackageRemovalTask(language,
-                    (SnuffyApplication) getApplication()));
+            if(!"en".equalsIgnoreCase(language.getLanguageCode()))
+            {
+                AsyncTaskCompat.execute(new DeletedPackageRemovalTask(language,
+                        (SnuffyApplication) getApplication()));
+            }
 
             updateDownloadedStatus(language.getLanguageCode(), false);
 
