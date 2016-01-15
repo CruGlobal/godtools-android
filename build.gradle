@@ -41,6 +41,10 @@ android {
     // XXX: we need to remove usage of the Apache HttpClient
     useLibrary 'org.apache.http.legacy'
 
+    lintOptions {
+        warning 'MissingTranslation'
+    }
+    
     defaultConfig {
         applicationId 'org.keynote.godtools.android'
 
