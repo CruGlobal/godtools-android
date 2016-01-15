@@ -408,15 +408,11 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         if (userIsSelectingPrimaryLanguage)
         {
             setResult(RESULT_CHANGED_PRIMARY, returnIntent);
-            primaryLanguage = langCode;
-            currentLanguage = langCode;
             storeLanguageCodeInSettings(GTLanguage.KEY_PRIMARY, langCode);
         }
         else
         {
             setResult(RESULT_CHANGED_PARALLEL, returnIntent);
-            parallelLanguage = langCode;
-            currentLanguage = langCode;
             storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, langCode);
         }
 
