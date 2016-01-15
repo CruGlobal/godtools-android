@@ -116,6 +116,8 @@ public class DBAdapter extends AbstractDao {
 
     public void deletePackages(String language, String status)
     {
+        if("en".equalsIgnoreCase(language)) return;
+
         String selection = String.format("%s = '%s' AND %s = '%s'",
                 DBContract.GTPackageTable.COL_LANGUAGE, language,
                 DBContract.GTPackageTable.COL_STATUS, status);

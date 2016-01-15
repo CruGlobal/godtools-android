@@ -219,20 +219,7 @@ public class SettingsPW extends BaseActionBarActivity implements
                 String primaryName = WordUtils.capitalize(localePrimary.getDisplayName(mDeviceLocale));
                 tvMainLanguage.setText(primaryName);
 
-                // set value for parallel language view
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-                String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
-
-                if (Strings.isNullOrEmpty(parallelLanguageCode))
-                {
-                    tvParallelLanguage.setText(getString(R.string.none));
-                }
-                else
-                {
-                    Locale localeParallel = LocaleCompat.forLanguageTag(parallelLanguageCode);
-                    String parallelName = WordUtils.capitalize(localeParallel.getDisplayName(mDeviceLocale));
-                    tvParallelLanguage.setText(parallelName);
-                }
+                setParallelLanguageField(null);
 
                 EventTracker.track(getApp(), "Settings", "Language Change",
                         "Change Primary Language");
@@ -240,11 +227,7 @@ public class SettingsPW extends BaseActionBarActivity implements
             }
             case RESULT_CHANGED_PARALLEL:
             {
-
-                // set value for parallel language view
-                String languageParallel = data.getStringExtra("parallelCode");
-                Locale localeParallel = LocaleCompat.forLanguageTag(languageParallel);
-                tvParallelLanguage.setText(WordUtils.capitalize(localeParallel.getDisplayName(mDeviceLocale)));
+                setParallelLanguageField(data.getStringExtra("parallelCode"));
 
                 EventTracker.track(getApp(), "Settings",
                         "Language Change", "Change Parallel Language");
@@ -255,6 +238,20 @@ public class SettingsPW extends BaseActionBarActivity implements
                 break;
         }
 
+    }
+
+    private void setParallelLanguageField(String languageCode)
+    {
+        if (Strings.isNullOrEmpty(languageCode))
+        {
+            tvParallelLanguage.setText(getString(R.string.none));
+        }
+        else
+        {
+            Locale localeParallel = LocaleCompat.forLanguageTag(languageCode);
+            String parallelName = WordUtils.capitalize(localeParallel.getDisplayName(mDeviceLocale));
+            tvParallelLanguage.setText(parallelName);
+        }
     }
 
     @Override

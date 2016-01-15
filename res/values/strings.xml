@@ -140,6 +140,7 @@
     <string name="status_downloading_resources">Downloading Resources...</string>
     <string name="language_alert_title">Language Settings</string>
     <string name="language_alert_body">Would you like to make {{language_name}} the default language?</string>
+    <string name="language_delete_primary">Current primary language cannot be deleted</string>
     <string name="draft_refresh_message">Refreshing draft...</string>
     <string name="draft_refresh_error">Refresh failure</string>
     <string name="everystudent_title">Topics</string>

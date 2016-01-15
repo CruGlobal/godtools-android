@@ -20,11 +20,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.ccci.gto.android.common.util.AsyncTaskCompat;
 import org.keynote.godtools.android.business.GTLanguage;
-import org.keynote.godtools.android.dao.DBAdapter;
+
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
+import org.keynote.godtools.android.tasks.DeletedPackageRemovalTask;
+
 import org.keynote.godtools.android.utils.Device;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
@@ -39,6 +42,7 @@ import java.util.Locale;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.LANGUAGE_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
@@ -58,7 +62,6 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     private String languageType;
     private Intent returnIntent;
     private boolean userIsSelectingPrimaryLanguage;
-    private boolean downloadOnly;
     private int index;
     private int top;
 
@@ -228,17 +231,11 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
                 setResult(RESULT_CHANGED_PRIMARY, returnIntent);
 
-                // this is set so that the view state is updated to reflect that the user just chose the selected language as primary language
-                // (applies the checkmark when the view is rendered)
-                primaryLanguage = selectedLanguage.getLanguageCode();
-                currentLanguage = selectedLanguage.getLanguageCode();
-
-                applyLanguageListToListView();
+                finish();
             }
             else
             {
                 Log.i(TAG, "Download: " + selectedLanguage.getLanguageName());
-                downloadOnly = false;
 
                 currentView = (LanguageAdapter.ViewHolder) view.getTag();
                 currentView.tvDownload.setText(R.string.downloading);
@@ -272,18 +269,12 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
                 setResult(RESULT_CHANGED_PARALLEL, returnIntent);
 
-                // this is set so that the view state is updated to reflect that the user just chose the selected language as primary language
-                // (applies the checkmark when the view is rendered)
-                parallelLanguage = selectedLanguage.getLanguageCode();
-                currentLanguage = selectedLanguage.getLanguageCode();
-
-                applyLanguageListToListView();
+                finish();
             }
             // download and set as parallel
             else
             {
                 Log.i(TAG, "Download: " + selectedLanguage.getLanguageName());
-                downloadOnly = false;
 
                 currentView = (LanguageAdapter.ViewHolder) view.getTag();
                 currentView.tvDownload.setText(R.string.downloading);
@@ -352,12 +343,23 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             return;
         }
 
-        currentView.pbDownloading.setVisibility(View.VISIBLE);
-        downloadOnly = true;
-
         if (!language.isDownloaded())
         {
             Log.i(TAG, "Download");
+
+            currentView.pbDownloading.setVisibility(View.VISIBLE);
+
+            returnIntent = new Intent();
+
+            if(userIsSelectingPrimaryLanguage)
+            {
+                returnIntent.putExtra("primaryCode", language.getLanguageCode());
+            }
+            else
+            {
+                returnIntent.putExtra("parallelCode", language.getLanguageCode());
+            }
+
             currentView.tvDownload.setText(R.string.downloading);
 
             GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
@@ -368,9 +370,30 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         else
         {
             Log.i(TAG, "Delete");
+
+            if(language.getLanguageCode().equalsIgnoreCase(primaryLanguage))
+            {
+                Toast.makeText(getApplicationContext(), R.string.language_delete_primary, Toast.LENGTH_SHORT)
+                        .show();
+                return;
+            }
+
+            if(language.getLanguageCode().equalsIgnoreCase(parallelLanguage))
+            {
+                returnIntent = new Intent();
+                setResult(RESULT_CHANGED_PARALLEL, returnIntent);
+                parallelLanguage = null;
+                storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, null);
+            }
+
+            if(!"en".equalsIgnoreCase(language.getLanguageCode()))
+            {
+                AsyncTaskCompat.execute(new DeletedPackageRemovalTask(language,
+                        (SnuffyApplication) getApplication()));
+            }
+
             updateDownloadedStatus(language.getLanguageCode(), false);
-            DBAdapter adapter = DBAdapter.getInstance(this);
-            adapter.deletePackages(language.getLanguageCode(), "live");
+
             applyLanguageListToListView();
         }
     }
@@ -382,36 +405,25 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
         updateDownloadedStatus(langCode, true);
 
-        if (!downloadOnly)
+        if (userIsSelectingPrimaryLanguage)
         {
-            if (userIsSelectingPrimaryLanguage)
-            {
-                setResult(RESULT_CHANGED_PRIMARY, returnIntent);
-                primaryLanguage = langCode;
-                currentLanguage = langCode;
-
-                storeLanguageCodeInSettings(GTLanguage.KEY_PRIMARY, langCode);
-            }
-            else
-            {
-                setResult(RESULT_CHANGED_PARALLEL, returnIntent);
-                parallelLanguage = langCode;
-                currentLanguage = langCode;
-                storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, langCode);
-            }
+            setResult(RESULT_CHANGED_PRIMARY, returnIntent);
+            storeLanguageCodeInSettings(GTLanguage.KEY_PRIMARY, langCode);
+        }
+        else
+        {
+            setResult(RESULT_CHANGED_PARALLEL, returnIntent);
+            storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, langCode);
         }
 
-        applyLanguageListToListView();
+        finish();
     }
 
     private void updateDownloadedStatus(String langCode, boolean downloaded)
     {
-        if (downloaded)
-        {
-            GTLanguage languageRetrievedFromDatabase = GTLanguage.getLanguage(app.getApplicationContext(), langCode);
-            languageRetrievedFromDatabase.setDownloaded(true);
-            languageRetrievedFromDatabase.update(app.getApplicationContext());
-        }
+        GTLanguage languageRetrievedFromDatabase = GTLanguage.getLanguage(app.getApplicationContext(), langCode);
+        languageRetrievedFromDatabase.setDownloaded(downloaded);
+        languageRetrievedFromDatabase.update(app.getApplicationContext());
 
         for (GTLanguage languageFromDisplayedLanguageList : languageList)
         {
