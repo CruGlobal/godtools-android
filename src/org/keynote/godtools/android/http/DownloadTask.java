@@ -85,14 +85,14 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
             DBAdapter adapter = DBAdapter.getInstance(mContext);
 
-            // delete packages
+            // delete draft packages before storing download
             if (tag.contains("draft")) {
-                adapter.deletePackages(langCode, "draft");
+                adapter.delete(GTPackage.class, GTPackage.SQL_WHERE_DRAFT_BY_LANGUAGE.args(langCode));
             }
 
             // save the parsed packages to database
             for (GTPackage gtp : packageList) {
-                adapter.upsertGTPackage(gtp);
+                adapter.updateOrInsert(gtp);
             }
 
             // delete package.zip and contents.xml
