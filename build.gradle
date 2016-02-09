@@ -24,8 +24,8 @@ dependencies {
     //noinspection GradleDependency
     compile 'com.google.android.gms:play-services:4.3.23'
 
-    compile 'org.ccci.gto.android:gto-support-core:0.7.2'
-    compile 'org.ccci.gto.android:gto-support-db:0.7.2'
+    compile 'org.ccci.gto.android:gto-support-core:0.8.0-SNAPSHOT'
+    compile 'org.ccci.gto.android:gto-support-db:0.8.0-SNAPSHOT'
 
     compile 'com.crashlytics.sdk.android:crashlytics:2.5.5'
     compile 'com.google.guava:guava:18.0'
