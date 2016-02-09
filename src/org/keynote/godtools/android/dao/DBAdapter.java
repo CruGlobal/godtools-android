@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.db.AbstractDao;
+import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Mapper;
 import org.ccci.gto.android.common.db.Query;
 import org.keynote.godtools.android.business.GTLanguage;
@@ -63,6 +64,32 @@ public class DBAdapter extends AbstractDao {
         }
 
         return super.getMapper(clazz);
+    }
+
+    @NonNull
+    @Override
+    protected Expression getPrimaryKeyWhere(@NonNull final Class<?> clazz) {
+        try {
+            if (GTPackage.class.equals(clazz)) {
+                return DBContract.GTPackageTable.SQL_WHERE_PRIMARY_KEY;
+            }
+        } catch (final RuntimeException e) {
+            throw new RuntimeException("Unable to find primary key where expression for " + clazz, e);
+        }
+
+        return super.getPrimaryKeyWhere(clazz);
+    }
+
+    @NonNull
+    @Override
+    protected Expression getPrimaryKeyWhere(@NonNull final Object obj) {
+        if (obj instanceof GTPackage) {
+            final GTPackage gtPackage = (GTPackage) obj;
+            return getPrimaryKeyWhere(GTPackage.class, gtPackage.getLanguage(), gtPackage.getStatus(),
+                                      gtPackage.getCode());
+        }
+
+        return super.getPrimaryKeyWhere(obj);
     }
 
     public long insertGTLanguage(GTLanguage gtLanguage)
