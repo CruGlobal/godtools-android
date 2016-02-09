@@ -48,7 +48,7 @@ public class UpdatePackageListTask
             for (GTPackage packageFromMetaDownload : languageFromMetaDownload.getPackages())
             {
                 // check if a new package is available for download or an existing package has been updated
-                GTPackage packageRetrievedFromDatabase = adapter.getGTPackage(packageFromMetaDownload.getCode(), packageFromMetaDownload.getLanguage(), packageFromMetaDownload.getStatus());
+                final GTPackage packageRetrievedFromDatabase = adapter.refresh(packageFromMetaDownload);
                 if (packageRetrievedFromDatabase == null || newerVersionExists(packageFromMetaDownload.getVersion(), packageRetrievedFromDatabase.getVersion()))
                 {
                     languageRetrievedFromDatabase.setDownloaded(false);
