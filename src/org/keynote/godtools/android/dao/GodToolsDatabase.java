@@ -55,7 +55,7 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
         try {
             db.beginTransaction();
 
-            db.execSQL(DBContract.GTPackageTable.SQL_CREATE_GTPACKAGES);
+            db.execSQL(DBContract.GTPackageTable.SQL_CREATE_TABLE);
             db.execSQL(DBContract.GTLanguageTable.SQL_CREATE_GTLANGUAGES);
 
             db.setTransactionSuccessful();
@@ -76,7 +76,7 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
                         db.execSQL(DBContract.GTLanguageTable.SQL_RENAME_GTLANGUAGES);
 
                         // create tables
-                        db.execSQL(DBContract.GTPackageTable.SQL_CREATE_GTPACKAGES);
+                        db.execSQL(DBContract.GTPackageTable.SQL_CREATE_TABLE);
                         db.execSQL(DBContract.GTLanguageTable.SQL_CREATE_GTLANGUAGES);
 
                         // copy old data to new table
