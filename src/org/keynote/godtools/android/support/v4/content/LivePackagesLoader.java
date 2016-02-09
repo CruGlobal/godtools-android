@@ -33,7 +33,7 @@ public class LivePackagesLoader extends AsyncTaskSharedPreferencesChangeLoader<L
     // ORDER BY
     //   CASE code WHEN 'everystudent' THEN 1 ELSE 0 END, # ORDER 'everystudent' last
     //   name                                             # and rest by name
-    private static final Query<GTPackage> BASE_QUERY = Query.select(GTPackage.class)
+    private static final Query<GTPackage> BASE_QUERY = Query.select(GTPackage.class).distinct(true)
             .orderBy("CASE " + COL_CODE + " WHEN 'everystudent' THEN 1 ELSE 0 END, " + COL_NAME);
     private static final Expression BASE_WHERE = FIELD_LANGUAGE.eq(bind()).and(FIELD_STATUS.eq(constant("live")));
 
