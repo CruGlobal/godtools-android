@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.crashlytics.android.Crashlytics;
 
 import org.keynote.godtools.android.business.GTPackage;
+import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
@@ -141,7 +142,9 @@ public class SnuffyPWActivity extends AppCompatActivity
         if (!langParallel.isEmpty())
         {
             isParallelLanguageSet = true;
-            mParallelPackage = GTPackage.getPackage(this, mAppPackage, langParallel, "live");
+            //noinspection WrongThread
+            mParallelPackage =
+                    DBAdapter.getInstance(this).find(GTPackage.class, langParallel, GTPackage.STATUS_LIVE, mAppPackage);
         }
 
         if (mParallelPackage != null)
