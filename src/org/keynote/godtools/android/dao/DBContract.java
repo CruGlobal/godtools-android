@@ -26,12 +26,12 @@ public class DBContract {
         public static final String TABLE_NAME = "gtpackages";
         public static final Table<GTPackage> TABLE = Table.forClass(GTPackage.class);
 
+        public static final String COL_LANGUAGE = "language";
+        public static final String COL_STATUS = "status";
         public static final String COL_CODE = "code";
         public static final String COL_NAME = "name";
-        public static final String COL_LANGUAGE = "language";
         public static final String COL_VERSION = "version";
         public static final String COL_CONFIG_FILE_NAME = "config_file_name";
-        public static final String COL_STATUS = "status";
         public static final String COL_ICON = "icon";
 
         public static final Field FIELD_CODE = field(TABLE, COL_CODE);
@@ -39,35 +39,42 @@ public class DBContract {
         public static final Field FIELD_STATUS = field(TABLE, COL_STATUS);
 
         public static final String[] PROJECTION_ALL =
-                {COL_CODE, COL_NAME, COL_LANGUAGE, COL_CONFIG_FILE_NAME, COL_ICON, COL_STATUS, COL_VERSION};
+                {COL_LANGUAGE, COL_STATUS, COL_CODE, COL_NAME, COL_CONFIG_FILE_NAME, COL_ICON, COL_VERSION};
 
-        private static final String SQL_COLUMN_CODE = COL_CODE + TEXT_TYPE;
+        private static final String SQL_COLUMN_LANGUAGE = COL_LANGUAGE + " TEXT NOT NULL DEFAULT ''";
+        private static final String SQL_COLUMN_STATUS = COL_STATUS + " TEXT NOT NULL DEFAULT ''";
+        private static final String SQL_COLUMN_CODE = COL_CODE + " TEXT NOT NULL DEFAULT ''";
         private static final String SQL_COLUMN_NAME = COL_NAME + TEXT_TYPE;
-        private static final String SQL_COLUMN_LANGUAGE = COL_LANGUAGE + TEXT_TYPE;
         private static final String SQL_COLUMN_CONFIG_FILE_NAME = COL_CONFIG_FILE_NAME + TEXT_TYPE;
         private static final String SQL_COLUMN_ICON = COL_ICON + TEXT_TYPE;
-        private static final String SQL_COLUMN_STATUS = COL_STATUS + TEXT_TYPE;
         private static final String SQL_COLUMN_VERSION = COL_VERSION + DOUBLE_TYPE;
+        private static final String SQL_PRIMARY_KEY =
+                "UNIQUE(" + COL_LANGUAGE + "," + COL_STATUS + "," + COL_CODE + ")";
 
         public static final String SQL_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + TextUtils
                 .join(",", new String[] {SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_NAME, SQL_COLUMN_LANGUAGE,
+                        SQL_COLUMN_CONFIG_FILE_NAME, SQL_COLUMN_ICON, SQL_COLUMN_STATUS, SQL_COLUMN_VERSION,
+                        SQL_PRIMARY_KEY}) + ")";
+
+        public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+
+        // migration db updates
+        public static final String OLD_TABLE_NAME = "gtpackages_old";
+        @Deprecated
+        static final String SQL_V2_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + TextUtils
+                .join(",", new String[] {SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_NAME, SQL_COLUMN_LANGUAGE,
                         SQL_COLUMN_CONFIG_FILE_NAME, SQL_COLUMN_ICON, SQL_COLUMN_STATUS, SQL_COLUMN_VERSION}) + ")";
-
-        public static final String SQL_DELETE_GTPACKAGES = "DROP TABLE IF EXISTS "
-                + GTPackageTable.TABLE_NAME;
-
-        // although these methods are not being used they are here for consistancy between the two tables.
-        // They may also be used in future updates.
-
-        public static final String UPDATE_TABLE_NAME = "gtpackages_old";
-        public static final String SQL_DELETE_OLD_GTPACKAGES = "DROP TABLE IF EXISTS "
-                + GTPackageTable.UPDATE_TABLE_NAME;
-
-        public static final String SQL_RENAME_GTPACKAGES = "ALTER TABLE " + TABLE_NAME
-                + " RENAME TO " + UPDATE_TABLE_NAME;
-
-        public static final String SQL_COPY_GTPACKAGES = "INSERT INTO " + TABLE_NAME
-                + " SELECT * FROM " + UPDATE_TABLE_NAME;
+        @Deprecated
+        static final String SQL_V3_RENAME_TABLE = "ALTER TABLE " + TABLE_NAME + " RENAME TO " + OLD_TABLE_NAME;
+        @Deprecated
+        private static final String SQL_V3_MIGRATE_COLUMNS = TextUtils.join(",", new Object[] {COL_LANGUAGE, COL_STATUS,
+                COL_CODE, COL_NAME, COL_VERSION, COL_CONFIG_FILE_NAME, COL_ICON});
+        @Deprecated
+        static final String SQL_V3_MIGRATE_DATA =
+                "INSERT OR IGNORE INTO " + TABLE_NAME + " (" + SQL_V3_MIGRATE_COLUMNS + ") SELECT " +
+                        SQL_V3_MIGRATE_COLUMNS + " FROM " + OLD_TABLE_NAME;
+        @Deprecated
+        static final String SQL_V3_DELETE_OLD_TABLE = "DROP TABLE IF EXISTS " + OLD_TABLE_NAME;
     }
 
     public static abstract class GTLanguageTable implements BaseColumns
