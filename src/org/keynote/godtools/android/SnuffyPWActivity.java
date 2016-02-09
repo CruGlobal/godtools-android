@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v4.view.WindowCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -119,7 +121,7 @@ public class SnuffyPWActivity extends AppCompatActivity
         mConfigFileName = getIntent().getStringExtra("ConfigFileName");
         mPackageStatus = getIntent().getStringExtra("Status"); // live = draft
         mPageLeft = getIntent().getIntExtra("PageLeft", 0);
-        mPageTop = getIntent().getIntExtra("PageTop", 0);
+        mPageTop = actionBarHeight();
         mPageWidth = getIntent().getIntExtra("PageWidth", 320);         // set defaults but they will not be used
         mPageHeight = getIntent().getIntExtra("PageHeight", 480);       // caller will always determine these and pass them in
         Log.i("ScreenSize", "Left = " + mPageLeft + ", Top = " + mPageTop + ", Width = " + mPageWidth + ", Height = " + mPageHeight);
@@ -183,6 +185,16 @@ public class SnuffyPWActivity extends AppCompatActivity
 
 
         }
+    }
+
+    private int actionBarHeight()
+    {
+        final TypedArray styledAttributes = getApplicationContext().getTheme().obtainStyledAttributes(
+                new int[] { android.R.attr.actionBarSize });
+        final int actionBarSize = (int) styledAttributes.getDimension(0, 0);
+
+        styledAttributes.recycle();
+        return actionBarSize;
     }
 
     private void handleLanguagesWithAlternateFonts()
