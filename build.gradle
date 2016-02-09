@@ -14,7 +14,7 @@ apply plugin: 'io.fabric'
 
 apply from: 'versioning.gradle'
 
-version '4.1.6-SNAPSHOT'
+version '4.1.6'
 
 dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
