@@ -1,13 +1,9 @@
 package org.keynote.godtools.android.tasks;
 
-import static org.keynote.godtools.android.business.GTPackage.STATUS_LIVE;
-import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.FIELD_LANGUAGE;
-
 import android.util.Log;
 
 import com.google.common.collect.Sets;
 
-import org.ccci.gto.android.common.db.Query;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
@@ -50,16 +46,10 @@ public class DeletedPackageRemovalTask implements Runnable
     {
         DBAdapter dbAdapter = DBAdapter.getInstance(application.getApplicationContext());
 
-        final List<GTPackage> godToolsPackages = dbAdapter
-                .get(Query.select(GTPackage.class).where(FIELD_LANGUAGE.eq(godToolsLanguage.getLanguageCode())));
+        List<GTPackage> godToolsPackages = dbAdapter.getGTPackageByLanguage(godToolsLanguage.getLanguageCode());
 
         for(GTPackage godToolsPackage : godToolsPackages)
         {
-            // skip live english packages
-            if ("en".equals(godToolsPackage.getLanguage()) && STATUS_LIVE.equals(godToolsPackage.getStatus())) {
-                continue;
-            }
-
             try
             {
                 File configFile = new File(resourcesDirectory,godToolsPackage.getConfigFileName());
@@ -92,11 +82,11 @@ public class DeletedPackageRemovalTask implements Runnable
                                 godToolsLanguage.getLanguageCode(),
                                 godToolsPackage.getCode()),
                         e);
-            } finally {
-                // delete this package from the database now that we attempted deleting the raw files
-                dbAdapter.delete(godToolsPackage);
             }
         }
+
+        dbAdapter.deletePackages(godToolsLanguage.getLanguageCode(), "live");
+        dbAdapter.deletePackages(godToolsLanguage.getLanguageCode(), "draft");
     }
 
     private Set<String> extractPageFilenamesFromConfigXml(InputStream isMain)

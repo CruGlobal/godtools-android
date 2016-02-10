@@ -2,8 +2,8 @@ package org.keynote.godtools.android.support.v4.content;
 
 import static android.content.Context.MODE_PRIVATE;
 import static org.ccci.gto.android.common.db.Expression.bind;
+import static org.ccci.gto.android.common.db.Expression.constant;
 import static org.ccci.gto.android.common.db.Expression.constants;
-import static org.keynote.godtools.android.business.GTPackage.STATUS_LIVE;
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.COL_CODE;
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.COL_NAME;
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.FIELD_CODE;
@@ -33,9 +33,9 @@ public class LivePackagesLoader extends AsyncTaskSharedPreferencesChangeLoader<L
     // ORDER BY
     //   CASE code WHEN 'everystudent' THEN 1 ELSE 0 END, # ORDER 'everystudent' last
     //   name                                             # and rest by name
-    private static final Query<GTPackage> BASE_QUERY = Query.select(GTPackage.class)
+    private static final Query<GTPackage> BASE_QUERY = Query.select(GTPackage.class).distinct(true)
             .orderBy("CASE " + COL_CODE + " WHEN 'everystudent' THEN 1 ELSE 0 END, " + COL_NAME);
-    private static final Expression BASE_WHERE = FIELD_LANGUAGE.eq(bind()).and(FIELD_STATUS.eq(STATUS_LIVE));
+    private static final Expression BASE_WHERE = FIELD_LANGUAGE.eq(bind()).and(FIELD_STATUS.eq(constant("live")));
 
     public LivePackagesLoader(@NonNull final Context context) {
         super(context, context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE));
