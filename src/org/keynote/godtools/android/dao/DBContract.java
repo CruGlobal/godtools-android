@@ -62,14 +62,14 @@ public class DBContract {
                         SQL_PRIMARY_KEY}) + ")";
         public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
-        // migration db updates
+        // migration db queries
         public static final String OLD_TABLE_NAME = "gtpackages_old";
+        static final String SQL_RENAME_TABLE = "ALTER TABLE " + TABLE_NAME + " RENAME TO " + OLD_TABLE_NAME;
+        static final String SQL_DELETE_OLD_TABLE = "DROP TABLE IF EXISTS " + OLD_TABLE_NAME;
         @Deprecated
         static final String SQL_V2_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + TextUtils
                 .join(",", new String[] {SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_NAME, SQL_COLUMN_LANGUAGE,
                         SQL_COLUMN_CONFIG_FILE_NAME, SQL_COLUMN_ICON, SQL_COLUMN_STATUS, SQL_COLUMN_VERSION}) + ")";
-        @Deprecated
-        static final String SQL_V3_RENAME_TABLE = "ALTER TABLE " + TABLE_NAME + " RENAME TO " + OLD_TABLE_NAME;
         @Deprecated
         private static final String SQL_V3_MIGRATE_COLUMNS = TextUtils.join(",", new Object[] {COL_LANGUAGE, COL_STATUS,
                 COL_CODE, COL_NAME, COL_VERSION, COL_CONFIG_FILE_NAME, COL_ICON});
@@ -77,8 +77,6 @@ public class DBContract {
         static final String SQL_V3_MIGRATE_DATA =
                 "INSERT OR IGNORE INTO " + TABLE_NAME + " (" + SQL_V3_MIGRATE_COLUMNS + ") SELECT " +
                         SQL_V3_MIGRATE_COLUMNS + " FROM " + OLD_TABLE_NAME;
-        @Deprecated
-        static final String SQL_V3_DELETE_OLD_TABLE = "DROP TABLE IF EXISTS " + OLD_TABLE_NAME;
     }
 
     public static abstract class GTLanguageTable implements BaseColumns
