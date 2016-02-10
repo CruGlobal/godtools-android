@@ -88,7 +88,8 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
                         break;
                     case 3:
                         // rename old packages table
-                        db.execSQL(DBContract.GTPackageTable.SQL_V3_RENAME_TABLE);
+                        db.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_TABLE);
+                        db.execSQL(DBContract.GTPackageTable.SQL_RENAME_TABLE);
 
                         // create new table
                         db.execSQL(DBContract.GTPackageTable.SQL_CREATE_TABLE);
@@ -97,7 +98,7 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
                         db.execSQL(DBContract.GTPackageTable.SQL_V3_MIGRATE_DATA);
 
                         // delete old table
-                        db.execSQL(DBContract.GTPackageTable.SQL_V3_DELETE_OLD_TABLE);
+                        db.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_TABLE);
 
                         break;
                     default:
@@ -135,6 +136,7 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
 
             // delete any existing tables
             db.execSQL(DBContract.GTPackageTable.SQL_DELETE_TABLE);
+            db.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_TABLE);
             db.execSQL(DBContract.GTLanguageTable.SQL_DELETE_GTLANGUAGES);
             db.execSQL(DBContract.GTLanguageTable.SQL_DELETE_OLD_GTLANGUAGES);
 
