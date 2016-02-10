@@ -140,7 +140,7 @@ public class DBAdapter extends AbstractDao {
         Cursor cursor = getReadableDatabase()
                 .query(DBContract.GTLanguageTable.TABLE_NAME, projection, selection, null, null, null, null);
 
-        List<GTLanguage> listGTLanguages = new ArrayList<GTLanguage>();
+        List<GTLanguage> listGTLanguages = new ArrayList<>();
 
         Locale current = Locale.getDefault();
         Locale.setDefault(new Locale("en"));

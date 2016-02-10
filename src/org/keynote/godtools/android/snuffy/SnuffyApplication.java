@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -14,17 +12,12 @@ import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.Tracker;
 
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.business.GTLanguage;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.Locale;
 import java.util.Vector;
 
 import io.fabric.sdk.android.Fabric;
-
-import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
-import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 
 public class SnuffyApplication extends Application
 {
