@@ -311,7 +311,7 @@ public class SnuffyPWActivity extends AppCompatActivity
                 /** No instance of pager adapter yet, it's only created on completeSetUp()**/
                 //mPagerAdapter.notifyDataSetChanged();
 
-                mProcessPackageAsync = new ProcessPackageAsync();
+                mProcessPackageAsync = new ProcessPackageAsync(mPager.getMeasuredWidth(), mPager.getMeasuredHeight());
                 mProcessPackageAsync.execute("");
             }
         }, delay);  // delay can be required to make sure activity fully created - is there something we can test for that is better than a fixed timeout?
@@ -748,6 +748,13 @@ public class SnuffyPWActivity extends AppCompatActivity
             extends AsyncTask<String, Integer, Integer>
             implements PackageReader.ProgressCallback
     {
+        private final int mPageWidth;
+        private final int mPageHeight;
+
+        public ProcessPackageAsync(int width, int height) {
+            mPageWidth = width;
+            mPageHeight = height;
+        }
 
         @Override
         protected void onPreExecute()
