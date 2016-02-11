@@ -21,7 +21,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -83,10 +82,6 @@ public class SnuffyPWActivity extends AppCompatActivity
     private int mPagerCurrentItem;
     private MyPagerAdapter mPagerAdapter;
     private boolean mSetupRequired = true;
-    private int mPageLeft;
-    private int mPageTop;
-    private int mPageWidth;
-    private int mPageHeight;
     private String mPackageTitle;
     private String mPackageStatus;
     private ProcessPackageAsync mProcessPackageAsync;
@@ -126,11 +121,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         mAppLanguage = getIntent().getStringExtra("LanguageCode");      // "en"
         mConfigFileName = getIntent().getStringExtra("ConfigFileName");
         mPackageStatus = getIntent().getStringExtra("Status"); // live = draft
-        mPageLeft = getIntent().getIntExtra("PageLeft", 0);
-        mPageTop = actionBarHeightWithFallback();
-        mPageWidth = getIntent().getIntExtra("PageWidth", 320);         // set defaults but they will not be used
-        mPageHeight = getIntent().getIntExtra("PageHeight", 480);       // caller will always determine these and pass them in
-        Log.i("ScreenSize", "Left = " + mPageLeft + ", Top = " + mPageTop + ", Width = " + mPageWidth + ", Height = " + mPageHeight);
         getIntent().putExtra("AllowFlip", false);
 
         trackScreenActivity(mAppPackage + "-0");
@@ -199,19 +189,6 @@ public class SnuffyPWActivity extends AppCompatActivity
     }
 
     /* END lifecycle */
-
-    /*
-     * Falls back to the height passed in through the intent extra if no action bar is found.
-     */
-    private int actionBarHeightWithFallback()
-    {
-        final TypedArray styledAttributes = getApplicationContext().getTheme().obtainStyledAttributes(
-                new int[] { android.R.attr.actionBarSize });
-        final int actionBarSize = (int) styledAttributes.getDimension(0, 0);
-
-        styledAttributes.recycle();
-        return actionBarSize != 0 ? actionBarSize : getIntent().getIntExtra("PageTop", 0);
-    }
 
     private void handleLanguagesWithAlternateFonts()
     {
