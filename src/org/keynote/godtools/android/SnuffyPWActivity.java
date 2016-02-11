@@ -24,7 +24,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.widget.AbsoluteLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -312,8 +311,6 @@ public class SnuffyPWActivity extends AppCompatActivity
                 /** No instance of pager adapter yet, it's only created on completeSetUp()**/
                 //mPagerAdapter.notifyDataSetChanged();
 
-                resizeTheActivity();
-
                 mProcessPackageAsync = new ProcessPackageAsync();
                 mProcessPackageAsync.execute("");
             }
@@ -424,18 +421,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         ed.apply();
         
         
-    }
-
-    private void resizeTheActivity()
-    {
-        // Update layout to set the size we have decided to use instead of FILL_PARENT
-        View pager = findViewById(R.id.snuffyViewPager);
-        AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) pager.getLayoutParams();
-        lp.width = mPageWidth;
-        lp.height = mPageHeight;
-        lp.x = mPageLeft;
-        lp.y = mPageTop;
-        pager.setLayoutParams(lp);
     }
 
     private void addClickHandlersToAllPages()
