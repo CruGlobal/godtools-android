@@ -1,5 +1,20 @@
 package org.keynote.godtools.android;
 
+import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
+import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.COUNT;
+import static org.keynote.godtools.android.utils.Constants.CURRENT_LANG_CODE;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
+import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.LANGUAGE_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.PROPERTY_REG_ID;
+import static org.keynote.godtools.android.utils.Constants.SATISFIED;
+import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -49,20 +64,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
-import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
-import static org.keynote.godtools.android.utils.Constants.COUNT;
-import static org.keynote.godtools.android.utils.Constants.CURRENT_LANG_CODE;
-import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
-import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
-import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
-import static org.keynote.godtools.android.utils.Constants.KGP;
-import static org.keynote.godtools.android.utils.Constants.LANGUAGE_PARALLEL;
-import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
-import static org.keynote.godtools.android.utils.Constants.PROPERTY_REG_ID;
-import static org.keynote.godtools.android.utils.Constants.SATISFIED;
-import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
-import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 @SuppressWarnings("deprecation")
 public class SnuffyPWActivity extends AppCompatActivity
@@ -75,7 +78,8 @@ public class SnuffyPWActivity extends AppCompatActivity
     private Typeface mAlternateTypeface;
     private Vector<SnuffyPage> mPages = new Vector<SnuffyPage>(0);
     private SnuffyPage mAboutView;
-    private ViewPager mPager;
+    @Bind(R.id.snuffyViewPager)
+    ViewPager mPager;
     private int mPagerCurrentItem;
     private MyPagerAdapter mPagerAdapter;
     private boolean mSetupRequired = true;
@@ -106,11 +110,15 @@ public class SnuffyPWActivity extends AppCompatActivity
         return mAppLanguage;
     }
 
+    /* BEGIN lifecycle */
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.snuffy_main);
+        ButterKnife.bind(this);
 
         Log.i("Activity", "SnuffyPWActivity");
 
@@ -125,7 +133,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         Log.i("ScreenSize", "Left = " + mPageLeft + ", Top = " + mPageTop + ", Width = " + mPageWidth + ", Height = " + mPageHeight);
         getIntent().putExtra("AllowFlip", false);
 
-        setContentView(R.layout.snuffy_main);
         trackScreenActivity(mAppPackage + "-0");
 
         mConfigPrimary = mConfigFileName;
@@ -184,6 +191,14 @@ public class SnuffyPWActivity extends AppCompatActivity
 
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
+    }
+
+    /* END lifecycle */
 
     /*
      * Falls back to the height passed in through the intent extra if no action bar is found.
@@ -335,7 +350,6 @@ public class SnuffyPWActivity extends AppCompatActivity
 
         //mPagerAdapter.notifyDataSetChanged();
         mPagerAdapter = new MyPagerAdapter();
-        mPager = (ViewPager) findViewById(R.id.snuffyViewPager);
         mPager.setAdapter(mPagerAdapter);
 
 
