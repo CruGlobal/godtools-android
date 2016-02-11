@@ -18,7 +18,7 @@
     <!-- Default GodTools theme with a transparent ActionBar (used to get Action Overflow Button only) -->
     <style name="Theme.GodTools.TransparentActionBar">
         <item name="android:windowContentOverlay">@null</item>
-        <item name="windowActionBarOverlay">true</item>
+        <item name="windowActionBarOverlay">false</item>
         <item name="android:actionBarStyle">@style/Widget.GodTools.ActionBar.Transparent</item>
         <item name="actionBarStyle">@style/Widget.GodTools.ActionBar.Transparent</item>
     </style>

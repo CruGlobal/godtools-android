@@ -1,12 +1,26 @@
 package org.keynote.godtools.android;
 
+import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
+import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.COUNT;
+import static org.keynote.godtools.android.utils.Constants.CURRENT_LANG_CODE;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
+import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.LANGUAGE_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.PROPERTY_REG_ID;
+import static org.keynote.godtools.android.utils.Constants.SATISFIED;
+import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,7 +38,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.widget.AbsoluteLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,20 +64,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
-import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
-import static org.keynote.godtools.android.utils.Constants.COUNT;
-import static org.keynote.godtools.android.utils.Constants.CURRENT_LANG_CODE;
-import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
-import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
-import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
-import static org.keynote.godtools.android.utils.Constants.KGP;
-import static org.keynote.godtools.android.utils.Constants.LANGUAGE_PARALLEL;
-import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
-import static org.keynote.godtools.android.utils.Constants.PROPERTY_REG_ID;
-import static org.keynote.godtools.android.utils.Constants.SATISFIED;
-import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
-import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 @SuppressWarnings("deprecation")
 public class SnuffyPWActivity extends AppCompatActivity
@@ -77,14 +78,11 @@ public class SnuffyPWActivity extends AppCompatActivity
     private Typeface mAlternateTypeface;
     private Vector<SnuffyPage> mPages = new Vector<SnuffyPage>(0);
     private SnuffyPage mAboutView;
-    private ViewPager mPager;
+    @Bind(R.id.snuffyViewPager)
+    ViewPager mPager;
     private int mPagerCurrentItem;
     private MyPagerAdapter mPagerAdapter;
     private boolean mSetupRequired = true;
-    private int mPageLeft;
-    private int mPageTop;
-    private int mPageWidth;
-    private int mPageHeight;
     private String mPackageTitle;
     private String mPackageStatus;
     private ProcessPackageAsync mProcessPackageAsync;
@@ -108,11 +106,15 @@ public class SnuffyPWActivity extends AppCompatActivity
         return mAppLanguage;
     }
 
+    /* BEGIN lifecycle */
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.snuffy_main);
+        ButterKnife.bind(this);
 
         Log.i("Activity", "SnuffyPWActivity");
 
@@ -120,14 +122,8 @@ public class SnuffyPWActivity extends AppCompatActivity
         mAppLanguage = getIntent().getStringExtra("LanguageCode");      // "en"
         mConfigFileName = getIntent().getStringExtra("ConfigFileName");
         mPackageStatus = getIntent().getStringExtra("Status"); // live = draft
-        mPageLeft = getIntent().getIntExtra("PageLeft", 0);
-        mPageTop = actionBarHeightWithFallback();
-        mPageWidth = getIntent().getIntExtra("PageWidth", 320);         // set defaults but they will not be used
-        mPageHeight = getIntent().getIntExtra("PageHeight", 480);       // caller will always determine these and pass them in
-        Log.i("ScreenSize", "Left = " + mPageLeft + ", Top = " + mPageTop + ", Width = " + mPageWidth + ", Height = " + mPageHeight);
         getIntent().putExtra("AllowFlip", false);
 
-        setContentView(R.layout.snuffy_main);
         trackScreenActivity(mAppPackage + "-0");
 
         mConfigPrimary = mConfigFileName;
@@ -189,18 +185,13 @@ public class SnuffyPWActivity extends AppCompatActivity
         }
     }
 
-    /*
-     * Falls back to the height passed in through the intent extra if no action bar is found.
-     */
-    private int actionBarHeightWithFallback()
-    {
-        final TypedArray styledAttributes = getApplicationContext().getTheme().obtainStyledAttributes(
-                new int[] { android.R.attr.actionBarSize });
-        final int actionBarSize = (int) styledAttributes.getDimension(0, 0);
-
-        styledAttributes.recycle();
-        return actionBarSize != 0 ? actionBarSize : getIntent().getIntExtra("PageTop", 0);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
     }
+
+    /* END lifecycle */
 
     private void handleLanguagesWithAlternateFonts()
     {
@@ -315,9 +306,7 @@ public class SnuffyPWActivity extends AppCompatActivity
                 /** No instance of pager adapter yet, it's only created on completeSetUp()**/
                 //mPagerAdapter.notifyDataSetChanged();
 
-                resizeTheActivity();
-
-                mProcessPackageAsync = new ProcessPackageAsync();
+                mProcessPackageAsync = new ProcessPackageAsync(mPager.getMeasuredWidth(), mPager.getMeasuredHeight());
                 mProcessPackageAsync.execute("");
             }
         }, delay);  // delay can be required to make sure activity fully created - is there something we can test for that is better than a fixed timeout?
@@ -341,7 +330,6 @@ public class SnuffyPWActivity extends AppCompatActivity
 
         //mPagerAdapter.notifyDataSetChanged();
         mPagerAdapter = new MyPagerAdapter();
-        mPager = (ViewPager) findViewById(R.id.snuffyViewPager);
         mPager.setAdapter(mPagerAdapter);
 
 
@@ -427,18 +415,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         ed.apply();
         
         
-    }
-
-    private void resizeTheActivity()
-    {
-        // Update layout to set the size we have decided to use instead of FILL_PARENT
-        View pager = findViewById(R.id.snuffyViewPager);
-        AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) pager.getLayoutParams();
-        lp.width = mPageWidth;
-        lp.height = mPageHeight;
-        lp.x = mPageLeft;
-        lp.y = mPageTop;
-        pager.setLayoutParams(lp);
     }
 
     private void addClickHandlersToAllPages()
@@ -766,6 +742,13 @@ public class SnuffyPWActivity extends AppCompatActivity
             extends AsyncTask<String, Integer, Integer>
             implements PackageReader.ProgressCallback
     {
+        private final int mPageWidth;
+        private final int mPageHeight;
+
+        public ProcessPackageAsync(int width, int height) {
+            mPageWidth = width;
+            mPageHeight = height;
+        }
 
         @Override
         protected void onPreExecute()
