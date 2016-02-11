@@ -23,11 +23,12 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
      *
      * v4.0.2
      * 2: 2015-05-26
-     * v4.0.3
+     * v4.0.3 - v4.1.6
+     * 3: 2016-02-09
      */
 
     private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private static GodToolsDatabase INSTANCE;
 
@@ -55,7 +56,7 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
         try {
             db.beginTransaction();
 
-            db.execSQL(DBContract.GTPackageTable.SQL_CREATE_GTPACKAGES);
+            db.execSQL(DBContract.GTPackageTable.SQL_CREATE_TABLE);
             db.execSQL(DBContract.GTLanguageTable.SQL_CREATE_GTLANGUAGES);
 
             db.setTransactionSuccessful();
@@ -76,7 +77,7 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
                         db.execSQL(DBContract.GTLanguageTable.SQL_RENAME_GTLANGUAGES);
 
                         // create tables
-                        db.execSQL(DBContract.GTPackageTable.SQL_CREATE_GTPACKAGES);
+                        db.execSQL(DBContract.GTPackageTable.SQL_V2_CREATE_TABLE);
                         db.execSQL(DBContract.GTLanguageTable.SQL_CREATE_GTLANGUAGES);
 
                         // copy old data to new table
@@ -84,6 +85,21 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
 
                         // delete old table
                         db.execSQL(DBContract.GTLanguageTable.SQL_DELETE_OLD_GTLANGUAGES);
+                        break;
+                    case 3:
+                        // rename old packages table
+                        db.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_TABLE);
+                        db.execSQL(DBContract.GTPackageTable.SQL_RENAME_TABLE);
+
+                        // create new table
+                        db.execSQL(DBContract.GTPackageTable.SQL_CREATE_TABLE);
+
+                        // migrate data
+                        db.execSQL(DBContract.GTPackageTable.SQL_V3_MIGRATE_DATA);
+
+                        // delete old table
+                        db.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_TABLE);
+
                         break;
                     default:
                         // unrecognized version
@@ -119,7 +135,8 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.beginTransaction();
 
             // delete any existing tables
-            db.execSQL(DBContract.GTPackageTable.SQL_DELETE_GTPACKAGES);
+            db.execSQL(DBContract.GTPackageTable.SQL_DELETE_TABLE);
+            db.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_TABLE);
             db.execSQL(DBContract.GTLanguageTable.SQL_DELETE_GTLANGUAGES);
             db.execSQL(DBContract.GTLanguageTable.SQL_DELETE_OLD_GTLANGUAGES);
 

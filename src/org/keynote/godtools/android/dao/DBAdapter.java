@@ -6,8 +6,8 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.db.AbstractDao;
+import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Mapper;
-import org.ccci.gto.android.common.db.Query;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 
@@ -65,6 +65,32 @@ public class DBAdapter extends AbstractDao {
         return super.getMapper(clazz);
     }
 
+    @NonNull
+    @Override
+    protected Expression getPrimaryKeyWhere(@NonNull final Class<?> clazz) {
+        try {
+            if (GTPackage.class.equals(clazz)) {
+                return DBContract.GTPackageTable.SQL_WHERE_PRIMARY_KEY;
+            }
+        } catch (final RuntimeException e) {
+            throw new RuntimeException("Unable to find primary key where expression for " + clazz, e);
+        }
+
+        return super.getPrimaryKeyWhere(clazz);
+    }
+
+    @NonNull
+    @Override
+    protected Expression getPrimaryKeyWhere(@NonNull final Object obj) {
+        if (obj instanceof GTPackage) {
+            final GTPackage gtPackage = (GTPackage) obj;
+            return getPrimaryKeyWhere(GTPackage.class, gtPackage.getLanguage(), gtPackage.getStatus(),
+                                      gtPackage.getCode());
+        }
+
+        return super.getPrimaryKeyWhere(obj);
+    }
+
     public long insertGTLanguage(GTLanguage gtLanguage)
     {
         ContentValues cv = new ContentValues();
@@ -81,73 +107,12 @@ public class DBAdapter extends AbstractDao {
         return queryGTLanguage(null);
     }
 
-    public GTPackage getGTPackage(String code, String language, String status)
-    {
-        String selection = String.format("%s = '%s' AND %s = '%s' AND %s = '%s'",
-                DBContract.GTPackageTable.COL_CODE, code,
-                DBContract.GTPackageTable.COL_LANGUAGE, language,
-                DBContract.GTPackageTable.COL_STATUS, status);
-        List<GTPackage> packages = queryGTPackage(selection);
-        return packages.size() > 0 ? packages.get(0) : null;
-    }
-
     public GTLanguage getGTLanguage(String code)
     {
         String selection = String.format("%s = '%s'",
                 DBContract.GTLanguageTable.COL_CODE, code);
         List<GTLanguage> languages = queryGTLanguage(selection);
         return languages.size() > 0 ? languages.get(0) : null;
-    }
-
-    public List<GTPackage> getGTPackageByLanguage(String language)
-    {
-        String selection = String.format("%s = '%s'", DBContract.GTPackageTable.COL_LANGUAGE, language);
-        return queryGTPackage(selection);
-    }
-
-    public List<GTPackage> getDraftGTPackage(String language)
-    {
-        String selection = String.format("%s = '%s' AND %s = 'draft'",
-                DBContract.GTPackageTable.COL_LANGUAGE, language,
-                DBContract.GTPackageTable.COL_STATUS);
-
-        return queryGTPackage(selection);
-    }
-
-    public void deletePackages(String language, String status)
-    {
-        if("en".equalsIgnoreCase(language)) return;
-
-        String selection = String.format("%s = '%s' AND %s = '%s'",
-                DBContract.GTPackageTable.COL_LANGUAGE, language,
-                DBContract.GTPackageTable.COL_STATUS, status);
-
-        getWritableDatabase().delete(DBContract.GTPackageTable.TABLE_NAME, selection, null);
-    }
-
-    public void upsertGTPackage(GTPackage gtp)
-    {
-        ContentValues cv = new ContentValues();
-
-        cv.put(DBContract.GTPackageTable.COL_NAME, gtp.getName());
-        cv.put(DBContract.GTPackageTable.COL_LANGUAGE, gtp.getLanguage());
-        cv.put(DBContract.GTPackageTable.COL_CODE, gtp.getCode());
-        cv.put(DBContract.GTPackageTable.COL_STATUS, gtp.getStatus());
-        cv.put(DBContract.GTPackageTable.COL_CONFIG_FILE_NAME, gtp.getConfigFileName());
-        cv.put(DBContract.GTPackageTable.COL_ICON, gtp.getIcon());
-        cv.put(DBContract.GTPackageTable.COL_VERSION, gtp.getVersion());
-
-        String where = String.format("%s = '%s' AND %s = '%s' AND %s = '%s'",
-                DBContract.GTPackageTable.COL_CODE, gtp.getCode(),
-                DBContract.GTPackageTable.COL_LANGUAGE, gtp.getLanguage(),
-                DBContract.GTPackageTable.COL_STATUS, gtp.getStatus());
-
-        int numberOfAffectedRows = getWritableDatabase().update(DBContract.GTPackageTable.TABLE_NAME, cv, where, null);
-
-        if (numberOfAffectedRows == 0)
-        {
-            getWritableDatabase().insert(DBContract.GTPackageTable.TABLE_NAME, null, cv);
-        }
     }
 
     public void updateGTLanguage(GTLanguage gtl)
@@ -163,11 +128,6 @@ public class DBAdapter extends AbstractDao {
         getWritableDatabase().update(DBContract.GTLanguageTable.TABLE_NAME, cv, where, null);
     }
 
-    private List<GTPackage> queryGTPackage(String selection)
-    {
-        return get(Query.select(GTPackage.class).where(selection).orderBy(DBContract.GTPackageTable._ID));
-    }
-
     private List<GTLanguage> queryGTLanguage(String selection)
     {
         String[] projection = {DBContract.GTLanguageTable._ID,
@@ -180,7 +140,7 @@ public class DBAdapter extends AbstractDao {
         Cursor cursor = getReadableDatabase()
                 .query(DBContract.GTLanguageTable.TABLE_NAME, projection, selection, null, null, null, null);
 
-        List<GTLanguage> listGTLanguages = new ArrayList<GTLanguage>();
+        List<GTLanguage> listGTLanguages = new ArrayList<>();
 
         Locale current = Locale.getDefault();
         Locale.setDefault(new Locale("en"));

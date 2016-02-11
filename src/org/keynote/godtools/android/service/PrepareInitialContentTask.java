@@ -9,6 +9,7 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
+import org.keynote.godtools.android.dao.DBAdapter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,6 +31,7 @@ public class PrepareInitialContentTask
     public static void run(Context mContext, File resourcesDir)
     {
         AssetManager manager = mContext.getAssets();
+        final DBAdapter dao = DBAdapter.getInstance(mContext);
 
         Log.i("resourceDir", resourcesDir.getAbsolutePath());
 
@@ -66,7 +68,7 @@ public class PrepareInitialContentTask
             for (GTPackage gtp : packageList)
             {
                 Log.i("addingDB", gtp.getName());
-                gtp.addToDatabase(mContext);
+                dao.insert(gtp);
             }
 
             // Add Every Student to database
@@ -78,7 +80,7 @@ public class PrepareInitialContentTask
             everyStudent.setLanguage("en");
             everyStudent.setVersion(1.1);
 
-            everyStudent.addToDatabase(mContext);
+            dao.insert(everyStudent);
 
             // english resources should be marked as downloaded
             GTLanguage gtlEnglish = new GTLanguage("en");
