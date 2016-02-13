@@ -15,10 +15,9 @@
         <item name="displayOptions">showHome</item>
     </style>
 
-    <!-- Default GodTools theme with a transparent ActionBar (used to get Action Overflow Button only) -->
     <style name="Theme.GodTools.TransparentActionBar">
         <item name="android:windowContentOverlay">@null</item>
-        <item name="windowActionBarOverlay">false</item>
+        <item name="windowActionBarOverlay">true</item>
         <item name="android:actionBarStyle">@style/Widget.GodTools.ActionBar.Transparent</item>
         <item name="actionBarStyle">@style/Widget.GodTools.ActionBar.Transparent</item>
     </style>
@@ -26,5 +25,11 @@
     <style name="Widget.GodTools.ActionBar.Transparent">
         <item name="android:background">@android:color/transparent</item>
         <item name="background">@android:color/transparent</item>
+    </style>
+
+    <!-- GodTools theme with a transparent ActionBar (used to get Action Overflow Button only) -->
+    <bool name="content_actionbar_overlay">false</bool>
+    <style name="Theme.GodTools.Activity.Content" parent="Theme.GodTools.TransparentActionBar">
+        <item name="windowActionBarOverlay">@bool/content_actionbar_overlay</item>
     </style>
 </resources>
