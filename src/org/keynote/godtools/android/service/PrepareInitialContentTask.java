@@ -68,7 +68,7 @@ public class PrepareInitialContentTask
             for (GTPackage gtp : packageList)
             {
                 Log.i("addingDB", gtp.getName());
-                dao.insert(gtp);
+                dao.updateOrInsert(gtp);
             }
 
             // Add Every Student to database
@@ -80,7 +80,7 @@ public class PrepareInitialContentTask
             everyStudent.setLanguage("en");
             everyStudent.setVersion(1.1);
 
-            dao.insert(everyStudent);
+            dao.updateOrInsert(everyStudent);
 
             // english resources should be marked as downloaded
             GTLanguage gtlEnglish = new GTLanguage("en");
