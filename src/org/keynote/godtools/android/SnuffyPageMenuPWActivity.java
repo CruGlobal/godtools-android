@@ -17,6 +17,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.snuffy.SnuffyPage;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
@@ -68,12 +70,16 @@ public class SnuffyPageMenuPWActivity extends ListActivity
         int[] to = {R.id.list1Text, R.id.list1Image};
 
         Vector<SnuffyPage> pages = app.getSnuffyPages();
-        for (SnuffyPage page : pages)
-        {
-            map = new HashMap<String, Object>();
-            map.put("label", page.mDescription);
-            map.put("image", page.mThumbnail);
-            mList.add(map);
+        if (pages != null) {
+            for (SnuffyPage page : pages) {
+                map = new HashMap<>();
+                map.put("label", page.mDescription);
+                map.put("image", page.mThumbnail);
+                mList.add(map);
+            }
+        } else {
+            Crashlytics.log("no pages found in Application");
+            Crashlytics.logException(new NullPointerException());
         }
 
         SimpleImageAdapter adapter = new SimpleImageAdapter(this, mList, R.layout.list_item_with_icon_and_text, from, to);
