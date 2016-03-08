@@ -68,12 +68,8 @@ public class DBAdapter extends AbstractDao {
     @NonNull
     @Override
     protected Expression getPrimaryKeyWhere(@NonNull final Class<?> clazz) {
-        try {
-            if (GTPackage.class.equals(clazz)) {
-                return DBContract.GTPackageTable.SQL_WHERE_PRIMARY_KEY;
-            }
-        } catch (final RuntimeException e) {
-            throw new RuntimeException("Unable to find primary key where expression for " + clazz, e);
+        if (GTPackage.class.equals(clazz)) {
+            return DBContract.GTPackageTable.SQL_WHERE_PRIMARY_KEY;
         }
 
         return super.getPrimaryKeyWhere(clazz);
