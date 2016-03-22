@@ -32,5 +32,8 @@ before_script:
 script:
   - ./gradlew build -PdisablePreDex --continue --stacktrace
 
+after_failure:
+  - cat /home/travis/build/CruGlobal/godtools-android/build/outputs/lint-results.xml
+
 notifications:
   email: false
