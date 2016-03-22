@@ -510,6 +510,11 @@ public class SnuffyPWActivity extends AppCompatActivity
 
     private void doCmdShowPageMenu(View v)
     {
+        // store pages before triggering Activity launch
+        Crashlytics.log("Storing SnuffyPages in Application before launching SnuffyPageMenuPWActivity: " +
+                                (mPages != null ? mPages.size() : "null"));
+        getApp().setSnuffyPages(mPages);
+
         Intent intent = new Intent(this, SnuffyPageMenuPWActivity.class);
         intent.putExtra("LanguageCode", mAppLanguage);
         intent.putExtra("PackageName", mAppPackage);
