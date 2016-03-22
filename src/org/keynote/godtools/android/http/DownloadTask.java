@@ -61,20 +61,27 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
         }
 
         // download & extract zip file to tmp directory
-        HttpURLConnection connection = null;
         try {
-            connection = getHttpURLConnection(url, authorization);
-            downloadResponseCode = connection.getResponseCode();
-            downloadContentLength = connection.getContentLength();
-
+            // download zip file
+            HttpURLConnection connection = null;
             final File zipfile = new File(tmpDir, "package.zip");
+            try {
+                connection = getHttpURLConnection(url, authorization);
+                downloadResponseCode = connection.getResponseCode();
+                downloadContentLength = connection.getContentLength();
 
-            // output zip file
-            InputStream is = connection.getInputStream();
-            FileOutputStream fout = new FileOutputStream(zipfile);
-            IOUtils.copy(is, fout);
-            is.close();
-            fout.close();
+                // output zip file
+                InputStream is = connection.getInputStream();
+                FileOutputStream fout = new FileOutputStream(zipfile);
+                IOUtils.copy(is, fout);
+                is.close();
+                fout.close();
+            } catch (final IOException e) {
+                // don't log IOExceptions when downloading, they will be tracked by newrelic
+                return false;
+            } finally {
+                IOUtils.closeQuietly(connection);
+            }
 
             // unzip package.zip
             new Decompress().unzip(zipfile, tmpDir);
@@ -120,6 +127,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
             return true;
         } catch (Exception e) {
+            // log any other exceptions encountered
             Crashlytics.setString("url", url);
             Crashlytics.setString("filePath", filePath);
             Crashlytics.setString("tag", tag);
@@ -131,8 +139,6 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             Crashlytics.logException(e);
             return false;
         } finally {
-            IOUtils.closeQuietly(connection);
-
             // delete unzip directory
             FileUtils.deleteRecursive(tmpDir, false);
         }
