@@ -23,10 +23,10 @@
 #-dontwarn com.google.android.gms.**
 
 
-## newrelic settings
-#-keep class com.newrelic.** { *; }
-#-dontwarn com.newrelic.**
-#-keepattributes Exceptions, Signature, InnerClasses
+# newrelic settings
+-keep class com.newrelic.** { *; }
+-dontwarn com.newrelic.**
+-keepattributes Exceptions, Signature, InnerClasses, LineNumberTable
 
 
 ## Picasso
