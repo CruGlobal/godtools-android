@@ -2,16 +2,16 @@ package org.keynote.godtools.android.http;
 
 import android.support.v4.os.AsyncTaskCompat;
 
-import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 import java.io.File;
 import java.util.UUID;
 
+import static org.keynote.godtools.android.BuildConfig.BASE_URL;
+import static org.keynote.godtools.android.BuildConfig.BASE_URL_V2;
+
 public class GodToolsApiClient {
 
-    private static final String BASE_URL_V2 = BuildConfig.BASE_URL_V2;
-    private static final String BASE_URL = BuildConfig.BASE_URL;
     private static final String ENDPOINT_META = "meta/";
     private static final String ENDPOINT_PACKAGES = "packages/";
     private static final String ENDPOINT_TRANSLATIONS = "translations/";
