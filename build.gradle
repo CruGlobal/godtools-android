@@ -6,11 +6,13 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath "com.newrelic.agent.android:agent-gradle-plugin:5.5.0"
         classpath 'io.fabric.tools:gradle:1.21.2'
     }
 }
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
+apply plugin: 'newrelic'
 
 apply from: 'versioning.gradle'
 
@@ -28,6 +30,7 @@ dependencies {
     compile 'org.ccci.gto.android:gto-support-db:0.8.0'
 
     compile 'com.crashlytics.sdk.android:crashlytics:2.5.5'
+    compile 'com.newrelic.agent.android:android-agent:5.5.0'
     compile 'com.google.guava:guava:18.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton:butterknife:7.0.1'
@@ -99,10 +102,12 @@ android {
 
             buildConfigField "String", "BASE_URL_V2", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/v2/\""
             buildConfigField "String", "BASE_URL", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/\""
+            buildConfigField "String", "NEW_RELIC_API_KEY", "\"AA2f0cb2d41f6ac7dcc256eaa9ca7e0f640859fd52\""
         }
         release {
             buildConfigField "String", "BASE_URL_V2", "\"https://api.godtoolsapp.com/godtools-api/rest/v2/\""
             buildConfigField "String", "BASE_URL", "\"https://api.godtoolsapp.com/godtools-api/rest/\""
+            buildConfigField "String", "NEW_RELIC_API_KEY", "\"AAcaf7bbfe3ffda5dcb1455d3bc16b0c5da1cd71e9\""
         }
     }
 
