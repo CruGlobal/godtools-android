@@ -178,8 +178,10 @@ public class BackgroundService extends IntentService implements NotificationRegi
         {
             if (!Strings.isNullOrEmpty(authorization))
             {
-                settings.edit().putString(AUTH_DRAFT, authorization).apply();
-                settings.edit().putBoolean(TRANSLATOR_MODE, true).apply();
+                settings.edit()
+                        .putString(AUTH_DRAFT, authorization)
+                        .putBoolean(TRANSLATOR_MODE, true)
+                        .apply();
 
                 broadcastManager.sendBroadcast(BroadcastUtil.stopBroadcast(Type.ENABLE_TRANSLATOR));
             }
