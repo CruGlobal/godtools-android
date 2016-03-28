@@ -3,17 +3,12 @@ package org.keynote.godtools.android.http;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
+import com.google.common.net.HttpHeaders;
+
 import org.keynote.godtools.android.api.GodToolsApi;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -48,33 +43,23 @@ public class AuthTask extends AsyncTask<Object, Void, String>
     @Override
     protected String doInBackground(Object... params)
     {
-
-        String url = params[0].toString();
-        HttpParams httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParams, 10000);
-        HttpConnectionParams.setSoTimeout(httpParams, 10000);
-
-        HttpClient httpClient = new DefaultHttpClient(httpParams);
-
+        // verify the provided auth token
         if (verifyStatus)
         {
+
             Log.i(TAG, "verifying auth token");
             String authToken = params[1].toString();
             Log.i(TAG, "Token: " + authToken);
 
-            url = url + "status";
-
-            HttpGet request = new HttpGet(url);
-            request.setHeader("Authorization", authToken);
             try
             {
-                HttpResponse response = httpClient.execute(request);
-                statusCode = response.getStatusLine().getStatusCode();
+                final Response<ResponseBody> response = GodToolsApi.INSTANCE.verifyAuthToken(authToken).execute();
+                statusCode = response.code();
 
                 Log.i(TAG, "Auth Token Verified. Status Code: " + statusCode);
 
                 return authToken;
-            } catch (Exception e)
+            } catch (final IOException e)
             {
                 e.printStackTrace();
                 Log.e(TAG, "Status Code: " + statusCode);
@@ -82,13 +67,14 @@ public class AuthTask extends AsyncTask<Object, Void, String>
             }
 
         }
+        // retrieve a new auth token
         else
         {
             try
             {
                 final Response<ResponseBody> response = GodToolsApi.INSTANCE.getAuthToken().execute();
                 statusCode = response.code();
-                return response.headers().get("Authorization");
+                return response.headers().get(HttpHeaders.AUTHORIZATION);
             } catch (final IOException e)
             {
                 e.printStackTrace();
@@ -103,7 +89,7 @@ public class AuthTask extends AsyncTask<Object, Void, String>
     {
         super.onPostExecute(s);
 
-        if (statusCode == HttpStatus.SC_NO_CONTENT)
+        if (statusCode == HttpURLConnection.HTTP_NO_CONTENT)
         {
             taskHandler.authComplete(s, authenticateAccessCode, verifyStatus);
         }
