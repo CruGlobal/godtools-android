@@ -18,8 +18,6 @@ import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.http.APITasks;
-import org.keynote.godtools.android.http.GodToolsApiClient;
-import org.keynote.godtools.android.http.NotificationRegistrationTask;
 import org.keynote.godtools.android.notifications.NotificationInfo;
 
 import java.io.IOException;
@@ -41,7 +39,7 @@ import static org.keynote.godtools.android.utils.Constants.TYPE;
 /**
  * Created by matthewfrederick on 5/4/15.
  */
-public class BackgroundService extends IntentService implements NotificationRegistrationTask.NotificationTaskHandler
+public class BackgroundService extends IntentService
 {
     private final String TAG = getClass().getSimpleName();
 
@@ -72,10 +70,7 @@ public class BackgroundService extends IntentService implements NotificationRegi
 
         if (APITasks.REGISTER_DEVICE.equals(intent.getSerializableExtra(TYPE)))
         {
-            GodToolsApiClient.registerDeviceForNotifications(
-                    intent.getStringExtra(REGISTRATION_ID),
-                    intent.getStringExtra(DEVICE_ID),
-                    intent.getStringExtra(NOTIFICATIONS_ON), this);
+            registerDeviceForNotifications(intent);
         }
         else if (APITasks.AUTHENTICATE_ACCESS_CODE.equals(intent.getSerializableExtra(TYPE)))
         {
@@ -95,6 +90,24 @@ public class BackgroundService extends IntentService implements NotificationRegi
             intent.putExtras(extras);
         }
         return intent;
+    }
+
+    private void registerDeviceForNotifications(@NonNull final Intent intent) {
+        try {
+            final String regId = intent.getStringExtra(REGISTRATION_ID);
+            final Response<ResponseBody> response = GodToolsApi.INSTANCE
+                    .registerDeviceForNotifications(intent.getStringExtra(REGISTRATION_ID),
+                                                    intent.getStringExtra(DEVICE_ID),
+                                                    intent.getBooleanExtra(NOTIFICATIONS_ON, true)).execute();
+
+            if (response.isSuccessful()) {
+                registrationComplete(regId);
+            } else {
+                registrationFailed();
+            }
+        } catch (final IOException e) {
+            registrationFailed();
+        }
     }
 
     private void authenticateAccessCode(@NonNull final Intent intent) {
@@ -138,16 +151,16 @@ public class BackgroundService extends IntentService implements NotificationRegi
 
     public static void registerDevice(Context context, String regId, String deviceID)
     {
-        registerDevice(context, regId, deviceID, "TRUE");
+        registerDevice(context, regId, deviceID, true);
     }
 
-    public static void registerDevice(Context context, String regId, String deviceID, String notificationsOn)
+    public static void registerDevice(Context context, String regId, String deviceID, boolean notificationsOn)
     {
         final Bundle extras = new Bundle(4);
         extras.putSerializable(TYPE, APITasks.REGISTER_DEVICE);
         extras.putString(REGISTRATION_ID, regId);
         extras.putString(DEVICE_ID, deviceID);
-        extras.putString(NOTIFICATIONS_ON, notificationsOn);
+        extras.putBoolean(NOTIFICATIONS_ON, notificationsOn);
         Intent intent = baseIntent(context, extras);
         context.startService(intent);
     }
@@ -216,14 +229,12 @@ public class BackgroundService extends IntentService implements NotificationRegi
         broadcastManager.sendBroadcast(BroadcastUtil.failBroadcast(Type.AUTH));
     }
 
-    @Override
-    public void registrationComplete(String regId)
+    private void registrationComplete(String regId)
     {
         Log.i(NotificationInfo.NOTIFICATION_TAG, "API Registration Complete");
     }
 
-    @Override
-    public void registrationFailed()
+    private void registrationFailed()
     {
         Log.i(NotificationInfo.NOTIFICATION_TAG, "API Registration Failed");
     }

@@ -396,8 +396,7 @@ public class SettingsPW extends BaseActionBarActivity implements
 
         EventTracker.track(getApp(), "Settings", "Notification State", event);
 
-        String notificationsOn = cbNotificationsAllowed.isChecked() ? "TRUE" : "FALSE";
-        updateDeviceWithAPI(notificationsOn);
+        updateDeviceWithAPI(cbNotificationsAllowed.isChecked());
     }
 
     private void showLoading(String msg)
@@ -421,7 +420,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         }
     }
 
-    private void updateDeviceWithAPI(String notificationsOn)
+    private void updateDeviceWithAPI(boolean notificationsOn)
     {
         String registrationId = settings.getString(REGISTRATION_ID, "");
         String deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);

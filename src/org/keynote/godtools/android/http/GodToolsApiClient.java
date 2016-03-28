@@ -16,7 +16,6 @@ public class GodToolsApiClient {
     private static final String ENDPOINT_PACKAGES = "packages/";
     private static final String ENDPOINT_TRANSLATIONS = "translations/";
     private static final String ENDPOINT_DRAFTS = "drafts/";
-    private static final String ENDPOINT_AUTH = "auth/";
     private static final String ENDPOINT_NOTIFICATIONS = "notification/";
 
     public static void getListOfPackages(String tag, MetaTask.MetaTaskHandler taskHandler){
@@ -82,13 +81,6 @@ public class GodToolsApiClient {
         String url = BASE_URL_V2 + ENDPOINT_TRANSLATIONS + languageCode + File.separator + packageCode;
 
         new DraftPublishTask(taskHandler).execute(url, authorization);
-    }
-
-    public static void registerDeviceForNotifications(String registrationID, String deviceId, String registrationsOn, NotificationRegistrationTask.NotificationTaskHandler taskHandler)
-    {
-        String url = BASE_URL + ENDPOINT_NOTIFICATIONS + registrationID;
-
-        new NotificationRegistrationTask(taskHandler).execute(url, deviceId, registrationsOn);
     }
 
     public static void updateNotification(String authcode, String registrationId, int notificationType,  NotificationUpdateTask.NotificationUpdateTaskHandler taskHandler)

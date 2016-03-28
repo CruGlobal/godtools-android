@@ -13,10 +13,12 @@ import retrofit2.http.Path;
 import static com.google.common.net.HttpHeaders.AUTHORIZATION;
 
 public interface GodToolsApi {
-    String AUTH = "auth";
+    String V2 = "v2";
+    String AUTH = V2 + "/auth";
+    String NOTIFICATION = "notification";
 
     GodToolsApi INSTANCE = new Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL_V2)
+            .baseUrl(BuildConfig.BASE_URL)
             .build()
             .create(GodToolsApi.class);
 
@@ -25,4 +27,9 @@ public interface GodToolsApi {
 
     @GET(AUTH + "/status")
     Call<ResponseBody> verifyAuthToken(@Header(AUTHORIZATION) String token);
+
+    @POST(NOTIFICATION + "/{registrationId}")
+    Call<ResponseBody> registerDeviceForNotifications(@Path("registrationId") String regId,
+                                                      @Header("deviceId") String deviceId,
+                                                      @Header("notificationsOn") boolean enableNotifications);
 }
