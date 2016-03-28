@@ -5,13 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.common.base.Strings;
+import com.google.common.net.HttpHeaders;
 
 import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.http.APITasks;
@@ -19,6 +22,12 @@ import org.keynote.godtools.android.http.AuthTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.NotificationRegistrationTask;
 import org.keynote.godtools.android.notifications.NotificationInfo;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 import static org.keynote.godtools.android.utils.Constants.ACCESS_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
@@ -72,7 +81,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         }
         else if (APITasks.AUTHENTICATE_ACCESS_CODE.equals(intent.getSerializableExtra(TYPE)))
         {
-            GodToolsApiClient.authenticateAccessCode(intent.getStringExtra(ACCESS_CODE), this);
+            authenticateAccessCode(intent);
         }
         else if (APITasks.VERIFY_ACCESS_CODE.equals(intent.getSerializableExtra(TYPE)))
         {
@@ -88,6 +97,26 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
             intent.putExtras(extras);
         }
         return intent;
+    }
+
+    private void authenticateAccessCode(@NonNull final Intent intent) {
+        try {
+            // get an auth token for the specified access_code
+            final Response<ResponseBody> response =
+                    GodToolsApi.INSTANCE.getAuthToken(intent.getStringExtra(ACCESS_CODE)).execute();
+
+            // a 204 response is successful, auth_token is in the Authorization header
+            if (response.code() == HttpURLConnection.HTTP_NO_CONTENT) {
+                authComplete(response.headers().get(HttpHeaders.AUTHORIZATION), true, false);
+            }
+            // otherwise we failed
+            else {
+                authFailed(true, false);
+            }
+        } catch (final IOException e) {
+            // any IOException should be considered a failure currently
+            authFailed(true, false);
+        }
     }
 
     public static void registerDevice(Context context, String regId, String deviceID)

@@ -38,12 +38,6 @@ public class GodToolsApiClient {
         download(app, url, filePath, tag, null, langCode, taskHandler);
     }
 
-    public static void authenticateAccessCode(String accessCode, AuthTask.AuthTaskHandler taskHandler){
-        AuthTask authTask = new AuthTask(taskHandler, true, false);
-        String url = BASE_URL + ENDPOINT_AUTH + accessCode;
-        authTask.execute(url, accessCode);
-    }
-
     public static void verifyStatusOfAuthToken(String authToken, AuthTask.AuthTaskHandler taskHandler)
     {
         AuthTask authTask = new AuthTask(taskHandler, false, true);
