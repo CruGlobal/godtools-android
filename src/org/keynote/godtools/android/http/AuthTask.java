@@ -72,7 +72,8 @@ public class AuthTask extends AsyncTask<Object, Void, String>
         {
             try
             {
-                final Response<ResponseBody> response = GodToolsApi.INSTANCE.getAuthToken().execute();
+                final Response<ResponseBody> response =
+                        GodToolsApi.INSTANCE.getAuthToken(params[1].toString()).execute();
                 statusCode = response.code();
                 return response.headers().get(HttpHeaders.AUTHORIZATION);
             } catch (final IOException e)

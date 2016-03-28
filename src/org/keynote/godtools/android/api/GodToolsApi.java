@@ -8,6 +8,7 @@ import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 import static com.google.common.net.HttpHeaders.AUTHORIZATION;
 
@@ -19,8 +20,8 @@ public interface GodToolsApi {
             .build()
             .create(GodToolsApi.class);
 
-    @POST(AUTH)
-    Call<ResponseBody> getAuthToken();
+    @POST(AUTH + "/{code}")
+    Call<ResponseBody> getAuthToken(@Path("code") String code);
 
     @GET(AUTH + "/status")
     Call<ResponseBody> verifyAuthToken(@Header(AUTHORIZATION) String token);
