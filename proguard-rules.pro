@@ -31,3 +31,9 @@
 
 ## Picasso
 -dontwarn com.squareup.okhttp.**
+
+
+## Retrofit2
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keepattributes Signature,Exceptions

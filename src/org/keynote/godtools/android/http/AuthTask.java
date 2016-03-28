@@ -7,11 +7,16 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.keynote.godtools.android.api.GodToolsApi;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 public class AuthTask extends AsyncTask<Object, Void, String>
 {
@@ -51,8 +56,6 @@ public class AuthTask extends AsyncTask<Object, Void, String>
 
         HttpClient httpClient = new DefaultHttpClient(httpParams);
 
-        HttpResponse response;
-
         if (verifyStatus)
         {
             Log.i(TAG, "verifying auth token");
@@ -65,7 +68,7 @@ public class AuthTask extends AsyncTask<Object, Void, String>
             request.setHeader("Authorization", authToken);
             try
             {
-                response = httpClient.execute(request);
+                HttpResponse response = httpClient.execute(request);
                 statusCode = response.getStatusLine().getStatusCode();
 
                 Log.i(TAG, "Auth Token Verified. Status Code: " + statusCode);
@@ -81,14 +84,12 @@ public class AuthTask extends AsyncTask<Object, Void, String>
         }
         else
         {
-            HttpPost request = new HttpPost(url);
             try
             {
-                response = httpClient.execute(request);
-                statusCode = response.getStatusLine().getStatusCode();
-
-                return response.getFirstHeader("Authorization").getValue();
-            } catch (Exception e)
+                final Response<ResponseBody> response = GodToolsApi.INSTANCE.getAuthToken().execute();
+                statusCode = response.code();
+                return response.headers().get("Authorization");
+            } catch (final IOException e)
             {
                 e.printStackTrace();
                 Log.e(TAG, "Status Code: " + statusCode);
