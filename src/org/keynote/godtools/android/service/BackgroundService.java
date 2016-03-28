@@ -18,7 +18,6 @@ import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.http.APITasks;
-import org.keynote.godtools.android.http.AuthTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.NotificationRegistrationTask;
 import org.keynote.godtools.android.notifications.NotificationInfo;
@@ -42,8 +41,7 @@ import static org.keynote.godtools.android.utils.Constants.TYPE;
 /**
  * Created by matthewfrederick on 5/4/15.
  */
-public class BackgroundService extends IntentService implements AuthTask.AuthTaskHandler,
-        NotificationRegistrationTask.NotificationTaskHandler
+public class BackgroundService extends IntentService implements NotificationRegistrationTask.NotificationTaskHandler
 {
     private final String TAG = getClass().getSimpleName();
 
@@ -85,7 +83,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         }
         else if (APITasks.VERIFY_ACCESS_CODE.equals(intent.getSerializableExtra(TYPE)))
         {
-            GodToolsApiClient.verifyStatusOfAuthToken(intent.getStringExtra(ACCESS_CODE), this);
+            verifyAuthToken(intent);
         }
     }
 
@@ -116,6 +114,25 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         } catch (final IOException e) {
             // any IOException should be considered a failure currently
             authFailed(true, false);
+        }
+    }
+
+    private void verifyAuthToken(@NonNull final Intent intent) {
+        try {
+            // verify that the specified auth_token is still valid
+            final String authToken = intent.getStringExtra(ACCESS_CODE);
+            final Response<ResponseBody> response = GodToolsApi.INSTANCE.verifyAuthToken(authToken).execute();
+
+            // a 204 response is successful
+            if (response.code() == HttpURLConnection.HTTP_NO_CONTENT) {
+                authComplete(authToken, false, true);
+            }
+            // otherwise we failed
+            else {
+                authFailed(false, true);
+            }
+        } catch (final IOException e) {
+            authFailed(false, true);
         }
     }
 
@@ -153,8 +170,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         context.startService(intent);
     }
 
-    @Override
-    public void authComplete(String authorization, boolean authenticateAccessCode, boolean verifyStatus)
+    private void authComplete(String authorization, boolean authenticateAccessCode, boolean verifyStatus)
     {
         Log.i(TAG, "Now Authorized");
 
@@ -180,8 +196,7 @@ public class BackgroundService extends IntentService implements AuthTask.AuthTas
         }
     }
 
-    @Override
-    public void authFailed(boolean authenticateAccessCode, boolean verifyStatus)
+    private void authFailed(boolean authenticateAccessCode, boolean verifyStatus)
     {
         Log.i(TAG, "Auth Failed");
 
