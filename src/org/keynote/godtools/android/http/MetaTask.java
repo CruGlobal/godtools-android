@@ -2,7 +2,6 @@ package org.keynote.godtools.android.http;
 
 import android.os.AsyncTask;
 
-import org.apache.http.HttpStatus;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackageReader;
 
@@ -56,7 +55,7 @@ public class MetaTask extends AsyncTask<Object, Void, List<GTLanguage>>
     @Override
     protected void onPostExecute(List<GTLanguage> languageList)
     {
-        if (statusCode == HttpStatus.SC_OK) 
+        if (statusCode == HttpURLConnection.HTTP_OK)
         {
             metaTaskHandler.metaTaskComplete(languageList, tag);
         }
