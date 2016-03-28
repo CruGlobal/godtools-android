@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="InvalidPackage">
+        <!-- com.squareup.retrofit2:retrofit -->
+        <ignore regexp="okio-([0-9]*\.?)*\.jar"/>
+        <ignore regexp="retrofit-([0-9]*\.?)*\.jar"/>
+    </issue>
+</lint>
