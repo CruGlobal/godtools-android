@@ -23,16 +23,15 @@ ext.deps = [
         androidSupport: '23.2.1',
         gtoSupport    : '0.9.0-SNAPSHOT',
         guava         : '19.0',
-
-        // keep this version of play services for now, newer versions may prompt users to upgrade before using the app
-        playServices  : '4.3.23'
+        playServices  : '8.4.0'
 ]
 
 dependencies {
     compile 'com.android.support:appcompat-v7:' + deps.androidSupport
     compile 'com.android.support:support-annotations:' + deps.androidSupport
 
-    compile 'com.google.android.gms:play-services:' + deps.playServices
+    compile 'com.google.android.gms:play-services-analytics:' + deps.playServices
+    compile 'com.google.android.gms:play-services-gcm:' + deps.playServices
 
     compile 'org.ccci.gto.android:gto-support-core:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-db:' + deps.gtoSupport
