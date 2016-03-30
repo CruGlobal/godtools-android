@@ -18,19 +18,27 @@ apply from: 'versioning.gradle'
 
 version '4.1.8-SNAPSHOT'
 
+// define dependency versions for this project
+ext.deps = [
+        androidSupport: '23.1.1',
+        gtoSupport    : '0.8.0',
+
+        // keep this version of play services for now, newer versions may prompt users to upgrade before using the app
+        playServices  : '4.3.23'
+]
+
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:support-annotations:23.1.1'
+    compile 'com.android.support:appcompat-v7:' + deps.androidSupport
+    compile 'com.android.support:support-annotations:' + deps.androidSupport
 
-    // keep this version of play services for now, newer versions may prompt users to upgrade before using the app
-    //noinspection GradleDependency
-    compile 'com.google.android.gms:play-services:4.3.23'
+    compile 'com.google.android.gms:play-services:' + deps.playServices
 
-    compile 'org.ccci.gto.android:gto-support-core:0.8.0'
-    compile 'org.ccci.gto.android:gto-support-db:0.8.0'
+    compile 'org.ccci.gto.android:gto-support-core:' + deps.gtoSupport
+    compile 'org.ccci.gto.android:gto-support-db:' + deps.gtoSupport
 
     compile 'com.crashlytics.sdk.android:crashlytics:2.5.5'
     compile 'com.newrelic.agent.android:android-agent:5.5.0'
+
     compile 'com.google.guava:guava:18.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton:butterknife:7.0.1'
