@@ -77,9 +77,10 @@ public class GoogleCloudMessagingClient
             return true;
         }
 
-        if (playServices.isUserResolvableError(resultCode)) {
-            playServices.getErrorDialog(callingActivity, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
-        }
+//        // XXX: we disable the error dialog since we should be able to work without GPS
+//        if (playServices.isUserResolvableError(resultCode)) {
+//            playServices.getErrorDialog(callingActivity, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+//        }
 
         return false;
     }
