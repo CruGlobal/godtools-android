@@ -20,8 +20,9 @@ version '4.1.8-SNAPSHOT'
 
 // define dependency versions for this project
 ext.deps = [
-        androidSupport: '23.1.1',
-        gtoSupport    : '0.8.0',
+        androidSupport: '23.2.1',
+        gtoSupport    : '0.9.0-SNAPSHOT',
+        guava         : '19.0',
 
         // keep this version of play services for now, newer versions may prompt users to upgrade before using the app
         playServices  : '4.3.23'
@@ -39,7 +40,7 @@ dependencies {
     compile 'com.crashlytics.sdk.android:crashlytics:2.5.5'
     compile 'com.newrelic.agent.android:android-agent:5.5.0'
 
-    compile 'com.google.guava:guava:18.0'
+    compile 'com.google.guava:guava:' + deps.guava
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.squareup.retrofit2:retrofit:2.0.0'
