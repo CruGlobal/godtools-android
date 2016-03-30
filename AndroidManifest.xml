@@ -3,6 +3,23 @@
     package="org.keynote.godtools.android"
     android:installLocation="preferExternal">
 
+    <supports-screens
+        android:smallScreens="false"
+        android:resizeable="false"/>
+
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+
+    <permission
+        android:name="${applicationId}.permission.C2D_MESSAGE"
+        android:protectionLevel="signature"/>
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE"/>
+
     <application
         android:icon="@drawable/icon"
         android:label="@string/app_name"
@@ -124,23 +141,4 @@
             android:name="io.fabric.ApiKey"
             android:value="4c6c9eb55214633c5eca4176c06b20bb8fd07a72" />
     </application>
-
-    <supports-screens
-        android:smallScreens="false"
-        android:resizeable="false" />
-
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="android.permission.GET_TASKS"/>
-
-    <permission android:name="${applicationId}.permission.C2D_MESSAGE"
-                android:protectionLevel="signature" />
-    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
-
-
-
 </manifest>
