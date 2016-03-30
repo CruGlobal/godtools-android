@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.ccci.gto.android.common.util.IOUtils;
 import org.keynote.godtools.android.R;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -246,16 +247,7 @@ public class PackageReader
             return false;
         } finally
         {
-            if (pageInputStream != null)
-            {
-                try
-                {
-                    pageInputStream.close();
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
+            IOUtils.closeQuietly(pageInputStream);
         }
 
         //noinspection ConstantConditions
