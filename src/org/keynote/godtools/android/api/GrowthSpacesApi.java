@@ -1,10 +1,15 @@
 package org.keynote.godtools.android.api;
 
-import okhttp3.ResponseBody;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.GsonBuilder;
+
+import org.keynote.godtools.android.BuildConfig;
+
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 /**
@@ -12,14 +17,18 @@ import retrofit2.http.POST;
  */
 public interface GrowthSpacesApi {
     String V1 = "v1";
-    String BASE_URL = "https://www.growthspaces.org/api/";
 
     GrowthSpacesApi INSTANCE = new Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(BuildConfig.GROWTH_SPACES_URL)
+            .addConverterFactory(
+                    GsonConverterFactory.create(
+                            new GsonBuilder()
+                            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                            .create()))
             .build()
             .create(GrowthSpacesApi.class);
 
-    @POST("/subscribers")
-    Call<ResponseBody> createSubscriber(@Body Object parameters);
+    @POST(V1 + "/subscribers")
+    Call<Subscriber> createSubscriber(@Header("Access-Id") String accessId,
+                                      @Header("Access-Secret") String accessSecret, @Body Subscriber subscriber);
 }
