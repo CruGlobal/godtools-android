@@ -65,7 +65,7 @@ android {
         versionCode buildVersionCode()
 
         minSdkVersion 10
-        targetSdkVersion 22
+        targetSdkVersion 23
 
         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
