@@ -138,16 +138,7 @@ public class PackageReader
             return false;
         } finally
         {
-            if (isMain != null)
-            {
-                try
-                {
-                    isMain.close();
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
+            IOUtils.closeQuietly(isMain);
         }
 
         return bSuccess;
@@ -2212,16 +2203,7 @@ public class PackageReader
             // try the next path instead
         } finally
         {
-            if (isImage != null)
-            {
-                try
-                {
-                    isImage.close();
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
+            IOUtils.closeQuietly(isImage);
         }
 
         // 2b.  next the package-specific folder with a @2x
@@ -2243,16 +2225,7 @@ public class PackageReader
             // try the next path instead
         } finally
         {
-            if (isImage != null)
-            {
-                try
-                {
-                    isImage.close();
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
+            IOUtils.closeQuietly(isImage);
         }
 
         // 3. next the folder that is shared by all packages
@@ -2269,16 +2242,7 @@ public class PackageReader
             return null;
         } finally
         {
-            if (isImage != null)
-            {
-                try
-                {
-                    isImage.close();
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
+            IOUtils.closeQuietly(isImage);
         }
     }
 
