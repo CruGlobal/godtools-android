@@ -3,7 +3,6 @@ package org.keynote.godtools.android;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.COUNT;
-import static org.keynote.godtools.android.utils.Constants.CURRENT_LANG_CODE;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
@@ -411,10 +410,7 @@ public class SnuffyPWActivity extends AppCompatActivity
         super.onPause();
         SharedPreferences.Editor ed = settings.edit();
         ed.putInt("currPage", mPagerCurrentItem);
-        ed.putString(CURRENT_LANG_CODE, getLanguage());
         ed.apply();
-        
-        
     }
 
     private void addClickHandlersToAllPages()
@@ -540,10 +536,6 @@ public class SnuffyPWActivity extends AppCompatActivity
     private void switchLanguages(String languageCode, boolean bResetToFirstPage)
     {
         setLanguage(languageCode);
-
-        SharedPreferences.Editor ed = settings.edit();
-        ed.putString(CURRENT_LANG_CODE, languageCode);
-        ed.apply();
 
         mPages.clear();
         mPages = null;

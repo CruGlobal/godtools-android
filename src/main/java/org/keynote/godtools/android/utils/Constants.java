@@ -48,7 +48,6 @@ public class Constants
     public static final String PROPERTY_REG_ID = "registration_id";
     public static final String LANGUAGE_PARALLEL = "languageParallel";
     public static final String ENGLISH_DEFAULT = "en";
-    public static final String CURRENT_LANG_CODE = "currLanguageCode";
 
     /**
      * Place holder texts
