@@ -2,8 +2,10 @@ package org.keynote.godtools.android.api;
 
 /**
  * Created by dsgoers on 3/29/16.
+ *
+ * For subscribers to Growth Spaces
  */
-public class Subscriber {
+public class GSSubscriber {
 
     private String routeId;
     private String languageCode;

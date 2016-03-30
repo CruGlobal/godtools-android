@@ -29,6 +29,6 @@ public interface GrowthSpacesApi {
             .create(GrowthSpacesApi.class);
 
     @POST(V1 + "/subscribers")
-    Call<Subscriber> createSubscriber(@Header("Access-Id") String accessId,
-                                      @Header("Access-Secret") String accessSecret, @Body Subscriber subscriber);
+    Call<GSSubscriber> createSubscriber(@Header("Access-Id") String accessId,
+                                      @Header("Access-Secret") String accessSecret, @Body GSSubscriber gsSubscriber);
 }
