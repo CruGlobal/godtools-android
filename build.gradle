@@ -102,8 +102,6 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
-    productFlavors {
-    }
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
