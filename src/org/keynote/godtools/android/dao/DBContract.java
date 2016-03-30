@@ -22,6 +22,7 @@ public class DBContract {
     private static final String INTEGER_TYPE = " INTEGER";
     private static final String DOUBLE_TYPE = " DOUBLE";
     private static final String PRIMARY_KEY = " PRIMARY KEY";
+    private static final String TIMESTAMP_WITH_TIME_ZONE = " TIMESTAMP WITH TIME ZONE";
     private static final String COMMA_SEP = ",";
 
     public static abstract class GTPackageTable extends Base {
@@ -111,5 +112,30 @@ public class DBContract {
                 + GTLanguageTable.COL_IS_DOWNLOADED + COMMA_SEP
                 + GTLanguageTable.COL_IS_DRAFT + ")" +
                 " SELECT * FROM " + UPDATE_TABLE_NAME ;
+    }
+
+    /*Growth Spaces subscriber table*/
+    public static abstract class GSSubscriberTable implements BaseColumns
+    {
+        public static final String TABLE_NAME = "gssubscribers";
+        public static final String COL_ROUTE_ID = "route_id";
+        public static final String COL_LANGUAGE_CODE = "language_code";
+        public static final String COL_FIRST_NAME = "first_name";
+        public static final String COL_LAST_NAME = "last_name";
+        public static final String COL_EMAIL = "email";
+        public static final String COL_CREATED_TIMESTAMP = "created_timestamp";
+
+        public static final String SQL_CREATE_GTSUBSCRIBER = "CREATE TABLE IF NOT EXISTS "
+                + GSSubscriberTable.TABLE_NAME + "("
+                + GSSubscriberTable._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP
+                + GSSubscriberTable.COL_ROUTE_ID + INTEGER_TYPE + COMMA_SEP
+                + GSSubscriberTable.COL_LANGUAGE_CODE + TEXT_TYPE + COMMA_SEP
+                + GSSubscriberTable.COL_FIRST_NAME + TEXT_TYPE + COMMA_SEP
+                + GSSubscriberTable.COL_LAST_NAME + TEXT_TYPE + COMMA_SEP
+                + GSSubscriberTable.COL_EMAIL + TEXT_TYPE + COMMA_SEP
+                + GSSubscriberTable.COL_CREATED_TIMESTAMP + TIMESTAMP_WITH_TIME_ZONE + ")";
+
+        public static final String SQL_DELETE_GTSUBSCRIBER = "DROP TABLE IF EXISTS "
+                + GSSubscriberTable.TABLE_NAME;
     }
 }
