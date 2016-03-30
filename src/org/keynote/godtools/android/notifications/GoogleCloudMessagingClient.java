@@ -8,7 +8,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
@@ -71,16 +71,17 @@ public class GoogleCloudMessagingClient
 
     private boolean googlePlayServicesIsAvailable()
     {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(callingActivity);
-        if (resultCode != ConnectionResult.SUCCESS)
-        {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode))
-            {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, callingActivity, PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            }
-            return false;
+        final GoogleApiAvailability playServices = GoogleApiAvailability.getInstance();
+        final int resultCode = playServices.isGooglePlayServicesAvailable(callingActivity);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            return true;
         }
-        return true;
+
+        if (playServices.isUserResolvableError(resultCode)) {
+            playServices.getErrorDialog(callingActivity, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+        }
+
+        return false;
     }
 
     private void registerInBackground()
