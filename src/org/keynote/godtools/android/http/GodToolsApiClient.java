@@ -2,21 +2,20 @@ package org.keynote.godtools.android.http;
 
 import android.support.v4.os.AsyncTaskCompat;
 
-import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 import java.io.File;
 import java.util.UUID;
 
+import static org.keynote.godtools.android.BuildConfig.BASE_URL;
+import static org.keynote.godtools.android.BuildConfig.BASE_URL_V2;
+
 public class GodToolsApiClient {
 
-    private static final String BASE_URL_V2 = BuildConfig.BASE_URL_V2;
-    private static final String BASE_URL = BuildConfig.BASE_URL;
     private static final String ENDPOINT_META = "meta/";
     private static final String ENDPOINT_PACKAGES = "packages/";
     private static final String ENDPOINT_TRANSLATIONS = "translations/";
     private static final String ENDPOINT_DRAFTS = "drafts/";
-    private static final String ENDPOINT_AUTH = "auth/";
     private static final String ENDPOINT_NOTIFICATIONS = "notification/";
 
     public static void getListOfPackages(String tag, MetaTask.MetaTaskHandler taskHandler){
@@ -36,19 +35,6 @@ public class GodToolsApiClient {
         String filePath = app.getDocumentsDir().getAbsolutePath() + File.separator + langCode + File.separator + "package.zip";
 
         download(app, url, filePath, tag, null, langCode, taskHandler);
-    }
-
-    public static void authenticateAccessCode(String accessCode, AuthTask.AuthTaskHandler taskHandler){
-        AuthTask authTask = new AuthTask(taskHandler, true, false);
-        String url = BASE_URL + ENDPOINT_AUTH + accessCode;
-        authTask.execute(url, accessCode);
-    }
-
-    public static void verifyStatusOfAuthToken(String authToken, AuthTask.AuthTaskHandler taskHandler)
-    {
-        AuthTask authTask = new AuthTask(taskHandler, false, true);
-        String url = BASE_URL + ENDPOINT_AUTH;
-        authTask.execute(url, authToken);
     }
 
     public static void downloadDrafts(SnuffyApplication app, String authorization, String langCode, String tag, DownloadTask.DownloadTaskHandler taskHandler){
@@ -95,13 +81,6 @@ public class GodToolsApiClient {
         String url = BASE_URL_V2 + ENDPOINT_TRANSLATIONS + languageCode + File.separator + packageCode;
 
         new DraftPublishTask(taskHandler).execute(url, authorization);
-    }
-
-    public static void registerDeviceForNotifications(String registrationID, String deviceId, String registrationsOn, NotificationRegistrationTask.NotificationTaskHandler taskHandler)
-    {
-        String url = BASE_URL + ENDPOINT_NOTIFICATIONS + registrationID;
-
-        new NotificationRegistrationTask(taskHandler).execute(url, deviceId, registrationsOn);
     }
 
     public static void updateNotification(String authcode, String registrationId, int notificationType,  NotificationUpdateTask.NotificationUpdateTaskHandler taskHandler)
