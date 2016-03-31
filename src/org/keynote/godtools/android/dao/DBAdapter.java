@@ -104,7 +104,7 @@ public class DBAdapter extends AbstractDao {
 
     public long insertGSSubscriber(GSSubscriber gsSubscriber)
     {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
         Calendar calendar = Calendar.getInstance();
 
         ContentValues cv = new ContentValues();
