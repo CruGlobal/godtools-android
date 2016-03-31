@@ -11,9 +11,11 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.text.ClipboardManager;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
+import android.util.Xml;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -29,14 +31,17 @@ import android.widget.Toast;
 
 import org.ccci.gto.android.common.util.IOUtils;
 import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.snuffy.model.Manifest;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import org.xmlpull.v1.XmlPullParser;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -146,103 +151,50 @@ public class PackageReader
 
     private boolean processMainPackageFilePW(InputStream isMain)
     {
-        Log.d(TAG, ">>> processMainPackageFile starts");
+        try {
+            // initialize pull parser
+            final XmlPullParser parser = Xml.newPullParser();
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+            parser.setInput(isMain, "UTF-8");
+            parser.nextTag();
 
-        boolean bSuccess = false;
+            // parse main package manifest
+            final Manifest manifest = Manifest.fromXml(parser);
+            final int numPages = manifest.getPages().size();
+            mPackageTitle = manifest.getTitle();
 
-        Document xmlDoc;
-        try
-        {
-            xmlDoc = DocumentBuilderFactory
-                    .newInstance()
-                    .newDocumentBuilder()
-                    .parse(isMain);
-            org.w3c.dom.Element root = xmlDoc.getDocumentElement();
-            if (root == null)
-                throw new SAXException("XML Document has no root element");
-
-            NodeList nlPages = root.getElementsByTagName("page");
-            int numPages = nlPages.getLength();
-            if (numPages == 0)
-                throw new SAXException("Main Package file document must have at least one page node");
-            NodeList nlAbout = root.getElementsByTagName("about");
-            int numAbouts = nlAbout.getLength();
-            if (numAbouts != 1)
-                throw new SAXException("Main Package file document must have exactly one about node");
-            NodeList nlPackageName = root.getElementsByTagName("packagename"); // packagename seems to have superseded displayname as the name for this element
-            int numPackageNames = nlPackageName.getLength();
-            NodeList nlDisplayName = root.getElementsByTagName("displayname"); // but some files (e.g. 4Laws/ru.xml) still have displayname ?
-            int numDisplayNames = nlDisplayName.getLength();
-            if ((numPackageNames + numDisplayNames) != 1)
-                throw new SAXException("Main Package file document must have exactly one packagename or displayname node");
-            if (numPackageNames == 1)
-            {
-                Element elPackage = (Element) nlPackageName.item(0);
-                mPackageTitle = elPackage.getTextContent();
-            }
-            else
-            {
-                Element elPackage = (Element) nlDisplayName.item(0);
-                mPackageTitle = elPackage.getTextContent();
-            }
-
-            Element elAbout = (Element) nlAbout.item(0);
-            if (!processPagePW(elAbout))    // about will be page 0
-                return false;
-
+            // process all pages
             mProgressCallback.updateProgress(0, numPages);
-            for (int i = 0; i < numPages; i++)
-            {
-                Element elPage = (Element) nlPages.item(i);
-                if (!processPagePW(elPage))
-                    return false;
-                mProgressCallback.updateProgress(i + 1, numPages);
+            mPages.add(processManifestPage(manifest.getAbout()));
+            mProgressCallback.updateProgress(mPages.size(), numPages);
+            for (final Manifest.Page page : manifest.getPages()) {
+                mPages.add(processManifestPage(page));
+                mProgressCallback.updateProgress(mPages.size(), numPages);
             }
 
-            bSuccess = true;
-        } catch (IOException e)
-        {
+            // return success
+            return true;
+        } catch (final Exception e) {
             Log.e(TAG, "processMainPackageFile failed: " + e.toString());
-        } catch (ParserConfigurationException e)
-        {
-            Log.e(TAG, "processMainPackageFile failed: " + e.toString());
-        } catch (SAXException e)
-        {
-            Log.e(TAG, "processMainPackageFile failed: " + e.toString());
+            return false;
         }
-        Log.d(TAG, ">>> processMainPackageFile ends");
-        return bSuccess;
     }
 
-    private boolean processPagePW(Element pageElement)
-    {
-        String thumbFileName = pageElement.getAttribute("thumb");
-        String pageFileName = pageElement.getAttribute("filename");
-        String description = pageElement.getTextContent();
-        Log.d(TAG, ">>> processPage: " + pageFileName);
-
-        pageFileName = "resources/" + pageFileName;
-
-        SnuffyPage currPage = null;
+    @NonNull
+    private SnuffyPage processManifestPage(@NonNull final Manifest.Page page) throws FileNotFoundException {
         InputStream pageInputStream = null;
-        try
-        {
-            pageInputStream = new BufferedInputStream(new FileInputStream(mAppRef.get().getDocumentsDir().getPath() + "/" + pageFileName));
-            currPage = processPageFilePW(pageInputStream, pageFileName);
-            currPage.mDescription = description;
-            currPage.mThumbnail = thumbFileName;
-            mPages.add(currPage);
-        } catch (IOException e)
-        {
-            Log.e(TAG, "Cannot open or read page file: " + pageFileName);
-            return false;
-        } finally
-        {
+        try {
+            final String pageFileName = "resources/" + page.getFileName();
+            pageInputStream = new BufferedInputStream(
+                    new FileInputStream(new File(mAppRef.get().getDocumentsDir(), pageFileName)));
+
+            final SnuffyPage currPage = processPageFilePW(pageInputStream, pageFileName);
+            currPage.mDescription = page.getDescription();
+            currPage.mThumbnail = page.getThumb();
+            return currPage;
+        } finally {
             IOUtils.closeQuietly(pageInputStream);
         }
-
-        //noinspection ConstantConditions
-        return (currPage != null);
     }
 
     private SnuffyPage processPageFilePW(InputStream isPage, String pageFileName)
