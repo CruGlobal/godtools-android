@@ -29,6 +29,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.ccci.gto.android.common.util.IOUtils;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.snuffy.model.Manifest;
@@ -175,7 +177,8 @@ public class PackageReader
             // return success
             return true;
         } catch (final Exception e) {
-            Log.e(TAG, "processMainPackageFile failed: " + e.toString());
+            Crashlytics.log("error processing main package manifest");
+            Crashlytics.logException(e);
             return false;
         }
     }
