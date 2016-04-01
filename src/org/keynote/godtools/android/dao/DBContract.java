@@ -23,7 +23,6 @@ public class DBContract {
     private static final String INTEGER_TYPE = " INTEGER";
     private static final String DOUBLE_TYPE = " DOUBLE";
     private static final String PRIMARY_KEY = " PRIMARY KEY";
-    private static final String TIMESTAMP_WITH_TIME_ZONE = " TIMESTAMP WITH TIME ZONE";
     private static final String COMMA_SEP = ",";
 
     public static abstract class GTPackageTable extends Base {
@@ -135,7 +134,7 @@ public class DBContract {
                 {COLUMN_SUBSCRIBER_ID, COL_ROUTE_ID, COL_LANGUAGE_CODE, COL_FIRST_NAME, COL_LAST_NAME, COL_EMAIL,
                         COL_CREATED_TIMESTAMP};
 
-        public static final String SQL_CREATE_GTSUBSCRIBERS = "CREATE TABLE IF NOT EXISTS "
+        public static final String SQL_CREATE_GSSUBSCRIBERS = "CREATE TABLE IF NOT EXISTS "
                 + GSSubscriberTable.TABLE_NAME + "("
                 + GSSubscriberTable._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP
                 + GSSubscriberTable.COL_ROUTE_ID + INTEGER_TYPE + COMMA_SEP
@@ -145,7 +144,7 @@ public class DBContract {
                 + GSSubscriberTable.COL_EMAIL + TEXT_TYPE + COMMA_SEP
                 + GSSubscriberTable.COL_CREATED_TIMESTAMP + INTEGER_TYPE + ")";
 
-        public static final String SQL_DELETE_GTSUBSCRIBERS = "DROP TABLE IF EXISTS "
+        public static final String SQL_DELETE_GSSUBSCRIBERS = "DROP TABLE IF EXISTS "
                 + GSSubscriberTable.TABLE_NAME;
 
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ACCOUNT_ID.eq(bind());
