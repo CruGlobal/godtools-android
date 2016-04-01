@@ -12,10 +12,7 @@ import org.keynote.godtools.android.api.GSSubscriber;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -94,8 +91,7 @@ public class DBAdapter extends AbstractDao {
         return super.getPrimaryKeyWhere(obj);
     }
 
-    public long insertGTLanguage(GTLanguage gtLanguage)
-    {
+    public long insertGTLanguage(GTLanguage gtLanguage) {
         ContentValues cv = new ContentValues();
         cv.put(DBContract.GTLanguageTable.COL_CODE, gtLanguage.getLanguageCode());
         cv.put(DBContract.GTLanguageTable.COL_IS_DOWNLOADED, gtLanguage.isDownloaded());
@@ -103,22 +99,6 @@ public class DBAdapter extends AbstractDao {
         cv.put(DBContract.GTLanguageTable.COL_NAME, gtLanguage.getLanguageName());
 
         return getWritableDatabase().insert(DBContract.GTLanguageTable.TABLE_NAME, null, cv);
-    }
-
-    public long insertGSSubscriber(GSSubscriber gsSubscriber)
-    {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
-        Calendar calendar = Calendar.getInstance();
-
-        ContentValues cv = new ContentValues();
-        cv.put(DBContract.GSSubscriberTable.COL_ROUTE_ID, gsSubscriber.getRouteId());
-        cv.put(DBContract.GSSubscriberTable.COL_LANGUAGE_CODE, gsSubscriber.getLanguageCode());
-        cv.put(DBContract.GSSubscriberTable.COL_FIRST_NAME, gsSubscriber.getFirstName());
-        cv.put(DBContract.GSSubscriberTable.COL_LAST_NAME, gsSubscriber.getLastName());
-        cv.put(DBContract.GSSubscriberTable.COL_EMAIL, gsSubscriber.getEmail());
-        cv.put(DBContract.GSSubscriberTable.COL_CREATED_TIMESTAMP, dateFormat.format(calendar.getTime()));
-
-        return getWritableDatabase().insert(DBContract.GSSubscriberTable.TABLE_NAME, null, cv);
     }
 
     public List<GTLanguage> getAllLanguages()
