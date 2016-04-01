@@ -73,7 +73,7 @@ public class GoogleCloudMessagingClient
     {
         final GoogleApiAvailability playServices = GoogleApiAvailability.getInstance();
         final int resultCode = playServices.isGooglePlayServicesAvailable(callingActivity);
-        if (resultCode != ConnectionResult.SUCCESS) {
+        if (resultCode == ConnectionResult.SUCCESS) {
             return true;
         }
 
