@@ -17,8 +17,6 @@ import retrofit2.http.POST;
  * Created by dsgoers on 3/29/16.
  */
 public interface GrowthSpacesApi {
-    String V1 = "v1";
-
     GrowthSpacesApi INSTANCE = new Retrofit.Builder()
             .baseUrl(BuildConfig.GROWTH_SPACES_URL)
             .addConverterFactory(
@@ -30,7 +28,7 @@ public interface GrowthSpacesApi {
             .build()
             .create(GrowthSpacesApi.class);
 
-    @POST(V1 + "/subscribers")
+    @POST("subscribers")
     Call<GSSubscriber> createSubscriber(@Header("Access-Id") String accessId,
                                       @Header("Access-Secret") String accessSecret, @Body GSSubscriber gsSubscriber);
 }
