@@ -2,8 +2,11 @@ package org.keynote.godtools.android.snuffy.model;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
+import android.text.TextUtils;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.xmlpull.v1.XmlPullParser;
@@ -22,6 +25,7 @@ public class Manifest {
     private static final String XML_PAGE = "page";
     private static final String XML_PAGE_FILENAME = "filename";
     private static final String XML_PAGE_THUMBNAIL = "thumb";
+    private static final String XML_PAGE_LISTENERS = "listeners";
 
     private String mTitle;
     private Page mAbout;
@@ -113,6 +117,10 @@ public class Manifest {
             return mDescription;
         }
 
+        public Set<String> getListeners() {
+            return mListeners;
+        }
+
         static Page fromXml(final XmlPullParser parser, @NonNull final String type)
                 throws IOException, XmlPullParserException {
             return new Page().parse(parser, type);
@@ -125,7 +133,16 @@ public class Manifest {
             // parse the attributes for this page
             mFileName = parser.getAttributeValue(null, XML_PAGE_FILENAME);
             mThumb = parser.getAttributeValue(null, XML_PAGE_THUMBNAIL);
-            // TODO: listeners
+
+            final ImmutableSet.Builder<String> listeners = ImmutableSet.builder();
+            for (final String listener : TextUtils
+                    .split(Strings.nullToEmpty(parser.getAttributeValue(null, XML_PAGE_LISTENERS)), ",")) {
+                if (!Strings.isNullOrEmpty(listener)) {
+                    listeners.add(listener);
+                }
+            }
+            mListeners = listeners.build();
+
             mDescription = XmlPullParserUtils.safeNextText(parser);
 
             if (mFileName == null) {
