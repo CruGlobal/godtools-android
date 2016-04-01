@@ -1,5 +1,7 @@
 package org.keynote.godtools.android.api;
 
+import java.util.Date;
+
 /**
  * Created by dsgoers on 3/29/16.
  *
@@ -12,6 +14,7 @@ public class GSSubscriber {
     private String firstName;
     private String lastName;
     private String email;
+    private Date createdTimestamp;
 
     public String getRouteId() {
         return routeId;
@@ -51,6 +54,14 @@ public class GSSubscriber {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Date getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
+    public void setCreatedTimestamp(Date createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
     }
 
 }
