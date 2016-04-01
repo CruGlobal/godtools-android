@@ -84,7 +84,6 @@ android {
     }
     sourceSets {
         main {
-            manifest.srcFile 'AndroidManifest.xml'
             assets.srcDirs = ['assets']
         }
     }
