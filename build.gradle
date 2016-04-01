@@ -26,14 +26,16 @@ dependencies {
     //noinspection GradleDependency
     compile 'com.google.android.gms:play-services:4.3.23'
 
-    compile 'org.ccci.gto.android:gto-support-core:0.8.0'
-    compile 'org.ccci.gto.android:gto-support-db:0.8.0'
+    compile 'org.ccci.gto.android:gto-support-core:0.9.0-SNAPSHOT'
+    compile 'org.ccci.gto.android:gto-support-db:0.9.0-SNAPSHOT'
+    compile 'org.ccci.gto.android:gto-support-gson:0.9.0-SNAPSHOT'
 
     compile 'com.crashlytics.sdk.android:crashlytics:2.5.5'
     compile 'com.newrelic.agent.android:android-agent:5.5.0'
     compile 'com.google.guava:guava:18.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
     compile 'com.squareup.retrofit2:retrofit:2.0.0'
 
     compile 'org.apache.commons:commons-lang3:3.4'
@@ -62,6 +64,7 @@ android {
         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
         buildConfigField "String", "GOOGLE_ANALYTICS_CLIENT_ID", "\"UA-325725-50\""
+        buildConfigField "String", "GROWTH_SPACES_URL", "\"https://www.growthspaces.org/api/v1/\""
     }
 
     compileOptions {
