@@ -48,6 +48,10 @@
 -keepattributes Exceptions, Signature, InnerClasses, LineNumberTable
 
 
+# Okio
+-dontwarn okio.Okio
+
+
 ## Picasso
 -dontwarn com.squareup.okhttp.**
 
