@@ -58,7 +58,7 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
 
             db.execSQL(DBContract.GTPackageTable.SQL_CREATE_TABLE);
             db.execSQL(DBContract.GTLanguageTable.SQL_CREATE_GTLANGUAGES);
-            db.execSQL(DBContract.GSSubscriberTable.SQL_CREATE_GTSUBSCRIBER);
+            db.execSQL(DBContract.GSSubscriberTable.SQL_CREATE_GTSUBSCRIBERS);
 
             db.setTransactionSuccessful();
         } finally {
@@ -140,7 +140,7 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_TABLE);
             db.execSQL(DBContract.GTLanguageTable.SQL_DELETE_GTLANGUAGES);
             db.execSQL(DBContract.GTLanguageTable.SQL_DELETE_OLD_GTLANGUAGES);
-            db.execSQL(DBContract.GSSubscriberTable.SQL_DELETE_GTSUBSCRIBER);
+            db.execSQL(DBContract.GSSubscriberTable.SQL_DELETE_GTSUBSCRIBERS);
 
             onCreate(db);
 

@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Expression.Field;
 import org.ccci.gto.android.common.db.Table;
+import org.keynote.godtools.android.api.GSSubscriber;
 import org.keynote.godtools.android.business.GTPackage;
 
 public class DBContract {
@@ -115,9 +116,12 @@ public class DBContract {
     }
 
     /*Growth Spaces subscriber table*/
-    public static abstract class GSSubscriberTable implements BaseColumns
+    public static abstract class GSSubscriberTable extends Base
     {
         public static final String TABLE_NAME = "gssubscribers";
+        public static final Table<GSSubscriber> TABLE = Table.forClass(GSSubscriber.class);
+
+        public static final String COLUMN_SUBSCRIBER_ID = _ID;
         public static final String COL_ROUTE_ID = "route_id";
         public static final String COL_LANGUAGE_CODE = "language_code";
         public static final String COL_FIRST_NAME = "first_name";
@@ -125,7 +129,13 @@ public class DBContract {
         public static final String COL_EMAIL = "email";
         public static final String COL_CREATED_TIMESTAMP = "created_timestamp";
 
-        public static final String SQL_CREATE_GTSUBSCRIBER = "CREATE TABLE IF NOT EXISTS "
+        public static final Field FIELD_ACCOUNT_ID = field(TABLE, COLUMN_SUBSCRIBER_ID);
+
+        public static final String[] PROJECTION_ALL =
+                {COLUMN_SUBSCRIBER_ID, COL_ROUTE_ID, COL_LANGUAGE_CODE, COL_FIRST_NAME, COL_LAST_NAME, COL_EMAIL,
+                        COL_CREATED_TIMESTAMP};
+
+        public static final String SQL_CREATE_GTSUBSCRIBERS = "CREATE TABLE IF NOT EXISTS "
                 + GSSubscriberTable.TABLE_NAME + "("
                 + GSSubscriberTable._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP
                 + GSSubscriberTable.COL_ROUTE_ID + INTEGER_TYPE + COMMA_SEP
@@ -135,7 +145,9 @@ public class DBContract {
                 + GSSubscriberTable.COL_EMAIL + TEXT_TYPE + COMMA_SEP
                 + GSSubscriberTable.COL_CREATED_TIMESTAMP + TIMESTAMP_WITH_TIME_ZONE + ")";
 
-        public static final String SQL_DELETE_GTSUBSCRIBER = "DROP TABLE IF EXISTS "
+        public static final String SQL_DELETE_GTSUBSCRIBERS = "DROP TABLE IF EXISTS "
                 + GSSubscriberTable.TABLE_NAME;
+
+        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ACCOUNT_ID.eq(bind());
     }
 }

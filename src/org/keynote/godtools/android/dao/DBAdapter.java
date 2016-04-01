@@ -26,6 +26,9 @@ public class DBAdapter extends AbstractDao {
 
     private DBAdapter(@NonNull final Context context) {
         super(GodToolsDatabase.getInstance(context));
+
+        registerType(GSSubscriber.class, DBContract.GSSubscriberTable.TABLE_NAME, DBContract.GSSubscriberTable.PROJECTION_ALL,
+                new GSSubscriberMapper(), DBContract.GSSubscriberTable.SQL_WHERE_PRIMARY_KEY);
     }
 
     public static DBAdapter getInstance(@NonNull final Context context) {
