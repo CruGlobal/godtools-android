@@ -45,7 +45,21 @@ public class GSSubscriberMapper extends AbstractMapper<GSSubscriber> {
             default:
                 super.mapField(values, field, obj);
         }
+    }
 
+    @NonNull
+    @Override
+    public GSSubscriber toObject(@NonNull final Cursor c) {
+        final GSSubscriber gsSubscriber = super.toObject(c);
 
+        gsSubscriber.setId(getInt(c, GSSubscriberTable.COLUMN_SUBSCRIBER_ID));
+        gsSubscriber.setRouteId(getString(c, GSSubscriberTable.COL_ROUTE_ID));
+        gsSubscriber.setLanguageCode(getString(c, GSSubscriberTable.COL_LANGUAGE_CODE));
+        gsSubscriber.setFirstName(getString(c, GSSubscriberTable.COL_FIRST_NAME));
+        gsSubscriber.setLastName(getString(c, GSSubscriberTable.COL_LAST_NAME));
+        gsSubscriber.setEmail(getString(c, GSSubscriberTable.COL_EMAIL));
+        gsSubscriber.setCreatedTimestamp(getDate(c, GSSubscriberTable.COL_CREATED_TIMESTAMP));
+
+        return gsSubscriber;
     }
 }
