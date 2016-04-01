@@ -82,11 +82,6 @@ android {
     dexOptions {
         preDexLibraries !project.hasProperty('disablePreDex')
     }
-    sourceSets {
-        main {
-            assets.srcDirs = ['assets']
-        }
-    }
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
