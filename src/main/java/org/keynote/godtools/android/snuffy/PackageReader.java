@@ -12,10 +12,10 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.ClipboardManager;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
-import android.util.Xml;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -38,7 +38,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
-import org.xmlpull.v1.XmlPullParser;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -49,9 +48,12 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.concurrent.ExecutionException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
 
 @SuppressWarnings({"deprecation", "BooleanMethodIsAlwaysInverted"})
 public class PackageReader
@@ -111,12 +113,12 @@ public class PackageReader
                                     int pageWidth,
                                     int pageHeight,
                                     String packageConfigName,
+                                    @Nullable final String status,
                                     Vector<SnuffyPage> pages,
                                     ProgressCallback progressCallback,
                                     Typeface alternateTypeface)
     {
-
-        mAppRef = new WeakReference<SnuffyApplication>(app);
+        mAppRef = new WeakReference<>(app);
         mContext = app.getApplicationContext();
         mPageWidth = pageWidth;
         mPageHeight = pageHeight;
@@ -132,36 +134,24 @@ public class PackageReader
         bitmapCache.clear();
         mPages.clear();
 
-        boolean bSuccess;
-        InputStream isMain = null;
-        try
-        {
-            isMain = new BufferedInputStream(new FileInputStream(app.getResourcesDir().getPath() + "/" + packageConfigName));
-            bSuccess = processMainPackageFilePW(isMain);
-
-        } catch (IOException e)
-        {
-            Log.e(TAG, "Cannot open or read main package file: " + packageConfigName);
+        // process the manifest
+        try {
+            final boolean forceReload = KEY_DRAFT.equalsIgnoreCase(status);
+            final Manifest manifest =
+                    PackageManager.getInstance(mContext).getManifest(packageConfigName, forceReload).get();
+            return processMainPackageFilePW(manifest);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             return false;
-        } finally
-        {
-            IOUtils.closeQuietly(isMain);
+        } catch (ExecutionException e) {
+            Log.e(TAG, "Error reading package manifest: " + packageConfigName);
+            return false;
         }
-
-        return bSuccess;
     }
 
-    private boolean processMainPackageFilePW(InputStream isMain)
-    {
+    private boolean processMainPackageFilePW(@NonNull final Manifest manifest) {
         try {
-            // initialize pull parser
-            final XmlPullParser parser = Xml.newPullParser();
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
-            parser.setInput(isMain, "UTF-8");
-            parser.nextTag();
-
-            // parse main package manifest
-            final Manifest manifest = Manifest.fromXml(parser);
+            // process main package manifest
             final int numPages = manifest.getPages().size();
             mPackageTitle = manifest.getTitle();
 

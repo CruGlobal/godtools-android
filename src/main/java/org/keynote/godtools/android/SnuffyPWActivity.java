@@ -770,7 +770,7 @@ public class SnuffyPWActivity extends AppCompatActivity
                 success = packageReader.processPackagePW(
                         (SnuffyApplication) getApplication(),
                         mPageWidth, mPageHeight,
-                        mConfigFileName, mPages,
+                        mConfigFileName, mPackageStatus, mPages,
                         ProcessPackageAsync.this,
                         mAlternateTypeface
                 );
