@@ -3,6 +3,7 @@ package org.keynote.godtools.android.api;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 
+import org.ccci.gto.android.common.gson.GsonIgnoreExclusionStrategy;
 import org.keynote.godtools.android.BuildConfig;
 
 import retrofit2.Call;
@@ -23,8 +24,9 @@ public interface GrowthSpacesApi {
             .addConverterFactory(
                     GsonConverterFactory.create(
                             new GsonBuilder()
-                            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                            .create()))
+                                    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                                    .setExclusionStrategies(new GsonIgnoreExclusionStrategy())
+                                    .create()))
             .build()
             .create(GrowthSpacesApi.class);
 
