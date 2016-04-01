@@ -13,7 +13,7 @@ import java.util.Date;
 public class GSSubscriber {
 
     @GsonIgnore
-    private int id;
+    private Integer id;
     private String routeId;
     private String languageCode;
     private String firstName;
@@ -22,11 +22,11 @@ public class GSSubscriber {
     @GsonIgnore
     private Date createdTimestamp = new Date(Calendar.getInstance().getTimeInMillis());
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
