@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import org.ccci.gto.android.common.db.AbstractDao;
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Mapper;
+import org.keynote.godtools.android.api.GSSubscriber;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 
@@ -22,6 +23,9 @@ public class DBAdapter extends AbstractDao {
 
     private DBAdapter(@NonNull final Context context) {
         super(GodToolsDatabase.getInstance(context));
+
+        registerType(GSSubscriber.class, DBContract.GSSubscriberTable.TABLE_NAME, DBContract.GSSubscriberTable.PROJECTION_ALL,
+                new GSSubscriberMapper(), DBContract.GSSubscriberTable.SQL_WHERE_PRIMARY_KEY);
     }
 
     public static DBAdapter getInstance(@NonNull final Context context) {
@@ -87,8 +91,7 @@ public class DBAdapter extends AbstractDao {
         return super.getPrimaryKeyWhere(obj);
     }
 
-    public long insertGTLanguage(GTLanguage gtLanguage)
-    {
+    public long insertGTLanguage(GTLanguage gtLanguage) {
         ContentValues cv = new ContentValues();
         cv.put(DBContract.GTLanguageTable.COL_CODE, gtLanguage.getLanguageCode());
         cv.put(DBContract.GTLanguageTable.COL_IS_DOWNLOADED, gtLanguage.isDownloaded());

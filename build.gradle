@@ -35,6 +35,7 @@ dependencies {
 
     compile 'org.ccci.gto.android:gto-support-core:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-db:' + deps.gtoSupport
+    compile 'org.ccci.gto.android:gto-support-gson:' + deps.gtoSupport
 
     compile 'com.crashlytics.sdk.android:crashlytics:2.5.5'
     compile 'com.newrelic.agent.android:android-agent:5.5.0'
@@ -42,6 +43,7 @@ dependencies {
     compile 'com.google.guava:guava:' + deps.guava
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
     compile 'com.squareup.retrofit2:retrofit:2.0.0'
 
     compile 'org.apache.commons:commons-lang3:3.4'
@@ -70,6 +72,7 @@ android {
         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
         buildConfigField "String", "GOOGLE_ANALYTICS_CLIENT_ID", "\"UA-325725-50\""
+        buildConfigField "String", "GROWTH_SPACES_URL", "\"https://www.growthspaces.org/api/v1/\""
     }
 
     compileOptions {

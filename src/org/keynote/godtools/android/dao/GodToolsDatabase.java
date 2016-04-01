@@ -25,10 +25,12 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
      * 2: 2015-05-26
      * v4.0.3 - v4.1.6
      * 3: 2016-02-09
+     * v4.1.7
+     * 4: 2016-04-01
      */
 
     private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     private static GodToolsDatabase INSTANCE;
 
@@ -58,6 +60,7 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
 
             db.execSQL(DBContract.GTPackageTable.SQL_CREATE_TABLE);
             db.execSQL(DBContract.GTLanguageTable.SQL_CREATE_GTLANGUAGES);
+            db.execSQL(DBContract.GSSubscriberTable.SQL_CREATE_GSSUBSCRIBERS);
 
             db.setTransactionSuccessful();
         } finally {
@@ -101,6 +104,10 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
                         db.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_TABLE);
 
                         break;
+                    case 4:
+                        //create Growth Spaces Subscriber table
+                        db.execSQL(DBContract.GSSubscriberTable.SQL_CREATE_GSSUBSCRIBERS);
+                        break;
                     default:
                         // unrecognized version
                         throw new SQLiteException("Unrecognized database version");
@@ -139,6 +146,7 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_TABLE);
             db.execSQL(DBContract.GTLanguageTable.SQL_DELETE_GTLANGUAGES);
             db.execSQL(DBContract.GTLanguageTable.SQL_DELETE_OLD_GTLANGUAGES);
+            db.execSQL(DBContract.GSSubscriberTable.SQL_DELETE_GSSUBSCRIBERS);
 
             onCreate(db);
 
