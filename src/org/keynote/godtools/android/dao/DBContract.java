@@ -143,7 +143,7 @@ public class DBContract {
                 + GSSubscriberTable.COL_FIRST_NAME + TEXT_TYPE + COMMA_SEP
                 + GSSubscriberTable.COL_LAST_NAME + TEXT_TYPE + COMMA_SEP
                 + GSSubscriberTable.COL_EMAIL + TEXT_TYPE + COMMA_SEP
-                + GSSubscriberTable.COL_CREATED_TIMESTAMP + TIMESTAMP_WITH_TIME_ZONE + ")";
+                + GSSubscriberTable.COL_CREATED_TIMESTAMP + INTEGER_TYPE + ")";
 
         public static final String SQL_DELETE_GTSUBSCRIBERS = "DROP TABLE IF EXISTS "
                 + GSSubscriberTable.TABLE_NAME;

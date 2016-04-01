@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.api;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -9,12 +10,21 @@ import java.util.Date;
  */
 public class GSSubscriber {
 
+    private int id;
     private String routeId;
     private String languageCode;
     private String firstName;
     private String lastName;
     private String email;
-    private Date createdTimestamp;
+    private Date createdTimestamp = new Date(Calendar.getInstance().getTimeInMillis());
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getRouteId() {
         return routeId;
