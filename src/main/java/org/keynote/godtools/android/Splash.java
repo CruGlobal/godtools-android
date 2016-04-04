@@ -96,7 +96,9 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
         final InitialContentTasks initTasks = new InitialContentTasks(getApplicationContext());
         mUpdateTasks = Futures.successfulAsList(
                 // load the default followup data
-                initTasks.loadFollowups()
+                initTasks.loadFollowups(),
+                // setup the Every Student content
+                initTasks.installEveryStudentPackage()
         );
     }
 

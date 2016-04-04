@@ -3,6 +3,7 @@ package org.keynote.godtools.android.tasks;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
 import android.util.Log;
@@ -47,9 +48,23 @@ public class InitialContentTasks {
         mDao = DBAdapter.getInstance(mContext);
     }
 
+    @NonNull
     public ListenableFuture<Object> loadFollowups() {
         final ListenableFuture<Cursor> followups = mDao.getCursorAsync(Query.select(Followup.class).limit(1));
         return Futures.transform(followups, new InitFollowups());
+    }
+
+    @NonNull
+    public ListenableFuture<Long> installEveryStudentPackage() {
+        // Add Every Student to database (Asynchronously)
+        final GTPackage everyStudent = new GTPackage();
+        everyStudent.setCode(GTPackage.EVERYSTUDENT_PACKAGE_CODE);
+        everyStudent.setName(mContext.getString(R.string.app_name_everystudent));
+        everyStudent.setIcon("homescreen_everystudent_icon_2x.png");
+        everyStudent.setStatus("live");
+        everyStudent.setLanguage("en");
+        everyStudent.setVersion(1.1);
+        return mDao.insertAsync(everyStudent, SQLiteDatabase.CONFLICT_IGNORE);
     }
 
     public static void run(Context mContext, File resourcesDir) {
@@ -89,17 +104,6 @@ public class InitialContentTasks {
                 Log.i("addingDB", gtp.getName());
                 dao.updateOrInsert(gtp);
             }
-
-            // Add Every Student to database
-            GTPackage everyStudent = new GTPackage();
-            everyStudent.setCode(GTPackage.EVERYSTUDENT_PACKAGE_CODE);
-            everyStudent.setName(mContext.getString(R.string.app_name_everystudent));
-            everyStudent.setIcon("homescreen_everystudent_icon_2x.png");
-            everyStudent.setStatus("live");
-            everyStudent.setLanguage("en");
-            everyStudent.setVersion(1.1);
-
-            dao.updateOrInsert(everyStudent);
 
             // english resources should be marked as downloaded
             GTLanguage gtlEnglish = new GTLanguage("en");
