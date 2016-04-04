@@ -2,19 +2,22 @@ package org.keynote.godtools.android.model;
 
 import android.support.annotation.Nullable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Followup {
     public static final long INVALID_ID = -1;
     public static final long DEFAULT_CONTEXT = -1;
 
+    @SerializedName("followup_id")
     private long mId = INVALID_ID;
-    private long mContextId = DEFAULT_CONTEXT;
+    private long contextId = DEFAULT_CONTEXT;
 
     @Nullable
-    private Long mGrowthSpacesRouteId;
+    private Long growthSpacesRouteId;
     @Nullable
-    private String mGrowthSpacesAccessId;
+    private String growthSpacesAccessId;
     @Nullable
-    private String mGrowthSpacesAccessSecret;
+    private String growthSpacesAccessSecret;
 
     public long getId() {
         return mId;
@@ -25,47 +28,47 @@ public class Followup {
     }
 
     public long getContextId() {
-        return mContextId;
+        return contextId;
     }
 
     public void setContextId(final long id) {
-        mContextId = id;
+        contextId = id;
     }
 
     public boolean isDefault() {
-        return mContextId == DEFAULT_CONTEXT;
+        return contextId == DEFAULT_CONTEXT;
     }
 
     public void setDefault(final boolean state) {
         if (state) {
-            mContextId = DEFAULT_CONTEXT;
+            contextId = DEFAULT_CONTEXT;
         }
     }
 
     @Nullable
     public Long getGrowthSpacesRouteId() {
-        return mGrowthSpacesRouteId;
+        return growthSpacesRouteId;
     }
 
     public void setGrowthSpacesRouteId(@Nullable final Long routeId) {
-        mGrowthSpacesRouteId = routeId;
+        growthSpacesRouteId = routeId;
     }
 
     @Nullable
     public String getGrowthSpacesAccessId() {
-        return mGrowthSpacesAccessId;
+        return growthSpacesAccessId;
     }
 
     public void setGrowthSpacesAccessId(@Nullable final String accessId) {
-        mGrowthSpacesAccessId = accessId;
+        growthSpacesAccessId = accessId;
     }
 
     @Nullable
     public String getGrowthSpacesAccessSecret() {
-        return mGrowthSpacesAccessSecret;
+        return growthSpacesAccessSecret;
     }
 
     public void setGrowthSpacesAccessSecret(@Nullable final String secret) {
-        mGrowthSpacesAccessSecret = secret;
+        growthSpacesAccessSecret = secret;
     }
 }
