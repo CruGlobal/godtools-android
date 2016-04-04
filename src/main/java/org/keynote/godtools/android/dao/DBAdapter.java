@@ -7,25 +7,26 @@ import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.db.AbstractDao;
 import org.ccci.gto.android.common.db.Expression;
-import org.ccci.gto.android.common.db.Mapper;
 import org.keynote.godtools.android.api.GSSubscriber;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
+import org.keynote.godtools.android.dao.DBContract.GSSubscriberTable;
+import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class DBAdapter extends AbstractDao {
-    private static final Mapper<GTPackage> GT_PACKAGE_MAPPER = new GTPackageMapper();
-
     private static DBAdapter INSTANCE;
 
     private DBAdapter(@NonNull final Context context) {
         super(GodToolsDatabase.getInstance(context));
 
-        registerType(GSSubscriber.class, DBContract.GSSubscriberTable.TABLE_NAME, DBContract.GSSubscriberTable.PROJECTION_ALL,
-                new GSSubscriberMapper(), DBContract.GSSubscriberTable.SQL_WHERE_PRIMARY_KEY);
+        registerType(GTPackage.class, GTPackageTable.TABLE_NAME, GTPackageTable.PROJECTION_ALL, new GTPackageMapper(),
+                     GTPackageTable.SQL_WHERE_PRIMARY_KEY);
+        registerType(GSSubscriber.class, GSSubscriberTable.TABLE_NAME, GSSubscriberTable.PROJECTION_ALL,
+                     new GSSubscriberMapper(), GSSubscriberTable.SQL_WHERE_PRIMARY_KEY);
     }
 
     public static DBAdapter getInstance(@NonNull final Context context) {
@@ -40,52 +41,13 @@ public class DBAdapter extends AbstractDao {
 
     @NonNull
     @Override
-    protected String getTable(@NonNull final Class<?> clazz) {
-        if (GTPackage.class.equals(clazz)) {
-            return DBContract.GTPackageTable.TABLE_NAME;
-        }
-
-        return super.getTable(clazz);
-    }
-
-    @NonNull
-    @Override
-    public String[] getFullProjection(@NonNull final Class<?> clazz) {
-        if (GTPackage.class.equals(clazz)) {
-            return DBContract.GTPackageTable.PROJECTION_ALL;
-        }
-
-        return super.getFullProjection(clazz);
-    }
-
-    @NonNull
-    @Override
-    @SuppressWarnings("unchecked")
-    protected <T> Mapper<T> getMapper(@NonNull Class<T> clazz) {
-        if (GTPackage.class.equals(clazz)) {
-            return (Mapper<T>) GT_PACKAGE_MAPPER;
-        }
-
-        return super.getMapper(clazz);
-    }
-
-    @NonNull
-    @Override
-    protected Expression getPrimaryKeyWhere(@NonNull final Class<?> clazz) {
-        if (GTPackage.class.equals(clazz)) {
-            return DBContract.GTPackageTable.SQL_WHERE_PRIMARY_KEY;
-        }
-
-        return super.getPrimaryKeyWhere(clazz);
-    }
-
-    @NonNull
-    @Override
     protected Expression getPrimaryKeyWhere(@NonNull final Object obj) {
         if (obj instanceof GTPackage) {
             final GTPackage gtPackage = (GTPackage) obj;
             return getPrimaryKeyWhere(GTPackage.class, gtPackage.getLanguage(), gtPackage.getStatus(),
                                       gtPackage.getCode());
+        } else if (obj instanceof GSSubscriber) {
+            return getPrimaryKeyWhere(GSSubscriber.class, ((GSSubscriber) obj).getId());
         }
 
         return super.getPrimaryKeyWhere(obj);
