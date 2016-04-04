@@ -10,8 +10,10 @@ import org.ccci.gto.android.common.db.Expression;
 import org.keynote.godtools.android.api.GSSubscriber;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
+import org.keynote.godtools.android.dao.DBContract.FollowupTable;
 import org.keynote.godtools.android.dao.DBContract.GSSubscriberTable;
 import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
+import org.keynote.godtools.android.model.Followup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,8 @@ public class DBAdapter extends AbstractDao {
                      GTPackageTable.SQL_WHERE_PRIMARY_KEY);
         registerType(GSSubscriber.class, GSSubscriberTable.TABLE_NAME, GSSubscriberTable.PROJECTION_ALL,
                      new GSSubscriberMapper(), GSSubscriberTable.SQL_WHERE_PRIMARY_KEY);
+        registerType(Followup.class, FollowupTable.TABLE_NAME, FollowupTable.PROJECTION_ALL, new FollowupMapper(),
+                     FollowupTable.SQL_WHERE_PRIMARY_KEY);
     }
 
     public static DBAdapter getInstance(@NonNull final Context context) {
@@ -48,6 +52,9 @@ public class DBAdapter extends AbstractDao {
                                       gtPackage.getCode());
         } else if (obj instanceof GSSubscriber) {
             return getPrimaryKeyWhere(GSSubscriber.class, ((GSSubscriber) obj).getId());
+        } else if (obj instanceof Followup) {
+            final Followup followup = (Followup) obj;
+            return getPrimaryKeyWhere(Followup.class, followup.getId(), followup.getContextId());
         }
 
         return super.getPrimaryKeyWhere(obj);

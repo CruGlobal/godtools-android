@@ -12,6 +12,7 @@ import com.google.common.base.Throwables;
 
 import org.ccci.gto.android.common.app.ApplicationUtils;
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper;
+import org.keynote.godtools.android.dao.DBContract.FollowupTable;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -27,10 +28,11 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
      * 3: 2016-02-09
      * v4.1.7
      * 4: 2016-04-01
+     * 5: 2016-04-04
      */
 
     private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     private static GodToolsDatabase INSTANCE;
 
@@ -60,7 +62,8 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
 
             db.execSQL(DBContract.GTPackageTable.SQL_CREATE_TABLE);
             db.execSQL(DBContract.GTLanguageTable.SQL_CREATE_GTLANGUAGES);
-            db.execSQL(DBContract.GSSubscriberTable.SQL_CREATE_GSSUBSCRIBERS);
+            db.execSQL(DBContract.GSSubscriberTable.SQL_CREATE_TABLE);
+            db.execSQL(FollowupTable.SQL_CREATE_TABLE);
 
             db.setTransactionSuccessful();
         } finally {
@@ -106,7 +109,10 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
                         break;
                     case 4:
                         //create Growth Spaces Subscriber table
-                        db.execSQL(DBContract.GSSubscriberTable.SQL_CREATE_GSSUBSCRIBERS);
+                        db.execSQL(DBContract.GSSubscriberTable.SQL_CREATE_TABLE);
+                        break;
+                    case 5:
+                        db.execSQL(FollowupTable.SQL_CREATE_TABLE);
                         break;
                     default:
                         // unrecognized version
@@ -146,7 +152,8 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_TABLE);
             db.execSQL(DBContract.GTLanguageTable.SQL_DELETE_GTLANGUAGES);
             db.execSQL(DBContract.GTLanguageTable.SQL_DELETE_OLD_GTLANGUAGES);
-            db.execSQL(DBContract.GSSubscriberTable.SQL_DELETE_GSSUBSCRIBERS);
+            db.execSQL(DBContract.GSSubscriberTable.SQL_DELETE_TABLE);
+            db.execSQL(FollowupTable.SQL_DELETE_TABLE);
 
             onCreate(db);
 
