@@ -38,6 +38,7 @@ dependencies {
 
     compile 'org.ccci.gto.android:gto-support-core:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-db:' + deps.gtoSupport
+    compile 'org.ccci.gto.android:gto-support-db-async:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-gson:' + deps.gtoSupport
 
     compile 'com.crashlytics.sdk.android:crashlytics:2.5.5'

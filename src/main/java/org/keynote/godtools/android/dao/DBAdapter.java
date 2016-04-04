@@ -5,8 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
-import org.ccci.gto.android.common.db.AbstractDao;
 import org.ccci.gto.android.common.db.Expression;
+import org.ccci.gto.android.common.db.async.AbstractAsyncDao;
 import org.keynote.godtools.android.api.GSSubscriber;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class DBAdapter extends AbstractDao {
+public class DBAdapter extends AbstractAsyncDao {
     private static DBAdapter INSTANCE;
 
     private DBAdapter(@NonNull final Context context) {
