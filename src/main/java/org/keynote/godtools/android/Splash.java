@@ -4,22 +4,24 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
-import org.keynote.godtools.android.service.PrepareInitialContentTask;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
+import org.keynote.godtools.android.tasks.InitialContentTasks;
+import org.keynote.godtools.android.utils.FileUtils;
 
 import java.util.List;
 import java.util.Locale;
@@ -55,20 +57,21 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
 
     private SharedPreferences settings;
 
-    /**
-     * Called when the activity is first created.
-     */
+    @Nullable
+    private ListenableFuture<?> mUpdateTasks;
+
+    /* BEGIN lifecycle */
+
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        startUpdateChecks();
+
         setContentView(R.layout.splash_pw);
         ButterKnife.bind(this);
-
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        if (!isFirstLaunch())
-        {
+        if (!isFirstLaunch() && isUpdateComplete()) {
             goToMainActivity();
         }
         else
@@ -79,25 +82,26 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
             settings.edit().putString(GTLanguage.KEY_PRIMARY, Locale.getDefault().getLanguage()).apply();
 
             // set up files
-            PrepareInitialContentTask.run(getApp().getApplicationContext(), getApp().getResourcesDir());
+            InitialContentTasks.run(getApplicationContext(), FileUtils.getResourcesDir(this));
 
             showLoading();
 
             GodToolsApiClient.getListOfPackages(META,this);
         }
-
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
-        return true;
+    /* END lifecycle */
+
+    private void startUpdateChecks() {
+        final InitialContentTasks initTasks = new InitialContentTasks(getApplicationContext());
+        mUpdateTasks = Futures.successfulAsList(
+                // load the default followup data
+                initTasks.loadFollowups()
+        );
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-    {
-        return true;
+    private boolean isUpdateComplete() {
+        return mUpdateTasks == null || mUpdateTasks.isDone();
     }
 
     private boolean isFirstLaunch()
