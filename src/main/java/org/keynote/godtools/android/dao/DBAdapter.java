@@ -36,7 +36,7 @@ public class DBAdapter extends AbstractDao {
     public static DBAdapter getInstance(@NonNull final Context context) {
         synchronized (DBAdapter.class) {
             if (INSTANCE == null) {
-                INSTANCE = new DBAdapter(context);
+                INSTANCE = new DBAdapter(context.getApplicationContext());
             }
         }
 

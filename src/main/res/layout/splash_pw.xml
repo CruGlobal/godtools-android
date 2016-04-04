@@ -36,7 +36,8 @@
             android:textColor="#777"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:text="@string/check_update"/>
     </LinearLayout>
 
 </RelativeLayout>

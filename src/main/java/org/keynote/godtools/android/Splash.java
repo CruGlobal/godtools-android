@@ -12,8 +12,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.common.base.Strings;
-
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.http.DownloadTask;
@@ -22,10 +20,12 @@ import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.service.PrepareInitialContentTask;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
-import org.keynote.godtools.android.utils.Device;
 
 import java.util.List;
 import java.util.Locale;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
@@ -45,14 +45,14 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
     If not first load:
         - go to main activity (home screen)
  */
-public class Splash extends Activity implements MetaTask.MetaTaskHandler,
-        DownloadTask.DownloadTaskHandler
-
-{
+public class Splash extends Activity implements MetaTask.MetaTaskHandler, DownloadTask.DownloadTaskHandler {
     private static final String TAG = Splash.class.getSimpleName();
 
-    private TextView tvTask;
-    private ProgressBar progressBar;
+    @Bind(R.id.tvTask)
+    TextView mUpdateText;
+    @Bind(R.id.progressBar)
+    ProgressBar mProgressBar;
+
     private SharedPreferences settings;
 
     /**
@@ -62,6 +62,8 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler,
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.splash_pw);
+        ButterKnife.bind(this);
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
@@ -71,11 +73,6 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler,
         }
         else
         {
-            setContentView(R.layout.splash_pw);
-
-            tvTask = (TextView) findViewById(R.id.tvTask);
-            progressBar = (ProgressBar) findViewById(R.id.progressBar);
-
             Log.i(TAG, "First Launch");
 
             // set primary language on first start
@@ -84,7 +81,7 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler,
             // set up files
             PrepareInitialContentTask.run(getApp().getApplicationContext(), getApp().getResourcesDir());
 
-            showLoading(getString(R.string.check_update));
+            showLoading();
 
             GodToolsApiClient.getListOfPackages(META,this);
         }
@@ -108,11 +105,9 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler,
         return settings.getBoolean(FIRST_LAUNCH, true);
     }
 
-    private void showLoading(String msg)
-    {
-        tvTask.setText(msg);
-        tvTask.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
+    private void showLoading() {
+        mUpdateText.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     private void goToMainActivity()
@@ -186,9 +181,9 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler,
     @Override
     public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
     {
-        GTLanguage languageRetrievedFromDatabase = GTLanguage.getLanguage(getApp().getApplicationContext(), langCode);
+        GTLanguage languageRetrievedFromDatabase = GTLanguage.getLanguage(this, langCode);
         languageRetrievedFromDatabase.setDownloaded(true);
-        languageRetrievedFromDatabase.update(getApp().getApplicationContext());
+        languageRetrievedFromDatabase.update(this);
 
         goToMainActivity();
     }
