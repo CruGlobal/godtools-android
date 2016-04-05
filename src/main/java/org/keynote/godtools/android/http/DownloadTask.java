@@ -11,6 +11,7 @@ import org.ccci.gto.android.common.util.IOUtils;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
 import org.keynote.godtools.android.snuffy.Decompress;
 import org.keynote.godtools.android.utils.FileUtils;
 
@@ -94,7 +95,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
             // delete draft packages before storing download
             if (tag.contains("draft")) {
-                adapter.delete(GTPackage.class, GTPackage.SQL_WHERE_DRAFT_BY_LANGUAGE.args(langCode));
+                adapter.delete(GTPackage.class, GTPackageTable.SQL_WHERE_DRAFT_BY_LANGUAGE.args(langCode));
             }
 
             // save the parsed packages to database

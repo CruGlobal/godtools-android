@@ -52,6 +52,8 @@ public class DBContract extends BaseContract {
 
         static final Expression SQL_WHERE_PRIMARY_KEY =
                 FIELD_LANGUAGE.eq(bind()).and(FIELD_STATUS.eq(bind())).and(FIELD_CODE.eq(bind()));
+        public static final Expression SQL_WHERE_DRAFT_BY_LANGUAGE =
+                FIELD_LANGUAGE.eq(bind()).and(FIELD_STATUS.eq(GTPackage.STATUS_DRAFT));
 
         public static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_NAME, SQL_COLUMN_LANGUAGE,
