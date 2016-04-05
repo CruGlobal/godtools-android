@@ -23,7 +23,8 @@ ext.deps = [
         androidSupport: '23.2.1',
         gtoSupport    : '0.9.0-SNAPSHOT',
         guava         : '19.0',
-        playServices  : '8.4.0'
+        playServices  : '8.4.0',
+        facebookStetho: '1.3.1'
 ]
 
 dependencies {
@@ -47,6 +48,9 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.0.0'
 
     compile 'org.apache.commons:commons-lang3:3.4'
+
+    debugCompile 'com.facebook.stetho:stetho:' + deps.facebookStetho
+    debugCompile 'com.facebook.stetho:stetho-okhttp3:' + deps.facebookStetho
 }
 
 android {
@@ -56,10 +60,6 @@ android {
     // XXX: we need to remove usage of the Apache HttpClient
     useLibrary 'org.apache.http.legacy'
 
-    lintOptions {
-        warning 'MissingTranslation'
-    }
-    
     defaultConfig {
         applicationId 'org.keynote.godtools.android'
 
@@ -82,6 +82,14 @@ android {
     dexOptions {
         preDexLibraries !project.hasProperty('disablePreDex')
     }
+    lintOptions {
+        warning 'MissingTranslation'
+    }
+    packagingOptions {
+        pickFirst 'META-INF/NOTICE.txt'
+        pickFirst 'META-INF/LICENSE.txt'
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
