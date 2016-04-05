@@ -11,7 +11,7 @@ public class GodToolsEvent {
 
     private String eventId;
     private String namespace;
-    private int followUpId;
+    private long followUpId;
     private Map<String, String> data = Maps.newHashMap();
 
     public GodToolsEvent(String eventId)
@@ -35,11 +35,11 @@ public class GodToolsEvent {
         this.namespace = namespace;
     }
 
-    public int getFollowUpId() {
+    public long getFollowUpId() {
         return followUpId;
     }
 
-    public void setFollowUpId(int followUpId) {
+    public void setFollowUpId(long followUpId) {
         this.followUpId = followUpId;
     }
 
