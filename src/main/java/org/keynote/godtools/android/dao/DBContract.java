@@ -1,6 +1,5 @@
 package org.keynote.godtools.android.dao;
 
-import android.provider.BaseColumns;
 import android.text.TextUtils;
 
 import org.ccci.gto.android.common.db.BaseContract;
@@ -8,6 +7,7 @@ import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Expression.Field;
 import org.ccci.gto.android.common.db.Table;
 import org.keynote.godtools.android.api.GSSubscriber;
+import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.model.Followup;
 
@@ -76,38 +76,53 @@ public class DBContract extends BaseContract {
                         SQL_V3_MIGRATE_COLUMNS + " FROM " + OLD_TABLE_NAME;
     }
 
-    public static abstract class GTLanguageTable implements BaseColumns
-    {
+    public static abstract class GTLanguageTable implements Base {
         public static final String TABLE_NAME = "gtlanguages";
+        public static final Table<GTLanguage> TABLE = Table.forClass(GTLanguage.class);
+
         public static final String COL_CODE = "code";
-        public static final String COL_IS_DOWNLOADED = "is_downloaded";
-        public static final String COL_IS_DRAFT = "is_draft";
         public static final String COL_NAME = "name";
-        public static final String UPDATE_TABLE_NAME = "gtlanguages_old";
+        public static final String COL_DOWNLOADED = "is_downloaded";
+        public static final String COL_DRAFT = "is_draft";
 
-        public static final String SQL_CREATE_GTLANGUAGES = "CREATE TABLE IF NOT EXISTS "
-                + GTLanguageTable.TABLE_NAME + "("
-                + GTLanguageTable._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP
-                + GTLanguageTable.COL_CODE + TEXT_TYPE + COMMA_SEP
-                + GTLanguageTable.COL_IS_DOWNLOADED + INTEGER_TYPE + COMMA_SEP
-                + GTLanguageTable.COL_IS_DRAFT + INTEGER_TYPE + COMMA_SEP
-                + GTLanguageTable.COL_NAME + TEXT_TYPE + ")";
+        static final String[] PROJECTION_ALL = {COL_CODE, COL_NAME, COL_DOWNLOADED, COL_DRAFT};
 
-        public static final String SQL_DELETE_GTLANGUAGES = "DROP TABLE IF EXISTS "
-                + GTPackageTable.TABLE_NAME;
+        private static final String SQL_COLUMN_CODE = COL_CODE + " TEXT NOT NULL";
+        private static final String SQL_COLUMN_NAME = COL_NAME + " TEXT";
+        private static final String SQL_COLUMN_DOWNLOADED = COL_DOWNLOADED + " INTEGER";
+        private static final String SQL_COLUMN_DRAFT = COL_DRAFT + " INTEGER";
+        private static final String SQL_PRIMARY_KEY = uniqueIndex(COL_CODE);
 
-        public static final String SQL_DELETE_OLD_GTLANGUAGES = "DROP TABLE IF EXISTS "
-                + GTLanguageTable.UPDATE_TABLE_NAME;
+        static final Expression SQL_WHERE_PRIMARY_KEY = TABLE.field(COL_CODE).eq(bind());
 
-        public static final String SQL_RENAME_GTLANGUAGES = "ALTER TABLE " + TABLE_NAME
-                + " RENAME TO " + UPDATE_TABLE_NAME;
+        static final String SQL_CREATE_TABLE =
+                create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_DOWNLOADED, SQL_COLUMN_DRAFT,
+                       SQL_COLUMN_NAME, SQL_PRIMARY_KEY);
+        static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
 
-        public static final String SQL_COPY_GTLLANGUAGES_V1 = "INSERT INTO " + TABLE_NAME
+        // migration db queries
+        static final String OLD_TABLE_NAME = "gtlanguages_old";
+        static final String SQL_RENAME_TABLE = "ALTER TABLE " + TABLE_NAME + " RENAME TO " + OLD_TABLE_NAME;
+        static final String SQL_DELETE_OLD_TABLE = drop(OLD_TABLE_NAME);
+
+        @Deprecated
+        static final String SQL_V1_MIGRATE_DATA = "INSERT INTO " + TABLE_NAME
                 + " (" + GTLanguageTable._ID + COMMA_SEP
                 + GTLanguageTable.COL_CODE + COMMA_SEP
-                + GTLanguageTable.COL_IS_DOWNLOADED + COMMA_SEP
-                + GTLanguageTable.COL_IS_DRAFT + ")" +
-                " SELECT * FROM " + UPDATE_TABLE_NAME ;
+                + GTLanguageTable.COL_DOWNLOADED + COMMA_SEP
+                + GTLanguageTable.COL_DRAFT + ")" +
+                " SELECT * FROM " + OLD_TABLE_NAME;
+        @Deprecated
+        static final String SQL_V2_CREATE_TABLE =
+                create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_DOWNLOADED, SQL_COLUMN_DRAFT,
+                       SQL_COLUMN_NAME);
+        @Deprecated
+        private static final String SQL_V6_MIGRATE_COLUMNS = TextUtils.join(",", new Object[] {COL_CODE, COL_DOWNLOADED,
+                COL_DRAFT, COL_DOWNLOADED});
+        @Deprecated
+        static final String SQL_V6_MIGRATE_DATA =
+                "INSERT OR IGNORE INTO " + TABLE_NAME + " (" + SQL_V6_MIGRATE_COLUMNS + ") SELECT " +
+                        SQL_V6_MIGRATE_COLUMNS + " FROM " + OLD_TABLE_NAME;
     }
 
     /*Growth Spaces subscriber table*/

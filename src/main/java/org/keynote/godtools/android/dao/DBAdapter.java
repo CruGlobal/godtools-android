@@ -12,6 +12,7 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBContract.FollowupTable;
 import org.keynote.godtools.android.dao.DBContract.GSSubscriberTable;
+import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
 import org.keynote.godtools.android.model.Followup;
 
@@ -27,6 +28,8 @@ public class DBAdapter extends AbstractAsyncDao {
 
         registerType(GTPackage.class, GTPackageTable.TABLE_NAME, GTPackageTable.PROJECTION_ALL, new GTPackageMapper(),
                      GTPackageTable.SQL_WHERE_PRIMARY_KEY);
+        registerType(GTLanguage.class, GTLanguageTable.TABLE_NAME, GTLanguageTable.PROJECTION_ALL,
+                     new GTLanguageMapper(), GTLanguageTable.SQL_WHERE_PRIMARY_KEY);
         registerType(GSSubscriber.class, GSSubscriberTable.TABLE_NAME, GSSubscriberTable.PROJECTION_ALL,
                      new GSSubscriberMapper(), GSSubscriberTable.SQL_WHERE_PRIMARY_KEY);
         registerType(Followup.class, FollowupTable.TABLE_NAME, FollowupTable.PROJECTION_ALL, new FollowupMapper(),
@@ -50,6 +53,8 @@ public class DBAdapter extends AbstractAsyncDao {
             final GTPackage gtPackage = (GTPackage) obj;
             return getPrimaryKeyWhere(GTPackage.class, gtPackage.getLanguage(), gtPackage.getStatus(),
                                       gtPackage.getCode());
+        } else if (obj instanceof GTLanguage) {
+            return getPrimaryKeyWhere(GTLanguage.class, ((GTLanguage) obj).getLanguageCode());
         } else if (obj instanceof GSSubscriber) {
             return getPrimaryKeyWhere(GSSubscriber.class, ((GSSubscriber) obj).getId());
         } else if (obj instanceof Followup) {

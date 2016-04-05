@@ -13,6 +13,7 @@ import com.google.common.base.Throwables;
 import org.ccci.gto.android.common.app.ApplicationUtils;
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper;
 import org.keynote.godtools.android.dao.DBContract.FollowupTable;
+import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -29,10 +30,11 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
      * v4.1.7
      * 4: 2016-04-01
      * 5: 2016-04-04
+     * 6: 2016-04-05
      */
 
     private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     private static GodToolsDatabase INSTANCE;
 
@@ -61,7 +63,7 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.beginTransaction();
 
             db.execSQL(DBContract.GTPackageTable.SQL_CREATE_TABLE);
-            db.execSQL(DBContract.GTLanguageTable.SQL_CREATE_GTLANGUAGES);
+            db.execSQL(GTLanguageTable.SQL_CREATE_TABLE);
             db.execSQL(DBContract.GSSubscriberTable.SQL_CREATE_TABLE);
             db.execSQL(FollowupTable.SQL_CREATE_TABLE);
 
@@ -80,17 +82,17 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
                 switch (upgradeTo) {
                     case 2:
                         // rename tables to save data
-                        db.execSQL(DBContract.GTLanguageTable.SQL_RENAME_GTLANGUAGES);
+                        db.execSQL(GTLanguageTable.SQL_RENAME_TABLE);
 
                         // create tables
                         db.execSQL(DBContract.GTPackageTable.SQL_V2_CREATE_TABLE);
-                        db.execSQL(DBContract.GTLanguageTable.SQL_CREATE_GTLANGUAGES);
+                        db.execSQL(GTLanguageTable.SQL_V2_CREATE_TABLE);
 
                         // copy old data to new table
-                        db.execSQL(DBContract.GTLanguageTable.SQL_COPY_GTLLANGUAGES_V1);
+                        db.execSQL(GTLanguageTable.SQL_V1_MIGRATE_DATA);
 
                         // delete old table
-                        db.execSQL(DBContract.GTLanguageTable.SQL_DELETE_OLD_GTLANGUAGES);
+                        db.execSQL(GTLanguageTable.SQL_DELETE_OLD_TABLE);
                         break;
                     case 3:
                         // rename old packages table
@@ -113,6 +115,20 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
                         break;
                     case 5:
                         db.execSQL(FollowupTable.SQL_CREATE_TABLE);
+                        break;
+                    case 6:
+                        // rename table to save data
+                        db.execSQL(GTLanguageTable.SQL_DELETE_OLD_TABLE);
+                        db.execSQL(GTLanguageTable.SQL_RENAME_TABLE);
+
+                        // create new table
+                        db.execSQL(GTLanguageTable.SQL_CREATE_TABLE);
+
+                        // copy old data to new table
+                        db.execSQL(GTLanguageTable.SQL_V6_MIGRATE_DATA);
+
+                        // delete old table
+                        db.execSQL(GTLanguageTable.SQL_DELETE_OLD_TABLE);
                         break;
                     default:
                         // unrecognized version
@@ -150,8 +166,8 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
             // delete any existing tables
             db.execSQL(DBContract.GTPackageTable.SQL_DELETE_TABLE);
             db.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_TABLE);
-            db.execSQL(DBContract.GTLanguageTable.SQL_DELETE_GTLANGUAGES);
-            db.execSQL(DBContract.GTLanguageTable.SQL_DELETE_OLD_GTLANGUAGES);
+            db.execSQL(GTLanguageTable.SQL_DELETE_TABLE);
+            db.execSQL(GTLanguageTable.SQL_DELETE_OLD_TABLE);
             db.execSQL(DBContract.GSSubscriberTable.SQL_DELETE_TABLE);
             db.execSQL(FollowupTable.SQL_DELETE_TABLE);
 
