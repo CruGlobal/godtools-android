@@ -1,5 +1,12 @@
 package org.keynote.godtools.android.dao;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.support.annotation.NonNull;
+
+import org.ccci.gto.android.common.db.AbstractMapper;
+import org.keynote.godtools.android.business.GTPackage;
+
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.COL_CODE;
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.COL_CONFIG_FILE_NAME;
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.COL_ICON;
@@ -7,13 +14,6 @@ import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.COL_LAN
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.COL_NAME;
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.COL_STATUS;
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.COL_VERSION;
-
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.support.annotation.NonNull;
-
-import org.ccci.gto.android.common.db.AbstractMapper;
-import org.keynote.godtools.android.business.GTPackage;
 
 public class GTPackageMapper extends AbstractMapper<GTPackage> {
     @Override
@@ -61,7 +61,7 @@ public class GTPackageMapper extends AbstractMapper<GTPackage> {
         gtPackage.setCode(getString(c, COL_CODE));
         gtPackage.setName(getString(c, COL_NAME));
         gtPackage.setLanguage(getString(c, COL_LANGUAGE));
-        gtPackage.setVersion(getDouble(c, COL_VERSION));
+        gtPackage.setVersion(getString(c, COL_VERSION, GTPackage.DEFAULT_VERSION));
         gtPackage.setConfigFileName(getString(c, COL_CONFIG_FILE_NAME));
         gtPackage.setStatus(getString(c, COL_STATUS));
         gtPackage.setIcon(getString(c, COL_ICON));

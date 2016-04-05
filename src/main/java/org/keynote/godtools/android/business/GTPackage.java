@@ -7,15 +7,18 @@ import com.google.common.base.Function;
 
 import org.keynote.godtools.android.model.HomescreenLayout;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Comparator;
+import java.util.regex.Pattern;
 
 public class GTPackage {
     public static final String EVERYSTUDENT_PACKAGE_CODE = "everystudent";
 
     public static final String STATUS_LIVE = "live";
     public static final String STATUS_DRAFT = "draft";
+
+    public static final String DEFAULT_VERSION = "0";
+
+    private static final Pattern PATTERN_VERSION = Pattern.compile("[0-9]+(?:\\.[0-9]+)*");
 
     public static final Function<GTPackage, String> FUNCTION_CODE = new Function<GTPackage, String>() {
         @Nullable
@@ -28,7 +31,8 @@ public class GTPackage {
 
     String code;
     private String name;
-    double version;
+    @NonNull
+    String version = DEFAULT_VERSION;
     private String language;
     private String configFileName;
     private String status;
@@ -61,12 +65,13 @@ public class GTPackage {
         this.name = name;
     }
 
-    public double getVersion() {
+    @NonNull
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion(double version) {
-        this.version = version;
+    public void setVersion(@Nullable final String version) {
+        this.version = version != null && PATTERN_VERSION.matcher(version).matches() ? version : DEFAULT_VERSION;
     }
 
     public String getLanguage() {
@@ -133,19 +138,19 @@ public class GTPackage {
     static class VersionComparator implements Comparator<GTPackage> {
         @Override
         public int compare(final GTPackage lhsPackage, final GTPackage rhsPackage) {
-            final BigDecimal lhs = BigDecimal.valueOf(lhsPackage.version);
-            final BigDecimal rhs = BigDecimal.valueOf(rhsPackage.version);
+            final String lhs[] = lhsPackage.version.split("\\.");
+            final String rhs[] = rhsPackage.version.split("\\.");
 
-            //compare int parts first
-            int result = lhs.intValue() - rhs.intValue();
-            if (result != 0) {
-                return result;
+            for (int i = 0; i < lhs.length || i < rhs.length; i++) {
+                final int lhsVal = i < lhs.length ? Integer.parseInt(lhs[i]) : 0;
+                final int rhsVal = i < rhs.length ? Integer.parseInt(rhs[i]) : 0;
+                final int result = lhsVal - rhsVal;
+                if (result != 0) {
+                    return result;
+                }
             }
 
-            // otherwise compare decimal part as an integer
-            // see: http://stackoverflow.com/questions/10383392/extract-number-decimal-in-bigdecimal
-            return lhs.subtract(lhs.setScale(0, RoundingMode.FLOOR)).movePointRight(lhs.scale()).intValue() -
-                    rhs.subtract(rhs.setScale(0, RoundingMode.FLOOR)).movePointRight(rhs.scale()).intValue();
+            return 0;
         }
     }
 }

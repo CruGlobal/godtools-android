@@ -17,7 +17,6 @@ import static org.ccci.gto.android.common.db.Expression.field;
 public class DBContract extends BaseContract {
     private static final String TEXT_TYPE = " TEXT";
     private static final String INTEGER_TYPE = " INTEGER";
-    private static final String DOUBLE_TYPE = " DOUBLE";
     private static final String PRIMARY_KEY = " PRIMARY KEY";
     private static final String COMMA_SEP = ",";
 
@@ -46,7 +45,7 @@ public class DBContract extends BaseContract {
         private static final String SQL_COLUMN_NAME = COL_NAME + TEXT_TYPE;
         private static final String SQL_COLUMN_CONFIG_FILE_NAME = COL_CONFIG_FILE_NAME + TEXT_TYPE;
         private static final String SQL_COLUMN_ICON = COL_ICON + TEXT_TYPE;
-        private static final String SQL_COLUMN_VERSION = COL_VERSION + DOUBLE_TYPE;
+        private static final String SQL_COLUMN_VERSION = COL_VERSION + " TEXT";
         private static final String SQL_PRIMARY_KEY =
                 "UNIQUE(" + COL_LANGUAGE + "," + COL_STATUS + "," + COL_CODE + ")";
 

@@ -64,7 +64,7 @@ public class InitialContentTasks {
         everyStudent.setIcon("homescreen_everystudent_icon_2x.png");
         everyStudent.setStatus("live");
         everyStudent.setLanguage("en");
-        everyStudent.setVersion(1.1);
+        everyStudent.setVersion("1.1");
         return mDao.insertAsync(everyStudent, SQLiteDatabase.CONFLICT_IGNORE);
     }
 
