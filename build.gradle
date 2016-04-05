@@ -100,6 +100,8 @@ android {
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AA2f0cb2d41f6ac7dcc256eaa9ca7e0f640859fd52\""
         }
         release {
+            minifyEnabled true
+
             buildConfigField "String", "BASE_URL_V2", "\"https://api.godtoolsapp.com/godtools-api/rest/v2/\""
             buildConfigField "String", "BASE_URL", "\"https://api.godtoolsapp.com/godtools-api/rest/\""
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AAcaf7bbfe3ffda5dcb1455d3bc16b0c5da1cd71e9\""
