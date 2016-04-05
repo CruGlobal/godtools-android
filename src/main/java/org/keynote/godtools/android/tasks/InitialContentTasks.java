@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
-import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.common.base.Function;
@@ -29,6 +28,7 @@ import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.model.Followup;
+import org.keynote.godtools.android.utils.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -40,19 +40,38 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 public class InitialContentTasks {
     final Context mContext;
     final DBAdapter mDao;
+    final AssetManager mAssets;
 
     public InitialContentTasks(@NonNull final Context context) {
         mContext = context.getApplicationContext();
         mDao = DBAdapter.getInstance(mContext);
+        mAssets = context.getAssets();
     }
 
     @NonNull
     public ListenableFuture<Object> loadFollowups() {
         final ListenableFuture<Cursor> followups = mDao.getCursorAsync(Query.select(Followup.class).limit(1));
         return Futures.transform(followups, new InitFollowups());
+    }
+
+    @NonNull
+    public ListenableFuture<Object> loadDefaultLanguages() {
+        final ListenableFuture<Cursor> languages = mDao.getCursorAsync(Query.select(GTLanguage.class).limit(1));
+        return Futures.transform(languages, new InitLanguages());
+    }
+
+    /**
+     * @param languagesTask the {@link InitialContentTasks#loadDefaultLanguages()} task that we wait to complete before
+     *                      starting this task
+     */
+    @NonNull
+    public ListenableFuture<Object> loadBundledPackages(@NonNull final ListenableFuture<Object> languagesTask) {
+        return Futures.transform(languagesTask, new InitPackages());
     }
 
     @NonNull
@@ -68,64 +87,18 @@ public class InitialContentTasks {
         return mDao.insertAsync(everyStudent, SQLiteDatabase.CONFLICT_IGNORE);
     }
 
-    public static void run(Context mContext, File resourcesDir) {
-        AssetManager manager = mContext.getAssets();
-        final DBAdapter dao = DBAdapter.getInstance(mContext);
-
-        Log.i("resourceDir", resourcesDir.getAbsolutePath());
-
-        try {
-            // copy the files from assets/english to documents directory
-            String[] files = manager.list("english");
-            for (String fileName : files) {
-                final Closer closer = Closer.create();
-                try {
-                    final InputStream in = closer.register(manager.open("english/" + fileName));
-                    final OutputStream os = closer.register(new FileOutputStream(new File(resourcesDir, fileName)));
-
-                    IOUtils.copy(in, os);
-                } catch (final Throwable t) {
-                    throw closer.rethrow(t);
-                } finally {
-                    closer.close();
-                }
-            }
-
-            // meta.xml file contains the list of supported languages
-            InputStream metaStream = manager.open("meta.xml");
-            List<GTLanguage> languageList = GTPackageReader.processMetaResponse(metaStream);
-            for (GTLanguage gtl : languageList) {
-                dao.updateOrInsert(gtl, GTLanguageTable.COL_NAME, GTLanguageTable.COL_DRAFT);
-            }
-
-            // contents.xml file contains information about the bundled english resources
-            InputStream contentsStream = manager.open("contents.xml");
-            List<GTPackage> packageList = GTPackageReader.processContentFile(contentsStream);
-            for (GTPackage gtp : packageList) {
-                dao.updateOrInsert(gtp);
-            }
-
-            // english resources should be marked as downloaded
-            GTLanguage gtlEnglish = new GTLanguage("en");
-            gtlEnglish.setDownloaded(true);
-            dao.update(gtlEnglish, GTLanguageTable.COL_DOWNLOADED);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     final class InitFollowups implements Function<Cursor, Object> {
         @Override
         public Object apply(final Cursor c) {
-            if (c != null) {
-                try {
-                    if (c.getCount() == 0) {
-                        loadDefaultFollowups();
-                    }
-                } catch (final IOException e) {
-                    Crashlytics.logException(e);
-                    throw Throwables.propagate(e);
-                } finally {
+            try {
+                if (c != null && c.getCount() == 0) {
+                    loadDefaultFollowups();
+                }
+            } catch (final IOException e) {
+                Crashlytics.logException(e);
+                throw Throwables.propagate(e);
+            } finally {
+                if (c != null) {
                     c.close();
                 }
             }
@@ -141,7 +114,7 @@ public class InitialContentTasks {
                     .setExclusionStrategies(new GsonIgnoreExclusionStrategy())
                     .create();
 
-            //
+            // parse current followups out of the json file
             final Closer closer = Closer.create();
             try {
                 final InputStream in = closer.register(mContext.getAssets().open("followup.json"));
@@ -158,6 +131,100 @@ public class InitialContentTasks {
                 closer.close();
             }
 
+        }
+    }
+
+    final class InitLanguages implements Function<Cursor, Object> {
+        @Override
+        public Object apply(final Cursor c) {
+            try {
+                if (c != null && c.getCount() == 0) {
+                    loadDefaultLanguages();
+                }
+            } catch (final IOException e) {
+                Crashlytics.logException(e);
+                throw Throwables.propagate(e);
+            } finally {
+                if (c != null) {
+                    c.close();
+                }
+            }
+
+            return null;
+        }
+
+        @WorkerThread
+        private void loadDefaultLanguages() throws IOException {
+            // meta.xml file contains the list of supported languages
+            InputStream metaStream = mAssets.open("meta.xml");
+            List<GTLanguage> languageList = GTPackageReader.processMetaResponse(metaStream);
+            for (GTLanguage gtl : languageList) {
+                mDao.updateOrInsert(gtl, GTLanguageTable.COL_NAME, GTLanguageTable.COL_DRAFT);
+            }
+        }
+    }
+
+    final class InitPackages implements Function<Object, Object> {
+        @Nullable
+        @Override
+        public Object apply(@Nullable Object input) {
+            try {
+                if (loadMissingPackages()) {
+                    copyResources();
+
+                    // mark english resources as downloaded
+                    GTLanguage gtlEnglish = new GTLanguage("en");
+                    gtlEnglish.setDownloaded(true);
+                    mDao.update(gtlEnglish, GTLanguageTable.COL_DOWNLOADED);
+                }
+            } catch (final IOException e) {
+                Crashlytics.logException(e);
+                throw Throwables.propagate(e);
+            }
+            return null;
+        }
+
+        @WorkerThread
+        private boolean loadMissingPackages() throws IOException {
+            boolean loaded = false;
+            final Closer closer = Closer.create();
+            try {
+                // contents.xml file contains information about the bundled english resources
+                InputStream in = closer.register(mAssets.open("contents.xml"));
+                final List<GTPackage> packages = GTPackageReader.processContentFile(in);
+                for (GTPackage gtp : packages) {
+                    final GTPackage current = mDao.refresh(gtp);
+                    if (current == null || current.compareVersionTo(gtp) < 0) {
+                        mDao.updateOrInsert(gtp);
+                        loaded = true;
+                    }
+                }
+            } catch (final Throwable t) {
+                throw closer.rethrow(t);
+            } finally {
+                closer.close();
+            }
+
+            return loaded;
+        }
+
+        @WorkerThread
+        private void copyResources() throws IOException {
+            // copy the files from assets/english to documents directory
+            final File resourcesDir = FileUtils.getResourcesDir(mContext);
+            for (String fileName : mAssets.list("english")) {
+                final Closer closer = Closer.create();
+                try {
+                    final InputStream in = closer.register(mAssets.open("english/" + fileName));
+                    final OutputStream os = closer.register(new FileOutputStream(new File(resourcesDir, fileName)));
+
+                    IOUtils.copy(in, os);
+                } catch (final Throwable t) {
+                    throw closer.rethrow(t);
+                } finally {
+                    closer.close();
+                }
+            }
         }
     }
 }

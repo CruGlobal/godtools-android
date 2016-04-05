@@ -22,7 +22,6 @@ import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.tasks.InitialContentTasks;
-import org.keynote.godtools.android.utils.FileUtils;
 
 import java.util.List;
 import java.util.Locale;
@@ -66,7 +65,7 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startUpdateChecks();
+        startUpdateTasks();
 
         setContentView(R.layout.splash_pw);
         ButterKnife.bind(this);
@@ -75,15 +74,12 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
         if (!isFirstLaunch() && isUpdateComplete()) {
             goToMainActivity();
         }
-        else
+        else if(isFirstLaunch())
         {
             Log.i(TAG, "First Launch");
 
             // set primary language on first start
             settings.edit().putString(GTLanguage.KEY_PRIMARY, Locale.getDefault().getLanguage()).apply();
-
-            // set up files
-            InitialContentTasks.run(getApplicationContext(), FileUtils.getResourcesDir(this));
 
             showLoading();
 
@@ -93,13 +89,21 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
 
     /* END lifecycle */
 
-    private void startUpdateChecks() {
+    private void startUpdateTasks() {
         final InitialContentTasks initTasks = new InitialContentTasks(getApplicationContext());
+
+        // background loading tasks
+        final ListenableFuture<Object> languagesTask = initTasks.loadDefaultLanguages();
+
         mUpdateTasks = Futures.successfulAsList(
                 // load the default followup data
                 initTasks.loadFollowups(),
+                // load the list of available languages
+                languagesTask,
                 // setup the Every Student content
-                initTasks.installEveryStudentPackage()
+                initTasks.installEveryStudentPackage(),
+                // load any bundled packages
+                initTasks.loadBundledPackages(languagesTask)
         );
     }
 
