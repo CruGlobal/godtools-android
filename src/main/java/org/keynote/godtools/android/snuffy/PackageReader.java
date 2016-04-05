@@ -182,6 +182,7 @@ public class PackageReader
                     new FileInputStream(new File(mAppRef.get().getDocumentsDir(), pageFileName)));
 
             final SnuffyPage currPage = processPageFilePW(pageInputStream, pageFileName);
+            currPage.mModel = page;
             currPage.mDescription = page.getDescription();
             currPage.mThumbnail = page.getThumb();
             return currPage;

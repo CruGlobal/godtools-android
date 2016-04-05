@@ -7,11 +7,15 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
+import org.keynote.godtools.android.snuffy.model.Manifest;
+
 import java.util.UUID;
 
 public class SnuffyPage extends SnuffyLayout
 {
     private static final String TAG = "SnuffyPage";
+
+    public Manifest.Page mModel;
 
     public String mDescription;
     public String mThumbnail;
@@ -34,6 +38,10 @@ public class SnuffyPage extends SnuffyLayout
         mCover = null;
         mActivePanel = null;
         mHiddenButton = null;
+    }
+
+    public Manifest.Page getModel() {
+        return mModel;
     }
 
     public void setCover(View cover)
