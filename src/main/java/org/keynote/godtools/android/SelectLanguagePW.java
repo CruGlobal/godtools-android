@@ -22,12 +22,12 @@ import android.widget.Toast;
 
 import org.ccci.gto.android.common.util.AsyncTaskCompat;
 import org.keynote.godtools.android.business.GTLanguage;
-
+import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.tasks.DeletedPackageRemovalTask;
-
 import org.keynote.godtools.android.utils.Device;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
@@ -42,7 +42,6 @@ import java.util.Locale;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
-import static org.keynote.godtools.android.utils.Constants.LANGUAGE_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
@@ -421,10 +420,15 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
     private void updateDownloadedStatus(String langCode, boolean downloaded)
     {
-        GTLanguage languageRetrievedFromDatabase = GTLanguage.getLanguage(app.getApplicationContext(), langCode);
-        languageRetrievedFromDatabase.setDownloaded(downloaded);
-        languageRetrievedFromDatabase.update(app.getApplicationContext());
+        // update value in database
+        {
+            final GTLanguage language = new GTLanguage();
+            language.setLanguageCode(langCode);
+            language.setDownloaded(downloaded);
+            DBAdapter.getInstance(this).updateAsync(language, GTLanguageTable.COL_DOWNLOADED);
+        }
 
+        // update value in local list
         for (GTLanguage languageFromDisplayedLanguageList : languageList)
         {
             if (languageFromDisplayedLanguageList.getLanguageCode().equals(langCode))

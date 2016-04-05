@@ -6,6 +6,7 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -31,32 +32,23 @@ public class UpdatePackageListTask
 
         for (GTLanguage languageFromMetaDownload : languageList)
         {
-            // check if language is already in the db
-            GTLanguage languageRetrievedFromDatabase = adapter.getGTLanguage(languageFromMetaDownload.getLanguageCode());
-            if (languageRetrievedFromDatabase == null)
-            {
-                adapter.insertGTLanguage(languageFromMetaDownload);
-            }
-            else
-            {
-                // don't forget that a previously downloaded language was already downloaded.
-                languageFromMetaDownload.setDownloaded(languageRetrievedFromDatabase.isDownloaded());
-                adapter.updateGTLanguage(languageFromMetaDownload);
-            }
+            adapter.updateOrInsert(languageFromMetaDownload, GTLanguageTable.COL_NAME, GTLanguageTable.COL_DRAFT);
 
-            languageRetrievedFromDatabase = adapter.getGTLanguage(languageFromMetaDownload.getLanguageCode());
-            for (GTPackage packageFromMetaDownload : languageFromMetaDownload.getPackages())
-            {
-                // check if a new package is available for download or an existing package has been updated
-                final GTPackage packageRetrievedFromDatabase = adapter.refresh(packageFromMetaDownload);
-                if (packageRetrievedFromDatabase == null || newerVersionExists(packageFromMetaDownload.getVersion(), packageRetrievedFromDatabase.getVersion()))
-                {
-                    languageRetrievedFromDatabase.setDownloaded(false);
-                    break;
+            GTLanguage languageRetrievedFromDatabase = adapter.refresh(languageFromMetaDownload);
+            if(languageRetrievedFromDatabase != null) {
+                for (GTPackage packageFromMetaDownload : languageFromMetaDownload.getPackages()) {
+                    // check if a new package is available for download or an existing package has been updated
+                    final GTPackage packageRetrievedFromDatabase = adapter.refresh(packageFromMetaDownload);
+                    if (packageRetrievedFromDatabase == null ||
+                            newerVersionExists(packageFromMetaDownload.getVersion(),
+                                               packageRetrievedFromDatabase.getVersion())) {
+                        languageRetrievedFromDatabase.setDownloaded(false);
+                        break;
+                    }
                 }
-            }
 
-            adapter.updateGTLanguage(languageRetrievedFromDatabase);
+                adapter.update(languageRetrievedFromDatabase, GTLanguageTable.COL_DOWNLOADED);
+            }
         }
     }
 

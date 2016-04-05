@@ -27,6 +27,7 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.model.Followup;
 
 import java.io.File;
@@ -94,22 +95,20 @@ public class InitialContentTasks {
             InputStream metaStream = manager.open("meta.xml");
             List<GTLanguage> languageList = GTPackageReader.processMetaResponse(metaStream);
             for (GTLanguage gtl : languageList) {
-                gtl.addToDatabase(mContext);
+                dao.updateOrInsert(gtl, GTLanguageTable.COL_NAME, GTLanguageTable.COL_DRAFT);
             }
 
             // contents.xml file contains information about the bundled english resources
             InputStream contentsStream = manager.open("contents.xml");
             List<GTPackage> packageList = GTPackageReader.processContentFile(contentsStream);
             for (GTPackage gtp : packageList) {
-                Log.i("addingDB", gtp.getName());
                 dao.updateOrInsert(gtp);
             }
 
             // english resources should be marked as downloaded
             GTLanguage gtlEnglish = new GTLanguage("en");
             gtlEnglish.setDownloaded(true);
-            gtlEnglish.update(mContext);
-
+            dao.update(gtlEnglish, GTLanguageTable.COL_DOWNLOADED);
         } catch (IOException e) {
             e.printStackTrace();
         }

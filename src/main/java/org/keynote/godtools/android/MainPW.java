@@ -31,6 +31,7 @@ import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
@@ -479,27 +480,23 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     @Override
     public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
     {
+        // mark language as downloaded
+        final GTLanguage gtl = new GTLanguage();
+        gtl.setLanguageCode(langCode);
+        gtl.setDownloaded(true);
+        DBAdapter.getInstance(this).update(gtl, GTLanguageTable.COL_DOWNLOADED);
+
+        // hide loading state? What does this actually do in MainPW? -DF
+        hideLoading();
+
+        // update primary or parallel language
         if (tag.equalsIgnoreCase(KEY_PRIMARY))
         {
-            GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
-            gtl.setDownloaded(true);
-            gtl.update(MainPW.this);
-
             settings.edit().putString(GTLanguage.KEY_PRIMARY, langCode).apply();
-
-            hideLoading();
         }
         else if (tag.equalsIgnoreCase(KEY_PARALLEL))
         {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(GTLanguage.KEY_PARALLEL, langCode);
-            editor.apply();
-
-            GTLanguage gtl = GTLanguage.getLanguage(MainPW.this, langCode);
-            gtl.setDownloaded(true);
-            gtl.update(MainPW.this);
-
-            hideLoading();
+            settings.edit().putString(GTLanguage.KEY_PARALLEL, langCode).apply();
         }
 
         EventTracker.track(getApp(), "HomeScreen", settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT));

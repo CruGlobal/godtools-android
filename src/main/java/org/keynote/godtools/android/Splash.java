@@ -15,6 +15,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
@@ -187,9 +188,10 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
     @Override
     public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
     {
-        GTLanguage languageRetrievedFromDatabase = GTLanguage.getLanguage(this, langCode);
-        languageRetrievedFromDatabase.setDownloaded(true);
-        languageRetrievedFromDatabase.update(this);
+        final GTLanguage language = new GTLanguage();
+        language.setLanguageCode(langCode);
+        language.setDownloaded(true);
+        DBAdapter.getInstance(this).updateAsync(language, GTLanguageTable.COL_DOWNLOADED);
 
         goToMainActivity();
     }
