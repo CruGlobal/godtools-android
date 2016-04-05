@@ -1,10 +1,15 @@
 package org.keynote.godtools.android.business;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.common.base.Function;
 
 import org.keynote.godtools.android.model.HomescreenLayout;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Comparator;
 
 public class GTPackage {
     public static final String EVERYSTUDENT_PACKAGE_CODE = "everystudent";
@@ -19,10 +24,11 @@ public class GTPackage {
             return input != null ? input.code : null;
         }
     };
+    private static final Comparator<GTPackage> COMPARATOR_VERSION = new VersionComparator();
 
-    private String code;
+    String code;
     private String name;
-    private double version;
+    double version;
     private String language;
     private String configFileName;
     private String status;
@@ -113,5 +119,33 @@ public class GTPackage {
     public void setAvailable(boolean available)
     {
         this.available = available;
+    }
+
+    /**
+     * @param other the package to compare versions against
+     * @return an integer < 0 if the version of this package is less than the version of {@code other}, 0 if they are
+     * equal, and > 0 if the version of this package is greater than the version of {@code other}.
+     */
+    public int compareVersionTo(@NonNull final GTPackage other) {
+        return COMPARATOR_VERSION.compare(this, other);
+    }
+
+    static class VersionComparator implements Comparator<GTPackage> {
+        @Override
+        public int compare(final GTPackage lhsPackage, final GTPackage rhsPackage) {
+            final BigDecimal lhs = BigDecimal.valueOf(lhsPackage.version);
+            final BigDecimal rhs = BigDecimal.valueOf(rhsPackage.version);
+
+            //compare int parts first
+            int result = lhs.intValue() - rhs.intValue();
+            if (result != 0) {
+                return result;
+            }
+
+            // otherwise compare decimal part as an integer
+            // see: http://stackoverflow.com/questions/10383392/extract-number-decimal-in-bigdecimal
+            return lhs.subtract(lhs.setScale(0, RoundingMode.FLOOR)).movePointRight(lhs.scale()).intValue() -
+                    rhs.subtract(rhs.setScale(0, RoundingMode.FLOOR)).movePointRight(rhs.scale()).intValue();
+        }
     }
 }
