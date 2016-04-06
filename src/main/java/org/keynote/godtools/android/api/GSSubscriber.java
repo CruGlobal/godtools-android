@@ -2,7 +2,6 @@ package org.keynote.godtools.android.api;
 
 import org.ccci.gto.android.common.gson.GsonIgnore;
 
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -20,7 +19,7 @@ public class GSSubscriber {
     private String lastName;
     private String email;
     @GsonIgnore
-    private Date createdTimestamp = new Date(Calendar.getInstance().getTimeInMillis());
+    private Date createdTimestamp = new Date(System.currentTimeMillis());
 
     public Integer getId() {
         return id;

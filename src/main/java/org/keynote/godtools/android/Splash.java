@@ -4,28 +4,33 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.common.base.Strings;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 
+import org.ccci.gto.android.common.util.MainThreadExecutor;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
-import org.keynote.godtools.android.service.PrepareInitialContentTask;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
-import org.keynote.godtools.android.utils.Device;
+import org.keynote.godtools.android.tasks.InitialContentTasks;
 
 import java.util.List;
 import java.util.Locale;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
@@ -45,62 +50,89 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
     If not first load:
         - go to main activity (home screen)
  */
-public class Splash extends Activity implements MetaTask.MetaTaskHandler,
-        DownloadTask.DownloadTaskHandler
-
-{
+public class Splash extends Activity implements MetaTask.MetaTaskHandler, DownloadTask.DownloadTaskHandler {
     private static final String TAG = Splash.class.getSimpleName();
 
-    private TextView tvTask;
-    private ProgressBar progressBar;
+    static final long MIN_LOAD_DELAY = 500;
+
+    @Bind(R.id.tvTask)
+    TextView mUpdateText;
+    @Bind(R.id.progressBar)
+    ProgressBar mProgressBar;
+
     private SharedPreferences settings;
 
-    /**
-     * Called when the activity is first created.
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
+    @Nullable
+    private ListenableFuture<?> mUpdateTasks;
 
+    /* BEGIN lifecycle */
+
+    @Override
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        startUpdateTasks();
+
+        setContentView(R.layout.splash_pw);
+        ButterKnife.bind(this);
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        if (!isFirstLaunch())
-        {
-            goToMainActivity();
-        }
-        else
-        {
-            setContentView(R.layout.splash_pw);
-
-            tvTask = (TextView) findViewById(R.id.tvTask);
-            progressBar = (ProgressBar) findViewById(R.id.progressBar);
-
+        // first use
+        if (isFirstLaunch()) {
             Log.i(TAG, "First Launch");
 
             // set primary language on first start
             settings.edit().putString(GTLanguage.KEY_PRIMARY, Locale.getDefault().getLanguage()).apply();
 
-            // set up files
-            PrepareInitialContentTask.run(getApp().getApplicationContext(), getApp().getResourcesDir());
-
-            showLoading(getString(R.string.check_update));
+            showLoading();
 
             GodToolsApiClient.getListOfPackages(META,this);
         }
-
+        // subsequent use update tasks still running
+        else if (mUpdateTasks != null && !mUpdateTasks.isDone()) {
+            // wait for background tasks to finish, then proceed to the app (waiting at least MIN_LOAD_DELAY)
+            final long startTime = System.currentTimeMillis();
+            mUpdateTasks.addListener(new Runnable() {
+                @Override
+                public void run() {
+                    final long elapsed = System.currentTimeMillis() - startTime;
+                    if (elapsed > MIN_LOAD_DELAY) {
+                        goToMainActivity();
+                    } else {
+                        final Handler handler = new Handler(Looper.getMainLooper());
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                goToMainActivity();
+                            }
+                        }, MIN_LOAD_DELAY - elapsed);
+                    }
+                }
+            }, new MainThreadExecutor());
+        }
+        // all updates are complete, proceed directly to Main Activity
+        else {
+            goToMainActivity();
+        }
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
-        return true;
-    }
+    /* END lifecycle */
 
-    @Override
-    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
-    {
-        return true;
+    private void startUpdateTasks() {
+        final InitialContentTasks initTasks = new InitialContentTasks(getApplicationContext());
+
+        // background loading tasks
+        final ListenableFuture<Object> languagesTask = initTasks.loadDefaultLanguages();
+
+        mUpdateTasks = Futures.successfulAsList(
+                // load the default followup data
+                initTasks.loadFollowups(),
+                // load the list of available languages
+                languagesTask,
+                // setup the Every Student content
+                initTasks.installEveryStudentPackage(),
+                // load any bundled packages
+                initTasks.loadBundledPackages(languagesTask)
+        );
     }
 
     private boolean isFirstLaunch()
@@ -108,15 +140,12 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler,
         return settings.getBoolean(FIRST_LAUNCH, true);
     }
 
-    private void showLoading(String msg)
-    {
-        tvTask.setText(msg);
-        tvTask.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
+    private void showLoading() {
+        mUpdateText.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
-    private void goToMainActivity()
-    {
+    void goToMainActivity() {
         // so now that we are expiring the translator code after 12 hours we will auto "log out" the
         // user when the app is restarted.
 
@@ -186,9 +215,10 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler,
     @Override
     public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
     {
-        GTLanguage languageRetrievedFromDatabase = GTLanguage.getLanguage(getApp().getApplicationContext(), langCode);
-        languageRetrievedFromDatabase.setDownloaded(true);
-        languageRetrievedFromDatabase.update(getApp().getApplicationContext());
+        final GTLanguage language = new GTLanguage();
+        language.setLanguageCode(langCode);
+        language.setDownloaded(true);
+        DBAdapter.getInstance(this).updateAsync(language, GTLanguageTable.COL_DOWNLOADED);
 
         goToMainActivity();
     }

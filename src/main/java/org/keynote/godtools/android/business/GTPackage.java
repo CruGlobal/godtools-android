@@ -1,15 +1,14 @@
 package org.keynote.godtools.android.business;
 
-import static org.ccci.gto.android.common.db.Expression.bind;
-import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.FIELD_LANGUAGE;
-import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.FIELD_STATUS;
-
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.common.base.Function;
 
-import org.ccci.gto.android.common.db.Expression;
 import org.keynote.godtools.android.model.HomescreenLayout;
+
+import java.util.Comparator;
+import java.util.regex.Pattern;
 
 public class GTPackage {
     public static final String EVERYSTUDENT_PACKAGE_CODE = "everystudent";
@@ -17,9 +16,9 @@ public class GTPackage {
     public static final String STATUS_LIVE = "live";
     public static final String STATUS_DRAFT = "draft";
 
-    // common SQL queries
-    public static final Expression SQL_WHERE_DRAFT_BY_LANGUAGE =
-            FIELD_LANGUAGE.eq(bind()).and(FIELD_STATUS.eq(STATUS_DRAFT));
+    public static final String DEFAULT_VERSION = "0";
+
+    private static final Pattern PATTERN_VERSION = Pattern.compile("[0-9]+(?:\\.[0-9]+)*");
 
     public static final Function<GTPackage, String> FUNCTION_CODE = new Function<GTPackage, String>() {
         @Nullable
@@ -28,10 +27,12 @@ public class GTPackage {
             return input != null ? input.code : null;
         }
     };
+    private static final Comparator<GTPackage> COMPARATOR_VERSION = new VersionComparator();
 
-    private String code;
+    String code;
     private String name;
-    private double version;
+    @NonNull
+    String version = DEFAULT_VERSION;
     private String language;
     private String configFileName;
     private String status;
@@ -64,12 +65,13 @@ public class GTPackage {
         this.name = name;
     }
 
-    public double getVersion() {
+    @NonNull
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion(double version) {
-        this.version = version;
+    public void setVersion(@Nullable final String version) {
+        this.version = version != null && PATTERN_VERSION.matcher(version).matches() ? version : DEFAULT_VERSION;
     }
 
     public String getLanguage() {
@@ -122,5 +124,33 @@ public class GTPackage {
     public void setAvailable(boolean available)
     {
         this.available = available;
+    }
+
+    /**
+     * @param other the package to compare versions against
+     * @return an integer < 0 if the version of this package is less than the version of {@code other}, 0 if they are
+     * equal, and > 0 if the version of this package is greater than the version of {@code other}.
+     */
+    public int compareVersionTo(@NonNull final GTPackage other) {
+        return COMPARATOR_VERSION.compare(this, other);
+    }
+
+    static class VersionComparator implements Comparator<GTPackage> {
+        @Override
+        public int compare(final GTPackage lhsPackage, final GTPackage rhsPackage) {
+            final String lhs[] = lhsPackage.version.split("\\.");
+            final String rhs[] = rhsPackage.version.split("\\.");
+
+            for (int i = 0; i < lhs.length || i < rhs.length; i++) {
+                final int lhsVal = i < lhs.length ? Integer.parseInt(lhs[i]) : 0;
+                final int rhsVal = i < rhs.length ? Integer.parseInt(rhs[i]) : 0;
+                final int result = lhsVal - rhsVal;
+                if (result != 0) {
+                    return result;
+                }
+            }
+
+            return 0;
+        }
     }
 }

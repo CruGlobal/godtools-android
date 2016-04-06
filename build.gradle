@@ -8,11 +8,13 @@ buildscript {
         classpath 'com.android.tools.build:gradle:1.5.0'
         classpath "com.newrelic.agent.android:agent-gradle-plugin:5.5.0"
         classpath 'io.fabric.tools:gradle:1.21.2'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
 }
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'newrelic'
+apply plugin: 'com.neenbedankt.android-apt'
 
 apply from: 'versioning.gradle'
 
@@ -23,7 +25,9 @@ ext.deps = [
         androidSupport: '23.2.1',
         gtoSupport    : '0.9.0-SNAPSHOT',
         guava         : '19.0',
-        playServices  : '8.4.0'
+        junit         : '4.12',
+        playServices  : '8.4.0',
+        facebookStetho: '1.3.1'
 ]
 
 dependencies {
@@ -35,6 +39,7 @@ dependencies {
 
     compile 'org.ccci.gto.android:gto-support-core:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-db:' + deps.gtoSupport
+    compile 'org.ccci.gto.android:gto-support-db-async:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-gson:' + deps.gtoSupport
 
     compile 'com.crashlytics.sdk.android:crashlytics:2.5.5'
@@ -47,6 +52,16 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.0.0'
 
     compile 'org.apache.commons:commons-lang3:3.4'
+
+    compile 'org.greenrobot:eventbus:3.0.0'
+
+    debugCompile 'com.facebook.stetho:stetho:' + deps.facebookStetho
+    debugCompile 'com.facebook.stetho:stetho-okhttp3:' + deps.facebookStetho
+
+    testCompile 'junit:junit:' + deps.junit
+    testCompile 'org.hamcrest:hamcrest-library:1.3'
+
+    apt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
 }
 
 android {
@@ -56,10 +71,6 @@ android {
     // XXX: we need to remove usage of the Apache HttpClient
     useLibrary 'org.apache.http.legacy'
 
-    lintOptions {
-        warning 'MissingTranslation'
-    }
-    
     defaultConfig {
         applicationId 'org.keynote.godtools.android'
 
@@ -82,6 +93,14 @@ android {
     dexOptions {
         preDexLibraries !project.hasProperty('disablePreDex')
     }
+    lintOptions {
+        warning 'MissingTranslation'
+    }
+    packagingOptions {
+        pickFirst 'META-INF/NOTICE.txt'
+        pickFirst 'META-INF/LICENSE.txt'
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
@@ -92,6 +111,8 @@ android {
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AA2f0cb2d41f6ac7dcc256eaa9ca7e0f640859fd52\""
         }
         release {
+            minifyEnabled true
+
             buildConfigField "String", "BASE_URL_V2", "\"https://api.godtoolsapp.com/godtools-api/rest/v2/\""
             buildConfigField "String", "BASE_URL", "\"https://api.godtoolsapp.com/godtools-api/rest/\""
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AAcaf7bbfe3ffda5dcb1455d3bc16b0c5da1cd71e9\""
@@ -116,4 +137,10 @@ repositories {
         }
     }
     maven { url 'https://maven.fabric.io/public' }
+}
+
+apt {
+    arguments {
+        eventBusIndex "org.keynote.godtools.android.eventbus.GodToolsEventBusIndex"
+    }
 }

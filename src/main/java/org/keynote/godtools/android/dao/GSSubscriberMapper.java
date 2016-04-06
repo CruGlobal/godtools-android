@@ -22,7 +22,6 @@ public class GSSubscriberMapper extends AbstractMapper<GSSubscriber> {
     @Override
     protected void mapField(@NonNull final ContentValues values, @NonNull final String field,
                             @NonNull final GSSubscriber obj) {
-
         switch(field) {
             case GSSubscriberTable.COL_ROUTE_ID:
                 values.put(field, obj.getRouteId());

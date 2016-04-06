@@ -1,19 +1,5 @@
 package org.keynote.godtools.android;
 
-import static org.keynote.godtools.android.business.GTPackage.SQL_WHERE_DRAFT_BY_LANGUAGE;
-import static org.keynote.godtools.android.utils.Constants.APPLICATION_NAME;
-import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
-import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
-import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
-import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
-import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT_PRIMARY;
-import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
-import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
-import static org.keynote.godtools.android.utils.Constants.KGP;
-import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
-import static org.keynote.godtools.android.utils.Constants.SATISFIED;
-import static org.keynote.godtools.android.utils.Constants.WEB_URL;
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -58,6 +44,20 @@ import org.keynote.godtools.android.utils.Device;
 
 import java.util.Iterator;
 import java.util.List;
+
+import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.SQL_WHERE_DRAFT_BY_LANGUAGE;
+import static org.keynote.godtools.android.utils.Constants.APPLICATION_NAME;
+import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
+import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
+import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.SATISFIED;
+import static org.keynote.godtools.android.utils.Constants.WEB_URL;
 
 public class PreviewModeMainPW extends BaseActionBarActivity implements
         DownloadTask.DownloadTaskHandler,
