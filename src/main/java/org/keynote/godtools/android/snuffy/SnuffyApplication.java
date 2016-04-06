@@ -17,7 +17,6 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.utils.FileUtils;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.Vector;
 
 import io.fabric.sdk.android.Fabric;
@@ -89,37 +88,6 @@ public class SnuffyApplication extends Application
     @Deprecated
     public File getResourcesDir() {
         return FileUtils.getResourcesDir(this);
-    }
-
-    private boolean assetExists(String fileName)
-    {
-        try
-        {
-            InputStream is = getAssets().open(fileName);
-            is.close();
-            return true;
-        } catch (Exception e)
-        {
-            return false;
-        }
-    }
-
-    private boolean fileExists(String fileName)
-    {
-        File f = new File(getDocumentsDir() + "/" + fileName);
-        return f.exists();
-    }
-
-    public boolean languageExistsAsAsset(String packageName, String languageCode)
-    {
-        String testFileName = "Packages/" + packageName + "/" + languageCode + ".xml";
-        return assetExists(testFileName);
-    }
-
-    public boolean languageExistsAsFile(String packageName, String languageCode)
-    {
-        String testFileName = "Packages/" + packageName + "/" + languageCode + ".xml";
-        return fileExists(testFileName);
     }
 
     public Tracker getTracker()
