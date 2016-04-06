@@ -6,7 +6,7 @@ import org.ccci.gto.android.common.db.BaseContract;
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Expression.Field;
 import org.ccci.gto.android.common.db.Table;
-import org.keynote.godtools.android.api.GSSubscriber;
+import org.keynote.godtools.android.business.GSSubscriber;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.model.Followup;

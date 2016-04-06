@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.api;
+package org.keynote.godtools.android.business;
 
 import org.ccci.gto.android.common.gson.GsonIgnore;
 
