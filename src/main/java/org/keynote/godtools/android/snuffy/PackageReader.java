@@ -11,6 +11,8 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.ClipboardManager;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
@@ -27,23 +29,31 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
+import org.ccci.gto.android.common.util.IOUtils;
 import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.snuffy.model.Manifest;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.concurrent.ExecutionException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
 
 @SuppressWarnings({"deprecation", "BooleanMethodIsAlwaysInverted"})
 public class PackageReader
@@ -103,12 +113,12 @@ public class PackageReader
                                     int pageWidth,
                                     int pageHeight,
                                     String packageConfigName,
+                                    @Nullable final String status,
                                     Vector<SnuffyPage> pages,
                                     ProgressCallback progressCallback,
                                     Typeface alternateTypeface)
     {
-
-        mAppRef = new WeakReference<SnuffyApplication>(app);
+        mAppRef = new WeakReference<>(app);
         mContext = app.getApplicationContext();
         mPageWidth = pageWidth;
         mPageHeight = pageHeight;
@@ -124,142 +134,61 @@ public class PackageReader
         bitmapCache.clear();
         mPages.clear();
 
-        boolean bSuccess;
-        InputStream isMain = null;
-        try
-        {
-            isMain = new BufferedInputStream(new FileInputStream(app.getResourcesDir().getPath() + "/" + packageConfigName));
-            bSuccess = processMainPackageFilePW(isMain);
-
-        } catch (IOException e)
-        {
-            Log.e(TAG, "Cannot open or read main package file: " + packageConfigName);
+        // process the manifest
+        try {
+            final boolean forceReload = KEY_DRAFT.equalsIgnoreCase(status);
+            final Manifest manifest =
+                    PackageManager.getInstance(mContext).getManifest(packageConfigName, forceReload).get();
+            return processMainPackageFilePW(manifest);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             return false;
-        } finally
-        {
-            if (isMain != null)
-            {
-                try
-                {
-                    isMain.close();
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
+        } catch (ExecutionException e) {
+            Log.e(TAG, "Error reading package manifest: " + packageConfigName);
+            return false;
         }
-
-        return bSuccess;
     }
 
-    private boolean processMainPackageFilePW(InputStream isMain)
-    {
-        Log.d(TAG, ">>> processMainPackageFile starts");
+    private boolean processMainPackageFilePW(@NonNull final Manifest manifest) {
+        try {
+            // process main package manifest
+            final int numPages = manifest.getPages().size();
+            mPackageTitle = manifest.getTitle();
 
-        boolean bSuccess = false;
-
-        Document xmlDoc;
-        try
-        {
-            xmlDoc = DocumentBuilderFactory
-                    .newInstance()
-                    .newDocumentBuilder()
-                    .parse(isMain);
-            org.w3c.dom.Element root = xmlDoc.getDocumentElement();
-            if (root == null)
-                throw new SAXException("XML Document has no root element");
-
-            NodeList nlPages = root.getElementsByTagName("page");
-            int numPages = nlPages.getLength();
-            if (numPages == 0)
-                throw new SAXException("Main Package file document must have at least one page node");
-            NodeList nlAbout = root.getElementsByTagName("about");
-            int numAbouts = nlAbout.getLength();
-            if (numAbouts != 1)
-                throw new SAXException("Main Package file document must have exactly one about node");
-            NodeList nlPackageName = root.getElementsByTagName("packagename"); // packagename seems to have superseded displayname as the name for this element
-            int numPackageNames = nlPackageName.getLength();
-            NodeList nlDisplayName = root.getElementsByTagName("displayname"); // but some files (e.g. 4Laws/ru.xml) still have displayname ?
-            int numDisplayNames = nlDisplayName.getLength();
-            if ((numPackageNames + numDisplayNames) != 1)
-                throw new SAXException("Main Package file document must have exactly one packagename or displayname node");
-            if (numPackageNames == 1)
-            {
-                Element elPackage = (Element) nlPackageName.item(0);
-                mPackageTitle = elPackage.getTextContent();
-            }
-            else
-            {
-                Element elPackage = (Element) nlDisplayName.item(0);
-                mPackageTitle = elPackage.getTextContent();
-            }
-
-            Element elAbout = (Element) nlAbout.item(0);
-            if (!processPagePW(elAbout))    // about will be page 0
-                return false;
-
+            // process all pages
             mProgressCallback.updateProgress(0, numPages);
-            for (int i = 0; i < numPages; i++)
-            {
-                Element elPage = (Element) nlPages.item(i);
-                if (!processPagePW(elPage))
-                    return false;
-                mProgressCallback.updateProgress(i + 1, numPages);
+            mPages.add(processManifestPage(manifest.getAbout()));
+            mProgressCallback.updateProgress(mPages.size(), numPages);
+            for (final Manifest.Page page : manifest.getPages()) {
+                mPages.add(processManifestPage(page));
+                mProgressCallback.updateProgress(mPages.size(), numPages);
             }
 
-            bSuccess = true;
-        } catch (IOException e)
-        {
-            Log.e(TAG, "processMainPackageFile failed: " + e.toString());
-        } catch (ParserConfigurationException e)
-        {
-            Log.e(TAG, "processMainPackageFile failed: " + e.toString());
-        } catch (SAXException e)
-        {
-            Log.e(TAG, "processMainPackageFile failed: " + e.toString());
+            // return success
+            return true;
+        } catch (final Exception e) {
+            Crashlytics.log("error processing main package manifest");
+            Crashlytics.logException(e);
+            return false;
         }
-        Log.d(TAG, ">>> processMainPackageFile ends");
-        return bSuccess;
     }
 
-    private boolean processPagePW(Element pageElement)
-    {
-        String thumbFileName = pageElement.getAttribute("thumb");
-        String pageFileName = pageElement.getAttribute("filename");
-        String description = pageElement.getTextContent();
-        Log.d(TAG, ">>> processPage: " + pageFileName);
-
-        pageFileName = "resources/" + pageFileName;
-
-        SnuffyPage currPage = null;
+    @NonNull
+    private SnuffyPage processManifestPage(@NonNull final Manifest.Page page) throws FileNotFoundException {
         InputStream pageInputStream = null;
-        try
-        {
-            pageInputStream = new BufferedInputStream(new FileInputStream(mAppRef.get().getDocumentsDir().getPath() + "/" + pageFileName));
-            currPage = processPageFilePW(pageInputStream, pageFileName);
-            currPage.mDescription = description;
-            currPage.mThumbnail = thumbFileName;
-            mPages.add(currPage);
-        } catch (IOException e)
-        {
-            Log.e(TAG, "Cannot open or read page file: " + pageFileName);
-            return false;
-        } finally
-        {
-            if (pageInputStream != null)
-            {
-                try
-                {
-                    pageInputStream.close();
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
+        try {
+            final String pageFileName = "resources/" + page.getFileName();
+            pageInputStream = new BufferedInputStream(
+                    new FileInputStream(new File(mAppRef.get().getDocumentsDir(), pageFileName)));
 
-        //noinspection ConstantConditions
-        return (currPage != null);
+            final SnuffyPage currPage = processPageFilePW(pageInputStream, pageFileName);
+            currPage.mModel = page;
+            currPage.mDescription = page.getDescription();
+            currPage.mThumbnail = page.getThumb();
+            return currPage;
+        } finally {
+            IOUtils.closeQuietly(pageInputStream);
+        }
     }
 
     private SnuffyPage processPageFilePW(InputStream isPage, String pageFileName)
@@ -2220,16 +2149,7 @@ public class PackageReader
             // try the next path instead
         } finally
         {
-            if (isImage != null)
-            {
-                try
-                {
-                    isImage.close();
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
+            IOUtils.closeQuietly(isImage);
         }
 
         // 2b.  next the package-specific folder with a @2x
@@ -2251,16 +2171,7 @@ public class PackageReader
             // try the next path instead
         } finally
         {
-            if (isImage != null)
-            {
-                try
-                {
-                    isImage.close();
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
+            IOUtils.closeQuietly(isImage);
         }
 
         // 3. next the folder that is shared by all packages
@@ -2277,16 +2188,7 @@ public class PackageReader
             return null;
         } finally
         {
-            if (isImage != null)
-            {
-                try
-                {
-                    isImage.close();
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
+            IOUtils.closeQuietly(isImage);
         }
     }
 
