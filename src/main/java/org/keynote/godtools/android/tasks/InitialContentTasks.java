@@ -5,6 +5,7 @@ import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
 import com.crashlytics.android.Crashlytics;
@@ -39,8 +40,6 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.annotation.Nullable;
 
 public class InitialContentTasks {
     final Context mContext;
