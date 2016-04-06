@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import org.ccci.gto.android.common.util.MainThreadExecutor;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
@@ -50,6 +53,8 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 public class Splash extends Activity implements MetaTask.MetaTaskHandler, DownloadTask.DownloadTaskHandler {
     private static final String TAG = Splash.class.getSimpleName();
 
+    static final long MIN_LOAD_DELAY = 500;
+
     @Bind(R.id.tvTask)
     TextView mUpdateText;
     @Bind(R.id.progressBar)
@@ -84,6 +89,31 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
             showLoading();
 
             GodToolsApiClient.getListOfPackages(META,this);
+        } else {
+            if (mUpdateTasks != null) {
+                final long startTime = System.currentTimeMillis();
+
+                // wait for background tasks to finish, then proceed to the app (waiting at least MIN_LOAD_DELAY)
+                mUpdateTasks.addListener(new Runnable() {
+                    @Override
+                    public void run() {
+                        final long elapsed = System.currentTimeMillis() - startTime;
+                        if (elapsed > MIN_LOAD_DELAY) {
+                            goToMainActivity();
+                        } else {
+                            final Handler handler = new Handler(Looper.getMainLooper());
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    goToMainActivity();
+                                }
+                            }, MIN_LOAD_DELAY - elapsed);
+                        }
+                    }
+                }, new MainThreadExecutor());
+            } else {
+                goToMainActivity();
+            }
         }
     }
 
@@ -121,8 +151,7 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
-    private void goToMainActivity()
-    {
+    void goToMainActivity() {
         // so now that we are expiring the translator code after 12 hours we will auto "log out" the
         // user when the app is restarted.
 
