@@ -56,7 +56,7 @@ public class GTPackageReader {
                     Element element = (Element) nlPackages.item(j);
 
                     String code = element.getAttribute("code");
-                    double version = Double.valueOf(element.getAttribute("version"));
+                    String version = element.getAttribute("version");
                     String status = element.getAttribute("status");
 
                     /*
@@ -116,7 +116,7 @@ public class GTPackageReader {
                 String icon = element.getAttribute("icon");
                 String status = element.getAttribute("status");
                 String name = element.getAttribute("name");
-                double version = Double.parseDouble(element.getAttribute("version"));
+                String version = element.getAttribute("version");
 
                 GTPackage gtp = new GTPackage();
                 gtp.setCode(code);
@@ -166,7 +166,7 @@ public class GTPackageReader {
                 String icon = element.getAttribute("icon");
                 String status = element.getAttribute("status");
                 String name = element.getAttribute("name");
-                double version = Double.parseDouble(element.getAttribute("version"));
+                String version = element.getAttribute("version");
 
                 GTPackage gtp = new GTPackage();
                 gtp.setCode(code);

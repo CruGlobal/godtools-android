@@ -15,7 +15,6 @@ public class GTLanguage implements Serializable {
     public static final String KEY_PRIMARY = "languagePrimary";
     public static final String KEY_PARALLEL = "languageParallel";
 
-    private long id;
     private String languageName;
     private String languageCode;
     private boolean downloaded;
@@ -36,14 +35,6 @@ public class GTLanguage implements Serializable {
 
         this.languageName = languageName;
         this.languageCode = languageCode;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getLanguageName() {
@@ -88,17 +79,6 @@ public class GTLanguage implements Serializable {
         this.draft = draft;
     }
 
-    public static GTLanguage getLanguage(Context context, String languageCode) {
-        DBAdapter adapter = DBAdapter.getInstance(context);
-        return adapter.getGTLanguage(languageCode);
-    }
-
-    public static List<GTLanguage> getAll(Context context) {
-        DBAdapter adapter = DBAdapter.getInstance(context);
-
-        return adapter.getAllLanguages();
-    }
-
     /**
      * Gets all languages where the name is translated to the locale that is passed in
      * via @param locale.
@@ -106,7 +86,7 @@ public class GTLanguage implements Serializable {
     public static List<GTLanguage> getAll(Context context, Locale locale) {
         DBAdapter adapter = DBAdapter.getInstance(context);
 
-        List<GTLanguage> allLanguages = adapter.getAllLanguages();
+        List<GTLanguage> allLanguages = adapter.get(GTLanguage.class);
 
         for(GTLanguage language : allLanguages)
         {
@@ -114,26 +94,6 @@ public class GTLanguage implements Serializable {
             language.setLanguageName(WordUtils.capitalize(displayName));
         }
         return allLanguages;
-    }
-
-    public void addToDatabase(Context context) {
-        DBAdapter adapter = DBAdapter.getInstance(context);
-
-        GTLanguage dbLanguage = adapter.getGTLanguage(languageCode);
-        if (dbLanguage == null)
-        {
-            adapter.insertGTLanguage(this);
-        }
-        else
-        {
-            this.setDownloaded(dbLanguage.isDownloaded());
-            adapter.updateGTLanguage(this);
-        }
-    }
-
-    public void update(Context context) {
-        DBAdapter adapter = DBAdapter.getInstance(context);
-        adapter.updateGTLanguage(this);
     }
 
     @Override

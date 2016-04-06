@@ -6,10 +6,9 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 
 import java.io.InputStream;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 
 public class UpdatePackageListTask
@@ -31,52 +30,22 @@ public class UpdatePackageListTask
 
         for (GTLanguage languageFromMetaDownload : languageList)
         {
-            // check if language is already in the db
-            GTLanguage languageRetrievedFromDatabase = adapter.getGTLanguage(languageFromMetaDownload.getLanguageCode());
-            if (languageRetrievedFromDatabase == null)
-            {
-                adapter.insertGTLanguage(languageFromMetaDownload);
-            }
-            else
-            {
-                // don't forget that a previously downloaded language was already downloaded.
-                languageFromMetaDownload.setDownloaded(languageRetrievedFromDatabase.isDownloaded());
-                adapter.updateGTLanguage(languageFromMetaDownload);
-            }
+            adapter.updateOrInsert(languageFromMetaDownload, GTLanguageTable.COL_NAME, GTLanguageTable.COL_DRAFT);
 
-            languageRetrievedFromDatabase = adapter.getGTLanguage(languageFromMetaDownload.getLanguageCode());
-            for (GTPackage packageFromMetaDownload : languageFromMetaDownload.getPackages())
-            {
-                // check if a new package is available for download or an existing package has been updated
-                final GTPackage packageRetrievedFromDatabase = adapter.refresh(packageFromMetaDownload);
-                if (packageRetrievedFromDatabase == null || newerVersionExists(packageFromMetaDownload.getVersion(), packageRetrievedFromDatabase.getVersion()))
-                {
-                    languageRetrievedFromDatabase.setDownloaded(false);
-                    break;
+            GTLanguage languageRetrievedFromDatabase = adapter.refresh(languageFromMetaDownload);
+            if(languageRetrievedFromDatabase != null) {
+                for (GTPackage packageFromMetaDownload : languageFromMetaDownload.getPackages()) {
+                    // check if a new package is available for download or an existing package has been updated
+                    final GTPackage packageRetrievedFromDatabase = adapter.refresh(packageFromMetaDownload);
+                    if (packageRetrievedFromDatabase == null ||
+                            packageRetrievedFromDatabase.compareVersionTo(packageFromMetaDownload) < 0) {
+                        languageRetrievedFromDatabase.setDownloaded(false);
+                        break;
+                    }
                 }
+
+                adapter.update(languageRetrievedFromDatabase, GTLanguageTable.COL_DOWNLOADED);
             }
-
-            adapter.updateGTLanguage(languageRetrievedFromDatabase);
         }
-    }
-
-    /*
-        For an explanation of how the decimal number portion is extracted to compare the minor version numbers,
-        see: http://stackoverflow.com/questions/10383392/extract-number-decimal-in-bigdecimal
-     */
-    private static boolean newerVersionExists(double remoteVersion, double localVersion)
-    {
-        // convert to string first to avoid floating point issues
-        BigDecimal wrappedRemoteVersion = new BigDecimal(String.valueOf(remoteVersion));
-        BigDecimal wrappedLocalVersion = new BigDecimal(String.valueOf(localVersion));
-
-        // check the major version number portion.  if removeVersion is higher, then return true.
-        // otherwise continue on to minor version number portion
-        if(wrappedRemoteVersion.intValue() > wrappedLocalVersion.intValue()) return true;
-
-        int integerRemoteMinorVersion = wrappedRemoteVersion.subtract(wrappedRemoteVersion.setScale(0, RoundingMode.FLOOR)).movePointRight(wrappedRemoteVersion.scale()).intValue();
-        int integerLocalMinorVersion = wrappedLocalVersion.subtract(wrappedLocalVersion.setScale(0, RoundingMode.FLOOR)).movePointRight(wrappedLocalVersion.scale()).intValue();
-
-        return integerRemoteMinorVersion > integerLocalMinorVersion;
     }
 }
