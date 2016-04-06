@@ -106,7 +106,7 @@ public class PackageManager {
 
     @NonNull
     @WorkerThread
-    private Manifest loadManifest(@NonNull final String manifestFileName) throws IOException, XmlPullParserException {
+    Manifest loadManifest(@NonNull final String manifestFileName) throws IOException, XmlPullParserException {
         final Closer closer = Closer.create();
         try {
             // open file
