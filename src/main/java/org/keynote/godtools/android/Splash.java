@@ -76,11 +76,8 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
         ButterKnife.bind(this);
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        if (!isFirstLaunch() && isUpdateComplete()) {
-            goToMainActivity();
-        }
-        else if(isFirstLaunch())
-        {
+        // first use
+        if (isFirstLaunch()) {
             Log.i(TAG, "First Launch");
 
             // set primary language on first start
@@ -89,31 +86,32 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
             showLoading();
 
             GodToolsApiClient.getListOfPackages(META,this);
-        } else {
-            if (mUpdateTasks != null) {
-                final long startTime = System.currentTimeMillis();
-
-                // wait for background tasks to finish, then proceed to the app (waiting at least MIN_LOAD_DELAY)
-                mUpdateTasks.addListener(new Runnable() {
-                    @Override
-                    public void run() {
-                        final long elapsed = System.currentTimeMillis() - startTime;
-                        if (elapsed > MIN_LOAD_DELAY) {
-                            goToMainActivity();
-                        } else {
-                            final Handler handler = new Handler(Looper.getMainLooper());
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    goToMainActivity();
-                                }
-                            }, MIN_LOAD_DELAY - elapsed);
-                        }
+        }
+        // subsequent use update tasks still running
+        else if (mUpdateTasks != null && !mUpdateTasks.isDone()) {
+            // wait for background tasks to finish, then proceed to the app (waiting at least MIN_LOAD_DELAY)
+            final long startTime = System.currentTimeMillis();
+            mUpdateTasks.addListener(new Runnable() {
+                @Override
+                public void run() {
+                    final long elapsed = System.currentTimeMillis() - startTime;
+                    if (elapsed > MIN_LOAD_DELAY) {
+                        goToMainActivity();
+                    } else {
+                        final Handler handler = new Handler(Looper.getMainLooper());
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                goToMainActivity();
+                            }
+                        }, MIN_LOAD_DELAY - elapsed);
                     }
-                }, new MainThreadExecutor());
-            } else {
-                goToMainActivity();
-            }
+                }
+            }, new MainThreadExecutor());
+        }
+        // all updates are complete, proceed directly to Main Activity
+        else {
+            goToMainActivity();
         }
     }
 
@@ -135,10 +133,6 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
                 // load any bundled packages
                 initTasks.loadBundledPackages(languagesTask)
         );
-    }
-
-    private boolean isUpdateComplete() {
-        return mUpdateTasks == null || mUpdateTasks.isDone();
     }
 
     private boolean isFirstLaunch()
