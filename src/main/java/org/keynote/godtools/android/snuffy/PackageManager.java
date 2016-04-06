@@ -29,6 +29,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class PackageManager {
+    private static PackageManager INSTANCE;
+
     @NonNull
     private final Context mContext;
     private final ExecutorService mExecutor;
@@ -44,7 +46,6 @@ public class PackageManager {
         }
     }
 
-    private static PackageManager INSTANCE;
     public static synchronized PackageManager getInstance(@NonNull final Context context) {
         if (INSTANCE == null) {
             INSTANCE = new PackageManager(context.getApplicationContext());
