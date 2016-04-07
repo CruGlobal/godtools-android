@@ -24,6 +24,7 @@ import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
+import org.keynote.godtools.android.sync.GodToolsSyncService;
 import org.keynote.godtools.android.tasks.InitialContentTasks;
 
 import java.util.List;
@@ -71,6 +72,7 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         startUpdateTasks();
+        GodToolsSyncService.syncGrowthSpacesSubscribers(this);
 
         setContentView(R.layout.splash_pw);
         ButterKnife.bind(this);
@@ -122,7 +124,6 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
 
         // background loading tasks
         final ListenableFuture<Object> languagesTask = initTasks.loadDefaultLanguages();
-
         mUpdateTasks = Futures.successfulAsList(
                 // load the default followup data
                 initTasks.loadFollowups(),

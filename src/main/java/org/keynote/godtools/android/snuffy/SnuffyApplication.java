@@ -21,9 +21,7 @@ import java.util.Vector;
 
 import io.fabric.sdk.android.Fabric;
 
-public class SnuffyApplication extends Application
-{
-
+public class SnuffyApplication extends Application {
     // Hold pointers to our created objects for the current SnuffyActivity (if any)
     private Vector<SnuffyPage> snuffyPages;
     public SnuffyPage aboutView;

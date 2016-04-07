@@ -30,5 +30,5 @@ public interface GrowthSpacesApi {
 
     @POST("subscribers")
     Call<GSSubscriber> createSubscriber(@Header("Access-Id") String accessId,
-                                      @Header("Access-Secret") String accessSecret, @Body GSSubscriber gsSubscriber);
+                                        @Header("Access-Secret") String accessSecret, @Body GSSubscriber gsSubscriber);
 }
