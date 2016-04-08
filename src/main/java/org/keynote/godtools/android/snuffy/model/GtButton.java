@@ -43,6 +43,7 @@ public class GtButton {
     static final String XML_NEGATIVE_BUTTON = "negative-button";
     static final String XML_LINK_BUTTON = "link-button";
 
+    private static final String XML_TEXT = "buttontext";
     private static final String XML_ATTR_MODE = "mode";
     private static final String XML_ATTR_TAP_EVENTS = "tap-events";
 
@@ -50,12 +51,17 @@ public class GtButton {
     private Mode mMode = Mode.DEFAULT;
     @NonNull
     private Set<String> mTapEvents = ImmutableSet.of();
+    private String mText;
 
     private GtButton() {}
 
     @NonNull
     public Mode getMode() {
         return mMode;
+    }
+
+    public String getText() {
+        return mText;
     }
 
     @NonNull
@@ -68,6 +74,7 @@ public class GtButton {
         XmlPullParserUtils
                 .requireAnyName(parser, XML_BUTTON, XML_POSITIVE_BUTTON, XML_NEGATIVE_BUTTON, XML_LINK_BUTTON);
 
+        // determine the button mode
         switch (parser.getName()) {
             case XML_BUTTON:
                 mMode = Mode.PANEL;
@@ -83,22 +90,33 @@ public class GtButton {
                 .of(TextUtils.split(Strings.nullToEmpty(parser.getAttributeValue(null, XML_ATTR_TAP_EVENTS)), ","))
                 .filter(Predicates.containsPattern(".")).toSet();
 
-        // loop until we reach the matching end tag for this element
-        while (parser.next() != XmlPullParser.END_TAG) {
-            // skip anything that isn't a start tag for an element
-            if (parser.getEventType() != XmlPullParser.START_TAG) {
-                continue;
-            }
+        // don't process unknown button modes
+        if (mMode == Mode.UNKNOWN) {
+            XmlPullParserUtils.skipTag(parser);
+        }
+        // This is a panel button, so extract the embedded content
+        else if (mMode == Mode.PANEL) {
+            // loop until we reach the matching end tag for this element
+            while (parser.next() != XmlPullParser.END_TAG) {
+                // skip anything that isn't a start tag for an element
+                if (parser.getEventType() != XmlPullParser.START_TAG) {
+                    continue;
+                }
 
-            // process recognized elements
-            switch (parser.getName()) {
-//                case XML_TITLE:
-//                    mTitle = XmlPullParserUtils.safeNextText(parser);
-//                    break;
-                default:
-                    // skip unrecognized nodes
-                    XmlPullParserUtils.skipTag(parser);
+                // process recognized elements
+                switch (parser.getName()) {
+                    case XML_TEXT:
+                        mText = XmlPullParserUtils.safeNextText(parser);
+                        break;
+                    default:
+                        // skip unrecognized nodes
+                        XmlPullParserUtils.skipTag(parser);
+                }
             }
+        }
+        // Otherwise, just extract the text content
+        else {
+            mText = XmlPullParserUtils.safeNextText(parser);
         }
 
         return this;

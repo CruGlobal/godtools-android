@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <button>
-    <buttontext>Did you pray this prayer?</buttontext>
+    <buttontext>Button Text</buttontext>
     <panel>
         <button-pair>
             <positive-button tap-events="prayer-page-give-me-follow-up">YES</positive-button>
