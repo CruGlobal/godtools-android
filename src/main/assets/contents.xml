@@ -1,1 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?><content><resource config="35d83e86-bdaa-4892-93fe-0f33576be2b9.xml" icon="6be451436d10d47fb1f966aa0aba459094f7e58a.png" language="en" name="Knowing God Personally" package="kgp" status="live" version="1.6"/><resource config="8a54c29b-b024-4a7c-b98b-9f231f81210e.xml" icon="38924f4776da6e14962ef2ba59eaa91bc837ea70.png" language="en" name="The Four Spiritual Laws" package="fourlaws" status="live" version="1.2"/><resource config="dbbe9fdc-6945-4ad2-a77b-62d3c9d96766.xml" icon="397ae8e768604adfbdad04b4ac287001c4f7ff43.png" language="en" name="Satisfied?" package="satisfied" status="live" version="1.3"/></content>
+<?xml version="1.0" encoding="UTF-8"?>
+<content>
+    <resource config="35d83e86-bdaa-4892-93fe-0f33576be2b9.xml" icon="6be451436d10d47fb1f966aa0aba459094f7e58a.png"
+        language="en" name="Knowing God Personally" package="kgp" status="live" version="1.6"/>
+    <resource config="8a54c29b-b024-4a7c-b98b-9f231f81210e.xml" icon="38924f4776da6e14962ef2ba59eaa91bc837ea70.png"
+        language="en" name="The Four Spiritual Laws" package="fourlaws" status="live" version="1.2"/>
+    <resource config="dbbe9fdc-6945-4ad2-a77b-62d3c9d96766.xml" icon="397ae8e768604adfbdad04b4ac287001c4f7ff43.png"
+        language="en" name="Satisfied?" package="satisfied" status="live" version="1.3"/>
+</content>
