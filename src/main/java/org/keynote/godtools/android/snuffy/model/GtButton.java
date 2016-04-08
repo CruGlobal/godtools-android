@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class GtButton {
     public enum Mode {
-        LINK, DEFAULT, PANEL;
+        LINK, DEFAULT, UNKNOWN, PANEL;
 
         private static final String MODE_LINK = "link";
 
@@ -28,6 +28,9 @@ public class GtButton {
                 switch (mode) {
                     case MODE_LINK:
                         return LINK;
+                    default:
+                        // there was a mode, but we don't recognize it
+                        return UNKNOWN;
                 }
             }
 

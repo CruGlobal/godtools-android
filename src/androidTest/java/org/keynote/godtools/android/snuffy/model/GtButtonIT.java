@@ -14,9 +14,16 @@ import static org.keynote.godtools.android.snuffy.ParserUtils.getParserForTestAs
 @RunWith(AndroidJUnit4.class)
 public class GtButtonIT {
     @Test
-    public void verifyPanelButton() throws Exception {
-        final GtButton button = GtButton.fromXml(getParserForTestAsset("button-panel1.xml"));
+    public void verifyButtonPanel() throws Exception {
+        final GtButton button = GtButton.fromXml(getParserForTestAsset("button-panel-simple.xml"));
         assertNotNull(button);
         assertThat(button.getMode(), is(Mode.PANEL));
+    }
+
+    @Test
+    public void verifyButtonUnknown() throws Exception {
+        final GtButton button = GtButton.fromXml(getParserForTestAsset("button-unknown-simple.xml"));
+        assertNotNull(button);
+        assertThat(button.getMode(), is(Mode.UNKNOWN));
     }
 }

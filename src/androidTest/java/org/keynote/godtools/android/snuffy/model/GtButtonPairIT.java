@@ -15,7 +15,7 @@ import static org.keynote.godtools.android.snuffy.ParserUtils.getParserForTestAs
 public class GtButtonPairIT {
     @Test
     public void verifyButtonPair() throws Exception {
-        final GtButtonPair buttonPair = GtButtonPair.fromXml(getParserForTestAsset("button-pair.xml"));
+        final GtButtonPair buttonPair = GtButtonPair.fromXml(getParserForTestAsset("buttonpair-simple.xml"));
         assertNotNull(buttonPair);
         assertNotNull(buttonPair.getPositiveButton());
         assertNotNull(buttonPair.getNegativeButton());
