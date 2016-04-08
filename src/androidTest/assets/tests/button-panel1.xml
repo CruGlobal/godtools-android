@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<button>
+    <buttontext>Did you pray this prayer?</buttontext>
+    <panel>
+        <button-pair>
+            <positive-button tap-events="prayer-page-give-me-follow-up">YES</positive-button>
+            <negative-button tap-events="prayer-page-not-today">Not Today</negative-button>
+        </button-pair>
+        <link-button tap-events="prayer-page-already-made-decision">I have already made this decision</link-button>
+    </panel>
+</button>
