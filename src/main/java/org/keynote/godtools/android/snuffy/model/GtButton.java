@@ -2,14 +2,11 @@ package org.keynote.godtools.android.snuffy.model;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
-import com.google.common.base.Predicates;
-import com.google.common.base.Strings;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.keynote.godtools.android.snuffy.ParserUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -91,9 +88,7 @@ public class GtButton {
                 mMode = Mode.DEFAULT;
         }
         mMode = Mode.fromXmlAttr(parser.getAttributeValue(null, XML_ATTR_MODE), mMode);
-        mTapEvents = FluentIterable
-                .of(TextUtils.split(Strings.nullToEmpty(parser.getAttributeValue(null, XML_ATTR_TAP_EVENTS)), ","))
-                .filter(Predicates.containsPattern(".")).toSet();
+        mTapEvents = ParserUtils.parseEvents(parser.getAttributeValue(null, XML_ATTR_TAP_EVENTS));
 
         // don't process unknown button modes
         if (mMode == Mode.UNKNOWN) {

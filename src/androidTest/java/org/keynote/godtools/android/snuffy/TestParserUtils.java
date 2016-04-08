@@ -8,7 +8,7 @@ import android.util.Xml;
 
 import org.xmlpull.v1.XmlPullParser;
 
-public class ParserUtils {
+public class TestParserUtils {
     public static XmlPullParser getParserForTestAsset(@NonNull final String name) throws Exception {
         final Context context = InstrumentationRegistry.getContext();
         final AssetManager assets = context.getAssets();

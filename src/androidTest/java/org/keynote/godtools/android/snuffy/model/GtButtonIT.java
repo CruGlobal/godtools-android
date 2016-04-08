@@ -10,7 +10,7 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.keynote.godtools.android.snuffy.ParserUtils.getParserForTestAsset;
+import static org.keynote.godtools.android.snuffy.TestParserUtils.getParserForTestAsset;
 
 @RunWith(AndroidJUnit4.class)
 public class GtButtonIT {
