@@ -60,6 +60,11 @@ public class GtButton {
         return mMode;
     }
 
+    @NonNull
+    public Set<String> getTapEvents() {
+        return mTapEvents;
+    }
+
     public String getText() {
         return mText;
     }
