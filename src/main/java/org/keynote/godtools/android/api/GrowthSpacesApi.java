@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import org.ccci.gto.android.common.gson.GsonIgnoreExclusionStrategy;
 import org.keynote.godtools.android.BuildConfig;
+import org.keynote.godtools.android.business.GSSubscriber;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;

@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.async.AbstractAsyncDao;
-import org.keynote.godtools.android.api.GSSubscriber;
+import org.keynote.godtools.android.business.GSSubscriber;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBContract.FollowupTable;
