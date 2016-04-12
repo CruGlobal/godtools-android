@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.db.AbstractMapper;
-import org.keynote.godtools.android.api.GSSubscriber;
+import org.keynote.godtools.android.business.GSSubscriber;
 
 import org.keynote.godtools.android.dao.DBContract.GSSubscriberTable;
 

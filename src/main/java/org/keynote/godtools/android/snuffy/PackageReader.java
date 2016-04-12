@@ -32,7 +32,9 @@ import android.widget.Toast;
 import com.crashlytics.android.Crashlytics;
 
 import org.ccci.gto.android.common.util.IOUtils;
+import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.snuffy.model.Manifest;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -46,6 +48,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
@@ -595,6 +599,12 @@ public class PackageReader
                     shadView.addView(iv);
                 }
 
+                //get any and all tap events, which will be sent to EventBus when the button is clicked
+                final ArrayList<String> tapEvents = new ArrayList<>();
+                if (elButton.hasAttribute("tap-events")) {
+                    Collections.addAll(tapEvents, elButton.getAttribute("tap-events").split(","));
+                }
+
                 theContainer.setOnClickListener(new View.OnClickListener()
                 {
 
@@ -761,6 +771,12 @@ public class PackageReader
                                 shadView.startAnimation(taShad);
                             }
                         };
+
+                        //create a new event when this button is clicked
+                        for (final String tapEvent : tapEvents) {
+                            EventBus.getDefault().post(new GodToolsEvent(tapEvent));
+                        }
+
                         // launch the first animation in the chain
                         new Handler().post(animOut1);
                     }
