@@ -24,25 +24,30 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
-import android.support.v4.view.PagerAdapter;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.common.collect.ImmutableList;
 
+import org.ccci.gto.android.common.support.v4.adapter.ViewHolderPagerAdapter;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.keynote.godtools.android.business.GSSubscriber;
@@ -64,6 +69,7 @@ import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -86,7 +92,7 @@ public class SnuffyPWActivity extends AppCompatActivity
     @Bind(R.id.snuffyViewPager)
     ViewPager mPager;
     private int mPagerCurrentItem;
-    private MyPagerAdapter mPagerAdapter;
+    private GtPagesPagerAdapter mPagerAdapter;
     private boolean mSetupRequired = true;
     private String mPackageTitle;
     private String mPackageStatus;
@@ -207,62 +213,6 @@ public class SnuffyPWActivity extends AppCompatActivity
 
     }
 
-    @SuppressWarnings("deprecation")
-    private class MyPagerAdapter extends PagerAdapter
-    {
-        public int getCount()
-        {
-            return mPages.size();
-        }
-
-        public Object instantiateItem(View collection, int position)
-        {
-            View view = mPages.elementAt(position);
-            ((ViewPager) collection).addView(view, 0);
-            return view;
-        }
-
-        @Override
-        public void destroyItem(View arg0, int arg1, Object arg2)
-        {
-            ((ViewPager) arg0).removeView((View) arg2);
-        }
-
-        @Override
-        public boolean isViewFromObject(View arg0, Object arg1)
-        {
-            return arg0 == arg1;
-        }
-
-        @Override
-        public int getItemPosition(Object object)
-        {
-            // was return POSITION_UNCHANGED; but then showed cached pages from prev language after we rebuilt pages for new language
-            return POSITION_NONE; // force view to redisplay
-        }
-
-        @Override
-        public Parcelable saveState()
-        {
-            return null;
-        }
-
-        @Override
-        public void finishUpdate(View arg0)
-        {
-        }
-
-        @Override
-        public void restoreState(Parcelable arg0, ClassLoader arg1)
-        {
-        }
-
-        @Override
-        public void startUpdate(View arg0)
-        {
-        }
-    }
-
     protected void onResume()
     {
         super.onResume();
@@ -381,9 +331,9 @@ public class SnuffyPWActivity extends AppCompatActivity
         mAboutView = mPages.elementAt(0);
         mPages.remove(mAboutView);
 
-        //mPagerAdapter.notifyDataSetChanged();
-        mPagerAdapter = new MyPagerAdapter();
+        mPagerAdapter = new GtPagesPagerAdapter();
         mPager.setAdapter(mPagerAdapter);
+        mPagerAdapter.setPages(mPages);
 
 
         if (mPagerCurrentItem >= mPages.size()) // if value from prefs (left over from running with different package?) is out-of-range
@@ -597,7 +547,7 @@ public class SnuffyPWActivity extends AppCompatActivity
         getApp().setSnuffyPages(null);
         getApp().aboutView = null;
         mPages = new Vector<>(0);
-        mPagerAdapter.notifyDataSetChanged(); // try to clear cached views (SnuffyPages) in pager, else they will display until we navigate away and back.
+        mPagerAdapter.setPages(null);
         if (bResetToFirstPage)
             mPagerCurrentItem = 0;
 
@@ -939,5 +889,60 @@ public class SnuffyPWActivity extends AppCompatActivity
         timer = new Timer("1.5ShareTimer");
         timer.schedule(timerTask, 90000); //1.5 minutes
         Log.i(TAG, "Timer scheduled");
+    }
+
+    static class GtPagesPagerAdapter extends ViewHolderPagerAdapter<GtPagesPagerAdapter.ViewHolder> {
+        @NonNull
+        private List<SnuffyPage> mPages = ImmutableList.of();
+
+        public void setPages(@Nullable final List<SnuffyPage> pages) {
+            mPages = pages != null ? pages : ImmutableList.<SnuffyPage>of();
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getCount() {
+            return mPages.size();
+        }
+
+        @NonNull
+        @Override
+        protected ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent) {
+            final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.gt_content_page, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        protected void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+            super.onBindViewHolder(holder, position);
+            final SnuffyPage page = mPages.get(position);
+
+            if (holder.mContentContainer != null) {
+                // remove any previous page from the content container
+                holder.mContentContainer.removeAllViews();
+
+                // attach the current page to the content container
+                holder.mContentContainer.addView(page);
+            }
+        }
+
+        @Override
+        protected void onViewRecycled(@NonNull final ViewHolder holder) {
+            super.onViewRecycled(holder);
+            if (holder.mContentContainer != null) {
+                holder.mContentContainer.removeAllViews();
+            }
+        }
+
+        final class ViewHolder extends ViewHolderPagerAdapter.ViewHolder {
+            @Nullable
+            @Bind(R.id.pageContainer)
+            FrameLayout mContentContainer;
+
+            ViewHolder(@NonNull View view) {
+                super(view);
+                ButterKnife.bind(this, view);
+            }
+        }
     }
 }
