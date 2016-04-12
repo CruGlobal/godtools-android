@@ -35,7 +35,8 @@ import org.ccci.gto.android.common.util.IOUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.event.GodToolsEvent;
-import org.keynote.godtools.android.snuffy.model.Manifest;
+import org.keynote.godtools.android.snuffy.model.GtManifest;
+import org.keynote.godtools.android.snuffy.model.GtPage;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -141,7 +142,7 @@ public class PackageReader
         // process the manifest
         try {
             final boolean forceReload = KEY_DRAFT.equalsIgnoreCase(status);
-            final Manifest manifest =
+            final GtManifest manifest =
                     PackageManager.getInstance(mContext).getManifest(packageConfigName, forceReload).get();
             return processMainPackageFilePW(manifest);
         } catch (InterruptedException e) {
@@ -153,7 +154,7 @@ public class PackageReader
         }
     }
 
-    private boolean processMainPackageFilePW(@NonNull final Manifest manifest) {
+    private boolean processMainPackageFilePW(@NonNull final GtManifest manifest) {
         try {
             // process main package manifest
             final int numPages = manifest.getPages().size();
@@ -163,7 +164,7 @@ public class PackageReader
             mProgressCallback.updateProgress(0, numPages);
             mPages.add(processManifestPage(manifest.getAbout()));
             mProgressCallback.updateProgress(mPages.size(), numPages);
-            for (final Manifest.Page page : manifest.getPages()) {
+            for (final GtPage page : manifest.getPages()) {
                 mPages.add(processManifestPage(page));
                 mProgressCallback.updateProgress(mPages.size(), numPages);
             }
@@ -178,7 +179,7 @@ public class PackageReader
     }
 
     @NonNull
-    private SnuffyPage processManifestPage(@NonNull final Manifest.Page page) throws FileNotFoundException {
+    private SnuffyPage processManifestPage(@NonNull final GtPage page) throws FileNotFoundException {
         InputStream pageInputStream = null;
         try {
             final String pageFileName = "resources/" + page.getFileName();

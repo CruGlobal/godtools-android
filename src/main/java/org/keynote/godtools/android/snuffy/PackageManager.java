@@ -12,7 +12,8 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
-import org.keynote.godtools.android.snuffy.model.Manifest;
+import org.keynote.godtools.android.snuffy.model.GtManifest;
+import org.keynote.godtools.android.snuffy.model.GtPage;
 import org.keynote.godtools.android.utils.FileUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -35,7 +36,7 @@ public class PackageManager {
     private final Context mContext;
     private final ExecutorService mExecutor;
 
-    private final LruCache<String, ListenableFuture<Manifest>> mCache = new LruCache<>(6);
+    private final LruCache<String, ListenableFuture<GtManifest>> mCache = new LruCache<>(6);
 
     private PackageManager(@NonNull final Context context) {
         mContext = context;
@@ -55,10 +56,10 @@ public class PackageManager {
     }
 
     @NonNull
-    public ListenableFuture<Manifest> getManifest(@NonNull final String manifestFileName, final boolean forceReload) {
-        final SettableFuture<Manifest> resp;
+    public ListenableFuture<GtManifest> getManifest(@NonNull final String manifestFileName, final boolean forceReload) {
+        final SettableFuture<GtManifest> resp;
         synchronized (mCache) {
-            ListenableFuture<Manifest> cached = mCache.get(manifestFileName);
+            ListenableFuture<GtManifest> cached = mCache.get(manifestFileName);
 
             // make sure we have a valid value cached
             // XXX: should we invalidate an entry after load failure instead?
@@ -93,7 +94,9 @@ public class PackageManager {
             @Override
             public void run() {
                 try {
-                    resp.set(loadManifest(manifestFileName));
+                    final GtManifest manifest = loadManifest(manifestFileName);
+                    loadPages(manifest);
+                    resp.set(manifest);
                 } catch (final Throwable t) {
                     resp.setException(t);
                 }
@@ -106,7 +109,7 @@ public class PackageManager {
 
     @NonNull
     @WorkerThread
-    Manifest loadManifest(@NonNull final String manifestFileName) throws IOException, XmlPullParserException {
+    GtManifest loadManifest(@NonNull final String manifestFileName) throws IOException, XmlPullParserException {
         final Closer closer = Closer.create();
         try {
             // open file
@@ -122,7 +125,45 @@ public class PackageManager {
                 parser.nextTag();
 
                 // parse & return the package manifest
-                return Manifest.fromXml(parser);
+                return GtManifest.fromXml(parser);
+            } catch (final Throwable t) {
+                Crashlytics.log("error processing main package manifest: " + file.toString());
+                Crashlytics.logException(t);
+                throw t;
+            }
+        } catch (final Throwable t) {
+            throw closer.rethrow(t, XmlPullParserException.class);
+        } finally {
+            closer.close();
+        }
+    }
+
+    @WorkerThread
+    void loadPages(@NonNull final GtManifest manifest) throws IOException, XmlPullParserException {
+        loadPage(manifest.getAbout());
+        for (final GtPage page : manifest.getPages()) {
+            loadPage(page);
+        }
+    }
+
+    @WorkerThread
+    private void loadPage(@NonNull final GtPage page) throws IOException, XmlPullParserException {
+        final Closer closer = Closer.create();
+        try {
+            // open file
+            final File file = new File(FileUtils.getResourcesDir(mContext), page.getFileName());
+            final InputStream fileIn = closer.register(new FileInputStream(file));
+            final InputStream bufIn = closer.register(new BufferedInputStream(fileIn));
+
+            try {
+                // initialize pull parser
+                final XmlPullParser parser = Xml.newPullParser();
+                parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+                parser.setInput(bufIn, "UTF-8");
+                parser.nextTag();
+
+                // parse & return the package manifest
+                page.parsePageXml(parser);
             } catch (final Throwable t) {
                 Crashlytics.log("error processing main package manifest: " + file.toString());
                 Crashlytics.logException(t);
