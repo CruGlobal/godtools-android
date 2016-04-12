@@ -15,7 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v4.view.ViewPager.SimpleOnPageChangeListener;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -231,7 +231,7 @@ public class SnuffyPWActivity extends AppCompatActivity
             mPager.setAdapter(mPagerAdapter);
 
             // configure page change listener
-            mPager.setOnPageChangeListener(new OnPageChangeListener() {
+            mPager.addOnPageChangeListener(new SimpleOnPageChangeListener() {
                 @Override
                 public void onPageSelected(int position) {
                     Log.d(TAG, "onPageSelected: " + mAppPackage + Integer.toString(position));
@@ -277,12 +277,6 @@ public class SnuffyPWActivity extends AppCompatActivity
                         }
                     }
                 }
-
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-
-                @Override
-                public void onPageScrollStateChanged(int state) {}
             });
         }
 
