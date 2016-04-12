@@ -27,7 +27,7 @@ class GrowthSpacesTasks {
         // fetch any pending subscribers
         final List<GSSubscriber> subscribers = dao.get(Query.select(GSSubscriber.class));
         for (final GSSubscriber subscriber : subscribers) {
-            // fetch the followup record for this subscriber (to retrieve access-id and access-secret
+            // fetch the followup record for this subscriber (to retrieve access-id and access-secret)
             final List<Followup> followups =
                     dao.get(Query.select(Followup.class)
                                     .where(FollowupTable.FIELD_GS_ROUTE_ID.eq(bind(subscriber.getRouteId()))).limit(1));
