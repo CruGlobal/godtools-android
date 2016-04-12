@@ -59,6 +59,7 @@ import org.keynote.godtools.android.snuffy.SnuffyAboutActivity;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.snuffy.SnuffyHelpActivity;
 import org.keynote.godtools.android.snuffy.SnuffyPage;
+import org.keynote.godtools.android.sync.GodToolsSyncService;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
 
@@ -320,6 +321,8 @@ public class SnuffyPWActivity extends AppCompatActivity
 
             final DBAdapter dao = DBAdapter.getInstance(this);
             dao.insertAsync(gsSubscriber);
+
+            GodToolsSyncService.syncGrowthSpacesSubscribers(this);
         }
     }
 
