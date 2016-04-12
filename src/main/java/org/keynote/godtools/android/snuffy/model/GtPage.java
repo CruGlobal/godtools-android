@@ -29,6 +29,9 @@ public class GtPage {
     @NonNull
     private Set<String> mListeners = ImmutableSet.of();
 
+    @Nullable
+    private GtFollowupModal mFollowupModal;
+
     private GtPage() {}
 
     public boolean isLoaded() {
@@ -50,6 +53,11 @@ public class GtPage {
     @NonNull
     public Set<String> getListeners() {
         return mListeners;
+    }
+
+    @Nullable
+    public GtFollowupModal getFollowupModal() {
+        return mFollowupModal;
     }
 
     @WorkerThread
@@ -92,6 +100,13 @@ public class GtPage {
 
                 // process recognized elements
                 switch (parser.getName()) {
+                    case GtFollowupModal.XML_FOLLOWUP_MODAL:
+                        if (mFollowupModal != null) {
+                            throw new XmlPullParserException("Package XML has more than 1 Followup Modal defined",
+                                                             parser, null);
+                        }
+                        mFollowupModal = GtFollowupModal.fromXml(parser);
+                        break;
                     default:
                         // skip unrecognized nodes
                         XmlPullParserUtils.skipTag(parser);
