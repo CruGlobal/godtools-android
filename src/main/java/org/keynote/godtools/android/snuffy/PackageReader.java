@@ -52,6 +52,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
@@ -93,7 +94,7 @@ public class PackageReader
     private Context mContext;
     private int mPageWidth;
     private int mPageHeight;
-    private Vector<SnuffyPage> mPages;
+    private List<SnuffyPage> mPages;
     private String mPackageTitle;
     private Typeface mAlternateTypeface;
     private String mImageFolderName;
@@ -121,7 +122,7 @@ public class PackageReader
                                     int pageHeight,
                                     String packageConfigName,
                                     @Nullable final String status,
-                                    Vector<SnuffyPage> pages,
+                                    List<SnuffyPage> pages,
                                     ProgressCallback progressCallback,
                                     Typeface alternateTypeface,
                                     String appPackage)

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.Tracker;
@@ -17,13 +18,13 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.utils.FileUtils;
 
 import java.io.File;
-import java.util.Vector;
+import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 
 public class SnuffyApplication extends Application {
-    // Hold pointers to our created objects for the current SnuffyActivity (if any)
-    private Vector<SnuffyPage> snuffyPages;
+    @Nullable
+    private List<SnuffyPage> snuffyPages;
     public SnuffyPage aboutView;
     public String packageTitle;
 
@@ -92,14 +93,13 @@ public class SnuffyApplication extends Application {
     {
         return org.keynote.godtools.android.utils.GoogleAnalytics.getTracker(this);
     }
-    
-    public Vector<SnuffyPage> getSnuffyPages()
-    {
+
+    @Nullable
+    public List<SnuffyPage> getSnuffyPages() {
         return snuffyPages;
     }
 
-    public void setSnuffyPages(Vector<SnuffyPage> snuffyPages)
-    {
-        this.snuffyPages = snuffyPages;
+    public void setSnuffyPages(@Nullable final List<SnuffyPage> pages) {
+        this.snuffyPages = pages;
     }
 }

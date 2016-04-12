@@ -87,7 +87,7 @@ public class SnuffyPWActivity extends AppCompatActivity
     private String mConfigFileName;
     private String mAppLanguage = ENGLISH_DEFAULT;
     private Typeface mAlternateTypeface;
-    private Vector<SnuffyPage> mPages = new Vector<>(0);
+    private List<SnuffyPage> mPages = new Vector<>(0);
     private SnuffyPage mAboutView;
     @Bind(R.id.snuffyViewPager)
     ViewPager mPager;
@@ -328,7 +328,7 @@ public class SnuffyPWActivity extends AppCompatActivity
 
         addClickHandlersToAllPages();
         addCallingActivityToAllPages();
-        mAboutView = mPages.elementAt(0);
+        mAboutView = mPages.get(0);
         mPages.remove(mAboutView);
 
         mPagerAdapter = new GtPagesPagerAdapter();
@@ -353,7 +353,7 @@ public class SnuffyPWActivity extends AppCompatActivity
                 Log.d(TAG, "onPageSelected: " + mAppPackage + Integer.toString(position));
                 trackScreenActivity(mAppPackage + "-" + Integer.toString(position));
 
-                View oldPage = mPages.elementAt(mPagerCurrentItem);
+                View oldPage = mPages.get(mPagerCurrentItem);
                 if (SnuffyPage.class.isInstance(oldPage))
                 {
                     ((SnuffyPage) oldPage).onExitPage();
@@ -361,7 +361,7 @@ public class SnuffyPWActivity extends AppCompatActivity
 
                 mPagerCurrentItem = position;    // keep our own since ViewPager doesn't offer a getCurrentItem method!
 
-                View newPage = mPages.elementAt(mPagerCurrentItem);
+                View newPage = mPages.get(mPager.getCurrentItem());
                 if (SnuffyPage.class.isInstance(newPage))
                 {
                     ((SnuffyPage) newPage).onEnterPage();
@@ -896,7 +896,7 @@ public class SnuffyPWActivity extends AppCompatActivity
         private List<SnuffyPage> mPages = ImmutableList.of();
 
         public void setPages(@Nullable final List<SnuffyPage> pages) {
-            mPages = pages != null ? pages : ImmutableList.<SnuffyPage>of();
+            mPages = pages != null ? ImmutableList.copyOf(pages) : ImmutableList.<SnuffyPage>of();
             notifyDataSetChanged();
         }
 
