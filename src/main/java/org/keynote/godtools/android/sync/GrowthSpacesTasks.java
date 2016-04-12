@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
 
 import org.ccci.gto.android.common.db.Query;
-import org.keynote.godtools.android.api.GSSubscriber;
 import org.keynote.godtools.android.api.GrowthSpacesApi;
+import org.keynote.godtools.android.business.GSSubscriber;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.FollowupTable;
 import org.keynote.godtools.android.model.Followup;
