@@ -21,19 +21,6 @@ public class GSSubscriber {
     @GsonIgnore
     private Date createdTimestamp = new Date(System.currentTimeMillis());
 
-    public GSSubscriber()
-    {
-    }
-
-    public GSSubscriber(String routeId, String languageCode, String firstName, String lastName, String email)
-    {
-        this.routeId = routeId;
-        this.languageCode = languageCode;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-    }
-
     public Integer getId() {
         return id;
     }

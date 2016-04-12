@@ -315,9 +315,12 @@ public class SnuffyPWActivity extends AppCompatActivity
 
         if(event.getEventId().equalsIgnoreCase(SUBSCRIBER_EVENT_ID))
         {
-            GSSubscriber gsSubscriber = new GSSubscriber(event.getData().get("routeId"), event.getData().get
-                    ("languageCode"), event.getData().get("firstName"), event.getData().get("lastName"), event
-                    .getData().get("email"));
+            GSSubscriber gsSubscriber = new GSSubscriber();
+            gsSubscriber.setRouteId(event.getData().get("routeId"));
+            gsSubscriber.setLanguageCode(event.getData().get("languageCode"));
+            gsSubscriber.setFirstName(event.getData().get("firstName"));
+            gsSubscriber.setLastName(event.getData().get("lastName"));
+            gsSubscriber.setEmail(event.getData().get("email"));
 
             final DBAdapter dao = DBAdapter.getInstance(this);
             dao.insertAsync(gsSubscriber);
