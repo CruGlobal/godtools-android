@@ -43,8 +43,11 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
@@ -272,17 +275,40 @@ public class SnuffyPWActivity extends AppCompatActivity
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
     protected void onStop()
     {
         super.onStop();
         Log.i(TAG, "Activity stopped");
-        
+
         if (timer != null)
         {
             timer.cancel();
             Log.i(NotificationInfo.NOTIFICATION_TAG, "Share Timer stopped");
         }
-        
+
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Subscribe
+    public void onGodToolsEvent(GodToolsEvent event){
+        for(int x = 0; x < mPages.size(); x++) {
+            SnuffyPage snuffyPage = mPages.get(x);
+
+            for(String listener : snuffyPage.getModel().getListeners())
+            {
+                //if the eventId
+                if(event.getEventId().equalsIgnoreCase(listener)) {
+                    mPager.setCurrentItem(x);
+                }
+            }
+        }
     }
 
     private void doSetup(int delay)
