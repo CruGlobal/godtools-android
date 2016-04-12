@@ -165,7 +165,7 @@ public class PackageManager {
                 // parse & return the package manifest
                 page.parsePageXml(parser);
             } catch (final Throwable t) {
-                Crashlytics.log("error processing main package manifest: " + file.toString());
+                Crashlytics.log("error processing page xml: " + file.toString());
                 Crashlytics.logException(t);
                 throw t;
             }
