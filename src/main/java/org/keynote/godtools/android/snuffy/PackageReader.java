@@ -117,21 +117,19 @@ public class PackageReader
         return mPackageTitle;
     }
 
-    public boolean processPackagePW(SnuffyApplication app,
-                                    int pageWidth,
-                                    int pageHeight,
-                                    String packageConfigName,
-                                    @Nullable final String status,
-                                    List<SnuffyPage> pages,
-                                    ProgressCallback progressCallback,
-                                    Typeface alternateTypeface,
-                                    String appPackage)
-    {
+    public List<SnuffyPage> processPackagePW(SnuffyApplication app,
+                                             int pageWidth,
+                                             int pageHeight,
+                                             String packageConfigName,
+                                             @Nullable final String status,
+                                             ProgressCallback progressCallback,
+                                             Typeface alternateTypeface,
+                                             String appPackage) {
         mAppRef = new WeakReference<>(app);
         mContext = app.getApplicationContext();
         mPageWidth = pageWidth;
         mPageHeight = pageHeight;
-        mPages = pages;
+        mPages = new ArrayList<>();
         mTotalBitmapSpace = 0;
         mImageFolderName = "resources/";
         mSharedFolderName = "shared/";
@@ -142,21 +140,22 @@ public class PackageReader
 
         // In the case where this package is replacing the previous package - release the memory occupied by the original
         bitmapCache.clear();
-        mPages.clear();
 
         // process the manifest
         try {
             final boolean forceReload = KEY_DRAFT.equalsIgnoreCase(status);
             final GtManifest manifest =
                     PackageManager.getInstance(mContext).getManifest(packageConfigName, mAppPackage, forceReload).get();
-            return processMainPackageFilePW(manifest);
+            if (processMainPackageFilePW(manifest)) {
+                return mPages;
+            }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            return false;
         } catch (ExecutionException e) {
             Log.e(TAG, "Error reading package manifest: " + packageConfigName);
-            return false;
         }
+
+        return null;
     }
 
     private boolean processMainPackageFilePW(@NonNull final GtManifest manifest) {

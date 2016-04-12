@@ -1,19 +1,5 @@
 package org.keynote.godtools.android;
 
-import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
-import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
-import static org.keynote.godtools.android.utils.Constants.COUNT;
-import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
-import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
-import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
-import static org.keynote.godtools.android.utils.Constants.KGP;
-import static org.keynote.godtools.android.utils.Constants.LANGUAGE_PARALLEL;
-import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
-import static org.keynote.godtools.android.utils.Constants.PROPERTY_REG_ID;
-import static org.keynote.godtools.android.utils.Constants.SATISFIED;
-import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
-import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -26,6 +12,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
+import android.support.annotation.WorkerThread;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.AppCompatActivity;
@@ -72,10 +60,23 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
+import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.COUNT;
+import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
+import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
+import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
+import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.LANGUAGE_PARALLEL;
+import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
+import static org.keynote.godtools.android.utils.Constants.PROPERTY_REG_ID;
+import static org.keynote.godtools.android.utils.Constants.SATISFIED;
+import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
+import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 @SuppressWarnings("deprecation")
 public class SnuffyPWActivity extends AppCompatActivity
@@ -87,11 +88,11 @@ public class SnuffyPWActivity extends AppCompatActivity
     private String mConfigFileName;
     private String mAppLanguage = ENGLISH_DEFAULT;
     private Typeface mAlternateTypeface;
-    private List<SnuffyPage> mPages = new Vector<>(0);
+    private List<SnuffyPage> mPages;
     private SnuffyPage mAboutView;
     @Bind(R.id.snuffyViewPager)
     ViewPager mPager;
-    private int mPagerCurrentItem;
+    private int mPagerCurrentItem = 0;
     private GtPagesPagerAdapter mPagerAdapter;
     private boolean mSetupRequired = true;
     private String mPackageTitle;
@@ -126,6 +127,7 @@ public class SnuffyPWActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.snuffy_main);
         ButterKnife.bind(this);
+        setupViewPager();
 
         Log.i("Activity", "SnuffyPWActivity");
 
@@ -158,10 +160,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         {
             mConfigParallel = mParallelPackage.getConfigFileName();
         }
-
-        // Now we are called from GodTools - do not restore current page
-        // always start at 0
-        mPagerCurrentItem = 0;
 
         handleLanguagesWithAlternateFonts();
 
@@ -196,13 +194,121 @@ public class SnuffyPWActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Event triggered whenever a new set of pages is loaded. This event handler is responsible for performing any
+     * post-processing on the list of pages
+     *
+     * @param pages the Pages that were just loaded.
+     */
+    void onPagesLoaded(@Nullable final List<SnuffyPage> pages) {
+        // replace the about page
+        mAboutView = null;
+        if (pages != null && pages.size() > 0) {
+            mAboutView = pages.get(0);
+            pages.remove(mAboutView);
+        }
+
+        // store the remaining pages as the actual pages
+        mPages = pages;
+
+        // trigger updates on various components
+        updateViewPager();
+        updateAppPages();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        cleanupViewPager();
         ButterKnife.unbind(this);
     }
 
     /* END lifecycle */
+
+    private void setupViewPager() {
+        if (mPager != null) {
+            mPagerAdapter = new GtPagesPagerAdapter();
+            mPager.setAdapter(mPagerAdapter);
+
+            // configure page change listener
+            mPager.setOnPageChangeListener(new OnPageChangeListener() {
+                @Override
+                public void onPageSelected(int position) {
+                    Log.d(TAG, "onPageSelected: " + mAppPackage + Integer.toString(position));
+                    trackScreenActivity(mAppPackage + "-" + Integer.toString(position));
+
+                    View oldPage = mPages.get(mPagerCurrentItem);
+                    if (SnuffyPage.class.isInstance(oldPage)) {
+                        ((SnuffyPage) oldPage).onExitPage();
+                    }
+
+                    // keep our own since ViewPager doesn't offer a getCurrentItem method!
+                    mPagerCurrentItem = position;
+
+                    View newPage = mPages.get(mPager.getCurrentItem());
+                    if (SnuffyPage.class.isInstance(newPage)) {
+                        ((SnuffyPage) newPage).onEnterPage();
+                    }
+
+                    // This notification has been updated to only be sent after the app has been opened 3 times
+                    // The api will only send a notice once, so it can be sent from here multiple times.
+
+                    // if the prayer pages are ever moved this will need to be updated.
+
+                    if (settings.getInt(COUNT, 0) >= 3) {
+                        if ((mAppPackage.equalsIgnoreCase(KGP) && position == 7) ||
+                                (mAppPackage.equalsIgnoreCase(FOUR_LAWS) && position == 6)) {
+                            Log.i(TAG, "App used 3 times and prayer page reached.");
+                            GodToolsApiClient.updateNotification(
+                                    settings.getString(AUTH_CODE, ""), regid, NotificationInfo.AFTER_1_PRESENTATION,
+                                    new NotificationUpdateTask.NotificationUpdateTaskHandler() {
+                                        @Override
+                                        public void registrationComplete(String regId) {
+                                            Log.i(NotificationInfo.NOTIFICATION_TAG,
+                                                  "1 Presentation Notification notice sent to API");
+                                        }
+
+                                        @Override
+                                        public void registrationFailed() {
+                                            Log.e(NotificationInfo.NOTIFICATION_TAG,
+                                                  "1 Presentation notification notice failed to send to API");
+                                        }
+                                    });
+                        }
+                    }
+                }
+
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+                @Override
+                public void onPageScrollStateChanged(int state) {}
+            });
+        }
+
+        // trigger an initial update
+        updateViewPager();
+    }
+
+    private void updateViewPager() {
+        if (mPagerAdapter != null) {
+            mPagerAdapter.setPages(mPages);
+        }
+    }
+
+    private void cleanupViewPager() {
+        if (mPager != null) {
+            mPager.setAdapter(null);
+            mPagerAdapter = null;
+        }
+    }
+
+    private void updateAppPages() {
+        final SnuffyApplication app = getApp();
+        app.packageTitle = mPackageTitle;
+        app.aboutView = mAboutView;
+        app.setSnuffyPages(mPages);
+    }
 
     private void handleLanguagesWithAlternateFonts()
     {
@@ -295,20 +401,10 @@ public class SnuffyPWActivity extends AppCompatActivity
         {
             public void run()
             {
-
                 // release the memory from the old package before we start building the new package
-                mPages.clear();
-                mPages = null;
-                mAboutView = null;
-                SnuffyApplication app = getApp();
-                app.setSnuffyPages(null);
-                app.aboutView = null;
-                app.packageTitle = mPackageTitle;
-                mPages = new Vector<>(0);
+                onPagesLoaded(null);
 
-                /** No instance of pager adapter yet, it's only created on completeSetUp()**/
-                //mPagerAdapter.notifyDataSetChanged();
-
+                // trigger the actual load of pages
                 mProcessPackageAsync = new ProcessPackageAsync(mPager.getMeasuredWidth(), mPager.getMeasuredHeight());
                 mProcessPackageAsync.execute("");
             }
@@ -328,84 +424,10 @@ public class SnuffyPWActivity extends AppCompatActivity
 
         addClickHandlersToAllPages();
         addCallingActivityToAllPages();
-        mAboutView = mPages.get(0);
-        mPages.remove(mAboutView);
-
-        mPagerAdapter = new GtPagesPagerAdapter();
-        mPager.setAdapter(mPagerAdapter);
-        mPagerAdapter.setPages(mPages);
-
 
         if (mPagerCurrentItem >= mPages.size()) // if value from prefs (left over from running with different package?) is out-of-range
             mPagerCurrentItem = 0;                // reset to first page.
         mPager.setCurrentItem(mPagerCurrentItem);
-        SnuffyApplication app = getApp();
-        app.setSnuffyPages(mPages);
-        app.aboutView = mAboutView;
-        app.packageTitle = mPackageTitle;
-
-        mPager.setOnPageChangeListener(new OnPageChangeListener()
-        {
-
-            @Override
-            public void onPageSelected(int position)
-            {
-                Log.d(TAG, "onPageSelected: " + mAppPackage + Integer.toString(position));
-                trackScreenActivity(mAppPackage + "-" + Integer.toString(position));
-
-                View oldPage = mPages.get(mPagerCurrentItem);
-                if (SnuffyPage.class.isInstance(oldPage))
-                {
-                    ((SnuffyPage) oldPage).onExitPage();
-                }
-
-                mPagerCurrentItem = position;    // keep our own since ViewPager doesn't offer a getCurrentItem method!
-
-                View newPage = mPages.get(mPager.getCurrentItem());
-                if (SnuffyPage.class.isInstance(newPage))
-                {
-                    ((SnuffyPage) newPage).onEnterPage();
-                }
-
-                // This notification has been updated to only be sent after the app has been opened 3 times
-                // The api will only send a notice once, so it can be sent from here multiple times.
-
-                // if the prayer pages are ever moved this will need to be updated.
-
-                if (settings.getInt(COUNT, 0) >= 3)
-                {
-                    if ((mAppPackage.equalsIgnoreCase(KGP) && position == 7) || (mAppPackage.equalsIgnoreCase(FOUR_LAWS) && position == 6))
-                    {
-                        Log.i(TAG, "App used 3 times and prayer page reached.");
-                        GodToolsApiClient.updateNotification(settings.getString(AUTH_CODE, ""),
-                                regid, NotificationInfo.AFTER_1_PRESENTATION, new NotificationUpdateTask.NotificationUpdateTaskHandler()
-                                {
-                                    @Override
-                                    public void registrationComplete(String regId)
-                                    {
-                                        Log.i(NotificationInfo.NOTIFICATION_TAG, "1 Presentation Notification notice sent to API");
-                                    }
-
-                                    @Override
-                                    public void registrationFailed()
-                                    {
-                                        Log.e(NotificationInfo.NOTIFICATION_TAG, "1 Presentation notification notice failed to send to API");
-                                    }
-                                });
-                    }
-                }
-            }
-
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2)
-            {
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state)
-            {
-            }
-        });
     }
 
     @Override
@@ -541,18 +563,13 @@ public class SnuffyPWActivity extends AppCompatActivity
     {
         setLanguage(languageCode);
 
-        mPages.clear();
-        mPages = null;
-        mAboutView = null;
-        getApp().setSnuffyPages(null);
-        getApp().aboutView = null;
-        mPages = new Vector<>(0);
-        mPagerAdapter.setPages(null);
+        // clear previous pages to free up memory
+        onPagesLoaded(null);
+
         if (bResetToFirstPage)
             mPagerCurrentItem = 0;
 
         doSetup(1000); // delay required to allow Pager to show the empty set of pages
-
     }
 
     private void switchLanguage()
@@ -571,7 +588,6 @@ public class SnuffyPWActivity extends AppCompatActivity
                 isUsingPrimaryLanguage = true;
             }
 
-            mPager.setAdapter(null);
             doSetup(0);
         }
         else
@@ -700,9 +716,8 @@ public class SnuffyPWActivity extends AppCompatActivity
                 new DownloadTask.DownloadTaskHandler()
                 {
                     @Override
-                    public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
-                    {
-                        Integer result = mProcessPackageAsync.doInBackground();
+                    public void downloadTaskComplete(String url, String filePath, String langCode, String tag) {
+                        List<SnuffyPage> result = mProcessPackageAsync.doInBackground();
                         mProcessPackageAsync.onPostExecute(result);
                         Toast.makeText(getApplicationContext(), getString(R.string.success), Toast.LENGTH_SHORT).show();
                         hideLoading();
@@ -739,10 +754,8 @@ public class SnuffyPWActivity extends AppCompatActivity
         }
     }
 
-    private class ProcessPackageAsync
-            extends AsyncTask<String, Integer, Integer>
-            implements PackageReader.ProgressCallback
-    {
+    private class ProcessPackageAsync extends AsyncTask<String, Integer, List<SnuffyPage>>
+            implements PackageReader.ProgressCallback {
         private final int mPageWidth;
         private final int mPageHeight;
 
@@ -764,17 +777,16 @@ public class SnuffyPWActivity extends AppCompatActivity
         }
 
         @Override
-        protected Integer doInBackground(String... params)
-        {
+        @WorkerThread
+        protected List<SnuffyPage> doInBackground(String... params) {
             // params are not used
-            boolean success = false;
+            List<SnuffyPage> pages = null;
             PackageReader packageReader = new PackageReader();
-            try
-            {
-                success = packageReader.processPackagePW(
+            try {
+                pages = packageReader.processPackagePW(
                         (SnuffyApplication) getApplication(),
                         mPageWidth, mPageHeight,
-                        mConfigFileName, mPackageStatus, mPages,
+                        mConfigFileName, mPackageStatus,
                         ProcessPackageAsync.this,
                         mAlternateTypeface,
                         mAppPackage
@@ -785,11 +797,11 @@ public class SnuffyPWActivity extends AppCompatActivity
                 Log.e(TAG, "processPackage failed: " + e.toString());
                 Crashlytics.logException(e);
             }
-            if (success)
+            if (pages != null)
             {
                 mPackageTitle = packageReader.getPackageTitle();
             }
-            return success ? 1 : 0;  // could not get Boolean return value to work so use Integer instead!
+            return pages;
         }
 
         public void updateProgress(int curr, int max)
@@ -805,14 +817,16 @@ public class SnuffyPWActivity extends AppCompatActivity
         }
 
         @Override
-        protected void onPostExecute(Integer result)
-        {
+        @UiThread
+        protected void onPostExecute(List<SnuffyPage> result) {
             if(mProgressDialog != null &&
                     mProgressDialog.isShowing())
             {
                 dismissDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);
             }
-            completeSetup(result != 0);
+
+            onPagesLoaded(result);
+            completeSetup(result != null);
         }
     }
 
