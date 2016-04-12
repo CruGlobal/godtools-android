@@ -170,6 +170,8 @@ public class DBContract extends BaseContract {
         public static final String COLUMN_GS_ACCESS_ID = "gs_access_id";
         public static final String COLUMN_GS_ACCESS_SECRET = "gs_access_secret";
 
+        public static final Field FIELD_GS_ROUTE_ID = TABLE.field(COLUMN_GS_ROUTE_ID);
+
         public static final String[] PROJECTION_ALL =
                 {COLUMN_ID, COLUMN_CONTEXT_ID, COLUMN_GS_ROUTE_ID, COLUMN_GS_ACCESS_ID,
                         COLUMN_GS_ACCESS_SECRET};
