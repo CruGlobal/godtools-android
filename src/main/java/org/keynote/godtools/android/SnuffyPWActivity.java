@@ -45,6 +45,7 @@ import com.crashlytics.android.Crashlytics;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.keynote.godtools.android.business.GSSubscriber;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.event.GodToolsEvent;
@@ -73,6 +74,7 @@ import butterknife.ButterKnife;
 public class SnuffyPWActivity extends AppCompatActivity
 {
     private static final String TAG = "SnuffyActivity";
+    private static final String SUBSCRIBER_EVENT_ID = "followup:subscribe";
 
     private String mAppPackage;
     private String mConfigFileName;
@@ -308,6 +310,16 @@ public class SnuffyPWActivity extends AppCompatActivity
                     mPager.setCurrentItem(x);
                 }
             }
+        }
+
+        if(event.getEventId().equalsIgnoreCase(SUBSCRIBER_EVENT_ID))
+        {
+            GSSubscriber gsSubscriber = new GSSubscriber(event.getData().get("routeId"), event.getData().get
+                    ("languageCode"), event.getData().get("firstName"), event.getData().get("lastName"), event
+                    .getData().get("email"));
+
+            final DBAdapter dao = DBAdapter.getInstance(this);
+            dao.insertAsync(gsSubscriber);
         }
     }
 
