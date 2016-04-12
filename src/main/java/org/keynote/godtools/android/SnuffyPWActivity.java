@@ -513,10 +513,10 @@ public class SnuffyPWActivity extends AppCompatActivity
             messageBody = getString(R.string.satisfied_share);
         }
 
-        if (mPagerCurrentItem > 0)
-        {
+        final int currItem = mPager.getCurrentItem();
+        if (currItem > 0) {
             // http://www.knowgod.com/en/kgp/5
-            shareLink =  shareLink + "/" + String.valueOf(mPagerCurrentItem);
+            shareLink = shareLink + "/" + String.valueOf(currItem);
         }
 
         messageBody = messageBody.replace(SHARE_LINK, shareLink);
@@ -698,7 +698,7 @@ public class SnuffyPWActivity extends AppCompatActivity
     private void refreshPage()
     {
         final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SnuffyPage currentPage = mPages.get(mPagerCurrentItem);
+        SnuffyPage currentPage = mPages.get(mPager.getCurrentItem());
 
         showLoading(getString(R.string.update_page));
 
