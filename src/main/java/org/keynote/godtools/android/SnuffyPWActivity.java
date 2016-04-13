@@ -81,7 +81,7 @@ public class SnuffyPWActivity extends AppCompatActivity
     private String mConfigFileName;
     private String mAppLanguage = ENGLISH_DEFAULT;
     private Typeface mAlternateTypeface;
-    private Vector<SnuffyPage> mPages = new Vector<SnuffyPage>(0);
+    private Vector<SnuffyPage> mPages = new Vector<>(0);
     private SnuffyPage mAboutView;
     @Bind(R.id.snuffyViewPager)
     ViewPager mPager;
@@ -344,7 +344,7 @@ public class SnuffyPWActivity extends AppCompatActivity
                 app.setSnuffyPages(null);
                 app.aboutView = null;
                 app.packageTitle = mPackageTitle;
-                mPages = new Vector<SnuffyPage>(0);
+                mPages = new Vector<>(0);
 
                 /** No instance of pager adapter yet, it's only created on completeSetUp()**/
                 //mPagerAdapter.notifyDataSetChanged();
@@ -586,7 +586,7 @@ public class SnuffyPWActivity extends AppCompatActivity
         mAboutView = null;
         getApp().setSnuffyPages(null);
         getApp().aboutView = null;
-        mPages = new Vector<SnuffyPage>(0);
+        mPages = new Vector<>(0);
         mPagerAdapter.notifyDataSetChanged(); // try to clear cached views (SnuffyPages) in pager, else they will display until we navigate away and back.
         if (bResetToFirstPage)
             mPagerCurrentItem = 0;
