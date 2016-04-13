@@ -88,8 +88,6 @@ public class SnuffyPWActivity extends AppCompatActivity
     private String mConfigFileName;
     private String mAppLanguage = ENGLISH_DEFAULT;
     private Typeface mAlternateTypeface;
-    private List<SnuffyPage> mPages;
-    private SnuffyPage mAboutView;
     @Bind(R.id.snuffyViewPager)
     ViewPager mPager;
     private int mPagerCurrentItem = 0;
@@ -107,6 +105,11 @@ public class SnuffyPWActivity extends AppCompatActivity
     private SharedPreferences settings;
     private String regid;
     private Timer timer;
+
+    @Nullable
+    private List<SnuffyPage> mPages;
+    @Nullable
+    private SnuffyPage mAboutView;
 
     private void setLanguage(String languageCode)
     {
@@ -195,25 +198,12 @@ public class SnuffyPWActivity extends AppCompatActivity
     }
 
     /**
-     * Event triggered whenever a new set of pages is loaded. This event handler is responsible for performing any
-     * post-processing on the list of pages
+     * Event triggered whenever a new set of pages is loaded.
      *
      * @param pages the Pages that were just loaded.
      */
     void onPagesLoaded(@Nullable final List<SnuffyPage> pages) {
-        // replace the about page
-        mAboutView = null;
-        if (pages != null && pages.size() > 0) {
-            mAboutView = pages.get(0);
-            pages.remove(mAboutView);
-        }
-
-        // store the remaining pages as the actual pages
-        mPages = pages;
-
-        // trigger updates on various components
-        updateViewPager();
-        updateAppPages();
+        updateDisplayedPages(pages);
     }
 
     @Override
@@ -237,17 +227,17 @@ public class SnuffyPWActivity extends AppCompatActivity
                     Log.d(TAG, "onPageSelected: " + mAppPackage + Integer.toString(position));
                     trackScreenActivity(mAppPackage + "-" + Integer.toString(position));
 
-                    View oldPage = mPages.get(mPagerCurrentItem);
-                    if (SnuffyPage.class.isInstance(oldPage)) {
-                        ((SnuffyPage) oldPage).onExitPage();
+                    // exit previously active page
+                    if (mPages != null) {
+                        mPages.get(mPagerCurrentItem).onExitPage();
                     }
 
                     // keep our own since ViewPager doesn't offer a getCurrentItem method!
                     mPagerCurrentItem = position;
 
-                    View newPage = mPages.get(mPager.getCurrentItem());
-                    if (SnuffyPage.class.isInstance(newPage)) {
-                        ((SnuffyPage) newPage).onEnterPage();
+                    // enter currently active page
+                    if (mPages != null) {
+                        mPages.get(mPagerCurrentItem).onEnterPage();
                     }
 
                     // This notification has been updated to only be sent after the app has been opened 3 times
@@ -302,6 +292,27 @@ public class SnuffyPWActivity extends AppCompatActivity
         app.packageTitle = mPackageTitle;
         app.aboutView = mAboutView;
         app.setSnuffyPages(mPages);
+    }
+
+    /**
+     * This method is responsible for updating the list of pages being displayed and used by the app
+     *
+     * @param pages the new set of Pages to display
+     */
+    void updateDisplayedPages(@Nullable final List<SnuffyPage> pages) {
+        // replace the about page
+        mAboutView = null;
+        if (pages != null && pages.size() > 0) {
+            mAboutView = pages.get(0);
+            pages.remove(mAboutView);
+        }
+
+        // store the remaining pages as the actual pages
+        mPages = pages;
+
+        // trigger updates on various components
+        updateViewPager();
+        updateAppPages();
     }
 
     private void handleLanguagesWithAlternateFonts()
@@ -395,9 +406,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         {
             public void run()
             {
-                // release the memory from the old package before we start building the new package
-                onPagesLoaded(null);
-
                 // trigger the actual load of pages
                 mProcessPackageAsync = new ProcessPackageAsync(mPager.getMeasuredWidth(), mPager.getMeasuredHeight());
                 mProcessPackageAsync.execute("");
@@ -556,9 +564,6 @@ public class SnuffyPWActivity extends AppCompatActivity
     private void switchLanguages(String languageCode, boolean bResetToFirstPage)
     {
         setLanguage(languageCode);
-
-        // clear previous pages to free up memory
-        onPagesLoaded(null);
 
         if (bResetToFirstPage)
             mPagerCurrentItem = 0;
@@ -923,26 +928,30 @@ public class SnuffyPWActivity extends AppCompatActivity
         @Override
         protected void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
             super.onBindViewHolder(holder, position);
-            final SnuffyPage page = mPages.get(position);
+            holder.mPage = mPages.get(position);
 
             if (holder.mContentContainer != null) {
                 // remove any previous page from the content container
                 holder.mContentContainer.removeAllViews();
 
                 // attach the current page to the content container
-                holder.mContentContainer.addView(page);
+                holder.mContentContainer.addView(holder.mPage);
             }
         }
 
         @Override
         protected void onViewRecycled(@NonNull final ViewHolder holder) {
             super.onViewRecycled(holder);
+            holder.mPage = null;
             if (holder.mContentContainer != null) {
                 holder.mContentContainer.removeAllViews();
             }
         }
 
-        final class ViewHolder extends ViewHolderPagerAdapter.ViewHolder {
+        static final class ViewHolder extends ViewHolderPagerAdapter.ViewHolder {
+            @Nullable
+            SnuffyPage mPage;
+
             @Nullable
             @Bind(R.id.pageContainer)
             FrameLayout mContentContainer;
