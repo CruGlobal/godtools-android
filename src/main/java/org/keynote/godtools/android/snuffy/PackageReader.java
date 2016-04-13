@@ -52,7 +52,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
@@ -88,7 +87,7 @@ public class PackageReader
     private static final int MIN_MARGIN_ABOVE_FOOTER = 5;
     private static final int MAX_YOFFSET = 100;
     private static final float HR_ALPHA = 0.25f;
-    private static final Hashtable<String, Bitmap> bitmapCache = new Hashtable<String, Bitmap>();
+    private static final Hashtable<String, Bitmap> bitmapCache = new Hashtable<>();
     private WeakReference<SnuffyApplication>
             mAppRef;
     private Context mContext;
@@ -259,15 +258,7 @@ public class PackageReader
                     }
                 }
             }
-        } catch (IOException e)
-        {
-            Log.e(TAG, "processPageFile failed: " + e.toString());
-            snuffyPage = null;
-        } catch (ParserConfigurationException e)
-        {
-            Log.e(TAG, "processPageFile failed: " + e.toString());
-            snuffyPage = null;
-        } catch (SAXException e)
+        } catch (IOException | ParserConfigurationException | SAXException e)
         {
             Log.e(TAG, "processPageFile failed: " + e.toString());
             snuffyPage = null;
@@ -347,7 +338,7 @@ public class PackageReader
     private void processPageElements(Element root, SnuffyPage currPage)
     {
         int numButtons = 0; // buttons are numbered from 1 to 9 and used as tag ranges: 1-9, 11-19 etc
-        Vector<String> urlsOnpage = new Vector<String>(0);
+        Vector<String> urlsOnpage = new Vector<>(0);
         Node node = root.getFirstChild();
         while (node != null)
         {
@@ -2316,7 +2307,7 @@ public class PackageReader
 
     private Vector<Element> getChildrenWithName(Element elParent)
     {
-        Vector<Element> v = new Vector<Element>();
+        Vector<Element> v = new Vector<>();
         Node node = elParent.getFirstChild();
         while (node != null)
         {
