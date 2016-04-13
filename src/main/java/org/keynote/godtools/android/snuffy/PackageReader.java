@@ -147,7 +147,7 @@ public class PackageReader
         try {
             final boolean forceReload = KEY_DRAFT.equalsIgnoreCase(status);
             final GtManifest manifest =
-                    PackageManager.getInstance(mContext).getManifest(packageConfigName, forceReload).get();
+                    PackageManager.getInstance(mContext).getManifest(packageConfigName, forceReload, mAppPackage).get();
             return processMainPackageFilePW(manifest);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

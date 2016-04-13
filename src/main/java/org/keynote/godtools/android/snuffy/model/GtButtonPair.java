@@ -14,7 +14,12 @@ public class GtButtonPair {
     private GtButton mPositiveButton;
     private GtButton mNegativeButton;
 
-    private GtButtonPair() {}
+    @NonNull
+    private final GtPage mPage;
+
+    private GtButtonPair(@NonNull final GtPage gtPage) {
+        mPage = gtPage;
+    }
 
     public GtButton getPositiveButton() {
         return mPositiveButton;
@@ -25,8 +30,9 @@ public class GtButtonPair {
     }
 
     @NonNull
-    static GtButtonPair fromXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
-        return new GtButtonPair().parse(parser);
+    static GtButtonPair fromXml(@NonNull final GtPage gtPage, @NonNull final XmlPullParser parser) throws IOException,
+            XmlPullParserException {
+        return new GtButtonPair(gtPage).parse(parser);
     }
 
     @NonNull
@@ -47,14 +53,14 @@ public class GtButtonPair {
                         throw new XmlPullParserException(
                                 "XML has more than 1 " + GtButton.XML_POSITIVE_BUTTON + " defined", parser, null);
                     }
-                    mPositiveButton = GtButton.fromXml(parser);
+                    mPositiveButton = GtButton.fromXml(mPage, parser);
                     break;
                 case GtButton.XML_NEGATIVE_BUTTON:
                     if (mNegativeButton != null) {
                         throw new XmlPullParserException(
                                 "XML has more than 1 " + GtButton.XML_NEGATIVE_BUTTON + " defined", parser, null);
                     }
-                    mNegativeButton = GtButton.fromXml(parser);
+                    mNegativeButton = GtButton.fromXml(mPage, parser);
                     break;
                 default:
                     // skip unrecognized nodes

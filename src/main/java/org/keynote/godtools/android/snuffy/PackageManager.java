@@ -56,7 +56,8 @@ public class PackageManager {
     }
 
     @NonNull
-    public ListenableFuture<GtManifest> getManifest(@NonNull final String manifestFileName, final boolean forceReload) {
+    public ListenableFuture<GtManifest> getManifest(@NonNull final String manifestFileName, final boolean
+            forceReload, @NonNull final String appPackage) {
         final SettableFuture<GtManifest> resp;
         synchronized (mCache) {
             ListenableFuture<GtManifest> cached = mCache.get(manifestFileName);
@@ -94,7 +95,7 @@ public class PackageManager {
             @Override
             public void run() {
                 try {
-                    final GtManifest manifest = loadManifest(manifestFileName);
+                    final GtManifest manifest = loadManifest(manifestFileName, appPackage);
                     loadPages(manifest);
                     resp.set(manifest);
                 } catch (final Throwable t) {
@@ -109,7 +110,9 @@ public class PackageManager {
 
     @NonNull
     @WorkerThread
-    GtManifest loadManifest(@NonNull final String manifestFileName) throws IOException, XmlPullParserException {
+    GtManifest loadManifest(@NonNull final String manifestFileName, @NonNull final String appPackage) throws
+            IOException,
+            XmlPullParserException {
         final Closer closer = Closer.create();
         try {
             // open file
@@ -125,7 +128,7 @@ public class PackageManager {
                 parser.nextTag();
 
                 // parse & return the package manifest
-                return GtManifest.fromXml(parser);
+                return GtManifest.fromXml(parser, appPackage);
             } catch (final Throwable t) {
                 Crashlytics.log("error processing main package manifest: " + file.toString());
                 Crashlytics.logException(t);

@@ -60,6 +60,7 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.snuffy.SnuffyHelpActivity;
 import org.keynote.godtools.android.snuffy.SnuffyPage;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
+import org.keynote.godtools.android.utils.EventID;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
 
@@ -304,10 +305,11 @@ public class SnuffyPWActivity extends AppCompatActivity
         for(int x = 0; x < mPages.size(); x++) {
             SnuffyPage snuffyPage = mPages.get(x);
 
-            for(String listener : snuffyPage.getModel().getListeners())
+            for(EventID eventID : snuffyPage.getModel().getListeners())
             {
                 //if the eventId
-                if(event.getEventId().equalsIgnoreCase(listener)) {
+                if(event.getEventId().equalsIgnoreCase(eventID.getId())) {
+                    //todo in the future will jump to a different package if the namespace calls for it
                     mPager.setCurrentItem(x);
                 }
             }
