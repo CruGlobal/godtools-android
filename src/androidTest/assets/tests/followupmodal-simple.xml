@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<followup-modal followup-id="1" listeners="event1">
+    <fallback>
+        <followup-title>Followup Title</followup-title>
+        <followup-body>Followup Body</followup-body>
+        <input-field name="email" type="email">
+            <input-label>Email</input-label>
+            <input-placeholder>Email</input-placeholder>
+        </input-field>
+        <input-field name="name" type="text">
+            <input-label>Name</input-label>
+            <input-placeholder>Name</input-placeholder>
+        </input-field>
+        <button-pair>
+            <positive-button tap-events="follow-up-send,followup:subscribe">Positive</positive-button>
+            <negative-button mode="link" tap-events="follow-up-no-thanks">Negative</negative-button>
+        </button-pair>
+
+        <!-- thank-you should be handled as an embedded page -->
+        <thank-you listeners="follow-up-send">
+            <text modifier="bold" textalign="center">Thank you</text>
+            <text textalign="left">Check your email soon for your first study in following Jesus Christ.</text>
+            <text textalign="left">If you don't receive it, please check your spam folder.</text>
+            <link-button textalign="center" tap-events="follow-up-thank-you-done">Done</link-button>
+        </thank-you>
+    </fallback>
+</followup-modal>

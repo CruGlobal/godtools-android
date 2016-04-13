@@ -7,7 +7,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
-import org.keynote.godtools.android.snuffy.model.Manifest;
+import org.keynote.godtools.android.snuffy.model.GtPage;
 
 import java.util.UUID;
 
@@ -15,7 +15,7 @@ public class SnuffyPage extends SnuffyLayout
 {
     private static final String TAG = "SnuffyPage";
 
-    public Manifest.Page mModel;
+    public GtPage mModel;
 
     public String mDescription;
     public String mThumbnail;
@@ -40,7 +40,7 @@ public class SnuffyPage extends SnuffyLayout
         mHiddenButton = null;
     }
 
-    public Manifest.Page getModel() {
+    public GtPage getModel() {
         return mModel;
     }
 
