@@ -921,8 +921,8 @@ public class SnuffyPWActivity extends AppCompatActivity
         @NonNull
         @Override
         protected ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent) {
-            final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.gt_content_page, parent, false);
-            return new ViewHolder(view);
+            return new ViewHolder(LayoutInflater.from(parent.getContext())
+                                          .inflate(R.layout.page_gt_page_frame, parent, false));
         }
 
         @Override
