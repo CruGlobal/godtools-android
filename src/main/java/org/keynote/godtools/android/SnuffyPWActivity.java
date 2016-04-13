@@ -75,7 +75,7 @@ import butterknife.ButterKnife;
 public class SnuffyPWActivity extends AppCompatActivity
 {
     private static final String TAG = "SnuffyActivity";
-    private static final String SUBSCRIBER_EVENT_ID = "followup:subscribe";
+    private static final String SUBSCRIBE = "subscribe";
 
     private String mAppPackage;
     private String mConfigFileName;
@@ -313,7 +313,7 @@ public class SnuffyPWActivity extends AppCompatActivity
             }
         }
 
-        if(event.getEventId().equalsIgnoreCase(SUBSCRIBER_EVENT_ID))
+        if(event.getEventId().equalsIgnoreCase(SUBSCRIBE))
         {
             GSSubscriber gsSubscriber = new GSSubscriber();
             gsSubscriber.setRouteId(event.getData().get("routeId"));
