@@ -317,17 +317,26 @@ public class SnuffyPWActivity extends AppCompatActivity
 
         if(event.getEventId().equalsIgnoreCase(SUBSCRIBE))
         {
-            GSSubscriber gsSubscriber = new GSSubscriber();
-            gsSubscriber.setRouteId(event.getData().get("routeId"));
-            gsSubscriber.setLanguageCode(event.getData().get("languageCode"));
-            gsSubscriber.setFirstName(event.getData().get("firstName"));
-            gsSubscriber.setLastName(event.getData().get("lastName"));
-            gsSubscriber.setEmail(event.getData().get("email"));
-
-            final DBAdapter dao = DBAdapter.getInstance(this);
-            dao.insertAsync(gsSubscriber);
+            addGSSubscriberToDB(event);
 
             GodToolsSyncService.syncGrowthSpacesSubscribers(this);
+        }
+    }
+
+    private void addGSSubscriberToDB(GodToolsEvent event) {
+        GSSubscriber gsSubscriber = new GSSubscriber();
+        gsSubscriber.setRouteId(event.getData().get("routeId"));
+        gsSubscriber.setLanguageCode(event.getData().get("languageCode"));
+        gsSubscriber.setFirstName(event.getData().get("firstName"));
+        gsSubscriber.setLastName(event.getData().get("lastName"));
+        gsSubscriber.setEmail(event.getData().get("email"));
+
+        if(gsSubscriber.isValid()) {
+            final DBAdapter dao = DBAdapter.getInstance(this);
+            dao.insertAsync(gsSubscriber);
+        }
+        else {
+            Log.e(TAG, "Growth Spaces Subscriber must have route id, language code, and email set.");
         }
     }
 
