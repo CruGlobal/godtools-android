@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.common.collect.Sets;
 
 import org.ccci.gto.android.common.util.IOUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -37,6 +38,7 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.snuffy.model.GtManifest;
 import org.keynote.godtools.android.snuffy.model.GtPage;
+import org.keynote.godtools.android.utils.EventID;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -49,9 +51,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
@@ -108,6 +110,7 @@ public class PackageReader
     private int mTotalBitmapSpace;
     private boolean mFromAssets;
     private ProgressCallback mProgressCallback;
+    private String mAppPackage;
 
     public String getPackageTitle()
     {
@@ -121,7 +124,8 @@ public class PackageReader
                                     @Nullable final String status,
                                     Vector<SnuffyPage> pages,
                                     ProgressCallback progressCallback,
-                                    Typeface alternateTypeface)
+                                    Typeface alternateTypeface,
+                                    String appPackage)
     {
         mAppRef = new WeakReference<>(app);
         mContext = app.getApplicationContext();
@@ -134,6 +138,7 @@ public class PackageReader
         mFromAssets = false;
         mProgressCallback = progressCallback;
         mAlternateTypeface = alternateTypeface;
+        mAppPackage = appPackage;
 
         // In the case where this package is replacing the previous package - release the memory occupied by the original
         bitmapCache.clear();
@@ -601,9 +606,9 @@ public class PackageReader
                 }
 
                 //get any and all tap events, which will be sent to EventBus when the button is clicked
-                final ArrayList<String> tapEvents = new ArrayList<>();
+                final Set<EventID> eventIds = Sets.newHashSet();
                 if (elButton.hasAttribute("tap-events")) {
-                    Collections.addAll(tapEvents, elButton.getAttribute("tap-events").split(","));
+                    eventIds.addAll(ParserUtils.parseEvents(elButton.getAttribute("tap-events"), mAppPackage));
                 }
 
                 theContainer.setOnClickListener(new View.OnClickListener()
@@ -774,8 +779,12 @@ public class PackageReader
                         };
 
                         //create a new event when this button is clicked
-                        for (final String tapEvent : tapEvents) {
-                            EventBus.getDefault().post(new GodToolsEvent(tapEvent));
+                        for (final EventID eventId : eventIds) {
+                            GodToolsEvent godToolsEvent = new GodToolsEvent();
+                            godToolsEvent.setNamespace(eventId.getNamespace());
+                            godToolsEvent.setEventId(eventId.getId());
+
+                            EventBus.getDefault().post(godToolsEvent);
                         }
 
                         // launch the first animation in the chain

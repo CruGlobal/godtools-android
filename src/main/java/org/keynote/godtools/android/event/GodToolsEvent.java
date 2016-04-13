@@ -14,9 +14,8 @@ public class GodToolsEvent {
     private long followUpId;
     private Map<String, String> data = Maps.newHashMap();
 
-    public GodToolsEvent(String eventId)
-    {
-        this.eventId = eventId;
+    public GodToolsEvent() {
+
     }
 
     public String getEventId() {

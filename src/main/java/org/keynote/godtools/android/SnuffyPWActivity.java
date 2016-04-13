@@ -816,7 +816,8 @@ public class SnuffyPWActivity extends AppCompatActivity
                         mPageWidth, mPageHeight,
                         mConfigFileName, mPackageStatus, mPages,
                         ProcessPackageAsync.this,
-                        mAlternateTypeface
+                        mAlternateTypeface,
+                        mAppPackage
                 );
             }
             catch (Exception e)
