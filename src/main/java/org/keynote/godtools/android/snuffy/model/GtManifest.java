@@ -26,7 +26,7 @@ public class GtManifest {
     private final String mAppPackage;
 
     @VisibleForTesting
-    private GtManifest(@NonNull final String appPackage) {
+    GtManifest(@NonNull final String appPackage) {
         this.mAppPackage = appPackage;
     }
 

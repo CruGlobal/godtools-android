@@ -39,7 +39,7 @@ public class GtPage {
     private final GtManifest mManifest;
 
     @VisibleForTesting
-    private GtPage(@NonNull final GtManifest gtManifest) {
+    GtPage(@NonNull final GtManifest gtManifest) {
         this.mManifest = gtManifest;
     }
 
