@@ -62,6 +62,8 @@ import java.util.concurrent.ExecutionException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import static org.keynote.godtools.android.snuffy.ParserUtils.getChildElementNamed;
+import static org.keynote.godtools.android.snuffy.ParserUtils.getTextContentImmediate;
 import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
 
 @SuppressWarnings({"deprecation", "BooleanMethodIsAlwaysInverted"})
@@ -2241,34 +2243,6 @@ public class PackageReader
     private int setColorAlphaVal(int color, float alpha)
     {
         return Color.argb((int) (255.0f * alpha), Color.red(color), Color.green(color), Color.blue(color));
-    }
-
-    private Element getChildElementNamed(Element elParent, String elementName)
-    {
-        Node node = elParent.getFirstChild();
-        while (node != null)
-        {
-            if (node.getNodeType() == Node.ELEMENT_NODE)
-            {
-                Element el = (Element) node;
-                if (el.getTagName().equalsIgnoreCase(elementName))
-                    return el;
-            }
-            node = node.getNextSibling();
-        }
-        return null;
-    }
-
-    private String getTextContentImmediate(Element elParent)
-    {
-        Node node = elParent.getFirstChild();
-        while (node != null)
-        {
-            if (node.getNodeType() == Node.TEXT_NODE)
-                return node.getNodeValue();
-            node = node.getNextSibling();
-        }
-        return "";
     }
 
     private Vector<Element> getChildrenWithName(Element elParent)
