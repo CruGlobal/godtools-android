@@ -2396,8 +2396,7 @@ public class PackageReader
         tv.setLayoutParams(lpOrig);
     }
 
-    private void setLayoutParamsOfViewWithTag(View parentView, int tagValue, SnuffyLayoutParams lp)
-    {
+    private void setLayoutParamsOfViewWithTag(View parentView, int tagValue, ViewGroup.LayoutParams lp) {
         View v = parentView.findViewWithTag(tagValue);
         if (v != null)
             v.setLayoutParams(lp);
