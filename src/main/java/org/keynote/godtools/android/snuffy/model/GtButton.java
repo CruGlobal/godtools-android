@@ -6,8 +6,8 @@ import android.support.annotation.Nullable;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.snuffy.ParserUtils;
-import org.keynote.godtools.android.utils.EventID;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -48,7 +48,7 @@ public class GtButton {
     @NonNull
     private Mode mMode = Mode.DEFAULT;
     @NonNull
-    private Set<EventID> mTapEvents = ImmutableSet.of();
+    private Set<GodToolsEvent.EventID> mTapEvents = ImmutableSet.of();
     private String mText;
 
     @NonNull
@@ -64,7 +64,7 @@ public class GtButton {
     }
 
     @NonNull
-    public Set<EventID> getTapEvents() {
+    public Set<GodToolsEvent.EventID> getTapEvents() {
         return mTapEvents;
     }
 

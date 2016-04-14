@@ -7,25 +7,25 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
-import org.keynote.godtools.android.utils.EventID;
+import org.keynote.godtools.android.event.GodToolsEvent;
 
 import java.util.Set;
 
 public class ParserUtils {
     private static Splitter SPLITTER_EVENTS = Splitter.on(',').omitEmptyStrings();
 
-    public static Set<EventID> parseEvents(@Nullable final String raw, @NonNull final String namespace) {
+    public static Set<GodToolsEvent.EventID> parseEvents(@Nullable final String raw, @NonNull final String namespace) {
         if (raw != null) {
-            ImmutableSet.Builder<EventID> eventIDs = ImmutableSet.builder();
+            ImmutableSet.Builder<GodToolsEvent.EventID> eventIDs = ImmutableSet.builder();
 
             for(String event : SPLITTER_EVENTS.split(raw)) {
-                EventID eventID = new EventID();
+                GodToolsEvent.EventID eventID;
 
                 int indexOfColon = event.indexOf(":");
 
                 if(indexOfColon == -1) {
-                    eventID.setNamespace(namespace); /*if namespace isn't specified use the current package*/
-                    eventID.setId(event);
+                    /*if namespace isn't specified use the current package*/
+                    eventID = new GodToolsEvent.EventID(namespace, event);
                 }
                 else {
                     String id = event.substring(indexOfColon + 1);
@@ -33,8 +33,7 @@ public class ParserUtils {
                     if(Strings.isNullOrEmpty(id)) {
                         continue; /*if there's no id (text after the colon) this event is invalid*/
                     }
-                    eventID.setNamespace(event.substring(0, indexOfColon));
-                    eventID.setId(id);
+                    eventID = new GodToolsEvent.EventID(event.substring(0, indexOfColon), id);
                 }
 
                 eventIDs.add(eventID);

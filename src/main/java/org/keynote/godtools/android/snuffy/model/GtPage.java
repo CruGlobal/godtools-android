@@ -8,8 +8,8 @@ import android.support.annotation.WorkerThread;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.snuffy.ParserUtils;
-import org.keynote.godtools.android.utils.EventID;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -30,7 +30,7 @@ public class GtPage {
     private String mThumb;
     private String mDescription;
     @NonNull
-    private Set<EventID> mListeners = ImmutableSet.of();
+    private Set<GodToolsEvent.EventID> mListeners = ImmutableSet.of();
 
     @Nullable
     private GtFollowupModal mFollowupModal;
@@ -60,7 +60,7 @@ public class GtPage {
     }
 
     @NonNull
-    public Set<EventID> getListeners() {
+    public Set<GodToolsEvent.EventID> getListeners() {
         return mListeners;
     }
 

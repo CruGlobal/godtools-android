@@ -30,7 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.common.collect.Sets;
 
 import org.ccci.gto.android.common.util.IOUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -38,7 +37,6 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.snuffy.model.GtManifest;
 import org.keynote.godtools.android.snuffy.model.GtPage;
-import org.keynote.godtools.android.utils.EventID;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -597,7 +595,8 @@ public class PackageReader
                 }
 
                 //get any and all tap events, which will be sent to EventBus when the button is clicked
-                final Set<EventID> eventIds = ParserUtils.parseEvents(elButton.getAttribute("tap-events"), mAppPackage);
+                final Set<GodToolsEvent.EventID> eventIds = ParserUtils.parseEvents(elButton.getAttribute
+                        ("tap-events"), mAppPackage);
 
                 theContainer.setOnClickListener(new View.OnClickListener()
                 {
@@ -767,12 +766,8 @@ public class PackageReader
                         };
 
                         //create a new event when this button is clicked
-                        for (final EventID eventId : eventIds) {
-                            GodToolsEvent godToolsEvent = new GodToolsEvent();
-                            godToolsEvent.setNamespace(eventId.getNamespace());
-                            godToolsEvent.setEventId(eventId.getId());
-
-                            EventBus.getDefault().post(godToolsEvent);
+                        for (final GodToolsEvent.EventID eventId : eventIds) {
+                            EventBus.getDefault().post(new GodToolsEvent(eventId));
                         }
 
                         // launch the first animation in the chain

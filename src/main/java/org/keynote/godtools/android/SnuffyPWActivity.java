@@ -60,7 +60,6 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.snuffy.SnuffyHelpActivity;
 import org.keynote.godtools.android.snuffy.SnuffyPage;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
-import org.keynote.godtools.android.utils.EventID;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
 
@@ -305,17 +304,17 @@ public class SnuffyPWActivity extends AppCompatActivity
         for(int x = 0; x < mPages.size(); x++) {
             SnuffyPage snuffyPage = mPages.get(x);
 
-            for(EventID eventID : snuffyPage.getModel().getListeners())
+            for(GodToolsEvent.EventID eventID : snuffyPage.getModel().getListeners())
             {
                 //if the eventId
-                if(event.getEventId().equalsIgnoreCase(eventID.getId())) {
+                if(event.getEventID().getId().equalsIgnoreCase(eventID.getId())) {
                     //todo in the future will jump to a different package if the namespace calls for it
                     mPager.setCurrentItem(x);
                 }
             }
         }
 
-        if(event.getEventId().equalsIgnoreCase(SUBSCRIBE))
+        if(event.getEventID().getId().equalsIgnoreCase(SUBSCRIBE))
         {
             addGSSubscriberToDB(event);
 
