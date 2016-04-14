@@ -56,8 +56,8 @@ public class PackageManager {
     }
 
     @NonNull
-    public ListenableFuture<GtManifest> getManifest(@NonNull final String manifestFileName, final boolean
-            forceReload, @NonNull final String appPackage) {
+    public ListenableFuture<GtManifest> getManifest(@NonNull final String manifestFileName, @NonNull final String
+            appPackage, final boolean forceReload) {
         final SettableFuture<GtManifest> resp;
         synchronized (mCache) {
             ListenableFuture<GtManifest> cached = mCache.get(manifestFileName);
