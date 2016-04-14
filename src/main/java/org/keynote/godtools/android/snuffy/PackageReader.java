@@ -597,10 +597,7 @@ public class PackageReader
                 }
 
                 //get any and all tap events, which will be sent to EventBus when the button is clicked
-                final Set<EventID> eventIds = Sets.newHashSet();
-                if (elButton.hasAttribute("tap-events")) {
-                    eventIds.addAll(ParserUtils.parseEvents(elButton.getAttribute("tap-events"), mAppPackage));
-                }
+                final Set<EventID> eventIds = ParserUtils.parseEvents(elButton.getAttribute("tap-events"), mAppPackage);
 
                 theContainer.setOnClickListener(new View.OnClickListener()
                 {

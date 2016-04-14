@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 
 import org.keynote.godtools.android.utils.EventID;
 
@@ -17,7 +16,7 @@ public class ParserUtils {
 
     public static Set<EventID> parseEvents(@Nullable final String raw, @NonNull final String namespace) {
         if (raw != null) {
-            Set<EventID> eventIDs = Sets.newHashSet();
+            ImmutableSet.Builder<EventID> eventIDs = ImmutableSet.builder();
 
             for(String event : SPLITTER_EVENTS.split(raw)) {
                 EventID eventID = new EventID();
@@ -40,7 +39,7 @@ public class ParserUtils {
 
                 eventIDs.add(eventID);
             }
-            return ImmutableSet.copyOf(eventIDs);
+            return eventIDs.build();
         }
         return ImmutableSet.of();
     }
