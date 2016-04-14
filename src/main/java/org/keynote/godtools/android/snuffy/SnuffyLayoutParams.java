@@ -2,6 +2,10 @@ package org.keynote.godtools.android.snuffy;
 
 import android.widget.AbsoluteLayout;
 
+/**
+ * @deprecated This is an unnecessary abstraction. use {@link AbsoluteLayout.LayoutParams} directly.
+ */
+@Deprecated
 public class SnuffyLayoutParams extends AbsoluteLayout.LayoutParams {
 
 	public SnuffyLayoutParams(int arg0, int arg1, int arg2, int arg3) {
