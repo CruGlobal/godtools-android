@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableSet;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.snuffy.ParserUtils;
+import org.w3c.dom.Element;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -78,6 +79,13 @@ public class GtButton {
         return new GtButton(gtPage).parse(parser);
     }
 
+    @NonNull
+    public static GtButton fromXml(@NonNull final GtPage page, @NonNull final Element node) {
+        final GtButton button = new GtButton();
+        button.parse(node);
+        return button;
+    }
+
     private GtButton parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, null, null);
         XmlPullParserUtils
@@ -98,35 +106,67 @@ public class GtButton {
         mTapEvents = ParserUtils.parseEvents(parser.getAttributeValue(null, XML_ATTR_TAP_EVENTS), mPage.getManifest
                 ().getAppPackage());
 
-        // don't process unknown button modes
-        if (mMode == Mode.UNKNOWN) {
-            XmlPullParserUtils.skipTag(parser);
-        }
-        // This is a panel button, so extract the embedded content
-        else if (mMode == Mode.PANEL) {
-            // loop until we reach the matching end tag for this element
-            while (parser.next() != XmlPullParser.END_TAG) {
-                // skip anything that isn't a start tag for an element
-                if (parser.getEventType() != XmlPullParser.START_TAG) {
-                    continue;
-                }
+        switch (mMode) {
+            // don't process unknown button modes
+            case UNKNOWN:
+                XmlPullParserUtils.skipTag(parser);
+                break;
+            // This is a panel button, so extract the embedded content
+            case PANEL:
+                // loop until we reach the matching end tag for this element
+                while (parser.next() != XmlPullParser.END_TAG) {
+                    // skip anything that isn't a start tag for an element
+                    if (parser.getEventType() != XmlPullParser.START_TAG) {
+                        continue;
+                    }
 
-                // process recognized elements
-                switch (parser.getName()) {
-                    case XML_TEXT:
-                        mText = XmlPullParserUtils.safeNextText(parser);
-                        break;
-                    default:
-                        // skip unrecognized nodes
-                        XmlPullParserUtils.skipTag(parser);
+                    // process recognized elements
+                    switch (parser.getName()) {
+                        case XML_TEXT:
+                            mText = XmlPullParserUtils.safeNextText(parser);
+                            break;
+                        default:
+                            // skip unrecognized nodes
+                            XmlPullParserUtils.skipTag(parser);
+                    }
                 }
-            }
-        }
-        // Otherwise, just extract the text content
-        else {
-            mText = XmlPullParserUtils.safeNextText(parser);
+                break;
+            // Otherwise, just extract the text content
+            default:
+                mText = XmlPullParserUtils.safeNextText(parser);
         }
 
         return this;
+    }
+
+    private void parse(@NonNull final Element node) {
+        // determine the button mode
+        switch (node.getNodeName()) {
+            case XML_BUTTON:
+                mMode = Mode.PANEL;
+                break;
+            case XML_LINK_BUTTON:
+                mMode = Mode.LINK;
+                break;
+            default:
+                mMode = Mode.DEFAULT;
+        }
+        if (node.hasAttribute(XML_ATTR_MODE)) {
+            mMode = Mode.fromXmlAttr(node.getAttribute(XML_ATTR_MODE), mMode);
+        }
+        mTapEvents = ParserUtils.parseEvents(node.getAttribute(XML_ATTR_TAP_EVENTS));
+
+        switch (mMode) {
+            case UNKNOWN:
+                break;
+            case PANEL:
+                final Element textNode = ParserUtils.getChildElementNamed(node, XML_TEXT);
+                if (textNode != null) {
+                    mText = ParserUtils.getTextContentImmediate(textNode);
+                }
+                break;
+            default:
+                mText = ParserUtils.getTextContentImmediate(node);
+        }
     }
 }
