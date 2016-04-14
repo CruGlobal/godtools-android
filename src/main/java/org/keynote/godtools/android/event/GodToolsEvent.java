@@ -1,5 +1,7 @@
 package org.keynote.godtools.android.event;
 
+import android.support.annotation.NonNull;
+
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 
@@ -10,14 +12,16 @@ import java.util.Map;
  */
 public class GodToolsEvent {
 
+    @NonNull
     private final EventID eventID;
     private long followUpId;
     private Map<String, String> data = Maps.newHashMap();
 
-    public GodToolsEvent(EventID eventID) {
+    public GodToolsEvent(@NonNull EventID eventID) {
         this.eventID = eventID;
     }
 
+    @NonNull
     public EventID getEventID() {
         return eventID;
     }
@@ -37,10 +41,12 @@ public class GodToolsEvent {
 
     /*immutable*/
     public static final class EventID {
+        @NonNull
         private final String namespace;
+        @NonNull
         private final String id;
 
-        public EventID(String namespace, String id) {
+        public EventID(@NonNull String namespace, @NonNull String id) {
             this.namespace = namespace;
             this.id = id;
         }
@@ -56,10 +62,12 @@ public class GodToolsEvent {
             return Objects.hashCode(namespace, id);
         }
 
+        @NonNull
         public String getNamespace() {
             return namespace;
         }
 
+        @NonNull
         public String getId() {
             return id;
         }

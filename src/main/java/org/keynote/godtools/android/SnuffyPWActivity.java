@@ -304,17 +304,17 @@ public class SnuffyPWActivity extends AppCompatActivity
         for(int x = 0; x < mPages.size(); x++) {
             SnuffyPage snuffyPage = mPages.get(x);
 
-            for(GodToolsEvent.EventID eventID : snuffyPage.getModel().getListeners())
+            for(GodToolsEvent.EventID listener : snuffyPage.getModel().getListeners())
             {
-                //if the eventId
-                if(event.getEventID().getId().equalsIgnoreCase(eventID.getId())) {
+                //if the event passed to this method equals a listener, jump to that page
+                if(event.getEventID().equals(listener)) {
                     //todo in the future will jump to a different package if the namespace calls for it
                     mPager.setCurrentItem(x);
                 }
             }
         }
 
-        if(event.getEventID().getId().equalsIgnoreCase(SUBSCRIBE))
+        if(event.getEventID().equals(getSubscribeEventID()))
         {
             addGSSubscriberToDB(event);
 
@@ -939,5 +939,10 @@ public class SnuffyPWActivity extends AppCompatActivity
         timer = new Timer("1.5ShareTimer");
         timer.schedule(timerTask, 90000); //1.5 minutes
         Log.i(TAG, "Timer scheduled");
+    }
+
+    //dynamically creates an EventID for subscribe events using the app package name
+    private GodToolsEvent.EventID getSubscribeEventID() {
+        return new GodToolsEvent.EventID(mAppPackage, SUBSCRIBE);
     }
 }
