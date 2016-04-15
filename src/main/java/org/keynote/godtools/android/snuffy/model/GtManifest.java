@@ -1,6 +1,7 @@
 package org.keynote.godtools.android.snuffy.model;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 
 import com.google.common.collect.ImmutableList;
@@ -22,7 +23,12 @@ public class GtManifest {
     private GtPage mAbout;
     private final List<GtPage> mPages = new ArrayList<>();
 
-    private GtManifest() {}
+    private final String mAppPackage;
+
+    @VisibleForTesting
+    GtManifest(@NonNull final String appPackage) {
+        this.mAppPackage = appPackage;
+    }
 
     public String getTitle() {
         return mTitle;
@@ -36,10 +42,15 @@ public class GtManifest {
         return ImmutableList.copyOf(mPages);
     }
 
+    public String getAppPackage() {
+        return mAppPackage;
+    }
+
     @NonNull
     @WorkerThread
-    public static GtManifest fromXml(final XmlPullParser parser) throws IOException, XmlPullParserException {
-        return new GtManifest().parse(parser);
+    public static GtManifest fromXml(final XmlPullParser parser, @NonNull final String appPackage) throws IOException,
+            XmlPullParserException {
+        return new GtManifest(appPackage).parse(parser);
     }
 
     private GtManifest parse(final XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -67,10 +78,10 @@ public class GtManifest {
                         throw new XmlPullParserException("Package XML has more than 1 about page defined", parser,
                                                          null);
                     }
-                    mAbout = GtPage.fromManifestXml(parser);
+                    mAbout = GtPage.fromManifestXml(this, parser);
                     continue;
                 case GtPage.XML_PAGE:
-                    mPages.add(GtPage.fromManifestXml(parser));
+                    mPages.add(GtPage.fromManifestXml(this, parser));
                     continue;
                 default:
                     // skip unrecognized nodes

@@ -45,6 +45,7 @@ import com.crashlytics.android.Crashlytics;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.keynote.godtools.android.business.GSSubscriber;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.event.GodToolsEvent;
@@ -58,6 +59,7 @@ import org.keynote.godtools.android.snuffy.SnuffyAboutActivity;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.snuffy.SnuffyHelpActivity;
 import org.keynote.godtools.android.snuffy.SnuffyPage;
+import org.keynote.godtools.android.sync.GodToolsSyncService;
 import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
 import org.keynote.godtools.android.utils.Typefaces;
 
@@ -73,12 +75,13 @@ import butterknife.ButterKnife;
 public class SnuffyPWActivity extends AppCompatActivity
 {
     private static final String TAG = "SnuffyActivity";
+    private static final GodToolsEvent.EventID SUBSCRIBE_EVENT = new GodToolsEvent.EventID("followup", "subscribe");
 
     private String mAppPackage;
     private String mConfigFileName;
     private String mAppLanguage = ENGLISH_DEFAULT;
     private Typeface mAlternateTypeface;
-    private Vector<SnuffyPage> mPages = new Vector<SnuffyPage>(0);
+    private Vector<SnuffyPage> mPages = new Vector<>(0);
     private SnuffyPage mAboutView;
     @Bind(R.id.snuffyViewPager)
     ViewPager mPager;
@@ -301,13 +304,38 @@ public class SnuffyPWActivity extends AppCompatActivity
         for(int x = 0; x < mPages.size(); x++) {
             SnuffyPage snuffyPage = mPages.get(x);
 
-            for(String listener : snuffyPage.getModel().getListeners())
+            for(GodToolsEvent.EventID listener : snuffyPage.getModel().getListeners())
             {
-                //if the eventId
-                if(event.getEventId().equalsIgnoreCase(listener)) {
+                //if the event passed to this method equals a listener, jump to that page
+                if(event.getEventID().equals(listener)) {
+                    //todo in the future will jump to a different package if the namespace calls for it
                     mPager.setCurrentItem(x);
                 }
             }
+        }
+
+        if(event.getEventID().equals(SUBSCRIBE_EVENT))
+        {
+            addGSSubscriberToDB(event);
+
+            GodToolsSyncService.syncGrowthSpacesSubscribers(this);
+        }
+    }
+
+    private void addGSSubscriberToDB(GodToolsEvent event) {
+        GSSubscriber gsSubscriber = new GSSubscriber();
+        gsSubscriber.setRouteId(event.getData().get("routeId"));
+        gsSubscriber.setLanguageCode(event.getData().get("languageCode"));
+        gsSubscriber.setFirstName(event.getData().get("firstName"));
+        gsSubscriber.setLastName(event.getData().get("lastName"));
+        gsSubscriber.setEmail(event.getData().get("email"));
+
+        if(gsSubscriber.isValid()) {
+            final DBAdapter dao = DBAdapter.getInstance(this);
+            dao.insertAsync(gsSubscriber);
+        }
+        else {
+            Log.e(TAG, "Growth Spaces Subscriber must have route id, language code, and email set.");
         }
     }
 
@@ -326,7 +354,7 @@ public class SnuffyPWActivity extends AppCompatActivity
                 app.setSnuffyPages(null);
                 app.aboutView = null;
                 app.packageTitle = mPackageTitle;
-                mPages = new Vector<SnuffyPage>(0);
+                mPages = new Vector<>(0);
 
                 /** No instance of pager adapter yet, it's only created on completeSetUp()**/
                 //mPagerAdapter.notifyDataSetChanged();
@@ -568,7 +596,7 @@ public class SnuffyPWActivity extends AppCompatActivity
         mAboutView = null;
         getApp().setSnuffyPages(null);
         getApp().aboutView = null;
-        mPages = new Vector<SnuffyPage>(0);
+        mPages = new Vector<>(0);
         mPagerAdapter.notifyDataSetChanged(); // try to clear cached views (SnuffyPages) in pager, else they will display until we navigate away and back.
         if (bResetToFirstPage)
             mPagerCurrentItem = 0;
@@ -798,7 +826,8 @@ public class SnuffyPWActivity extends AppCompatActivity
                         mPageWidth, mPageHeight,
                         mConfigFileName, mPackageStatus, mPages,
                         ProcessPackageAsync.this,
-                        mAlternateTypeface
+                        mAlternateTypeface,
+                        mAppPackage
                 );
             }
             catch (Exception e)

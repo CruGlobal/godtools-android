@@ -1,5 +1,7 @@
 package org.keynote.godtools.android.business;
 
+import com.google.common.base.Strings;
+
 import org.ccci.gto.android.common.gson.GsonIgnore;
 
 import java.util.Date;
@@ -20,6 +22,14 @@ public class GSSubscriber {
     private String email;
     @GsonIgnore
     private Date createdTimestamp = new Date(System.currentTimeMillis());
+
+    public boolean isValid()
+    {
+        if(Strings.isNullOrEmpty(routeId) || Strings.isNullOrEmpty(languageCode) || Strings.isNullOrEmpty(email)) {
+            return false;
+        }
+        return true;
+    }
 
     public Integer getId() {
         return id;

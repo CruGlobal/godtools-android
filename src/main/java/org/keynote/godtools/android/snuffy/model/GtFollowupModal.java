@@ -21,13 +21,23 @@ public class GtFollowupModal {
 
     private static final String XML_ATTR_FOLLOWUP_ID = "followup-id";
 
+    @NonNull
+    private final GtPage mPage;
+
     private long mFollowupId = Followup.INVALID_ID;
     private String mTitle;
     private String mBody;
     private final List<GtInputField> mInputFields = new ArrayList<>();
     private GtButtonPair mButtonPair;
 
-    private GtFollowupModal() {}
+    private GtFollowupModal(@NonNull final GtPage page) {
+        mPage = page;
+    }
+
+    @NonNull
+    public GtPage getPage() {
+        return mPage;
+    }
 
     public long getFollowupId() {
         return mFollowupId;
@@ -50,8 +60,9 @@ public class GtFollowupModal {
     }
 
     @NonNull
-    static GtFollowupModal fromXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
-        final GtFollowupModal followup = new GtFollowupModal();
+    static GtFollowupModal fromXml(@NonNull final GtPage page, @NonNull final XmlPullParser parser)
+            throws IOException, XmlPullParserException {
+        final GtFollowupModal followup = new GtFollowupModal(page);
         followup.parse(parser);
         return followup;
     }
@@ -106,7 +117,7 @@ public class GtFollowupModal {
                     mInputFields.add(GtInputField.fromXml(parser));
                     break;
                 case GtButtonPair.XML_BUTTON_PAIR:
-                    mButtonPair = GtButtonPair.fromXml(parser);
+                    mButtonPair = GtButtonPair.fromXml(mPage, parser);
                     break;
                 default:
                     // skip unrecognized nodes

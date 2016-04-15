@@ -51,9 +51,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Hashtable;
+import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
@@ -88,7 +87,7 @@ public class PackageReader
     private static final int MIN_MARGIN_ABOVE_FOOTER = 5;
     private static final int MAX_YOFFSET = 100;
     private static final float HR_ALPHA = 0.25f;
-    private static final Hashtable<String, Bitmap> bitmapCache = new Hashtable<String, Bitmap>();
+    private static final Hashtable<String, Bitmap> bitmapCache = new Hashtable<>();
     private WeakReference<SnuffyApplication>
             mAppRef;
     private Context mContext;
@@ -110,6 +109,7 @@ public class PackageReader
     private int mTotalBitmapSpace;
     private boolean mFromAssets;
     private ProgressCallback mProgressCallback;
+    private String mAppPackage;
 
     public String getPackageTitle()
     {
@@ -123,7 +123,8 @@ public class PackageReader
                                     @Nullable final String status,
                                     Vector<SnuffyPage> pages,
                                     ProgressCallback progressCallback,
-                                    Typeface alternateTypeface)
+                                    Typeface alternateTypeface,
+                                    String appPackage)
     {
         mAppRef = new WeakReference<>(app);
         mContext = app.getApplicationContext();
@@ -136,6 +137,7 @@ public class PackageReader
         mFromAssets = false;
         mProgressCallback = progressCallback;
         mAlternateTypeface = alternateTypeface;
+        mAppPackage = appPackage;
 
         // In the case where this package is replacing the previous package - release the memory occupied by the original
         bitmapCache.clear();
@@ -145,7 +147,7 @@ public class PackageReader
         try {
             final boolean forceReload = KEY_DRAFT.equalsIgnoreCase(status);
             final GtManifest manifest =
-                    PackageManager.getInstance(mContext).getManifest(packageConfigName, forceReload).get();
+                    PackageManager.getInstance(mContext).getManifest(packageConfigName, mAppPackage, forceReload).get();
             return processMainPackageFilePW(manifest);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -256,15 +258,7 @@ public class PackageReader
                     }
                 }
             }
-        } catch (IOException e)
-        {
-            Log.e(TAG, "processPageFile failed: " + e.toString());
-            snuffyPage = null;
-        } catch (ParserConfigurationException e)
-        {
-            Log.e(TAG, "processPageFile failed: " + e.toString());
-            snuffyPage = null;
-        } catch (SAXException e)
+        } catch (IOException | ParserConfigurationException | SAXException e)
         {
             Log.e(TAG, "processPageFile failed: " + e.toString());
             snuffyPage = null;
@@ -344,7 +338,7 @@ public class PackageReader
     private void processPageElements(Element root, SnuffyPage currPage)
     {
         int numButtons = 0; // buttons are numbered from 1 to 9 and used as tag ranges: 1-9, 11-19 etc
-        Vector<String> urlsOnpage = new Vector<String>(0);
+        Vector<String> urlsOnpage = new Vector<>(0);
         Node node = root.getFirstChild();
         while (node != null)
         {
@@ -611,10 +605,8 @@ public class PackageReader
                 }
 
                 //get any and all tap events, which will be sent to EventBus when the button is clicked
-                final ArrayList<String> tapEvents = new ArrayList<>();
-                if (elButton.hasAttribute("tap-events")) {
-                    Collections.addAll(tapEvents, elButton.getAttribute("tap-events").split(","));
-                }
+                final Set<GodToolsEvent.EventID> eventIds = ParserUtils.parseEvents(elButton.getAttribute
+                        ("tap-events"), mAppPackage);
 
                 theContainer.setOnClickListener(new View.OnClickListener()
                 {
@@ -784,8 +776,8 @@ public class PackageReader
                         };
 
                         //create a new event when this button is clicked
-                        for (final String tapEvent : tapEvents) {
-                            EventBus.getDefault().post(new GodToolsEvent(tapEvent));
+                        for (final GodToolsEvent.EventID eventId : eventIds) {
+                            EventBus.getDefault().post(new GodToolsEvent(eventId));
                         }
 
                         // launch the first animation in the chain
@@ -2316,7 +2308,7 @@ public class PackageReader
 
     private Vector<Element> getChildrenWithName(Element elParent)
     {
-        Vector<Element> v = new Vector<Element>();
+        Vector<Element> v = new Vector<>();
         Node node = elParent.getFirstChild();
         while (node != null)
         {

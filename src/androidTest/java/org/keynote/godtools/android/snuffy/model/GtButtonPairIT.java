@@ -13,9 +13,12 @@ import static org.keynote.godtools.android.snuffy.TestParserUtils.getParserForTe
 
 @RunWith(AndroidJUnit4.class)
 public class GtButtonPairIT {
+
+    private static final GtPage PAGE = new GtPage(new GtManifest("kgp"));
+
     @Test
     public void verifyButtonPair() throws Exception {
-        final GtButtonPair buttonPair = GtButtonPair.fromXml(getParserForTestAsset("buttonpair-simple.xml"));
+        final GtButtonPair buttonPair = GtButtonPair.fromXml(PAGE, getParserForTestAsset("buttonpair-simple.xml"));
         assertNotNull(buttonPair);
         assertNotNull(buttonPair.getPositiveButton());
         assertNotNull(buttonPair.getNegativeButton());

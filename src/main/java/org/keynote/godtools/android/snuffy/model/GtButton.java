@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.snuffy.ParserUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -47,10 +48,15 @@ public class GtButton {
     @NonNull
     private Mode mMode = Mode.DEFAULT;
     @NonNull
-    private Set<String> mTapEvents = ImmutableSet.of();
+    private Set<GodToolsEvent.EventID> mTapEvents = ImmutableSet.of();
     private String mText;
 
-    private GtButton() {}
+    @NonNull
+    private final GtPage mPage;
+
+    private GtButton(@NonNull final GtPage gtPage) {
+        mPage = gtPage;
+    }
 
     @NonNull
     public Mode getMode() {
@@ -58,7 +64,7 @@ public class GtButton {
     }
 
     @NonNull
-    public Set<String> getTapEvents() {
+    public Set<GodToolsEvent.EventID> getTapEvents() {
         return mTapEvents;
     }
 
@@ -67,8 +73,9 @@ public class GtButton {
     }
 
     @NonNull
-    static GtButton fromXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
-        return new GtButton().parse(parser);
+    static GtButton fromXml(@NonNull final GtPage gtPage, @NonNull final XmlPullParser parser) throws IOException,
+            XmlPullParserException {
+        return new GtButton(gtPage).parse(parser);
     }
 
     private GtButton parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -88,7 +95,8 @@ public class GtButton {
                 mMode = Mode.DEFAULT;
         }
         mMode = Mode.fromXmlAttr(parser.getAttributeValue(null, XML_ATTR_MODE), mMode);
-        mTapEvents = ParserUtils.parseEvents(parser.getAttributeValue(null, XML_ATTR_TAP_EVENTS));
+        mTapEvents = ParserUtils.parseEvents(parser.getAttributeValue(null, XML_ATTR_TAP_EVENTS), mPage.getManifest
+                ().getAppPackage());
 
         // don't process unknown button modes
         if (mMode == Mode.UNKNOWN) {
