@@ -53,8 +53,8 @@ public class GodToolsEvent {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof EventID && namespace.equals(((EventID) obj).getNamespace()) && id.equals(((EventID)
-                    obj).getId());
+            return obj instanceof EventID && namespace.equalsIgnoreCase(((EventID) obj).getNamespace()) && id
+                    .equalsIgnoreCase(((EventID) obj).getId());
         }
 
         @Override

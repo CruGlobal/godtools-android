@@ -75,7 +75,7 @@ import butterknife.ButterKnife;
 public class SnuffyPWActivity extends AppCompatActivity
 {
     private static final String TAG = "SnuffyActivity";
-    private static final String SUBSCRIBE = "subscribe";
+    private static final GodToolsEvent.EventID SUBSCRIBE_EVENT = new GodToolsEvent.EventID("followup", "subscribe");
 
     private String mAppPackage;
     private String mConfigFileName;
@@ -314,7 +314,7 @@ public class SnuffyPWActivity extends AppCompatActivity
             }
         }
 
-        if(event.getEventID().equals(getSubscribeEventID()))
+        if(event.getEventID().equals(SUBSCRIBE_EVENT))
         {
             addGSSubscriberToDB(event);
 
@@ -939,10 +939,5 @@ public class SnuffyPWActivity extends AppCompatActivity
         timer = new Timer("1.5ShareTimer");
         timer.schedule(timerTask, 90000); //1.5 minutes
         Log.i(TAG, "Timer scheduled");
-    }
-
-    //dynamically creates an EventID for subscribe events using the app package name
-    private GodToolsEvent.EventID getSubscribeEventID() {
-        return new GodToolsEvent.EventID(mAppPackage, SUBSCRIBE);
     }
 }
