@@ -16,14 +16,15 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.keynote.godtools.android.snuffy.TestParserUtils.getParserForTestAsset;
 import static org.keynote.godtools.android.snuffy.TestParserUtils.getRootElementForTestAsset;
+import static org.keynote.godtools.android.snuffy.model.Constants.NAMESPACE;
+import static org.keynote.godtools.android.snuffy.model.Constants.PAGE;
 
 @RunWith(Parameterized.class)
 public class GtButtonIT {
     private static final String TEXT = "Button Text";
-    private static final String NAMESPACE = "ns";
+    private static final String EXTERNAL_NAMESPACE = "external";
     private static final GodToolsEvent.EventID EVENT1 = new GodToolsEvent.EventID(NAMESPACE, "event1");
-    private static final GodToolsEvent.EventID EVENT2 = new GodToolsEvent.EventID(NAMESPACE, "event2");
-    private static final GtPage PAGE = new GtPage(new GtManifest(NAMESPACE));
+    private static final GodToolsEvent.EventID EVENT2 = new GodToolsEvent.EventID(EXTERNAL_NAMESPACE, "event2");
 
     private final boolean mDomParser;
 

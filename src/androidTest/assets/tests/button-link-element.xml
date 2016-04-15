@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<link-button tap-events="event1,ns:event2">Button Text</link-button>
+<link-button tap-events="event1,external:event2">Button Text</link-button>
