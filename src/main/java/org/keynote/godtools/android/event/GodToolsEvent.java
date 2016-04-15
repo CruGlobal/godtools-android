@@ -59,7 +59,7 @@ public class GodToolsEvent {
 
         @Override
         public int hashCode() {
-            return Objects.hashCode(namespace, id);
+            return Objects.hashCode(namespace.toLowerCase(), id.toLowerCase());
         }
 
         @NonNull
