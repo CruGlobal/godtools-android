@@ -19,11 +19,13 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.MeasureSpec;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
+import android.widget.AbsoluteLayout;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -287,7 +289,7 @@ public class PackageReader
             if (bm != null)
             {
                 ImageView iv = new ImageView(mContext);
-                iv.setLayoutParams(new SnuffyLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 0, 0));
+                iv.setLayoutParams(new AbsoluteLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 0, 0));
                 iv.setImageBitmap(bm);
                 iv.setScaleType(ImageView.ScaleType.FIT_XY);
                 currPage.addView(iv);
@@ -299,7 +301,7 @@ public class PackageReader
             if (bm != null)
             {
                 ImageView iv = new ImageView(mContext);
-                iv.setLayoutParams(new SnuffyLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 0, 0));
+                iv.setLayoutParams(new AbsoluteLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 0, 0));
                 iv.setImageBitmap(bm);
                 iv.setScaleType(ImageView.ScaleType.FIT_XY);
                 currPage.addView(iv);
@@ -311,7 +313,7 @@ public class PackageReader
             if (bmTop != null)
             {
                 ImageView iv = new ImageView(mContext);
-                iv.setLayoutParams(new SnuffyLayoutParams(LayoutParams.MATCH_PARENT, getScaledYValue(bmTop.getHeight()), 0, 0));
+                iv.setLayoutParams(new AbsoluteLayout.LayoutParams(LayoutParams.MATCH_PARENT, getScaledYValue(bmTop.getHeight()), 0, 0));
                 iv.setImageBitmap(bmTop);
                 iv.setScaleType(ImageView.ScaleType.FIT_XY);
                 currPage.addView(iv);
@@ -321,7 +323,7 @@ public class PackageReader
             if (bmBot != null)
             {
                 ImageView iv = new ImageView(mContext);
-                iv.setLayoutParams(new SnuffyLayoutParams(LayoutParams.MATCH_PARENT, getScaledYValue(bmBot.getHeight()), 0, mPageHeight - getScaledYValue(bmBot.getHeight())));
+                iv.setLayoutParams(new AbsoluteLayout.LayoutParams(LayoutParams.MATCH_PARENT, getScaledYValue(bmBot.getHeight()), 0, mPageHeight - getScaledYValue(bmBot.getHeight())));
                 iv.setImageBitmap(bmBot);
                 iv.setScaleType(ImageView.ScaleType.FIT_XY);
                 currPage.addView(iv);
@@ -332,7 +334,7 @@ public class PackageReader
     private void addCover(SnuffyPage currPage)
     {
         SnuffyLayout theCover = new SnuffyLayout(mContext);
-        theCover.setLayoutParams(new SnuffyLayoutParams(mPageWidth, mPageHeight, 0, 0));
+        theCover.setLayoutParams(new AbsoluteLayout.LayoutParams(mPageWidth, mPageHeight, 0, 0));
         theCover.setBackgroundColor(Color.TRANSPARENT); // overwritten in SnuffyPage.setCover
         theCover.setVisibility(View.GONE);
         currPage.addView(theCover);
@@ -409,7 +411,7 @@ public class PackageReader
             button.setEllipsize(TruncateAt.END);
             button.setTextSize(getScaledTextSize(DEFAULT_BUTTON_TEXT_SIZE * size / 100.0f));
             button.setTextColor(mBackgroundColor);
-            button.setLayoutParams(new SnuffyLayoutParams(mPageWidth - 2 * margin, LayoutParams.WRAP_CONTENT, margin, mYOffset));
+            button.setLayoutParams(new AbsoluteLayout.LayoutParams(mPageWidth - 2 * margin, LayoutParams.WRAP_CONTENT, margin, mYOffset));
 
 
             currPage.addView(new SnuffyAlternateTypefaceTextView(button)
@@ -449,10 +451,10 @@ public class PackageReader
             theContainer.addView(hr);
             yPosInContainer += 1;
 
-            theContainer.setLayoutParams(new SnuffyLayoutParams(buttonWidth,
+            theContainer.setLayoutParams(new AbsoluteLayout.LayoutParams(buttonWidth,
                     yPosInContainer, BUTTON_MARGINX, yPos));
             processButtonButton(elButton, 1000 + iButton, false, theContainer);
-            SnuffyLayoutParams lpContainer = (SnuffyLayoutParams) (theContainer.getLayoutParams());
+            ViewGroup.LayoutParams lpContainer = theContainer.getLayoutParams();
             yPosInContainer = lpContainer.height; // we add to bottom of the container
 
             // add 2 pixel thick horizontal rule below the button
@@ -464,7 +466,7 @@ public class PackageReader
             yPosInContainer += 1;
 
             int buttonHeight = yPosInContainer;
-            theContainer.setLayoutParams(new SnuffyLayoutParams(buttonWidth, buttonHeight, BUTTON_MARGINX, yPos));
+            theContainer.setLayoutParams(new AbsoluteLayout.LayoutParams(buttonWidth, buttonHeight, BUTTON_MARGINX, yPos));
             theContainer.setBackgroundColor(Color.TRANSPARENT);
             theContainer.setTag(iTagButtonContainer);
             currPage.addView(theContainer);
@@ -493,7 +495,7 @@ public class PackageReader
 
                 // Determine size and position:
                 // a) the panel to be shown
-                SnuffyLayoutParams lp = (SnuffyLayoutParams) (panel.getLayoutParams());
+                AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) panel.getLayoutParams();
                 int panelHeight = lp.height;
                 // b) the button view that was clicked at will appear to transform into the panel
                 final int yBefore = yPos;
@@ -507,8 +509,12 @@ public class PackageReader
                                 : yBefore;
 
                 // Place panel over button
-                final SnuffyLayoutParams lpBefore = new SnuffyLayoutParams(lp.width, buttonHeight, lp.x, yBefore);  // button height, button locn
-                final SnuffyLayoutParams lpAfter = new SnuffyLayoutParams(lp.width, lp.height, lp.x, yAfter); // full height, final locn
+                // button height, button locn
+                final ViewGroup.LayoutParams lpBefore =
+                        new AbsoluteLayout.LayoutParams(lp.width, buttonHeight, lp.x, yBefore);
+                // full height, final locn
+                final ViewGroup.LayoutParams lpAfter =
+                        new AbsoluteLayout.LayoutParams(lp.width, lp.height, lp.x, yAfter);
 
                 // Create the shadow view with its 5 images
                 // IOS Equivalent of this is in standardViewController.m: showShadow
@@ -518,8 +524,12 @@ public class PackageReader
 
                 final SnuffyLayout shadView = new SnuffyLayout(mContext);
                 shadView.setBackgroundColor(Color.TRANSPARENT);
-                final SnuffyLayoutParams lpBeforeShad = new SnuffyLayoutParams(lp.width + DROPSHADOW_X, lp.height + DROPSHADOW_Y, lp.x, yBefore);
-                final SnuffyLayoutParams lpAfterShad = new SnuffyLayoutParams(lp.width + DROPSHADOW_X, lp.height + DROPSHADOW_Y, lp.x, yAfter);
+                final ViewGroup.LayoutParams lpBeforeShad =
+                        new AbsoluteLayout.LayoutParams(lp.width + DROPSHADOW_X, lp.height + DROPSHADOW_Y, lp.x,
+                                                        yBefore);
+                final ViewGroup.LayoutParams lpAfterShad =
+                        new AbsoluteLayout.LayoutParams(lp.width + DROPSHADOW_X, lp.height + DROPSHADOW_Y, lp.x,
+                                                        yAfter);
                 shadView.setVisibility(View.GONE);
                 currPage.addView(shadView);
 
@@ -528,7 +538,7 @@ public class PackageReader
                 if (bmNE != null)
                 {
                     ImageView iv = new ImageView(mContext);
-                    iv.setLayoutParams(new SnuffyLayoutParams(
+                    iv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                             DROPSHADOW_X,
                             DROPSHADOW_Y,
                             lp.width,
@@ -543,7 +553,7 @@ public class PackageReader
                 if (bmE != null)
                 {
                     ImageView iv = new ImageView(mContext);
-                    iv.setLayoutParams(new SnuffyLayoutParams(
+                    iv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                             DROPSHADOW_X,
                             lp.height - DROPSHADOW_Y,
                             lp.width,
@@ -558,7 +568,7 @@ public class PackageReader
                 if (bmSE != null)
                 {
                     ImageView iv = new ImageView(mContext);
-                    iv.setLayoutParams(new SnuffyLayoutParams(
+                    iv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                             DROPSHADOW_X,
                             DROPSHADOW_Y,
                             lp.width,
@@ -574,7 +584,7 @@ public class PackageReader
                 {
                     ImageView iv = new ImageView(mContext);
                     //iv.setTag(new Integer(TAG_SHAD_S));
-                    iv.setLayoutParams(new SnuffyLayoutParams(
+                    iv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                             lp.width - DROPSHADOW_X,
                             DROPSHADOW_Y,
                             DROPSHADOW_X,
@@ -590,7 +600,7 @@ public class PackageReader
                 if (bmSW != null)
                 {
                     ImageView iv = new ImageView(mContext);
-                    iv.setLayoutParams(new SnuffyLayoutParams(
+                    iv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                             DROPSHADOW_X,
                             DROPSHADOW_Y,
                             0,
@@ -796,7 +806,7 @@ public class PackageReader
 
         // Note that mode can include phone, email allurl and and url although the main use for these in the About pages
 
-        SnuffyLayoutParams lpContainer = (SnuffyLayoutParams) (theContainer.getLayoutParams());
+        AbsoluteLayout.LayoutParams lpContainer = (AbsoluteLayout.LayoutParams) (theContainer.getLayoutParams());
         int yPosInContainer = lpContainer.height; // we add to bottom of the container
         int containerWidth = lpContainer.width;
         int marginX = BUTTON_TEXT_MARGINX; // ?? 22Jan2012 - (REFERENCE_DEVICE_WIDTH-lpContainer.width)/2;
@@ -846,7 +856,7 @@ public class PackageReader
                     {
                         int imageHeight = getScaledYValue(bm.getHeight());
                         ImageView iv = new ImageView(mContext);
-                        iv.setLayoutParams(new SnuffyLayoutParams(LayoutParams.MATCH_PARENT, imageHeight, getScaledXValue(xPos), yPosInContainer));
+                        iv.setLayoutParams(new AbsoluteLayout.LayoutParams(LayoutParams.MATCH_PARENT, imageHeight, getScaledXValue(xPos), yPosInContainer));
                         iv.setImageBitmap(bm);
                         iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
                         theContainer.addView(iv);
@@ -862,7 +872,7 @@ public class PackageReader
         int buttonHeight = getScaledYValue(36);
 
         TextView tv = new TextView(mContext);
-        tv.setLayoutParams(new SnuffyLayoutParams(
+        tv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                 width == 0 ? LayoutParams.WRAP_CONTENT : width,
                 buttonHeight,
                 xPos, yPosInContainer));
@@ -876,12 +886,11 @@ public class PackageReader
                 .setAlternateTypeface(mAlternateTypeface)
                 .get());
 
-
-        SnuffyLayoutParams lp = (SnuffyLayoutParams) tv.getLayoutParams();
+        AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) tv.getLayoutParams();
         tv.measure(
                 MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY),
                 MeasureSpec.UNSPECIFIED);
-        lp = (SnuffyLayoutParams) tv.getLayoutParams();
+        lp = (AbsoluteLayout.LayoutParams) tv.getLayoutParams();
         yPosInContainer += buttonHeight;
 
         // add the disclosure indicator at the right of the button
@@ -892,12 +901,12 @@ public class PackageReader
             if (bExpanded)
             {
                 iv.setImageResource(R.drawable.disclosure_indicator_maximized);
-                iv.setLayoutParams(new SnuffyLayoutParams(buttonHeight, buttonHeight, containerWidth - buttonHeight - getScaledXValue(0), lp.y + 2));
+                iv.setLayoutParams(new AbsoluteLayout.LayoutParams(buttonHeight, buttonHeight, containerWidth - buttonHeight - getScaledXValue(0), lp.y + 2));
             }
             else
             {
                 iv.setImageResource(R.drawable.disclosure_indicator_minimized);
-                iv.setLayoutParams(new SnuffyLayoutParams(buttonHeight, buttonHeight, containerWidth - buttonHeight + getScaledXValue(5), lp.y + 2));
+                iv.setLayoutParams(new AbsoluteLayout.LayoutParams(buttonHeight, buttonHeight, containerWidth - buttonHeight + getScaledXValue(5), lp.y + 2));
             }
             theContainer.addView(iv);
         }
@@ -905,7 +914,7 @@ public class PackageReader
         // add margin below the button
         yPosInContainer += BUTTON_MARGIN_BOTTOM;
 
-        theContainer.setLayoutParams(new SnuffyLayoutParams(lpContainer.width, lpContainer.height + yPosInContainer, lpContainer.x, lpContainer.y));
+        theContainer.setLayoutParams(new AbsoluteLayout.LayoutParams(lpContainer.width, lpContainer.height + yPosInContainer, lpContainer.x, lpContainer.y));
 
         theContainer.setTag(iButton);
     }
@@ -946,21 +955,21 @@ public class PackageReader
             node = node.getNextSibling();
         }
 
-        theButton.setLayoutParams(new SnuffyLayoutParams(panelWidth, 0, 0, 2)); // yPos=2 to allow for the HR drawn when not in panel
+        theButton.setLayoutParams(new AbsoluteLayout.LayoutParams(panelWidth, 0, 0, 2)); // yPos=2 to allow for the HR drawn when not in panel
         processButtonButton(elButton, iButton, true, theButton);
         thePanel.addView(theButton);
-        SnuffyLayoutParams lpButton = (SnuffyLayoutParams) (theButton.getLayoutParams());
+        AbsoluteLayout.LayoutParams lpButton = (AbsoluteLayout.LayoutParams) (theButton.getLayoutParams());
         int buttonHeight = lpButton.height + lpButton.y;
 
         int containerHeight = mYOffsetMaxInPanel;
-        theContainer.setLayoutParams(new SnuffyLayoutParams(panelWidth, containerHeight, 0, buttonHeight));
+        theContainer.setLayoutParams(new AbsoluteLayout.LayoutParams(panelWidth, containerHeight, 0, buttonHeight));
         theContainer.setBackgroundColor(Color.TRANSPARENT);
         thePanel.addView(theContainer);
 
         // panel Y coord will be relocated at runtime to cover its associated button and then animated, with button,
         // so that bottom of panel is at bottom of screen (if whole panel was not already able to fit on-screen)
         int yPanelTop = 50;
-        thePanel.setLayoutParams(new SnuffyLayoutParams(panelWidth, PANEL_YMARGIN + buttonHeight + containerHeight + PANEL_YMARGIN, PANEL_XMARGIN, yPanelTop));
+        thePanel.setLayoutParams(new AbsoluteLayout.LayoutParams(panelWidth, PANEL_YMARGIN + buttonHeight + containerHeight + PANEL_YMARGIN, PANEL_XMARGIN, yPanelTop));
         thePanel.setBackgroundColor(mBackgroundColor);
         thePanel.setTag(1000 + iButton);
         thePanel.setVisibility(View.INVISIBLE); // hide it initially - will be animated into position on click on its owner button.
@@ -993,7 +1002,7 @@ public class PackageReader
         button.setText(content);
         button.setTextSize(getScaledTextSize(DEFAULT_BUTTON_TEXT_SIZE * size / 100.0f));
         button.setTextColor(mBackgroundColor);
-        button.setLayoutParams(new SnuffyLayoutParams(panelWidth - 2 * margin, LayoutParams.WRAP_CONTENT, margin, mYOffsetInPanel));
+        button.setLayoutParams(new AbsoluteLayout.LayoutParams(panelWidth - 2 * margin, LayoutParams.WRAP_CONTENT, margin, mYOffsetInPanel));
 
 
         theContainer.addView(new SnuffyAlternateTypefaceTextView(button)
@@ -1045,7 +1054,7 @@ public class PackageReader
             if (bm != null)
             {
                 ImageView iv = new ImageView(mContext);
-                iv.setLayoutParams(new SnuffyLayoutParams(width, height, xPos, yPos));
+                iv.setLayoutParams(new AbsoluteLayout.LayoutParams(width, height, xPos, yPos));
                 iv.setImageBitmap(bm);
                 iv.setScaleType(ImageView.ScaleType.FIT_XY);
                 theContainer.addView(iv);
@@ -1103,7 +1112,7 @@ public class PackageReader
         content = content.replace("\t", " ");    // replace tabs with spaces to match iPhone (Android treats as > 1 space). (see 4Laws/en/11.xml)
 
         TextView tv = new TextView(mContext);
-        tv.setLayoutParams(new SnuffyLayoutParams(
+        tv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                 width,
                 height == 0 ? LayoutParams.WRAP_CONTENT : height,
                 xPos, yPos));
@@ -1160,7 +1169,7 @@ public class PackageReader
             {
                 yOffset = mPageHeight - mYOffsetInQuestion - getScaledYValue(QUESTION_MARGIN_BOTTOM);
             }
-            SnuffyLayoutParams lp = new SnuffyLayoutParams(mPageWidth, mYOffsetInQuestion, 0, yOffset);
+            AbsoluteLayout.LayoutParams lp = new AbsoluteLayout.LayoutParams(mPageWidth, mYOffsetInQuestion, 0, yOffset);
 
             questionContainer.setLayoutParams(lp);
             mYFooterTop = lp.y;
@@ -1204,7 +1213,7 @@ public class PackageReader
                     xPos = 0;
                 }
 
-                tv.setLayoutParams(new SnuffyLayoutParams(
+                tv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                         width == 0 ? LayoutParams.WRAP_CONTENT : width,
                         LayoutParams.WRAP_CONTENT,
                         xPos, yPos));
@@ -1229,11 +1238,11 @@ public class PackageReader
                 if (yPos == 0)
                 {
                     // place at bottom of page with a margin below
-                    SnuffyLayoutParams lp = (SnuffyLayoutParams) tv.getLayoutParams();
+                    AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) tv.getLayoutParams();
                     tv.measure(
                             MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY),
                             MeasureSpec.UNSPECIFIED);
-                    lp = (SnuffyLayoutParams) tv.getLayoutParams();
+                    lp = (AbsoluteLayout.LayoutParams) tv.getLayoutParams();
                     int mh = tv.getMeasuredHeight();
                     lp.y = mPageHeight - mh - getScaledYValue(QUESTION_MARGIN_BOTTOM);
                     tv.setLayoutParams(lp);
@@ -1269,7 +1278,7 @@ public class PackageReader
             yPos = mYOffsetInQuestion;
 
         TextView tv = new TextView(mContext);
-        tv.setLayoutParams(new SnuffyLayoutParams(
+        tv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                 width == 0 ? LayoutParams.WRAP_CONTENT : width,
                 LayoutParams.WRAP_CONTENT,
                 xPos, yPos));
@@ -1293,7 +1302,7 @@ public class PackageReader
         }
 
         // Determine height required for all texts in this question so caller can set yFooterTop
-        SnuffyLayoutParams lp = (SnuffyLayoutParams) tv.getLayoutParams();
+        ViewGroup.LayoutParams lp = tv.getLayoutParams();
         tv.measure(
                 MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY),
                 MeasureSpec.UNSPECIFIED);
@@ -1342,7 +1351,7 @@ public class PackageReader
         }
 
         TextView tv = new TextView(mContext);
-        tv.setLayoutParams(new SnuffyLayoutParams(
+        tv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                 width == 0 ? LayoutParams.WRAP_CONTENT : width,
                 LayoutParams.WRAP_CONTENT,
                 xPos, yPos));
@@ -1360,7 +1369,7 @@ public class PackageReader
         tv.setTextSize(getScaledTextSize(DEFAULT_TEXT_SIZE * size / 100.0f));
         currPage.addView(tv);
 
-        SnuffyLayoutParams lp = (SnuffyLayoutParams) tv.getLayoutParams();
+        ViewGroup.LayoutParams lp = tv.getLayoutParams();
         tv.measure(
                 MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY),
                 MeasureSpec.UNSPECIFIED);
@@ -1448,8 +1457,8 @@ public class PackageReader
             // layout title container with heading on left, subheading on right and line between them
             // Note: IOS version ONLY does this if bPeekMode - why
             adjustHeadingFont(tvHeading);
-            SnuffyLayoutParams lpHeading = (SnuffyLayoutParams) tvHeading.getLayoutParams();
-            SnuffyLayoutParams lpSubHeading = (SnuffyLayoutParams) tvSubHeading.getLayoutParams();
+            AbsoluteLayout.LayoutParams lpHeading = (AbsoluteLayout.LayoutParams) tvHeading.getLayoutParams();
+            AbsoluteLayout.LayoutParams lpSubHeading = (AbsoluteLayout.LayoutParams) tvSubHeading.getLayoutParams();
             int newX = lpHeading.x + lpHeading.width + PEEK_HEADING_XSEPARATION;
             lpSubHeading.width -= (newX - lpSubHeading.x);
             lpSubHeading.x += (newX - lpSubHeading.x);
@@ -1458,11 +1467,11 @@ public class PackageReader
             tvHeading.measure(
                     MeasureSpec.makeMeasureSpec(lpHeading.width, MeasureSpec.EXACTLY),
                     MeasureSpec.UNSPECIFIED);
-            lpHeading = (SnuffyLayoutParams) tvHeading.getLayoutParams();
+            lpHeading = (AbsoluteLayout.LayoutParams) tvHeading.getLayoutParams();
             tvSubHeading.measure(
                     MeasureSpec.makeMeasureSpec(lpSubHeading.width, MeasureSpec.EXACTLY),
                     MeasureSpec.UNSPECIFIED);
-            lpSubHeading = (SnuffyLayoutParams) tvSubHeading.getLayoutParams();
+            lpSubHeading = (AbsoluteLayout.LayoutParams) tvSubHeading.getLayoutParams();
 
             int xPosVLine = lpSubHeading.x - (PEEK_HEADING_XSEPARATION / 2);
             int y2PosVLine = Math.max(lpHeading.y + tvHeading.getMeasuredHeight(), lpSubHeading.y + tvSubHeading.getMeasuredHeight()) - (2 * PEEK_VLINE_YMARGIN) + HEADING_BOTTOM_PADDING;
@@ -1475,7 +1484,7 @@ public class PackageReader
             // get it from the 3 children and their children    
             if (tvNumber != null)
             {
-                SnuffyLayoutParams lp = (SnuffyLayoutParams) tvNumber.getLayoutParams();
+                AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) tvNumber.getLayoutParams();
                 tvNumber.measure(
                         MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY),
                         MeasureSpec.UNSPECIFIED);
@@ -1485,7 +1494,7 @@ public class PackageReader
             }
             if (tvHeading != null)
             {
-                SnuffyLayoutParams lp = (SnuffyLayoutParams) tvHeading.getLayoutParams();
+                AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) tvHeading.getLayoutParams();
                 tvHeading.measure(
                         MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY),
                         MeasureSpec.UNSPECIFIED);
@@ -1495,7 +1504,7 @@ public class PackageReader
             }
             if (tvSubHeading != null)
             {
-                SnuffyLayoutParams lp = (SnuffyLayoutParams) tvSubHeading.getLayoutParams();
+                AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) tvSubHeading.getLayoutParams();
                 tvSubHeading.measure(
                         MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY),
                         MeasureSpec.UNSPECIFIED);
@@ -1506,7 +1515,7 @@ public class PackageReader
             titleHeight += HEADING_BOTTOM_PADDING;
         }
 
-        titleContainer.setLayoutParams(new SnuffyLayoutParams(
+        titleContainer.setLayoutParams(new AbsoluteLayout.LayoutParams(
                 titleWidth, titleHeight,
                 0, 0));
 
@@ -1518,30 +1527,30 @@ public class PackageReader
 
             // h specified. assume there is a heading and only a heading.
             assert tvHeading != null;
-            SnuffyLayoutParams lp = (SnuffyLayoutParams) tvHeading.getLayoutParams();
+            AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) tvHeading.getLayoutParams();
             tvHeading.measure(
                     MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY),
                     MeasureSpec.UNSPECIFIED);
-            lp = (SnuffyLayoutParams) tvHeading.getLayoutParams();
+            lp = (AbsoluteLayout.LayoutParams) tvHeading.getLayoutParams();
             lp.y = (int) (0.5 * (titleHeight - tvHeading.getMeasuredHeight()));
             tvHeading.setLayoutParams(lp);
         }
         else if ((bPlainMode || bPeekMode) && (tvHeading != null) && (tvSubHeading != null))
         {
             // center heading and subheading vertically
-            SnuffyLayoutParams lp = (SnuffyLayoutParams) tvHeading.getLayoutParams();
+            AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) tvHeading.getLayoutParams();
             tvHeading.measure(
                     MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY),
                     MeasureSpec.UNSPECIFIED);
-            lp = (SnuffyLayoutParams) tvHeading.getLayoutParams();
+            lp = (AbsoluteLayout.LayoutParams) tvHeading.getLayoutParams();
             lp.y = (int) (0.5 * (titleHeight - tvHeading.getMeasuredHeight()));
             tvHeading.setLayoutParams(lp);
 
-            lp = (SnuffyLayoutParams) tvSubHeading.getLayoutParams();
+            lp = (AbsoluteLayout.LayoutParams) tvSubHeading.getLayoutParams();
             tvSubHeading.measure(
                     MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY),
                     MeasureSpec.UNSPECIFIED);
-            lp = (SnuffyLayoutParams) tvSubHeading.getLayoutParams();
+            lp = (AbsoluteLayout.LayoutParams) tvSubHeading.getLayoutParams();
             lp.y = (int) (0.5 * (titleHeight - tvSubHeading.getMeasuredHeight()));
             tvSubHeading.setLayoutParams(lp);
         }
@@ -1564,7 +1573,7 @@ public class PackageReader
         final int DROPSHADOW_SUBLENGTHX = getScaledXValue(20);
         final int DROPSHADOW_SUBLENGTHY = getScaledYValue(20);
 
-        SnuffyLayoutParams lpTitleContainer = (SnuffyLayoutParams) titleContainer.getLayoutParams();
+        AbsoluteLayout.LayoutParams lpTitleContainer = (AbsoluteLayout.LayoutParams) titleContainer.getLayoutParams();
         if (bStraightMode)
         {
             Bitmap bmTop = getBitmapFromAssetOrFile(mContext, "grad_shad_bot.png");
@@ -1572,7 +1581,7 @@ public class PackageReader
             {
                 ImageView iv = new ImageView(mContext);
                 iv.setTag(561);
-                iv.setLayoutParams(new SnuffyLayoutParams(lpTitleContainer.width, getScaledYValue(bmTop.getHeight()),
+                iv.setLayoutParams(new AbsoluteLayout.LayoutParams(lpTitleContainer.width, getScaledYValue(bmTop.getHeight()),
                         lpTitleContainer.x, lpTitleContainer.y - bmTop.getHeight() + getScaledYValue(DROPSHADOW_INSETTOP)));
                 iv.setImageBitmap(bmTop);
                 iv.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -1583,7 +1592,7 @@ public class PackageReader
             {
                 ImageView iv = new ImageView(mContext);
                 iv.setTag(562);
-                iv.setLayoutParams(new SnuffyLayoutParams(lpTitleContainer.width, getScaledYValue(bmBot.getHeight()),
+                iv.setLayoutParams(new AbsoluteLayout.LayoutParams(lpTitleContainer.width, getScaledYValue(bmBot.getHeight()),
                         lpTitleContainer.x, lpTitleContainer.y + lpTitleContainer.height - DROPSHADOW_INSETBOT));
                 iv.setImageBitmap(bmBot);
                 iv.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -1598,7 +1607,7 @@ public class PackageReader
                 // grad_shad_NE_title:...
                 ImageView iv = new ImageView(mContext);
                 iv.setTag(561);
-                iv.setLayoutParams(new SnuffyLayoutParams(
+                iv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                         getScaledXValue(bmNE.getWidth()),
                         getScaledYValue(bmNE.getHeight()),
                         lpTitleContainer.x + lpTitleContainer.width - DROPSHADOW_INSETX,
@@ -1615,7 +1624,7 @@ public class PackageReader
                 ImageView iv = new ImageView(mContext);
                 iv.setTag(566);
                 assert bmNE != null;
-                iv.setLayoutParams(new SnuffyLayoutParams(
+                iv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                         getScaledXValue(bmE.getWidth()),
                         lpTitleContainer.height - getScaledYValue(bmNE.getHeight()) - DROPSHADOW_INSETY,
                         lpTitleContainer.x + lpTitleContainer.width - DROPSHADOW_INSETX,
@@ -1631,7 +1640,7 @@ public class PackageReader
                 // grad_shad_SE_title:...
                 ImageView iv = new ImageView(mContext);
                 iv.setTag(563);
-                iv.setLayoutParams(new SnuffyLayoutParams(
+                iv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                         getScaledXValue(bmSE.getWidth()),
                         getScaledYValue(bmSE.getHeight()),
                         lpTitleContainer.x + lpTitleContainer.width - DROPSHADOW_INSETX,
@@ -1647,7 +1656,7 @@ public class PackageReader
                 // grad_shad_S_title:...
                 ImageView iv = new ImageView(mContext);
                 iv.setTag(562);
-                iv.setLayoutParams(new SnuffyLayoutParams(
+                iv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                         lpTitleContainer.width - DROPSHADOW_INSETX,
                         getScaledYValue(bmS.getHeight()),
                         lpTitleContainer.x,
@@ -1666,7 +1675,7 @@ public class PackageReader
                 // grad_shad_E_title:...
                 ImageView iv = new ImageView(mContext);
                 iv.setTag(566);
-                iv.setLayoutParams(new SnuffyLayoutParams(
+                iv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                         DROPSHADOW_LENGTHX,
                         lpTitleContainer.height - DROPSHADOW_INSETY,
                         lpTitleContainer.width - DROPSHADOW_INSETX,
@@ -1681,7 +1690,7 @@ public class PackageReader
                 // grad_shad_S_title:...
                 ImageView iv = new ImageView(mContext);
                 iv.setTag(562);
-                iv.setLayoutParams(new SnuffyLayoutParams(
+                iv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                         lpTitleContainer.width - DROPSHADOW_INSETX,
                         DROPSHADOW_LENGTHY,
                         lpTitleContainer.x,
@@ -1696,7 +1705,7 @@ public class PackageReader
                 // grad_shad_SE_title:...
                 ImageView iv = new ImageView(mContext);
                 iv.setTag(563);
-                iv.setLayoutParams(new SnuffyLayoutParams(
+                iv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                         DROPSHADOW_LENGTHX,
                         DROPSHADOW_LENGTHY,
                         lpTitleContainer.x + lpTitleContainer.width - DROPSHADOW_INSETX,
@@ -1708,7 +1717,7 @@ public class PackageReader
         }
         titleContainer.bringToFront(); // so it is in front of the shadows
 
-        titleClippingContainer.setLayoutParams(new SnuffyLayoutParams(
+        titleClippingContainer.setLayoutParams(new AbsoluteLayout.LayoutParams(
                 mPageWidth, mPageHeight - titleMarginY,
                 0, titleMarginY));
 
@@ -1740,12 +1749,12 @@ public class PackageReader
             subTitleContainer.addView(tvArrow);
 
             assert tvSubTitle != null;
-            SnuffyLayoutParams lp = (SnuffyLayoutParams) tvSubTitle.getLayoutParams();
+            AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) tvSubTitle.getLayoutParams();
             tvSubTitle.measure(
                     MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY),
                     MeasureSpec.UNSPECIFIED);
-            lp = (SnuffyLayoutParams) tvSubTitle.getLayoutParams();
-            tvArrow.setLayoutParams(new SnuffyLayoutParams(
+            lp = (AbsoluteLayout.LayoutParams) tvSubTitle.getLayoutParams();
+            tvArrow.setLayoutParams(new AbsoluteLayout.LayoutParams(
                     LayoutParams.FILL_PARENT,
                     getScaledYValue(SUBTITLE_PEEK_OFFSET),
                     0, lp.y + tvSubTitle.getMeasuredHeight() + getScaledYValue(SUBTITLE_BOTTOM_PADDING)));
@@ -1753,16 +1762,16 @@ public class PackageReader
             int subTitleHeight = lp.y + tvSubTitle.getMeasuredHeight() + getScaledYValue(SUBTITLE_BOTTOM_PADDING) + getScaledYValue(SUBTITLE_PEEK_OFFSET);
             final int yBefore = titleHeight - subTitleHeight + subTitlePeekOffset;
             final int yAfter = titleHeight - getScaledYValue(20); // adjusted since there is too much white space at top
-            final SnuffyLayoutParams lpBefore = new SnuffyLayoutParams(subTitleWidth, subTitleHeight, 0, yBefore);
-            final SnuffyLayoutParams lpAfter = new SnuffyLayoutParams(subTitleWidth, subTitleHeight, 0, yAfter);
+            final AbsoluteLayout.LayoutParams lpBefore = new AbsoluteLayout.LayoutParams(subTitleWidth, subTitleHeight, 0, yBefore);
+            final AbsoluteLayout.LayoutParams lpAfter = new AbsoluteLayout.LayoutParams(subTitleWidth, subTitleHeight, 0, yAfter);
 
             subTitleContainer.setLayoutParams(lpBefore);
 
             titleClippingContainer.addView(subTitleContainer);
 
-            SnuffyLayoutParams lpSubTitleContainer = new SnuffyLayoutParams(subTitleWidth, subTitleHeight, 0, yBefore);
+            AbsoluteLayout.LayoutParams lpSubTitleContainer = new AbsoluteLayout.LayoutParams(subTitleWidth, subTitleHeight, 0, yBefore);
             // grad_shad_E_subtitle:...
-            SnuffyLayoutParams lpTemp = new SnuffyLayoutParams(
+            AbsoluteLayout.LayoutParams lpTemp = new AbsoluteLayout.LayoutParams(
                     DROPSHADOW_SUBLENGTHX,
                     lpSubTitleContainer.height - DROPSHADOW_INSETY,
                     lpSubTitleContainer.width - DROPSHADOW_INSETX,
@@ -1777,13 +1786,13 @@ public class PackageReader
                 iv.setImageBitmap(bmE);
                 titleClippingContainer.addView(iv);
             }
-            final SnuffyLayoutParams lpBeforeE = new SnuffyLayoutParams(lpTemp.width, lpTemp.height, lpTemp.x, yBefore);
-            final SnuffyLayoutParams lpAfterE = new SnuffyLayoutParams(lpTemp.width, lpTemp.height, lpTemp.x, yAfter);
+            final AbsoluteLayout.LayoutParams lpBeforeE = new AbsoluteLayout.LayoutParams(lpTemp.width, lpTemp.height, lpTemp.x, yBefore);
+            final AbsoluteLayout.LayoutParams lpAfterE = new AbsoluteLayout.LayoutParams(lpTemp.width, lpTemp.height, lpTemp.x, yAfter);
 
             // grad_shad_S_subtitle:...
             final int yBeforeS = yBefore + lpSubTitleContainer.height - DROPSHADOW_INSETY;
             final int yAfterS = yAfter + lpSubTitleContainer.height - DROPSHADOW_INSETY;
-            lpTemp = new SnuffyLayoutParams(
+            lpTemp = new AbsoluteLayout.LayoutParams(
                     lpSubTitleContainer.width - DROPSHADOW_INSETX,
                     DROPSHADOW_SUBLENGTHY,
                     lpSubTitleContainer.x,
@@ -1798,13 +1807,13 @@ public class PackageReader
                 iv.setImageBitmap(bmS);
                 titleClippingContainer.addView(iv);
             }
-            final SnuffyLayoutParams lpBeforeS = new SnuffyLayoutParams(lpTemp.width, lpTemp.height, lpTemp.x, yBeforeS);
-            final SnuffyLayoutParams lpAfterS = new SnuffyLayoutParams(lpTemp.width, lpTemp.height, lpTemp.x, yAfterS);
+            final AbsoluteLayout.LayoutParams lpBeforeS = new AbsoluteLayout.LayoutParams(lpTemp.width, lpTemp.height, lpTemp.x, yBeforeS);
+            final AbsoluteLayout.LayoutParams lpAfterS = new AbsoluteLayout.LayoutParams(lpTemp.width, lpTemp.height, lpTemp.x, yAfterS);
 
             // grad_shad_SE_subtitle:...
             final int yBeforeSE = yBefore + lpSubTitleContainer.height - DROPSHADOW_INSETY;
             final int yAfterSE = yAfter + lpSubTitleContainer.height - DROPSHADOW_INSETY;
-            lpTemp = new SnuffyLayoutParams(
+            lpTemp = new AbsoluteLayout.LayoutParams(
                     DROPSHADOW_SUBLENGTHX,
                     DROPSHADOW_SUBLENGTHY,
                     lpSubTitleContainer.x + lpSubTitleContainer.width - DROPSHADOW_INSETX,
@@ -1819,8 +1828,8 @@ public class PackageReader
                 iv.setScaleType(ImageView.ScaleType.FIT_XY);
                 titleClippingContainer.addView(iv);
             }
-            final SnuffyLayoutParams lpBeforeSE = new SnuffyLayoutParams(lpTemp.width, lpTemp.height, lpTemp.x, yBeforeSE);
-            final SnuffyLayoutParams lpAfterSE = new SnuffyLayoutParams(lpTemp.width, lpTemp.height, lpTemp.x, yAfterSE);
+            final AbsoluteLayout.LayoutParams lpBeforeSE = new AbsoluteLayout.LayoutParams(lpTemp.width, lpTemp.height, lpTemp.x, yBeforeSE);
+            final AbsoluteLayout.LayoutParams lpAfterSE = new AbsoluteLayout.LayoutParams(lpTemp.width, lpTemp.height, lpTemp.x, yAfterSE);
 
             orderTitleViews(titleClippingContainer);
             final SnuffyPage thePage = currPage;
@@ -1977,7 +1986,7 @@ public class PackageReader
         y = y - (int) (0.35 * textSize); // eliminate the leading
 
         TextView tv = new TextView(mContext);
-        tv.setLayoutParams(new SnuffyLayoutParams(
+        tv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                 w == 0 ? LayoutParams.WRAP_CONTENT : w,
                 LayoutParams.WRAP_CONTENT,
                 x, y));
@@ -2029,7 +2038,7 @@ public class PackageReader
         h = getScaledYValue(h);
 
         TextView tv = new TextView(mContext);
-        tv.setLayoutParams(new SnuffyLayoutParams(
+        tv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                 w == 0 ? LayoutParams.WRAP_CONTENT : w,
                 bResize ? LayoutParams.WRAP_CONTENT : h,
                 x, y));
@@ -2079,7 +2088,7 @@ public class PackageReader
         h = getScaledYValue(h);
 
         TextView tv = new TextView(mContext);
-        tv.setLayoutParams(new SnuffyLayoutParams(
+        tv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                 w == 0 ? LayoutParams.WRAP_CONTENT : w,
                 bResize ? LayoutParams.WRAP_CONTENT : h,
                 x, y));
@@ -2123,7 +2132,7 @@ public class PackageReader
         content = content.trim(); // some pages have trailing CRLF which we do not want
 
         TextView tv = new TextView(mContext);
-        tv.setLayoutParams(new SnuffyLayoutParams(
+        tv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                 w == 0 ? LayoutParams.WRAP_CONTENT : w,
                 bResize ? LayoutParams.WRAP_CONTENT : h,
                 x, y));
@@ -2348,7 +2357,7 @@ public class PackageReader
     {
         View hr = new View(mContext);
         hr.setBackgroundColor(setColorAlphaVal(color, HR_ALPHA));
-        hr.setLayoutParams(new SnuffyLayoutParams(
+        hr.setLayoutParams(new AbsoluteLayout.LayoutParams(
                 pageWidth,
                 1,
                 PackageReader.BUTTON_HR_MARGINX, yPos));
@@ -2359,7 +2368,7 @@ public class PackageReader
     {
         View vr = new View(mContext);
         vr.setBackgroundColor(setColorAlphaVal(Color.BLACK, HR_ALPHA));
-        vr.setLayoutParams(new SnuffyLayoutParams(
+        vr.setLayoutParams(new AbsoluteLayout.LayoutParams(
                 1,
                 y2Pos - y1Pos,
                 xPos, y1Pos));
@@ -2371,14 +2380,14 @@ public class PackageReader
         String theText = tv.getText().toString();
         theText = theText.replace(" ", "\n");
         tv.setText(theText);
-        SnuffyLayoutParams lpOrig = (SnuffyLayoutParams) tv.getLayoutParams(); // save it
+        ViewGroup.LayoutParams lpOrig = tv.getLayoutParams(); // save it
         float textSize = tv.getTextSize();
         float minTextSize = 6.0f; // try down to 6px text
         float incr = 1.0f;
         int w;
         do
         {
-            tv.setLayoutParams(new SnuffyLayoutParams(
+            tv.setLayoutParams(new AbsoluteLayout.LayoutParams(
                     LayoutParams.WRAP_CONTENT,
                     LayoutParams.WRAP_CONTENT,
                     0, 0));
@@ -2395,8 +2404,7 @@ public class PackageReader
         tv.setLayoutParams(lpOrig);
     }
 
-    private void setLayoutParamsOfViewWithTag(View parentView, int tagValue, SnuffyLayoutParams lp)
-    {
+    private void setLayoutParamsOfViewWithTag(View parentView, int tagValue, ViewGroup.LayoutParams lp) {
         View v = parentView.findViewWithTag(tagValue);
         if (v != null)
             v.setLayoutParams(lp);
