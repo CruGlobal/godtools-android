@@ -38,6 +38,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.snuffy.model.GtManifest;
+import org.keynote.godtools.android.snuffy.model.GtModel;
 import org.keynote.godtools.android.snuffy.model.GtPage;
 import org.keynote.godtools.android.utils.TypefaceUtils;
 import org.w3c.dom.Document;
@@ -936,12 +937,25 @@ public class PackageReader
             {
                 Element el = (Element) node;
                 mYOffsetInPanel += getScaledYValue(PANEL_ITEM_DEFAULT_YOFFSET);
-                if (el.getTagName().equalsIgnoreCase("text"))
+                if (el.getTagName().equalsIgnoreCase("text")) {
                     processButtonPanelText(elPanel, el, theContainer, panelWidth);
-                if (el.getTagName().equalsIgnoreCase("image"))
+                } else if (el.getTagName().equalsIgnoreCase("image")) {
                     processButtonPanelImage(elPanel, el, theContainer, panelWidth);
-                if (el.getTagName().equalsIgnoreCase("button"))
+                } else if (el.getTagName().equalsIgnoreCase("button")) {
                     processButtonPanelButton(el, currPage, theContainer, panelWidth, urlsOnPage);
+                } else {
+                    // try parsing it in our new model
+                    final GtModel model = GtModel.fromXml(currPage.getModel(), el);
+                    if (model != null) {
+                        final View view = model.render(theContainer, true);
+                        if (view != null) {
+                            layoutModel(model, view, mYOffsetInPanel, panelWidth);
+                            final AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) view.getLayoutParams();
+                            mYOffsetInPanel = lp.y + lp.height;
+                            mYOffsetMaxInPanel = determineBottom(theContainer);
+                        }
+                    }
+                }
             }
             node = node.getNextSibling();
         }
@@ -2183,6 +2197,66 @@ public class PackageReader
         Log.d("BITMAPS", imageFileName + ": " + b.getRowBytes() * b.getHeight());
         bitmapCache.put(imageFileName, b);
         return b;
+    }
+
+    private int determineBottom(@NonNull final AbsoluteLayout layout) {
+        final int count = layout.getChildCount();
+        int height = 0;
+        for (int i = 0; i < count; i++) {
+            final View child = layout.getChildAt(i);
+            final AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) child.getLayoutParams();
+            height = Math.max(height, lp.y + lp.height);
+        }
+        return height;
+    }
+
+    private void layoutModel(@NonNull final GtModel model, @NonNull final View view, final int defScaledTop,
+                             final int defScaledWidth) {
+        // calculate the top of this view ((scaled(top) || defScaledTop) + scaled(topOffset));
+        Integer top = model.getTop();
+        if (top == null) {
+            top = defScaledTop;
+        } else {
+            top = getScaledYValue(top);
+        }
+        if (model.getTopOffset() != null) {
+            top += getScaledYValue(model.getTopOffset());
+        }
+
+        // calculate the left of this view (scaled(left) + leftOffset);
+        Integer left = model.getLeft();
+        if (left == null) {
+            left = 0;
+        }
+        Integer leftOffset = model.getLeftOffset();
+        if (leftOffset == null) {
+            leftOffset = 0;
+        }
+        leftOffset = getScaledXValue(leftOffset);
+        left = getScaledXValue(left) + leftOffset;
+
+        // calculate the width of this view ((scaled(width) || defScaledWidth) - scaled(leftOffset))
+        Integer width = model.getWidth();
+        if (width == null) {
+            width = 0;
+        }
+        width = getScaledXValue(width);
+        if (width == 0) {
+            width = defScaledWidth;
+        }
+        width -= leftOffset;
+
+        // calculate the height
+        view.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.UNSPECIFIED);
+        final int height = view.getMeasuredHeight();
+
+        // update layout params
+        final AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) view.getLayoutParams();
+        lp.y = top;
+        lp.x = left;
+        lp.width = width;
+        lp.height = height;
+        view.setLayoutParams(lp);
     }
 
     private int getScaledXValue(int x)
