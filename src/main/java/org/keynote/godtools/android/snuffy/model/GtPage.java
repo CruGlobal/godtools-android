@@ -7,6 +7,7 @@ import android.support.annotation.WorkerThread;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
@@ -16,6 +17,8 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class GtPage extends GtModel {
@@ -34,8 +37,8 @@ public class GtPage extends GtModel {
     @NonNull
     private Set<GodToolsEvent.EventID> mListeners = ImmutableSet.of();
 
-    @Nullable
-    private GtFollowupModal mFollowupModal;
+    @NonNull
+    private final List<GtFollowupModal> mFollowupModals = new ArrayList<>();
 
     @VisibleForTesting
     GtPage(@NonNull final GtManifest manifest) {
@@ -63,9 +66,9 @@ public class GtPage extends GtModel {
         return mListeners;
     }
 
-    @Nullable
-    public GtFollowupModal getFollowupModal() {
-        return mFollowupModal;
+    @NonNull
+    public List<GtFollowupModal> getFollowupModals() {
+        return ImmutableList.copyOf(mFollowupModals);
     }
 
     @Nullable
@@ -117,11 +120,7 @@ public class GtPage extends GtModel {
                 // process recognized elements
                 switch (parser.getName()) {
                     case GtFollowupModal.XML_FOLLOWUP_MODAL:
-                        if (mFollowupModal != null) {
-                            throw new XmlPullParserException("Package XML has more than 1 Followup Modal defined",
-                                                             parser, null);
-                        }
-                        mFollowupModal = GtFollowupModal.fromXml(this, parser);
+                        mFollowupModals.add(GtFollowupModal.fromXml(this, parser));
                         break;
                     default:
                         // skip unrecognized nodes
