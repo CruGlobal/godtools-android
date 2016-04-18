@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.google.common.collect.ImmutableList;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.keynote.godtools.android.BuildConfig;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -72,7 +73,10 @@ public class GtManifest extends GtModel {
 
     @Nullable
     @Override
-    public View render(@NonNull final ViewGroup parent, final boolean attachToParent) {
+    public View render(@NonNull final ViewGroup root, final double scale, final boolean attachToRoot) {
+        if (BuildConfig.DEBUG) {
+            throw new IllegalStateException("You cannot render a GtManifest!!!!");
+        }
         // you can't render a GtManifest
         return null;
     }

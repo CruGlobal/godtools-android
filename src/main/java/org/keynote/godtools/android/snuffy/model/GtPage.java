@@ -84,7 +84,7 @@ public class GtPage extends GtModel {
 
     @Nullable
     @Override
-    public View render(@NonNull ViewGroup parent, boolean attachToParent) {
+    public View render(@NonNull final ViewGroup root, final double scale, final boolean attachToRoot) {
         // TODO: should this actually render the page long term?
         return null;
     }

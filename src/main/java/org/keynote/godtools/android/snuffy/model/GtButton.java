@@ -79,15 +79,17 @@ public class GtButton extends GtModel implements View.OnClickListener {
 
     @NonNull
     @Override
-    public View render(@NonNull final ViewGroup parent, final boolean attachToParent) {
-        final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+    public View render(@NonNull final ViewGroup root, final double scale, final boolean attachToRoot) {
+        final LayoutInflater inflater = LayoutInflater.from(root.getContext());
 
         // inflate the raw view
         final View view;
         switch (mMode) {
             default:
-                view = inflater.inflate(R.layout.gt_button_default, parent, false);
-                parent.addView(view);
+                view = inflater.inflate(R.layout.gt_button_default, root, false);
+                if (attachToRoot) {
+                    root.addView(view);
+                }
                 break;
         }
 
@@ -98,6 +100,7 @@ public class GtButton extends GtModel implements View.OnClickListener {
             button.setOnClickListener(this);
         }
 
+        applyLayout(view, scale);
         return view;
     }
 

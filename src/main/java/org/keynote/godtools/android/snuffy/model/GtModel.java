@@ -152,11 +152,23 @@ public abstract class GtModel {
     /**
      * Render this view.
      *
-     * @param parent         The parent ViewGroup to inherit properties from (and optionally attach ourselves to).
-     * @param attachToParent Whether this view should be attached to the parent or not.
+     * @param root         The parent ViewGroup to inherit properties from (and optionally attach ourselves to).
+     * @param attachToRoot Whether this view should be attached to the parent or not.
      * @return The view representing this model
      */
     @Nullable
     @UiThread
-    public abstract View render(@NonNull ViewGroup parent, boolean attachToParent);
+    public abstract View render(@NonNull ViewGroup root, double scale, boolean attachToRoot);
+
+    protected void applyLayout(@Nullable final View view, final double scale) {
+        if (view != null) {
+            final ViewGroup.LayoutParams lp = view.getLayoutParams();
+            if (mWidth != null && mWidth > 0) {
+                lp.width = (int) Math.round(mWidth * scale);
+            }
+            if (mHeight != null && mHeight > 0) {
+                lp.height = (int) Math.round(mHeight * scale);
+            }
+        }
+    }
 }
