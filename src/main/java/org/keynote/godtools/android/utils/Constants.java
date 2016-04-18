@@ -61,4 +61,9 @@ public class Constants
     public static final String NUMBER_OF_RESULTS = "{{number_of_terms}}";
     public static final String WEB_URL = "{{web_url}}";
     public static final String SHARE_LINK = "{{share_link}}";
+
+    /**
+     * miscellaneous
+     */
+    public static final String INTERPRETER_HEADER = "interpreter";
 }

@@ -8,6 +8,7 @@ import com.crashlytics.android.Crashlytics;
 import com.google.common.base.Strings;
 
 import org.ccci.gto.android.common.util.IOUtils;
+import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
@@ -23,6 +24,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+
+import static org.keynote.godtools.android.utils.Constants.INTERPRETER_HEADER;
+
 
 public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
@@ -151,6 +155,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
         getDownloadUrlConnection.setReadTimeout(90000 /* milliseconds */);
         getDownloadUrlConnection.setConnectTimeout(10000 /* milliseconds */);
         getDownloadUrlConnection.setRequestMethod("GET");
+        getDownloadUrlConnection.setRequestProperty(INTERPRETER_HEADER, BuildConfig.INTERPRETER_VERSION);
 
         if(!Strings.isNullOrEmpty(authorization))
         {

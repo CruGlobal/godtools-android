@@ -134,7 +134,8 @@ public class BackgroundService extends IntentService
         try {
             // verify that the specified auth_token is still valid
             final String authToken = intent.getStringExtra(ACCESS_CODE);
-            final Response<ResponseBody> response = GodToolsApi.INSTANCE.verifyAuthToken(authToken).execute();
+            final Response<ResponseBody> response = GodToolsApi.INSTANCE.verifyAuthToken(authToken)
+                    .execute();
 
             // a 204 response is successful
             if (response.code() == HttpURLConnection.HTTP_NO_CONTENT) {
