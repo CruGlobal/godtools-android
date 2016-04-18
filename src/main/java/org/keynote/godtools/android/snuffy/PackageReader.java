@@ -51,7 +51,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
@@ -93,7 +95,7 @@ public class PackageReader
     private Context mContext;
     private int mPageWidth;
     private int mPageHeight;
-    private Vector<SnuffyPage> mPages;
+    private List<SnuffyPage> mPages;
     private String mPackageTitle;
     private Typeface mAlternateTypeface;
     private String mImageFolderName;
@@ -116,21 +118,19 @@ public class PackageReader
         return mPackageTitle;
     }
 
-    public boolean processPackagePW(SnuffyApplication app,
-                                    int pageWidth,
-                                    int pageHeight,
-                                    String packageConfigName,
-                                    @Nullable final String status,
-                                    Vector<SnuffyPage> pages,
-                                    ProgressCallback progressCallback,
-                                    Typeface alternateTypeface,
-                                    String appPackage)
-    {
+    public List<SnuffyPage> processPackagePW(SnuffyApplication app,
+                                             int pageWidth,
+                                             int pageHeight,
+                                             String packageConfigName,
+                                             @Nullable final String status,
+                                             ProgressCallback progressCallback,
+                                             Typeface alternateTypeface,
+                                             String appPackage) {
         mAppRef = new WeakReference<>(app);
         mContext = app.getApplicationContext();
         mPageWidth = pageWidth;
         mPageHeight = pageHeight;
-        mPages = pages;
+        mPages = new ArrayList<>();
         mTotalBitmapSpace = 0;
         mImageFolderName = "resources/";
         mSharedFolderName = "shared/";
@@ -141,21 +141,22 @@ public class PackageReader
 
         // In the case where this package is replacing the previous package - release the memory occupied by the original
         bitmapCache.clear();
-        mPages.clear();
 
         // process the manifest
         try {
             final boolean forceReload = KEY_DRAFT.equalsIgnoreCase(status);
             final GtManifest manifest =
                     PackageManager.getInstance(mContext).getManifest(packageConfigName, mAppPackage, forceReload).get();
-            return processMainPackageFilePW(manifest);
+            if (processMainPackageFilePW(manifest)) {
+                return mPages;
+            }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            return false;
         } catch (ExecutionException e) {
             Log.e(TAG, "Error reading package manifest: " + packageConfigName);
-            return false;
         }
+
+        return null;
     }
 
     private boolean processMainPackageFilePW(@NonNull final GtManifest manifest) {

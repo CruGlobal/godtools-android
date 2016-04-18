@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 public class SnuffyPageMenuPWActivity extends ListActivity
 {
@@ -69,7 +68,7 @@ public class SnuffyPageMenuPWActivity extends ListActivity
         // on which we want to display the values defined in the from array
         int[] to = {R.id.list1Text, R.id.list1Image};
 
-        Vector<SnuffyPage> pages = app.getSnuffyPages();
+        List<SnuffyPage> pages = app.getSnuffyPages();
         if (pages != null) {
             for (SnuffyPage page : pages) {
                 map = new HashMap<>();
