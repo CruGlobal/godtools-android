@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -16,7 +18,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.Set;
 
-public class GtPage {
+public class GtPage extends GtModel {
     static final String XML_PAGE = "page";
     static final String XML_ABOUT = "about";
 
@@ -35,12 +37,9 @@ public class GtPage {
     @Nullable
     private GtFollowupModal mFollowupModal;
 
-    @NonNull
-    private final GtManifest mManifest;
-
     @VisibleForTesting
-    GtPage(@NonNull final GtManifest gtManifest) {
-        this.mManifest = gtManifest;
+    GtPage(@NonNull final GtManifest manifest) {
+        super(manifest);
     }
 
     public boolean isLoaded() {
@@ -69,9 +68,11 @@ public class GtPage {
         return mFollowupModal;
     }
 
-    @NonNull
-    public GtManifest getManifest() {
-        return mManifest;
+    @Nullable
+    @Override
+    public View render(@NonNull ViewGroup parent, boolean attachToParent) {
+        // TODO: should this actually render the page long term?
+        return null;
     }
 
     @WorkerThread
@@ -90,8 +91,8 @@ public class GtPage {
             throw new XmlPullParserException("Package XML does not have a filename defined for a page", parser, null);
         }
         mThumb = parser.getAttributeValue(null, XML_ATTR_THUMBNAIL);
-        mListeners = ParserUtils.parseEvents(parser.getAttributeValue(null, XML_ATTR_LISTENERS), mManifest
-                .getAppPackage());
+        mListeners = ParserUtils
+                .parseEvents(parser.getAttributeValue(null, XML_ATTR_LISTENERS), getManifest().getAppPackage());
         mDescription = XmlPullParserUtils.safeNextText(parser);
 
         return this;

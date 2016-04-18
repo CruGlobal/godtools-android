@@ -25,7 +25,7 @@ public abstract class GtModel {
     private static final String XML_ATTR_TOP_OFFSET = "yoffset";
 
     @NonNull
-    private final GtPage mPage;
+    private final GtModel mParentModel;
 
     @Nullable
     private Integer mWidth = null;
@@ -40,13 +40,21 @@ public abstract class GtModel {
     @Nullable
     private Integer mTopOffset = null;
 
-    GtModel(@NonNull final GtPage page) {
-        mPage = page;
+    // only allow GtManifest to use this constructor
+    GtModel() {
+        if (!(this instanceof GtManifest)) {
+            throw new IllegalArgumentException("cannot use the no-args constructor for anything except a Manifest");
+        }
+        mParentModel = this;
+    }
+
+    GtModel(@NonNull final GtModel model) {
+        mParentModel = model;
     }
 
     @NonNull
     public GtManifest getManifest() {
-        return getPage().getManifest();
+        return mParentModel.getManifest();
     }
 
     /**
@@ -54,7 +62,7 @@ public abstract class GtModel {
      */
     @NonNull
     public GtPage getPage() {
-        return mPage;
+        return mParentModel.getPage();
     }
 
     @Nullable
