@@ -108,6 +108,7 @@ public abstract class GtModel {
             case GtButton.XML_NEGATIVE_BUTTON:
                 return GtButton.fromXml(parent, parser);
             case GtButtonPair.XML_BUTTON_PAIR:
+                return GtButtonPair.fromXml(parent, parser);
             default:
                 XmlPullParserUtils.skipTag(parser);
                 return null;
@@ -135,6 +136,7 @@ public abstract class GtModel {
             case GtButton.XML_NEGATIVE_BUTTON:
                 return GtButton.fromXml(parent, node);
             case GtButtonPair.XML_BUTTON_PAIR:
+                return GtButtonPair.fromXml(parent, node);
             default:
                 return null;
         }
