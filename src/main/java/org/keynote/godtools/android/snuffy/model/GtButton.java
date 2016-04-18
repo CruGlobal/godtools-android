@@ -1,17 +1,19 @@
 package org.keynote.godtools.android.snuffy.model;
 
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.event.GodToolsEvent;
+import org.keynote.godtools.android.event.GodToolsEvent.EventID;
 import org.keynote.godtools.android.snuffy.ParserUtils;
 import org.w3c.dom.Element;
 import org.xmlpull.v1.XmlPullParser;
@@ -20,9 +22,11 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.Set;
 
-import static butterknife.ButterKnife.findById;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class GtButton extends GtModel implements View.OnClickListener {
+public class GtButton extends GtModel {
     public enum Mode {
         LINK, DEFAULT, UNKNOWN, PANEL;
 
@@ -54,10 +58,10 @@ public class GtButton extends GtModel implements View.OnClickListener {
     private static final String XML_ATTR_TAP_EVENTS = "tap-events";
 
     @NonNull
-    private Mode mMode = Mode.DEFAULT;
+    Mode mMode = Mode.DEFAULT;
     @NonNull
-    private Set<GodToolsEvent.EventID> mTapEvents = ImmutableSet.of();
-    private String mText;
+    Set<EventID> mTapEvents = ImmutableSet.of();
+    String mText;
 
     private GtButton(@NonNull final GtModel parent) {
         super(parent);
@@ -69,7 +73,7 @@ public class GtButton extends GtModel implements View.OnClickListener {
     }
 
     @NonNull
-    public Set<GodToolsEvent.EventID> getTapEvents() {
+    public Set<EventID> getTapEvents() {
         return mTapEvents;
     }
 
@@ -85,28 +89,20 @@ public class GtButton extends GtModel implements View.OnClickListener {
         // inflate the raw view
         final View view;
         switch (mMode) {
+            case LINK:
+                view = inflater.inflate(R.layout.gt_button_link, root, false);
+                break;
             default:
                 view = inflater.inflate(R.layout.gt_button_default, root, false);
-                if (attachToRoot) {
-                    root.addView(view);
-                }
                 break;
         }
-
-        // customize button if necessary
-        final Button button = findById(view, R.id.gtButton);
-        if (button != null) {
-            button.setText(mText);
-            button.setOnClickListener(this);
+        if (attachToRoot) {
+            root.addView(view);
         }
+        new ViewHolder(view);
 
         applyLayout(view, scale);
         return view;
-    }
-
-    @Override
-    public void onClick(@NonNull final View v) {
-        // TODO
     }
 
     @NonNull
@@ -205,6 +201,32 @@ public class GtButton extends GtModel implements View.OnClickListener {
                 break;
             default:
                 mText = ParserUtils.getTextContentImmediate(node);
+        }
+    }
+
+    class ViewHolder {
+        @NonNull
+        private final View mRoot;
+
+        @Bind(R.id.gtButton)
+        TextView mButton;
+
+        ViewHolder(@NonNull final View root) {
+            mRoot = root;
+            ButterKnife.bind(this, mRoot);
+
+            // customize button if necessary
+            if (mButton != null) {
+                mButton.setText(mText);
+
+                if (mMode == Mode.LINK) {
+                    mButton.setPaintFlags(mButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                }
+            }
+        }
+
+        @OnClick(R.id.gtButton)
+        void onClick() {
         }
     }
 }
