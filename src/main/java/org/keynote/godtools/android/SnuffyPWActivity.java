@@ -41,6 +41,7 @@ import org.keynote.godtools.android.business.GSSubscriber;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.event.GodToolsEvent;
+import org.keynote.godtools.android.event.GodToolsEvent.EventID;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
@@ -80,7 +81,7 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 public class SnuffyPWActivity extends AppCompatActivity
 {
     private static final String TAG = "SnuffyActivity";
-    private static final GodToolsEvent.EventID SUBSCRIBE_EVENT = new GodToolsEvent.EventID("followup", "subscribe");
+    private static final EventID SUBSCRIBE_EVENT = new EventID("followup", "subscribe");
 
     private String mAppPackage;
     private String mConfigFileName;
@@ -201,6 +202,15 @@ public class SnuffyPWActivity extends AppCompatActivity
         updateDisplayedPages(pages);
     }
 
+    @Subscribe
+    public boolean onGodToolsEvent(@NonNull final GodToolsEvent event) {
+        if (event.getEventID().equals(SUBSCRIBE_EVENT)) {
+            return triggerSubscribeEvent(event);
+        } else {
+            return triggerLocalPageNavigation(event.getEventID());
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -310,6 +320,25 @@ public class SnuffyPWActivity extends AppCompatActivity
         updateAppPages();
     }
 
+    private boolean triggerLocalPageNavigation(@NonNull final EventID event) {
+        if (mPages != null) {
+            for (int x = 0; x < mPages.size(); x++) {
+                if (mPages.get(x).getModel().getListeners().contains(event)) {
+                    mPager.setCurrentItem(x);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean triggerSubscribeEvent(@NonNull final GodToolsEvent event) {
+        addGSSubscriberToDB(event);
+        GodToolsSyncService.syncGrowthSpacesSubscribers(this);
+        return true;
+    }
+
     protected void onResume()
     {
         super.onResume();
@@ -344,29 +373,6 @@ public class SnuffyPWActivity extends AppCompatActivity
 
         EventBus.getDefault().unregister(this);
         super.onStop();
-    }
-
-    @Subscribe
-    public void onGodToolsEvent(GodToolsEvent event){
-        for(int x = 0; x < mPages.size(); x++) {
-            SnuffyPage snuffyPage = mPages.get(x);
-
-            for(GodToolsEvent.EventID listener : snuffyPage.getModel().getListeners())
-            {
-                //if the event passed to this method equals a listener, jump to that page
-                if(event.getEventID().equals(listener)) {
-                    //todo in the future will jump to a different package if the namespace calls for it
-                    mPager.setCurrentItem(x);
-                }
-            }
-        }
-
-        if(event.getEventID().equals(SUBSCRIBE_EVENT))
-        {
-            addGSSubscriberToDB(event);
-
-            GodToolsSyncService.syncGrowthSpacesSubscribers(this);
-        }
     }
 
     private void addGSSubscriberToDB(GodToolsEvent event) {
