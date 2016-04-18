@@ -28,7 +28,8 @@ ext.deps = [
         gtoSupport           : '0.9.0-SNAPSHOT',
         guava                : '19.0',
         junit                : '4.12',
-        playServices         : '8.4.0'
+        playServices         : '8.4.0',
+        retrofit2            : '2.0.2'
 ]
 
 dependencies {
@@ -49,8 +50,8 @@ dependencies {
     compile 'com.google.guava:guava:' + deps.guava
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
-    compile 'com.squareup.retrofit2:retrofit:2.0.0'
+    compile 'com.squareup.retrofit2:retrofit:' + deps.retrofit2
+    compile 'com.squareup.retrofit2:converter-gson:' + deps.retrofit2
 
     compile 'org.apache.commons:commons-lang3:3.4'
 
