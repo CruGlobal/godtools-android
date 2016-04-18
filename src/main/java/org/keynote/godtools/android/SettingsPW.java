@@ -30,11 +30,9 @@ import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
 import org.keynote.godtools.android.fragments.ConfirmDialogFragment;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.service.BackgroundService;
-import org.keynote.godtools.android.snuffy.SnuffyAlternateTypefaceTextView;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
-import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
-import org.keynote.godtools.android.utils.Typefaces;
+import org.keynote.godtools.android.utils.TypefaceUtils;
 
 import java.util.Locale;
 
@@ -61,7 +59,6 @@ public class SettingsPW extends BaseActionBarActivity implements
     private TextView tvParallelLanguage;
     private CompoundButton cbTranslatorMode;
     private CompoundButton cbNotificationsAllowed;
-    private Typeface mAlternateTypeface;
 
     private ProgressDialog pdLoading;
 
@@ -105,9 +102,8 @@ public class SettingsPW extends BaseActionBarActivity implements
         String primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
         String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
 
-        handleLanguagesWithAlternateFonts(primaryLanguageCode);
-        tvMainLanguage = new SnuffyAlternateTypefaceTextView(tvMainLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.NORMAL).get();
-        tvParallelLanguage = new SnuffyAlternateTypefaceTextView(tvParallelLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.NORMAL).get();
+        tvMainLanguage = TypefaceUtils.setTypeface(tvMainLanguage, primaryLanguageCode, Typeface.NORMAL);
+        tvParallelLanguage = TypefaceUtils.setTypeface(tvParallelLanguage, primaryLanguageCode, Typeface.NORMAL);
 
         // set up translator switch
         cbTranslatorMode.setChecked(isTranslatorEnabled);
@@ -210,9 +206,8 @@ public class SettingsPW extends BaseActionBarActivity implements
             {
                 String languagePrimary = data.getStringExtra("primaryCode");
 
-                handleLanguagesWithAlternateFonts(languagePrimary);
-                tvMainLanguage = new SnuffyAlternateTypefaceTextView(tvMainLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.BOLD).get();
-                tvParallelLanguage = new SnuffyAlternateTypefaceTextView(tvParallelLanguage).setAlternateTypeface(mAlternateTypeface, Typeface.BOLD).get();
+                tvMainLanguage = TypefaceUtils.setTypeface(tvMainLanguage, languagePrimary, Typeface.BOLD);
+                tvParallelLanguage = TypefaceUtils.setTypeface(tvParallelLanguage, languagePrimary, Typeface.BOLD);
 
                 // set value for primary language view
                 Locale localePrimary = LocaleCompat.forLanguageTag(languagePrimary);
@@ -406,18 +401,6 @@ public class SettingsPW extends BaseActionBarActivity implements
         pdLoading.setMessage(msg);
         pdLoading.show();
 
-    }
-
-    private void handleLanguagesWithAlternateFonts(String mAppLanguage)
-    {
-        if (LanguagesNotSupportedByDefaultFont.contains(mAppLanguage))
-        {
-            mAlternateTypeface = Typefaces.get(getApplication(), LanguagesNotSupportedByDefaultFont.getPathToAlternateFont(mAppLanguage));
-        }
-        else
-        {
-            mAlternateTypeface = Typeface.DEFAULT;
-        }
     }
 
     private void updateDeviceWithAPI(boolean notificationsOn)

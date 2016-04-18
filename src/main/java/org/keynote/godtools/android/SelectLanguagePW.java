@@ -29,8 +29,7 @@ import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.tasks.DeletedPackageRemovalTask;
 import org.keynote.godtools.android.utils.Device;
-import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
-import org.keynote.godtools.android.utils.Typefaces;
+import org.keynote.godtools.android.utils.TypefaceUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,7 +56,6 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     private String parallelLanguage;
     private String currentLanguage;
     private Boolean isTranslator;
-    private Typeface mAlternateTypeface;
     private String languageType;
     private Intent returnIntent;
     private boolean userIsSelectingPrimaryLanguage;
@@ -88,8 +86,6 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
         Log.i(TAG, "primary: " + primaryLanguage);
         Log.i(TAG, "parallel: " + parallelLanguage);
-
-        handleLanguagesWithAlternateFonts(primaryLanguage);
     }
 
     /**
@@ -319,18 +315,6 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         }
     }
 
-    private void handleLanguagesWithAlternateFonts(String mAppLanguage)
-    {
-        if (LanguagesNotSupportedByDefaultFont.contains(mAppLanguage))
-        {
-            mAlternateTypeface = Typefaces.get(getApplication(), LanguagesNotSupportedByDefaultFont.getPathToAlternateFont(mAppLanguage));
-        }
-        else
-        {
-            mAlternateTypeface = Typeface.DEFAULT;
-        }
-    }
-
     private void itemOnClickAction(GTLanguage language)
     {
         setListLocation();
@@ -496,7 +480,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             }
 
             final GTLanguage gtl = mLanguageList.get(position);
-            holder.tvLanguage.setTypeface(mAlternateTypeface, Typeface.NORMAL);
+            TypefaceUtils.setTypeface(holder.tvLanguage, primaryLanguage, Typeface.NORMAL);
             holder.tvLanguage.setText(gtl.getLanguageName());
 
             if (gtl.isDownloaded())

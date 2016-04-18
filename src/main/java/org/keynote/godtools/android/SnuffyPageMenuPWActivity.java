@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -21,8 +20,7 @@ import com.crashlytics.android.Crashlytics;
 
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.snuffy.SnuffyPage;
-import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
-import org.keynote.godtools.android.utils.Typefaces;
+import org.keynote.godtools.android.utils.TypefaceUtils;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -190,18 +188,11 @@ public class SnuffyPageMenuPWActivity extends ListActivity
         {
             View view = super.getView(position, convertView, parent);
 
-            if (LanguagesNotSupportedByDefaultFont.contains(mLanguageCode))
-            {
-                if (view instanceof LinearLayout)
-                {
-                    LinearLayout layout = (LinearLayout) view;
-                    for (int i = 0; i < layout.getChildCount(); i++)
-                    {
-                        if (layout.getChildAt(i) instanceof TextView)
-                        {
-                            TextView internalTextView = (TextView) layout.getChildAt(i);
-                            internalTextView.setTypeface(Typefaces.get(getApplicationContext(), LanguagesNotSupportedByDefaultFont.getPathToAlternateFont(mLanguageCode)));
-                        }
+            if (view instanceof ViewGroup) {
+                ViewGroup layout = (ViewGroup) view;
+                for (int i = 0; i < layout.getChildCount(); i++) {
+                    if (layout.getChildAt(i) instanceof TextView) {
+                        TypefaceUtils.setTypeface((TextView) layout.getChildAt(i), mLanguageCode);
                     }
                 }
             }
