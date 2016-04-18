@@ -43,10 +43,14 @@ public class GtManifest extends GtModel {
         return this;
     }
 
-    @NonNull
+    @Nullable
     @Override
     public GtPage getPage() {
-        throw new IllegalStateException("It is impossible for a page to contain a Manifest");
+        if (BuildConfig.DEBUG) {
+            throw new IllegalStateException("It is impossible for a page to contain a Manifest");
+        }
+
+        return null;
     }
 
     public String getTitle() {

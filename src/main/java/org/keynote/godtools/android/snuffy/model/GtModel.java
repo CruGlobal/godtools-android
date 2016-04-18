@@ -60,7 +60,7 @@ public abstract class GtModel {
     /**
      * @return the page that contains this model.
      */
-    @NonNull
+    @Nullable
     public GtPage getPage() {
         return mParentModel.getPage();
     }

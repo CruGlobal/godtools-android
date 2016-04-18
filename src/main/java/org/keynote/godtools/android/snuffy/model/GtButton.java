@@ -82,7 +82,7 @@ public class GtButton extends GtModel {
         return mText;
     }
 
-    @NonNull
+    @Nullable
     @Override
     public View render(@NonNull final ViewGroup root, final double scale, final boolean attachToRoot) {
         final LayoutInflater inflater = LayoutInflater.from(root.getContext());
@@ -90,6 +90,8 @@ public class GtButton extends GtModel {
         // inflate the raw view
         final View view;
         switch (mMode) {
+            case PANEL:
+                return null;
             case LINK:
                 view = inflater.inflate(R.layout.gt_button_link, root, false);
                 break;
