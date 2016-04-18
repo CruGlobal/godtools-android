@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.event.GodToolsEvent.EventID;
@@ -208,6 +209,7 @@ public class GtButton extends GtModel {
         @NonNull
         private final View mRoot;
 
+        @Nullable
         @Bind(R.id.gtButton)
         TextView mButton;
 
@@ -227,6 +229,12 @@ public class GtButton extends GtModel {
 
         @OnClick(R.id.gtButton)
         void onClick() {
+            // trigger any configured tap events
+            for (final EventID event : mTapEvents) {
+                EventBus.getDefault().post(new GodToolsEvent(event));
+
+                // TODO: detect followup:subscribe event & add any input fields
+            }
         }
     }
 }
