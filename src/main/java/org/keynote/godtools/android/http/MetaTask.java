@@ -10,6 +10,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+import static org.keynote.godtools.android.BuildConfig.INTERPRETER;
+
 public class MetaTask extends AsyncTask<Object, Void, List<GTLanguage>>
 {
 
@@ -71,6 +73,8 @@ public class MetaTask extends AsyncTask<Object, Void, List<GTLanguage>>
         connection.setReadTimeout(10000 /* milliseconds */);
         connection.setConnectTimeout(15000 /* milliseconds */);
         connection.setRequestMethod("GET");
+        connection.setRequestProperty("interpreter", INTERPRETER);
+
         return connection;
     }
 }

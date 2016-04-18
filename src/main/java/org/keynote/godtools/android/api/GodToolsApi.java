@@ -23,13 +23,14 @@ public interface GodToolsApi {
             .create(GodToolsApi.class);
 
     @POST(AUTH + "/{code}")
-    Call<ResponseBody> getAuthToken(@Path("code") String code);
+    Call<ResponseBody> getAuthToken(@Path("code") String code, @Header("interpreter") String interpreter);
 
     @GET(AUTH + "/status")
-    Call<ResponseBody> verifyAuthToken(@Header(AUTHORIZATION) String token);
+    Call<ResponseBody> verifyAuthToken(@Header(AUTHORIZATION) String token, @Header("interpreter") String interpreter);
 
     @POST(NOTIFICATION + "/{registrationId}")
     Call<ResponseBody> registerDeviceForNotifications(@Path("registrationId") String regId,
                                                       @Header("deviceId") String deviceId,
+                                                      @Header("interpreter") String interpreter,
                                                       @Header("notificationsOn") boolean enableNotifications);
 }

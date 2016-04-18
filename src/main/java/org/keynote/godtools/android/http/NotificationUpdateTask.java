@@ -16,6 +16,9 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
 
+import static org.keynote.godtools.android.BuildConfig.INTERPRETER;
+
+
 /**
  * Created by matthewfrederick on 1/5/15.
  */
@@ -63,6 +66,7 @@ public class NotificationUpdateTask extends AsyncTask<Object, Void, String>
             HttpPost request = new HttpPost(url);
             Log.i(TAG, url);
             request.setHeader("Authorization", authcode);
+            request.setHeader("interpreter", INTERPRETER);
 
             StringEntity stringEntity = new StringEntity(jsonObject.toString());
             stringEntity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));

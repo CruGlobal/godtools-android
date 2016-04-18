@@ -24,6 +24,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+import static org.keynote.godtools.android.BuildConfig.INTERPRETER;
+
 public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
     private DownloadTaskHandler mTaskHandler;
@@ -151,6 +153,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
         getDownloadUrlConnection.setReadTimeout(90000 /* milliseconds */);
         getDownloadUrlConnection.setConnectTimeout(10000 /* milliseconds */);
         getDownloadUrlConnection.setRequestMethod("GET");
+        getDownloadUrlConnection.setRequestProperty("interpreter", INTERPRETER);
 
         if(!Strings.isNullOrEmpty(authorization))
         {
