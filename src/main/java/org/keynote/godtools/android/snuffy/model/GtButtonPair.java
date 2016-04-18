@@ -1,6 +1,9 @@
 package org.keynote.godtools.android.snuffy.model;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.view.View;
+import android.view.ViewGroup;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.xmlpull.v1.XmlPullParser;
@@ -8,17 +11,14 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-public class GtButtonPair {
+public class GtButtonPair extends GtModel {
     static final String XML_BUTTON_PAIR = "button-pair";
 
     private GtButton mPositiveButton;
     private GtButton mNegativeButton;
 
-    @NonNull
-    private final GtPage mPage;
-
-    private GtButtonPair(@NonNull final GtPage gtPage) {
-        mPage = gtPage;
+    private GtButtonPair(@NonNull final GtModel parent) {
+        super(parent);
     }
 
     public GtButton getPositiveButton() {
@@ -29,14 +29,22 @@ public class GtButtonPair {
         return mNegativeButton;
     }
 
-    @NonNull
-    static GtButtonPair fromXml(@NonNull final GtPage gtPage, @NonNull final XmlPullParser parser) throws IOException,
-            XmlPullParserException {
-        return new GtButtonPair(gtPage).parse(parser);
+    @Nullable
+    @Override
+    public View render(@NonNull ViewGroup parent, boolean attachToParent) {
+        // TODO
+        return null;
     }
 
     @NonNull
-    private GtButtonPair parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
+    public static GtButtonPair fromXml(@NonNull final GtModel parent, @NonNull final XmlPullParser parser)
+            throws IOException, XmlPullParserException {
+        final GtButtonPair buttonPair = new GtButtonPair(parent);
+        buttonPair.parse(parser);
+        return buttonPair;
+    }
+
+    private void parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, null, XML_BUTTON_PAIR);
 
         // loop until we reach the matching end tag for this element
@@ -53,21 +61,19 @@ public class GtButtonPair {
                         throw new XmlPullParserException(
                                 "XML has more than 1 " + GtButton.XML_POSITIVE_BUTTON + " defined", parser, null);
                     }
-                    mPositiveButton = GtButton.fromXml(mPage, parser);
+                    mPositiveButton = GtButton.fromXml(this, parser);
                     break;
                 case GtButton.XML_NEGATIVE_BUTTON:
                     if (mNegativeButton != null) {
                         throw new XmlPullParserException(
                                 "XML has more than 1 " + GtButton.XML_NEGATIVE_BUTTON + " defined", parser, null);
                     }
-                    mNegativeButton = GtButton.fromXml(mPage, parser);
+                    mNegativeButton = GtButton.fromXml(this, parser);
                     break;
                 default:
                     // skip unrecognized nodes
                     XmlPullParserUtils.skipTag(parser);
             }
         }
-
-        return this;
     }
 }

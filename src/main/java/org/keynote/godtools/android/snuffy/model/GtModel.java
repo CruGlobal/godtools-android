@@ -96,7 +96,7 @@ public abstract class GtModel {
     }
 
     @Nullable
-    public static GtModel fromXml(@NonNull final GtPage page, @NonNull final XmlPullParser parser)
+    public static GtModel fromXml(@NonNull final GtModel parent, @NonNull final XmlPullParser parser)
             throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, null, null);
 
@@ -106,7 +106,7 @@ public abstract class GtModel {
             case GtButton.XML_LINK_BUTTON:
             case GtButton.XML_POSITIVE_BUTTON:
             case GtButton.XML_NEGATIVE_BUTTON:
-                return GtButton.fromXml(page, parser);
+                return GtButton.fromXml(parent, parser);
             case GtButtonPair.XML_BUTTON_PAIR:
             default:
                 XmlPullParserUtils.skipTag(parser);
@@ -127,13 +127,13 @@ public abstract class GtModel {
 
     @Nullable
     @Deprecated
-    public static GtModel fromXml(@NonNull final GtPage page, @NonNull final Element node) {
+    public static GtModel fromXml(@NonNull final GtModel parent, @NonNull final Element node) {
         switch (node.getTagName()) {
             case GtButton.XML_BUTTON:
             case GtButton.XML_LINK_BUTTON:
             case GtButton.XML_POSITIVE_BUTTON:
             case GtButton.XML_NEGATIVE_BUTTON:
-                return GtButton.fromXml(page, node);
+                return GtButton.fromXml(parent, node);
             case GtButtonPair.XML_BUTTON_PAIR:
             default:
                 return null;
