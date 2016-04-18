@@ -15,9 +15,9 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
+import org.keynote.godtools.android.BuildConfig;
 
-import static org.keynote.godtools.android.BuildConfig.INTERPRETER;
-
+import static org.keynote.godtools.android.utils.Constants.INTERPRETER_HEADER;
 
 /**
  * Created by matthewfrederick on 1/5/15.
@@ -66,7 +66,7 @@ public class NotificationUpdateTask extends AsyncTask<Object, Void, String>
             HttpPost request = new HttpPost(url);
             Log.i(TAG, url);
             request.setHeader("Authorization", authcode);
-            request.setHeader("interpreter", INTERPRETER);
+            request.setHeader(INTERPRETER_HEADER, BuildConfig.INTERPRETER_VERSION);
 
             StringEntity stringEntity = new StringEntity(jsonObject.toString());
             stringEntity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));

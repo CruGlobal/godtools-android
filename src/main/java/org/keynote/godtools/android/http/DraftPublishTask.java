@@ -8,10 +8,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.keynote.godtools.android.BuildConfig;
+
+import static org.keynote.godtools.android.utils.Constants.INTERPRETER_HEADER;
 
 import java.io.IOException;
-
-import static org.keynote.godtools.android.BuildConfig.INTERPRETER;
 
 /**
  * Created by ryancarlson on 9/10/14.
@@ -41,7 +42,7 @@ public class DraftPublishTask extends AsyncTask<Object, Void, Integer>
         request.setHeader("Accept", "application/xml");
         request.setHeader("Content-type", "application/xml");
         request.setHeader("Authorization", authorization);
-        request.setHeader("interpreter", INTERPRETER);
+        request.setHeader(INTERPRETER_HEADER, BuildConfig.INTERPRETER_VERSION);
 
         HttpParams httpParams = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParams, 10000);

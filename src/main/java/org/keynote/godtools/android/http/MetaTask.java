@@ -2,6 +2,7 @@ package org.keynote.godtools.android.http;
 
 import android.os.AsyncTask;
 
+import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackageReader;
 
@@ -10,7 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-import static org.keynote.godtools.android.BuildConfig.INTERPRETER;
+import static org.keynote.godtools.android.utils.Constants.INTERPRETER_HEADER;
 
 public class MetaTask extends AsyncTask<Object, Void, List<GTLanguage>>
 {
@@ -73,7 +74,7 @@ public class MetaTask extends AsyncTask<Object, Void, List<GTLanguage>>
         connection.setReadTimeout(10000 /* milliseconds */);
         connection.setConnectTimeout(15000 /* milliseconds */);
         connection.setRequestMethod("GET");
-        connection.setRequestProperty("interpreter", INTERPRETER);
+        connection.setRequestProperty(INTERPRETER_HEADER, BuildConfig.INTERPRETER_VERSION);
 
         return connection;
     }

@@ -35,7 +35,6 @@ import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.REGISTRATION_ID;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 import static org.keynote.godtools.android.utils.Constants.TYPE;
-import static org.keynote.godtools.android.BuildConfig.INTERPRETER;
 
 /**
  * Created by matthewfrederick on 5/4/15.
@@ -99,7 +98,6 @@ public class BackgroundService extends IntentService
             final Response<ResponseBody> response = GodToolsApi.INSTANCE
                     .registerDeviceForNotifications(intent.getStringExtra(REGISTRATION_ID),
                                                     intent.getStringExtra(DEVICE_ID),
-                                                    INTERPRETER,
                                                     intent.getBooleanExtra(NOTIFICATIONS_ON, true)).execute();
 
             if (response.isSuccessful()) {
@@ -116,7 +114,7 @@ public class BackgroundService extends IntentService
         try {
             // get an auth token for the specified access_code
             final Response<ResponseBody> response =
-                    GodToolsApi.INSTANCE.getAuthToken(intent.getStringExtra(ACCESS_CODE), INTERPRETER).execute();
+                    GodToolsApi.INSTANCE.getAuthToken(intent.getStringExtra(ACCESS_CODE)).execute();
 
             // a 204 response is successful, auth_token is in the Authorization header
             if (response.code() == HttpURLConnection.HTTP_NO_CONTENT) {
@@ -136,7 +134,7 @@ public class BackgroundService extends IntentService
         try {
             // verify that the specified auth_token is still valid
             final String authToken = intent.getStringExtra(ACCESS_CODE);
-            final Response<ResponseBody> response = GodToolsApi.INSTANCE.verifyAuthToken(authToken, INTERPRETER)
+            final Response<ResponseBody> response = GodToolsApi.INSTANCE.verifyAuthToken(authToken)
                     .execute();
 
             // a 204 response is successful
