@@ -72,12 +72,12 @@ import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
 public class PackageReader
 {
     private static final int REFERENCE_DEVICE_HEIGHT = 480;    // pixels on iPhone - including status bar
+    private static final int REFERENCE_DEVICE_WIDTH = 320;    // pixels on iPhone - full width
 
     // Note that these coords are those used in the Package .XML files.
     // They are based on an original iPhone (480x320), with the status bar removed
     // The similar specs in Main.java and the HomeScreen layout in the GodTools app are based on
     // an iPhone4S with retina display (960x640), with the status bar removed.
-    private static final int REFERENCE_DEVICE_WIDTH = 320;    // pixels on iPhone - full width
     private static final String TAG = "PackageReader";
     private static final float DEFAULT_TEXT_SIZE = 17.0f;
     private static final float DEFAULT_BUTTON_TEXT_SIZE = 20.0f;
@@ -105,6 +105,7 @@ public class PackageReader
     private String mImageFolderName;
     private String mSharedFolderName;
     private int mBackgroundColor;
+    private double mScale;
     private int mYOffsetPerItem;
     private int mYOffset;
     private int mYOffsetInPanel;
@@ -136,6 +137,7 @@ public class PackageReader
         mContext = app.getApplicationContext();
         mPageWidth = pageWidth;
         mPageHeight = pageHeight;
+        mScale = ((double) pageWidth) / ((double) REFERENCE_DEVICE_WIDTH);
         mPages = new ArrayList<>();
         mTotalBitmapSpace = 0;
         mImageFolderName = "resources/";
@@ -2259,22 +2261,19 @@ public class PackageReader
         view.setLayoutParams(lp);
     }
 
-    private int getScaledXValue(int x)
-    {
-        return (int) Math.round((double) (x * mPageWidth) / (double) REFERENCE_DEVICE_WIDTH);
+    private int getScaledXValue(final int x) {
+        return (int) Math.round(mScale * x);
     }
 
-    private int getScaledYValue(int y)
-    {
-        return (int) Math.round((double) (y * mPageHeight) / (double) REFERENCE_DEVICE_HEIGHT);
+    private int getScaledYValue(final int y) {
+        return (int) Math.round(mScale * y);
     }
 
-    private float getScaledTextSize(float textSize)
-    {
+    private float getScaledTextSize(final float textSize) {
         // textSize is supplied is SP units.
         // return a value in DP units.
         final float scale = mContext.getResources().getDisplayMetrics().density;
-        return (textSize * (float) mPageHeight / (float) REFERENCE_DEVICE_HEIGHT) / scale;
+        return (float) (textSize * mScale) / scale;
     }
 
     private int getColorAttributeValue(Element el, int defaultValue)
