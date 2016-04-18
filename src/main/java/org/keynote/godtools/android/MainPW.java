@@ -44,6 +44,7 @@ import org.keynote.godtools.android.notifications.NotificationsClient;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.support.v4.content.LivePackagesLoader;
+import org.keynote.godtools.android.utils.TypefaceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -221,6 +222,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 layout.getLayout().setClickable(true);
                 layout.getLayout().setOnClickListener(this);
                 layout.getTextView().setText(gtPackage.getName());
+                TypefaceUtils.setTypeface(layout.getTextView(), gtPackage.getLanguage());
 
                 if (KGP.equals(gtPackage.getCode()))
                     layout.getImageView().setImageResource(R.drawable.gt4_homescreen_kgpicon);
