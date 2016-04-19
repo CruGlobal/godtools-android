@@ -31,6 +31,8 @@ public class GtPage extends GtModel {
 
     private boolean mLoaded = false;
 
+    @NonNull
+    private String mId = "";
     private String mFileName;
     private String mThumb;
     private String mDescription;
@@ -47,6 +49,15 @@ public class GtPage extends GtModel {
 
     public boolean isLoaded() {
         return mLoaded;
+    }
+
+    void setId(@NonNull final String id) {
+        mId = id;
+    }
+
+    @NonNull
+    public String getId() {
+        return mId;
     }
 
     public String getFileName() {
@@ -95,7 +106,7 @@ public class GtPage extends GtModel {
         }
         mThumb = parser.getAttributeValue(null, XML_ATTR_THUMBNAIL);
         mListeners = ParserUtils
-                .parseEvents(parser.getAttributeValue(null, XML_ATTR_LISTENERS), getManifest().getAppPackage());
+                .parseEvents(parser.getAttributeValue(null, XML_ATTR_LISTENERS), getManifest().getPackageCode());
         mDescription = XmlPullParserUtils.safeNextText(parser);
 
         return this;
