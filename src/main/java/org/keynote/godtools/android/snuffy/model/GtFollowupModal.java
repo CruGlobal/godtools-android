@@ -23,6 +23,7 @@ public class GtFollowupModal {
 
     @NonNull
     private final GtPage mPage;
+    private String mId = "";
 
     private long mFollowupId = Followup.INVALID_ID;
     private String mTitle;
@@ -37,6 +38,14 @@ public class GtFollowupModal {
     @NonNull
     public GtPage getPage() {
         return mPage;
+    }
+
+    public String getId() {
+        return mId;
+    }
+
+    void setId(@NonNull final String id) {
+        mId = id;
     }
 
     public long getFollowupId() {
