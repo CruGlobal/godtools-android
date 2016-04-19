@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.snuffy.model;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
@@ -29,6 +30,9 @@ public class GtPage extends GtModel {
     private static final String XML_ATTR_THUMBNAIL = "thumb";
     private static final String XML_ATTR_LISTENERS = "listeners";
 
+    private static final String XML_ATTR_COLOR = "color";
+    private static final String XML_ATTR_WATERMARK = "watermark";
+
     private boolean mLoaded = false;
 
     @NonNull
@@ -36,6 +40,10 @@ public class GtPage extends GtModel {
     private String mFileName;
     private String mThumb;
     private String mDescription;
+    @Nullable
+    private Integer mColor;
+    @Nullable
+    private String mWatermark;
     @NonNull
     private Set<GodToolsEvent.EventID> mListeners = ImmutableSet.of();
 
@@ -45,10 +53,6 @@ public class GtPage extends GtModel {
     @VisibleForTesting
     GtPage(@NonNull final GtManifest manifest) {
         super(manifest);
-    }
-
-    public boolean isLoaded() {
-        return mLoaded;
     }
 
     void setId(@NonNull final String id) {
@@ -72,6 +76,16 @@ public class GtPage extends GtModel {
         return mDescription;
     }
 
+    @Nullable
+    public Integer getColor() {
+        return mColor;
+    }
+
+    @Nullable
+    public String getWatermark() {
+        return mWatermark;
+    }
+
     @NonNull
     public Set<GodToolsEvent.EventID> getListeners() {
         return mListeners;
@@ -90,12 +104,14 @@ public class GtPage extends GtModel {
     }
 
     @WorkerThread
-    static GtPage fromManifestXml(@NonNull final GtManifest gtManifest, final XmlPullParser parser)
+    static GtPage fromManifestXml(@NonNull final GtManifest manifest, final XmlPullParser parser)
             throws IOException, XmlPullParserException {
-        return new GtPage(gtManifest).parseManifestXml(parser);
+        final GtPage page = new GtPage(manifest);
+        page.parseManifestXml(parser);
+        return page;
     }
 
-    private GtPage parseManifestXml(final XmlPullParser parser) throws IOException, XmlPullParserException {
+    private void parseManifestXml(final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, null, null);
         XmlPullParserUtils.requireAnyName(parser, XML_PAGE, XML_ABOUT);
 
@@ -107,9 +123,8 @@ public class GtPage extends GtModel {
         mThumb = parser.getAttributeValue(null, XML_ATTR_THUMBNAIL);
         mListeners = ParserUtils
                 .parseEvents(parser.getAttributeValue(null, XML_ATTR_LISTENERS), getManifest().getPackageCode());
-        mDescription = XmlPullParserUtils.safeNextText(parser);
 
-        return this;
+        mDescription = XmlPullParserUtils.safeNextText(parser);
     }
 
     @WorkerThread
@@ -120,6 +135,17 @@ public class GtPage extends GtModel {
             }
 
             parser.require(XmlPullParser.START_TAG, null, XML_PAGE);
+
+            // handle any local attributes
+            final String rawColor = parser.getAttributeValue(null, XML_ATTR_COLOR);
+            if (rawColor != null) {
+                try {
+                    mColor = Color.parseColor(rawColor);
+                } catch (final IllegalArgumentException e) {
+                    mColor = null;
+                }
+            }
+            mWatermark = parser.getAttributeValue(null, XML_ATTR_WATERMARK);
 
             // loop until we reach the matching end tag for this element
             while (parser.next() != XmlPullParser.END_TAG) {
