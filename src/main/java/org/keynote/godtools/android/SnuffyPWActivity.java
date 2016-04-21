@@ -773,6 +773,9 @@ public class SnuffyPWActivity extends AppCompatActivity
                         mConfigFileName, mPackageStatus,
                         ProcessPackageAsync.this,
                         mAppPackage,
+                        // send along the language we are loading. if there is a parallel language configured and we
+                        // are not showing the primary language, send the parallel language. Otherwise send the primary
+                        // language
                         !isUsingPrimaryLanguage && mParallelPackage != null ? mParallelPackage.getLanguage() : mAppLanguage
                 );
             }
