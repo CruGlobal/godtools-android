@@ -1,7 +1,7 @@
 package org.keynote.godtools.android.snuffy.model;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -27,6 +27,8 @@ import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static org.keynote.godtools.android.snuffy.Constants.DEFAULT_BACKGROUND_COLOR;
 
 public class GtFollowupModal extends GtModel {
     static final String XML_FOLLOWUP_MODAL = "followup-modal";
@@ -71,10 +73,12 @@ public class GtFollowupModal extends GtModel {
         return mListeners;
     }
 
-    public Integer getColor() {
+    @ColorInt
+    @Nullable
+    Integer getBackgroundColor() {
         final GtPage page = getPage();
         if (page != null) {
-            return page.getColor();
+            return page.getBackgroundColor();
         }
         return null;
     }
@@ -203,8 +207,8 @@ public class GtFollowupModal extends GtModel {
 
         private void updateBackground() {
             // update the background color & watermark
-            final Integer color = getColor();
-            mRoot.setBackgroundColor(color != null ? color : Color.TRANSPARENT);
+            final Integer color = getBackgroundColor();
+            mRoot.setBackgroundColor(color != null ? color : DEFAULT_BACKGROUND_COLOR);
         }
 
         private void updateTitle() {

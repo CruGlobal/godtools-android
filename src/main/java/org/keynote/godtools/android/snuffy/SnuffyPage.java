@@ -15,7 +15,7 @@ public class SnuffyPage extends SnuffyLayout
     private static final String TAG = "SnuffyPage";
 
     @NonNull
-    public final GtPage mModel;
+    private final GtPage mModel;
 
     public String mDescription;
     public String mThumbnail;

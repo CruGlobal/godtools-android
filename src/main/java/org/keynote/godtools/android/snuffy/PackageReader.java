@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.ClipboardManager;
@@ -64,6 +65,7 @@ import java.util.concurrent.ExecutionException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import static org.keynote.godtools.android.snuffy.Constants.DEFAULT_BACKGROUND_COLOR;
 import static org.keynote.godtools.android.snuffy.ParserUtils.getChildElementNamed;
 import static org.keynote.godtools.android.snuffy.ParserUtils.getChildrenNamed;
 import static org.keynote.godtools.android.snuffy.ParserUtils.getTextContentImmediate;
@@ -85,7 +87,6 @@ public class PackageReader
     private static final float DEFAULT_BUTTON_TEXT_SIZE = 20.0f;
     private static final float DEFAULT_QUESTION_TEXT_SIZE = 20.0f;
     private static final float DEFAULT_STRAIGHT_QUESTION_TEXT_SIZE = 17.0f;
-    private static final String DEFAULT_BACKGROUND_COLOR = "#ffff00";    // yellow so we will see if it is not set in the XML
     private static final int TEXT_MARGINX = 10;
     private static final int BUTTON_MARGINX = 10;    // within the page
     private static final int BUTTON_HR_MARGINX = 0;    // within the button container
@@ -105,7 +106,8 @@ public class PackageReader
     private String mPackageTitle;
     private String mImageFolderName;
     private String mSharedFolderName;
-    private int mBackgroundColor;
+    @ColorInt
+    private int mBackgroundColor = DEFAULT_BACKGROUND_COLOR;
     private double mScale;
     private int mYOffsetPerItem;
     private int mYOffset;
@@ -239,7 +241,7 @@ public class PackageReader
             mYFooterTop = mPageHeight;
             mNumOffsetItems = 0;
             addCover(snuffyPage);
-            processBackgroundPW(root, snuffyPage);
+            processBackground(snuffyPage);
             processPageElements(root, snuffyPage);
 
             switch (iPass) {
@@ -270,18 +272,16 @@ public class PackageReader
         return snuffyPage;
     }
 
-    private void processBackgroundPW(Element root, SnuffyPage currPage)
-    {
-        String watermark = root.getAttribute("watermark");        // 	either this
-        String backgroundImage = root.getAttribute("backgroundimage");    // 	or this
-        String shadows = getStringAttributeValue(root, "shadows", "yes");
+    private void processBackground(@NonNull final SnuffyPage currPage) {
+        final GtPage model = currPage.getModel();
 
-        mBackgroundColor = Color.parseColor(getStringAttributeValue(root, "color", DEFAULT_BACKGROUND_COLOR));
+        mBackgroundColor = model.getBackgroundColor() != null ? model.getBackgroundColor() : DEFAULT_BACKGROUND_COLOR;
         currPage.setBackgroundColor(mBackgroundColor);
         currPage.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        if (backgroundImage.length() > 0)
-        {
+        final String watermark = model.getWatermark();        // 	either this
+        final String backgroundImage = model.getBackground();    // 	or this
+        if (backgroundImage != null && backgroundImage.length() > 0) {
             Bitmap bm = getBitmapFromAssetOrFile(mContext, backgroundImage);
             if (bm != null)
             {
@@ -292,8 +292,7 @@ public class PackageReader
                 currPage.addView(iv);
             }
         }
-        if (watermark.length() > 0)
-        {
+        if (watermark != null && watermark.length() > 0) {
             Bitmap bm = getBitmapFromAssetOrFile(mContext, watermark);
             if (bm != null)
             {
@@ -304,8 +303,7 @@ public class PackageReader
                 currPage.addView(iv);
             }
         }
-        if (shadows.equalsIgnoreCase("yes"))
-        {
+        if (model.hasPageShadows()) {
             Bitmap bmTop = getBitmapFromAssetOrFile(mContext, "grad_shad_top.png");
             if (bmTop != null)
             {
