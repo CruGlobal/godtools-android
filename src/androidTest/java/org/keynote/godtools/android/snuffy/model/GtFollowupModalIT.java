@@ -12,17 +12,17 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.keynote.godtools.android.snuffy.TestParserUtils.getParserForTestAsset;
+import static org.keynote.godtools.android.snuffy.model.Constants.PAGE;
 
 @RunWith(AndroidJUnit4.class)
 public class GtFollowupModalIT {
     private static final String TITLE = "Followup Title";
     private static final String BODY = "Followup Body";
-    private static final GtPage PAGE = new GtPage(new GtManifest("kgp"));
 
     @Test
     public void verifyFollowupModal() throws Exception {
-        final GtFollowupModal followup = GtFollowupModal.fromXml(PAGE, getParserForTestAsset("followupmodal-simple" +
-                ".xml"));
+        final GtFollowupModal followup =
+                GtFollowupModal.fromXml(PAGE, getParserForTestAsset("followupmodal-simple.xml"));
         assertNotNull(followup);
         assertThat(followup.getFollowupId(), is(1L));
         assertThat(followup.getTitle(), is(TITLE));
