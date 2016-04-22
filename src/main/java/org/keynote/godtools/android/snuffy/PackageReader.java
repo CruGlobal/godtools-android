@@ -231,8 +231,7 @@ public class PackageReader
         int SAVE = mTotalBitmapSpace;
         for (int iPass = 1; iPass <= 2; iPass++)
         {
-            snuffyPage = new SnuffyPage(mContext);
-            snuffyPage.mModel = page;
+            snuffyPage = new SnuffyPage(mContext, page);
             snuffyPage.mDescription = page.getDescription();
             snuffyPage.mThumbnail = page.getThumb();
 

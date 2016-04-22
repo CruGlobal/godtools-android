@@ -724,8 +724,7 @@ public class SnuffyPWActivity extends AppCompatActivity
     private void refreshPage() {
         final GtPagesPagerAdapter.ViewHolder currentView = mPagerAdapter.getPrimaryItem();
         final SnuffyPage currentPage = currentView != null ? currentView.mPage : null;
-        final GtPage page = currentPage != null ? currentPage.getModel() : null;
-        final String pageUuid = page != null ? page.getUuid() : null;
+        final String pageUuid = currentPage != null ? currentPage.getModel().getUuid() : null;
 
         // short-circuit if we don't have a valid UUID
         if (pageUuid == null) {

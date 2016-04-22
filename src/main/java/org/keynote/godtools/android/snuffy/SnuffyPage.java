@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 
@@ -13,7 +14,8 @@ public class SnuffyPage extends SnuffyLayout
 {
     private static final String TAG = "SnuffyPage";
 
-    public GtPage mModel;
+    @NonNull
+    public final GtPage mModel;
 
     public String mDescription;
     public String mThumbnail;
@@ -24,14 +26,15 @@ public class SnuffyPage extends SnuffyLayout
     private View mHiddenButton;
     private Runnable mOnRemoveCover;
 
-    public SnuffyPage(Context context)
-    {
+    public SnuffyPage(@NonNull final Context context, @NonNull final GtPage model) {
         super(context);
+        mModel = model;
         mCover = null;
         mActivePanel = null;
         mHiddenButton = null;
     }
 
+    @NonNull
     public GtPage getModel() {
         return mModel;
     }
