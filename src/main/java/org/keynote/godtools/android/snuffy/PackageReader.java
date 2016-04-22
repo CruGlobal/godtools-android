@@ -32,6 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.common.base.Throwables;
+import com.google.common.io.Closer;
 
 import org.ccci.gto.android.common.util.IOUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -40,7 +42,6 @@ import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.snuffy.model.GtManifest;
 import org.keynote.godtools.android.snuffy.model.GtModel;
 import org.keynote.godtools.android.snuffy.model.GtPage;
-import org.keynote.godtools.android.utils.FileUtils;
 import org.keynote.godtools.android.utils.TypefaceUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -50,7 +51,6 @@ import org.xml.sax.SAXException;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -68,6 +68,7 @@ import static org.keynote.godtools.android.snuffy.ParserUtils.getChildElementNam
 import static org.keynote.godtools.android.snuffy.ParserUtils.getChildrenNamed;
 import static org.keynote.godtools.android.snuffy.ParserUtils.getTextContentImmediate;
 import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
+import static org.keynote.godtools.android.utils.FileUtils.getResourcesDir;
 
 @SuppressWarnings({"deprecation", "BooleanMethodIsAlwaysInverted"})
 public class PackageReader
@@ -191,80 +192,80 @@ public class PackageReader
     }
 
     @NonNull
-    private SnuffyPage processManifestPage(@NonNull final GtPage page) throws FileNotFoundException {
-        InputStream pageInputStream = null;
+    private SnuffyPage processManifestPage(@NonNull final GtPage page) {
+        // parse page into DOM model
+        final Element node;
         try {
-            pageInputStream = new BufferedInputStream(
-                    new FileInputStream(new File(FileUtils.getResourcesDir(mContext), page.getFileName())));
+            final Closer closer = Closer.create();
+            try {
+                // open input stream for this page
+                final File file = new File(getResourcesDir(mContext), page.getFileName());
+                final FileInputStream fileIn = closer.register(new FileInputStream(file));
+                final InputStream pageIn = closer.register(new BufferedInputStream(fileIn));
 
-            return processPageFilePW(page, pageInputStream);
-        } finally {
-            IOUtils.closeQuietly(pageInputStream);
+                // create XML DOM element for this page
+                final Document xmlDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(pageIn);
+                node = xmlDoc.getDocumentElement();
+            } catch (final Throwable t) {
+                throw closer.rethrow(t, ParserConfigurationException.class, SAXException.class);
+            } finally {
+                closer.close();
+            }
+        } catch (final Exception e) {
+            Crashlytics.log("error parsing page id: " + page.getId() + " language: " + mLanguage + " filename: " +
+                                    page.getFileName());
+            throw Throwables.propagate(e);
         }
+
+        // convert DOM into page view
+        return parsePage(page, node);
     }
 
-    private SnuffyPage processPageFilePW(@NonNull final GtPage page, InputStream isPage) {
+    @NonNull
+    private SnuffyPage parsePage(@NonNull final GtPage page, @NonNull final Element root) {
         Log.d(TAG, ">>> processPageFile starts");
 
         SnuffyPage snuffyPage = null;
 
-        Document xmlDoc;
-        try
+        mYOffsetPerItem = getScaledYValue(DEFAULT_YOFFSET);
+        int SAVE = mTotalBitmapSpace;
+        for (int iPass = 1; iPass <= 2; iPass++)
         {
-            xmlDoc = DocumentBuilderFactory
-                    .newInstance()
-                    .newDocumentBuilder()
-                    .parse(isPage);
-            Element root = xmlDoc.getDocumentElement();
-            if (root == null)
-                throw new SAXException("XML Document has no root element");
+            snuffyPage = new SnuffyPage(mContext);
+            snuffyPage.mModel = page;
+            snuffyPage.mDescription = page.getDescription();
+            snuffyPage.mThumbnail = page.getThumb();
 
-            mYOffsetPerItem = getScaledYValue(DEFAULT_YOFFSET);
-            int SAVE = mTotalBitmapSpace;
-            for (int iPass = 1; iPass <= 2; iPass++)
-            {
-                snuffyPage = new SnuffyPage(mContext);
-                snuffyPage.mModel = page;
-                snuffyPage.mDescription = page.getDescription();
-                snuffyPage.mThumbnail = page.getThumb();
+            mYOffset = 0;
+            mYFooterTop = mPageHeight;
+            mNumOffsetItems = 0;
+            addCover(snuffyPage);
+            processBackgroundPW(root, snuffyPage);
+            processPageElements(root, snuffyPage);
 
-                mYOffset = 0;
-                mYFooterTop = mPageHeight;
-                mNumOffsetItems = 0;
-                addCover(snuffyPage);
-                processBackgroundPW(root, snuffyPage);
-                processPageElements(root, snuffyPage);
-
-                switch (iPass)
+            switch (iPass) {
+                case 1:
                 {
-                    case 1:
+                    if (mNumOffsetItems < 1)
                     {
-                        if (mNumOffsetItems < 1)
-                        {
-                            // no second pass required
-                            iPass = 2; // force exit from loop
-                        }
-                        else
-                        {
-                            mYOffsetPerItem = (int) Math.round(
-                                    (double) ((mYFooterTop - getScaledYValue(MIN_MARGIN_ABOVE_FOOTER)) - (mYOffset - (mNumOffsetItems * getScaledYValue(DEFAULT_YOFFSET)))) /
-                                            (double) (mNumOffsetItems + 1));
-                            mYOffsetPerItem = Math.min(mYOffsetPerItem, getScaledYValue(MAX_YOFFSET));
-                            mYOffsetPerItem = Math.max(mYOffsetPerItem, 0);
-                            mTotalBitmapSpace = SAVE;
-                        }
-                        break;
-                    }
-                    case 2:
+                        // no second pass required
+                        iPass = 2; // force exit from loop
+                    } else
                     {
-                        break;
+                        mYOffsetPerItem = (int) Math.round(
+                                (double) ((mYFooterTop - getScaledYValue(MIN_MARGIN_ABOVE_FOOTER)) -
+                                        (mYOffset - (mNumOffsetItems * getScaledYValue(DEFAULT_YOFFSET)))) /
+                                        (double) (mNumOffsetItems + 1));
+                        mYOffsetPerItem = Math.min(mYOffsetPerItem, getScaledYValue(MAX_YOFFSET));
+                        mYOffsetPerItem = Math.max(mYOffsetPerItem, 0);
+                        mTotalBitmapSpace = SAVE;
                     }
+                    break;
+                }
+                case 2: {
+                    break;
                 }
             }
-        } catch (IOException | ParserConfigurationException | SAXException e)
-        {
-            Log.e(TAG, "processPageFile failed: " + e.toString());
-            snuffyPage = null;
         }
         Log.d(TAG, ">>> processPageFile ends");
         return snuffyPage;
