@@ -39,6 +39,7 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.snuffy.model.GtManifest;
 import org.keynote.godtools.android.snuffy.model.GtPage;
+import org.keynote.godtools.android.utils.TypefaceUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -97,7 +98,6 @@ public class PackageReader
     private int mPageHeight;
     private List<SnuffyPage> mPages;
     private String mPackageTitle;
-    private Typeface mAlternateTypeface;
     private String mImageFolderName;
     private String mSharedFolderName;
     private int mBackgroundColor;
@@ -112,6 +112,8 @@ public class PackageReader
     private boolean mFromAssets;
     private ProgressCallback mProgressCallback;
     private String mAppPackage;
+    @NonNull
+    private String mLanguage = "en";
 
     public String getPackageTitle()
     {
@@ -124,8 +126,8 @@ public class PackageReader
                                              String packageConfigName,
                                              @Nullable final String status,
                                              ProgressCallback progressCallback,
-                                             Typeface alternateTypeface,
-                                             String appPackage) {
+                                             String appPackage,
+                                             @NonNull final String language) {
         mAppRef = new WeakReference<>(app);
         mContext = app.getApplicationContext();
         mPageWidth = pageWidth;
@@ -136,8 +138,8 @@ public class PackageReader
         mSharedFolderName = "shared/";
         mFromAssets = false;
         mProgressCallback = progressCallback;
-        mAlternateTypeface = alternateTypeface;
         mAppPackage = appPackage;
+        mLanguage = language;
 
         // In the case where this package is replacing the previous package - release the memory occupied by the original
         bitmapCache.clear();
@@ -408,10 +410,7 @@ public class PackageReader
             button.setTextColor(mBackgroundColor);
             button.setLayoutParams(new AbsoluteLayout.LayoutParams(mPageWidth - 2 * margin, LayoutParams.WRAP_CONTENT, margin, mYOffset));
 
-
-            currPage.addView(new SnuffyAlternateTypefaceTextView(button)
-                    .setAlternateTypeface(mAlternateTypeface)
-                    .get());
+            currPage.addView(TypefaceUtils.setTypeface(button, mLanguage));
 
             button.measure(
                     MeasureSpec.makeMeasureSpec(mPageWidth, MeasureSpec.EXACTLY),
@@ -875,9 +874,7 @@ public class PackageReader
         tv.setTypeface(null, getTypefaceFromModifier(modifier));
         tv.setTextColor(color);
         tv.setTextSize(getScaledTextSize(DEFAULT_BUTTON_TEXT_SIZE * size / 100.0f));
-        theContainer.addView(new SnuffyAlternateTypefaceTextView(tv)
-                .setAlternateTypeface(mAlternateTypeface)
-                .get());
+        theContainer.addView(TypefaceUtils.setTypeface(tv, mLanguage));
 
         AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) tv.getLayoutParams();
         tv.measure(
@@ -997,10 +994,7 @@ public class PackageReader
         button.setTextColor(mBackgroundColor);
         button.setLayoutParams(new AbsoluteLayout.LayoutParams(panelWidth - 2 * margin, LayoutParams.WRAP_CONTENT, margin, mYOffsetInPanel));
 
-
-        theContainer.addView(new SnuffyAlternateTypefaceTextView(button)
-                .setAlternateTypeface(mAlternateTypeface)
-                .get());
+        theContainer.addView(TypefaceUtils.setTypeface(button, mLanguage));
 
         button.measure(
                 MeasureSpec.makeMeasureSpec(panelWidth, MeasureSpec.EXACTLY),
@@ -1121,10 +1115,7 @@ public class PackageReader
             int marginRight = getScaledXValue(PANEL_TEXT_RIGHT_MARGIN);
             tv.setPadding(marginLeft, 0, marginRight, 0);
         }
-        theContainer.addView(new SnuffyAlternateTypefaceTextView(tv)
-                        .setAlternateTypeface(mAlternateTypeface)
-                        .get()
-        );
+        theContainer.addView(TypefaceUtils.setTypeface(tv, mLanguage));
 
         if (height == 0)
         {
@@ -1212,14 +1203,7 @@ public class PackageReader
                         xPos, yPos));
                 tv.setText(content);
                 tv.setGravity(getGravityFromAlign(align) + Gravity.TOP);
-                if (mAlternateTypeface != null)
-                {
-                    tv.setTypeface(mAlternateTypeface);
-                }
-                else
-                {
-                    tv.setTypeface(null, getTypefaceFromModifier(modifier));
-                }
+                TypefaceUtils.setTypeface(tv, mLanguage, getTypefaceFromModifier(modifier));
                 tv.setTextColor(color);
                 tv.setTextSize(getScaledTextSize((bStraightMode ? DEFAULT_STRAIGHT_QUESTION_TEXT_SIZE : DEFAULT_QUESTION_TEXT_SIZE) * size / 100.0f));
                 if (xPos == 0)
@@ -1277,14 +1261,7 @@ public class PackageReader
                 xPos, yPos));
         tv.setText(content);
         tv.setGravity(getGravityFromAlign(align) + Gravity.TOP);
-        if (mAlternateTypeface != null)
-        {
-            tv.setTypeface(mAlternateTypeface);
-        }
-        else
-        {
-            tv.setTypeface(null, getTypefaceFromModifier(modifier));
-        }
+        TypefaceUtils.setTypeface(tv, mLanguage, getTypefaceFromModifier(modifier));
         tv.setTextColor(color);
         tv.setTextSize(getScaledTextSize(DEFAULT_QUESTION_TEXT_SIZE * size / 100.0f));
         if (xPos == 0)
@@ -1350,14 +1327,7 @@ public class PackageReader
                 xPos, yPos));
         tv.setText(content);
         tv.setGravity(getGravityFromAlign(align));
-        if (mAlternateTypeface != null)
-        {
-            tv.setTypeface(mAlternateTypeface);
-        }
-        else
-        {
-            tv.setTypeface(null, getTypefaceFromModifier(modifier));
-        }
+        TypefaceUtils.setTypeface(tv, mLanguage, getTypefaceFromModifier(modifier));
         tv.setTextColor(color);
         tv.setTextSize(getScaledTextSize(DEFAULT_TEXT_SIZE * size / 100.0f));
         currPage.addView(tv);
@@ -2042,9 +2012,7 @@ public class PackageReader
         tv.setTextSize(getScaledTextSize(textSize));
         tv.setPadding(0, 0, 0, 0);
 
-        return new SnuffyAlternateTypefaceTextView(tv)
-                .setAlternateTypeface(mAlternateTypeface)
-                .get();
+        return TypefaceUtils.setTypeface(tv, mLanguage);
     }
 
     private TextView createTitleSubHeadingFromElement(Element el, String titleMode)
@@ -2092,9 +2060,7 @@ public class PackageReader
         tv.setTextSize(getScaledTextSize(textSize));
         tv.setPadding(0, 0, 0, 0);
 
-        return new SnuffyAlternateTypefaceTextView(tv)
-                .setAlternateTypeface(mAlternateTypeface)
-                .get();
+        return TypefaceUtils.setTypeface(tv, mLanguage);
     }
 
     private TextView createSubTitleFromElement(Element el)
@@ -2137,9 +2103,7 @@ public class PackageReader
         tv.setTextSize(getScaledTextSize(textSize));
         tv.setPadding(0, 0, 0, 0);
 
-        return new SnuffyAlternateTypefaceTextView(tv)
-                .setAlternateTypeface(mAlternateTypeface)
-                .get();
+        return TypefaceUtils.setTypeface(tv, mLanguage);
     }
 
     private Bitmap getBitmapFromAssetOrFile(Context context, String imageFileName)

@@ -3,7 +3,6 @@ package org.keynote.godtools.android.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -19,8 +18,7 @@ import com.squareup.picasso.Picasso;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
-import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
-import org.keynote.godtools.android.utils.Typefaces;
+import org.keynote.godtools.android.utils.TypefaceUtils;
 
 import java.io.File;
 import java.util.List;
@@ -37,7 +35,6 @@ public class PackageListFragment extends ListFragment
 	private List<GTPackage> listPackages;
     private boolean translatorMode;
 	private PackageListAdapter mAdapter;
-	private Typeface mAlternateTypeface;
 	private OnPackageSelectedListener mListener;
 
 	public static PackageListFragment newInstance(String langCode, List<GTPackage> packages, boolean translatorMode)
@@ -71,8 +68,6 @@ public class PackageListFragment extends ListFragment
 
 		setRetainInstance(true);
 
-		handleLanguagesWithAlternateFonts(this.languageCode);
-
 		mAdapter = new PackageListAdapter(getActivity(), listPackages);
 		setListAdapter(mAdapter);
 	}
@@ -91,7 +86,6 @@ public class PackageListFragment extends ListFragment
 	{
 		this.languageCode = langCode;
         this.translatorMode = translatorMode;
-		handleLanguagesWithAlternateFonts(langCode);
 		mAdapter.refresh(packages);
 	}
 
@@ -105,17 +99,6 @@ public class PackageListFragment extends ListFragment
 	public void enable()
 	{
 		mAdapter.enableClick();
-	}
-
-	private void handleLanguagesWithAlternateFonts(String mAppLanguage)
-	{
-		if (LanguagesNotSupportedByDefaultFont.contains(mAppLanguage))
-		{
-			mAlternateTypeface = Typefaces.get(getActivity(), LanguagesNotSupportedByDefaultFont.getPathToAlternateFont(mAppLanguage));
-		} else
-		{
-			mAlternateTypeface = Typeface.DEFAULT;
-		}
 	}
 
 	@Override
@@ -177,7 +160,7 @@ public class PackageListFragment extends ListFragment
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            holder.packageName.setTypeface(mAlternateTypeface);
+			TypefaceUtils.setTypeface(holder.packageName, languageCode);
 
             if (position % 2 == 0)
             {

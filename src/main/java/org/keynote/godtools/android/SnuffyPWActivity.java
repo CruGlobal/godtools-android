@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,8 +52,6 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.snuffy.SnuffyHelpActivity;
 import org.keynote.godtools.android.snuffy.SnuffyPage;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
-import org.keynote.godtools.android.utils.LanguagesNotSupportedByDefaultFont;
-import org.keynote.godtools.android.utils.Typefaces;
 
 import java.util.Iterator;
 import java.util.List;
@@ -87,7 +84,6 @@ public class SnuffyPWActivity extends AppCompatActivity
     private String mAppPackage;
     private String mConfigFileName;
     private String mAppLanguage = ENGLISH_DEFAULT;
-    private Typeface mAlternateTypeface;
     @Bind(R.id.snuffyViewPager)
     ViewPager mPager;
     private int mPagerCurrentItem = 0;
@@ -163,8 +159,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         {
             mConfigParallel = mParallelPackage.getConfigFileName();
         }
-
-        handleLanguagesWithAlternateFonts();
 
         //doSetup(100); // used to be 1 second delay required to make sure activity fully created
         // - is there something we can test for that is better than a fixed timeout?
@@ -313,15 +307,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         // trigger updates on various components
         updateViewPager();
         updateAppPages();
-    }
-
-    private void handleLanguagesWithAlternateFonts()
-    {
-        if (LanguagesNotSupportedByDefaultFont.contains(mAppLanguage))
-        {
-            mAlternateTypeface = Typefaces.get(getApplication(), LanguagesNotSupportedByDefaultFont.getPathToAlternateFont(mAppLanguage));
-        }
-
     }
 
     protected void onResume()
@@ -787,8 +772,11 @@ public class SnuffyPWActivity extends AppCompatActivity
                         mPageWidth, mPageHeight,
                         mConfigFileName, mPackageStatus,
                         ProcessPackageAsync.this,
-                        mAlternateTypeface,
-                        mAppPackage
+                        mAppPackage,
+                        // send along the language we are loading. if there is a parallel language configured and we
+                        // are not showing the primary language, send the parallel language. Otherwise send the primary
+                        // language
+                        !isUsingPrimaryLanguage && mParallelPackage != null ? mParallelPackage.getLanguage() : mAppLanguage
                 );
             }
             catch (Exception e)
