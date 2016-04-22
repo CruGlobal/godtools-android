@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
 public class GTPackage {
     public static final String EVERYSTUDENT_PACKAGE_CODE = "everystudent";
 
+    public static final String INVALID_CODE = "";
+
     public static final String STATUS_LIVE = "live";
     public static final String STATUS_DRAFT = "draft";
 

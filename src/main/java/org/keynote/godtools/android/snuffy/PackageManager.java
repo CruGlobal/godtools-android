@@ -12,6 +12,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
+import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.snuffy.model.GtManifest;
 import org.keynote.godtools.android.snuffy.model.GtPage;
 import org.keynote.godtools.android.utils.FileUtils;
@@ -56,8 +57,13 @@ public class PackageManager {
     }
 
     @NonNull
-    public ListenableFuture<GtManifest> getManifest(@NonNull final String manifestFileName, @NonNull final String
-            appPackage, final boolean forceReload) {
+    public ListenableFuture<GtManifest> getManifest(@NonNull final GTPackage gtPackage, final boolean forceReload) {
+        return getManifest(gtPackage.getConfigFileName(), gtPackage.getCode(), forceReload);
+    }
+
+    @NonNull
+    public ListenableFuture<GtManifest> getManifest(@NonNull final String manifestFileName,
+                                                    @NonNull final String appPackage, final boolean forceReload) {
         final SettableFuture<GtManifest> resp;
         synchronized (mCache) {
             ListenableFuture<GtManifest> cached = mCache.get(manifestFileName);

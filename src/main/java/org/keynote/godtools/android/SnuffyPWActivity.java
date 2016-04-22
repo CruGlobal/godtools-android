@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.SimpleOnPageChangeListener;
 import android.support.v7.app.AppCompatActivity;
@@ -52,6 +53,9 @@ import org.keynote.godtools.android.snuffy.SnuffyAboutActivity;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.snuffy.SnuffyHelpActivity;
 import org.keynote.godtools.android.snuffy.SnuffyPage;
+import org.keynote.godtools.android.snuffy.model.GtFollowupModal;
+import org.keynote.godtools.android.snuffy.model.GtPage;
+import org.keynote.godtools.android.support.v4.fragment.GtFollowupModalDialogFragment;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
 
 import java.util.Iterator;
@@ -207,7 +211,7 @@ public class SnuffyPWActivity extends AppCompatActivity
         if (event.getEventID().equals(SUBSCRIBE_EVENT)) {
             return triggerSubscribeEvent(event);
         } else {
-            return triggerLocalPageNavigation(event.getEventID());
+            return triggerFollowupModal(event.getEventID()) || triggerLocalPageNavigation(event.getEventID());
         }
     }
 
@@ -320,6 +324,26 @@ public class SnuffyPWActivity extends AppCompatActivity
         updateAppPages();
     }
 
+    private boolean triggerFollowupModal(@NonNull final EventID event) {
+        // check for a followup modal on the current page
+        if (mPagerAdapter != null) {
+            final GtPagesPagerAdapter.ViewHolder holder = mPagerAdapter.getPrimaryItem();
+            if (holder != null && holder.mPage != null) {
+                final GtPage page = holder.mPage.getModel();
+                if (page != null) {
+                    for (final GtFollowupModal followup : page.getFollowupModals()) {
+                        if (followup != null && followup.getListeners().contains(event)) {
+                            showFollowupModal(followup);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     private boolean triggerLocalPageNavigation(@NonNull final EventID event) {
         if (mPages != null) {
             for (int x = 0; x < mPages.size(); x++) {
@@ -337,6 +361,15 @@ public class SnuffyPWActivity extends AppCompatActivity
         addGSSubscriberToDB(event);
         GodToolsSyncService.syncGrowthSpacesSubscribers(this);
         return true;
+    }
+
+    private void showFollowupModal(@NonNull final GtFollowupModal modal) {
+        final FragmentManager fm = this.getSupportFragmentManager();
+        if (fm.findFragmentByTag("followupModal") == null) {
+            final GtFollowupModalDialogFragment followupFragment =
+                    GtFollowupModalDialogFragment.newInstance(mAppPackage, mAppLanguage, mPackageStatus, modal.getId());
+            followupFragment.show(fm.beginTransaction().addToBackStack("followupModal"), "followupModal");
+        }
     }
 
     protected void onResume()

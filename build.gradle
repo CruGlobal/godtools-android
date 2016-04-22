@@ -35,6 +35,7 @@ ext.deps = [
 dependencies {
     compile 'com.android.support:appcompat-v7:' + deps.androidSupport
     compile 'com.android.support:support-annotations:' + deps.androidSupport
+    compile 'com.android.support:design:' + deps.androidSupport
 
     compile 'com.google.android.gms:play-services-analytics:' + deps.playServices
     compile 'com.google.android.gms:play-services-gcm:' + deps.playServices

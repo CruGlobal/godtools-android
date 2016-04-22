@@ -103,6 +103,17 @@ public class GtPage extends GtModel {
     }
 
     @Nullable
+    public GtFollowupModal getFollowupModal(@Nullable final String id) {
+        for (final GtFollowupModal modal : mFollowupModals) {
+            if (modal.getId().equals(id)) {
+                return modal;
+            }
+        }
+
+        return null;
+    }
+
+    @Nullable
     @Override
     public ViewHolder render(@NonNull final Context context, @Nullable final ViewGroup parent,
                              final boolean attachToRoot) {
