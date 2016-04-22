@@ -31,10 +31,13 @@ public class GtManifest extends GtModel {
 
     @NonNull
     private final String mPackageCode;
+    @NonNull
+    private final String mLanguage;
 
     @VisibleForTesting
-    GtManifest(@NonNull final String code) {
+    GtManifest(@NonNull final String code, @NonNull final String language) {
         mPackageCode = code;
+        mLanguage = language;
     }
 
     @NonNull
@@ -75,6 +78,11 @@ public class GtManifest extends GtModel {
         return mPackageCode;
     }
 
+    @NonNull
+    public String getLanguage() {
+        return mLanguage;
+    }
+
     @Nullable
     @Override
     public ViewHolder render(@NonNull final Context context, @Nullable final ViewGroup parent,
@@ -88,12 +96,14 @@ public class GtManifest extends GtModel {
 
     @NonNull
     @WorkerThread
-    public static GtManifest fromXml(final XmlPullParser parser, @NonNull final String appPackage) throws IOException,
-            XmlPullParserException {
-        return new GtManifest(appPackage).parse(parser);
+    public static GtManifest fromXml(@NonNull final XmlPullParser parser, @NonNull final String packageCode,
+                                     @NonNull final String language) throws IOException, XmlPullParserException {
+        final GtManifest manifest = new GtManifest(packageCode, language);
+        manifest.parse(parser);
+        return manifest;
     }
 
-    private GtManifest parse(final XmlPullParser parser) throws IOException, XmlPullParserException {
+    private void parse(final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, null, XML_PACKAGE);
 
         // loop until we reach the matching end tag for this element
@@ -141,7 +151,5 @@ public class GtManifest extends GtModel {
         if (mAbout == null) {
             throw new XmlPullParserException("Package XML does not have an about page defined");
         }
-
-        return this;
     }
 }

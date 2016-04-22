@@ -154,7 +154,7 @@ public class PackageReader
         try {
             final boolean forceReload = KEY_DRAFT.equalsIgnoreCase(status);
             final GtManifest manifest =
-                    PackageManager.getInstance(mContext).getManifest(packageConfigName, mAppPackage, forceReload).get();
+                    PackageManager.getInstance(mContext).getManifest(packageConfigName, mAppPackage, mLanguage, forceReload).get();
             if (processMainPackageFilePW(manifest)) {
                 return mPages;
             }

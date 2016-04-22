@@ -58,12 +58,13 @@ public class PackageManager {
 
     @NonNull
     public ListenableFuture<GtManifest> getManifest(@NonNull final GTPackage gtPackage, final boolean forceReload) {
-        return getManifest(gtPackage.getConfigFileName(), gtPackage.getCode(), forceReload);
+        return getManifest(gtPackage.getConfigFileName(), gtPackage.getCode(), gtPackage.getLanguage(), forceReload);
     }
 
     @NonNull
-    public ListenableFuture<GtManifest> getManifest(@NonNull final String manifestFileName,
-                                                    @NonNull final String appPackage, final boolean forceReload) {
+    @Deprecated
+    public ListenableFuture<GtManifest> getManifest(@NonNull final String manifestFileName, @NonNull final String code,
+                                                    @NonNull final String language, final boolean forceReload) {
         final SettableFuture<GtManifest> resp;
         synchronized (mCache) {
             ListenableFuture<GtManifest> cached = mCache.get(manifestFileName);
@@ -101,7 +102,7 @@ public class PackageManager {
             @Override
             public void run() {
                 try {
-                    final GtManifest manifest = loadManifest(manifestFileName, appPackage);
+                    final GtManifest manifest = loadManifest(manifestFileName, code, language);
                     loadPages(manifest);
                     resp.set(manifest);
                 } catch (final Throwable t) {
@@ -116,9 +117,8 @@ public class PackageManager {
 
     @NonNull
     @WorkerThread
-    GtManifest loadManifest(@NonNull final String manifestFileName, @NonNull final String appPackage) throws
-            IOException,
-            XmlPullParserException {
+    GtManifest loadManifest(@NonNull final String manifestFileName, @NonNull final String code,
+                            @NonNull final String language) throws IOException, XmlPullParserException {
         final Closer closer = Closer.create();
         try {
             // open file
@@ -134,7 +134,7 @@ public class PackageManager {
                 parser.nextTag();
 
                 // parse & return the package manifest
-                return GtManifest.fromXml(parser, appPackage);
+                return GtManifest.fromXml(parser, code, language);
             } catch (final Throwable t) {
                 Crashlytics.log("error processing main package manifest: " + file.toString());
                 Crashlytics.logException(t);
