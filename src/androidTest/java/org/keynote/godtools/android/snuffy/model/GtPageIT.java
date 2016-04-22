@@ -70,7 +70,7 @@ public class GtPageIT {
 
     @NonNull
     private GtPage parsePageXml(@NonNull final String file) throws Exception {
-        final GtPage page = new GtPage(MANIFEST);
+        final GtPage page = new GtPage(MANIFEST, "test");
         page.parsePageXml(getParserForTestAsset(file));
         return page;
     }

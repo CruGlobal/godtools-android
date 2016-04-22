@@ -40,7 +40,7 @@ public class GtFollowupModal extends GtModel {
     private static final String XML_ATTR_LISTENERS = "listeners";
 
     @NonNull
-    private String mId = "";
+    private final String mId;
 
     private long mFollowupId = Followup.INVALID_ID;
     @NonNull
@@ -51,17 +51,14 @@ public class GtFollowupModal extends GtModel {
     @Nullable
     GtButtonPair mButtonPair;
 
-    private GtFollowupModal(@NonNull final GtModel parent) {
-        super(parent);
+    private GtFollowupModal(@NonNull final GtPage page, @NonNull final String uniqueId) {
+        super(page);
+        mId = page.getId() + "-followup-" + uniqueId;
     }
 
     @NonNull
     public String getId() {
         return mId;
-    }
-
-    void setId(@NonNull final String id) {
-        mId = id;
     }
 
     public long getFollowupId() {
@@ -116,9 +113,10 @@ public class GtFollowupModal extends GtModel {
     }
 
     @NonNull
-    public static GtFollowupModal fromXml(@NonNull final GtModel parent, @NonNull final XmlPullParser parser)
+    static GtFollowupModal fromXml(@NonNull final GtPage page, @NonNull final String uniqueId,
+                                   @NonNull final XmlPullParser parser)
             throws IOException, XmlPullParserException {
-        final GtFollowupModal followup = new GtFollowupModal(parent);
+        final GtFollowupModal followup = new GtFollowupModal(page, uniqueId);
         followup.parse(parser);
         return followup;
     }

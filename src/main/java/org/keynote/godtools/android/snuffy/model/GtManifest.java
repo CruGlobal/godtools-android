@@ -128,13 +128,11 @@ public class GtManifest extends GtModel {
                         throw new XmlPullParserException("Package XML has more than 1 about page defined", parser,
                                                          null);
                     }
-                    mAbout = GtPage.fromManifestXml(this, parser);
-                    mAbout.setId(mPackageCode + "-about");
+                    mAbout = GtPage.fromManifestXml(this, "about", parser);
                     mPagesIndex.put(mAbout.getId(), mAbout);
                     continue;
                 case GtPage.XML_PAGE:
-                    final GtPage page = GtPage.fromManifestXml(this, parser);
-                    page.setId(mPackageCode + "-" + Integer.toString(mPages.size()));
+                    final GtPage page = GtPage.fromManifestXml(this, Integer.toString(mPages.size()), parser);
                     mPages.add(page);
                     mPagesIndex.put(page.getId(), mAbout);
                     continue;

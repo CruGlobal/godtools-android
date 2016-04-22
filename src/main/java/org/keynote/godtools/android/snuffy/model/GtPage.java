@@ -45,7 +45,7 @@ public class GtPage extends GtModel {
     private boolean mLoaded = false;
 
     @NonNull
-    private String mId = "";
+    private final String mId;
     @VisibleForTesting
     String mFileName;
     private String mThumb;
@@ -68,18 +68,15 @@ public class GtPage extends GtModel {
     private final List<GtFollowupModal> mFollowupModals = new ArrayList<>();
 
     @VisibleForTesting
-    GtPage(@NonNull final GtManifest manifest) {
+    GtPage(@NonNull final GtManifest manifest, @NonNull final String uniqueId) {
         super(manifest);
+        mId = manifest.getPackageCode() + "-" + uniqueId;
     }
 
     @NonNull
     @Override
     public GtPage getPage() {
         return this;
-    }
-
-    void setId(@NonNull final String id) {
-        mId = id;
     }
 
     @NonNull
@@ -161,9 +158,10 @@ public class GtPage extends GtModel {
     }
 
     @WorkerThread
-    static GtPage fromManifestXml(@NonNull final GtManifest manifest, final XmlPullParser parser)
+    static GtPage fromManifestXml(@NonNull final GtManifest manifest, @NonNull final String id,
+                                  final XmlPullParser parser)
             throws IOException, XmlPullParserException {
-        final GtPage page = new GtPage(manifest);
+        final GtPage page = new GtPage(manifest, id);
         page.parseManifestXml(parser);
         return page;
     }

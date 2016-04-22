@@ -108,6 +108,15 @@ android {
         pickFirst 'META-INF/NOTICE.txt'
         pickFirst 'META-INF/LICENSE.txt'
     }
+    sourceSets {
+        test {
+            java.srcDir 'src/testShared/java'
+        }
+
+        androidTest {
+            java.srcDir 'src/testShared/java'
+        }
+    }
 
     buildTypes {
         debug {

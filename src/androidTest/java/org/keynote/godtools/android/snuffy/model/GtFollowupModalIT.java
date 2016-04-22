@@ -22,7 +22,7 @@ public class GtFollowupModalIT {
     @Test
     public void verifyFollowupModal() throws Exception {
         final GtFollowupModal followup =
-                GtFollowupModal.fromXml(PAGE, getParserForTestAsset("followupmodal-simple.xml"));
+                GtFollowupModal.fromXml(PAGE, "simple", getParserForTestAsset("followupmodal-simple.xml"));
         assertNotNull(followup);
         assertThat(followup.getFollowupId(), is(1L));
         assertThat(followup.getTitle(), is(TITLE));
