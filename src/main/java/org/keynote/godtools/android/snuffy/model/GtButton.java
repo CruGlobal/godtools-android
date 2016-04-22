@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.snuffy.model;
 
+import android.content.Context;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,9 +12,7 @@ import android.widget.TextView;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
-import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.event.GodToolsEvent.EventID;
 import org.keynote.godtools.android.snuffy.ParserUtils;
 import org.w3c.dom.Element;
@@ -84,8 +83,9 @@ public class GtButton extends GtModel {
 
     @Nullable
     @Override
-    public View render(@NonNull final ViewGroup root, final double scale, final boolean attachToRoot) {
-        final LayoutInflater inflater = LayoutInflater.from(root.getContext());
+    public ViewHolder render(@NonNull final Context context, @Nullable final ViewGroup parent,
+                             final boolean attachToRoot) {
+        final LayoutInflater inflater = LayoutInflater.from(context);
 
         // inflate the raw view
         final View view;
@@ -93,19 +93,17 @@ public class GtButton extends GtModel {
             case PANEL:
                 return null;
             case LINK:
-                view = inflater.inflate(R.layout.gt_button_link, root, false);
+                view = inflater.inflate(R.layout.gt_button_link, parent, false);
                 break;
             default:
-                view = inflater.inflate(R.layout.gt_button_default, root, false);
+                view = inflater.inflate(R.layout.gt_button_default, parent, false);
                 break;
         }
-        if (attachToRoot) {
-            root.addView(view);
+        if (parent != null && attachToRoot) {
+            parent.addView(view);
         }
-        new ViewHolder(view);
 
-        applyLayout(view, scale);
-        return view;
+        return new ViewHolder(view);
     }
 
     @NonNull
@@ -207,16 +205,13 @@ public class GtButton extends GtModel {
         }
     }
 
-    class ViewHolder {
-        @NonNull
-        private final View mRoot;
-
+    class ViewHolder extends GtModel.ViewHolder {
         @Nullable
         @Bind(R.id.gtButton)
         TextView mButton;
 
         ViewHolder(@NonNull final View root) {
-            mRoot = root;
+            super(root);
             ButterKnife.bind(this, mRoot);
 
             // customize button if necessary
@@ -233,9 +228,7 @@ public class GtButton extends GtModel {
         void onClick() {
             // trigger any configured tap events
             for (final EventID event : mTapEvents) {
-                EventBus.getDefault().post(new GodToolsEvent(event));
-
-                // TODO: detect followup:subscribe event & add any input fields
+                onSendEvent(event);
             }
         }
     }

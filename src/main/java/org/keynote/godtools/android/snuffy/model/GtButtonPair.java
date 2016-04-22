@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.snuffy.model;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -16,14 +17,16 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static butterknife.ButterKnife.findById;
 
 public class GtButtonPair extends GtModel {
     static final String XML_BUTTON_PAIR = "button-pair";
 
-    private GtButton mPositiveButton;
-    private GtButton mNegativeButton;
+    GtButton mPositiveButton;
+    GtButton mNegativeButton;
 
     private GtButtonPair(@NonNull final GtModel parent) {
         super(parent);
@@ -37,34 +40,19 @@ public class GtButtonPair extends GtModel {
         return mNegativeButton;
     }
 
-    @Nullable
+    @NonNull
     @Override
-    public View render(@NonNull final ViewGroup root, final double scale, final boolean attachToRoot) {
-        final LayoutInflater inflater = LayoutInflater.from(root.getContext());
+    public ViewHolder render(@NonNull final Context context, @Nullable final ViewGroup parent,
+                             final boolean attachToRoot) {
+        final LayoutInflater inflater = LayoutInflater.from(context);
 
         // inflate the raw view
-        final View view = inflater.inflate(R.layout.gt_buttonpair, root, false);
-        if (attachToRoot) {
-            root.addView(view);
-        }
-        final LinearLayout layout = findById(view, R.id.gtButtonPair);
-
-        // attach the positive & negative buttons
-        for (final GtModel model : new GtModel[] {mNegativeButton, mPositiveButton}) {
-            if (model != null) {
-                final View child = model.render(layout, scale, true);
-                if (child != null) {
-                    final LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) child.getLayoutParams();
-                    if (lp.width <= 0 && lp.width != WRAP_CONTENT) {
-                        lp.width = 0;
-                        lp.weight = 1;
-                    }
-                }
-            }
+        final ViewHolder holder = new ViewHolder(inflater.inflate(R.layout.gt_buttonpair, parent, false));
+        if (parent != null && attachToRoot) {
+            parent.addView(holder.mRoot);
         }
 
-        applyLayout(view, scale);
-        return view;
+        return holder;
     }
 
     @NonNull
@@ -122,6 +110,34 @@ public class GtButtonPair extends GtModel {
         final Element negative = ParserUtils.getChildElementNamed(node, GtButton.XML_NEGATIVE_BUTTON);
         if (negative != null) {
             mNegativeButton = GtButton.fromXml(this, negative);
+        }
+    }
+
+    class ViewHolder extends GtModel.ViewHolder {
+        @Bind(R.id.gtButtonPair)
+        LinearLayout mButtons;
+
+        ViewHolder(@NonNull final View root) {
+            super(root);
+            ButterKnife.bind(this, root);
+
+            attachButtons();
+        }
+
+        private void attachButtons() {
+            for (final GtModel model : new GtModel[] {mNegativeButton, mPositiveButton}) {
+                if (model != null) {
+                    final GtModel.ViewHolder child = model.render(mButtons.getContext(), mButtons, true);
+                    if (child != null) {
+                        child.setParentHolder(this);
+                        final LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) child.mRoot.getLayoutParams();
+                        if (lp.width <= 0 && lp.width != WRAP_CONTENT) {
+                            lp.width = 0;
+                            lp.weight = 1;
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -1,11 +1,11 @@
 package org.keynote.godtools.android.snuffy.model;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.SimpleArrayMap;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.common.collect.ImmutableList;
@@ -47,7 +47,7 @@ public class GtManifest extends GtModel {
     @Override
     public GtPage getPage() {
         if (BuildConfig.DEBUG) {
-            throw new IllegalStateException("It is impossible for a page to contain a Manifest");
+            throw new IllegalStateException("It is impossible for a manifest to be a child of a page");
         }
 
         return null;
@@ -77,7 +77,8 @@ public class GtManifest extends GtModel {
 
     @Nullable
     @Override
-    public View render(@NonNull final ViewGroup root, final double scale, final boolean attachToRoot) {
+    public ViewHolder render(@NonNull final Context context, @Nullable final ViewGroup parent,
+                             final boolean attachToRoot) {
         if (BuildConfig.DEBUG) {
             throw new IllegalStateException("You cannot render a GtManifest!!!!");
         }

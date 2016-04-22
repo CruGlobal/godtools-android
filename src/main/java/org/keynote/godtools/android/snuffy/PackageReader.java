@@ -949,10 +949,11 @@ public class PackageReader
                     // try parsing it in our new model
                     final GtModel model = GtModel.fromXml(currPage.getModel(), el);
                     if (model != null) {
-                        final View view = model.render(theContainer, mScale, true);
-                        if (view != null) {
-                            layoutModel(model, view, mYOffsetInPanel, panelWidth);
-                            final AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) view.getLayoutParams();
+                        final GtModel.ViewHolder holder = model.render(mContext, theContainer, true);
+                        if (holder != null) {
+                            layoutModel(model, holder.mRoot, mYOffsetInPanel, panelWidth);
+                            final AbsoluteLayout.LayoutParams lp =
+                                    (AbsoluteLayout.LayoutParams) holder.mRoot.getLayoutParams();
                             mYOffsetInPanel = lp.y + lp.height;
                             mYOffsetMaxInPanel = determineBottom(theContainer);
                         }

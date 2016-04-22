@@ -1,11 +1,11 @@
 package org.keynote.godtools.android.snuffy.model;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.common.collect.ImmutableList;
@@ -55,6 +55,12 @@ public class GtPage extends GtModel {
         super(manifest);
     }
 
+    @NonNull
+    @Override
+    public GtPage getPage() {
+        return this;
+    }
+
     void setId(@NonNull final String id) {
         mId = id;
     }
@@ -98,7 +104,8 @@ public class GtPage extends GtModel {
 
     @Nullable
     @Override
-    public View render(@NonNull final ViewGroup root, final double scale, final boolean attachToRoot) {
+    public ViewHolder render(@NonNull final Context context, @Nullable final ViewGroup parent,
+                             final boolean attachToRoot) {
         // TODO: should this actually render the page long term?
         return null;
     }
