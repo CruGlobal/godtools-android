@@ -11,7 +11,6 @@ import java.util.Map;
  * Created by dsgoers on 4/5/16.
  */
 public class GodToolsEvent {
-
     @NonNull
     private final EventID eventID;
     private long followUpId;
@@ -41,6 +40,8 @@ public class GodToolsEvent {
 
     /*immutable*/
     public static final class EventID {
+        public static final EventID SUBSCRIBE_EVENT = new EventID("followup", "subscribe");
+
         @NonNull
         private final String namespace;
         @NonNull

@@ -63,6 +63,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static org.ccci.gto.android.common.support.v4.util.IdUtils.convertId;
+import static org.keynote.godtools.android.event.GodToolsEvent.EventID.SUBSCRIBE_EVENT;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.COUNT;
@@ -81,7 +82,6 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 public class SnuffyPWActivity extends AppCompatActivity
 {
     private static final String TAG = "SnuffyActivity";
-    private static final EventID SUBSCRIBE_EVENT = new EventID("followup", "subscribe");
 
     private String mAppPackage;
     private String mConfigFileName;
