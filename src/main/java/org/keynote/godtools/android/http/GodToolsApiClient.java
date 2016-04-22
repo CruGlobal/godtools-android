@@ -5,7 +5,6 @@ import android.support.v4.os.AsyncTaskCompat;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
 import java.io.File;
-import java.util.UUID;
 
 import static org.keynote.godtools.android.BuildConfig.BASE_URL;
 import static org.keynote.godtools.android.BuildConfig.BASE_URL_V2;
@@ -48,7 +47,7 @@ public class GodToolsApiClient {
                                          String authorization,
                                          String languageCode,
                                          String packageCode,
-                                         UUID pageId,
+                                         String pageId,
                                          DownloadTask.DownloadTaskHandler taskHandler)
     {
         String url = BASE_URL + ENDPOINT_DRAFTS + languageCode + File.separator + packageCode + File.separator + "pages" + File.separator + pageId + "?compressed=true";

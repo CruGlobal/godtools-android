@@ -40,6 +40,7 @@ import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.snuffy.model.GtManifest;
 import org.keynote.godtools.android.snuffy.model.GtModel;
 import org.keynote.godtools.android.snuffy.model.GtPage;
+import org.keynote.godtools.android.utils.FileUtils;
 import org.keynote.godtools.android.utils.TypefaceUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -193,17 +194,16 @@ public class PackageReader
     private SnuffyPage processManifestPage(@NonNull final GtPage page) throws FileNotFoundException {
         InputStream pageInputStream = null;
         try {
-            final String pageFileName = "resources/" + page.getFileName();
             pageInputStream = new BufferedInputStream(
-                    new FileInputStream(new File(mAppRef.get().getDocumentsDir(), pageFileName)));
+                    new FileInputStream(new File(FileUtils.getResourcesDir(mContext), page.getFileName())));
 
-            return processPageFilePW(page, pageInputStream, pageFileName);
+            return processPageFilePW(page, pageInputStream);
         } finally {
             IOUtils.closeQuietly(pageInputStream);
         }
     }
 
-    private SnuffyPage processPageFilePW(@NonNull final GtPage page, InputStream isPage, String pageFileName) {
+    private SnuffyPage processPageFilePW(@NonNull final GtPage page, InputStream isPage) {
         Log.d(TAG, ">>> processPageFile starts");
 
         SnuffyPage snuffyPage = null;
@@ -234,8 +234,6 @@ public class PackageReader
                 addCover(snuffyPage);
                 processBackgroundPW(root, snuffyPage);
                 processPageElements(root, snuffyPage);
-
-                snuffyPage.setPageIdFromFilename(pageFileName);
 
                 switch (iPass)
                 {

@@ -721,18 +721,25 @@ public class SnuffyPWActivity extends AppCompatActivity
         return true;
     }
 
-    private void refreshPage()
-    {
-        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SnuffyPage currentPage = mPagerAdapter.getPrimaryItem().mPage;
+    private void refreshPage() {
+        final GtPagesPagerAdapter.ViewHolder currentView = mPagerAdapter.getPrimaryItem();
+        final SnuffyPage currentPage = currentView != null ? currentView.mPage : null;
+        final GtPage page = currentPage != null ? currentPage.getModel() : null;
+        final String pageUuid = page != null ? page.getUuid() : null;
+
+        // short-circuit if we don't have a valid UUID
+        if (pageUuid == null) {
+            return;
+        }
 
         showLoading(getString(R.string.update_page));
 
+        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         GodToolsApiClient.downloadDraftPage((SnuffyApplication) getApplication(),
                 settings.getString(AUTH_DRAFT, ""),
                 mAppLanguage,
                 mAppPackage,
-                currentPage.getPageId(),
+                pageUuid,
                 new DownloadTask.DownloadTaskHandler()
                 {
                     @Override

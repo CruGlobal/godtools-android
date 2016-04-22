@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GtPage extends GtModel {
     static final String XML_PAGE = "page";
@@ -33,11 +35,16 @@ public class GtPage extends GtModel {
     private static final String XML_ATTR_COLOR = "color";
     private static final String XML_ATTR_WATERMARK = "watermark";
 
+    private static final Pattern PATTERN_FILENAME_UUID =
+            Pattern.compile("^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\\.xml$",
+                            Pattern.CASE_INSENSITIVE);
+
     private boolean mLoaded = false;
 
     @NonNull
     private String mId = "";
-    private String mFileName;
+    @VisibleForTesting
+    String mFileName;
     private String mThumb;
     private String mDescription;
     @Nullable
@@ -68,6 +75,18 @@ public class GtPage extends GtModel {
     @NonNull
     public String getId() {
         return mId;
+    }
+
+    @Nullable
+    public String getUuid() {
+        if (mFileName != null) {
+            final Matcher matcher = PATTERN_FILENAME_UUID.matcher(mFileName);
+            if (matcher.matches()) {
+                return matcher.group(1);
+            }
+        }
+
+        return null;
     }
 
     public String getFileName() {
