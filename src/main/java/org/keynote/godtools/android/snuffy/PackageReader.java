@@ -100,7 +100,6 @@ public class PackageReader
     private Context mContext;
     private int mPageWidth;
     private int mPageHeight;
-    private List<SnuffyPage> mPages;
     private String mPackageTitle;
     private String mImageFolderName;
     private String mSharedFolderName;
@@ -138,7 +137,6 @@ public class PackageReader
         mPageWidth = pageWidth;
         mPageHeight = pageHeight;
         mScale = ((double) pageWidth) / ((double) REFERENCE_DEVICE_WIDTH);
-        mPages = new ArrayList<>();
         mTotalBitmapSpace = 0;
         mImageFolderName = "resources/";
         mSharedFolderName = "shared/";
@@ -155,9 +153,7 @@ public class PackageReader
             final boolean forceReload = KEY_DRAFT.equalsIgnoreCase(status);
             final GtManifest manifest =
                     PackageManager.getInstance(mContext).getManifest(packageConfigName, mAppPackage, mLanguage, forceReload).get();
-            if (processMainPackageFilePW(manifest)) {
-                return mPages;
-            }
+            return processMainPackageFilePW(manifest);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
@@ -167,27 +163,29 @@ public class PackageReader
         return null;
     }
 
-    private boolean processMainPackageFilePW(@NonNull final GtManifest manifest) {
+    @Nullable
+    private List<SnuffyPage> processMainPackageFilePW(@NonNull final GtManifest manifest) {
         try {
             // process main package manifest
             final int numPages = manifest.getPages().size();
             mPackageTitle = manifest.getTitle();
 
             // process all pages
+            final List<SnuffyPage> pages = new ArrayList<>();
             mProgressCallback.updateProgress(0, numPages);
-            mPages.add(processManifestPage(manifest.getAbout()));
-            mProgressCallback.updateProgress(mPages.size(), numPages);
+            pages.add(processManifestPage(manifest.getAbout()));
+            mProgressCallback.updateProgress(pages.size(), numPages);
             for (final GtPage page : manifest.getPages()) {
-                mPages.add(processManifestPage(page));
-                mProgressCallback.updateProgress(mPages.size(), numPages);
+                pages.add(processManifestPage(page));
+                mProgressCallback.updateProgress(pages.size(), numPages);
             }
 
             // return success
-            return true;
+            return pages;
         } catch (final Exception e) {
             Crashlytics.log("error processing main package manifest");
             Crashlytics.logException(e);
-            return false;
+            return null;
         }
     }
 
