@@ -196,8 +196,7 @@ public class PackageReader
             pageInputStream = new BufferedInputStream(
                     new FileInputStream(new File(mAppRef.get().getDocumentsDir(), pageFileName)));
 
-            final SnuffyPage currPage = processPageFilePW(pageInputStream, pageFileName);
-            currPage.mModel = page;
+            final SnuffyPage currPage = processPageFilePW(page, pageInputStream, pageFileName);
             currPage.mDescription = page.getDescription();
             currPage.mThumbnail = page.getThumb();
             return currPage;
@@ -206,8 +205,7 @@ public class PackageReader
         }
     }
 
-    private SnuffyPage processPageFilePW(InputStream isPage, String pageFileName)
-    {
+    private SnuffyPage processPageFilePW(@NonNull final GtPage page, InputStream isPage, String pageFileName) {
         Log.d(TAG, ">>> processPageFile starts");
 
         SnuffyPage snuffyPage = null;
@@ -228,6 +226,7 @@ public class PackageReader
             for (int iPass = 1; iPass <= 2; iPass++)
             {
                 snuffyPage = new SnuffyPage(mContext);
+                snuffyPage.mModel = page;
 
                 mYOffset = 0;
                 mYFooterTop = mPageHeight;
