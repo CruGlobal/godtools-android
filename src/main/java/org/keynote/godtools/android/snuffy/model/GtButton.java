@@ -139,7 +139,7 @@ public class GtButton extends GtModel implements View.OnClickListener {
         }
         mMode = Mode.fromXmlAttr(parser.getAttributeValue(null, XML_ATTR_MODE), mMode);
         mTapEvents = ParserUtils
-                .parseEvents(parser.getAttributeValue(null, XML_ATTR_TAP_EVENTS), getManifest().getAppPackage());
+                .parseEvents(parser.getAttributeValue(null, XML_ATTR_TAP_EVENTS), getManifest().getPackageCode());
         parsePositionAttrs(parser);
 
         switch (mMode) {
@@ -188,7 +188,7 @@ public class GtButton extends GtModel implements View.OnClickListener {
         if (node.hasAttribute(XML_ATTR_MODE)) {
             mMode = Mode.fromXmlAttr(node.getAttribute(XML_ATTR_MODE), mMode);
         }
-        mTapEvents = ParserUtils.parseEvents(node.getAttribute(XML_ATTR_TAP_EVENTS), getManifest().getAppPackage());
+        mTapEvents = ParserUtils.parseEvents(node.getAttribute(XML_ATTR_TAP_EVENTS), getManifest().getPackageCode());
         parsePositionAttrs(node);
 
         switch (mMode) {

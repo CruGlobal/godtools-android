@@ -61,6 +61,7 @@ import java.util.TimerTask;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static org.ccci.gto.android.common.support.v4.util.IdUtils.convertId;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.COUNT;
@@ -411,10 +412,6 @@ public class SnuffyPWActivity extends AppCompatActivity
 
         addClickHandlersToAllPages();
         addCallingActivityToAllPages();
-
-        if (mPagerCurrentItem >= mPages.size()) // if value from prefs (left over from running with different package?) is out-of-range
-            mPagerCurrentItem = 0;                // reset to first page.
-        mPager.setCurrentItem(mPagerCurrentItem);
     }
 
     @Override
@@ -688,7 +685,7 @@ public class SnuffyPWActivity extends AppCompatActivity
     private void refreshPage()
     {
         final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SnuffyPage currentPage = mPages.get(mPager.getCurrentItem());
+        SnuffyPage currentPage = mPagerAdapter.getPrimaryItem().mPage;
 
         showLoading(getString(R.string.update_page));
 
@@ -896,9 +893,28 @@ public class SnuffyPWActivity extends AppCompatActivity
         @NonNull
         private List<SnuffyPage> mPages = ImmutableList.of();
 
+        public GtPagesPagerAdapter() {
+            setHasStableIds(true);
+        }
+
         public void setPages(@Nullable final List<SnuffyPage> pages) {
             mPages = pages != null ? ImmutableList.copyOf(pages) : ImmutableList.<SnuffyPage>of();
             notifyDataSetChanged();
+        }
+
+        @Override
+        public long getItemId(final int position) {
+            return convertId(mPages.get(position).getModel().getId());
+        }
+
+        @Override
+        protected int getItemPositionFromId(final long id) {
+            for (int i = 0; i < mPages.size(); i++) {
+                if (convertId(mPages.get(i).getModel().getId()) == id) {
+                    return i;
+                }
+            }
+            return POSITION_NONE;
         }
 
         @Override

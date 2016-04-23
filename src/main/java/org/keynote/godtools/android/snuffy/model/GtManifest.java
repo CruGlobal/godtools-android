@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
+import android.support.v4.util.SimpleArrayMap;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -25,12 +26,14 @@ public class GtManifest extends GtModel {
     private String mTitle;
     private GtPage mAbout;
     private final List<GtPage> mPages = new ArrayList<>();
+    private final SimpleArrayMap<String, GtPage> mPagesIndex = new SimpleArrayMap<>();
 
-    private final String mAppPackage;
+    @NonNull
+    private final String mPackageCode;
 
     @VisibleForTesting
-    GtManifest(@NonNull final String appPackage) {
-        this.mAppPackage = appPackage;
+    GtManifest(@NonNull final String code) {
+        mPackageCode = code;
     }
 
     @NonNull
@@ -53,12 +56,18 @@ public class GtManifest extends GtModel {
         return mAbout;
     }
 
+    @Nullable
+    public GtPage getPage(@Nullable final String pageId) {
+        return mPagesIndex.get(pageId);
+    }
+
     public List<GtPage> getPages() {
         return ImmutableList.copyOf(mPages);
     }
 
-    public String getAppPackage() {
-        return mAppPackage;
+    @NonNull
+    public String getPackageCode() {
+        return mPackageCode;
     }
 
     @Nullable
@@ -101,9 +110,14 @@ public class GtManifest extends GtModel {
                                                          null);
                     }
                     mAbout = GtPage.fromManifestXml(this, parser);
+                    mAbout.setId(mPackageCode + "-about");
+                    mPagesIndex.put(mAbout.getId(), mAbout);
                     continue;
                 case GtPage.XML_PAGE:
-                    mPages.add(GtPage.fromManifestXml(this, parser));
+                    final GtPage page = GtPage.fromManifestXml(this, parser);
+                    page.setId(mPackageCode + "-" + Integer.toString(mPages.size()));
+                    mPages.add(page);
+                    mPagesIndex.put(page.getId(), mAbout);
                     continue;
                 default:
                     // skip unrecognized nodes
