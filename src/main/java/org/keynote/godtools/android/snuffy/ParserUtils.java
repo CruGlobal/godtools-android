@@ -11,6 +11,8 @@ import org.keynote.godtools.android.event.GodToolsEvent;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class ParserUtils {
@@ -58,6 +60,22 @@ public class ParserUtils {
             node = node.getNextSibling();
         }
         return null;
+    }
+
+    @NonNull
+    public static List<Element> getChildrenNamed(@NonNull final Element parent, @NonNull final String name) {
+        List<Element> children = new ArrayList<>();
+        Node node = parent.getFirstChild();
+        while (node != null) {
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element el = (Element) node;
+                if (el.getTagName().equalsIgnoreCase(name)) {
+                    children.add(el);
+                }
+            }
+            node = node.getNextSibling();
+        }
+        return children;
     }
 
     @NonNull

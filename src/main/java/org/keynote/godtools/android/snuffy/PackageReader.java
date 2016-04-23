@@ -63,6 +63,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import static org.keynote.godtools.android.snuffy.ParserUtils.getChildElementNamed;
+import static org.keynote.godtools.android.snuffy.ParserUtils.getChildrenNamed;
 import static org.keynote.godtools.android.snuffy.ParserUtils.getTextContentImmediate;
 import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
 
@@ -1133,7 +1134,7 @@ public class PackageReader
 
     private void processQuestion(SnuffyPage currPage, Element elQuestion)
     {
-        Vector<Element> vTexts = getChildrenWithName(elQuestion);
+        List<Element> vTexts = getChildrenNamed(elQuestion, "text");
         int numTexts = vTexts.size();
         if (numTexts > 0)
         {
@@ -1146,7 +1147,7 @@ public class PackageReader
             mYOffsetInQuestion = 0;
             for (int i = 0; i < numTexts; i++)
             {
-                Element elText = vTexts.elementAt(i);
+                Element elText = vTexts.get(i);
                 processQuestionText(elText, questionContainer);
             }
             // place at bottom of page with a margin below
@@ -2243,23 +2244,6 @@ public class PackageReader
     private int setColorAlphaVal(int color, float alpha)
     {
         return Color.argb((int) (255.0f * alpha), Color.red(color), Color.green(color), Color.blue(color));
-    }
-
-    private Vector<Element> getChildrenWithName(Element elParent)
-    {
-        Vector<Element> v = new Vector<>();
-        Node node = elParent.getFirstChild();
-        while (node != null)
-        {
-            if (node.getNodeType() == Node.ELEMENT_NODE)
-            {
-                Element el = (Element) node;
-                if (el.getTagName().equalsIgnoreCase("text"))
-                    v.add(el);
-            }
-            node = node.getNextSibling();
-        }
-        return v;
     }
 
     private int getTypefaceFromModifier(String modifier)
