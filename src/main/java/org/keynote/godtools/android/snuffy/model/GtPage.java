@@ -205,27 +205,32 @@ public class GtPage extends GtModel {
             // pageShadows is false only if it is set to "no" in the page XML, otherwise default to true
             mPageShadows = !"no".equals(parser.getAttributeValue(null, XML_ATTR_PAGE_SHADOWS));
 
-            // loop until we reach the matching end tag for this element
-            while (parser.next() != XmlPullParser.END_TAG) {
-                // skip anything that isn't a start tag for an element
-                if (parser.getEventType() != XmlPullParser.START_TAG) {
-                    continue;
-                }
-
-                // process recognized elements
-                switch (parser.getName()) {
-                    case GtFollowupModal.XML_FOLLOWUP_MODAL:
-                        final GtFollowupModal modal = GtFollowupModal.fromXml(this, parser);
-                        modal.setId(getId() + "-followup-" + Integer.toString(mFollowupModals.size()));
-                        mFollowupModals.add(modal);
-                        break;
-                    default:
-                        // skip unrecognized nodes
-                        XmlPullParserUtils.skipTag(parser);
-                }
-            }
+            // parse any page content
+            parseContentXml(parser);
         } finally {
             mLoaded = true;
+        }
+    }
+
+    void parseContentXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
+        // loop until we reach the matching end tag for this element
+        while (parser.next() != XmlPullParser.END_TAG) {
+            // skip anything that isn't a start tag for an element
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+
+            // process recognized elements
+            switch (parser.getName()) {
+                case GtFollowupModal.XML_FOLLOWUP_MODAL:
+                    final GtFollowupModal modal =
+                            GtFollowupModal.fromXml(this, Integer.toString(mFollowupModals.size()), parser);
+                    mFollowupModals.add(modal);
+                    break;
+                default:
+                    // skip unrecognized nodes
+                    XmlPullParserUtils.skipTag(parser);
+            }
         }
     }
 }
