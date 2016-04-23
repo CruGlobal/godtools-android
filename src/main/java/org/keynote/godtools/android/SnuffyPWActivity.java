@@ -90,10 +90,12 @@ public class SnuffyPWActivity extends AppCompatActivity
     private String mAppPackage;
     private String mConfigFileName;
     private String mAppLanguage = ENGLISH_DEFAULT;
+
     @Bind(R.id.snuffyViewPager)
     ViewPager mPager;
+    GtPagesPagerAdapter mPagerAdapter;
     private int mPagerCurrentItem = 0;
-    private GtPagesPagerAdapter mPagerAdapter;
+
     private boolean mSetupRequired = true;
     private String mPackageTitle;
     private String mPackageStatus;
@@ -141,8 +143,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         mConfigFileName = getIntent().getStringExtra("ConfigFileName");
         mPackageStatus = getIntent().getStringExtra("Status"); // live = draft
         getIntent().putExtra("AllowFlip", false);
-
-        trackScreenActivity(mAppPackage + "-0");
 
         mConfigPrimary = mConfigFileName;
         isUsingPrimaryLanguage = true;
@@ -233,20 +233,22 @@ public class SnuffyPWActivity extends AppCompatActivity
             mPager.addOnPageChangeListener(new SimpleOnPageChangeListener() {
                 @Override
                 public void onPageSelected(int position) {
-                    Log.d(TAG, "onPageSelected: " + mAppPackage + Integer.toString(position));
-                    trackScreenActivity(mAppPackage + "-" + Integer.toString(position));
-
                     // exit previously active page
-                    if (mPages != null) {
-                        mPages.get(mPagerCurrentItem).onExitPage();
+                    final SnuffyPage previousPage = mPagerAdapter.getItemFromPosition(mPagerCurrentItem);
+                    if (previousPage != null) {
+                        previousPage.onExitPage();
                     }
 
                     // keep our own since ViewPager doesn't offer a getCurrentItem method!
                     mPagerCurrentItem = position;
 
                     // enter currently active page
-                    if (mPages != null) {
-                        mPages.get(mPagerCurrentItem).onEnterPage();
+                    final SnuffyPage page = mPagerAdapter.getItemFromPosition(position);
+                    if (page != null) {
+                        final GtPage model = page.getModel();
+                        Log.d(TAG, "onPageSelected: " + model.getId());
+                        trackPageView(model);
+                        page.onEnterPage();
                     }
 
                     // This notification has been updated to only be sent after the app has been opened 3 times
@@ -447,6 +449,12 @@ public class SnuffyPWActivity extends AppCompatActivity
                     getString(R.string.processing_failed),
                     Toast.LENGTH_SHORT).show();
             return;
+        }
+
+        // track a page view of the most recently loaded page
+        final GtPagesPagerAdapter.ViewHolder holder = mPagerAdapter.getPrimaryItem();
+        if (holder != null && holder.mPage != null) {
+            trackPageView(holder.mPage.getModel());
         }
 
         addClickHandlersToAllPages();
@@ -898,9 +906,8 @@ public class SnuffyPWActivity extends AppCompatActivity
         EventTracker.track(getApp(), mAppPackage, "Menu Event", event);
     }
 
-    private void trackScreenActivity(String activity)
-    {
-        EventTracker.track(getApp(), activity, mAppLanguage);
+    void trackPageView(@NonNull final GtPage page) {
+        EventTracker.track(getApp(), page.getId(), page.getManifest().getLanguage());
     }
 
     private void startTimer()
@@ -960,6 +967,14 @@ public class SnuffyPWActivity extends AppCompatActivity
                 }
             }
             return POSITION_NONE;
+        }
+
+        @Nullable
+        SnuffyPage getItemFromPosition(final int position) {
+            if (position > 0 && position < mPages.size()) {
+                return mPages.get(position);
+            }
+            return null;
         }
 
         @Override
