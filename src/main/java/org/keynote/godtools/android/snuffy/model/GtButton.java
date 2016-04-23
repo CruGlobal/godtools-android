@@ -59,8 +59,8 @@ public class GtButton extends GtModel implements View.OnClickListener {
     private Set<GodToolsEvent.EventID> mTapEvents = ImmutableSet.of();
     private String mText;
 
-    private GtButton(@NonNull final GtPage page) {
-        super(page);
+    private GtButton(@NonNull final GtModel parent) {
+        super(parent);
     }
 
     @NonNull
@@ -107,16 +107,16 @@ public class GtButton extends GtModel implements View.OnClickListener {
     }
 
     @NonNull
-    public static GtButton fromXml(@NonNull final GtPage page, @NonNull final XmlPullParser parser)
+    public static GtButton fromXml(@NonNull final GtModel parent, @NonNull final XmlPullParser parser)
             throws IOException, XmlPullParserException {
-        final GtButton button = new GtButton(page);
+        final GtButton button = new GtButton(parent);
         button.parse(parser);
         return button;
     }
 
     @NonNull
-    public static GtButton fromXml(@NonNull final GtPage page, @NonNull final Element node) {
-        final GtButton button = new GtButton(page);
+    public static GtButton fromXml(@NonNull final GtModel parent, @NonNull final Element node) {
+        final GtButton button = new GtButton(parent);
         button.parse(node);
         return button;
     }

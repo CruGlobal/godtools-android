@@ -196,10 +196,7 @@ public class PackageReader
             pageInputStream = new BufferedInputStream(
                     new FileInputStream(new File(mAppRef.get().getDocumentsDir(), pageFileName)));
 
-            final SnuffyPage currPage = processPageFilePW(page, pageInputStream, pageFileName);
-            currPage.mDescription = page.getDescription();
-            currPage.mThumbnail = page.getThumb();
-            return currPage;
+            return processPageFilePW(page, pageInputStream, pageFileName);
         } finally {
             IOUtils.closeQuietly(pageInputStream);
         }
@@ -227,6 +224,8 @@ public class PackageReader
             {
                 snuffyPage = new SnuffyPage(mContext);
                 snuffyPage.mModel = page;
+                snuffyPage.mDescription = page.getDescription();
+                snuffyPage.mThumbnail = page.getThumb();
 
                 mYOffset = 0;
                 mYFooterTop = mPageHeight;

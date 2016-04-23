@@ -1,8 +1,11 @@
 package org.keynote.godtools.android.snuffy.model;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.common.collect.ImmutableList;
 
@@ -14,7 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GtManifest {
+public class GtManifest extends GtModel {
     private static final String XML_PACKAGE = "document";
     private static final String XML_TITLE = "packagename";
     private static final String XML_TITLE_LEGACY = "displayname";
@@ -28,6 +31,18 @@ public class GtManifest {
     @VisibleForTesting
     GtManifest(@NonNull final String appPackage) {
         this.mAppPackage = appPackage;
+    }
+
+    @NonNull
+    @Override
+    public GtManifest getManifest() {
+        return this;
+    }
+
+    @NonNull
+    @Override
+    public GtPage getPage() {
+        throw new IllegalStateException("It is impossible for a page to contain a Manifest");
     }
 
     public String getTitle() {
@@ -44,6 +59,13 @@ public class GtManifest {
 
     public String getAppPackage() {
         return mAppPackage;
+    }
+
+    @Nullable
+    @Override
+    public View render(@NonNull final ViewGroup parent, final boolean attachToParent) {
+        // you can't render a GtManifest
+        return null;
     }
 
     @NonNull

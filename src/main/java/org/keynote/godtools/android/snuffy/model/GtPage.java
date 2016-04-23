@@ -4,7 +4,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
+import android.view.View;
+import android.view.ViewGroup;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
@@ -14,9 +17,11 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
-public class GtPage {
+public class GtPage extends GtModel {
     static final String XML_PAGE = "page";
     static final String XML_ABOUT = "about";
 
@@ -32,15 +37,12 @@ public class GtPage {
     @NonNull
     private Set<GodToolsEvent.EventID> mListeners = ImmutableSet.of();
 
-    @Nullable
-    private GtFollowupModal mFollowupModal;
-
     @NonNull
-    private final GtManifest mManifest;
+    private final List<GtFollowupModal> mFollowupModals = new ArrayList<>();
 
     @VisibleForTesting
-    GtPage(@NonNull final GtManifest gtManifest) {
-        this.mManifest = gtManifest;
+    GtPage(@NonNull final GtManifest manifest) {
+        super(manifest);
     }
 
     public boolean isLoaded() {
@@ -64,14 +66,16 @@ public class GtPage {
         return mListeners;
     }
 
-    @Nullable
-    public GtFollowupModal getFollowupModal() {
-        return mFollowupModal;
+    @NonNull
+    public List<GtFollowupModal> getFollowupModals() {
+        return ImmutableList.copyOf(mFollowupModals);
     }
 
-    @NonNull
-    public GtManifest getManifest() {
-        return mManifest;
+    @Nullable
+    @Override
+    public View render(@NonNull ViewGroup parent, boolean attachToParent) {
+        // TODO: should this actually render the page long term?
+        return null;
     }
 
     @WorkerThread
@@ -90,8 +94,8 @@ public class GtPage {
             throw new XmlPullParserException("Package XML does not have a filename defined for a page", parser, null);
         }
         mThumb = parser.getAttributeValue(null, XML_ATTR_THUMBNAIL);
-        mListeners = ParserUtils.parseEvents(parser.getAttributeValue(null, XML_ATTR_LISTENERS), mManifest
-                .getAppPackage());
+        mListeners = ParserUtils
+                .parseEvents(parser.getAttributeValue(null, XML_ATTR_LISTENERS), getManifest().getAppPackage());
         mDescription = XmlPullParserUtils.safeNextText(parser);
 
         return this;
@@ -116,11 +120,7 @@ public class GtPage {
                 // process recognized elements
                 switch (parser.getName()) {
                     case GtFollowupModal.XML_FOLLOWUP_MODAL:
-                        if (mFollowupModal != null) {
-                            throw new XmlPullParserException("Package XML has more than 1 Followup Modal defined",
-                                                             parser, null);
-                        }
-                        mFollowupModal = GtFollowupModal.fromXml(this, parser);
+                        mFollowupModals.add(GtFollowupModal.fromXml(this, parser));
                         break;
                     default:
                         // skip unrecognized nodes
