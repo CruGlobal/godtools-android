@@ -14,7 +14,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.event.GodToolsEvent.EventID;
 import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.snuffy.ParserUtils;
@@ -43,7 +45,7 @@ public class GtFollowupModal extends GtModel {
     @NonNull
     private final String mId;
 
-    private long mFollowupId = Followup.INVALID_ID;
+    long mFollowupId = Followup.INVALID_ID;
     @NonNull
     private Set<EventID> mListeners = ImmutableSet.of();
     String mTitle;
@@ -214,6 +216,26 @@ public class GtFollowupModal extends GtModel {
             updateBody();
             attachButtonPair();
         }
+
+        /* BEGIN lifecycle */
+
+        @Override
+        protected boolean onSendEvent(@NonNull final EventID eventId) {
+            if (eventId.equals(EventID.SUBSCRIBE_EVENT)) {
+                // build subscribe event object
+                final GodToolsEvent event = new GodToolsEvent(eventId);
+                event.setPackageCode(getManifest().getPackageCode());
+                event.setLanguage(getManifest().getLanguage());
+                event.setFollowUpId(mFollowupId);
+
+                // send subscribe event
+                EventBus.getDefault().post(event);
+                return true;
+            }
+            return super.onSendEvent(eventId);
+        }
+
+        /* END lifecycle */
 
         private void updateBackground() {
             // update the background color & watermark
