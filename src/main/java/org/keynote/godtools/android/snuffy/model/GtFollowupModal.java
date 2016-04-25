@@ -32,8 +32,8 @@ import butterknife.ButterKnife;
 import static org.keynote.godtools.android.snuffy.Constants.DEFAULT_BACKGROUND_COLOR;
 
 public class GtFollowupModal extends GtModel {
-    static final String XML_FOLLOWUP_MODAL = "followup-modal";
-    private static final String XML_FALLBACK = "fallback";
+    public static final String XML_FOLLOWUP_MODAL = "followup-modal";
+    public static final String XML_FALLBACK = "fallback";
     private static final String XML_TITLE = "followup-title";
     private static final String XML_BODY = "followup-body";
 
@@ -51,6 +51,8 @@ public class GtFollowupModal extends GtModel {
     private final List<GtInputField> mInputFields = new ArrayList<>();
     @Nullable
     GtButtonPair mButtonPair;
+    @NonNull
+    private final List<GtThankYou> mThankYous = new ArrayList<>();
 
     @VisibleForTesting
     GtFollowupModal(@NonNull final GtPage page, @NonNull final String uniqueId) {
@@ -97,6 +99,11 @@ public class GtFollowupModal extends GtModel {
     @Nullable
     public GtButtonPair getButtonPair() {
         return mButtonPair;
+    }
+
+    @NonNull
+    public List<GtThankYou> getThankYous() {
+        return ImmutableList.copyOf(mThankYous);
     }
 
     @Nullable
@@ -176,6 +183,9 @@ public class GtFollowupModal extends GtModel {
                     break;
                 case GtButtonPair.XML_BUTTON_PAIR:
                     mButtonPair = GtButtonPair.fromXml(this, parser);
+                    break;
+                case GtThankYou.XML_THANK_YOU:
+                    mThankYous.add(GtThankYou.fromXml(this, Integer.toString(mThankYous.size() + 1), parser));
                     break;
                 default:
                     // skip unrecognized nodes

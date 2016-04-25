@@ -40,9 +40,11 @@ import org.ccci.gto.android.common.util.IOUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.event.GodToolsEvent;
+import org.keynote.godtools.android.snuffy.model.GtFollowupModal;
 import org.keynote.godtools.android.snuffy.model.GtManifest;
 import org.keynote.godtools.android.snuffy.model.GtModel;
 import org.keynote.godtools.android.snuffy.model.GtPage;
+import org.keynote.godtools.android.snuffy.model.GtThankYou;
 import org.keynote.godtools.android.utils.TypefaceUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -57,6 +59,7 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -268,6 +271,12 @@ public class PackageReader
                 }
             }
         }
+
+        // add all children pages
+        for (final SnuffyPage child : processFollowupModals(page, root)) {
+            snuffyPage.addChildPage(child);
+        }
+
         Log.d(TAG, ">>> processPageFile ends");
         return snuffyPage;
     }
@@ -357,6 +366,36 @@ public class PackageReader
             }
             node = node.getNextSibling();
         }
+    }
+
+    @NonNull
+    private List<SnuffyPage> processFollowupModals(@NonNull final GtPage page, @NonNull final Element element) {
+        final List<SnuffyPage> pages = new ArrayList<>();
+
+        // process all followup modals within this page
+        final Iterator<GtFollowupModal> modals = page.getFollowupModals().iterator();
+        for (final Element node : getChildrenNamed(element, GtFollowupModal.XML_FOLLOWUP_MODAL)) {
+            final Element fallback = getChildElementNamed(node, GtFollowupModal.XML_FALLBACK);
+            if (fallback != null) {
+                pages.addAll(processThankYouPages(modals.next(), fallback));
+            }
+        }
+
+        return pages;
+    }
+
+    @NonNull
+    private List<SnuffyPage> processThankYouPages(@NonNull final GtFollowupModal modal,
+                                                  @NonNull final Element element) {
+        final List<SnuffyPage> pages = new ArrayList<>();
+
+        // process all followup modals within this page
+        final Iterator<GtThankYou> thankYous = modal.getThankYous().iterator();
+        for (final Element node : getChildrenNamed(element, GtThankYou.XML_THANK_YOU)) {
+            pages.add(parsePage(thankYous.next(), node));
+        }
+
+        return pages;
     }
 
     private void processButton(SnuffyPage currPage, Element elButton, int iButton, Vector<String> urlsOnpage)

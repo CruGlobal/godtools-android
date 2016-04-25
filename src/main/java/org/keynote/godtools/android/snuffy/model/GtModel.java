@@ -57,6 +57,11 @@ public abstract class GtModel {
     }
 
     @NonNull
+    GtModel getParentModel() {
+        return mParentModel;
+    }
+
+    @NonNull
     public GtManifest getManifest() {
         return mParentModel.getManifest();
     }

@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
-import org.keynote.godtools.android.event.GodToolsEvent;
+import org.keynote.godtools.android.event.GodToolsEvent.EventID;
 import org.keynote.godtools.android.snuffy.ParserUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -31,7 +31,7 @@ public class GtPage extends GtModel {
 
     private static final String XML_ATTR_FILENAME = "filename";
     private static final String XML_ATTR_THUMBNAIL = "thumb";
-    private static final String XML_ATTR_LISTENERS = "listeners";
+    static final String XML_ATTR_LISTENERS = "listeners";
 
     private static final String XML_ATTR_BACKGROUND = "backgroundimage";
     private static final String XML_ATTR_BACKGROUND_COLOR = "color";
@@ -62,7 +62,7 @@ public class GtPage extends GtModel {
     private boolean mPageShadows = true;
 
     @NonNull
-    private Set<GodToolsEvent.EventID> mListeners = ImmutableSet.of();
+    Set<EventID> mListeners = ImmutableSet.of();
 
     @NonNull
     private final List<GtFollowupModal> mFollowupModals = new ArrayList<>();
@@ -71,6 +71,11 @@ public class GtPage extends GtModel {
     GtPage(@NonNull final GtManifest manifest, @NonNull final String uniqueId) {
         super(manifest);
         mId = manifest.getPackageCode() + "-" + uniqueId;
+    }
+
+    GtPage(@NonNull final GtFollowupModal modal, @NonNull final String uniqueId) {
+        super(modal);
+        mId = modal.getId() + "-" + uniqueId;
     }
 
     @NonNull
@@ -129,8 +134,8 @@ public class GtPage extends GtModel {
     }
 
     @NonNull
-    public Set<GodToolsEvent.EventID> getListeners() {
-        return mListeners;
+    public Set<EventID> getListeners() {
+        return ImmutableSet.copyOf(mListeners);
     }
 
     @NonNull
@@ -224,7 +229,7 @@ public class GtPage extends GtModel {
             switch (parser.getName()) {
                 case GtFollowupModal.XML_FOLLOWUP_MODAL:
                     final GtFollowupModal modal =
-                            GtFollowupModal.fromXml(this, Integer.toString(mFollowupModals.size()), parser);
+                            GtFollowupModal.fromXml(this, Integer.toString(mFollowupModals.size() + 1), parser);
                     mFollowupModals.add(modal);
                     break;
                 default:

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.util.SimpleArrayMap;
 import android.util.Log;
 import android.view.View;
 
@@ -16,6 +18,8 @@ public class SnuffyPage extends SnuffyLayout
 
     @NonNull
     private final GtPage mModel;
+
+    private final SimpleArrayMap<String, SnuffyPage> mChildPages = new SimpleArrayMap<>();
 
     public String mDescription;
     public String mThumbnail;
@@ -37,6 +41,15 @@ public class SnuffyPage extends SnuffyLayout
     @NonNull
     public GtPage getModel() {
         return mModel;
+    }
+
+    public void addChildPage(@NonNull final SnuffyPage page) {
+        mChildPages.put(page.getModel().getId(), page);
+    }
+
+    @Nullable
+    public SnuffyPage getChildPage(@NonNull final String id) {
+        return mChildPages.get(id);
     }
 
     public void setCover(View cover)
