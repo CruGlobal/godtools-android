@@ -15,7 +15,7 @@ public class GSSubscriber {
 
     @GsonIgnore
     private Integer id;
-    private String routeId;
+    private Long routeId;
     private String languageCode;
     private String firstName;
     private String lastName;
@@ -23,12 +23,8 @@ public class GSSubscriber {
     @GsonIgnore
     private Date createdTimestamp = new Date(System.currentTimeMillis());
 
-    public boolean isValid()
-    {
-        if(Strings.isNullOrEmpty(routeId) || Strings.isNullOrEmpty(languageCode) || Strings.isNullOrEmpty(email)) {
-            return false;
-        }
-        return true;
+    public boolean isValid() {
+        return routeId != null && !Strings.isNullOrEmpty(languageCode) && !Strings.isNullOrEmpty(email);
     }
 
     public Integer getId() {
@@ -39,11 +35,11 @@ public class GSSubscriber {
         this.id = id;
     }
 
-    public String getRouteId() {
+    public Long getRouteId() {
         return routeId;
     }
 
-    public void setRouteId(String routeId) {
+    public void setRouteId(Long routeId) {
         this.routeId = routeId;
     }
 

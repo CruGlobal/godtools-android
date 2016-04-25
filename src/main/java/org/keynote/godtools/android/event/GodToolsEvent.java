@@ -20,7 +20,7 @@ public class GodToolsEvent {
     private long mFollowUpId = Followup.INVALID_ID;
     private String mLanguage;
 
-    private final Map<String, String> mData = new HashMap<>();
+    private final Map<String, String> mFields = new HashMap<>();
 
     public GodToolsEvent(@NonNull EventID eventID) {
         this.eventID = eventID;
@@ -56,15 +56,15 @@ public class GodToolsEvent {
         mFollowUpId = id;
     }
 
-    public Map<String, String> getData() {
-        return ImmutableMap.copyOf(mData);
+    public Map<String, String> getFields() {
+        return ImmutableMap.copyOf(mFields);
     }
 
-    public void setData(@NonNull final String key, @Nullable final String value) {
+    public void setField(@NonNull final String key, @Nullable final String value) {
         if (value != null) {
-            mData.put(key, value);
+            mFields.put(key, value);
         } else {
-            mData.remove(key);
+            mFields.remove(key);
         }
     }
 

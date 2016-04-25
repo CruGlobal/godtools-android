@@ -21,6 +21,11 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class GtInputField extends GtModel {
+    public static final String FIELD_EMAIL = "email";
+    public static final String FIELD_FIRST_NAME = "first_name";
+    public static final String FIELD_LAST_NAME = "last_name";
+    public static final String FIELD_NAME = "name";
+
     public enum Type {
         EMAIL, TEXT;
 

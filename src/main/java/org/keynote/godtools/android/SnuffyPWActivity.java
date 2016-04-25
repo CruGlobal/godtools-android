@@ -35,11 +35,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 import org.ccci.gto.android.common.support.v4.adapter.ViewHolderPagerAdapter;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.keynote.godtools.android.business.GSSubscriber;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
@@ -49,6 +51,7 @@ import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.NotificationUpdateTask;
+import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.notifications.NotificationInfo;
 import org.keynote.godtools.android.snuffy.PackageReader;
 import org.keynote.godtools.android.snuffy.SnuffyAboutActivity;
@@ -64,6 +67,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -74,6 +79,10 @@ import butterknife.ButterKnife;
 import static android.support.v4.app.FragmentManager.POP_BACK_STACK_INCLUSIVE;
 import static org.ccci.gto.android.common.support.v4.util.IdUtils.convertId;
 import static org.keynote.godtools.android.event.GodToolsEvent.EventID.SUBSCRIBE_EVENT;
+import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_EMAIL;
+import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_FIRST_NAME;
+import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_LAST_NAME;
+import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_NAME;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.COUNT;
@@ -215,20 +224,22 @@ public class SnuffyPWActivity extends AppCompatActivity
     }
 
     @Subscribe
-    public void onGodToolsEvent(@NonNull final GodToolsEvent event) {
+    public void onNavigationEvent(@NonNull final GodToolsEvent event) {
         // only process events for our local namespace
         if (event.getEventID().inNamespace(mAppPackage)) {
             if (triggerFollowupModal(event.getEventID())) {
-                return;
+                // followup modal was displayed
             } else if (triggerLocalPageNavigation(event.getEventID())) {
                 dismissFollowupModal();
-                return;
             }
         }
+    }
 
-        // TODO: move this to a separate subscribe handler
+    @WorkerThread
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onSubscribeEvent(@NonNull final GodToolsEvent event) {
         if (event.getEventID().equals(SUBSCRIBE_EVENT)) {
-            triggerSubscribeEvent(event);
+            processSubscriberEvent(event);
         }
     }
 
@@ -404,10 +415,45 @@ public class SnuffyPWActivity extends AppCompatActivity
         return false;
     }
 
-    private boolean triggerSubscribeEvent(@NonNull final GodToolsEvent event) {
-        addGSSubscriberToDB(event);
-        GodToolsSyncService.syncGrowthSpacesSubscribers(this);
-        return true;
+    @WorkerThread
+    private void processSubscriberEvent(@NonNull final GodToolsEvent event) {
+        // look up the followup for the active context
+        final DBAdapter dao = DBAdapter.getInstance(this);
+        final Followup followup = dao.find(Followup.class, event.getFollowUpId(), Followup.DEFAULT_CONTEXT);
+        if (followup != null) {
+            // generate subscriber record
+            final GSSubscriber subscriber = new GSSubscriber();
+            subscriber.setRouteId(followup.getGrowthSpacesRouteId());
+            subscriber.setLanguageCode(event.getLanguage());
+
+            // process any fields
+            for (final Map.Entry<String, String> field : event.getFields().entrySet()) {
+                switch (Strings.nullToEmpty(field.getKey()).toLowerCase(Locale.US)) {
+                    case FIELD_EMAIL:
+                        subscriber.setEmail(field.getValue());
+                        break;
+                    case FIELD_FIRST_NAME:
+                        subscriber.setFirstName(field.getValue());
+                        break;
+                    case FIELD_LAST_NAME:
+                        subscriber.setLastName(field.getValue());
+                        break;
+                    case FIELD_NAME:
+                        final String[] parts = field.getValue().split(" ", 2);
+                        subscriber.setFirstName(parts[0]);
+                        if (parts.length > 1) {
+                            subscriber.setLastName(parts[1]);
+                        }
+                        break;
+                }
+            }
+
+            // store subscriber if it's valid & trigger background sync
+            if (subscriber.isValid()) {
+                dao.insert(subscriber);
+                GodToolsSyncService.syncGrowthSpacesSubscribers(this);
+            }
+        }
     }
 
     private void showFollowupModal(@NonNull final GtFollowupModal modal) {
@@ -464,23 +510,6 @@ public class SnuffyPWActivity extends AppCompatActivity
 
         EventBus.getDefault().unregister(this);
         super.onStop();
-    }
-
-    private void addGSSubscriberToDB(GodToolsEvent event) {
-        GSSubscriber gsSubscriber = new GSSubscriber();
-        gsSubscriber.setRouteId(event.getData().get("routeId"));
-        gsSubscriber.setLanguageCode(event.getData().get("languageCode"));
-        gsSubscriber.setFirstName(event.getData().get("firstName"));
-        gsSubscriber.setLastName(event.getData().get("lastName"));
-        gsSubscriber.setEmail(event.getData().get("email"));
-
-        if(gsSubscriber.isValid()) {
-            final DBAdapter dao = DBAdapter.getInstance(this);
-            dao.insertAsync(gsSubscriber);
-        }
-        else {
-            Log.e(TAG, "Growth Spaces Subscriber must have route id, language code, and email set.");
-        }
     }
 
     private void doSetup(int delay)

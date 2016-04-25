@@ -241,7 +241,7 @@ public class GtFollowupModal extends GtModel {
                         if (rawHolder instanceof GtInputField.ViewHolder) {
                             final GtInputField.ViewHolder holder = (GtInputField.ViewHolder) rawHolder;
                             if (holder.getName() != null) {
-                                event.setData(holder.getName(), holder.getValue());
+                                event.setField(holder.getName(), holder.getValue());
                             }
                         }
                     }
