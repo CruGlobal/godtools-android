@@ -13,6 +13,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.SimpleOnPageChangeListener;
@@ -58,14 +60,18 @@ import org.keynote.godtools.android.snuffy.model.GtPage;
 import org.keynote.godtools.android.support.v4.fragment.GtFollowupModalDialogFragment;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static android.support.v4.app.FragmentManager.POP_BACK_STACK_INCLUSIVE;
 import static org.ccci.gto.android.common.support.v4.util.IdUtils.convertId;
 import static org.keynote.godtools.android.event.GodToolsEvent.EventID.SUBSCRIBE_EVENT;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
@@ -86,6 +92,7 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 public class SnuffyPWActivity extends AppCompatActivity
 {
     private static final String TAG = "SnuffyActivity";
+    private static final String TAG_FOLLOWUP_MODAL = "followupModal";
 
     private String mAppPackage;
     private String mConfigFileName;
@@ -110,6 +117,7 @@ public class SnuffyPWActivity extends AppCompatActivity
     private String regid;
     private Timer timer;
 
+    private final Set<String> mVisibleChildPages = new HashSet<>();
     @Nullable
     private List<SnuffyPage> mPages;
     @Nullable
@@ -207,11 +215,35 @@ public class SnuffyPWActivity extends AppCompatActivity
     }
 
     @Subscribe
-    public boolean onGodToolsEvent(@NonNull final GodToolsEvent event) {
+    public void onGodToolsEvent(@NonNull final GodToolsEvent event) {
+        // only process events for our local namespace
+        if (event.getEventID().inNamespace(mAppPackage)) {
+            if (triggerFollowupModal(event.getEventID())) {
+                return;
+            } else if (triggerLocalPageNavigation(event.getEventID())) {
+                dismissFollowupModal();
+                return;
+            }
+        }
+
+        // TODO: move this to a separate subscribe handler
         if (event.getEventID().equals(SUBSCRIBE_EVENT)) {
-            return triggerSubscribeEvent(event);
-        } else {
-            return triggerFollowupModal(event.getEventID()) || triggerLocalPageNavigation(event.getEventID());
+            triggerSubscribeEvent(event);
+        }
+    }
+
+    /**
+     * Event triggered when a child page should be shown
+     *
+     * @param id
+     */
+    public void onShowChildPage(@NonNull final String id) {
+        mVisibleChildPages.add(id);
+        updateViewPager();
+        dismissFollowupModal();
+
+        if (mPager != null) {
+            mPager.setCurrentItem(mPagerAdapter.getItemPositionFromId(convertId(id)));
         }
     }
 
@@ -287,7 +319,23 @@ public class SnuffyPWActivity extends AppCompatActivity
 
     private void updateViewPager() {
         if (mPagerAdapter != null) {
-            mPagerAdapter.setPages(mPages);
+            final List<SnuffyPage> pages;
+            if (mVisibleChildPages.isEmpty() || mPages == null) {
+                pages = mPages;
+            } else {
+                pages = new ArrayList<>();
+                for (final SnuffyPage page : mPages) {
+                    pages.add(page);
+                    for (final String name : mVisibleChildPages) {
+                        final SnuffyPage child = page.getChildPage(name);
+                        if (child != null) {
+                            pages.add(child);
+                        }
+                    }
+                }
+            }
+
+            mPagerAdapter.setPages(pages);
         }
     }
 
@@ -331,13 +379,10 @@ public class SnuffyPWActivity extends AppCompatActivity
         if (mPagerAdapter != null) {
             final GtPagesPagerAdapter.ViewHolder holder = mPagerAdapter.getPrimaryItem();
             if (holder != null && holder.mPage != null) {
-                final GtPage page = holder.mPage.getModel();
-                if (page != null) {
-                    for (final GtFollowupModal followup : page.getFollowupModals()) {
-                        if (followup != null && followup.getListeners().contains(event)) {
-                            showFollowupModal(followup);
-                            return true;
-                        }
+                for (final GtFollowupModal followup : holder.mPage.getModel().getFollowupModals()) {
+                    if (followup != null && followup.getListeners().contains(event)) {
+                        showFollowupModal(followup);
+                        return true;
                     }
                 }
             }
@@ -366,11 +411,22 @@ public class SnuffyPWActivity extends AppCompatActivity
     }
 
     private void showFollowupModal(@NonNull final GtFollowupModal modal) {
-        final FragmentManager fm = this.getSupportFragmentManager();
-        if (fm.findFragmentByTag("followupModal") == null) {
-            final GtFollowupModalDialogFragment followupFragment =
-                    GtFollowupModalDialogFragment.newInstance(mAppPackage, mAppLanguage, mPackageStatus, modal.getId());
-            followupFragment.show(fm.beginTransaction().addToBackStack("followupModal"), "followupModal");
+        // dismiss any previous followup modal
+        dismissFollowupModal();
+
+        // create the new followup modal
+        final FragmentManager fm = getSupportFragmentManager();
+        GtFollowupModalDialogFragment.newInstance(mAppPackage, mAppLanguage, mPackageStatus, modal.getId())
+                .show(fm.beginTransaction().addToBackStack(TAG_FOLLOWUP_MODAL), TAG_FOLLOWUP_MODAL);
+    }
+
+    private void dismissFollowupModal() {
+        final FragmentManager fm = getSupportFragmentManager();
+        final Fragment fragment = fm.findFragmentByTag(TAG_FOLLOWUP_MODAL);
+        if (fragment instanceof DialogFragment) {
+            ((DialogFragment) fragment).dismiss();
+        } else if (fragment != null) {
+            fm.popBackStack(TAG_FOLLOWUP_MODAL, POP_BACK_STACK_INCLUSIVE);
         }
     }
 

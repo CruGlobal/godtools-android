@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.support.v4.fragment;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import org.ccci.gto.android.common.util.BundleCompat;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.keynote.godtools.android.SnuffyPWActivity;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.event.GodToolsEvent;
@@ -16,6 +18,7 @@ import org.keynote.godtools.android.snuffy.PackageManager;
 import org.keynote.godtools.android.snuffy.model.GtFollowupModal;
 import org.keynote.godtools.android.snuffy.model.GtManifest;
 import org.keynote.godtools.android.snuffy.model.GtPage;
+import org.keynote.godtools.android.snuffy.model.GtThankYou;
 
 import java.util.concurrent.ExecutionException;
 
@@ -102,7 +105,16 @@ public class GtFollowupModalDialogFragment extends BottomSheetDialogFragment {
 
     @Subscribe
     public void onGodToolsEvent(@NonNull final GodToolsEvent event) {
-        dismiss();
+        if (mModal != null) {
+            for (final GtThankYou thankYou : mModal.getThankYous()) {
+                if (thankYou.getListeners().contains(event.getEventID())) {
+                    final Activity activity = getActivity();
+                    if (activity instanceof SnuffyPWActivity) {
+                        ((SnuffyPWActivity) activity).onShowChildPage(thankYou.getId());
+                    }
+                }
+            }
+        }
     }
 
     @Override
