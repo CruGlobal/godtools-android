@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearance.GodTools.Content" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="Widget.GodTools.Content" parent="Base"/>
+
+    <style name="Widget.GodTools.Content.ButtonPair"/>
+</resources>

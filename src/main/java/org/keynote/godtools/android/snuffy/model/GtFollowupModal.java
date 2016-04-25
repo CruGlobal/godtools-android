@@ -50,7 +50,7 @@ public class GtFollowupModal extends GtModel {
     private Set<EventID> mListeners = ImmutableSet.of();
     String mTitle;
     String mBody;
-    private final List<GtInputField> mInputFields = new ArrayList<>();
+    final List<GtInputField> mInputFields = new ArrayList<>();
     @Nullable
     GtButtonPair mButtonPair;
     @NonNull
@@ -115,7 +115,7 @@ public class GtFollowupModal extends GtModel {
         final LayoutInflater inflater = LayoutInflater.from(context);
 
         // inflate the raw view
-        final ViewHolder holder = new ViewHolder(inflater.inflate(R.layout.gt_followup_modal, parent, false));
+        final ViewHolder holder = new ViewHolder(inflater.inflate(R.layout.gt_followupmodal, parent, false));
         if (parent != null && attachToRoot) {
             parent.addView(holder.mRoot);
         }
@@ -201,7 +201,12 @@ public class GtFollowupModal extends GtModel {
         @Bind(R.id.title)
         TextView mTitleText;
         @Nullable
+        @Bind(R.id.body)
         TextView mBodyText;
+
+        @Nullable
+        @Bind(R.id.fields)
+        ViewGroup mFields;
 
         @Nullable
         @Bind(R.id.buttons)
@@ -214,6 +219,7 @@ public class GtFollowupModal extends GtModel {
             updateBackground();
             updateTitle();
             updateBody();
+            attachFields();
             attachButtonPair();
         }
 
@@ -227,6 +233,19 @@ public class GtFollowupModal extends GtModel {
                 event.setPackageCode(getManifest().getPackageCode());
                 event.setLanguage(getManifest().getLanguage());
                 event.setFollowUpId(mFollowupId);
+
+                // set all input fields as data
+                if (mFields != null) {
+                    for (int i = 0; i < mFields.getChildCount(); i++) {
+                        final Object rawHolder = mFields.getChildAt(i).getTag(R.id.tag_gt_model_view_holder);
+                        if (rawHolder instanceof GtInputField.ViewHolder) {
+                            final GtInputField.ViewHolder holder = (GtInputField.ViewHolder) rawHolder;
+                            if (holder.getName() != null) {
+                                event.setData(holder.getName(), holder.getValue());
+                            }
+                        }
+                    }
+                }
 
                 // send subscribe event
                 EventBus.getDefault().post(event);
@@ -257,6 +276,15 @@ public class GtFollowupModal extends GtModel {
                 mBodyText.setVisibility(mBody != null ? View.VISIBLE : View.GONE);
                 if (mBody != null) {
                     mBodyText.setText(mBody);
+                }
+            }
+        }
+
+        private void attachFields() {
+            if (mFields != null) {
+                mFields.setVisibility(mInputFields.size() > 0 ? View.VISIBLE : View.GONE);
+                for (final GtInputField field : mInputFields) {
+                    field.render(mFields.getContext(), mFields, true);
                 }
             }
         }

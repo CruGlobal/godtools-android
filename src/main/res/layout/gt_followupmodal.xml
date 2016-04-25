@@ -11,14 +11,11 @@
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:gravity="center_vertical"
-        android:textSize="16sp"
-        android:textIsSelectable="false"
-        android:textColor="#fff"
+        style="@style/Widget.GodTools.Content.FollowupModal.Title"
         tools:text="Jesus has come into your life as he promised."/>
 
     <TextView
@@ -26,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
+        style="@style/Widget.GodTools.Content.FollowupModal.Body"
         tools:text="Knowing someone better helps a relationship grow. Would you like to sign up for an email series that can help guide you in your new relationship with Jesus Christ?"/>
 
     <LinearLayout
@@ -39,5 +37,6 @@
         android:id="@+id/buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/fields"/>
+        android:layout_below="@id/fields"
+        style="@style/Widget.GodTools.Content.FollowupModal.Buttons"/>
 </RelativeLayout>
