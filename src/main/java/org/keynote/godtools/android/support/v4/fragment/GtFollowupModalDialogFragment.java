@@ -2,10 +2,13 @@ package org.keynote.godtools.android.support.v4.fragment;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.view.View;
 
 import org.ccci.gto.android.common.util.BundleCompat;
 import org.greenrobot.eventbus.EventBus;
@@ -96,6 +99,18 @@ public class GtFollowupModalDialogFragment extends BottomSheetDialogFragment {
         final GtFollowupModal.ViewHolder holder = mModal.render(getContext(), null, false);
         if (holder != null) {
             dialog.setContentView(holder.mRoot);
+            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(@NonNull final DialogInterface d) {
+                    if (d instanceof Dialog) {
+                        final View bottomSheet =
+                                ((Dialog) d).findViewById(android.support.design.R.id.design_bottom_sheet);
+                        if (bottomSheet != null) {
+                            BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
+                        }
+                    }
+                }
+            });
         } else {
             dismissAllowingStateLoss();
         }
