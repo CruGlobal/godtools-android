@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,8 @@ public class GtFollowupModal extends GtModel {
     @Nullable
     GtButtonPair mButtonPair;
 
-    private GtFollowupModal(@NonNull final GtPage page, @NonNull final String uniqueId) {
+    @VisibleForTesting
+    GtFollowupModal(@NonNull final GtPage page, @NonNull final String uniqueId) {
         super(page);
         mId = page.getId() + "-followup-" + uniqueId;
     }
@@ -170,7 +172,7 @@ public class GtFollowupModal extends GtModel {
                     mBody = XmlPullParserUtils.safeNextText(parser);
                     break;
                 case GtInputField.XML_INPUT_FIELD:
-                    mInputFields.add(GtInputField.fromXml(parser));
+                    mInputFields.add(GtInputField.fromXml(this, parser));
                     break;
                 case GtButtonPair.XML_BUTTON_PAIR:
                     mButtonPair = GtButtonPair.fromXml(this, parser);

@@ -1,7 +1,9 @@
 package org.keynote.godtools.android.snuffy.model;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.ViewGroup;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.xmlpull.v1.XmlPullParser;
@@ -9,7 +11,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-public class GtInputField {
+public class GtInputField extends GtModel {
     public enum Type {
         EMAIL, TEXT;
 
@@ -18,6 +20,7 @@ public class GtInputField {
         private static final String XML_ATTR_TYPE_EMAIL = "email";
         private static final String XML_ATTR_TYPE_TEXT = "text";
 
+        @NonNull
         static Type fromXmlAttr(@Nullable final String attr) {
             if (attr != null) {
                 switch (attr) {
@@ -45,7 +48,9 @@ public class GtInputField {
     private String mLabel;
     private String mPlaceholder;
 
-    private GtInputField() {}
+    private GtInputField(@NonNull final GtFollowupModal parent) {
+        super(parent);
+    }
 
     @NonNull
     public Type getType() {
@@ -64,9 +69,19 @@ public class GtInputField {
         return mPlaceholder;
     }
 
+    @Nullable
+    @Override
+    public ViewHolder render(@NonNull Context context, @Nullable ViewGroup parent, boolean attachToRoot) {
+        // TODO
+        return null;
+    }
+
     @NonNull
-    static GtInputField fromXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
-        return new GtInputField().parse(parser);
+    static GtInputField fromXml(@NonNull final GtFollowupModal modal, @NonNull final XmlPullParser parser)
+            throws IOException, XmlPullParserException {
+        final GtInputField field = new GtInputField(modal);
+        field.parse(parser);
+        return field;
     }
 
     @NonNull
