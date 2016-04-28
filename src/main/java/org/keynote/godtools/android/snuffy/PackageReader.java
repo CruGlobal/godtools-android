@@ -17,6 +17,7 @@ import android.support.annotation.Nullable;
 import android.text.ClipboardManager;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -443,7 +444,7 @@ public class PackageReader
             button.setText(label.length() > 0 ? label : content);
             button.setSingleLine();
             button.setEllipsize(TruncateAt.END);
-            button.setTextSize(getScaledTextSize(DEFAULT_BUTTON_TEXT_SIZE * size / 100.0f));
+            button.setTextSize(TypedValue.COMPLEX_UNIT_PX, getScaledTextSize(DEFAULT_BUTTON_TEXT_SIZE * size / 100.0f));
             button.setTextColor(mBackgroundColor);
             button.setLayoutParams(new AbsoluteLayout.LayoutParams(mPageWidth - 2 * margin, LayoutParams.WRAP_CONTENT, margin, mYOffset));
 
@@ -910,7 +911,7 @@ public class PackageReader
         tv.setGravity(getGravityFromAlign(align) + Gravity.CENTER_VERTICAL);
         tv.setTypeface(null, getTypefaceFromModifier(modifier));
         tv.setTextColor(color);
-        tv.setTextSize(getScaledTextSize(DEFAULT_BUTTON_TEXT_SIZE * size / 100.0f));
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, getScaledTextSize(DEFAULT_BUTTON_TEXT_SIZE * size / 100.0f));
         theContainer.addView(TypefaceUtils.setTypeface(tv, mLanguage));
 
         AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) tv.getLayoutParams();
@@ -1041,7 +1042,7 @@ public class PackageReader
 
         Button button = new Button(mContext);
         button.setText(content);
-        button.setTextSize(getScaledTextSize(DEFAULT_BUTTON_TEXT_SIZE * size / 100.0f));
+        button.setTextSize(TypedValue.COMPLEX_UNIT_PX, getScaledTextSize(DEFAULT_BUTTON_TEXT_SIZE * size / 100.0f));
         button.setTextColor(mBackgroundColor);
         button.setLayoutParams(new AbsoluteLayout.LayoutParams(panelWidth - 2 * margin, LayoutParams.WRAP_CONTENT, margin, mYOffsetInPanel));
 
@@ -1158,7 +1159,7 @@ public class PackageReader
         tv.setGravity(getGravityFromAlign(align) + Gravity.TOP);
         tv.setTypeface(null, getTypefaceFromModifier(modifier));
         tv.setTextColor(color);
-        tv.setTextSize(getScaledTextSize(DEFAULT_TEXT_SIZE * size / 100.0f));
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, getScaledTextSize(DEFAULT_TEXT_SIZE * size / 100.0f));
 
         if (xPos == 0)
         {
@@ -1256,7 +1257,7 @@ public class PackageReader
                 tv.setGravity(getGravityFromAlign(align) + Gravity.TOP);
                 TypefaceUtils.setTypeface(tv, mLanguage, getTypefaceFromModifier(modifier));
                 tv.setTextColor(color);
-                tv.setTextSize(getScaledTextSize((bStraightMode ? DEFAULT_STRAIGHT_QUESTION_TEXT_SIZE : DEFAULT_QUESTION_TEXT_SIZE) * size / 100.0f));
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, getScaledTextSize((bStraightMode ? DEFAULT_STRAIGHT_QUESTION_TEXT_SIZE : DEFAULT_QUESTION_TEXT_SIZE) * size / 100.0f));
                 if (xPos == 0)
                 {
                     int marginX = getScaledXValue(TEXT_MARGINX);
@@ -1314,7 +1315,7 @@ public class PackageReader
         tv.setGravity(getGravityFromAlign(align) + Gravity.TOP);
         TypefaceUtils.setTypeface(tv, mLanguage, getTypefaceFromModifier(modifier));
         tv.setTextColor(color);
-        tv.setTextSize(getScaledTextSize(DEFAULT_QUESTION_TEXT_SIZE * size / 100.0f));
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, getScaledTextSize(DEFAULT_QUESTION_TEXT_SIZE * size / 100.0f));
         if (xPos == 0)
         {
             int marginX = getScaledXValue(TEXT_MARGINX);
@@ -1380,7 +1381,7 @@ public class PackageReader
         tv.setGravity(getGravityFromAlign(align));
         TypefaceUtils.setTypeface(tv, mLanguage, getTypefaceFromModifier(modifier));
         tv.setTextColor(color);
-        tv.setTextSize(getScaledTextSize(DEFAULT_TEXT_SIZE * size / 100.0f));
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, getScaledTextSize(DEFAULT_TEXT_SIZE * size / 100.0f));
         currPage.addView(tv);
 
         ViewGroup.LayoutParams lp = tv.getLayoutParams();
@@ -2008,7 +2009,7 @@ public class PackageReader
         tv.setGravity(getGravityFromAlign(align) + Gravity.TOP);
         tv.setTypeface(null, getTypefaceFromModifier(modifier));
         tv.setTextColor(color);
-        tv.setTextSize(getScaledTextSize(textSize));
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, getScaledTextSize(textSize));
         tv.setPadding(0, 0, 0, 0);
 
         return tv;
@@ -2060,7 +2061,7 @@ public class PackageReader
         tv.setGravity(getGravityFromAlign(align));
         tv.setTypeface(null, getTypefaceFromModifier(modifier));
         tv.setTextColor(color);
-        tv.setTextSize(getScaledTextSize(textSize));
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, getScaledTextSize(textSize));
         tv.setPadding(0, 0, 0, 0);
 
         return TypefaceUtils.setTypeface(tv, mLanguage);
@@ -2108,7 +2109,7 @@ public class PackageReader
         tv.setGravity(getGravityFromAlign(align));
         tv.setTypeface(null, getTypefaceFromModifier(modifier));
         tv.setTextColor(color);
-        tv.setTextSize(getScaledTextSize(textSize));
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, getScaledTextSize(textSize));
         tv.setPadding(0, 0, 0, 0);
 
         return TypefaceUtils.setTypeface(tv, mLanguage);
@@ -2151,7 +2152,7 @@ public class PackageReader
         tv.setTypeface(null, getTypefaceFromModifier(modifier));
         tv.setTextColor(color);
         tv.setBackgroundColor(bgColor);
-        tv.setTextSize(getScaledTextSize(textSize));
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, getScaledTextSize(textSize));
         tv.setPadding(0, 0, 0, 0);
 
         return TypefaceUtils.setTypeface(tv, mLanguage);
@@ -2304,10 +2305,7 @@ public class PackageReader
     }
 
     private float getScaledTextSize(final float textSize) {
-        // textSize is supplied is SP units.
-        // return a value in DP units.
-        final float scale = mContext.getResources().getDisplayMetrics().density;
-        return (float) (textSize * mScale) / scale;
+        return (float) (textSize * mScale);
     }
 
     private int getColorAttributeValue(Element el, int defaultValue)
@@ -2411,7 +2409,7 @@ public class PackageReader
                     LayoutParams.WRAP_CONTENT,
                     LayoutParams.WRAP_CONTENT,
                     0, 0));
-            tv.setTextSize(getScaledTextSize(textSize));
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, getScaledTextSize(textSize));
             tv.measure(
                     MeasureSpec.UNSPECIFIED,
                     MeasureSpec.UNSPECIFIED);
