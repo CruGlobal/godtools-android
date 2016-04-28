@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,9 @@ import java.util.Set;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static org.keynote.godtools.android.snuffy.RenderUtils.scaleTextSize;
+import static org.keynote.godtools.android.snuffy.RenderUtils.unapplyTextSizeUnit;
 
 public class GtButton extends GtTextModel {
     public enum Mode {
@@ -233,6 +237,14 @@ public class GtButton extends GtTextModel {
             // trigger any configured tap events
             for (final EventID event : mTapEvents) {
                 onSendEvent(event);
+            }
+        }
+
+        @Override
+        public void scaleViewForLegacyLayout(final double scale) {
+            super.scaleViewForLegacyLayout(scale);
+            if (mButton != null) {
+                scaleTextSize(unapplyTextSizeUnit(mButton, TypedValue.COMPLEX_UNIT_SP), scale);
             }
         }
     }

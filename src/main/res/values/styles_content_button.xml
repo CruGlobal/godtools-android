@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="TextAppearance.GodTools.Content.Button"/>
+    <style name="TextAppearance.GodTools.Content.Button">
+        <item name="android:textSize">19sp</item>
+    </style>
 
     <style name="TextAppearance.GodTools.Content.Button.Link">
     </style>

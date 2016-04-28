@@ -139,5 +139,20 @@ public class GtButtonPair extends GtModel {
                 }
             }
         }
+
+        @Override
+        public void scaleViewForLegacyLayout(final double scale) {
+            super.scaleViewForLegacyLayout(scale);
+
+            // scale the positive and negative buttons
+            if (mButtons != null) {
+                for (int i = 0; i < mButtons.getChildCount(); i++) {
+                    final Object holder = mButtons.getChildAt(i).getTag(R.id.tag_gt_model_view_holder);
+                    if (holder instanceof GtModel.ViewHolder) {
+                        ((GtModel.ViewHolder) holder).scaleViewForLegacyLayout(scale);
+                    }
+                }
+            }
+        }
     }
 }

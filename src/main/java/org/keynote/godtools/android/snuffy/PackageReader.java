@@ -984,6 +984,7 @@ public class PackageReader
                     if (model != null) {
                         final GtModel.ViewHolder holder = model.render(mContext, theContainer, true);
                         if (holder != null) {
+                            holder.scaleViewForLegacyLayout(mScale);
                             layoutModel(model, holder.mRoot, mYOffsetInPanel, panelWidth);
                             final AbsoluteLayout.LayoutParams lp =
                                     (AbsoluteLayout.LayoutParams) holder.mRoot.getLayoutParams();

@@ -5,6 +5,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.TextView;
 
@@ -76,10 +77,20 @@ public abstract class GtTextModel extends GtModel {
 
     void applyTextStyles(@NonNull final TextView view) {
         TypefaceUtils.setTypeface(view, getManifest().getLanguage(), getTextStyle());
+
+        // set text size
+        final Integer size = getTextSize();
+        if (size != null && size != 100) {
+            view.setTextSize(TypedValue.COMPLEX_UNIT_PX, (view.getTextSize() * size) / 100);
+        }
+
+        // set text color
         final Integer color = getTextColor();
         if (color != null) {
             view.setTextColor(getTextColor());
         }
+
+        // set text alignment
         final int align = getTextAlign();
         if (align != Gravity.NO_GRAVITY) {
             view.setGravity(align);
