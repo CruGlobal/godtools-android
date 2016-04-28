@@ -26,7 +26,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class GtButton extends GtModel {
+public class GtButton extends GtTextModel {
     public enum Mode {
         LINK, DEFAULT, UNKNOWN, PANEL;
 
@@ -141,6 +141,7 @@ public class GtButton extends GtModel {
         mTapEvents = ParserUtils
                 .parseEvents(parser.getAttributeValue(null, XML_ATTR_TAP_EVENTS), getManifest().getPackageCode());
         parsePositionAttrs(parser);
+        parseTextAttrs(parser);
 
         switch (mMode) {
             // don't process unknown button modes
@@ -190,6 +191,7 @@ public class GtButton extends GtModel {
         }
         mTapEvents = ParserUtils.parseEvents(node.getAttribute(XML_ATTR_TAP_EVENTS), getManifest().getPackageCode());
         parsePositionAttrs(node);
+        parseTextAttrs(node);
 
         switch (mMode) {
             case UNKNOWN:
@@ -217,7 +219,9 @@ public class GtButton extends GtModel {
             // customize button if necessary
             if (mButton != null) {
                 mButton.setText(mText);
+                applyTextStyles(mButton);
 
+                // XXX: we can't set underline in style attributes :( -DF
                 if (mMode == Mode.LINK) {
                     mButton.setPaintFlags(mButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 }

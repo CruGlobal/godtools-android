@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="TextAppearance.GodTools.Content" parent="TextAppearance.AppCompat.Large">
+    <style name="TextAppearance.GodTools.Content" parent="TextAppearance.AppCompat">
         <item name="android:textColor">#fff</item>
     </style>
 
