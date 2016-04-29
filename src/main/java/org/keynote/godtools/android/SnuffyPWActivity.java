@@ -77,6 +77,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static android.support.v4.app.FragmentManager.POP_BACK_STACK_INCLUSIVE;
+import static android.support.v4.view.PagerAdapter.POSITION_NONE;
 import static org.ccci.gto.android.common.support.v4.util.IdUtils.convertId;
 import static org.keynote.godtools.android.event.GodToolsEvent.EventID.SUBSCRIBE_EVENT;
 import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_EMAIL;
@@ -252,10 +253,7 @@ public class SnuffyPWActivity extends AppCompatActivity
         mVisibleChildPages.add(id);
         updateViewPager();
         dismissFollowupModal();
-
-        if (mPager != null) {
-            mPager.setCurrentItem(mPagerAdapter.getItemPositionFromId(convertId(id)));
-        }
+        showPage(id);
     }
 
     @Override
@@ -404,9 +402,10 @@ public class SnuffyPWActivity extends AppCompatActivity
 
     private boolean triggerLocalPageNavigation(@NonNull final EventID event) {
         if (mPages != null) {
-            for (int x = 0; x < mPages.size(); x++) {
-                if (mPages.get(x).getModel().getListeners().contains(event)) {
-                    mPager.setCurrentItem(x);
+            for (final SnuffyPage page : mPages) {
+                final GtPage model = page.getModel();
+                if (model.getListeners().contains(event)) {
+                    showPage(model.getId());
                     return true;
                 }
             }
@@ -476,6 +475,15 @@ public class SnuffyPWActivity extends AppCompatActivity
             ((DialogFragment) fragment).dismiss();
         } else if (fragment != null) {
             fm.popBackStack(TAG_FOLLOWUP_MODAL, POP_BACK_STACK_INCLUSIVE);
+        }
+    }
+
+    private void showPage(@Nullable final String id) {
+        if (mPager != null && mPagerAdapter != null && id != null) {
+            final int position = mPagerAdapter.getItemPositionFromId(convertId(id));
+            if (position != POSITION_NONE) {
+                mPager.setCurrentItem(position);
+            }
         }
     }
 
