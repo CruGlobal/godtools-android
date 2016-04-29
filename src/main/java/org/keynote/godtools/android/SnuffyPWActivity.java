@@ -111,7 +111,6 @@ public class SnuffyPWActivity extends AppCompatActivity
     @Bind(R.id.snuffyViewPager)
     ViewPager mPager;
     GtPagesPagerAdapter mPagerAdapter;
-    private int mPagerCurrentItem = 0;
 
     private boolean mSetupRequired = true;
     private String mPackageTitle;
@@ -132,6 +131,8 @@ public class SnuffyPWActivity extends AppCompatActivity
     private List<SnuffyPage> mPages;
     @Nullable
     private SnuffyPage mAboutView;
+    @Nullable
+    String mCurrentPageId;
 
     private void setLanguage(String languageCode)
     {
@@ -274,21 +275,24 @@ public class SnuffyPWActivity extends AppCompatActivity
             mPager.addOnPageChangeListener(new SimpleOnPageChangeListener() {
                 @Override
                 public void onPageSelected(int position) {
-                    // exit previously active page
-                    final SnuffyPage previousPage = mPagerAdapter.getItemFromPosition(mPagerCurrentItem);
-                    if (previousPage != null) {
-                        previousPage.onExitPage();
+                    if (mCurrentPageId != null) {
+                        final SnuffyPage page = mPagerAdapter
+                                .getItemFromPosition(mPagerAdapter.getItemPositionFromId(convertId(mCurrentPageId)));
+                        if (page != null) {
+                            // trigger the exit page event
+                            page.onExitPage();
+                        }
                     }
 
-                    // keep our own since ViewPager doesn't offer a getCurrentItem method!
-                    mPagerCurrentItem = position;
-
-                    // enter currently active page
                     final SnuffyPage page = mPagerAdapter.getItemFromPosition(position);
                     if (page != null) {
                         final GtPage model = page.getModel();
-                        Log.d(TAG, "onPageSelected: " + model.getId());
+
+                        // track the currently active page
+                        mCurrentPageId = page.getModel().getId();
                         trackPageView(model);
+
+                        // trigger the enter page event
                         page.onEnterPage();
                     }
 
@@ -555,15 +559,6 @@ public class SnuffyPWActivity extends AppCompatActivity
 
         addClickHandlersToAllPages();
         addCallingActivityToAllPages();
-    }
-
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-        SharedPreferences.Editor ed = settings.edit();
-        ed.putInt("currPage", mPagerCurrentItem);
-        ed.apply();
     }
 
     private void addClickHandlersToAllPages()
