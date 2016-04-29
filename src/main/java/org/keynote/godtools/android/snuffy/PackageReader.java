@@ -364,6 +364,29 @@ public class PackageReader
                     processText(currPage, el);
                 } else if (el.getTagName().equalsIgnoreCase("title")) {
                     processTitle(currPage, el);
+                } else {
+                    // try parsing it in our new model
+                    final GtModel model = GtModel.fromXml(currPage.getModel(), el);
+                    if (model != null) {
+                        final GtModel.ViewHolder holder = model.render(mContext, currPage, true);
+                        if (holder != null) {
+                            // rendered items are evenly distributed if they don't specify an explicit top
+                            int defTop = mYOffset;
+                            if (model.getTop() == null) {
+                                defTop += mYOffsetPerItem;
+                                mNumOffsetItems++;
+                            }
+
+                            // scale and layout item
+                            holder.scaleViewForLegacyLayout(mScale);
+                            layoutModel(model, holder.mRoot, defTop, mPageWidth);
+
+                            // update our Y offset
+                            final AbsoluteLayout.LayoutParams lp =
+                                    (AbsoluteLayout.LayoutParams) holder.mRoot.getLayoutParams();
+                            mYOffset = lp.y + lp.height;
+                        }
+                    }
                 }
             }
             node = node.getNextSibling();
