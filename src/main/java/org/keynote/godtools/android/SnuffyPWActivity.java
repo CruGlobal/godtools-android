@@ -323,6 +323,15 @@ public class SnuffyPWActivity extends AppCompatActivity
                         }
                     }
                 }
+
+                @Override
+                public void onPageScrollStateChanged(final int state) {
+                    switch (state) {
+                        case ViewPager.SCROLL_STATE_IDLE:
+                            clearNotVisibleChildPages();
+                            break;
+                    }
+                }
             });
         }
 
@@ -488,6 +497,24 @@ public class SnuffyPWActivity extends AppCompatActivity
             if (position != POSITION_NONE) {
                 mPager.setCurrentItem(position);
             }
+        }
+    }
+
+    void clearNotVisibleChildPages() {
+        boolean changed = false;
+        final boolean isVisibleChild = mVisibleChildPages.remove(mCurrentPageId);
+        if (!mVisibleChildPages.isEmpty()) {
+            mVisibleChildPages.clear();
+            changed = true;
+        }
+
+        if (isVisibleChild) {
+            mVisibleChildPages.add(mCurrentPageId);
+            changed = true;
+        }
+
+        if (changed) {
+            updateViewPager();
         }
     }
 
