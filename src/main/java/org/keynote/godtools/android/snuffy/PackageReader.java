@@ -356,14 +356,15 @@ public class PackageReader
             if (node.getNodeType() == Node.ELEMENT_NODE)
             {
                 Element el = (Element) node;
-                if (el.getTagName().equalsIgnoreCase("button"))
+                if (el.getTagName().equalsIgnoreCase("button")) {
                     processButton(currPage, el, ++numButtons, urlsOnpage);
-                if (el.getTagName().equalsIgnoreCase("question"))
+                } else if (el.getTagName().equalsIgnoreCase("question")) {
                     processQuestion(currPage, el);
-                if (el.getTagName().equalsIgnoreCase("text"))
+                } else if (el.getTagName().equalsIgnoreCase("text")) {
                     processText(currPage, el);
-                if (el.getTagName().equalsIgnoreCase("title"))
+                } else if (el.getTagName().equalsIgnoreCase("title")) {
                     processTitle(currPage, el);
+                }
             }
             node = node.getNextSibling();
         }
