@@ -26,16 +26,12 @@ public class SnuffyPage extends SnuffyLayout
     public Activity mCallingActivity; // used to host AlertDialog
 
     private View mCover;
-    private View mActivePanel;
-    private View mHiddenButton;
     private Runnable mOnRemoveCover;
 
     public SnuffyPage(@NonNull final Context context, @NonNull final GtPage model) {
         super(context);
         mModel = model;
         mCover = null;
-        mActivePanel = null;
-        mHiddenButton = null;
     }
 
     @NonNull
@@ -79,22 +75,10 @@ public class SnuffyPage extends SnuffyLayout
 
     private void hideActivePanel()
     {
-        if (mCover != null)
-        {
-            if (mCover.getVisibility() != View.GONE)
-                mCover.setVisibility(View.GONE);
+        if (mCover != null) {
+            mCover.setVisibility(View.GONE);
         }
-        if (mActivePanel != null)
-        {
-            mActivePanel.clearAnimation();
-            mActivePanel.setVisibility(View.GONE);
-            mActivePanel = null;
-        }
-        if (mHiddenButton != null)
-        {
-            mHiddenButton.setVisibility(View.VISIBLE);
-            mHiddenButton = null;
-        }
+
         if (mOnRemoveCover != null)
         {
             new Handler().post(mOnRemoveCover);
