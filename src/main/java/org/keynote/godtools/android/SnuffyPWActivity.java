@@ -602,10 +602,11 @@ public class SnuffyPWActivity extends AppCompatActivity
         // of these language codes defined or curr language is not one of them.
         getIntent().putExtra("AllowFlip", true); // allow called intent to show the flip command
 
-        if (mAppLanguage.equalsIgnoreCase("en_heartbeat"))
-            switchLanguages("et_heartbeat", false);
-        else if (mAppLanguage.equalsIgnoreCase("et_heartbeat"))
-            switchLanguages("en_heartbeat", false);
+        if (mAppLanguage.equalsIgnoreCase("en_heartbeat")) {
+            switchLanguages("et_heartbeat");
+        } else if (mAppLanguage.equalsIgnoreCase("et_heartbeat")) {
+            switchLanguages("en_heartbeat");
+        }
         // no other flip actions defined
     }
 
@@ -686,12 +687,8 @@ public class SnuffyPWActivity extends AppCompatActivity
         }
     }
 
-    private void switchLanguages(String languageCode, boolean bResetToFirstPage)
-    {
+    private void switchLanguages(String languageCode) {
         setLanguage(languageCode);
-
-        if (bResetToFirstPage)
-            mPagerCurrentItem = 0;
 
         doSetup(1000); // delay required to allow Pager to show the empty set of pages
     }
