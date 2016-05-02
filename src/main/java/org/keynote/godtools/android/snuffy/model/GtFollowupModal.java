@@ -251,6 +251,7 @@ public class GtFollowupModal extends GtModel {
                 EventBus.getDefault().post(event);
                 return true;
             }
+
             return super.onSendEvent(eventId);
         }
 

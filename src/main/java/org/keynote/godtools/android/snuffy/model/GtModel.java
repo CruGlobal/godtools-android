@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
-import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.event.GodToolsEvent;
 import org.w3c.dom.Element;
@@ -192,8 +191,7 @@ public abstract class GtModel {
                 return true;
             }
 
-            EventBus.getDefault().post(new GodToolsEvent(event));
-            return true;
+            return false;
         }
 
         /* END lifecycle */

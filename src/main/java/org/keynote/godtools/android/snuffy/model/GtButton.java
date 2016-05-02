@@ -14,7 +14,9 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.event.GodToolsEvent.EventID;
 import org.keynote.godtools.android.snuffy.ParserUtils;
 import org.w3c.dom.Element;
@@ -267,6 +269,14 @@ public class GtButton extends GtTextModel {
             for (final EventID event : mTapEvents) {
                 onSendEvent(event);
             }
+        }
+
+        @Override
+        protected boolean onSendEvent(@NonNull EventID event) {
+            if (!super.onSendEvent(event)) {
+                EventBus.getDefault().post(new GodToolsEvent(event));
+            }
+            return true;
         }
 
         @Override
