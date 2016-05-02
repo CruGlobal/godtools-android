@@ -60,6 +60,7 @@ import static org.keynote.godtools.android.utils.Constants.KGP;
 import static org.keynote.godtools.android.utils.Constants.META;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
+import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 import static org.keynote.godtools.android.utils.Constants.WEB_URL;
 
@@ -449,9 +450,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private void doCmdShare()
     {
-        String messageBody = getString(R.string.share_general_subject);
-        messageBody = messageBody.replace(APPLICATION_NAME, getString(R.string.app_name));
-        messageBody = messageBody.replace(WEB_URL, "\n"+getString(R.string.app_share_link_base_link));
+        String messageBody = buildMessageBody();
 
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
@@ -459,6 +458,18 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         share.putExtra(Intent.EXTRA_TEXT, messageBody);
         startActivity(Intent.createChooser(share, getString(R.string.share_prompt)));
     }
+
+    private String buildMessageBody()
+    {
+        String messageBody = getString(R.string.share_general_message);
+
+        // knowgod.com + /language example:  http://www.knowgod.com/en
+        String shareLink = getString(R.string.app_share_link_base_link) + "/" + languagePrimary;
+        messageBody = messageBody.replace(SHARE_LINK, shareLink);
+
+        return messageBody;
+    }
+
 
     private SnuffyApplication getApp()
     {
