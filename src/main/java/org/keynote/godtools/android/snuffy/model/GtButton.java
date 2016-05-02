@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
@@ -21,6 +22,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Set;
 
 import butterknife.Bind;
@@ -59,10 +61,16 @@ public class GtButton extends GtTextModel {
 
     private static final String XML_TEXT = "buttontext";
     private static final String XML_ATTR_MODE = "mode";
+    private static final String XML_ATTR_VALIDATION = "validation";
     private static final String XML_ATTR_TAP_EVENTS = "tap-events";
+    private static final String XML_ATTR_VALIDATION_TRUE_1 = "true";
+    private static final String XML_ATTR_VALIDATION_TRUE_2 = "yes";
+    private static final String XML_ATTR_VALIDATION_FALSE_1 = "false";
+    private static final String XML_ATTR_VALIDATION_FALSE_2 = "no";
 
     @NonNull
     Mode mMode = Mode.DEFAULT;
+    boolean mRequireValidation;
     @NonNull
     Set<EventID> mTapEvents = ImmutableSet.of();
     String mText;
@@ -74,6 +82,10 @@ public class GtButton extends GtTextModel {
     @NonNull
     public Mode getMode() {
         return mMode;
+    }
+
+    public boolean requiresValidation() {
+        return mRequireValidation;
     }
 
     @NonNull
@@ -142,6 +154,8 @@ public class GtButton extends GtTextModel {
                 mMode = Mode.DEFAULT;
         }
         mMode = Mode.fromXmlAttr(parser.getAttributeValue(null, XML_ATTR_MODE), mMode);
+        mRequireValidation = parseRequired(parser.getAttributeValue(null, XML_ATTR_VALIDATION),
+                                           XML_POSITIVE_BUTTON.equals(parser.getName()));
         mTapEvents = ParserUtils
                 .parseEvents(parser.getAttributeValue(null, XML_ATTR_TAP_EVENTS), getManifest().getPackageCode());
         parsePositionAttrs(parser);
@@ -193,6 +207,8 @@ public class GtButton extends GtTextModel {
         if (node.hasAttribute(XML_ATTR_MODE)) {
             mMode = Mode.fromXmlAttr(node.getAttribute(XML_ATTR_MODE), mMode);
         }
+        mRequireValidation =
+                parseRequired(node.getAttribute(XML_ATTR_VALIDATION), XML_POSITIVE_BUTTON.equals(node.getTagName()));
         mTapEvents = ParserUtils.parseEvents(node.getAttribute(XML_ATTR_TAP_EVENTS), getManifest().getPackageCode());
         parsePositionAttrs(node);
         parseTextAttrs(node);
@@ -208,6 +224,19 @@ public class GtButton extends GtTextModel {
                 break;
             default:
                 mText = ParserUtils.getTextContentImmediate(node);
+        }
+    }
+
+    private static boolean parseRequired(@Nullable final String value, final boolean defValue) {
+        switch (Strings.nullToEmpty(value).toLowerCase(Locale.US)) {
+            case XML_ATTR_VALIDATION_TRUE_1:
+            case XML_ATTR_VALIDATION_TRUE_2:
+                return true;
+            case XML_ATTR_VALIDATION_FALSE_1:
+            case XML_ATTR_VALIDATION_FALSE_2:
+                return false;
+            default:
+                return defValue;
         }
     }
 

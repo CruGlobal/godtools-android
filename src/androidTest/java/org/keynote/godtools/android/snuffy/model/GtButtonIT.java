@@ -48,6 +48,7 @@ public class GtButtonIT {
         final GtButton button = parse("button-link-element.xml");
         assertNotNull(button);
         assertThat(button.getMode(), is(Mode.LINK));
+        assertThat(button.requiresValidation(), is(false));
         assertThat(button.getTapEvents(), hasItems(EVENT1, EVENT2));
         assertThat(button.getText(), is(TEXT));
     }
@@ -57,6 +58,7 @@ public class GtButtonIT {
         final GtButton button = parse("button-link-mode.xml");
         assertNotNull(button);
         assertThat(button.getMode(), is(Mode.LINK));
+        assertThat(button.requiresValidation(), is(false));
         assertThat(button.getTapEvents(), hasItems(EVENT1, EVENT2));
         assertThat(button.getText(), is(TEXT));
     }
@@ -66,6 +68,17 @@ public class GtButtonIT {
         final GtButton button = parse("button-panel-simple.xml");
         assertNotNull(button);
         assertThat(button.getMode(), is(Mode.PANEL));
+        assertThat(button.requiresValidation(), is(false));
+        assertThat(button.getText(), is(TEXT));
+    }
+
+    @Test
+    public void verifyButtonPositiveSimple() throws Exception {
+        final GtButton button = parse("button-positive-simple.xml");
+        assertNotNull(button);
+        assertThat(button.getMode(), is(Mode.DEFAULT));
+        assertThat(button.requiresValidation(), is(true));
+        assertThat(button.getTapEvents(), hasItems(EVENT1, EVENT2));
         assertThat(button.getText(), is(TEXT));
     }
 
@@ -126,6 +139,20 @@ public class GtButtonIT {
         assertThat(button.getTextAlign(), is(Gravity.NO_GRAVITY));
         assertThat(button.getTextSize(), nullValue());
         assertThat(button.getTextColor(), nullValue());
+    }
+
+    @Test
+    public void verifyButtonPositiveValidationFalse() throws Exception {
+        final GtButton button = parse("button-positive-falsevalidation.xml");
+        assertNotNull(button);
+        assertThat(button.requiresValidation(), is(false));
+    }
+
+    @Test
+    public void verifyButtonPositiveValidationNo() throws Exception {
+        final GtButton button = parse("button-positive-novalidation.xml");
+        assertNotNull(button);
+        assertThat(button.requiresValidation(), is(false));
     }
 
     @NonNull

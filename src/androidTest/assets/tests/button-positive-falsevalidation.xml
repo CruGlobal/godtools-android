@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<positive-button tap-events="event1,external:event2" validation="FaLsE">Button Text</positive-button>
