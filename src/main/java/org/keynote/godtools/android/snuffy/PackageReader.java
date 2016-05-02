@@ -2626,23 +2626,14 @@ public class PackageReader
         void updateProgress(int curr, int max);
     }
 
-    @SuppressWarnings("unused")
     private class SimpleAnimationListener implements Animation.AnimationListener
     {
 
         private final Runnable mToRunOnEnd;
-        private final long mDelay;
 
         public SimpleAnimationListener(Runnable toRunOnEnd)
         {
             mToRunOnEnd = toRunOnEnd;
-            mDelay = 0;
-        }
-
-        public SimpleAnimationListener(Runnable toRunOnEnd, long delay)
-        {
-            mToRunOnEnd = toRunOnEnd;
-            mDelay = delay;
         }
 
         @Override
@@ -2658,10 +2649,7 @@ public class PackageReader
         @Override
         public void onAnimationEnd(Animation animation)
         {
-            if (mDelay == 0)
-                new Handler().post(mToRunOnEnd);
-            else
-                new Handler().postDelayed(mToRunOnEnd, mDelay);
+            new Handler().post(mToRunOnEnd);
         }
 
     }
