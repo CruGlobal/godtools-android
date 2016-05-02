@@ -26,6 +26,7 @@ public abstract class GtModel {
     private static final String XML_ATTR_LEFT = "x";
     private static final String XML_ATTR_TOP = "y";
     private static final String XML_ATTR_LEFT_OFFSET = "xoffset";
+    public static final String XML_ATTR_RIGHT_OFFSET = "x-trailing-offset";
     private static final String XML_ATTR_TOP_OFFSET = "yoffset";
 
     @NonNull
@@ -41,6 +42,8 @@ public abstract class GtModel {
     private Integer mTop = null;
     @Nullable
     private Integer mLeftOffset = null;
+    @Nullable
+    private Integer mRightOffset = null;
     @Nullable
     private Integer mTopOffset = null;
 
@@ -100,6 +103,11 @@ public abstract class GtModel {
     }
 
     @Nullable
+    public Integer getRightOffset() {
+        return mRightOffset;
+    }
+
+    @Nullable
     public Integer getTopOffset() {
         return mTopOffset;
     }
@@ -132,6 +140,7 @@ public abstract class GtModel {
         mLeft = toInteger(parser.getAttributeValue(null, XML_ATTR_LEFT), mLeft);
         mTop = toInteger(parser.getAttributeValue(null, XML_ATTR_TOP), mTop);
         mLeftOffset = toInteger(parser.getAttributeValue(null, XML_ATTR_LEFT_OFFSET), mLeftOffset);
+        mRightOffset = toInteger(parser.getAttributeValue(null, XML_ATTR_RIGHT_OFFSET), mRightOffset);
         mTopOffset = toInteger(parser.getAttributeValue(null, XML_ATTR_TOP_OFFSET), mTopOffset);
     }
 
@@ -157,6 +166,7 @@ public abstract class GtModel {
         mLeft = toInteger(node.getAttribute(XML_ATTR_LEFT), mLeft);
         mTop = toInteger(node.getAttribute(XML_ATTR_TOP), mTop);
         mLeftOffset = toInteger(node.getAttribute(XML_ATTR_LEFT_OFFSET), mLeftOffset);
+        mRightOffset = toInteger(node.getAttribute(XML_ATTR_RIGHT_OFFSET), mRightOffset);
         mTopOffset = toInteger(node.getAttribute(XML_ATTR_TOP_OFFSET), mTopOffset);
     }
 

@@ -1340,6 +1340,7 @@ public class PackageReader
         int xPos = getIntegerAttributeValue(elText, "x", 0);
         int yPos = getIntegerAttributeValue(elText, "y", 0);
         int xOffset = getIntegerAttributeValue(elText, "xoffset", 0);
+        int rightOffset = getIntegerAttributeValue(elText, GtModel.XML_ATTR_RIGHT_OFFSET, 0);
         int yOffset = getIntegerAttributeValue(elText, "yoffset", 0);
         int width = getIntegerAttributeValue(elText, "w", REFERENCE_DEVICE_WIDTH);
         int size = getIntegerAttributeValue(elText, "size", 100);
@@ -1351,6 +1352,7 @@ public class PackageReader
         xPos = getScaledXValue(xPos);
         yPos = getScaledYValue(yPos);
         xOffset = getScaledXValue(xOffset);
+        rightOffset = getScaledXValue(rightOffset);
         yOffset = getScaledYValue(yOffset);
         width = getScaledXValue(width);
         color = setColorAlphaVal(color, alpha);
@@ -1363,6 +1365,7 @@ public class PackageReader
         else if (elText.getAttribute("w").length() == 0)
             width = mPageWidth - 2 * xPos;
         xPos += xOffset;
+        width -= (xOffset + rightOffset);
 
         if (yPos == 0)
         {
@@ -2271,7 +2274,15 @@ public class PackageReader
         leftOffset = getScaledXValue(leftOffset);
         left = getScaledXValue(left) + leftOffset;
 
-        // calculate the width of this view ((scaled(width) || defScaledWidth) - scaled(leftOffset))
+        // calculate the right offset
+        Integer rightOffset = model.getRightOffset();
+        if (rightOffset == null) {
+            rightOffset = 0;
+        }
+        rightOffset = getScaledXValue(rightOffset);
+
+        // calculate the width of this view
+        // ((scaled(width) || defScaledWidth) - scaled(leftOffset) - scaled(rightOffset))
         Integer width = model.getWidth();
         if (width == null) {
             width = 0;
@@ -2280,7 +2291,7 @@ public class PackageReader
         if (width == 0) {
             width = defScaledWidth;
         }
-        width -= leftOffset;
+        width -= (leftOffset + rightOffset);
 
         // calculate the height
         view.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.UNSPECIFIED);
