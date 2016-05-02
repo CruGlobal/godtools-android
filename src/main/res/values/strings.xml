@@ -105,11 +105,11 @@
     <!-- Sharing -->
     <string name="app_email_subject">Our conversation about {{package_name}} today</string>
     <string name="share_general_subject">{{app_name}}</string>
-    <string name="share_general_message">Here’s the link to download the app we were looking at today: http://godtoolsapp.com
+    <string name="share_general_message">Here’s the link to download the app we were looking at today: http://godtoolsapp.com \n\n
 
-		Here’s a link to a web version of the app {{share_link}}
+		Here’s a link to a web version of the app {{share_link}} \n\n
 
-		Enjoy exploring!</string>
+		Let’s talk more!</string>
     <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
     <string name="share_from_page_subject">{{app_name}}</string>
     <string name="share_from_page_message" formatted="false">Here is the booklet we were looking at today. This link will take you to the web version of the page we were last looking at together:
