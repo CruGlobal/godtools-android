@@ -150,4 +150,6 @@
     <string name="page_download_error">There was an error downloading the page</string>
     <string name="server_error">There were server issues encountered</string>
     <string name="initial_setup_error_message">Unfortunately we could not load any resources. Please quit the app and reopen. If the problem persists contact support@godtoolsapp.com</string>
+    <string name="followup_modal_input_invalid_email">Please enter a valid email address</string>
+    <string name="followup_modal_input_invalid_generic">%1$s was not properly formatted</string>
 </resources>

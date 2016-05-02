@@ -185,6 +185,10 @@ public abstract class GtModel {
 
         /* BEGIN lifecycle */
 
+        protected boolean onValidate(final boolean validateParent) {
+            return !validateParent || mParentHolder == null || mParentHolder.onValidate(true);
+        }
+
         protected boolean onSendEvent(@NonNull final GodToolsEvent.EventID event) {
             // if we have a parent ViewHolder, try using it to send the event
             if (mParentHolder != null && mParentHolder.onSendEvent(event)) {

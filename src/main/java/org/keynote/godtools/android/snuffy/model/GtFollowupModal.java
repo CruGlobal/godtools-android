@@ -212,6 +212,8 @@ public class GtFollowupModal extends GtModel {
         @Bind(R.id.buttons)
         ViewGroup mButtons;
 
+        private final List<GtInputField.ViewHolder> mFieldViewHolders = new ArrayList<>();
+
         ViewHolder(@NonNull final View root) {
             super(root);
             ButterKnife.bind(this, mRoot);
@@ -226,6 +228,17 @@ public class GtFollowupModal extends GtModel {
         /* BEGIN lifecycle */
 
         @Override
+        protected boolean onValidate(final boolean validateParent) {
+            boolean valid = super.onValidate(validateParent);
+
+            for (final GtInputField.ViewHolder holder : mFieldViewHolders) {
+                valid = holder.onValidate(false) && valid;
+            }
+
+            return valid;
+        }
+
+        @Override
         protected boolean onSendEvent(@NonNull final EventID eventId) {
             if (eventId.equals(EventID.SUBSCRIBE_EVENT)) {
                 // build subscribe event object
@@ -236,13 +249,9 @@ public class GtFollowupModal extends GtModel {
 
                 // set all input fields as data
                 if (mFields != null) {
-                    for (int i = 0; i < mFields.getChildCount(); i++) {
-                        final Object rawHolder = mFields.getChildAt(i).getTag(R.id.tag_gt_model_view_holder);
-                        if (rawHolder instanceof GtInputField.ViewHolder) {
-                            final GtInputField.ViewHolder holder = (GtInputField.ViewHolder) rawHolder;
-                            if (holder.getName() != null) {
-                                event.setField(holder.getName(), holder.getValue());
-                            }
+                    for (final GtInputField.ViewHolder holder : mFieldViewHolders) {
+                        if (holder.getName() != null) {
+                            event.setField(holder.getName(), holder.getValue());
                         }
                     }
                 }
@@ -285,7 +294,7 @@ public class GtFollowupModal extends GtModel {
             if (mFields != null) {
                 mFields.setVisibility(mInputFields.size() > 0 ? View.VISIBLE : View.GONE);
                 for (final GtInputField field : mInputFields) {
-                    field.render(mFields.getContext(), mFields, true);
+                    mFieldViewHolders.add(field.render(mFields.getContext(), mFields, true));
                 }
             }
         }

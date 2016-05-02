@@ -265,6 +265,10 @@ public class GtButton extends GtTextModel {
 
         @OnClick(R.id.gtButton)
         void onClick() {
+            if (mRequireValidation && !onValidate(true)) {
+                return;
+            }
+
             // trigger any configured tap events
             for (final EventID event : mTapEvents) {
                 onSendEvent(event);
