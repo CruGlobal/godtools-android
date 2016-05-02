@@ -4,11 +4,14 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.InputType;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.common.base.Strings;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.keynote.godtools.android.R;
@@ -16,9 +19,13 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 public class GtInputField extends GtModel {
     public static final String FIELD_EMAIL = "email";
@@ -55,11 +62,14 @@ public class GtInputField extends GtModel {
 
     private static final String XML_ATTR_TYPE = "type";
     private static final String XML_ATTR_NAME = "name";
+    private static final String XML_ATTR_VALID_FORMAT = "valid-format";
 
     @NonNull
     Type mType = Type.DEFAULT;
     @Nullable
     String mName;
+    @Nullable
+    Pattern mValidFormat;
     @Nullable
     String mLabel;
     @Nullable
@@ -84,6 +94,24 @@ public class GtInputField extends GtModel {
 
     public String getPlaceholder() {
         return mPlaceholder;
+    }
+
+    public boolean isValidValue(@Nullable String value) {
+        value = Strings.nullToEmpty(value);
+
+        // handle explicit formats
+        if (mValidFormat != null) {
+            return mValidFormat.matcher(value).matches();
+        }
+
+        // handle any pre-defined type formats
+        switch (mType) {
+            case EMAIL:
+                return Patterns.EMAIL_ADDRESS.matcher(value).matches();
+        }
+
+        // default to true
+        return true;
     }
 
     @Nullable
@@ -114,6 +142,14 @@ public class GtInputField extends GtModel {
 
         mType = Type.fromXmlAttr(parser.getAttributeValue(null, XML_ATTR_TYPE));
         mName = parser.getAttributeValue(null, XML_ATTR_NAME);
+        try {
+            final String pattern = parser.getAttributeValue(null, XML_ATTR_VALID_FORMAT);
+            if (pattern != null) {
+                mValidFormat = Pattern.compile(pattern, CASE_INSENSITIVE);
+            }
+        } catch (final PatternSyntaxException e) {
+            mValidFormat = null;
+        }
 
         // loop until we reach the matching end tag for this element
         while (parser.next() != XmlPullParser.END_TAG) {
