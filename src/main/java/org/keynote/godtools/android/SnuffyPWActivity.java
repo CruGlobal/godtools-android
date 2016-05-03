@@ -439,6 +439,9 @@ public class SnuffyPWActivity extends AppCompatActivity
                         subscriber.setLastName(field.getValue());
                         break;
                     case FIELD_NAME:
+                        // XXX: This is a best attempt at doing the right thing with a full name when the API expects
+                        // XXX: separate first and last names. This handles edge cases by putting all names beyond the
+                        // XXX: first one in the last name field.
                         final String[] parts = field.getValue().split(" ", 2);
                         subscriber.setFirstName(parts[0]);
                         if (parts.length > 1) {
