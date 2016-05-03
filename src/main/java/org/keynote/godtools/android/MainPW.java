@@ -397,7 +397,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         {
             Intent intent = new Intent(this, EveryStudent.class);
             intent.putExtra("PackageName", gtPackage.getCode());
-            addPageFrameToIntent(intent);
             startActivity(intent);
             return;
         }
@@ -407,7 +406,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         intent.putExtra("LanguageCode", gtPackage.getLanguage());
         intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
         intent.putExtra("Status", gtPackage.getStatus());
-        addPageFrameToIntent(intent);
         startActivity(intent);
     }
 
@@ -432,14 +430,6 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         supportInvalidateOptionsMenu();
 
         setSupportProgressBarIndeterminateVisibility(false);
-    }
-
-    private void addPageFrameToIntent(Intent intent)
-    {
-        intent.putExtra("PageLeft", mPageLeft);
-        intent.putExtra("PageTop", mPageTop);
-        intent.putExtra("PageWidth", mPageWidth);
-        intent.putExtra("PageHeight", mPageHeight);
     }
 
     private void onCmd_settings()

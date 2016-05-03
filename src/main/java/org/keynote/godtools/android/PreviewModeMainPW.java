@@ -153,7 +153,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                         {
                             Intent intent = new Intent(context, EveryStudent.class);
                             intent.putExtra("PackageName", gtPackage.getCode());
-                            addPageFrameToIntent(intent);
                             startActivity(intent);
                             return true;
                         }
@@ -164,7 +163,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                             intent.putExtra("LanguageCode", gtPackage.getLanguage());
                             intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
                             intent.putExtra("Status", gtPackage.getStatus());
-                            addPageFrameToIntent(intent);
                             startActivity(intent);
                         }
                         else
@@ -448,14 +446,6 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    private void addPageFrameToIntent(Intent intent)
-    {
-        intent.putExtra("PageLeft", mPageLeft);
-        intent.putExtra("PageTop", mPageTop);
-        intent.putExtra("PageWidth", mPageWidth);
-        intent.putExtra("PageHeight", mPageHeight);
     }
 
     private void onCmd_settings()
