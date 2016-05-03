@@ -91,8 +91,9 @@ public class GtFollowupModalDialogFragment extends BottomSheetDialogFragment {
         EventBus.getDefault().register(this);
     }
 
+    @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
         final Dialog dialog = super.onCreateDialog(savedInstanceState);
 
         assert mModal != null;
