@@ -16,8 +16,10 @@ import android.support.annotation.WorkerThread;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewConfigurationCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.SimpleOnPageChangeListener;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -27,6 +29,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
@@ -153,6 +156,7 @@ public class SnuffyPWActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.snuffy_main);
         ButterKnife.bind(this);
+        setupActionBar();
         setupViewPager();
 
         Log.i("Activity", "SnuffyPWActivity");
@@ -265,6 +269,15 @@ public class SnuffyPWActivity extends AppCompatActivity
     }
 
     /* END lifecycle */
+
+    private void setupActionBar() {
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            if (ViewConfigurationCompat.hasPermanentMenuKey(ViewConfiguration.get(this))) {
+                actionBar.hide();
+            }
+        }
+    }
 
     private void setupViewPager() {
         if (mPager != null) {

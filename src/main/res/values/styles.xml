@@ -28,8 +28,7 @@
     </style>
 
     <!-- GodTools theme with a transparent ActionBar (used to get Action Overflow Button only) -->
-    <bool name="content_actionbar_overlay">false</bool>
     <style name="Theme.GodTools.Activity.Content" parent="Theme.GodTools.TransparentActionBar">
-        <item name="windowActionBarOverlay">@bool/content_actionbar_overlay</item>
+        <item name="windowActionBarOverlay">false</item>
     </style>
 </resources>
