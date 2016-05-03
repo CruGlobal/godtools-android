@@ -632,20 +632,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         }
     }
 
-    private void doCmdFlip()
-    {
-        // Note: We have disabled this menu item if this package does not have both
-        // of these language codes defined or curr language is not one of them.
-        getIntent().putExtra("AllowFlip", true); // allow called intent to show the flip command
-
-        if (mAppLanguage.equalsIgnoreCase("en_heartbeat")) {
-            switchLanguages("et_heartbeat");
-        } else if (mAppLanguage.equalsIgnoreCase("et_heartbeat")) {
-            switchLanguages("en_heartbeat");
-        }
-        // no other flip actions defined
-    }
-
     private void doCmdHelp()
     {
         Intent intent = new Intent(this, SnuffyHelpActivity.class);
@@ -723,12 +709,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         }
     }
 
-    private void switchLanguages(String languageCode) {
-        setLanguage(languageCode);
-
-        doSetup();
-    }
-
     private void switchLanguage()
     {
         if (isParallelLanguageSet && mParallelPackage != null)
@@ -779,15 +759,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu_options, menu);
 
-        // enable this feature just for one specific situation
-        // matches corresponding items in doCmdFlip() below
-        MenuItem flipItem = menu.findItem(R.id.CMD_FLIP);
-        if (mAppPackage.equalsIgnoreCase(KGP)
-                && (mAppLanguage.equalsIgnoreCase("en_heartbeat") || mAppLanguage.equalsIgnoreCase("et_heartbeat")))
-            flipItem.setVisible(true);
-        else
-            flipItem.setVisible(false);
-
         // enable this feature if the the parallel language is set
         // and a translation is available for this package
         MenuItem switchItem = menu.findItem(R.id.CMD_SWITCH_LANGUAGE);
@@ -833,12 +804,6 @@ public class SnuffyPWActivity extends AppCompatActivity
             {
                 trackScreenEvent("Help");
                 doCmdHelp();
-                break;
-            }
-            case R.id.CMD_FLIP:
-            {
-                trackScreenEvent("Flip");
-                doCmdFlip();
                 break;
             }
             case R.id.CMD_SWITCH_LANGUAGE:
