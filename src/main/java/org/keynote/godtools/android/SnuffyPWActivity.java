@@ -524,10 +524,7 @@ public class SnuffyPWActivity extends AppCompatActivity
 
         if (mSetupRequired)
         {
-            doSetup(100); // used to be 1 second delay required to make sure activity fully created
-            // - is there something we can test for that is better than a fixed timeout?
-            // We reduce this now to 100 msec since we are not measuring the device size here
-            // since that is done in GodTools which calls us and passes the dimensions in.
+            doSetup();
             mSetupRequired = false;
         }
     }
@@ -554,18 +551,22 @@ public class SnuffyPWActivity extends AppCompatActivity
         super.onStop();
     }
 
-    private void doSetup(int delay)
-    {
-        new Handler().postDelayed(new Runnable()
-        {
-            public void run()
-            {
-                // trigger the actual load of pages
-                mProcessPackageAsync = new ProcessPackageAsync(mPager.getMeasuredWidth(), mPager.getMeasuredHeight());
-                mProcessPackageAsync.execute("");
+    void doSetup() {
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                if (mPager != null) {
+                    final int width = mPager.getMeasuredWidth();
+                    final int height = mPager.getMeasuredHeight();
+                    if (width > 0 && height > 0) {
+                        // trigger the actual load of pages
+                        mProcessPackageAsync = new ProcessPackageAsync(width, height);
+                        mProcessPackageAsync.execute("");
+                    } else {
+                        doSetup();
+                    }
+                }
             }
-        }, delay);  // delay can be required to make sure activity fully created - is there something we can test for that is better than a fixed timeout?
-
+        }, 1000 / 60);
     }
 
     private void completeSetup(boolean bSuccess)
@@ -712,7 +713,7 @@ public class SnuffyPWActivity extends AppCompatActivity
     private void switchLanguages(String languageCode) {
         setLanguage(languageCode);
 
-        doSetup(1000); // delay required to allow Pager to show the empty set of pages
+        doSetup();
     }
 
     private void switchLanguage()
@@ -731,7 +732,7 @@ public class SnuffyPWActivity extends AppCompatActivity
                 isUsingPrimaryLanguage = true;
             }
 
-            doSetup(0);
+            doSetup();
         }
         else
         {
