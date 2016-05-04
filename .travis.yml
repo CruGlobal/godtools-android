@@ -19,9 +19,8 @@ android:
     - extra-android-m2repository
     - extra-google-m2repository
 
-    # system images for testing
-    - sys-img-armeabi-v7a-android-15
-    - sys-img-armeabi-v7a-android-21
+    # system image for testing
+    - sys-img-$ANDROID_ABI-$ANDROID_TARGET
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
