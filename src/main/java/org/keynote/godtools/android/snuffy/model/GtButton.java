@@ -244,6 +244,7 @@ public class GtButton extends GtTextModel {
         public void scaleViewForLegacyLayout(final double scale) {
             super.scaleViewForLegacyLayout(scale);
             if (mButton != null) {
+                // we need to convert 19sp to 19px, then scale it
                 scaleTextSize(unapplyTextSizeUnit(mButton, TypedValue.COMPLEX_UNIT_SP), scale);
             }
         }

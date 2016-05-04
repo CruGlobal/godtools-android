@@ -5,6 +5,9 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
 public final class TypedValueUtils {
+    /**
+     * This is the inverse of {@link TypedValue#applyDimension(int, float, DisplayMetrics)}.
+     */
     public static float unapplyDimension(final int unit, final float value, @NonNull final DisplayMetrics metrics) {
         switch (unit) {
             case TypedValue.COMPLEX_UNIT_PX:
