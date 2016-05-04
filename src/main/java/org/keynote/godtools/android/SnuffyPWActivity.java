@@ -77,6 +77,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static android.support.v4.app.FragmentManager.POP_BACK_STACK_INCLUSIVE;
+import static android.support.v4.view.PagerAdapter.POSITION_NONE;
 import static org.ccci.gto.android.common.support.v4.util.IdUtils.convertId;
 import static org.keynote.godtools.android.event.GodToolsEvent.EventID.SUBSCRIBE_EVENT;
 import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_EMAIL;
@@ -110,7 +111,6 @@ public class SnuffyPWActivity extends AppCompatActivity
     @Bind(R.id.snuffyViewPager)
     ViewPager mPager;
     GtPagesPagerAdapter mPagerAdapter;
-    private int mPagerCurrentItem = 0;
 
     private boolean mSetupRequired = true;
     private String mPackageTitle;
@@ -131,6 +131,8 @@ public class SnuffyPWActivity extends AppCompatActivity
     private List<SnuffyPage> mPages;
     @Nullable
     private SnuffyPage mAboutView;
+    @Nullable
+    String mCurrentPageId;
 
     private void setLanguage(String languageCode)
     {
@@ -252,10 +254,7 @@ public class SnuffyPWActivity extends AppCompatActivity
         mVisibleChildPages.add(id);
         updateViewPager();
         dismissFollowupModal();
-
-        if (mPager != null) {
-            mPager.setCurrentItem(mPagerAdapter.getItemPositionFromId(convertId(id)));
-        }
+        showPage(id);
     }
 
     @Override
@@ -276,21 +275,24 @@ public class SnuffyPWActivity extends AppCompatActivity
             mPager.addOnPageChangeListener(new SimpleOnPageChangeListener() {
                 @Override
                 public void onPageSelected(int position) {
-                    // exit previously active page
-                    final SnuffyPage previousPage = mPagerAdapter.getItemFromPosition(mPagerCurrentItem);
-                    if (previousPage != null) {
-                        previousPage.onExitPage();
+                    if (mCurrentPageId != null) {
+                        final SnuffyPage page = mPagerAdapter
+                                .getItemFromPosition(mPagerAdapter.getItemPositionFromId(convertId(mCurrentPageId)));
+                        if (page != null) {
+                            // trigger the exit page event
+                            page.onExitPage();
+                        }
                     }
 
-                    // keep our own since ViewPager doesn't offer a getCurrentItem method!
-                    mPagerCurrentItem = position;
-
-                    // enter currently active page
                     final SnuffyPage page = mPagerAdapter.getItemFromPosition(position);
                     if (page != null) {
                         final GtPage model = page.getModel();
-                        Log.d(TAG, "onPageSelected: " + model.getId());
+
+                        // track the currently active page
+                        mCurrentPageId = page.getModel().getId();
                         trackPageView(model);
+
+                        // trigger the enter page event
                         page.onEnterPage();
                     }
 
@@ -319,6 +321,15 @@ public class SnuffyPWActivity extends AppCompatActivity
                                         }
                                     });
                         }
+                    }
+                }
+
+                @Override
+                public void onPageScrollStateChanged(final int state) {
+                    switch (state) {
+                        case ViewPager.SCROLL_STATE_IDLE:
+                            clearNotVisibleChildPages();
+                            break;
                     }
                 }
             });
@@ -404,9 +415,10 @@ public class SnuffyPWActivity extends AppCompatActivity
 
     private boolean triggerLocalPageNavigation(@NonNull final EventID event) {
         if (mPages != null) {
-            for (int x = 0; x < mPages.size(); x++) {
-                if (mPages.get(x).getModel().getListeners().contains(event)) {
-                    mPager.setCurrentItem(x);
+            for (final SnuffyPage page : mPages) {
+                final GtPage model = page.getModel();
+                if (model.getListeners().contains(event)) {
+                    showPage(model.getId());
                     return true;
                 }
             }
@@ -476,6 +488,33 @@ public class SnuffyPWActivity extends AppCompatActivity
             ((DialogFragment) fragment).dismiss();
         } else if (fragment != null) {
             fm.popBackStack(TAG_FOLLOWUP_MODAL, POP_BACK_STACK_INCLUSIVE);
+        }
+    }
+
+    private void showPage(@Nullable final String id) {
+        if (mPager != null && mPagerAdapter != null && id != null) {
+            final int position = mPagerAdapter.getItemPositionFromId(convertId(id));
+            if (position != POSITION_NONE) {
+                mPager.setCurrentItem(position);
+            }
+        }
+    }
+
+    void clearNotVisibleChildPages() {
+        boolean changed = false;
+        final boolean isVisibleChild = mVisibleChildPages.remove(mCurrentPageId);
+        if (!mVisibleChildPages.isEmpty()) {
+            mVisibleChildPages.clear();
+            changed = true;
+        }
+
+        if (isVisibleChild) {
+            mVisibleChildPages.add(mCurrentPageId);
+            changed = true;
+        }
+
+        if (changed) {
+            updateViewPager();
         }
     }
 
@@ -549,15 +588,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         addCallingActivityToAllPages();
     }
 
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-        SharedPreferences.Editor ed = settings.edit();
-        ed.putInt("currPage", mPagerCurrentItem);
-        ed.apply();
-    }
-
     private void addClickHandlersToAllPages()
     {
         Iterator<SnuffyPage> iter = mPages.iterator();
@@ -594,10 +624,11 @@ public class SnuffyPWActivity extends AppCompatActivity
         // of these language codes defined or curr language is not one of them.
         getIntent().putExtra("AllowFlip", true); // allow called intent to show the flip command
 
-        if (mAppLanguage.equalsIgnoreCase("en_heartbeat"))
-            switchLanguages("et_heartbeat", false);
-        else if (mAppLanguage.equalsIgnoreCase("et_heartbeat"))
-            switchLanguages("en_heartbeat", false);
+        if (mAppLanguage.equalsIgnoreCase("en_heartbeat")) {
+            switchLanguages("et_heartbeat");
+        } else if (mAppLanguage.equalsIgnoreCase("et_heartbeat")) {
+            switchLanguages("en_heartbeat");
+        }
         // no other flip actions defined
     }
 
@@ -678,12 +709,8 @@ public class SnuffyPWActivity extends AppCompatActivity
         }
     }
 
-    private void switchLanguages(String languageCode, boolean bResetToFirstPage)
-    {
+    private void switchLanguages(String languageCode) {
         setLanguage(languageCode);
-
-        if (bResetToFirstPage)
-            mPagerCurrentItem = 0;
 
         doSetup(1000); // delay required to allow Pager to show the empty set of pages
     }
