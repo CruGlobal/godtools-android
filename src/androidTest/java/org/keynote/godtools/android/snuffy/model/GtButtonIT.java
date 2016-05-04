@@ -86,6 +86,7 @@ public class GtButtonIT {
         assertThat(button.getHeight(), is(10));
         assertThat(button.getTopOffset(), is(-3));
         assertThat(button.getLeftOffset(), is(-2));
+        assertThat(button.getRightOffset(), is(17));
     }
 
     @Test
@@ -98,6 +99,7 @@ public class GtButtonIT {
         assertThat(button.getHeight(), nullValue());
         assertThat(button.getTopOffset(), nullValue());
         assertThat(button.getLeftOffset(), nullValue());
+        assertThat(button.getRightOffset(), nullValue());
     }
 
     @Test
