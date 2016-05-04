@@ -554,14 +554,16 @@ public class SnuffyPWActivity extends AppCompatActivity
     void doSetup() {
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                final int width = mPager.getMeasuredWidth();
-                final int height = mPager.getMeasuredHeight();
-                if (width > 0 && height > 0) {
-                    // trigger the actual load of pages
-                    mProcessPackageAsync = new ProcessPackageAsync(width, height);
-                    mProcessPackageAsync.execute("");
-                } else {
-                    doSetup();
+                if (mPager != null) {
+                    final int width = mPager.getMeasuredWidth();
+                    final int height = mPager.getMeasuredHeight();
+                    if (width > 0 && height > 0) {
+                        // trigger the actual load of pages
+                        mProcessPackageAsync = new ProcessPackageAsync(width, height);
+                        mProcessPackageAsync.execute("");
+                    } else {
+                        doSetup();
+                    }
                 }
             }
         }, 1000 / 60);
