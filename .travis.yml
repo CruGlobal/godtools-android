@@ -8,7 +8,8 @@ env:
     - ADB_INSTALL_TIMEOUT=10
   matrix:
     - ANDROID_TARGET=android-15 ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
+#    - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-23 ANDROID_ABI=armeabi-v7a
 
 android:
   components:
@@ -19,9 +20,8 @@ android:
     - extra-android-m2repository
     - extra-google-m2repository
 
-    # system images for testing
-    - sys-img-armeabi-v7a-android-15
-    - sys-img-armeabi-v7a-android-21
+    # system image for testing
+    - sys-img-$ANDROID_ABI-$ANDROID_TARGET
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
