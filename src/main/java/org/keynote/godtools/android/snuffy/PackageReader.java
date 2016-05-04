@@ -1360,12 +1360,20 @@ public class PackageReader
         if (elText.getAttribute("x").length() == 0)
             xPos = getScaledXValue(TEXT_MARGINX);
 
-        if (align.equalsIgnoreCase("center"))
-            width = mPageWidth - 2 * xPos;
-        else if (elText.getAttribute("w").length() == 0)
-            width = mPageWidth - 2 * xPos;
+        // generate a default width if one wasn't explicitly set
+        if (elText.getAttribute("w").length() == 0) {
+            // full_width
+            width = mPageWidth;
+            // - left_margin
+            width -= xPos;
+            // - right_margin
+            width -= align.equalsIgnoreCase("center") ? xPos : getScaledXValue(TEXT_MARGINX);
+            // - left_offset
+            width -= xOffset;
+            // - right_offset
+            width -= rightOffset;
+        }
         xPos += xOffset;
-        width -= (xOffset + rightOffset);
 
         if (yPos == 0)
         {
@@ -2282,16 +2290,15 @@ public class PackageReader
         rightOffset = getScaledXValue(rightOffset);
 
         // calculate the width of this view
-        // ((scaled(width) || defScaledWidth) - scaled(leftOffset) - scaled(rightOffset))
+        // scaled(width) || (defScaledWidth - scaled(leftOffset) - scaled(rightOffset))
         Integer width = model.getWidth();
         if (width == null) {
             width = 0;
         }
         width = getScaledXValue(width);
         if (width == 0) {
-            width = defScaledWidth;
+            width = defScaledWidth - leftOffset - rightOffset;
         }
-        width -= (leftOffset + rightOffset);
 
         // calculate the height
         view.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.UNSPECIFIED);
