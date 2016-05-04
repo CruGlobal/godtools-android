@@ -1,55 +1,89 @@
 package org.keynote.godtools.android.snuffy.model;
 
+import android.content.Context;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.greenrobot.eventbus.EventBus;
+import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.event.GodToolsEvent;
+import org.keynote.godtools.android.event.GodToolsEvent.EventID;
 import org.keynote.godtools.android.model.Followup;
+import org.keynote.godtools.android.snuffy.ParserUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-public class GtFollowupModal {
-    static final String XML_FOLLOWUP_MODAL = "followup-modal";
-    private static final String XML_FALLBACK = "fallback";
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+import static org.keynote.godtools.android.snuffy.Constants.DEFAULT_BACKGROUND_COLOR;
+
+public class GtFollowupModal extends GtModel {
+    public static final String XML_FOLLOWUP_MODAL = "followup-modal";
+    public static final String XML_FALLBACK = "fallback";
     private static final String XML_TITLE = "followup-title";
     private static final String XML_BODY = "followup-body";
 
     private static final String XML_ATTR_FOLLOWUP_ID = "followup-id";
+    private static final String XML_ATTR_LISTENERS = "listeners";
 
     @NonNull
-    private final GtPage mPage;
-    private String mId = "";
+    private final String mId;
 
-    private long mFollowupId = Followup.INVALID_ID;
-    private String mTitle;
-    private String mBody;
-    private final List<GtInputField> mInputFields = new ArrayList<>();
-    private GtButtonPair mButtonPair;
+    long mFollowupId = Followup.INVALID_ID;
+    @NonNull
+    private Set<EventID> mListeners = ImmutableSet.of();
+    String mTitle;
+    String mBody;
+    final List<GtInputField> mInputFields = new ArrayList<>();
+    @Nullable
+    GtButtonPair mButtonPair;
+    @NonNull
+    private final List<GtThankYou> mThankYous = new ArrayList<>();
 
-    private GtFollowupModal(@NonNull final GtPage page) {
-        mPage = page;
+    @VisibleForTesting
+    GtFollowupModal(@NonNull final GtPage page, @NonNull final String uniqueId) {
+        super(page);
+        mId = page.getId() + "-followup-" + uniqueId;
     }
 
     @NonNull
-    public GtPage getPage() {
-        return mPage;
-    }
-
     public String getId() {
         return mId;
     }
 
-    void setId(@NonNull final String id) {
-        mId = id;
-    }
-
     public long getFollowupId() {
         return mFollowupId;
+    }
+
+    @NonNull
+    public Set<EventID> getListeners() {
+        return mListeners;
+    }
+
+    @ColorInt
+    @Nullable
+    Integer getBackgroundColor() {
+        final GtPage page = getPage();
+        if (page != null) {
+            return page.getBackgroundColor();
+        }
+        return null;
     }
 
     public String getTitle() {
@@ -64,14 +98,36 @@ public class GtFollowupModal {
         return ImmutableList.copyOf(mInputFields);
     }
 
+    @Nullable
     public GtButtonPair getButtonPair() {
         return mButtonPair;
     }
 
     @NonNull
-    static GtFollowupModal fromXml(@NonNull final GtPage page, @NonNull final XmlPullParser parser)
+    public List<GtThankYou> getThankYous() {
+        return ImmutableList.copyOf(mThankYous);
+    }
+
+    @Nullable
+    @Override
+    public ViewHolder render(@NonNull final Context context, @Nullable final ViewGroup parent,
+                             final boolean attachToRoot) {
+        final LayoutInflater inflater = LayoutInflater.from(context);
+
+        // inflate the raw view
+        final ViewHolder holder = new ViewHolder(inflater.inflate(R.layout.gt_followupmodal, parent, false));
+        if (parent != null && attachToRoot) {
+            parent.addView(holder.mRoot);
+        }
+
+        return holder;
+    }
+
+    @NonNull
+    static GtFollowupModal fromXml(@NonNull final GtPage page, @NonNull final String uniqueId,
+                                   @NonNull final XmlPullParser parser)
             throws IOException, XmlPullParserException {
-        final GtFollowupModal followup = new GtFollowupModal(page);
+        final GtFollowupModal followup = new GtFollowupModal(page, uniqueId);
         followup.parse(parser);
         return followup;
     }
@@ -84,6 +140,8 @@ public class GtFollowupModal {
         } catch (final Exception suppressed) {
             mFollowupId = Followup.INVALID_ID;
         }
+        mListeners = ParserUtils
+                .parseEvents(parser.getAttributeValue(null, XML_ATTR_LISTENERS), getManifest().getPackageCode());
 
         // loop until we reach the matching end tag for this element
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -123,14 +181,121 @@ public class GtFollowupModal {
                     mBody = XmlPullParserUtils.safeNextText(parser);
                     break;
                 case GtInputField.XML_INPUT_FIELD:
-                    mInputFields.add(GtInputField.fromXml(parser));
+                    mInputFields.add(GtInputField.fromXml(this, parser));
                     break;
                 case GtButtonPair.XML_BUTTON_PAIR:
-                    mButtonPair = GtButtonPair.fromXml(mPage, parser);
+                    mButtonPair = GtButtonPair.fromXml(this, parser);
+                    break;
+                case GtThankYou.XML_THANK_YOU:
+                    mThankYous.add(GtThankYou.fromXml(this, Integer.toString(mThankYous.size() + 1), parser));
                     break;
                 default:
                     // skip unrecognized nodes
                     XmlPullParserUtils.skipTag(parser);
+            }
+        }
+    }
+
+    public class ViewHolder extends GtModel.ViewHolder {
+        @Nullable
+        @Bind(R.id.title)
+        TextView mTitleText;
+        @Nullable
+        @Bind(R.id.body)
+        TextView mBodyText;
+
+        @Nullable
+        @Bind(R.id.fields)
+        ViewGroup mFields;
+
+        @Nullable
+        @Bind(R.id.buttons)
+        ViewGroup mButtons;
+
+        ViewHolder(@NonNull final View root) {
+            super(root);
+            ButterKnife.bind(this, mRoot);
+
+            updateBackground();
+            updateTitle();
+            updateBody();
+            attachFields();
+            attachButtonPair();
+        }
+
+        /* BEGIN lifecycle */
+
+        @Override
+        protected boolean onSendEvent(@NonNull final EventID eventId) {
+            if (eventId.equals(EventID.SUBSCRIBE_EVENT)) {
+                // build subscribe event object
+                final GodToolsEvent event = new GodToolsEvent(eventId);
+                event.setPackageCode(getManifest().getPackageCode());
+                event.setLanguage(getManifest().getLanguage());
+                event.setFollowUpId(mFollowupId);
+
+                // set all input fields as data
+                if (mFields != null) {
+                    for (int i = 0; i < mFields.getChildCount(); i++) {
+                        final Object rawHolder = mFields.getChildAt(i).getTag(R.id.tag_gt_model_view_holder);
+                        if (rawHolder instanceof GtInputField.ViewHolder) {
+                            final GtInputField.ViewHolder holder = (GtInputField.ViewHolder) rawHolder;
+                            if (holder.getName() != null) {
+                                event.setField(holder.getName(), holder.getValue());
+                            }
+                        }
+                    }
+                }
+
+                // send subscribe event
+                EventBus.getDefault().post(event);
+                return true;
+            }
+            return super.onSendEvent(eventId);
+        }
+
+        /* END lifecycle */
+
+        private void updateBackground() {
+            // update the background color & watermark
+            final Integer color = getBackgroundColor();
+            mRoot.setBackgroundColor(color != null ? color : DEFAULT_BACKGROUND_COLOR);
+        }
+
+        private void updateTitle() {
+            if (mTitleText != null) {
+                mTitleText.setVisibility(mTitle != null ? View.VISIBLE : View.GONE);
+                if (mTitle != null) {
+                    mTitleText.setText(mTitle);
+                }
+            }
+        }
+
+        private void updateBody() {
+            if (mBodyText != null) {
+                mBodyText.setVisibility(mBody != null ? View.VISIBLE : View.GONE);
+                if (mBody != null) {
+                    mBodyText.setText(mBody);
+                }
+            }
+        }
+
+        private void attachFields() {
+            if (mFields != null) {
+                mFields.setVisibility(mInputFields.size() > 0 ? View.VISIBLE : View.GONE);
+                for (final GtInputField field : mInputFields) {
+                    field.render(mFields.getContext(), mFields, true);
+                }
+            }
+        }
+
+        private void attachButtonPair() {
+            if (mButtons != null) {
+                mButtons.setVisibility(mButtonPair != null ? View.VISIBLE : View.GONE);
+                if (mButtonPair != null) {
+                    final GtModel.ViewHolder holder = mButtonPair.render(mButtons.getContext(), mButtons, true);
+                    holder.setParentHolder(this);
+                }
             }
         }
     }

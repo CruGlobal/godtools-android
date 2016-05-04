@@ -4,44 +4,52 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.util.SimpleArrayMap;
 import android.util.Log;
 import android.view.View;
 
 import org.keynote.godtools.android.snuffy.model.GtPage;
 
-import java.util.UUID;
-
 public class SnuffyPage extends SnuffyLayout
 {
     private static final String TAG = "SnuffyPage";
 
-    public GtPage mModel;
+    @NonNull
+    private final GtPage mModel;
+
+    private final SimpleArrayMap<String, SnuffyPage> mChildPages = new SimpleArrayMap<>();
 
     public String mDescription;
     public String mThumbnail;
     public Activity mCallingActivity; // used to host AlertDialog
-
-    /**
-     * SnuffyPage's unique identifier on the GodTools API.  This ID is used when fetching an
-     * updated version of just one page while making content edits in the translation tool.
-     */
-    private UUID pageId;
 
     private View mCover;
     private View mActivePanel;
     private View mHiddenButton;
     private Runnable mOnRemoveCover;
 
-    public SnuffyPage(Context context)
-    {
+    public SnuffyPage(@NonNull final Context context, @NonNull final GtPage model) {
         super(context);
+        mModel = model;
         mCover = null;
         mActivePanel = null;
         mHiddenButton = null;
     }
 
+    @NonNull
     public GtPage getModel() {
         return mModel;
+    }
+
+    public void addChildPage(@NonNull final SnuffyPage page) {
+        mChildPages.put(page.getModel().getId(), page);
+    }
+
+    @Nullable
+    public SnuffyPage getChildPage(@NonNull final String id) {
+        return mChildPages.get(id);
     }
 
     public void setCover(View cover)
@@ -109,39 +117,5 @@ public class SnuffyPage extends SnuffyLayout
         mCover.bringToFront();
         requestLayout();
         forceLayout();
-    }
-
-    public UUID getPageId()
-    {
-        return pageId;
-    }
-
-    public void setPageIdFromFilename(String pageFileName)
-    {
-        Log.d("SnuffyPage", "PageFileName is: " + pageFileName);
-        if (pageFileName == null || !pageFileName.contains(".xml"))
-        {
-            throw new IllegalArgumentException("pageFileName must not be null and must contain .xml");
-        }
-
-        String actualFilename;
-
-        if (pageFileName.contains("/"))
-        {
-            String[] potentialActualFilenames = pageFileName.split("/");
-            // the last one.
-            actualFilename = potentialActualFilenames[potentialActualFilenames.length - 1];
-        }
-        else
-        {
-            actualFilename = pageFileName;
-        }
-        Log.d("SnuffyPage", "actualFilename: " + actualFilename);
-
-        if (actualFilename.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\\.xml"))
-        {
-            Log.d("SnuffyPage", "Verified UUID");
-            this.pageId = UUID.fromString(actualFilename.substring(0, actualFilename.indexOf(".xml")));
-        }
     }
 }

@@ -1,16 +1,17 @@
 package org.keynote.godtools.android.snuffy.model;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.SimpleArrayMap;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.common.collect.ImmutableList;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.keynote.godtools.android.BuildConfig;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -30,10 +31,13 @@ public class GtManifest extends GtModel {
 
     @NonNull
     private final String mPackageCode;
+    @NonNull
+    private final String mLanguage;
 
     @VisibleForTesting
-    GtManifest(@NonNull final String code) {
+    GtManifest(@NonNull final String code, @NonNull final String language) {
         mPackageCode = code;
+        mLanguage = language;
     }
 
     @NonNull
@@ -42,10 +46,14 @@ public class GtManifest extends GtModel {
         return this;
     }
 
-    @NonNull
+    @Nullable
     @Override
     public GtPage getPage() {
-        throw new IllegalStateException("It is impossible for a page to contain a Manifest");
+        if (BuildConfig.DEBUG) {
+            throw new IllegalStateException("It is impossible for a manifest to be a child of a page");
+        }
+
+        return null;
     }
 
     public String getTitle() {
@@ -70,21 +78,32 @@ public class GtManifest extends GtModel {
         return mPackageCode;
     }
 
+    @NonNull
+    public String getLanguage() {
+        return mLanguage;
+    }
+
     @Nullable
     @Override
-    public View render(@NonNull final ViewGroup parent, final boolean attachToParent) {
+    public ViewHolder render(@NonNull final Context context, @Nullable final ViewGroup parent,
+                             final boolean attachToRoot) {
+        if (BuildConfig.DEBUG) {
+            throw new IllegalStateException("You cannot render a GtManifest!!!!");
+        }
         // you can't render a GtManifest
         return null;
     }
 
     @NonNull
     @WorkerThread
-    public static GtManifest fromXml(final XmlPullParser parser, @NonNull final String appPackage) throws IOException,
-            XmlPullParserException {
-        return new GtManifest(appPackage).parse(parser);
+    public static GtManifest fromXml(@NonNull final XmlPullParser parser, @NonNull final String packageCode,
+                                     @NonNull final String language) throws IOException, XmlPullParserException {
+        final GtManifest manifest = new GtManifest(packageCode, language);
+        manifest.parse(parser);
+        return manifest;
     }
 
-    private GtManifest parse(final XmlPullParser parser) throws IOException, XmlPullParserException {
+    private void parse(final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, null, XML_PACKAGE);
 
         // loop until we reach the matching end tag for this element
@@ -109,13 +128,11 @@ public class GtManifest extends GtModel {
                         throw new XmlPullParserException("Package XML has more than 1 about page defined", parser,
                                                          null);
                     }
-                    mAbout = GtPage.fromManifestXml(this, parser);
-                    mAbout.setId(mPackageCode + "-about");
+                    mAbout = GtPage.fromManifestXml(this, "about", parser);
                     mPagesIndex.put(mAbout.getId(), mAbout);
                     continue;
                 case GtPage.XML_PAGE:
-                    final GtPage page = GtPage.fromManifestXml(this, parser);
-                    page.setId(mPackageCode + "-" + Integer.toString(mPages.size()));
+                    final GtPage page = GtPage.fromManifestXml(this, Integer.toString(mPages.size()), parser);
                     mPages.add(page);
                     mPagesIndex.put(page.getId(), mAbout);
                     continue;
@@ -132,7 +149,5 @@ public class GtManifest extends GtModel {
         if (mAbout == null) {
             throw new XmlPullParserException("Package XML does not have an about page defined");
         }
-
-        return this;
     }
 }

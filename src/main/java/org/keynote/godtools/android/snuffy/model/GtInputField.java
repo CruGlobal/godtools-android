@@ -1,15 +1,31 @@
 package org.keynote.godtools.android.snuffy.model;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.InputType;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.keynote.godtools.android.R;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-public class GtInputField {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+public class GtInputField extends GtModel {
+    public static final String FIELD_EMAIL = "email";
+    public static final String FIELD_FIRST_NAME = "first_name";
+    public static final String FIELD_LAST_NAME = "last_name";
+    public static final String FIELD_NAME = "name";
+
     public enum Type {
         EMAIL, TEXT;
 
@@ -18,6 +34,7 @@ public class GtInputField {
         private static final String XML_ATTR_TYPE_EMAIL = "email";
         private static final String XML_ATTR_TYPE_TEXT = "text";
 
+        @NonNull
         static Type fromXmlAttr(@Nullable final String attr) {
             if (attr != null) {
                 switch (attr) {
@@ -40,12 +57,17 @@ public class GtInputField {
     private static final String XML_ATTR_NAME = "name";
 
     @NonNull
-    private Type mType = Type.DEFAULT;
-    private String mName;
-    private String mLabel;
-    private String mPlaceholder;
+    Type mType = Type.DEFAULT;
+    @Nullable
+    String mName;
+    @Nullable
+    String mLabel;
+    @Nullable
+    String mPlaceholder;
 
-    private GtInputField() {}
+    private GtInputField(@NonNull final GtFollowupModal parent) {
+        super(parent);
+    }
 
     @NonNull
     public Type getType() {
@@ -64,9 +86,26 @@ public class GtInputField {
         return mPlaceholder;
     }
 
+    @Nullable
+    @Override
+    public ViewHolder render(@NonNull Context context, @Nullable ViewGroup parent, boolean attachToRoot) {
+        final LayoutInflater inflater = LayoutInflater.from(context);
+
+        // inflate the raw view
+        final View view = inflater.inflate(R.layout.gt_input_field, parent, false);
+        if (parent != null && attachToRoot) {
+            parent.addView(view);
+        }
+
+        return new ViewHolder(view);
+    }
+
     @NonNull
-    static GtInputField fromXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
-        return new GtInputField().parse(parser);
+    static GtInputField fromXml(@NonNull final GtFollowupModal modal, @NonNull final XmlPullParser parser)
+            throws IOException, XmlPullParserException {
+        final GtInputField field = new GtInputField(modal);
+        field.parse(parser);
+        return field;
     }
 
     @NonNull
@@ -98,5 +137,62 @@ public class GtInputField {
         }
 
         return this;
+    }
+
+    public class ViewHolder extends GtModel.ViewHolder {
+        @Nullable
+        @Bind(R.id.label)
+        TextView mLabelView;
+        @Bind(R.id.input)
+        EditText mInputView;
+
+        protected ViewHolder(@NonNull final View root) {
+            super(root);
+            ButterKnife.bind(this, root);
+
+            setupLabel();
+            setupInput();
+        }
+
+        private void setupLabel() {
+            if (mLabelView != null) {
+                mLabelView.setVisibility(mLabel != null ? View.VISIBLE : View.GONE);
+                mLabelView.setText(mLabel);
+            }
+        }
+
+        private void setupInput() {
+            if (mInputView != null) {
+                int inputType = InputType.TYPE_CLASS_TEXT;
+                switch (mType) {
+                    case EMAIL:
+                        inputType |= InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
+                        break;
+                }
+                mInputView.setInputType(inputType);
+
+                // set the hint for this input view, prefer the label (unless we have a separate label view or no label
+                // is defined)
+                String hint = mLabel;
+                if (mLabelView != null || hint == null) {
+                    hint = mPlaceholder;
+                }
+                mInputView.setHint(hint);
+            }
+        }
+
+        @Nullable
+        public String getName() {
+            return mName;
+        }
+
+        @Nullable
+        public String getValue() {
+            if (mInputView != null) {
+                return mInputView.getText().toString();
+            }
+
+            return null;
+        }
     }
 }

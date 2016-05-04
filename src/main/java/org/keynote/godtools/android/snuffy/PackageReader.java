@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.ClipboardManager;
@@ -32,13 +33,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.common.base.Throwables;
+import com.google.common.io.Closer;
 
 import org.ccci.gto.android.common.util.IOUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.event.GodToolsEvent;
+import org.keynote.godtools.android.snuffy.model.GtFollowupModal;
 import org.keynote.godtools.android.snuffy.model.GtManifest;
+import org.keynote.godtools.android.snuffy.model.GtModel;
 import org.keynote.godtools.android.snuffy.model.GtPage;
+import org.keynote.godtools.android.snuffy.model.GtThankYou;
 import org.keynote.godtools.android.utils.TypefaceUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -48,12 +54,12 @@ import org.xml.sax.SAXException;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -62,27 +68,28 @@ import java.util.concurrent.ExecutionException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import static org.keynote.godtools.android.snuffy.Constants.DEFAULT_BACKGROUND_COLOR;
 import static org.keynote.godtools.android.snuffy.ParserUtils.getChildElementNamed;
 import static org.keynote.godtools.android.snuffy.ParserUtils.getChildrenNamed;
 import static org.keynote.godtools.android.snuffy.ParserUtils.getTextContentImmediate;
 import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
+import static org.keynote.godtools.android.utils.FileUtils.getResourcesDir;
 
 @SuppressWarnings({"deprecation", "BooleanMethodIsAlwaysInverted"})
 public class PackageReader
 {
     private static final int REFERENCE_DEVICE_HEIGHT = 480;    // pixels on iPhone - including status bar
+    private static final int REFERENCE_DEVICE_WIDTH = 320;    // pixels on iPhone - full width
 
     // Note that these coords are those used in the Package .XML files.
     // They are based on an original iPhone (480x320), with the status bar removed
     // The similar specs in Main.java and the HomeScreen layout in the GodTools app are based on
     // an iPhone4S with retina display (960x640), with the status bar removed.
-    private static final int REFERENCE_DEVICE_WIDTH = 320;    // pixels on iPhone - full width
     private static final String TAG = "PackageReader";
     private static final float DEFAULT_TEXT_SIZE = 17.0f;
     private static final float DEFAULT_BUTTON_TEXT_SIZE = 20.0f;
     private static final float DEFAULT_QUESTION_TEXT_SIZE = 20.0f;
     private static final float DEFAULT_STRAIGHT_QUESTION_TEXT_SIZE = 17.0f;
-    private static final String DEFAULT_BACKGROUND_COLOR = "#ffff00";    // yellow so we will see if it is not set in the XML
     private static final int TEXT_MARGINX = 10;
     private static final int BUTTON_MARGINX = 10;    // within the page
     private static final int BUTTON_HR_MARGINX = 0;    // within the button container
@@ -99,11 +106,12 @@ public class PackageReader
     private Context mContext;
     private int mPageWidth;
     private int mPageHeight;
-    private List<SnuffyPage> mPages;
     private String mPackageTitle;
     private String mImageFolderName;
     private String mSharedFolderName;
-    private int mBackgroundColor;
+    @ColorInt
+    private int mBackgroundColor = DEFAULT_BACKGROUND_COLOR;
+    private double mScale;
     private int mYOffsetPerItem;
     private int mYOffset;
     private int mYOffsetInPanel;
@@ -135,7 +143,7 @@ public class PackageReader
         mContext = app.getApplicationContext();
         mPageWidth = pageWidth;
         mPageHeight = pageHeight;
-        mPages = new ArrayList<>();
+        mScale = ((double) pageWidth) / ((double) REFERENCE_DEVICE_WIDTH);
         mTotalBitmapSpace = 0;
         mImageFolderName = "resources/";
         mSharedFolderName = "shared/";
@@ -151,10 +159,8 @@ public class PackageReader
         try {
             final boolean forceReload = KEY_DRAFT.equalsIgnoreCase(status);
             final GtManifest manifest =
-                    PackageManager.getInstance(mContext).getManifest(packageConfigName, mAppPackage, forceReload).get();
-            if (processMainPackageFilePW(manifest)) {
-                return mPages;
-            }
+                    PackageManager.getInstance(mContext).getManifest(packageConfigName, mAppPackage, mLanguage, forceReload).get();
+            return processMainPackageFilePW(manifest);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
@@ -164,125 +170,127 @@ public class PackageReader
         return null;
     }
 
-    private boolean processMainPackageFilePW(@NonNull final GtManifest manifest) {
+    @Nullable
+    private List<SnuffyPage> processMainPackageFilePW(@NonNull final GtManifest manifest) {
         try {
             // process main package manifest
             final int numPages = manifest.getPages().size();
             mPackageTitle = manifest.getTitle();
 
             // process all pages
+            final List<SnuffyPage> pages = new ArrayList<>();
             mProgressCallback.updateProgress(0, numPages);
-            mPages.add(processManifestPage(manifest.getAbout()));
-            mProgressCallback.updateProgress(mPages.size(), numPages);
+            pages.add(processManifestPage(manifest.getAbout()));
+            mProgressCallback.updateProgress(pages.size(), numPages);
             for (final GtPage page : manifest.getPages()) {
-                mPages.add(processManifestPage(page));
-                mProgressCallback.updateProgress(mPages.size(), numPages);
+                pages.add(processManifestPage(page));
+                mProgressCallback.updateProgress(pages.size(), numPages);
             }
 
             // return success
-            return true;
+            return pages;
         } catch (final Exception e) {
             Crashlytics.log("error processing main package manifest");
             Crashlytics.logException(e);
-            return false;
+            return null;
         }
     }
 
     @NonNull
-    private SnuffyPage processManifestPage(@NonNull final GtPage page) throws FileNotFoundException {
-        InputStream pageInputStream = null;
+    private SnuffyPage processManifestPage(@NonNull final GtPage page) {
+        // parse page into DOM model
+        final Element node;
         try {
-            final String pageFileName = "resources/" + page.getFileName();
-            pageInputStream = new BufferedInputStream(
-                    new FileInputStream(new File(mAppRef.get().getDocumentsDir(), pageFileName)));
+            final Closer closer = Closer.create();
+            try {
+                // open input stream for this page
+                final File file = new File(getResourcesDir(mContext), page.getFileName());
+                final FileInputStream fileIn = closer.register(new FileInputStream(file));
+                final InputStream pageIn = closer.register(new BufferedInputStream(fileIn));
 
-            return processPageFilePW(page, pageInputStream, pageFileName);
-        } finally {
-            IOUtils.closeQuietly(pageInputStream);
+                // create XML DOM element for this page
+                final Document xmlDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(pageIn);
+                node = xmlDoc.getDocumentElement();
+            } catch (final Throwable t) {
+                throw closer.rethrow(t, ParserConfigurationException.class, SAXException.class);
+            } finally {
+                closer.close();
+            }
+        } catch (final Exception e) {
+            Crashlytics.log("error parsing page id: " + page.getId() + " language: " + mLanguage + " filename: " +
+                                    page.getFileName());
+            throw Throwables.propagate(e);
         }
+
+        // convert DOM into page view
+        return parsePage(page, node);
     }
 
-    private SnuffyPage processPageFilePW(@NonNull final GtPage page, InputStream isPage, String pageFileName) {
+    @NonNull
+    private SnuffyPage parsePage(@NonNull final GtPage page, @NonNull final Element root) {
         Log.d(TAG, ">>> processPageFile starts");
 
         SnuffyPage snuffyPage = null;
 
-        Document xmlDoc;
-        try
+        mYOffsetPerItem = getScaledYValue(DEFAULT_YOFFSET);
+        int SAVE = mTotalBitmapSpace;
+        for (int iPass = 1; iPass <= 2; iPass++)
         {
-            xmlDoc = DocumentBuilderFactory
-                    .newInstance()
-                    .newDocumentBuilder()
-                    .parse(isPage);
-            Element root = xmlDoc.getDocumentElement();
-            if (root == null)
-                throw new SAXException("XML Document has no root element");
+            snuffyPage = new SnuffyPage(mContext, page);
+            snuffyPage.mDescription = page.getDescription();
+            snuffyPage.mThumbnail = page.getThumb();
 
-            mYOffsetPerItem = getScaledYValue(DEFAULT_YOFFSET);
-            int SAVE = mTotalBitmapSpace;
-            for (int iPass = 1; iPass <= 2; iPass++)
-            {
-                snuffyPage = new SnuffyPage(mContext);
-                snuffyPage.mModel = page;
-                snuffyPage.mDescription = page.getDescription();
-                snuffyPage.mThumbnail = page.getThumb();
+            mYOffset = 0;
+            mYFooterTop = mPageHeight;
+            mNumOffsetItems = 0;
+            addCover(snuffyPage);
+            processBackground(snuffyPage);
+            processPageElements(root, snuffyPage);
 
-                mYOffset = 0;
-                mYFooterTop = mPageHeight;
-                mNumOffsetItems = 0;
-                addCover(snuffyPage);
-                processBackgroundPW(root, snuffyPage);
-                processPageElements(root, snuffyPage);
-
-                snuffyPage.setPageIdFromFilename(pageFileName);
-
-                switch (iPass)
+            switch (iPass) {
+                case 1:
                 {
-                    case 1:
+                    if (mNumOffsetItems < 1)
                     {
-                        if (mNumOffsetItems < 1)
-                        {
-                            // no second pass required
-                            iPass = 2; // force exit from loop
-                        }
-                        else
-                        {
-                            mYOffsetPerItem = (int) Math.round(
-                                    (double) ((mYFooterTop - getScaledYValue(MIN_MARGIN_ABOVE_FOOTER)) - (mYOffset - (mNumOffsetItems * getScaledYValue(DEFAULT_YOFFSET)))) /
-                                            (double) (mNumOffsetItems + 1));
-                            mYOffsetPerItem = Math.min(mYOffsetPerItem, getScaledYValue(MAX_YOFFSET));
-                            mYOffsetPerItem = Math.max(mYOffsetPerItem, 0);
-                            mTotalBitmapSpace = SAVE;
-                        }
-                        break;
-                    }
-                    case 2:
+                        // no second pass required
+                        iPass = 2; // force exit from loop
+                    } else
                     {
-                        break;
+                        mYOffsetPerItem = (int) Math.round(
+                                (double) ((mYFooterTop - getScaledYValue(MIN_MARGIN_ABOVE_FOOTER)) -
+                                        (mYOffset - (mNumOffsetItems * getScaledYValue(DEFAULT_YOFFSET)))) /
+                                        (double) (mNumOffsetItems + 1));
+                        mYOffsetPerItem = Math.min(mYOffsetPerItem, getScaledYValue(MAX_YOFFSET));
+                        mYOffsetPerItem = Math.max(mYOffsetPerItem, 0);
+                        mTotalBitmapSpace = SAVE;
                     }
+                    break;
+                }
+                case 2: {
+                    break;
                 }
             }
-        } catch (IOException | ParserConfigurationException | SAXException e)
-        {
-            Log.e(TAG, "processPageFile failed: " + e.toString());
-            snuffyPage = null;
         }
+
+        // add all children pages
+        for (final SnuffyPage child : processFollowupModals(page, root)) {
+            snuffyPage.addChildPage(child);
+        }
+
         Log.d(TAG, ">>> processPageFile ends");
         return snuffyPage;
     }
 
-    private void processBackgroundPW(Element root, SnuffyPage currPage)
-    {
-        String watermark = root.getAttribute("watermark");        // 	either this
-        String backgroundImage = root.getAttribute("backgroundimage");    // 	or this
-        String shadows = getStringAttributeValue(root, "shadows", "yes");
+    private void processBackground(@NonNull final SnuffyPage currPage) {
+        final GtPage model = currPage.getModel();
 
-        mBackgroundColor = Color.parseColor(getStringAttributeValue(root, "color", DEFAULT_BACKGROUND_COLOR));
+        mBackgroundColor = model.getBackgroundColor() != null ? model.getBackgroundColor() : DEFAULT_BACKGROUND_COLOR;
         currPage.setBackgroundColor(mBackgroundColor);
         currPage.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        if (backgroundImage.length() > 0)
-        {
+        final String watermark = model.getWatermark();        // 	either this
+        final String backgroundImage = model.getBackground();    // 	or this
+        if (backgroundImage != null && backgroundImage.length() > 0) {
             Bitmap bm = getBitmapFromAssetOrFile(mContext, backgroundImage);
             if (bm != null)
             {
@@ -293,8 +301,7 @@ public class PackageReader
                 currPage.addView(iv);
             }
         }
-        if (watermark.length() > 0)
-        {
+        if (watermark != null && watermark.length() > 0) {
             Bitmap bm = getBitmapFromAssetOrFile(mContext, watermark);
             if (bm != null)
             {
@@ -305,8 +312,7 @@ public class PackageReader
                 currPage.addView(iv);
             }
         }
-        if (shadows.equalsIgnoreCase("yes"))
-        {
+        if (model.hasPageShadows()) {
             Bitmap bmTop = getBitmapFromAssetOrFile(mContext, "grad_shad_top.png");
             if (bmTop != null)
             {
@@ -360,6 +366,36 @@ public class PackageReader
             }
             node = node.getNextSibling();
         }
+    }
+
+    @NonNull
+    private List<SnuffyPage> processFollowupModals(@NonNull final GtPage page, @NonNull final Element element) {
+        final List<SnuffyPage> pages = new ArrayList<>();
+
+        // process all followup modals within this page
+        final Iterator<GtFollowupModal> modals = page.getFollowupModals().iterator();
+        for (final Element node : getChildrenNamed(element, GtFollowupModal.XML_FOLLOWUP_MODAL)) {
+            final Element fallback = getChildElementNamed(node, GtFollowupModal.XML_FALLBACK);
+            if (fallback != null) {
+                pages.addAll(processThankYouPages(modals.next(), fallback));
+            }
+        }
+
+        return pages;
+    }
+
+    @NonNull
+    private List<SnuffyPage> processThankYouPages(@NonNull final GtFollowupModal modal,
+                                                  @NonNull final Element element) {
+        final List<SnuffyPage> pages = new ArrayList<>();
+
+        // process all followup modals within this page
+        final Iterator<GtThankYou> thankYous = modal.getThankYous().iterator();
+        for (final Element node : getChildrenNamed(element, GtThankYou.XML_THANK_YOU)) {
+            pages.add(parsePage(thankYous.next(), node));
+        }
+
+        return pages;
     }
 
     private void processButton(SnuffyPage currPage, Element elButton, int iButton, Vector<String> urlsOnpage)
@@ -936,12 +972,26 @@ public class PackageReader
             {
                 Element el = (Element) node;
                 mYOffsetInPanel += getScaledYValue(PANEL_ITEM_DEFAULT_YOFFSET);
-                if (el.getTagName().equalsIgnoreCase("text"))
+                if (el.getTagName().equalsIgnoreCase("text")) {
                     processButtonPanelText(elPanel, el, theContainer, panelWidth);
-                if (el.getTagName().equalsIgnoreCase("image"))
+                } else if (el.getTagName().equalsIgnoreCase("image")) {
                     processButtonPanelImage(elPanel, el, theContainer, panelWidth);
-                if (el.getTagName().equalsIgnoreCase("button"))
+                } else if (el.getTagName().equalsIgnoreCase("button")) {
                     processButtonPanelButton(el, currPage, theContainer, panelWidth, urlsOnPage);
+                } else {
+                    // try parsing it in our new model
+                    final GtModel model = GtModel.fromXml(currPage.getModel(), el);
+                    if (model != null) {
+                        final GtModel.ViewHolder holder = model.render(mContext, theContainer, true);
+                        if (holder != null) {
+                            layoutModel(model, holder.mRoot, mYOffsetInPanel, panelWidth);
+                            final AbsoluteLayout.LayoutParams lp =
+                                    (AbsoluteLayout.LayoutParams) holder.mRoot.getLayoutParams();
+                            mYOffsetInPanel = lp.y + lp.height;
+                            mYOffsetMaxInPanel = determineBottom(theContainer);
+                        }
+                    }
+                }
             }
             node = node.getNextSibling();
         }
@@ -2185,22 +2235,79 @@ public class PackageReader
         return b;
     }
 
-    private int getScaledXValue(int x)
-    {
-        return (int) Math.round((double) (x * mPageWidth) / (double) REFERENCE_DEVICE_WIDTH);
+    private int determineBottom(@NonNull final AbsoluteLayout layout) {
+        final int count = layout.getChildCount();
+        int height = 0;
+        for (int i = 0; i < count; i++) {
+            final View child = layout.getChildAt(i);
+            final AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) child.getLayoutParams();
+            height = Math.max(height, lp.y + lp.height);
+        }
+        return height;
     }
 
-    private int getScaledYValue(int y)
-    {
-        return (int) Math.round((double) (y * mPageHeight) / (double) REFERENCE_DEVICE_HEIGHT);
+    private void layoutModel(@NonNull final GtModel model, @NonNull final View view, final int defScaledTop,
+                             final int defScaledWidth) {
+        // calculate the top of this view ((scaled(top) || defScaledTop) + scaled(topOffset));
+        Integer top = model.getTop();
+        if (top == null) {
+            top = defScaledTop;
+        } else {
+            top = getScaledYValue(top);
+        }
+        if (model.getTopOffset() != null) {
+            top += getScaledYValue(model.getTopOffset());
+        }
+
+        // calculate the left of this view (scaled(left) + leftOffset);
+        Integer left = model.getLeft();
+        if (left == null) {
+            left = 0;
+        }
+        Integer leftOffset = model.getLeftOffset();
+        if (leftOffset == null) {
+            leftOffset = 0;
+        }
+        leftOffset = getScaledXValue(leftOffset);
+        left = getScaledXValue(left) + leftOffset;
+
+        // calculate the width of this view ((scaled(width) || defScaledWidth) - scaled(leftOffset))
+        Integer width = model.getWidth();
+        if (width == null) {
+            width = 0;
+        }
+        width = getScaledXValue(width);
+        if (width == 0) {
+            width = defScaledWidth;
+        }
+        width -= leftOffset;
+
+        // calculate the height
+        view.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.UNSPECIFIED);
+        final int height = view.getMeasuredHeight();
+
+        // update layout params
+        final AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) view.getLayoutParams();
+        lp.y = top;
+        lp.x = left;
+        lp.width = width;
+        lp.height = height;
+        view.setLayoutParams(lp);
     }
 
-    private float getScaledTextSize(float textSize)
-    {
+    private int getScaledXValue(final int x) {
+        return (int) Math.round(mScale * x);
+    }
+
+    private int getScaledYValue(final int y) {
+        return (int) Math.round(mScale * y);
+    }
+
+    private float getScaledTextSize(final float textSize) {
         // textSize is supplied is SP units.
         // return a value in DP units.
         final float scale = mContext.getResources().getDisplayMetrics().density;
-        return (textSize * (float) mPageHeight / (float) REFERENCE_DEVICE_HEIGHT) / scale;
+        return (float) (textSize * mScale) / scale;
     }
 
     private int getColorAttributeValue(Element el, int defaultValue)

@@ -13,6 +13,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.SimpleOnPageChangeListener;
 import android.support.v7.app.AppCompatActivity;
@@ -32,36 +35,54 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 import org.ccci.gto.android.common.support.v4.adapter.ViewHolderPagerAdapter;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.keynote.godtools.android.business.GSSubscriber;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.event.GodToolsEvent;
+import org.keynote.godtools.android.event.GodToolsEvent.EventID;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.NotificationUpdateTask;
+import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.notifications.NotificationInfo;
 import org.keynote.godtools.android.snuffy.PackageReader;
 import org.keynote.godtools.android.snuffy.SnuffyAboutActivity;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.snuffy.SnuffyHelpActivity;
 import org.keynote.godtools.android.snuffy.SnuffyPage;
+import org.keynote.godtools.android.snuffy.model.GtFollowupModal;
+import org.keynote.godtools.android.snuffy.model.GtPage;
+import org.keynote.godtools.android.support.v4.fragment.GtFollowupModalDialogFragment;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static android.support.v4.app.FragmentManager.POP_BACK_STACK_INCLUSIVE;
 import static org.ccci.gto.android.common.support.v4.util.IdUtils.convertId;
+import static org.keynote.godtools.android.event.GodToolsEvent.EventID.SUBSCRIBE_EVENT;
+import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_EMAIL;
+import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_FIRST_NAME;
+import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_LAST_NAME;
+import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_NAME;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.COUNT;
@@ -80,15 +101,17 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 public class SnuffyPWActivity extends AppCompatActivity
 {
     private static final String TAG = "SnuffyActivity";
-    private static final GodToolsEvent.EventID SUBSCRIBE_EVENT = new GodToolsEvent.EventID("followup", "subscribe");
+    private static final String TAG_FOLLOWUP_MODAL = "followupModal";
 
     private String mAppPackage;
     private String mConfigFileName;
     private String mAppLanguage = ENGLISH_DEFAULT;
+
     @Bind(R.id.snuffyViewPager)
     ViewPager mPager;
+    GtPagesPagerAdapter mPagerAdapter;
     private int mPagerCurrentItem = 0;
-    private GtPagesPagerAdapter mPagerAdapter;
+
     private boolean mSetupRequired = true;
     private String mPackageTitle;
     private String mPackageStatus;
@@ -103,6 +126,7 @@ public class SnuffyPWActivity extends AppCompatActivity
     private String regid;
     private Timer timer;
 
+    private final Set<String> mVisibleChildPages = new HashSet<>();
     @Nullable
     private List<SnuffyPage> mPages;
     @Nullable
@@ -136,8 +160,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         mConfigFileName = getIntent().getStringExtra("ConfigFileName");
         mPackageStatus = getIntent().getStringExtra("Status"); // live = draft
         getIntent().putExtra("AllowFlip", false);
-
-        trackScreenActivity(mAppPackage + "-0");
 
         mConfigPrimary = mConfigFileName;
         isUsingPrimaryLanguage = true;
@@ -201,6 +223,41 @@ public class SnuffyPWActivity extends AppCompatActivity
         updateDisplayedPages(pages);
     }
 
+    @Subscribe
+    public void onNavigationEvent(@NonNull final GodToolsEvent event) {
+        // only process events for our local namespace
+        if (event.getEventID().inNamespace(mAppPackage)) {
+            if (triggerFollowupModal(event.getEventID())) {
+                // followup modal was displayed
+            } else if (triggerLocalPageNavigation(event.getEventID())) {
+                dismissFollowupModal();
+            }
+        }
+    }
+
+    @WorkerThread
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onSubscribeEvent(@NonNull final GodToolsEvent event) {
+        if (event.getEventID().equals(SUBSCRIBE_EVENT)) {
+            processSubscriberEvent(event);
+        }
+    }
+
+    /**
+     * Event triggered when a child page should be shown
+     *
+     * @param id
+     */
+    public void onShowChildPage(@NonNull final String id) {
+        mVisibleChildPages.add(id);
+        updateViewPager();
+        dismissFollowupModal();
+
+        if (mPager != null) {
+            mPager.setCurrentItem(mPagerAdapter.getItemPositionFromId(convertId(id)));
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -219,20 +276,22 @@ public class SnuffyPWActivity extends AppCompatActivity
             mPager.addOnPageChangeListener(new SimpleOnPageChangeListener() {
                 @Override
                 public void onPageSelected(int position) {
-                    Log.d(TAG, "onPageSelected: " + mAppPackage + Integer.toString(position));
-                    trackScreenActivity(mAppPackage + "-" + Integer.toString(position));
-
                     // exit previously active page
-                    if (mPages != null) {
-                        mPages.get(mPagerCurrentItem).onExitPage();
+                    final SnuffyPage previousPage = mPagerAdapter.getItemFromPosition(mPagerCurrentItem);
+                    if (previousPage != null) {
+                        previousPage.onExitPage();
                     }
 
                     // keep our own since ViewPager doesn't offer a getCurrentItem method!
                     mPagerCurrentItem = position;
 
                     // enter currently active page
-                    if (mPages != null) {
-                        mPages.get(mPagerCurrentItem).onEnterPage();
+                    final SnuffyPage page = mPagerAdapter.getItemFromPosition(position);
+                    if (page != null) {
+                        final GtPage model = page.getModel();
+                        Log.d(TAG, "onPageSelected: " + model.getId());
+                        trackPageView(model);
+                        page.onEnterPage();
                     }
 
                     // This notification has been updated to only be sent after the app has been opened 3 times
@@ -271,7 +330,23 @@ public class SnuffyPWActivity extends AppCompatActivity
 
     private void updateViewPager() {
         if (mPagerAdapter != null) {
-            mPagerAdapter.setPages(mPages);
+            final List<SnuffyPage> pages;
+            if (mVisibleChildPages.isEmpty() || mPages == null) {
+                pages = mPages;
+            } else {
+                pages = new ArrayList<>();
+                for (final SnuffyPage page : mPages) {
+                    pages.add(page);
+                    for (final String name : mVisibleChildPages) {
+                        final SnuffyPage child = page.getChildPage(name);
+                        if (child != null) {
+                            pages.add(child);
+                        }
+                    }
+                }
+            }
+
+            mPagerAdapter.setPages(pages);
         }
     }
 
@@ -310,6 +385,100 @@ public class SnuffyPWActivity extends AppCompatActivity
         updateAppPages();
     }
 
+    private boolean triggerFollowupModal(@NonNull final EventID event) {
+        // check for a followup modal on the current page
+        if (mPagerAdapter != null) {
+            final GtPagesPagerAdapter.ViewHolder holder = mPagerAdapter.getPrimaryItem();
+            if (holder != null && holder.mPage != null) {
+                for (final GtFollowupModal followup : holder.mPage.getModel().getFollowupModals()) {
+                    if (followup != null && followup.getListeners().contains(event)) {
+                        showFollowupModal(followup);
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean triggerLocalPageNavigation(@NonNull final EventID event) {
+        if (mPages != null) {
+            for (int x = 0; x < mPages.size(); x++) {
+                if (mPages.get(x).getModel().getListeners().contains(event)) {
+                    mPager.setCurrentItem(x);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    @WorkerThread
+    private void processSubscriberEvent(@NonNull final GodToolsEvent event) {
+        // look up the followup for the active context
+        final DBAdapter dao = DBAdapter.getInstance(this);
+        final Followup followup = dao.find(Followup.class, event.getFollowUpId(), Followup.DEFAULT_CONTEXT);
+        if (followup != null) {
+            // generate subscriber record
+            final GSSubscriber subscriber = new GSSubscriber();
+            subscriber.setRouteId(followup.getGrowthSpacesRouteId());
+            subscriber.setLanguageCode(event.getLanguage());
+
+            // process any fields
+            for (final Map.Entry<String, String> field : event.getFields().entrySet()) {
+                switch (Strings.nullToEmpty(field.getKey()).toLowerCase(Locale.US)) {
+                    case FIELD_EMAIL:
+                        subscriber.setEmail(field.getValue());
+                        break;
+                    case FIELD_FIRST_NAME:
+                        subscriber.setFirstName(field.getValue());
+                        break;
+                    case FIELD_LAST_NAME:
+                        subscriber.setLastName(field.getValue());
+                        break;
+                    case FIELD_NAME:
+                        // XXX: This is a best attempt at doing the right thing with a full name when the API expects
+                        // XXX: separate first and last names. This handles edge cases by putting all names beyond the
+                        // XXX: first one in the last name field.
+                        final String[] parts = field.getValue().split(" ", 2);
+                        subscriber.setFirstName(parts[0]);
+                        if (parts.length > 1) {
+                            subscriber.setLastName(parts[1]);
+                        }
+                        break;
+                }
+            }
+
+            // store subscriber if it's valid & trigger background sync
+            if (subscriber.isValid()) {
+                dao.insert(subscriber);
+                GodToolsSyncService.syncGrowthSpacesSubscribers(this);
+            }
+        }
+    }
+
+    private void showFollowupModal(@NonNull final GtFollowupModal modal) {
+        // dismiss any previous followup modal
+        dismissFollowupModal();
+
+        // create the new followup modal
+        final FragmentManager fm = getSupportFragmentManager();
+        GtFollowupModalDialogFragment.newInstance(mAppPackage, mAppLanguage, mPackageStatus, modal.getId())
+                .show(fm.beginTransaction().addToBackStack(TAG_FOLLOWUP_MODAL), TAG_FOLLOWUP_MODAL);
+    }
+
+    private void dismissFollowupModal() {
+        final FragmentManager fm = getSupportFragmentManager();
+        final Fragment fragment = fm.findFragmentByTag(TAG_FOLLOWUP_MODAL);
+        if (fragment instanceof DialogFragment) {
+            ((DialogFragment) fragment).dismiss();
+        } else if (fragment != null) {
+            fm.popBackStack(TAG_FOLLOWUP_MODAL, POP_BACK_STACK_INCLUSIVE);
+        }
+    }
+
     protected void onResume()
     {
         super.onResume();
@@ -346,46 +515,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         super.onStop();
     }
 
-    @Subscribe
-    public void onGodToolsEvent(GodToolsEvent event){
-        for(int x = 0; x < mPages.size(); x++) {
-            SnuffyPage snuffyPage = mPages.get(x);
-
-            for(GodToolsEvent.EventID listener : snuffyPage.getModel().getListeners())
-            {
-                //if the event passed to this method equals a listener, jump to that page
-                if(event.getEventID().equals(listener)) {
-                    //todo in the future will jump to a different package if the namespace calls for it
-                    mPager.setCurrentItem(x);
-                }
-            }
-        }
-
-        if(event.getEventID().equals(SUBSCRIBE_EVENT))
-        {
-            addGSSubscriberToDB(event);
-
-            GodToolsSyncService.syncGrowthSpacesSubscribers(this);
-        }
-    }
-
-    private void addGSSubscriberToDB(GodToolsEvent event) {
-        GSSubscriber gsSubscriber = new GSSubscriber();
-        gsSubscriber.setRouteId(event.getData().get("routeId"));
-        gsSubscriber.setLanguageCode(event.getData().get("languageCode"));
-        gsSubscriber.setFirstName(event.getData().get("firstName"));
-        gsSubscriber.setLastName(event.getData().get("lastName"));
-        gsSubscriber.setEmail(event.getData().get("email"));
-
-        if(gsSubscriber.isValid()) {
-            final DBAdapter dao = DBAdapter.getInstance(this);
-            dao.insertAsync(gsSubscriber);
-        }
-        else {
-            Log.e(TAG, "Growth Spaces Subscriber must have route id, language code, and email set.");
-        }
-    }
-
     private void doSetup(int delay)
     {
         new Handler().postDelayed(new Runnable()
@@ -408,6 +537,12 @@ public class SnuffyPWActivity extends AppCompatActivity
                     getString(R.string.processing_failed),
                     Toast.LENGTH_SHORT).show();
             return;
+        }
+
+        // track a page view of the most recently loaded page
+        final GtPagesPagerAdapter.ViewHolder holder = mPagerAdapter.getPrimaryItem();
+        if (holder != null && holder.mPage != null) {
+            trackPageView(holder.mPage.getModel());
         }
 
         addClickHandlersToAllPages();
@@ -682,18 +817,24 @@ public class SnuffyPWActivity extends AppCompatActivity
         return true;
     }
 
-    private void refreshPage()
-    {
-        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SnuffyPage currentPage = mPagerAdapter.getPrimaryItem().mPage;
+    private void refreshPage() {
+        final GtPagesPagerAdapter.ViewHolder currentView = mPagerAdapter.getPrimaryItem();
+        final SnuffyPage currentPage = currentView != null ? currentView.mPage : null;
+        final String pageUuid = currentPage != null ? currentPage.getModel().getUuid() : null;
+
+        // short-circuit if we don't have a valid UUID
+        if (pageUuid == null) {
+            return;
+        }
 
         showLoading(getString(R.string.update_page));
 
+        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         GodToolsApiClient.downloadDraftPage((SnuffyApplication) getApplication(),
                 settings.getString(AUTH_DRAFT, ""),
                 mAppLanguage,
                 mAppPackage,
-                currentPage.getPageId(),
+                pageUuid,
                 new DownloadTask.DownloadTaskHandler()
                 {
                     @Override
@@ -853,9 +994,8 @@ public class SnuffyPWActivity extends AppCompatActivity
         EventTracker.track(getApp(), mAppPackage, "Menu Event", event);
     }
 
-    private void trackScreenActivity(String activity)
-    {
-        EventTracker.track(getApp(), activity, mAppLanguage);
+    void trackPageView(@NonNull final GtPage page) {
+        EventTracker.track(getApp(), page.getId(), page.getManifest().getLanguage());
     }
 
     private void startTimer()
@@ -915,6 +1055,14 @@ public class SnuffyPWActivity extends AppCompatActivity
                 }
             }
             return POSITION_NONE;
+        }
+
+        @Nullable
+        SnuffyPage getItemFromPosition(final int position) {
+            if (position > 0 && position < mPages.size()) {
+                return mPages.get(position);
+            }
+            return null;
         }
 
         @Override

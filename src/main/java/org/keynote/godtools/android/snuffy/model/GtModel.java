@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.snuffy.model;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
@@ -7,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.greenrobot.eventbus.EventBus;
+import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.event.GodToolsEvent;
 import org.w3c.dom.Element;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -53,6 +57,11 @@ public abstract class GtModel {
     }
 
     @NonNull
+    GtModel getParentModel() {
+        return mParentModel;
+    }
+
+    @NonNull
     public GtManifest getManifest() {
         return mParentModel.getManifest();
     }
@@ -60,7 +69,7 @@ public abstract class GtModel {
     /**
      * @return the page that contains this model.
      */
-    @NonNull
+    @Nullable
     public GtPage getPage() {
         return mParentModel.getPage();
     }
@@ -108,6 +117,7 @@ public abstract class GtModel {
             case GtButton.XML_NEGATIVE_BUTTON:
                 return GtButton.fromXml(parent, parser);
             case GtButtonPair.XML_BUTTON_PAIR:
+                return GtButtonPair.fromXml(parent, parser);
             default:
                 XmlPullParserUtils.skipTag(parser);
                 return null;
@@ -135,6 +145,7 @@ public abstract class GtModel {
             case GtButton.XML_NEGATIVE_BUTTON:
                 return GtButton.fromXml(parent, node);
             case GtButtonPair.XML_BUTTON_PAIR:
+                return GtButtonPair.fromXml(parent, node);
             default:
                 return null;
         }
@@ -152,11 +163,43 @@ public abstract class GtModel {
     /**
      * Render this view.
      *
-     * @param parent         The parent ViewGroup to inherit properties from (and optionally attach ourselves to).
-     * @param attachToParent Whether this view should be attached to the parent or not.
+     * @param context      The context to use to inflate the necessary views
+     * @param parent       The parent ViewGroup to inherit properties from (and optionally attach ourselves to).
+     * @param attachToRoot Whether this view should be attached to the parent or not.
      * @return The view representing this model
      */
     @Nullable
     @UiThread
-    public abstract View render(@NonNull ViewGroup parent, boolean attachToParent);
+    public abstract ViewHolder render(@NonNull Context context, @Nullable ViewGroup parent, boolean attachToRoot);
+
+    public abstract static class ViewHolder {
+        @NonNull
+        public final View mRoot;
+
+        @Nullable
+        private ViewHolder mParentHolder;
+
+        protected ViewHolder(@NonNull final View root) {
+            mRoot = root;
+            mRoot.setTag(R.id.tag_gt_model_view_holder, this);
+        }
+
+        /* BEGIN lifecycle */
+
+        protected boolean onSendEvent(@NonNull final GodToolsEvent.EventID event) {
+            // if we have a parent ViewHolder, try using it to send the event
+            if (mParentHolder != null && mParentHolder.onSendEvent(event)) {
+                return true;
+            }
+
+            EventBus.getDefault().post(new GodToolsEvent(event));
+            return true;
+        }
+
+        /* END lifecycle */
+
+        final void setParentHolder(@Nullable final ViewHolder holder) {
+            mParentHolder = holder;
+        }
+    }
 }
