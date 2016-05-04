@@ -1,7 +1,6 @@
 package org.keynote.godtools.android.snuffy.model;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,6 +23,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.keynote.godtools.android.snuffy.ParserUtils.safeParseColor;
 
 public class GtPage extends GtModel {
     static final String XML_PAGE = "page";
@@ -197,14 +198,7 @@ public class GtPage extends GtModel {
             parser.require(XmlPullParser.START_TAG, null, XML_PAGE);
 
             // handle any local attributes
-            final String rawColor = parser.getAttributeValue(null, XML_ATTR_BACKGROUND_COLOR);
-            if (rawColor != null) {
-                try {
-                    mBackgroundColor = Color.parseColor(rawColor);
-                } catch (final IllegalArgumentException e) {
-                    mBackgroundColor = null;
-                }
-            }
+            mBackgroundColor = safeParseColor(parser.getAttributeValue(null, XML_ATTR_BACKGROUND_COLOR), null);
             mBackground = parser.getAttributeValue(null, XML_ATTR_BACKGROUND);
             mWatermark = parser.getAttributeValue(null, XML_ATTR_WATERMARK);
             // pageShadows is false only if it is set to "no" in the page XML, otherwise default to true

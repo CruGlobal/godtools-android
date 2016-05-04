@@ -1,5 +1,7 @@
 package org.keynote.godtools.android.snuffy;
 
+import android.graphics.Color;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -45,6 +47,17 @@ public class ParserUtils {
             return eventIDs.build();
         }
         return ImmutableSet.of();
+    }
+
+    @ColorInt
+    @Nullable
+    public static Integer safeParseColor(@Nullable final String rawColor, @Nullable final Integer defColor) {
+        try {
+            return Color.parseColor(rawColor);
+        } catch (final Exception ignored) {
+        }
+
+        return defColor;
     }
 
     @Nullable

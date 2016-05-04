@@ -1,6 +1,9 @@
 package org.keynote.godtools.android.snuffy.model;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
+import android.view.Gravity;
 
 import com.google.common.collect.ImmutableList;
 
@@ -13,6 +16,7 @@ import org.keynote.godtools.android.snuffy.model.GtButton.Mode;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -94,6 +98,34 @@ public class GtButtonIT {
         assertThat(button.getHeight(), nullValue());
         assertThat(button.getTopOffset(), nullValue());
         assertThat(button.getLeftOffset(), nullValue());
+    }
+
+    @Test
+    public void verifyButtonTextStyles() throws Exception {
+        final GtButton button = parse("button-link-textstyles.xml");
+        assertNotNull(button);
+        assertThat(button.getMode(), is(Mode.LINK));
+        assertThat(button.getText(), is(TEXT));
+        assertThat(button.getTextStyle(), is(Typeface.BOLD_ITALIC));
+        assertThat(button.getTextAlign(), is(Gravity.CENTER_HORIZONTAL));
+        assertThat(button.getTextSize(), is(42));
+        assertNotNull(button.getTextColor());
+        assertEquals(18, Color.red(button.getTextColor()));
+        assertEquals(52, Color.green(button.getTextColor()));
+        assertEquals(86, Color.blue(button.getTextColor()));
+        assertEquals(255, Color.alpha(button.getTextColor()));
+    }
+
+    @Test
+    public void verifyButtonNoTextStyles() throws Exception {
+        final GtButton button = parse("button-link-no-textstyles.xml");
+        assertNotNull(button);
+        assertThat(button.getMode(), is(Mode.LINK));
+        assertThat(button.getText(), is(TEXT));
+        assertThat(button.getTextStyle(), is(Typeface.NORMAL));
+        assertThat(button.getTextAlign(), is(Gravity.NO_GRAVITY));
+        assertThat(button.getTextSize(), nullValue());
+        assertThat(button.getTextColor(), nullValue());
     }
 
     @NonNull

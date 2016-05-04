@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class GtButton extends GtModel {
+import static org.keynote.godtools.android.snuffy.RenderUtils.scaleTextSize;
+import static org.keynote.godtools.android.snuffy.RenderUtils.unapplyTextSizeUnit;
+
+public class GtButton extends GtTextModel {
     public enum Mode {
         LINK, DEFAULT, UNKNOWN, PANEL;
 
@@ -141,6 +145,7 @@ public class GtButton extends GtModel {
         mTapEvents = ParserUtils
                 .parseEvents(parser.getAttributeValue(null, XML_ATTR_TAP_EVENTS), getManifest().getPackageCode());
         parsePositionAttrs(parser);
+        parseTextAttrs(parser);
 
         switch (mMode) {
             // don't process unknown button modes
@@ -190,6 +195,7 @@ public class GtButton extends GtModel {
         }
         mTapEvents = ParserUtils.parseEvents(node.getAttribute(XML_ATTR_TAP_EVENTS), getManifest().getPackageCode());
         parsePositionAttrs(node);
+        parseTextAttrs(node);
 
         switch (mMode) {
             case UNKNOWN:
@@ -217,7 +223,9 @@ public class GtButton extends GtModel {
             // customize button if necessary
             if (mButton != null) {
                 mButton.setText(mText);
+                applyTextStyles(mButton);
 
+                // XXX: we can't set underline in style attributes :( -DF
                 if (mMode == Mode.LINK) {
                     mButton.setPaintFlags(mButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 }
@@ -229,6 +237,15 @@ public class GtButton extends GtModel {
             // trigger any configured tap events
             for (final EventID event : mTapEvents) {
                 onSendEvent(event);
+            }
+        }
+
+        @Override
+        public void scaleViewForLegacyLayout(final double scale) {
+            super.scaleViewForLegacyLayout(scale);
+            if (mButton != null) {
+                // we need to convert 19sp to 19px, then scale it
+                scaleTextSize(unapplyTextSizeUnit(mButton, TypedValue.COMPLEX_UNIT_SP), scale);
             }
         }
     }

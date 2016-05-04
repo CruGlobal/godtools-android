@@ -201,5 +201,12 @@ public abstract class GtModel {
         final void setParentHolder(@Nullable final ViewHolder holder) {
             mParentHolder = holder;
         }
+
+        /**
+         * This will scale the components within this ViewHolder for use in the legacy rendering model.
+         *
+         * @param scale
+         */
+        public void scaleViewForLegacyLayout(final double scale) {}
     }
 }
