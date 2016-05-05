@@ -672,6 +672,7 @@ public class PackageReader
 
                 theContainer.setOnClickListener(new View.OnClickListener()
                 {
+                    Runnable animIn1;
 
                     @Override
                     public void onClick(View v)
@@ -705,15 +706,21 @@ public class PackageReader
                                 // (unfortunately the result is a black flash)
                                 new Handler().postDelayed(animIn3, 250); // Needs to be this long or it still doesn't take
 
+                                // the animation is finished, let's remove the modal
+                                thePage.removeModal(animIn1);
                             }
                         };
 
-                        final Runnable animIn1 = new Runnable()
-                        {
+                        animIn1 = new Runnable() {
+                            private static final int THIS_ANIMATION_DURATION = 250;
+
                             @Override
                             public void run()
                             {
-                                final int THIS_ANIMATION_DURATION = 250;
+                                // short-circuit if there is already an animation running for this panel
+                                if (panel.getAnimation() != null || shadView.getAnimation() != null) {
+                                    return;
+                                }
 
                                 TranslateAnimation translateAnimation = new TranslateAnimation(
                                         Animation.ABSOLUTE, 0, Animation.ABSOLUTE, 0,
@@ -807,7 +814,7 @@ public class PackageReader
                                 thePage.forceLayout();
                                 thePage.invalidate();
 
-                                thePage.showCover(animIn1, false); // must be after we have brought any other views to front since cover must end up on top
+                                thePage.addModal(animIn1, false); // must be after we have brought any other views to front since cover must end up on top
                                 shadView.bringToFront();
                                 panel.bringToFront();
 
@@ -1886,6 +1893,7 @@ public class PackageReader
             final SnuffyPage thePage = currPage;
             titleContainer.setOnClickListener(new View.OnClickListener()
             {
+                Runnable animIn1;
 
                 @Override
                 public void onClick(View v)
@@ -1905,16 +1913,21 @@ public class PackageReader
                             thePage.requestLayout();
                             thePage.forceLayout();
                             thePage.invalidate();
+
+                            thePage.removeModal(animIn1);
                         }
                     };
 
-                    final Runnable animIn1 = new Runnable()
-                    {
+                    animIn1 = new Runnable() {
+                        private static final int THIS_ANIMATION_DURATION = 400;
 
                         @Override
                         public void run()
                         {
-                            final int THIS_ANIMATION_DURATION = 400;
+                            // don't run if we are currently animating
+                            if (subTitleContainer.getAnimation() != null) {
+                                return;
+                            }
 
                             TranslateAnimation translateAnimation = new TranslateAnimation(
                                     Animation.ABSOLUTE, 0, Animation.ABSOLUTE, 0,
@@ -1972,7 +1985,7 @@ public class PackageReader
                             thePage.requestLayout();
                             thePage.forceLayout();
                             thePage.invalidate();
-                            thePage.showCover(animIn1, true);
+                            thePage.addModal(animIn1, true);
 
                             TranslateAnimation translateAnimation = new TranslateAnimation(
                                     Animation.ABSOLUTE, 0, Animation.ABSOLUTE, 0,
@@ -2626,23 +2639,14 @@ public class PackageReader
         void updateProgress(int curr, int max);
     }
 
-    @SuppressWarnings("unused")
     private class SimpleAnimationListener implements Animation.AnimationListener
     {
 
         private final Runnable mToRunOnEnd;
-        private final long mDelay;
 
         public SimpleAnimationListener(Runnable toRunOnEnd)
         {
             mToRunOnEnd = toRunOnEnd;
-            mDelay = 0;
-        }
-
-        public SimpleAnimationListener(Runnable toRunOnEnd, long delay)
-        {
-            mToRunOnEnd = toRunOnEnd;
-            mDelay = delay;
         }
 
         @Override
@@ -2658,10 +2662,7 @@ public class PackageReader
         @Override
         public void onAnimationEnd(Animation animation)
         {
-            if (mDelay == 0)
-                new Handler().post(mToRunOnEnd);
-            else
-                new Handler().postDelayed(mToRunOnEnd, mDelay);
+            new Handler().post(mToRunOnEnd);
         }
 
     }
