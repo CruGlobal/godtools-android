@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
-import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.event.GodToolsEvent;
 import org.w3c.dom.Element;
@@ -196,14 +195,17 @@ public abstract class GtModel {
 
         /* BEGIN lifecycle */
 
+        protected boolean onValidate(final boolean validateParent) {
+            return !validateParent || mParentHolder == null || mParentHolder.onValidate(true);
+        }
+
         protected boolean onSendEvent(@NonNull final GodToolsEvent.EventID event) {
             // if we have a parent ViewHolder, try using it to send the event
             if (mParentHolder != null && mParentHolder.onSendEvent(event)) {
                 return true;
             }
 
-            EventBus.getDefault().post(new GodToolsEvent(event));
-            return true;
+            return false;
         }
 
         /* END lifecycle */

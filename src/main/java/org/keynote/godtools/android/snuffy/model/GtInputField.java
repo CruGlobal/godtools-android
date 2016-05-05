@@ -3,22 +3,35 @@ package org.keynote.godtools.android.snuffy.model;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.design.widget.TextInputLayout;
 import android.text.InputType;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.common.base.Strings;
+
+import org.apache.commons.lang3.StringUtils;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.keynote.godtools.android.R;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnFocusChange;
+import butterknife.OnTextChanged;
+
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import static org.ccci.gto.android.common.Constants.INVALID_STRING_RES;
 
 public class GtInputField extends GtModel {
     public static final String FIELD_EMAIL = "email";
@@ -55,11 +68,14 @@ public class GtInputField extends GtModel {
 
     private static final String XML_ATTR_TYPE = "type";
     private static final String XML_ATTR_NAME = "name";
+    private static final String XML_ATTR_VALID_FORMAT = "valid-format";
 
     @NonNull
     Type mType = Type.DEFAULT;
     @Nullable
     String mName;
+    @Nullable
+    Pattern mValidFormat;
     @Nullable
     String mLabel;
     @Nullable
@@ -86,7 +102,40 @@ public class GtInputField extends GtModel {
         return mPlaceholder;
     }
 
-    @Nullable
+    boolean hasValidation() {
+        return mValidFormat != null || mType == Type.EMAIL;
+    }
+
+    boolean isValidValue(@Nullable String value) {
+        value = Strings.nullToEmpty(value);
+
+        // handle explicit formats
+        if (mValidFormat != null) {
+            return mValidFormat.matcher(value).matches();
+        }
+
+        // handle any pre-defined type formats
+        switch (mType) {
+            case EMAIL:
+                return Patterns.EMAIL_ADDRESS.matcher(value).matches();
+        }
+
+        // default to true
+        return true;
+    }
+
+    @StringRes
+    int getErrorResource() {
+        if (mValidFormat != null) {
+            return R.string.followup_modal_input_invalid_generic;
+        } else if (mType == Type.EMAIL) {
+            return R.string.followup_modal_input_invalid_email;
+        } else {
+            return INVALID_STRING_RES;
+        }
+    }
+
+    @NonNull
     @Override
     public ViewHolder render(@NonNull Context context, @Nullable ViewGroup parent, boolean attachToRoot) {
         final LayoutInflater inflater = LayoutInflater.from(context);
@@ -114,6 +163,14 @@ public class GtInputField extends GtModel {
 
         mType = Type.fromXmlAttr(parser.getAttributeValue(null, XML_ATTR_TYPE));
         mName = parser.getAttributeValue(null, XML_ATTR_NAME);
+        try {
+            final String pattern = parser.getAttributeValue(null, XML_ATTR_VALID_FORMAT);
+            if (pattern != null) {
+                mValidFormat = Pattern.compile(pattern, CASE_INSENSITIVE);
+            }
+        } catch (final PatternSyntaxException e) {
+            mValidFormat = null;
+        }
 
         // loop until we reach the matching end tag for this element
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -145,6 +202,9 @@ public class GtInputField extends GtModel {
         TextView mLabelView;
         @Bind(R.id.input)
         EditText mInputView;
+        @Nullable
+        @Bind(R.id.inputLayout)
+        TextInputLayout mInputLayout;
 
         protected ViewHolder(@NonNull final View root) {
             super(root);
@@ -154,6 +214,40 @@ public class GtInputField extends GtModel {
             setupInput();
         }
 
+        /* BEGIN lifecycle */
+
+        @OnTextChanged(value = R.id.input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+        void onTextUpdated() {
+            // only update if we are currently in an error state
+            if (mInputLayout != null && mInputLayout.isErrorEnabled()) {
+                onValidate(false);
+            }
+        }
+
+        @OnFocusChange(R.id.input)
+        void onFocusChanged(boolean hasFocus) {
+            if (!hasFocus) {
+                onValidate(false);
+            }
+        }
+
+        @Override
+        protected boolean onValidate(final boolean validateParent) {
+            final int resId = getErrorResource();
+            final boolean valid = isValidValue(mInputView.getText().toString());
+            if (valid) {
+                showError(null);
+            } else if (resId != INVALID_STRING_RES) {
+                showError(mRoot.getResources().getString(resId, StringUtils.capitalize(getName()), getValue()));
+            } else {
+                showError("");
+            }
+
+            return super.onValidate(validateParent) && valid;
+        }
+
+        /* END lifecycle */
+
         private void setupLabel() {
             if (mLabelView != null) {
                 mLabelView.setVisibility(mLabel != null ? View.VISIBLE : View.GONE);
@@ -162,6 +256,7 @@ public class GtInputField extends GtModel {
         }
 
         private void setupInput() {
+            // setup inputType
             if (mInputView != null) {
                 int inputType = InputType.TYPE_CLASS_TEXT;
                 switch (mType) {
@@ -170,14 +265,28 @@ public class GtInputField extends GtModel {
                         break;
                 }
                 mInputView.setInputType(inputType);
+            }
 
-                // set the hint for this input view, prefer the label (unless we have a separate label view or no label
-                // is defined)
-                String hint = mLabel;
-                if (mLabelView != null || hint == null) {
-                    hint = mPlaceholder;
-                }
+            // setup the hint, prefer the label (unless we have a separate label view or no label is defined)
+            String hint = mLabel;
+            if (mLabelView != null || hint == null) {
+                hint = mPlaceholder;
+            }
+
+            // set the hint on the layout or the actual input (based on what's available)
+            if (mInputLayout != null) {
+                mInputLayout.setHint(hint);
+            } else if (mInputView != null) {
                 mInputView.setHint(hint);
+            }
+        }
+
+        private void showError(@Nullable final String error) {
+            if (mInputLayout != null) {
+                mInputLayout.setError(error);
+                mInputLayout.setErrorEnabled(error != null);
+            } else if (mInputView != null) {
+                mInputView.setError(error);
             }
         }
 

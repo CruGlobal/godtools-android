@@ -226,8 +226,8 @@ public class EveryStudentSearchResults extends ListActivity
 
             if (mCursor == null)
             {
-                myCount = getString(R.string.search_no_results,
-                        mQuery);
+                myCount = getString(R.string.search_no_results);
+                myCount.replace("{{search_term}}", mQuery);
             }
             else
             {

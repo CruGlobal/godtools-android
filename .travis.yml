@@ -53,7 +53,7 @@ script:
   - ./gradlew connectedAndroidTest -PdisablePreDex --continue --stacktrace
 
 after_failure:
-  - cat /home/travis/build/CruGlobal/godtools-android/build/outputs/lint-results.xml
+  - cat /home/travis/build/CruGlobal/godtools-android/build/outputs/lint-results*.xml
 
 notifications:
   email: false
