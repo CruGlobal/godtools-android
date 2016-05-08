@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.GoogleAnalytics;
 
 /**
@@ -14,6 +13,8 @@ import org.keynote.godtools.android.utils.GoogleAnalytics;
  */
 public class EventTracker {
     public static final String SCREEN_SETTINGS = "Settings";
+
+    public static final String CATEGORY_MENU = "Menu Event";
 
     private static final int DIMENSION_SCREEN_NAME = 1;
     private static final int DIMENSION_LANGUAGE = 2;
@@ -58,17 +59,11 @@ public class EventTracker {
                               .build());
     }
 
-    /**
-     * Track an event
-     */
-    public static void track(SnuffyApplication app, String screenName, String category, String event)
-    {
-        Tracker tracker = app.getTracker();
-        tracker.setScreenName(screenName);
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory(category)
-                .setAction(event)
-                .setLabel(event)
-                .build());
+    public void menuEvent(@NonNull final String item) {
+        mTracker.send(new HitBuilders.EventBuilder()
+                              .setCategory(CATEGORY_MENU)
+                              .setAction(item)
+                              .setLabel(item)
+                              .build());
     }
 }
