@@ -126,7 +126,7 @@ public class SettingsPW extends BaseActionBarActivity implements
             tvParallelLanguage.setText(parallelName);
         }
 
-        EventTracker.track(getApp(), "Settings", primaryLanguageCode);
+        EventTracker.getInstance(this).screenView("Settings", primaryLanguageCode);
     }
 
     @Override

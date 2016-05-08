@@ -1001,7 +1001,7 @@ public class SnuffyPWActivity extends AppCompatActivity
     }
 
     void trackPageView(@NonNull final GtPage page) {
-        EventTracker.track(getApp(), page.getId(), page.getManifest().getLanguage());
+        EventTracker.getInstance(this).screenView(page.getId(), page.getManifest().getLanguage());
     }
 
     private void startTimer()
