@@ -12,6 +12,7 @@ import org.keynote.godtools.android.utils.GoogleAnalytics;
  * This class is used to track events for Google Analytics.
  */
 public class EventTracker {
+    public static final String SCREEN_EVERYSTUDENT = "EveryStudent";
     public static final String SCREEN_SETTINGS = "Settings";
 
     public static final String CATEGORY_MENU = "Menu Event";
