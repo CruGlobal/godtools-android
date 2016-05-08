@@ -6,6 +6,10 @@ import android.support.annotation.NonNull;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.utils.GoogleAnalytics;
 
 /**
@@ -16,6 +20,7 @@ public class EventTracker {
     public static final String SCREEN_SETTINGS = "Settings";
 
     public static final String CATEGORY_MENU = "Menu Event";
+    public static final String CATEGORY_CONTENT_EVENT = "Content Event";
 
     private static final int DIMENSION_SCREEN_NAME = 1;
     private static final int DIMENSION_LANGUAGE = 2;
@@ -27,6 +32,7 @@ public class EventTracker {
 
     private EventTracker(@NonNull final Context context) {
         mTracker = GoogleAnalytics.getTracker(context);
+        EventBus.getDefault().register(this);
     }
 
     @NonNull
@@ -65,6 +71,15 @@ public class EventTracker {
                               .setCategory(CATEGORY_MENU)
                               .setAction(item)
                               .setLabel(item)
+                              .build());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void trackContentEvent(@NonNull final GodToolsEvent event) {
+        final GodToolsEvent.EventID eventID = event.getEventID();
+        mTracker.send(new HitBuilders.EventBuilder()
+                              .setCategory(CATEGORY_CONTENT_EVENT)
+                              .setAction(eventID.getNamespace() + ":" + eventID.getId())
                               .build());
     }
 }
