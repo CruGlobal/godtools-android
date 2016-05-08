@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -30,7 +32,6 @@ import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
 import org.keynote.godtools.android.fragments.ConfirmDialogFragment;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.service.BackgroundService;
-import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 import org.keynote.godtools.android.utils.TypefaceUtils;
 
@@ -47,13 +48,14 @@ public class SettingsPW extends BaseActionBarActivity implements
         ConfirmDialogFragment.OnConfirmClickListener,
         AccessCodeDialogFragment.AccessCodeDialogListener
 {
-
     private static final String TAG = SettingsPW.class.getSimpleName();
     private static final int REQUEST_PRIMARY = 1002;
     private static final int REQUEST_PARALLEL = 1003;
 
     private LocalBroadcastManager broadcastManager;
     private BroadcastReceiver broadcastReceiver;
+    @NonNull
+    private EventTracker mTracker;
 
     private TextView tvMainLanguage;
     private TextView tvParallelLanguage;
@@ -66,11 +68,13 @@ public class SettingsPW extends BaseActionBarActivity implements
 
     private SharedPreferences settings;
 
+    /* BEGIN lifecycle */
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
+        mTracker = EventTracker.getInstance(this);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -126,7 +130,13 @@ public class SettingsPW extends BaseActionBarActivity implements
             tvParallelLanguage.setText(parallelName);
         }
 
-        EventTracker.getInstance(this).screenView("Settings", primaryLanguageCode);
+        mTracker.screenView(EventTracker.SCREEN_SETTINGS, primaryLanguageCode);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mTracker.activeScreen(EventTracker.SCREEN_SETTINGS);
     }
 
     @Override
@@ -135,6 +145,8 @@ public class SettingsPW extends BaseActionBarActivity implements
         super.onDestroy();
         removeBroadcastReceiver();
     }
+
+    /* END lifecycle */
 
     private void setupBroadcastReceiver()
     {
@@ -216,16 +228,14 @@ public class SettingsPW extends BaseActionBarActivity implements
 
                 setParallelLanguageField(null);
 
-                EventTracker.track(getApp(), "Settings", "Language Change",
-                        "Change Primary Language");
+                mTracker.settingChanged("Language Change", "Change Primary Language");
                 break;
             }
             case RESULT_CHANGED_PARALLEL:
             {
                 setParallelLanguageField(data.getStringExtra("parallelCode"));
 
-                EventTracker.track(getApp(), "Settings",
-                        "Language Change", "Change Parallel Language");
+                mTracker.settingChanged("Language Change", "Change Parallel Language");
                 break;
             }
             case RESULT_DOWNLOAD_PRIMARY:
@@ -389,7 +399,7 @@ public class SettingsPW extends BaseActionBarActivity implements
 
         String event = cbNotificationsAllowed.isChecked() ? "Turned ON" : "Turned OFF";
 
-        EventTracker.track(getApp(), "Settings", "Notification State", event);
+        mTracker.settingChanged("Notification State", event);
 
         updateDeviceWithAPI(cbNotificationsAllowed.isChecked());
     }
@@ -412,10 +422,5 @@ public class SettingsPW extends BaseActionBarActivity implements
         {
             BackgroundService.registerDevice(getApplicationContext(), registrationId, deviceId, notificationsOn);
         }
-    }
-
-    private SnuffyApplication getApp()
-    {
-        return (SnuffyApplication) getApplication();
     }
 }
