@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <color name="gt_content_text">#ffffff</color>
     <style name="TextAppearance.GodTools.Content" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">#fff</item>
+        <item name="android:textColor">@color/gt_content_text</item>
+        <item name="android:textColorHint">@color/gt_content_text</item>
+        <item name="android:textColorHighlight">@color/gt_content_text</item>
+        <item name="android:textColorLink">@color/gt_content_text</item>
     </style>
 
     <style name="Widget.GodTools.Content" parent="Base"/>

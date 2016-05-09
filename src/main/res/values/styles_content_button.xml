@@ -3,16 +3,21 @@
 
     <style name="TextAppearance.GodTools.Content.Button">
         <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+    <style name="Widget.GodTools.Content.Button" parent="Widget.GodTools.Button">
+        <item name="android:background">@drawable/gt_content_btn_white</item>
     </style>
 
-    <style name="TextAppearance.GodTools.Content.Button.Link">
+    <style name="TextAppearance.GodTools.Content.Button.Default"/>
+    <style name="Widget.GodTools.Content.Button.Default">
+        <item name="android:textAppearance">@style/TextAppearance.GodTools.Content.Button.Default</item>
     </style>
 
-    <style name="Widget.GodTools.Content.Button">
-        <item name="android:textAppearance">@style/TextAppearance.GodTools.Content.Button</item>
+    <style name="TextAppearance.GodTools.Content.Button.Link" parent="TextAppearance.GodTools.Content">
+        <item name="android:textSize">19sp</item>
     </style>
-
-    <style name="Widget.GodTools.Content.Button.Link">
+    <style name="Widget.GodTools.Content.Button.Link" parent="Widget.GodTools.Text">
         <item name="android:textAppearance">@style/TextAppearance.GodTools.Content.Button.Link</item>
     </style>
 </resources>

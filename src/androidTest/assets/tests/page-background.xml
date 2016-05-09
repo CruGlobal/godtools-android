@@ -6,4 +6,11 @@
         </heading>
         <subheading size="100" textalign="center">Prayer is simply talking with God.</subheading>
     </title>
+    <followup-modal>
+        <fallback>
+            <button-pair>
+                <positive-button/>
+            </button-pair>
+        </fallback>
+    </followup-modal>
 </page>
