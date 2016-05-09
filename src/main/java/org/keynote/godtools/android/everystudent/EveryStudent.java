@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,20 +22,20 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.SimpleExpandableListAdapter;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.snuffy.SnuffyApplication;
+import org.keynote.godtools.android.googleAnalytics.EventTracker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.keynote.godtools.android.googleAnalytics.EventTracker.SCREEN_EVERYSTUDENT;
+
 @SuppressWarnings("deprecation")
 public class EveryStudent extends ExpandableListActivity
 {
+    public static final String GA_LANGUAGE_EVERYSTUDENT = "en_classic";
     public static final String NAME = "NAME";
     public static final String CONTENT = "CONTENT";
     private static final String ROWID = "ROWID";
@@ -43,6 +44,8 @@ public class EveryStudent extends ExpandableListActivity
 
     private static ExpandableListAdapter mAdapter;
     private static ParserThread mParserThread;
+    @NonNull
+    private EventTracker mTracker;
 
     private List<List<Map<String, String>>> mTopics;
     private List<Map<String, String>> mCategories;
@@ -54,6 +57,7 @@ public class EveryStudent extends ExpandableListActivity
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
+        mTracker = EventTracker.getInstance(this);
 
         EveryStudentPersistance esp = (EveryStudentPersistance) getLastNonConfigurationInstance();
 
@@ -91,7 +95,7 @@ public class EveryStudent extends ExpandableListActivity
             }
         });
 
-        trackScreenActivity();
+        mTracker.screenView(SCREEN_EVERYSTUDENT, GA_LANGUAGE_EVERYSTUDENT);
     }
 
     @Override
@@ -133,20 +137,6 @@ public class EveryStudent extends ExpandableListActivity
             default:
                 return false;
         }
-    }
-
-    private Tracker getGoogleAnalyticsTracker()
-    {
-        return ((SnuffyApplication) getApplication()).getTracker();
-    }
-
-    private void trackScreenActivity()
-    {
-        Tracker tracker = getGoogleAnalyticsTracker();
-        tracker.setScreenName("EveryStudent");
-        tracker.send(new HitBuilders.AppViewBuilder()
-                .setCustomDimension(1, "EveryStudent")
-                .build());
     }
 
     @SuppressLint("HandlerLeak")

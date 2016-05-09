@@ -49,7 +49,6 @@ import org.keynote.godtools.android.utils.TypefaceUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.keynote.godtools.android.utils.Constants.APPLICATION_NAME;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
 import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
@@ -62,7 +61,6 @@ import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
-import static org.keynote.godtools.android.utils.Constants.WEB_URL;
 
 
 public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
@@ -324,7 +322,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             {
                 final String currentLanguage = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
 
-                EventTracker.track(getApp(), "HomeScreen", currentLanguage);
+                EventTracker.getInstance(this).screenView("HomeScreen", currentLanguage);
 
                 break;
             }
@@ -338,10 +336,9 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         doSetup();
     }
 
-    private void doSetup()
-    {
-        EventTracker.track(getApp(), "HomeScreen", settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT));
-        getScreenSize();
+    private void doSetup() {
+        EventTracker.getInstance(this)
+                .screenView("HomeScreen", settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT));
     }
 
     private void getScreenSize()
@@ -502,7 +499,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
             settings.edit().putString(GTLanguage.KEY_PARALLEL, langCode).apply();
         }
 
-        EventTracker.track(getApp(), "HomeScreen", settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT));
+        EventTracker.getInstance(this)
+                .screenView("HomeScreen", settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT));
     }
 
     @Override

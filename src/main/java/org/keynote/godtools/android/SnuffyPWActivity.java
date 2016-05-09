@@ -107,6 +107,9 @@ public class SnuffyPWActivity extends AppCompatActivity
     private static final String TAG = "SnuffyActivity";
     private static final String TAG_FOLLOWUP_MODAL = "followupModal";
 
+    @NonNull
+    private EventTracker mTracker;
+
     private String mAppPackage;
     private String mConfigFileName;
     private String mAppLanguage = ENGLISH_DEFAULT;
@@ -154,6 +157,8 @@ public class SnuffyPWActivity extends AppCompatActivity
     {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+        mTracker = EventTracker.getInstance(this);
+
         setContentView(R.layout.snuffy_main);
         ButterKnife.bind(this);
         setupActionBar();
@@ -217,6 +222,16 @@ public class SnuffyPWActivity extends AppCompatActivity
                     });
 
 
+        }
+    }
+
+    protected void onResume() {
+        super.onResume();
+        mTracker.activeScreen(mCurrentPageId != null ? mCurrentPageId : mAppPackage + "-0");
+
+        if (mSetupRequired) {
+            doSetup();
+            mSetupRequired = false;
         }
     }
 
@@ -531,17 +546,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         }
     }
 
-    protected void onResume()
-    {
-        super.onResume();
-
-        if (mSetupRequired)
-        {
-            doSetup();
-            mSetupRequired = false;
-        }
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -784,31 +788,31 @@ public class SnuffyPWActivity extends AppCompatActivity
         {
             case R.id.CMD_ABOUT:
             {
-                trackScreenEvent("About");
+                mTracker.menuEvent("About");
                 doCmdInfo(null);
                 break;
             }
             case R.id.CMD_CONTENT:
             {
-                trackScreenEvent("Content");
+                mTracker.menuEvent("Content");
                 doCmdShowPageMenu(null);
                 break;
             }
             case R.id.CMD_EMAIL:
             {
-                trackScreenEvent("Share");
+                mTracker.menuEvent("Share");
                 doCmdShare(null);
                 break;
             }
             case R.id.CMD_HELP:
             {
-                trackScreenEvent("Help");
+                mTracker.menuEvent("Help");
                 doCmdHelp();
                 break;
             }
             case R.id.CMD_SWITCH_LANGUAGE:
             {
-                trackScreenEvent("Switch Language");
+                mTracker.menuEvent("Switch Language");
                 switchLanguage();
                 break;
             }
@@ -995,13 +999,8 @@ public class SnuffyPWActivity extends AppCompatActivity
         return (SnuffyApplication) getApplication();
     }
 
-    private void trackScreenEvent(String event)
-    {
-        EventTracker.track(getApp(), mAppPackage, "Menu Event", event);
-    }
-
     void trackPageView(@NonNull final GtPage page) {
-        EventTracker.track(getApp(), page.getId(), page.getManifest().getLanguage());
+        mTracker.screenView(page.getId(), page.getManifest().getLanguage());
     }
 
     private void startTimer()

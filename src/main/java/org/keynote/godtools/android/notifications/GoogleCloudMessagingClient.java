@@ -60,7 +60,7 @@ public class GoogleCloudMessagingClient
                 registerInBackground();
                 // since when an app is first registered notifications are probably on,
                 // send first state to Google Analytics
-                EventTracker.track(application, "HomeScreen", "Notification State", "Turned ON");
+                EventTracker.getInstance(context).settingChanged("Notification State", "Turned ON");
             }
         }
         else

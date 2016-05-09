@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.analytics.Tracker;
 import com.newrelic.agent.android.NewRelic;
 
 import org.keynote.godtools.android.BuildConfig;
@@ -87,11 +86,6 @@ public class SnuffyApplication extends Application {
     @Deprecated
     public File getResourcesDir() {
         return FileUtils.getResourcesDir(this);
-    }
-
-    public Tracker getTracker()
-    {
-        return org.keynote.godtools.android.utils.GoogleAnalytics.getTracker(this);
     }
 
     @Nullable
