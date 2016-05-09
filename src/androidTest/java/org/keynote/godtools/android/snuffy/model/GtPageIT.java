@@ -49,6 +49,18 @@ public class GtPageIT {
         assertEquals("background.jpg", page.getBackground());
         assertEquals("watermark.png", page.getWatermark());
         assertTrue(page.hasPageShadows());
+
+        // page color should affect button color
+        final GtFollowupModal modal = page.getFollowupModal("kgp-test-followup-1");
+        assertNotNull(modal);
+        assertNotNull(modal.getButtonPair());
+        final GtButton button = modal.getButtonPair().getPositiveButton();
+        assertNotNull(button);
+        assertNotNull(button.getTextColor());
+        assertEquals(18, Color.red(button.getTextColor()));
+        assertEquals(52, Color.green(button.getTextColor()));
+        assertEquals(86, Color.blue(button.getTextColor()));
+        assertEquals(255, Color.alpha(button.getTextColor()));
     }
 
     @Test

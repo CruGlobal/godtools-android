@@ -101,6 +101,21 @@ public class GtButton extends GtTextModel {
 
     @Nullable
     @Override
+    public Integer getTextColor() {
+        Integer color = super.getTextColor();
+        if (color == null) {
+            if (mMode != Mode.LINK) {
+                final GtPage page = getPage();
+                if (page != null) {
+                    color = page.getBackgroundColor();
+                }
+            }
+        }
+        return color;
+    }
+
+    @Nullable
+    @Override
     public ViewHolder render(@NonNull final Context context, @Nullable final ViewGroup parent,
                              final boolean attachToRoot) {
         final LayoutInflater inflater = LayoutInflater.from(context);

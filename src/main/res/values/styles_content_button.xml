@@ -3,8 +3,11 @@
 
     <style name="TextAppearance.GodTools.Content.Button">
         <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
-    <style name="Widget.GodTools.Content.Button" parent="Widget.GodTools.Button"/>
+    <style name="Widget.GodTools.Content.Button" parent="Widget.GodTools.Button">
+        <item name="android:background">@drawable/gt_content_btn_white</item>
+    </style>
 
     <style name="TextAppearance.GodTools.Content.Button.Default"/>
     <style name="Widget.GodTools.Content.Button.Default">
