@@ -139,7 +139,7 @@ android {
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AA2f0cb2d41f6ac7dcc256eaa9ca7e0f640859fd52\""
         }
         release {
-            minifyEnabled true
+            minifyEnabled false
             if (signingConfigs.release.storeFile.exists()) {
                 signingConfig signingConfigs.release
             }
