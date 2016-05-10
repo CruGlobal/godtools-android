@@ -76,8 +76,9 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 import static android.support.v4.app.FragmentManager.POP_BACK_STACK_INCLUSIVE;
 import static android.support.v4.view.PagerAdapter.POSITION_NONE;
@@ -114,7 +115,8 @@ public class SnuffyPWActivity extends AppCompatActivity
     private String mConfigFileName;
     private String mAppLanguage = ENGLISH_DEFAULT;
 
-    @Bind(R.id.snuffyViewPager)
+    private Unbinder mButterKnife;
+    @BindView(R.id.snuffyViewPager)
     ViewPager mPager;
     GtPagesPagerAdapter mPagerAdapter;
 
@@ -160,7 +162,7 @@ public class SnuffyPWActivity extends AppCompatActivity
         mTracker = EventTracker.getInstance(this);
 
         setContentView(R.layout.snuffy_main);
-        ButterKnife.bind(this);
+        mButterKnife = ButterKnife.bind(this);
         setupActionBar();
         setupViewPager();
 
@@ -280,7 +282,7 @@ public class SnuffyPWActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         cleanupViewPager();
-        ButterKnife.unbind(this);
+        mButterKnife.unbind();
     }
 
     /* END lifecycle */
@@ -1110,7 +1112,7 @@ public class SnuffyPWActivity extends AppCompatActivity
             SnuffyPage mPage;
 
             @Nullable
-            @Bind(R.id.pageContainer)
+            @BindView(R.id.pageContainer)
             FrameLayout mContentContainer;
 
             ViewHolder(@NonNull View view) {

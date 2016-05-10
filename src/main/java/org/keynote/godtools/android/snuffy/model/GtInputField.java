@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
@@ -198,12 +198,12 @@ public class GtInputField extends GtModel {
 
     public class ViewHolder extends GtModel.ViewHolder {
         @Nullable
-        @Bind(R.id.label)
+        @BindView(R.id.label)
         TextView mLabelView;
-        @Bind(R.id.input)
+        @BindView(R.id.input)
         EditText mInputView;
         @Nullable
-        @Bind(R.id.inputLayout)
+        @BindView(R.id.inputLayout)
         TextInputLayout mInputLayout;
 
         protected ViewHolder(@NonNull final View root) {

@@ -30,7 +30,7 @@ import org.keynote.godtools.android.tasks.InitialContentTasks;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
@@ -56,9 +56,9 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
 
     static final long MIN_LOAD_DELAY = 500;
 
-    @Bind(R.id.tvTask)
+    @BindView(R.id.tvTask)
     TextView mUpdateText;
-    @Bind(R.id.progressBar)
+    @BindView(R.id.progressBar)
     ProgressBar mProgressBar;
 
     private SharedPreferences settings;

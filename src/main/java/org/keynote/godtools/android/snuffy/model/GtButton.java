@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Set;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -259,7 +259,7 @@ public class GtButton extends GtTextModel {
 
     class ViewHolder extends GtModel.ViewHolder {
         @Nullable
-        @Bind(R.id.gtButton)
+        @BindView(R.id.gtButton)
         TextView mButton;
 
         ViewHolder(@NonNull final View root) {
