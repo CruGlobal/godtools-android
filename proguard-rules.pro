@@ -27,6 +27,14 @@
 -keepattributes SourceFile,LineNumberTable
 
 
+# EventBus
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+
 # Google Guava
 # http://stackoverflow.com/questions/9120338/proguard-configuration-for-guava-with-obfuscation-and-optimization
 -dontwarn com.google.j2objc.annotations.Weak
