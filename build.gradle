@@ -120,6 +120,15 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            storeFile file(androidKeystorePath)
+            storePassword androidKeystoreStorePassword
+            keyAlias androidKeystoreKeyAlias
+            keyPassword androidKeystoreKeyPassword
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
@@ -131,6 +140,9 @@ android {
         }
         release {
             minifyEnabled true
+            if (signingConfigs.release.storeFile.exists()) {
+                signingConfig signingConfigs.release
+            }
 
             buildConfigField "String", "BASE_URL_V2", "\"https://api.godtoolsapp.com/godtools-api/rest/v2/\""
             buildConfigField "String", "BASE_URL", "\"https://api.godtoolsapp.com/godtools-api/rest/\""
