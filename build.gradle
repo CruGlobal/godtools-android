@@ -18,6 +18,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 apply from: 'versioning.gradle'
 
+group 'org.cru.android'
 version '4.1.8-SNAPSHOT'
 
 // define dependency versions for this project
@@ -168,6 +169,14 @@ repositories {
         }
     }
     maven { url 'https://maven.fabric.io/public' }
+}
+
+apply from: "maven_publish.gradle"
+afterEvaluate { project ->
+    artifacts {
+        archives artifactSourcesJar
+        archives artifactJavadocJar
+    }
 }
 
 apt {
