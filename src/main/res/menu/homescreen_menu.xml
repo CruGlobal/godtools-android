@@ -4,7 +4,7 @@
     
     
     <item android:id="@+id/homescreen_settings"
-        android:icon="@drawable/language_icon_gradient"
+        android:icon="@drawable/ic_action_language"
         android:title="@string/settings_title"
         app:showAsAction="always"/>
     
@@ -12,5 +12,4 @@
           android:icon="@drawable/ic_action_share"
           android:title="@string/menu_item_share"
           app:showAsAction="ifRoom|withText" />
-
 </menu>
