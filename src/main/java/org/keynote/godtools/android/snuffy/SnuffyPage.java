@@ -101,7 +101,7 @@ public class SnuffyPage extends SnuffyLayout
         }
     }
 
-    void hideAllModals() {
+    public void hideAllModals() {
         if (!mModalRemovals.isEmpty()) {
             final Handler handler = new Handler();
 
