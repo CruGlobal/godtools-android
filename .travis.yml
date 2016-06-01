@@ -1,9 +1,10 @@
 language: android
 sudo: false
 jdk:
-  - oraclejdk7
+  - oraclejdk8
 env:
   global:
+    - GRADLE_OPTS="-Xmx2048m"
     # wait up to 10 minutes for adb to connect to emulator
     - ADB_INSTALL_TIMEOUT=10
   matrix:
@@ -34,8 +35,6 @@ cache:
     - $HOME/.gradle/wrapper/
 
 before_script:
-  - "export GRADLE_OPTS=-Xmx2048m"
-
   # Emulator Management: Create, Start and Wait
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
   - emulator -avd test -no-skin -no-audio -no-window &

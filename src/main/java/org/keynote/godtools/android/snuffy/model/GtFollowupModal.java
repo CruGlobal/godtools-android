@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static org.keynote.godtools.android.snuffy.Constants.DEFAULT_BACKGROUND_COLOR;
@@ -198,18 +198,18 @@ public class GtFollowupModal extends GtModel {
 
     public class ViewHolder extends GtModel.ViewHolder {
         @Nullable
-        @Bind(R.id.title)
+        @BindView(R.id.title)
         TextView mTitleText;
         @Nullable
-        @Bind(R.id.body)
+        @BindView(R.id.body)
         TextView mBodyText;
 
         @Nullable
-        @Bind(R.id.fields)
+        @BindView(R.id.fields)
         ViewGroup mFields;
 
         @Nullable
-        @Bind(R.id.buttons)
+        @BindView(R.id.buttons)
         ViewGroup mButtons;
 
         private final List<GtInputField.ViewHolder> mFieldViewHolders = new ArrayList<>();

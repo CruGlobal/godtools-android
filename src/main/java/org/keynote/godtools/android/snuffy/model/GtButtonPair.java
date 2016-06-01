@@ -17,7 +17,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -114,7 +114,7 @@ public class GtButtonPair extends GtModel {
     }
 
     class ViewHolder extends GtModel.ViewHolder {
-        @Bind(R.id.gtButtonPair)
+        @BindView(R.id.gtButtonPair)
         LinearLayout mButtons;
 
         ViewHolder(@NonNull final View root) {
