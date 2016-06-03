@@ -21,6 +21,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.SimpleOnPageChangeListener;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -306,8 +307,7 @@ public class SnuffyPWActivity extends AppCompatActivity
                 @Override
                 public void onPageSelected(int position) {
                     if (mCurrentPageId != null) {
-                        final SnuffyPage page = mPagerAdapter
-                                .getItemFromPosition(mPagerAdapter.getItemPositionFromId(convertId(mCurrentPageId)));
+                        final SnuffyPage page = mPagerAdapter.getItem(mCurrentPageId);
                         if (page != null) {
                             // trigger the exit page event
                             page.onExitPage();
@@ -523,6 +523,15 @@ public class SnuffyPWActivity extends AppCompatActivity
 
     private void showPage(@Nullable final String id) {
         if (mPager != null && mPagerAdapter != null && id != null) {
+            // are we trying to show the currently active page?
+            if (TextUtils.equals(id, mCurrentPageId)) {
+                final SnuffyPage page = mPagerAdapter.getItem(mCurrentPageId);
+                if (page != null) {
+                    // hide any active panel modals
+                    page.hideAllModals();
+                }
+            }
+
             final int position = mPagerAdapter.getItemPositionFromId(convertId(id));
             if (position != POSITION_NONE) {
                 mPager.setCurrentItem(position);
@@ -1068,6 +1077,16 @@ public class SnuffyPWActivity extends AppCompatActivity
         SnuffyPage getItemFromPosition(final int position) {
             if (position > 0 && position < mPages.size()) {
                 return mPages.get(position);
+            }
+            return null;
+        }
+
+        @Nullable
+        SnuffyPage getItem(@Nullable final String id) {
+            for (final SnuffyPage page : mPages) {
+                if (TextUtils.equals(page.getModel().getId(), id)) {
+                    return page;
+                }
             }
             return null;
         }
