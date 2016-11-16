@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2014 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+    <declare-styleable name="OptRoundCardView">
+        <!-- Background color for CardView. -->
+        <attr name="optRoundCardBackgroundColor" format="color" />
+        <!-- Corner radius for CardView. -->
+        <attr name="optRoundCardLeftTopCorner" format="boolean" />
+        <!-- Corner radius for CardView. -->
+        <attr name="optRoundCardRightTopCorner" format="boolean" />
+        <!-- Corner radius for CardView. -->
+        <attr name="optRoundCardLeftBottomCorner" format="boolean" />
+        <!-- Corner radius for CardView. -->
+        <attr name="optRoundCardRightBottomCorner" format="boolean" />
+
+        <!-- Left Edges for CardView. -->
+        <attr name="optRoundCardLeftEdges" format="boolean" />
+        <!-- Top Edges for CardView. -->
+        <attr name="optRoundCardTopEdges" format="boolean" />
+        <!-- Right Edges for CardView. -->
+        <attr name="optRoundCardRightEdges" format="boolean" />
+        <!-- Bottom Edges for CardView. -->
+        <attr name="optRoundCardBottomEdges" format="boolean" />
+
+        <!-- Corner radius for CardView. -->
+        <attr name="optRoundCardCornerRadius" format="dimension" />
+        <!-- Elevation for CardView. -->
+        <attr name="optRoundCardElevation" format="dimension" />
+        <!-- Maximum Elevation for CardView. -->
+        <attr name="optRoundCardMaxElevation" format="dimension" />
+        <!-- Add padding in API v21+ as well to have the same measurements with previous versions. -->
+        <attr name="optRoundCardUseCompatPadding" format="boolean" />
+        <!-- Add padding to CardView on v20 and before to prevent intersections between the Card content and rounded corners. -->
+        <attr name="optRoundCardPreventCornerOverlap" format="boolean" />
+        <!-- Inner padding between the edges of the Card and children of the CardView. -->
+        <attr name="optRoundContentPadding" format="dimension" />
+        <!-- Inner padding between the left edge of the Card and children of the CardView. -->
+        <attr name="optRoundContentPaddingLeft" format="dimension" />
+        <!-- Inner padding between the right edge of the Card and children of the CardView. -->
+        <attr name="optRoundContentPaddingRight" format="dimension" />
+        <!-- Inner padding between the top edge of the Card and children of the CardView. -->
+        <attr name="optRoundContentPaddingTop" format="dimension" />
+        <!-- Inner padding between the bottom edge of the Card and children of the CardView. -->
+        <attr name="optRoundContentPaddingBottom" format="dimension" />
+    </declare-styleable>
+</resources>

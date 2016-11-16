@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><page buttons="4" color="#993300" watermark="1c0ac553e8c0418833067e669b5f7bc23c3a9fe9.png">
+  <title mode="peek">
+    <heading gtapi-trx-id="06daebb2-36c6-4a4c-a458-7da93340d01b" translate="true">The Divine Gift</heading>
+    <subheading gtapi-trx-id="42c03470-bc54-4e96-98eb-475bf8bf2b03" translate="true">God has given us His Spirit so that we can experience intimacy with Him and enjoy all that He has for us.</subheading>
+    <peekpanel gtapi-trx-id="108e9d2e-6865-4b13-8b0e-79090aca8c6c" translate="true">The Holy Spirit is the source of our deepest satisfaction.</peekpanel>
+  </title>
+  <button>
+    <buttontext gtapi-trx-id="e56bfff7-8e11-453d-a816-b751f0b2e156" translate="true">The Holy Spirit is God's...</buttontext>
+    <panel>
+      <text gtapi-trx-id="1bce670f-3a5c-4ccd-936a-262049fac207" size="111" translate="true">...permanent presence with us.</text>
+      <text gtapi-trx-id="e33fd2e5-df96-49ff-bd56-9de4242ed1ed" modifier="italics" translate="true">Jesus said, "I will ask the Father, and he will give you another Counselor to be with you forever - the Spirit of truth.  (John 14:16, 17)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="c08044ea-df68-425e-b61c-8eeb350a3520" translate="true">The Holy Spirit enables us...</buttontext>
+    <panel>
+      <text gtapi-trx-id="27164f05-daa5-401c-ac2d-24ecdfe73b06" size="111" translate="true">...to understand...</text>
+      <text gtapi-trx-id="4dae880d-34ee-450f-8743-b69a4941621e" modifier="italics" textalign="center" translate="true">"We have not received the spirit of the world but the Spirit who is from God, that we may understand what God has freely given us." 
+(1 Corinthians 2:12)</text>
+      <text gtapi-trx-id="e8dffc68-6ad0-43da-8f41-5aaabf4f580b" size="111" translate="true">...and experience all God has given us.</text>
+      <text gtapi-trx-id="7ef2d3f0-3908-474b-84d2-0fab8073e59e" translate="true">- A genuine new spiritual life 
+(John 3:1-8)
+- The assurance of being a child of God (Romans 8:15, 16)
+- The infinite love of God 
+(Romans 5:5; Ephesians 3:18,19)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="5c29963b-baf9-449c-a2d1-82c9fed5122f" translate="true">Life without the Spirit</buttontext>
+    <panel textalign="center">
+      <image align="center" gtapi-trx-id="7e0239cf-c583-4a70-9034-0443215d36bb" h="142" translate="true" w="236">bebcbea94f7f7766a95b2c5cb33d6b92b9a249ad.png</image>
+      <text gtapi-trx-id="1d9eb041-3db8-477f-a02e-08a1a1323e76" translate="true">The man without the Spirit does not accept the things of the Spirit of God, for they are foolishness to him, and he cannot understand them, because they are spiritually discerned. (1 Corinthians 2:14)</text>
+    </panel>
+  </button>
+  <button>
+    <buttontext gtapi-trx-id="4a943b48-0a8d-4ebd-8d8b-7c13ca0628b2" translate="true">Life with the Spirit</buttontext>
+    <panel textalign="center">
+      <image align="center" gtapi-trx-id="8cf2fbc8-4585-4702-a210-56aa55691124" h="142" translate="true" w="236">bebcbea94f7f7766a95b2c5cb33d6b92b9a249ad.png</image>
+      <text gtapi-trx-id="829e23f2-9409-4a02-a1af-4c624ffc83f0" translate="true">The spiritual man makes judgements about all things…we have the mind of Christ. 
+(1 Corinthians 2:15,16)</text>
+      <text gtapi-trx-id="7df4495b-3f37-4e30-b5df-21772c5aebef" modifier="italics" textalign="center" translate="true">But those who are controlled by the Holy Spirit think about things that please the Spirit. (Romans 8:5, NLT)</text>
+    </panel>
+  </button>
+  <question gtapi-trx-id="fcee3f74-d7ee-480b-b7df-ba700fa84183" size="92" translate="true">Why are so many Christians not satisfied in their experience with God?</question>
+</page>
