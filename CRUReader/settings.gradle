@@ -1,0 +1,2 @@
+include ':app', ':optroundcardview'
+project(':optroundcardview').projectDir = new File('RoundCardView/optroundcardview')
