@@ -8,6 +8,7 @@ import android.os.Build;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -89,18 +90,19 @@ public class GButton extends GBaseButtonAttributes implements IRender {
 
                 int coords[] = {0, 0};
 
-                tv.getLocationOnScreen(coords);
-                int notificationBar = getStatusBarHeight(context);
-                int absoluteTop = coords[1] - notificationBar;
-                int absoluteBottomY = absoluteTop + tv.getHeight();
-                int distanceToBottomOfScreen = height - absoluteBottomY;
+                ll.getLocationOnScreen(coords);
+                //int notificationBar = getStatusBarHeight(context);
+                //int absoluteTop = coords[1] - notificationBar;
+               // int absoluteBottomY = absoluteTop + tv.getHeight();
+                //int distanceToBottomOfScreen = height - absoluteBottomY;
 
 
-                float percentFromTop = new Float(absoluteTop) / new Float(height);
+                //loat percentFromTop = new Float(absoluteTop) / new Float(height);
+                Log.i(TAG, "Y VS CORDS: " + ll.getY() + "    cords: " + coords[1]);
                 Intent intent = new Intent(context, PopupDialogActivity.class);
-                intent.putExtra(PopupDialogActivity.CONSTANTS_PERCENT_FROM_TOP_EXTRA, percentFromTop);
+                intent.putExtra(PopupDialogActivity.CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA, (float)coords[1] );
                 intent.putExtra(PopupDialogActivity.CONSTANTS_BACKGROUND_COLOR_STRING_EXTRA, ll.getTag(BACKGROUND_COLOR_KEY).toString());
-                intent.putExtra(PopupDialogActivity.CONSTANTS_DISTANCE_FROM_BOTTOM, distanceToBottomOfScreen);
+               // intent.putExtra(PopupDialogActivity.CONSTANTS_DISTANCE_FROM_BOTTOM, distanceToBottomOfScreen);
                 intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_HASH_KEY_INT_EXTRA, ll.getId());
                 if(tv != null) {
                     intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_TITLE_STRING_EXTRA, tv.getText());
@@ -125,14 +127,7 @@ public class GButton extends GBaseButtonAttributes implements IRender {
         return outerLayout;
     }
 
-    public int getStatusBarHeight(Context context) {
-        int result = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = context.getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
+
 
     private void addLines(View v, LinearLayout ll)
     {
