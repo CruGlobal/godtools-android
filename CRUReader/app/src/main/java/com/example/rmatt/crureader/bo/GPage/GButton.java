@@ -47,66 +47,49 @@ public class GButton extends GBaseButtonAttributes implements IRender {
     @Override
     public LinearLayout render(ViewGroup viewGroup) {
 
+        setDefaultValues();
+
         Context context = viewGroup.getContext();
         LinearLayout outerLayout = new LinearLayout(context);
         outerLayout.setGravity(Gravity.CENTER_VERTICAL);
-        RenderConstants.setDefaultPadding(outerLayout);
-        LinearLayout ll = new LinearLayout(context);
-       // RenderConstants.setDefaultPadding(ll);
-        ll.setTag(BACKGROUND_COLOR_KEY, RenderSingleton.getInstance().globalColor);
-        ll.setClickable(true);
-        //VectorDrawableCompat vectorDrawableCompat = VectorDrawableCompat.create(context.getResources(), R.drawable.ic_expand_more_white_48px, context.getTheme());
 
-       // ll.setBackgroundResource(android.R.drawable.list_selector_background);
+        LinearLayout ll = new LinearLayout(context);
+        ll.setGravity(Gravity.CENTER_VERTICAL);
+        ll.setClickable(true);
         ll.setId(View.generateViewId());
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         outerLayout.addView(ll);
         if (buttonText != null) {
             TextView v = buttonText.render(viewGroup);
-
-
-           // v.setCompoundDrawables(null, null, vectorDrawableCompat, null);
             addLines(v, ll);
-
-
-
-            //v.setTag(new Integer(55));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 v.setTransitionName(context.getString(R.string.button_tv_transistion_title));
-                ll.setTransitionName(context.getString(R.string.inner_ll_transistion_title));
             }
+
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ll.setTransitionName(context.getString(R.string.inner_ll_transistion_title));
         }
 
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View ll) {
+
                 RenderSingleton.getInstance().gPanelHashMap.put(ll.getId(), GButton.this.panel);
                 Context context = ll.getContext();
-                DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-                int height = metrics.heightPixels;
                 TextView tv = (TextView) ll.findViewById(R.id.button_tv);
+                String backgroundColor = (String) ll.getTag(BACKGROUND_COLOR_KEY);
 
+                int cords[] = {0, 0};
 
-                int coords[] = {0, 0};
-
-                ll.getLocationOnScreen(coords);
-                //int notificationBar = getStatusBarHeight(context);
-                //int absoluteTop = coords[1] - notificationBar;
-               // int absoluteBottomY = absoluteTop + tv.getHeight();
-                //int distanceToBottomOfScreen = height - absoluteBottomY;
-
-
-                //loat percentFromTop = new Float(absoluteTop) / new Float(height);
-                Log.i(TAG, "Y VS CORDS: " + ll.getY() + "    cords: " + coords[1]);
+                ll.getLocationOnScreen(cords);
                 Intent intent = new Intent(context, PopupDialogActivity.class);
-                intent.putExtra(PopupDialogActivity.CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA, (float)coords[1] );
-                intent.putExtra(PopupDialogActivity.CONSTANTS_BACKGROUND_COLOR_STRING_EXTRA, ll.getTag(BACKGROUND_COLOR_KEY).toString());
-               // intent.putExtra(PopupDialogActivity.CONSTANTS_DISTANCE_FROM_BOTTOM, distanceToBottomOfScreen);
+                intent.putExtra(PopupDialogActivity.CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA, (float) cords[1]);
                 intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_HASH_KEY_INT_EXTRA, ll.getId());
-                if(tv != null) {
-                    intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_TITLE_STRING_EXTRA, tv.getText());
-                }
+                intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_TITLE_STRING_EXTRA, tv != null && tv.getText() != null ? tv.getText() : "");
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                             (Activity) context,
@@ -127,17 +110,19 @@ public class GButton extends GBaseButtonAttributes implements IRender {
         return outerLayout;
     }
 
+    private void setDefaultValues() {
+        GButton.this.panel.setBackground(RenderSingleton.getInstance().globalColor);
+    }
 
 
-    private void addLines(View v, LinearLayout ll)
-    {
+    private void addLines(View v, LinearLayout ll) {
 
 
         Context context = v.getContext();
 
         ll.addView(getHRView(context, "#404c4c4c"));
         ll.addView(getHRView(context, "#40ffffff"));
-        ll.addView(v, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT, 4));
+        ll.addView(v, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         /*ImageView iv = new ImageView(context);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
