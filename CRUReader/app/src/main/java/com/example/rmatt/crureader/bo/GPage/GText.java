@@ -31,5 +31,9 @@ public class GText extends GBaseTextAttributes implements IRender
         if (size == 0) {
             size = RenderConstants.DEFAULT_TEXT_SIZE;
         }
+        if(color == null || color == "")
+        {
+            color = RenderConstants.DEFAULT_TEXT_COLOR;
+        }
     }
 }

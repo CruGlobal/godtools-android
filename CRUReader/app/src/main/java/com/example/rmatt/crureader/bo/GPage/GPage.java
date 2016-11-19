@@ -146,7 +146,7 @@ public class GPage implements IRender {
 
             for (Gtapi tap : gtapiArrayList) {
 
-                View view = tap.render(percentRelativeLayout);
+                View view = tap.render(midSection);
 
                 view.setId(View.generateViewId());
 

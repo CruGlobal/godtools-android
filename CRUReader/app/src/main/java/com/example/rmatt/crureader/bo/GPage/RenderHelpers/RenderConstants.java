@@ -60,6 +60,8 @@ public class RenderConstants {
     public static final String DEFAULT_BUTTON_TEXT_ALIGN = "left";
     public static final String DEFAULT_BUTTON_COLOR = "#FFFFFFFF";
 
+    public static final String DEFAULT_TEXT_COLOR = "#FFFFFFFF";
+
 
     public static float getButtonTextSizeFromXMLSize(int xmlSize) {
         if (xmlSize == 0) {
