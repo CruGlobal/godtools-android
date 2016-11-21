@@ -405,7 +405,7 @@ public class OptRoundCardView extends FrameLayout implements CardViewDelegate {
      * @attr ref android.support.v7.cardview.R.styleable#CardView_cardPreventCornerOverlap
      * @see #setUseCompatPadding(boolean)
      */
-    public void setPreventCornerOverlap(boolean preventCornerOverlap) {
+   /* public void setPreventCornerOverlap(boolean preventCornerOverlap) {
         if (preventCornerOverlap == mPreventCornerOverlap) {
             return;
         }
@@ -414,14 +414,12 @@ public class OptRoundCardView extends FrameLayout implements CardViewDelegate {
     }
 
     private static final boolean SDK_LOLLIPOP = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
-    /**
-     * show corner or rect
-     */
+
     public void showCorner(boolean leftTop, boolean rightTop, boolean leftBottom, boolean rightBottom){
         if (SDK_LOLLIPOP) {
             ((OptRoundRectDrawable) getBackground()).showCorner(leftTop, rightTop, leftBottom, rightBottom);
         } else {
-            ((OptRoundRectDrawableWithShadow) getBackground()).showCorner(leftTop, rightTop, leftBottom, rightBottom);
+          //  ((OptRoundRectDrawableWithShadow) getBackground()).showCorner(leftTop, rightTop, leftBottom, rightBottom);
         }
     }
 
@@ -429,7 +427,7 @@ public class OptRoundCardView extends FrameLayout implements CardViewDelegate {
         if (SDK_LOLLIPOP) {
             ((OptRoundRectDrawable) getBackground()).showLeftTopRect(show);
         } else {
-            ((OptRoundRectDrawableWithShadow) getBackground()).showLeftTopRect(!show);
+          //  ((OptRoundRectDrawableWithShadow) getBackground()).showLeftTopRect(!show);
         }
     }
 
@@ -453,13 +451,10 @@ public class OptRoundCardView extends FrameLayout implements CardViewDelegate {
         if (SDK_LOLLIPOP) {
             ((OptRoundRectDrawable) getBackground()).showRightBottomRect(!show);
         } else {
-            ((OptRoundRectDrawableWithShadow) getBackground()).showRightBottomRect(!show);
+            //((OptRoundRectDrawableWithShadow) getBackground()).showRightBottomRect(!show);
         }
     }
 
-    /**
-     * show Edge Shadow
-     */
     public void showEdgeShadow(boolean left, boolean top, boolean right, boolean bottom){
         if (SDK_LOLLIPOP) {
             ((OptRoundRectDrawable) getBackground()).showCorner(left, right, top, right);
@@ -495,5 +490,111 @@ public class OptRoundCardView extends FrameLayout implements CardViewDelegate {
        // } else {
             ((OptRoundRectDrawableWithShadow) getBackground()).showBottomEdgeShadow(show);
        // }
+    }
+    */
+
+    /**
+     * On pre-Lollipop platforms, CardView does not clip the bounds of the Card for the rounded
+     * corners. Instead, it adds padding to content so that it won't overlap with the rounded
+     * corners. You can disable this behavior by setting this field to <code>false</code>.
+     * <p>
+     * Setting this value on Lollipop and above does not have any effect unless you have enabled
+     * compatibility padding.
+     *
+     * @param preventCornerOverlap Whether CardView should add extra padding to content to avoid
+     *                             overlaps with the CardView corners.
+     * @attr ref android.support.v7.cardview.R.styleable#CardView_cardPreventCornerOverlap
+     * @see #setUseCompatPadding(boolean)
+     */
+    public void setPreventCornerOverlap(boolean preventCornerOverlap) {
+        if (preventCornerOverlap == mPreventCornerOverlap) {
+            return;
+        }
+        mPreventCornerOverlap = preventCornerOverlap;
+        IMPL.onPreventCornerOverlapChanged(this);
+    }
+
+    private static final boolean SDK_LOLLIPOP = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+    /**
+     * show corner or rect
+     */
+    public void showCorner(boolean leftTop, boolean rightTop, boolean leftBottom, boolean rightBottom){
+        if (SDK_LOLLIPOP) {
+            ((OptRoundRectDrawable) getBackground()).showCorner(leftTop, rightTop, leftBottom, rightBottom);
+        } else {
+            ((OptRoundRectDrawableWithShadow) getBackground()).showCorner(leftTop, rightTop, leftBottom, rightBottom);
+        }
+    }
+
+    public void showLeftTopCorner(boolean show){
+        if (SDK_LOLLIPOP) {
+            //((OptRoundRectDrawable) getBackground()).showCorner(leftTop, rightTop, leftBottom, rightBottom);
+        } else {
+            ((OptRoundRectDrawableWithShadow) getBackground()).showLeftTopRect(!show);
+        }
+    }
+
+    public void showRightTopCorner(boolean show){
+        if (SDK_LOLLIPOP) {
+            //((OptRoundRectDrawable) getBackground()).showCorner(leftTop, rightTop, leftBottom, rightBottom);
+        } else {
+            ((OptRoundRectDrawableWithShadow) getBackground()).showRightTopRect(!show);
+        }
+    }
+
+    public void showLeftBottomCorner(boolean show){
+        if (SDK_LOLLIPOP) {
+            //((OptRoundRectDrawable) getBackground()).showCorner(leftTop, rightTop, leftBottom, rightBottom);
+        } else {
+            ((OptRoundRectDrawableWithShadow) getBackground()).showLeftBottomRect(!show);
+        }
+    }
+
+    public void showRightBottomCorner(boolean show){
+        if (SDK_LOLLIPOP) {
+            //((OptRoundRectDrawable) getBackground()).showCorner(leftTop, rightTop, leftBottom, rightBottom);
+        } else {
+            ((OptRoundRectDrawableWithShadow) getBackground()).showRightBottomRect(!show);
+        }
+    }
+
+    /**
+     * show Edge Shadow
+     */
+    public void showEdgeShadow(boolean left, boolean top, boolean right, boolean bottom){
+        if (SDK_LOLLIPOP) {
+            //((OptRoundRectDrawable) getBackground()).showCorner(leftTop, rightTop, leftBottom, rightBottom);
+        } else {
+            ((OptRoundRectDrawableWithShadow) getBackground()).showEdgeShadow(left, top, right, bottom);
+        }
+    }
+
+    public void showLeftEdgeShadow(boolean show){
+        if (SDK_LOLLIPOP) {
+            //((OptRoundRectDrawable) getBackground()).showCorner(leftTop, rightTop, leftBottom, rightBottom);
+        } else {
+            ((OptRoundRectDrawableWithShadow) getBackground()).showLeftEdgeShadow(show);
+        }
+    }
+    public void showTopEdgeShadow(boolean show){
+        if (SDK_LOLLIPOP) {
+            //((OptRoundRectDrawable) getBackground()).showCorner(leftTop, rightTop, leftBottom, rightBottom);
+        } else {
+            ((OptRoundRectDrawableWithShadow) getBackground()).showTopEdgeShadow(show);
+        }
+    }
+    public void showRightEdgeShadow(boolean show){
+        if (SDK_LOLLIPOP) {
+            //((OptRoundRectDrawable) getBackground()).showCorner(leftTop, rightTop, leftBottom, rightBottom);
+        } else {
+            ((OptRoundRectDrawableWithShadow) getBackground()).showRightEdgeShadow(show);
+        }
+    }
+    public void showBottomEdgeShadow(boolean show){
+        if (SDK_LOLLIPOP) {
+            //((OptRoundRectDrawable) getBackground()).showCorner(leftTop, rightTop, leftBottom, rightBottom);
+        } else {
+            ((OptRoundRectDrawableWithShadow) getBackground()).showBottomEdgeShadow(show);
+        }
     }
 }

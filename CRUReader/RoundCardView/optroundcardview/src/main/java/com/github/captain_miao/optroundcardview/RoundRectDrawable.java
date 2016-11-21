@@ -41,7 +41,7 @@ import static com.github.captain_miao.optroundcardview.RoundRectDrawableWithShad
  * Simpler and uses less resources compared to GradientDrawable or ShapeDrawable.
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-class RoundRectDrawable extends ColorDrawable {
+class RoundRectDrawable extends Drawable {
     protected float mRadius;
     protected final Paint mPaint;
     protected final RectF mBoundsF;

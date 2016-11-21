@@ -97,7 +97,7 @@ public class GTitle extends Gtapi implements IRender {
 
         switch (mode) {
             case peek:
-                cv.setBackgroundColor(Color.WHITE);
+                cv.setCardBackgroundColor(Color.WHITE);
 
                 cv.showCorner(false, true, false, true);
                 cv.setRadius(TITLE_CORNER_RADIUS);
@@ -109,7 +109,7 @@ public class GTitle extends Gtapi implements IRender {
                 break;
             case straight:
 
-                cv.setBackgroundColor(Color.WHITE);
+                cv.setCardBackgroundColor(Color.WHITE);
                 cv.setCardElevation(TITLE_ELEVATION);
                 //cv.setShadowPadding(10, 10, 10, 10);
 
@@ -117,21 +117,25 @@ public class GTitle extends Gtapi implements IRender {
             case clear:
 
                 Log.i(TAG, "Clear settings");
-                cv.setBackgroundColor(Color.TRANSPARENT);
+                cv.setCardBackgroundColor(Color.TRANSPARENT);
                 //cv.setShadowPadding(10, 10, 10, 10);
 
                 //cv.setBackgroundColor(Color.TRANSPARENT);
-                //cv.showEdgeShadow(false, false, false, false);
-                //cv.showCorner(false, false, false, false);
+                cv.showEdgeShadow(false, false, false, false);
+                cv.showCorner(false, false, false, false);
 
                 break;
             case plain:
             default:
-                cv.setBackgroundColor(Color.WHITE);
+                cv.setCardBackgroundColor(Color.WHITE);
                 percentLayoutInfo.rightMarginPercent = DEFAULT_RIGHT_MARGIN;
                 //cv.setShadowPadding(10, 10, 10, 10);
                 cv.showCorner(false, true, false, true);
+
+
+                //put back
                 cv.setRadius(TITLE_CORNER_RADIUS);
+
                 cv.setCardElevation(TITLE_ELEVATION);
                 break;
 
