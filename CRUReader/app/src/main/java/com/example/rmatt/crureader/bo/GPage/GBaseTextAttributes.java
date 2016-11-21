@@ -3,11 +3,14 @@ package com.example.rmatt.crureader.bo.GPage;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.percent.PercentRelativeLayout;
+import android.support.v4.widget.TextViewCompat;
 import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 
 import org.simpleframework.xml.Attribute;
@@ -46,7 +49,11 @@ public abstract class GBaseTextAttributes extends GBaseAttributes {
         textView.setTextColor(RenderConstants.parseColor(color));
         textView.setTypeface(Typeface.defaultFromStyle(RenderConstants.getTypefaceFromModifier(modifier)));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, RenderConstants.getTextSizeFromXMLSize(size));
-        textView.setGravity(RenderConstants.getGravityFromAlign(textalign));
+
+
+        RenderViewCompat.textViewAlign(textView, textalign);
+        //This needs to be a base attributes property.
+        //textView.setGravity(RenderConstants.getGravityFromAlign(textalign));
         RenderConstants.setDefaultPadding(textView);
         return textView;
     }

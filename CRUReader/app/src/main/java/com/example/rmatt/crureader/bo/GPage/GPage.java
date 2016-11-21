@@ -8,11 +8,13 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.percent.PercentLayoutHelper;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.BitmapCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewGroupCompat;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.rmatt.crureader.R;
+import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.IDO.IRender;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
@@ -104,9 +107,9 @@ public class GPage extends Gtapi implements IRender {
             ViewGroup vgTop = title.render(percentRelativeLayout);
 
 
-            vgTop.setId(View.generateViewId());
+            vgTop.setId(RenderViewCompat.generateViewId());
             topId = vgTop.getId();
-
+            Log.i(TAG, "View Compat top Id: " + topId);
             percentRelativeLayout.addView(vgTop);
         }
 
@@ -116,9 +119,9 @@ public class GPage extends Gtapi implements IRender {
             PercentRelativeLayout.LayoutParams vgBottomParams = new PercentRelativeLayout.LayoutParams(PercentRelativeLayout.LayoutParams.MATCH_PARENT,
                     PercentRelativeLayout.LayoutParams.WRAP_CONTENT);
             vgBottomParams.addRule(PercentRelativeLayout.ALIGN_PARENT_BOTTOM);
-            vgBottom.setId(View.generateViewId());
+            vgBottom.setId(RenderViewCompat.generateViewId());
             bottomId = vgBottom.getId();
-
+            Log.i(TAG, "View Compat bottom Id: " + bottomId);
             percentRelativeLayout.addView(vgBottom, vgBottomParams);
         }
 
@@ -145,7 +148,7 @@ public class GPage extends Gtapi implements IRender {
 
             try {
                 Drawable d = Drawable.createFromStream(viewGroup.getContext().getAssets().open(resourceName), null);
-                viewGroup.setBackground(d);
+                ViewCompat.setBackground(viewGroup, d);
             } catch (IOException e) {
                 e.printStackTrace();
             }

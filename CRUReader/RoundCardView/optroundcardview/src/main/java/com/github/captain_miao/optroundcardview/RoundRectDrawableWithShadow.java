@@ -35,7 +35,7 @@ import android.os.Build;
  * A rounded rectangle drawable which also includes a shadow around.
  */
 @TargetApi(Build.VERSION_CODES.KITKAT)
-class RoundRectDrawableWithShadow extends ColorDrawable {
+class RoundRectDrawableWithShadow extends Drawable {
     // used to calculate content padding
     final static double COS_45 = Math.cos(Math.toRadians(45));
 

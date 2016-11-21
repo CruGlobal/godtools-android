@@ -159,7 +159,6 @@ public class OptRoundRectDrawable extends RoundRectDrawable {
         return mPaint.getColor();
     }*/
 
-    @Override
     public int getColor() {
         return mPaint.getColor();
     }

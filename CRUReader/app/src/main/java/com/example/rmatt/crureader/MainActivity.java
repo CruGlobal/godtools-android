@@ -25,13 +25,6 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-
-
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setAllowEnterTransitionOverlap(false);
-            getWindow().setAllowReturnTransitionOverlap(false);
-        }*/
 
         setContentView(R.layout.activity_main);
 
@@ -47,10 +40,6 @@ public class MainActivity extends FragmentActivity {
             e.printStackTrace();
         }
 
-          /*  XmlMapper om = new XmlMapper();
-            InputStream testIS = getResources().getAssets().open("test.xml");
-            Simple value = om.readValue(testIS, Simple.class);
-            Log.i(TAG, "Value: " + value.toString());*/
 
 
     }

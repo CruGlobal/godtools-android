@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
+import android.support.annotation.IntDef;
 import android.support.annotation.Px;
 import android.view.Gravity;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.rmatt.crureader.R;
+import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.Gtapi;
 
 import java.util.ArrayList;
@@ -49,7 +51,7 @@ public class RenderConstants {
      * Color constants
      *******************************************************/
 
-    public static final String DEFAULT_BACKGROUND_COLOR = "#FFFFFF00";
+    public static final String DEFAULT_BACKGROUND_COLOR = "#FFFFFFFF";
 
 
 
@@ -103,6 +105,19 @@ public class RenderConstants {
         return Gravity.CENTER_HORIZONTAL;
     }
 
+
+    public static int getTextAlign(String textAlign)
+    {
+        if(textAlign != null && textAlign != "")
+        {
+            if(textAlign == "center")
+                return View.TEXT_ALIGNMENT_CENTER;
+            else if(textAlign == "right")
+                return View.TEXT_ALIGNMENT_TEXT_END;
+        }
+        return View.TEXT_ALIGNMENT_TEXT_START;
+    }
+
     public static void setDefaultPadding(View numberTextView) {
         int dimensionPixelSize = numberTextView.getContext().getResources().getDimensionPixelSize(R.dimen.text_padding);
         numberTextView.setPadding(dimensionPixelSize, dimensionPixelSize, dimensionPixelSize, dimensionPixelSize);
@@ -124,7 +139,7 @@ public class RenderConstants {
 
         for (Gtapi tap : gtapiArrayList) {
             View view = tap.render(midSection);
-            view.setId(View.generateViewId());
+            view.setId(RenderViewCompat.generateViewId());
             LinearLayout.LayoutParams midSectionChildLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1);
             midSection.addView(view, midSectionChildLayoutParams);
 
@@ -139,7 +154,7 @@ public class RenderConstants {
 
         for (Gtapi tap : gtapiArrayList) {
             View view = tap.render(midSection);
-            view.setId(View.generateViewId());
+            view.setId(RenderViewCompat.generateViewId());
             LinearLayout.LayoutParams midSectionChildLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             midSection.addView(view, midSectionChildLayoutParams);
 

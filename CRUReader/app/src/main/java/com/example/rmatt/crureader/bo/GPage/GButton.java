@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.rmatt.crureader.PopupDialogActivity;
 import com.example.rmatt.crureader.R;
+import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.IDO.IRender;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
@@ -56,16 +57,13 @@ public class GButton extends GBaseButtonAttributes implements IRender {
         LinearLayout ll = new LinearLayout(context);
         ll.setGravity(Gravity.CENTER_VERTICAL);
         ll.setClickable(true);
-        ll.setId(View.generateViewId());
+        ll.setId(RenderViewCompat.generateViewId());
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         outerLayout.addView(ll);
         if (buttonText != null) {
             TextView v = buttonText.render(viewGroup);
             addLines(v, ll);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                //v.setTransitionName(context.getString(R.string.button_tv_transistion_title));
-            }
 
         }
 

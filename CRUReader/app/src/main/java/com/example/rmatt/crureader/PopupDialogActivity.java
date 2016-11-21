@@ -10,6 +10,7 @@ import android.support.percent.PercentFrameLayout;
 import android.support.percent.PercentLayoutHelper;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.view.GravityCompat;
 import android.text.Html;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
@@ -24,8 +25,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.GPanel;
 import com.example.rmatt.crureader.bo.GPage.GText;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
@@ -104,37 +107,48 @@ public class PopupDialogActivity extends Activity {
         }
 
 
+        if (RenderViewCompat.SDK_JELLY_BEAN) {
+            ll.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+
+                    ll.measure(View.MeasureSpec.makeMeasureSpec(ll.getWidth(), View.MeasureSpec.AT_MOST),
+                            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                    extraContent.measure(View.MeasureSpec.makeMeasureSpec(extraContent.getWidth(), View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
 
-        ll.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
+                    if (ll.getHeight() < ll.getMeasuredHeight() && !fixed) {
+                        fixed = true;
+                        PercentLayoutHelper.PercentLayoutParams layoutParams = (PercentLayoutHelper.PercentLayoutParams) ll.getLayoutParams();
+                        PercentLayoutHelper.PercentLayoutInfo percentLayoutInfo = layoutParams.getPercentLayoutInfo();
+                        percentLayoutInfo.topMarginPercent = percentLayoutInfo.topMarginPercent - (((float) ll.getMeasuredHeight() - (float) ll.getHeight())
+                                / ((float) ((View) ll.getParent()).getHeight())) - .01F;
+                    }
 
-                ll.measure(View.MeasureSpec.makeMeasureSpec(ll.getWidth(), View.MeasureSpec.AT_MOST),
-                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                extraContent.measure(View.MeasureSpec.makeMeasureSpec(extraContent.getWidth(), View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                    return true;
 
-
-                if (ll.getHeight() < ll.getMeasuredHeight() && !fixed && extraContent.getChildCount() > 0) {
-                    fixed = true;
-                    PercentLayoutHelper.PercentLayoutParams layoutParams = (PercentLayoutHelper.PercentLayoutParams) ll.getLayoutParams();
-                    PercentLayoutHelper.PercentLayoutInfo percentLayoutInfo = layoutParams.getPercentLayoutInfo();
-                    percentLayoutInfo.topMarginPercent = percentLayoutInfo.topMarginPercent - (((float) ll.getMeasuredHeight() - (float) ll.getHeight())
-                            / ((float) ((View) ll.getParent()).getHeight())) - .01F;
                 }
 
-                return true;
+            });
 
-            }
 
-        });
-
-        TranslateView();
+            TranslateView();
+        }
+        else
+        {
+            TranslateViewJellyBeanCompat();
+        }
         ll.setBackgroundColor(Color.parseColor(gPanel.getBackground()));
         bindHeader();
         bindPanelContent();
 
 
+    }
+
+    private void TranslateViewJellyBeanCompat() {
+
+        PercentFrameLayout.LayoutParams layoutParams = (PercentFrameLayout.LayoutParams)ll.getLayoutParams();
+        layoutParams.gravity = Gravity.CENTER;
     }
 
     private void upwrapExtras() {
@@ -159,7 +173,7 @@ public class PopupDialogActivity extends Activity {
     }
 
     private void bindPanelContent() {
-        extraContent.addView(gPanel.render(extraContent),   new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+        extraContent.addView(gPanel.render(extraContent), new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
     }
 
     private void TranslateView() {
