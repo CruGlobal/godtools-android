@@ -1,14 +1,19 @@
 package com.example.rmatt.crureader.bo.GPage.RenderHelpers;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Px;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.rmatt.crureader.R;
+import com.example.rmatt.crureader.bo.Gtapi;
+
+import java.util.ArrayList;
 
 /**
  * Created by rmatt on 11/3/2016.
@@ -51,19 +56,18 @@ public class RenderConstants {
     /***************************************************
      * Font size constants
      ***************************************************/
-    public static final float SCALE_TEXT_SIZE = 12.0F;
-    public static final int DEFAULT_BUTTON_TEXT_SIZE = 80;
+    public static final float SCALE_TEXT_SIZE = 18.0F;
+    public static final int DEFAULT_BUTTON_TEXT_SIZE = 100;
     public static final int DEFAULT_TEXT_SIZE = 60;
-    public static final int DEFAULT_NUMBER_TEXT_SIZE = 105;
+    public static final int DEFAULT_NUMBER_TEXT_SIZE = 200;
     public static final int DEFAULT_HEADER_TEXT_SIZE = 90;
-    public static final int DEFAULT_SUBHEADER_TEXT_SIZE = 80;
+    public static final int DEFAULT_SUBHEADER_TEXT_SIZE = 100;
     public static final String DEFAULT_BUTTON_TEXT_ALIGN = "left";
-    public static final String DEFAULT_BUTTON_COLOR = "#FFFFFFFF";
+
 
     public static final String DEFAULT_TEXT_COLOR = "#FFFFFFFF";
 
-
-    public static float getButtonTextSizeFromXMLSize(int xmlSize) {
+    public static float getTextSizeFromXMLSize(int xmlSize) {
         if (xmlSize == 0) {
             return SCALE_TEXT_SIZE;
         }
@@ -112,7 +116,34 @@ public class RenderConstants {
         }
     }
 
-    public static float reduceTextSize(int size) {
-        return Math.round(size / 4);
+
+    public static LinearLayout renderLinearLayoutListWeighted(Context context, ArrayList<Gtapi> gtapiArrayList) {
+        LinearLayout midSection = new LinearLayout(context);
+        midSection.setOrientation(LinearLayout.VERTICAL);
+
+
+        for (Gtapi tap : gtapiArrayList) {
+            View view = tap.render(midSection);
+            view.setId(View.generateViewId());
+            LinearLayout.LayoutParams midSectionChildLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1);
+            midSection.addView(view, midSectionChildLayoutParams);
+
+        }
+        return midSection;
+    }
+
+    public static LinearLayout renderLinearLayoutList(Context context, ArrayList<Gtapi> gtapiArrayList) {
+        LinearLayout midSection = new LinearLayout(context);
+        midSection.setOrientation(LinearLayout.VERTICAL);
+
+
+        for (Gtapi tap : gtapiArrayList) {
+            View view = tap.render(midSection);
+            view.setId(View.generateViewId());
+            LinearLayout.LayoutParams midSectionChildLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            midSection.addView(view, midSectionChildLayoutParams);
+
+        }
+        return midSection;
     }
 }

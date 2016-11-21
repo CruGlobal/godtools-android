@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.rmatt.crureader.bo.GPage.IDO.IRender;
+import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 import com.example.rmatt.crureader.bo.Gtapi;
 
@@ -43,25 +44,8 @@ public class GPanel implements IRender {
     @Override
     public LinearLayout render(ViewGroup viewGroup) {
         Context context = viewGroup.getContext();
-        LinearLayout midSection = new LinearLayout(context);
-        if (gtapiArrayList != null && gtapiArrayList.size() > 0) {
-
-
-            midSection.setOrientation(LinearLayout.VERTICAL);
-
-
-            for (Gtapi tap : gtapiArrayList) {
-
-                View view = tap.render(midSection);
-                view.setId(View.generateViewId());
-                LinearLayout.LayoutParams midSectionChildLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
-                midSection.addView(view, midSectionChildLayoutParams);
-
-            }
-            midSection.setBackgroundColor(Color.parseColor(backgroundColor));
-
-        }
-
+        LinearLayout midSection = RenderConstants.renderLinearLayoutList(viewGroup.getContext(), gtapiArrayList);
+        midSection.setBackgroundColor(Color.parseColor(backgroundColor));
         return midSection;
 
     }

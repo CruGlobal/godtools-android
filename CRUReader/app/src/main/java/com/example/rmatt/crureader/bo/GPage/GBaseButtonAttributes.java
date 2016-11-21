@@ -38,10 +38,6 @@ public class GBaseButtonAttributes extends GBaseAttributes implements IRender{
     @Attribute(name="x-trailing-offset", required = false)
     public int xTrailingOffset;
 
-
-    @Attribute(required = false)
-    public String translate;
-
     @Override
     public LinearLayout render(ViewGroup viewGroup) {
         LinearLayout ll = new LinearLayout(viewGroup.getContext());

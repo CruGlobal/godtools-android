@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.percent.PercentFrameLayout;
 import android.support.percent.PercentLayoutHelper;
+import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.DialogFragment;
 import android.text.Html;
 import android.transition.Transition;
@@ -51,6 +52,7 @@ public class PopupDialogActivity extends Activity {
     public float Y;
     int screenHeight;
     String title;
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -102,7 +104,7 @@ public class PopupDialogActivity extends Activity {
         }
 
 
-        TranslateView();
+
 
         ll.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
@@ -113,11 +115,12 @@ public class PopupDialogActivity extends Activity {
                 extraContent.measure(View.MeasureSpec.makeMeasureSpec(extraContent.getWidth(), View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
 
-                if (ll.getHeight() < ll.getMeasuredHeight() && !fixed) {
+                if (ll.getHeight() < ll.getMeasuredHeight() && !fixed && extraContent.getChildCount() > 0) {
                     fixed = true;
                     PercentLayoutHelper.PercentLayoutParams layoutParams = (PercentLayoutHelper.PercentLayoutParams) ll.getLayoutParams();
                     PercentLayoutHelper.PercentLayoutInfo percentLayoutInfo = layoutParams.getPercentLayoutInfo();
-                    percentLayoutInfo.topMarginPercent = percentLayoutInfo.topMarginPercent - (((float) ll.getMeasuredHeight() - (float) ll.getHeight()) / ((float) ((View) ll.getParent()).getHeight())) - .01F;
+                    percentLayoutInfo.topMarginPercent = percentLayoutInfo.topMarginPercent - (((float) ll.getMeasuredHeight() - (float) ll.getHeight())
+                            / ((float) ((View) ll.getParent()).getHeight())) - .01F;
                 }
 
                 return true;
@@ -126,7 +129,7 @@ public class PopupDialogActivity extends Activity {
 
         });
 
-
+        TranslateView();
         ll.setBackgroundColor(Color.parseColor(gPanel.getBackground()));
         bindHeader();
         bindPanelContent();
@@ -144,8 +147,8 @@ public class PopupDialogActivity extends Activity {
 
     private void bindHeader() {
 
-        tv.setTextColor(Color.parseColor(RenderConstants.DEFAULT_BUTTON_COLOR));
-        tv.setTextSize(RenderConstants.reduceTextSize(RenderConstants.DEFAULT_BUTTON_TEXT_SIZE));
+        tv.setTextColor(Color.parseColor(RenderConstants.DEFAULT_TEXT_COLOR));
+        tv.setTextSize(RenderConstants.getTextSizeFromXMLSize(RenderConstants.DEFAULT_BUTTON_TEXT_SIZE));
         tv.setText(title);
     }
 
@@ -156,7 +159,7 @@ public class PopupDialogActivity extends Activity {
     }
 
     private void bindPanelContent() {
-        extraContent.addView(gPanel.render(extraContent));
+        extraContent.addView(gPanel.render(extraContent),   new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
     }
 
     private void TranslateView() {
@@ -172,24 +175,6 @@ public class PopupDialogActivity extends Activity {
         Animation fadeInAnim = AnimationUtils.loadAnimation(PopupDialogActivity.this, R.anim.textview_fadein);
         extraContent.setAnimation(fadeInAnim);
         extraContent.setVisibility(View.VISIBLE);
-    }
-
-    public int getStatusBarHeight(Context context) {
-        int result = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = context.getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-
-    public int getNavBarHeight() {
-        Resources resources = this.getResources();
-        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            return resources.getDimensionPixelSize(resourceId);
-        }
-        return 0;
     }
 
 

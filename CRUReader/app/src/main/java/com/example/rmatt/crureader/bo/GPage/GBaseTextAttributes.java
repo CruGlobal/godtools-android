@@ -25,8 +25,6 @@ public abstract class GBaseTextAttributes extends GBaseAttributes {
     @Attribute(required = false)
     public String textalign;
 
-    @Attribute(required = false)
-    public String translate;
 
     @Attribute(required = false)
     public String align;
@@ -47,7 +45,7 @@ public abstract class GBaseTextAttributes extends GBaseAttributes {
         textView.setText(content);
         textView.setTextColor(RenderConstants.parseColor(color));
         textView.setTypeface(Typeface.defaultFromStyle(RenderConstants.getTypefaceFromModifier(modifier)));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, RenderConstants.reduceTextSize(size));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, RenderConstants.getTextSizeFromXMLSize(size));
         textView.setGravity(RenderConstants.getGravityFromAlign(textalign));
         RenderConstants.setDefaultPadding(textView);
         return textView;

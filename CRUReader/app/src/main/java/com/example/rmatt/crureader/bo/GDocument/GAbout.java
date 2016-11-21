@@ -29,9 +29,6 @@ public class GAbout extends Gtapi {
     @Attribute
     public String filename;
 
-    @Attribute
-    public Boolean translate;
-
     @Override
     public View render(ViewGroup viewGroup) {
         TextView t = new TextView(viewGroup.getContext());

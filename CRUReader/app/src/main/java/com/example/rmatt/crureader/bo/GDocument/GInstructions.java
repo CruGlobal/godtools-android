@@ -23,9 +23,6 @@ public class GInstructions extends Gtapi {
 
     private static final String TAG = "GInstructions";
 
-    @Attribute
-    public String translate;
-
     @Override
     public TextView render(ViewGroup viewGroup) {
         Context context = viewGroup.getContext();
