@@ -40,7 +40,7 @@ public class GButtonText extends GBaseTextAttributes implements IRender
 
         if(color == null || color == "")
         {
-            color = RenderConstants.DEFAULT_BUTTON_COLOR;
+            color = RenderConstants.DEFAULT_TEXT_COLOR;
         }
     }
 

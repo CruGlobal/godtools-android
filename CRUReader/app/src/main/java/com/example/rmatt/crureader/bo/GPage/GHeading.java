@@ -26,9 +26,9 @@ public class GHeading extends GBaseTextAttributes
 
 
     @Override
-    public TextView render(ViewGroup percentRelativeLayout) {
+    public TextView render(ViewGroup viewGroup) {
         setDefaultValues();
-        return super.render(percentRelativeLayout);
+        return super.render(viewGroup);
     }
 
     private void setDefaultValues() {

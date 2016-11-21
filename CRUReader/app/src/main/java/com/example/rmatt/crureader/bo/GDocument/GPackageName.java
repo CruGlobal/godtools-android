@@ -23,9 +23,6 @@ public class GPackageName extends Gtapi {
         @Text
         public String content;
 
-        @Attribute
-        public Boolean translate;
-
         @Override
         public View render(ViewGroup viewGroup) {
                 return null;

@@ -101,7 +101,7 @@ public class GTitle extends Gtapi implements IRender {
 
                 cv.showCorner(false, true, false, true);
                 cv.setRadius(TITLE_CORNER_RADIUS);
-                cv.setShadowPadding(10, 10, 10, 10);
+                //cv.setShadowPadding(10, 10, 10, 10);
                 cv.setCardElevation(TITLE_ELEVATION);
                 percentLayoutInfo.rightMarginPercent = DEFAULT_RIGHT_MARGIN;
 
@@ -111,14 +111,14 @@ public class GTitle extends Gtapi implements IRender {
 
                 cv.setBackgroundColor(Color.WHITE);
                 cv.setCardElevation(TITLE_ELEVATION);
-                cv.setShadowPadding(10, 10, 10, 10);
+                //cv.setShadowPadding(10, 10, 10, 10);
 
                 break;
             case clear:
 
                 Log.i(TAG, "Clear settings");
                 cv.setBackgroundColor(Color.TRANSPARENT);
-                cv.setShadowPadding(10, 10, 10, 10);
+                //cv.setShadowPadding(10, 10, 10, 10);
 
                 //cv.setBackgroundColor(Color.TRANSPARENT);
                 //cv.showEdgeShadow(false, false, false, false);
@@ -129,7 +129,7 @@ public class GTitle extends Gtapi implements IRender {
             default:
                 cv.setBackgroundColor(Color.WHITE);
                 percentLayoutInfo.rightMarginPercent = DEFAULT_RIGHT_MARGIN;
-                cv.setShadowPadding(10, 10, 10, 10);
+                //cv.setShadowPadding(10, 10, 10, 10);
                 cv.showCorner(false, true, false, true);
                 cv.setRadius(TITLE_CORNER_RADIUS);
                 cv.setCardElevation(TITLE_ELEVATION);
@@ -163,7 +163,7 @@ public class GTitle extends Gtapi implements IRender {
         numberTextView.setText(number);
         numberTextView.setTextColor(Color.parseColor(heading.color != null ? heading.color : RenderSingleton.getInstance().globalColor));
         numberTextView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-        numberTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, RenderConstants.DEFAULT_NUMBER_TEXT_SIZE);
+        numberTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, RenderConstants.getTextSizeFromXMLSize(RenderConstants.DEFAULT_NUMBER_TEXT_SIZE));
         RenderConstants.setDefaultPadding(numberTextView);
     }
 

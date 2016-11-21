@@ -7,8 +7,6 @@ import org.simpleframework.xml.Attribute;
  */
 
 public abstract class GBaseImageAttributes extends GBaseAttributes {
-    @Attribute(required = false)
-    public String translate;
 
     @Attribute(required = false)
     public String align;

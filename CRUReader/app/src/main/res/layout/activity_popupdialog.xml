@@ -19,7 +19,7 @@
             android:id="@id/button_tv_popin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:transitionName="@string/button_tv_transistion_title" />
+             />
 
         <FrameLayout
             android:id="@+id/extra_wrapper_fl"

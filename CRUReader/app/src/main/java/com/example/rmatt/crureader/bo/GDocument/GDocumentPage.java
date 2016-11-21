@@ -30,9 +30,6 @@ public class GDocumentPage extends Gtapi {
     public String filename;
 
     @Attribute
-    public Boolean translate;
-
-    @Attribute
     public String thumb;
 
     @Attribute(required = false)

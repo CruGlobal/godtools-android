@@ -45,7 +45,7 @@ import java.util.zip.Inflater;
  * Created by rmatt on 10/18/2016.
  */
 @Root(name = "page")
-public class GPage implements IRender {
+public class GPage extends Gtapi implements IRender {
     private static final String TAG = "GPage";
     @Attribute(required = false)
     public String watermark;
@@ -60,30 +60,15 @@ public class GPage implements IRender {
             @ElementList(inline = true, required = false, entry = "button", type = GButton.class),
             @ElementList(inline = true, required = false, entry = "followup-modal", type = GFollowupModal.class)})
     public ArrayList<Gtapi> gtapiArrayList = new ArrayList<Gtapi>();
-//    @ElementList(inline=true, required = false)
-//    public List<GText> text;
 
 
     @Attribute
     public String color;
-
-//    @ElementList(inline=true, required = false)
-//    public List<GButton> button;
-
     @Attribute(required = false)
     public String buttons;
 
     @Attribute(required = false)
     public String backgroundimage;
-
-    @Attribute(name = "tnt-trx-ref-value", required = false)
-    public String tntTrxRefValue;
-
-    @Attribute(name = "tnt-trx-translated", required = false)
-    public String tntTrxTranslated;
-
-    @Attribute(required = false)
-    public Boolean translate;
 
     @Element(name = "question", required = false)
     public GQuestion gQuestion;
@@ -122,15 +107,14 @@ public class GPage implements IRender {
             vgTop.setId(View.generateViewId());
             topId = vgTop.getId();
 
-            Log.i(TAG, "lastId" + lastId);
-            // vgTop.requestLayout();
             percentRelativeLayout.addView(vgTop);
         }
 
 
         if (gQuestion != null) {
             View vgBottom = gQuestion.render(percentRelativeLayout);
-            PercentRelativeLayout.LayoutParams vgBottomParams = new PercentRelativeLayout.LayoutParams(PercentRelativeLayout.LayoutParams.MATCH_PARENT, PercentRelativeLayout.LayoutParams.WRAP_CONTENT);
+            PercentRelativeLayout.LayoutParams vgBottomParams = new PercentRelativeLayout.LayoutParams(PercentRelativeLayout.LayoutParams.MATCH_PARENT,
+                    PercentRelativeLayout.LayoutParams.WRAP_CONTENT);
             vgBottomParams.addRule(PercentRelativeLayout.ALIGN_PARENT_BOTTOM);
             vgBottom.setId(View.generateViewId());
             bottomId = vgBottom.getId();
@@ -138,23 +122,12 @@ public class GPage implements IRender {
             percentRelativeLayout.addView(vgBottom, vgBottomParams);
         }
 
+
+
         if (gtapiArrayList != null && gtapiArrayList.size() > 0) {
 
-            LinearLayout midSection = new LinearLayout(context);
-            midSection.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout midSection = RenderConstants.renderLinearLayoutListWeighted(context, gtapiArrayList);
 
-
-            for (Gtapi tap : gtapiArrayList) {
-
-                View view = tap.render(midSection);
-
-                view.setId(View.generateViewId());
-
-                LinearLayout.LayoutParams midSectionChildLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1);
-
-                midSection.addView(view, midSectionChildLayoutParams);
-
-            }
             params = new PercentRelativeLayout.LayoutParams(PercentRelativeLayout.LayoutParams.MATCH_PARENT, PercentRelativeLayout.LayoutParams.WRAP_CONTENT);
 
             if (topId > 0) params.addRule(PercentRelativeLayout.BELOW, topId);

@@ -64,7 +64,7 @@ public class GButton extends GBaseButtonAttributes implements IRender {
             TextView v = buttonText.render(viewGroup);
             addLines(v, ll);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                v.setTransitionName(context.getString(R.string.button_tv_transistion_title));
+                //v.setTransitionName(context.getString(R.string.button_tv_transistion_title));
             }
 
         }
@@ -91,11 +91,12 @@ public class GButton extends GBaseButtonAttributes implements IRender {
                 intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_TITLE_STRING_EXTRA, tv != null && tv.getText() != null ? tv.getText() : "");
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    /*ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                             (Activity) context,
                             new Pair<View, String>(ll, context.getString(R.string.inner_ll_transistion_title)),
-                            new Pair<View, String>(tv, context.getString(R.string.button_tv_transistion_title))
-                    );
+                            new Pair<View, String>(tv, context.getString(R.string.button_tv_transistion_title))*/
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity)context,  ll, context.getString(R.string.inner_ll_transistion_title));
+
                     ((Activity) context).startActivityForResult(intent, 999, options.toBundle());
 
 
@@ -111,7 +112,9 @@ public class GButton extends GBaseButtonAttributes implements IRender {
     }
 
     private void setDefaultValues() {
-        GButton.this.panel.setBackground(RenderSingleton.getInstance().globalColor);
+        if(GButton.this.panel != null) {
+            GButton.this.panel.setBackground(RenderSingleton.getInstance().globalColor);
+        }
     }
 
 

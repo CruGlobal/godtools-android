@@ -23,6 +23,9 @@ public abstract class Gtapi implements IRender {
     public String tntTrxTranslated;
 
 
+    @Attribute(required = false)
+    public String translate;
+
     private void setDefaultPadding(View view) {
 
         view.setPadding(20, 20, 20, 20);
