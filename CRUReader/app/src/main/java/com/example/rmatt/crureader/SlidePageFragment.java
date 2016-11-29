@@ -15,11 +15,12 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.rmatt.crureader.bo.GPage.GPage;
+import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 
 /**
  * Created by rmatt on 10/24/2016.
  */
-public class SlidePageFragment extends Fragment {
+public class SlidePageFragment extends  Fragment {
 
 
     private static final String ARG_DOCUMENT_ID = "DOCUMENT_ID";
@@ -52,6 +53,8 @@ public class SlidePageFragment extends Fragment {
         try {
             Log.i(TAG, "XMLDocument: " + mXmlDocumentId);
             mGPage = XMLUtil.parseGPage(this.getActivity(), mXmlDocumentId);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -71,9 +74,9 @@ public class SlidePageFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        RenderSingleton.getInstance().addGlobalColor(mPosition, mGPage.getBackgroundColor());
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-        PercentRelativeLayout percentRelativeLayout = mGPage.render(thisView);
+        PercentRelativeLayout percentRelativeLayout = mGPage.render(thisView, mPosition);
         thisView.addView(percentRelativeLayout, layoutParams);
 
     }

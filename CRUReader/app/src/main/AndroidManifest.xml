@@ -17,11 +17,11 @@
         </intent-filter>
         </activity>
 
-        <activity android:name=".PopupDialogActivity" android:theme="@style/MyDialogActivity" android:screenOrientation="portrait">
+        <activity android:name=".PopupDialogActivity" android:theme="@style/Popin" android:screenOrientation="portrait" />
+        <!--<activity android:name=".FollowupDialogActivity" android:theme="@style/MyDialogActivity" android:screenOrientation="portrait"  />-->
 
 
-
-        </activity>
+        <activity android:name=".RenderSingleTestActivity" android:screenOrientation="portrait" />
     </application>
 
 </manifest>

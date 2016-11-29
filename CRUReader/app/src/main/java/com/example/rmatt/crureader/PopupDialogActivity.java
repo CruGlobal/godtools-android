@@ -51,7 +51,7 @@ public class PopupDialogActivity extends Activity {
     int distanceToBottomOfScreen;
     FrameLayout extraContent;
     TextView tv;
-    GPanel gPanel;
+    Gtapi gPanel;
     public float Y;
     int screenHeight;
     String title;
@@ -66,12 +66,20 @@ public class PopupDialogActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setAllowEnterTransitionOverlap(false);
+            getWindow().setAllowReturnTransitionOverlap(false);
+        }
         setContentView(R.layout.activity_popupdialog);
+        bindLayouts();
+
+        //todo: HOW DOES BACKGROUND WORK
+        // ll.setBackgroundColor(Color.parseColor(RenderSingleton.getInstance().getCurrentPageGlobalColor()));
 
 
         upwrapExtras();
 
-        bindLayouts();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getSharedElementEnterTransition().addListener(new Transition.TransitionListener() {
@@ -106,7 +114,6 @@ public class PopupDialogActivity extends Activity {
             fadeIn();
         }
 
-
         if (RenderViewCompat.SDK_JELLY_BEAN) {
             ll.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 @Override
@@ -122,7 +129,7 @@ public class PopupDialogActivity extends Activity {
                         PercentLayoutHelper.PercentLayoutParams layoutParams = (PercentLayoutHelper.PercentLayoutParams) ll.getLayoutParams();
                         PercentLayoutHelper.PercentLayoutInfo percentLayoutInfo = layoutParams.getPercentLayoutInfo();
                         percentLayoutInfo.topMarginPercent = percentLayoutInfo.topMarginPercent - (((float) ll.getMeasuredHeight() - (float) ll.getHeight())
-                                / ((float) ((View) ll.getParent()).getHeight())) - .01F;
+                                / ((float) ((View) ll.getParent()).getHeight()));
                     }
 
                     return true;
@@ -131,23 +138,22 @@ public class PopupDialogActivity extends Activity {
 
             });
 
-
-            TranslateView();
         }
-        else
-        {
-            TranslateViewJellyBeanCompat();
-        }
-        ll.setBackgroundColor(Color.parseColor(gPanel.getBackground()));
         bindHeader();
         bindPanelContent();
+
+        if (RenderViewCompat.SDK_JELLY_BEAN) {
+            TranslateView();
+        } else {
+            TranslateViewJellyBeanCompat();
+        }
 
 
     }
 
     private void TranslateViewJellyBeanCompat() {
 
-        PercentFrameLayout.LayoutParams layoutParams = (PercentFrameLayout.LayoutParams)ll.getLayoutParams();
+        PercentFrameLayout.LayoutParams layoutParams = (PercentFrameLayout.LayoutParams) ll.getLayoutParams();
         layoutParams.gravity = Gravity.CENTER;
     }
 
@@ -170,10 +176,14 @@ public class PopupDialogActivity extends Activity {
         extraContent = (FrameLayout) findViewById(R.id.extra_wrapper_fl);
         tv = (TextView) findViewById(R.id.button_tv_popin);
         ll = (LinearLayout) findViewById(R.id.popup_innerLinearLayout);
+        ll.setBackgroundColor(Color.parseColor(RenderSingleton.getInstance().getCurrentPageGlobalColor()));
+        //ll.setPadding(40, 40, 40,40);
+
     }
 
     private void bindPanelContent() {
-        extraContent.addView(gPanel.render(extraContent), new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+        extraContent.addView(gPanel.render(extraContent, RenderSingleton.getInstance().curPosition),
+                new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
     }
 
     private void TranslateView() {

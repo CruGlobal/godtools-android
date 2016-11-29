@@ -25,7 +25,7 @@ public class GFollowUpTitle extends GBaseTextAttributes {
     private static final String TAG = "GFollowUpTitle";
 
     @Override
-    public TextView render(ViewGroup viewGroup) {
+    public TextView render(ViewGroup viewGroup, int position) {
         TextView v = new TextView(viewGroup.getContext());
         v.setText("GFollowUpTitle");
         Log.i(TAG, "render in GFollowUpTitle");

@@ -9,8 +9,8 @@ import android.view.ViewGroup;
  * Created by rmatt on 11/2/2016.
  */
 
-public interface IRender {
+public interface IRender<T> {
 
-    View render(ViewGroup viewGroup);
+    T render(ViewGroup viewGroup, int position);
 
 }

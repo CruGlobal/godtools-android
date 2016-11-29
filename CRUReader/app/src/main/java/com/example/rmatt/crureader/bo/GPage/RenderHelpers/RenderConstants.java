@@ -3,16 +3,24 @@ package com.example.rmatt.crureader.bo.GPage.RenderHelpers;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntDef;
 import android.support.annotation.Px;
+import android.support.v4.app.NotificationCompatSideChannelService;
+import android.support.v4.widget.Space;
+import android.support.v4.widget.TextViewCompat;
+import android.support.v7.view.ContextThemeWrapper;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
+import com.example.rmatt.crureader.bo.GPage.GFollowupModal;
 import com.example.rmatt.crureader.bo.Gtapi;
 
 import java.util.ArrayList;
@@ -28,7 +36,7 @@ public class RenderConstants {
 
     public static final float REFERENCE_DEVICE_HEIGHT = 480.0f;
     public static final float REFERENCE_DEVICE_WIDTH = 320.0f;
-
+    private static final String TAG = "RenderConstants";
 
 
     /*
@@ -119,8 +127,12 @@ public class RenderConstants {
     }
 
     public static void setDefaultPadding(View numberTextView) {
+        RenderSingleton.getInstance().getCacheIntResource(R.dimen.text_padding);
         int dimensionPixelSize = numberTextView.getContext().getResources().getDimensionPixelSize(R.dimen.text_padding);
+
+
         numberTextView.setPadding(dimensionPixelSize, dimensionPixelSize, dimensionPixelSize, dimensionPixelSize);
+
     }
 
     public static int parseColor(String color) {
@@ -132,33 +144,66 @@ public class RenderConstants {
     }
 
 
-    public static LinearLayout renderLinearLayoutListWeighted(Context context, ArrayList<Gtapi> gtapiArrayList) {
+    public static LinearLayout renderLinearLayoutListWeighted(Context context, ArrayList<Gtapi> gtapiArrayList, int position) {
         LinearLayout midSection = new LinearLayout(context);
         midSection.setOrientation(LinearLayout.VERTICAL);
 
-
+        Space space = new Space(context);
+        LinearLayout.LayoutParams evenSpreadDownSpaceLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.0f);
+        midSection.addView(space, evenSpreadDownSpaceLayoutParams);
         for (Gtapi tap : gtapiArrayList) {
-            View view = tap.render(midSection);
+
+            View view = (View) tap.render(midSection, position);
             view.setId(RenderViewCompat.generateViewId());
-            LinearLayout.LayoutParams midSectionChildLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1);
+
+            LinearLayout.LayoutParams midSectionChildLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             midSection.addView(view, midSectionChildLayoutParams);
+
+            space = new Space(context);
+            midSection.addView(space, evenSpreadDownSpaceLayoutParams);
+
 
         }
         return midSection;
     }
 
-    public static LinearLayout renderLinearLayoutList(Context context, ArrayList<Gtapi> gtapiArrayList) {
+   /* public static LinearLayout renderLinearLayoutList(Context context, ArrayList<Gtapi> gtapiArrayList, int position) {
         LinearLayout midSection = new LinearLayout(context);
         midSection.setOrientation(LinearLayout.VERTICAL);
 
 
         for (Gtapi tap : gtapiArrayList) {
-            View view = tap.render(midSection);
+            View view = (View) tap.render(midSection, position);
             view.setId(RenderViewCompat.generateViewId());
             LinearLayout.LayoutParams midSectionChildLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             midSection.addView(view, midSectionChildLayoutParams);
 
         }
         return midSection;
+    } */
+
+    public static String[] getTapEvents(String tapEvents) {
+        String[] splitTapEvents = null;
+        if (tapEvents != null && tapEvents.trim() != "") {
+            splitTapEvents = tapEvents.split("[,]");
+            for (String tapEvent : splitTapEvents) {
+                Log.i(TAG, "Tap event post split: " + tapEvent);
+            }
+
+        }
+        return splitTapEvents;
+
+    }
+
+    public static void setUpFollowups(ViewGroup container, ArrayList<GFollowupModal> followupModalsArrayList) {
+        for(GFollowupModal modal : followupModalsArrayList)
+        {
+            if(modal.listeners != null)
+            {
+                Log.i(TAG, "modal listeners: " + modal.listeners  + " as hash: " + modal.listeners.hashCode());
+
+                RenderSingleton.getInstance().gPanelHashMap.put(modal.listeners.hashCode(), modal);
+            }
+        }
     }
 }

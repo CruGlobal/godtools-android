@@ -19,9 +19,11 @@ import static android.content.ContentValues.TAG;
 
 /**
  * Created by rmatt on 10/26/2016.
+ * This is a bottom sheet
+ *
  */
 @Root(name = "fallback")
-public class GFallback extends Gtapi {
+public class GFallback extends Gtapi<TextView, ViewGroup> {
 
     @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GText.class),
             @ElementList(inline = true, required = false, entry = "image", type = GImage.class),
@@ -35,10 +37,15 @@ public class GFallback extends Gtapi {
 
 
     @Override
-    public View render(ViewGroup viewGroup) {
+    public TextView render(ViewGroup viewGroup, int position) {
         TextView tv = new TextView(viewGroup.getContext());
         Log.i(TAG, "GButtonPair render");
         tv.setText("Not implemented yet");
         return tv;
+    }
+
+    @Override
+    public ViewGroup group(ViewGroup viewGroup, int position) {
+        return null;
     }
 }

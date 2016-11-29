@@ -32,7 +32,7 @@ public class GFollowupModal extends Gtapi implements IRender {
     public GFallback fallback;
 
     @Override
-    public View render(ViewGroup viewGroup) {
+    public View render(ViewGroup viewGroup, int position) {
         TextView v = new TextView(viewGroup.getContext());
         v.setText(followUpID + "");
         Log.i(TAG, "render in GFollowupModal");

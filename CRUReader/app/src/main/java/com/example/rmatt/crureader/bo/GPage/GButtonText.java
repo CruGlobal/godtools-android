@@ -17,13 +17,13 @@ import org.simpleframework.xml.Root;
  * Created by rmatt on 10/19/2016.
  */
 @Root(name="buttontext")
-public class GButtonText extends GBaseTextAttributes implements IRender
+public class GButtonText extends GBaseTextAttributes
 {
 
     public static final String TAG = "GText";
-    public TextView render(ViewGroup viewGroup) {
+    public TextView render(ViewGroup viewGroup, int position) {
         setDefaultValues();
-        TextView tv = super.render(viewGroup);
+        TextView tv = super.render(viewGroup, position);
         tv.setId(R.id.button_tv);
         return tv;
     }

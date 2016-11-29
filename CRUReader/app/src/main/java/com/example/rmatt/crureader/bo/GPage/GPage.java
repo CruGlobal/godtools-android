@@ -48,7 +48,7 @@ import java.util.zip.Inflater;
  * Created by rmatt on 10/18/2016.
  */
 @Root(name = "page")
-public class GPage extends Gtapi implements IRender {
+public class GPage extends Gtapi<PercentRelativeLayout, ViewGroup> {
     private static final String TAG = "GPage";
     @Attribute(required = false)
     public String watermark;
@@ -60,9 +60,12 @@ public class GPage extends Gtapi implements IRender {
     public int bigbuttons;
 
     @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GText.class),
-            @ElementList(inline = true, required = false, entry = "button", type = GButton.class),
-            @ElementList(inline = true, required = false, entry = "followup-modal", type = GFollowupModal.class)})
+            @ElementList(inline = true, required = false, entry = "button", type = GButton.class)
+    })
     public ArrayList<Gtapi> gtapiArrayList = new ArrayList<Gtapi>();
+
+    @ElementList(inline = true, required = false, entry = "followup-modal", type = GFollowupModal.class)
+    public ArrayList<GFollowupModal> followupModalsArrayList = new ArrayList<GFollowupModal>();
 
 
     @Attribute
@@ -80,13 +83,14 @@ public class GPage extends Gtapi implements IRender {
         if (color != null) return color;
         else return RenderConstants.DEFAULT_BACKGROUND_COLOR;
     }
+
     @Override
-    public PercentRelativeLayout render(ViewGroup container) {
+    public PercentRelativeLayout render(ViewGroup container, int position) {
         //setDefaultValues();
         Context context = container.getContext();
         /* Background color */
-        RenderSingleton.getInstance().globalColor = getBackgroundColor();
-        container.setBackgroundColor(Color.parseColor(RenderSingleton.getInstance().globalColor));
+
+        container.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
 
 
         Integer lastId = 9999;
@@ -95,7 +99,7 @@ public class GPage extends Gtapi implements IRender {
 
 
         PercentRelativeLayout percentRelativeLayout = new PercentRelativeLayout(context);
-
+        //    percentRelativeLayout.setPadding(40, 40, 40,40);
         loadBackground(percentRelativeLayout);
 
 
@@ -104,7 +108,7 @@ public class GPage extends Gtapi implements IRender {
 
         if (title != null) {
 
-            ViewGroup vgTop = title.render(percentRelativeLayout);
+            ViewGroup vgTop = title.render(percentRelativeLayout, position);
 
 
             vgTop.setId(RenderViewCompat.generateViewId());
@@ -115,7 +119,7 @@ public class GPage extends Gtapi implements IRender {
 
 
         if (gQuestion != null) {
-            View vgBottom = gQuestion.render(percentRelativeLayout);
+            View vgBottom = gQuestion.render(percentRelativeLayout, position);
             PercentRelativeLayout.LayoutParams vgBottomParams = new PercentRelativeLayout.LayoutParams(PercentRelativeLayout.LayoutParams.MATCH_PARENT,
                     PercentRelativeLayout.LayoutParams.WRAP_CONTENT);
             vgBottomParams.addRule(PercentRelativeLayout.ALIGN_PARENT_BOTTOM);
@@ -126,10 +130,9 @@ public class GPage extends Gtapi implements IRender {
         }
 
 
-
         if (gtapiArrayList != null && gtapiArrayList.size() > 0) {
 
-            LinearLayout midSection = RenderConstants.renderLinearLayoutListWeighted(context, gtapiArrayList);
+            LinearLayout midSection = RenderConstants.renderLinearLayoutListWeighted(context, gtapiArrayList, position);
 
             params = new PercentRelativeLayout.LayoutParams(PercentRelativeLayout.LayoutParams.MATCH_PARENT, PercentRelativeLayout.LayoutParams.WRAP_CONTENT);
 
@@ -138,8 +141,15 @@ public class GPage extends Gtapi implements IRender {
             percentRelativeLayout.addView(midSection, params);
         }
 
+        RenderConstants.setUpFollowups(container, followupModalsArrayList);
+
         return percentRelativeLayout;
 
+    }
+
+    @Override
+    public ViewGroup group(ViewGroup viewGroup, int position) {
+        return null;
     }
 
     private void loadBackground(ViewGroup viewGroup) {
@@ -159,7 +169,6 @@ public class GPage extends Gtapi implements IRender {
     private String getImageURL() {
         return "file:///android_asset/" + backgroundimage;
     }
-
 
 
 }

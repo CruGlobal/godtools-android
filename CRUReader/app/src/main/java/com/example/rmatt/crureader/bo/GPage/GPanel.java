@@ -1,14 +1,8 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.provider.Settings;
-import android.support.percent.PercentRelativeLayout;
-import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.rmatt.crureader.bo.GPage.IDO.IRender;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
@@ -25,11 +19,7 @@ import java.util.ArrayList;
  * Created by rmatt on 10/18/2016.
  */
 @Root(name = "panel")
-public class GPanel implements IRender {
-
-
-
-    String backgroundColor;
+public class GPanel extends Gtapi<LinearLayout, ViewGroup> {
 
     private static final String TAG = "GPanel";
     @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GText.class),
@@ -40,31 +30,19 @@ public class GPanel implements IRender {
     public ArrayList<Gtapi> gtapiArrayList = new ArrayList<Gtapi>();
 
 
-
     @Override
-    public LinearLayout render(ViewGroup viewGroup) {
+    public LinearLayout render(ViewGroup viewGroup, int position) {
         Context context = viewGroup.getContext();
-        LinearLayout midSection = RenderConstants.renderLinearLayoutList(viewGroup.getContext(), gtapiArrayList);
-        midSection.setBackgroundColor(Color.parseColor(backgroundColor));
+
+        LinearLayout midSection = RenderConstants.renderLinearLayoutListWeighted(viewGroup.getContext(), gtapiArrayList, position);
+        midSection.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
         return midSection;
 
     }
 
-
-    public void setBackground(String backgroundColor) {
-        this.backgroundColor = backgroundColor;
+    @Override
+    public ViewGroup group(ViewGroup viewGroup, int position) {
+        return null;
     }
-
-    public String getBackground() {
-        return backgroundColor;
-    }
-
-
-    //##################################################################
-    // Non-XML properties
-    //##################################################################
-
-
-
 
 }

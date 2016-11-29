@@ -3,6 +3,7 @@ package com.example.rmatt.crureader.bo.GPage;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.annotation.ColorInt;
 import android.support.percent.PercentLayoutHelper;
 import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
@@ -27,14 +28,14 @@ import org.simpleframework.xml.Root;
  */
 
 @Root(name = "title")
-public class GTitle extends Gtapi implements IRender {
+public class GTitle extends Gtapi<OptRoundCardView, ViewGroup> {
 
 
     public static final float DEFAULT_RIGHT_MARGIN = .025F;
     private static final float DEFAULT_TOP_MARGIN = .02F;
 
-    public static final float TITLE_ELEVATION = 60.0F;
-    public static final float TITLE_CORNER_RADIUS = 50.0F;
+    public static final float TITLE_ELEVATION = 10;
+    public static final float TITLE_CORNER_RADIUS = 10.0F;
 
 
     public static final String TAG = "GTitle";
@@ -56,43 +57,62 @@ public class GTitle extends Gtapi implements IRender {
     @Element(required = false)
     public String number;
 
-    @Attribute(required = false)
-    public int h;
 
-
-    public ViewGroup render(ViewGroup viewGroup) {
+    public OptRoundCardView render(ViewGroup viewGroup, int position) {
         Context context = viewGroup.getContext();
         PercentRelativeLayout.LayoutParams layoutParams;
         setDefaultValues();
         OptRoundCardView cv = new OptRoundCardView(context);
+        layoutParams = new PercentRelativeLayout.LayoutParams(PercentRelativeLayout.LayoutParams.MATCH_PARENT, PercentRelativeLayout.LayoutParams.WRAP_CONTENT);
+        cv.setLayoutParams(layoutParams);
+        PercentLayoutHelper.PercentLayoutInfo percentLayoutInfo = layoutParams.getPercentLayoutInfo();
+        percentLayoutInfo.topMarginPercent = DEFAULT_TOP_MARGIN;
+        /*cv.setPreventCornerOverlap(false);
+        cv.setUseCompatPadding(false);
+        cv.setContentPadding(0,0,0,0);
+        cv.setMeasureAllChildren(false);
+        cv.setLayoutParams(layoutParams);*/
+
+
 
         LinearLayout headingLayout = new LinearLayout(context);
         headingLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-        TextView numberTextView = new TextView(context);
-        RenderConstants.setDefaultPadding(numberTextView);
-        LinearLayout.LayoutParams numberTextViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        setUpNumberTextView(numberTextView);
-
-
-        TextView headingTextView = heading.render(viewGroup);
-        headingTextView.setGravity(Gravity.CENTER_VERTICAL);
+        if (number != null && number != "") {
+            TextView numberTextView = new TextView(context);
+            RenderConstants.setDefaultPadding(numberTextView);
+            LinearLayout.LayoutParams numberTextViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            setUpNumberTextView(numberTextView, position);
+            headingLayout.addView(numberTextView, numberTextViewLayoutParams);
+        }
+        TextView headingTextView = heading.render(viewGroup, position);
+       // headingTextView.setGravity(Gravity.CENTER_VERTICAL);
         //headingTextView.setSingleLine(false);
 
-        LinearLayout.LayoutParams headerTextViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-
-
-        headingLayout.addView(numberTextView, numberTextViewLayoutParams);
-
-
-        LinearLayout.LayoutParams headerLinearLayoutLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        LinearLayout.LayoutParams subheaderTextViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         LinearLayout subHeadingAndHeadingLayout = new LinearLayout(context);
         subHeadingAndHeadingLayout.setOrientation(LinearLayout.VERTICAL);
-        layoutParams = new PercentRelativeLayout.LayoutParams(PercentRelativeLayout.LayoutParams.MATCH_PARENT, PercentRelativeLayout.LayoutParams.WRAP_CONTENT);
 
-        PercentLayoutHelper.PercentLayoutInfo percentLayoutInfo = layoutParams.getPercentLayoutInfo();
-        percentLayoutInfo.topMarginPercent = DEFAULT_TOP_MARGIN;
+
+
+        headingLayout.setGravity(Gravity.CENTER_VERTICAL);
+
+
+        subHeadingAndHeadingLayout.addView(headingTextView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+        if (subheading != null) {
+            Log.i(TAG, "Subheading != null");
+            TextView subheadingTextView = subheading.render(viewGroup, position);
+            subHeadingAndHeadingLayout.addView(subheadingTextView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        }
+        if (number == null || number == "")
+        {
+            cv.addView(subHeadingAndHeadingLayout, new OptRoundCardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        }
+        else
+        {
+            headingLayout.addView(subHeadingAndHeadingLayout);
+            cv.addView(headingLayout, new OptRoundCardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        }
 
 
         switch (mode) {
@@ -140,34 +160,23 @@ public class GTitle extends Gtapi implements IRender {
                 break;
 
         }
-        headingLayout.setGravity(Gravity.CENTER_VERTICAL);
-
-
-        subHeadingAndHeadingLayout.addView(headingTextView, headerTextViewLayoutParams);
-
-        if (subheading != null) {
-            Log.i(TAG, "Subheading != null");
-            TextView subheadingTextView = subheading.render(viewGroup);
-            subHeadingAndHeadingLayout.addView(subheadingTextView, subheaderTextViewLayoutParams);
-        }
-
-        headingLayout.addView(subHeadingAndHeadingLayout);
-        cv.addView(headingLayout);
-
-        cv.setLayoutParams(layoutParams);
-
         return cv;
 
     }
 
+    @Override
+    public ViewGroup group(ViewGroup viewGroup, int position) {
+        return null;
+    }
 
 
-    private void setUpNumberTextView(TextView numberTextView) {
-
+    private void setUpNumberTextView(TextView numberTextView, int position) {
+        @ColorInt int numberTextColor = heading.color != null ? Color.parseColor(heading.color) : RenderSingleton.getInstance().getPositionGlobalColorAsInt(position);
         numberTextView.setText(number);
-        numberTextView.setTextColor(Color.parseColor(heading.color != null ? heading.color : RenderSingleton.getInstance().globalColor));
+        numberTextView.setTextColor(numberTextColor);
+        //numberTextView.setTextColor(Color.parseColor((heading.color != null && heading.color.length() > 0) ? heading.color : RenderSingleton.getInstance().getPositionGlobalColorAsString(position)));
         numberTextView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-        numberTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, RenderConstants.getTextSizeFromXMLSize(RenderConstants.DEFAULT_NUMBER_TEXT_SIZE));
+        numberTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, RenderConstants.getTextSizeFromXMLSize(RenderConstants.DEFAULT_NUMBER_TEXT_SIZE));
         RenderConstants.setDefaultPadding(numberTextView);
     }
 

@@ -20,7 +20,7 @@ public class GLinkButtonAttributes extends GBaseTextAttributes {
     public String tapEvents;
 
     @Override
-    public TextView render(ViewGroup viewGroup) {
+    public TextView render(ViewGroup viewGroup, int position) {
         TextView v = new TextView(viewGroup.getContext());
         v.setText("GLinkButtonAttributes");
         Log.i(TAG, "render in GLinkButtonAttributes");

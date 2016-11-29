@@ -1,15 +1,12 @@
 package com.example.rmatt.crureader.bo.GPage;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import org.simpleframework.xml.Attribute;
+import com.example.rmatt.crureader.bo.Gtapi;
+
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Text;
 
@@ -20,7 +17,7 @@ import java.io.IOException;
  */
 
 @Root(name = "image")
-public class GImage extends GBaseImageAttributes {
+public class GImage extends Gtapi<ImageView, ViewGroup> {
 
 
     private static final String TAG = "GImage";
@@ -30,7 +27,7 @@ public class GImage extends GBaseImageAttributes {
 
 
     @Override
-    public ImageView render(ViewGroup viewGroup) {
+    public ImageView render(ViewGroup viewGroup, int position) {
         ImageView imageView = new ImageView(viewGroup.getContext());
         setImageView(imageView);
         Log.i(TAG, "render in GImage");
