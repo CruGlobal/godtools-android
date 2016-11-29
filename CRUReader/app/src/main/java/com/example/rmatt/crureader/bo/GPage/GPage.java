@@ -1,38 +1,19 @@
 package com.example.rmatt.crureader.bo.GPage;
 
-import android.app.ActionBar;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.support.percent.PercentLayoutHelper;
 import android.support.percent.PercentRelativeLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.BitmapCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewGroupCompat;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
-import com.example.rmatt.crureader.bo.GPage.IDO.IRender;
+import com.example.rmatt.crureader.bo.GPage.RenderHelpers.Diagnostics;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 import com.example.rmatt.crureader.bo.Gtapi;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -42,7 +23,6 @@ import org.simpleframework.xml.Root;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 /**
  * Created by rmatt on 10/18/2016.
@@ -100,7 +80,7 @@ public class GPage extends Gtapi<PercentRelativeLayout, ViewGroup> {
 
         PercentRelativeLayout percentRelativeLayout = new PercentRelativeLayout(context);
         //    percentRelativeLayout.setPadding(40, 40, 40,40);
-        loadBackground(percentRelativeLayout);
+        loadBackground(percentRelativeLayout, position);
 
 
         PercentRelativeLayout.LayoutParams params = null;
@@ -152,8 +132,10 @@ public class GPage extends Gtapi<PercentRelativeLayout, ViewGroup> {
         return null;
     }
 
-    private void loadBackground(ViewGroup viewGroup) {
-        String resourceName = (watermark != null && watermark.length()> 0) ? watermark : backgroundimage;
+    private void loadBackground(ViewGroup viewGroup, int position) {
+
+        String resourceName = (watermark != null && watermark.length() > 0) ? watermark : backgroundimage;
+        Diagnostics.StartMethodTracingWithKey(position + "_" + resourceName);
         if (resourceName != null) {
 
             try {
@@ -163,6 +145,8 @@ public class GPage extends Gtapi<PercentRelativeLayout, ViewGroup> {
                 e.printStackTrace();
             }
         }
+
+        Diagnostics.StopMethodTracingByKey(position + "_" + resourceName);
 
     }
 
