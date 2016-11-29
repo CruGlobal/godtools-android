@@ -1,9 +1,6 @@
 package com.example.rmatt.crureader.bo.GPage;
 
-import android.content.Context;
-import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -21,7 +18,7 @@ import org.simpleframework.xml.Root;
  </input-field>
  */
 @Root(name="input-field")
-public class GInputField extends GBaseAttributes {
+public class GInputField extends Gtapi<TextView, ViewGroup> {
 
     private static final String TAG = "GInputField";
     @Attribute(name="valid-format", required = false)
@@ -33,9 +30,6 @@ public class GInputField extends GBaseAttributes {
     @Attribute
     public String name;
 
-    @Attribute(name = "x-trailing-offset", required = false)
-    public String xTrailingOffset;
-
     @Element(name="input-label", required = false)
     public GInputLabel inputLabel;
 
@@ -43,10 +37,15 @@ public class GInputField extends GBaseAttributes {
     public GInputPlaceholder inputPlaceholder;
 
     @Override
-    public TextView render(ViewGroup viewGroup) {
+    public TextView render(ViewGroup viewGroup, int position) {
         TextView v = new TextView(viewGroup.getContext());
         v.setText("GInputField");
         Log.i(TAG, "render in GInputField");
         return v;
+    }
+
+    @Override
+    public ViewGroup group(ViewGroup viewGroup, int position) {
+        return null;
     }
 }

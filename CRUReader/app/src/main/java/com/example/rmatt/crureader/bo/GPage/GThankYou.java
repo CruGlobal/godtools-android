@@ -32,6 +32,10 @@ import java.util.ArrayList;
  </link-button>
  </thank-you>
  */
+
+/*
+    This is an activity
+ */
 @Root(name="thank-you")
 public class GThankYou extends Gtapi {
 
@@ -40,15 +44,22 @@ public class GThankYou extends Gtapi {
     public String listeners;
 
     @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GText.class),
-            @ElementList(inline = true, required = false, entry = "image", type = GImage.class), @ElementList(inline = true, required = false, entry = "button-pair", type = GButtonPair.class), @ElementList(inline = true, required = false, entry = "link-button", type = GLinkButtonAttributes.class)})
+            @ElementList(inline = true, required = false, entry = "image", type = GImage.class),
+            @ElementList(inline = true, required = false, entry = "button-pair", type = GButtonPair.class),
+            @ElementList(inline = true, required = false, entry = "link-button", type = GLinkButtonAttributes.class)})
     public ArrayList<Gtapi> panelArrayList = new ArrayList<Gtapi>();
 
     @Override
-    public TextView render(ViewGroup viewGroup) {
+    public TextView render(ViewGroup viewGroup, int position) {
         Context context = viewGroup.getContext();
         TextView v = new TextView(context);
         v.setText(TAG + ": " + listeners);
         Log.i(TAG, "render in: " +  TAG);
         return v;
+    }
+
+    @Override
+    public ViewGroup group(ViewGroup viewGroup, int position) {
+        return null;
     }
 }

@@ -16,15 +16,15 @@ import org.simpleframework.xml.Root;
 import static android.content.ContentValues.TAG;
 
 @Root(name="text")
-public class GText extends GBaseTextAttributes implements IRender
+public class GText extends GBaseTextAttributes
 {
     public static final String TAG = "GText";
 
 
     @Override
-    public TextView render(ViewGroup viewGroup) {
+    public TextView render(ViewGroup viewGroup, int position) {
         setDefaultValues();
-        return super.render(viewGroup);
+        return super.render(viewGroup, position);
     }
 
     private void setDefaultValues() {

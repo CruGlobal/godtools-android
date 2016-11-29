@@ -36,7 +36,7 @@ public class GDocumentPage extends Gtapi {
     public String listeners;
 
     @Override
-    public View render(ViewGroup viewGroup) {
+    public View render(ViewGroup viewGroup, int position) {
         return null;
     }
 }

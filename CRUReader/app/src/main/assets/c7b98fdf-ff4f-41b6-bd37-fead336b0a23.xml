@@ -1,68 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?><page buttons="1" color="#DC5C31" tnt-trx-ref-value="" tnt-trx-translated="" translate="" watermark="90458873df4460124f51a61d5e22e2c3d021a739.png">
-  <title mode="straight">
-    <heading gtapi-trx-id="09e36daa-998f-4ff7-a931-40d210d3c77e" size="111" textalign="center" w="300" x="10">YOU CAN EXPRESS YOUR ATTITUDE TOWARDS GOD THROUGH PRAYER.</heading>
-    <subheading gtapi-trx-id="5bcdf851-6ba4-452f-b5f8-3ed38758ce61" size="100" textalign="center">Prayer is simply talking with God.</subheading>
-  </title>
-  
-  
-  
-  
-<text gtapi-trx-id="88a13a09-c5f6-4dd0-9fb3-88119738cf3c" textalign="left" x-trailing-offset="20" xoffset="20">Lord Jesus,</text><text gtapi-trx-id="453de523-1828-404b-be29-898ebc0bf8d5" textalign="left" x-trailing-offset="20" xoffset="20">I want to know you personally.</text><text gtapi-trx-id="f83226fc-3e6d-476e-a1fd-8b411b1cdcb3" textalign="left" x-trailing-offset="20" xoffset="20">I'm sorry for going my own way. Please forgive me for all my sin.</text><text gtapi-trx-id="8020a609-0984-43a7-81a8-be46cd573cc1" textalign="left" x-trailing-offset="20" xoffset="20">Thank you for dying on the cross to pay for my sin.</text><text gtapi-trx-id="74fa69ef-1a88-4fee-af2a-1b6884e6677c" textalign="left" x-trailing-offset="20" xoffset="20">I agree to turn from my old ways and follow you as my Saviour and Lord.</text><text gtapi-trx-id="4f1cebde-3801-4640-823e-7b90c8ed8cad" textalign="left" x-trailing-offset="20" xoffset="20">Please come and take first place in my life.</text><text gtapi-trx-id="7d191d5f-5a8c-40e2-8bab-feef609adeaf" modifier="bold" size="110" textalign="left" x-trailing-offset="20" xoffset="20" yoffset="15">Is there anything stopping you from saying this right now?</text><button>
-        <buttontext size="82">Did you pray this prayer?</buttontext>
-        <panel>
-            <button-pair>
-                <positive-button h="40" tap-events="prayer-page-give-me-follow-up" w="120">YES</positive-button>
-                <negative-button h="40" tap-events="prayer-page-not-today" w="120">Not Ready</negative-button>
-            </button-pair>
-            <link-button h="28" size="70" tap-events="prayer-page-already-decided" textalign="center">I already made this decision</link-button>
-        </panel>
-    </button><followup-modal followup-id="1" listeners="prayer-page-give-me-follow-up">
-        <fallback>
-            <followup-title modifier="bold" x="0" x-trailing-offset="20" xoffset="20">Jesus has come into your life as he promised.</followup-title>
-            <followup-body modifier="bold" x="0" x-trailing-offset="30" xoffset="30" yoffset="40">Knowing someone better helps a relationship grow. Would you like to sign up for an email series that can help guide you in your new relationship with Jesus Christ?</followup-body>
-            <input-field name="email" type="email" x-trailing-offset="30" xoffset="30" yoffset="10">
-                <input-label modifier="bold" size="80">Email</input-label>
-                <input-placeholder>john.doe@gmail.com</input-placeholder>
-            </input-field>
-            <input-field name="name" type="text" valid-format=".+.*\S+.*" x-trailing-offset="30" xoffset="30" yoffset="10">
-                <input-label modifier="bold" size="80">Name</input-label>
-                <input-placeholder>John Doe (Optional)</input-placeholder>
-            </input-field>
-            <button-pair align="right" x-trailing-offset="30" xoffset="30">
-                <positive-button h="40" tap-events="follow-up-send,followup:subscribe" w="80">Send</positive-button>
-                <negative-button h="40" mode="link" size="70" tap-events="follow-up-no-thanks" w="120">No Thanks</negative-button>
-            </button-pair>
-            
-            <!-- thank-you should be handled as an embedded page -->
-            <thank-you listeners="follow-up-send">
-                <text modifier="bold" size="100" textalign="center" x-trailing-offset="30" xoffset="30">Thank you</text>
-                <text size="100" textalign="left" x-trailing-offset="30" xoffset="30">Check your email soon for your first study in following Jesus Christ.</text>
-                <text size="100" textalign="left" x-trailing-offset="30" xoffset="30">If you don't receive it, please check your spam folder.</text>
-                <link-button tap-events="follow-up-thank-you-done" textalign="center">Done</link-button>
-            </thank-you>
-        </fallback>
-    </followup-modal><followup-modal followup-id="1" listeners="prayer-page-already-decided">
-        <fallback>
-            <followup-body modifier="bold" x="0" x-trailing-offset="30" xoffset="30" yoffset="40">Knowing someone better helps a relationship grow. Would you like to sign up for an email series that can help guide you in your relationship with Jesus Christ?</followup-body>
-            <input-field name="email" type="email" x-trailing-offset="30" xoffset="30" yoffset="10">
-                <input-label modifier="bold" size="80">Email</input-label>
-                <input-placeholder>john.doe@gmail.com</input-placeholder>
-            </input-field>
-            <input-field name="name" type="text" x-trailing-offset="30" xoffset="30" yoffset="10">
-                <input-label modifier="bold" size="80">Name</input-label>
-                <input-placeholder>John Doe (Optional)</input-placeholder>
-            </input-field>
-            <button-pair align="right" x-trailing-offset="30" xoffset="30">
-                <positive-button h="40" tap-events="follow-up-send, followup:subscribe" validation="no" w="80">Send</positive-button>
-                <negative-button h="40" mode="link" size="70" tap-events="follow-up-no-thanks" w="120">No Thanks</negative-button>
-            </button-pair>
-            
-<!-- thank-you should be handled as an embedded page -->
-            <thank-you listeners="follow-up-send">
-                <text modifier="bold" size="100" textalign="center" x-trailing-offset="30" xoffset="30">Thank you</text>
-                <text size="100" textalign="left" x-trailing-offset="30" xoffset="30">Check your email soon for your first study in following Jesus Christ.</text>
-                <text size="100" textalign="left" x-trailing-offset="30" xoffset="30">If you don't receive it, please check your spam folder.</text>
-                <link-button tap-events="follow-up-thank-you-done" textalign="center">Done</link-button>
-            </thank-you>
-        </fallback>
-    </followup-modal></page>
+    <title mode="straight">
+        <heading gtapi-trx-id="09e36daa-998f-4ff7-a931-40d210d3c77e" size="111" textalign="center" w="300" x="10">YOU CAN EXPRESS YOUR ATTITUDE TOWARDS GOD THROUGH PRAYER.</heading>
+        <subheading gtapi-trx-id="5bcdf851-6ba4-452f-b5f8-3ed38758ce61" size="100" textalign="center">Prayer is simply talking with God.</subheading>
+    </title>
+
+
+
+
+    <text gtapi-trx-id="88a13a09-c5f6-4dd0-9fb3-88119738cf3c" textalign="left" x-trailing-offset="20" xoffset="20">Lord Jesus,</text><text gtapi-trx-id="453de523-1828-404b-be29-898ebc0bf8d5" textalign="left" x-trailing-offset="20" xoffset="20">I want to know you personally.</text><text gtapi-trx-id="f83226fc-3e6d-476e-a1fd-8b411b1cdcb3" textalign="left" x-trailing-offset="20" xoffset="20">I'm sorry for going my own way. Please forgive me for all my sin.</text><text gtapi-trx-id="8020a609-0984-43a7-81a8-be46cd573cc1" textalign="left" x-trailing-offset="20" xoffset="20">Thank you for dying on the cross to pay for my sin.</text><text gtapi-trx-id="74fa69ef-1a88-4fee-af2a-1b6884e6677c" textalign="left" x-trailing-offset="20" xoffset="20">I agree to turn from my old ways and follow you as my Saviour and Lord.</text><text gtapi-trx-id="4f1cebde-3801-4640-823e-7b90c8ed8cad" textalign="left" x-trailing-offset="20" xoffset="20">Please come and take first place in my life.</text><text gtapi-trx-id="7d191d5f-5a8c-40e2-8bab-feef609adeaf" modifier="bold" size="110" textalign="left" x-trailing-offset="20" xoffset="20" yoffset="15">Is there anything stopping you from saying this right now?</text><button>
+    <buttontext size="82">Did you pray this prayer?</buttontext>
+    <panel>
+        <button-pair>
+            <positive-button h="40" tap-events="prayer-page-give-me-follow-up" w="120">YES</positive-button>
+            <negative-button h="40" tap-events="prayer-page-not-today" w="120">Not Ready</negative-button>
+        </button-pair>
+        <link-button h="28" size="70" tap-events="prayer-page-already-decided" textalign="center">I already made this decision</link-button>
+    </panel>
+</button><followup-modal followup-id="1" listeners="prayer-page-give-me-follow-up">
+    <fallback>
+        <followup-title modifier="bold" x="0" x-trailing-offset="20" xoffset="20">Jesus has come into your life as he promised.</followup-title>
+        <followup-body modifier="bold" x="0" x-trailing-offset="30" xoffset="30" yoffset="40">Knowing someone better helps a relationship grow. Would you like to sign up for an email series that can help guide you in your new relationship with Jesus Christ?</followup-body>
+        <input-field name="email" type="email" x-trailing-offset="30" xoffset="30" yoffset="10">
+            <input-label modifier="bold" size="80">Email</input-label>
+            <input-placeholder>john.doe@gmail.com</input-placeholder>
+        </input-field>
+        <input-field name="name" type="text" valid-format=".+.*\S+.*" x-trailing-offset="30" xoffset="30" yoffset="10">
+            <input-label modifier="bold" size="80">Name</input-label>
+            <input-placeholder>John Doe (Optional)</input-placeholder>
+        </input-field>
+        <button-pair align="right" x-trailing-offset="30" xoffset="30">
+            <positive-button h="40" tap-events="follow-up-send,followup:subscribe" w="80">Send</positive-button>
+            <negative-button h="40" mode="link" size="70" tap-events="follow-up-no-thanks" w="120">No Thanks</negative-button>
+        </button-pair>
+
+        <!-- thank-you should be handled as an embedded page -->
+        <thank-you listeners="follow-up-send">
+            <text modifier="bold" size="100" textalign="center" x-trailing-offset="30" xoffset="30">Thank you</text>
+            <text size="100" textalign="left" x-trailing-offset="30" xoffset="30">Check your email soon for your first study in following Jesus Christ.</text>
+            <text size="100" textalign="left" x-trailing-offset="30" xoffset="30">If you don't receive it, please check your spam folder.</text>
+            <link-button tap-events="follow-up-thank-you-done" textalign="center">Done</link-button>
+        </thank-you>
+    </fallback>
+</followup-modal><followup-modal followup-id="1" listeners="prayer-page-already-decided">
+    <fallback>
+        <followup-body modifier="bold" x="0" x-trailing-offset="30" xoffset="30" yoffset="40">Knowing someone better helps a relationship grow. Would you like to sign up for an email series that can help guide you in your relationship with Jesus Christ?</followup-body>
+        <input-field name="email" type="email" x-trailing-offset="30" xoffset="30" yoffset="10">
+            <input-label modifier="bold" size="80">Email</input-label>
+            <input-placeholder>john.doe@gmail.com</input-placeholder>
+        </input-field>
+        <input-field name="name" type="text" x-trailing-offset="30" xoffset="30" yoffset="10">
+            <input-label modifier="bold" size="80">Name</input-label>
+            <input-placeholder>John Doe (Optional)</input-placeholder>
+        </input-field>
+        <button-pair align="right" x-trailing-offset="30" xoffset="30">
+            <positive-button h="40" tap-events="follow-up-send, followup:subscribe" validation="no" w="80">Send</positive-button>
+            <negative-button h="40" mode="link" size="70" tap-events="follow-up-no-thanks" w="120">No Thanks</negative-button>
+        </button-pair>
+
+        <!-- thank-you should be handled as an embedded page -->
+        <thank-you listeners="follow-up-send">
+            <text modifier="bold" size="100" textalign="center" x-trailing-offset="30" xoffset="30">Thank you</text>
+            <text size="100" textalign="left" x-trailing-offset="30" xoffset="30">Check your email soon for your first study in following Jesus Christ.</text>
+            <text size="100" textalign="left" x-trailing-offset="30" xoffset="30">If you don't receive it, please check your spam folder.</text>
+            <link-button tap-events="follow-up-thank-you-done" textalign="center">Done</link-button>
+        </thank-you>
+    </fallback>
+</followup-modal></page>

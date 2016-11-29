@@ -9,16 +9,17 @@
         android:id="@+id/popup_innerLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        android:transitionName="@string/inner_ll_transistion_title">
+        android:transitionName="@string/inner_ll_transistion_title"
+        android:orientation="vertical">
         <!--android:layout_gravity="center"-->
 
         <TextView
             android:id="@id/button_tv_popin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:textAppearance="@style/TextAppearance.GodTools.Button.Standard"
              />
 
         <FrameLayout

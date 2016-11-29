@@ -3,10 +3,12 @@ package com.example.rmatt.crureader.bo.GPage;
 import android.content.Context;
 import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.rmatt.crureader.bo.GPage.IDO.IRender;
+import com.example.rmatt.crureader.bo.Gtapi;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -17,25 +19,27 @@ import org.simpleframework.xml.Text;
  * <input-label modifier="bold" size="80">Email</input-label>
  */
 @Root(name="input-label")
-public class GInputLabel implements IRender {
+public class GInputLabel extends Gtapi<TextView, ViewGroup> {
 
     private static final String TAG = "GInputLabel";
     @Attribute
     public String modifier;
-
-    @Attribute
-    public int size;
 
     @Text
     public String content;
 
 
     @Override
-    public TextView render(ViewGroup viewGroup) {
+    public TextView render(ViewGroup viewGroup, int position) {
         Context context = viewGroup.getContext();
         TextView v = new TextView(context);
         v.setText("GInputLabel");
         Log.i(TAG, "render in GInputLabel");
         return v;
+    }
+
+    @Override
+    public ViewGroup group(ViewGroup viewGroup, int position) {
+        return null;
     }
 }

@@ -24,7 +24,7 @@ public class GPackageName extends Gtapi {
         public String content;
 
         @Override
-        public View render(ViewGroup viewGroup) {
+        public View render(ViewGroup viewGroup, int position) {
                 return null;
         }
 }

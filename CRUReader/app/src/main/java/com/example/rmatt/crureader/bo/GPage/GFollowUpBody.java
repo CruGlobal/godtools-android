@@ -25,10 +25,8 @@ import static android.content.ContentValues.TAG;
 @Root(name="followup-body")
 public class GFollowUpBody extends GBaseTextAttributes {
 
-
-
     @Override
-    public TextView render(ViewGroup viewGroup) {
+    public TextView render(ViewGroup viewGroup, int position) {
         TextView tv = new TextView(viewGroup.getContext());
         Log.i(TAG, "GButtonPair render");
         tv.setText("Not implemented yet");

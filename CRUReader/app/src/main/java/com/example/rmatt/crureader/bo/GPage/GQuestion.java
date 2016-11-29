@@ -27,9 +27,9 @@ public class GQuestion extends GBaseTextAttributes {
     public String mode;
 
     @Override
-    public TextView render(ViewGroup viewGroup) {
+    public TextView render(ViewGroup viewGroup, int position) {
 
-        return super.render(viewGroup);
+        return super.render(viewGroup, position);
     }
 
 

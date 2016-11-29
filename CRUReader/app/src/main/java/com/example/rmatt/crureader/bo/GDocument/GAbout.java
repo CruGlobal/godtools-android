@@ -30,7 +30,7 @@ public class GAbout extends Gtapi {
     public String filename;
 
     @Override
-    public View render(ViewGroup viewGroup) {
+    public View render(ViewGroup viewGroup, int position) {
         TextView t = new TextView(viewGroup.getContext());
         t.setText("About");
         return t;
