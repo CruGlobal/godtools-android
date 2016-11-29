@@ -12,6 +12,8 @@ public class Diagnostics {
 
 
     private static final String TAG = "Diagnostics";
+    
+    private static final long UI_THREAD_PROCESS_TIME_ALLOWANCE = 15;
 
     public static void StartMethodTracingWithKey(String key) {
         StartMethodTracingByKeyWithTag(TAG, key);
@@ -41,7 +43,7 @@ public class Diagnostics {
                                 Tag + "   " + leadingMessage + "   "
                                         + processTime + " milliseconds");
 
-                if(processTime > 10 && isOnUIThread())
+                if(processTime > UI_THREAD_PROCESS_TIME_ALLOWANCE && isOnUIThread())
                 {
                     alertProcessTooLong(leadingMessage);
 
