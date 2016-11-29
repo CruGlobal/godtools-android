@@ -1,21 +1,21 @@
 package com.example.rmatt.crureader.bo.GPage.RenderHelpers;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.util.SparseArray;
 
-import com.example.rmatt.crureader.RenderApp;
-import com.example.rmatt.crureader.bo.GPage.GPanel;
 import com.example.rmatt.crureader.bo.Gtapi;
 
 import java.util.HashMap;
+import java.util.Hashtable;
 
 /**
  * Created by rmatt on 11/16/2016.
  */
 
 public class RenderSingleton {
+
+    public static final boolean IS_DEBUG_BUILD = true;
 
     private static RenderSingleton renderSingleton;
     private int positionGlobalColor;
@@ -87,4 +87,11 @@ public class RenderSingleton {
         return dimensionResourceCache.get(text_padding);
     }
 
+
+
+    private Hashtable<String, Long> methodTraceMilliSecondsKeyMap = new Hashtable<String, Long>();
+
+    public Hashtable<String, Long>  getMethodTraceMilliSecondsKeyMap() {
+        return methodTraceMilliSecondsKeyMap;
+    }
 }
