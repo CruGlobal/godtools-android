@@ -153,7 +153,7 @@ public class GPage extends Gtapi<PercentRelativeLayout, ViewGroup> {
     }
 
     private void loadBackground(ViewGroup viewGroup) {
-        String resourceName = (watermark != null && watermark != "") ? watermark : backgroundimage;
+        String resourceName = (watermark != null && watermark.length()> 0) ? watermark : backgroundimage;
         if (resourceName != null) {
 
             try {
