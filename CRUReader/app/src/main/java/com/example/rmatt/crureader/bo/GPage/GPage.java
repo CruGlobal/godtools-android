@@ -114,11 +114,11 @@ public class GPage extends GCoordinator {
         if (GCoordinatorArrayList != null && GCoordinatorArrayList.size() > 0) {
 
             int[] ids = RenderConstants.renderLinearLayoutListWeighted(inflater, container, GCoordinatorArrayList, position);
-            params = new PercentRelativeLayout.LayoutParams(PercentRelativeLayout.LayoutParams.MATCH_PARENT, PercentRelativeLayout.LayoutParams.WRAP_CONTENT);
+
             if (topId > 0)
                 ((PercentRelativeLayout.LayoutParams) container.findViewById(ids[0]).getLayoutParams()).addRule(PercentRelativeLayout.BELOW, topId);
             if (bottomId > 0)
-                ((PercentRelativeLayout.LayoutParams) container.findViewById(ids[1]).getLayoutParams()).addRule(PercentRelativeLayout.ABOVE, topId);
+                ((PercentRelativeLayout.LayoutParams) container.findViewById(ids[1]).getLayoutParams()).addRule(PercentRelativeLayout.ABOVE, bottomId);
 
         }
 
@@ -152,7 +152,7 @@ public class GPage extends GCoordinator {
     private String getImageURL() {
         return "file:///android_asset/" + backgroundimage;
     }
-
+        //TODO: add back sliding panel for peek view
     //vgTop.setId(RenderViewCompat.generateViewId());
     //topId = vgTop.getId();
     //Log.i(TAG, "View Compat top Id: " + topId);
