@@ -1,7 +1,5 @@
 package com.example.rmatt.crureader.bo.GDocument;
 
-import android.content.Context;
-import android.support.percent.PercentRelativeLayout;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -34,6 +32,7 @@ public class GDocumentPage extends Gtapi {
 
     @Attribute(required = false)
     public String listeners;
+
 
     @Override
     public View render(ViewGroup viewGroup, int position) {

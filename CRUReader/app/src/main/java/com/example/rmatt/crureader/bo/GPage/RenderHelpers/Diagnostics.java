@@ -12,10 +12,10 @@ public class Diagnostics {
 
 
     private static final String TAG = "Diagnostics";
-    
+
     private static final long UI_THREAD_PROCESS_TIME_ALLOWANCE = 15;
 
-    public static void StartMethodTracingWithKey(String key) {
+    public static void StartMethodTracingByKey(String key) {
         StartMethodTracingByKeyWithTag(TAG, key);
     }
 

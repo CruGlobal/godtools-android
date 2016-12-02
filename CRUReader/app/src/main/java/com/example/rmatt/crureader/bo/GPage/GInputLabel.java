@@ -1,36 +1,25 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.content.Context;
-import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.rmatt.crureader.bo.GPage.IDO.IRender;
-import com.example.rmatt.crureader.bo.Gtapi;
-
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.Text;
 
 /**
  * Created by rmatt on 10/26/2016.
  * <input-label modifier="bold" size="80">Email</input-label>
  */
 @Root(name="input-label")
-public class GInputLabel extends Gtapi<TextView, ViewGroup> {
+public class GInputLabel extends GBaseTextAttributes {
 
     private static final String TAG = "GInputLabel";
-    @Attribute
-    public String modifier;
-
-    @Text
-    public String content;
-
 
     @Override
     public TextView render(ViewGroup viewGroup, int position) {
+
+        super.render(viewGroup, position);
         Context context = viewGroup.getContext();
         TextView v = new TextView(context);
         v.setText("GInputLabel");

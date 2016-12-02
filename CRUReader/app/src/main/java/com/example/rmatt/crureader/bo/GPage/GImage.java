@@ -5,12 +5,11 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.rmatt.crureader.bo.GPage.RenderHelpers.ImageAsyncTask;
 import com.example.rmatt.crureader.bo.Gtapi;
 
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Text;
-
-import java.io.IOException;
 
 /**
  * Created by rmatt on 10/31/2016.
@@ -26,6 +25,7 @@ public class GImage extends Gtapi<ImageView, ViewGroup> {
     public String content;
 
 
+
     @Override
     public ImageView render(ViewGroup viewGroup, int position) {
         ImageView imageView = new ImageView(viewGroup.getContext());
@@ -34,12 +34,17 @@ public class GImage extends Gtapi<ImageView, ViewGroup> {
         return imageView;
     }
 
-    public void setImageView(ImageView imageView) {
-        try {
-            Drawable d = Drawable.createFromStream(imageView.getContext().getAssets().open(content), null);
-            imageView.setImageDrawable(d);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void setImageView(final ImageView imageView) {
+
+            new ImageAsyncTask(){
+                @Override
+                protected void onPostExecute(Drawable drawable) {
+                    super.onPostExecute(drawable);
+                    if(drawable != null && imageView != null) {
+                        imageView.setImageDrawable(drawable);
+                    }
+                }
+            }.start(content);
+
     }
 }

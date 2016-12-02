@@ -2,15 +2,12 @@ package com.example.rmatt.crureader;
 
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.WindowInsetsCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -25,7 +22,12 @@ public class MainActivity extends  FragmentActivity {
 
     private static final String TAG = "MainActivity";
     GDocument gDoc;
-    public static final String BASE_XML = "97f17b1f-b76d-40ad-8be4-9a45d3406e70.xml";//"35d83e86-bdaa-4892-93fe-0f33576be2b9.xml"; //"35d83e86-bdaa-4892-93fe-0f33576be2b9.xml";
+    public static final String BASE_XML =  "97f17b1f-b76d-40ad-8be4-9a45d3406e70.xml";
+
+            //"dbbe9fdc-6945-4ad2-a77b-62d3c9d96766.xml";
+
+            //1: "97f17b1f-b76d-40ad-8be4-9a45d3406e70.xml";//"35d83e86-bdaa-4892-93fe-0f33576be2b9.xml"; //"35d83e86-bdaa-4892-93fe-0f33576be2b9.xml";
+            //2: "dbbe9fdc-6945-4ad2-a77b-62d3c9d96766.xml";
 
     ViewPager viewPager;
     @Override

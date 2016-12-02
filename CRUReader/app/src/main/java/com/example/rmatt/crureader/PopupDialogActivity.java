@@ -1,36 +1,24 @@
 package com.example.rmatt.crureader;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.percent.PercentFrameLayout;
 import android.support.percent.PercentLayoutHelper;
-import android.support.percent.PercentRelativeLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.view.GravityCompat;
-import android.text.Html;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
-import com.example.rmatt.crureader.bo.GPage.GPanel;
-import com.example.rmatt.crureader.bo.GPage.GText;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 import com.example.rmatt.crureader.bo.Gtapi;
@@ -73,9 +61,6 @@ public class PopupDialogActivity extends Activity {
         }
         setContentView(R.layout.activity_popupdialog);
         bindLayouts();
-
-        //todo: HOW DOES BACKGROUND WORK
-        // ll.setBackgroundColor(Color.parseColor(RenderSingleton.getInstance().getCurrentPageGlobalColor()));
 
 
         upwrapExtras();
