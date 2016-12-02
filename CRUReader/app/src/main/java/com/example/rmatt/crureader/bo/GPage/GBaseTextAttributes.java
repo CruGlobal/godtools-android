@@ -1,6 +1,7 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.graphics.Typeface;
+import android.support.percent.PercentRelativeLayout;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,7 +68,7 @@ public class GBaseTextAttributes extends GCoordinator {
 
         TextView textView = new TextView(viewGroup.getContext());
         textView.setId(RenderViewCompat.generateViewId());
-        viewGroup.addView(textView);
+        viewGroup.addView(textView, new PercentRelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         updateBaseAttributes(textView);
         return textView.getId();
     }

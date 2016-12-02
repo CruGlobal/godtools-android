@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GCoordinator;
@@ -80,10 +79,9 @@ public class GPage extends GCoordinator {
         Integer bottomId = -1;
 
 
-        PercentRelativeLayout percentRelativeLayout = new PercentRelativeLayout(context);
 
         //percentRelativeLayout.setId();
-        loadBackground(percentRelativeLayout, position);
+        loadBackground(container, position);
 
 
         PercentRelativeLayout.LayoutParams params = null;
@@ -92,10 +90,10 @@ public class GPage extends GCoordinator {
         if (title != null) {
 
 
-            title.render(inflater, percentRelativeLayout, position);
+            title.render(inflater, container, position);
 
             Diagnostics.StartMethodTracingByKey("findViewWithTag(top)");
-            View topView = percentRelativeLayout.findViewWithTag("top");
+            View topView = container.findViewWithTag("top");
 
             if (topView != null) {
                 Log.i(TAG, "top view != null");
@@ -109,28 +107,25 @@ public class GPage extends GCoordinator {
 
 
         if (gQuestion != null) {
-            bottomId = gQuestion.render(inflater, percentRelativeLayout, position);
-
-
+            bottomId = gQuestion.render(inflater, container, position);
         }
 
 
         if (GCoordinatorArrayList != null && GCoordinatorArrayList.size() > 0) {
 
-            int[] ids = RenderConstants.renderLinearLayoutListWeighted(inflater, percentRelativeLayout, GCoordinatorArrayList, position);
+            int[] ids = RenderConstants.renderLinearLayoutListWeighted(inflater, container, GCoordinatorArrayList, position);
             params = new PercentRelativeLayout.LayoutParams(PercentRelativeLayout.LayoutParams.MATCH_PARENT, PercentRelativeLayout.LayoutParams.WRAP_CONTENT);
             if (topId > 0)
-                ((PercentRelativeLayout.LayoutParams) percentRelativeLayout.findViewById(ids[0]).getLayoutParams()).addRule(PercentRelativeLayout.BELOW, topId);
+                ((PercentRelativeLayout.LayoutParams) container.findViewById(ids[0]).getLayoutParams()).addRule(PercentRelativeLayout.BELOW, topId);
             if (bottomId > 0)
-                ((PercentRelativeLayout.LayoutParams) percentRelativeLayout.findViewById(ids[1]).getLayoutParams()).addRule(PercentRelativeLayout.ABOVE, topId);
-            //if (topId > 0) params.addRule(PercentRelativeLayout.BELOW, ids[0[]);
-            //if (bottomId > 0) params.addRule(PercentRelativeLayout.ABOVE, bottomId);
+                ((PercentRelativeLayout.LayoutParams) container.findViewById(ids[1]).getLayoutParams()).addRule(PercentRelativeLayout.ABOVE, topId);
+
         }
 
         RenderConstants.setUpFollowups(container, followupModalsArrayList);
 
-        container.addView(percentRelativeLayout, new FrameLayout.LayoutParams(PercentRelativeLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-        return percentRelativeLayout.getId();
+
+        return container.getId();
 
     }
 
