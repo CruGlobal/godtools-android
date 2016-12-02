@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
-import com.example.rmatt.crureader.bo.Gtapi;
+import com.example.rmatt.crureader.bo.GCoordinator;
 
 /**
  * Created by rmatt on 11/14/2016.
@@ -39,7 +39,7 @@ public class PopupDialogActivity extends Activity {
     int distanceToBottomOfScreen;
     FrameLayout extraContent;
     TextView tv;
-    Gtapi gPanel;
+    GCoordinator gPanel;
     int screenHeight;
     String title;
     private boolean fixed = false;

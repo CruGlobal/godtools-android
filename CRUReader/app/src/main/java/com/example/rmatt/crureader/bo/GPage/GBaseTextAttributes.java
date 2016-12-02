@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
-import com.example.rmatt.crureader.bo.Gtapi;
+import com.example.rmatt.crureader.bo.GCoordinator;
 
 import org.simpleframework.xml.Attribute;
 
@@ -16,7 +16,7 @@ import org.simpleframework.xml.Attribute;
  * Created by rmatt on 10/31/2016.
  */
 
-public class GBaseTextAttributes extends Gtapi {
+public class GBaseTextAttributes extends GCoordinator {
 
 
     @org.simpleframework.xml.Text(required = false, empty = "")

@@ -5,7 +5,7 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.rmatt.crureader.bo.Gtapi;
+import com.example.rmatt.crureader.bo.GCoordinator;
 
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Text;
@@ -15,7 +15,7 @@ import org.simpleframework.xml.Text;
  * <input-placeholder>john.doe@gmail.com</input-placeholder>
  */
 @Root(name = "input-placeholder")
-public class GInputPlaceholder extends Gtapi {
+public class GInputPlaceholder extends GCoordinator {
 
     private static final String TAG = "GInputPlaceholder";
     @Text

@@ -3,7 +3,7 @@ package com.example.rmatt.crureader.bo.GDocument;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.rmatt.crureader.bo.Gtapi;
+import com.example.rmatt.crureader.bo.GCoordinator;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -18,7 +18,7 @@ import org.simpleframework.xml.Text;
  */
 
 @Root(name = "page")
-public class GDocumentPage extends Gtapi {
+public class GDocumentPage extends GCoordinator {
 
     @Text
     public String content;

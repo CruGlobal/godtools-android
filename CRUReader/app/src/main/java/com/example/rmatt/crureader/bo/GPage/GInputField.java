@@ -4,7 +4,7 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.rmatt.crureader.bo.Gtapi;
+import com.example.rmatt.crureader.bo.GCoordinator;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -18,7 +18,7 @@ import org.simpleframework.xml.Root;
  * </input-field>
  */
 @Root(name = "input-field")
-public class GInputField extends Gtapi<TextView, ViewGroup> {
+public class GInputField extends GCoordinator<TextView, ViewGroup> {
 
     private static final String TAG = "GInputField";
     @Attribute(name = "valid-format", required = false)
