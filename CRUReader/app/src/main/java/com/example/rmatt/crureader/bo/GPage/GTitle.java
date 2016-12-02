@@ -1,15 +1,13 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.annotation.ColorInt;
+import android.support.percent.PercentFrameLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.rmatt.crureader.R;
-import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
+import com.example.rmatt.crureader.bo.GPage.Views.RootTextColorTextView;
 import com.example.rmatt.crureader.bo.Gtapi;
 import com.github.captain_miao.optroundcardview.OptRoundCardView;
 
@@ -29,14 +27,14 @@ public class GTitle extends Gtapi<OptRoundCardView, ViewGroup> {
 
 
     public enum HeadingMode {
-        peek, straight, clear, plain,  none
+        peek, straight, clear, plain, none
     }
 
     @Element(required = false)
-    public GHeading heading;
+    public GBaseTextAttributes heading;
 
     @Element(required = false)
-    public GSubheading subheading;
+    public GBaseTextAttributes subheading;
 
     @Attribute(required = false)
     public HeadingMode mode;
@@ -45,7 +43,7 @@ public class GTitle extends Gtapi<OptRoundCardView, ViewGroup> {
     public String number;
 
     @Element(required = false, name = "peekpanel")
-    public GText peekPanel;
+    public GBaseTextAttributes peekPanel;
 
     public OptRoundCardView render(ViewGroup viewGroup, int position) {
         Context context = viewGroup.getContext();
@@ -71,7 +69,7 @@ public class GTitle extends Gtapi<OptRoundCardView, ViewGroup> {
                 break;
             default:
                 tempRoot = inflaterService.inflate(R.layout.g_header_default, viewGroup);
-                setUpNumberTextView((TextView) tempRoot.findViewById(R.id.g_header_default_number_textview), position);
+                setUpNumberTextView((RootTextColorTextView) tempRoot.findViewById(R.id.g_header_default_number_textview), position);
                 break;
 
         }
@@ -82,13 +80,13 @@ public class GTitle extends Gtapi<OptRoundCardView, ViewGroup> {
     }
 
     private void updateStandardRoots(View tempRoot, int position) {
-        if(tempRoot != null) {
-            if(heading != null) {
-                heading.setDefaultValues(position);
+        if (tempRoot != null) {
+            if (heading != null) {
+
                 heading.updateBaseAttributes(tempRoot.findViewById(R.id.g_header_header_textview));
             }
-            if(subheading != null) {
-                subheading.setDefaultValues(position);
+            if (subheading != null) {
+
                 subheading.updateBaseAttributes(tempRoot.findViewById(R.id.g_header_subheader_textview));
             }
         }
@@ -101,10 +99,15 @@ public class GTitle extends Gtapi<OptRoundCardView, ViewGroup> {
     }
 
 
-    private void setUpNumberTextView(TextView numberTextView, int position) {
-        @ColorInt int numberTextColor = heading.textColor != null ? Color.parseColor(heading.textColor) : RenderSingleton.getInstance().getPositionGlobalColorAsInt(position);
-        numberTextView.setText(number);
-        numberTextView.setTextColor(numberTextColor);
+    private void setUpNumberTextView(RootTextColorTextView numberTextView, int position) {
+        if (number != null) {
+
+            numberTextView.setText(number);
+            //numberTextView.setTextColor(numberTextColor);
+        } else {
+            PercentFrameLayout.LayoutParams pli = (PercentFrameLayout.LayoutParams) numberTextView.getLayoutParams();
+            pli.getPercentLayoutInfo().widthPercent = 0;
+        }
     }
 
 

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="button_tv" type="id"/>
-    <item name="button_tv_popin" type="id"/>
+    <item name="gpage_root" type="id" />
 </resources>
