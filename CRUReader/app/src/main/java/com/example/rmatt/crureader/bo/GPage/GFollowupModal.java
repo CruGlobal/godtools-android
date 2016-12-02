@@ -1,8 +1,5 @@
 package com.example.rmatt.crureader.bo.GPage;
 
-import android.content.Context;
-import android.opengl.GLSurfaceView;
-import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;

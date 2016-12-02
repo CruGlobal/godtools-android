@@ -19,13 +19,24 @@ import org.simpleframework.xml.Attribute;
 public class GBaseTextAttributes extends Gtapi {
 
 
+    @org.simpleframework.xml.Text(required = false, empty = "")
+    public String content;
+    @Attribute(required = false)
+    public String textalign;
+    @Attribute(required = false, name = "size")
+    public Integer textSize;
+    @Attribute(required = false, name = "color")
+    public String textColor;
+    @Attribute(required = false, name = "modifier")
+    public String textModifier;
+
     //TODO: cast T to skip unboxing.
     @Override
     public void updateBaseAttributes(View view) {
         super.updateBaseAttributes(view);
         if (view != null && view instanceof TextView) {
 
-            TextView textViewCast = (TextView)view;
+            TextView textViewCast = (TextView) view;
             applyTextColor(textViewCast);
             applyTextModifier(textViewCast);
             applyTextSize(textViewCast);
@@ -34,36 +45,21 @@ public class GBaseTextAttributes extends Gtapi {
         }
     }
 
-    @org.simpleframework.xml.Text(required = false, empty = "")
-    public String content;
-
     private void applyTextContent(TextView textViewCast) {
         textViewCast.setText(content);
     }
 
-
-    @Attribute(required = false)
-    public String textalign;
-
     private void applyTextAlign(TextView textViewCast) {
-        if(textalign != null && !textalign.equalsIgnoreCase(""))
-        {
+        if (textalign != null && !textalign.equalsIgnoreCase("")) {
             RenderViewCompat.textViewAlign(textViewCast, textalign);
         }
     }
 
-
-    @Attribute(required = false, name="size")
-    public Integer textSize;
-
     private void applyTextSize(TextView textViewCast) {
-        if(textSize != null)
-        {
+        if (textSize != null) {
             textViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, RenderConstants.getTextSizeFromXMLSize(textSize));
         }
     }
-
-
 
     @Override
     public TextView render(ViewGroup viewGroup, int position) {
@@ -78,7 +74,7 @@ public class GBaseTextAttributes extends Gtapi {
         RenderViewCompat.textViewAlign(textView, textalign);
         //This needs to be a base attributes property.
         //textView.setGravity(RenderConstants.getGravityFromAlign(textalign));
-       // RenderConstants.setDefaultPadding(textView);
+        // RenderConstants.setDefaultPadding(textView);
         return textView;
     }
 
@@ -87,25 +83,16 @@ public class GBaseTextAttributes extends Gtapi {
         return null;
     }
 
-
-    @Attribute(required = false, name="color")
-    public String textColor;
-
     public void applyTextColor(TextView textView) {
-        if(textColor != null && !textColor.equalsIgnoreCase("")) {
+        if (textColor != null && !textColor.equalsIgnoreCase("")) {
             textView.setTextColor(RenderConstants.parseColor(textColor));
         }
     }
 
-
-    @Attribute(required = false, name="modifier")
-    public String textModifier;
-
     public void applyTextModifier(TextView textView) {
-        if(textModifier != null && !textModifier.equalsIgnoreCase(""))
-        textView.setTypeface(Typeface.defaultFromStyle(RenderConstants.getTypefaceFromModifier(textModifier)));
+        if (textModifier != null && !textModifier.equalsIgnoreCase(""))
+            textView.setTypeface(Typeface.defaultFromStyle(RenderConstants.getTypefaceFromModifier(textModifier)));
     }
-
 
 
 }

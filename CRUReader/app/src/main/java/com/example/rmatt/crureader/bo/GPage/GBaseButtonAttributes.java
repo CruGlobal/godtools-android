@@ -16,7 +16,7 @@ public abstract class GBaseButtonAttributes extends Gtapi<AppCompatButton, ViewG
 
     private static final String TAG = "GBaseButtonAttributes";
 
-    @Attribute(required = false, name="size")
+    @Attribute(required = false, name = "size")
     public Integer textSize;
 
     @Attribute(required = false)
@@ -27,9 +27,6 @@ public abstract class GBaseButtonAttributes extends Gtapi<AppCompatButton, ViewG
 
     @Attribute(name = "tap-events", required = false)
     public String tapEvents;
-
-
-
 
 
 }

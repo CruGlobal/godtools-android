@@ -32,17 +32,17 @@ public class PopupDialogActivity extends Activity {
     public static final String CONSTANTS_PANEL_HASH_KEY_INT_EXTRA = "panelhash";
     public static final String CONSTANTS_PANEL_TITLE_STRING_EXTRA = "title";
     public static final String CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA = "Y";
-    private boolean fixed = false;
     public static final String TAG = "PopupDialogActivity";
+    public float Y;
     LinearLayout ll;
 
     int distanceToBottomOfScreen;
     FrameLayout extraContent;
     TextView tv;
     Gtapi gPanel;
-    public float Y;
     int screenHeight;
     String title;
+    private boolean fixed = false;
 
     @Override
     public void onBackPressed() {

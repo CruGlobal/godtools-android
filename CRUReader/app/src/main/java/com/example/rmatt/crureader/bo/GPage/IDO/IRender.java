@@ -1,8 +1,5 @@
 package com.example.rmatt.crureader.bo.GPage.IDO;
 
-import android.content.Context;
-import android.support.percent.PercentRelativeLayout;
-import android.view.View;
 import android.view.ViewGroup;
 
 /**

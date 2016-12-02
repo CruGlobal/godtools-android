@@ -21,13 +21,12 @@ import java.util.ArrayList;
 @Root(name = "panel")
 public class GPanel extends Gtapi<LinearLayout, ViewGroup> {
 
+    private static final String TAG = "GPanel";
     /*
     This defaults all text to center for inside panel.
      */
-    @Attribute(required = false, name="textalign")
+    @Attribute(required = false, name = "textalign")
     public String textAlign;
-
-    private static final String TAG = "GPanel";
     @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GBaseTextAttributes.class),
             @ElementList(inline = true, required = false, entry = "image", type = GImage.class),
             @ElementList(inline = true, required = false, entry = "button-pair", type = GButtonPair.class),

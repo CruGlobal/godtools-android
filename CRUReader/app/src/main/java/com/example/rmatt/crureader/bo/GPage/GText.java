@@ -5,9 +5,8 @@ import android.widget.TextView;
 
 import org.simpleframework.xml.Root;
 
-@Root(name="text")
-public class GText extends GBaseTextAttributes
-{
+@Root(name = "text")
+public class GText extends GBaseTextAttributes {
     public static final String TAG = "GText";
 
 
@@ -16,7 +15,6 @@ public class GText extends GBaseTextAttributes
         setDefaultValues();
         return super.render(viewGroup, position);
     }
-
 
 
     private void setDefaultValues() {

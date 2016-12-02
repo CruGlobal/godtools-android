@@ -8,7 +8,6 @@ import com.example.rmatt.crureader.bo.GPage.GPage;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**

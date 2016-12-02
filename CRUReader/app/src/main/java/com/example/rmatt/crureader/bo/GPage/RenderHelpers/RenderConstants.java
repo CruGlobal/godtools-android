@@ -28,37 +28,11 @@ public class RenderConstants {
 
     public static final float REFERENCE_DEVICE_HEIGHT = 480.0f;
     public static final float REFERENCE_DEVICE_WIDTH = 320.0f;
-    private static final String TAG = "RenderConstants";
-
-
-    /*
-    The percent of screen height by taking xml value height and dividing by the xml's height basis.
-     */
-    public static float getVerticalPercent(int height) {
-        float verticalPercent = (float) ((float) height / REFERENCE_DEVICE_HEIGHT);
-        Log.i(TAG, "height: " + height + " - vertical percent - " + verticalPercent);
-        return verticalPercent;
-    }
-
-
-    /*
-        The percent of screen width by taking xml value width and dividing by the xml's width basis.
-    */
-    public static float getHorizontalPercent(int width) {
-        float horizontalPercent = ((float) width / REFERENCE_DEVICE_WIDTH);
-        Log.i(TAG, "width: " + width + " - horizontal percent - " + horizontalPercent);
-        return horizontalPercent;
-    }
-
-
     /*******************************************************
      * Color constants
      *******************************************************/
 
     public static final String DEFAULT_BACKGROUND_COLOR = "#FFFFFFFF";
-
-
-
     /***************************************************
      * Font size constants
      ***************************************************/
@@ -69,9 +43,26 @@ public class RenderConstants {
     public static final int DEFAULT_HEADER_TEXT_SIZE = 90;
     public static final int DEFAULT_SUBHEADER_TEXT_SIZE = 100;
     public static final String DEFAULT_BUTTON_TEXT_ALIGN = "left";
-
-
     public static final String DEFAULT_TEXT_COLOR = "#FFFFFFFF";
+    private static final String TAG = "RenderConstants";
+
+    /*
+    The percent of screen height by taking xml value height and dividing by the xml's height basis.
+     */
+    public static float getVerticalPercent(int height) {
+        float verticalPercent = (float) ((float) height / REFERENCE_DEVICE_HEIGHT);
+        Log.i(TAG, "height: " + height + " - vertical percent - " + verticalPercent);
+        return verticalPercent;
+    }
+
+    /*
+        The percent of screen width by taking xml value width and dividing by the xml's width basis.
+    */
+    public static float getHorizontalPercent(int width) {
+        float horizontalPercent = ((float) width / REFERENCE_DEVICE_WIDTH);
+        Log.i(TAG, "width: " + width + " - horizontal percent - " + horizontalPercent);
+        return horizontalPercent;
+    }
 
     public static float getTextSizeFromXMLSize(int xmlSize) {
         if (xmlSize == 0) {
@@ -110,13 +101,11 @@ public class RenderConstants {
     }
 
 
-    public static int getTextAlign(String textAlign)
-    {
-        if(textAlign != null && !textAlign.equalsIgnoreCase(""))
-        {
-            if(textAlign.equalsIgnoreCase("center"))
+    public static int getTextAlign(String textAlign) {
+        if (textAlign != null && !textAlign.equalsIgnoreCase("")) {
+            if (textAlign.equalsIgnoreCase("center"))
                 return View.TEXT_ALIGNMENT_CENTER;
-            else if(textAlign.equalsIgnoreCase("right"))
+            else if (textAlign.equalsIgnoreCase("right"))
                 return View.TEXT_ALIGNMENT_TEXT_END;
         }
         return View.TEXT_ALIGNMENT_TEXT_START;
@@ -192,11 +181,9 @@ public class RenderConstants {
     }
 
     public static void setUpFollowups(ViewGroup container, ArrayList<GFollowupModal> followupModalsArrayList) {
-        for(GFollowupModal modal : followupModalsArrayList)
-        {
-            if(modal.listeners != null)
-            {
-                Log.i(TAG, "modal listeners: " + modal.listeners  + " as hash: " + modal.listeners.hashCode());
+        for (GFollowupModal modal : followupModalsArrayList) {
+            if (modal.listeners != null) {
+                Log.i(TAG, "modal listeners: " + modal.listeners + " as hash: " + modal.listeners.hashCode());
 
                 RenderSingleton.getInstance().gPanelHashMap.put(modal.listeners.hashCode(), modal);
             }

@@ -1,6 +1,5 @@
 package com.example.rmatt.crureader;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -20,7 +19,7 @@ public class RenderSingleTestActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_singlerender);
-        LinearLayout ll = (LinearLayout)findViewById(R.id.singlerendertest);
+        LinearLayout ll = (LinearLayout) findViewById(R.id.singlerendertest);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         fragmentTransaction.replace(R.id.singlerendertest, SlidePageFragment.create(0, singleXMLTestID));

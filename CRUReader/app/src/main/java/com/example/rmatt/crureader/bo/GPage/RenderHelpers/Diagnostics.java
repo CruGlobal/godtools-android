@@ -19,8 +19,7 @@ public class Diagnostics {
         StartMethodTracingByKeyWithTag(TAG, key);
     }
 
-    public static void StopMethodTracingByKey(String key)
-    {
+    public static void StopMethodTracingByKey(String key) {
         StopMethodTracingByKeyWithTag(TAG, key, key);
     }
 
@@ -32,7 +31,7 @@ public class Diagnostics {
     }
 
     public static void StopMethodTracingByKeyWithTag(String Tag, String key,
-                                              String leadingMessage) {
+                                                     String leadingMessage) {
         if (RenderSingleton.IS_DEBUG_BUILD) {
             Log.w(TAG, "Is Diagnostics on UI Thread: " + (Looper.myLooper() == Looper.getMainLooper() ? " true " : " false "));
             if (RenderSingleton.getInstance().getMethodTraceMilliSecondsKeyMap().containsKey(key)) {
@@ -43,8 +42,7 @@ public class Diagnostics {
                                 Tag + "   " + leadingMessage + "   "
                                         + processTime + " milliseconds");
 
-                if(processTime > UI_THREAD_PROCESS_TIME_ALLOWANCE && isOnUIThread())
-                {
+                if (processTime > UI_THREAD_PROCESS_TIME_ALLOWANCE && isOnUIThread()) {
                     alertProcessTooLong(leadingMessage);
 
                 }
@@ -55,9 +53,7 @@ public class Diagnostics {
     }
 
 
-
-    public static void logMemory(String leadingMessage)
-    {
+    public static void logMemory(String leadingMessage) {
         Debug.MemoryInfo memoryInfo = new Debug.MemoryInfo();
         Debug.getMemoryInfo(memoryInfo);
 
@@ -68,8 +64,7 @@ public class Diagnostics {
 
     }
 
-    public static boolean isOnUIThread()
-    {
+    public static boolean isOnUIThread() {
         return Looper.myLooper() == Looper.getMainLooper();
     }
 
@@ -77,6 +72,6 @@ public class Diagnostics {
     private static void alertProcessTooLong(String leadingMessage) {
         Log.e(TAG, "ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT " +
                 "ALERT ALERT ALERT process (  " + leadingMessage + " ) too long on UI Thread"
-                + " ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT" );
+                + " ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT ALERT");
     }
 }

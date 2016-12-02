@@ -1,17 +1,13 @@
 package com.example.rmatt.crureader.bo.GDocument;
 
 import android.content.Context;
-import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.rmatt.crureader.bo.Gtapi;
 
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.stream.Position;
 
 /**
  * Created by rmatt on 10/24/2016.

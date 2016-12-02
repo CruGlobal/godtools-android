@@ -97,7 +97,7 @@ public class GButton extends GBaseButtonAttributes {
 
                 AppCompatButton appCompatButton = (AppCompatButton) view;
 
-                Context context = ((ContextThemeWrapper)appCompatButton.getContext()).getBaseContext();
+                Context context = ((ContextThemeWrapper) appCompatButton.getContext()).getBaseContext();
 
                 RenderSingleton.getInstance().gPanelHashMap.put(appCompatButton.getId(), GButton.this.panel);
                 int cords[] = {0, 0};
@@ -112,7 +112,7 @@ public class GButton extends GBaseButtonAttributes {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, appCompatButton, context.getString(R.string.inner_ll_transistion_title));
 
-                   ((Activity) context).startActivityForResult(intent, 999, options.toBundle());
+                    ((Activity) context).startActivityForResult(intent, 999, options.toBundle());
 
 
                 } else {
