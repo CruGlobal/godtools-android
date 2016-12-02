@@ -82,14 +82,10 @@ public class GBaseTextAttributes extends Gtapi {
         return textView;
     }
 
-
-
     @Override
     public ViewGroup group(ViewGroup viewGroup, int position) {
         return null;
     }
-
-
 
 
     @Attribute(required = false, name="color")

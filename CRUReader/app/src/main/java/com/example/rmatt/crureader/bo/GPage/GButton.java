@@ -31,7 +31,23 @@ public class GButton extends GBaseButtonAttributes {
     public GImage image;
 
     @Element(name = "buttontext", required = false)
-    public GButtonText buttonText;
+    public GBaseTextAttributes buttonText;
+
+    /*
+          if (textSize == 0 || textalign == "") {
+            textSize = RenderConstants.DEFAULT_BUTTON_TEXT_SIZE;
+        }
+
+        if(textalign == null || textalign == "")
+        {
+            textalign = RenderConstants.DEFAULT_BUTTON_TEXT_ALIGN;
+        }
+
+        if(textColor == null || textColor == "")
+        {
+            textColor = RenderConstants.DEFAULT_TEXT_COLOR;
+        }
+     */
 
 
     @Element(name = "panel", required = false)

@@ -1,9 +1,7 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.content.Context;
-import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -43,7 +41,7 @@ public class GThankYou extends Gtapi {
     @Attribute
     public String listeners;
 
-    @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GText.class),
+    @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GBaseTextAttributes.class),
             @ElementList(inline = true, required = false, entry = "image", type = GImage.class),
             @ElementList(inline = true, required = false, entry = "button-pair", type = GButtonPair.class),
             @ElementList(inline = true, required = false, entry = "link-button", type = GLinkButtonAttributes.class)})

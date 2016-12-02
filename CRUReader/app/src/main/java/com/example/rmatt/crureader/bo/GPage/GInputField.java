@@ -31,7 +31,7 @@ public class GInputField extends Gtapi<TextView, ViewGroup> {
     public String name;
 
     @Element(name="input-label", required = false)
-    public GInputLabel inputLabel;
+    public GBaseTextAttributes inputLabel;
 
     @Element(name="input-placeholder", required = false)
     public GInputPlaceholder inputPlaceholder;

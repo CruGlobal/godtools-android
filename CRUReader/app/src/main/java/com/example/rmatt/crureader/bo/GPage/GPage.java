@@ -39,7 +39,7 @@ public class GPage extends Gtapi<PercentRelativeLayout, ViewGroup> {
     @Attribute(required = false)
     public int bigbuttons;
 
-    @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GText.class),
+    @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GBaseTextAttributes.class),
             @ElementList(inline = true, required = false, entry = "button", type = GButton.class)
     })
     public ArrayList<Gtapi> gtapiArrayList = new ArrayList<Gtapi>();

@@ -1,18 +1,14 @@
 package com.example.rmatt.crureader;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.percent.PercentLayoutHelper;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.example.rmatt.crureader.bo.GPage.GPage;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
@@ -66,7 +62,7 @@ public class SlidePageFragment extends  Fragment {
 
 
         View rootView = inflater.inflate(R.layout.page, container, false);
-        thisView = (FrameLayout) rootView.findViewById(R.id.genericViewGroup);
+        thisView = (FrameLayout) rootView.findViewById(R.id.gpage_root);
         return thisView;
     }
 

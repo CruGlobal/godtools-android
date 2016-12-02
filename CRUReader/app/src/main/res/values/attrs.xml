@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RootTextColorTextView">
+        <!-- Corner radius for CardView. -->
+        <attr name="inheritColorFromRootViewBackground" format="boolean" />
+        <attr name="parentId" format="reference"></attr>
+    </declare-styleable>
+
+</resources>

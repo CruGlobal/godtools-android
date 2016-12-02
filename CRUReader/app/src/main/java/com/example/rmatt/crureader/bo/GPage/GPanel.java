@@ -28,7 +28,7 @@ public class GPanel extends Gtapi<LinearLayout, ViewGroup> {
     public String textAlign;
 
     private static final String TAG = "GPanel";
-    @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GText.class),
+    @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GBaseTextAttributes.class),
             @ElementList(inline = true, required = false, entry = "image", type = GImage.class),
             @ElementList(inline = true, required = false, entry = "button-pair", type = GButtonPair.class),
             @ElementList(inline = true, required = false, entry = "link-button", type = GLinkButtonAttributes.class),

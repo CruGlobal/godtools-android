@@ -14,8 +14,6 @@ import org.simpleframework.xml.Attribute;
 public abstract class GBaseButtonAttributes extends Gtapi<AppCompatButton, ViewGroup> {
 
 
-
-
     private static final String TAG = "GBaseButtonAttributes";
 
     @Attribute(required = false, name="size")
