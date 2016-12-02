@@ -58,7 +58,7 @@ public abstract class GCoordinator {
             applyMargins(percentLayoutInfo);
             applyWidth(percentLayoutInfo);
             applyHeight(percentLayoutInfo);
-            updateAlignment(view);
+            //updateAlignment(view);
         } else {
             Log.e(TAG, "View isn't in a percent layout");
         }

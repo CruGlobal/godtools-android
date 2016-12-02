@@ -139,7 +139,11 @@ public class RenderConstants {
         int firstId = -1;
         for (GCoordinator tap : GCoordinatorArrayList) {
 
-            firstId = newId = tap.render(inflater, percentRelativeLayout, position);
+            newId = tap.render(inflater, percentRelativeLayout, position);
+            if (firstId == -1)
+            {
+                firstId = newId;
+            }
             if (lastId > -1) {
                 ((PercentRelativeLayout.LayoutParams) percentRelativeLayout.findViewById(newId).getLayoutParams()).addRule(PercentRelativeLayout.BELOW, lastId);
             }
