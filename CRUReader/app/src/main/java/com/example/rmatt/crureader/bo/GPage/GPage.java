@@ -9,12 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.Diagnostics;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.ImageAsyncTask;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
-import com.example.rmatt.crureader.bo.Gtapi;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
  * Created by rmatt on 10/18/2016.
  */
 @Root(name = "page")
-public class GPage extends Gtapi<PercentRelativeLayout, ViewGroup> {
+public class GPage extends GCoordinator<PercentRelativeLayout, ViewGroup> {
     private static final String TAG = "GPage";
     @Attribute(required = false)
     public String watermark;
@@ -42,7 +42,7 @@ public class GPage extends Gtapi<PercentRelativeLayout, ViewGroup> {
     @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GBaseTextAttributes.class),
             @ElementList(inline = true, required = false, entry = "button", type = GButton.class)
     })
-    public ArrayList<Gtapi> gtapiArrayList = new ArrayList<Gtapi>();
+    public ArrayList<GCoordinator> GCoordinatorArrayList = new ArrayList<GCoordinator>();
 
     @ElementList(inline = true, required = false, entry = "followup-modal", type = GFollowupModal.class)
     public ArrayList<GFollowupModal> followupModalsArrayList = new ArrayList<GFollowupModal>();
@@ -118,9 +118,9 @@ public class GPage extends Gtapi<PercentRelativeLayout, ViewGroup> {
         }
 
 
-        if (gtapiArrayList != null && gtapiArrayList.size() > 0) {
+        if (GCoordinatorArrayList != null && GCoordinatorArrayList.size() > 0) {
 
-            LinearLayout midSection = RenderConstants.renderLinearLayoutListWeighted(context, gtapiArrayList, position);
+            LinearLayout midSection = RenderConstants.renderLinearLayoutListWeighted(context, GCoordinatorArrayList, position);
 
             params = new PercentRelativeLayout.LayoutParams(PercentRelativeLayout.LayoutParams.MATCH_PARENT, PercentRelativeLayout.LayoutParams.WRAP_CONTENT);
 

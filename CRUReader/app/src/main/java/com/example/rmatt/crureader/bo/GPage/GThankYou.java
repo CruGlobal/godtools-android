@@ -5,7 +5,7 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.rmatt.crureader.bo.Gtapi;
+import com.example.rmatt.crureader.bo.GCoordinator;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
@@ -35,7 +35,7 @@ import java.util.ArrayList;
     This is an activity
  */
 @Root(name = "thank-you")
-public class GThankYou extends Gtapi {
+public class GThankYou extends GCoordinator {
 
     private static final String TAG = "GThankYou";
     @Attribute
@@ -45,7 +45,7 @@ public class GThankYou extends Gtapi {
             @ElementList(inline = true, required = false, entry = "image", type = GImage.class),
             @ElementList(inline = true, required = false, entry = "button-pair", type = GButtonPair.class),
             @ElementList(inline = true, required = false, entry = "link-button", type = GLinkButtonAttributes.class)})
-    public ArrayList<Gtapi> panelArrayList = new ArrayList<Gtapi>();
+    public ArrayList<GCoordinator> panelArrayList = new ArrayList<GCoordinator>();
 
     @Override
     public TextView render(ViewGroup viewGroup, int position) {

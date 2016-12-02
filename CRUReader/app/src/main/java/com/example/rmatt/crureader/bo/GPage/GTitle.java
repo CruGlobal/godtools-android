@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.rmatt.crureader.R;
+import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Views.RootTextColorTextView;
-import com.example.rmatt.crureader.bo.Gtapi;
 import com.github.captain_miao.optroundcardview.OptRoundCardView;
 
 import org.simpleframework.xml.Attribute;
@@ -20,7 +20,7 @@ import org.simpleframework.xml.Root;
  */
 
 @Root(name = "title")
-public class GTitle extends Gtapi<OptRoundCardView, ViewGroup> {
+public class GTitle extends GCoordinator<OptRoundCardView, ViewGroup> {
 
 
     public static final String TAG = "GTitle";

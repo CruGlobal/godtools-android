@@ -16,9 +16,9 @@ import org.simpleframework.xml.Attribute;
  * Created by rmatt on 10/24/2016.
  */
 
-public abstract class Gtapi<T extends View, G extends ViewGroup> {
+public abstract class GCoordinator<T extends View, G extends ViewGroup> {
 
-    private static final String TAG = "Gtapi";
+    private static final String TAG = "GCoordinator";
 
     @Attribute(name = "gtapi-trx-id", required = false)
     public String gtapiTrxId;

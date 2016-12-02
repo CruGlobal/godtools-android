@@ -5,8 +5,8 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.ImageAsyncTask;
-import com.example.rmatt.crureader.bo.Gtapi;
 
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Text;
@@ -16,7 +16,7 @@ import org.simpleframework.xml.Text;
  */
 
 @Root(name = "image")
-public class GImage extends Gtapi<ImageView, ViewGroup> {
+public class GImage extends GCoordinator<ImageView, ViewGroup> {
 
 
     private static final String TAG = "GImage";

@@ -6,7 +6,7 @@ import android.widget.LinearLayout;
 
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
-import com.example.rmatt.crureader.bo.Gtapi;
+import com.example.rmatt.crureader.bo.GCoordinator;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * Created by rmatt on 10/18/2016.
  */
 @Root(name = "panel")
-public class GPanel extends Gtapi<LinearLayout, ViewGroup> {
+public class GPanel extends GCoordinator<LinearLayout, ViewGroup> {
 
     private static final String TAG = "GPanel";
     /*
@@ -32,14 +32,14 @@ public class GPanel extends Gtapi<LinearLayout, ViewGroup> {
             @ElementList(inline = true, required = false, entry = "button-pair", type = GButtonPair.class),
             @ElementList(inline = true, required = false, entry = "link-button", type = GLinkButtonAttributes.class),
             @ElementList(inline = true, required = false, entry = "button", type = GButton.class)})
-    public ArrayList<Gtapi> gtapiArrayList = new ArrayList<Gtapi>();
+    public ArrayList<GCoordinator> GCoordinatorArrayList = new ArrayList<GCoordinator>();
 
 
     @Override
     public LinearLayout render(ViewGroup viewGroup, int position) {
         Context context = viewGroup.getContext();
 
-        LinearLayout midSection = RenderConstants.renderLinearLayoutListWeighted(viewGroup.getContext(), gtapiArrayList, position);
+        LinearLayout midSection = RenderConstants.renderLinearLayoutListWeighted(viewGroup.getContext(), GCoordinatorArrayList, position);
         midSection.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
         return midSection;
 

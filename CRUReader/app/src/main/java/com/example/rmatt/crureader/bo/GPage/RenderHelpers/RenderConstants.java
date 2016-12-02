@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.GFollowupModal;
-import com.example.rmatt.crureader.bo.Gtapi;
+import com.example.rmatt.crureader.bo.GCoordinator;
 
 import java.util.ArrayList;
 
@@ -129,14 +129,14 @@ public class RenderConstants {
     }
 
 
-    public static LinearLayout renderLinearLayoutListWeighted(Context context, ArrayList<Gtapi> gtapiArrayList, int position) {
+    public static LinearLayout renderLinearLayoutListWeighted(Context context, ArrayList<GCoordinator> GCoordinatorArrayList, int position) {
         LinearLayout midSection = new LinearLayout(context);
         midSection.setOrientation(LinearLayout.VERTICAL);
 
         Space space = new Space(context);
         LinearLayout.LayoutParams evenSpreadDownSpaceLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.0f);
         midSection.addView(space, evenSpreadDownSpaceLayoutParams);
-        for (Gtapi tap : gtapiArrayList) {
+        for (GCoordinator tap : GCoordinatorArrayList) {
 
             View view = (View) tap.render(midSection, position);
             view.setId(RenderViewCompat.generateViewId());
@@ -152,12 +152,12 @@ public class RenderConstants {
         return midSection;
     }
 
-   /* public static LinearLayout renderLinearLayoutList(Context context, ArrayList<Gtapi> gtapiArrayList, int position) {
+   /* public static LinearLayout renderLinearLayoutList(Context context, ArrayList<GCoordinator> GCoordinatorArrayList, int position) {
         LinearLayout midSection = new LinearLayout(context);
         midSection.setOrientation(LinearLayout.VERTICAL);
 
 
-        for (Gtapi tap : gtapiArrayList) {
+        for (GCoordinator tap : GCoordinatorArrayList) {
             View view = (View) tap.render(midSection, position);
             view.setId(RenderViewCompat.generateViewId());
             LinearLayout.LayoutParams midSectionChildLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);

@@ -4,7 +4,7 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.rmatt.crureader.bo.Gtapi;
+import com.example.rmatt.crureader.bo.GCoordinator;
 
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.ElementListUnion;
@@ -19,7 +19,7 @@ import static android.content.ContentValues.TAG;
  * This is a bottom sheet
  */
 @Root(name = "fallback")
-public class GFallback extends Gtapi<TextView, ViewGroup> {
+public class GFallback extends GCoordinator<TextView, ViewGroup> {
 
     @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GBaseTextAttributes.class),
             @ElementList(inline = true, required = false, entry = "image", type = GImage.class),
@@ -29,7 +29,7 @@ public class GFallback extends Gtapi<TextView, ViewGroup> {
             @ElementList(inline = true, required = false, entry = "input-field", type = GInputField.class),
             @ElementList(inline = true, required = false, entry = "followup-body", type = GFollowUpBody.class),
             @ElementList(inline = true, required = false, entry = "followup-title", type = GFollowUpTitle.class)})
-    public ArrayList<Gtapi> panelArrayList = new ArrayList<Gtapi>();
+    public ArrayList<GCoordinator> panelArrayList = new ArrayList<GCoordinator>();
 
 
     @Override

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.SparseArray;
 
-import com.example.rmatt.crureader.bo.Gtapi;
+import com.example.rmatt.crureader.bo.GCoordinator;
 
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -18,7 +18,7 @@ public class RenderSingleton {
     public static final boolean IS_DEBUG_BUILD = true;
 
     private static RenderSingleton renderSingleton;
-    public SparseArray<Gtapi> gPanelHashMap = new SparseArray<Gtapi>();
+    public SparseArray<GCoordinator> gPanelHashMap = new SparseArray<GCoordinator>();
     /*
     Current View pager location.
      */

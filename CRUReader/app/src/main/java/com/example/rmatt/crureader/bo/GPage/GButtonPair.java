@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.example.rmatt.crureader.bo.Gtapi;
+import com.example.rmatt.crureader.bo.GCoordinator;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -13,7 +13,7 @@ import org.simpleframework.xml.Root;
  * Created by rmatt on 10/25/2016.
  */
 @Root(name = "button-pair")
-public class GButtonPair extends Gtapi {
+public class GButtonPair extends GCoordinator {
 
 
     @Element(name = "positive-button", required = false)
