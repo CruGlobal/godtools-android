@@ -8,13 +8,13 @@ import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 import org.simpleframework.xml.Element;
 
 /**
- * Created by rmatt on 10/18/2016.
+ * Created by rmatt on 12/1/2016.
  */
 
-@Element(name = "subheading")
-public class GSubheading extends GBaseTextAttributes {
+@Element(name = "peekpanel")
+public class GPeekPanel extends GBaseTextAttributes {
 
-    private static final String TAG = "GSubheading";
+    private static final String TAG = "PeakPanel";
 
 
     @Override
@@ -23,7 +23,11 @@ public class GSubheading extends GBaseTextAttributes {
         return super.render(viewGroup, position);
     }
 
-    public void setDefaultValues(int position) {
+    private void setDefaultValues(int position) {
+        /*if (super.textSize == 0) {
+            size = RenderConstants.DEFAULT_SUBHEADER_TEXT_SIZE;
+        }*/
+
         if (textColor == null || textColor == "") {
             textColor = RenderSingleton.getInstance().getPositionGlobalColorAsString(position);
         }

@@ -2,19 +2,13 @@ package com.example.rmatt.crureader.bo.GPage;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
-import android.support.percent.PercentLayoutHelper;
-import android.support.percent.PercentRelativeLayout;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.rmatt.crureader.bo.GPage.IDO.IRender;
-import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
+import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 import com.example.rmatt.crureader.bo.Gtapi;
 import com.github.captain_miao.optroundcardview.OptRoundCardView;
@@ -31,21 +25,14 @@ import org.simpleframework.xml.Root;
 public class GTitle extends Gtapi<OptRoundCardView, ViewGroup> {
 
 
-    public static final float DEFAULT_RIGHT_MARGIN = .025F;
-    private static final float DEFAULT_TOP_MARGIN = .02F;
-
-    public static final float TITLE_ELEVATION = 10;
-    public static final float TITLE_CORNER_RADIUS = 10.0F;
-
-
     public static final String TAG = "GTitle";
 
 
     public enum HeadingMode {
-        peek, straight, clear, plain
+        peek, straight, clear, plain,  none
     }
 
-    @Element
+    @Element(required = false)
     public GHeading heading;
 
     @Element(required = false)
@@ -57,110 +44,54 @@ public class GTitle extends Gtapi<OptRoundCardView, ViewGroup> {
     @Element(required = false)
     public String number;
 
+    @Element(required = false, name = "peekpanel")
+    public GText peekPanel;
 
     public OptRoundCardView render(ViewGroup viewGroup, int position) {
         Context context = viewGroup.getContext();
-        PercentRelativeLayout.LayoutParams layoutParams;
+
+
         setDefaultValues();
-        OptRoundCardView cv = new OptRoundCardView(context);
-        layoutParams = new PercentRelativeLayout.LayoutParams(PercentRelativeLayout.LayoutParams.MATCH_PARENT, PercentRelativeLayout.LayoutParams.WRAP_CONTENT);
-        cv.setLayoutParams(layoutParams);
-        PercentLayoutHelper.PercentLayoutInfo percentLayoutInfo = layoutParams.getPercentLayoutInfo();
-        percentLayoutInfo.topMarginPercent = DEFAULT_TOP_MARGIN;
-        /*cv.setPreventCornerOverlap(false);
-        cv.setUseCompatPadding(false);
-        cv.setContentPadding(0,0,0,0);
-        cv.setMeasureAllChildren(false);
-        cv.setLayoutParams(layoutParams);*/
-
-
-
-        LinearLayout headingLayout = new LinearLayout(context);
-        headingLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-        if (number != null && number != "") {
-            TextView numberTextView = new TextView(context);
-            RenderConstants.setDefaultPadding(numberTextView);
-            LinearLayout.LayoutParams numberTextViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            setUpNumberTextView(numberTextView, position);
-            headingLayout.addView(numberTextView, numberTextViewLayoutParams);
-        }
-        TextView headingTextView = heading.render(viewGroup, position);
-       // headingTextView.setGravity(Gravity.CENTER_VERTICAL);
-        //headingTextView.setSingleLine(false);
-
-        LinearLayout subHeadingAndHeadingLayout = new LinearLayout(context);
-        subHeadingAndHeadingLayout.setOrientation(LinearLayout.VERTICAL);
-
-
-
-        headingLayout.setGravity(Gravity.CENTER_VERTICAL);
-
-
-        subHeadingAndHeadingLayout.addView(headingTextView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-        if (subheading != null) {
-            Log.i(TAG, "Subheading != null");
-            TextView subheadingTextView = subheading.render(viewGroup, position);
-            subHeadingAndHeadingLayout.addView(subheadingTextView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        }
-        if (number == null || number == "")
-        {
-            cv.addView(subHeadingAndHeadingLayout, new OptRoundCardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        }
-        else
-        {
-            headingLayout.addView(subHeadingAndHeadingLayout);
-            cv.addView(headingLayout, new OptRoundCardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        }
-
-
+        LayoutInflater inflaterService = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View tempRoot = null;
         switch (mode) {
             case peek:
-                cv.setCardBackgroundColor(Color.WHITE);
+                tempRoot = inflaterService.inflate(R.layout.g_header_peak, viewGroup);
 
-                cv.showCorner(false, true, false, true);
-                cv.setRadius(TITLE_CORNER_RADIUS);
-                //cv.setShadowPadding(10, 10, 10, 10);
-                cv.setCardElevation(TITLE_ELEVATION);
-                percentLayoutInfo.rightMarginPercent = DEFAULT_RIGHT_MARGIN;
-
-                //do popout
+                peekPanel.updateBaseAttributes(tempRoot.findViewById(R.id.g_header_peak_peak_textview));
                 break;
             case straight:
-
-                cv.setCardBackgroundColor(Color.WHITE);
-                cv.setCardElevation(TITLE_ELEVATION);
-                //cv.setShadowPadding(10, 10, 10, 10);
-
+                tempRoot = inflaterService.inflate(R.layout.g_header_straight, viewGroup);
                 break;
             case clear:
-
-                Log.i(TAG, "Clear settings");
-                cv.setCardBackgroundColor(Color.TRANSPARENT);
-                //cv.setShadowPadding(10, 10, 10, 10);
-
-                //cv.setBackgroundColor(Color.TRANSPARENT);
-                cv.showEdgeShadow(false, false, false, false);
-                cv.showCorner(false, false, false, false);
-
+                tempRoot = inflaterService.inflate(R.layout.g_header_clear, viewGroup);
                 break;
             case plain:
+                tempRoot = inflaterService.inflate(R.layout.g_header_plain, viewGroup);
+                break;
             default:
-                cv.setCardBackgroundColor(Color.WHITE);
-                percentLayoutInfo.rightMarginPercent = DEFAULT_RIGHT_MARGIN;
-                //cv.setShadowPadding(10, 10, 10, 10);
-                cv.showCorner(false, true, false, true);
-
-
-                //put back
-                cv.setRadius(TITLE_CORNER_RADIUS);
-
-                cv.setCardElevation(TITLE_ELEVATION);
+                tempRoot = inflaterService.inflate(R.layout.g_header_default, viewGroup);
+                setUpNumberTextView((TextView) tempRoot.findViewById(R.id.g_header_default_number_textview), position);
                 break;
 
         }
-        return cv;
+
+        updateStandardRoots(tempRoot, position);
+        return null;
+
+    }
+
+    private void updateStandardRoots(View tempRoot, int position) {
+        if(tempRoot != null) {
+            if(heading != null) {
+                heading.setDefaultValues(position);
+                heading.updateBaseAttributes(tempRoot.findViewById(R.id.g_header_header_textview));
+            }
+            if(subheading != null) {
+                subheading.setDefaultValues(position);
+                subheading.updateBaseAttributes(tempRoot.findViewById(R.id.g_header_subheader_textview));
+            }
+        }
 
     }
 
@@ -171,19 +102,35 @@ public class GTitle extends Gtapi<OptRoundCardView, ViewGroup> {
 
 
     private void setUpNumberTextView(TextView numberTextView, int position) {
-        @ColorInt int numberTextColor = heading.color != null ? Color.parseColor(heading.color) : RenderSingleton.getInstance().getPositionGlobalColorAsInt(position);
+        @ColorInt int numberTextColor = heading.textColor != null ? Color.parseColor(heading.textColor) : RenderSingleton.getInstance().getPositionGlobalColorAsInt(position);
         numberTextView.setText(number);
         numberTextView.setTextColor(numberTextColor);
-        //numberTextView.setTextColor(Color.parseColor((heading.color != null && heading.color.length() > 0) ? heading.color : RenderSingleton.getInstance().getPositionGlobalColorAsString(position)));
-        numberTextView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-        numberTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, RenderConstants.getTextSizeFromXMLSize(RenderConstants.DEFAULT_NUMBER_TEXT_SIZE));
-        RenderConstants.setDefaultPadding(numberTextView);
     }
 
 
     public void setDefaultValues() {
-        if (mode == null) mode = HeadingMode.plain;
+        if (mode == null) mode = HeadingMode.none;
     }
+
+
+    /* Recent clean up.
+
+
+
+//    public static final float DEFAULT_RIGHT_MARGIN = .025F;
+//    private static final float DEFAULT_TOP_MARGIN = .02F;
+//
+//    public static final float TITLE_ELEVATION = 20;
+//    public static final float TITLE_CORNER_RADIUS = 30.0F;
+
+
+        //TODO: these properties moved to xml to clean up
+        //numberTextView.setTextColor(Color.parseColor((heading.color != null && heading.color.length() > 0) ? heading.color : RenderSingleton.getInstance().getPositionGlobalColorAsString(position)));
+//        numberTextView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+//        numberTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, RenderConstants.getTextSizeFromXMLSize(RenderConstants.DEFAULT_NUMBER_TEXT_SIZE));
+//        RenderConstants.setDefaultPadding(numberTextView);
+
+     */
 
 
 }

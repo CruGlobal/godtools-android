@@ -3,20 +3,12 @@ package com.example.rmatt.crureader.bo.GPage.RenderHelpers;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Build;
-import android.support.annotation.ColorInt;
-import android.support.annotation.IntDef;
-import android.support.annotation.Px;
-import android.support.v4.app.NotificationCompatSideChannelService;
 import android.support.v4.widget.Space;
-import android.support.v4.widget.TextViewCompat;
-import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
@@ -43,7 +35,9 @@ public class RenderConstants {
     The percent of screen height by taking xml value height and dividing by the xml's height basis.
      */
     public static float getVerticalPercent(int height) {
-        return (float) ((float) height / REFERENCE_DEVICE_HEIGHT);
+        float verticalPercent = (float) ((float) height / REFERENCE_DEVICE_HEIGHT);
+        Log.i(TAG, "height: " + height + " - vertical percent - " + verticalPercent);
+        return verticalPercent;
     }
 
 
@@ -51,7 +45,9 @@ public class RenderConstants {
         The percent of screen width by taking xml value width and dividing by the xml's width basis.
     */
     public static float getHorizontalPercent(int width) {
-        return (float) ((float) width / REFERENCE_DEVICE_WIDTH);
+        float horizontalPercent = ((float) width / REFERENCE_DEVICE_WIDTH);
+        Log.i(TAG, "width: " + width + " - horizontal percent - " + horizontalPercent);
+        return horizontalPercent;
     }
 
 
@@ -116,11 +112,11 @@ public class RenderConstants {
 
     public static int getTextAlign(String textAlign)
     {
-        if(textAlign != null && textAlign != "")
+        if(textAlign != null && !textAlign.equalsIgnoreCase(""))
         {
-            if(textAlign == "center")
+            if(textAlign.equalsIgnoreCase("center"))
                 return View.TEXT_ALIGNMENT_CENTER;
-            else if(textAlign == "right")
+            else if(textAlign.equalsIgnoreCase("right"))
                 return View.TEXT_ALIGNMENT_TEXT_END;
         }
         return View.TEXT_ALIGNMENT_TEXT_START;

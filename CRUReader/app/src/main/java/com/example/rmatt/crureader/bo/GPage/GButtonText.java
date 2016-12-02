@@ -1,16 +1,11 @@
 package com.example.rmatt.crureader.bo.GPage;
 
-import android.support.percent.PercentRelativeLayout;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.rmatt.crureader.R;
-import com.example.rmatt.crureader.bo.GPage.IDO.IRender;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
-import com.example.rmatt.crureader.bo.Gtapi;
 
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
 /**
@@ -29,18 +24,18 @@ public class GButtonText extends GBaseTextAttributes
     }
 
     private void setDefaultValues() {
-        if (size == 0 || align == "") {
-            size = RenderConstants.DEFAULT_BUTTON_TEXT_SIZE;
+        if (textSize == 0 || textalign == "") {
+            textSize = RenderConstants.DEFAULT_BUTTON_TEXT_SIZE;
         }
 
-        if(align == null || align == "")
+        if(textalign == null || textalign == "")
         {
             textalign = RenderConstants.DEFAULT_BUTTON_TEXT_ALIGN;
         }
 
-        if(color == null || color == "")
+        if(textColor == null || textColor == "")
         {
-            color = RenderConstants.DEFAULT_TEXT_COLOR;
+            textColor = RenderConstants.DEFAULT_TEXT_COLOR;
         }
     }
 

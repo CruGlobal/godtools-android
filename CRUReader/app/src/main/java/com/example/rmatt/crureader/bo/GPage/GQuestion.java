@@ -1,16 +1,10 @@
 package com.example.rmatt.crureader.bo.GPage;
 
-import android.content.Context;
-import android.support.percent.PercentRelativeLayout;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.rmatt.crureader.bo.Gtapi;
-
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.Text;
 
 /**
  * Created by rmatt on 10/24/2016.
@@ -28,7 +22,6 @@ public class GQuestion extends GBaseTextAttributes {
 
     @Override
     public TextView render(ViewGroup viewGroup, int position) {
-
         return super.render(viewGroup, position);
     }
 

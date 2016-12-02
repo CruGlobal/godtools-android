@@ -21,7 +21,7 @@ import java.util.List;
 @Root(name="document")
 public class GDocument
 {
-    @Element
+    @Element(required = false)
     public GInstructions instructions;
 
     @ElementList(inline = true, entry = "page")

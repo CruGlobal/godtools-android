@@ -4,11 +4,11 @@ import android.content.Context;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.example.rmatt.crureader.bo.GPage.IDO.IRender;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 import com.example.rmatt.crureader.bo.Gtapi;
 
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.ElementListUnion;
 import org.simpleframework.xml.Root;
@@ -20,6 +20,12 @@ import java.util.ArrayList;
  */
 @Root(name = "panel")
 public class GPanel extends Gtapi<LinearLayout, ViewGroup> {
+
+    /*
+    This defaults all text to center for inside panel.
+     */
+    @Attribute(required = false, name="textalign")
+    public String textAlign;
 
     private static final String TAG = "GPanel";
     @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GText.class),

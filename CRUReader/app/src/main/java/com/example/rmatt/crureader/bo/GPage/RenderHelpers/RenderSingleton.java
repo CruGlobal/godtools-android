@@ -94,4 +94,8 @@ public class RenderSingleton {
     public Hashtable<String, Long>  getMethodTraceMilliSecondsKeyMap() {
         return methodTraceMilliSecondsKeyMap;
     }
+
+    public Context getContext() {
+        return context;
+    }
 }

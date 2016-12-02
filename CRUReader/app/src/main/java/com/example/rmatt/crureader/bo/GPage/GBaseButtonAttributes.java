@@ -1,9 +1,7 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.support.v7.widget.AppCompatButton;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.example.rmatt.crureader.bo.Gtapi;
 
@@ -19,6 +17,10 @@ public abstract class GBaseButtonAttributes extends Gtapi<AppCompatButton, ViewG
 
 
     private static final String TAG = "GBaseButtonAttributes";
+
+    @Attribute(required = false, name="size")
+    public Integer textSize;
+
     @Attribute(required = false)
     public String validation;
 

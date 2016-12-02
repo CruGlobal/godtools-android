@@ -4,4 +4,12 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="text_padding">5dp</dimen>
+
+
+    <dimen name="header_top_margin">16dp</dimen>
+    <dimen name="header_right_margin">16dp</dimen>
+    <dimen name="header_right_peek_margin">24dp</dimen>
+
+    <fraction name="header_straight_percent_width">93.75%</fraction>
+    <fraction name="header_clear_percent_width">93.75%</fraction>
 </resources>
