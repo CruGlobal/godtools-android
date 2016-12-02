@@ -1,19 +1,17 @@
 package com.example.rmatt.crureader.bo.GPage.RenderHelpers;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.v4.widget.Space;
+import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.example.rmatt.crureader.R;
-import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
-import com.example.rmatt.crureader.bo.GPage.GFollowupModal;
 import com.example.rmatt.crureader.bo.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.GFollowupModal;
 
 import java.util.ArrayList;
 
@@ -129,27 +127,33 @@ public class RenderConstants {
     }
 
 
-    public static LinearLayout renderLinearLayoutListWeighted(Context context, ArrayList<GCoordinator> GCoordinatorArrayList, int position) {
-        LinearLayout midSection = new LinearLayout(context);
-        midSection.setOrientation(LinearLayout.VERTICAL);
+    public static int[] renderLinearLayoutListWeighted(LayoutInflater inflater, PercentRelativeLayout percentRelativeLayout, ArrayList<GCoordinator> GCoordinatorArrayList, int position) {
+        /*LinearLayout midSection = new LinearLayout(context);
+        midSection.setOrientation(LinearLayout.VERTICAL);*/
 
-        Space space = new Space(context);
-        LinearLayout.LayoutParams evenSpreadDownSpaceLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.0f);
-        midSection.addView(space, evenSpreadDownSpaceLayoutParams);
+        //Space space = new Space(context);
+        //LinearLayout.LayoutParams evenSpreadDownSpaceLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.0f);
+        //midSection.addView(space, evenSpreadDownSpaceLayoutParams);
+        int lastId = -1;
+        int newId = -1;
+        int firstId = -1;
         for (GCoordinator tap : GCoordinatorArrayList) {
 
-            View view = (View) tap.render(midSection, position);
-            view.setId(RenderViewCompat.generateViewId());
+            firstId = newId = tap.render(inflater, percentRelativeLayout, position);
+            if (lastId > -1) {
+                ((PercentRelativeLayout.LayoutParams) percentRelativeLayout.findViewById(newId).getLayoutParams()).addRule(PercentRelativeLayout.BELOW, lastId);
+            }
+            lastId = newId;
 
-            LinearLayout.LayoutParams midSectionChildLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            midSection.addView(view, midSectionChildLayoutParams);
+            //LinearLayout.LayoutParams midSectionChildLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            //midSection.addView(view, midSectionChildLayoutParams);
 
-            space = new Space(context);
-            midSection.addView(space, evenSpreadDownSpaceLayoutParams);
+            //space = new Space(context);
+            // midSection.addView(space, evenSpreadDownSpaceLayoutParams);
 
 
         }
-        return midSection;
+        return new int[]{firstId, lastId};
     }
 
    /* public static LinearLayout renderLinearLayoutList(Context context, ArrayList<GCoordinator> GCoordinatorArrayList, int position) {

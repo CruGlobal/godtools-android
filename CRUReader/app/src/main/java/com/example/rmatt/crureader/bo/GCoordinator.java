@@ -5,6 +5,7 @@ import android.support.percent.PercentLayoutHelper;
 import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,7 +17,7 @@ import org.simpleframework.xml.Attribute;
  * Created by rmatt on 10/24/2016.
  */
 
-public abstract class GCoordinator<T extends View, G extends ViewGroup> {
+public abstract class GCoordinator {
 
     private static final String TAG = "GCoordinator";
 
@@ -57,6 +58,7 @@ public abstract class GCoordinator<T extends View, G extends ViewGroup> {
             applyMargins(percentLayoutInfo);
             applyWidth(percentLayoutInfo);
             applyHeight(percentLayoutInfo);
+            updateAlignment(view);
         } else {
             Log.e(TAG, "View isn't in a percent layout");
         }
@@ -82,6 +84,7 @@ public abstract class GCoordinator<T extends View, G extends ViewGroup> {
             PercentRelativeLayout.LayoutParams percentRelativeLayoutLayoutParams = (PercentRelativeLayout.LayoutParams) view.getLayoutParams();
             percentRelativeLayoutLayoutParams.addRule(PercentRelativeLayout.CENTER_IN_PARENT);
         } else if (view.getLayoutParams() instanceof PercentFrameLayout.LayoutParams) {
+
             PercentFrameLayout.LayoutParams percentFrameLayoutLayoutParams = (PercentFrameLayout.LayoutParams) view.getLayoutParams();
             percentFrameLayoutLayoutParams.gravity = Gravity.CENTER;
         }
@@ -110,11 +113,7 @@ public abstract class GCoordinator<T extends View, G extends ViewGroup> {
     }
 
 
-    public abstract T render(ViewGroup viewGroup, int position);
-
-    public G group(G viewGroup, int position) {
-        return viewGroup;
-    }
+    public abstract int render(LayoutInflater inflater, ViewGroup viewGroup, int position);
 
 
 }

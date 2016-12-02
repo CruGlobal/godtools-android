@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.percent.PercentFrameLayout;
 import android.support.percent.PercentLayoutHelper;
+import android.support.percent.PercentRelativeLayout;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -14,14 +15,13 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
-import com.example.rmatt.crureader.bo.GCoordinator;
 
 /**
  * Created by rmatt on 11/14/2016.
@@ -37,7 +37,7 @@ public class PopupDialogActivity extends Activity {
     LinearLayout ll;
 
     int distanceToBottomOfScreen;
-    FrameLayout extraContent;
+    PercentRelativeLayout extraContent;
     TextView tv;
     GCoordinator gPanel;
     int screenHeight;
@@ -158,7 +158,7 @@ public class PopupDialogActivity extends Activity {
     }
 
     private void bindLayouts() {
-        extraContent = (FrameLayout) findViewById(R.id.extra_wrapper_fl);
+        extraContent = (PercentRelativeLayout) findViewById(R.id.extra_wrapper_fl);
         tv = (TextView) findViewById(R.id.button_tv_popin);
         ll = (LinearLayout) findViewById(R.id.popup_innerLinearLayout);
         ll.setBackgroundColor(Color.parseColor(RenderSingleton.getInstance().getCurrentPageGlobalColor()));
@@ -167,8 +167,7 @@ public class PopupDialogActivity extends Activity {
     }
 
     private void bindPanelContent() {
-        extraContent.addView(gPanel.render(extraContent, RenderSingleton.getInstance().curPosition),
-                new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+        gPanel.render(getLayoutInflater(), extraContent, RenderSingleton.getInstance().curPosition);
     }
 
     private void TranslateView() {

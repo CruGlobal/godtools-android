@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.AppCompatButton;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.rmatt.crureader.PopupDialogActivity;
 import com.example.rmatt.crureader.R;
@@ -55,49 +55,28 @@ public class GButton extends GBaseButtonAttributes {
 
 
     @Override
-    public AppCompatButton render(ViewGroup viewGroup, int position) {
+    public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
+        View v = inflater.inflate(R.layout.g_button, viewGroup);
+        Button button = (Button) v.findViewById(R.id.g_button_g_button);
 
-        ContextThemeWrapper newContext = new ContextThemeWrapper(viewGroup.getContext(), R.style.Widget_GodTools_Button_Standard);
-
-        AppCompatButton appCompatButton = new AppCompatButton(newContext);
-
-        appCompatButton.setId(RenderViewCompat.generateViewId());
-       /* Context context = viewGroup.getContext();
-        LinearLayout outerLayout = new LinearLayout(context);
-        outerLayout.setGravity(Gravity.CENTER_VERTICAL);
-
-        LinearLayout ll = new LinearLayout(context);
-        ll.setGravity(Gravity.CENTER_VERTICAL);
-        ll.setClickable(true);
-        ll.setId(RenderViewCompat.generateViewId());
-        ll.setOrientation(LinearLayout.VERTICAL);
-        ll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        outerLayout.addView(ll);*/
-
-        //appCompatButton.setBac
-        //buttonText.render(appCompatButton, position);
+        button.setId(RenderViewCompat.generateViewId());
+        updateBaseAttributes(button);
         if (buttonText != null && buttonText.content != null) {
-            appCompatButton.setText(buttonText.content);
-           /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                appCompatButton.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
-            }*/
-            appCompatButton.setTextSize(RenderConstants.getTextSizeFromXMLSize(RenderConstants.DEFAULT_BUTTON_TEXT_SIZE));
+            button.setText(buttonText.content);
 
-            appCompatButton.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
+            button.setTextSize(RenderConstants.getTextSizeFromXMLSize(RenderConstants.DEFAULT_BUTTON_TEXT_SIZE));
+
+            button.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
 
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            appCompatButton.setTransitionName(viewGroup.getContext().getString(R.string.inner_ll_transistion_title));
-        }
-
-        appCompatButton.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                AppCompatButton appCompatButton = (AppCompatButton) view;
+                Button appCompatButton = (Button) view;
 
-                Context context = ((ContextThemeWrapper) appCompatButton.getContext()).getBaseContext();
+                Context context = view.getContext();
 
                 RenderSingleton.getInstance().gPanelHashMap.put(appCompatButton.getId(), GButton.this.panel);
                 int cords[] = {0, 0};
@@ -122,37 +101,8 @@ public class GButton extends GBaseButtonAttributes {
 
             }
         });
-
-        return appCompatButton;
+        this.updateBaseAttributes(button);
+        return button.getId();
     }
-
-    @Override
-    public ViewGroup group(ViewGroup viewGroup, int position) {
-        return null;
-    }
-
-
-//    private void addLines(View v, LinearLayout ll) {
-//
-//
-//        Context context = v.getContext();
-//
-//
-//        //TODO: redo this
-//        ll.addView(getHRView(context, "#404c4c4c"));
-//        ll.addView(getHRView(context, "#40ffffff"));
-//        ll.addView(v, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//        ll.addView(getHRView(context, "#404c4c4c"));
-//        ll.addView(getHRView(context, "#40ffffff"));
-//    }
-
- /*   private View getHRView(Context context, String color) {
-        View hr = new View(context);
-        hr.setBackgroundColor(Color.parseColor(color));
-        hr.setLayoutParams(new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, context.getResources().getDisplayMetrics())));
-        return hr;
-    }*/
 
 }

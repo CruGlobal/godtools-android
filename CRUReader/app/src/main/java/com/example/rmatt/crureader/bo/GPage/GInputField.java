@@ -1,10 +1,11 @@
 package com.example.rmatt.crureader.bo.GPage;
 
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import com.example.rmatt.crureader.bo.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -18,7 +19,7 @@ import org.simpleframework.xml.Root;
  * </input-field>
  */
 @Root(name = "input-field")
-public class GInputField extends GCoordinator<TextView, ViewGroup> {
+public class GInputField extends GCoordinator {
 
     private static final String TAG = "GInputField";
     @Attribute(name = "valid-format", required = false)
@@ -32,20 +33,18 @@ public class GInputField extends GCoordinator<TextView, ViewGroup> {
 
     @Element(name = "input-label", required = false)
     public GBaseTextAttributes inputLabel;
-
     @Element(name = "input-placeholder", required = false)
     public GInputPlaceholder inputPlaceholder;
 
     @Override
-    public TextView render(ViewGroup viewGroup, int position) {
-        TextView v = new TextView(viewGroup.getContext());
-        v.setText("GInputField");
-        Log.i(TAG, "render in GInputField");
-        return v;
+    public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
+        EditText editText = new EditText(viewGroup.getContext());
+        updateBaseAttributes(editText);
+
+        editText.setId(RenderViewCompat.generateViewId());
+        viewGroup.addView(editText);
+
+        return editText.getId();
     }
 
-    @Override
-    public ViewGroup group(ViewGroup viewGroup, int position) {
-        return null;
-    }
 }

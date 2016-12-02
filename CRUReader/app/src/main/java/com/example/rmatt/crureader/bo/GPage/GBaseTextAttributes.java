@@ -2,13 +2,14 @@ package com.example.rmatt.crureader.bo.GPage;
 
 import android.graphics.Typeface;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
-import com.example.rmatt.crureader.bo.GCoordinator;
 
 import org.simpleframework.xml.Attribute;
 
@@ -62,26 +63,15 @@ public class GBaseTextAttributes extends GCoordinator {
     }
 
     @Override
-    public TextView render(ViewGroup viewGroup, int position) {
+    public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
+
         TextView textView = new TextView(viewGroup.getContext());
-        textView.setText(content);
-        textView.setTextColor(RenderConstants.parseColor(textColor));
-        textView.setTypeface(Typeface.defaultFromStyle(RenderConstants.getTypefaceFromModifier(textModifier)));
-        applyTextSize(textView);
-
-
-        textView.setIncludeFontPadding(false);
-        RenderViewCompat.textViewAlign(textView, textalign);
-        //This needs to be a base attributes property.
-        //textView.setGravity(RenderConstants.getGravityFromAlign(textalign));
-        // RenderConstants.setDefaultPadding(textView);
-        return textView;
+        textView.setId(RenderViewCompat.generateViewId());
+        viewGroup.addView(textView);
+        updateBaseAttributes(textView);
+        return textView.getId();
     }
 
-    @Override
-    public ViewGroup group(ViewGroup viewGroup, int position) {
-        return null;
-    }
 
     public void applyTextColor(TextView textView) {
         if (textColor != null && !textColor.equalsIgnoreCase("")) {

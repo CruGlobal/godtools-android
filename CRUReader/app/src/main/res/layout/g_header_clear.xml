@@ -2,51 +2,25 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView android:layout_alignParentTop="true"
+    <TextView
         android:id="@+id/g_header_header_textview"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_gravity="left"
         android:gravity="center_horizontal"
+        android:includeFontPadding="false"
         android:text="@string/sample_text_g_header_clear_header_textview"
         app:layout_marginLeftPercent="3%"
-        android:includeFontPadding="false"
         app:layout_widthPercent="@fraction/header_clear_percent_width" />
 
     <TextView
         android:id="@+id/g_header_subheader_textview"
-        android:tag="top"
-        android:includeFontPadding="false"
         android:layout_height="wrap_content"
         android:layout_below="@id/g_header_header_textview"
         android:layout_gravity="right"
+        android:includeFontPadding="false"
+        android:tag="top"
         android:text="@string/sample_text_g_header_clear_subheader_textview"
         app:layout_widthPercent="@fraction/header_clear_percent_width" />
 
 </merge>
-
-    <!--
-
-      <title mode="clear">
-        <heading color="#000000" gtapi-trx-id="02cf6004-a0f9-4828-be26-09253d4490b6" size="200" textalign="left" translate="true" w="300" x="19" y="25">KNOWING GOD</heading>
-        <subheading color="#000000" gtapi-trx-id="f1c599f5-dccc-4a9d-b81d-030e4cbce6cd" size="211" textalign="right" translate="true" w="275" x="0" y="60">personally</subheading>
-      </title>
-  <title mode="clear">
-    <heading color="#000000" gtapi-trx-id="02cf6004-a0f9-4828-be26-09253d4490b6" size="200" textalign="left" translate="true" x="19" y="25">KNOWING GOD</heading>
-    <subheading color="#000000" gtapi-trx-id="f1c599f5-dccc-4a9d-b81d-030e4cbce6cd" size="211" textalign="right" translate="true" x="0" y="60">personally</subheading>
-  </title>
-
-  <title mode="clear">
-    <heading color="#000000" gtapi-trx-id="02cf6004-a0f9-4828-be26-09253d4490b6" size="200" textalign="left" translate="true" w="300" x="19" y="25">KNOWING GOD</heading>
-    <subheading color="#000000" gtapi-trx-id="f1c599f5-dccc-4a9d-b81d-030e4cbce6cd" size="211" textalign="right" translate="true" w="275" x="0" y="60">personally</subheading>
-  </title>
-
-  <title mode="clear">
-    <subheading align="center" color="#000000" gtapi-trx-id="a3049b50-0a42-46f1-a286-179c8dea2ee6" size="211" textalign="center" translate="true">Satisfied?</subheading>
-  </title>
-
-  <title mode="clear">
-    <subheading align="center" color="#000000" gtapi-trx-id="a3049b50-0a42-46f1-a286-179c8dea2ee6" size="211" textalign="center" translate="true">Satisfied?</subheading>
-  </title>
-
-	.24 will be text multiplier
-     -->
