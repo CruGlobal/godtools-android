@@ -127,7 +127,7 @@ public class RenderConstants {
     }
 
 
-    public static int[] renderLinearLayoutListWeighted(LayoutInflater inflater, PercentRelativeLayout percentRelativeLayout, ArrayList<GCoordinator> GCoordinatorArrayList, int position) {
+    public static int[] renderLinearLayoutListWeighted(LayoutInflater inflater, ViewGroup percentRelativeLayout, ArrayList<GCoordinator> GCoordinatorArrayList, int position) {
         /*LinearLayout midSection = new LinearLayout(context);
         midSection.setOrientation(LinearLayout.VERTICAL);*/
 

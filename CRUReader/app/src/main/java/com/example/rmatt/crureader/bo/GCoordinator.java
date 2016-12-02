@@ -83,6 +83,7 @@ public abstract class GCoordinator {
         if (view.getLayoutParams() instanceof PercentRelativeLayout.LayoutParams) {
             PercentRelativeLayout.LayoutParams percentRelativeLayoutLayoutParams = (PercentRelativeLayout.LayoutParams) view.getLayoutParams();
             percentRelativeLayoutLayoutParams.addRule(PercentRelativeLayout.CENTER_IN_PARENT);
+
         } else if (view.getLayoutParams() instanceof PercentFrameLayout.LayoutParams) {
 
             PercentFrameLayout.LayoutParams percentFrameLayoutLayoutParams = (PercentFrameLayout.LayoutParams) view.getLayoutParams();
