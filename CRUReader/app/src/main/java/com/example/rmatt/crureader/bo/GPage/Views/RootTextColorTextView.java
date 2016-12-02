@@ -51,7 +51,9 @@ public class RootTextColorTextView extends AppCompatTextView {
         checkBackgroundColor();
     }
 
-
+    /*
+    This is a troll :P  RM RM
+     */
     private void checkBackgroundColor() {
         String diagnosticsKey = "LongRecursion? ";
         Diagnostics.StartMethodTracingByKey(diagnosticsKey);
