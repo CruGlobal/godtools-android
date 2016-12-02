@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Button
+        android:id="@+id/g_button_g_button"
+        style="@style/Widget.GodTools.Button.Standard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:gravity="center_horizontal"
+        android:text="@string/sample_text_g_button_g"
+        android:transitionName="@string/inner_ll_transistion_title"
+
+
+        />
+
+
+</merge>
+
+    <!--
+
+      <title mode="clear">
+        <heading color="#000000" gtapi-trx-id="02cf6004-a0f9-4828-be26-09253d4490b6" size="200" textalign="left" translate="true" w="300" x="19" y="25">KNOWING GOD</heading>
+        <subheading color="#000000" gtapi-trx-id="f1c599f5-dccc-4a9d-b81d-030e4cbce6cd" size="211" textalign="right" translate="true" w="275" x="0" y="60">personally</subheading>
+      </title>
+  <title mode="clear">
+    <heading color="#000000" gtapi-trx-id="02cf6004-a0f9-4828-be26-09253d4490b6" size="200" textalign="left" translate="true" x="19" y="25">KNOWING GOD</heading>
+    <subheading color="#000000" gtapi-trx-id="f1c599f5-dccc-4a9d-b81d-030e4cbce6cd" size="211" textalign="right" translate="true" x="0" y="60">personally</subheading>
+  </title>
+
+  <title mode="clear">
+    <heading color="#000000" gtapi-trx-id="02cf6004-a0f9-4828-be26-09253d4490b6" size="200" textalign="left" translate="true" w="300" x="19" y="25">KNOWING GOD</heading>
+    <subheading color="#000000" gtapi-trx-id="f1c599f5-dccc-4a9d-b81d-030e4cbce6cd" size="211" textalign="right" translate="true" w="275" x="0" y="60">personally</subheading>
+  </title>
+
+  <title mode="clear">
+    <subheading align="center" color="#000000" gtapi-trx-id="a3049b50-0a42-46f1-a286-179c8dea2ee6" size="211" textalign="center" translate="true">Satisfied?</subheading>
+  </title>
+
+  <title mode="clear">
+    <subheading align="center" color="#000000" gtapi-trx-id="a3049b50-0a42-46f1-a286-179c8dea2ee6" size="211" textalign="center" translate="true">Satisfied?</subheading>
+  </title>
+
+	.24 will be text multiplier
+     -->

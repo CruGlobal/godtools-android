@@ -1,8 +1,11 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 
 import org.simpleframework.xml.Root;
 
@@ -19,11 +22,14 @@ import static android.content.ContentValues.TAG;
 public class GFollowUpBody extends GBaseTextAttributes {
 
     @Override
-    public TextView render(ViewGroup viewGroup, int position) {
+    public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
         TextView tv = new TextView(viewGroup.getContext());
+        updateBaseAttributes(tv);
         Log.i(TAG, "GButtonPair render");
         tv.setText("Not implemented yet");
-        return tv;
+        tv.setId(RenderViewCompat.generateViewId());
+        viewGroup.addView(tv);
+        return tv.getId();
     }
 
 

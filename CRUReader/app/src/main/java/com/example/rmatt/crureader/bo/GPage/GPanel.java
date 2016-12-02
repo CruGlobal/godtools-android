@@ -1,12 +1,12 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.content.Context;
+import android.support.percent.PercentRelativeLayout;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
-import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
-import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 import com.example.rmatt.crureader.bo.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * Created by rmatt on 10/18/2016.
  */
 @Root(name = "panel")
-public class GPanel extends GCoordinator<LinearLayout, ViewGroup> {
+public class GPanel extends GCoordinator {
 
     private static final String TAG = "GPanel";
     /*
@@ -36,18 +36,11 @@ public class GPanel extends GCoordinator<LinearLayout, ViewGroup> {
 
 
     @Override
-    public LinearLayout render(ViewGroup viewGroup, int position) {
+    public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
         Context context = viewGroup.getContext();
-
-        LinearLayout midSection = RenderConstants.renderLinearLayoutListWeighted(viewGroup.getContext(), GCoordinatorArrayList, position);
-        midSection.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
-        return midSection;
-
-    }
-
-    @Override
-    public ViewGroup group(ViewGroup viewGroup, int position) {
-        return null;
+        RenderConstants.renderLinearLayoutListWeighted(inflater,
+                (PercentRelativeLayout) viewGroup, GCoordinatorArrayList, position);
+        return 0;
     }
 
 }

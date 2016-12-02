@@ -1,7 +1,11 @@
 package com.example.rmatt.crureader.bo.GPage;
 
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.rmatt.crureader.R;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -21,9 +25,16 @@ public class GQuestion extends GBaseTextAttributes {
     public String mode;
 
     @Override
-    public TextView render(ViewGroup viewGroup, int position) {
-        return super.render(viewGroup, position);
+    public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
+        View gQuestion;
+        if (mode
+                != null && mode.equalsIgnoreCase("straight")) {
+            gQuestion = inflater.inflate(R.layout.g_question_straight, viewGroup);
+        } else {
+            gQuestion = inflater.inflate(R.layout.g_question_default, viewGroup);
+        }
+        TextView gQuestionTextView = (TextView) gQuestion.findViewById(R.id.g_question_textview);
+        updateBaseAttributes(gQuestionTextView);
+        return gQuestionTextView.getId();
     }
-
-
 }

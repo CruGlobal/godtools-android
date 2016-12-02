@@ -1,11 +1,11 @@
 package com.example.rmatt.crureader.bo.GPage;
 
-import android.content.Context;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.rmatt.crureader.bo.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Text;
@@ -22,16 +22,11 @@ public class GInputPlaceholder extends GCoordinator {
     public String content;
 
     @Override
-    public TextView render(ViewGroup viewGroup, int position) {
-        Context context = viewGroup.getContext();
-        TextView v = new TextView(context);
-        v.setText("GInputPlaceholder");
-        Log.i(TAG, "render in GInputPlaceholder");
-        return v;
-    }
-
-    @Override
-    public ViewGroup group(ViewGroup viewGroup, int position) {
-        return null;
+    public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
+        TextView v = new TextView(viewGroup.getContext());
+        v.setId(RenderViewCompat.generateViewId());
+        updateBaseAttributes(v);
+        viewGroup.addView(v);
+        return v.getId();
     }
 }

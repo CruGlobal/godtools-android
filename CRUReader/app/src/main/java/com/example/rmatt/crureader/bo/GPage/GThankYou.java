@@ -1,11 +1,12 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.content.Context;
-import android.util.Log;
+import android.support.percent.PercentRelativeLayout;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.rmatt.crureader.bo.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
@@ -45,19 +46,12 @@ public class GThankYou extends GCoordinator {
             @ElementList(inline = true, required = false, entry = "image", type = GImage.class),
             @ElementList(inline = true, required = false, entry = "button-pair", type = GButtonPair.class),
             @ElementList(inline = true, required = false, entry = "link-button", type = GLinkButtonAttributes.class)})
-    public ArrayList<GCoordinator> panelArrayList = new ArrayList<GCoordinator>();
+    public ArrayList<GCoordinator> GCoordinatorArrayList = new ArrayList<GCoordinator>();
 
     @Override
-    public TextView render(ViewGroup viewGroup, int position) {
+    public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
         Context context = viewGroup.getContext();
-        TextView v = new TextView(context);
-        v.setText(TAG + ": " + listeners);
-        Log.i(TAG, "render in: " + TAG);
-        return v;
-    }
-
-    @Override
-    public ViewGroup group(ViewGroup viewGroup, int position) {
-        return null;
+        RenderConstants.renderLinearLayoutListWeighted(inflater, (PercentRelativeLayout) viewGroup, GCoordinatorArrayList, position);
+        return 0;
     }
 }

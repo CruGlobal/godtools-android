@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Views.RootTextColorTextView;
-import com.github.captain_miao.optroundcardview.OptRoundCardView;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -20,7 +19,7 @@ import org.simpleframework.xml.Root;
  */
 
 @Root(name = "title")
-public class GTitle extends GCoordinator<OptRoundCardView, ViewGroup> {
+public class GTitle extends GCoordinator {
 
 
     public static final String TAG = "GTitle";
@@ -35,36 +34,36 @@ public class GTitle extends GCoordinator<OptRoundCardView, ViewGroup> {
     @Element(required = false, name = "peekpanel")
     public GBaseTextAttributes peekPanel;
 
-    public OptRoundCardView render(ViewGroup viewGroup, int position) {
+    public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
         Context context = viewGroup.getContext();
         if (mode == null) mode = HeadingMode.none;
-        LayoutInflater inflaterService = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         View tempRoot = null;
         switch (mode) {
             case peek:
-                tempRoot = inflaterService.inflate(R.layout.g_header_peak, viewGroup);
+                tempRoot = inflater.inflate(R.layout.g_header_peak, viewGroup);
 
                 peekPanel.updateBaseAttributes(tempRoot.findViewById(R.id.g_header_peak_peak_textview));
                 break;
             case straight:
-                tempRoot = inflaterService.inflate(R.layout.g_header_straight, viewGroup);
+                tempRoot = inflater.inflate(R.layout.g_header_straight, viewGroup);
                 break;
             case clear:
-                tempRoot = inflaterService.inflate(R.layout.g_header_clear, viewGroup);
+                tempRoot = inflater.inflate(R.layout.g_header_clear, viewGroup);
                 break;
             case plain:
-                tempRoot = inflaterService.inflate(R.layout.g_header_plain, viewGroup);
+                tempRoot = inflater.inflate(R.layout.g_header_plain, viewGroup);
                 break;
             default:
-                tempRoot = inflaterService.inflate(R.layout.g_header_default, viewGroup);
+                tempRoot = inflater.inflate(R.layout.g_header_default, viewGroup);
                 setUpNumberTextView((RootTextColorTextView) tempRoot.findViewById(R.id.g_header_default_number_textview), position);
                 break;
 
         }
 
         updateStandardRoots(tempRoot, position);
-        return null;
 
+        return tempRoot.getId();
     }
 
     private void updateStandardRoots(View tempRoot, int position) {
@@ -81,10 +80,6 @@ public class GTitle extends GCoordinator<OptRoundCardView, ViewGroup> {
 
     }
 
-    @Override
-    public ViewGroup group(ViewGroup viewGroup, int position) {
-        return null;
-    }
 
     private void setUpNumberTextView(RootTextColorTextView numberTextView, int position) {
         if (number != null) {
@@ -96,7 +91,6 @@ public class GTitle extends GCoordinator<OptRoundCardView, ViewGroup> {
             pli.getPercentLayoutInfo().widthPercent = 0;
         }
     }
-
 
 
     public enum HeadingMode {

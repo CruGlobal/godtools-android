@@ -21,14 +21,14 @@
             android:textAppearance="@style/TextAppearance.GodTools.Button.Standard"
              />
 
-        <FrameLayout
+        <android.support.percent.PercentRelativeLayout
             android:id="@+id/extra_wrapper_fl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="invisible">
 
 
-        </FrameLayout>
+        </android.support.percent.PercentRelativeLayout>
 
     </LinearLayout>
 

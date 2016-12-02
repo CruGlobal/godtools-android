@@ -1,8 +1,7 @@
 package com.example.rmatt.crureader.bo.GPage;
 
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.rmatt.crureader.bo.GCoordinator;
 
@@ -12,14 +11,12 @@ import org.simpleframework.xml.Root;
 
 import java.util.ArrayList;
 
-import static android.content.ContentValues.TAG;
-
 /**
  * Created by rmatt on 10/26/2016.
  * This is a bottom sheet
  */
 @Root(name = "fallback")
-public class GFallback extends GCoordinator<TextView, ViewGroup> {
+public class GFallback extends GCoordinator {
 
     @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GBaseTextAttributes.class),
             @ElementList(inline = true, required = false, entry = "image", type = GImage.class),
@@ -33,15 +30,8 @@ public class GFallback extends GCoordinator<TextView, ViewGroup> {
 
 
     @Override
-    public TextView render(ViewGroup viewGroup, int position) {
-        TextView tv = new TextView(viewGroup.getContext());
-        Log.i(TAG, "GButtonPair render");
-        tv.setText("Not implemented yet");
-        return tv;
+    public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
+        return 0;
     }
 
-    @Override
-    public ViewGroup group(ViewGroup viewGroup, int position) {
-        return null;
-    }
 }

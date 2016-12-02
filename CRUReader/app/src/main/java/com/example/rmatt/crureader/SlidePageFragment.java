@@ -59,20 +59,25 @@ public class SlidePageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        RenderSingleton.getInstance().addGlobalColor(mPosition, mGPage.getBackgroundColor());
+        PercentRelativeLayout fl = new PercentRelativeLayout(getContext());
 
-        View rootView = inflater.inflate(R.layout.page, container, false);
-        thisView = (FrameLayout) rootView.findViewById(R.id.gpage_root);
-        return thisView;
+
+        int viewId = mGPage.render(inflater, fl, mPosition); //inflater.inflate(R.layout.page, container, false);
+
+        //thisView = (FrameLayout) rootView.findViewById(R.id.gpage_root);
+        return fl;
     }
 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RenderSingleton.getInstance().addGlobalColor(mPosition, mGPage.getBackgroundColor());
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-        PercentRelativeLayout percentRelativeLayout = mGPage.render(thisView, mPosition);
-        thisView.addView(percentRelativeLayout, layoutParams);
+
+        //FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+
+        //mGPage.render(thisView, mPosition);
+
 
     }
 }

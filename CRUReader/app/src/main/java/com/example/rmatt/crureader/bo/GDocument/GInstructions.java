@@ -1,11 +1,11 @@
 package com.example.rmatt.crureader.bo.GDocument;
 
-import android.content.Context;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.rmatt.crureader.bo.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 
 import org.simpleframework.xml.Root;
 
@@ -15,16 +15,17 @@ import org.simpleframework.xml.Root;
  */
 
 @Root(name = "instructions")
-public class GInstructions extends GCoordinator<TextView, ViewGroup> {
+public class GInstructions extends GCoordinator {
 
 
     private static final String TAG = "GInstructions";
 
     @Override
-    public TextView render(ViewGroup viewGroup, int position) {
-        Context context = viewGroup.getContext();
-        TextView v = new TextView(context);
-        Log.i(TAG, "render in: " + TAG);
-        return v;
+    public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
+        TextView v = new TextView(viewGroup.getContext());
+        v.setId(RenderViewCompat.generateViewId());
+        updateBaseAttributes(v);
+        viewGroup.addView(v);
+        return v.getId();
     }
 }

@@ -1,6 +1,6 @@
 package com.example.rmatt.crureader.bo.GDocument;
 
-import android.view.View;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.example.rmatt.crureader.bo.GCoordinator;
@@ -34,7 +34,7 @@ public class GDocumentPage extends GCoordinator {
 
 
     @Override
-    public View render(ViewGroup viewGroup, int position) {
-        return null;
+    public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
+        return 0;
     }
 }
