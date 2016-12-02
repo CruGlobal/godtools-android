@@ -11,7 +11,7 @@ import org.simpleframework.xml.Root;
  * Created by rmatt on 10/26/2016.
  * <input-label modifier="bold" size="80">Email</input-label>
  */
-@Root(name="input-label")
+@Root(name = "input-label")
 public class GInputLabel extends GBaseTextAttributes {
 
     private static final String TAG = "GInputLabel";

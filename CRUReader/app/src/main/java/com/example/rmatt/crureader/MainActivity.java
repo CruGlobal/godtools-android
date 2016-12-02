@@ -15,21 +15,21 @@ import android.view.Window;
 import com.example.rmatt.crureader.bo.GDocument.GDocument;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 
-public class MainActivity extends  FragmentActivity {
+public class MainActivity extends FragmentActivity {
 
 
+    public static final String BASE_XML = "97f17b1f-b76d-40ad-8be4-9a45d3406e70.xml";
     private static final boolean SINGLE_TEST = false;
-
     private static final String TAG = "MainActivity";
     GDocument gDoc;
-    public static final String BASE_XML =  "97f17b1f-b76d-40ad-8be4-9a45d3406e70.xml";
 
-            //"dbbe9fdc-6945-4ad2-a77b-62d3c9d96766.xml";
+    //"dbbe9fdc-6945-4ad2-a77b-62d3c9d96766.xml";
 
-            //1: "97f17b1f-b76d-40ad-8be4-9a45d3406e70.xml";//"35d83e86-bdaa-4892-93fe-0f33576be2b9.xml"; //"35d83e86-bdaa-4892-93fe-0f33576be2b9.xml";
-            //2: "dbbe9fdc-6945-4ad2-a77b-62d3c9d96766.xml";
-
+    //1: "97f17b1f-b76d-40ad-8be4-9a45d3406e70.xml";//"35d83e86-bdaa-4892-93fe-0f33576be2b9.xml"; //"35d83e86-bdaa-4892-93fe-0f33576be2b9.xml";
+    //2: "dbbe9fdc-6945-4ad2-a77b-62d3c9d96766.xml";
     ViewPager viewPager;
+    ViewPager.OnPageChangeListener onPageChangeListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -76,24 +76,17 @@ public class MainActivity extends  FragmentActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else
-        {
+        } else {
             Intent i = new Intent(this, RenderSingleTestActivity.class);
             startActivity(i);
             finish();
         }
     }
 
-    ViewPager.OnPageChangeListener onPageChangeListener;
-
-
-
     @Override
-    public void onPause()
-    {
+    public void onPause() {
         super.onPause();
-        if(viewPager != null && onPageChangeListener != null) {
+        if (viewPager != null && onPageChangeListener != null) {
             viewPager.removeOnPageChangeListener(onPageChangeListener);
         }
     }
@@ -116,9 +109,9 @@ public class MainActivity extends  FragmentActivity {
         public int getCount() {
             return gDoc.pages.size();
         }
+
         @Override
-        public CharSequence getPageTitle(int position)
-        {
+        public CharSequence getPageTitle(int position) {
             return position + ":";
         }
 

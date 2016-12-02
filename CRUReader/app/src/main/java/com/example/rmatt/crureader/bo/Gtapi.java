@@ -31,7 +31,22 @@ public abstract class Gtapi<T extends View, G extends ViewGroup> {
 
     @Attribute(required = false)
     public String translate;
-
+    @Attribute(required = false, name = "h")
+    public Integer height;
+    @Attribute(required = false, name = "w")
+    public Integer width;
+    @Attribute(required = false, name = "align")
+    public String layoutAlign;
+    @Attribute(required = false)
+    public Integer x;
+    @Attribute(required = false)
+    public Integer y;
+    @Attribute(required = false, name = "xoffset")
+    public Integer startMargin;
+    @Attribute(required = false, name = "yoffset")
+    public Integer topMargin;
+    @Attribute(name = "x-trailing-offset", required = false)
+    public Integer endMargin;
 
     public void updateBaseAttributes(View view) {
         if (view != null && view.getLayoutParams() instanceof PercentLayoutHelper.PercentLayoutParams) {
@@ -47,29 +62,17 @@ public abstract class Gtapi<T extends View, G extends ViewGroup> {
         }
     }
 
-
-    @Attribute(required = false, name = "h")
-    public Integer height;
-
-
     private void applyHeight(PercentLayoutHelper.PercentLayoutInfo percentLayoutInfo) {
         if (height != null && height > 0) {
             percentLayoutInfo.heightPercent = RenderConstants.getVerticalPercent(height);
         }
     }
 
-
-    @Attribute(required = false, name = "w")
-    public Integer width;
-
     private void applyWidth(PercentLayoutHelper.PercentLayoutInfo percentLayoutInfo) {
         if (width != null && width > 0) {
             percentLayoutInfo.widthPercent = RenderConstants.getHorizontalPercent(width);
         }
     }
-
-    @Attribute(required = false, name = "align")
-    public String layoutAlign;
 
     /*
     //TODO: override this for imageview.
@@ -84,22 +87,6 @@ public abstract class Gtapi<T extends View, G extends ViewGroup> {
         }
 
     }
-
-
-    @Attribute(required = false)
-    public Integer x;
-
-    @Attribute(required = false)
-    public Integer y;
-
-    @Attribute(required = false, name = "xoffset")
-    public Integer startMargin;
-
-    @Attribute(required = false, name = "yoffset")
-    public Integer topMargin;
-
-    @Attribute(name = "x-trailing-offset", required = false)
-    public Integer endMargin;
 
     private void applyMargins(PercentLayoutHelper.PercentLayoutInfo percentLayoutInfo) {
 

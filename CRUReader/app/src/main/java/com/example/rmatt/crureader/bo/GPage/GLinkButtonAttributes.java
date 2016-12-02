@@ -1,7 +1,5 @@
 package com.example.rmatt.crureader.bo.GPage;
 
-import android.content.Context;
-import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -12,11 +10,11 @@ import org.simpleframework.xml.Root;
 /**
  * Created by rmatt on 10/25/2016.
  */
-@Root(name="link-button")
+@Root(name = "link-button")
 public class GLinkButtonAttributes extends GBaseTextAttributes {
 
     private static final String TAG = "GLinkButtonAttributes";
-    @Attribute(name="tap-events", required=false)
+    @Attribute(name = "tap-events", required = false)
     public String tapEvents;
 
     @Override

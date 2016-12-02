@@ -12,14 +12,14 @@ import org.simpleframework.xml.Root;
 /**
  * Created by rmatt on 10/25/2016.
  */
-@Root(name="button-pair")
+@Root(name = "button-pair")
 public class GButtonPair extends Gtapi {
 
 
-    @Element(name="positive-button", required = false)
+    @Element(name = "positive-button", required = false)
     public GSimpleButton positiveButton;
 
-    @Element(name="negative-button", required = false)
+    @Element(name = "negative-button", required = false)
     public GSimpleButton negativeButton;
 
     @Override

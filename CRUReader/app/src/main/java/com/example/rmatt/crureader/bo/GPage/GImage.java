@@ -25,7 +25,6 @@ public class GImage extends Gtapi<ImageView, ViewGroup> {
     public String content;
 
 
-
     @Override
     public ImageView render(ViewGroup viewGroup, int position) {
         ImageView imageView = new ImageView(viewGroup.getContext());
@@ -36,15 +35,15 @@ public class GImage extends Gtapi<ImageView, ViewGroup> {
 
     public void setImageView(final ImageView imageView) {
 
-            new ImageAsyncTask(){
-                @Override
-                protected void onPostExecute(Drawable drawable) {
-                    super.onPostExecute(drawable);
-                    if(drawable != null && imageView != null) {
-                        imageView.setImageDrawable(drawable);
-                    }
+        new ImageAsyncTask() {
+            @Override
+            protected void onPostExecute(Drawable drawable) {
+                super.onPostExecute(drawable);
+                if (drawable != null && imageView != null) {
+                    imageView.setImageDrawable(drawable);
                 }
-            }.start(content);
+            }
+        }.start(content);
 
     }
 }

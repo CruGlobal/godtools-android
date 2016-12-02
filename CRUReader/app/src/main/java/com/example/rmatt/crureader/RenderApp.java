@@ -10,6 +10,7 @@ import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 public class RenderApp extends Application {
 
     private RenderSingleton renderSingleton;
+
     @Override
     public void onCreate() {
         super.onCreate();

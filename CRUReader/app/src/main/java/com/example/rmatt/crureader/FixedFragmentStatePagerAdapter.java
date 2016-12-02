@@ -19,8 +19,6 @@ package com.example.rmatt.crureader;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
@@ -32,11 +30,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 /**
  * Implementation of {@link android.support.v4.view.PagerAdapter} that
  * uses a {@link Fragment} to manage each page. This class also handles
  * saving and restoring of fragment's state.
- *
+ * <p>
  * <p>This version of the pager is more useful when there are a large number
  * of pages, working more like a list view.  When pages are not visible to
  * the user, their entire fragment may be destroyed, only keeping the saved
@@ -44,29 +44,29 @@ import android.view.ViewGroup;
  * memory associated with each visited page as compared to
  * {@link android.support.v4.app.FragmentPagerAdapter} at the cost of potentially more overhead when
  * switching between pages.
- *
+ * <p>
  * <p>When using FragmentPagerAdapter the host ViewPager must have a
  * valid ID set.</p>
- *
+ * <p>
  * <p>Subclasses only need to implement {@link #getItem(int)}
  * and {@link #getCount()} to have a working adapter.
- *
+ * <p>
  * <p>Here is an example implementation of a pager containing fragments of
  * lists:
- *
+ * <p>
  * {@sample development/samples/Support13Demos/src/com/example/android/supportv13/app/FragmentStatePagerSupport.java
- *      complete}
- *
+ * complete}
+ * <p>
  * <p>The <code>R.layout.fragment_pager</code> resource of the top-level fragment is:
- *
+ * <p>
  * {@sample development/samples/Support13Demos/res/layout/fragment_pager.xml
- *      complete}
- *
+ * complete}
+ * <p>
  * <p>The <code>R.layout.fragment_pager_list</code> resource containing each
  * individual fragment's layout is:
- *
+ * <p>
  * {@sample development/samples/Support13Demos/res/layout/fragment_pager_list.xml
- *      complete}
+ * complete}
  */
 public abstract class FixedFragmentStatePagerAdapter extends PagerAdapter {
     private static final String TAG = "FragmentStatePagerAdapter";
@@ -139,13 +139,13 @@ public abstract class FixedFragmentStatePagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        Fragment fragment = (Fragment)object;
+        Fragment fragment = (Fragment) object;
 
         if (mCurTransaction == null) {
             mCurTransaction = mFragmentManager.beginTransaction();
         }
         if (DEBUG) Log.v(TAG, "Removing item #" + position + ": f=" + object
-                + " v=" + ((Fragment)object).getView() + " t=" + fragment.getTag());
+                + " v=" + ((Fragment) object).getView() + " t=" + fragment.getTag());
         while (mSavedState.size() <= position) {
             mSavedState.add(null);
             mSavedFragmentTags.add(null);
@@ -159,7 +159,7 @@ public abstract class FixedFragmentStatePagerAdapter extends PagerAdapter {
 
     @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
-        Fragment fragment = (Fragment)object;
+        Fragment fragment = (Fragment) object;
         if (fragment != mCurrentPrimaryItem) {
             if (mCurrentPrimaryItem != null) {
                 mCurrentPrimaryItem.setMenuVisibility(false);
@@ -184,7 +184,7 @@ public abstract class FixedFragmentStatePagerAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return ((Fragment)object).getView() == view;
+        return ((Fragment) object).getView() == view;
     }
 
     @Override
@@ -197,7 +197,7 @@ public abstract class FixedFragmentStatePagerAdapter extends PagerAdapter {
             state.putParcelableArray("states", fss);
             state.putStringArrayList("tags", mSavedFragmentTags);
         }
-        for (int i=0; i<mFragments.size(); i++) {
+        for (int i = 0; i < mFragments.size(); i++) {
             Fragment f = mFragments.get(i);
             if (f != null) {
                 if (state == null) {
@@ -213,7 +213,7 @@ public abstract class FixedFragmentStatePagerAdapter extends PagerAdapter {
     @Override
     public void restoreState(Parcelable state, ClassLoader loader) {
         if (state != null) {
-            Bundle bundle = (Bundle)state;
+            Bundle bundle = (Bundle) state;
             bundle.setClassLoader(loader);
             Parcelable[] fss = bundle.getParcelableArray("states");
             mSavedState.clear();
@@ -226,12 +226,12 @@ public abstract class FixedFragmentStatePagerAdapter extends PagerAdapter {
                 mSavedFragmentTags.clear();
             }
             if (fss != null) {
-                for (int i=0; i<fss.length; i++) {
-                    mSavedState.add((Fragment.SavedState)fss[i]);
+                for (int i = 0; i < fss.length; i++) {
+                    mSavedState.add((Fragment.SavedState) fss[i]);
                 }
             }
             Iterable<String> keys = bundle.keySet();
-            for (String key: keys) {
+            for (String key : keys) {
                 if (key.startsWith("f")) {
                     int index = Integer.parseInt(key.substring(1));
                     Fragment f = mFragmentManager.getFragment(bundle, key);

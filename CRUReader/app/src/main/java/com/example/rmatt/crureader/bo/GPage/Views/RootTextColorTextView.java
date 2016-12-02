@@ -21,6 +21,7 @@ public class RootTextColorTextView extends AppCompatTextView {
     private boolean inheritColorFromRootViewBackground = false;
     private boolean textColorSetFromBackground = false;
     private int parentId;
+
     public RootTextColorTextView(Context context) {
         super(context);
     }
@@ -30,12 +31,12 @@ public class RootTextColorTextView extends AppCompatTextView {
         initialize(context, attrs);
     }
 
-    public RootTextColorTextView(Context context, AttributeSet attrs, int defStyleAttr)  {
+    public RootTextColorTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initialize(context, attrs);
     }
 
-    private void initialize(Context context, AttributeSet attrs)  {
+    private void initialize(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RootTextColorTextView);
 
         inheritColorFromRootViewBackground = a.getBoolean(R.styleable.RootTextColorTextView_inheritColorFromRootViewBackground, false);
@@ -79,13 +80,11 @@ public class RootTextColorTextView extends AppCompatTextView {
     }
 
 
-
     public boolean getInheritColorFromRootViewBackground() {
         return inheritColorFromRootViewBackground;
     }
 
-    public int getParentId()
-    {
+    public int getParentId() {
         return parentId;
     }
 

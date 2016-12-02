@@ -17,7 +17,6 @@ import static android.content.ContentValues.TAG;
 /**
  * Created by rmatt on 10/26/2016.
  * This is a bottom sheet
- *
  */
 @Root(name = "fallback")
 public class GFallback extends Gtapi<TextView, ViewGroup> {

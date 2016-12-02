@@ -11,7 +11,7 @@ import java.io.IOException;
  * Created by rmatt on 12/1/2016.
  */
 
-public class ImageAsyncTask  extends AsyncTask<String, Void, Drawable> {
+public class ImageAsyncTask extends AsyncTask<String, Void, Drawable> {
 
 
     @Override
@@ -27,21 +27,17 @@ public class ImageAsyncTask  extends AsyncTask<String, Void, Drawable> {
         return d;
     }
 
-    public void start(String param)
-    {
+    public void start(String param) {
 
-            Log.d("Async Task", "Start with Serial Executor");
-            if (Build.VERSION.SDK_INT >= 11)
-            {
-                // --post GB use serial executor by default --
-                executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, param);
-            }
-            else
-            {
-                // --GB uses ThreadPoolExecutor by default--
-                execute(param);
-            }
+        Log.d("Async Task", "Start with Serial Executor");
+        if (Build.VERSION.SDK_INT >= 11) {
+            // --post GB use serial executor by default --
+            executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, param);
+        } else {
+            // --GB uses ThreadPoolExecutor by default--
+            execute(param);
         }
-
-
     }
+
+
+}

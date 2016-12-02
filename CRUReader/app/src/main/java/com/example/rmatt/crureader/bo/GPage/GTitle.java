@@ -24,32 +24,20 @@ public class GTitle extends Gtapi<OptRoundCardView, ViewGroup> {
 
 
     public static final String TAG = "GTitle";
-
-
-    public enum HeadingMode {
-        peek, straight, clear, plain, none
-    }
-
     @Element(required = false)
     public GBaseTextAttributes heading;
-
     @Element(required = false)
     public GBaseTextAttributes subheading;
-
     @Attribute(required = false)
     public HeadingMode mode;
-
     @Element(required = false)
     public String number;
-
     @Element(required = false, name = "peekpanel")
     public GBaseTextAttributes peekPanel;
 
     public OptRoundCardView render(ViewGroup viewGroup, int position) {
         Context context = viewGroup.getContext();
-
-
-        setDefaultValues();
+        if (mode == null) mode = HeadingMode.none;
         LayoutInflater inflaterService = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View tempRoot = null;
         switch (mode) {
@@ -98,7 +86,6 @@ public class GTitle extends Gtapi<OptRoundCardView, ViewGroup> {
         return null;
     }
 
-
     private void setUpNumberTextView(RootTextColorTextView numberTextView, int position) {
         if (number != null) {
 
@@ -111,8 +98,9 @@ public class GTitle extends Gtapi<OptRoundCardView, ViewGroup> {
     }
 
 
-    public void setDefaultValues() {
-        if (mode == null) mode = HeadingMode.none;
+
+    public enum HeadingMode {
+        peek, straight, clear, plain, none
     }
 
 
