@@ -3,7 +3,6 @@ package com.example.rmatt.crureader.bo.GPage;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.percent.PercentRelativeLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +79,6 @@ public class GPage extends GCoordinator {
         percentRelativeLayout.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
 
 
-        Integer lastId = 9999;
         Integer topId = -1;
         Integer bottomId = -1;
 
@@ -101,9 +99,7 @@ public class GPage extends GCoordinator {
             View topView = percentRelativeLayout.findViewWithTag("top");
 
             if (topView != null) {
-                Log.i(TAG, "top view != null");
                 topId = topView.getId();
-                Log.i(TAG, "topId: " + topId);
             }
             Diagnostics.StopMethodTracingByKey("findViewWithTag(top)");
 
@@ -111,11 +107,7 @@ public class GPage extends GCoordinator {
         }
 
 
-        if (gQuestion != null) {
-            bottomId = gQuestion.render(inflater, percentRelativeLayout, position);
-        }
-
-
+        if (gQuestion != null) bottomId = gQuestion.render(inflater, percentRelativeLayout, position);
 
         if (GCoordinatorArrayList != null && GCoordinatorArrayList.size() > 0) {
 
