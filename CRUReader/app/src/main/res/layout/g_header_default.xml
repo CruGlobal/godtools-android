@@ -35,7 +35,7 @@
                 android:textSize="72dp"
                 app:inheritColorFromRootViewBackground="true"
                 app:layout_widthPercent="20%"
-                app:parentId="@id/gpage_root" />
+                 />
 
             <com.example.rmatt.crureader.bo.GPage.Views.RootTextColorTextView
                 android:id="@+id/g_header_header_textview"
@@ -47,7 +47,7 @@
                 android:textSize="24dp"
                 app:inheritColorFromRootViewBackground="true"
                 app:layout_widthPercent="80%"
-                app:parentId="@id/gpage_root" />
+                 />
 
 
         </android.support.percent.PercentFrameLayout>

@@ -2,7 +2,6 @@ package com.example.rmatt.crureader;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,13 +59,13 @@ public class SlidePageFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         RenderSingleton.getInstance().addGlobalColor(mPosition, mGPage.getBackgroundColor());
-        PercentRelativeLayout fl = new PercentRelativeLayout(getContext());
 
 
-        int viewId = mGPage.render(inflater, fl, mPosition); //inflater.inflate(R.layout.page, container, false);
+
+        int viewId = mGPage.render(inflater, container, mPosition); //inflater.inflate(R.layout.page, container, false);
 
         //thisView = (FrameLayout) rootView.findViewById(R.id.gpage_root);
-        return fl;
+        return mGPage.rootView;
     }
 
 

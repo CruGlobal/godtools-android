@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 import com.example.rmatt.crureader.bo.GPage.Views.RootTextColorTextView;
 
 import org.simpleframework.xml.Attribute;
@@ -73,15 +74,21 @@ public class GTitle extends GCoordinator {
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void updateStandardRoots(View tempRoot, int position) {
+
+
         if (tempRoot != null) {
+
+            TextView headerTextView = (TextView) tempRoot.findViewById(R.id.g_header_header_textview);
+            TextView subHeaderTextView = (TextView)tempRoot.findViewById(R.id.g_header_subheader_textview);
+
             boolean removeLayoutBelow = false;
             if (heading != null) {
+                heading.defaultColor(position);
 
-
-                heading.updateBaseAttributes(tempRoot.findViewById(R.id.g_header_header_textview));
+                heading.updateBaseAttributes(headerTextView);
             }
             if (subheading != null) {
-                TextView subHeaderTextView = (TextView) tempRoot.findViewById(R.id.g_header_subheader_textview);
+                subheading.defaultColor(position);
                 if (subheading.y != null || heading == null)
                 {
                     ((PercentRelativeLayout.LayoutParams)subHeaderTextView.getLayoutParams()).addRule(RelativeLayout.BELOW, -1);
@@ -94,11 +101,13 @@ public class GTitle extends GCoordinator {
     }
 
 
+
+
     private void setUpNumberTextView(RootTextColorTextView numberTextView, int position) {
         if (number != null) {
 
             numberTextView.setText(number);
-            //numberTextView.setTextColor(numberTextColor);
+            numberTextView.setTextColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
         } else {
             PercentFrameLayout.LayoutParams pli = (PercentFrameLayout.LayoutParams) numberTextView.getLayoutParams();
             pli.getPercentLayoutInfo().widthPercent = 0;
