@@ -2,16 +2,21 @@ package com.example.rmatt.crureader.bo.GPage.RenderHelpers;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.percent.PercentRelativeLayout;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.GFollowupModal;
+import com.example.rmatt.crureader.bo.GPage.Views.Space;
 
 import java.util.ArrayList;
 
@@ -98,15 +103,28 @@ public class RenderConstants {
         return Gravity.CENTER_HORIZONTAL;
     }
 
+    public static int getRelativeLayoutRuleFromAlign(String align) {
+        if (align != null) {
+            if (align.equalsIgnoreCase("right")) {
+                return RelativeLayout.ALIGN_PARENT_END;
+            } else if (align.equalsIgnoreCase("center")) {
+                return RelativeLayout.CENTER_HORIZONTAL;
+            }
+        }
 
+        return RelativeLayout.ALIGN_PARENT_START;
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static int getTextAlign(String textAlign) {
         if (textAlign != null && !textAlign.equalsIgnoreCase("")) {
             if (textAlign.equalsIgnoreCase("center"))
-                return View.TEXT_ALIGNMENT_CENTER;
+                return Gravity.CENTER;
             else if (textAlign.equalsIgnoreCase("right"))
-                return View.TEXT_ALIGNMENT_TEXT_END;
+                return Gravity.END;
         }
-        return View.TEXT_ALIGNMENT_TEXT_START;
+        return Gravity.START;
     }
 
     public static void setDefaultPadding(View numberTextView) {
@@ -127,37 +145,41 @@ public class RenderConstants {
     }
 
 
-    public static int[] renderLinearLayoutListWeighted(LayoutInflater inflater, ViewGroup percentRelativeLayout, ArrayList<GCoordinator> GCoordinatorArrayList, int position) {
-        /*LinearLayout midSection = new LinearLayout(context);
-        midSection.setOrientation(LinearLayout.VERTICAL);*/
-
-        //Space space = new Space(context);
-        //LinearLayout.LayoutParams evenSpreadDownSpaceLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.0f);
-        //midSection.addView(space, evenSpreadDownSpaceLayoutParams);
-        int lastId = -1;
+    public static int renderLinearLayoutListWeighted(LayoutInflater inflater, ViewGroup percentRelativeLayout, ArrayList<GCoordinator> GCoordinatorArrayList, int position) {
+        LinearLayout midSection = new LinearLayout(inflater.getContext());
+        midSection.setOrientation(LinearLayout.VERTICAL);
+        midSection.setId(RenderViewCompat.generateViewId());
+        Space space = new Space(inflater.getContext());
+        LinearLayout.LayoutParams evenSpreadDownSpaceLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.0f);
+        midSection.addView(space, evenSpreadDownSpaceLayoutParams);
+        /*int lastId = -1;
         int newId = -1;
         int firstId = -1;
+        */
+
+
         for (GCoordinator tap : GCoordinatorArrayList) {
 
-            newId = tap.render(inflater, percentRelativeLayout, position);
-            if (firstId == -1)
-            {
+           /* newId = tap.render(inflater, percentRelativeLayout, position);
+            if (firstId == -1) {
                 firstId = newId;
             }
-            if (lastId > -1) {
+            if (lastId > -1 && tap.y == null) {
                 ((PercentRelativeLayout.LayoutParams) percentRelativeLayout.findViewById(newId).getLayoutParams()).addRule(PercentRelativeLayout.BELOW, lastId);
             }
-            lastId = newId;
+            lastId = newId;*/
+            tap.render(inflater, tap.y == null ? midSection : percentRelativeLayout, position);
 
             //LinearLayout.LayoutParams midSectionChildLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             //midSection.addView(view, midSectionChildLayoutParams);
 
-            //space = new Space(context);
-            // midSection.addView(space, evenSpreadDownSpaceLayoutParams);
+            space = new Space(inflater.getContext());
+            midSection.addView(space, evenSpreadDownSpaceLayoutParams);
 
 
         }
-        return new int[]{firstId, lastId};
+        percentRelativeLayout.addView(midSection);
+        return midSection.getId();
     }
 
    /* public static LinearLayout renderLinearLayoutList(Context context, ArrayList<GCoordinator> GCoordinatorArrayList, int position) {
@@ -196,5 +218,13 @@ public class RenderConstants {
                 RenderSingleton.getInstance().gPanelHashMap.put(modal.listeners.hashCode(), modal);
             }
         }
+    }
+
+    public static int getHorizontalPixels(Integer width) {
+        return Math.round(getHorizontalPercent(width) * RenderSingleton.getInstance().screenWidth);
+    }
+
+    public static int getVerticalPixels(Integer height) {
+        return Math.round(getVerticalPercent(height) * RenderSingleton.getInstance().screenHeight);
     }
 }

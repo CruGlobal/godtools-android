@@ -46,7 +46,7 @@ public class SlidePageFragment extends Fragment {
         mPosition = getArguments().getInt(ARG_POSITION);
 
         try {
-            Log.i(TAG, "XMLDocument: " + mXmlDocumentId);
+            Log.w(TAG, "XMLDocument: " + mXmlDocumentId);
             mGPage = XMLUtil.parseGPage(this.getActivity(), mXmlDocumentId);
 
 

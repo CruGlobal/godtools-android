@@ -34,6 +34,7 @@ public class GQuestion extends GBaseTextAttributes {
             gQuestion = inflater.inflate(R.layout.g_question_default, viewGroup);
         }
         TextView gQuestionTextView = (TextView) gQuestion.findViewById(R.id.g_question_textview);
+        textalign = "right";
         updateBaseAttributes(gQuestionTextView);
         return gQuestionTextView.getId();
     }
