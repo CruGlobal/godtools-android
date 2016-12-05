@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <Button xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/g_button_g_button"
-        style="@style/Widget.GodTools.Button.Standard"
+    <LinearLayout
+        android:id="@+id/g_button_outer_linearlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:gravity="center_horizontal"
-        android:text="@string/sample_text_g_button_g"
-        android:transitionName="@string/inner_ll_transistion_title"
-        app:layout_heightPercent="20%"
+        android:orientation="vertical"
+        android:transitionName="@string/inner_ll_transistion_title">
+
+        <include
+            android:id="@+id/g_button_top_horizontal_rule"
+            layout="@layout/g_button_horizontal_rule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/g_button_g_button"
+            style="@style/Widget.GodTools.Button.Standard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:gravity="center_horizontal"
+            android:text="@string/sample_text_g_button_g"
+             />
 
 
-        />
+        <include
+            android:id="@+id/g_button_bottom_horizontal_rule"
+            layout="@layout/g_button_horizontal_rule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 </merge>

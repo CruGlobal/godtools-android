@@ -67,7 +67,7 @@ public class GButton extends GBaseButtonAttributes {
 
             button.setTextSize(RenderConstants.getTextSizeFromXMLSize(RenderConstants.DEFAULT_BUTTON_TEXT_SIZE));
 
-            button.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
+           // button.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
 
         }
 

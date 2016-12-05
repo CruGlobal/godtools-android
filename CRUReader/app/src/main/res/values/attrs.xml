@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="RootTextColorTextView">
         <!-- Corner radius for CardView. -->
+        <attr name="textSizeScalar" format="integer"></attr>
         <attr name="inheritColorFromRootViewBackground" format="boolean" />
         <attr name="parentId" format="reference"></attr>
     </declare-styleable>

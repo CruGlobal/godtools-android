@@ -19,38 +19,35 @@
         app:optRoundCardRightTopCorner="true"
         app:optRoundContentPadding="6dp">
 
-        <android.support.percent.PercentFrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical">
+            android:orientation="horizontal">
 
 
             <com.example.rmatt.crureader.bo.GPage.Views.RootTextColorTextView
                 android:id="@+id/g_header_default_number_textview"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
+                android:layout_weight="2"
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:text="@string/sample_text_g_header_default_number_textview"
                 android:textSize="72dp"
-                app:inheritColorFromRootViewBackground="true"
-                app:layout_widthPercent="20%"
-                 />
+                app:inheritColorFromRootViewBackground="true" />
 
             <com.example.rmatt.crureader.bo.GPage.Views.RootTextColorTextView
                 android:id="@+id/g_header_header_textview"
+                android:layout_width="0dp"
+                android:layout_gravity="center_vertical"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:gravity="center"
-                android:includeFontPadding="false"
+                android:layout_weight="8"
                 android:text="@string/sample_text_g_header_default_header_textview"
                 android:textSize="24dp"
-                app:inheritColorFromRootViewBackground="true"
-                app:layout_widthPercent="80%"
-                 />
+                app:inheritColorFromRootViewBackground="true" />
 
 
-        </android.support.percent.PercentFrameLayout>
+        </LinearLayout>
 
     </com.github.captain_miao.optroundcardview.OptRoundCardView>
 </merge>

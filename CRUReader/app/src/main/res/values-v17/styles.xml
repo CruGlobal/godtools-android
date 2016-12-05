@@ -5,8 +5,8 @@
     <style name="Widget.GodTools.Button.Standard">
         <item name="android:textAppearanceButton">@style/TextAppearance.GodTools.Button.Standard
         </item>
+        <item name="colorControlHighlight"> @android:color/transparent</item>
         <item name="colorButtonNormal">@android:color/transparent</item>
-
         <item name="android:textAlignment">viewStart</item>
     </style>
 
