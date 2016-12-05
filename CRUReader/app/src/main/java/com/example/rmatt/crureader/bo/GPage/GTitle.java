@@ -84,15 +84,17 @@ public class GTitle extends GCoordinator {
             boolean removeLayoutBelow = false;
             if (heading != null) {
                 heading.defaultColor(position);
-
                 heading.updateBaseAttributes(headerTextView);
             }
             if (subheading != null) {
                 subheading.defaultColor(position);
-                if (subheading.y != null || heading == null)
-                {
-                    ((PercentRelativeLayout.LayoutParams)subHeaderTextView.getLayoutParams()).addRule(RelativeLayout.BELOW, -1);
-                }
+
+
+                if (subheading.y != null || heading == null)     ((PercentRelativeLayout.LayoutParams)subHeaderTextView.getLayoutParams()).addRule(RelativeLayout.BELOW, -1);
+
+
+
+
                 subheading.updateBaseAttributes(subHeaderTextView);
             }
 
