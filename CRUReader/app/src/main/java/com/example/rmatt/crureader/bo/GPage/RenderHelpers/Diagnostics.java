@@ -33,12 +33,12 @@ public class Diagnostics {
     public static void StopMethodTracingByKeyWithTag(String Tag, String key,
                                                      String leadingMessage) {
         if (RenderSingleton.IS_DEBUG_BUILD) {
-            Log.w(TAG, "Is Diagnostics on UI Thread: " + (Looper.myLooper() == Looper.getMainLooper() ? " true " : " false "));
+            Log.v(TAG, "Is Diagnostics on UI Thread: " + (Looper.myLooper() == Looper.getMainLooper() ? " true " : " false "));
             if (RenderSingleton.getInstance().getMethodTraceMilliSecondsKeyMap().containsKey(key)) {
                 long processTime = System.currentTimeMillis() - RenderSingleton.getInstance().getMethodTraceMilliSecondsKeyMap()
                         .remove(key);
                 Log
-                        .w(TAG,
+                        .v(TAG,
                                 Tag + "   " + leadingMessage + "   "
                                         + processTime + " milliseconds");
 
@@ -60,7 +60,7 @@ public class Diagnostics {
         String memMessage = String.format("Memory_ + " + leadingMessage + "_: Pss=%.2f MB, Private=%.2f MB, Shared=%.2f MB", memoryInfo.getTotalPss() / 1024.0,
                 memoryInfo.getTotalPrivateDirty() / 1024.0, memoryInfo.getTotalSharedDirty() / 1024.0);
 
-        Log.i(TAG, memMessage);
+        Log.v(TAG, memMessage);
 
     }
 

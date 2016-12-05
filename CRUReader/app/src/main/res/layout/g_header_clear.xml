@@ -5,22 +5,17 @@
     <TextView
         android:id="@+id/g_header_header_textview"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="left"
-        android:gravity="center_horizontal"
+        android:layout_width="wrap_content"
         android:includeFontPadding="false"
         android:text="@string/sample_text_g_header_clear_header_textview"
-        app:layout_marginLeftPercent="3%"
         app:layout_widthPercent="@fraction/header_clear_percent_width" />
 
     <TextView
         android:id="@+id/g_header_subheader_textview"
         android:layout_height="wrap_content"
-        android:layout_below="@id/g_header_header_textview"
-        android:layout_gravity="right"
         android:includeFontPadding="false"
         android:tag="top"
         android:text="@string/sample_text_g_header_clear_subheader_textview"
-        app:layout_widthPercent="@fraction/header_clear_percent_width" />
+        android:layout_width="wrap_content" />
 
 </merge>

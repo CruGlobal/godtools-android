@@ -53,7 +53,11 @@ public class GBaseTextAttributes extends GCoordinator {
 
     private void applyTextAlign(TextView textViewCast) {
         if (textalign != null && !textalign.equalsIgnoreCase("")) {
+
             RenderViewCompat.textViewAlign(textViewCast, textalign);
+
+            layoutAlign = textalign;
+            updateAlignment(textViewCast);
         }
     }
 

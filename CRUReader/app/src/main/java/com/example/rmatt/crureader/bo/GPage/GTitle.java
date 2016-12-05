@@ -1,10 +1,15 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.percent.PercentFrameLayout;
+import android.support.percent.PercentRelativeLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GCoordinator;
@@ -66,16 +71,24 @@ public class GTitle extends GCoordinator {
         return tempRoot.getId();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void updateStandardRoots(View tempRoot, int position) {
         if (tempRoot != null) {
+            boolean removeLayoutBelow = false;
             if (heading != null) {
+
 
                 heading.updateBaseAttributes(tempRoot.findViewById(R.id.g_header_header_textview));
             }
             if (subheading != null) {
-
-                subheading.updateBaseAttributes(tempRoot.findViewById(R.id.g_header_subheader_textview));
+                TextView subHeaderTextView = (TextView) tempRoot.findViewById(R.id.g_header_subheader_textview);
+                if (subheading.y != null || heading == null)
+                {
+                    ((PercentRelativeLayout.LayoutParams)subHeaderTextView.getLayoutParams()).addRule(RelativeLayout.BELOW, -1);
+                }
+                subheading.updateBaseAttributes(subHeaderTextView);
             }
+
         }
 
     }

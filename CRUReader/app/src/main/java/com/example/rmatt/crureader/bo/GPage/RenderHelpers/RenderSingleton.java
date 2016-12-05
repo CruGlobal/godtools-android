@@ -2,6 +2,7 @@ package com.example.rmatt.crureader.bo.GPage.RenderHelpers;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.DisplayMetrics;
 import android.util.SparseArray;
 
 import com.example.rmatt.crureader.bo.GCoordinator;
@@ -35,8 +36,14 @@ public class RenderSingleton {
     private Context context;
     private Hashtable<String, Long> methodTraceMilliSecondsKeyMap = new Hashtable<String, Long>();
 
+    int screenWidth;
+    int screenHeight;
+
     private RenderSingleton(Context context) {
         this.context = context;
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        screenWidth = metrics.widthPixels;
+        screenHeight = metrics.heightPixels;
     }
 
     public static RenderSingleton getInstance() {

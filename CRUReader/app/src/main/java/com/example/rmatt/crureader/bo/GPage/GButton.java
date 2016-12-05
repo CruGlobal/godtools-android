@@ -58,8 +58,9 @@ public class GButton extends GBaseButtonAttributes {
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
         View v = inflater.inflate(R.layout.g_button, viewGroup);
         Button button = (Button) v.findViewById(R.id.g_button_g_button);
-
+//        Space space = (Space)v.findViewById(R.id.g_button_space_bottom);
         button.setId(RenderViewCompat.generateViewId());
+        //space.setId(RenderViewCompat.generateViewId());
         updateBaseAttributes(button);
         if (buttonText != null && buttonText.content != null) {
             button.setText(buttonText.content);

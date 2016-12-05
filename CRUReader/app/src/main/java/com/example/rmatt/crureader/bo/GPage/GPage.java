@@ -70,7 +70,7 @@ public class GPage extends GCoordinator {
         Context context = container.getContext();
         /* Background color */
 
-
+        //container.setBackgroundTintList();
         container.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
         container.setId(R.id.gpage_root);
 
@@ -81,7 +81,7 @@ public class GPage extends GCoordinator {
 
 
         //percentRelativeLayout.setId();
-        loadBackground(container, position);
+       // loadBackground(container, position);
 
 
         PercentRelativeLayout.LayoutParams params = null;
@@ -111,14 +111,15 @@ public class GPage extends GCoordinator {
         }
 
 
+
         if (GCoordinatorArrayList != null && GCoordinatorArrayList.size() > 0) {
 
-            int[] ids = RenderConstants.renderLinearLayoutListWeighted(inflater, container, GCoordinatorArrayList, position);
+            int midSectionId = RenderConstants.renderLinearLayoutListWeighted(inflater, container, GCoordinatorArrayList, position);
 
             if (topId > 0)
-                ((PercentRelativeLayout.LayoutParams) container.findViewById(ids[0]).getLayoutParams()).addRule(PercentRelativeLayout.BELOW, topId);
+                ((PercentRelativeLayout.LayoutParams) container.findViewById(midSectionId).getLayoutParams()).addRule(PercentRelativeLayout.BELOW, topId);
             if (bottomId > 0)
-                ((PercentRelativeLayout.LayoutParams) container.findViewById(ids[1]).getLayoutParams()).addRule(PercentRelativeLayout.ABOVE, bottomId);
+                ((PercentRelativeLayout.LayoutParams) container.findViewById(midSectionId).getLayoutParams()).addRule(PercentRelativeLayout.ABOVE, bottomId);
 
         }
 
