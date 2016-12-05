@@ -35,6 +35,31 @@
 
     </style>
 
+    <style name="Widget"></style>
+    <style name="Widget.GodTools"></style>
+
+    <style name="AutoScaleTextView" >
+        <item name="textSizeScalar">17</item> //Default Text Size Scalar
+
+    </style>
+
+    <style name="HeaderNumberTextView" parent="AutoScaleTextView">
+        <item name="textSizeScalar">68</item>
+    </style>
+
+    <style name="HeaderHeaderTextView" parent="AutoScaleTextView">
+        <!-- Default Size -->
+    </style>
+
+    <style name="HeaderSubheadingTextView" parent="AutoScaleTextView">
+        <!-- Default Size -->
+    </style>
+
+    <style name="ButtonTextView" parent="AutoScaleTextButton">
+        <item name="textSizeScalar">20</item>
+        <!-- Default Size -->
+    </style>
+
 
 
     <style name="Widget.GodTools.Button" parent="@style/Widget.AppCompat.Button.Borderless">
@@ -55,13 +80,17 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="Widget.GodTools.Button.Standard">
+
+
+    <style name="Widget.GodTools.Button.Standard" parent="AutoScaleTextButton">
         <item name="android:textAppearanceButton">@style/TextAppearance.GodTools.Button.Standard</item>
         <item name="android:gravity">left|center_vertical</item>
     </style>
 
 
-
+    <style name="AutoScaleTextButton" parent="Widget.GodTools.Button">
+        <item name="textSizeScalar">20</item>
+    </style>
 
 
     <style name="Widget.GodTools.Button.ButtonPair">

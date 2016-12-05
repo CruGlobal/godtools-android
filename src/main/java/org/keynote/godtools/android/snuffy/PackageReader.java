@@ -2142,7 +2142,7 @@ public class PackageReader
             w = REFERENCE_DEVICE_WIDTH;
         }
         boolean bResize = (!((el.getAttribute("w").length() > 0) && (el.getAttribute("h").length() > 0)));
-        textSize = textSize * size / 100.0f;
+            textSize = textSize * size / 100.0f;
         color = setColorAlphaVal(color, labelAlpha);
         x = getScaledXValue(x);
         y = getScaledYValue(y);

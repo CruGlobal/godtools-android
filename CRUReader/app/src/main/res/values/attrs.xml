@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="RootTextColorTextView">
+    <declare-styleable name="AutoScaleTextView">
         <!-- Corner radius for CardView. -->
         <attr name="textSizeScalar" format="integer"></attr>
-        <attr name="inheritColorFromRootViewBackground" format="boolean" />
-        <attr name="parentId" format="reference"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="AutoScaleTextButton">
+        <!-- Corner radius for CardView. -->
+        <attr name="textSizeScalarTB" format="integer"></attr>
     </declare-styleable>
 
 </resources>

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +15,8 @@ import android.widget.Button;
 import com.example.rmatt.crureader.PopupDialogActivity;
 import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
-import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
+import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextButton;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -57,15 +59,15 @@ public class GButton extends GBaseButtonAttributes {
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
         View v = inflater.inflate(R.layout.g_button, viewGroup);
-        Button button = (Button) v.findViewById(R.id.g_button_g_button);
+        AutoScaleTextButton button = (AutoScaleTextButton) v.findViewById(R.id.g_button_g_button);
 //        Space space = (Space)v.findViewById(R.id.g_button_space_bottom);
         button.setId(RenderViewCompat.generateViewId());
         //space.setId(RenderViewCompat.generateViewId());
-        updateBaseAttributes(button);
+        this.updateBaseAttributes(button);
         if (buttonText != null && buttonText.content != null) {
-            button.setText(buttonText.content);
+            //button.setText(buttonText.content);
 
-            button.setTextSize(RenderConstants.getTextSizeFromXMLSize(RenderConstants.DEFAULT_BUTTON_TEXT_SIZE));
+            //button.setTextSize(RenderConstants.getTextSizeFromXMLSize(RenderConstants.DEFAULT_BUTTON_TEXT_SIZE));
 
            // button.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
 
@@ -102,8 +104,39 @@ public class GButton extends GBaseButtonAttributes {
 
             }
         });
-        this.updateBaseAttributes(button);
         return button.getId();
+    }
+
+    @Override
+    public void updateBaseAttributes(View view) {
+        super.updateBaseAttributes(view);
+        if(buttonText != null) {
+            if (view != null && view instanceof AutoScaleTextButton) {
+                AutoScaleTextButton textViewCast = (AutoScaleTextButton) view;
+                applyTextSize(textViewCast);
+                applyTextContent(textViewCast);
+            }
+        }
+    }
+
+    private void applyTextContent(AutoScaleTextButton textViewCast) {
+        textViewCast.setText(buttonText.content);
+    }
+
+    private void applyTextSize(AutoScaleTextButton textViewCast) {
+
+        if (width != null && height != null)
+        {
+            Log.e(TAG, "Should scale this~!~ + " + textViewCast.getText() + textViewCast.getId());
+        }
+        if (textSize != null) {
+            textViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, buttonText.textSize);
+        }
+        else
+        {
+            textViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100.0f);
+        }
+
     }
 
 }

@@ -24,7 +24,8 @@
             android:gravity="center_vertical">
 
 
-            <TextView
+            <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
+                style="@style/HeaderSubheadingTextView"
                 android:id="@+id/g_header_subheader_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
