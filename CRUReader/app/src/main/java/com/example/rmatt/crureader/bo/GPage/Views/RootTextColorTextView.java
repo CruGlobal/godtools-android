@@ -2,15 +2,10 @@ package com.example.rmatt.crureader.bo.GPage.Views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.PaintDrawable;
-import android.os.Build;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
-import android.view.View;
 
 import com.example.rmatt.crureader.R;
-import com.example.rmatt.crureader.bo.GPage.RenderHelpers.Diagnostics;
 
 /**
  * Created by rmatt on 12/2/2016.
@@ -48,13 +43,13 @@ public class RootTextColorTextView extends AppCompatTextView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        checkBackgroundColor();
+//       / checkBackgroundColor();
     }
 
     /*
     This is a troll :P  RM RM
      */
-    private void checkBackgroundColor() {
+    /*private void checkBackgroundColor() {
         String diagnosticsKey = "LongRecursion? ";
         Diagnostics.StartMethodTracingByKey(diagnosticsKey);
         if (inheritColorFromRootViewBackground && !textColorSetFromBackground && getRootView() != null && parentId > -1) {
@@ -79,7 +74,7 @@ public class RootTextColorTextView extends AppCompatTextView {
         } else {
             return view;
         }
-    }
+    }*/
 
 
     public boolean getInheritColorFromRootViewBackground() {

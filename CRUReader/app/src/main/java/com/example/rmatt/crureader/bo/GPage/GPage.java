@@ -3,11 +3,11 @@ package com.example.rmatt.crureader.bo.GPage;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.percent.PercentRelativeLayout;
-import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GCoordinator;
@@ -30,6 +30,9 @@ import java.util.ArrayList;
 @Root(name = "page")
 public class GPage extends GCoordinator {
     private static final String TAG = "GPage";
+
+    public View rootView;
+
     @Attribute(required = false)
     public String watermark;
 
@@ -53,8 +56,8 @@ public class GPage extends GCoordinator {
     @Attribute(required = false)
     public String buttons;
 
-    @Attribute(required = false)
-    public String backgroundimage;
+    @Attribute(required = false, name="backgroundimage")
+    public String backgroundImage;
 
     @Element(name = "question", required = false)
     public GQuestion gQuestion;
@@ -67,12 +70,15 @@ public class GPage extends GCoordinator {
     @Override
     public int render(LayoutInflater inflater, ViewGroup container, int position) {
         //setDefaultValues();
-        Context context = container.getContext();
+        rootView = (View) inflater.inflate(R.layout.g_page, container, false);
+        PercentRelativeLayout percentRelativeLayout = (PercentRelativeLayout)rootView.findViewById(R.id.g_page_main_layout_percentrelativelayout);
+        ImageView backgroundImageView = (ImageView)percentRelativeLayout.findViewById(R.id.g_page_background_imageview);
+        Context context = inflater.getContext();
         /* Background color */
 
         //container.setBackgroundTintList();
-        container.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
-        container.setId(R.id.gpage_root);
+        percentRelativeLayout.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
+
 
         Integer lastId = 9999;
         Integer topId = -1;
@@ -81,19 +87,18 @@ public class GPage extends GCoordinator {
 
 
         //percentRelativeLayout.setId();
-       // loadBackground(container, position);
+        loadBackground(backgroundImageView, position);
 
 
-        PercentRelativeLayout.LayoutParams params = null;
 
 
         if (title != null) {
 
 
-            title.render(inflater, container, position);
+            title.render(inflater, percentRelativeLayout, position);
 
             Diagnostics.StartMethodTracingByKey("findViewWithTag(top)");
-            View topView = container.findViewWithTag("top");
+            View topView = percentRelativeLayout.findViewWithTag("top");
 
             if (topView != null) {
                 Log.i(TAG, "top view != null");
@@ -107,40 +112,41 @@ public class GPage extends GCoordinator {
 
 
         if (gQuestion != null) {
-            bottomId = gQuestion.render(inflater, container, position);
+            bottomId = gQuestion.render(inflater, percentRelativeLayout, position);
         }
 
 
 
         if (GCoordinatorArrayList != null && GCoordinatorArrayList.size() > 0) {
 
-            int midSectionId = RenderConstants.renderLinearLayoutListWeighted(inflater, container, GCoordinatorArrayList, position);
+            int midSectionId = RenderConstants.renderLinearLayoutListWeighted(inflater, percentRelativeLayout, GCoordinatorArrayList, position);
 
             if (topId > 0)
-                ((PercentRelativeLayout.LayoutParams) container.findViewById(midSectionId).getLayoutParams()).addRule(PercentRelativeLayout.BELOW, topId);
+                ((PercentRelativeLayout.LayoutParams) percentRelativeLayout.findViewById(midSectionId).getLayoutParams()).addRule(PercentRelativeLayout.BELOW, topId);
             if (bottomId > 0)
-                ((PercentRelativeLayout.LayoutParams) container.findViewById(midSectionId).getLayoutParams()).addRule(PercentRelativeLayout.ABOVE, bottomId);
+                ((PercentRelativeLayout.LayoutParams) percentRelativeLayout.findViewById(midSectionId).getLayoutParams()).addRule(PercentRelativeLayout.ABOVE, bottomId);
 
         }
 
-        RenderConstants.setUpFollowups(container, followupModalsArrayList);
+        RenderConstants.setUpFollowups(percentRelativeLayout, followupModalsArrayList);
 
 
-        return container.getId();
+        return percentRelativeLayout.getId();
 
     }
 
-    private void loadBackground(final ViewGroup viewGroup, int position) {
+    private void loadBackground(final ImageView iv, int position) {
 
-        String resourceName = (watermark != null && watermark.length() > 0) ? watermark : backgroundimage;
+        String resourceName = (watermark != null && watermark.length() > 0) ? watermark : backgroundImage;
         Diagnostics.StartMethodTracingByKey(position + "_" + resourceName);
         if (resourceName != null) {
             new ImageAsyncTask() {
                 @Override
                 protected void onPostExecute(Drawable drawable) {
                     super.onPostExecute(drawable);
-                    if (drawable != null && viewGroup != null) {
-                        ViewCompat.setBackground(viewGroup, drawable);
+                    if (drawable != null && iv != null) {
+                        iv.setImageDrawable(drawable);
+
                     }
                 }
             }.start(resourceName);
@@ -151,7 +157,7 @@ public class GPage extends GCoordinator {
     }
 
     private String getImageURL() {
-        return "file:///android_asset/" + backgroundimage;
+        return "file:///android_asset/" + backgroundImage;
     }
         //TODO: add back sliding panel for peek view
     //vgTop.setId(RenderViewCompat.generateViewId());

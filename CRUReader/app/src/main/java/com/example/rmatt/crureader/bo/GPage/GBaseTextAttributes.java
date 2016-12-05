@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
+import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 
 import org.simpleframework.xml.Attribute;
 
@@ -89,5 +90,9 @@ public class GBaseTextAttributes extends GCoordinator {
             textView.setTypeface(Typeface.defaultFromStyle(RenderConstants.getTypefaceFromModifier(textModifier)));
     }
 
+
+    public void defaultColor(int position) {
+        if(textColor == null) textColor = RenderSingleton.getInstance().getPositionGlobalColorAsString(position);
+    }
 
 }
