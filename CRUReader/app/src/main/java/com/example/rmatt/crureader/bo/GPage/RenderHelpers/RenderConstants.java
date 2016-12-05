@@ -96,11 +96,11 @@ public class RenderConstants {
         if (align != null) {
             if (align.equalsIgnoreCase("right"))
                 return Gravity.END;
-            else if (align.equalsIgnoreCase("left"))
-                return Gravity.START;
+            else if (align.equalsIgnoreCase("center"))
+                return Gravity.CENTER;
         }
 
-        return Gravity.CENTER_HORIZONTAL;
+        return Gravity.START;
     }
 
     public static int getRelativeLayoutRuleFromAlign(String align) {
