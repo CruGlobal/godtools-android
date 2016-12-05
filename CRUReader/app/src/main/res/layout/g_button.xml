@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <Button
+        <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextButton
             android:id="@+id/g_button_g_button"
             style="@style/Widget.GodTools.Button.Standard"
             android:layout_width="match_parent"

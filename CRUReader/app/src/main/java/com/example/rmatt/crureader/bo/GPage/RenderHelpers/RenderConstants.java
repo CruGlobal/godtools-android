@@ -95,12 +95,12 @@ public class RenderConstants {
     public static int getGravityFromAlign(String align) {
         if (align != null) {
             if (align.equalsIgnoreCase("right"))
-                return Gravity.END;
+                return Gravity.END + Gravity.TOP;
             else if (align.equalsIgnoreCase("center"))
-                return Gravity.CENTER;
+                return Gravity.CENTER_HORIZONTAL + Gravity.TOP;
         }
 
-        return Gravity.START;
+        return Gravity.START  + Gravity.TOP;
     }
 
     public static int getRelativeLayoutRuleFromAlign(String align) {
@@ -120,11 +120,11 @@ public class RenderConstants {
     public static int getTextAlign(String textAlign) {
         if (textAlign != null && !textAlign.equalsIgnoreCase("")) {
             if (textAlign.equalsIgnoreCase("center"))
-                return Gravity.CENTER;
+                return Gravity.CENTER_HORIZONTAL + Gravity.TOP;
             else if (textAlign.equalsIgnoreCase("right"))
-                return Gravity.END;
+                return Gravity.END + Gravity.TOP;
         }
-        return Gravity.START;
+        return Gravity.START + Gravity.TOP;
     }
 
     public static void setDefaultPadding(View numberTextView) {

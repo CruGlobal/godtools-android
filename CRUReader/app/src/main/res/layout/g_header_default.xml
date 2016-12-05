@@ -25,7 +25,8 @@
             android:orientation="horizontal">
 
 
-            <com.example.rmatt.crureader.bo.GPage.Views.RootTextColorTextView
+            <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
+                style="@style/HeaderNumberTextView"
                 android:id="@+id/g_header_default_number_textview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -33,18 +34,17 @@
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:text="@string/sample_text_g_header_default_number_textview"
-                android:textSize="72dp"
-                app:inheritColorFromRootViewBackground="true" />
+                android:textSize="72dp" />
 
-            <com.example.rmatt.crureader.bo.GPage.Views.RootTextColorTextView
+            <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
+                style="@style/HeaderHeaderTextView"
                 android:id="@+id/g_header_header_textview"
                 android:layout_width="0dp"
                 android:layout_gravity="center_vertical"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
                 android:text="@string/sample_text_g_header_default_header_textview"
-                android:textSize="24dp"
-                app:inheritColorFromRootViewBackground="true" />
+                android:textSize="24dp" />
 
 
         </LinearLayout>

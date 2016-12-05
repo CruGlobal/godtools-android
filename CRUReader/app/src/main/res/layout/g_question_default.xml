@@ -2,13 +2,12 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <com.example.rmatt.crureader.bo.GPage.Views.RootTextColorTextView
+        <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
             android:id="@+id/g_question_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:textColor="@android:color/white"
-            app:inheritColorFromRootViewBackground="false"
             android:text="@string/sample_text_gheader_textview"/>
 
 

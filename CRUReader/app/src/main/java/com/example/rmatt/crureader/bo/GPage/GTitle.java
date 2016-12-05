@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
-import com.example.rmatt.crureader.bo.GPage.Views.RootTextColorTextView;
+import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -62,7 +62,7 @@ public class GTitle extends GCoordinator {
                 break;
             default:
                 tempRoot = inflater.inflate(R.layout.g_header_default, viewGroup);
-                setUpNumberTextView((RootTextColorTextView) tempRoot.findViewById(R.id.g_header_default_number_textview), position);
+                setUpNumberTextView((AutoScaleTextView) tempRoot.findViewById(R.id.g_header_default_number_textview), position);
                 break;
 
         }
@@ -105,14 +105,13 @@ public class GTitle extends GCoordinator {
 
 
 
-    private void setUpNumberTextView(RootTextColorTextView numberTextView, int position) {
+    private void setUpNumberTextView(AutoScaleTextView numberTextView, int position) {
         if (number != null) {
 
             numberTextView.setText(number);
             numberTextView.setTextColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
         } else {
-            PercentFrameLayout.LayoutParams pli = (PercentFrameLayout.LayoutParams) numberTextView.getLayoutParams();
-            pli.getPercentLayoutInfo().widthPercent = 0;
+            numberTextView.setVisibility(View.GONE);
         }
     }
 
