@@ -39,7 +39,7 @@ public class GPanel extends GCoordinator {
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
         Context context = viewGroup.getContext();
         RenderConstants.renderLinearLayoutListWeighted(inflater,
-                (PercentRelativeLayout) viewGroup, GCoordinatorArrayList, position);
+                (PercentRelativeLayout) viewGroup, GCoordinatorArrayList, position, 40);
         return 0;
     }
 

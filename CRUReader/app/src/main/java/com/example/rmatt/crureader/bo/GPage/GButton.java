@@ -5,18 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.example.rmatt.crureader.PopupDialogActivity;
 import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
-import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextButton;
+import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -59,12 +57,19 @@ public class GButton extends GBaseButtonAttributes {
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
         View v = inflater.inflate(R.layout.g_button, viewGroup);
-        AutoScaleTextButton button = (AutoScaleTextButton) v.findViewById(R.id.g_button_g_button);
+        LinearLayout buttonLinearLayout = (LinearLayout) v.findViewById(R.id.g_button_outer_linearlayout);
+        AutoScaleTextView buttonTextView = (AutoScaleTextView)v.findViewById(R.id.g_button_g_textview);
+
+
 //        Space space = (Space)v.findViewById(R.id.g_button_space_bottom);
-        button.setId(RenderViewCompat.generateViewId());
+        buttonLinearLayout.setId(RenderViewCompat.generateViewId());
         //space.setId(RenderViewCompat.generateViewId());
-        this.updateBaseAttributes(button);
+        this.updateBaseAttributes(buttonLinearLayout);
+
         if (buttonText != null && buttonText.content != null) {
+            buttonText.updateBaseAttributes(buttonTextView);
+            buttonTextView.setId(RenderViewCompat.generateViewId());
+            buttonLinearLayout.setTag(buttonText.content);
             //button.setText(buttonText.content);
 
             //button.setTextSize(RenderConstants.getTextSizeFromXMLSize(RenderConstants.DEFAULT_BUTTON_TEXT_SIZE));
@@ -73,26 +78,26 @@ public class GButton extends GBaseButtonAttributes {
 
         }
 
-        button.setOnClickListener(new View.OnClickListener() {
+        buttonLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Button appCompatButton = (Button) view;
+                LinearLayout ll = (LinearLayout) view;
 
                 Context context = view.getContext();
 
-                RenderSingleton.getInstance().gPanelHashMap.put(appCompatButton.getId(), GButton.this.panel);
+                RenderSingleton.getInstance().gPanelHashMap.put(ll.getId(), GButton.this.panel);
                 int cords[] = {0, 0};
 
-                appCompatButton.getLocationInWindow(cords);
+                ll.getLocationInWindow(cords);
 
                 Intent intent = new Intent(context, PopupDialogActivity.class);
                 intent.putExtra(PopupDialogActivity.CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA, (float) cords[1]);
-                intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_HASH_KEY_INT_EXTRA, appCompatButton.getId());
-                intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_TITLE_STRING_EXTRA, appCompatButton.getText() != null ? appCompatButton.getText() : "");
+                intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_HASH_KEY_INT_EXTRA, ll.getId());
+                intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_TITLE_STRING_EXTRA, ll.getTag() != null ? ll.getTag().toString() : "");
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, appCompatButton, context.getString(R.string.inner_ll_transistion_title));
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, ll, context.getString(R.string.inner_ll_transistion_title));
 
                     ((Activity) context).startActivityForResult(intent, 999, options.toBundle());
 
@@ -104,39 +109,7 @@ public class GButton extends GBaseButtonAttributes {
 
             }
         });
-        return button.getId();
-    }
-
-    @Override
-    public void updateBaseAttributes(View view) {
-        super.updateBaseAttributes(view);
-        if(buttonText != null) {
-            if (view != null && view instanceof AutoScaleTextButton) {
-                AutoScaleTextButton textViewCast = (AutoScaleTextButton) view;
-                applyTextSize(textViewCast);
-                applyTextContent(textViewCast);
-            }
-        }
-    }
-
-    private void applyTextContent(AutoScaleTextButton textViewCast) {
-        textViewCast.setText(buttonText.content);
-    }
-
-    private void applyTextSize(AutoScaleTextButton textViewCast) {
-
-        if (width != null && height != null)
-        {
-            Log.e(TAG, "Should scale this~!~ + " + textViewCast.getText() + textViewCast.getId());
-        }
-        if (textSize != null) {
-            textViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, buttonText.textSize);
-        }
-        else
-        {
-            textViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100.0f);
-        }
-
+        return buttonLinearLayout.getId();
     }
 
 }
