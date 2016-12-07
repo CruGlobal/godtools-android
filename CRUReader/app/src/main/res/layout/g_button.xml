@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
+
     <LinearLayout
         android:id="@+id/g_button_outer_linearlayout"
         android:layout_width="match_parent"
@@ -13,15 +14,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextButton
-            android:id="@+id/g_button_g_button"
-            style="@style/Widget.GodTools.Button.Standard"
-            android:layout_width="match_parent"
+        <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
+            android:id="@+id/g_button_g_textview"
+            style="@style/NormalButtonTextView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:gravity="center_horizontal"
-            android:text="@string/sample_text_g_button_g"
-             />
+            android:layout_gravity="left|center_vertical"
+            android:gravity="center_vertical" />
 
 
         <include

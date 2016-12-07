@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -100,7 +101,7 @@ public class RenderConstants {
                 return Gravity.CENTER_HORIZONTAL + Gravity.TOP;
         }
 
-        return Gravity.START  + Gravity.TOP;
+        return Gravity.START + Gravity.TOP;
     }
 
     public static int getRelativeLayoutRuleFromAlign(String align) {
@@ -144,58 +145,36 @@ public class RenderConstants {
         }
     }
 
-
     public static int renderLinearLayoutListWeighted(LayoutInflater inflater, ViewGroup percentRelativeLayout, ArrayList<GCoordinator> GCoordinatorArrayList, int position) {
+        return renderLinearLayoutListWeighted(inflater, percentRelativeLayout, GCoordinatorArrayList, position, 0);
+
+    }
+
+    public static int renderLinearLayoutListWeighted(LayoutInflater inflater, ViewGroup percentRelativeLayout, ArrayList<GCoordinator> GCoordinatorArrayList, int position, int maxSpace) {
         LinearLayout midSection = new LinearLayout(inflater.getContext());
         midSection.setOrientation(LinearLayout.VERTICAL);
         midSection.setId(RenderViewCompat.generateViewId());
+
+
         Space space = new Space(inflater.getContext());
-        LinearLayout.LayoutParams evenSpreadDownSpaceLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.0f);
+        LinearLayout.LayoutParams evenSpreadDownSpaceLayoutParams;
+
+        evenSpreadDownSpaceLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, maxSpace, 1.0f); //max space is to deal with popups that shouldn't take up the whole container.
+
         midSection.addView(space, evenSpreadDownSpaceLayoutParams);
-        /*int lastId = -1;
-        int newId = -1;
-        int firstId = -1;
-        */
 
 
         for (GCoordinator tap : GCoordinatorArrayList) {
 
-           /* newId = tap.render(inflater, percentRelativeLayout, position);
-            if (firstId == -1) {
-                firstId = newId;
-            }
-            if (lastId > -1 && tap.y == null) {
-                ((PercentRelativeLayout.LayoutParams) percentRelativeLayout.findViewById(newId).getLayoutParams()).addRule(PercentRelativeLayout.BELOW, lastId);
-            }
-            lastId = newId;*/
-            tap.render(inflater, tap.y == null ? midSection : percentRelativeLayout, position);
-
-            //LinearLayout.LayoutParams midSectionChildLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            //midSection.addView(view, midSectionChildLayoutParams);
-
+            tap.render(inflater, tap.y == null ? midSection : percentRelativeLayout, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
             space = new Space(inflater.getContext());
             midSection.addView(space, evenSpreadDownSpaceLayoutParams);
 
 
         }
-        percentRelativeLayout.addView(midSection);
+        percentRelativeLayout.addView(midSection, new PercentRelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         return midSection.getId();
     }
-
-   /* public static LinearLayout renderLinearLayoutList(Context context, ArrayList<GCoordinator> GCoordinatorArrayList, int position) {
-        LinearLayout midSection = new LinearLayout(context);
-        midSection.setOrientation(LinearLayout.VERTICAL);
-
-
-        for (GCoordinator tap : GCoordinatorArrayList) {
-            View view = (View) tap.render(midSection, position);
-            view.setId(RenderViewCompat.generateViewId());
-            LinearLayout.LayoutParams midSectionChildLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            midSection.addView(view, midSectionChildLayoutParams);
-
-        }
-        return midSection;
-    } */
 
     public static String[] getTapEvents(String tapEvents) {
         String[] splitTapEvents = null;

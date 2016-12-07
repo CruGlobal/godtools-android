@@ -55,9 +55,8 @@
         <!-- Default Size -->
     </style>
 
-    <style name="ButtonTextView" parent="AutoScaleTextButton">
+    <style name="NormalButtonTextView" parent="AutoScaleTextView">
         <item name="textSizeScalar">20</item>
-        <!-- Default Size -->
     </style>
 
 
@@ -82,15 +81,12 @@
 
 
 
-    <style name="Widget.GodTools.Button.Standard" parent="AutoScaleTextButton">
+    <style name="Widget.GodTools.Button.Standard">
         <item name="android:textAppearanceButton">@style/TextAppearance.GodTools.Button.Standard</item>
         <item name="android:gravity">left|center_vertical</item>
     </style>
 
 
-    <style name="AutoScaleTextButton" parent="Widget.GodTools.Button">
-        <item name="textSizeScalar">20</item>
-    </style>
 
 
     <style name="Widget.GodTools.Button.ButtonPair">
