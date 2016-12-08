@@ -5,6 +5,7 @@
     <com.github.captain_miao.optroundcardview.OptRoundCardView
         android:id="@+id/g_question_straight_outerlayout_optroundcardview"
         android:layout_width="match_parent"
+        android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
         android:layout_height="wrap_content"
         app:optRoundCardBackgroundColor="@android:color/white"
@@ -13,8 +14,8 @@
         <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
             android:id="@+id/g_question_textview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
+            android:layout_height="wrap_content"
+            style="@style/Question.QuestionStraightTextView"
             android:text="@string/sample_text_gheader_straight_textview"/>
 
 

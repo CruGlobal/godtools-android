@@ -13,8 +13,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -152,6 +150,7 @@ public class PopupDialogActivity extends Activity {
 
     private void bindHeader() {
 
+
         tv.setTextColor(Color.parseColor(RenderConstants.DEFAULT_TEXT_COLOR));
         tv.setTextSize(RenderConstants.getTextSizeFromXMLSize(RenderConstants.DEFAULT_BUTTON_TEXT_SIZE));
         tv.setText(title);
@@ -180,8 +179,9 @@ public class PopupDialogActivity extends Activity {
 
     private void fadeIn() {
 
-        Animation fadeInAnim = AnimationUtils.loadAnimation(PopupDialogActivity.this, R.anim.textview_fadein);
-        extraContent.setAnimation(fadeInAnim);
+//        Animation fadeInAnim = AnimationUtils.loadAnimation(PopupDialogActivity.this, R.anim.textview_fadein);
+//        extraContent.setAnimation(fadeInAnim);
+//        extraContent.setVisibility(View.VISIBLE);
         extraContent.setVisibility(View.VISIBLE);
     }
 

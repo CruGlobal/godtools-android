@@ -16,11 +16,12 @@
         <android.support.percent.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:gravity="center_vertical">
 
 
             <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
-                style="@style/HeaderHeaderTextView"
+                style="@style/AutoScaleTextView.HeaderHeaderTextView"
                 android:id="@+id/g_header_header_textview"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -32,6 +33,7 @@
 
             <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
                 android:id="@+id/g_header_subheader_textview"
+                style="@style/AutoScaleTextView.HeaderSubheadingTextView"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/g_header_header_textview"
                 android:text="@string/sample_text_g_header_straight_subheader_textview"

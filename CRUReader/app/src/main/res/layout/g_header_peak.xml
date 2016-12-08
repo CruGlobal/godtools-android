@@ -25,8 +25,9 @@
             android:gravity="center_vertical">
 
 
-            <TextView
+            <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
                 android:id="@+id/g_header_header_textview"
+                style="@style/AutoScaleTextView.HeaderHeaderTextView"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:text="@string/sample_text_g_header_peak_header_textview"
@@ -34,7 +35,8 @@
                 android:textSize="22.8dp"
                 app:layout_widthPercent="33%" />
 
-            <TextView
+            <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
+                style="@style/AutoScaleTextView.HeaderSubheadingTextView"
                 android:id="@+id/g_header_subheader_textview"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"

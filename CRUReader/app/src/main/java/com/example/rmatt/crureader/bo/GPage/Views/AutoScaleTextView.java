@@ -33,13 +33,13 @@ public class AutoScaleTextView extends AppCompatTextView {
 
     private void initialize(Context context, AttributeSet attrs, int defStyleAttr) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AutoScaleTextView, defStyleAttr, R.style.AutoScaleTextView);
-        textSizeScalar = a.getResourceId(R.styleable.AutoScaleTextView_textSizeScalar, 17);
+        textSizeScalar = a.getInteger(R.styleable.AutoScaleTextView_textSizeScalar, 17);
     }
 
     @Override
     public void setTextSize(int unit, float size) {
 
-        float adjustedSize = (size * (float)textSizeScalar) / 100.0f;
+        float adjustedSize = (size * (float)textSizeScalar) / 80.0f;
         Log.w("TextSize", "Size: " + size + " adjustedSize: " + adjustedSize + " textSizeScalar: " + textSizeScalar);
         super.setTextSize(unit, adjustedSize);
     }

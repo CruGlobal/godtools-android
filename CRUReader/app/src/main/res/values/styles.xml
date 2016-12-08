@@ -36,27 +36,62 @@
     </style>
 
     <style name="Widget"></style>
-    <style name="Widget.GodTools"></style>
+    <style name="Widget.GodTools">
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+    </style>
 
-    <style name="AutoScaleTextView" >
+    <style name="AutoScaleTextView" parent="Widget.GodTools">
         <item name="textSizeScalar">17</item> //Default Text Size Scalar
+        <item name="android:visibility">gone</item>
 
     </style>
 
-    <style name="HeaderNumberTextView" parent="AutoScaleTextView">
+    <style name="AutoScaleTextView.HeaderNumberTextView">
         <item name="textSizeScalar">68</item>
+        <item name="android:layout_marginRight">0dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:gravity">top|right</item>
     </style>
 
-    <style name="HeaderHeaderTextView" parent="AutoScaleTextView">
+    <style name="AutoScaleTextView.HeaderHeaderTextView">
         <!-- Default Size -->
+        <item name="textSizeScalar">17</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
 
-    <style name="HeaderSubheadingTextView" parent="AutoScaleTextView">
+    <style name="AutoScaleTextView.HeaderSubheadingTextView">
         <!-- Default Size -->
     </style>
 
     <style name="NormalButtonTextView" parent="AutoScaleTextView">
         <item name="textSizeScalar">20</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+    </style>
+
+    <style name="Question" parent="AutoScaleTextView">
+        <item name="android:gravity">top|right</item>
+
+
+
+    </style>
+
+    <style name="Question.QuestionStraightTextView">
+        <item name="textSizeScalar">17</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center_horizontal|top</item>
+
+    </style>
+
+    <style name="Question.QuestionDefaultTextView">
+            <!-- Default Size -->
+        <item name="textSizeScalar">20</item>
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_alignParentBottom">true</item>
     </style>
 
 
