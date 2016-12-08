@@ -46,8 +46,8 @@ public class PopupDialogActivity extends Activity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        extraContent.setAnimation(null);
-        extraContent.setVisibility(View.INVISIBLE);
+        //extraContent.setAnimation(null);
+        //extraContent.setVisibility(View.INVISIBLE);
     }
 
     @Override
