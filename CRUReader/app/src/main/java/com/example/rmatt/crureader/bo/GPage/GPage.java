@@ -71,6 +71,7 @@ public class GPage extends GCoordinator {
         //setDefaultValues();
         rootView = (View) inflater.inflate(R.layout.g_page, container, false);
         PercentRelativeLayout percentRelativeLayout = (PercentRelativeLayout)rootView.findViewById(R.id.g_page_main_layout_percentrelativelayout);
+
         ImageView backgroundImageView = (ImageView)percentRelativeLayout.findViewById(R.id.g_page_background_imageview);
         Context context = inflater.getContext();
         /* Background color */

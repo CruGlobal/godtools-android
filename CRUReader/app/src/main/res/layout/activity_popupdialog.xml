@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.percent.PercentFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/popup_percentFrameLayout"
+
+
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,21 +11,22 @@
         android:id="@+id/popup_innerLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:duplicateParentState="true"
         android:transitionName="@string/inner_ll_transistion_title"
         android:orientation="vertical">
 
-        <TextView
+        <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
+            android:visibility="visible"
             android:id="@+id/button_tv_popin"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:textAppearance="@style/TextAppearance.GodTools.Button.Standard"
+            style="@style/NormalButtonTextView"
              />
 
         <android.support.percent.PercentRelativeLayout
             android:id="@+id/extra_wrapper_fl"
             android:layout_width="match_parent"
+            android:layout_margin="8dp"
             android:layout_height="wrap_content"
             android:visibility="invisible">
 
