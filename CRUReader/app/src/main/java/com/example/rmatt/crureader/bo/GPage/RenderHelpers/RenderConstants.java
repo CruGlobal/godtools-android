@@ -167,12 +167,15 @@ public class RenderConstants {
         for (GCoordinator tap : GCoordinatorArrayList) {
 
             tap.render(inflater, tap.y == null ? midSection : percentRelativeLayout, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
-            space = new Space(inflater.getContext());
-            midSection.addView(space, evenSpreadDownSpaceLayoutParams);
+            if (tap.y == null) //If items are manually laid out, we don't want to add space between them.
+            {
+                space = new Space(inflater.getContext());
+                midSection.addView(space, evenSpreadDownSpaceLayoutParams);
+            }
 
 
         }
-        percentRelativeLayout.addView(midSection, new PercentRelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        percentRelativeLayout.addView(midSection, new PercentRelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, maxSpace > 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : ViewGroup.LayoutParams.MATCH_PARENT)); //If there is max space wrap_content because we only want to fill a small area.   If it isn't we want to fill the whole available area evenly.
         return midSection.getId();
     }
 

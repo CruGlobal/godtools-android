@@ -3,9 +3,9 @@ package com.example.rmatt.crureader.bo.GPage;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.rmatt.crureader.R;
+import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -30,11 +30,11 @@ public class GQuestion extends GBaseTextAttributes {
         if (mode
                 != null && mode.equalsIgnoreCase("straight")) {
             gQuestion = inflater.inflate(R.layout.g_question_straight, viewGroup);
+            defaultColor(position);
         } else {
             gQuestion = inflater.inflate(R.layout.g_question_default, viewGroup);
         }
-        TextView gQuestionTextView = (TextView) gQuestion.findViewById(R.id.g_question_textview);
-        textalign = "right";
+        AutoScaleTextView gQuestionTextView = (AutoScaleTextView) gQuestion.findViewById(R.id.g_question_textview);
         updateBaseAttributes(gQuestionTextView);
         return gQuestionTextView.getId();
     }

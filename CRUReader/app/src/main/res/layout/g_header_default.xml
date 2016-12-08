@@ -26,25 +26,21 @@
 
 
             <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
-                style="@style/HeaderNumberTextView"
+                style="@style/AutoScaleTextView.HeaderNumberTextView"
                 android:id="@+id/g_header_default_number_textview"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
                 android:includeFontPadding="false"
-                android:text="@string/sample_text_g_header_default_number_textview"
-                android:textSize="72dp" />
+                android:text="@string/sample_text_g_header_default_number_textview" />
 
             <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
-                style="@style/HeaderHeaderTextView"
+                style="@style/AutoScaleTextView.HeaderHeaderTextView"
                 android:id="@+id/g_header_header_textview"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_height="wrap_content"
-                android:layout_weight="8"
                 android:text="@string/sample_text_g_header_default_header_textview"
-                android:textSize="24dp" />
+                 />
 
 
         </LinearLayout>

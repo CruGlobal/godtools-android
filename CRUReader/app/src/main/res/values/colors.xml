@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="g_button_upper_border_color">#644c4c4c</color>
-    <color name="g_button_bottom_border_color">#64ffffff</color>
+    <color name="g_button_upper_border_color">#404c4c4c</color>
+    <color name="g_button_bottom_border_color">#40ffffff</color>
 </resources>

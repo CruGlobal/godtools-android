@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
-        style="@style/HeaderHeaderTextView"
+        style="@style/AutoScaleTextView.HeaderHeaderTextView"
         android:id="@+id/g_header_header_textview"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -13,7 +13,7 @@
 
     <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
         android:id="@+id/g_header_subheader_textview"
-        style="@style/HeaderSubheadingTextView"
+        style="@style/AutoScaleTextView.HeaderSubheadingTextView"
         android:layout_height="wrap_content"
         android:includeFontPadding="false"
         android:tag="top"

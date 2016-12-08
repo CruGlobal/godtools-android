@@ -36,7 +36,7 @@ public class GTitle extends GCoordinator {
     @Attribute(required = false)
     public HeadingMode mode;
     @Element(required = false)
-    public String number;
+    public GBaseTextAttributes number;
     @Element(required = false, name = "peekpanel")
     public GBaseTextAttributes peekPanel;
 
@@ -62,7 +62,11 @@ public class GTitle extends GCoordinator {
                 break;
             default:
                 tempRoot = inflater.inflate(R.layout.g_header_default, viewGroup);
-                setUpNumberTextView((AutoScaleTextView) tempRoot.findViewById(R.id.g_header_default_number_textview), position);
+                if(number != null) {
+                    number.defaultColor(position);
+                    number.updateBaseAttributes((AutoScaleTextView) tempRoot.findViewById(R.id.g_header_default_number_textview));
+                }
+                //setUpNumberTextView((AutoScaleTextView) tempRoot.findViewById(R.id.g_header_default_number_textview), position);
                 break;
 
         }
@@ -105,7 +109,7 @@ public class GTitle extends GCoordinator {
 
 
 
-    private void setUpNumberTextView(AutoScaleTextView numberTextView, int position) {
+    /*private void setUpNumberTextView(AutoScaleTextView numberTextView, int position) {
         if (number != null) {
 
             numberTextView.setText(number);
@@ -114,6 +118,7 @@ public class GTitle extends GCoordinator {
             numberTextView.setVisibility(View.GONE);
         }
     }
+    */
 
 
     public enum HeadingMode {

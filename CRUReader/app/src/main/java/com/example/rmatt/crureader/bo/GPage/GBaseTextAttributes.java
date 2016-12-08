@@ -1,9 +1,10 @@
 package com.example.rmatt.crureader.bo.GPage;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView;
 
 import org.simpleframework.xml.Attribute;
+
+import me.grantland.widget.AutofitHelper;
 
 /**
  * Created by rmatt on 10/31/2016.
@@ -48,10 +51,19 @@ public class GBaseTextAttributes extends GCoordinator {
             applyTextAlign(textViewCast);
             applyTextContent(textViewCast);
         }
+        else
+            new Exception("Must be autoscaletextview to extend GBaseTextAttributes");
     }
 
     private void applyTextContent(AutoScaleTextView textViewCast) {
-        textViewCast.setText(content);
+        if(content != null && !content.equalsIgnoreCase("")) {
+            textViewCast.setVisibility(View.VISIBLE);
+            textViewCast.setText(content);
+        }
+        else
+        {
+            textViewCast.setVisibility(View.GONE);
+        }
     }
 
     private void applyTextAlign(AutoScaleTextView textViewCast) {
@@ -68,13 +80,14 @@ public class GBaseTextAttributes extends GCoordinator {
         if (width != null && height != null)
         {
             Log.e(TAG, "Should scale this~!~ + " + textViewCast.getText() + textViewCast.getId());
+            AutofitHelper.create(textViewCast);
         }
-        if (textSize != null) {
-            textViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
-        }
-        else
-        {
-            textViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100.0f); 
+        else {
+            if (textSize != null) {
+                textViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+            } else {
+                textViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100.0f);
+            }
         }
 
     }
@@ -84,7 +97,10 @@ public class GBaseTextAttributes extends GCoordinator {
 
         AutoScaleTextView textView = new AutoScaleTextView(viewGroup.getContext());
         textView.setId(RenderViewCompat.generateViewId());
-        viewGroup.addView(textView, new PercentRelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        textView.setGravity(Gravity.TOP);
+        textView.setTextColor(Color.WHITE);
+
+        viewGroup.addView(textView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         updateBaseAttributes(textView);
         return textView.getId();
     }
