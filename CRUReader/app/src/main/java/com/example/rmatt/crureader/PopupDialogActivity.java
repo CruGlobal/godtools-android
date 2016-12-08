@@ -9,17 +9,18 @@ import android.support.percent.PercentLayoutHelper;
 import android.support.percent.PercentRelativeLayout;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
+import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView;
 
 /**
  * Created by rmatt on 11/14/2016.
@@ -36,7 +37,7 @@ public class PopupDialogActivity extends Activity {
 
     int distanceToBottomOfScreen;
     PercentRelativeLayout extraContent;
-    TextView tv;
+    AutoScaleTextView tv;
     GCoordinator gPanel;
     int screenHeight;
     String title;
@@ -57,7 +58,10 @@ public class PopupDialogActivity extends Activity {
             getWindow().setAllowEnterTransitionOverlap(false);
             getWindow().setAllowReturnTransitionOverlap(false);
         }
+
+
         setContentView(R.layout.activity_popupdialog);
+
         bindLayouts();
 
 
@@ -104,7 +108,7 @@ public class PopupDialogActivity extends Activity {
 
                     ll.measure(View.MeasureSpec.makeMeasureSpec(ll.getWidth(), View.MeasureSpec.AT_MOST),
                             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                    extraContent.measure(View.MeasureSpec.makeMeasureSpec(extraContent.getWidth(), View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                   // extraContent.measure(View.MeasureSpec.makeMeasureSpec(extraContent.getWidth(), View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
 
                     if (ll.getHeight() < ll.getMeasuredHeight() && !fixed) {
@@ -152,16 +156,21 @@ public class PopupDialogActivity extends Activity {
 
 
         tv.setTextColor(Color.parseColor(RenderConstants.DEFAULT_TEXT_COLOR));
-        tv.setTextSize(RenderConstants.getTextSizeFromXMLSize(RenderConstants.DEFAULT_BUTTON_TEXT_SIZE));
         tv.setText(title);
     }
 
     private void bindLayouts() {
         extraContent = (PercentRelativeLayout) findViewById(R.id.extra_wrapper_fl);
-        tv = (TextView) findViewById(R.id.button_tv_popin);
+        tv = (AutoScaleTextView) findViewById(R.id.button_tv_popin);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100.0f);
         ll = (LinearLayout) findViewById(R.id.popup_innerLinearLayout);
         ll.setBackgroundColor(Color.parseColor(RenderSingleton.getInstance().getCurrentPageGlobalColor()));
-        //ll.setPadding(40, 40, 40,40);
+        findViewById(R.id.popup_percentFrameLayout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
     }
 
@@ -178,10 +187,6 @@ public class PopupDialogActivity extends Activity {
     }
 
     private void fadeIn() {
-
-//        Animation fadeInAnim = AnimationUtils.loadAnimation(PopupDialogActivity.this, R.anim.textview_fadein);
-//        extraContent.setAnimation(fadeInAnim);
-//        extraContent.setVisibility(View.VISIBLE);
         extraContent.setVisibility(View.VISIBLE);
     }
 

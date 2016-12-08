@@ -55,9 +55,9 @@ public class GButton extends GBaseButtonAttributes {
 
 
     @Override
-    public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
+    public int render(final LayoutInflater inflater, ViewGroup viewGroup, final int position) {
         View v = inflater.inflate(R.layout.g_button, viewGroup);
-        LinearLayout buttonLinearLayout = (LinearLayout) v.findViewById(R.id.g_button_outer_linearlayout);
+        final LinearLayout buttonLinearLayout = (LinearLayout) v.findViewById(R.id.g_button_outer_linearlayout);
         AutoScaleTextView buttonTextView = (AutoScaleTextView)v.findViewById(R.id.g_button_g_textview);
 
 
@@ -81,18 +81,13 @@ public class GButton extends GBaseButtonAttributes {
         buttonLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                LinearLayout ll = (LinearLayout) view;
-
+                final LinearLayout ll = (LinearLayout) view;
                 Context context = view.getContext();
-
+                int distanceTooTop = ll.getTop() + ((View) ll.getParent()).getTop();
                 RenderSingleton.getInstance().gPanelHashMap.put(ll.getId(), GButton.this.panel);
-                int cords[] = {0, 0};
-
-                ll.getLocationInWindow(cords);
 
                 Intent intent = new Intent(context, PopupDialogActivity.class);
-                intent.putExtra(PopupDialogActivity.CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA, (float) cords[1]);
+                intent.putExtra(PopupDialogActivity.CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA, (float) distanceTooTop);
                 intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_HASH_KEY_INT_EXTRA, ll.getId());
                 intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_TITLE_STRING_EXTRA, ll.getTag() != null ? ll.getTag().toString() : "");
 
@@ -107,9 +102,10 @@ public class GButton extends GBaseButtonAttributes {
                 }
 
 
+
             }
         });
         return buttonLinearLayout.getId();
     }
-
+    private boolean fixed = false;
 }

@@ -70,6 +70,8 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_gravity">left|center_vertical</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
 
     <style name="Question" parent="AutoScaleTextView">

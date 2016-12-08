@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
@@ -95,7 +96,8 @@ public class GBaseTextAttributes extends GCoordinator {
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
 
-        AutoScaleTextView textView = new AutoScaleTextView(viewGroup.getContext());
+
+        AutoScaleTextView textView = new AutoScaleTextView(inflater.getContext(), null, R.style.AutoScaleTextView);
         textView.setId(RenderViewCompat.generateViewId());
         textView.setGravity(Gravity.TOP);
         textView.setTextColor(Color.WHITE);
@@ -124,5 +126,11 @@ public class GBaseTextAttributes extends GCoordinator {
 
     public Integer getTextSize() {
         return textSize;
+    }
+
+    @Override
+    public boolean hasSpace()
+    {
+        return false;
     }
 }

@@ -8,12 +8,10 @@ import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.GFollowupModal;
@@ -128,14 +126,6 @@ public class RenderConstants {
         return Gravity.START + Gravity.TOP;
     }
 
-    public static void setDefaultPadding(View numberTextView) {
-        RenderSingleton.getInstance().getCacheIntResource(R.dimen.text_padding);
-        int dimensionPixelSize = numberTextView.getContext().getResources().getDimensionPixelSize(R.dimen.text_padding);
-
-
-        numberTextView.setPadding(dimensionPixelSize, dimensionPixelSize, dimensionPixelSize, dimensionPixelSize);
-
-    }
 
     public static int parseColor(String color) {
         if (color != null) {
@@ -158,7 +148,6 @@ public class RenderConstants {
 
         Space space = new Space(inflater.getContext());
         LinearLayout.LayoutParams evenSpreadDownSpaceLayoutParams;
-
         evenSpreadDownSpaceLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, maxSpace, 1.0f); //max space is to deal with popups that shouldn't take up the whole container.
 
         midSection.addView(space, evenSpreadDownSpaceLayoutParams);
@@ -167,7 +156,7 @@ public class RenderConstants {
         for (GCoordinator tap : GCoordinatorArrayList) {
 
             tap.render(inflater, tap.y == null ? midSection : percentRelativeLayout, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
-            if (tap.y == null) //If items are manually laid out, we don't want to add space between them.
+            if (!tap.isManuallyLaidOut()) //If items are manually laid out, we don't want to add space between them.
             {
                 space = new Space(inflater.getContext());
                 midSection.addView(space, evenSpreadDownSpaceLayoutParams);

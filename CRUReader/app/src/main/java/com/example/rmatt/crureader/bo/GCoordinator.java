@@ -98,7 +98,6 @@ public abstract class GCoordinator {
         if (percentLayoutInfo.topMargin == -1) percentLayoutInfo.topMargin = 0;
         if (percentLayoutInfo.leftMargin == -1) percentLayoutInfo.leftMargin = 0;
         if (percentLayoutInfo.rightMargin == -1) percentLayoutInfo.rightMargin = 0;
-        //if (percentLayoutInfo.leftMarginPercent == -1) percentLayoutInfo.leftMarginPercent = 0;
 
         if (startMargin != null) {
             percentLayoutInfo.leftMargin += RenderConstants.getHorizontalPixels(startMargin);
@@ -119,7 +118,19 @@ public abstract class GCoordinator {
             percentLayoutInfo.leftMargin += RenderConstants.getHorizontalPixels(x);
         }
 
+
     }
+
+    public boolean hasSpace()
+    {
+        return true;
+    }
+
+    public boolean isManuallyLaidOut()
+    {
+        return y != null;
+    }
+
 
     /*
 
