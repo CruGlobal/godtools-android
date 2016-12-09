@@ -20,13 +20,13 @@ public abstract class GBaseButtonAttributes extends GCoordinator {
     public String validation;
 
     @Attribute(required = false)
-    public String mode;
+    public ButtonMode mode;
 
     @Attribute(name = "tap-events", required = false)
     public String tapEvents;
 
-    //TODO: cast T to skip unboxing.
-
-
+    public enum ButtonMode {
+        big, url, allurl, email, link
+    }
 
 }

@@ -1,20 +1,28 @@
 package com.example.rmatt.crureader.bo.GPage.RenderHelpers;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.percent.PercentRelativeLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.example.rmatt.crureader.PopupDialogActivity;
+import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.GFollowupModal;
+import com.example.rmatt.crureader.bo.GPage.GPanel;
 import com.example.rmatt.crureader.bo.GPage.Views.Space;
 
 import java.util.ArrayList;
@@ -197,5 +205,40 @@ public class RenderConstants {
 
     public static int getVerticalPixels(Integer height) {
         return Math.round(getVerticalPercent(height) * RenderSingleton.getInstance().screenHeight);
+    }
+
+    static View.OnClickListener onClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            final LinearLayout ll = (LinearLayout) view;
+            Context context = view.getContext();
+            int distanceTooTop = ll.getTop() + ((View) ll.getParent()).getTop();
+
+            RenderSingleton.getInstance().gPanelHashMap.put(ll.getId(), (GPanel)ll.getTag(R.integer.gpanel_tag));
+
+            Intent intent = new Intent(context, PopupDialogActivity.class);
+            intent.putExtra(PopupDialogActivity.CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA, (float) distanceTooTop);
+            intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_HASH_KEY_INT_EXTRA, ll.getId());
+            intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_TITLE_STRING_EXTRA, ll.getTag() != null ? ll.getTag().toString() : "");
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, ll, context.getString(R.string.inner_ll_transistion_title));
+
+                ((Activity) context).startActivityForResult(intent, 999, options.toBundle());
+
+
+            } else {
+                ((Activity) context).startActivityForResult(intent, 999);
+            }
+
+
+
+        }
+    };
+
+    public static void addOnClickPanelListener(String content, GPanel panel, LinearLayout buttonLinearLayout) {
+        buttonLinearLayout.setTag(content);
+        buttonLinearLayout.setTag(R.integer.gpanel_tag, panel);
+        buttonLinearLayout.setOnClickListener(onClick);
     }
 }

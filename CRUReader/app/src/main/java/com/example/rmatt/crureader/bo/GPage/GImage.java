@@ -1,7 +1,6 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,8 +38,6 @@ public class GImage extends GCoordinator {
         updateBaseAttributes(gImageView);
         setImageView(gImageView);
         gImageView.setId(RenderViewCompat.generateViewId());
-
-        Log.i(TAG, "render in GImage");
         return gImageView.getId();
     }
 

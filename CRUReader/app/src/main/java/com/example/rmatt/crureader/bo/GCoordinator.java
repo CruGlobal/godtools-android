@@ -132,38 +132,6 @@ public abstract class GCoordinator {
     }
 
 
-    /*
-
-        private void applyMargins(RelativeLayout.LayoutParams percentLayoutInfo) {
-
-        if (percentLayoutInfo.topMarginPercent == -1) percentLayoutInfo.topMarginPercent = 0;
-        if (percentLayoutInfo.startMarginPercent == -1) percentLayoutInfo.startMarginPercent = 0;
-        if (percentLayoutInfo.endMarginPercent == -1) percentLayoutInfo.endMarginPercent = 0;
-        if (percentLayoutInfo.leftMarginPercent == -1) percentLayoutInfo.leftMarginPercent = 0;
-            RenderConstants.getHorizontalPixels(startMargin);
-        if (startMargin != null) {
-            percentLayoutInfo.startMarginPercent += RenderConstants.getHorizontalPercent(startMargin);
-            Log.i(TAG, "RenderConstants get horizontal screen size");
-        }
-        if (endMargin != null) {
-            percentLayoutInfo.endMarginPercent += RenderConstants.getHorizontalPercent(endMargin);
-        }
-        if (topMargin != null) {
-
-            percentLayoutInfo.topMarginPercent += RenderConstants.getVerticalPercent(topMargin);
-        }
-        if (y != null) {
-
-            percentLayoutInfo.topMarginPercent += RenderConstants.getVerticalPercent(y);
-        }
-        if (x != null) {
-            percentLayoutInfo.startMarginPercent += RenderConstants.getHorizontalPercent(x);
-        }
-
-    }
-
-     */
-
 
     public abstract int render(LayoutInflater inflater, ViewGroup viewGroup, int position);
 
