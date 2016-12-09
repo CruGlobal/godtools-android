@@ -11,6 +11,7 @@ import android.transition.Transition;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
@@ -161,14 +162,18 @@ public class PopupDialogActivity extends Activity {
 
     private void bindLayouts() {
         extraContent = (PercentRelativeLayout) findViewById(R.id.extra_wrapper_fl);
-        tv = (AutoScaleTextView) findViewById(R.id.button_tv_popin);
+        tv = (AutoScaleTextView) findViewById(R.id.popin_button_tv);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100.0f);
         ll = (LinearLayout) findViewById(R.id.popup_innerLinearLayout);
         ll.setBackgroundColor(Color.parseColor(RenderSingleton.getInstance().getCurrentPageGlobalColor()));
-        findViewById(R.id.popup_percentFrameLayout).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.popup_percentFrameLayout).setClickable(false);
+        findViewById(R.id.popup_percentFrameLayout).setAnimation(null);
+        findViewById(R.id.popup_percentFrameLayout).setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                view.setVisibility(View.GONE);
                 finish();
+                return false;
             }
         });
 

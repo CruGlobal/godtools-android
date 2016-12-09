@@ -1,33 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.percent.PercentFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/popup_percentFrameLayout"
-
-
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clickable="false"
+    android:hapticFeedbackEnabled="false">
 
 
     <LinearLayout
         android:id="@+id/popup_innerLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:duplicateParentState="true"
-        android:transitionName="@string/inner_ll_transistion_title"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:transitionName="@string/inner_ll_transistion_title">
 
-        <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
-            android:visibility="visible"
-            android:id="@+id/button_tv_popin"
-            android:layout_width="wrap_content"
+        <LinearLayout
+
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/NormalButtonTextView"
-             />
+            android:orientation="horizontal">
+
+            <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
+                android:id="@+id/popin_button_tv"
+                style="@style/NormalButtonTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/popin_iv_expand_imageview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_expand_less_white_48dp"></ImageView>
+
+        </LinearLayout>
 
         <android.support.percent.PercentRelativeLayout
             android:id="@+id/extra_wrapper_fl"
             android:layout_width="match_parent"
-            android:layout_margin="8dp"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:visibility="visible">
 
 
