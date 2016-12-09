@@ -3,6 +3,7 @@
     android:id="@+id/popup_percentFrameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="false"
     android:clickable="false"
     android:hapticFeedbackEnabled="false">
 
