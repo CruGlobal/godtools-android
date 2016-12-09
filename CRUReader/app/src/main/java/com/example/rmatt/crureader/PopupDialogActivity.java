@@ -57,7 +57,7 @@ public class PopupDialogActivity extends Activity {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setAllowEnterTransitionOverlap(false);
-            getWindow().setAllowReturnTransitionOverlap(false);
+            getWindow().setAllowReturnTransitionOverlap(true);
         }
 
 
@@ -171,8 +171,14 @@ public class PopupDialogActivity extends Activity {
         findViewById(R.id.popup_percentFrameLayout).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                view.setVisibility(View.GONE);
-                finish();
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    finishAfterTransition();
+                }
+                else
+                {
+                    finish();
+                }
                 return false;
             }
         });

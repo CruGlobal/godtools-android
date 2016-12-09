@@ -3,9 +3,11 @@ package com.example.rmatt.crureader.bo.GPage;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.ImageAsyncTask;
@@ -29,15 +31,17 @@ public class GImage extends GCoordinator {
 
     @Override
     public int render(LayoutInflater layoutInflater, ViewGroup viewGroup, int position) {
-        ImageView imageView = new ImageView(viewGroup.getContext());
-        viewGroup.addView(imageView);
-        updateBaseAttributes(imageView);
-        setImageView(imageView);
-        imageView.setId(RenderViewCompat.generateViewId());
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        View view
+                = layoutInflater.inflate(R.layout.g_image, viewGroup);
+        ImageView gImageView = (ImageView)view.findViewById(R.id.g_image_image_view);
+
+
+        updateBaseAttributes(gImageView);
+        setImageView(gImageView);
+        gImageView.setId(RenderViewCompat.generateViewId());
 
         Log.i(TAG, "render in GImage");
-        return imageView.getId();
+        return gImageView.getId();
     }
 
     public void setImageView(final ImageView imageView) {
