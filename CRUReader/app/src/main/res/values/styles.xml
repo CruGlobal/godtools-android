@@ -54,6 +54,11 @@
 
     </style>
 
+    <style name="Widget.GodTools.AutoScaleButtonView" >
+        <item name="buttonTextSizeScalar">17</item> //Default Text Size Scalar
+
+    </style>
+
     <style name="AutoScaleTextView.HeaderNumberTextView">
         <item name="textSizeScalar">68</item>
         <item name="android:layout_marginRight">0dp</item>
@@ -105,9 +110,9 @@
 
 
 
-    <style name="Widget.GodTools.Button" parent="@style/Widget.AppCompat.Button.Borderless">
+    <style name="Widget.GodTools.Button" parent="@style/Widget.AppCompat.Button">
 
-        <item name="android:background">@android:color/transparent</item>
+        <item name="android:background">@drawable/gbutton_white</item>
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>
         <item name="android:paddingTop">8dp</item>

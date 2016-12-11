@@ -1,12 +1,12 @@
 package com.example.rmatt.crureader;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.percent.PercentFrameLayout;
 import android.support.percent.PercentLayoutHelper;
 import android.support.percent.PercentRelativeLayout;
+import android.support.v4.app.FragmentActivity;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -26,7 +26,7 @@ import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView;
 /**
  * Created by rmatt on 11/14/2016.
  */
-public class PopupDialogActivity extends Activity {
+public class PopupDialogActivity extends FragmentActivity {
 
 
     public static final String CONSTANTS_PANEL_HASH_KEY_INT_EXTRA = "panelhash";

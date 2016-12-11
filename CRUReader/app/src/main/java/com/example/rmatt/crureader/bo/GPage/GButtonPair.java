@@ -1,12 +1,12 @@
 package com.example.rmatt.crureader.bo.GPage;
 
-import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GCoordinator;
-import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -26,13 +26,12 @@ public class GButtonPair extends GCoordinator {
 
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
-        Context context = viewGroup.getContext();
-        LinearLayout ll = new LinearLayout(context);
-        ll.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0));
-        ll.setOrientation(LinearLayout.HORIZONTAL);
-        negativeButton.render(inflater, ll, position);
-        positiveButton.render(inflater, ll, position);
-        ll.setId(RenderViewCompat.generateViewId());
-        return ll.getId();
+        View inflate = inflater.inflate(R.layout.g_button_pair, viewGroup);
+        LinearLayout buttonPairLinearLayout = (LinearLayout)inflate.findViewById(R.id.g_button_pair_linear_layout);
+
+        negativeButton.render(inflater, buttonPairLinearLayout, position);
+        positiveButton.render(inflater, buttonPairLinearLayout, position);
+
+        return buttonPairLinearLayout.getId();
     }
 }

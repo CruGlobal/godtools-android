@@ -1,11 +1,12 @@
 package com.example.rmatt.crureader.bo.GPage;
 
+import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GCoordinator;
-import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -16,6 +17,12 @@ import org.simpleframework.xml.Root;
  */
 @Root(name = "followup-modal")
 public class GFollowupModal extends GCoordinator {
+
+
+    public void show(Context context)
+    {
+
+    }
 
     private static final String TAG = "GFollowupModal";
     @Attribute(name = "followup-id")
@@ -29,10 +36,7 @@ public class GFollowupModal extends GCoordinator {
 
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
-        TextView v = new TextView(viewGroup.getContext());
-        v.setId(RenderViewCompat.generateViewId());
-        updateBaseAttributes(v);
-        viewGroup.addView(v);
+        View v = inflater.inflate(R.layout.g_followupmodal, viewGroup);
         return v.getId();
     }
 }

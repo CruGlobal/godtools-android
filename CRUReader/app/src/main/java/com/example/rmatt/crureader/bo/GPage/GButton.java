@@ -10,6 +10,7 @@ import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView;
 
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -30,10 +31,13 @@ public class GButton extends GBaseButtonAttributes {
     @Element(name = "panel", required = false)
     public GPanel panel;
 
+    @Attribute(name ="label", required = false)
+    public String label;
+
 
     @Override
     public int render(final LayoutInflater inflater, ViewGroup viewGroup, final int position) {
-        View v = inflater.inflate(R.layout.g_button, viewGroup);
+        View v = inflater.inflate(R.layout.g_button_default, viewGroup);
         final LinearLayout buttonLinearLayout = (LinearLayout) v.findViewById(R.id.g_button_outer_linearlayout);
         AutoScaleTextView buttonTextView = (AutoScaleTextView)v.findViewById(R.id.g_button_g_textview);
         buttonLinearLayout.setId(RenderViewCompat.generateViewId());
@@ -51,6 +55,7 @@ public class GButton extends GBaseButtonAttributes {
 
         return buttonLinearLayout.getId();
     }
+
 
 
     private boolean fixed = false;
