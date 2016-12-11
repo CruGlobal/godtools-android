@@ -10,7 +10,6 @@ import org.simpleframework.xml.Attribute;
 
 public abstract class GBaseButtonAttributes extends GCoordinator {
 
-
     private static final String TAG = "GBaseButtonAttributes";
 
     @Attribute(required = false, name = "size")

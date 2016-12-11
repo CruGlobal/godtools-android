@@ -5,9 +5,9 @@
         <attr name="textSizeScalar" format="integer"></attr>
     </declare-styleable>
 
-    <declare-styleable name="AutoScaleTextButton">
+    <declare-styleable name="AutoScaleButtonView">
         <!-- Corner radius for CardView. -->
-        <attr name="textSizeScalarTB" format="integer"></attr>
+        <attr name="buttonTextSizeScalar" format="integer"></attr>
     </declare-styleable>
 
 </resources>

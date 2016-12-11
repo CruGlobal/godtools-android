@@ -9,6 +9,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.GFollowupModal;
 import com.example.rmatt.crureader.bo.GPage.GPanel;
+import com.example.rmatt.crureader.bo.GPage.Views.BottomSheetDialog;
 import com.example.rmatt.crureader.bo.GPage.Views.Space;
 
 import java.util.ArrayList;
@@ -207,6 +209,18 @@ public class RenderConstants {
         return Math.round(getVerticalPercent(height) * RenderSingleton.getInstance().screenHeight);
     }
 
+    static View.OnClickListener followupOnClick = new View.OnClickListener()
+    {
+
+        @Override
+        public void onClick(View view) {
+            BottomSheetDialog bs = new BottomSheetDialog();
+            bs.show(((FragmentActivity)view.getContext()).getSupportFragmentManager(), "test");
+
+
+        }
+    };
+
     static View.OnClickListener onClick = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -236,9 +250,11 @@ public class RenderConstants {
         }
     };
 
-    public static void addOnClickPanelListener(String content, GPanel panel, LinearLayout buttonLinearLayout) {
-        buttonLinearLayout.setTag(content);
-        buttonLinearLayout.setTag(R.integer.gpanel_tag, panel);
-        buttonLinearLayout.setOnClickListener(onClick);
+    public static void addOnClickPanelListener(String content, GCoordinator panel, View button) {
+        if(panel instanceof GPanel) {
+            button.setTag(content);
+            button.setTag(R.integer.gpanel_tag, panel);
+            button.setOnClickListener(onClick);
+        }
     }
 }
