@@ -1,6 +1,7 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.util.TypedValue;
@@ -38,6 +39,7 @@ public class GBaseTextAttributes extends GCoordinator {
     public String textColor;
     @Attribute(required = false, name = "modifier")
     public String textModifier;
+
 
     //TODO: cast T to skip unboxing.
     @Override
@@ -78,7 +80,7 @@ public class GBaseTextAttributes extends GCoordinator {
     }
 
     private void applyTextSize(AutoScaleTextView textViewCast) {
-        if (width != null && height != null)
+        if (width != null && height != null && textSize == null)
         {
             Log.e(TAG, "Should scale this~!~ + " + textViewCast.getText() + textViewCast.getId());
             AutofitHelper.create(textViewCast);
@@ -117,6 +119,10 @@ public class GBaseTextAttributes extends GCoordinator {
     public void applyTextModifier(AutoScaleTextView textView) {
         if (textModifier != null && !textModifier.equalsIgnoreCase(""))
             textView.setTypeface(Typeface.defaultFromStyle(RenderConstants.getTypefaceFromModifier(textModifier)));
+
+        if(shouldUnderline())
+                textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
     }
 
 
@@ -133,4 +139,6 @@ public class GBaseTextAttributes extends GCoordinator {
     {
         return false;
     }
+    public boolean shouldUnderline() { return false; }
+
 }

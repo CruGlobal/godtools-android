@@ -1,9 +1,11 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 
 import org.simpleframework.xml.Attribute;
@@ -21,11 +23,17 @@ public class GLinkButtonAttributes extends GBaseTextAttributes {
 
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
-        TextView v = new TextView(viewGroup.getContext());
-        v.setId(RenderViewCompat.generateViewId());
-        updateBaseAttributes(v);
-        viewGroup.addView(v);
-        return v.getId();
+        View inflated = inflater.inflate(R.layout.g_button_link, viewGroup);
+        TextView tv = (TextView) inflated.findViewById(R.id.g_button_link_textview);
+        tv.setId(RenderViewCompat.generateViewId());
+
+        updateBaseAttributes(tv);
+        return tv.getId();
+    }
+    @Override
+    public boolean shouldUnderline()
+    {
+        return true;
     }
 
 }

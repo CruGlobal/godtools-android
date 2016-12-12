@@ -17,8 +17,6 @@ import com.example.rmatt.crureader.bo.GPage.Views.BottomSheetDialog;
 
 import org.simpleframework.xml.Root;
 
-import me.grantland.widget.AutofitHelper;
-
 
 @Root(name = "button")
 public class GSimpleButton extends GBaseButtonAttributes {
@@ -32,30 +30,32 @@ public class GSimpleButton extends GBaseButtonAttributes {
     public String content;
 
     @Override
-    public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
+    public int render(LayoutInflater inflater, ViewGroup viewGroup, final int position) {
         View inflate = inflater.inflate(R.layout.g_button_simple, viewGroup);
 
-        AutoScaleButtonView button = (AutoScaleButtonView)inflate.findViewById(R.id.g_simple_button);
+        AutoScaleButtonView button = (AutoScaleButtonView) inflate.findViewById(R.id.g_simple_button);
 
         defaultColor(position);
         button.setTextColor(Color.parseColor(textColor));
         button.setText(content);
         applyTextSize(button);
+        updateBaseAttributes(button);
 
         button.setId(RenderViewCompat.generateViewId());
         button.setTag(tapEvents);
+        button.setTag(R.id.followupshow, position);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // Toast.makeText(view.getContext(), (String) view.getTag(), Toast.LENGTH_LONG).show();
+                // Toast.makeText(view.getContext(), (String) view.getTag(), Toast.LENGTH_LONG).show();
                 String[] tapEvents = RenderConstants.getTapEvents((String) view.getTag());
                 for (String tap : tapEvents) {
                     Log.i(TAG, "tap: " + tap + " tap as hash " + tap.hashCode());
                     if (RenderSingleton.getInstance().gPanelHashMap.get(tap.hashCode()) != null) {
                         Log.i(TAG, "tap contained in map start activity");
 
-                        BottomSheetDialog bs = new BottomSheetDialog();
-                        bs.show(((FragmentActivity)view.getContext()).getSupportFragmentManager(), "test");
+                        BottomSheetDialog bs = BottomSheetDialog.create((Integer) view.getTag(R.id.followupshow), tap.hashCode());
+                        bs.show(((FragmentActivity) view.getContext()).getSupportFragmentManager(), "test");
 
                     }
                 }
@@ -72,19 +72,10 @@ public class GSimpleButton extends GBaseButtonAttributes {
     }
 
     private void applyTextSize(AutoScaleButtonView buttonViewCast) {
-        if (width != null && height != null)
-        {
-            Log.e(TAG, "Should scale this~!~ + " + buttonViewCast.getText() + buttonViewCast.getId());
-            AutofitHelper.create(buttonViewCast);
+        if (textSize != null) {
+            buttonViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+        } else {
+            buttonViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100.0f);
         }
-        else {
-            if (textSize != null) {
-                buttonViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
-            } else {
-                buttonViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100.0f);
-            }
-        }
-
     }
-
 }

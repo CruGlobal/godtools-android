@@ -1,54 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
-        android:id="@+id/g_button_outer_linearlayout"
+    <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/g_button_link_textview"
+        style="@style/Link"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:transitionName="@string/inner_ll_transistion_title">
+        tools:text="Link Button" />
 
-        <include
-            android:id="@+id/g_button_top_horizontal_rule"
-            layout="@layout/g_button_horizontal_rule"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <LinearLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
-                android:id="@+id/g_button_g_textview"
-                style="@style/NormalButtonTextView"
-
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:id="@+id/g_button_expand_imageview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"
-
-                android:layout_marginRight="5dp"
-                android:src="@drawable/ic_expand_more_white_48dp"></ImageView>
-
-        </LinearLayout>
-
-
-        <include
-            android:id="@+id/g_button_bottom_horizontal_rule"
-            layout="@layout/g_button_horizontal_rule"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-</merge>
-<!--
+</merge><!--
     // Could share code with processPuttonPanelButton?
     // That is where the following code came from
     final float DEFAULT_BUTTON_TEXT_SIZE = 19.0f;

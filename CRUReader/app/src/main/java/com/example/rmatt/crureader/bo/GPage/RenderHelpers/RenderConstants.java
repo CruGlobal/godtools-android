@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -145,12 +144,12 @@ public class RenderConstants {
         }
     }
 
-    public static int renderLinearLayoutListWeighted(LayoutInflater inflater, ViewGroup percentRelativeLayout, ArrayList<GCoordinator> GCoordinatorArrayList, int position) {
-        return renderLinearLayoutListWeighted(inflater, percentRelativeLayout, GCoordinatorArrayList, position, 0);
+    public static int renderLinearLayoutListWeighted(LayoutInflater inflater, ViewGroup viewGroup, ArrayList<GCoordinator> GCoordinatorArrayList, int position) {
+        return renderLinearLayoutListWeighted(inflater, viewGroup, GCoordinatorArrayList, position, 0);
 
     }
 
-    public static int renderLinearLayoutListWeighted(LayoutInflater inflater, ViewGroup percentRelativeLayout, ArrayList<GCoordinator> GCoordinatorArrayList, int position, int maxSpace) {
+    public static int renderLinearLayoutListWeighted(LayoutInflater inflater, ViewGroup viewGroup, ArrayList<GCoordinator> GCoordinatorArrayList, int position, int maxSpace) {
         LinearLayout midSection = new LinearLayout(inflater.getContext());
         midSection.setOrientation(LinearLayout.VERTICAL);
         midSection.setId(RenderViewCompat.generateViewId());
@@ -165,7 +164,7 @@ public class RenderConstants {
 
         for (GCoordinator tap : GCoordinatorArrayList) {
 
-            tap.render(inflater, tap.y == null ? midSection : percentRelativeLayout, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
+            tap.render(inflater, tap.y == null ? midSection : viewGroup, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
             if (!tap.isManuallyLaidOut()) //If items are manually laid out, we don't want to add space between them.
             {
                 space = new Space(inflater.getContext());
@@ -174,7 +173,7 @@ public class RenderConstants {
 
 
         }
-        percentRelativeLayout.addView(midSection, new PercentRelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, maxSpace > 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : ViewGroup.LayoutParams.MATCH_PARENT)); //If there is max space wrap_content because we only want to fill a small area.   If it isn't we want to fill the whole available area evenly.
+        viewGroup.addView(midSection, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, maxSpace > 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : ViewGroup.LayoutParams.MATCH_PARENT)); //If there is max space wrap_content because we only want to fill a small area.   If it isn't we want to fill the whole available area evenly.
         return midSection.getId();
     }
 
