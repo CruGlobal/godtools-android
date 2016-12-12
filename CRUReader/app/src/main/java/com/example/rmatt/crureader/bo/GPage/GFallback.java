@@ -1,9 +1,11 @@
 package com.example.rmatt.crureader.bo.GPage;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.example.rmatt.crureader.bo.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.ElementListUnion;
@@ -26,12 +28,15 @@ public class GFallback extends GCoordinator {
             @ElementList(inline = true, required = false, entry = "input-field", type = GInputField.class),
             @ElementList(inline = true, required = false, entry = "followup-body", type = GFollowUpBody.class),
             @ElementList(inline = true, required = false, entry = "followup-title", type = GFollowUpTitle.class)})
-    public ArrayList<GCoordinator> panelArrayList = new ArrayList<GCoordinator>();
+    public ArrayList<GCoordinator> GCoordinatorArrayList = new ArrayList<GCoordinator>();
 
 
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
-        return 0;
+        Context context = viewGroup.getContext();
+
+        return RenderConstants.renderLinearLayoutListWeighted(inflater,
+                viewGroup, GCoordinatorArrayList, position, 40);
     }
 
 }

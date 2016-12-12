@@ -54,8 +54,8 @@
 
     </style>
 
-    <style name="Widget.GodTools.AutoScaleButtonView" >
-        <item name="buttonTextSizeScalar">17</item> //Default Text Size Scalar
+    <style name="Widget.GodTools.AutoScaleButtonView" parent="@style/Widget.AppCompat.Button" >
+
 
     </style>
 
@@ -109,9 +109,25 @@
     </style>
 
 
+        <color name="gt_content_text">#ffffff</color>
+        <style name="TextAppearance.GodTools.Content.Button.Link" parent="TextAppearance.AppCompat">
+            <item name="android:textColor">@color/gt_content_text</item>
+            <item name="android:textColorHint">@color/gt_content_text</item>
+            <item name="android:textColorHighlight">@color/gt_content_text</item>
+            <item name="android:textColorLink">@color/gt_content_text</item>
 
-    <style name="Widget.GodTools.Button" parent="@style/Widget.AppCompat.Button">
+        </style>
 
+        <style name="Link" parent="AutoScaleTextView">
+            <item name="android:textAppearance">@style/TextAppearance.GodTools.Content.Button.Link</item>
+            <item name="textSizeScalar">19</item>
+        </style>
+
+
+
+
+    <style name="Widget.GodTools.Button" parent="@style/Widget.GodTools.AutoScaleButtonView" >
+        <item name="buttonTextSizeScalar">20</item> //Default Text Size Scalar
         <item name="android:background">@drawable/gbutton_white</item>
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>

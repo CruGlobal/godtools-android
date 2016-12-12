@@ -1,7 +1,6 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.content.Context;
-import android.support.percent.PercentRelativeLayout;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -51,7 +50,7 @@ public class GThankYou extends GCoordinator {
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
         Context context = viewGroup.getContext();
-        RenderConstants.renderLinearLayoutListWeighted(inflater, (PercentRelativeLayout) viewGroup, GCoordinatorArrayList, position);
+        RenderConstants.renderLinearLayoutListWeighted(inflater, viewGroup, GCoordinatorArrayList, position);
         return 0;
     }
 }
