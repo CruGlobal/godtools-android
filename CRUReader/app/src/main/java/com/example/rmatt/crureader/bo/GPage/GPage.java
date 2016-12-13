@@ -40,7 +40,7 @@ public class GPage extends GCoordinator {
     public GTitle title;
 
     @Attribute(required = false)
-    public int bigbuttons;
+    public Integer bigbuttons;
 
     @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GBaseTextAttributes.class),
             @ElementList(inline = true, required = false, entry = "button", type = GButton.class)
@@ -112,9 +112,14 @@ public class GPage extends GCoordinator {
         if (gQuestion != null) bottomId = gQuestion.render(inflater, percentRelativeLayout, position);
 
         if (GCoordinatorArrayList != null && GCoordinatorArrayList.size() > 0) {
-
-            int midSectionId = RenderConstants.renderLinearLayoutListWeighted(inflater, percentRelativeLayout, GCoordinatorArrayList, position);
-
+            int midSectionId;
+            if(bigbuttons != null && bigbuttons > 0)
+            {
+                midSectionId = RenderConstants.renderLinearLayoutList(inflater, percentRelativeLayout, GCoordinatorArrayList, position);
+            }
+            else {
+                midSectionId = RenderConstants.renderLinearLayoutListWeighted(inflater, percentRelativeLayout, GCoordinatorArrayList, position);
+            }
             if (topId > 0)
                 ((RelativeLayout.LayoutParams) percentRelativeLayout.findViewById(midSectionId).getLayoutParams()).addRule(PercentRelativeLayout.BELOW, topId);
             if (bottomId > 0)

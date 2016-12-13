@@ -53,7 +53,7 @@ public abstract class GCoordinator {
 
             ViewGroup.MarginLayoutParams percentLayoutInfo = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
 
-           // PercentLayoutHelper.PercentLayoutInfo percentLayoutInfo = p.getPercentLayoutInfo();
+            // PercentLayoutHelper.PercentLayoutInfo percentLayoutInfo = p.getPercentLayoutInfo();
             applyMargins(percentLayoutInfo);
             applyWidth(percentLayoutInfo);
             applyHeight(percentLayoutInfo);
@@ -121,19 +121,20 @@ public abstract class GCoordinator {
 
     }
 
-    public boolean hasSpace()
-    {
+    public boolean hasSpace() {
         return true;
     }
 
-    public boolean isManuallyLaidOut()
-    {
+    public boolean isManuallyLaidOut() {
         return y != null;
     }
 
 
-
     public abstract int render(LayoutInflater inflater, ViewGroup viewGroup, int position);
 
+    protected boolean firstElementInList;
 
+    public void setFirstElementInList(boolean firstElementInList) {
+        this.firstElementInList = firstElementInList;
+    }
 }

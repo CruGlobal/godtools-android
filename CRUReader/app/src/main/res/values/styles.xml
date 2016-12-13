@@ -43,14 +43,16 @@
 
     <style name="Image" parent="Widget.GodTools">
         <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:scaleType">fitXY</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:adjustViewBounds">true</item>
     </style>
 
     <style name="AutoScaleTextView" parent="Widget.GodTools">
         <item name="textSizeScalar">17</item> //Default Text Size Scalar
         <item name="android:visibility">gone</item>
+
 
     </style>
 
