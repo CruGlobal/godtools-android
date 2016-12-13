@@ -6,6 +6,7 @@
         android:id="@+id/g_question_straight_outerlayout_optroundcardview"
         android:layout_width="match_parent"
         android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
         android:layout_alignParentBottom="true"
         android:layout_height="wrap_content"
         app:optRoundCardBackgroundColor="@android:color/white"

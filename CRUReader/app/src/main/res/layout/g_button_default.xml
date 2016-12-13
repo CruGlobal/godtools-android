@@ -4,8 +4,10 @@
     <LinearLayout
         android:id="@+id/g_button_outer_linearlayout"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content"
         android:orientation="vertical"
+
         android:transitionName="@string/inner_ll_transistion_title">
 
         <include
