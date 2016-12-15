@@ -2,4 +2,6 @@
 <resources>
     <integer name="anim_duration_long">2000</integer>
     <integer name="gpanel_tag">12344</integer>
+    <integer name="gpanel_posiiton">12366</integer>
+    <integer name="imageurl_tag">12345</integer>
 </resources>

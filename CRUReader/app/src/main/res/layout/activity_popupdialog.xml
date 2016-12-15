@@ -3,8 +3,8 @@
     android:id="@+id/popup_percentFrameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false"
     android:clickable="false"
+    android:fitsSystemWindows="true"
     android:hapticFeedbackEnabled="false">
 
 
@@ -14,6 +14,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:transitionName="@string/inner_ll_transistion_title">
+
+        <ImageView
+            android:id="@+id/popup_imageView"
+            style="@style/Image"
+            android:visibility="gone">
+
+        </ImageView>
+
 
         <LinearLayout
 

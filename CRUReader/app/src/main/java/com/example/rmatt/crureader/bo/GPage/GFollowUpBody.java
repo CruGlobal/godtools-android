@@ -1,15 +1,14 @@
 package com.example.rmatt.crureader.bo.GPage;
 
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
+import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView;
 
 import org.simpleframework.xml.Root;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by rmatt on 10/26/2016.
@@ -23,12 +22,12 @@ public class GFollowUpBody extends GBaseTextAttributes {
 
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
-        TextView tv = new TextView(viewGroup.getContext());
-        updateBaseAttributes(tv);
-        Log.i(TAG, "GButtonPair render");
-        tv.setText("Not implemented yet");
+        View inflatedView = inflater.inflate(R.layout.g_followup_body, viewGroup);
+
+        AutoScaleTextView tv = (AutoScaleTextView)inflatedView.findViewById(R.id.g_followup_body_textview);
+
         tv.setId(RenderViewCompat.generateViewId());
-        viewGroup.addView(tv);
+        updateBaseAttributes(tv);
         return tv.getId();
     }
 

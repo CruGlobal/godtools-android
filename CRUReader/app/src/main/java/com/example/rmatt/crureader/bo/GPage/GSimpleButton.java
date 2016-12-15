@@ -1,7 +1,6 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.graphics.Color;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -43,24 +42,29 @@ public class GSimpleButton extends GBaseButtonAttributes {
 
         button.setId(RenderViewCompat.generateViewId());
         button.setTag(tapEvents);
-        button.setTag(R.id.followupshow, position);
+        button.setTag(R.integer.gpanel_posiiton, position);
         button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Toast.makeText(view.getContext(), (String) view.getTag(), Toast.LENGTH_LONG).show();
-                String[] tapEvents = RenderConstants.getTapEvents((String) view.getTag());
-                for (String tap : tapEvents) {
-                    Log.i(TAG, "tap: " + tap + " tap as hash " + tap.hashCode());
-                    if (RenderSingleton.getInstance().gPanelHashMap.get(tap.hashCode()) != null) {
-                        Log.i(TAG, "tap contained in map start activity");
+                                      @Override
+                                      public void onClick(View view) {
 
-                        BottomSheetDialog bs = BottomSheetDialog.create((Integer) view.getTag(R.id.followupshow), tap.hashCode());
-                        bs.show(((FragmentActivity) view.getContext()).getSupportFragmentManager(), "test");
+                                          AutoScaleButtonView autoScaleButtonView = (AutoScaleButtonView) view;
+                                          // Toast.makeText(view.getContext(), (String) view.getTag(), Toast.LENGTH_LONG).show();
+                                          String[] tapEvents = RenderConstants.getTapEvents((String) view.getTag());
+                                          for (String tap : tapEvents) {
+                                              Log.i(TAG, "tap: " + tap + " tap as hash " + tap.hashCode());
+                                              if (RenderSingleton.getInstance().gPanelHashMap.get(tap.hashCode()) != null) {
+                                                  Log.i(TAG, "tap contained in map start activity");
 
-                    }
-                }
-            }
-        });
+                                                  BottomSheetDialog bs = BottomSheetDialog.create((Integer) view.getTag(R.integer.gpanel_posiiton), tap.hashCode());
+
+                                                  bs.show(RenderConstants.searchForFragmentManager(view.getContext()), "test");
+
+                                              }
+                                          }
+                                      }
+                                  }
+
+        );
 
         //viewGroup.addView(button);
         return button.getId();
@@ -70,6 +74,8 @@ public class GSimpleButton extends GBaseButtonAttributes {
     public void defaultColor(int position) {
         textColor = RenderSingleton.getInstance().getPositionGlobalColorAsString(position);
     }
+
+
 
     private void applyTextSize(AutoScaleButtonView buttonViewCast) {
         if (textSize != null) {

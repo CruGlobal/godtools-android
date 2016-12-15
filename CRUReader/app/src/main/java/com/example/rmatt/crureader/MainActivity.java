@@ -13,11 +13,12 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 import com.example.rmatt.crureader.bo.GDocument.GDocument;
+import com.example.rmatt.crureader.bo.GPage.IDO.IContexual;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.Diagnostics;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity  implements IContexual{
 
 
     public static final String BASE_XML = "97f17b1f-b76d-40ad-8be4-9a45d3406e70.xml";
@@ -94,6 +95,11 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+    @Override
+    public FragmentManager getContexualFragmentActivity() {
+        return this.getSupportFragmentManager();
+    }
+
     private class DocumentPagerAdapter extends FragmentStatePagerAdapter {
 
         private GDocument gDoc;
@@ -124,5 +130,8 @@ public class MainActivity extends FragmentActivity {
             super.destroyItem(container, position, object);
         }
     }
+
+
+
 
 }

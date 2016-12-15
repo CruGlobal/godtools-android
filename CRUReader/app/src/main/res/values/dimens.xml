@@ -9,6 +9,8 @@
     <dimen name="header_top_margin">16dp</dimen>
     <dimen name="header_right_margin">16dp</dimen>
     <dimen name="header_right_peek_margin">24dp</dimen>
+    <dimen name="fallback_element_space">2dp</dimen>
+    <dimen name="thankyou_element_space">2dp</dimen>
 
     <fraction name="header_straight_percent_width">93.75%</fraction>
     <fraction name="header_clear_percent_width">93.75%</fraction>

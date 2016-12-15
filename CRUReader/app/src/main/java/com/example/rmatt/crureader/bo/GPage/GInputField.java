@@ -1,9 +1,12 @@
 package com.example.rmatt.crureader.bo.GPage;
 
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
+import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 
@@ -38,13 +41,16 @@ public class GInputField extends GCoordinator {
 
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
-        EditText editText = new EditText(viewGroup.getContext());
-        updateBaseAttributes(editText);
 
-        editText.setId(RenderViewCompat.generateViewId());
-        viewGroup.addView(editText);
+        View inflate = inflater.inflate(R.layout.g_input_field, viewGroup);
+        final TextInputLayout textInputLayout = (TextInputLayout)inflate.findViewById(R.id.g_input_field_input_layout);
+        textInputLayout.setId(RenderViewCompat.generateViewId());
+        textInputLayout.setHint(inputLabel.content);
+        final TextInputEditText textInputEditText = (TextInputEditText)inflate.findViewById(R.id.g_input_field_input_edit_text);
+        textInputEditText.setId(RenderViewCompat.generateViewId());
+        updateBaseAttributes(textInputLayout);
 
-        return editText.getId();
+        return textInputLayout.getId();
     }
 
 }

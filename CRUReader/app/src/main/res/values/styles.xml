@@ -5,8 +5,6 @@
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:windowContentTransitions">true</item>
-
-
     </style>
 
     <!--<style name="ActivityTheme" parent="Theme.AppCompat.NoActionBar">-->
@@ -19,7 +17,6 @@
 
 
     <style name="PopupAnimation">
-
         <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
         <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
@@ -44,7 +41,7 @@
     <style name="Image" parent="Widget.GodTools">
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:scaleType">fitCenter</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:adjustViewBounds">true</item>
     </style>
@@ -90,10 +87,8 @@
 
     <style name="Question" parent="AutoScaleTextView">
         <item name="android:gravity">top|right</item>
-
-
-
     </style>
+
 
     <style name="Question.QuestionStraightTextView">
         <item name="textSizeScalar">17</item>
@@ -159,6 +154,23 @@
     <style name="Widget.GodTools.Button.ButtonPair">
 
     </style>
+
+    <style name="FollowUp" parent="AutoScaleTextView">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="FollowUp.Title" >
+        <item name="textSizeScalar">18</item>
+    </style>
+
+    <style name="FollowUp.Body">
+        <item name="textSizeScalar">17</item>
+    </style>
+
+
+
+
+
 
 
 </resources>

@@ -2,6 +2,7 @@ package com.example.rmatt.crureader.bo.GPage.RenderHelpers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -9,6 +10,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,8 +23,9 @@ import com.example.rmatt.crureader.PopupDialogActivity;
 import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
-import com.example.rmatt.crureader.bo.GPage.GFollowupModal;
+import com.example.rmatt.crureader.bo.GPage.GModal;
 import com.example.rmatt.crureader.bo.GPage.GPanel;
+import com.example.rmatt.crureader.bo.GPage.IDO.IContexual;
 import com.example.rmatt.crureader.bo.GPage.Views.BottomSheetDialog;
 import com.example.rmatt.crureader.bo.GPage.Views.Space;
 
@@ -206,8 +209,8 @@ public class RenderConstants {
 
     }
 
-    public static void setUpFollowups(ViewGroup container, ArrayList<GFollowupModal> followupModalsArrayList) {
-        for (GFollowupModal modal : followupModalsArrayList) {
+    public static void setUpFollowups(ArrayList<GModal> followupModalsArrayList) {
+        for (GModal modal : followupModalsArrayList) {
             if (modal.listeners != null) {
                 Log.i(TAG, "modal listeners: " + modal.listeners + " as hash: " + modal.listeners.hashCode());
 
@@ -237,7 +240,7 @@ public class RenderConstants {
     };
 
     static View.OnClickListener onClick = new View.OnClickListener() {
-        @Override
+
         public void onClick(View view) {
             final LinearLayout ll = (LinearLayout) view;
             Context context = view.getContext();
@@ -248,7 +251,8 @@ public class RenderConstants {
             Intent intent = new Intent(context, PopupDialogActivity.class);
             intent.putExtra(PopupDialogActivity.CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA, (float) distanceTooTop);
             intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_HASH_KEY_INT_EXTRA, ll.getId());
-            intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_TITLE_STRING_EXTRA, ll.getTag() != null ? ll.getTag().toString() : "");
+            intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_TITLE_STRING_EXTRA, ll.getTag() != null ? ll.getTag().toString() : null);
+            intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_LOCATION, ll.getTag(R.integer.imageurl_tag) != null ? ll.getTag(R.integer.imageurl_tag).toString() : null);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, ll, context.getString(R.string.inner_ll_transistion_title));
@@ -265,11 +269,23 @@ public class RenderConstants {
         }
     };
 
-    public static void addOnClickPanelListener(String content, GCoordinator panel, View button) {
+    public static void addOnClickPanelListener(String content, String imageUrl, GCoordinator panel, View button) {
         if(panel instanceof GPanel) {
             button.setTag(content);
             button.setTag(R.integer.gpanel_tag, panel);
+            button.setTag(R.integer.imageurl_tag, imageUrl);
             button.setOnClickListener(onClick);
         }
     }
+
+    public static FragmentManager searchForFragmentManager(Context context) {
+        if (context == null)
+            return null;
+        else if (context instanceof IContexual)
+            return ((IContexual)context).getContexualFragmentActivity();
+        else if (context instanceof ContextWrapper)
+            return searchForFragmentManager(((ContextWrapper)context).getBaseContext());
+        return null;
+    }
+
 }

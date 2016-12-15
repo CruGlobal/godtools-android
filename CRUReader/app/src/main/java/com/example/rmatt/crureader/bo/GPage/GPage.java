@@ -48,7 +48,7 @@ public class GPage extends GCoordinator {
     public ArrayList<GCoordinator> GCoordinatorArrayList = new ArrayList<GCoordinator>();
 
     @ElementList(inline = true, required = false, entry = "followup-modal", type = GFollowupModal.class)
-    public ArrayList<GFollowupModal> followupModalsArrayList = new ArrayList<GFollowupModal>();
+    public ArrayList<GModal> followupModalsArrayList = new ArrayList<GModal>();
 
 
     @Attribute
@@ -127,7 +127,7 @@ public class GPage extends GCoordinator {
 
         }
 
-        RenderConstants.setUpFollowups(percentRelativeLayout, followupModalsArrayList);
+        RenderConstants.setUpFollowups(followupModalsArrayList);
 
 
         return percentRelativeLayout.getId();

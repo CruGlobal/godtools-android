@@ -7,6 +7,7 @@ import android.support.percent.PercentFrameLayout;
 import android.support.percent.PercentLayoutHelper;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -15,10 +16,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
+import com.example.rmatt.crureader.bo.GPage.IDO.IContexual;
+import com.example.rmatt.crureader.bo.GPage.RenderHelpers.ImageAsyncTask;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView;
@@ -26,19 +30,23 @@ import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView;
 /**
  * Created by rmatt on 11/14/2016.
  */
-public class PopupDialogActivity extends FragmentActivity {
+public class PopupDialogActivity extends FragmentActivity implements IContexual {
 
 
     public static final String CONSTANTS_PANEL_HASH_KEY_INT_EXTRA = "panelhash";
     public static final String CONSTANTS_PANEL_TITLE_STRING_EXTRA = "title";
     public static final String CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA = "Y";
+    public static final String CONSTANTS_IMAGE_LOCATION = "imageLocation";
     public static final String TAG = "PopupDialogActivity";
+
+    private String mImageLocation;
     public float Y;
     LinearLayout ll;
 
     int distanceToBottomOfScreen;
     PercentRelativeLayout extraContent;
     AutoScaleTextView tv;
+    ImageView iv;
     GCoordinator gPanel;
     int screenHeight;
     String title;
@@ -68,7 +76,7 @@ public class PopupDialogActivity extends FragmentActivity {
 
         upwrapExtras();
 
-
+        setUpImageView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getSharedElementEnterTransition().addListener(new Transition.TransitionListener() {
                 @Override
@@ -109,7 +117,6 @@ public class PopupDialogActivity extends FragmentActivity {
 
                     ll.measure(View.MeasureSpec.makeMeasureSpec(ll.getWidth(), View.MeasureSpec.AT_MOST),
                             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                   // extraContent.measure(View.MeasureSpec.makeMeasureSpec(extraContent.getWidth(), View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
 
                     if (ll.getHeight() < ll.getMeasuredHeight() && !fixed) {
@@ -150,6 +157,7 @@ public class PopupDialogActivity extends FragmentActivity {
         Y = this.getIntent().getExtras().getFloat(CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA);
         int panelKey = this.getIntent().getExtras().getInt(CONSTANTS_PANEL_HASH_KEY_INT_EXTRA);
         title = this.getIntent().getExtras().getString(CONSTANTS_PANEL_TITLE_STRING_EXTRA);
+        mImageLocation = this.getIntent().getExtras().getString(CONSTANTS_IMAGE_LOCATION);
         gPanel = RenderSingleton.getInstance().gPanelHashMap.get(panelKey);
     }
 
@@ -165,6 +173,9 @@ public class PopupDialogActivity extends FragmentActivity {
         tv = (AutoScaleTextView) findViewById(R.id.popin_button_tv);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100.0f);
         ll = (LinearLayout) findViewById(R.id.popup_innerLinearLayout);
+        iv = (ImageView) findViewById(R.id.popup_imageView);
+
+
         ll.setBackgroundColor(Color.parseColor(RenderSingleton.getInstance().getCurrentPageGlobalColor()));
         findViewById(R.id.popup_percentFrameLayout).setClickable(false);
         findViewById(R.id.popup_percentFrameLayout).setAnimation(null);
@@ -185,6 +196,14 @@ public class PopupDialogActivity extends FragmentActivity {
 
     }
 
+    private void setUpImageView() {
+        if(mImageLocation != null && !mImageLocation.equalsIgnoreCase(""))
+        {
+            iv.setVisibility(View.VISIBLE);
+            ImageAsyncTask.setImageView(mImageLocation, iv);
+        }
+    }
+
     private void bindPanelContent() {
         gPanel.render(getLayoutInflater(), extraContent, RenderSingleton.getInstance().curPosition);
     }
@@ -202,5 +221,10 @@ public class PopupDialogActivity extends FragmentActivity {
     }
 
 
+    @Override
+    public FragmentManager getContexualFragmentActivity() {
+
+        return this.getSupportFragmentManager();
+    }
 }
 
