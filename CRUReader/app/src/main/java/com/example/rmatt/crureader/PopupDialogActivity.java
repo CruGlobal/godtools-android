@@ -14,6 +14,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.ImageView;
@@ -25,6 +26,7 @@ import com.example.rmatt.crureader.bo.GPage.IDO.IContexual;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.ImageAsyncTask;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
+import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleButtonView;
 import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView;
 
 /**
@@ -197,15 +199,53 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     }
 
     private void setUpImageView() {
-        if(mImageLocation != null && !mImageLocation.equalsIgnoreCase(""))
+        if(hasImageExtraFromBigButton())
         {
             iv.setVisibility(View.VISIBLE);
             ImageAsyncTask.setImageView(mImageLocation, iv);
+            //This means it's big, so center labels.
+            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+
+
+
         }
+    }
+
+    private boolean hasImageExtraFromBigButton()
+    {
+        return mImageLocation != null && !mImageLocation.equalsIgnoreCase("");
     }
 
     private void bindPanelContent() {
         gPanel.render(getLayoutInflater(), extraContent, RenderSingleton.getInstance().curPosition);
+        if(hasImageExtraFromBigButton())
+        {
+            centerAllChildren(extraContent);
+        }
+    }
+
+    private void centerAllChildren(View v)
+    {
+        if(v instanceof ViewGroup)
+        {
+            for(int i = 0; i < ((ViewGroup) v).getChildCount(); i++)
+            {
+                centerAllChildren(((ViewGroup) v).getChildAt(i));
+            }
+        }
+        else if(v instanceof AutoScaleTextView)
+        {
+            LinearLayout.LayoutParams llParams = (LinearLayout.LayoutParams)v.getLayoutParams();
+            llParams.gravity = Gravity.CENTER_HORIZONTAL;
+
+        }
+        else if(v instanceof AutoScaleButtonView)
+        {
+
+            LinearLayout.LayoutParams llParams = (LinearLayout.LayoutParams)v.getLayoutParams();
+            llParams.gravity = Gravity.CENTER_HORIZONTAL;
+
+        }
     }
 
     private void TranslateView() {
