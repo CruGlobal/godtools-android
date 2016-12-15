@@ -137,4 +137,6 @@ public abstract class GCoordinator {
     public void setFirstElementInList(boolean firstElementInList) {
         this.firstElementInList = firstElementInList;
     }
+
+    public boolean shouldUnderline() { return false; }
 }
