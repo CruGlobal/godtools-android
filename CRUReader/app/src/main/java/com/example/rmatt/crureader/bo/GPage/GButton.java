@@ -45,6 +45,7 @@ public class GButton extends GBaseButtonAttributes {
         LinearLayout outerLayout;
         String imageContent = null;
         if (mode != null && mode == ButtonMode.big) {
+            buttonText.textalign = "center";
             buttonLayout = inflater.inflate(R.layout.g_big_button, viewGroup);
             outerLayout = (LinearLayout) buttonLayout.findViewById(R.id.g_big_button_outer_linearlayout);
             FrameLayout imageFrame = (FrameLayout) buttonLayout.findViewById(R.id.g_big_button_image_framelayout);
@@ -73,6 +74,7 @@ public class GButton extends GBaseButtonAttributes {
         this.updateBaseAttributes(outerLayout);
 
         if (buttonText != null && buttonText.content != null) {
+
             buttonText.updateBaseAttributes(buttonTextView);
             buttonTextView.setId(RenderViewCompat.generateViewId());
             content = buttonText.content;

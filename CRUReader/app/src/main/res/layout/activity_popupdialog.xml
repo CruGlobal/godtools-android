@@ -23,18 +23,16 @@
         </ImageView>
 
 
-        <LinearLayout
-
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView
                 android:id="@+id/popin_button_tv"
                 style="@style/NormalButtonTextView"
-                android:layout_width="0dp"
+
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:visibility="visible" />
 
             <ImageView
@@ -42,14 +40,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
+
                 android:layout_marginRight="5dp"
                 android:src="@drawable/ic_expand_less_white_48dp"></ImageView>
 
-        </LinearLayout>
+        </FrameLayout>
 
         <android.support.percent.PercentRelativeLayout
             android:id="@+id/extra_wrapper_fl"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:visibility="visible">
@@ -60,9 +59,9 @@
     </LinearLayout>
 
     <ImageView
-        android:layout_below="@id/popup_innerLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/popup_innerLinearLayout"
         android:scaleType="fitXY"
         android:src="@drawable/grad_shad_top" />
 
