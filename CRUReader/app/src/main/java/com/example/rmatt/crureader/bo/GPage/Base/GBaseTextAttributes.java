@@ -1,4 +1,4 @@
-package com.example.rmatt.crureader.bo.GPage;
+package com.example.rmatt.crureader.bo.GPage.Base;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.rmatt.crureader.R;
-import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;

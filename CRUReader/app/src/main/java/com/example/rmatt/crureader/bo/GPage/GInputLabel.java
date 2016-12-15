@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.rmatt.crureader.bo.GPage.Base.GBaseTextAttributes;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 
 import org.simpleframework.xml.Root;

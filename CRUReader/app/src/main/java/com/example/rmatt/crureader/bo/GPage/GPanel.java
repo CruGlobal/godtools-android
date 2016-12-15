@@ -5,7 +5,8 @@ import android.support.percent.PercentRelativeLayout;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.example.rmatt.crureader.bo.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.Base.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.Base.GBaseTextAttributes;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 
 import org.simpleframework.xml.Attribute;

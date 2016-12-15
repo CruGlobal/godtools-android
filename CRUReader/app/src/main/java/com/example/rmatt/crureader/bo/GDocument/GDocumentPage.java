@@ -3,7 +3,7 @@ package com.example.rmatt.crureader.bo.GDocument;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.example.rmatt.crureader.bo.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.Base.GCoordinator;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;

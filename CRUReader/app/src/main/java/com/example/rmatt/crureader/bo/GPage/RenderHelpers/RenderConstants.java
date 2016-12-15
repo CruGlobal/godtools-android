@@ -23,9 +23,9 @@ import android.widget.TextView;
 
 import com.example.rmatt.crureader.PopupDialogActivity;
 import com.example.rmatt.crureader.R;
-import com.example.rmatt.crureader.bo.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.Base.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
-import com.example.rmatt.crureader.bo.GPage.GModal;
+import com.example.rmatt.crureader.bo.GPage.Base.GModal;
 import com.example.rmatt.crureader.bo.GPage.GPanel;
 import com.example.rmatt.crureader.bo.GPage.IDO.IContexual;
 import com.example.rmatt.crureader.bo.GPage.Views.BottomSheetDialog;

@@ -1,4 +1,4 @@
-package com.example.rmatt.crureader.bo;
+package com.example.rmatt.crureader.bo.GPage.Base;
 
 import android.support.percent.PercentFrameLayout;
 import android.support.percent.PercentRelativeLayout;

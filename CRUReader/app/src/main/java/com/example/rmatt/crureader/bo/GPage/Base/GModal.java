@@ -1,6 +1,4 @@
-package com.example.rmatt.crureader.bo.GPage;
-
-import com.example.rmatt.crureader.bo.GCoordinator;
+package com.example.rmatt.crureader.bo.GPage.Base;
 
 import org.simpleframework.xml.Attribute;
 

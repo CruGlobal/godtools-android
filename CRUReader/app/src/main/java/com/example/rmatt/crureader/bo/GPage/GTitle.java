@@ -3,7 +3,6 @@ package com.example.rmatt.crureader.bo.GPage;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.support.percent.PercentFrameLayout;
 import android.support.percent.PercentRelativeLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +11,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.rmatt.crureader.R;
-import com.example.rmatt.crureader.bo.GCoordinator;
-import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
+import com.example.rmatt.crureader.bo.GPage.Base.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.Base.GBaseTextAttributes;
 import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView;
 
 import org.simpleframework.xml.Attribute;
@@ -107,45 +106,11 @@ public class GTitle extends GCoordinator {
     }
 
 
-
-
-    /*private void setUpNumberTextView(AutoScaleTextView numberTextView, int position) {
-        if (number != null) {
-
-            numberTextView.setText(number);
-            numberTextView.setTextColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
-        } else {
-            numberTextView.setVisibility(View.GONE);
-        }
-    }
-    */
-
-
     public enum HeadingMode {
         peek, straight, clear, plain, none
     }
 
 
-
-
-    /* Recent clean up.
-
-
-
-//    public static final float DEFAULT_RIGHT_MARGIN = .025F;
-//    private static final float DEFAULT_TOP_MARGIN = .02F;
-//
-//    public static final float TITLE_ELEVATION = 20;
-//    public static final float TITLE_CORNER_RADIUS = 30.0F;
-
-
-        //TODO: these properties moved to xml to clean up
-        //numberTextView.setTextColor(Color.parseColor((heading.color != null && heading.color.length() > 0) ? heading.color : RenderSingleton.getInstance().getPositionGlobalColorAsString(position)));
-//        numberTextView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-//        numberTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, RenderConstants.getTextSizeFromXMLSize(RenderConstants.DEFAULT_NUMBER_TEXT_SIZE));
-//        RenderConstants.setDefaultPadding(numberTextView);
-
-     */
 
 
 }
