@@ -20,7 +20,7 @@ import org.simpleframework.xml.Root;
 @Root(name = "button")
 public class GSimpleButton extends GBaseButtonAttributes {
 
-
+    private boolean shouldUnderline = false;
     private static final String TAG = "GButton";
 
     public String textColor;
@@ -30,13 +30,37 @@ public class GSimpleButton extends GBaseButtonAttributes {
 
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, final int position) {
-        View inflate = inflater.inflate(R.layout.g_button_simple, viewGroup);
+        View inflate = null;
+        if (mode != null) {
+            switch (mode) {
+                case big:
+                    break;
+                case url:
+                    break;
+                case allurl:
+                    break;
+                case email:
+                    break;
+                case link:
+                    inflate = inflater.inflate(R.layout.g_button_link, viewGroup);
+                    shouldUnderline = true;
+                    break;
+
+
+            }
+        } else {
+            inflate = inflater.inflate(R.layout.g_button_simple, viewGroup);
+            defaultColor(position);
+        }
+
 
         AutoScaleButtonView button = (AutoScaleButtonView) inflate.findViewById(R.id.g_simple_button);
 
-        defaultColor(position);
-        button.setTextColor(Color.parseColor(textColor));
-        button.setText(content);
+        if (textColor != null)
+            button.setTextColor(Color.parseColor(textColor));
+        if (content != null)
+            button.setText(content);
+
         applyTextSize(button);
         updateBaseAttributes(button);
 
@@ -76,12 +100,22 @@ public class GSimpleButton extends GBaseButtonAttributes {
     }
 
 
-
     private void applyTextSize(AutoScaleButtonView buttonViewCast) {
         if (textSize != null) {
             buttonViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
         } else {
             buttonViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100.0f);
         }
+
+        if(shouldUnderline())
+        {
+            RenderConstants.underline(buttonViewCast);
+        }
+    }
+
+    @Override
+    public boolean shouldUnderline()
+    {
+        return shouldUnderline;
     }
 }

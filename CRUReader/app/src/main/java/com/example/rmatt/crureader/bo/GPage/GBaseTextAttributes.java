@@ -1,7 +1,6 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.util.TypedValue;
@@ -121,7 +120,7 @@ public class GBaseTextAttributes extends GCoordinator {
             textView.setTypeface(Typeface.defaultFromStyle(RenderConstants.getTypefaceFromModifier(textModifier)));
 
         if(shouldUnderline())
-                textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            RenderConstants.underline(textView);
 
     }
 
@@ -139,6 +138,6 @@ public class GBaseTextAttributes extends GCoordinator {
     {
         return false;
     }
-    public boolean shouldUnderline() { return false; }
+
 
 }

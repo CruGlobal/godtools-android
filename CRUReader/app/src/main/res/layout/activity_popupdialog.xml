@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/popup_percentFrameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -59,4 +59,11 @@
 
     </LinearLayout>
 
-</android.support.percent.PercentFrameLayout>
+    <ImageView
+        android:layout_below="@id/popup_innerLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/grad_shad_top" />
+
+</android.support.percent.PercentRelativeLayout>

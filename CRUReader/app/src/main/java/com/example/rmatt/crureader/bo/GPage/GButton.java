@@ -58,8 +58,6 @@ public class GButton extends GBaseButtonAttributes {
         } else {
             buttonLayout = inflater.inflate(R.layout.g_button_default, viewGroup);
             outerLayout = (LinearLayout) buttonLayout.findViewById(R.id.g_button_outer_linearlayout);
-
-
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             outerLayout.setTransitionName(inflater.getContext().getString(R.string.inner_ll_transistion_title));

@@ -23,7 +23,7 @@ public class GLinkButtonAttributes extends GBaseTextAttributes {
 
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
-        View inflated = inflater.inflate(R.layout.g_button_link, viewGroup);
+        View inflated = inflater.inflate(R.layout.g_link_button, viewGroup);
         TextView tv = (TextView) inflated.findViewById(R.id.g_button_link_textview);
         tv.setId(RenderViewCompat.generateViewId());
 
