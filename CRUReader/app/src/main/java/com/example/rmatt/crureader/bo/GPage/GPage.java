@@ -10,7 +10,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.rmatt.crureader.R;
-import com.example.rmatt.crureader.bo.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.Base.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.Base.GBaseTextAttributes;
+import com.example.rmatt.crureader.bo.GPage.Base.GModal;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.Diagnostics;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.ImageAsyncTask;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;

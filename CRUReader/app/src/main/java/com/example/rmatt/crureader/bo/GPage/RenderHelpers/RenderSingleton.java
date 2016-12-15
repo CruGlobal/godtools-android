@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.util.SparseArray;
 
-import com.example.rmatt.crureader.bo.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.Base.GCoordinator;
 
 import java.util.HashMap;
 import java.util.Hashtable;

@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.example.rmatt.crureader.R;
-import com.example.rmatt.crureader.bo.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.Base.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.Base.GBaseTextAttributes;
+import com.example.rmatt.crureader.bo.GPage.Base.GModal;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 
 import org.simpleframework.xml.ElementList;

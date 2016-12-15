@@ -8,6 +8,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.example.rmatt.crureader.R;
+import com.example.rmatt.crureader.bo.GPage.Base.GBaseButtonAttributes;
+import com.example.rmatt.crureader.bo.GPage.Base.GBaseTextAttributes;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView;

@@ -3,6 +3,8 @@ package com.example.rmatt.crureader.bo.GPage;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.example.rmatt.crureader.bo.GPage.Base.GModal;
+
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
