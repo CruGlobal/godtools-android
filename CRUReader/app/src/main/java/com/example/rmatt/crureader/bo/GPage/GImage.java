@@ -1,6 +1,5 @@
 package com.example.rmatt.crureader.bo.GPage;
 
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,22 +35,10 @@ public class GImage extends GCoordinator {
 
 
         updateBaseAttributes(gImageView);
-        setImageView(gImageView);
+        ImageAsyncTask.setImageView(content, gImageView);
         gImageView.setId(RenderViewCompat.generateViewId());
         return gImageView.getId();
     }
 
-    public void setImageView(final ImageView imageView) {
 
-        new ImageAsyncTask() {
-            @Override
-            protected void onPostExecute(Drawable drawable) {
-                super.onPostExecute(drawable);
-                if (drawable != null && imageView != null) {
-                    imageView.setImageDrawable(drawable);
-                }
-            }
-        }.start(content);
-
-    }
 }

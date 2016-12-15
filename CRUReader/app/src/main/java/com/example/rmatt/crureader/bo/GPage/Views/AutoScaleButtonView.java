@@ -42,6 +42,7 @@ public class AutoScaleButtonView extends AppCompatButton {
         float adjustedSize = (size * (float)textSizeScalar) / 80.0f;
         Log.w("TextSize", "Size: " + size + " adjustedSize: " + adjustedSize + " textSizeScalar: " + textSizeScalar);
         super.setTextSize(unit, adjustedSize);
+        invalidate();
     }
 
 

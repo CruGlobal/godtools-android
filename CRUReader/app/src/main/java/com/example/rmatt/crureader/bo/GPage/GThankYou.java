@@ -1,13 +1,12 @@
 package com.example.rmatt.crureader.bo.GPage;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.ElementListUnion;
 import org.simpleframework.xml.Root;
@@ -35,22 +34,23 @@ import java.util.ArrayList;
     This is an activity
  */
 @Root(name = "thank-you")
-public class GThankYou extends GCoordinator {
+public class GThankYou extends GModal {
 
     private static final String TAG = "GThankYou";
-    @Attribute
-    public String listeners;
+
 
     @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GBaseTextAttributes.class),
             @ElementList(inline = true, required = false, entry = "image", type = GImage.class),
             @ElementList(inline = true, required = false, entry = "button-pair", type = GButtonPair.class),
             @ElementList(inline = true, required = false, entry = "link-button", type = GLinkButtonAttributes.class)})
-    public ArrayList<GCoordinator> GCoordinatorArrayList = new ArrayList<GCoordinator>();
+    public ArrayList<GCoordinator> mGCoordinatorArrayList = new ArrayList<GCoordinator>();
 
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
-        Context context = viewGroup.getContext();
-        RenderConstants.renderLinearLayoutListWeighted(inflater, viewGroup, GCoordinatorArrayList, position);
-        return 0;
+        int space = Math.round(inflater.getContext().getResources().getDimension(R.dimen.thankyou_element_space));
+
+        return RenderConstants.renderLinearLayoutListWeighted(inflater, viewGroup,
+                mGCoordinatorArrayList,
+                position,space);
     }
 }

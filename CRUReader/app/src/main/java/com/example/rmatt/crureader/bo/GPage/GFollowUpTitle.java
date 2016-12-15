@@ -1,10 +1,12 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
+import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleTextView;
 
 import org.simpleframework.xml.Root;
 
@@ -22,10 +24,10 @@ public class GFollowUpTitle extends GBaseTextAttributes {
 
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
-        TextView v = new TextView(viewGroup.getContext());
-        v.setId(RenderViewCompat.generateViewId());
-        updateBaseAttributes(v);
-        viewGroup.addView(v);
-        return v.getId();
+        View view = inflater.inflate(R.layout.g_followup_title, viewGroup);
+        AutoScaleTextView tv = (AutoScaleTextView)view.findViewById(R.id.g_followup_title_textview);
+        tv.setId(RenderViewCompat.generateViewId());
+        updateBaseAttributes(tv);
+        return tv.getId();
     }
 }

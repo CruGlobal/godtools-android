@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 
 import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GCoordinator;
+import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -28,7 +29,7 @@ public class GButtonPair extends GCoordinator {
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
         View inflate = inflater.inflate(R.layout.g_button_pair, viewGroup);
         LinearLayout buttonPairLinearLayout = (LinearLayout)inflate.findViewById(R.id.g_button_pair_linear_layout);
-
+        buttonPairLinearLayout.setId(RenderViewCompat.generateViewId());
         negativeButton.render(inflater, buttonPairLinearLayout, position);
         positiveButton.render(inflater, buttonPairLinearLayout, position);
 

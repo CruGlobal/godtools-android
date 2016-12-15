@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-    android:layout_weight="1"
-    android:orientation="vertical">
-
-    <FrameLayout
-        android:id="@+id/g_big_button_image_framelayout"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/g_big_button_outer_linearlayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
+        <FrameLayout
+            android:id="@+id/g_big_button_image_framelayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="1">
 
 
             <ImageView
@@ -20,13 +23,12 @@
                 android:src="@drawable/grad_shad_bot" />
 
 
+        </FrameLayout>
 
+        <include
 
-    </FrameLayout>
+            android:id="@+id/g_big_button_g_small_button"
+            layout="@layout/g_button_default"></include>
 
-    <include
-
-        android:id="@+id/g_big_button_g_small_button"
-        layout="@layout/g_button_default"></include>
-
-</LinearLayout>
+    </LinearLayout>
+</merge>

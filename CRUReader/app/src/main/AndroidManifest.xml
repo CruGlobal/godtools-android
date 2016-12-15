@@ -12,7 +12,7 @@
         android:supportsRtl="true"
 
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" android:screenOrientation="portrait" >
+        <activity android:name=".MainActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
@@ -20,11 +20,11 @@
         </intent-filter>
         </activity>
 
-        <activity android:name=".PopupDialogActivity" android:theme="@style/Popin" android:screenOrientation="portrait" />
+        <activity android:name=".PopupDialogActivity" android:theme="@style/Popin" android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan" />
         <!--<activity android:name=".FollowupDialogActivity" android:theme="@style/MyDialogActivity" android:screenOrientation="portrait"  />-->
 
 
-        <activity android:name=".RenderSingleTestActivity" android:screenOrientation="portrait" />
+        <activity android:name=".RenderSingleTestActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

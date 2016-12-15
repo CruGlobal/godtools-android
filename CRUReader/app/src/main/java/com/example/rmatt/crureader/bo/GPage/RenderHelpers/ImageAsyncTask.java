@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
+import android.widget.ImageView;
 
 import java.io.IOException;
 
@@ -39,5 +40,19 @@ public class ImageAsyncTask extends AsyncTask<String, Void, Drawable> {
         }
     }
 
+
+    public static void setImageView(String content, final ImageView imageView) {
+
+        new ImageAsyncTask() {
+            @Override
+            protected void onPostExecute(Drawable drawable) {
+                super.onPostExecute(drawable);
+                if (drawable != null && imageView != null) {
+                    imageView.setImageDrawable(drawable);
+                }
+            }
+        }.start(content);
+
+    }
 
 }

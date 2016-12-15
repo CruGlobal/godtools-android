@@ -1,5 +1,6 @@
 package com.example.rmatt.crureader.bo.GPage;
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,38 +40,45 @@ public class GButton extends GBaseButtonAttributes {
     @Override
     public int render(final LayoutInflater inflater, ViewGroup viewGroup, final int position) {
         View buttonLayout;
-
+        LinearLayout outerLayout;
+        String imageContent = null;
         if (mode != null && mode == ButtonMode.big) {
             buttonLayout = inflater.inflate(R.layout.g_big_button, viewGroup);
-            //buttonLayout = bigButtonLayout.findViewById(R.id.g_big_button_g_small_button);
+            outerLayout = (LinearLayout) buttonLayout.findViewById(R.id.g_big_button_outer_linearlayout);
             FrameLayout imageFrame = (FrameLayout) buttonLayout.findViewById(R.id.g_big_button_image_framelayout);
-            if(!firstElementInList)
-            {
+            if (!firstElementInList) {
                 imageFrame.removeAllViews();
             }
             imageFrame.setId(RenderViewCompat.generateViewId());
             if (image != null) {
+                imageContent = image.content;
                 image.render(inflater, imageFrame, position);
 
             }
         } else {
             buttonLayout = inflater.inflate(R.layout.g_button_default, viewGroup);
+            outerLayout = (LinearLayout) buttonLayout.findViewById(R.id.g_button_outer_linearlayout);
+
+
         }
-        final LinearLayout buttonLinearLayout = (LinearLayout) buttonLayout.findViewById(R.id.g_button_outer_linearlayout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            outerLayout.setTransitionName(inflater.getContext().getString(R.string.inner_ll_transistion_title));
+        }
+
         AutoScaleTextView buttonTextView = (AutoScaleTextView) buttonLayout.findViewById(R.id.g_button_g_textview);
-        buttonLinearLayout.setId(RenderViewCompat.generateViewId());
+        outerLayout.setId(RenderViewCompat.generateViewId());
 
         String content = "";
 
-        this.updateBaseAttributes(buttonLinearLayout);
+        this.updateBaseAttributes(outerLayout);
 
         if (buttonText != null && buttonText.content != null) {
             buttonText.updateBaseAttributes(buttonTextView);
             buttonTextView.setId(RenderViewCompat.generateViewId());
             content = buttonText.content;
         }
-        RenderConstants.addOnClickPanelListener(content, panel, buttonLinearLayout);
-        return buttonLinearLayout.getId();
+        RenderConstants.addOnClickPanelListener(content, imageContent, panel, outerLayout);
+        return outerLayout.getId();
     }
 
 
