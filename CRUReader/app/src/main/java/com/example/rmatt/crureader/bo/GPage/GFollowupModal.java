@@ -16,9 +16,9 @@ import org.simpleframework.xml.Root;
 public class GFollowupModal extends GModal {
 
     private static final String TAG = "GFollowupModal";
+
     @Attribute(name = "followup-id")
     public int followUpID;
-
 
 
     @Element(name = "fallback")

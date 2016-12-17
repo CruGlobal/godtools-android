@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 import com.example.rmatt.crureader.R;
+import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 
 /**
  * Created by rmatt on 12/2/2016.
@@ -39,7 +40,7 @@ public class AutoScaleTextView extends AppCompatTextView {
     @Override
     public void setTextSize(int unit, float size) {
 
-        float adjustedSize = (size * (float)textSizeScalar) / 80.0f;
+        float adjustedSize = ((size) * (float)textSizeScalar * RenderSingleton.getInstance().getScreenHeightForNonRotationDesign()) / 80.0F;
         Log.w("TextSize", "Size: " + size + " adjustedSize: " + adjustedSize + " textSizeScalar: " + textSizeScalar);
         super.setTextSize(unit, adjustedSize);
     }

@@ -24,6 +24,7 @@ public class GSimpleButton extends GBaseButtonAttributes {
     private boolean shouldUnderline = false;
     private static final String TAG = "GButton";
 
+
     public String textColor;
 
     @org.simpleframework.xml.Text(required = false)
@@ -67,7 +68,7 @@ public class GSimpleButton extends GBaseButtonAttributes {
 
         button.setId(RenderViewCompat.generateViewId());
         button.setTag(tapEvents);
-        button.setTag(R.integer.gpanel_posiiton, position);
+        button.setTag(R.id.gpanel_posiiton, position);
         button.setOnClickListener(new View.OnClickListener() {
                                       @Override
                                       public void onClick(View view) {
@@ -80,7 +81,7 @@ public class GSimpleButton extends GBaseButtonAttributes {
                                               if (RenderSingleton.getInstance().gPanelHashMap.get(tap.hashCode()) != null) {
                                                   Log.i(TAG, "tap contained in map start activity");
 
-                                                  BottomSheetDialog bs = BottomSheetDialog.create((Integer) view.getTag(R.integer.gpanel_posiiton), tap.hashCode());
+                                                  BottomSheetDialog bs = BottomSheetDialog.create((Integer) view.getTag(R.id.gpanel_posiiton), tap.hashCode());
 
                                                   bs.show(RenderConstants.searchForFragmentManager(view.getContext()), "test");
 

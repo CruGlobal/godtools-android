@@ -17,6 +17,7 @@ import java.util.Hashtable;
 public class RenderSingleton {
 
     public static final boolean IS_DEBUG_BUILD = true;
+    public static final float KNOWN_HEIGHT = 731.0F;
 
     private static RenderSingleton renderSingleton;
     public SparseArray<GCoordinator> gPanelHashMap = new SparseArray<GCoordinator>();
@@ -24,6 +25,13 @@ public class RenderSingleton {
     Current View pager location.
      */
     public int curPosition;
+
+    /*
+    screenScalar
+     */
+    public float screenScalar = -1.0F;
+
+
     /*
     <Position in View Pager, background color>
      */
@@ -38,12 +46,14 @@ public class RenderSingleton {
 
     int screenWidth;
     int screenHeight;
+    float screenDensity;
 
     private RenderSingleton(Context context) {
         this.context = context;
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         screenWidth = metrics.widthPixels;
         screenHeight = metrics.heightPixels;
+        screenDensity = metrics.density;
     }
 
     public static RenderSingleton getInstance() {
@@ -81,6 +91,15 @@ public class RenderSingleton {
 
         return dimensionResourceCache.get(text_padding);
     }
+
+    public float getScreenHeightForNonRotationDesign() {
+        if (screenScalar < 0) {
+            final float screenHeightInDp = screenHeight / screenDensity;
+            screenScalar = (screenHeightInDp / KNOWN_HEIGHT);
+        }
+            return screenScalar;
+    }
+
 
     public Hashtable<String, Long> getMethodTraceMilliSecondsKeyMap() {
         return methodTraceMilliSecondsKeyMap;
