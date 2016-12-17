@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/popup_percentFrameLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="false"
-    android:fitsSystemWindows="true"
-    android:hapticFeedbackEnabled="false">
+                                               android:id="@+id/popup_percentFrameLayout"
+                                               android:layout_width="match_parent"
+                                               android:layout_height="match_parent"
+                                               android:clickable="false"
+                                               android:hapticFeedbackEnabled="false">
 
 
     <LinearLayout
@@ -17,8 +16,7 @@
 
         <ImageView
             android:id="@+id/popup_imageView"
-            style="@style/Image"
-            android:visibility="gone">
+            style="@style/Image">
 
         </ImageView>
 
@@ -33,7 +31,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible" />
+                android:visibility="visible"/>
 
             <ImageView
                 android:id="@+id/popin_iv_expand_imageview"
@@ -63,6 +61,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/popup_innerLinearLayout"
         android:scaleType="fitXY"
-        android:src="@drawable/grad_shad_top" />
+        android:src="@drawable/grad_shad_top"/>
 
 </android.support.percent.PercentRelativeLayout>

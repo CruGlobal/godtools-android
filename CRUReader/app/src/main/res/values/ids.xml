@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <item name="gpanel_tag" type="id"></item>
+    <item name="gpanel_posiiton" type="id"></item>
+    <item name="imageurl_tag" type="id"></item>
+    <item name="image_width" type="id"/>
+    <item name="image_height" type="id"/>
 </resources>

@@ -10,39 +10,4 @@
         android:layout_height="wrap_content"
         tools:text="Link Button" />
 
-</merge><!--
-    // Could share code with processPuttonPanelButton?
-    // That is where the following code came from
-    final float DEFAULT_BUTTON_TEXT_SIZE = 19.0f;
-    final int BUTTON_MARGIN = 20;
-    final int BUTTON_YOFFSET_TOP = 16; // was 30 but not so good on en_US, final page
-    final int BUTTON_YOFFSET_BOTTOM = 5;
-
-    final String content = getTextContentImmediate(elButton);
-    int margin = getScaledXValue(BUTTON_MARGIN);
-    if (elButton.getAttribute("y").length() == 0)
-    mYOffset += getScaledYValue(BUTTON_YOFFSET_TOP);
-    Button button = new Button(mContext);
-    button.setText(label.length() > 0 ? label : content);
-    button.setSingleLine();
-    button.setEllipsize(TruncateAt.END);
-    button.setTextSize(TypedValue.COMPLEX_UNIT_PX, getScaledTextSize(DEFAULT_BUTTON_TEXT_SIZE * size / 100.0f));
-    button.setTextColor(mBackgroundColor);
-    button.setLayoutParams(new AbsoluteLayout.LayoutParams(mPageWidth - 2 * margin, LayoutParams.WRAP_CONTENT, margin, mYOffset));
-
-    currPage.addView(TypefaceUtils.setTypeface(button, mLanguage));
-
-    button.measure(
-    MeasureSpec.makeMeasureSpec(mPageWidth, MeasureSpec.EXACTLY),
-    MeasureSpec.UNSPECIFIED);
-    int height = button.getMeasuredHeight();
-    mYOffset += height;
-    mYOffset += getScaledYValue(BUTTON_YOFFSET_BOTTOM);
-    if (bUrlMode)
-    {
-    // save urls for the addurl button - if any - that must be final button on page
-    urlsOnpage.add(content);
-    }
-
-    setupUrlButtonHandler(currPage, button, mode, content);
--->
+</merge>

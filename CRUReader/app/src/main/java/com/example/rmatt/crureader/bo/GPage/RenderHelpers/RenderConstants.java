@@ -119,13 +119,14 @@ public class RenderConstants {
     public static int getRelativeLayoutRuleFromAlign(String align) {
         if (align != null) {
             if (align.equalsIgnoreCase("right")) {
-                return RelativeLayout.ALIGN_PARENT_END;
+                return RelativeLayout.ALIGN_PARENT_RIGHT;
             } else if (align.equalsIgnoreCase("center")) {
                 return RelativeLayout.CENTER_HORIZONTAL;
             }
         }
 
-        return RelativeLayout.ALIGN_PARENT_START;
+
+        return RelativeLayout.ALIGN_PARENT_LEFT;
     }
 
 
@@ -248,15 +249,18 @@ public class RenderConstants {
             Context context = view.getContext();
             int distanceTooTop = ll.getTop() + ((View) ll.getParent()).getTop();
 
-            RenderSingleton.getInstance().gPanelHashMap.put(ll.getId(), (GPanel)ll.getTag(R.integer.gpanel_tag));
+            RenderSingleton.getInstance().gPanelHashMap.put(ll.getId(), (GPanel)ll.getTag(R.id.gpanel_tag));
 
             Intent intent = new Intent(context, PopupDialogActivity.class);
             intent.putExtra(PopupDialogActivity.CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA, (float) distanceTooTop);
             intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_HASH_KEY_INT_EXTRA, ll.getId());
             intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_TITLE_STRING_EXTRA, ll.getTag() != null ? ll.getTag().toString() : null);
-            intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_LOCATION, ll.getTag(R.integer.imageurl_tag) != null ? ll.getTag(R.integer.imageurl_tag).toString() : null);
+            intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_LOCATION, ll.getTag(R.id.imageurl_tag) != null ? ll.getTag(R.id.imageurl_tag).toString() : null);
+            intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_WIDTH_INT_EXTRA, (int)ll.getTag(R.id.image_width));
+            intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_HEIGHT_INT_EXTRA, (int)ll.getTag(R.id.image_height));
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
                 ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, ll, context.getString(R.string.inner_ll_transistion_title));
 
                 ((Activity) context).startActivityForResult(intent, 999, options.toBundle());
@@ -273,12 +277,23 @@ public class RenderConstants {
 
     public static void addOnClickPanelListener(String content, String imageUrl, GCoordinator panel, View button) {
         if(panel instanceof GPanel) {
+            addOnClickPanelListener(content, imageUrl, panel, button, 0, 0);
+        }
+    }
+
+
+    public static void addOnClickPanelListener(String content, String imageUrl, GCoordinator panel, View button, int width, int height) {
+        if(panel instanceof GPanel) {
             button.setTag(content);
-            button.setTag(R.integer.gpanel_tag, panel);
-            button.setTag(R.integer.imageurl_tag, imageUrl);
+            button.setTag(R.id.gpanel_tag, panel);
+            button.setTag(R.id.imageurl_tag, imageUrl);
+            button.setTag(R.id.image_width, width);
+            button.setTag(R.id.image_height, height);
             button.setOnClickListener(onClick);
         }
     }
+
+
 
     public static FragmentManager searchForFragmentManager(Context context) {
         if (context == null)

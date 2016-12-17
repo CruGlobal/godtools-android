@@ -405,6 +405,50 @@ public class SnuffyPWActivity extends AppCompatActivity
         app.setSnuffyPages(mPages);
     }
 
+    @WorkerThread
+    private void processSubscriberEvent(@NonNull final GodToolsEvent event) {
+        // look up the followup for the active context
+        final DBAdapter dao = DBAdapter.getInstance(this);
+        final Followup followup = dao.find(Followup.class, event.getFollowUpId(), Followup.DEFAULT_CONTEXT);
+        if (followup != null) {
+            // generate subscriber record
+            final GSSubscriber subscriber = new GSSubscriber();
+            subscriber.setRouteId(followup.getGrowthSpacesRouteId());
+            subscriber.setLanguageCode(event.getLanguage());
+
+            // process any fields
+            for (final Map.Entry<String, String> field : event.getFields().entrySet()) {
+                switch (Strings.nullToEmpty(field.getKey()).toLowerCase(Locale.US)) {
+                    case FIELD_EMAIL:
+                        subscriber.setEmail(field.getValue());
+                        break;
+                    case FIELD_FIRST_NAME:
+                        subscriber.setFirstName(field.getValue());
+                        break;
+                    case FIELD_LAST_NAME:
+                        subscriber.setLastName(field.getValue());
+                        break;
+                    case FIELD_NAME:
+                        // XXX: This is a best attempt at doing the right thing with a full name when the API expects
+                        // XXX: separate first and last names. This handles edge cases by putting all names beyond the
+                        // XXX: first one in the last name field.
+                        final String[] parts = field.getValue().split(" ", 2);
+                        subscriber.setFirstName(parts[0]);
+                        if (parts.length > 1) {
+                            subscriber.setLastName(parts[1]);
+                        }
+                        break;
+                }
+            }
+
+            // store subscriber if it's valid & trigger background sync
+            if (subscriber.isValid()) {
+                dao.insert(subscriber);
+                GodToolsSyncService.syncGrowthSpacesSubscribers(this);
+            }
+        }
+    }
+
     /**
      * This method is responsible for updating the list of pages being displayed and used by the app
      *
@@ -455,50 +499,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         }
 
         return false;
-    }
-
-    @WorkerThread
-    private void processSubscriberEvent(@NonNull final GodToolsEvent event) {
-        // look up the followup for the active context
-        final DBAdapter dao = DBAdapter.getInstance(this);
-        final Followup followup = dao.find(Followup.class, event.getFollowUpId(), Followup.DEFAULT_CONTEXT);
-        if (followup != null) {
-            // generate subscriber record
-            final GSSubscriber subscriber = new GSSubscriber();
-            subscriber.setRouteId(followup.getGrowthSpacesRouteId());
-            subscriber.setLanguageCode(event.getLanguage());
-
-            // process any fields
-            for (final Map.Entry<String, String> field : event.getFields().entrySet()) {
-                switch (Strings.nullToEmpty(field.getKey()).toLowerCase(Locale.US)) {
-                    case FIELD_EMAIL:
-                        subscriber.setEmail(field.getValue());
-                        break;
-                    case FIELD_FIRST_NAME:
-                        subscriber.setFirstName(field.getValue());
-                        break;
-                    case FIELD_LAST_NAME:
-                        subscriber.setLastName(field.getValue());
-                        break;
-                    case FIELD_NAME:
-                        // XXX: This is a best attempt at doing the right thing with a full name when the API expects
-                        // XXX: separate first and last names. This handles edge cases by putting all names beyond the
-                        // XXX: first one in the last name field.
-                        final String[] parts = field.getValue().split(" ", 2);
-                        subscriber.setFirstName(parts[0]);
-                        if (parts.length > 1) {
-                            subscriber.setLastName(parts[1]);
-                        }
-                        break;
-                }
-            }
-
-            // store subscriber if it's valid & trigger background sync
-            if (subscriber.isValid()) {
-                dao.insert(subscriber);
-                GodToolsSyncService.syncGrowthSpacesSubscribers(this);
-            }
-        }
     }
 
     private void showFollowupModal(@NonNull final GtFollowupModal modal) {
