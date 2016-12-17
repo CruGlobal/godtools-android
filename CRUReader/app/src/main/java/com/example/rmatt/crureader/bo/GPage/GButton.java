@@ -106,11 +106,8 @@ public class GButton extends GBaseButtonAttributes {
                     }
                 }
 
-
-                           });
-        }
-        else
-        {
+            });
+        } else {
             RenderConstants.addOnClickPanelListener(content, imageContent, panel, outerLayout, imageWidth, imageHeight);
         }
         return outerLayout.getId();
