@@ -35,6 +35,7 @@ public class GSimpleButton extends GBaseButtonAttributes {
                     break;
                 case url:
                     inflate = inflater.inflate(R.layout.g_button_url, viewGroup);
+                    defaultColor(position);
                     break;
                 case allurl:
                     break;
