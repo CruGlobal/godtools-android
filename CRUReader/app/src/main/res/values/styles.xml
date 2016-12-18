@@ -4,46 +4,79 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">
+            false
+        </item>
     </style>
 
 
     <style name="PopupAnimation">
-        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
-        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+        <item name="android:windowEnterAnimation">
+            @android:anim/fade_in
+        </item>
+        <item name="android:windowExitAnimation">
+            @android:anim/fade_out
+        </item>
     </style>
 
 
     <style name="Popin" parent="AppTheme">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:fitsSystemWindows">false</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">.25</item>
+        <item name="android:windowNoTitle">true
+        </item>
+        <item name="android:fitsSystemWindows">
+            false
+        </item>
+        <item name="android:windowBackground">
+            @android:color/transparent
+        </item>
+        <item name="android:windowIsTranslucent">
+            true
+        </item>
+        <item name="android:windowContentOverlay">
+            @null
+        </item>
+        <item name="android:backgroundDimEnabled">
+            true
+        </item>
+        <item name="android:backgroundDimAmount">
+            .25
+        </item>
 
     </style>
 
     <style name="Widget"></style>
 
     <style name="Widget.GodTools">
-        <item name="android:layout_marginRight">8dp</item>
-        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">
+            8dp
+        </item>
+        <item name="android:layout_marginLeft">
+            8dp
+        </item>
     </style>
 
     <style name="Image" parent="Widget.GodTools">
-        <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:scaleType">fitCenter</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:adjustViewBounds">true</item>
+        <item name="android:layout_gravity">
+            center_horizontal
+        </item>
+        <item name="android:scaleType">fitCenter
+        </item>
+        <item name="android:layout_height">
+            wrap_content
+        </item>
+        <item name="android:layout_width">
+            match_parent
+        </item>
+        <item name="android:adjustViewBounds">
+            true
+        </item>
     </style>
 
     <style name="AutoScaleTextView" parent="Widget.GodTools">
         <item name="textSizeScalar">17</item>
         //Default Text Size Scalar
-        <item name="android:visibility">gone</item>
+        <item name="android:visibility">gone
+        </item>
 
 
     </style>
@@ -55,23 +88,31 @@
 
     <style name="Widget.GodTools.AutoScaleBorderlessButtonView" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="background">@null</item>
-        <item name="android:background">@null</item>
+        <item name="android:background">@null
+        </item>
 
 
     </style>
 
     <style name="AutoScaleTextView.HeaderNumberTextView">
         <item name="textSizeScalar">68</item>
-        <item name="android:layout_marginRight">0dp</item>
+        <item name="android:layout_marginRight">
+            0dp
+        </item>
         <item name="android:padding">0dp</item>
-        <item name="android:layout_marginTop">5dp</item>
-        <item name="android:gravity">top|right</item>
+        <item name="android:layout_marginTop">
+            5dp
+        </item>
+        <item name="android:gravity">top|right
+        </item>
     </style>
 
     <style name="AutoScaleTextView.HeaderHeaderTextView">
         <!-- Default Size -->
         <item name="textSizeScalar">17</item>
-        <item name="android:gravity">center_vertical</item>
+        <item name="android:gravity">
+            center_vertical
+        </item>
     </style>
 
     <style name="AutoScaleTextView.HeaderSubheadingTextView">
@@ -80,88 +121,145 @@
 
     <style name="NormalButtonTextView" parent="AutoScaleTextView">
         <item name="textSizeScalar">20</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:layout_marginTop">10dp</item>
-        <item name="android:layout_marginBottom">10dp</item>
-        <item name="android:layout_gravity">left|center_vertical</item>
-        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">
+            @android:color/white
+        </item>
+        <item name="android:layout_marginTop">
+            10dp
+        </item>
+        <item name="android:layout_marginBottom">
+            10dp
+        </item>
+        <item name="android:layout_gravity">
+            left|center_vertical
+        </item>
+        <item name="android:gravity">
+            center_vertical
+        </item>
     </style>
 
     <style name="Question" parent="AutoScaleTextView">
-        <item name="android:gravity">top|right</item>
+        <item name="android:gravity">top|right
+        </item>
     </style>
 
 
     <style name="Question.QuestionStraightTextView">
         <item name="textSizeScalar">17</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:gravity">center_horizontal|top</item>
-
+        <item name="android:gravity">
+            center_horizontal|top
+        </item>
     </style>
 
     <style name="Question.QuestionDefaultTextView">
         <!-- Default Size -->
         <item name="textSizeScalar">20</item>
-        <item name="android:textStyle">bold|italic</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:textStyle">
+            bold|italic
+        </item>
+        <item name="android:textColor">
+            @android:color/white
+        </item>
+        <item name="android:layout_alignParentBottom">
+            true
+        </item>
     </style>
 
 
     <color name="gt_content_text">#ffffff</color>
 
     <style name="TextAppearance.GodTools.Content.Button.Link" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/gt_content_text</item>
-        <item name="android:textColorHint">@color/gt_content_text</item>
-        <item name="android:textColorHighlight">@color/gt_content_text</item>
-        <item name="android:textColorLink">@color/gt_content_text</item>
+        <item name="android:textColor">
+            @color/gt_content_text
+        </item>
+        <item name="android:textColorHint">
+            @color/gt_content_text
+        </item>
+        <item name="android:textColorHighlight">
+            @color/gt_content_text
+        </item>
+        <item name="android:textColorLink">
+            @color/gt_content_text
+        </item>
+
+    </style>
+
+    <style name="Url" parent="AutoScaleTextView">
+        <item name="textSizeScalar">19</item>
+        <item name="android:ellipsize">end</item>
 
     </style>
 
     <style name="Link" parent="AutoScaleTextView">
-        <item name="android:textAppearance">@style/TextAppearance.GodTools.Content.Button.Link
+        <item name="android:textAppearance">
+            @style/TextAppearance.GodTools.Content.Button.Link
         </item>
         <item name="textSizeScalar">19</item>
     </style>
 
     <style name="Widget.GodTools.ButtonLink" parent="Widget.GodTools.AutoScaleBorderlessButtonView">
-        <item name="android:textAppearance">@style/TextAppearance.GodTools.Content.Button.Link
+        <item name="android:textAppearance">
+            @style/TextAppearance.GodTools.Content.Button.Link
         </item>
         <item name="textSizeScalar">19</item>
-        <item name="android:gravity">left|top</item>
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:paddingRight">8dp</item>
+        <item name="android:gravity">left|top
+        </item>
+        <item name="android:paddingLeft">8dp
+        </item>
+        <item name="android:paddingRight">8dp
+        </item>
         <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:paddingBottom">8dp
+        </item>
+        <item name="android:layout_marginLeft">
+            10dp
+        </item>
+        <item name="android:layout_marginRight">
+            10dp
+        </item>
     </style>
 
 
     <style name="Widget.GodTools.Button" parent="@style/Widget.GodTools.AutoScaleButtonView">
-        <item name="buttonTextSizeScalar">20</item>
+        <item name="buttonTextSizeScalar">20
+        </item>
         //Default Text Size Scalar
-        <item name="android:background">@drawable/gbutton_white</item>
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:layout_marginRight">10dp</item>
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:paddingRight">8dp</item>
+        <item name="android:background">
+            @drawable/gbutton_white
+        </item>
+        <item name="android:layout_marginLeft">
+            10dp
+        </item>
+        <item name="android:layout_marginRight">
+            10dp
+        </item>
+        <item name="android:paddingLeft">8dp
+        </item>
+        <item name="android:paddingRight">8dp
+        </item>
         <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingBottom">8dp
+        </item>
         <item name="android:minHeight">1dp</item>
         <item name="textAllCaps">false</item>
 
     </style>
 
     <style name="TextAppearance.GodTools.Button.Standard" parent="@style/TextAppearance.AppCompat.Widget.Button">
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">
+            @android:color/white
+        </item>
     </style>
 
 
     <style name="Widget.GodTools.Button.Standard">
-        <item name="android:textAppearanceButton">@style/TextAppearance.GodTools.Button.Standard
+        <item name="android:textAppearanceButton">
+            @style/TextAppearance.GodTools.Button.Standard
         </item>
-        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:gravity">
+            left|center_vertical
+        </item>
     </style>
 
 
@@ -170,7 +268,9 @@
     </style>
 
     <style name="FollowUp" parent="AutoScaleTextView">
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">
+            @android:color/white
+        </item>
     </style>
 
     <style name="FollowUp.Title">

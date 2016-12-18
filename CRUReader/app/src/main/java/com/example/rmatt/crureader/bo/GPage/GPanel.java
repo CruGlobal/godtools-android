@@ -5,8 +5,8 @@ import android.support.percent.PercentRelativeLayout;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.example.rmatt.crureader.bo.GPage.Base.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Base.GBaseTextAttributes;
+import com.example.rmatt.crureader.bo.GPage.Base.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 
 import org.simpleframework.xml.Attribute;
@@ -32,16 +32,15 @@ public class GPanel extends GCoordinator {
             @ElementList(inline = true, required = false, entry = "image", type = GImage.class),
             @ElementList(inline = true, required = false, entry = "button-pair", type = GButtonPair.class),
             @ElementList(inline = true, required = false, entry = "link-button", type = GLinkButtonAttributes.class),
-            @ElementList(inline = true, required = false, entry = "button", type = GButton.class)})
+            @ElementList(inline = true, required = false, entry = "button", type = GSimpleButton.class)})
     public ArrayList<GCoordinator> GCoordinatorArrayList = new ArrayList<GCoordinator>();
-
 
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
         Context context = viewGroup.getContext();
-        RenderConstants.renderLinearLayoutListWeighted(inflater,
+
+        return RenderConstants.renderLinearLayoutListWeighted(inflater,
                 (PercentRelativeLayout) viewGroup, GCoordinatorArrayList, position, 40);
-        return 0;
     }
 
 }

@@ -26,7 +26,6 @@ public class GFollowUpBody extends GBaseTextAttributes {
         View inflatedView = inflater.inflate(R.layout.g_followup_body, viewGroup);
 
         AutoScaleTextView tv = (AutoScaleTextView)inflatedView.findViewById(R.id.g_followup_body_textview);
-
         tv.setId(RenderViewCompat.generateViewId());
         updateBaseAttributes(tv);
         return tv.getId();

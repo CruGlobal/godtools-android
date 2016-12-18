@@ -17,18 +17,14 @@ import com.example.rmatt.crureader.bo.GPage.Views.BottomSheetDialog;
 
 import org.simpleframework.xml.Root;
 
-
 @Root(name = "button")
 public class GSimpleButton extends GBaseButtonAttributes {
 
-    private boolean shouldUnderline = false;
     private static final String TAG = "GButton";
-
-
     public String textColor;
-
     @org.simpleframework.xml.Text(required = false)
     public String content;
+    private boolean shouldUnderline = false;
 
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, final int position) {
@@ -38,6 +34,7 @@ public class GSimpleButton extends GBaseButtonAttributes {
                 case big:
                     break;
                 case url:
+                    inflate = inflater.inflate(R.layout.g_button_url, viewGroup);
                     break;
                 case allurl:
                     break;
@@ -48,13 +45,11 @@ public class GSimpleButton extends GBaseButtonAttributes {
                     shouldUnderline = true;
                     break;
 
-
             }
         } else {
             inflate = inflater.inflate(R.layout.g_button_simple, viewGroup);
             defaultColor(position);
         }
-
 
         AutoScaleButtonView button = (AutoScaleButtonView) inflate.findViewById(R.id.g_simple_button);
 
@@ -74,15 +69,11 @@ public class GSimpleButton extends GBaseButtonAttributes {
                                       public void onClick(View view) {
 
                                           AutoScaleButtonView autoScaleButtonView = (AutoScaleButtonView) view;
-                                          // Toast.makeText(view.getContext(), (String) view.getTag(), Toast.LENGTH_LONG).show();
                                           String[] tapEvents = RenderConstants.getTapEvents((String) view.getTag());
                                           for (String tap : tapEvents) {
                                               Log.i(TAG, "tap: " + tap + " tap as hash " + tap.hashCode());
                                               if (RenderSingleton.getInstance().gPanelHashMap.get(tap.hashCode()) != null) {
-                                                  Log.i(TAG, "tap contained in map start activity");
-
                                                   BottomSheetDialog bs = BottomSheetDialog.create((Integer) view.getTag(R.id.gpanel_posiiton), tap.hashCode());
-
                                                   bs.show(RenderConstants.searchForFragmentManager(view.getContext()), "test");
 
                                               }
@@ -101,7 +92,6 @@ public class GSimpleButton extends GBaseButtonAttributes {
         textColor = RenderSingleton.getInstance().getPositionGlobalColorAsString(position);
     }
 
-
     private void applyTextSize(AutoScaleButtonView buttonViewCast) {
         if (textSize != null) {
             buttonViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
@@ -109,15 +99,13 @@ public class GSimpleButton extends GBaseButtonAttributes {
             buttonViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100.0f);
         }
 
-        if(shouldUnderline())
-        {
+        if (shouldUnderline()) {
             RenderConstants.underline(buttonViewCast);
         }
     }
 
     @Override
-    public boolean shouldUnderline()
-    {
+    public boolean shouldUnderline() {
         return shouldUnderline;
     }
 }
