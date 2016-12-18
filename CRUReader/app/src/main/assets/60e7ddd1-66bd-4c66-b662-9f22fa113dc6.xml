@@ -1,24 +1,66 @@
-<?xml version="1.0" encoding="UTF-8"?><page buttons="6" color="#DC5C31" tnt-trx-ref-value="" tnt-trx-translated="" translate="" watermark="90458873df4460124f51a61d5e22e2c3d021a739.png">
-  <title h="50" mode="straight">
-    <heading gtapi-trx-id="99627019-e11a-4678-bc23-0cfcd5a6ed62" textalign="center" translate="true">WEBSITES TO ASSIST YOU</heading>
-  </title>
-  <button>
-    <buttontext gtapi-trx-id="2b883c27-3cf3-4046-a075-f5ddd97c881e" translate="true">Still not sure who Jesus is?</buttontext>
-    <panel>
-      <button gtapi-trx-id="3285f0ab-f247-4524-bcc1-b757d2db85a9" mode="url" tnt-trx-ref-value="whyjesus.com.au" tnt-trx-translated="true" translate="true">www.everystudent.com</button>
-    </panel>
-  </button>
-  <button>
-    <buttontext gtapi-trx-id="22ddc59d-91cc-4432-90a9-1730d995f7d3" translate="true">More about Christianity...</buttontext>
-    <panel>
-      <button gtapi-trx-id="f1225cff-2834-486a-a93e-b8dd4efd7a5c" mode="url" translate="true">http://www.startingwithgod.com/starter-kit/</button>
-    </panel>
-  </button>
-  <button>
-    <buttontext gtapi-trx-id="0a54d46a-93af-4f0d-804f-4bd48ce5e385" translate="true">Watch a film about Jesus</buttontext>
-    <panel>
-      <button gtapi-trx-id="1c0b32ac-31ba-4606-9de8-05034082e178" mode="url" tnt-trx-ref-value="www.5clicks.com" tnt-trx-translated="true" translate="true">jesusfilmmedia.org/video/1_529-jf-0-0/english/jesus</button>
-    </panel>
-  </button>
-  <button gtapi-trx-id="55654320-db11-4cb3-b1ea-3aea73bb5079" mode="allurl" translate="true">All Websites</button>
+<?xml version="1.0" encoding="UTF-8"?>
+<page buttons="6" color="#DC5C31"
+      tnt-trx-ref-value="" tnt-trx-translated=""
+      translate=""
+      watermark="90458873df4460124f51a61d5e22e2c3d021a739.png">
+    <title h="50" mode="straight">
+        <heading
+            gtapi-trx-id="99627019-e11a-4678-bc23-0cfcd5a6ed62"
+            textalign="center" translate="true">
+            WEBSITES TO ASSIST YOU
+        </heading>
+    </title>
+    <button>
+        <buttontext
+            gtapi-trx-id="2b883c27-3cf3-4046-a075-f5ddd97c881e"
+            translate="true">Still not sure who
+            Jesus is?
+        </buttontext>
+        <panel>
+            <button
+                gtapi-trx-id="3285f0ab-f247-4524-bcc1-b757d2db85a9"
+                mode="url"
+                tnt-trx-ref-value="whyjesus.com.au"
+                tnt-trx-translated="true"
+                translate="true">
+                www.everystudent.com
+            </button>
+        </panel>
+    </button>
+    <button>
+        <buttontext
+            gtapi-trx-id="22ddc59d-91cc-4432-90a9-1730d995f7d3"
+            translate="true">More about
+            Christianity...
+        </buttontext>
+        <panel>
+            <button
+                gtapi-trx-id="f1225cff-2834-486a-a93e-b8dd4efd7a5c"
+                mode="url" translate="true">
+                http://www.startingwithgod.com/starter-kit/
+            </button>
+        </panel>
+    </button>
+    <button>
+        <buttontext
+            gtapi-trx-id="0a54d46a-93af-4f0d-804f-4bd48ce5e385"
+            translate="true">Watch a film about
+            Jesus
+        </buttontext>
+        <panel>
+            <button
+                gtapi-trx-id="1c0b32ac-31ba-4606-9de8-05034082e178"
+                mode="url"
+                tnt-trx-ref-value="www.5clicks.com"
+                tnt-trx-translated="true"
+                translate="true">
+                jesusfilmmedia.org/video/1_529-jf-0-0/english/jesus
+            </button>
+        </panel>
+    </button>
+    <button
+        gtapi-trx-id="55654320-db11-4cb3-b1ea-3aea73bb5079"
+        mode="allurl" translate="true">All
+        Websites
+    </button>
 </page>

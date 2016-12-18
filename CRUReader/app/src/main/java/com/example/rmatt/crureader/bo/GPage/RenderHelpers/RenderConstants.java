@@ -24,8 +24,8 @@ import android.widget.TextView;
 import com.example.rmatt.crureader.PopupDialogActivity;
 import com.example.rmatt.crureader.R;
 import com.example.rmatt.crureader.bo.GPage.Base.GCoordinator;
-import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.Base.GModal;
+import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.GPanel;
 import com.example.rmatt.crureader.bo.GPage.IDO.IContexual;
 import com.example.rmatt.crureader.bo.GPage.Views.BottomSheetDialog;
@@ -61,6 +61,44 @@ public class RenderConstants {
     public static final String DEFAULT_BUTTON_TEXT_ALIGN = "left";
     public static final String DEFAULT_TEXT_COLOR = "#FFFFFFFF";
     private static final String TAG = "RenderConstants";
+    static View.OnClickListener followupOnClick = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View view) {
+            BottomSheetDialog bs = new BottomSheetDialog();
+            bs.show(((FragmentActivity) view.getContext()).getSupportFragmentManager(), "test");
+
+        }
+    };
+    static View.OnClickListener onClick = new View.OnClickListener() {
+
+        public void onClick(View view) {
+            final LinearLayout ll = (LinearLayout) view;
+            Context context = view.getContext();
+            int distanceTooTop = ll.getTop() + ((View) ll.getParent()).getTop();
+
+            RenderSingleton.getInstance().gPanelHashMap.put(ll.getId(), (GPanel) ll.getTag(R.id.gpanel_tag));
+
+            Intent intent = new Intent(context, PopupDialogActivity.class);
+            intent.putExtra(PopupDialogActivity.CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA, (float) distanceTooTop);
+            intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_HASH_KEY_INT_EXTRA, ll.getId());
+            intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_TITLE_STRING_EXTRA, ll.getTag() != null ? ll.getTag().toString() : null);
+            intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_LOCATION, ll.getTag(R.id.imageurl_tag) != null ? ll.getTag(R.id.imageurl_tag).toString() : null);
+            intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_WIDTH_INT_EXTRA, (int) ll.getTag(R.id.image_width));
+            intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_HEIGHT_INT_EXTRA, (int) ll.getTag(R.id.image_height));
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, ll, context.getString(R.string.inner_ll_transistion_title));
+
+                ((Activity) context).startActivityForResult(intent, 999, options.toBundle());
+
+            } else {
+                ((Activity) context).startActivityForResult(intent, 999);
+            }
+
+        }
+    };
 
     /*
     The percent of screen height by taking xml value height and dividing by the xml's height basis.
@@ -86,7 +124,6 @@ public class RenderConstants {
         }
         return (xmlSize * SCALE_TEXT_SIZE) / 100.0F;
     }
-
 
     /********************************************
      * Helpers
@@ -125,10 +162,8 @@ public class RenderConstants {
             }
         }
 
-
         return RelativeLayout.ALIGN_PARENT_LEFT;
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static int getTextAlign(String textAlign) {
@@ -140,7 +175,6 @@ public class RenderConstants {
         }
         return Gravity.START + Gravity.TOP;
     }
-
 
     public static int parseColor(String color) {
         if (color != null) {
@@ -160,13 +194,11 @@ public class RenderConstants {
         midSection.setOrientation(LinearLayout.VERTICAL);
         midSection.setId(RenderViewCompat.generateViewId());
 
-
         Space space = new Space(inflater.getContext());
         LinearLayout.LayoutParams evenSpreadDownSpaceLayoutParams;
         evenSpreadDownSpaceLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, maxSpace, 1.0f); //max space is to deal with popups that shouldn't take up the whole container.
 
         midSection.addView(space, evenSpreadDownSpaceLayoutParams);
-
 
         for (GCoordinator tap : GCoordinatorArrayList) {
 
@@ -176,7 +208,6 @@ public class RenderConstants {
                 space = new Space(inflater.getContext());
                 midSection.addView(space, evenSpreadDownSpaceLayoutParams);
             }
-
 
         }
         viewGroup.addView(midSection, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, maxSpace > 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : ViewGroup.LayoutParams.MATCH_PARENT)); //If there is max space wrap_content because we only want to fill a small area.   If it isn't we want to fill the whole available area evenly.
@@ -197,7 +228,6 @@ public class RenderConstants {
         viewGroup.addView(midSection, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)); //If there is max space wrap_content because we only want to fill a small area.   If it isn't we want to fill the whole available area evenly.
         return midSection.getId();
     }
-
 
     public static String[] getTapEvents(String tapEvents) {
         String[] splitTapEvents = null;
@@ -230,82 +260,42 @@ public class RenderConstants {
         return Math.round(getVerticalPercent(height) * RenderSingleton.getInstance().screenHeight);
     }
 
-    static View.OnClickListener followupOnClick = new View.OnClickListener()
-    {
-
-        @Override
-        public void onClick(View view) {
-            BottomSheetDialog bs = new BottomSheetDialog();
-            bs.show(((FragmentActivity)view.getContext()).getSupportFragmentManager(), "test");
-
-
+    public static void addOnClickPanelListener(String content, GCoordinator panel, View button) {
+        if (panel instanceof GPanel) {
+            addOnClickPanelListener(content, null, panel, button, 0, 0);
         }
-    };
-
-    static View.OnClickListener onClick = new View.OnClickListener() {
-
-        public void onClick(View view) {
-            final LinearLayout ll = (LinearLayout) view;
-            Context context = view.getContext();
-            int distanceTooTop = ll.getTop() + ((View) ll.getParent()).getTop();
-
-            RenderSingleton.getInstance().gPanelHashMap.put(ll.getId(), (GPanel)ll.getTag(R.id.gpanel_tag));
-
-            Intent intent = new Intent(context, PopupDialogActivity.class);
-            intent.putExtra(PopupDialogActivity.CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA, (float) distanceTooTop);
-            intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_HASH_KEY_INT_EXTRA, ll.getId());
-            intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_TITLE_STRING_EXTRA, ll.getTag() != null ? ll.getTag().toString() : null);
-            intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_LOCATION, ll.getTag(R.id.imageurl_tag) != null ? ll.getTag(R.id.imageurl_tag).toString() : null);
-            intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_WIDTH_INT_EXTRA, (int)ll.getTag(R.id.image_width));
-            intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_HEIGHT_INT_EXTRA, (int)ll.getTag(R.id.image_height));
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, ll, context.getString(R.string.inner_ll_transistion_title));
-
-                ((Activity) context).startActivityForResult(intent, 999, options.toBundle());
-
-
-            } else {
-                ((Activity) context).startActivityForResult(intent, 999);
-            }
-
-
-
-        }
-    };
+    }
 
     public static void addOnClickPanelListener(String content, String imageUrl, GCoordinator panel, View button) {
-        if(panel instanceof GPanel) {
+        if (panel instanceof GPanel) {
             addOnClickPanelListener(content, imageUrl, panel, button, 0, 0);
         }
     }
 
-
     public static void addOnClickPanelListener(String content, String imageUrl, GCoordinator panel, View button, int width, int height) {
-        if(panel instanceof GPanel) {
+        if (panel instanceof GPanel) {
             button.setTag(content);
             button.setTag(R.id.gpanel_tag, panel);
-            button.setTag(R.id.imageurl_tag, imageUrl);
+
+            if (imageUrl != null)
+                button.setTag(R.id.imageurl_tag, imageUrl);
             button.setTag(R.id.image_width, width);
             button.setTag(R.id.image_height, height);
             button.setOnClickListener(onClick);
         }
     }
 
-
-
     public static FragmentManager searchForFragmentManager(Context context) {
         if (context == null)
             return null;
         else if (context instanceof IContexual)
-            return ((IContexual)context).getContexualFragmentActivity();
+            return ((IContexual) context).getContexualFragmentActivity();
         else if (context instanceof ContextWrapper)
-            return searchForFragmentManager(((ContextWrapper)context).getBaseContext());
+            return searchForFragmentManager(((ContextWrapper) context).getBaseContext());
         return null;
     }
 
     public static void underline(TextView textView) {
-            textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
     }
 }

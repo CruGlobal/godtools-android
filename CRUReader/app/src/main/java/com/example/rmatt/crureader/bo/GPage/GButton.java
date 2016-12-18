@@ -1,10 +1,10 @@
 package com.example.rmatt.crureader.bo.GPage;
 
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -43,52 +43,82 @@ public class GButton extends GBaseButtonAttributes {
 
     @Override
     public int render(final LayoutInflater inflater, ViewGroup viewGroup, final int position) {
-        View buttonLayout;
-        final LinearLayout outerLayout;
+
+
+        if (mode != null && mode == ButtonMode.big) {
+            return methodBig(inflater, viewGroup, position);
+        } else {
+            return methodDefault(inflater, viewGroup, position);
+
+        }
+
+    }
+
+
+
+    private int methodDefault(LayoutInflater inflater, ViewGroup viewGroup, int position) {
+
+        FrameLayout imageFrame = null;
+        String content = "";
+        View buttonLayout = inflater.inflate(R.layout.g_button_default, viewGroup);
+
+        LinearLayout outerLayout = (LinearLayout) buttonLayout.findViewById(R.id.g_button_outer_linearlayout);
+        this.updateBaseAttributes(outerLayout);
+
+        outerLayout.setId(RenderViewCompat.generateViewId());
+
+        AutoScaleTextView buttonTextView = (AutoScaleTextView) buttonLayout.findViewById(R.id.g_button_g_textview);
+
+        //************* Sets up top and bottom dividers asynch loading them into the view, because some avenues don't need them ***********//
+
+        lazyInflateDividers(inflater, buttonLayout, true, true);
+
+        //************** end dividers****************************************//
+
+        setOuterLayoutToTransistion(outerLayout);
+        this.updateBaseAttributes(outerLayout);
+
+        content = setButtonText(buttonTextView);
+
+        RenderConstants.addOnClickPanelListener(content, panel, outerLayout);
+
+        return outerLayout.getId();
+
+    }
+
+    private int methodBig(LayoutInflater inflater, ViewGroup viewGroup, int position) {
+
         final int imageWidth = 0;
         final int imageHeight = 0;
-        FrameLayout imageFrame = null;
         int imageId = 0;
         String imageContent = null;
-        if (mode != null && mode == ButtonMode.big) {
-            buttonText.textalign = "center";
-            buttonLayout = inflater.inflate(R.layout.g_big_button, viewGroup);
-            outerLayout = (LinearLayout) buttonLayout.findViewById(R.id.g_big_button_outer_linearlayout);
-            imageFrame = (FrameLayout) buttonLayout.findViewById(R.id.g_big_button_image_framelayout);
-            if (!firstElementInList) {
-                imageFrame.removeAllViews();
-            }
-            imageFrame.setId(RenderViewCompat.generateViewId());
-            if (image != null) {
-                imageContent = image.content;
-                imageId = image.render(inflater, imageFrame, position);
+        buttonText.textalign = "center";
+        View buttonLayout = inflater.inflate(R.layout.g_big_button, viewGroup);
+        final LinearLayout outerLayout = (LinearLayout) buttonLayout.findViewById(R.id.g_big_button_outer_linearlayout);
+        FrameLayout imageFrame = (FrameLayout) buttonLayout.findViewById(R.id.g_big_button_image_framelayout);
 
-            }
-        } else {
-            buttonLayout = inflater.inflate(R.layout.g_button_default, viewGroup);
-            outerLayout = (LinearLayout) buttonLayout.findViewById(R.id.g_button_outer_linearlayout);
+        if (!firstElementInList) {
+            imageFrame.removeAllViews();
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            outerLayout.setTransitionName(inflater.getContext().getString(R.string.inner_ll_transistion_title));
+        imageFrame.setId(RenderViewCompat.generateViewId());
+        if (image != null) {
+            imageContent = image.content;
+            imageId = image.render(inflater, imageFrame, position);
+
         }
+
+        setOuterLayoutToTransistion(outerLayout);
+        lazyInflateDividers(inflater, buttonLayout, false, true);
 
         AutoScaleTextView buttonTextView = (AutoScaleTextView) buttonLayout.findViewById(R.id.g_button_g_textview);
         outerLayout.setId(RenderViewCompat.generateViewId());
 
-        String content = "";
-
         this.updateBaseAttributes(outerLayout);
 
-        if (buttonText != null && buttonText.content != null) {
-
-            buttonText.updateBaseAttributes(buttonTextView);
-            buttonTextView.setId(RenderViewCompat.generateViewId());
-            content = buttonText.content;
-        }
+        final String content = setButtonText(buttonTextView);
 
         if (imageFrame != null) {
 
-            final String finalContent = content;
             final String finalImageContent = imageContent;
             final FrameLayout finalImageFrame = imageFrame;
             final int finalImageId = imageId;
@@ -100,16 +130,46 @@ public class GButton extends GBaseButtonAttributes {
                     if (buttonImageView != null) {
                         int imageWidth = buttonImageView.getMeasuredWidth();
                         int imageHeight = buttonImageView.getMeasuredHeight();
-                        Log.i(TAG, "imageWidth: " + imageWidth);
 
-                        RenderConstants.addOnClickPanelListener(finalContent, finalImageContent, panel, outerLayout, imageWidth, imageHeight);
+                        RenderConstants.addOnClickPanelListener(content, finalImageContent, panel, outerLayout, imageWidth, imageHeight);
                     }
                 }
 
             });
-        } else {
-            RenderConstants.addOnClickPanelListener(content, imageContent, panel, outerLayout, imageWidth, imageHeight);
         }
         return outerLayout.getId();
+
+    }
+
+    private String setButtonText(AutoScaleTextView buttonTextView) {
+        if (buttonText != null && buttonText.content != null) {
+
+            buttonText.updateBaseAttributes(buttonTextView);
+            buttonTextView.setId(RenderViewCompat.generateViewId());
+            buttonTextView.setText(buttonText.content);
+            return buttonText.content;
+        }
+        return "";
+
+    }
+
+    private void setOuterLayoutToTransistion(View view) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            view.setTransitionName(view.getContext().getString(R.string.inner_ll_transistion_title));
+        }
+    }
+
+    private void lazyInflateDividers(LayoutInflater inflater, View buttonLayout, boolean topShown, boolean bottomShown) {
+        ViewStub bottomButtonDivider = (ViewStub) buttonLayout.findViewById(R.id.g_button_bottom_horizontal_rule);
+        ViewStub topButtonDivider = (ViewStub) buttonLayout.findViewById(R.id.g_button_top_horizontal_rule);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            bottomButtonDivider.setLayoutInflater(inflater);
+            topButtonDivider.setLayoutInflater(inflater);
+        }
+        if (topShown) topButtonDivider.inflate();
+        if (bottomShown)
+            bottomButtonDivider.inflate();
     }
 }

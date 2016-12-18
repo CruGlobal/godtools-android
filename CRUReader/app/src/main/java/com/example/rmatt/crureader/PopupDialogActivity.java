@@ -9,7 +9,6 @@ import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -23,6 +22,7 @@ import android.widget.LinearLayout;
 import com.example.rmatt.crureader.bo.GPage.Base.GCoordinator;
 import com.example.rmatt.crureader.bo.GPage.Compat.RenderViewCompat;
 import com.example.rmatt.crureader.bo.GPage.IDO.IContexual;
+import com.example.rmatt.crureader.bo.GPage.RenderHelpers.ImageAsyncTask;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import com.example.rmatt.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 import com.example.rmatt.crureader.bo.GPage.Views.AutoScaleButtonView;
@@ -35,24 +35,29 @@ import java.io.IOException;
  */
 public class PopupDialogActivity extends FragmentActivity implements IContexual {
 
+    public static final String TAG = "PopupDialogActivity";
     public static final String CONSTANTS_PANEL_HASH_KEY_INT_EXTRA = "panelhash";
     public static final String CONSTANTS_PANEL_TITLE_STRING_EXTRA = "title";
     public static final String CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA = "Y";
     public static final String CONSTANTS_IMAGE_WIDTH_INT_EXTRA = "ImageWidth";
     public static final String CONSTANTS_IMAGE_HEIGHT_INT_EXTRA = "ImageHeight";
     public static final String CONSTANTS_IMAGE_LOCATION = "imageLocation";
-    public static final String TAG = "PopupDialogActivity";
-    public float Y;
-    LinearLayout ll;
-    int distanceToBottomOfScreen;
-    PercentRelativeLayout extraContent;
-    AutoScaleTextView tv;
-    ImageView iv;
+
+
+    private PercentRelativeLayout extraContent;
+    private AutoScaleTextView tv;
+    private ImageView iv;
+    private LinearLayout ll;
+
     GCoordinator gPanel;
-    int screenHeight;
-    String title;
-    private String mImageLocation;
+
+    private float Y;
+    private int distanceToBottomOfScreen;
     private boolean fixed = false;
+    private int screenHeight;
+    private String title;
+    private String mImageLocation;
+
     private int mImageWidth;
     private int mImageHeight;
 
@@ -71,81 +76,17 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
             getWindow().setAllowReturnTransitionOverlap(false);
         }
         bindLayouts();
-        this.getWindow().getDecorView().setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    finishAfterTransition();
-                } else {
-                    finish();
-                }
-                return true;
-            }
-        });
+        setUpDismissAction();
+
         upwrapExtras();
 
         setUpImageView();
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().getSharedElementEnterTransition().addListener(new Transition.TransitionListener() {
-                @Override
-                public void onTransitionStart(Transition transition) {
-                    System.out.println("#¤ PopupDialogActivity.onTransitionStart - Enter");
-                }
-
-                @Override
-                public void onTransitionEnd(Transition transition) {
-                    System.out.println("#¤ PopupDialogActivity.onTransitionEnd - Enter");
-                    fadeIn();
-
-                }
-
-                @Override
-                public void onTransitionCancel(Transition transition) {
-
-                }
-
-                @Override
-                public void onTransitionPause(Transition transition) {
-
-                }
-
-                @Override
-                public void onTransitionResume(Transition transition) {
-
-                }
-            });
-        } else {
-            fadeIn();
-        }*/
 
         if (RenderViewCompat.SDK_JELLY_BEAN) {
-            iv.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    Log.i(TAG, "In IV predraw");
-                    Log.i(TAG, "IV Measured Height: " + iv.getMeasuredHeight());
-                    Log.i(TAG, "IV Height: " + iv.getHeight());
-                    //ll.measure(View.MeasureSpec.makeMeasureSpec(ll.getWidth(), View.MeasureSpec.AT_MOST),
-                      //      View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
-//                    if (ll.getHeight() < ll.getMeasuredHeight() && !fixed) {
-//                        fixed = true;
-//                        PercentLayoutHelper.PercentLayoutParams layoutParams = (PercentLayoutHelper.PercentLayoutParams) ll.getLayoutParams();
-//                        PercentLayoutHelper.PercentLayoutInfo percentLayoutInfo = layoutParams.getPercentLayoutInfo();
-//                        percentLayoutInfo.topMarginPercent = percentLayoutInfo.topMarginPercent - (((float) ll.getMeasuredHeight() - (float) ll.getHeight())
-//                                / ((float) ((View) ll.getParent()).getHeight()));
-//                        return false;
-//                    }
-//
-                    return true;
-                }
-            });
             ll.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 @Override
                 public boolean onPreDraw() {
-                    Log.i(TAG, "In  LL predraw");
-                    Log.i(TAG, "LL Measured Height: " + ll.getMeasuredHeight());
-                    Log.i(TAG, "LL Height: " + ll.getHeight());
                     ll.measure(View.MeasureSpec.makeMeasureSpec(ll.getWidth(), View.MeasureSpec.AT_MOST),
                             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
@@ -157,12 +98,7 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
                                 (float) ll.getMeasuredHeight() - (float) ll.getHeight())
                                 / ((float) ((View) ll.getParent()).getHeight()));
 
-//                        if(hasImageExtraFromBigButton())
-//                        {
-//                            percentLayoutInfo.topMarginPercent = percentLayoutInfo.topMarginPercent - (((float)iv.getMeasuredHeight() - (float)iv.getHeight())
-//                                    / ((float) ((View) ll.getParent().getParent()).getHeight()));
-//                        }
-                        return true;
+                        return false;
                     }
 
                     return true;
@@ -181,6 +117,20 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
             TranslateViewJellyBeanCompat();
         }
 
+    }
+
+    private void setUpDismissAction() {
+        this.getWindow().getDecorView().setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    finishAfterTransition();
+                } else {
+                    finish();
+                }
+                return true;
+            }
+        });
     }
 
     private void TranslateViewJellyBeanCompat() {
@@ -221,23 +171,16 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     private void setUpImageView() {
         if (hasImageExtraFromBigButton()) {
             try {
-                Drawable d = Drawable.createFromStream(RenderSingleton.getInstance().getContext().getAssets().open(mImageLocation), null);
-                iv.setImageDrawable(d);
-                Log.i(TAG, "IV: painting");
-                //ll.childDrawableStateChanged(iv);
-                iv.setMinimumWidth(mImageWidth);
-                iv.setMaxWidth(mImageWidth);
                 iv.getLayoutParams().height = mImageHeight;
-                iv.setMaxHeight(mImageHeight);
-                iv.setMinimumHeight(mImageHeight);
-                //Try this sync becuase measurement is off.
-//                ImageAsyncTask.setImageView(mImageLocation, iv);
-                //This means it's big, so center labels.
+                iv.getLayoutParams().width = mImageWidth;
+                ImageAsyncTask.setImageView(mImageLocation, iv);
+                Drawable d = Drawable.createFromStream(RenderSingleton.getInstance().getContext().getAssets().open(mImageLocation), null);
                 tv.setGravity(Gravity.CENTER_HORIZONTAL);
             } catch (IOException e) {
+                //TODO: handle error.
                 e.printStackTrace();
             }
-            //iv.setVisibility(View.VISIBLE);
+
 
         }
     }
@@ -278,9 +221,6 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
         percentLayoutInfo.topMarginPercent = Y / (float) screenHeight;
     }
 
-   /* private void fadeIn() {
-        extraContent.setVisibility(View.VISIBLE);
-    }*/
 
     @Override
     public FragmentManager getContexualFragmentActivity() {
