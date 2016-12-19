@@ -1,11 +1,12 @@
 buildscript {
     repositories {
+
         mavenLocal()
         jcenter()
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.2.3'
         classpath 'com.newrelic.agent.android:agent-gradle-plugin:5.8.4'
         classpath 'io.fabric.tools:gradle:1.22.0'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
@@ -35,6 +36,7 @@ ext.deps = [
 ]
 
 dependencies {
+    compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:appcompat-v7:' + deps.androidSupport
     compile 'com.android.support:support-annotations:' + deps.androidSupport
     compile 'com.android.support:design:' + deps.androidSupport
@@ -67,11 +69,13 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:' + deps.androidTestingSupport
     androidTestCompile 'com.android.support:support-annotations:' + deps.androidSupport
 
+
     testCompile 'junit:junit:' + deps.junit
     testCompile 'org.hamcrest:hamcrest-library:1.3'
 
     apt 'com.jakewharton:butterknife-compiler:' + deps.butterknife
     apt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
+    compile project(path: ':godtools-renderer')
 }
 
 android {
@@ -97,6 +101,8 @@ android {
         buildConfigField "String", "GOOGLE_ANALYTICS_CLIENT_ID", "\"UA-325725-50\""
         buildConfigField "String", "GROWTH_SPACES_URL", "\"https://www.growthspaces.org/api/v1/\""
         buildConfigField "String", "INTERPRETER_VERSION", "\"1\""
+
+        multiDexEnabled true
     }
 
     compileOptions {
@@ -160,6 +166,7 @@ android {
 }
 
 repositories {
+    mavenCentral()
     mavenLocal()
     jcenter()
     maven {
@@ -171,6 +178,10 @@ repositories {
         }
     }
     maven { url 'https://maven.fabric.io/public' }
+
+    maven {
+        url "https://oss.sonatype.org/content/repositories/releases"
+    }
 }
 
 apply from: "maven_publish.gradle"
@@ -185,4 +196,13 @@ apt {
     arguments {
         eventBusIndex "org.keynote.godtools.android.eventbus.GodToolsEventBusIndex"
     }
+}
+allprojects {
+    repositories {
+        jcenter()
+
+    }
+}
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }

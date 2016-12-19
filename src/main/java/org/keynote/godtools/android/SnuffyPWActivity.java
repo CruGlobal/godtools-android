@@ -38,9 +38,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
 
 import org.ccci.gto.android.common.support.v4.adapter.ViewHolderPagerAdapter;
 import org.greenrobot.eventbus.EventBus;
@@ -52,7 +50,6 @@ import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.event.GodToolsEvent.EventID;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
-import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.NotificationUpdateTask;
 import org.keynote.godtools.android.model.Followup;
@@ -61,15 +58,17 @@ import org.keynote.godtools.android.snuffy.PackageReader;
 import org.keynote.godtools.android.snuffy.SnuffyAboutActivity;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.snuffy.SnuffyHelpActivity;
-import org.keynote.godtools.android.snuffy.SnuffyPage;
 import org.keynote.godtools.android.snuffy.model.GtFollowupModal;
-import org.keynote.godtools.android.snuffy.model.GtPage;
 import org.keynote.godtools.android.support.v4.fragment.GtFollowupModalDialogFragment;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
+import org.keynote.godtools.renderer.crureader.XMLUtil;
+import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocument;
+import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocumentPage;
+import org.keynote.godtools.renderer.crureader.bo.GPage.GPage;
+import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.Diagnostics;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -90,7 +89,6 @@ import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_FIRST
 import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_LAST_NAME;
 import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_NAME;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
-import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.COUNT;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
@@ -104,60 +102,53 @@ import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 @SuppressWarnings("deprecation")
-public class SnuffyPWActivity extends AppCompatActivity
-{
+public class SnuffyPWActivity extends AppCompatActivity {
     private static final String TAG = "SnuffyActivity";
     private static final String TAG_FOLLOWUP_MODAL = "followupModal";
-
-    @NonNull
-    private EventTracker mTracker;
-
-    private String mAppPackage;
-    private String mConfigFileName;
-    private String mAppLanguage = ENGLISH_DEFAULT;
-
-    private Unbinder mButterKnife;
+    private static final int DIALOG_PROCESS_PACKAGE_PROGRESS = 1;
+    private final Set<String> mVisibleChildPages = new HashSet<>();
     @BindView(R.id.snuffyViewPager)
     ViewPager mPager;
     GtPagesPagerAdapter mPagerAdapter;
-
+    @Nullable
+    String mCurrentPageId;
+    @NonNull
+    private EventTracker mTracker;
+    private String mAppPackage;
+    private String mConfigFileName;
+    private String mAppLanguage = ENGLISH_DEFAULT;
+    private Unbinder mButterKnife;
     private boolean mSetupRequired = true;
     private String mPackageTitle;
     private String mPackageStatus;
     private ProcessPackageAsync mProcessPackageAsync;
     private GestureDetector MyGestureDetector;
-
     private String mConfigPrimary, mConfigParallel;
     private GTPackage mParallelPackage;
     private boolean isUsingPrimaryLanguage, isParallelLanguageSet;
-    
     private SharedPreferences settings;
     private String regid;
     private Timer timer;
 
-    private final Set<String> mVisibleChildPages = new HashSet<>();
+    //TODO: RM No BO tracking in activity?   May be memory leak.
+    // @Nullable
+    //private List<GPage> mPages;
     @Nullable
-    private List<SnuffyPage> mPages;
-    @Nullable
-    private SnuffyPage mAboutView;
-    @Nullable
-    String mCurrentPageId;
-
-    private void setLanguage(String languageCode)
-    {
-        mAppLanguage = languageCode;
-    }
-
-    private String getLanguage()
-    {
-        return mAppLanguage;
-    }
+    private GPage mAboutView;
+    private ProgressDialog mProgressDialog;
 
     /* BEGIN lifecycle */
 
+    private String getLanguage() {
+        return mAppLanguage;
+    }
+
+    private void setLanguage(String languageCode) {
+        mAppLanguage = languageCode;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         mTracker = EventTracker.getInstance(this);
@@ -182,18 +173,17 @@ public class SnuffyPWActivity extends AppCompatActivity
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String langParallel = settings.getString(LANGUAGE_PARALLEL, "");
 
-
+        Diagnostics.StartMethodTracingByKey("langPara");
         // get package if parallel language is set
-        if (!langParallel.isEmpty())
-        {
+        if (!langParallel.isEmpty()) {
             isParallelLanguageSet = true;
             //noinspection WrongThread
             mParallelPackage =
                     DBAdapter.getInstance(this).find(GTPackage.class, langParallel, GTPackage.STATUS_LIVE, mAppPackage);
         }
+        Diagnostics.StopMethodTracingByKey("langPara");
 
-        if (mParallelPackage != null)
-        {
+        if (mParallelPackage != null) {
             mConfigParallel = mParallelPackage.getConfigFileName();
         }
 
@@ -201,29 +191,24 @@ public class SnuffyPWActivity extends AppCompatActivity
         // - is there something we can test for that is better than a fixed timeout?
         // We reduce this now to 100 msec since we are not measuring the device size here
         // since that is done in GodTools which calls us and passes the dimensions in.
-        
+
         regid = settings.getString(PROPERTY_REG_ID, "");
-        
-        if (mAppPackage.equalsIgnoreCase(KGP) || mAppPackage.equalsIgnoreCase(FOUR_LAWS))
-        {
+
+        if (mAppPackage.equalsIgnoreCase(KGP) || mAppPackage.equalsIgnoreCase(FOUR_LAWS)) {
             startTimer();
 
             GodToolsApiClient.updateNotification(settings.getString(AUTH_CODE, ""),
-                    regid, NotificationInfo.AFTER_10_PRESENTATIONS, new NotificationUpdateTask.NotificationUpdateTaskHandler()
-                    {
+                    regid, NotificationInfo.AFTER_10_PRESENTATIONS, new NotificationUpdateTask.NotificationUpdateTaskHandler() {
                         @Override
-                        public void registrationComplete(String regId)
-                        {
+                        public void registrationComplete(String regId) {
                             Log.i(NotificationInfo.NOTIFICATION_TAG, "10 Presentation Notification notice sent to API");
                         }
 
                         @Override
-                        public void registrationFailed()
-                        {
+                        public void registrationFailed() {
                             Log.e(NotificationInfo.NOTIFICATION_TAG, "10 Presentation notification notice failed to send to API");
                         }
                     });
-
 
         }
     }
@@ -243,7 +228,7 @@ public class SnuffyPWActivity extends AppCompatActivity
      *
      * @param pages the Pages that were just loaded.
      */
-    void onPagesLoaded(@Nullable final List<SnuffyPage> pages) {
+    void onPagesLoaded(@Nullable final GDocument pages) {
         updateDisplayedPages(pages);
     }
 
@@ -267,6 +252,8 @@ public class SnuffyPWActivity extends AppCompatActivity
         }
     }
 
+    /* END lifecycle */
+
     /**
      * Event triggered when a child page should be shown
      *
@@ -274,7 +261,8 @@ public class SnuffyPWActivity extends AppCompatActivity
      */
     public void onShowChildPage(@NonNull final String id) {
         mVisibleChildPages.add(id);
-        updateViewPager();
+        //TODO: figure this out.
+        //updateViewPager();
         dismissFollowupModal();
         showPage(id);
     }
@@ -285,8 +273,6 @@ public class SnuffyPWActivity extends AppCompatActivity
         cleanupViewPager();
         mButterKnife.unbind();
     }
-
-    /* END lifecycle */
 
     private void setupActionBar() {
         final ActionBar actionBar = getSupportActionBar();
@@ -306,17 +292,22 @@ public class SnuffyPWActivity extends AppCompatActivity
             mPager.addOnPageChangeListener(new SimpleOnPageChangeListener() {
                 @Override
                 public void onPageSelected(int position) {
+
+                    //TODO: RM I don't fully understand this.
                     if (mCurrentPageId != null) {
-                        final SnuffyPage page = mPagerAdapter.getItem(mCurrentPageId);
+                        final GPage page = mPagerAdapter.getItemFromPosition(position); //TODO: forloops getItem(mCurrentPageId);
                         if (page != null) {
                             // trigger the exit page event
-                            page.onExitPage();
+
+                            //TODO: RM trigger onExitPage();
+                            //page.onExitPage();
                         }
                     }
 
-                    final SnuffyPage page = mPagerAdapter.getItemFromPosition(position);
+                    final GPage page = mPagerAdapter.getItemFromPosition(position);
                     if (page != null) {
-                        final GtPage model = page.getModel();
+                        //TODO: RM track pages that turned, figure out need for onEnterPage()
+                        /*final GtPage model = page.getModel();
 
                         // track the currently active page
                         mCurrentPageId = page.getModel().getId();
@@ -324,13 +315,14 @@ public class SnuffyPWActivity extends AppCompatActivity
 
                         // trigger the enter page event
                         page.onEnterPage();
+                        */
                     }
 
                     // This notification has been updated to only be sent after the app has been opened 3 times
                     // The api will only send a notice once, so it can be sent from here multiple times.
 
                     // if the prayer pages are ever moved this will need to be updated.
-
+                    //TODO: RM why is this here, this should be elsewhere.
                     if (settings.getInt(COUNT, 0) >= 3) {
                         if ((mAppPackage.equalsIgnoreCase(KGP) && position == 7) ||
                                 (mAppPackage.equalsIgnoreCase(FOUR_LAWS) && position == 6)) {
@@ -341,13 +333,13 @@ public class SnuffyPWActivity extends AppCompatActivity
                                         @Override
                                         public void registrationComplete(String regId) {
                                             Log.i(NotificationInfo.NOTIFICATION_TAG,
-                                                  "1 Presentation Notification notice sent to API");
+                                                    "1 Presentation Notification notice sent to API");
                                         }
 
                                         @Override
                                         public void registrationFailed() {
                                             Log.e(NotificationInfo.NOTIFICATION_TAG,
-                                                  "1 Presentation notification notice failed to send to API");
+                                                    "1 Presentation notification notice failed to send to API");
                                         }
                                     });
                         }
@@ -366,17 +358,19 @@ public class SnuffyPWActivity extends AppCompatActivity
         }
 
         // trigger an initial update
-        updateViewPager();
+        //updateViewPager();
     }
 
-    private void updateViewPager() {
-        if (mPagerAdapter != null) {
-            final List<SnuffyPage> pages;
+    private void updateViewPager(GDocument gDocument) {
+        //TODO RM: not certain if this is needed still.
+
+        /*if (mPagerAdapter != null) {
+            final List<GPage> pages;
             if (mVisibleChildPages.isEmpty() || mPages == null) {
                 pages = mPages;
             } else {
                 pages = new ArrayList<>();
-                for (final SnuffyPage page : mPages) {
+                for (final GPage page : mPages) {
                     pages.add(page);
                     for (final String name : mVisibleChildPages) {
                         final SnuffyPage child = page.getChildPage(name);
@@ -388,7 +382,16 @@ public class SnuffyPWActivity extends AppCompatActivity
             }
 
             mPagerAdapter.setPages(pages);
+        }*/
+        ArrayList<GPage> gTemp = new ArrayList<>();
+        for (GDocumentPage s : gDocument.pages) {
+            try {
+                gTemp.add(XMLUtil.parseGPage(SnuffyPWActivity.this, s.filename));
+            } catch (Exception e) {
+
+            }
         }
+        mPagerAdapter.setPages(gTemp);
     }
 
     private void cleanupViewPager() {
@@ -401,8 +404,11 @@ public class SnuffyPWActivity extends AppCompatActivity
     private void updateAppPages() {
         final SnuffyApplication app = getApp();
         app.packageTitle = mPackageTitle;
-        app.aboutView = mAboutView;
-        app.setSnuffyPages(mPages);
+
+        //TODO: deteremine about vieww
+        //app.aboutView = mAboutView;
+        //TODO: RM the pages are saved to activity, no need for parent activity.
+        //app.setSnuffyPages(mPages);
     }
 
     @WorkerThread
@@ -454,27 +460,32 @@ public class SnuffyPWActivity extends AppCompatActivity
      *
      * @param pages the new set of Pages to display
      */
-    void updateDisplayedPages(@Nullable final List<SnuffyPage> pages) {
+    void updateDisplayedPages(@Nullable final GDocument pages) {
         // replace the about page
         mAboutView = null;
-        if (pages != null && pages.size() > 0) {
-            mAboutView = pages.get(0);
-            pages.remove(mAboutView);
+        //TODO: RM looks like the first page is the about page
+        if (pages.pages
+                != null && pages.pages.size() > 0) {
+
+            // / mAboutView = pages.remove(0);
+
         }
 
         // store the remaining pages as the actual pages
-        mPages = pages;
+        //mPages = pages;
 
         // trigger updates on various components
-        updateViewPager();
+        updateViewPager(pages);
         updateAppPages();
     }
 
+
     private boolean triggerFollowupModal(@NonNull final EventID event) {
         // check for a followup modal on the current page
-        if (mPagerAdapter != null) {
+        //TODO: RM rework this
+        /*if (mPagerAdapter != null) {
             final GtPagesPagerAdapter.ViewHolder holder = mPagerAdapter.getPrimaryItem();
-            if (holder != null && holder.mPage != null) {
+            if (holder != null) {
                 for (final GtFollowupModal followup : holder.mPage.getModel().getFollowupModals()) {
                     if (followup != null && followup.getListeners().contains(event)) {
                         showFollowupModal(followup);
@@ -482,14 +493,15 @@ public class SnuffyPWActivity extends AppCompatActivity
                     }
                 }
             }
-        }
+        }*/
 
         return false;
     }
 
     private boolean triggerLocalPageNavigation(@NonNull final EventID event) {
-        if (mPages != null) {
-            for (final SnuffyPage page : mPages) {
+        //TODO: RM events
+        /*if (mPages != null) {
+            for (final GPage page : mPages) {
                 final GtPage model = page.getModel();
                 if (model.getListeners().contains(event)) {
                     showPage(model.getId());
@@ -497,6 +509,7 @@ public class SnuffyPWActivity extends AppCompatActivity
                 }
             }
         }
+        */
 
         return false;
     }
@@ -525,11 +538,13 @@ public class SnuffyPWActivity extends AppCompatActivity
         if (mPager != null && mPagerAdapter != null && id != null) {
             // are we trying to show the currently active page?
             if (TextUtils.equals(id, mCurrentPageId)) {
-                final SnuffyPage page = mPagerAdapter.getItem(mCurrentPageId);
-                if (page != null) {
+                //final SnuffyPage page = mPagerAdapter.getItem(mCurrentPageId);
+                final GPage page = mPagerAdapter.getItemFromPosition(Integer.parseInt(mCurrentPageId));
+                //TODO: RM // FIXME: 12/19/2016
+                /*if (page != null) {
                     // hide any active panel modals
                     page.hideAllModals();
-                }
+                }*/
             }
 
             final int position = mPagerAdapter.getItemPositionFromId(convertId(id));
@@ -552,8 +567,10 @@ public class SnuffyPWActivity extends AppCompatActivity
             changed = true;
         }
 
+        //TODO:
+        //what is this?
         if (changed) {
-            updateViewPager();
+            //updateViewPager();
         }
     }
 
@@ -564,13 +581,11 @@ public class SnuffyPWActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStop()
-    {
+    protected void onStop() {
         super.onStop();
         Log.i(TAG, "Activity stopped");
 
-        if (timer != null)
-        {
+        if (timer != null) {
             timer.cancel();
             Log.i(NotificationInfo.NOTIFICATION_TAG, "Share Timer stopped");
         }
@@ -597,10 +612,8 @@ public class SnuffyPWActivity extends AppCompatActivity
         }, 1000 / 60);
     }
 
-    private void completeSetup(boolean bSuccess)
-    {
-        if (!bSuccess)
-        { // now testing is done - only show msg on failure
+    private void completeSetup(boolean bSuccess) {
+        if (!bSuccess) { // now testing is done - only show msg on failure
             Toast.makeText(SnuffyPWActivity.this.getApplicationContext(),
                     getString(R.string.processing_failed),
                     Toast.LENGTH_SHORT).show();
@@ -609,53 +622,48 @@ public class SnuffyPWActivity extends AppCompatActivity
 
         // track a page view of the most recently loaded page
         final GtPagesPagerAdapter.ViewHolder holder = mPagerAdapter.getPrimaryItem();
-        if (holder != null && holder.mPage != null) {
-            trackPageView(holder.mPage.getModel());
+        if (holder != null) {
+            Diagnostics.StartMethodTracingByKey("Tracker");
+            trackPageView(mPagerAdapter.getItemFromPosition(0));
+            Diagnostics.StopMethodTracingByKey("Tracker");
         }
 
         addClickHandlersToAllPages();
         addCallingActivityToAllPages();
     }
 
-    private void addClickHandlersToAllPages()
-    {
-        Iterator<SnuffyPage> iter = mPages.iterator();
+    private void addClickHandlersToAllPages() {
+        //TODO: what is this for?
+        /*Iterator<SnuffyPage> iter = mPages.iterator();
 
         MyGestureDetector = new GestureDetector(new MyGestureListener());
 
-
-        while (iter.hasNext())
-        {
-            iter.next().setOnTouchListener(new View.OnTouchListener()
-            {
+        while (iter.hasNext()) {
+            iter.next().setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public boolean onTouch(View v, MotionEvent event)
-                {
+                public boolean onTouch(View v, MotionEvent event) {
                     MyGestureDetector.onTouchEvent(event);
                     return true;
                 }
             });
         }
+        */
     }
 
-    private void addCallingActivityToAllPages()
-    {
-
-        for (SnuffyPage mPage : mPages)
-        {
+    private void addCallingActivityToAllPages() {
+        //TODO: i don't think this will be coming back in, not sure though.
+        /*for (SnuffyPage mPage : mPages) {
             mPage.mCallingActivity = this; // the SnuffyActivity owns most pages except the about page - which will be set explicitly
-        }
+        }*/
     }
 
-    private void doCmdHelp()
-    {
+    private void doCmdHelp() {
         Intent intent = new Intent(this, SnuffyHelpActivity.class);
         intent.putExtra("PackageTitle", mPackageTitle);
         startActivity(intent);
     }
 
-    private void doCmdShare(View v)
-    {
+    private void doCmdShare(View v) {
         String messageBody = buildMessageBody();
 
         Intent share = new Intent(Intent.ACTION_SEND);
@@ -665,22 +673,18 @@ public class SnuffyPWActivity extends AppCompatActivity
         startActivity(Intent.createChooser(share, getString(R.string.share_prompt)));
     }
 
-    private String buildMessageBody()
-    {
+    private String buildMessageBody() {
         String messageBody = "";
 
         // http://www.knowgod.com/en
         String shareLink = getString(R.string.app_share_link_base_link) + "/" + mAppLanguage;
 
-        if (KGP.equalsIgnoreCase(mAppPackage) || FOUR_LAWS.equalsIgnoreCase(mAppPackage))
-        {
+        if (KGP.equalsIgnoreCase(mAppPackage) || FOUR_LAWS.equalsIgnoreCase(mAppPackage)) {
             // http://www.knowgod.com/en/kgp
             shareLink = shareLink + "/" + mAppPackage;
 
             messageBody = getString(R.string.share_from_page_message);
-        }
-        else if (SATISFIED.equalsIgnoreCase(mAppPackage))
-        {
+        } else if (SATISFIED.equalsIgnoreCase(mAppPackage)) {
             messageBody = getString(R.string.satisfied_share);
         }
 
@@ -695,12 +699,13 @@ public class SnuffyPWActivity extends AppCompatActivity
         return messageBody;
     }
 
-    private void doCmdShowPageMenu(View v)
-    {
+    private void doCmdShowPageMenu(View v) {
         // store pages before triggering Activity launch
-        Crashlytics.log("Storing SnuffyPages in Application before launching SnuffyPageMenuPWActivity: " +
-                                (mPages != null ? mPages.size() : "null"));
-        getApp().setSnuffyPages(mPages);
+        //TODO: figure out why we store?
+        /*Crashlytics.log("Storing SnuffyPages in Application before launching SnuffyPageMenuPWActivity: " +
+                (mPages != null ? mPages.size() : "null"));*/
+        //TODO: determine how much of SnuffyApp we need to use.
+        //getApp().setSnuffyPages(mPages);
 
         Intent intent = new Intent(this, SnuffyPageMenuPWActivity.class);
         intent.putExtra("LanguageCode", mAppLanguage);
@@ -709,13 +714,11 @@ public class SnuffyPWActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_CANCELED)
             return;
 
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case 0: // Show Page Menu
             {
                 mPager.setCurrentItem(resultCode - RESULT_FIRST_USER);
@@ -724,34 +727,25 @@ public class SnuffyPWActivity extends AppCompatActivity
         }
     }
 
-    private void switchLanguage()
-    {
-        if (isParallelLanguageSet && mParallelPackage != null)
-        {
-            if (isUsingPrimaryLanguage)
-            {
+    private void switchLanguage() {
+        if (isParallelLanguageSet && mParallelPackage != null) {
+            if (isUsingPrimaryLanguage) {
                 mConfigFileName = mConfigParallel;
                 isUsingPrimaryLanguage = false;
 
-            }
-            else
-            {
+            } else {
                 mConfigFileName = mConfigPrimary;
                 isUsingPrimaryLanguage = true;
             }
 
             doSetup();
-        }
-        else
-        {
+        } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.alternate_language)
                     .setMessage(R.string.alternate_language_message)
-                    .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener()
-                    {
+                    .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialogInterface, int i)
-                        {
+                        public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.dismiss();
                         }
                     })
@@ -761,15 +755,13 @@ public class SnuffyPWActivity extends AppCompatActivity
 
     }
 
-    private void doCmdInfo(View v)
-    {
+    private void doCmdInfo(View v) {
         Intent intent = new Intent(this, SnuffyAboutActivity.class);
         startActivity(intent);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu_options, menu);
@@ -779,56 +771,45 @@ public class SnuffyPWActivity extends AppCompatActivity
         MenuItem switchItem = menu.findItem(R.id.CMD_SWITCH_LANGUAGE);
         switchItem.setVisible(true);
 
-        if (KEY_DRAFT.equalsIgnoreCase(mPackageStatus) && settings.getBoolean(TRANSLATOR_MODE, false))
-        {
+        if (KEY_DRAFT.equalsIgnoreCase(mPackageStatus) && settings.getBoolean(TRANSLATOR_MODE, false)) {
             menu.findItem(R.id.CMD_REFRESH_PAGE).setVisible(true);
-        }
-        else
-        {
+        } else {
             menu.findItem(R.id.CMD_REFRESH_PAGE).setVisible(false);
         }
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (super.onOptionsItemSelected(item))
             return true;
-        switch (item.getItemId())
-        {
-            case R.id.CMD_ABOUT:
-            {
+        switch (item.getItemId()) {
+            case R.id.CMD_ABOUT: {
                 mTracker.menuEvent("About");
                 doCmdInfo(null);
                 break;
             }
-            case R.id.CMD_CONTENT:
-            {
+            case R.id.CMD_CONTENT: {
                 mTracker.menuEvent("Content");
                 doCmdShowPageMenu(null);
                 break;
             }
-            case R.id.CMD_EMAIL:
-            {
+            case R.id.CMD_EMAIL: {
                 mTracker.menuEvent("Share");
                 doCmdShare(null);
                 break;
             }
-            case R.id.CMD_HELP:
-            {
+            case R.id.CMD_HELP: {
                 mTracker.menuEvent("Help");
                 doCmdHelp();
                 break;
             }
-            case R.id.CMD_SWITCH_LANGUAGE:
-            {
+            case R.id.CMD_SWITCH_LANGUAGE: {
                 mTracker.menuEvent("Switch Language");
                 switchLanguage();
                 break;
             }
-            case R.id.CMD_REFRESH_PAGE:
-            {
+            case R.id.CMD_REFRESH_PAGE: {
                 refreshPage();
                 break;
             }
@@ -838,13 +819,14 @@ public class SnuffyPWActivity extends AppCompatActivity
         return true;
     }
 
+    //TODO: RM need to figure out the functions of this.n
     private void refreshPage() {
         final GtPagesPagerAdapter.ViewHolder currentView = mPagerAdapter.getPrimaryItem();
-        final SnuffyPage currentPage = currentView != null ? currentView.mPage : null;
-        final String pageUuid = currentPage != null ? currentPage.getModel().getUuid() : null;
+        //final GPage currentPage = currentView != null ? currentView.mPage : null;
+        //final String pageUuid = currentPage != null ? currentPage.getModel().getUuid() : null;
 
         // short-circuit if we don't have a valid UUID
-        if (pageUuid == null) {
+        /*if (pageUuid == null) {
             return;
         }
 
@@ -856,8 +838,7 @@ public class SnuffyPWActivity extends AppCompatActivity
                 mAppLanguage,
                 mAppPackage,
                 pageUuid,
-                new DownloadTask.DownloadTaskHandler()
-                {
+                new DownloadTask.DownloadTaskHandler() {
                     @Override
                     public void downloadTaskComplete(String url, String filePath, String langCode, String tag) {
                         List<SnuffyPage> result = mProcessPackageAsync.doInBackground();
@@ -867,22 +848,16 @@ public class SnuffyPWActivity extends AppCompatActivity
                     }
 
                     @Override
-                    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
-                    {
+                    public void downloadTaskFailure(String url, String filePath, String langCode, String tag) {
                         Toast.makeText(getApplicationContext(), getString(R.string.page_error), Toast.LENGTH_SHORT).show();
                         hideLoading();
                     }
-                });
+                });*/
     }
 
-    private ProgressDialog mProgressDialog;
-    private static final int DIALOG_PROCESS_PACKAGE_PROGRESS = 1;
-
     @Override
-    protected Dialog onCreateDialog(int id)
-    {
-        switch (id)
-        {
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
             case DIALOG_PROCESS_PACKAGE_PROGRESS:
                 mProgressDialog = new ProgressDialog(this);
                 mProgressDialog.setMessage(getApplicationContext().getString(R.string.processing_package));
@@ -897,97 +872,7 @@ public class SnuffyPWActivity extends AppCompatActivity
         }
     }
 
-    private class ProcessPackageAsync extends AsyncTask<String, Integer, List<SnuffyPage>>
-            implements PackageReader.ProgressCallback {
-        private final int mPageWidth;
-        private final int mPageHeight;
-
-        public ProcessPackageAsync(int width, int height) {
-            mPageWidth = width;
-            mPageHeight = height;
-        }
-
-        @Override
-        protected void onPreExecute()
-        {
-            super.onPreExecute();
-            if (mProgressDialog != null)
-            {
-                mProgressDialog.setProgress(0);
-                mProgressDialog.setMax(1);
-            }
-            showDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);
-        }
-
-        @Override
-        @WorkerThread
-        protected List<SnuffyPage> doInBackground(String... params) {
-            // params are not used
-            List<SnuffyPage> pages = null;
-            PackageReader packageReader = new PackageReader();
-            try {
-                pages = packageReader.processPackagePW(
-                        (SnuffyApplication) getApplication(),
-                        mPageWidth, mPageHeight,
-                        mConfigFileName, mPackageStatus,
-                        ProcessPackageAsync.this,
-                        mAppPackage,
-                        // send along the language we are loading. if there is a parallel language configured and we
-                        // are not showing the primary language, send the parallel language. Otherwise send the primary
-                        // language
-                        !isUsingPrimaryLanguage && mParallelPackage != null ? mParallelPackage.getLanguage() : mAppLanguage
-                );
-            }
-            catch (Exception e)
-            {
-                Log.e(TAG, "processPackage failed: " + e.toString());
-                Crashlytics.logException(e);
-            }
-            if (pages != null)
-            {
-                mPackageTitle = packageReader.getPackageTitle();
-            }
-            return pages;
-        }
-
-        public void updateProgress(int curr, int max)
-        {
-            onProgressUpdate(curr, max);
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... progress)
-        {
-            mProgressDialog.setMax(progress[1]);
-            mProgressDialog.setProgress(progress[0]);
-        }
-
-        @Override
-        @UiThread
-        protected void onPostExecute(List<SnuffyPage> result) {
-            if(mProgressDialog != null &&
-                    mProgressDialog.isShowing())
-            {
-                dismissDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);
-            }
-
-            onPagesLoaded(result);
-            completeSetup(result != null);
-        }
-    }
-
-    private class MyGestureListener extends GestureDetector.SimpleOnGestureListener
-    {
-        @Override
-        public boolean onSingleTapUp(MotionEvent e)
-        {
-            openOptionsMenu();
-            return super.onSingleTapUp(e);
-        }
-    }
-
-    private void showLoading(String msg)
-    {
+    private void showLoading(String msg) {
         RelativeLayout updatingDraftLayout = (RelativeLayout) findViewById(R.id.updatingDraft);
         updatingDraftLayout.setVisibility(View.VISIBLE);
 
@@ -995,8 +880,7 @@ public class SnuffyPWActivity extends AppCompatActivity
         updatingPage.setText(msg);
     }
 
-    private void hideLoading()
-    {
+    private void hideLoading() {
         TextView updatingPage = (TextView) findViewById(R.id.updatingPageTextView);
         updatingPage.setText("");
 
@@ -1005,35 +889,30 @@ public class SnuffyPWActivity extends AppCompatActivity
 
     }
 
-    private SnuffyApplication getApp()
-    {
+    private SnuffyApplication getApp() {
         return (SnuffyApplication) getApplication();
     }
 
-    void trackPageView(@NonNull final GtPage page) {
-        mTracker.screenView(page.getId(), page.getManifest().getLanguage());
+    void trackPageView(@NonNull final GPage page) {
+        //TODO: // FIXME: 12/19/2016
+        mTracker.screenView("0", "enUS");
+        //mTracker.screenView(page.getId(), page.getManifest().getLanguage());
     }
 
-    private void startTimer()
-    {
-        TimerTask timerTask = new TimerTask()
-        {
+    private void startTimer() {
+        TimerTask timerTask = new TimerTask() {
             @Override
-            public void run()
-            {
+            public void run() {
                 Log.i(TAG, "Timer complete");
                 GodToolsApiClient.updateNotification(settings.getString(AUTH_CODE, ""),
-                        regid, NotificationInfo.DAY_AFTER_SHARE, new NotificationUpdateTask.NotificationUpdateTaskHandler()
-                        {
+                        regid, NotificationInfo.DAY_AFTER_SHARE, new NotificationUpdateTask.NotificationUpdateTaskHandler() {
                             @Override
-                            public void registrationComplete(String regId)
-                            {
+                            public void registrationComplete(String regId) {
                                 Log.i(NotificationInfo.NOTIFICATION_TAG, "Day After Share Notification notice sent to API");
                             }
 
                             @Override
-                            public void registrationFailed()
-                            {
+                            public void registrationFailed() {
                                 Log.e(NotificationInfo.NOTIFICATION_TAG, "Day After Share notification notice failed to send to API");
                             }
                         });
@@ -1047,49 +926,58 @@ public class SnuffyPWActivity extends AppCompatActivity
 
     static class GtPagesPagerAdapter extends ViewHolderPagerAdapter<GtPagesPagerAdapter.ViewHolder> {
         @NonNull
-        private List<SnuffyPage> mPages = ImmutableList.of();
+        private List<GPage> mPages = new ArrayList<GPage>(); // ImmutableList.of();
 
         public GtPagesPagerAdapter() {
             setHasStableIds(true);
         }
 
-        public void setPages(@Nullable final List<SnuffyPage> pages) {
-            mPages = pages != null ? ImmutableList.copyOf(pages) : ImmutableList.<SnuffyPage>of();
+        public void setPages(@NonNull final List<GPage> pages) {
+            mPages = pages; //pages != null ? ImmutableList.copyOf(pages) : ImmutableList.<GPage>of();
             notifyDataSetChanged();
         }
 
         @Override
         public long getItemId(final int position) {
-            return convertId(mPages.get(position).getModel().getId());
+            //TODO:// FIXME: 12/19/2016
+            return position; //convertId(mPages.get(position).getModel().getId());
         }
 
         @Override
         protected int getItemPositionFromId(final long id) {
-            for (int i = 0; i < mPages.size(); i++) {
+            /*for (int i = 0; i < mPages.size(); i++) {
                 if (convertId(mPages.get(i).getModel().getId()) == id) {
                     return i;
                 }
-            }
-            return POSITION_NONE;
+            }*/
+            return (int) id;
+            //return POSITION_NONE;
+
         }
 
+        /*
+            TODO: no for loops
+         */
         @Nullable
-        SnuffyPage getItemFromPosition(final int position) {
+        GPage getItemFromPosition(final int position) {
             if (position > 0 && position < mPages.size()) {
                 return mPages.get(position);
             }
             return null;
         }
 
-        @Nullable
+        /*
+            TODO: no for loops
+         */
+        /*@Nullable
         SnuffyPage getItem(@Nullable final String id) {
-            for (final SnuffyPage page : mPages) {
+            for (final GPage page : mPages) {
                 if (TextUtils.equals(page.getModel().getId(), id)) {
                     return page;
                 }
             }
             return null;
-        }
+        }*/
 
         @Override
         public int getCount() {
@@ -1100,35 +988,47 @@ public class SnuffyPWActivity extends AppCompatActivity
         @Override
         protected ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent) {
             return new ViewHolder(LayoutInflater.from(parent.getContext())
-                                          .inflate(R.layout.page_gt_page_frame, parent, false));
+                    .inflate(R.layout.page_gt_page_frame, parent, false));
         }
 
         @Override
         protected void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
             super.onBindViewHolder(holder, position);
-            holder.mPage = mPages.get(position);
+
+            /*
+                TODO: This is duplicating business object.
+             */
+            //holder.mPage = mPages.get(position);
 
             if (holder.mContentContainer != null) {
                 // remove any previous page from the content container
                 holder.mContentContainer.removeAllViews();
-
+                // t
                 // attach the current page to the content container
-                holder.mContentContainer.addView(holder.mPage);
+                ;
+                getItemFromPosition(position).render(LayoutInflater.from(holder.mContentContainer.getContext()),
+                        holder.mContentContainer, position);
+                //holder.mContentContainer.addView(holder.mPage);
             }
         }
 
         @Override
         protected void onViewRecycled(@NonNull final ViewHolder holder) {
             super.onViewRecycled(holder);
-            holder.mPage = null;
+            //holder.mPage = null;
+            //TODO: this will have a bad effect with rotation and possible timing issues with home, backbuttons.  This is possible memory leak.
             if (holder.mContentContainer != null) {
                 holder.mContentContainer.removeAllViews();
             }
         }
 
         static final class ViewHolder extends ViewHolderPagerAdapter.ViewHolder {
-            @Nullable
-            SnuffyPage mPage;
+
+            /*
+            TODO: Shouldn't have business objects in ViewHolder.
+             */
+            /*@Nullable
+            SnuffyPage mPage;*/
 
             @Nullable
             @BindView(R.id.pageContainer)
@@ -1138,6 +1038,99 @@ public class SnuffyPWActivity extends AppCompatActivity
                 super(view);
                 ButterKnife.bind(this, view);
             }
+        }
+    }
+
+    private class ProcessPackageAsync extends AsyncTask<String, Integer, GDocument>
+            implements PackageReader.ProgressCallback {
+        private final int mPageWidth;
+        private final int mPageHeight;
+
+        public ProcessPackageAsync(int width, int height) {
+            mPageWidth = width;
+            mPageHeight = height;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (mProgressDialog != null) {
+                mProgressDialog.setProgress(0);
+                mProgressDialog.setMax(1);
+            }
+            showDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);
+        }
+
+        @Override
+        @WorkerThread
+        protected GDocument doInBackground(String... params) {
+            // params are not used
+            List<GPage> pages = null;
+            PackageReader packageReader = new PackageReader();
+            try {
+                GDocument gDocument = XMLUtil.parseGDocument(SnuffyPWActivity.this, mAppPackage);
+
+                return gDocument;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            //TODO: understand all items passsed here.
+
+            /*
+            try {
+
+
+                pages = packageReader.processPackagePW(
+                        (SnuffyApplication) getApplication(),
+                        mPageWidth, mPageHeight,
+                        mConfigFileName, mPackageStatus,
+                        ProcessPackageAsync.this,
+                        mAppPackage,
+                        // send along the language we are loading. if there is a parallel language configured and we
+                        // are not showing the primary language, send the parallel language. Otherwise send the primary
+                        // language
+                        !isUsingPrimaryLanguage && mParallelPackage != null ? mParallelPackage.getLanguage() : mAppLanguage
+                );
+            } catch (Exception e) {
+                Log.e(TAG, "processPackage failed: " + e.toString());
+                Crashlytics.logException(e);
+            }
+            if (pages != null) {
+                mPackageTitle = packageReader.getPackageTitle();
+            }
+            */
+            return null;
+        }
+
+        public void updateProgress(int curr, int max) {
+            onProgressUpdate(curr, max);
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            mProgressDialog.setMax(progress[1]);
+            mProgressDialog.setProgress(progress[0]);
+        }
+
+        @Override
+        @UiThread
+        protected void onPostExecute(GDocument result) {
+            if (mProgressDialog != null &&
+                    mProgressDialog.isShowing()) {
+                dismissDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);
+            }
+
+            onPagesLoaded(result);
+            completeSetup(result != null);
+        }
+    }
+
+    private class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            openOptionsMenu();
+            return super.onSingleTapUp(e);
         }
     }
 }

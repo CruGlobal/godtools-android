@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.github.captain_miao.optroundcardview.OptRoundCardView
+        android:id="@+id/g_question_straight_outerlayout_optroundcardview"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        app:optRoundCardBackgroundColor="@android:color/white"
+        app:optRoundCardElevation="20dp">
+
+        <org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView
+            android:id="@+id/g_question_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Question.QuestionStraightTextView"
+            android:text="@string/sample_text_gheader_straight_textview"/>
+
+
+    </com.github.captain_miao.optroundcardview.OptRoundCardView>
+</merge>
