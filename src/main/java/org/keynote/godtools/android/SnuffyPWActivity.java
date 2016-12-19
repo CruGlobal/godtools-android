@@ -61,12 +61,14 @@ import org.keynote.godtools.android.snuffy.SnuffyHelpActivity;
 import org.keynote.godtools.android.snuffy.model.GtFollowupModal;
 import org.keynote.godtools.android.support.v4.fragment.GtFollowupModalDialogFragment;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
+import org.keynote.godtools.android.utils.FileUtils;
 import org.keynote.godtools.renderer.crureader.XMLUtil;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocument;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocumentPage;
 import org.keynote.godtools.renderer.crureader.bo.GPage.GPage;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.Diagnostics;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -228,7 +230,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
      *
      * @param pages the Pages that were just loaded.
      */
-    void onPagesLoaded(@Nullable final GDocument pages) {
+    void onPagesLoaded(@Nullable final List<GPage> pages) {
         updateDisplayedPages(pages);
     }
 
@@ -361,7 +363,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
         //updateViewPager();
     }
 
-    private void updateViewPager(GDocument gDocument) {
+    private void updateViewPager(List<GPage> gPages) {
         //TODO RM: not certain if this is needed still.
 
         /*if (mPagerAdapter != null) {
@@ -383,15 +385,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
             mPagerAdapter.setPages(pages);
         }*/
-        ArrayList<GPage> gTemp = new ArrayList<>();
-        for (GDocumentPage s : gDocument.pages) {
-            try {
-                gTemp.add(XMLUtil.parseGPage(SnuffyPWActivity.this, s.filename));
-            } catch (Exception e) {
-
-            }
-        }
-        mPagerAdapter.setPages(gTemp);
+        mPagerAdapter.setPages(gPages);
     }
 
     private void cleanupViewPager() {
@@ -460,14 +454,15 @@ public class SnuffyPWActivity extends AppCompatActivity {
      *
      * @param pages the new set of Pages to display
      */
-    void updateDisplayedPages(@Nullable final GDocument pages) {
+    void updateDisplayedPages(@Nullable final List<GPage> pages) {
         // replace the about page
         mAboutView = null;
         //TODO: RM looks like the first page is the about page
-        if (pages.pages
-                != null && pages.pages.size() > 0) {
+        if (pages
+                != null && pages.size() > 0) {
 
-            // / mAboutView = pages.remove(0);
+            updateViewPager(pages);
+            updateAppPages();
 
         }
 
@@ -475,8 +470,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
         //mPages = pages;
 
         // trigger updates on various components
-        updateViewPager(pages);
-        updateAppPages();
+
     }
 
 
@@ -960,7 +954,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
          */
         @Nullable
         GPage getItemFromPosition(final int position) {
-            if (position > 0 && position < mPages.size()) {
+            if (position >= 0 && position < mPages.size()) {
                 return mPages.get(position);
             }
             return null;
@@ -1041,7 +1035,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
     }
 
-    private class ProcessPackageAsync extends AsyncTask<String, Integer, GDocument>
+    private class ProcessPackageAsync extends AsyncTask<String, Integer, List<GPage>>
             implements PackageReader.ProgressCallback {
         private final int mPageWidth;
         private final int mPageHeight;
@@ -1063,14 +1057,24 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
         @Override
         @WorkerThread
-        protected GDocument doInBackground(String... params) {
+        protected List<GPage> doInBackground(String... params) {
             // params are not used
-            List<GPage> pages = null;
+            List<GPage> pages = new ArrayList<GPage>();
             PackageReader packageReader = new PackageReader();
             try {
-                GDocument gDocument = XMLUtil.parseGDocument(SnuffyPWActivity.this, mAppPackage);
+                File f = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), mConfigFileName);
 
-                return gDocument;
+                GDocument gDocument
+
+                        = XMLUtil.parseGDocument(SnuffyPWActivity.this.getBaseContext(), f);
+
+                for(GDocumentPage gdp : gDocument.pages)
+                {
+                    File fileForGDP = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), gdp.filename);
+                    pages.add(XMLUtil.parseGPage(SnuffyPWActivity.this, fileForGDP));
+                }
+
+                return pages;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1115,7 +1119,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
         @Override
         @UiThread
-        protected void onPostExecute(GDocument result) {
+        protected void onPostExecute(List<GPage> result) {
             if (mProgressDialog != null &&
                     mProgressDialog.isShowing()) {
                 dismissDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);

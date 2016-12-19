@@ -4,10 +4,10 @@ import android.content.Context;
 
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocument;
 import org.keynote.godtools.renderer.crureader.bo.GPage.GPage;
-
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
+import java.io.File;
 import java.io.InputStream;
 
 /**
@@ -23,7 +23,6 @@ public class XMLUtil {
         return GPage;
     }
 
-
     public static GDocument parseGDocument(Context appContext, String baseXml) throws Exception {
 
         InputStream testIS = appContext.getResources().getAssets().open(baseXml);
@@ -31,4 +30,15 @@ public class XMLUtil {
         GDocument GDocument = serializer.read(GDocument.class, testIS);
         return GDocument;
     }
+
+    public static GPage parseGPage(Context context, File file) throws Exception {
+        Serializer serializer = new Persister();
+        return serializer.read(GPage.class, file);
+    }
+
+    public static GDocument parseGDocument(Context context, File file) throws Exception {
+        Serializer serializer = new Persister();
+        return serializer.read(GDocument.class, file);
+    }
+
 }

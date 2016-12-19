@@ -18,7 +18,7 @@
       <text gtapi-trx-id="fdbc4e08-8d4f-4ff5-a6c2-f37b765f5351" size="90" textalign="center" translate="true">Is there anything stopping you from saying this right now?</text>
     </panel>
   </button>
-  <text gtapi-trx-id="51d896fa-67f7-42e1-aa4d-e0122d46a658" modifier="bold" size="110" textalign="left" translate="true" w="300" yoffset="12 ">Could you say this to God and mean it?</text>
+  <text gtapi-trx-id="51d896fa-67f7-42e1-aa4d-e0122d46a658" modifier="bold" size="110" textalign="left" translate="true" w="300" yoffset="12">Could you say this to God and mean it?</text>
   <text gtapi-trx-id="7d191d5f-5a8c-40e2-8bab-feef609adeaf" modifier="bold" size="110" textalign="left" translate="true" w="300" yoffset="-24">Is there anything stopping you from saying this right now?</text>
   <question gtapi-trx-id="035c27d5-97a3-48c9-aa10-a969ec12174e" mode="straight" size="100" translate="true">Jesus will come into your life as he promised.</question>
 </page>
