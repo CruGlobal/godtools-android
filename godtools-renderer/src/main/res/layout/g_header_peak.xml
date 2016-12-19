@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.github.captain_miao.optroundcardview.OptRoundCardView
+        android:id="@+id/g_header_peek_outerlayout_optroundcardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="@dimen/header_right_margin"
+        android:layout_marginTop="@dimen/header_top_margin"
+        android:tag="top"
+        app:optRoundCardBackgroundColor="@android:color/white"
+        app:optRoundCardCornerRadius="12dp"
+        app:optRoundCardElevation="20dp"
+        app:optRoundCardLeftBottomCorner="false"
+        app:optRoundCardLeftTopCorner="false"
+        app:optRoundCardRightBottomCorner="true"
+        app:optRoundCardRightTopCorner="true"
+        app:optRoundContentPadding="6dp">
+
+        <android.support.percent.PercentFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+
+            <org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView
+                android:id="@+id/g_header_header_textview"
+                style="@style/AutoScaleTextView.HeaderHeaderTextView"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:text="@string/sample_text_g_header_peak_header_textview"
+                android:textColor="@android:color/black"
+                android:textSize="22.8dp"
+                app:layout_widthPercent="33%" />
+
+            <org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView
+                style="@style/AutoScaleTextView.HeaderSubheadingTextView"
+                android:id="@+id/g_header_subheader_textview"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:text="@string/sample_text_g_header_peak_subheader_textview"
+                android:textColor="@android:color/black"
+                android:textSize="19.2dp"
+                app:layout_widthPercent="66%" />
+
+
+        </android.support.percent.PercentFrameLayout>
+
+    </com.github.captain_miao.optroundcardview.OptRoundCardView>
+
+
+    <com.github.captain_miao.optroundcardview.OptRoundCardView
+        android:id="@+id/g_header_peek_peeklayout_optroundcardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/g_header_peek_outerlayout_optroundcardview"
+        android:layout_marginRight="@dimen/header_right_peek_margin"
+        android:layout_marginTop="-24dp"
+        android:animateLayoutChanges="true"
+        android:minHeight="32dp"
+        app:optRoundCardBackgroundColor="@android:color/white"
+        app:optRoundCardCornerRadius="12dp"
+        app:optRoundCardElevation="10dp"
+        app:optRoundCardLeftBottomCorner="false"
+
+        app:optRoundCardLeftEdges="false"
+        app:optRoundCardLeftTopCorner="false"
+        app:optRoundCardRightBottomCorner="true"
+        app:optRoundCardRightTopCorner="false"
+        app:optRoundCardTopEdges="false">
+
+        <android.support.percent.PercentFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView
+                android:id="@+id/g_header_peak_peak_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sample_text_g_header_peak_peak_textview"
+                android:textColor="@android:color/black"
+                android:textSize="21.6dp"
+                android:visibility="gone" />
+        </android.support.percent.PercentFrameLayout>
+
+    </com.github.captain_miao.optroundcardview.OptRoundCardView>
+
+</merge>
