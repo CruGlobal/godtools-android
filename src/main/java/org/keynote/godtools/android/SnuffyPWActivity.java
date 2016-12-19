@@ -67,6 +67,7 @@ import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocument;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocumentPage;
 import org.keynote.godtools.renderer.crureader.bo.GPage.GPage;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.Diagnostics;
+import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -996,13 +997,15 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
             if (holder.mContentContainer != null) {
                 // remove any previous page from the content container
+                /* This might be costly  */
                 holder.mContentContainer.removeAllViews();
                 // t
-                // attach the current page to the content container
-                ;
-                getItemFromPosition(position).render(LayoutInflater.from(holder.mContentContainer.getContext()),
+                // attach the current page to the content container;
+                GPage itemFromPosition = getItemFromPosition(position);
+                //TODO:
+                RenderSingleton.getInstance().addGlobalColor(position, itemFromPosition.getBackgroundColor());
+                itemFromPosition.render(LayoutInflater.from(holder.mContentContainer.getContext()),
                         holder.mContentContainer, position);
-                //holder.mContentContainer.addView(holder.mPage);
             }
         }
 
