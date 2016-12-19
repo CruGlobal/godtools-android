@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import org.keynote.godtools.renderer.crureader.bo.GPage.GPage;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
@@ -65,7 +66,7 @@ public class SlidePageFragment extends Fragment {
         int viewId = mGPage.render(inflater, container, mPosition); //inflater.inflate(R.layout.page, container, false);
 
         //thisView = (FrameLayout) rootView.findViewById(R.id.gpage_root);
-        return mGPage.rootView;
+        return new TextView(inflater.getContext());
     }
 
 
