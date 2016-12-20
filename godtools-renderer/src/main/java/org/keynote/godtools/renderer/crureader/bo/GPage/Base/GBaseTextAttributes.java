@@ -37,6 +37,10 @@ public class GBaseTextAttributes extends GCoordinator {
     @Attribute(required = false, name = "modifier")
     public String textModifier;
 
+    //TODO: RM --- need to implement alpha.
+    @Attribute(required = false, name = "alpha")
+    public String alpha;
+
 
     //TODO: cast T to skip unboxing.
     @Override
