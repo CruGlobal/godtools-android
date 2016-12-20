@@ -86,6 +86,7 @@ public class RenderConstants {
             intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_LOCATION, ll.getTag(R.id.imageurl_tag) != null ? ll.getTag(R.id.imageurl_tag).toString() : null);
             intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_WIDTH_INT_EXTRA, (int) ll.getTag(R.id.image_width));
             intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_HEIGHT_INT_EXTRA, (int) ll.getTag(R.id.image_height));
+            intent.putExtra(PopupDialogActivity.CONSTANTS_POSITION_INT_EXTRA, (int)ll.getTag(R.id.position));
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
@@ -260,19 +261,19 @@ public class RenderConstants {
         return Math.round(getVerticalPercent(height) * RenderSingleton.getInstance().screenHeight);
     }
 
-    public static void addOnClickPanelListener(String content, GCoordinator panel, View button) {
+    public static void addOnClickPanelListener(int position, String content, GCoordinator panel, View button) {
         if (panel instanceof GPanel) {
-            addOnClickPanelListener(content, null, panel, button, 0, 0);
+            addOnClickPanelListener(position, content, null, panel, button, 0, 0);
         }
     }
 
-    public static void addOnClickPanelListener(String content, String imageUrl, GCoordinator panel, View button) {
+    public static void addOnClickPanelListener(int position, String content, String imageUrl, GCoordinator panel, View button) {
         if (panel instanceof GPanel) {
-            addOnClickPanelListener(content, imageUrl, panel, button, 0, 0);
+            addOnClickPanelListener(position, content, imageUrl, panel, button, 0, 0);
         }
     }
 
-    public static void addOnClickPanelListener(String content, String imageUrl, GCoordinator panel, View button, int width, int height) {
+    public static void addOnClickPanelListener(int position, String content, String imageUrl, GCoordinator panel, View button, int width, int height) {
         if (panel instanceof GPanel) {
             button.setTag(content);
             button.setTag(R.id.gpanel_tag, panel);
@@ -281,6 +282,7 @@ public class RenderConstants {
                 button.setTag(R.id.imageurl_tag, imageUrl);
             button.setTag(R.id.image_width, width);
             button.setTag(R.id.image_height, height);
+            button.setTag(R.id.position, position);
             button.setOnClickListener(onClick);
         }
     }

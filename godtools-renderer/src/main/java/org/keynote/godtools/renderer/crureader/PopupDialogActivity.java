@@ -1,7 +1,6 @@
 package org.keynote.godtools.renderer.crureader;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.percent.PercentLayoutHelper;
@@ -28,8 +27,6 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSing
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleButtonView;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView;
 
-import java.io.IOException;
-
 /**
  * Created by rmatt on 11/14/2016.
  */
@@ -41,6 +38,7 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     public static final String CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA = "Y";
     public static final String CONSTANTS_IMAGE_WIDTH_INT_EXTRA = "ImageWidth";
     public static final String CONSTANTS_IMAGE_HEIGHT_INT_EXTRA = "ImageHeight";
+    public static final String CONSTANTS_POSITION_INT_EXTRA = "position";
     public static final String CONSTANTS_IMAGE_LOCATION = "imageLocation";
 
 
@@ -57,9 +55,10 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     private int screenHeight;
     private String title;
     private String mImageLocation;
-
     private int mImageWidth;
     private int mImageHeight;
+
+    private int mPosition;
 
     @Override
     public void onBackPressed() {
@@ -76,10 +75,12 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
             getWindow().setAllowEnterTransitionOverlap(false);
             getWindow().setAllowReturnTransitionOverlap(false);
         }
+
+        upwrapExtras();
+
         bindLayouts();
         setUpDismissAction();
 
-        upwrapExtras();
 
         setUpImageView();
 
@@ -149,6 +150,7 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
         gPanel = RenderSingleton.getInstance().gPanelHashMap.get(panelKey);
         mImageWidth = this.getIntent().getExtras().getInt(CONSTANTS_IMAGE_WIDTH_INT_EXTRA);
         mImageHeight = this.getIntent().getExtras().getInt(CONSTANTS_IMAGE_HEIGHT_INT_EXTRA);
+        mPosition = this.getIntent().getExtras().getInt(CONSTANTS_POSITION_INT_EXTRA);
 
     }
 
@@ -165,24 +167,17 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100.0f);
         ll = (LinearLayout) findViewById(R.id.popup_innerLinearLayout);
         iv = (ImageView) findViewById(R.id.popup_imageView);
-        ll.setBackgroundColor(Color.parseColor(RenderSingleton.getInstance().getCurrentPageGlobalColor()));
+        ll.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(mPosition));
+
 
     }
 
     private void setUpImageView() {
         if (hasImageExtraFromBigButton()) {
-            try {
                 iv.getLayoutParams().height = mImageHeight;
                 iv.getLayoutParams().width = mImageWidth;
                 ImageAsyncTask.setImageView(mImageLocation, iv);
-                Drawable d = Drawable.createFromStream(RenderSingleton.getInstance().getContext().getAssets().open(mImageLocation), null);
                 tv.setGravity(Gravity.CENTER_HORIZONTAL);
-            } catch (IOException e) {
-                //TODO: handle error.
-                e.printStackTrace();
-            }
-
-
         }
     }
 

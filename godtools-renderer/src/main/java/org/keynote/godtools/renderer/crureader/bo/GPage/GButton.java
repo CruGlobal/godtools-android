@@ -80,13 +80,13 @@ public class GButton extends GBaseButtonAttributes {
 
         content = setButtonText(buttonTextView);
 
-        RenderConstants.addOnClickPanelListener(content, panel, outerLayout);
+        RenderConstants.addOnClickPanelListener(position, content, panel, outerLayout);
 
         return outerLayout.getId();
 
     }
 
-    private int methodBig(LayoutInflater inflater, ViewGroup viewGroup, int position) {
+    private int methodBig(LayoutInflater inflater, ViewGroup viewGroup, final int position) {
 
         final int imageWidth = 0;
         final int imageHeight = 0;
@@ -131,7 +131,7 @@ public class GButton extends GBaseButtonAttributes {
                         int imageWidth = buttonImageView.getMeasuredWidth();
                         int imageHeight = buttonImageView.getMeasuredHeight();
 
-                        RenderConstants.addOnClickPanelListener(content, finalImageContent, panel, outerLayout, imageWidth, imageHeight);
+                        RenderConstants.addOnClickPanelListener(position, content, finalImageContent, panel, outerLayout, imageWidth, imageHeight);
                     }
                 }
 
