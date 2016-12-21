@@ -1,6 +1,7 @@
 package org.keynote.godtools.renderer.crureader.bo.GPage;
 
 import android.os.Build;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,6 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseTextAttributes
 import org.keynote.godtools.renderer.crureader.bo.GPage.Compat.RenderViewCompat;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView;
-
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -42,6 +42,7 @@ public class GButton extends GBaseButtonAttributes {
     @Attribute(name = "label", required = false)
     public String label;
     private boolean fixed = false;
+    private String text;
 
     @Override
     public int render(final LayoutInflater inflater, ViewGroup viewGroup, final int position) {
@@ -81,8 +82,18 @@ public class GButton extends GBaseButtonAttributes {
         this.updateBaseAttributes(outerLayout);
 
         content = setButtonText(buttonTextView);
-        if(mode == ButtonMode.allurl) {
-            buttonTextView.setGravity(Gravity.CENTER_HORIZONTAL|buttonTextView.getGravity());
+        if(mode == ButtonMode.allurl || mode == ButtonMode.url) {
+
+            buttonTextView.setGravity(Gravity.CENTER);
+            outerLayout.findViewById(R.id.g_button_expand_imageview).setVisibility(View.GONE);
+            buttonTextView.setText(text);
+            buttonTextView.setVisibility(View.VISIBLE);
+            buttonTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100);
+            if(buttonTextView.getLayoutParams() instanceof FrameLayout.LayoutParams)
+            {
+                FrameLayout.LayoutParams frameLayouts = (FrameLayout.LayoutParams)buttonTextView.getLayoutParams();
+                frameLayouts.gravity = RenderConstants.getGravityFromAlign(layoutAlign);
+            }
             outerLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -186,5 +197,9 @@ public class GButton extends GBaseButtonAttributes {
         if (topShown) topButtonDivider.inflate();
         if (bottomShown)
             bottomButtonDivider.inflate();
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

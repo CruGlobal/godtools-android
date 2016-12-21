@@ -3,9 +3,13 @@ package org.keynote.godtools.renderer.crureader;
 import android.content.Context;
 
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocument;
+import org.keynote.godtools.renderer.crureader.bo.GPage.GButton;
 import org.keynote.godtools.renderer.crureader.bo.GPage.GPage;
 import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.convert.Registry;
+import org.simpleframework.xml.convert.RegistryStrategy;
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.strategy.Strategy;
 
 import java.io.File;
 import java.io.InputStream;
@@ -18,7 +22,10 @@ public class XMLUtil {
 
     public static GPage parseGPage(Context context, String xmlFileName) throws Exception {
         InputStream testIS = context.getResources().getAssets().open(xmlFileName);
-        Serializer serializer = new Persister();
+        Registry registry = new Registry();
+        Strategy strategy = new RegistryStrategy(registry);
+        Serializer serializer = new Persister(strategy);
+        registry.bind(GButton.class, ComplexConverter.class);
         GPage GPage = serializer.read(GPage.class, testIS);
         return GPage;
     }
@@ -32,7 +39,11 @@ public class XMLUtil {
     }
 
     public static GPage parseGPage(Context context, File file) throws Exception {
-        Serializer serializer = new Persister();
+
+        Registry registry = new Registry();
+        Strategy strategy = new RegistryStrategy(registry);
+        Serializer serializer = new Persister(strategy);
+        registry.bind(GButton.class, ComplexConverter.class);
         return serializer.read(GPage.class, file);
     }
 
