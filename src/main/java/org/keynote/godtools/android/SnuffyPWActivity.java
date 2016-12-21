@@ -998,7 +998,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
             if (holder.mContentContainer != null) {
                 // remove any previous page from the content container
                 /* This might be costly  */
-                holder.mContentContainer.removeAllViews();
+                //holder.mContentContainer.removeAllViews();
                 // t
                 // attach the current page to the content container;
                 GPage itemFromPosition = getItemFromPosition(position);
@@ -1016,6 +1016,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
             //TODO: this will have a bad effect with rotation and possible timing issues with home, backbuttons.  This is possible memory leak.
             if (holder.mContentContainer != null) {
                 holder.mContentContainer.removeAllViews();
+
             }
         }
 

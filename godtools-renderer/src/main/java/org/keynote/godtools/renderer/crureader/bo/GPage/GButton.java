@@ -1,6 +1,7 @@
 package org.keynote.godtools.renderer.crureader.bo.GPage;
 
 import android.os.Build;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import org.keynote.godtools.renderer.crureader.R;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttributes;
@@ -56,7 +58,7 @@ public class GButton extends GBaseButtonAttributes {
 
 
 
-    private int methodDefault(LayoutInflater inflater, ViewGroup viewGroup, int position) {
+    private int methodDefault(final LayoutInflater inflater, ViewGroup viewGroup, int position) {
 
         FrameLayout imageFrame = null;
         String content = "";
@@ -79,8 +81,21 @@ public class GButton extends GBaseButtonAttributes {
         this.updateBaseAttributes(outerLayout);
 
         content = setButtonText(buttonTextView);
+        if(mode == ButtonMode.allurl) {
+            buttonTextView.setGravity(Gravity.CENTER_HORIZONTAL|buttonTextView.getGravity());
+            outerLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(inflater.getContext(), "all url", Toast.LENGTH_LONG).show();
+                }
+            });
 
-        RenderConstants.addOnClickPanelListener(position, content, panel, outerLayout);
+        }
+        else
+        {
+            RenderConstants.addOnClickPanelListener(position, content, panel, outerLayout);
+        }
+
 
         return outerLayout.getId();
 
