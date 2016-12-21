@@ -33,7 +33,7 @@ public class AutoScaleButtonView extends AppCompatButton {
     }
 
     private void initialize(Context context, AttributeSet attrs, int defStyleAttr) {
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AutoScaleButtonView, defStyleAttr, R.style.Widget_GodTools_AutoScaleButtonView);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AutoScaleButtonView, defStyleAttr, R.style.Widget_GodToolsRenderer_AutoScaleButtonView);
         textSizeScalar = a.getInteger(R.styleable.AutoScaleButtonView_buttonTextSizeScalar, 17);
     }
 

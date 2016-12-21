@@ -186,7 +186,7 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     }
 
     private void bindPanelContent() {
-        gPanel.render(getLayoutInflater(), extraContent, RenderSingleton.getInstance().curPosition);
+        gPanel.render(getLayoutInflater(), extraContent, mPosition);
         if (hasImageExtraFromBigButton()) {
             centerAllChildren(extraContent);
         }

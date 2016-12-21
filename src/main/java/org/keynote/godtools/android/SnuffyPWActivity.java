@@ -1062,6 +1062,8 @@ public class SnuffyPWActivity extends AppCompatActivity {
         @WorkerThread
         protected List<GPage> doInBackground(String... params) {
             // params are not used
+
+            Diagnostics.StartMethodTracingByKey("snuffy");
             List<GPage> pages = new ArrayList<GPage>();
             PackageReader packageReader = new PackageReader();
             try {
@@ -1076,7 +1078,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
                     File fileForGDP = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), gdp.filename);
                     pages.add(XMLUtil.parseGPage(SnuffyPWActivity.this, fileForGDP));
                 }
-
+                Diagnostics.StopMethodTracingByKey("snuffy");
                 return pages;
             } catch (Exception e) {
                 e.printStackTrace();
