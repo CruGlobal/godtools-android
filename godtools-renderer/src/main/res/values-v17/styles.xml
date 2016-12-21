@@ -2,15 +2,15 @@
 <resources>
 
 
-    <style name="Widget.GodTools.Button.Standard">
-        <item name="android:textAppearanceButton">@style/TextAppearance.GodTools.Button.Standard
+    <style name="Widget.GodToolsRenderer.Button.Standard">
+        <item name="android:textAppearanceButton">@style/TextAppearance.GodToolsRenderer.Button.Standard
         </item>
         <item name="colorControlHighlight"> @android:color/transparent</item>
         <item name="colorButtonNormal">@android:color/transparent</item>
         <item name="android:textAlignment">viewStart</item>
     </style>
 
-    <style name="TextAppearance.GodTools.Button.Standard" parent="@style/TextAppearance.AppCompat.Widget.Button">
+    <style name="TextAppearance.GodToolsRenderer.Button.Standard" parent="@style/TextAppearance.AppCompat.Widget.Button">
         <!--<item name="android:textSize">32dp</item>-->
         <!--<item name="android:textColor">@android:color/white</item>-->
 

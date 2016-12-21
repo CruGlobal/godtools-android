@@ -3,7 +3,7 @@
 
     <LinearLayout
         android:id="@+id/g_button_pair_linear_layout"
-        style="@style/Widget.GodTools.ButtonPairLayout"
+        style="@style/Widget.GodToolsRenderer.ButtonPairLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
