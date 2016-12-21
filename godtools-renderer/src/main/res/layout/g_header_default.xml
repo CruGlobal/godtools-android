@@ -30,7 +30,6 @@
                 android:id="@+id/g_header_default_number_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:includeFontPadding="false"
                 android:text="@string/sample_text_g_header_default_number_textview" />
 
             <org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView

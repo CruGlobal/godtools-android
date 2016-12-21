@@ -1,50 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/snuffyMainLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:id="@+id/snuffyMainLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <org.ccci.gto.android.common.widget.RatioLayout
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_centerInParent="true"
-        app:aspectRatioHeight="960"
-        app:aspectRatioWidth="640">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/snuffyViewPager"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"/>
-    </org.ccci.gto.android.common.widget.RatioLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/snuffyViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <RelativeLayout
         android:id="@+id/updatingDraft"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000"
         android:alpha="0.5"
+        android:background="#000"
         android:gravity="center_vertical"
         android:visibility="gone">
 
         <ProgressBar
+            android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:indeterminate="true"
             android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:id="@+id/progressBar"
-            android:indeterminate="true"/>
+            android:paddingRight="25dp"/>
 
         <TextView
-            android:layout_toRightOf="@+id/progressBar"
+            android:id="@+id/updatingPageTextView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/progressBar"
+            android:gravity="center_vertical"
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
-            android:textSize="16sp"
             android:textColor="#fff"
-            android:gravity="center_vertical"
-            android:id="@+id/updatingPageTextView"/>
+            android:textSize="16sp"/>
     </RelativeLayout>
 
 </RelativeLayout>

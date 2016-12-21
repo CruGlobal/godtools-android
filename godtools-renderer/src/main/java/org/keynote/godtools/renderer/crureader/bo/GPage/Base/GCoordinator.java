@@ -1,14 +1,13 @@
 package org.keynote.godtools.renderer.crureader.bo.GPage.Base;
 
-import android.support.percent.PercentFrameLayout;
 import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderConstants;
-
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -85,10 +84,11 @@ public abstract class GCoordinator {
                 PercentRelativeLayout.LayoutParams percentRelativeLayoutLayoutParams = (PercentRelativeLayout.LayoutParams) view.getLayoutParams();
                 percentRelativeLayoutLayoutParams.addRule(RenderConstants.getRelativeLayoutRuleFromAlign(layoutAlign));
 
-            } else if (view.getLayoutParams() instanceof PercentFrameLayout.LayoutParams) {
-
-                PercentFrameLayout.LayoutParams percentFrameLayoutLayoutParams = (PercentFrameLayout.LayoutParams) view.getLayoutParams();
-                percentFrameLayoutLayoutParams.gravity = RenderConstants.getGravityFromAlign(layoutAlign);
+            }
+            else if(view.getLayoutParams() instanceof FrameLayout.LayoutParams)
+            {
+                FrameLayout.LayoutParams frameLayouts = (FrameLayout.LayoutParams)view.getLayoutParams();
+                frameLayouts.gravity = RenderConstants.getGravityFromAlign(layoutAlign);
             }
         }
     }
