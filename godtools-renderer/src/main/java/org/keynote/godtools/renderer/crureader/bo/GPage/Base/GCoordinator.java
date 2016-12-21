@@ -42,9 +42,18 @@ public abstract class GCoordinator {
     @Attribute(required = false, name = "xoffset")
     public Integer startMargin;
     @Attribute(required = false, name = "yoffset")
-    public Integer topMargin;
+    public String yoffset;
     @Attribute(name = "x-trailing-offset", required = false)
     public Integer endMargin;
+
+    public Integer getTopMargin()
+    {
+        if(yoffset != null && !yoffset.trim().equalsIgnoreCase(""))
+        {
+            return Integer.valueOf(yoffset.trim());
+        }
+        return 0;
+    }
 
     public void updateBaseAttributes(View view) {
         if (view != null && view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
@@ -106,9 +115,9 @@ public abstract class GCoordinator {
         if (endMargin != null) {
             percentLayoutInfo.rightMargin += RenderConstants.getHorizontalPixels(endMargin);
         }
-        if (topMargin != null) {
+        if (getTopMargin() != null) {
 
-            percentLayoutInfo.topMargin += RenderConstants.getVerticalPixels(topMargin);
+            percentLayoutInfo.topMargin += RenderConstants.getVerticalPixels(getTopMargin());
         }
         if (y != null) {
 
