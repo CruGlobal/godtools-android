@@ -17,6 +17,8 @@ public class RenderViewCompat {
 
     public static final boolean SDK_JELLY_BEAN = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2; //18
 
+
+
     private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
 
     public static int generateViewId() {

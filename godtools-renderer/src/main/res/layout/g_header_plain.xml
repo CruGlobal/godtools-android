@@ -10,6 +10,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginRight="@dimen/header_right_margin"
         android:layout_marginTop="@dimen/header_top_margin"
+        android:layout_alignParentLeft="true"
         app:optRoundCardBackgroundColor="@android:color/white"
         app:optRoundCardCornerRadius="8dp"
         app:optRoundCardElevation="20dp"

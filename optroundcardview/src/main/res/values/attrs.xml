@@ -56,5 +56,8 @@
         <attr name="optRoundContentPaddingTop" format="dimension" />
         <!-- Inner padding between the bottom edge of the Card and children of the CardView. -->
         <attr name="optRoundContentPaddingBottom" format="dimension" />
+        <attr name="optRoundCardShowLeftEdgeShadow" format="boolean" />
+        <attr name="optRoundCardShowRightEdgeShadow" format="boolean" />
     </declare-styleable>
+
 </resources>
