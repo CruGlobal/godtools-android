@@ -1,9 +1,6 @@
 package org.keynote.godtools.renderer.crureader.bo.GPage;
 
-import android.animation.LayoutTransition;
 import android.content.Context;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.percent.PercentRelativeLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +46,7 @@ public class GTitle extends GCoordinator {
         switch (mode) {
             case peek:
                 tempRoot = inflater.inflate(R.layout.g_header_peak, viewGroup);
-                final OptRoundCardView headerTopRoundCardView = (OptRoundCardView)tempRoot.findViewById(R.id.g_header_peek_outerlayout_optroundcardview);
+                final OptRoundCardView headerTopRoundCardView = (OptRoundCardView) tempRoot.findViewById(R.id.g_header_peek_outerlayout_optroundcardview);
                 final OptRoundCardView peekPanelRoundCardView = (OptRoundCardView) tempRoot.findViewById(R.id.g_header_peek_peeklayout_optroundcardview);
                 final AutoScaleTextView autoScaleTextView = (AutoScaleTextView) tempRoot.findViewById(R.id.g_header_peak_peak_textview);
 
@@ -64,8 +61,8 @@ public class GTitle extends GCoordinator {
                 autoScaleTextView.setId(RenderViewCompat.generateViewId());
                 peekPanelRoundCardView.setId(RenderViewCompat.generateViewId());
                 headerTopRoundCardView.setId(RenderViewCompat.generateViewId());
-                ((PercentRelativeLayout.LayoutParams)peekPanelRoundCardView.getLayoutParams()).addRule(RelativeLayout.BELOW, headerTopRoundCardView.getId());
-                if(peekPanel!= null) {
+                ((PercentRelativeLayout.LayoutParams) peekPanelRoundCardView.getLayoutParams()).addRule(RelativeLayout.BELOW, headerTopRoundCardView.getId());
+                if (peekPanel != null) {
                     peekPanel.updateBaseAttributes(autoScaleTextView);
                     View.OnClickListener peekPanelOnClick = new View.OnClickListener() {
                         @Override
@@ -99,6 +96,12 @@ public class GTitle extends GCoordinator {
                 break;
             default:
                 tempRoot = inflater.inflate(R.layout.g_header_default, viewGroup);
+//                OptRoundCardView optRoundCardView = (OptRoundCardView) tempRoot.findViewById(R.id.g_header_default_outerlayout_optroundcardview);
+//
+//                    optRoundCardView.showLeftEdgeShadow(false);
+
+
+
                 if (number != null) {
                     number.defaultColor(position);
                     number.updateBaseAttributes((AutoScaleTextView) tempRoot.findViewById(R.id.g_header_default_number_textview));
@@ -114,7 +117,7 @@ public class GTitle extends GCoordinator {
         return tempRoot.getId();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+
     private void updateStandardRoots(View tempRoot, int position) {
 
         if (tempRoot != null) {

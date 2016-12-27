@@ -49,4 +49,7 @@ interface CardViewImpl {
     void onPreventCornerOverlapChanged(CardViewDelegate cardView);
 
     void setBackgroundColor(CardViewDelegate cardView, int color);
+
+
+
 }

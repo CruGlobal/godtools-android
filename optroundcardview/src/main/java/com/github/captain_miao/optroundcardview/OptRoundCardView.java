@@ -173,7 +173,13 @@ public class OptRoundCardView extends FrameLayout implements CardViewDelegate {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (IMPL instanceof CardViewApi21 == false) {
+            if (IMPL instanceof CardViewApi21 == false) {
+//                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
+//                {
+//
+//                    ((MarginLayoutParams)this.getLayoutParams()).leftMargin = -(int)getCardElevation();
+//
+//                }
             final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
             switch (widthMode) {
                 case MeasureSpec.EXACTLY:
@@ -221,6 +227,9 @@ public class OptRoundCardView extends FrameLayout implements CardViewDelegate {
             maxElevation = elevation;
         }
 
+        boolean showLeftEdgeShadow = a.getBoolean(R.styleable.OptRoundCardView_optRoundCardShowLeftEdgeShadow, false);
+        boolean showRightEdgeShadow = a.getBoolean(R.styleable.OptRoundCardView_optRoundCardShowRightEdgeShadow, false);
+
         int cornerFlag = 0;
         boolean flag = a.getBoolean(R.styleable.OptRoundCardView_optRoundCardLeftTopCorner, true);
         cornerFlag += flag ? OptRoundRectDrawable.FLAG_LEFT_TOP_CORNER : 0;
@@ -250,6 +259,9 @@ public class OptRoundCardView extends FrameLayout implements CardViewDelegate {
         a.recycle();
 
         IMPL.initialize(this, context, backgroundColor, radius, elevation, maxElevation, cornerFlag, edgesFlag);
+        showLeftEdgeShadow(showLeftEdgeShadow);
+        showRightEdgeShadow(showRightEdgeShadow);
+
     }
 
     /**

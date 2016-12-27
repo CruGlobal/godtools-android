@@ -10,6 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="@dimen/header_top_margin"
+        app:optRoundCardShowLeftEdgeShadow="false"
+        app:optRoundCardShowRightEdgeShadow="false"
         app:optRoundCardBackgroundColor="@android:color/white"
         app:optRoundCardElevation="20dp">
 

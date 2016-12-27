@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView
         style="@style/AutoScaleTextView.HeaderHeaderTextView"
@@ -8,8 +7,7 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:includeFontPadding="false"
-        android:text="@string/sample_text_g_header_clear_header_textview"
-        app:layout_widthPercent="@fraction/header_clear_percent_width" />
+        android:text="@string/sample_text_g_header_clear_header_textview" />
 
     <org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView
         android:id="@+id/g_header_subheader_textview"
