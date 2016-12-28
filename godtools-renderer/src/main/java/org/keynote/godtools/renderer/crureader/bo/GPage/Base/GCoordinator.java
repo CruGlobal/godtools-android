@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import org.keynote.godtools.renderer.crureader.bo.GPage.Compat.RenderViewCompat;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import org.simpleframework.xml.Attribute;
 
@@ -45,11 +46,10 @@ public abstract class GCoordinator {
     public String yoffset;
     @Attribute(name = "x-trailing-offset", required = false)
     public Integer endMargin;
+    protected boolean firstElementInList;
 
-    public Integer getTopMargin()
-    {
-        if(yoffset != null && !yoffset.trim().equalsIgnoreCase(""))
-        {
+    public Integer getTopMargin() {
+        if (yoffset != null && !yoffset.trim().equalsIgnoreCase("")) {
             return Integer.valueOf(yoffset.trim());
         }
         return 0;
@@ -78,8 +78,10 @@ public abstract class GCoordinator {
     }
 
     private void applyWidth(PercentRelativeLayout.MarginLayoutParams percentLayoutInfo) {
-        if (width != null && width > 0) {
+        if (width != null && width > 0 && !RenderViewCompat.SDK_ICS_OR_PRIOR) {
+
             percentLayoutInfo.width = RenderConstants.getHorizontalPixels(width);
+
         }
     }
 
@@ -93,10 +95,8 @@ public abstract class GCoordinator {
                 PercentRelativeLayout.LayoutParams percentRelativeLayoutLayoutParams = (PercentRelativeLayout.LayoutParams) view.getLayoutParams();
                 percentRelativeLayoutLayoutParams.addRule(RenderConstants.getRelativeLayoutRuleFromAlign(layoutAlign));
 
-            }
-            else if(view.getLayoutParams() instanceof FrameLayout.LayoutParams)
-            {
-                FrameLayout.LayoutParams frameLayouts = (FrameLayout.LayoutParams)view.getLayoutParams();
+            } else if (view.getLayoutParams() instanceof FrameLayout.LayoutParams) {
+                FrameLayout.LayoutParams frameLayouts = (FrameLayout.LayoutParams) view.getLayoutParams();
                 frameLayouts.gravity = RenderConstants.getGravityFromAlign(layoutAlign);
             }
         }
@@ -104,9 +104,12 @@ public abstract class GCoordinator {
 
     private void applyMargins(ViewGroup.MarginLayoutParams percentLayoutInfo) {
 
-        if (percentLayoutInfo.topMargin == -1) percentLayoutInfo.topMargin = 0;
-        if (percentLayoutInfo.leftMargin == -1) percentLayoutInfo.leftMargin = 0;
-        if (percentLayoutInfo.rightMargin == -1) percentLayoutInfo.rightMargin = 0;
+        if (percentLayoutInfo.topMargin == -1)
+            percentLayoutInfo.topMargin = 0;
+        if (percentLayoutInfo.leftMargin == -1)
+            percentLayoutInfo.leftMargin = 0;
+        if (percentLayoutInfo.rightMargin == -1)
+            percentLayoutInfo.rightMargin = 0;
 
         if (startMargin != null) {
             percentLayoutInfo.leftMargin += RenderConstants.getHorizontalPixels(startMargin);
@@ -127,7 +130,6 @@ public abstract class GCoordinator {
             percentLayoutInfo.leftMargin += RenderConstants.getHorizontalPixels(x);
         }
 
-
     }
 
     public boolean hasSpace() {
@@ -138,14 +140,13 @@ public abstract class GCoordinator {
         return y != null;
     }
 
-
     public abstract int render(LayoutInflater inflater, ViewGroup viewGroup, int position);
-
-    protected boolean firstElementInList;
 
     public void setFirstElementInList(boolean firstElementInList) {
         this.firstElementInList = firstElementInList;
     }
 
-    public boolean shouldUnderline() { return false; }
+    public boolean shouldUnderline() {
+        return false;
+    }
 }

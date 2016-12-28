@@ -130,6 +130,11 @@ public class GTitle extends GCoordinator {
                 heading.defaultColor(position);
                 heading.updateBaseAttributes(headerTextView);
             }
+            else
+            {
+                if(headerTextView!=null)
+                headerTextView.setVisibility(View.GONE);
+            }
             if (subheading != null) {
                 subheading.defaultColor(position);
 
@@ -137,6 +142,11 @@ public class GTitle extends GCoordinator {
                     ((PercentRelativeLayout.LayoutParams) subHeaderTextView.getLayoutParams()).addRule(RelativeLayout.BELOW, -1);
 
                 subheading.updateBaseAttributes(subHeaderTextView);
+            }
+            else
+            {
+                if(subHeaderTextView!=null)
+                subHeaderTextView.setVisibility(View.GONE);
             }
 
         }
