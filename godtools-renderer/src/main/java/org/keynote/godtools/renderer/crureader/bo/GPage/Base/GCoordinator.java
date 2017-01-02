@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 
 import org.keynote.godtools.renderer.crureader.bo.GPage.Compat.RenderViewCompat;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderConstants;
+import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -119,7 +120,8 @@ public abstract class GCoordinator {
 
         if (translationY != null && translationY != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                view.setTranslationY(RenderConstants.getVerticalPixels(getTranslationY()));
+                if(getTranslationY() < 0)
+                    view.setTranslationY(RenderConstants.getVerticalPixels((int) (getTranslationY() * RenderSingleton.getInstance().getScreenHeightForNonRotationDesign())));
             }
         }
 

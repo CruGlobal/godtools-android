@@ -17,7 +17,7 @@ import java.util.Hashtable;
 public class RenderSingleton {
 
     public static final boolean IS_DEBUG_BUILD = true;
-    public static final float KNOWN_HEIGHT = 731.0F;
+    public static final float KNOWN_HEIGHT = 600.0F;
 
     private static RenderSingleton renderSingleton;
     public SparseArray<GCoordinator> gPanelHashMap = new SparseArray<GCoordinator>();

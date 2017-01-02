@@ -22,6 +22,7 @@ import me.grantland.widget.AutofitHelper;
 
 public class GBaseTextAttributes extends GCoordinator {
 
+
     private static final String TAG = "GBaseTextAttributes";
     @org.simpleframework.xml.Text(required = false, empty = "")
     public String content;
@@ -38,6 +39,7 @@ public class GBaseTextAttributes extends GCoordinator {
     @Attribute(required = false, name = "alpha")
     public String alpha;
 
+
     //TODO: cast T to skip unboxing.
     @Override
     public void updateBaseAttributes(View view) {
@@ -50,15 +52,18 @@ public class GBaseTextAttributes extends GCoordinator {
             applyTextSize(textViewCast);
             applyTextAlign(textViewCast);
             applyTextContent(textViewCast);
-        } else
+        }
+        else
             new Exception("Must be autoscaletextview to extend GBaseTextAttributes");
     }
 
     private void applyTextContent(AutoScaleTextView textViewCast) {
-        if (content != null && !content.equalsIgnoreCase("")) {
+        if(content != null && !content.equalsIgnoreCase("")) {
             textViewCast.setVisibility(View.VISIBLE);
             textViewCast.setText(content);
-        } else {
+        }
+        else
+        {
             textViewCast.setVisibility(View.GONE);
         }
     }
@@ -74,10 +79,12 @@ public class GBaseTextAttributes extends GCoordinator {
     }
 
     private void applyTextSize(AutoScaleTextView textViewCast) {
-        if (width != null && height != null && textSize == null) {
+        if (width != null && height != null && textSize == null)
+        {
             Log.e(TAG, "Should scale this~!~ + " + textViewCast.getText() + textViewCast.getId());
             AutofitHelper.create(textViewCast);
-        } else {
+        }
+        else {
             if (textSize != null) {
                 textViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
             } else {
@@ -91,11 +98,15 @@ public class GBaseTextAttributes extends GCoordinator {
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
 
         View inflatedView = inflater.inflate(R.layout.g_base_text, viewGroup);
-        AutoScaleTextView autoScaleTextView = (AutoScaleTextView) inflatedView.findViewById(R.id.g_base_text);
+        AutoScaleTextView autoScaleTextView = (AutoScaleTextView)inflatedView.findViewById(R.id.g_base_text);
         autoScaleTextView.setId(RenderViewCompat.generateViewId());
+
+
+
         updateBaseAttributes(autoScaleTextView);
         return autoScaleTextView.getId();
     }
+
 
     public void applyTextColor(AutoScaleTextView textView) {
         if (textColor != null && !textColor.equalsIgnoreCase("")) {
@@ -107,14 +118,14 @@ public class GBaseTextAttributes extends GCoordinator {
         if (textModifier != null && !textModifier.equalsIgnoreCase(""))
             textView.setTypeface(Typeface.defaultFromStyle(RenderConstants.getTypefaceFromModifier(textModifier)));
 
-        if (shouldUnderline())
+        if(shouldUnderline())
             RenderConstants.underline(textView);
 
     }
 
+
     public void defaultColor(int position) {
-        if (textColor == null)
-            textColor = RenderSingleton.getInstance().getPositionGlobalColorAsString(position);
+        if(textColor == null) textColor = RenderSingleton.getInstance().getPositionGlobalColorAsString(position);
     }
 
     public Integer getTextSize() {
@@ -122,8 +133,10 @@ public class GBaseTextAttributes extends GCoordinator {
     }
 
     @Override
-    public boolean hasSpace() {
+    public boolean hasSpace()
+    {
         return false;
     }
+
 
 }

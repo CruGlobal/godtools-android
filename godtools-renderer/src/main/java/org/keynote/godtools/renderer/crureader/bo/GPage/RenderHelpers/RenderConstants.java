@@ -194,12 +194,15 @@ public class RenderConstants {
         LinearLayout midSection = new LinearLayout(inflater.getContext());
         midSection.setOrientation(LinearLayout.VERTICAL);
         midSection.setId(RenderViewCompat.generateViewId());
-
         Space space = new Space(inflater.getContext());
         LinearLayout.LayoutParams evenSpreadDownSpaceLayoutParams;
         evenSpreadDownSpaceLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, maxSpace, 1.0f); //max space is to deal with popups that shouldn't take up the whole container.
 
-        midSection.addView(space, evenSpreadDownSpaceLayoutParams);
+       // if(!(GCoordinatorArrayList.get(0) instanceof GBaseTextAttributes)) {
+
+
+            midSection.addView(space, evenSpreadDownSpaceLayoutParams);
+       // }
         for(int i = 0; i < GCoordinatorArrayList.size(); i++)
         {
             GCoordinator tap = GCoordinatorArrayList.get(i);
@@ -212,9 +215,11 @@ public class RenderConstants {
             else
             {
                 tap.render(inflater, midSection, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
-                space = new Space(inflater.getContext());
-                space.setId(RenderViewCompat.generateViewId());
-                midSection.addView(space, evenSpreadDownSpaceLayoutParams);
+               // if(!(tap instanceof GBaseTextAttributes)) {
+                    space = new Space(inflater.getContext());
+                    space.setId(RenderViewCompat.generateViewId());
+                    midSection.addView(space, evenSpreadDownSpaceLayoutParams);
+                //}
                /* midSection.setClipChildren(false);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     midSection.setClipToOutline(false);
@@ -241,6 +246,7 @@ public class RenderConstants {
 
         //}
         viewGroup.addView(midSection, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, maxSpace > 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : ViewGroup.LayoutParams.MATCH_PARENT)); //If there is max space wrap_content because we only want to fill a small area.   If it isn't we want to fill the whole available area evenly.
+        //((RelativeLayout.LayoutParams)viewGroup.getLayoutParams()).addRule(RelativeLayout.ALIGN_BASELINE);
         return midSection.getId();
     }
 
