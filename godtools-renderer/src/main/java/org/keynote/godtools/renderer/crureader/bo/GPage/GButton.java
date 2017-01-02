@@ -1,6 +1,8 @@
 package org.keynote.godtools.renderer.crureader.bo.GPage;
 
+import android.graphics.Color;
 import android.os.Build;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,7 +20,10 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttribut
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseTextAttributes;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Compat.RenderViewCompat;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderConstants;
+import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleButtonView;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Views.BottomSheetDialog;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -29,6 +34,8 @@ public class GButton extends GBaseButtonAttributes {
     public static final int BACKGROUND_COLOR_KEY = "background".hashCode();
 
     private static final String TAG = "GButton";
+
+    public String textColor;
 
     @Element(required = false)
     public GImage image;
@@ -47,17 +54,69 @@ public class GButton extends GBaseButtonAttributes {
     @Override
     public int render(final LayoutInflater inflater, ViewGroup viewGroup, final int position) {
 
-
         if (mode != null && mode == ButtonMode.big) {
             return methodBig(inflater, viewGroup, position);
+        } else if (mode != null && mode == ButtonMode.url) {
+
+            return methodURL(inflater, viewGroup, position);
         } else {
             return methodDefault(inflater, viewGroup, position);
-
         }
 
     }
 
+    private void applyTextSize(AutoScaleButtonView buttonViewCast) {
+        if (textSize != null) {
+            buttonViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+        } else {
+            buttonViewCast.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100.0f);
+        }
 
+        if (shouldUnderline()) {
+            RenderConstants.underline(buttonViewCast);
+        }
+    }
+
+    private int methodURL(LayoutInflater inflater, ViewGroup viewGroup, int position) {
+
+        View inflate = inflater.inflate(R.layout.g_button_url, viewGroup);
+        defaultColor(position);
+
+        AutoScaleButtonView button = (AutoScaleButtonView) inflate.findViewById(R.id.g_simple_button);
+
+        if (textColor != null)
+            button.setTextColor(Color.parseColor(textColor));
+        if (text != null)
+            button.setText(text);
+
+        applyTextSize(button);
+        updateBaseAttributes(button);
+
+        button.setId(RenderViewCompat.generateViewId());
+        button.setTag(tapEvents);
+        button.setTag(R.id.gpanel_posiiton, position);
+        button.setOnClickListener(new View.OnClickListener() {
+                                      @Override
+                                      public void onClick(View view) {
+
+                                          AutoScaleButtonView autoScaleButtonView = (AutoScaleButtonView) view;
+                                          String[] tapEvents = RenderConstants.getTapEvents((String) view.getTag());
+                                          for (String tap : tapEvents) {
+                                              Log.i(TAG, "tap: " + tap + " tap as hash " + tap.hashCode());
+                                              if (RenderSingleton.getInstance().gPanelHashMap.get(tap.hashCode()) != null) {
+                                                  BottomSheetDialog bs = BottomSheetDialog.create((Integer) view.getTag(R.id.gpanel_posiiton), tap.hashCode());
+                                                  bs.show(RenderConstants.searchForFragmentManager(view.getContext()), "test");
+
+                                              }
+                                          }
+                                      }
+                                  }
+
+        );
+
+        //viewGroup.addView(button);
+        return button.getId();
+    }
 
     private int methodDefault(final LayoutInflater inflater, ViewGroup viewGroup, int position) {
 
@@ -82,16 +141,15 @@ public class GButton extends GBaseButtonAttributes {
         this.updateBaseAttributes(outerLayout);
 
         content = setButtonText(buttonTextView);
-        if(mode == ButtonMode.allurl || mode == ButtonMode.url) {
+        if (mode == ButtonMode.allurl || mode == ButtonMode.url) {
 
             buttonTextView.setGravity(Gravity.CENTER);
             outerLayout.findViewById(R.id.g_button_expand_imageview).setVisibility(View.GONE);
             buttonTextView.setText(text);
             buttonTextView.setVisibility(View.VISIBLE);
             buttonTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100);
-            if(buttonTextView.getLayoutParams() instanceof FrameLayout.LayoutParams)
-            {
-                FrameLayout.LayoutParams frameLayouts = (FrameLayout.LayoutParams)buttonTextView.getLayoutParams();
+            if (buttonTextView.getLayoutParams() instanceof FrameLayout.LayoutParams) {
+                FrameLayout.LayoutParams frameLayouts = (FrameLayout.LayoutParams) buttonTextView.getLayoutParams();
                 frameLayouts.gravity = RenderConstants.getGravityFromAlign(layoutAlign);
             }
             outerLayout.setOnClickListener(new View.OnClickListener() {
@@ -101,12 +159,9 @@ public class GButton extends GBaseButtonAttributes {
                 }
             });
 
-        }
-        else
-        {
+        } else {
             RenderConstants.addOnClickPanelListener(position, content, panel, outerLayout);
         }
-
 
         return outerLayout.getId();
 
@@ -202,4 +257,9 @@ public class GButton extends GBaseButtonAttributes {
     public void setText(String text) {
         this.text = text;
     }
+
+    public void defaultColor(int position) {
+        textColor = RenderSingleton.getInstance().getPositionGlobalColorAsString(position);
+    }
+
 }

@@ -81,7 +81,7 @@ public class MainActivity extends FragmentActivity  implements IContexual{
             }
             Diagnostics.StopMethodTracingByKey("lala");
         } else {
-            Intent i = new Intent(this, RenderSingleTestActivity.class);
+            Intent i = new Intent(this, RenderSingleActivity.class);
             startActivity(i);
             finish();
         }

@@ -200,17 +200,46 @@ public class RenderConstants {
         evenSpreadDownSpaceLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, maxSpace, 1.0f); //max space is to deal with popups that shouldn't take up the whole container.
 
         midSection.addView(space, evenSpreadDownSpaceLayoutParams);
+        for(int i = 0; i < GCoordinatorArrayList.size(); i++)
+        {
+            GCoordinator tap = GCoordinatorArrayList.get(i);
+            if(tap.isManuallyLaidOut())
+            {
+                int layoutBelowId = tap.render(inflater, viewGroup, position);
+                ((RelativeLayout.LayoutParams)viewGroup.findViewById(renderLinearLayoutListWeighted(inflater, viewGroup, new ArrayList<>(GCoordinatorArrayList.subList(i + 1, GCoordinatorArrayList.size())), position, 0)).getLayoutParams()).addRule(RelativeLayout.BELOW, layoutBelowId);
+                break;
+            }
+            else
+            {
+                tap.render(inflater, midSection, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
+                space = new Space(inflater.getContext());
+                space.setId(RenderViewCompat.generateViewId());
+                midSection.addView(space, evenSpreadDownSpaceLayoutParams);
+               /* midSection.setClipChildren(false);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    midSection.setClipToOutline(false);
+                }
+                midSection.setClipToPadding(false);*/
 
-        for (GCoordinator tap : GCoordinatorArrayList) {
 
+            }
+        }
+        /*for (GCoordinator tap : GCoordinatorArrayList) {
+            tap.render(inflater, midSection, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
+            space = new Space(inflater.getContext());
+            if (!tap.isManuallyLaidOut()) {
+                midSection.addView(space, evenSpreadDownSpaceLayoutParams);
+            }
+            /*
             tap.render(inflater, tap.y == null ? midSection : viewGroup, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
             if (!tap.isManuallyLaidOut()) //If items are manually laid out, we don't want to add space between them.
             {
                 space = new Space(inflater.getContext());
                 midSection.addView(space, evenSpreadDownSpaceLayoutParams);
             }
+            */
 
-        }
+        //}
         viewGroup.addView(midSection, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, maxSpace > 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : ViewGroup.LayoutParams.MATCH_PARENT)); //If there is max space wrap_content because we only want to fill a small area.   If it isn't we want to fill the whole available area evenly.
         return midSection.getId();
     }

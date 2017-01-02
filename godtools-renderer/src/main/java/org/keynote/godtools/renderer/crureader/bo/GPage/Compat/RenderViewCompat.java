@@ -36,6 +36,7 @@ public class RenderViewCompat {
     public static void textViewAlign(TextView textView, String textAlign) {
         textView.setGravity(RenderConstants.getGravityFromAlign(textAlign));
 
+
     }
 
 }
