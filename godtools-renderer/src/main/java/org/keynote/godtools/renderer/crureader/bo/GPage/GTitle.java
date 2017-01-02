@@ -138,7 +138,7 @@ public class GTitle extends GCoordinator {
             if (subheading != null) {
                 subheading.defaultColor(position);
 
-                if (subheading.y != null || heading == null)
+                if (subheading.y != null || heading == null && subHeaderTextView.getLayoutParams() instanceof  PercentRelativeLayout.LayoutParams)
                     ((PercentRelativeLayout.LayoutParams) subHeaderTextView.getLayoutParams()).addRule(RelativeLayout.BELOW, -1);
 
                 subheading.updateBaseAttributes(subHeaderTextView);

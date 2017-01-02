@@ -13,6 +13,8 @@ import android.widget.TextView;
 import org.keynote.godtools.renderer.crureader.bo.GPage.GPage;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 
+import java.io.File;
+
 /**
  * Created by rmatt on 10/24/2016.
  */
@@ -47,7 +49,7 @@ public class SlidePageFragment extends Fragment {
 
         try {
             Log.w(TAG, "XMLDocument: " + mXmlDocumentId);
-            mGPage = XMLUtil.parseGPage(this.getActivity(), mXmlDocumentId);
+            mGPage = XMLUtil.parseGPage(this.getActivity(), new File(mXmlDocumentId));
 
 
         } catch (Exception e) {

@@ -109,12 +109,16 @@ public class SnuffyPWActivity extends AppCompatActivity {
     private static final String TAG = "SnuffyActivity";
     private static final String TAG_FOLLOWUP_MODAL = "followupModal";
     private static final int DIALOG_PROCESS_PACKAGE_PROGRESS = 1;
+
     private final Set<String> mVisibleChildPages = new HashSet<>();
     @BindView(R.id.snuffyViewPager)
     ViewPager mPager;
+
     GtPagesPagerAdapter mPagerAdapter;
+
     @Nullable
     String mCurrentPageId;
+    GDocument gDocument;
     @NonNull
     private EventTracker mTracker;
     private String mAppPackage;
@@ -125,22 +129,19 @@ public class SnuffyPWActivity extends AppCompatActivity {
     private String mPackageTitle;
     private String mPackageStatus;
     private ProcessPackageAsync mProcessPackageAsync;
-    private GestureDetector MyGestureDetector;
     private String mConfigPrimary, mConfigParallel;
     private GTPackage mParallelPackage;
     private boolean isUsingPrimaryLanguage, isParallelLanguageSet;
     private SharedPreferences settings;
     private String regid;
     private Timer timer;
-
-    //TODO: RM No BO tracking in activity?   May be memory leak.
     // @Nullable
     //private List<GPage> mPages;
     @Nullable
     private GPage mAboutView;
-    private ProgressDialog mProgressDialog;
 
     /* BEGIN lifecycle */
+    private ProgressDialog mProgressDialog;
 
     private String getLanguage() {
         return mAppLanguage;
@@ -247,6 +248,8 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
     }
 
+    /* END lifecycle */
+
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onSubscribeEvent(@NonNull final GodToolsEvent event) {
@@ -254,8 +257,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
             processSubscriberEvent(event);
         }
     }
-
-    /* END lifecycle */
 
     /**
      * Event triggered when a child page should be shown
@@ -474,7 +475,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
     }
 
-
     private boolean triggerFollowupModal(@NonNull final EventID event) {
         // check for a followup modal on the current page
         //TODO: RM rework this
@@ -653,6 +653,11 @@ public class SnuffyPWActivity extends AppCompatActivity {
     }
 
     private void doCmdHelp() {
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//
+//        fragmentTransaction.show(SlidePageFragment.create(0, gDocument.about.filename));
+//
+//        fragmentTransaction.commit();
         Intent intent = new Intent(this, SnuffyHelpActivity.class);
         intent.putExtra("PackageTitle", mPackageTitle);
         startActivity(intent);
@@ -751,8 +756,12 @@ public class SnuffyPWActivity extends AppCompatActivity {
     }
 
     private void doCmdInfo(View v) {
+
+        File fileForGDP = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), gDocument.about.filename);
         Intent intent = new Intent(this, SnuffyAboutActivity.class);
+        intent.putExtra(SnuffyAboutActivity.FILE_ID_STRING_EXTRA, fileForGDP.getPath());
         startActivity(intent);
+
     }
 
     @Override
@@ -1070,12 +1079,11 @@ public class SnuffyPWActivity extends AppCompatActivity {
             try {
                 File f = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), mConfigFileName);
 
-                GDocument gDocument
+                gDocument
 
                         = XMLUtil.parseGDocument(SnuffyPWActivity.this.getBaseContext(), f);
 
-                for(GDocumentPage gdp : gDocument.pages)
-                {
+                for (GDocumentPage gdp : gDocument.pages) {
                     File fileForGDP = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), gdp.filename);
                     pages.add(XMLUtil.parseGPage(SnuffyPWActivity.this, fileForGDP));
                 }

@@ -33,6 +33,8 @@ import java.util.ArrayList;
 public class GPage extends GCoordinator {
     private static final String TAG = "GPage";
 
+    @Attribute(required = false)
+    public boolean shadows;
 
     @Attribute(required = false)
     public String watermark;
