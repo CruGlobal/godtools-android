@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 
 import org.keynote.godtools.renderer.crureader.bo.GPage.Compat.RenderViewCompat;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderConstants;
-import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -68,8 +67,8 @@ public abstract class GCoordinator {
             applyMargins(percentLayoutInfo);
             applyWidth(percentLayoutInfo);
             applyHeight(percentLayoutInfo);
-            translateViews(view);
             updateAlignment(view);
+            translateViews(view);
         } else {
             Log.e(TAG, "View isn't in a percent layout");
         }
@@ -118,10 +117,9 @@ public abstract class GCoordinator {
             }
         }
 
-        if (translationY != null && translationY != null) {
+        if (translationY != null && getTranslationY() != 0) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                if(getTranslationY() < 0)
-                    view.setTranslationY(RenderConstants.getVerticalPixels((int) (getTranslationY() * RenderSingleton.getInstance().getScreenHeightForNonRotationDesign())));
+                view.setTranslationY(RenderConstants.getVerticalPixels(getTranslationY() / 4));
             }
         }
 

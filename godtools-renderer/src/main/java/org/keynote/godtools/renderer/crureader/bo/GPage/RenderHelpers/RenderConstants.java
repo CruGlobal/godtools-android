@@ -105,7 +105,7 @@ public class RenderConstants {
     The percent of screen height by taking xml value height and dividing by the xml's height basis.
      */
     public static float getVerticalPercent(int height) {
-        float verticalPercent = (float) ((float) height / REFERENCE_DEVICE_HEIGHT);
+        float verticalPercent = ((float) height / REFERENCE_DEVICE_HEIGHT);
         Log.i(TAG, "height: " + height + " - vertical percent - " + verticalPercent);
         return verticalPercent;
     }
@@ -209,7 +209,7 @@ public class RenderConstants {
             if(tap.isManuallyLaidOut())
             {
                 int layoutBelowId = tap.render(inflater, viewGroup, position);
-                ((RelativeLayout.LayoutParams)viewGroup.findViewById(renderLinearLayoutListWeighted(inflater, viewGroup, new ArrayList<>(GCoordinatorArrayList.subList(i + 1, GCoordinatorArrayList.size())), position, 0)).getLayoutParams()).addRule(RelativeLayout.BELOW, layoutBelowId);
+                ((RelativeLayout.LayoutParams)viewGroup.findViewById(renderLinearLayoutListWeighted(inflater, viewGroup, new ArrayList<>(GCoordinatorArrayList.subList(i + 1, GCoordinatorArrayList.size())), position, maxSpace)).getLayoutParams()).addRule(RelativeLayout.BELOW, layoutBelowId);
                 break;
             }
             else
@@ -217,6 +217,7 @@ public class RenderConstants {
                 tap.render(inflater, midSection, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
                // if(!(tap instanceof GBaseTextAttributes)) {
                     space = new Space(inflater.getContext());
+
                     space.setId(RenderViewCompat.generateViewId());
                     midSection.addView(space, evenSpreadDownSpaceLayoutParams);
                 //}
