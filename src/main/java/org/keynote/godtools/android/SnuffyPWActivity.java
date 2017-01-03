@@ -118,7 +118,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
     @Nullable
     String mCurrentPageId;
-    GDocument gDocument;
+
     @NonNull
     private EventTracker mTracker;
     private String mAppPackage;
@@ -706,7 +706,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
                 (mPages != null ? mPages.size() : "null"));*/
         //TODO: determine how much of SnuffyApp we need to use.
         //getApp().setSnuffyPages(mPages);
-
+        Toast.makeText(this, "doCmdShowPageMenu: ", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, SnuffyPageMenuPWActivity.class);
         intent.putExtra("LanguageCode", mAppLanguage);
         intent.putExtra("PackageName", mAppPackage);
@@ -757,9 +757,9 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
     private void doCmdInfo(View v) {
 
-        File fileForGDP = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), gDocument.about.filename);
+
         Intent intent = new Intent(this, SnuffyAboutActivity.class);
-        intent.putExtra(SnuffyAboutActivity.FILE_ID_STRING_EXTRA, fileForGDP.getPath());
+
         startActivity(intent);
 
     }
@@ -1079,10 +1079,9 @@ public class SnuffyPWActivity extends AppCompatActivity {
             try {
                 File f = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), mConfigFileName);
 
-                gDocument
+                RenderSingleton.getInstance().setGDocument(XMLUtil.parseGDocument(SnuffyPWActivity.this.getBaseContext(), f));
 
-                        = XMLUtil.parseGDocument(SnuffyPWActivity.this.getBaseContext(), f);
-
+                GDocument gDocument = RenderSingleton.getInstance().getGDocument();
                 for (GDocumentPage gdp : gDocument.pages) {
                     File fileForGDP = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), gdp.filename);
                     pages.add(XMLUtil.parseGPage(SnuffyPWActivity.this, fileForGDP));

@@ -5,9 +5,9 @@ import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.util.SparseArray;
 
+import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocument;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 
-import java.util.HashMap;
 import java.util.Hashtable;
 
 /**
@@ -21,17 +21,15 @@ public class RenderSingleton {
 
     private static RenderSingleton renderSingleton;
     public SparseArray<GCoordinator> gPanelHashMap = new SparseArray<GCoordinator>();
+    private Hashtable<String, Long> methodTraceMilliSecondsKeyMap = new Hashtable<String, Long>();
     /*
     Current View pager location.
      */
     public int curPosition;
-
     /*
     screenScalar
      */
     public float screenScalar = -1.0F;
-
-
     /*
     <Position in View Pager, background color>
      */
@@ -39,14 +37,17 @@ public class RenderSingleton {
     /*
     Commonly called dimensions are hashmaped.
      */
-    public HashMap<Integer, Integer> dimensionResourceCache = new HashMap<>();
-    private int positionGlobalColor;
-    private Context context;
-    private Hashtable<String, Long> methodTraceMilliSecondsKeyMap = new Hashtable<String, Long>();
-
     int screenWidth;
     int screenHeight;
     float screenDensity;
+
+
+    private Context context;
+
+    /*
+    Currently rendered GDocument
+     */
+    private GDocument GDocument;
 
     private RenderSingleton(Context context) {
         this.context = context;
@@ -79,27 +80,13 @@ public class RenderSingleton {
         return globalColors.get(position);
     }
 
-    public String getCurrentPageGlobalColor() {
-        return globalColors.get(curPosition);
-    }
-
-    public int getCacheIntResource(int text_padding) {
-        if (!dimensionResourceCache.containsKey(text_padding)) {
-            dimensionResourceCache.put(text_padding, context.getResources().getDimensionPixelSize(text_padding));
-
-        }
-
-        return dimensionResourceCache.get(text_padding);
-    }
-
     public float getScreenHeightForNonRotationDesign() {
         if (screenScalar < 0) {
             final float screenHeightInDp = screenHeight / screenDensity;
             screenScalar = (screenHeightInDp / KNOWN_HEIGHT);
         }
-            return screenScalar;
+        return screenScalar;
     }
-
 
     public Hashtable<String, Long> getMethodTraceMilliSecondsKeyMap() {
         return methodTraceMilliSecondsKeyMap;
@@ -107,5 +94,13 @@ public class RenderSingleton {
 
     public Context getContext() {
         return context;
+    }
+
+    public GDocument getGDocument() {
+        return this.GDocument;
+    }
+
+    public void setGDocument(GDocument GDocument) {
+        this.GDocument = GDocument;
     }
 }

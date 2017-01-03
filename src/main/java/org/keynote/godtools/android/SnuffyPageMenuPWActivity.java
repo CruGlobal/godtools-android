@@ -16,11 +16,10 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
-
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
-import org.keynote.godtools.android.snuffy.SnuffyPage;
 import org.keynote.godtools.android.utils.TypefaceUtils;
+import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocumentPage;
+import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -30,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+//@TODO: look into this
 public class SnuffyPageMenuPWActivity extends ListActivity
 {
     private static String TAG = "SnuffyPageMenuActivity";
@@ -66,17 +65,14 @@ public class SnuffyPageMenuPWActivity extends ListActivity
         // on which we want to display the values defined in the from array
         int[] to = {R.id.list1Text, R.id.list1Image};
 
-        List<SnuffyPage> pages = app.getSnuffyPages();
+        List<GDocumentPage> pages = RenderSingleton.getInstance().getGDocument().pages;
         if (pages != null) {
-            for (SnuffyPage page : pages) {
+            for (GDocumentPage page : pages) {
                 map = new HashMap<>();
-                map.put("label", page.mDescription);
-                map.put("image", page.mThumbnail);
+                map.put("label", page.content);
+                map.put("image", page.thumb);
                 mList.add(map);
             }
-        } else {
-            Crashlytics.log("no pages found in Application");
-            Crashlytics.logException(new NullPointerException());
         }
 
         SimpleImageAdapter adapter = new SimpleImageAdapter(this, mList, R.layout.list_item_with_icon_and_text, from, to);
@@ -90,6 +86,8 @@ public class SnuffyPageMenuPWActivity extends ListActivity
         finish();
     }
 
+
+    //TODO: rework this
     private Bitmap getBitmapFromAssetOrFile(Context context, String imageFileName)
     {
         // a path is passed such as: /Packages/kgp/en_US/thumbs/uspagethumb_10.png

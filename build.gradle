@@ -140,6 +140,7 @@ android {
 
     buildTypes {
         debug {
+            ext.enableCrashlytics = false
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
 
