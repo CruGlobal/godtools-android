@@ -73,8 +73,8 @@ public class GBaseTextAttributes extends GCoordinator {
 
             RenderViewCompat.textViewAlign(textViewCast, textalign);
 
-            layoutAlign = textalign;
-            updateAlignment(textViewCast);
+            //layoutAlign = textalign;
+           // updateAlignment(textViewCast);
         }
     }
 

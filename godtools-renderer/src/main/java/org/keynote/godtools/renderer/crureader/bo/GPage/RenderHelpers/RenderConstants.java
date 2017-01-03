@@ -148,7 +148,7 @@ public class RenderConstants {
             if (align.equalsIgnoreCase("right"))
                 return Gravity.END + Gravity.TOP;
             else if (align.equalsIgnoreCase("center"))
-                return Gravity.CENTER_HORIZONTAL + Gravity.TOP;
+                return Gravity.CENTER;
         }
 
         return Gravity.START + Gravity.TOP;
@@ -159,7 +159,7 @@ public class RenderConstants {
             if (align.equalsIgnoreCase("right")) {
                 return RelativeLayout.ALIGN_PARENT_RIGHT;
             } else if (align.equalsIgnoreCase("center")) {
-                return RelativeLayout.CENTER_HORIZONTAL;
+                return RelativeLayout.CENTER_IN_PARENT;
             }
         }
 
@@ -170,11 +170,11 @@ public class RenderConstants {
     public static int getTextAlign(String textAlign) {
         if (textAlign != null && !textAlign.equalsIgnoreCase("")) {
             if (textAlign.equalsIgnoreCase("center"))
-                return Gravity.CENTER_HORIZONTAL + Gravity.TOP;
+                return TextView.TEXT_ALIGNMENT_CENTER;
             else if (textAlign.equalsIgnoreCase("right"))
-                return Gravity.END + Gravity.TOP;
+                return TextView.TEXT_ALIGNMENT_VIEW_END;
         }
-        return Gravity.START + Gravity.TOP;
+        return TextView.TEXT_ALIGNMENT_VIEW_START;
     }
 
     public static int parseColor(String color) {

@@ -38,6 +38,8 @@ public class GTitle extends GCoordinator {
     @Element(required = false, name = "peekpanel")
     public GBaseTextAttributes peekPanel;
 
+    boolean autoTextResizeHeader = false;
+
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
         Context context = viewGroup.getContext();
         if (mode == null) mode = HeadingMode.none;
@@ -46,6 +48,7 @@ public class GTitle extends GCoordinator {
         switch (mode) {
             case peek:
                 tempRoot = inflater.inflate(R.layout.g_header_peak, viewGroup);
+                autoTextResizeHeader = true;
                 final OptRoundCardView headerTopRoundCardView = (OptRoundCardView) tempRoot.findViewById(R.id.g_header_peek_outerlayout_optroundcardview);
                 final OptRoundCardView peekPanelRoundCardView = (OptRoundCardView) tempRoot.findViewById(R.id.g_header_peek_peeklayout_optroundcardview);
                 final AutoScaleTextView autoScaleTextView = (AutoScaleTextView) tempRoot.findViewById(R.id.g_header_peak_peak_textview);
@@ -128,7 +131,10 @@ public class GTitle extends GCoordinator {
             boolean removeLayoutBelow = false;
             if (heading != null) {
                 heading.defaultColor(position);
+                heading.width = null;
+
                 heading.updateBaseAttributes(headerTextView);
+
             }
             else
             {
@@ -137,7 +143,7 @@ public class GTitle extends GCoordinator {
             }
             if (subheading != null) {
                 subheading.defaultColor(position);
-
+                subheading.width = null;
                 if (subheading.y != null || heading == null && subHeaderTextView.getLayoutParams() instanceof  PercentRelativeLayout.LayoutParams)
                     ((PercentRelativeLayout.LayoutParams) subHeaderTextView.getLayoutParams()).addRule(RelativeLayout.BELOW, -1);
 
