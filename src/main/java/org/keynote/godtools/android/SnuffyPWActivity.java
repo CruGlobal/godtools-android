@@ -20,7 +20,9 @@ import android.support.v4.view.ViewConfigurationCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -277,6 +279,12 @@ public class SnuffyPWActivity extends AppCompatActivity {
             snuffyRecyclerView.setLayoutManager(layout);
             snuffyRecyclerView.setAdapter(mPagerAdapter);
 
+            SnapHelper helper = new PagerSnapHelper()
+            {
+
+            };
+
+            helper.attachToRecyclerView(snuffyRecyclerView);
             snuffyRecyclerView.setHasFixedSize(true);
             // configure page change listener
 //            snuffyRecyclerView.addOnPageChangedListener(new RecyclerViewPager.OnPageChangedListener() {
