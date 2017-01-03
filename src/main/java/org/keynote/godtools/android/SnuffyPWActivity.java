@@ -122,11 +122,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
     private SharedPreferences settings;
     private String regid;
     private Timer timer;
-    // @Nullable
-    //private List<GPage> mPages;
-    @Nullable
-    private GPage mAboutView;
-
 
     @BindView(R.id.snuffyRecyclerView)
     public RecyclerViewPager snuffyRecyclerView;
@@ -260,12 +255,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
         showPage(id);
     }
 
-    /*@Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //cleanupViewPager();
-        //mButterKnife.unbind();
-    }*/
 
     private void setupActionBar() {
         final ActionBar actionBar = getSupportActionBar();
@@ -283,7 +272,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
             LinearLayoutManager layout = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
             snuffyRecyclerView.setLayoutManager(layout);
             snuffyRecyclerView.setAdapter(mPagerAdapter);
-
+            snuffyRecyclerView.setItemViewCacheSize(0);
             // configure page change listener
             snuffyRecyclerView.addOnPageChangedListener(new RecyclerViewPager.OnPageChangedListener() {
                 @Override
@@ -412,7 +401,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
      */
     void updateDisplayedPages(@Nullable final List<GPage> pages) {
         // replace the about page
-        mAboutView = null;
+
         //TODO: RM looks like the first page is the about page
         if (pages
                 != null && pages.size() > 0) {
@@ -875,10 +864,21 @@ public class SnuffyPWActivity extends AppCompatActivity {
                     .inflate(R.layout.page_gt_page_frame, parent, false));
         }
 
+//        public void addItem(int position) {
+//            final int id = mCurrentItemId++;
+//            mItems.add(position, id);
+//            notifyItemInserted(position);
+//        }
+//
+//        public void removeItem(int position) {
+//            mItems.remove(position);
+//            notifyItemRemoved(position);
+//        }
+
         public void addPages(GPage page)
         {
             mPages.add(page);
-            this.notifyDataSetChanged();
+            this.notifyItemInserted(mPages.size() - 1);
         }
 
         public void setPages(@NonNull final List<GPage> pages) {
@@ -1015,7 +1015,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
                         SnuffyPWActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                List<GPage> pages = new ArrayList<GPage>();
+                                List<GPage> pages = new ArrayList<>();
                                 pages.add(gPage);
                                 onPagesLoaded(pages);
                             }
