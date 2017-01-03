@@ -31,7 +31,6 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.google.common.base.Strings;
 
@@ -118,7 +117,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
     private String mAppLanguage = ENGLISH_DEFAULT;
     private Unbinder mButterKnife;
     private boolean mSetupRequired = true;
-    private String mPackageTitle;
     private String mPackageStatus;
     private ProcessPackageAsync mProcessPackageAsync;
     private String mConfigPrimary, mConfigParallel;
@@ -139,9 +137,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
         return mAppLanguage;
     }
 
-    private void setLanguage(String languageCode) {
-        mAppLanguage = languageCode;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -559,12 +554,12 @@ public class SnuffyPWActivity extends AppCompatActivity {
     }
 
     private void completeSetup(boolean bSuccess) {
-        if (!bSuccess) { // now testing is done - only show msg on failure
+        /*if (!bSuccess) { // now testing is done - only show msg on failure
             Toast.makeText(SnuffyPWActivity.this.getApplicationContext(),
                     getString(R.string.processing_failed),
                     Toast.LENGTH_SHORT).show();
             return;
-        }
+        }*/
 
         // track a page view of the most recently loaded page
         final GtPagesPagerAdapter.ViewHolder holder = mPagerAdapter.getPrimaryItem();
@@ -575,7 +570,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
 
         addClickHandlersToAllPages();
-        addCallingActivityToAllPages();
     }
 
     private void addClickHandlersToAllPages() {
@@ -596,21 +590,8 @@ public class SnuffyPWActivity extends AppCompatActivity {
         */
     }
 
-    private void addCallingActivityToAllPages() {
-        //TODO: i don't think this will be coming back in, not sure though.
-        /*for (SnuffyPage mPage : mPages) {
-            mPage.mCallingActivity = this; // the SnuffyActivity owns most pages except the about page - which will be set explicitly
-        }*/
-    }
-
     private void doCmdHelp() {
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//
-//        fragmentTransaction.show(SlidePageFragment.create(0, gDocument.about.filename));
-//
-//        fragmentTransaction.commit();
         Intent intent = new Intent(this, SnuffyHelpActivity.class);
-        intent.putExtra("PackageTitle", mPackageTitle);
         startActivity(intent);
     }
 
@@ -656,8 +637,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
         /*Crashlytics.log("Storing SnuffyPages in Application before launching SnuffyPageMenuPWActivity: " +
                 (mPages != null ? mPages.size() : "null"));*/
         //TODO: determine how much of SnuffyApp we need to use.
-        //getApp().setSnuffyPages(mPages);
-        Toast.makeText(this, "doCmdShowPageMenu: ", Toast.LENGTH_LONG).show();
+
         Intent intent = new Intent(this, SnuffyPageMenuPWActivity.class);
         intent.putExtra("LanguageCode", mAppLanguage);
         intent.putExtra("PackageName", mAppPackage);
@@ -886,6 +866,12 @@ public class SnuffyPWActivity extends AppCompatActivity {
             setHasStableIds(true);
         }
 
+        public void addPages(GPage page)
+        {
+            mPages.add(page);
+            this.notifyDataSetChanged();
+        }
+
         public void setPages(@NonNull final List<GPage> pages) {
             mPages = pages; //pages != null ? ImmutableList.copyOf(pages) : ImmutableList.<GPage>of();
             notifyDataSetChanged();
@@ -992,11 +978,11 @@ public class SnuffyPWActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if (mProgressDialog != null) {
+           /* if (mProgressDialog != null) {
                 mProgressDialog.setProgress(0);
                 mProgressDialog.setMax(1);
             }
-            showDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);
+            showDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);*/
         }
 
         @Override
@@ -1005,19 +991,46 @@ public class SnuffyPWActivity extends AppCompatActivity {
             // params are not used
 
             Diagnostics.StartMethodTracingByKey("snuffy");
-            List<GPage> pages = new ArrayList<GPage>();
+
             try {
                 File f = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), mConfigFileName);
 
                 RenderSingleton.getInstance().setGDocument(XMLUtil.parseGDocument(SnuffyPWActivity.this.getBaseContext(), f));
 
                 GDocument gDocument = RenderSingleton.getInstance().getGDocument();
-                for (GDocumentPage gdp : gDocument.pages) {
+                for (int i = 0; i < gDocument.pages.size(); i++)
+                {
+                    GDocumentPage gdp = gDocument.pages.get(i);
+
                     File fileForGDP = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), gdp.filename);
-                    pages.add(XMLUtil.parseGPage(SnuffyPWActivity.this, fileForGDP));
+
+                    if(i == 0)
+                    {
+                        final GPage gPage = XMLUtil.parseGPage(SnuffyPWActivity.this, fileForGDP);
+                        SnuffyPWActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                List<GPage> pages = new ArrayList<GPage>();
+                                pages.add(gPage);
+                                onPagesLoaded(pages);
+                            }
+                        });
+                    }
+                    else
+                    {
+                        final GPage gPage = XMLUtil.parseGPage(SnuffyPWActivity.this, fileForGDP);
+                        SnuffyPWActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SnuffyPWActivity.this.mPagerAdapter.addPages(gPage);
+                            }
+                        });
+                    }
+
+
                 }
                 Diagnostics.StopMethodTracingByKey("snuffy");
-                return pages;
+                return null;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1051,24 +1064,24 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
 
         public void updateProgress(int curr, int max) {
-            onProgressUpdate(curr, max);
+            //onProgressUpdate(curr, max);
         }
 
         @Override
         protected void onProgressUpdate(Integer... progress) {
-            mProgressDialog.setMax(progress[1]);
-            mProgressDialog.setProgress(progress[0]);
+            /*  mProgressDialog.setMax(progress[1]);
+            mProgressDialog.setProgress(progress[0]);*/
         }
 
         @Override
         @UiThread
         protected void onPostExecute(List<GPage> result) {
-            if (mProgressDialog != null &&
+            /*if (mProgressDialog != null &&
                     mProgressDialog.isShowing()) {
                 dismissDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);
-            }
+            }*/
 
-            onPagesLoaded(result);
+            //onPagesLoaded(result);
             completeSetup(result != null);
         }
     }
