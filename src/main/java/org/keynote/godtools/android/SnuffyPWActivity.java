@@ -91,7 +91,6 @@ import static org.keynote.godtools.android.utils.Constants.LANGUAGE_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.PROPERTY_REG_ID;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
-import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 @SuppressWarnings("deprecation")
@@ -101,17 +100,15 @@ public class SnuffyPWActivity extends AppCompatActivity {
     private static final int DIALOG_PROCESS_PACKAGE_PROGRESS = 1;
 
     private final Set<String> mVisibleChildPages = new HashSet<>();
-
-
+    @BindView(R.id.snuffyRecyclerView)
+    public RecyclerView snuffyRecyclerView;
     GtPagesPagerAdapter mPagerAdapter;
-
     @Nullable
     String mCurrentPageId;
     private Unbinder mButterKnife;
     private String mAppPackage;
     private String mConfigFileName;
     private String mAppLanguage = ENGLISH_DEFAULT;
-
     private boolean mSetupRequired = true;
     private String mPackageStatus;
     private ProcessPackageAsync mProcessPackageAsync;
@@ -121,27 +118,36 @@ public class SnuffyPWActivity extends AppCompatActivity {
     private SharedPreferences settings;
     private String regid;
     private Timer timer;
-
-    @BindView(R.id.snuffyRecyclerView)
-    public RecyclerViewPager snuffyRecyclerView;
-
     /* BEGIN lifecycle */
     private ProgressDialog mProgressDialog;
-
 
     private String getLanguage() {
         return mAppLanguage;
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        ;
+
 
         setContentView(R.layout.snuffy_main);
         mButterKnife = ButterKnife.bind(this);
+//        snuffyRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(int newState) {
+//                if(newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                    // special handler to avoid displaying half elements
+//                    scrollToNext();
+//                }
+//                animate();
+//            }
+//
+//            @Override
+//            public void onScrolled(int dx, int dy) {
+//                animate();
+//            }
+//        });
         setupActionBar();
         setupViewPager();
 
@@ -254,7 +260,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
         showPage(id);
     }
 
-
     private void setupActionBar() {
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -268,79 +273,75 @@ public class SnuffyPWActivity extends AppCompatActivity {
         if (snuffyRecyclerView != null) {
             mPagerAdapter = new GtPagesPagerAdapter();
             //snuffyRecyclerView.setAdapter(new GtPagesPagerAdapter());
-            LinearLayoutManager layout = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+            LinearLayoutManager layout = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
             snuffyRecyclerView.setLayoutManager(layout);
             snuffyRecyclerView.setAdapter(mPagerAdapter);
 
             snuffyRecyclerView.setHasFixedSize(true);
             // configure page change listener
-            snuffyRecyclerView.addOnPageChangedListener(new RecyclerViewPager.OnPageChangedListener() {
-                @Override
-                public void OnPageChanged(int oldPosition, int newPosition) {
-
-
-                    //TODO: RM I don't fully understand this.
-                    /*if (mCurrentPageId != null) {
-                        final GPage page = mPagerAdapter.getItemFromPosition(newPosition); //TODO: forloops getItem(mCurrentPageId);
-                        if (page != null) {
-                            // trigger the exit page event
-
-                            //TODO: RM trigger onExitPage();
-                            //page.onExitPage();
-                        }
-                    }*/
-
-                    /*final GPage page = mPagerAdapter.getItemFromPosition(newPosition);
-                    if (page != null) {*/
-                        //TODO: RM track pages that turned, figure out need for onEnterPage()
-                        /*final GtPage model = page.getModel();
-
-                        // track the currently active page
-                        mCurrentPageId = page.getModel().getId();
-                        trackPageView(model);
-
-                        // trigger the enter page event
-                        page.onEnterPage();
-                        */
-                    /*}*/
-
-                    // This notification has been updated to only be sent after the app has been opened 3 times
-                    // The api will only send a notice once, so it can be sent from here multiple times.
-
-                    // if the prayer pages are ever moved this will need to be updated.
-                    //TODO: RM why is this here, this should be elsewhere.
-
-
-                    /* if (settings.getInt(COUNT, 0) >= 3) {
-                        if ((mAppPackage.equalsIgnoreCase(KGP) && newPosition == 7) ||
-                                (mAppPackage.equalsIgnoreCase(FOUR_LAWS) && newPosition == 6)) {
-                            Log.i(TAG, "App used 3 times and prayer page reached.");
-                            GodToolsApiClient.updateNotification(
-                                    settings.getString(AUTH_CODE, ""), regid, NotificationInfo.AFTER_1_PRESENTATION,
-                                    new NotificationUpdateTask.NotificationUpdateTaskHandler() {
-                                        @Override
-                                        public void registrationComplete(String regId) {
-                                            Log.i(NotificationInfo.NOTIFICATION_TAG,
-                                                    "1 Presentation Notification notice sent to API");
-                                        }
-
-                                        @Override
-                                        public void registrationFailed() {
-                                            Log.e(NotificationInfo.NOTIFICATION_TAG,
-                                                    "1 Presentation notification notice failed to send to API");
-                                        }
-                                    });
-                        }
-                    }*/
-
-                }
-            });
+//            snuffyRecyclerView.addOnPageChangedListener(new RecyclerViewPager.OnPageChangedListener() {
+//                @Override
+//                public void OnPageChanged(int oldPosition, int newPosition) {
+//
+//                    //TODO: RM I don't fully understand this.
+//                    /*if (mCurrentPageId != null) {
+//                        final GPage page = mPagerAdapter.getItemFromPosition(newPosition); //TODO: forloops getItem(mCurrentPageId);
+//                        if (page != null) {
+//                            // trigger the exit page event
+//
+//                            //TODO: RM trigger onExitPage();
+//                            //page.onExitPage();
+//                        }
+//                    }*/
+//
+//                    /*final GPage page = mPagerAdapter.getItemFromPosition(newPosition);
+//                    if (page != null) {*/
+//                    //TODO: RM track pages that turned, figure out need for onEnterPage()
+//                        /*final GtPage model = page.getModel();
+//
+//                        // track the currently active page
+//                        mCurrentPageId = page.getModel().getId();
+//                        trackPageView(model);
+//
+//                        // trigger the enter page event
+//                        page.onEnterPage();
+//                        */
+//                    /*}*/
+//
+//                    // This notification has been updated to only be sent after the app has been opened 3 times
+//                    // The api will only send a notice once, so it can be sent from here multiple times.
+//
+//                    // if the prayer pages are ever moved this will need to be updated.
+//                    //TODO: RM why is this here, this should be elsewhere.
+//
+//
+//                    /* if (settings.getInt(COUNT, 0) >= 3) {
+//                        if ((mAppPackage.equalsIgnoreCase(KGP) && newPosition == 7) ||
+//                                (mAppPackage.equalsIgnoreCase(FOUR_LAWS) && newPosition == 6)) {
+//                            Log.i(TAG, "App used 3 times and prayer page reached.");
+//                            GodToolsApiClient.updateNotification(
+//                                    settings.getString(AUTH_CODE, ""), regid, NotificationInfo.AFTER_1_PRESENTATION,
+//                                    new NotificationUpdateTask.NotificationUpdateTaskHandler() {
+//                                        @Override
+//                                        public void registrationComplete(String regId) {
+//                                            Log.i(NotificationInfo.NOTIFICATION_TAG,
+//                                                    "1 Presentation Notification notice sent to API");
+//                                        }
+//
+//                                        @Override
+//                                        public void registrationFailed() {
+//                                            Log.e(NotificationInfo.NOTIFICATION_TAG,
+//                                                    "1 Presentation notification notice failed to send to API");
+//                                        }
+//                                    });
+//                        }
+//                    }*/
+//
+//                }
+//            });
         }
 
     }
-
-
-
 
     @WorkerThread
     private void processSubscriberEvent(@NonNull final GodToolsEvent event) {
@@ -526,10 +527,10 @@ public class SnuffyPWActivity extends AppCompatActivity {
             public void run() {
                 if (snuffyRecyclerView != null) {
 
-                        // trigger the actual load of pages
-                        mProcessPackageAsync = new ProcessPackageAsync();
-                        mProcessPackageAsync.execute("");
-                    }
+                    // trigger the actual load of pages
+                    mProcessPackageAsync = new ProcessPackageAsync();
+                    mProcessPackageAsync.execute("");
+                }
 
             }
         }, 1000 / 60);
@@ -602,13 +603,14 @@ public class SnuffyPWActivity extends AppCompatActivity {
             messageBody = getString(R.string.satisfied_share);
         }
 
-        final int currItem = snuffyRecyclerView.getCurrentPosition();
-        if (currItem > 0) {
-            // http://www.knowgod.com/en/kgp/5
-            shareLink = shareLink + "/" + String.valueOf(currItem);
-        }
-
-        messageBody = messageBody.replace(SHARE_LINK, shareLink);
+        //TODO: revisit
+        //final int currItem = snuffyRecyclerView.getLayoutManager().getItem
+//        if (currItem > 0) {
+//            // http://www.knowgod.com/en/kgp/5
+//            shareLink = shareLink + "/" + String.valueOf(currItem);
+//        }
+//
+//        messageBody = messageBody.replace(SHARE_LINK, shareLink);
 
         return messageBody;
     }
@@ -670,7 +672,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
     }
 
     private void doCmdInfo(View v) {
-
 
         Intent intent = new Intent(this, SnuffyAboutActivity.class);
 
@@ -841,18 +842,17 @@ public class SnuffyPWActivity extends AppCompatActivity {
         Log.i(TAG, "Timer scheduled");
     }
 
-
     static class GtPagesPagerAdapter extends RecyclerView.Adapter<SnuffyPWActivity.ViewHolder> {
 
         private List<GPage> mPages = new ArrayList<>();
 
+        public GtPagesPagerAdapter() {
+            setHasStableIds(true);
+        }
+
         @Override
         public int getItemViewType(int position) {
             return position;
-        }
-
-        public GtPagesPagerAdapter() {
-            setHasStableIds(true);
         }
 
         @Override
@@ -872,8 +872,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
 //            notifyItemRemoved(position);
 //        }
 
-        public void addPages(GPage page)
-        {
+        public void addPages(GPage page) {
             mPages.add(page);
             this.notifyItemInserted(mPages.size() - 1);
         }
@@ -911,13 +910,8 @@ public class SnuffyPWActivity extends AppCompatActivity {
          */
         @Nullable
         GPage getItemFromPosition(final int position) {
-            if (position >= 0 && position < mPages.size()) {
-                return mPages.get(position);
-            }
-            return null;
+            return mPages.get(position);
         }
-
-
 
         @Override
         public void onBindViewHolder(@NonNull final SnuffyPWActivity.ViewHolder holder, final int position) {
@@ -929,17 +923,17 @@ public class SnuffyPWActivity extends AppCompatActivity {
             //holder.mPage = mPages.get(position);
 
             //if (holder.mContentContainer != null) {
-                // remove any previous page from the content container
+            // remove any previous page from the content container
                 /* This might be costly  */
-                //holder.mContentContainer.removeAllViews();
-                // t
-                // attach the current page to the content container;
-                GPage itemFromPosition = getItemFromPosition(position);
-                //TODO:
+            //holder.mContentContainer.removeAllViews();
+            // t
+            // attach the current page to the content container;
+            GPage itemFromPosition = getItemFromPosition(position);
+            //TODO:
 
-                RenderSingleton.getInstance().addGlobalColor(position, itemFromPosition.getBackgroundColor());
-                itemFromPosition.render(LayoutInflater.from(holder.mContentContainer.getContext()),
-                        holder.mContentContainer, position);
+            RenderSingleton.getInstance().addGlobalColor(position, itemFromPosition.getBackgroundColor());
+            itemFromPosition.render(LayoutInflater.from(holder.mContentContainer.getContext()),
+                    holder.mContentContainer, position);
             //}
         }
 
@@ -954,12 +948,9 @@ public class SnuffyPWActivity extends AppCompatActivity {
 //            }
 //        }
 
-
     }
 
     static final class ViewHolder extends RecyclerViewPager.ViewHolder {
-
-
 
         @BindView(R.id.pageContainer)
         FrameLayout mContentContainer;
@@ -970,9 +961,84 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
     }
 
+//    class FragmentsAdapter extends FragmentStatePagerAdapter  {
+//        LinkedHashMap<Integer, Fragment> mFragmentCache = new LinkedHashMap<>();
+//
+//        public FragmentsAdapter(FragmentManager fm) {
+//            super(fm);
+//            setHasStableIds(false);
+//            RenderSingleton.getInstance().setPages(new ArrayList<GPage>());
+//        }
+//
+//        public FragmentsAdapter(List<GPage> mPages, FragmentManager fm) {
+//            super(fm);
+//            RenderSingleton.getInstance().setPages(mPages);
+//
+//        }
+//
+//        public void addPages(GPage page) {
+//            RenderSingleton.getInstance().getPages().add(page);
+//            this.notifyItemInserted(RenderSingleton.getInstance().getPages().size() - 1);
+//        }
+//
+//        public void setPages(@NonNull final List<GPage> pages) {
+//            RenderSingleton.getInstance().setPages(pages);
+//            notifyDataSetChanged();
+//        }
+//
+//        GPage getItemFromPosition(final int position) {
+//            return RenderSingleton.getInstance().getPages(position);
+//        }
+//
+//
+//        @Override
+//        public long getItemId(final int position) {
+//            //TODO:// FIXME: 12/19/2016
+//            return position;
+//        }
+//
+//        @Override
+//        public Fragment getItem(int position, Fragment.SavedState savedState) {
+//            Fragment f = mFragmentCache.containsKey(position) ? mFragmentCache.get(position)
+//
+//                    : SlidePageFragment.create(snuffyRecyclerView.getCurrentPosition());
+//            Log.e("test", "getItem:" + position + " from cache" + mFragmentCache.containsKey
+//                    (position));
+////            if (savedState == null || f.getArguments() == null) {
+////                Bundle bundle = new Bundle();
+////                bundle.putInt("index", position);
+////                f.setArguments(bundle);
+////                Log.e("test", "setArguments:" + position);
+////            } else if (!mFragmentCache.containsKey(position)) {
+////                f.setInitialSavedState(savedState);
+////                Log.e("test", "setInitialSavedState:" + position);
+////            }
+//            mFragmentCache.put(position, f);
+//            return f;
+//        }
+//
+//        @Override
+//        public void onDestroyItem(int position, Fragment fragment) {
+//            // onDestroyItem
+//            while (mFragmentCache.size() > 5) {
+//                Object[] keys = mFragmentCache.keySet().toArray();
+//                mFragmentCache.remove(keys[0]);
+//            }
+//        }
+//
+////        @Override
+////        public String getPageTitle(int position) {
+////            return "item-" + position;
+////        }
+//
+//        @Override
+//        public int getItemCount() {
+//            return RenderSingleton.getInstance().getPages().size();
+//        }
+//    }
+
     private class ProcessPackageAsync extends AsyncTask<String, Integer, List<GPage>>
             implements ProgressCallback {
-
 
         public ProcessPackageAsync() {
 
@@ -1001,14 +1067,12 @@ public class SnuffyPWActivity extends AppCompatActivity {
                 RenderSingleton.getInstance().setGDocument(XMLUtil.parseGDocument(SnuffyPWActivity.this.getBaseContext(), f));
 
                 GDocument gDocument = RenderSingleton.getInstance().getGDocument();
-                for (int i = 0; i < gDocument.pages.size(); i++)
-                {
+                for (int i = 0; i < gDocument.pages.size(); i++) {
                     GDocumentPage gdp = gDocument.pages.get(i);
 
                     File fileForGDP = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), gdp.filename);
 
-                    if(i == 0)
-                    {
+                    if (i == 0) {
                         final GPage gPage = XMLUtil.parseGPage(SnuffyPWActivity.this, fileForGDP);
                         SnuffyPWActivity.this.runOnUiThread(new Runnable() {
                             @Override
@@ -1018,9 +1082,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
                                 onPagesLoaded(pages);
                             }
                         });
-                    }
-                    else
-                    {
+                    } else {
                         final GPage gPage = XMLUtil.parseGPage(SnuffyPWActivity.this, fileForGDP);
                         SnuffyPWActivity.this.runOnUiThread(new Runnable() {
                             @Override
@@ -1029,7 +1091,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
                             }
                         });
                     }
-
 
                 }
                 Diagnostics.StopMethodTracingByKey("snuffy");
@@ -1088,6 +1149,5 @@ public class SnuffyPWActivity extends AppCompatActivity {
             completeSetup(result != null);
         }
     }
-
 
 }

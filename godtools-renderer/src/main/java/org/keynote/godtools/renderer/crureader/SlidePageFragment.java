@@ -32,6 +32,14 @@ public class SlidePageFragment extends Fragment {
     public SlidePageFragment() {
     }
 
+    public static Fragment create(int position) {
+        SlidePageFragment fragment = new SlidePageFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_POSITION, position);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     public static Fragment create(int position, String xmlDocumentId) {
         SlidePageFragment fragment = new SlidePageFragment();
         Bundle args = new Bundle();
@@ -48,8 +56,14 @@ public class SlidePageFragment extends Fragment {
         mPosition = getArguments().getInt(ARG_POSITION);
 
         try {
-            Log.w(TAG, "XMLDocument: " + mXmlDocumentId);
-            mGPage = XMLUtil.parseGPage(this.getActivity(), new File(mXmlDocumentId));
+            if(mXmlDocumentId != null && !mXmlDocumentId.equalsIgnoreCase("")) {
+                Log.w(TAG, "XMLDocument: " + mXmlDocumentId);
+                mGPage = XMLUtil.parseGPage(this.getActivity(), new File(mXmlDocumentId));
+            }
+            else
+            {
+                mGPage = RenderSingleton.getInstance().getPages(mPosition);
+            }
 
 
         } catch (Exception e) {

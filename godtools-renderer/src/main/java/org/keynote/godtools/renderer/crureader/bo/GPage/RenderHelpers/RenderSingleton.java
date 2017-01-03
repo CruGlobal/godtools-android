@@ -7,8 +7,10 @@ import android.util.SparseArray;
 
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocument;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
+import org.keynote.godtools.renderer.crureader.bo.GPage.GPage;
 
 import java.util.Hashtable;
+import java.util.List;
 
 /**
  * Created by rmatt on 11/16/2016.
@@ -48,6 +50,7 @@ public class RenderSingleton {
     Currently rendered GDocument
      */
     private GDocument GDocument;
+    private List<GPage> pages;
 
     private RenderSingleton(Context context) {
         this.context = context;
@@ -102,5 +105,17 @@ public class RenderSingleton {
 
     public void setGDocument(GDocument GDocument) {
         this.GDocument = GDocument;
+    }
+
+    public void setPages(List<GPage> pages) {
+        this.pages = pages;
+    }
+
+    public GPage getPages(int mPosition) {
+        return pages.get(mPosition);
+    }
+
+    public List<GPage> getPages() {
+        return pages;
     }
 }
