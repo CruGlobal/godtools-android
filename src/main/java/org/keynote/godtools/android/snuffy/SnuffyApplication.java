@@ -7,10 +7,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.newrelic.agent.android.NewRelic;
 
 import org.keynote.godtools.android.BuildConfig;
@@ -19,23 +19,30 @@ import org.keynote.godtools.android.utils.FileUtils;
 import org.keynote.godtools.renderer.crureader.RenderApp;
 
 import java.io.File;
-import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 
 public class SnuffyApplication extends RenderApp {
-    public SnuffyPage aboutView;
+
     public String packageTitle;
-    @Nullable
-    private List<SnuffyPage> snuffyPages;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         // Enable crash reporting
-        Fabric.with(this, new Crashlytics());
-        NewRelic.withApplicationToken(BuildConfig.NEW_RELIC_API_KEY).start(this);
+        // Set up Crashlytics, disabled for debug builds
+
+        Crashlytics crashlyticsKit = new Crashlytics.Builder()
+                .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+                .build();
+
+        // Initialize Fabric with the debug-disabled crashlytics.
+        Fabric.with(this, crashlyticsKit);
+        if(!BuildConfig.DEBUG) {
+            NewRelic.withApplicationToken(BuildConfig.NEW_RELIC_API_KEY).start(this);
+        }
+
     }
 
     public void sendEmailWithContent(Activity callingActivity, String subjectLine, String msgBody) {
@@ -83,19 +90,9 @@ public class SnuffyApplication extends RenderApp {
         return FileUtils.getResourcesDir(this);
     }
 
-    @Nullable
-    public List<SnuffyPage> getSnuffyPages() {
-        return snuffyPages;
-    }
-
-    public void setSnuffyPages(@Nullable final List<SnuffyPage> pages) {
-        this.snuffyPages = pages;
-    }
-
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
-
     }
 }
