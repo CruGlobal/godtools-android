@@ -17,10 +17,10 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewConfigurationCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.SimpleOnPageChangeListener;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,8 +33,8 @@ import android.view.Window;
 import android.widget.FrameLayout;
 
 import com.google.common.base.Strings;
+import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 
-import org.ccci.gto.android.common.support.v4.adapter.ViewHolderPagerAdapter;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -77,8 +77,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 import static android.support.v4.app.FragmentManager.POP_BACK_STACK_INCLUSIVE;
-import static android.support.v4.view.PagerAdapter.POSITION_NONE;
-import static org.ccci.gto.android.common.support.v4.util.IdUtils.convertId;
 import static org.keynote.godtools.android.event.GodToolsEvent.EventID.SUBSCRIBE_EVENT;
 import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_EMAIL;
 import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_FIRST_NAME;
@@ -104,18 +102,17 @@ public class SnuffyPWActivity extends AppCompatActivity {
     private static final int DIALOG_PROCESS_PACKAGE_PROGRESS = 1;
 
     private final Set<String> mVisibleChildPages = new HashSet<>();
-    @BindView(R.id.snuffyViewPager)
-    ViewPager mPager;
+
 
     GtPagesPagerAdapter mPagerAdapter;
 
     @Nullable
     String mCurrentPageId;
-
+    private Unbinder mButterKnife;
     private String mAppPackage;
     private String mConfigFileName;
     private String mAppLanguage = ENGLISH_DEFAULT;
-    private Unbinder mButterKnife;
+
     private boolean mSetupRequired = true;
     private String mPackageStatus;
     private ProcessPackageAsync mProcessPackageAsync;
@@ -130,8 +127,13 @@ public class SnuffyPWActivity extends AppCompatActivity {
     @Nullable
     private GPage mAboutView;
 
+
+    @BindView(R.id.snuffyRecyclerView)
+    public RecyclerViewPager snuffyRecyclerView;
+
     /* BEGIN lifecycle */
     private ProgressDialog mProgressDialog;
+
 
     private String getLanguage() {
         return mAppLanguage;
@@ -275,18 +277,22 @@ public class SnuffyPWActivity extends AppCompatActivity {
     }
 
     private void setupViewPager() {
-        if (mPager != null) {
+        if (snuffyRecyclerView != null) {
             mPagerAdapter = new GtPagesPagerAdapter();
-            mPager.setAdapter(mPagerAdapter);
+            //snuffyRecyclerView.setAdapter(new GtPagesPagerAdapter());
+            LinearLayoutManager layout = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+            snuffyRecyclerView.setLayoutManager(layout);
+            snuffyRecyclerView.setAdapter(mPagerAdapter);
 
             // configure page change listener
-            mPager.addOnPageChangeListener(new SimpleOnPageChangeListener() {
+            snuffyRecyclerView.addOnPageChangedListener(new RecyclerViewPager.OnPageChangedListener() {
                 @Override
-                public void onPageSelected(int position) {
+                public void OnPageChanged(int oldPosition, int newPosition) {
+
 
                     //TODO: RM I don't fully understand this.
                     if (mCurrentPageId != null) {
-                        final GPage page = mPagerAdapter.getItemFromPosition(position); //TODO: forloops getItem(mCurrentPageId);
+                        final GPage page = mPagerAdapter.getItemFromPosition(newPosition); //TODO: forloops getItem(mCurrentPageId);
                         if (page != null) {
                             // trigger the exit page event
 
@@ -295,7 +301,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
                         }
                     }
 
-                    final GPage page = mPagerAdapter.getItemFromPosition(position);
+                    final GPage page = mPagerAdapter.getItemFromPosition(newPosition);
                     if (page != null) {
                         //TODO: RM track pages that turned, figure out need for onEnterPage()
                         /*final GtPage model = page.getModel();
@@ -315,8 +321,8 @@ public class SnuffyPWActivity extends AppCompatActivity {
                     // if the prayer pages are ever moved this will need to be updated.
                     //TODO: RM why is this here, this should be elsewhere.
                     if (settings.getInt(COUNT, 0) >= 3) {
-                        if ((mAppPackage.equalsIgnoreCase(KGP) && position == 7) ||
-                                (mAppPackage.equalsIgnoreCase(FOUR_LAWS) && position == 6)) {
+                        if ((mAppPackage.equalsIgnoreCase(KGP) && newPosition == 7) ||
+                                (mAppPackage.equalsIgnoreCase(FOUR_LAWS) && newPosition == 6)) {
                             Log.i(TAG, "App used 3 times and prayer page reached.");
                             GodToolsApiClient.updateNotification(
                                     settings.getString(AUTH_CODE, ""), regid, NotificationInfo.AFTER_1_PRESENTATION,
@@ -335,15 +341,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
                                     });
                         }
                     }
-                }
 
-                @Override
-                public void onPageScrollStateChanged(final int state) {
-                    /*switch (state) {
-                        case ViewPager.SCROLL_STATE_IDLE:
-                            clearNotVisibleChildPages();
-                            break;
-                    }*/
                 }
             });
         }
@@ -486,7 +484,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
     }
 
     private void showPage(@Nullable final String id) {
-        if (mPager != null && mPagerAdapter != null && id != null) {
+        /*if (snuffyRecyclerView != null && mPagerAdapter != null && id != null) {
             // are we trying to show the currently active page?
 //            if (TextUtils.equals(id, mCurrentPageId)) {
 //                final GPage page = mPagerAdapter.getItemFromPosition(Integer.parseInt(mCurrentPageId));
@@ -494,9 +492,12 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
             final int position = mPagerAdapter.getItemPositionFromId(convertId(id));
             if (position != POSITION_NONE) {
-                mPager.setCurrentItem(position);
+                RecyclerView.LayoutManager layoutManager = snuffyRecyclerView.getLayoutManager();
+                layoutManager.scrollToPosition(position);
+                //setCurrentItem(position);
             }
         }
+        */
     }
 
 //    void clearNotVisibleChildPages() {
@@ -542,7 +543,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
     void doSetup() {
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                if (mPager != null) {
+                if (snuffyRecyclerView != null) {
 
                         // trigger the actual load of pages
                         mProcessPackageAsync = new ProcessPackageAsync();
@@ -562,12 +563,12 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }*/
 
         // track a page view of the most recently loaded page
-        final GtPagesPagerAdapter.ViewHolder holder = mPagerAdapter.getPrimaryItem();
-        if (holder != null) {
-            Diagnostics.StartMethodTracingByKey("Tracker");
-            trackPageView(mPagerAdapter.getItemFromPosition(0));
-            Diagnostics.StopMethodTracingByKey("Tracker");
-        }
+//        final GtPagesPagerAdapter.ViewHolder holder = mPagerAdapter.getPrimaryItem();
+//        if (holder != null) {
+//            Diagnostics.StartMethodTracingByKey("Tracker");
+//            trackPageView(mPagerAdapter.getItemFromPosition(0));
+//            Diagnostics.StopMethodTracingByKey("Tracker");
+//        }
 
         addClickHandlersToAllPages();
     }
@@ -620,7 +621,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
             messageBody = getString(R.string.satisfied_share);
         }
 
-        final int currItem = mPager.getCurrentItem();
+        final int currItem = snuffyRecyclerView.getCurrentPosition();
         if (currItem > 0) {
             // http://www.knowgod.com/en/kgp/5
             shareLink = shareLink + "/" + String.valueOf(currItem);
@@ -652,7 +653,8 @@ public class SnuffyPWActivity extends AppCompatActivity {
         switch (requestCode) {
             case 0: // Show Page Menu
             {
-                mPager.setCurrentItem(resultCode - RESULT_FIRST_USER);
+                snuffyRecyclerView.getLayoutManager().scrollToPosition(resultCode - RESULT_FIRST_USER);
+                //setCurrentItem(resultCode - RESULT_FIRST_USER);
                 break;
             }
         }
@@ -756,7 +758,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
     //TODO: RM need to figure out the functions of this.n
     private void refreshPage() {
-        final GtPagesPagerAdapter.ViewHolder currentView = mPagerAdapter.getPrimaryItem();
+        //final GtPagesPagerAdapter.ViewHolder currentView = mPagerAdapter.getPrimaryItem();
         //final GPage currentPage = currentView != null ? currentView.mPage : null;
         //final String pageUuid = currentPage != null ? currentPage.getModel().getUuid() : null;
 
@@ -858,12 +860,19 @@ public class SnuffyPWActivity extends AppCompatActivity {
         Log.i(TAG, "Timer scheduled");
     }
 
-    static class GtPagesPagerAdapter extends ViewHolderPagerAdapter<GtPagesPagerAdapter.ViewHolder> {
+
+    static class GtPagesPagerAdapter extends RecyclerView.Adapter<SnuffyPWActivity.ViewHolder> {
 
         private List<GPage> mPages = new ArrayList<>();
 
         public GtPagesPagerAdapter() {
             setHasStableIds(true);
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new ViewHolder(LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.page_gt_page_frame, parent, false));
         }
 
         public void addPages(GPage page)
@@ -880,20 +889,25 @@ public class SnuffyPWActivity extends AppCompatActivity {
         @Override
         public long getItemId(final int position) {
             //TODO:// FIXME: 12/19/2016
-            return position; //convertId(mPages.get(position).getModel().getId());
+            return position;
         }
 
         @Override
-        protected int getItemPositionFromId(final long id) {
-            /*for (int i = 0; i < mPages.size(); i++) {
-                if (convertId(mPages.get(i).getModel().getId()) == id) {
-                    return i;
-                }
-            }*/
-            return (int) id;
-            //return POSITION_NONE;
-
+        public int getItemCount() {
+            return mPages.size();
         }
+
+//        @Override
+//        protected int getItemPositionFromId(final long id) {
+//            /*for (int i = 0; i < mPages.size(); i++) {
+//                if (convertId(mPages.get(i).getModel().getId()) == id) {
+//                    return i;
+//                }
+//            }*/
+//            return (int) id;
+//            //return POSITION_NONE;
+//
+//        }
 
         /*
             TODO: no for loops
@@ -907,28 +921,17 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
 
 
-        @Override
-        public int getCount() {
-            return mPages.size();
-        }
-
-        @NonNull
-        @Override
-        protected ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.page_gt_page_frame, parent, false));
-        }
 
         @Override
-        protected void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-            super.onBindViewHolder(holder, position);
+        public void onBindViewHolder(@NonNull final SnuffyPWActivity.ViewHolder holder, final int position) {
+
 
             /*
                 TODO: This is duplicating business object.
              */
             //holder.mPage = mPages.get(position);
 
-            if (holder.mContentContainer != null) {
+            //if (holder.mContentContainer != null) {
                 // remove any previous page from the content container
                 /* This might be costly  */
                 //holder.mContentContainer.removeAllViews();
@@ -939,31 +942,33 @@ public class SnuffyPWActivity extends AppCompatActivity {
                 RenderSingleton.getInstance().addGlobalColor(position, itemFromPosition.getBackgroundColor());
                 itemFromPosition.render(LayoutInflater.from(holder.mContentContainer.getContext()),
                         holder.mContentContainer, position);
-            }
+            //}
         }
 
-        @Override
-        protected void onViewRecycled(@NonNull final ViewHolder holder) {
-            super.onViewRecycled(holder);
-            //holder.mPage = null;
-            //TODO: this will have a bad effect with rotation and possible timing issues with home, backbuttons.  This is possible memory leak.
-            if (holder.mContentContainer != null) {
-                holder.mContentContainer.removeAllViews();
-
-            }
-        }
-
-        static final class ViewHolder extends ViewHolderPagerAdapter.ViewHolder {
+//        @Override
+//        protected void onViewRecycled(@NonNull final ViewHolder holder) {
+//            super.onViewRecycled(holder);
+//            //holder.mPage = null;
+//            //TODO: this will have a bad effect with rotation and possible timing issues with home, backbuttons.  This is possible memory leak.
+//            if (holder.mContentContainer != null) {
+//                holder.mContentContainer.removeAllViews();
+//
+//            }
+//        }
 
 
-            @Nullable
-            @BindView(R.id.pageContainer)
-            FrameLayout mContentContainer;
+    }
 
-            ViewHolder(@NonNull View view) {
-                super(view);
-                ButterKnife.bind(this, view);
-            }
+    static final class ViewHolder extends RecyclerViewPager.ViewHolder {
+
+
+
+        @BindView(R.id.pageContainer)
+        FrameLayout mContentContainer;
+
+        ViewHolder(@NonNull View view) {
+            super(view);
+            ButterKnife.bind(this, view);
         }
     }
 
