@@ -232,7 +232,7 @@ public class RenderConstants {
         }
         /*for (GCoordinator tap : GCoordinatorArrayList) {
             tap.render(inflater, midSection, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
-            space = new Space(inflater.getContext());
+            space = newnew Space(inflater.getContext());
             if (!tap.isManuallyLaidOut()) {
                 midSection.addView(space, evenSpreadDownSpaceLayoutParams);
             }
@@ -240,7 +240,7 @@ public class RenderConstants {
             tap.render(inflater, tap.y == null ? midSection : viewGroup, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
             if (!tap.isManuallyLaidOut()) //If items are manually laid out, we don't want to add space between them.
             {
-                space = new Space(inflater.getContext());
+                space = newnew Space(inflater.getContext());
                 midSection.addView(space, evenSpreadDownSpaceLayoutParams);
             }
             */

@@ -24,7 +24,7 @@ import io.fabric.sdk.android.Fabric;
 
 public class SnuffyApplication extends RenderApp {
 
-    public String packageTitle;
+
 
     @Override
     public void onCreate() {

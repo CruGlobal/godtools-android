@@ -92,7 +92,7 @@ public class PackageManager {
                 return cached;
             }
 
-            // create a new future for this request (and cache it before starting to process)
+            // create a newnew future for this request (and cache it before starting to process)
             resp = SettableFuture.create();
             mCache.put(manifestFileName, resp);
         }

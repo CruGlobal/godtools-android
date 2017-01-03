@@ -267,7 +267,7 @@ public class OptRoundCardView extends FrameLayout implements CardViewDelegate {
     /**
      * Updates the background color of the CardView
      *
-     * @param color The new color to set for the card background
+     * @param color The newnew color to set for the card background
      * @attr ref android.support.v7.cardview.R.styleable#CardView_cardBackgroundColor
      */
     public void setCardBackgroundColor(int color) {

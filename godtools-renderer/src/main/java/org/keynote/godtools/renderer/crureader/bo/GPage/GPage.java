@@ -173,22 +173,22 @@ public class GPage extends GCoordinator {
                 tv.setTextColor(Color.BLACK);
                 tv.setPadding(20, 20, 20, 20);
 
-                PercentRelativeLayout.LayoutParams slidingViewLayoutParams = new PercentRelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                PercentRelativeLayout.LayoutParams slidingViewLayoutParams = newnew PercentRelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 slidingViewLayoutParams.addRule(PercentRelativeLayout.BELOW, topId);
                 slidingViewLayoutParams.getPercentLayoutInfo().rightMarginPercent = GTitle.DEFAULT_RIGHT_MARGIN + .02f;
-                OptRoundCardView cv = new OptRoundCardView(context);
+                OptRoundCardView cv = newnew OptRoundCardView(context);
                 cv.showCorner(false, false, false, true);
                 cv.setRadius(GTitle.TITLE_CORNER_RADIUS - 10);
                 //cv.setShadowPadding(10, 10, 10, 10);
                 cv.setCardElevation(GTitle.TITLE_ELEVATION - 10);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                    cv.setLayoutTransition(new LayoutTransition());
+                    cv.setLayoutTransition(newnew LayoutTransition());
                 }
 
                 cv.setMinimumHeight(60);
                 cv.setCardBackgroundColor(Color.WHITE);
-                cv.addView(tv, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                View.OnClickListener slidingPanelOnClickListener = new View.OnClickListener() {
+                cv.addView(tv, newnew FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                View.OnClickListener slidingPanelOnClickListener = newnew View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (tv.getVisibility() == View.VISIBLE) {
