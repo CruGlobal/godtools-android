@@ -121,7 +121,7 @@ public class GPage extends GCoordinator {
                 midSectionId = RenderConstants.renderLinearLayoutList(inflater, percentRelativeLayout, GCoordinatorArrayList, position);
             }
             else {
-                midSectionId = RenderConstants.renderLinearLayoutListWeighted(inflater, percentRelativeLayout, GCoordinatorArrayList, position);
+                midSectionId = RenderConstants.renderLinearLayoutListWeighted(inflater, percentRelativeLayout, GCoordinatorArrayList, position, 0);
             }
             if (topId > 0)
                 ((RelativeLayout.LayoutParams) percentRelativeLayout.findViewById(midSectionId).getLayoutParams()).addRule(PercentRelativeLayout.BELOW, topId);
