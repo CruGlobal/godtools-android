@@ -83,7 +83,6 @@ import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_FIRST
 import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_LAST_NAME;
 import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_NAME;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
-import static org.keynote.godtools.android.utils.Constants.COUNT;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
@@ -272,7 +271,8 @@ public class SnuffyPWActivity extends AppCompatActivity {
             LinearLayoutManager layout = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
             snuffyRecyclerView.setLayoutManager(layout);
             snuffyRecyclerView.setAdapter(mPagerAdapter);
-            snuffyRecyclerView.setItemViewCacheSize(0);
+
+            snuffyRecyclerView.setHasFixedSize(true);
             // configure page change listener
             snuffyRecyclerView.addOnPageChangedListener(new RecyclerViewPager.OnPageChangedListener() {
                 @Override
@@ -280,7 +280,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
 
                     //TODO: RM I don't fully understand this.
-                    if (mCurrentPageId != null) {
+                    /*if (mCurrentPageId != null) {
                         final GPage page = mPagerAdapter.getItemFromPosition(newPosition); //TODO: forloops getItem(mCurrentPageId);
                         if (page != null) {
                             // trigger the exit page event
@@ -288,10 +288,10 @@ public class SnuffyPWActivity extends AppCompatActivity {
                             //TODO: RM trigger onExitPage();
                             //page.onExitPage();
                         }
-                    }
+                    }*/
 
-                    final GPage page = mPagerAdapter.getItemFromPosition(newPosition);
-                    if (page != null) {
+                    /*final GPage page = mPagerAdapter.getItemFromPosition(newPosition);
+                    if (page != null) {*/
                         //TODO: RM track pages that turned, figure out need for onEnterPage()
                         /*final GtPage model = page.getModel();
 
@@ -302,14 +302,16 @@ public class SnuffyPWActivity extends AppCompatActivity {
                         // trigger the enter page event
                         page.onEnterPage();
                         */
-                    }
+                    /*}*/
 
                     // This notification has been updated to only be sent after the app has been opened 3 times
                     // The api will only send a notice once, so it can be sent from here multiple times.
 
                     // if the prayer pages are ever moved this will need to be updated.
                     //TODO: RM why is this here, this should be elsewhere.
-                    if (settings.getInt(COUNT, 0) >= 3) {
+
+
+                    /* if (settings.getInt(COUNT, 0) >= 3) {
                         if ((mAppPackage.equalsIgnoreCase(KGP) && newPosition == 7) ||
                                 (mAppPackage.equalsIgnoreCase(FOUR_LAWS) && newPosition == 6)) {
                             Log.i(TAG, "App used 3 times and prayer page reached.");
@@ -329,7 +331,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
                                         }
                                     });
                         }
-                    }
+                    }*/
 
                 }
             });
@@ -338,17 +340,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
     }
 
 
-    /*private void cleanupViewPager() {
-        if (mPager != null) {
-            mPager.setAdapter(null);
-            mPagerAdapter = null;
-        }
-    }*/
 
-//    private void updateAppPages() {
-//        final SnuffyApplication app = getApp();
-//
-//    }
 
     @WorkerThread
     private void processSubscriberEvent(@NonNull final GodToolsEvent event) {
@@ -854,6 +846,11 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
         private List<GPage> mPages = new ArrayList<>();
 
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+
         public GtPagesPagerAdapter() {
             setHasStableIds(true);
         }
@@ -939,6 +936,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
                 // attach the current page to the content container;
                 GPage itemFromPosition = getItemFromPosition(position);
                 //TODO:
+
                 RenderSingleton.getInstance().addGlobalColor(position, itemFromPosition.getBackgroundColor());
                 itemFromPosition.render(LayoutInflater.from(holder.mContentContainer.getContext()),
                         holder.mContentContainer, position);
