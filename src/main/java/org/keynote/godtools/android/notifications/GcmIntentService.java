@@ -45,7 +45,7 @@ public class GcmIntentService extends IntentService
         {  // has effect of unparcelling Bundle
             /*
              * Filter messages based on message type. Since it is likely that GCM will be
-             * extended in the future with new message types, just ignore any message types you're
+             * extended in the future with newnew message types, just ignore any message types you're
              * not interested in, or that you don't recognize.
              */
             if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType))

@@ -53,7 +53,7 @@ public class SnuffyPageMenuPWActivity extends ListActivity
         mFromAssets = false;
         mFilesDir = app.getResourcesDir().getPath();
 
-        setTitle(app.packageTitle);
+        setTitle(RenderSingleton.getInstance().getGDocument().packagename.content);
 
         HashMap<String, Object> map;
 
