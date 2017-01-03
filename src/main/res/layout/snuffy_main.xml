@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         app:rvp_singlePageFling="true"
-        app:rvp_triggerOffset="0.1"/>
+        app:rvp_triggerOffset="0.0"/>
 
     <RelativeLayout
         android:id="@+id/updatingDraft"
