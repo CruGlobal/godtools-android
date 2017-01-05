@@ -132,24 +132,9 @@ public class SnuffyPWActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.snuffy_main);
         mButterKnife = ButterKnife.bind(this);
-//        snuffyRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(int newState) {
-//                if(newState == RecyclerView.SCROLL_STATE_IDLE) {
-//                    // special handler to avoid displaying half elements
-//                    scrollToNext();
-//                }
-//                animate();
-//            }
-//
-//            @Override
-//            public void onScrolled(int dx, int dy) {
-//                animate();
-//            }
-//        });
+
         setupActionBar();
         setupViewPager();
 
@@ -279,8 +264,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
             snuffyRecyclerView.setLayoutManager(layout);
             snuffyRecyclerView.setAdapter(mPagerAdapter);
 
-            SnapHelper helper = new PagerSnapHelper()
-            {
+            SnapHelper helper = new PagerSnapHelper() {
 
             };
 
@@ -1045,6 +1029,9 @@ public class SnuffyPWActivity extends AppCompatActivity {
 //        }
 //    }
 
+
+    private void
+
     private class ProcessPackageAsync extends AsyncTask<String, Integer, List<GPage>>
             implements ProgressCallback {
 
@@ -1072,7 +1059,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
             try {
                 File f = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), mConfigFileName);
 
-                RenderSingleton.getInstance().setGDocument(XMLUtil.parseGDocument(SnuffyPWActivity.this.getBaseContext(), f));
+                RenderSingleton.getInstance().setGDocument(XMLUtil.parseGDocument(f));
 
                 GDocument gDocument = RenderSingleton.getInstance().getGDocument();
                 for (int i = 0; i < gDocument.pages.size(); i++) {
@@ -1081,7 +1068,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
                     File fileForGDP = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), gdp.filename);
 
                     if (i == 0) {
-                        final GPage gPage = XMLUtil.parseGPage(SnuffyPWActivity.this, fileForGDP);
+                        final GPage gPage = XMLUtil.parseGPage(fileForGDP);
                         SnuffyPWActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -1091,7 +1078,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
                             }
                         });
                     } else {
-                        final GPage gPage = XMLUtil.parseGPage(SnuffyPWActivity.this, fileForGDP);
+                        final GPage gPage = XMLUtil.parseGPage(fileForGDP);
                         SnuffyPWActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
