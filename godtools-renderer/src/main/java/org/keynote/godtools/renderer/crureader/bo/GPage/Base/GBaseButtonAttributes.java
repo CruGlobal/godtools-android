@@ -23,7 +23,7 @@ public abstract class GBaseButtonAttributes extends GCoordinator {
     public String tapEvents;
 
     public enum ButtonMode {
-        big, url, allurl, email, link
+        big, url, allurl, email, phone, link
     }
 
 

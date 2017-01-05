@@ -50,7 +50,6 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     GCoordinator gPanel;
 
     private float Y;
-    private int distanceToBottomOfScreen;
     private boolean fixed = false;
     private int screenHeight;
     private String title;

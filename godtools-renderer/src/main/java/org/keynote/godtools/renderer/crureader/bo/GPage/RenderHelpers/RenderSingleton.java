@@ -1,16 +1,25 @@
 package org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.util.SparseArray;
+import android.view.View;
 
+import org.keynote.godtools.renderer.crureader.AlertDialogActivity;
+import org.keynote.godtools.renderer.crureader.BaseAppConfig;
+import org.keynote.godtools.renderer.crureader.R;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocument;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttributes;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 import org.keynote.godtools.renderer.crureader.bo.GPage.GPage;
 
 import java.util.Hashtable;
 import java.util.List;
+
+import static org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttributes.ButtonMode.phone;
 
 /**
  * Created by rmatt on 11/16/2016.
@@ -23,7 +32,6 @@ public class RenderSingleton {
 
     private static RenderSingleton renderSingleton;
     public SparseArray<GCoordinator> gPanelHashMap = new SparseArray<GCoordinator>();
-    private Hashtable<String, Long> methodTraceMilliSecondsKeyMap = new Hashtable<String, Long>();
     /*
     Current View pager location.
      */
@@ -42,15 +50,43 @@ public class RenderSingleton {
     int screenWidth;
     int screenHeight;
     float screenDensity;
-
-
+    private Hashtable<String, Long> methodTraceMilliSecondsKeyMap = new Hashtable<String, Long>();
     private Context context;
-
     /*
     Currently rendered GDocument
      */
     private GDocument GDocument;
     private List<GPage> pages;
+    private BaseAppConfig baseAppConfig;
+    View.OnClickListener mLinksOnClick = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            final GBaseButtonAttributes.ButtonMode mode = GBaseButtonAttributes.ButtonMode.valueOf((String) v.getTag(R.id.button_mode));
+            final String content = (String) v.getTag(R.id.button_content);
+
+            switch (mode) {
+
+                case email:
+
+                case phone:
+
+                    String urlScheme = mode == phone ? "tel:" : "mailto:";
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlScheme + content));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    RenderSingleton.getInstance().getContext().startActivity(intent);
+                    break;
+
+                default:
+                    Intent i = new Intent(RenderSingleton.getInstance().getContext(), AlertDialogActivity.class);
+                    i.putExtra(AlertDialogActivity.CONSTANTS_ALERT_DIALOG_CONTENT_STRING_EXTRA, content);
+                    i.putExtra(AlertDialogActivity.CONSTANTS_ALERT_DIALOG_MODE_STRING_EXTRA, mode.toString());
+                    RenderSingleton.getInstance().getContext().startActivity(i);
+                    break;
+            }
+
+        }
+    };
 
     private RenderSingleton(Context context) {
         this.context = context;
@@ -107,15 +143,23 @@ public class RenderSingleton {
         this.GDocument = GDocument;
     }
 
-    public void setPages(List<GPage> pages) {
-        this.pages = pages;
-    }
-
     public GPage getPages(int mPosition) {
         return pages.get(mPosition);
     }
 
     public List<GPage> getPages() {
         return pages;
+    }
+
+    public void setPages(List<GPage> pages) {
+        this.pages = pages;
+    }
+
+    public void setBaseAppConfig(BaseAppConfig baseAppConfig) {
+        this.baseAppConfig = baseAppConfig;
+    }
+
+    public BaseAppConfig getAppConfig() {
+        return baseAppConfig;
     }
 }
