@@ -3,7 +3,9 @@ buildscript {
 
         mavenLocal()
         jcenter()
-        maven { url 'https://maven.fabric.io/public' }
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
@@ -36,7 +38,7 @@ ext.deps = [
 ]
 
 dependencies {
-    compile 'com.android.support:multidex:1.0.1'
+
     compile 'com.android.support:appcompat-v7:' + deps.androidSupport
     compile 'com.android.support:support-annotations:' + deps.androidSupport
     compile 'com.android.support:design:' + deps.androidSupport
@@ -57,8 +59,8 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:' + deps.retrofit2
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'org.greenrobot:eventbus:3.0.0'
-    debugCompile 'com.facebook.stetho:stetho:' + deps.facebookStetho
-    debugCompile 'com.facebook.stetho:stetho-okhttp3:' + deps.facebookStetho
+//    debugCompile 'com.facebook.stetho:stetho:' + deps.facebookStetho
+//    debugCompile 'com.facebook.stetho:stetho-okhttp3:' + deps.facebookStetho
     androidTestCompile 'com.android.support.test:runner:' + deps.androidTestingSupport
     androidTestCompile 'com.android.support.test:rules:' + deps.androidTestingSupport
     androidTestCompile 'com.android.support:support-annotations:' + deps.androidSupport

@@ -336,6 +336,7 @@ public class RenderConstants {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             RenderSingleton.getInstance().getContext().startActivity(Intent.createChooser(intent, RenderSingleton.getInstance().getAppConfig().getChooseYourEmailProvider()));
         } catch (Exception e) { //TODO: this is bad practice all of these should be removed and defensive coding should be used, discuss with team.
+            //TODO: discussed, but hook from crashlytics register into renderer singleton.
             showErrorDialog(RenderSingleton.getInstance().getAppConfig().getCannotSendEmail());
         }
     }

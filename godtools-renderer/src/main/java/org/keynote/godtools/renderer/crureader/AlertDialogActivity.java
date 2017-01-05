@@ -63,10 +63,12 @@ public class AlertDialogActivity extends Activity {
             builder.setPositiveButton(RenderSingleton.getInstance().getAppConfig().getOpenString(),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+
                             String urlScheme = "http://"; // bUrlMode
                             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlScheme + content));
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             RenderSingleton.getInstance().getContext().startActivity(intent);
+
                         }
                     });
         }

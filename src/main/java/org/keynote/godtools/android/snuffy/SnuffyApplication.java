@@ -1,20 +1,13 @@
 package org.keynote.godtools.android.snuffy;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.newrelic.agent.android.NewRelic;
 
 import org.keynote.godtools.android.BuildConfig;
-import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.RenderAppConfig;
 import org.keynote.godtools.android.utils.FileUtils;
 import org.keynote.godtools.renderer.crureader.BaseAppConfig;
@@ -52,23 +45,7 @@ public class SnuffyApplication extends RenderApp {
         return new RenderAppConfig();
     }
 
-    public void sendEmailWithContent(Activity callingActivity, String subjectLine, String msgBody) {
-        try {
-            Intent intent = new Intent(Intent.ACTION_SENDTO);
-            intent.setData(Uri.parse("mailto:"));
-            intent.putExtra(Intent.EXTRA_SUBJECT, subjectLine);
-            intent.putExtra(Intent.EXTRA_TEXT, msgBody);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            callingActivity.startActivity(Intent.createChooser(intent, getApplicationContext().getString(R.string.choose_your_email_provider)));
-        } catch (Exception e) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(callingActivity);
-            builder.setMessage(R.string.unable_to_send_the_email)
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.ok, null);
-            AlertDialog alert = builder.create();
-            alert.show();
-        }
-    }
+
 
     public File getDocumentsDir() {
         File documentsDir = null;
@@ -97,9 +74,9 @@ public class SnuffyApplication extends RenderApp {
         return FileUtils.getResourcesDir(this);
     }
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
+//    @Override
+//    protected void attachBaseContext(Context base) {
+//        super.attachBaseContext(base);
+//        MultiDex.install(this);
+//    }
 }
