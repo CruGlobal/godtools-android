@@ -145,6 +145,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
         Diagnostics.StartMethodTracingByKey("langPara");
         // get package if parallel language is set
+
         if (!langParallel.isEmpty()) {
             isParallelLanguageSet = true;
             //noinspection WrongThread

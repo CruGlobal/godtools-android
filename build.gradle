@@ -3,7 +3,9 @@ buildscript {
 
         mavenLocal()
         jcenter()
-        maven { url 'https://maven.fabric.io/public' }
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
@@ -24,19 +26,19 @@ version '4.2.1-SNAPSHOT'
 
 // define dependency versions for this project
 ext.deps = [
-        androidSupport       : '25.1.0',
+        androidSupport: '25.1.0',
         androidTestingSupport: '0.5',
-        butterknife          : '8.0.1',
-        facebookStetho       : '1.3.1',
-        gtoSupport           : '0.9.0',
-        guava                : '19.0',
-        junit                : '4.12',
-        playServices         : '8.4.0',
-        retrofit2            : '2.0.2'
+        butterknife: '8.0.1',
+        facebookStetho: '1.3.1',
+        gtoSupport: '0.9.0',
+        guava: '19.0',
+        junit: '4.12',
+        playServices: '8.4.0',
+        retrofit2: '2.0.2'
 ]
 
 dependencies {
-    compile 'com.android.support:multidex:1.0.1'
+
     compile 'com.android.support:appcompat-v7:' + deps.androidSupport
     compile 'com.android.support:support-annotations:' + deps.androidSupport
     compile 'com.android.support:design:' + deps.androidSupport
@@ -55,8 +57,8 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:' + deps.retrofit2
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'org.greenrobot:eventbus:3.0.0'
-    debugCompile 'com.facebook.stetho:stetho:' + deps.facebookStetho
-    debugCompile 'com.facebook.stetho:stetho-okhttp3:' + deps.facebookStetho
+//    debugCompile 'com.facebook.stetho:stetho:' + deps.facebookStetho
+//    debugCompile 'com.facebook.stetho:stetho-okhttp3:' + deps.facebookStetho
     androidTestCompile 'com.android.support.test:runner:' + deps.androidTestingSupport
     androidTestCompile 'com.android.support.test:rules:' + deps.androidTestingSupport
     androidTestCompile 'com.android.support:support-annotations:' + deps.androidSupport
