@@ -56,11 +56,12 @@ public class GButton extends GBaseButtonAttributes {
 
         if (mode != null && mode == ButtonMode.big) {
             return methodBig(inflater, viewGroup, position);
-        } else if (mode != null && mode == ButtonMode.url) {
+        }
+        if (mode == null) {
 
-            return methodURL(inflater, viewGroup, position);
-        } else {
             return methodDefault(inflater, viewGroup, position);
+        } else {
+            return methodURL(inflater, viewGroup, position);
         }
 
     }
