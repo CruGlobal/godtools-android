@@ -35,7 +35,6 @@ import android.view.Window;
 import android.widget.FrameLayout;
 
 import com.google.common.base.Strings;
-import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -927,7 +926,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
     }
 
-    static final class ViewHolder extends RecyclerViewPager.ViewHolder {
+    static final class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.pageContainer)
         FrameLayout mContentContainer;
