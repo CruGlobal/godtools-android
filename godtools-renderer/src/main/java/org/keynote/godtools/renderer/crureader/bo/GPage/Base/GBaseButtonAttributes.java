@@ -26,8 +26,4 @@ public abstract class GBaseButtonAttributes extends GCoordinator {
         big, url, allurl, email, phone, link
     }
 
-
-
-
-
 }

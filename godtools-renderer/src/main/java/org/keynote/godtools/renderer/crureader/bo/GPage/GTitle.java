@@ -14,6 +14,7 @@ import org.keynote.godtools.renderer.crureader.R;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseTextAttributes;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Compat.RenderViewCompat;
+import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -64,6 +65,7 @@ public class GTitle extends GCoordinator {
                 autoScaleTextView.setId(RenderViewCompat.generateViewId());
                 peekPanelRoundCardView.setId(RenderViewCompat.generateViewId());
                 headerTopRoundCardView.setId(RenderViewCompat.generateViewId());
+                autoScaleTextView.setTextColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
                 ((PercentRelativeLayout.LayoutParams) peekPanelRoundCardView.getLayoutParams()).addRule(RelativeLayout.BELOW, headerTopRoundCardView.getId());
                 if (peekPanel != null) {
                     peekPanel.updateBaseAttributes(autoScaleTextView);
