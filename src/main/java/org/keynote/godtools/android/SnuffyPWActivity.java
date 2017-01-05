@@ -66,17 +66,14 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSing
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 import static android.support.v4.app.FragmentManager.POP_BACK_STACK_INCLUSIVE;
 import static org.keynote.godtools.android.event.GodToolsEvent.EventID.SUBSCRIBE_EVENT;
@@ -101,13 +98,11 @@ public class SnuffyPWActivity extends AppCompatActivity {
     private static final String TAG_FOLLOWUP_MODAL = "followupModal";
     private static final int DIALOG_PROCESS_PACKAGE_PROGRESS = 1;
 
-    private final Set<String> mVisibleChildPages = new HashSet<>();
     @BindView(R.id.snuffyRecyclerView)
     public RecyclerView snuffyRecyclerView;
     GtPagesPagerAdapter mPagerAdapter;
     @Nullable
     String mCurrentPageId;
-    private Unbinder mButterKnife;
     private String mAppPackage;
     private String mConfigFileName;
     private String mAppLanguage = ENGLISH_DEFAULT;
@@ -133,13 +128,9 @@ public class SnuffyPWActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.snuffy_main);
-        mButterKnife = ButterKnife.bind(this);
+        ButterKnife.bind(this);
 
         setupActionBar();
-        setupViewPager();
-
-        Log.i("Activity", "SnuffyPWActivity");
-
         mAppPackage = getIntent().getStringExtra("PackageName");        // "kgp"
         mAppLanguage = getIntent().getStringExtra("LanguageCode");      // "en"
         mConfigFileName = getIntent().getStringExtra("ConfigFileName");
@@ -203,14 +194,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Event triggered whenever a newnew set of pages is loaded.
-     *
-     * @param pages the Pages that were just loaded.
-     */
-    void onPagesLoaded(@Nullable final List<GPage> pages) {
-        updateDisplayedPages(pages);
-    }
 
     @Subscribe
     public void onNavigationEvent(@NonNull final GodToolsEvent event) {
@@ -256,20 +239,21 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
     }
 
+    private void initializeAdapter(GPage page)
+    {
+        mPagerAdapter = new GtPagesPagerAdapter(page);
+        LinearLayoutManager layout = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        snuffyRecyclerView.setLayoutManager(layout);
+        SnapHelper helper = new PagerSnapHelper();
+        helper.attachToRecyclerView(snuffyRecyclerView);
+        snuffyRecyclerView.setHasFixedSize(true);
+        snuffyRecyclerView.setAdapter(mPagerAdapter);
+
+    }
+
     private void setupViewPager() {
         if (snuffyRecyclerView != null) {
-            mPagerAdapter = new GtPagesPagerAdapter();
-            //snuffyRecyclerView.setAdapter(new GtPagesPagerAdapter());
-            LinearLayoutManager layout = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-            snuffyRecyclerView.setLayoutManager(layout);
-            snuffyRecyclerView.setAdapter(mPagerAdapter);
 
-            SnapHelper helper = new PagerSnapHelper() {
-
-            };
-
-            helper.attachToRecyclerView(snuffyRecyclerView);
-            snuffyRecyclerView.setHasFixedSize(true);
             // configure page change listener
 //            snuffyRecyclerView.addOnPageChangedListener(new RecyclerViewPager.OnPageChangedListener() {
 //                @Override
@@ -838,7 +822,8 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
         private List<GPage> mPages = new ArrayList<>();
 
-        public GtPagesPagerAdapter() {
+        public GtPagesPagerAdapter(GPage gPage) {
+            mPages.add(gPage);
             setHasStableIds(true);
         }
 
@@ -1030,14 +1015,10 @@ public class SnuffyPWActivity extends AppCompatActivity {
 //    }
 
 
-    private void
 
     private class ProcessPackageAsync extends AsyncTask<String, Integer, List<GPage>>
             implements ProgressCallback {
 
-        public ProcessPackageAsync() {
-
-        }
 
         @Override
         protected void onPreExecute() {
@@ -1072,9 +1053,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
                         SnuffyPWActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                List<GPage> pages = new ArrayList<>();
-                                pages.add(gPage);
-                                onPagesLoaded(pages);
+                                initializeAdapter(gPage);
                             }
                         });
                     } else {

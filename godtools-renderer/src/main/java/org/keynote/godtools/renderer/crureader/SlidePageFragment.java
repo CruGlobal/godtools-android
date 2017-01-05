@@ -58,7 +58,7 @@ public class SlidePageFragment extends Fragment {
         try {
             if(mXmlDocumentId != null && !mXmlDocumentId.equalsIgnoreCase("")) {
                 Log.w(TAG, "XMLDocument: " + mXmlDocumentId);
-                mGPage = XMLUtil.parseGPage(this.getActivity(), new File(mXmlDocumentId));
+                mGPage = XMLUtil.parseGPage(new File(mXmlDocumentId));
             }
             else
             {
