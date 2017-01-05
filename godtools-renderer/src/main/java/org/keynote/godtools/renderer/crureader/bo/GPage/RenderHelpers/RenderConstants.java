@@ -1,12 +1,14 @@
 package org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -23,6 +25,7 @@ import android.widget.TextView;
 
 import org.keynote.godtools.renderer.crureader.PopupDialogActivity;
 import org.keynote.godtools.renderer.crureader.R;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttributes;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GModal;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Compat.RenderViewCompat;
@@ -73,6 +76,7 @@ public class RenderConstants {
     static View.OnClickListener onClick = new View.OnClickListener() {
 
         public void onClick(View view) {
+
             final LinearLayout ll = (LinearLayout) view;
             Context context = view.getContext();
             int distanceTooTop = ll.getTop() + ((View) ll.getParent()).getTop();
@@ -84,9 +88,9 @@ public class RenderConstants {
             intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_HASH_KEY_INT_EXTRA, ll.getId());
             intent.putExtra(PopupDialogActivity.CONSTANTS_PANEL_TITLE_STRING_EXTRA, ll.getTag() != null ? ll.getTag().toString() : null);
             intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_LOCATION, ll.getTag(R.id.imageurl_tag) != null ? ll.getTag(R.id.imageurl_tag).toString() : null);
-            intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_WIDTH_INT_EXTRA, (int) ll.getTag(R.id.image_width));
-            intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_HEIGHT_INT_EXTRA, (int) ll.getTag(R.id.image_height));
-            intent.putExtra(PopupDialogActivity.CONSTANTS_POSITION_INT_EXTRA, (int)ll.getTag(R.id.position));
+            intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_WIDTH_INT_EXTRA, view.getMeasuredWidth());
+            intent.putExtra(PopupDialogActivity.CONSTANTS_IMAGE_HEIGHT_INT_EXTRA, view.getMeasuredHeight());
+            intent.putExtra(PopupDialogActivity.CONSTANTS_POSITION_INT_EXTRA, (int) ll.getTag(R.id.position));
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
@@ -198,35 +202,29 @@ public class RenderConstants {
         LinearLayout.LayoutParams evenSpreadDownSpaceLayoutParams;
         evenSpreadDownSpaceLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, maxSpace, 1.0f); //max space is to deal with popups that shouldn't take up the whole container.
 
-       // if(!(GCoordinatorArrayList.get(0) instanceof GBaseTextAttributes)) {
+        // if(!(GCoordinatorArrayList.get(0) instanceof GBaseTextAttributes)) {
 
-
-            midSection.addView(space, evenSpreadDownSpaceLayoutParams);
-       // }
-        for(int i = 0; i < GCoordinatorArrayList.size(); i++)
-        {
+        midSection.addView(space, evenSpreadDownSpaceLayoutParams);
+        // }
+        for (int i = 0; i < GCoordinatorArrayList.size(); i++) {
             GCoordinator tap = GCoordinatorArrayList.get(i);
-            if(tap.isManuallyLaidOut())
-            {
+            if (tap.isManuallyLaidOut()) {
                 int layoutBelowId = tap.render(inflater, viewGroup, position);
-                ((RelativeLayout.LayoutParams)viewGroup.findViewById(renderLinearLayoutListWeighted(inflater, viewGroup, new ArrayList<>(GCoordinatorArrayList.subList(i + 1, GCoordinatorArrayList.size())), position, maxSpace)).getLayoutParams()).addRule(RelativeLayout.BELOW, layoutBelowId);
+                ((RelativeLayout.LayoutParams) viewGroup.findViewById(renderLinearLayoutListWeighted(inflater, viewGroup, new ArrayList<>(GCoordinatorArrayList.subList(i + 1, GCoordinatorArrayList.size())), position, maxSpace)).getLayoutParams()).addRule(RelativeLayout.BELOW, layoutBelowId);
                 break;
-            }
-            else
-            {
+            } else {
                 tap.render(inflater, midSection, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
-               // if(!(tap instanceof GBaseTextAttributes)) {
-                    space = new Space(inflater.getContext());
+                // if(!(tap instanceof GBaseTextAttributes)) {
+                space = new Space(inflater.getContext());
 
-                    space.setId(RenderViewCompat.generateViewId());
-                    midSection.addView(space, evenSpreadDownSpaceLayoutParams);
+                space.setId(RenderViewCompat.generateViewId());
+                midSection.addView(space, evenSpreadDownSpaceLayoutParams);
                 //}
                /* midSection.setClipChildren(false);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     midSection.setClipToOutline(false);
                 }
                 midSection.setClipToPadding(false);*/
-
 
             }
         }
@@ -299,25 +297,17 @@ public class RenderConstants {
 
     public static void addOnClickPanelListener(int position, String content, GCoordinator panel, View button) {
         if (panel instanceof GPanel) {
-            addOnClickPanelListener(position, content, null, panel, button, 0, 0);
+            addOnClickPanelListener(position, content, null, panel, button);
         }
     }
 
     public static void addOnClickPanelListener(int position, String content, String imageUrl, GCoordinator panel, View button) {
-        if (panel instanceof GPanel) {
-            addOnClickPanelListener(position, content, imageUrl, panel, button, 0, 0);
-        }
-    }
-
-    public static void addOnClickPanelListener(int position, String content, String imageUrl, GCoordinator panel, View button, int width, int height) {
         if (panel instanceof GPanel) {
             button.setTag(content);
             button.setTag(R.id.gpanel_tag, panel);
 
             if (imageUrl != null)
                 button.setTag(R.id.imageurl_tag, imageUrl);
-            button.setTag(R.id.image_width, width);
-            button.setTag(R.id.image_height, height);
             button.setTag(R.id.position, position);
             button.setOnClickListener(onClick);
         }
@@ -335,5 +325,33 @@ public class RenderConstants {
 
     public static void underline(TextView textView) {
         textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+    }
+
+    public static void sendEmailWithContent(String subjectLine, String msgBody) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setData(Uri.parse("mailto:"));
+            intent.putExtra(Intent.EXTRA_SUBJECT, subjectLine);
+            intent.putExtra(Intent.EXTRA_TEXT, msgBody);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            RenderSingleton.getInstance().getContext().startActivity(Intent.createChooser(intent, RenderSingleton.getInstance().getAppConfig().getChooseYourEmailProvider()));
+        } catch (Exception e) { //TODO: this is bad practice all of these should be removed and defensive coding should be used, discuss with team.
+            showErrorDialog(RenderSingleton.getInstance().getAppConfig().getCannotSendEmail());
+        }
+    }
+
+    public static void showErrorDialog(String errorMessage) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(RenderSingleton.getInstance().getContext());
+        builder.setMessage(errorMessage)
+                .setCancelable(false)
+                .setPositiveButton(RenderSingleton.getInstance().getAppConfig().getOK(), null);
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public static void setupUrlButtonHandler(View button, GBaseButtonAttributes.ButtonMode mode, String content) {
+        button.setTag(R.id.button_mode, mode.toString());
+        button.setTag(R.id.button_content, content);
+        button.setOnClickListener(RenderSingleton.getInstance().mLinksOnClick);
     }
 }

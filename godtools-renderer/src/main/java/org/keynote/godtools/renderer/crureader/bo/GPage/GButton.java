@@ -2,18 +2,14 @@ package org.keynote.godtools.renderer.crureader.bo.GPage;
 
 import android.graphics.Color;
 import android.os.Build;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import org.keynote.godtools.renderer.crureader.R;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttributes;
@@ -23,7 +19,6 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderCons
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleButtonView;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView;
-import org.keynote.godtools.renderer.crureader.bo.GPage.Views.BottomSheetDialog;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -87,8 +82,6 @@ public class GButton extends GBaseButtonAttributes {
 
         if (textColor != null)
             button.setTextColor(Color.parseColor(textColor));
-        if (text != null)
-            button.setText(text);
 
         applyTextSize(button);
         updateBaseAttributes(button);
@@ -96,26 +89,9 @@ public class GButton extends GBaseButtonAttributes {
         button.setId(RenderViewCompat.generateViewId());
         button.setTag(tapEvents);
         button.setTag(R.id.gpanel_posiiton, position);
-        button.setOnClickListener(new View.OnClickListener() {
-                                      @Override
-                                      public void onClick(View view) {
+        button.setText(text);
+        RenderConstants.setupUrlButtonHandler(button, mode, text);
 
-                                          AutoScaleButtonView autoScaleButtonView = (AutoScaleButtonView) view;
-                                          String[] tapEvents = RenderConstants.getTapEvents((String) view.getTag());
-                                          for (String tap : tapEvents) {
-                                              Log.i(TAG, "tap: " + tap + " tap as hash " + tap.hashCode());
-                                              if (RenderSingleton.getInstance().gPanelHashMap.get(tap.hashCode()) != null) {
-                                                  BottomSheetDialog bs = BottomSheetDialog.create((Integer) view.getTag(R.id.gpanel_posiiton), tap.hashCode());
-                                                  bs.show(RenderConstants.searchForFragmentManager(view.getContext()), "test");
-
-                                              }
-                                          }
-                                      }
-                                  }
-
-        );
-
-        //viewGroup.addView(button);
         return button.getId();
     }
 
@@ -142,7 +118,9 @@ public class GButton extends GBaseButtonAttributes {
         this.updateBaseAttributes(outerLayout);
 
         content = setButtonText(buttonTextView);
-        if (mode == ButtonMode.allurl || mode == ButtonMode.url) {
+        if (panel != null) {
+            RenderConstants.addOnClickPanelListener(position, content, panel, outerLayout);
+        } else {
 
             buttonTextView.setGravity(Gravity.CENTER);
             outerLayout.findViewById(R.id.g_button_expand_imageview).setVisibility(View.GONE);
@@ -153,15 +131,7 @@ public class GButton extends GBaseButtonAttributes {
                 FrameLayout.LayoutParams frameLayouts = (FrameLayout.LayoutParams) buttonTextView.getLayoutParams();
                 frameLayouts.gravity = RenderConstants.getGravityFromAlign(layoutAlign);
             }
-            outerLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(inflater.getContext(), "all url", Toast.LENGTH_LONG).show();
-                }
-            });
-
-        } else {
-            RenderConstants.addOnClickPanelListener(position, content, panel, outerLayout);
+            RenderConstants.setupUrlButtonHandler(buttonTextView, mode, text);
         }
 
         return outerLayout.getId();
@@ -170,8 +140,6 @@ public class GButton extends GBaseButtonAttributes {
 
     private int methodBig(LayoutInflater inflater, ViewGroup viewGroup, final int position) {
 
-        final int imageWidth = 0;
-        final int imageHeight = 0;
         int imageId = 0;
         String imageContent = null;
         buttonText.textalign = "center";
@@ -204,20 +172,7 @@ public class GButton extends GBaseButtonAttributes {
             final String finalImageContent = imageContent;
             final FrameLayout finalImageFrame = imageFrame;
             final int finalImageId = imageId;
-            final ImageView buttonImageView = (ImageView) imageFrame.findViewById(imageId);
-            buttonImageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    final ImageView buttonImageView = (ImageView) finalImageFrame.findViewById(finalImageId);
-                    if (buttonImageView != null) {
-                        int imageWidth = buttonImageView.getMeasuredWidth();
-                        int imageHeight = buttonImageView.getMeasuredHeight();
-
-                        RenderConstants.addOnClickPanelListener(position, content, finalImageContent, panel, outerLayout, imageWidth, imageHeight);
-                    }
-                }
-
-            });
+            RenderConstants.addOnClickPanelListener(position, content, finalImageContent, panel, outerLayout);
         }
         return outerLayout.getId();
 

@@ -65,28 +65,35 @@ public class GSimpleButton extends GBaseButtonAttributes {
         updateBaseAttributes(button);
 
         button.setId(RenderViewCompat.generateViewId());
-        button.setTag(tapEvents);
         button.setTag(R.id.gpanel_posiiton, position);
-        button.setOnClickListener(new View.OnClickListener() {
-                                      @Override
-                                      public void onClick(View view) {
 
-                                          AutoScaleButtonView autoScaleButtonView = (AutoScaleButtonView) view;
-                                          String[] tapEvents = RenderConstants.getTapEvents((String) view.getTag());
-                                          for (String tap : tapEvents) {
-                                              Log.i(TAG, "tap: " + tap + " tap as hash " + tap.hashCode());
-                                              if (RenderSingleton.getInstance().gPanelHashMap.get(tap.hashCode()) != null) {
-                                                  BottomSheetDialog bs = BottomSheetDialog.create((Integer) view.getTag(R.id.gpanel_posiiton), tap.hashCode());
-                                                  bs.show(RenderConstants.searchForFragmentManager(view.getContext()), "test");
+        if(tapEvents != null && !tapEvents.equalsIgnoreCase("")) {
+            button.setTag(tapEvents);
 
+            button.setOnClickListener(new View.OnClickListener() {
+                                          @Override
+                                          public void onClick(View view) {
+
+                                              AutoScaleButtonView autoScaleButtonView = (AutoScaleButtonView) view;
+                                              String[] tapEvents = RenderConstants.getTapEvents((String) view.getTag());
+                                              for (String tap : tapEvents) {
+                                                  Log.i(TAG, "tap: " + tap + " tap as hash " + tap.hashCode());
+                                                  if (RenderSingleton.getInstance().gPanelHashMap.get(tap.hashCode()) != null) {
+                                                      BottomSheetDialog bs = BottomSheetDialog.create((Integer) view.getTag(R.id.gpanel_posiiton), tap.hashCode());
+                                                      bs.show(RenderConstants.searchForFragmentManager(view.getContext()), "test");
+
+                                                  }
                                               }
                                           }
                                       }
-                                  }
 
-        );
+            );
+        }
+        else
+        {
+            RenderConstants.setupUrlButtonHandler(button, mode, content);
+        }
 
-        //viewGroup.addView(button);
         return button.getId();
 
     }

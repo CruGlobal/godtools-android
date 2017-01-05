@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="gpanel_tag" type="id"></item>
-    <item name="gpanel_posiiton" type="id"></item>
-    <item name="imageurl_tag" type="id"></item>
-    <item name="position" type="id"></item>
+    <item name="button_mode" type="id"/>
+    <item name="button_content" type="id"/>
+    <item name="gpanel_tag" type="id"/>
+    <item name="gpanel_posiiton" type="id"/>
+    <item name="imageurl_tag" type="id"/>
+    <item name="position" type="id"/>
     <item name="image_width" type="id"/>
     <item name="image_height" type="id"/>
     <item name="peek_textview_top_margin" type="id"/>

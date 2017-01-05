@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.keynote.godtools.renderer.crureader"
-    xmlns:tools="http://schemas.android.com/tools">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="org.keynote.godtools.renderer.crureader">
 
-    <uses-sdk tools:overrideLibrary="me.grantland.widget"
-              android:targetSdkVersion="17"/>
+    <uses-sdk
+        android:targetSdkVersion="17"
+        tools:overrideLibrary="me.grantland.widget"/>
 
-    <application android:name=".RenderApp"
+    <application
         android:allowBackup="true"
-        android:label="@string/app_name"
         android:supportsRtl="true"
-
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"  android:theme="@style/AppTheme" android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan">
+        <activity
+            android:name=".AlertDialogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Popin"
+            android:windowSoftInputMode="adjustPan">
         </activity>
 
-        <activity android:name=".PopupDialogActivity" android:theme="@style/Popin" android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan" />
-        <!--<activity android:name=".FollowupDialogActivity" android:theme="@style/MyDialogActivity" android:screenOrientation="portrait"  />-->
+        <activity
+            android:name=".PopupDialogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Popin"
+            android:windowSoftInputMode="adjustPan"/>
 
 
-        <activity android:name=".RenderSingleActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".RenderSingleActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
     </application>
 
 </manifest>

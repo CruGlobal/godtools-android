@@ -15,7 +15,9 @@ import com.newrelic.agent.android.NewRelic;
 
 import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.RenderAppConfig;
 import org.keynote.godtools.android.utils.FileUtils;
+import org.keynote.godtools.renderer.crureader.BaseAppConfig;
 import org.keynote.godtools.renderer.crureader.RenderApp;
 
 import java.io.File;
@@ -43,6 +45,11 @@ public class SnuffyApplication extends RenderApp {
             NewRelic.withApplicationToken(BuildConfig.NEW_RELIC_API_KEY).start(this);
         }
 
+    }
+
+    @Override
+    public BaseAppConfig getBaseAppConfig() {
+        return new RenderAppConfig();
     }
 
     public void sendEmailWithContent(Activity callingActivity, String subjectLine, String msgBody) {

@@ -7,7 +7,7 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSing
 /**
  * Created by rmatt on 11/16/2016.
  */
-public class RenderApp extends Application {
+public abstract class RenderApp extends Application {
 
     private RenderSingleton renderSingleton;
 
@@ -15,5 +15,8 @@ public class RenderApp extends Application {
     public void onCreate() {
         super.onCreate();
         this.renderSingleton = RenderSingleton.init(this);
+        RenderSingleton.getInstance().setBaseAppConfig(getBaseAppConfig());
     }
+
+    public abstract BaseAppConfig getBaseAppConfig();
 }
