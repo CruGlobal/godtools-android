@@ -37,9 +37,11 @@ public class GSimpleButton extends GBaseButtonAttributes {
                     inflate = inflater.inflate(R.layout.g_button_url, viewGroup);
                     defaultColor(position);
                     break;
-                case allurl:
+                case allurl: //TODO: rm
+                    inflate = inflater.inflate(R.layout.g_button_url, viewGroup);
                     break;
-                case email:
+                case email: //TODO: rm
+                    inflate = inflater.inflate(R.layout.g_button_url, viewGroup);
                     break;
                 case link:
                     inflate = inflater.inflate(R.layout.g_button_link, viewGroup);
