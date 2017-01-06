@@ -10,6 +10,7 @@ env:
   matrix:
     - ANDROID_TARGET=android-15 ANDROID_ABI=armeabi-v7a
 #    - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
+#    - ANDROID_TARGET=android-23 ANDROID_ABI=armeabi-v7a
     - ANDROID_TARGET=android-24 ANDROID_ABI=armeabi-v7a
 branches:
   only:
@@ -17,10 +18,10 @@ branches:
 
 android:
   components:
-    - platform-tools
     - tools
-    - build-tools-23.0.3
-    - android-23
+    - platform-tools
+    - build-tools-25.0.2
+    - android-25
     - extra-android-m2repository
     - extra-google-m2repository
 
