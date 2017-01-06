@@ -48,7 +48,7 @@ public abstract class GCoordinator {
     public String translationY;
     @Attribute(name = "x-trailing-offset", required = false)
     public Integer endMargin;
-    protected boolean firstElementInList;
+   // protected boolean firstElementInList;
 
     public Integer getTranslationY() {
         if (translationY != null && !translationY.trim().equalsIgnoreCase("")) {
@@ -161,9 +161,9 @@ public abstract class GCoordinator {
 
     public abstract int render(LayoutInflater inflater, ViewGroup viewGroup, int position);
 
-    public void setFirstElementInList(boolean firstElementInList) {
-        this.firstElementInList = firstElementInList;
-    }
+//    public void setFirstElementInList(boolean firstElementInList) {
+//        this.firstElementInList = firstElementInList;
+//    }
 
     public boolean shouldUnderline() {
         return false;

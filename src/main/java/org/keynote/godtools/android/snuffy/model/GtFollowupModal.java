@@ -16,10 +16,8 @@ import com.google.common.collect.ImmutableSet;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.event.GodToolsEvent;
-import org.keynote.godtools.android.event.GodToolsEvent.EventID;
 import org.keynote.godtools.android.model.Followup;
-import org.keynote.godtools.android.snuffy.ParserUtils;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -47,7 +45,7 @@ public class GtFollowupModal extends GtModel {
 
     long mFollowupId = Followup.INVALID_ID;
     @NonNull
-    private Set<EventID> mListeners = ImmutableSet.of();
+    private Set<GodToolsEvent.EventID> mListeners = ImmutableSet.of();
     String mTitle;
     String mBody;
     final List<GtInputField> mInputFields = new ArrayList<>();
@@ -72,7 +70,7 @@ public class GtFollowupModal extends GtModel {
     }
 
     @NonNull
-    public Set<EventID> getListeners() {
+    public Set<GodToolsEvent.EventID> getListeners() {
         return mListeners;
     }
 
@@ -140,8 +138,8 @@ public class GtFollowupModal extends GtModel {
         } catch (final Exception suppressed) {
             mFollowupId = Followup.INVALID_ID;
         }
-        mListeners = ParserUtils
-                .parseEvents(parser.getAttributeValue(null, XML_ATTR_LISTENERS), getManifest().getPackageCode());
+        /*mListeners = ParserUtils
+                .parseEvents(parser.getAttributeValue(null, XML_ATTR_LISTENERS), getManifest().getPackageCode());*/
 
         // loop until we reach the matching end tag for this element
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -239,8 +237,8 @@ public class GtFollowupModal extends GtModel {
         }
 
         @Override
-        protected boolean onSendEvent(@NonNull final EventID eventId) {
-            if (eventId.equals(EventID.SUBSCRIBE_EVENT)) {
+        protected boolean onSendEvent(@NonNull final GodToolsEvent.EventID eventId) {
+            if (eventId.equals(GodToolsEvent.EventID.SUBSCRIBE_EVENT)) {
                 // build subscribe event object
                 final GodToolsEvent event = new GodToolsEvent(eventId);
                 event.setPackageCode(getManifest().getPackageCode());

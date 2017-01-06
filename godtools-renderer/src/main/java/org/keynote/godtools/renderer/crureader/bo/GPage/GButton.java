@@ -146,10 +146,10 @@ public class GButton extends GBaseButtonAttributes {
         View buttonLayout = inflater.inflate(R.layout.g_big_button, viewGroup);
         final LinearLayout outerLayout = (LinearLayout) buttonLayout.findViewById(R.id.g_big_button_outer_linearlayout);
         FrameLayout imageFrame = (FrameLayout) buttonLayout.findViewById(R.id.g_big_button_image_framelayout);
-
-        if (!firstElementInList) {
-            imageFrame.removeAllViews();
-        }
+//
+//        if (!firstElementInList) {
+//            imageFrame.removeAllViews();
+//        }
         imageFrame.setId(RenderViewCompat.generateViewId());
         if (image != null) {
             imageContent = image.content;

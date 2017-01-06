@@ -3,6 +3,7 @@ package org.keynote.godtools.renderer.crureader;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocument;
 import org.keynote.godtools.renderer.crureader.bo.GPage.GButton;
 import org.keynote.godtools.renderer.crureader.bo.GPage.GPage;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.ComplexConverter;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.Registry;
 import org.simpleframework.xml.convert.RegistryStrategy;

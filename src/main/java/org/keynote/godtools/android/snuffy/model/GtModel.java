@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.event.GodToolsEvent;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
 import org.w3c.dom.Element;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;

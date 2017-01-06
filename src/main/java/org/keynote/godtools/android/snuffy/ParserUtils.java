@@ -9,7 +9,7 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
-import org.keynote.godtools.android.event.GodToolsEvent;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 

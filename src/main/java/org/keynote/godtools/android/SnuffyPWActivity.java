@@ -42,8 +42,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.keynote.godtools.android.business.GSSubscriber;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
-import org.keynote.godtools.android.event.GodToolsEvent;
-import org.keynote.godtools.android.event.GodToolsEvent.EventID;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.http.NotificationUpdateTask;
@@ -59,9 +57,11 @@ import org.keynote.godtools.android.utils.FileUtils;
 import org.keynote.godtools.renderer.crureader.XMLUtil;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocument;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocumentPage;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
 import org.keynote.godtools.renderer.crureader.bo.GPage.GPage;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.Diagnostics;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Views.BottomSheetDialog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -75,7 +75,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.support.v4.app.FragmentManager.POP_BACK_STACK_INCLUSIVE;
-import static org.keynote.godtools.android.event.GodToolsEvent.EventID.SUBSCRIBE_EVENT;
 import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_EMAIL;
 import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_FIRST_NAME;
 import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_LAST_NAME;
@@ -90,6 +89,7 @@ import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.PROPERTY_REG_ID;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
+import static org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent.EventID.SUBSCRIBE_EVENT;
 
 @SuppressWarnings("deprecation")
 public class SnuffyPWActivity extends AppCompatActivity {
@@ -114,6 +114,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
     private SharedPreferences settings;
     private String regid;
     private Timer timer;
+    private LinearLayoutManager mLinearLayoutManager;
     /* BEGIN lifecycle */
     private ProgressDialog mProgressDialog;
 
@@ -194,17 +195,17 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
     }
 
-
     @Subscribe
     public void onNavigationEvent(@NonNull final GodToolsEvent event) {
+        Log.i(TAG, "EventBus: Navigation event");
         // only process events for our local namespace
-        if (event.getEventID().inNamespace(mAppPackage)) {
-            if (triggerFollowupModal(event.getEventID())) {
+        //if (event.getEventID().inNamespace(mAppPackage)) {
+            if (triggerFollowupModal(event)) {
                 // followup modal was displayed
             } else if (triggerLocalPageNavigation(event.getEventID())) {
                 dismissFollowupModal();
             }
-        }
+        //}
     }
 
     /* END lifecycle */
@@ -212,7 +213,9 @@ public class SnuffyPWActivity extends AppCompatActivity {
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onSubscribeEvent(@NonNull final GodToolsEvent event) {
+        Log.i(TAG, "EventBus: Subscribe event");
         if (event.getEventID().equals(SUBSCRIBE_EVENT)) {
+            Log.i(TAG, "Subscribe event");
             processSubscriberEvent(event);
         }
     }
@@ -239,11 +242,10 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
     }
 
-    private void initializeAdapter(GPage page)
-    {
+    private void initializeAdapter(GPage page) {
         mPagerAdapter = new GtPagesPagerAdapter(page);
-        LinearLayoutManager layout = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        snuffyRecyclerView.setLayoutManager(layout);
+        mLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        snuffyRecyclerView.setLayoutManager(mLinearLayoutManager);
         SnapHelper helper = new PagerSnapHelper();
         helper.attachToRecyclerView(snuffyRecyclerView);
         snuffyRecyclerView.setHasFixedSize(true);
@@ -387,25 +389,23 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
     }
 
-    private boolean triggerFollowupModal(@NonNull final EventID event) {
+    private boolean triggerFollowupModal(@NonNull final GodToolsEvent event) {
         // check for a followup modal on the current page
+        Log.i(TAG, "EventBus triggerFollowupModal");
         //TODO: RM rework this
-        /*if (mPagerAdapter != null) {
-            final GtPagesPagerAdapter.ViewHolder holder = mPagerAdapter.getPrimaryItem();
-            if (holder != null) {
-                for (final GtFollowupModal followup : holder.mPage.getModel().getFollowupModals()) {
-                    if (followup != null && followup.getListeners().contains(event)) {
-                        showFollowupModal(followup);
-                        return true;
-                    }
-                }
-            }
-        }*/
+        if (mPagerAdapter != null) {
+            int hashCode = event.getEventID().getId().hashCode();
+            if (RenderSingleton.getInstance().gPanelHashMap.get(hashCode) != null) {
+                BottomSheetDialog bs = BottomSheetDialog.create(event.getPosition(), hashCode);
+                bs.show(getSupportFragmentManager(), "test");
 
+            }
+        }
         return false;
     }
 
-    private boolean triggerLocalPageNavigation(@NonNull final EventID event) {
+    private boolean triggerLocalPageNavigation(@NonNull final GodToolsEvent.EventID event) {
+        Log.i(TAG, "EventBus triggerLocalPageNavigation");
         //TODO: RM events
         /*if (mPages != null) {
             for (final GPage page : mPages) {
@@ -1014,11 +1014,8 @@ public class SnuffyPWActivity extends AppCompatActivity {
 //        }
 //    }
 
-
-
     private class ProcessPackageAsync extends AsyncTask<String, Integer, List<GPage>>
             implements ProgressCallback {
-
 
         @Override
         protected void onPreExecute() {

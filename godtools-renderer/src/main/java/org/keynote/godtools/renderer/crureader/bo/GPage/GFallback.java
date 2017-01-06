@@ -1,15 +1,14 @@
 package org.keynote.godtools.renderer.crureader.bo.GPage;
 
-import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import org.keynote.godtools.renderer.crureader.R;
-import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseTextAttributes;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GModal;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderConstants;
-
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.ElementListUnion;
 import org.simpleframework.xml.Root;
@@ -22,6 +21,8 @@ import java.util.ArrayList;
  */
 @Root(name = "fallback")
 public class GFallback extends GCoordinator {
+
+    public static final String TAG = "GFallback";
 
     @ElementListUnion({@ElementList(inline = true, required = false, entry = "text", type = GBaseTextAttributes.class),
             @ElementList(inline = true, required = false, entry = "image", type = GImage.class),
@@ -38,10 +39,14 @@ public class GFallback extends GCoordinator {
 
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
-        Context context = viewGroup.getContext();
+
         RenderConstants.setUpFollowups(GCoordinatorFollowupList);
-        return RenderConstants.renderLinearLayoutListWeighted(inflater,
+        int viewId = RenderConstants.renderLinearLayoutListWeighted(inflater,
                 viewGroup, GCoordinatorArrayList, position, Math.round(inflater.getContext().getResources().getDimension(R.dimen.fallback_element_space)));
+
+
+        return viewId;
+
     }
 
 }
