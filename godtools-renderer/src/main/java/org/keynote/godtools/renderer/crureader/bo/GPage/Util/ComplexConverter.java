@@ -1,4 +1,4 @@
-package org.keynote.godtools.renderer.crureader;
+package org.keynote.godtools.renderer.crureader.bo.GPage.Util;
 
 import org.keynote.godtools.renderer.crureader.bo.GPage.GButton;
 import org.simpleframework.xml.Serializer;

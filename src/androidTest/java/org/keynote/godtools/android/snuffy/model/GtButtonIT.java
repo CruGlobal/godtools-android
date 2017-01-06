@@ -10,8 +10,8 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.snuffy.model.GtButton.Mode;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;

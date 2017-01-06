@@ -16,9 +16,8 @@ import com.google.common.collect.ImmutableSet;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.event.GodToolsEvent;
-import org.keynote.godtools.android.event.GodToolsEvent.EventID;
 import org.keynote.godtools.android.snuffy.ParserUtils;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
 import org.w3c.dom.Element;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -74,7 +73,7 @@ public class GtButton extends GtTextModel {
     Mode mMode = Mode.DEFAULT;
     boolean mRequireValidation;
     @NonNull
-    Set<EventID> mTapEvents = ImmutableSet.of();
+    Set<GodToolsEvent.EventID> mTapEvents = ImmutableSet.of();
     String mText;
 
     private GtButton(@NonNull final GtModel parent) {
@@ -91,7 +90,7 @@ public class GtButton extends GtTextModel {
     }
 
     @NonNull
-    public Set<EventID> getTapEvents() {
+    public Set<GodToolsEvent.EventID> getTapEvents() {
         return mTapEvents;
     }
 
@@ -285,13 +284,13 @@ public class GtButton extends GtTextModel {
             }
 
             // trigger any configured tap events
-            for (final EventID event : mTapEvents) {
+            for (final GodToolsEvent.EventID event : mTapEvents) {
                 onSendEvent(event);
             }
         }
 
         @Override
-        protected boolean onSendEvent(@NonNull EventID event) {
+        protected boolean onSendEvent(@NonNull GodToolsEvent.EventID event) {
             if (!super.onSendEvent(event)) {
                 EventBus.getDefault().post(new GodToolsEvent(event));
             }

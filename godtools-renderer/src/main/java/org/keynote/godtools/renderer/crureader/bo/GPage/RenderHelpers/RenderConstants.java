@@ -253,11 +253,11 @@ public class RenderConstants {
         LinearLayout midSection = new LinearLayout(inflater.getContext());
         midSection.setOrientation(LinearLayout.VERTICAL);
         midSection.setId(RenderViewCompat.generateViewId());
-        boolean firstElementInList = true;
+        //boolean firstElementInList = true;
         for (GCoordinator tap : GCoordinatorArrayList) {
-            tap.setFirstElementInList(firstElementInList);
+            //tap.setFirstElementInList(firstElementInList);
             tap.render(inflater, tap.y == null ? midSection : viewGroup, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
-            firstElementInList = false;
+            //firstElementInList = false;
         }
 
         viewGroup.addView(midSection, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)); //If there is max space wrap_content because we only want to fill a small area.   If it isn't we want to fill the whole available area evenly.
@@ -355,4 +355,6 @@ public class RenderConstants {
         button.setTag(R.id.button_content, content);
         button.setOnClickListener(RenderSingleton.getInstance().mLinksOnClick);
     }
+
+    public final static String DEFAULT_NAMESPACE = "default_namespace";
 }

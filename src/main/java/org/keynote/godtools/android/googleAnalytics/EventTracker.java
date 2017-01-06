@@ -2,6 +2,7 @@ package org.keynote.godtools.android.googleAnalytics;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -10,13 +11,16 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.keynote.godtools.android.BuildConfig;
-import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.utils.GoogleAnalytics;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
 
 /**
  * This class is used to track events for Google Analytics.
  */
 public class EventTracker {
+
+    private static final String TAG = "EventTracker";
+
     public static final String SCREEN_EVERYSTUDENT = "EveryStudent";
     public static final String SCREEN_SETTINGS = "Settings";
 
@@ -25,7 +29,6 @@ public class EventTracker {
 
     private static final int DIMENSION_SCREEN_NAME = 1;
     private static final int DIMENSION_LANGUAGE = 2;
-
 
     private Tracker mTracker = null;
 
@@ -87,6 +90,7 @@ public class EventTracker {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void trackContentEvent(@NonNull final GodToolsEvent event) {
+        Log.i(TAG, "EventBus: trackerContentEvent " + event.toString());
         if(!BuildConfig.DEBUG) {
             final GodToolsEvent.EventID eventID = event.getEventID();
             mTracker.send(new HitBuilders.EventBuilder()

@@ -16,12 +16,12 @@ import org.greenrobot.eventbus.Subscribe;
 import org.keynote.godtools.android.SnuffyPWActivity;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
-import org.keynote.godtools.android.event.GodToolsEvent;
 import org.keynote.godtools.android.snuffy.PackageManager;
 import org.keynote.godtools.android.snuffy.model.GtFollowupModal;
 import org.keynote.godtools.android.snuffy.model.GtManifest;
 import org.keynote.godtools.android.snuffy.model.GtPage;
 import org.keynote.godtools.android.snuffy.model.GtThankYou;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
 
 import java.util.concurrent.ExecutionException;
 

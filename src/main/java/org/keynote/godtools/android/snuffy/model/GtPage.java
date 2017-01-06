@@ -12,8 +12,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
-import org.keynote.godtools.android.event.GodToolsEvent.EventID;
-import org.keynote.godtools.android.snuffy.ParserUtils;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -63,7 +62,7 @@ public class GtPage extends GtModel {
     private boolean mPageShadows = true;
 
     @NonNull
-    Set<EventID> mListeners = ImmutableSet.of();
+    Set<GodToolsEvent.EventID> mListeners = ImmutableSet.of();
 
     @NonNull
     private final List<GtFollowupModal> mFollowupModals = new ArrayList<>();
@@ -135,7 +134,7 @@ public class GtPage extends GtModel {
     }
 
     @NonNull
-    public Set<EventID> getListeners() {
+    public Set<GodToolsEvent.EventID> getListeners() {
         return ImmutableSet.copyOf(mListeners);
     }
 
@@ -182,8 +181,8 @@ public class GtPage extends GtModel {
             throw new XmlPullParserException("Package XML does not have a filename defined for a page", parser, null);
         }
         mThumb = parser.getAttributeValue(null, XML_ATTR_THUMBNAIL);
-        mListeners = ParserUtils
-                .parseEvents(parser.getAttributeValue(null, XML_ATTR_LISTENERS), getManifest().getPackageCode());
+        /*mListeners = ParserUtils
+                .parseEvents(parser.getAttributeValue(null, XML_ATTR_LISTENERS), getManifest().getPackageCode());*/
 
         mDescription = XmlPullParserUtils.safeNextText(parser);
     }

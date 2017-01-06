@@ -38,11 +38,15 @@ public class GInputField extends GCoordinator {
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
 
+
+
         View inflate = inflater.inflate(R.layout.g_input_field, viewGroup);
         final TextInputLayout textInputLayout = (TextInputLayout)inflate.findViewById(R.id.g_input_field_input_layout);
         textInputLayout.setId(RenderViewCompat.generateViewId());
         textInputLayout.setHint(inputLabel.content);
         final TextInputEditText textInputEditText = (TextInputEditText)inflate.findViewById(R.id.g_input_field_input_edit_text);
+        textInputEditText.setTag(R.id.textinput_name, name);
+        textInputEditText.setTag(inflater.getContext().getString(R.string.scannable_text_input));
         textInputEditText.setId(RenderViewCompat.generateViewId());
         updateBaseAttributes(textInputLayout);
 

@@ -1,15 +1,16 @@
-package org.keynote.godtools.android.event;
+package org.keynote.godtools.renderer.crureader.bo.GPage.Event;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.google.common.collect.ImmutableMap;
-
-import org.keynote.godtools.android.model.Followup;
+import org.keynote.godtools.renderer.crureader.bo.GPage.GFollowupModal;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+
+
 
 public class GodToolsEvent {
     @NonNull
@@ -17,8 +18,9 @@ public class GodToolsEvent {
 
     @Nullable
     private String mPackageCode;
-    private long mFollowUpId = Followup.INVALID_ID;
+    private long mFollowUpId = GFollowupModal.INVALID_ID;
     private String mLanguage;
+    private int position;
 
     private final Map<String, String> mFields = new HashMap<>();
 
@@ -56,8 +58,16 @@ public class GodToolsEvent {
         mFollowUpId = id;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     public Map<String, String> getFields() {
-        return ImmutableMap.copyOf(mFields);
+        return mFields;
     }
 
     public void setField(@NonNull final String key, @Nullable final String value) {
