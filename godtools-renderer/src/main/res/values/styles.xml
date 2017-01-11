@@ -286,5 +286,39 @@
 
     <style name="Widget.GodToolsRenderer.ButtonPairLayout"></style>
 
+    <style name="Widget.GodToolsRenderer.Content.FollowupModal" />
+
+    <style name="Widget.GodToolsRenderer.Content.FollowupModal.Input">
+
+        <item name="android:minHeight">40dp</item>
+
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="Widget.GodToolsRenderer.Content.FollowupModal.Input.Field">
+        <item name="android:textAppearance">@style/TextAppearance.GodToolsRenderer.Content.FollowupModal.Input.Field</item>
+    </style>
+
+    <style name="TextAppearance.GodToolsRenderer.Content.FollowupModal.Input.Field" parent="TextAppearance.GodToolsRenderer.Content.FollowupModal.Body">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.GodToolsRenderer.Content.FollowupModal.Body" parent="TextAppearance.GodToolsRenderer.Content">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+
+
+    <style name="TextAppearance.GodToolsRenderer.Content" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/gt_content_text</item>
+        <item name="android:textColorHint">@color/gt_content_text</item>
+        <item name="android:textColorHighlight">@color/gt_content_text</item>
+        <item name="android:textColorLink">@color/gt_content_text</item>
+    </style>
+
+    <style name="Widget.GodToolsRenderer.Content" />
+
 
 </resources>
