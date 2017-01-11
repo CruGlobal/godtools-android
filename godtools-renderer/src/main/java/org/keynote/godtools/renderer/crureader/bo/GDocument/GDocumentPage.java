@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
-
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Text;
@@ -23,6 +22,7 @@ public class GDocumentPage extends GCoordinator {
 
     @Attribute(required = false)
     public String listeners;
+
 
 
     @Override

@@ -126,7 +126,7 @@ public class GtFollowupModalDialogFragment extends BottomSheetDialogFragment {
                 if (thankYou.getListeners().contains(event.getEventID())) {
                     final Activity activity = getActivity();
                     if (activity instanceof SnuffyPWActivity) {
-                        ((SnuffyPWActivity) activity).onShowChildPage(thankYou.getId());
+                        //((SnuffyPWActivity) activity).onShowChildPage(thankYou.getId());
                     }
                 }
             }

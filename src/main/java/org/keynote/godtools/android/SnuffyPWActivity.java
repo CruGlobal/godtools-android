@@ -1,14 +1,12 @@
 package org.keynote.godtools.android;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
@@ -22,7 +20,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,6 +31,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.common.base.Strings;
 
 import org.greenrobot.eventbus.EventBus;
@@ -50,10 +48,10 @@ import org.keynote.godtools.android.notifications.NotificationInfo;
 import org.keynote.godtools.android.snuffy.SnuffyAboutActivity;
 import org.keynote.godtools.android.snuffy.SnuffyHelpActivity;
 import org.keynote.godtools.android.snuffy.model.GtFollowupModal;
-import org.keynote.godtools.android.snuffy.newnew.ProgressCallback;
 import org.keynote.godtools.android.support.v4.fragment.GtFollowupModalDialogFragment;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
 import org.keynote.godtools.android.utils.FileUtils;
+import org.keynote.godtools.renderer.crureader.OnDismissEvent;
 import org.keynote.godtools.renderer.crureader.XMLUtil;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocument;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocumentPage;
@@ -88,10 +86,10 @@ import static org.keynote.godtools.android.utils.Constants.LANGUAGE_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.PROPERTY_REG_ID;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
+import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 import static org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent.EventID.SUBSCRIBE_EVENT;
 
-@SuppressWarnings("deprecation")
 public class SnuffyPWActivity extends AppCompatActivity {
     private static final String TAG = "SnuffyActivity";
     private static final String TAG_FOLLOWUP_MODAL = "followupModal";
@@ -102,6 +100,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
     GtPagesPagerAdapter mPagerAdapter;
     @Nullable
     String mCurrentPageId;
+    PagerSnapHelper helper;
     private String mAppPackage;
     private String mConfigFileName;
     private String mAppLanguage = ENGLISH_DEFAULT;
@@ -111,12 +110,14 @@ public class SnuffyPWActivity extends AppCompatActivity {
     private String mConfigPrimary, mConfigParallel;
     private GTPackage mParallelPackage;
     private boolean isUsingPrimaryLanguage, isParallelLanguageSet;
+    private boolean mAsyncLoadComplete = false;
     private SharedPreferences settings;
     private String regid;
     private Timer timer;
     private LinearLayoutManager mLinearLayoutManager;
     /* BEGIN lifecycle */
     private ProgressDialog mProgressDialog;
+    private int mPositionBeforeLanguageSwitch;
 
     private String getLanguage() {
         return mAppLanguage;
@@ -185,35 +186,32 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
     }
 
+    /* END lifecycle */
+
     protected void onResume() {
         super.onResume();
         EventTracker.getInstance(this).activeScreen(mCurrentPageId != null ? mCurrentPageId : mAppPackage + "-0");
 
         if (mSetupRequired) {
-            doSetup();
+            doSetup(0);
             mSetupRequired = false;
         }
     }
 
     @Subscribe
     public void onNavigationEvent(@NonNull final GodToolsEvent event) {
-        Log.i(TAG, "EventBus: Navigation event");
-        // only process events for our local namespace
-        //if (event.getEventID().inNamespace(mAppPackage)) {
-            if (triggerFollowupModal(event)) {
-                // followup modal was displayed
-            } else if (triggerLocalPageNavigation(event.getEventID())) {
-                dismissFollowupModal();
-            }
-        //}
-    }
+        EventBus.getDefault().post(new OnDismissEvent());
+        dismissFollowupModal();
+        if (triggerFollowupModal(event)) {
+            // followup modal was displayed
+        } else if (triggerLocalPageNavigation(event)) {
 
-    /* END lifecycle */
+        }
+    }
 
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onSubscribeEvent(@NonNull final GodToolsEvent event) {
-        Log.i(TAG, "EventBus: Subscribe event");
         if (event.getEventID().equals(SUBSCRIBE_EVENT)) {
             Log.i(TAG, "Subscribe event");
             processSubscriberEvent(event);
@@ -223,14 +221,14 @@ public class SnuffyPWActivity extends AppCompatActivity {
     /**
      * Event triggered when a child page should be shown
      *
-     * @param id
+     * @param position
      */
-    public void onShowChildPage(@NonNull final String id) {
+    public void onShowChildPage(final int position) {
         //mVisibleChildPages.add(id);
         //TODO: figure this out.
         //updateViewPager();
-        dismissFollowupModal();
-        showPage(id);
+
+        showPage(position);
     }
 
     private void setupActionBar() {
@@ -242,14 +240,18 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
     }
 
-    private void initializeAdapter(GPage page) {
-        mPagerAdapter = new GtPagesPagerAdapter(page);
+    private void initializeAdapter(int location, int size, GPage page) {
+        mPagerAdapter = new GtPagesPagerAdapter(location, size, page);
         mLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         snuffyRecyclerView.setLayoutManager(mLinearLayoutManager);
-        SnapHelper helper = new PagerSnapHelper();
+        snuffyRecyclerView.setOnFlingListener(null);
+        helper = new PagerSnapHelper();
         helper.attachToRecyclerView(snuffyRecyclerView);
         snuffyRecyclerView.setHasFixedSize(true);
         snuffyRecyclerView.setAdapter(mPagerAdapter);
+        if (location > 0) {
+            mLinearLayoutManager.scrollToPosition(location);
+        }
 
     }
 
@@ -365,30 +367,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * This method is responsible for updating the list of pages being displayed and used by the app
-     *
-     * @param pages the newnew set of Pages to display
-     */
-    void updateDisplayedPages(@Nullable final List<GPage> pages) {
-        // replace the about page
-
-        //TODO: RM looks like the first page is the about page
-        if (pages
-                != null && pages.size() > 0) {
-            mPagerAdapter.setPages(pages);
-
-            //updateAppPages();
-
-        }
-
-        // store the remaining pages as the actual pages
-        //mPages = pages;
-
-        // trigger updates on various components
-
-    }
-
     private boolean triggerFollowupModal(@NonNull final GodToolsEvent event) {
         // check for a followup modal on the current page
         Log.i(TAG, "EventBus triggerFollowupModal");
@@ -397,26 +375,20 @@ public class SnuffyPWActivity extends AppCompatActivity {
             int hashCode = event.getEventID().getId().hashCode();
             if (RenderSingleton.getInstance().gPanelHashMap.get(hashCode) != null) {
                 BottomSheetDialog bs = BottomSheetDialog.create(event.getPosition(), hashCode);
-                bs.show(getSupportFragmentManager(), "test");
-
+                bs.show(getSupportFragmentManager(), TAG_FOLLOWUP_MODAL);
+                return true;
             }
         }
         return false;
     }
 
-    private boolean triggerLocalPageNavigation(@NonNull final GodToolsEvent.EventID event) {
+    private boolean triggerLocalPageNavigation(@NonNull final GodToolsEvent event) {
         Log.i(TAG, "EventBus triggerLocalPageNavigation");
-        //TODO: RM events
-        /*if (mPages != null) {
-            for (final GPage page : mPages) {
-                final GtPage model = page.getModel();
-                if (model.getListeners().contains(event)) {
-                    showPage(model.getId());
-                    return true;
-                }
-            }
+        if (event.getPosition() >= -1) {
+            onShowChildPage(event.getPosition());
+
+            return true;
         }
-        */
 
         return false;
     }
@@ -441,42 +413,11 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
     }
 
-    private void showPage(@Nullable final String id) {
-        /*if (snuffyRecyclerView != null && mPagerAdapter != null && id != null) {
-            // are we trying to show the currently active page?
-//            if (TextUtils.equals(id, mCurrentPageId)) {
-//                final GPage page = mPagerAdapter.getItemFromPosition(Integer.parseInt(mCurrentPageId));
-//            }
-
-            final int position = mPagerAdapter.getItemPositionFromId(convertId(id));
-            if (position != POSITION_NONE) {
-                RecyclerView.LayoutManager layoutManager = snuffyRecyclerView.getLayoutManager();
-                layoutManager.scrollToPosition(position);
-                //setCurrentItem(position);
-            }
+    private void showPage(final int position) {
+        if (snuffyRecyclerView != null && mPagerAdapter != null && position > GodToolsEvent.INVALID_ID) {
+            snuffyRecyclerView.smoothScrollToPosition(position);
         }
-        */
     }
-
-//    void clearNotVisibleChildPages() {
-//        boolean changed = false;
-//        final boolean isVisibleChild = mVisibleChildPages.remove(mCurrentPageId);
-//        if (!mVisibleChildPages.isEmpty()) {
-//            mVisibleChildPages.clear();
-//            changed = true;
-//        }
-//
-//        if (isVisibleChild) {
-//            mVisibleChildPages.add(mCurrentPageId);
-//            changed = true;
-//        }
-//
-//        //TODO:
-//        //what is this?
-//        if (changed) {
-//            //updateViewPager();
-//        }
-//    }
 
     @Override
     public void onStart() {
@@ -498,18 +439,11 @@ public class SnuffyPWActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    void doSetup() {
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                if (snuffyRecyclerView != null) {
+    void doSetup(final int startPosition) {
 
-                    // trigger the actual load of pages
-                    mProcessPackageAsync = new ProcessPackageAsync();
-                    mProcessPackageAsync.execute("");
-                }
-
-            }
-        }, 1000 / 60);
+        // trigger the actual load of pages
+        mProcessPackageAsync = new ProcessPackageAsync();
+        mProcessPackageAsync.execute(startPosition);
     }
 
     private void completeSetup(boolean bSuccess) {
@@ -528,25 +462,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
 //            Diagnostics.StopMethodTracingByKey("Tracker");
 //        }
 
-        addClickHandlersToAllPages();
-    }
-
-    private void addClickHandlersToAllPages() {
-        //TODO: what is this for?
-        /*Iterator<SnuffyPage> iter = mPages.iterator();
-
-        MyGestureDetector = newnew GestureDetector(newnew MyGestureListener());
-
-        while (iter.hasNext()) {
-            iter.next().setOnTouchListener(newnew View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    MyGestureDetector.onTouchEvent(event);
-                    return true;
-                }
-            });
-        }
-        */
     }
 
     private void doCmdHelp() {
@@ -580,13 +495,13 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
 
         //TODO: revisit
-        //final int currItem = snuffyRecyclerView.getLayoutManager().getItem
-//        if (currItem > 0) {
-//            // http://www.knowgod.com/en/kgp/5
-//            shareLink = shareLink + "/" + String.valueOf(currItem);
-//        }
-//
-//        messageBody = messageBody.replace(SHARE_LINK, shareLink);
+        final int currItem = helper.findTargetSnapPosition(mLinearLayoutManager, 0, 0);
+        if (currItem > 0) {
+            // http://www.knowgod.com/en/kgp/5
+            shareLink = shareLink + "/" + String.valueOf(currItem);
+        }
+
+        messageBody = messageBody.replace(SHARE_LINK, shareLink);
 
         return messageBody;
     }
@@ -613,13 +528,16 @@ public class SnuffyPWActivity extends AppCompatActivity {
             case 0: // Show Page Menu
             {
                 snuffyRecyclerView.getLayoutManager().scrollToPosition(resultCode - RESULT_FIRST_USER);
-                //setCurrentItem(resultCode - RESULT_FIRST_USER);
                 break;
             }
         }
     }
 
     private void switchLanguage() {
+        int snapPositionWithNoVelocity = helper.findTargetSnapPosition(mLinearLayoutManager, 0, 0);
+
+        Log.i(TAG, "Snap Position with No velocity: " + snapPositionWithNoVelocity);
+        mPositionBeforeLanguageSwitch = snapPositionWithNoVelocity;
         if (isParallelLanguageSet && mParallelPackage != null) {
             if (isUsingPrimaryLanguage) {
                 mConfigFileName = mConfigParallel;
@@ -630,7 +548,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
                 isUsingPrimaryLanguage = true;
             }
 
-            doSetup();
+            doSetup(snapPositionWithNoVelocity);
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.alternate_language)
@@ -750,44 +668,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
                 });*/
     }
 
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case DIALOG_PROCESS_PACKAGE_PROGRESS:
-                mProgressDialog = new ProgressDialog(this);
-                mProgressDialog.setMessage(getApplicationContext().getString(R.string.processing_package));
-                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                mProgressDialog.setCancelable(false);
-                mProgressDialog.setProgress(0);
-                mProgressDialog.setMax(1); //harmless values to start with to avoid seeing "Nan"
-                mProgressDialog.show();
-                return mProgressDialog;
-            default:
-                return null;
-        }
-    }
-
-    /*private void showLoading(String msg) {
-        RelativeLayout updatingDraftLayout = (RelativeLayout) findViewById(R.id.updatingDraft);
-        updatingDraftLayout.setVisibility(View.VISIBLE);
-
-        TextView updatingPage = (TextView) findViewById(R.id.updatingPageTextView);
-        updatingPage.setText(msg);
-    }
-
-    private void hideLoading() {
-        TextView updatingPage = (TextView) findViewById(R.id.updatingPageTextView);
-        updatingPage.setText("");
-
-        RelativeLayout updatingDraftLayout = (RelativeLayout) findViewById(R.id.updatingDraft);
-        updatingDraftLayout.setVisibility(View.GONE);
-
-    }*/
-
-    /*private SnuffyApplication getApp() {
-        return (SnuffyApplication) getApplication();
-    }*/
-
     void trackPageView(@NonNull final GPage page) {
         EventTracker.getInstance(this).screenView(page.gtapiTrxId, getLanguage());
 
@@ -820,10 +700,20 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
     static class GtPagesPagerAdapter extends RecyclerView.Adapter<SnuffyPWActivity.ViewHolder> {
 
-        private List<GPage> mPages = new ArrayList<>();
+        private List<GPage> mPages;
 
-        public GtPagesPagerAdapter(GPage gPage) {
-            mPages.add(gPage);
+        public GtPagesPagerAdapter(int location, int capacity, GPage gPage) {
+            GPage blankPage = new GPage();
+            mPages = new ArrayList<GPage>();
+            for (int i = 0; i < capacity; i++) {
+                if (i == location) {
+                    mPages.add(gPage);
+                } else {
+                    mPages.add(blankPage);
+                }
+
+            }
+
             setHasStableIds(true);
         }
 
@@ -838,24 +728,13 @@ public class SnuffyPWActivity extends AppCompatActivity {
                     .inflate(R.layout.page_gt_page_frame, parent, false));
         }
 
-//        public void addItem(int position) {
-//            final int id = mCurrentItemId++;
-//            mItems.add(position, id);
-//            notifyItemInserted(position);
-//        }
-//
-//        public void removeItem(int position) {
-//            mItems.remove(position);
-//            notifyItemRemoved(position);
-//        }
-
-        public void addPages(GPage page) {
-            mPages.add(page);
-            this.notifyItemInserted(mPages.size() - 1);
+        public void addPages(int location, GPage page) {
+            mPages.set(location, page);
+            this.notifyItemChanged(location);
         }
 
         public void setPages(@NonNull final List<GPage> pages) {
-            mPages = pages; //pages != null ? ImmutableList.copyOf(pages) : ImmutableList.<GPage>of();
+            mPages = pages;
             notifyDataSetChanged();
         }
 
@@ -870,21 +749,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
             return mPages.size();
         }
 
-//        @Override
-//        protected int getItemPositionFromId(final long id) {
-//            /*for (int i = 0; i < mPages.size(); i++) {
-//                if (convertId(mPages.get(i).getModel().getId()) == id) {
-//                    return i;
-//                }
-//            }*/
-//            return (int) id;
-//            //return POSITION_NONE;
-//
-//        }
-
-        /*
-            TODO: no for loops
-         */
         @Nullable
         GPage getItemFromPosition(final int position) {
             return mPages.get(position);
@@ -893,37 +757,13 @@ public class SnuffyPWActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull final SnuffyPWActivity.ViewHolder holder, final int position) {
 
-
-            /*
-                TODO: This is duplicating business object.
-             */
-            //holder.mPage = mPages.get(position);
-
-            //if (holder.mContentContainer != null) {
-            // remove any previous page from the content container
-                /* This might be costly  */
-            //holder.mContentContainer.removeAllViews();
-            // t
-            // attach the current page to the content container;
             GPage itemFromPosition = getItemFromPosition(position);
-            //TODO:
 
             RenderSingleton.getInstance().addGlobalColor(position, itemFromPosition.getBackgroundColor());
             itemFromPosition.render(LayoutInflater.from(holder.mContentContainer.getContext()),
                     holder.mContentContainer, position);
-            //}
-        }
 
-//        @Override
-//        protected void onViewRecycled(@NonNull final ViewHolder holder) {
-//            super.onViewRecycled(holder);
-//            //holder.mPage = null;
-//            //TODO: this will have a bad effect with rotation and possible timing issues with home, backbuttons.  This is possible memory leak.
-//            if (holder.mContentContainer != null) {
-//                holder.mContentContainer.removeAllViews();
-//
-//            }
-//        }
+        }
 
     }
 
@@ -938,138 +778,92 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
     }
 
-//    class FragmentsAdapter extends FragmentStatePagerAdapter  {
-//        LinkedHashMap<Integer, Fragment> mFragmentCache = new LinkedHashMap<>();
-//
-//        public FragmentsAdapter(FragmentManager fm) {
-//            super(fm);
-//            setHasStableIds(false);
-//            RenderSingleton.getInstance().setPages(new ArrayList<GPage>());
-//        }
-//
-//        public FragmentsAdapter(List<GPage> mPages, FragmentManager fm) {
-//            super(fm);
-//            RenderSingleton.getInstance().setPages(mPages);
-//
-//        }
-//
-//        public void addPages(GPage page) {
-//            RenderSingleton.getInstance().getPages().add(page);
-//            this.notifyItemInserted(RenderSingleton.getInstance().getPages().size() - 1);
-//        }
-//
-//        public void setPages(@NonNull final List<GPage> pages) {
-//            RenderSingleton.getInstance().setPages(pages);
-//            notifyDataSetChanged();
-//        }
-//
-//        GPage getItemFromPosition(final int position) {
-//            return RenderSingleton.getInstance().getPages(position);
-//        }
-//
-//
-//        @Override
-//        public long getItemId(final int position) {
-//            //TODO:// FIXME: 12/19/2016
-//            return position;
-//        }
-//
-//        @Override
-//        public Fragment getItem(int position, Fragment.SavedState savedState) {
-//            Fragment f = mFragmentCache.containsKey(position) ? mFragmentCache.get(position)
-//
-//                    : SlidePageFragment.create(snuffyRecyclerView.getCurrentPosition());
-//            Log.e("test", "getItem:" + position + " from cache" + mFragmentCache.containsKey
-//                    (position));
-////            if (savedState == null || f.getArguments() == null) {
-////                Bundle bundle = new Bundle();
-////                bundle.putInt("index", position);
-////                f.setArguments(bundle);
-////                Log.e("test", "setArguments:" + position);
-////            } else if (!mFragmentCache.containsKey(position)) {
-////                f.setInitialSavedState(savedState);
-////                Log.e("test", "setInitialSavedState:" + position);
-////            }
-//            mFragmentCache.put(position, f);
-//            return f;
-//        }
-//
-//        @Override
-//        public void onDestroyItem(int position, Fragment fragment) {
-//            // onDestroyItem
-//            while (mFragmentCache.size() > 5) {
-//                Object[] keys = mFragmentCache.keySet().toArray();
-//                mFragmentCache.remove(keys[0]);
-//            }
-//        }
-//
-////        @Override
-////        public String getPageTitle(int position) {
-////            return "item-" + position;
-////        }
-//
-//        @Override
-//        public int getItemCount() {
-//            return RenderSingleton.getInstance().getPages().size();
-//        }
-//    }
+    private class ProcessPackageAsync extends AsyncTask<Integer, Integer, List<GPage>> {
 
-    private class ProcessPackageAsync extends AsyncTask<String, Integer, List<GPage>>
-            implements ProgressCallback {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-           /* if (mProgressDialog != null) {
-                mProgressDialog.setProgress(0);
-                mProgressDialog.setMax(1);
-            }
-            showDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);*/
-        }
 
         @Override
         @WorkerThread
-        protected List<GPage> doInBackground(String... params) {
+        protected List<GPage> doInBackground(Integer... params) {
             // params are not used
+            final int loadingStartPosition = params.length > 0 ? params[0] : 0;
+            Log.i(TAG, "loadingStartPosition: " + loadingStartPosition);
 
             Diagnostics.StartMethodTracingByKey("snuffy");
 
-            try {
-                File f = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), mConfigFileName);
+            File f = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), mConfigFileName);
 
+            try {
                 RenderSingleton.getInstance().setGDocument(XMLUtil.parseGDocument(f));
 
-                GDocument gDocument = RenderSingleton.getInstance().getGDocument();
-                for (int i = 0; i < gDocument.pages.size(); i++) {
-                    GDocumentPage gdp = gDocument.pages.get(i);
+                final GDocument gDocument = RenderSingleton.getInstance().getGDocument();
 
-                    File fileForGDP = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), gdp.filename);
+                new Thread() {
+                    public void run() {
+                        for (int i = loadingStartPosition; i >= 0; i--) {
+                            GDocumentPage gdp = gDocument.documentPages.get(i);
 
-                    if (i == 0) {
-                        final GPage gPage = XMLUtil.parseGPage(fileForGDP);
-                        SnuffyPWActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                initializeAdapter(gPage);
+                            File fileForGDP = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), gdp.filename);
+                            try {
+                                if (i == loadingStartPosition) {
+                                    final GPage gPage = XMLUtil.parseGPage(fileForGDP);
+                                    SnuffyPWActivity.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            initializeAdapter(loadingStartPosition, gDocument.documentPages.size(), gPage);
+                                            new Thread() {
+                                                public void run() {
+                                                    for (int i = loadingStartPosition + 1; i < gDocument.documentPages.size(); i++) {
+                                                        GDocumentPage gdp = gDocument.documentPages.get(i);
+
+                                                        File fileForGDP = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), gdp.filename);
+                                                        try {
+                                                            final GPage gPage = XMLUtil.parseGPage(fileForGDP);
+                                                            final int addIndex = i;
+                                                            //sleepWhilstWaiting();
+                                                            SnuffyPWActivity.this.runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    SnuffyPWActivity.this.mPagerAdapter.addPages(addIndex, gPage);
+                                                                }
+                                                            });
+                                                        } catch (Exception e) {
+                                                            Crashlytics.logException(e);
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+                                                }
+                                            }.start();
+                                        }
+                                    });
+                                } else {
+
+                                    final GPage gPage = XMLUtil.parseGPage(fileForGDP);
+                                    final int addIndex = i;
+                                    //sleepWhilstWaiting();
+                                    SnuffyPWActivity.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            SnuffyPWActivity.this.mPagerAdapter.addPages(addIndex, gPage);
+                                        }
+                                    });
+                                }
+                            } catch (Exception e) {
+                                Crashlytics.logException(e);
+                                e.printStackTrace();
                             }
-                        });
-                    } else {
-                        final GPage gPage = XMLUtil.parseGPage(fileForGDP);
-                        SnuffyPWActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                SnuffyPWActivity.this.mPagerAdapter.addPages(gPage);
-                            }
-                        });
+                        }
                     }
 
-                }
-                Diagnostics.StopMethodTracingByKey("snuffy");
-                return null;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                }.start();
 
+                Diagnostics.StopMethodTracingByKey("snuffy");
+            } catch (Exception e) {
+                Crashlytics.logException(e);
+                e.printStackTrace();
+            } finally {
+                return null;
+            }
             //TODO: understand all items passsed here.
 
             /*
@@ -1095,28 +889,12 @@ public class SnuffyPWActivity extends AppCompatActivity {
                 mPackageTitle = packageReader.getPackageTitle();
             }
             */
-            return null;
-        }
-
-        public void updateProgress(int curr, int max) {
-            //onProgressUpdate(curr, max);
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... progress) {
-            /*  mProgressDialog.setMax(progress[1]);
-            mProgressDialog.setProgress(progress[0]);*/
         }
 
         @Override
         @UiThread
         protected void onPostExecute(List<GPage> result) {
-            /*if (mProgressDialog != null &&
-                    mProgressDialog.isShowing()) {
-                dismissDialog(DIALOG_PROCESS_PACKAGE_PROGRESS);
-            }*/
 
-            //onPagesLoaded(result);
             completeSetup(result != null);
         }
     }

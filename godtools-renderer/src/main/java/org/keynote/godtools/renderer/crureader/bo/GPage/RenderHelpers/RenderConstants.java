@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -23,18 +24,23 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.renderer.crureader.PopupDialogActivity;
 import org.keynote.godtools.renderer.crureader.R;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttributes;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GModal;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Compat.RenderViewCompat;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
 import org.keynote.godtools.renderer.crureader.bo.GPage.GPanel;
 import org.keynote.godtools.renderer.crureader.bo.GPage.IDO.IContexual;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.SearchableViewUtil;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.BottomSheetDialog;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.Space;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by rmatt on 11/3/2016.
@@ -63,6 +69,7 @@ public class RenderConstants {
     public static final int DEFAULT_SUBHEADER_TEXT_SIZE = 100;
     public static final String DEFAULT_BUTTON_TEXT_ALIGN = "left";
     public static final String DEFAULT_TEXT_COLOR = "#FFFFFFFF";
+    public final static String DEFAULT_NAMESPACE = "default_namespace";
     private static final String TAG = "RenderConstants";
     static View.OnClickListener followupOnClick = new View.OnClickListener() {
 
@@ -102,6 +109,63 @@ public class RenderConstants {
                 ((Activity) context).startActivityForResult(intent, 999);
             }
 
+        }
+    };
+    static View.OnClickListener simpleOnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            String[] tapEvents = RenderConstants.splitEvents((String) view.getTag());
+            int position = (int) view.getTag(R.id.button_position);
+            String packageName = RenderSingleton.getInstance().getGDocument().packagename.content;
+
+            for (String tap : tapEvents) {
+
+                if (RenderSingleton.getInstance().gPanelHashMap.get(tap.hashCode()) != null) {
+                    GodToolsEvent godToolsEvent = new GodToolsEvent(new GodToolsEvent.EventID(packageName, tap));
+                    godToolsEvent.setPosition((Integer) view.getTag(R.id.button_position));
+                    EventBus.getDefault().post(godToolsEvent);
+
+                    //BottomSheetDialog bs = BottomSheetDialog.create((Integer) view.getTag(R.id.button_position), tap.hashCode());
+                    //bs.show(RenderConstants.searchForFragmentManager(view.getContext()), "test");
+                } else if (tap.equalsIgnoreCase("followup:subscribe")) {
+                    View parentView = SearchableViewUtil.findFallBackPanel(view);
+                    if (parentView != null) {
+                        final GodToolsEvent event = new GodToolsEvent(GodToolsEvent.EventID.SUBSCRIBE_EVENT);
+                        event.setPackageCode(packageName);
+                        event.setLanguage("en");
+                        event.setFollowUpId((int) parentView.getTag(R.string.fallback));
+
+                        ArrayList<View> viewsByTag = SearchableViewUtil.getViewsByTag((ViewGroup) parentView, parentView.getContext().getString(R.string.scannable_text_input));
+                        Map<String, String> mFields = new HashMap<>();
+                        // set all input fields as data
+                        if (mFields != null) {
+                            for (View scannedView : viewsByTag) {
+
+                                if (scannedView instanceof TextInputEditText && scannedView.getTag(R.id.textinput_name) != null) {
+                                    Log.i(TAG, "Scannedview name: " + scannedView.getTag(R.id.textinput_name) + " data: " + ((TextInputEditText) scannedView).getText().toString());
+                                    event.setField((String) scannedView.getTag(R.id.textinput_name), ((TextInputEditText) scannedView).getText().toString());
+                                }
+                            }
+                        }
+
+                        // send subscribe event
+                        EventBus.getDefault().post(event);
+                        Log.i(TAG, "View has been clicked");
+                    }
+                } else {
+                    GodToolsEvent.EventID eventId = new GodToolsEvent.EventID(packageName, tap);
+                    int globalEventPosition = RenderSingleton.getInstance().getGDocument().getGlobalEventPosition(eventId);
+                    if (globalEventPosition != GodToolsEvent.INVALID_ID) {
+                        GodToolsEvent godToolsEvent = new GodToolsEvent(eventId);
+                        godToolsEvent.setPosition(globalEventPosition);
+                        godToolsEvent.setPackageCode(packageName);
+                        godToolsEvent.setLanguage("en");
+                        EventBus.getDefault().post(godToolsEvent);
+                    }
+
+                }
+            }
         }
     };
 
@@ -264,7 +328,7 @@ public class RenderConstants {
         return midSection.getId();
     }
 
-    public static String[] getTapEvents(String tapEvents) {
+    public static String[] splitEvents(String tapEvents) {
         String[] splitTapEvents = null;
         if (tapEvents != null && tapEvents.trim() != "") {
             splitTapEvents = tapEvents.split("[,]");
@@ -350,11 +414,17 @@ public class RenderConstants {
         alert.show();
     }
 
-    public static void setupUrlButtonHandler(View button, GBaseButtonAttributes.ButtonMode mode, String content) {
+    public static void setupUrlButtonHandler(View button, GBaseButtonAttributes.ButtonMode mode, String content, int position) {
+        button.setTag(R.id.button_position, position);
         button.setTag(R.id.button_mode, mode.toString());
         button.setTag(R.id.button_content, content);
         button.setOnClickListener(RenderSingleton.getInstance().mLinksOnClick);
     }
 
-    public final static String DEFAULT_NAMESPACE = "default_namespace";
+    public static void addSimpleButtonOnClickListener(View button, String tapEvents, int position) {
+        button.setTag(tapEvents);
+        button.setTag(R.id.button_position, position);
+        button.setOnClickListener(simpleOnClick);
+    }
+
 }

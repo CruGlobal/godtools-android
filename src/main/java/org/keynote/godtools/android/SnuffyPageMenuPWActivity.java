@@ -65,7 +65,7 @@ public class SnuffyPageMenuPWActivity extends ListActivity
         // on which we want to display the values defined in the from array
         int[] to = {R.id.list1Text, R.id.list1Image};
 
-        List<GDocumentPage> pages = RenderSingleton.getInstance().getGDocument().pages;
+        List<GDocumentPage> pages = RenderSingleton.getInstance().getGDocument().documentPages;
         if (pages != null) {
             for (GDocumentPage page : pages) {
                 map = new HashMap<>();
