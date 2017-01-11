@@ -10,8 +10,11 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import org.keynote.godtools.renderer.crureader.bo.GPage.Compat.RenderViewCompat;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import org.simpleframework.xml.Attribute;
+
+import java.util.List;
 
 /**
  * Created by rmatt on 10/24/2016.
@@ -20,6 +23,8 @@ import org.simpleframework.xml.Attribute;
 public abstract class GCoordinator {
 
     private static final String TAG = "GCoordinator";
+
+    public List<GodToolsEvent.EventID> eventListeners;
 
     @Attribute(name = "gtapi-trx-id", required = false)
     public String gtapiTrxId;

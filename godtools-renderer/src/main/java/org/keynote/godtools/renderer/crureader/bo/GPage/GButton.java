@@ -88,9 +88,9 @@ public class GButton extends GBaseButtonAttributes {
 
         button.setId(RenderViewCompat.generateViewId());
         button.setTag(tapEvents);
-        button.setTag(R.id.gpanel_posiiton, position);
+
         button.setText(text);
-        RenderConstants.setupUrlButtonHandler(button, mode, text);
+        RenderConstants.setupUrlButtonHandler(button, mode, text, position);
 
         return button.getId();
     }
@@ -131,7 +131,7 @@ public class GButton extends GBaseButtonAttributes {
                 FrameLayout.LayoutParams frameLayouts = (FrameLayout.LayoutParams) buttonTextView.getLayoutParams();
                 frameLayouts.gravity = RenderConstants.getGravityFromAlign(layoutAlign);
             }
-            RenderConstants.setupUrlButtonHandler(buttonTextView, mode, text);
+            RenderConstants.setupUrlButtonHandler(buttonTextView, mode, text, position);
         }
 
         return outerLayout.getId();

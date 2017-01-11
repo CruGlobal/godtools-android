@@ -3,11 +3,13 @@ package org.keynote.godtools.renderer.crureader;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.percent.PercentLayoutHelper;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -18,6 +20,8 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Compat.RenderViewCompat;
 import org.keynote.godtools.renderer.crureader.bo.GPage.IDO.IContexual;
@@ -40,15 +44,11 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     public static final String CONSTANTS_IMAGE_HEIGHT_INT_EXTRA = "ImageHeight";
     public static final String CONSTANTS_POSITION_INT_EXTRA = "position";
     public static final String CONSTANTS_IMAGE_LOCATION = "imageLocation";
-
-
+    GCoordinator gPanel;
     private PercentRelativeLayout extraContent;
     private AutoScaleTextView tv;
     private ImageView iv;
     private LinearLayout ll;
-
-    GCoordinator gPanel;
-
     private float Y;
     private boolean fixed = false;
     private int screenHeight;
@@ -79,7 +79,6 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
 
         bindLayouts();
         setUpDismissAction();
-
 
         setUpImageView();
 
@@ -168,15 +167,14 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
         iv = (ImageView) findViewById(R.id.popup_imageView);
         ll.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(mPosition));
 
-
     }
 
     private void setUpImageView() {
         if (hasImageExtraFromBigButton()) {
-                iv.getLayoutParams().height = mImageHeight;
-                iv.getLayoutParams().width = mImageWidth;
-                ImageAsyncTask.setImageView(mImageLocation, iv);
-                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+            iv.getLayoutParams().height = mImageHeight;
+            iv.getLayoutParams().width = mImageWidth;
+            ImageAsyncTask.setImageView(mImageLocation, iv);
+            tv.setGravity(Gravity.CENTER_HORIZONTAL);
         }
     }
 
@@ -216,11 +214,41 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
         percentLayoutInfo.topMarginPercent = Y / (float) screenHeight;
     }
 
-
     @Override
     public FragmentManager getContexualFragmentActivity() {
 
         return this.getSupportFragmentManager();
     }
+
+    @Subscribe
+    public void onDismissEvent(@NonNull final OnDismissEvent event) {
+        Log.i(TAG, "On Dismiss event");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            if (!this.isChangingConfigurations())
+                finish();
+        } else {
+            if (!this.isFinishing()) {
+                finish();
+            }
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+
+    }
+
+
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+
 }
 

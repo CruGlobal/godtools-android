@@ -10,9 +10,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.Window;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttributes;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
@@ -115,5 +119,33 @@ public class AlertDialogActivity extends Activity {
         mButtonMode = GBaseButtonAttributes.ButtonMode.valueOf(this.getIntent().getExtras().getString(CONSTANTS_ALERT_DIALOG_MODE_STRING_EXTRA));
         content = this.getIntent().getExtras().getString(CONSTANTS_ALERT_DIALOG_CONTENT_STRING_EXTRA);
     }
+
+
+    @Subscribe
+    public void onDismissEvent(@NonNull final OnDismissEvent event) {
+        Log.i(TAG, "On Dismiss event");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            if (!this.isChangingConfigurations())
+                finish();
+        } else {
+            if (!this.isFinishing()) {
+                finish();
+            }
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
 }
 

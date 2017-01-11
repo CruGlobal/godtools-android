@@ -3,29 +3,24 @@ package org.keynote.godtools.renderer.crureader.bo.GPage.Event;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.keynote.godtools.renderer.crureader.bo.GPage.GFollowupModal;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
-
 public class GodToolsEvent {
+    public static final int INVALID_ID = -1;
     @NonNull
     private final EventID eventID;
-
+    private final Map<String, String> mFields = new HashMap<>();
     @Nullable
     private String mPackageCode;
-    private long mFollowUpId = GFollowupModal.INVALID_ID;
+    private long mFollowUpId = INVALID_ID;
     private String mLanguage;
-    private int position;
-
-    private final Map<String, String> mFields = new HashMap<>();
+    private int position = INVALID_ID;
 
     public GodToolsEvent(@NonNull EventID eventID) {
         this.eventID = eventID;
+
     }
 
     @NonNull
@@ -115,7 +110,7 @@ public class GodToolsEvent {
 
         @Override
         public int hashCode() {
-            return Arrays.hashCode(new String[] {namespace.toLowerCase(), id.toLowerCase()});
+            return Arrays.hashCode(new String[]{namespace.toLowerCase(), id.toLowerCase()});
         }
     }
 }

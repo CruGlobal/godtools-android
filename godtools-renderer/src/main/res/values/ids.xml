@@ -3,7 +3,6 @@
     <item name="button_mode" type="id"/>
     <item name="button_content" type="id"/>
     <item name="gpanel_tag" type="id"/>
-    <item name="gpanel_posiiton" type="id"/>
     <item name="imageurl_tag" type="id"/>
     <item name="position" type="id"/>
     <item name="image_width" type="id"/>

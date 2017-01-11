@@ -9,6 +9,7 @@ import org.keynote.godtools.renderer.crureader.R;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseTextAttributes;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Compat.RenderViewCompat;
 
+import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
@@ -27,7 +28,7 @@ public class GLinkButtonAttributes extends GBaseTextAttributes {
         View inflated = inflater.inflate(R.layout.g_link_button, viewGroup);
         TextView tv = (TextView) inflated.findViewById(R.id.g_button_link_textview);
         tv.setId(RenderViewCompat.generateViewId());
-
+        RenderConstants.addSimpleButtonOnClickListener(tv, tapEvents, position);
         updateBaseAttributes(tv);
         return tv.getId();
     }

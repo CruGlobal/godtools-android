@@ -17,7 +17,6 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 import org.keynote.godtools.renderer.crureader.bo.GPage.GPage;
 
 import java.util.Hashtable;
-import java.util.List;
 
 import static org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttributes.ButtonMode.phone;
 
@@ -31,11 +30,13 @@ public class RenderSingleton {
     public static final float KNOWN_HEIGHT = 700.0F;
 
     private static RenderSingleton renderSingleton;
-    public SparseArray<GCoordinator> gPanelHashMap = new SparseArray<GCoordinator>();
+
+
     /*
-    Current View pager location.
+    This holds page local events
      */
-    public int curPosition;
+    public SparseArray<GCoordinator> gPanelHashMap = new SparseArray<>();
+
     /*
     screenScalar
      */
@@ -56,7 +57,7 @@ public class RenderSingleton {
     Currently rendered GDocument
      */
     private GDocument GDocument;
-    private List<GPage> pages;
+
     private BaseAppConfig baseAppConfig;
     View.OnClickListener mLinksOnClick = new View.OnClickListener() {
 
@@ -144,16 +145,10 @@ public class RenderSingleton {
     }
 
     public GPage getPages(int mPosition) {
-        return pages.get(mPosition);
+        return getGDocument().getPages().get(mPosition);
     }
 
-    public List<GPage> getPages() {
-        return pages;
-    }
 
-    public void setPages(List<GPage> pages) {
-        this.pages = pages;
-    }
 
     public void setBaseAppConfig(BaseAppConfig baseAppConfig) {
         this.baseAppConfig = baseAppConfig;
