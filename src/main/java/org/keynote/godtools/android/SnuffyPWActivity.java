@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Process;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
@@ -201,7 +202,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
     @Subscribe
     public void onNavigationEvent(@NonNull final GodToolsEvent event) {
 
-        if(!event.getEventID().equals(GodToolsEvent.EventID.ERROR_EVENT)) {
+        if (!event.getEventID().equals(GodToolsEvent.EventID.ERROR_EVENT)) {
             EventBus.getDefault().post(new OnDismissEvent());
             dismissFollowupModal();
             if (triggerFollowupModal(event)) {
@@ -209,9 +210,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
             } else if (triggerLocalPageNavigation(event)) {
 
             }
-        }
-        else
-        {
+        } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(SnuffyPWActivity.this);
             builder.setMessage(event.getErrorContent())
                     .setCancelable(false)
@@ -307,30 +306,30 @@ public class SnuffyPWActivity extends AppCompatActivity {
 //                    //TODO: RM why is this here, this should be elsewhere.
 //
 //
-//                    /* if (settings.getInt(COUNT, 0) >= 3) {
-//                        if ((mAppPackage.equalsIgnoreCase(KGP) && newPosition == 7) ||
-//                                (mAppPackage.equalsIgnoreCase(FOUR_LAWS) && newPosition == 6)) {
-//                            Log.i(TAG, "App used 3 times and prayer page reached.");
-//                            GodToolsApiClient.updateNotification(
-//                                    settings.getString(AUTH_CODE, ""), regid, NotificationInfo.AFTER_1_PRESENTATION,
-//                                    new NotificationUpdateTask.NotificationUpdateTaskHandler() {
-//                                        @Override
-//                                        public void registrationComplete(String regId) {
-//                                            Log.i(NotificationInfo.NOTIFICATION_TAG,
-//                                                    "1 Presentation Notification notice sent to API");
-//                                        }
-//
-//                                        @Override
-//                                        public void registrationFailed() {
-//                                            Log.e(NotificationInfo.NOTIFICATION_TAG,
-//                                                    "1 Presentation notification notice failed to send to API");
-//                                        }
-//                                    });
-//                        }
-//                    }*/
-//
-//                }
-//            });
+                    /* if (settings.getInt(COUNT, 0) >= 3) {
+                        if ((mAppPackage.equalsIgnoreCase(KGP) && newPosition == 7) ||
+                                (mAppPackage.equalsIgnoreCase(FOUR_LAWS) && newPosition == 6)) {
+                            Log.i(TAG, "App used 3 times and prayer page reached.");
+                            GodToolsApiClient.updateNotification(
+                                    settings.getString(AUTH_CODE, ""), regid, NotificationInfo.AFTER_1_PRESENTATION,
+                                    new NotificationUpdateTask.NotificationUpdateTaskHandler() {
+                                        @Override
+                                        public void registrationComplete(String regId) {
+                                            Log.i(NotificationInfo.NOTIFICATION_TAG,
+                                                    "1 Presentation Notification notice sent to API");
+                                        }
+
+                                        @Override
+                                        public void registrationFailed() {
+                                            Log.e(NotificationInfo.NOTIFICATION_TAG,
+                                                    "1 Presentation notification notice failed to send to API");
+                                        }
+                                    });
+                        }
+                    }*/
+
+            //   }
+            //});
         }
 
     }
@@ -792,8 +791,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
     private class ProcessPackageAsync extends AsyncTask<Integer, Integer, List<GPage>> {
 
-
-
         @Override
         @WorkerThread
         protected List<GPage> doInBackground(Integer... params) {
@@ -812,6 +809,8 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
                 new Thread() {
                     public void run() {
+                        super.run();
+                        Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
                         for (int i = loadingStartPosition; i >= 0; i--) {
                             GDocumentPage gdp = gDocument.documentPages.get(i);
 
@@ -825,6 +824,10 @@ public class SnuffyPWActivity extends AppCompatActivity {
                                             initializeAdapter(loadingStartPosition, gDocument.documentPages.size(), gPage);
                                             new Thread() {
                                                 public void run() {
+                                                    /* Lower the thread priority, so it doesn't interfere with loading images from the disk */
+                                                    Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND - 1);
+                                                    Log.i("AsyncLoad", "I'm less important!!!!!");
+                                                    Thread.yield();
                                                     for (int i = loadingStartPosition + 1; i < gDocument.documentPages.size(); i++) {
                                                         GDocumentPage gdp = gDocument.documentPages.get(i);
 
@@ -849,7 +852,10 @@ public class SnuffyPWActivity extends AppCompatActivity {
                                         }
                                     });
                                 } else {
-
+                                    /* Lower the thread priority, so it doesn't interfere with loading images from the disk */
+                                    Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND - 1);
+                                    Thread.yield();
+                                    Log.i("AsyncLoad", "I'm less important!!!!!");
                                     final GPage gPage = XMLUtil.parseGPage(fileForGDP);
                                     final int addIndex = i;
                                     //sleepWhilstWaiting();

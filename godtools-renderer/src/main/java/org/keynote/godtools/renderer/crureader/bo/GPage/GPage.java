@@ -3,6 +3,7 @@ package org.keynote.godtools.renderer.crureader.bo.GPage;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.percent.PercentRelativeLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +11,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import org.keynote.godtools.renderer.crureader.R;
-import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseTextAttributes;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GModal;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.Diagnostics;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.ImageAsyncTask;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
-
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -53,50 +53,58 @@ public class GPage extends GCoordinator {
     @ElementList(inline = true, required = false, entry = "followup-modal", type = GFollowupModal.class)
     public ArrayList<GModal> followupModalsArrayList = new ArrayList<GModal>();
 
-
     @Attribute
     public String color;
     @Attribute(required = false)
     public String buttons;
 
-    @Attribute(required = false, name="backgroundimage")
+    @Attribute(required = false, name = "backgroundimage")
     public String backgroundImage;
 
     @Element(name = "question", required = false)
     public GQuestion gQuestion;
 
+    public static void setImageView(String content, final ImageView imageView) {
+
+        new ImageAsyncTask() {
+            @Override
+            protected void onPostExecute(Drawable drawable) {
+                super.onPostExecute(drawable);
+                Log.i("AsyncLoad", "I'm an important!!!!!");
+                if (drawable != null && imageView != null) {
+                    imageView.setImageDrawable(drawable);
+                }
+            }
+        }.start(content);
+
+    }
+
     public String getBackgroundColor() {
         if (color != null) return color;
-        else return RenderConstants.DEFAULT_BACKGROUND_COLOR;
+        else
+            return RenderConstants.DEFAULT_BACKGROUND_COLOR;
     }
 
     @Override
     public int render(LayoutInflater inflater, ViewGroup container, int position) {
         //setDefaultValues();
         View rootView = (View) inflater.inflate(R.layout.g_page, container);
-        PercentRelativeLayout percentRelativeLayout = (PercentRelativeLayout)rootView.findViewById(R.id.g_page_main_layout_percentrelativelayout);
+        PercentRelativeLayout percentRelativeLayout = (PercentRelativeLayout) rootView.findViewById(R.id.g_page_main_layout_percentrelativelayout);
 
-        ImageView backgroundImageView = (ImageView)percentRelativeLayout.findViewById(R.id.g_page_background_imageview);
+        ImageView backgroundImageView = (ImageView) percentRelativeLayout.findViewById(R.id.g_page_background_imageview);
         Context context = inflater.getContext();
         /* Background color */
 
         //container.setBackgroundTintList();
         percentRelativeLayout.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
 
-
         Integer topId = -1;
         Integer bottomId = -1;
-
-
 
         //percentRelativeLayout.setId();
         loadBackground(backgroundImageView, position);
 
-
-
-
         if (title != null) {
-
 
             title.render(inflater, percentRelativeLayout, position);
 
@@ -108,19 +116,16 @@ public class GPage extends GCoordinator {
             }
             Diagnostics.StopMethodTracingByKey("findViewWithTag(top)");
 
-
         }
 
-
-        if (gQuestion != null) bottomId = gQuestion.render(inflater, percentRelativeLayout, position);
+        if (gQuestion != null)
+            bottomId = gQuestion.render(inflater, percentRelativeLayout, position);
 
         if (GCoordinatorArrayList != null && GCoordinatorArrayList.size() > 0) {
             int midSectionId;
-            if(bigbuttons != null && bigbuttons > 0)
-            {
+            if (bigbuttons != null && bigbuttons > 0) {
                 midSectionId = RenderConstants.renderLinearLayoutList(inflater, percentRelativeLayout, GCoordinatorArrayList, position);
-            }
-            else {
+            } else {
                 midSectionId = RenderConstants.renderLinearLayoutListWeighted(inflater, percentRelativeLayout, GCoordinatorArrayList, position, 0);
             }
             if (topId > 0)
@@ -132,36 +137,32 @@ public class GPage extends GCoordinator {
 
         RenderConstants.setUpFollowups(followupModalsArrayList);
 
-
         return percentRelativeLayout.getId();
 
     }
 
-    private void loadBackground(final ImageView iv, int position) {
+    private void loadBackground(final ImageView iv, final int position) {
 
-        String resourceName = (watermark != null && watermark.length() > 0) ? watermark : backgroundImage;
-        Diagnostics.StartMethodTracingByKey(position + "_" + resourceName);
+        final String resourceName = (watermark != null && watermark.length() > 0) ? watermark : backgroundImage;
+
         if (resourceName != null) {
+
+            ImageAsyncTask.setImageView(resourceName, iv);
             new ImageAsyncTask() {
                 @Override
                 protected void onPostExecute(Drawable drawable) {
                     super.onPostExecute(drawable);
                     if (drawable != null && iv != null) {
                         iv.setImageDrawable(drawable);
-
                     }
                 }
             }.start(resourceName);
 
         }
-        Diagnostics.StopMethodTracingByKey(position + "_" + resourceName);
 
     }
 
-    private String getImageURL() {
-        return "file:///android_asset/" + backgroundImage;
-    }
-        //TODO: add back sliding panel for peek view
+    //TODO: add back sliding panel for peek view
     //vgTop.setId(RenderViewCompat.generateViewId());
     //topId = vgTop.getId();
     //Log.i(TAG, "View Compat top Id: " + topId);
@@ -202,7 +203,6 @@ public class GPage extends GCoordinator {
                 cv.setOnClickListener(slidingPanelOnClickListener);
                 percentRelativeLayout.addView(cv, slidingViewLayoutParams);
             }*/
-
 
 }
 
