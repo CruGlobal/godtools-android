@@ -385,8 +385,10 @@ public class SnuffyPWActivity extends AppCompatActivity {
         if (mPagerAdapter != null) {
             int hashCode = event.getEventID().getId().hashCode();
             if (RenderSingleton.getInstance().gPanelHashMap.get(hashCode) != null) {
+
+                final FragmentManager fm = getSupportFragmentManager();
                 BottomSheetDialog bs = BottomSheetDialog.create(event.getPosition(), hashCode);
-                bs.show(getSupportFragmentManager(), TAG_FOLLOWUP_MODAL);
+                bs.show(fm.beginTransaction().addToBackStack(TAG_FOLLOWUP_MODAL), TAG_FOLLOWUP_MODAL);;
                 return true;
             }
         }

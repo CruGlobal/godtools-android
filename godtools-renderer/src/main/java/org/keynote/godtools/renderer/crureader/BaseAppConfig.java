@@ -27,4 +27,9 @@ public abstract class BaseAppConfig {
     public abstract String getOK();
 
     public abstract String getCopy();
+
+    public abstract String getFollowupModalInputValidGeneric();
+
+    public abstract String getFollowupModalInputInvalidEmail();
+
 }
