@@ -68,6 +68,16 @@ public class RenderAppConfig extends BaseAppConfig {
         return get(R.string.copy);
     }
 
+    @Override
+    public String getFollowupModalInputValidGeneric() {
+        return get(R.string.followup_modal_input_invalid_generic);
+    }
+
+    @Override
+    public String getFollowupModalInputInvalidEmail() {
+        return get(R.string.followup_modal_input_invalid_email);
+    }
+
     public String get(int id) {
         return RenderSingleton.getInstance().getContext().getString(id);
     }

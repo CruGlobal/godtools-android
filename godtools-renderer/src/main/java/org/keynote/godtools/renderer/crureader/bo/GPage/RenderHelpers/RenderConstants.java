@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +20,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,6 +33,7 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GModal;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Compat.RenderViewCompat;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
+import org.keynote.godtools.renderer.crureader.bo.GPage.GInputField;
 import org.keynote.godtools.renderer.crureader.bo.GPage.GPanel;
 import org.keynote.godtools.renderer.crureader.bo.GPage.IDO.IContexual;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Util.SearchableViewUtil;
@@ -110,6 +113,8 @@ public class RenderConstants {
 
         }
     };
+
+    //TODO: this is messy clean up.
     static View.OnClickListener simpleOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -117,19 +122,21 @@ public class RenderConstants {
             String[] tapEvents = RenderConstants.splitEvents((String) view.getTag());
             int position = (int) view.getTag(R.id.button_position);
             String packageName = RenderSingleton.getInstance().getGDocument().packagename.content;
-
+            boolean valid = true;
+            ArrayList<GodToolsEvent> sendList = new ArrayList<GodToolsEvent>();
             for (String tap : tapEvents) {
 
                 if (RenderSingleton.getInstance().gPanelHashMap.get(tap.hashCode()) != null) {
                     GodToolsEvent godToolsEvent = new GodToolsEvent(new GodToolsEvent.EventID(packageName, tap));
                     godToolsEvent.setPosition((Integer) view.getTag(R.id.button_position));
-                    EventBus.getDefault().post(godToolsEvent);
+                    sendList.add(godToolsEvent);
 
                     //BottomSheetDialog bs = BottomSheetDialog.create((Integer) view.getTag(R.id.button_position), tap.hashCode());
                     //bs.show(RenderConstants.searchForFragmentManager(view.getContext()), "test");
                 } else if (tap.equalsIgnoreCase("followup:subscribe")) {
                     View parentView = SearchableViewUtil.findFallBackPanel(view);
                     if (parentView != null) {
+
                         final GodToolsEvent event = new GodToolsEvent(GodToolsEvent.EventID.SUBSCRIBE_EVENT);
                         event.setPackageCode(packageName);
                         event.setLanguage("en");
@@ -141,16 +148,25 @@ public class RenderConstants {
                         if (mFields != null) {
                             for (View scannedView : viewsByTag) {
 
-                                if (scannedView instanceof TextInputEditText && scannedView.getTag(R.id.textinput_name) != null) {
-                                    Log.i(TAG, "Scannedview name: " + scannedView.getTag(R.id.textinput_name) + " data: " + ((TextInputEditText) scannedView).getText().toString());
-                                    event.setField((String) scannedView.getTag(R.id.textinput_name), ((TextInputEditText) scannedView).getText().toString());
+                                if (scannedView instanceof TextInputLayout && scannedView.getTag() != null) {
+
+                                    TextInputEditText editText = (TextInputEditText) (((FrameLayout) ((TextInputLayout) scannedView).getChildAt(0)).getChildAt(0));
+                                    String content = editText.getText() != null ? editText.getText().toString() : "";
+                                    GInputField gInputField = (GInputField) editText.getTag();
+                                    if (gInputField.hasValidation()) {
+                                        if (gInputField.isValidValue(content)) {
+                                            event.setField(gInputField.name, content);
+                                        } else {
+                                            valid = false;
+                                            gInputField.showError((TextInputLayout) scannedView);
+                                        }
+                                    }
                                 }
                             }
                         }
 
-                        // send subscribe event
-                        EventBus.getDefault().post(event);
-                        Log.i(TAG, "View has been clicked");
+                        sendList.add(event);
+
                     }
                 } else {
                     GodToolsEvent.EventID eventId = new GodToolsEvent.EventID(packageName, tap);
@@ -160,11 +176,18 @@ public class RenderConstants {
                         godToolsEvent.setPosition(globalEventPosition);
                         godToolsEvent.setPackageCode(packageName);
                         godToolsEvent.setLanguage("en");
-                        EventBus.getDefault().post(godToolsEvent);
+                        sendList.add(godToolsEvent);
+
                     }
 
                 }
             }
+            if (valid) {
+                for (GodToolsEvent gte : sendList) {
+                    EventBus.getDefault().post(gte);
+                }
+            }
+
         }
     };
 
@@ -265,8 +288,6 @@ public class RenderConstants {
         LinearLayout.LayoutParams evenSpreadDownSpaceLayoutParams;
         evenSpreadDownSpaceLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, maxSpace, 1.0f); //max space is to deal with popups that shouldn't take up the whole container.
 
-        // if(!(GCoordinatorArrayList.get(0) instanceof GBaseTextAttributes)) {
-
         midSection.addView(space, evenSpreadDownSpaceLayoutParams);
         // }
         for (int i = 0; i < GCoordinatorArrayList.size(); i++) {
@@ -277,38 +298,16 @@ public class RenderConstants {
                 break;
             } else {
                 tap.render(inflater, midSection, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
-                // if(!(tap instanceof GBaseTextAttributes)) {
+
                 space = new Space(inflater.getContext());
 
                 space.setId(RenderViewCompat.generateViewId());
                 midSection.addView(space, evenSpreadDownSpaceLayoutParams);
-                //}
-               /* midSection.setClipChildren(false);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    midSection.setClipToOutline(false);
-                }
-                midSection.setClipToPadding(false);*/
 
             }
         }
-        /*for (GCoordinator tap : GCoordinatorArrayList) {
-            tap.render(inflater, midSection, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
-            space = newnew Space(inflater.getContext());
-            if (!tap.isManuallyLaidOut()) {
-                midSection.addView(space, evenSpreadDownSpaceLayoutParams);
-            }
-            /*
-            tap.render(inflater, tap.y == null ? midSection : viewGroup, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
-            if (!tap.isManuallyLaidOut()) //If items are manually laid out, we don't want to add space between them.
-            {
-                space = newnew Space(inflater.getContext());
-                midSection.addView(space, evenSpreadDownSpaceLayoutParams);
-            }
-            */
 
-        //}
         viewGroup.addView(midSection, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, maxSpace > 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : ViewGroup.LayoutParams.MATCH_PARENT)); //If there is max space wrap_content because we only want to fill a small area.   If it isn't we want to fill the whole available area evenly.
-        //((RelativeLayout.LayoutParams)viewGroup.getLayoutParams()).addRule(RelativeLayout.ALIGN_BASELINE);
         return midSection.getId();
     }
 
@@ -316,11 +315,9 @@ public class RenderConstants {
         LinearLayout midSection = new LinearLayout(inflater.getContext());
         midSection.setOrientation(LinearLayout.VERTICAL);
         midSection.setId(RenderViewCompat.generateViewId());
-        //boolean firstElementInList = true;
         for (GCoordinator tap : GCoordinatorArrayList) {
-            //tap.setFirstElementInList(firstElementInList);
             tap.render(inflater, tap.y == null ? midSection : viewGroup, position); // put into the relative layout if x, y are managing the positioning, or else put into the weight layout.
-            //firstElementInList = false;
+
         }
 
         viewGroup.addView(midSection, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)); //If there is max space wrap_content because we only want to fill a small area.   If it isn't we want to fill the whole available area evenly.

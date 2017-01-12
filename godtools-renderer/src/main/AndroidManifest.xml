@@ -9,8 +9,7 @@
 
     <application
         android:allowBackup="true"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:supportsRtl="true">
         <activity
             android:name=".AlertDialogActivity"
             android:screenOrientation="portrait"
