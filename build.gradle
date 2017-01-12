@@ -130,9 +130,10 @@ android {
             ext.enableCrashlytics = false
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
-
-            buildConfigField "String", "BASE_URL_V2", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/v2/\""
-            buildConfigField "String", "BASE_URL", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/\""
+            buildConfigField "String", "BASE_URL_V2", "\"https://api.godtoolsapp.com/godtools-api/rest/v2/\""
+            buildConfigField "String", "BASE_URL", "\"https://api.godtoolsapp.com/godtools-api/rest/\""
+            //buildConfigField "String", "BASE_URL_V2", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/v2/\""
+            //buildConfigField "String", "BASE_URL", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/\""
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AA2f0cb2d41f6ac7dcc256eaa9ca7e0f640859fd52\""
         }
         release {

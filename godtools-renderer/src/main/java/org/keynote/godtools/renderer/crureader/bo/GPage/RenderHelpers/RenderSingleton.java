@@ -82,6 +82,7 @@ public class RenderSingleton {
                     Intent i = new Intent(RenderSingleton.getInstance().getContext(), AlertDialogActivity.class);
                     i.putExtra(AlertDialogActivity.CONSTANTS_ALERT_DIALOG_CONTENT_STRING_EXTRA, content);
                     i.putExtra(AlertDialogActivity.CONSTANTS_ALERT_DIALOG_MODE_STRING_EXTRA, mode.toString());
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     RenderSingleton.getInstance().getContext().startActivity(i);
                     break;
             }

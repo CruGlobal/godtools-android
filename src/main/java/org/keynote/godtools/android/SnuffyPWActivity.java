@@ -200,12 +200,24 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
     @Subscribe
     public void onNavigationEvent(@NonNull final GodToolsEvent event) {
-        EventBus.getDefault().post(new OnDismissEvent());
-        dismissFollowupModal();
-        if (triggerFollowupModal(event)) {
-            // followup modal was displayed
-        } else if (triggerLocalPageNavigation(event)) {
 
+        if(!event.getEventID().equals(GodToolsEvent.EventID.ERROR_EVENT)) {
+            EventBus.getDefault().post(new OnDismissEvent());
+            dismissFollowupModal();
+            if (triggerFollowupModal(event)) {
+                // followup modal was displayed
+            } else if (triggerLocalPageNavigation(event)) {
+
+            }
+        }
+        else
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(SnuffyPWActivity.this);
+            builder.setMessage(event.getErrorContent())
+                    .setCancelable(false)
+                    .setPositiveButton(RenderSingleton.getInstance().getAppConfig().getOK(), null);
+            AlertDialog alert = builder.create();
+            alert.show();
         }
     }
 
@@ -864,31 +876,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
             } finally {
                 return null;
             }
-            //TODO: understand all items passsed here.
-
-            /*
-            try {
-
-
-                pages = packageReader.processPackagePW(
-                        (SnuffyApplication) getApplication(),
-                        mPageWidth, mPageHeight,
-                        mConfigFileName, mPackageStatus,
-                        ProcessPackageAsync.this,
-                        mAppPackage,
-                        // send along the language we are loading. if there is a parallel language configured and we
-                        // are not showing the primary language, send the parallel language. Otherwise send the primary
-                        // language
-                        !isUsingPrimaryLanguage && mParallelPackage != null ? mParallelPackage.getLanguage() : mAppLanguage
-                );
-            } catch (Exception e) {
-                Log.e(TAG, "processPackage failed: " + e.toString());
-                Crashlytics.logException(e);
-            }
-            if (pages != null) {
-                mPackageTitle = packageReader.getPackageTitle();
-            }
-            */
         }
 
         @Override
