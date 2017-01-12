@@ -14,9 +14,31 @@ import java.io.IOException;
 
 public class ImageAsyncTask extends AsyncTask<String, Void, Drawable> {
 
+    public static void setImageView(final String content, final ImageView imageView) {
+        Diagnostics.StartMethodTracingByKey(content);
+        new ImageAsyncTask() {
+            @Override
+            protected void onPostExecute(Drawable drawable) {
+                super.onPostExecute(drawable);
+                Log.i("AsyncLoad", "I'm an important!!!!!");
+                if (drawable != null && imageView != null) {
+                    imageView.setImageDrawable(drawable);
+                    Diagnostics.StopMethodTracingByKey(content);
+                }
+            }
+        }.start(content);
+
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+    }
 
     @Override
     protected Drawable doInBackground(String... fileLocation) {
+
         Drawable d = null;
         try {
             d = Drawable.createFromStream(RenderSingleton.getInstance().getContext().getAssets().open(fileLocation[0]), null);
@@ -38,21 +60,6 @@ public class ImageAsyncTask extends AsyncTask<String, Void, Drawable> {
             // --GB uses ThreadPoolExecutor by default--
             execute(param);
         }
-    }
-
-
-    public static void setImageView(String content, final ImageView imageView) {
-
-        new ImageAsyncTask() {
-            @Override
-            protected void onPostExecute(Drawable drawable) {
-                super.onPostExecute(drawable);
-                if (drawable != null && imageView != null) {
-                    imageView.setImageDrawable(drawable);
-                }
-            }
-        }.start(content);
-
     }
 
 }
