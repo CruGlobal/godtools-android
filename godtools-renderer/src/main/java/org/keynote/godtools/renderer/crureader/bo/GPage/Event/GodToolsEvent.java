@@ -3,6 +3,8 @@ package org.keynote.godtools.renderer.crureader.bo.GPage.Event;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttributes;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +19,9 @@ public class GodToolsEvent {
     private long mFollowUpId = INVALID_ID;
     private String mLanguage;
     private int position = INVALID_ID;
+    private GBaseButtonAttributes.ButtonMode errorMode;
+    private String errorContent;
+    private boolean mode;
 
     public GodToolsEvent(@NonNull EventID eventID) {
         this.eventID = eventID;
@@ -73,10 +78,27 @@ public class GodToolsEvent {
         }
     }
 
+    public void setErrorMode(GBaseButtonAttributes.ButtonMode errorMode) {
+        this.errorMode = errorMode;
+    }
+
+    public void setErrorContent(String errorContent) {
+        this.errorContent = errorContent;
+    }
+
+
+    public String getErrorContent() {
+        return errorContent;
+    }
+
+    public boolean getMode() {
+        return mode;
+    }
+
     /*immutable*/
     public static final class EventID {
         public static final EventID SUBSCRIBE_EVENT = new EventID("followup", "subscribe");
-
+        public static final EventID ERROR_EVENT = new EventID("error", "errordialog");
         @NonNull
         private final String namespace;
         @NonNull
@@ -112,5 +134,6 @@ public class GodToolsEvent {
         public int hashCode() {
             return Arrays.hashCode(new String[]{namespace.toLowerCase(), id.toLowerCase()});
         }
+
     }
 }

@@ -1,7 +1,6 @@
 package org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -406,12 +405,10 @@ public class RenderConstants {
     }
 
     public static void showErrorDialog(String errorMessage) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(RenderSingleton.getInstance().getContext());
-        builder.setMessage(errorMessage)
-                .setCancelable(false)
-                .setPositiveButton(RenderSingleton.getInstance().getAppConfig().getOK(), null);
-        AlertDialog alert = builder.create();
-        alert.show();
+        GodToolsEvent gte = new GodToolsEvent(GodToolsEvent.EventID.ERROR_EVENT);
+        gte.setErrorContent(errorMessage);
+        EventBus.getDefault().post(gte);
+
     }
 
     public static void setupUrlButtonHandler(View button, GBaseButtonAttributes.ButtonMode mode, String content, int position) {
