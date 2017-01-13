@@ -64,9 +64,11 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Views.BottomSheetDialog;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -119,6 +121,10 @@ public class SnuffyPWActivity extends AppCompatActivity {
     /* BEGIN lifecycle */
     private ProgressDialog mProgressDialog;
     private int mPositionBeforeLanguageSwitch;
+    private Queue<ActivityReadyAction> activityReadyQueue = new LinkedList<>();
+    private boolean mIsConfigChange;
+
+    /* END lifecycle */
 
     private String getLanguage() {
         return mAppLanguage;
@@ -186,8 +192,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
         }
     }
-
-    /* END lifecycle */
 
     protected void onResume() {
         super.onResume();
@@ -334,6 +338,33 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        mIsConfigChange = false;
+        Log.i(TAG, "On Post Resume");
+        while(true)
+        {
+            ActivityReadyAction activityReadyAction = activityReadyQueue.poll();
+            if(activityReadyAction == null) break;
+            activityReadyAction.onActivityReady();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mIsConfigChange = true;
+    }
+
+    @Override
+    public boolean isChangingConfigurations() {
+        if (android.os.Build.VERSION.SDK_INT >= 11)
+            return super.isChangingConfigurations() || mIsConfigChange;
+        else
+            return mIsConfigChange;
+    }
+
     @WorkerThread
     private void processSubscriberEvent(@NonNull final GodToolsEvent event) {
         // look up the followup for the active context
@@ -383,12 +414,24 @@ public class SnuffyPWActivity extends AppCompatActivity {
         Log.i(TAG, "EventBus triggerFollowupModal");
         //TODO: RM rework this
         if (mPagerAdapter != null) {
-            int hashCode = event.getEventID().getId().hashCode();
+            final int hashCode = event.getEventID().getId().hashCode();
             if (RenderSingleton.getInstance().gPanelHashMap.get(hashCode) != null) {
 
-                final FragmentManager fm = getSupportFragmentManager();
-                BottomSheetDialog bs = BottomSheetDialog.create(event.getPosition(), hashCode);
-                bs.show(fm.beginTransaction().addToBackStack(TAG_FOLLOWUP_MODAL), TAG_FOLLOWUP_MODAL);;
+                if (isChangingConfigurations()) {
+                    activityReadyQueue.add(new ActivityReadyAction() {
+                        @Override
+                        public void onActivityReady() {
+                            final FragmentManager fm = getSupportFragmentManager();
+                            BottomSheetDialog bs = BottomSheetDialog.create(event.getPosition(), hashCode);
+                            bs.show(fm.beginTransaction().addToBackStack(TAG_FOLLOWUP_MODAL), TAG_FOLLOWUP_MODAL);
+                        }
+                    });
+                } else {
+
+                    final FragmentManager fm = getSupportFragmentManager();
+                    BottomSheetDialog bs = BottomSheetDialog.create(event.getPosition(), hashCode);
+                    bs.show(fm.beginTransaction().addToBackStack(TAG_FOLLOWUP_MODAL), TAG_FOLLOWUP_MODAL);
+                }
                 return true;
             }
         }
@@ -408,7 +451,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
     private void showFollowupModal(@NonNull final GtFollowupModal modal) {
         // dismiss any previous followup modal
-        dismissFollowupModal();
+        //dismissFollowupModal();
 
         // create the newnew followup modal
         final FragmentManager fm = getSupportFragmentManager();
@@ -709,6 +752,10 @@ public class SnuffyPWActivity extends AppCompatActivity {
         timer = new Timer("1.5ShareTimer");
         timer.schedule(timerTask, 90000); //1.5 minutes
         Log.i(TAG, "Timer scheduled");
+    }
+
+    public interface ActivityReadyAction {
+        void onActivityReady();
     }
 
     static class GtPagesPagerAdapter extends RecyclerView.Adapter<SnuffyPWActivity.ViewHolder> {
