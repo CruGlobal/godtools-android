@@ -78,7 +78,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements ICon
         });
         //} /*else {
         //   dismissAllowingStateLoss();
-        //}*/
+        //}
 
         return dialog;
     }
