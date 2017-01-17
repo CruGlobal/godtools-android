@@ -60,7 +60,7 @@ public class GTitle extends GCoordinator {
                 autoTextResizeHeader = true;
 
                 //TODO: revert this back to original approach
-                if (RenderViewCompat.SDK_KIT_KAT) {
+                if (RenderViewCompat.SDK_LOLLIPOP) {
                     Log.i(TAG, "SDK Kit Kat or higher");
                     final OptRoundCardView headerTopRoundCardView = (OptRoundCardView) tempRoot.findViewById(R.id.g_header_peek_outerlayout_optroundcardview);
                     final OptRoundCardView peekPanelRoundCardView = (OptRoundCardView) tempRoot.findViewById(R.id.g_header_peek_peeklayout_optroundcardview);
