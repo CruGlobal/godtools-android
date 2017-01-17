@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.github.captain_miao.optroundcardview.OptRoundCardView
+        android:tag="top"
+        android:id="@+id/g_header_plain_outerlayout_optroundcardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="@dimen/header_right_margin"
+        android:layout_marginTop="@dimen/header_top_margin"
+        android:layout_alignParentLeft="true"
+        app:optRoundCardBackgroundColor="@android:color/white"
+        app:optRoundCardCornerRadius="8dp"
+        app:optRoundCardElevation="20dp"
+        app:optRoundCardLeftBottomCorner="false"
+        app:optRoundCardLeftTopCorner="false"
+        app:optRoundCardRightBottomCorner="true"
+        app:optRoundCardRightTopCorner="true">
+
+
+
+            <org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView
+                style="@style/AutoScaleTextView.HeaderSubheadingTextView"
+                android:id="@+id/g_header_subheader_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/sample_text_g_header_peak_subheader_textview"
+                android:textSize="28dp" />
+
+
+
+    </com.github.captain_miao.optroundcardview.OptRoundCardView>
+
+
+</merge>

@@ -10,5 +10,6 @@
     <item name="peek_textview_top_margin" type="id"/>
     <item name="button_position" type="id"/>
     <item name="view_parent_tap" type="id"/>
+    <item name="popup_showing" type="id"/>
 
 </resources>

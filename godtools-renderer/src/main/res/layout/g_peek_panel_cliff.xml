@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/g_header_peek_cliff_framelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/appcompat_title_background_peek_only_bottom_right"
+        android:layout_marginRight="32dp"
+        android:minHeight="10dp"
+        android:visibility="visible">
+
+    </FrameLayout>
+</merge>

@@ -1,4 +1,4 @@
-package org.keynote.godtools.renderer.crureader.bo.GPage.Compat;
+ package org.keynote.godtools.renderer.crureader.bo.GPage.Compat;
 
 import android.os.Build;
 import android.widget.TextView;
@@ -16,6 +16,8 @@ public class RenderViewCompat {
     public static final boolean SDK_LOLLIPOP = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;  //21
 
     public static final boolean SDK_JELLY_BEAN = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2; //18
+
+    public static final boolean SDK_KIT_KAT = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT; //18
 
     public static final boolean SDK_ICS_OR_PRIOR = Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1;
 

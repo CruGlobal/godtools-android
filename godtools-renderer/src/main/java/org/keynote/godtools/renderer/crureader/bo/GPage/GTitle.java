@@ -2,9 +2,12 @@ package org.keynote.godtools.renderer.crureader.bo.GPage;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -18,6 +21,7 @@ import org.keynote.godtools.renderer.crureader.R;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseTextAttributes;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Compat.RenderViewCompat;
+import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -42,9 +46,10 @@ public class GTitle extends GCoordinator {
     @Element(required = false, name = "peekpanel")
     public GBaseTextAttributes peekPanel;
     boolean autoTextResizeHeader = false;
+    boolean isPopupShowing = false;
     private int zie = 30;
 
-    public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
+    public int render(LayoutInflater inflater, final ViewGroup viewGroup, final int position) {
         final Context context = viewGroup.getContext();
         if (mode == null) mode = HeadingMode.none;
 
@@ -53,122 +58,126 @@ public class GTitle extends GCoordinator {
             case peek:
                 tempRoot = inflater.inflate(R.layout.g_header_peak, viewGroup);
                 autoTextResizeHeader = true;
-                final OptRoundCardView headerTopRoundCardView = (OptRoundCardView) tempRoot.findViewById(R.id.g_header_peek_outerlayout_optroundcardview);
-                // final OptRoundCardView peekPanelRoundCardView = (OptRoundCardView) tempRoot.findViewById(R.id.g_header_peek_peeklayout_optroundcardview);
-                //peekPanelRoundCardView.setClipToPadding(true);
-                //final AutoScaleTextView autoScaleTextView = (AutoScaleTextView) tempRoot.findViewById(R.id.g_header_peak_peak_textview);
 
-                //autoScaleTextView.setId(RenderViewCompat.generateViewId());
-                //peekPanelRoundCardView.setId(RenderViewCompat.generateViewId());
-                headerTopRoundCardView.setId(RenderViewCompat.generateViewId());
-                headerTopRoundCardView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(final View v) {
-                        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        View inflatedView = inflater.inflate(R.layout.g_peek_panel, null, false);
-                        final PopupWindow pw = new PopupWindow(inflatedView);
+                //TODO: revert this back to original approach
+                if (RenderViewCompat.SDK_KIT_KAT) {
+                    Log.i(TAG, "SDK Kit Kat or higher");
+                    final OptRoundCardView headerTopRoundCardView = (OptRoundCardView) tempRoot.findViewById(R.id.g_header_peek_outerlayout_optroundcardview);
+                    final OptRoundCardView peekPanelRoundCardView = (OptRoundCardView) tempRoot.findViewById(R.id.g_header_peek_peeklayout_optroundcardview);
+                    final AutoScaleTextView autoScaleTextView = (AutoScaleTextView) tempRoot.findViewById(R.id.g_header_peak_peak_textview);
 
-                        pw.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
-                        pw.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-                        pw.showAsDropDown(v);
-
-                        pw.setClippingEnabled(true);
-
-                        zie = 30;
-                        final FrameLayout outerLayout = (FrameLayout) pw.getContentView().findViewById(R.id.g_header_peek_peeklayout_optroundcardview);
-                        outerLayout.setClipChildren(true);
-                        final int[] destinedHeight = new int[1];
-                        new Thread() {
-                            public void run() {
-                                super.run();
-                                while (outerLayout.getMeasuredHeight() == 0) {
-                                    try {
-                                        sleep(20);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                destinedHeight[0] = outerLayout.getMeasuredHeight();
-
-                                Log.i(TAG, "Meaured height: " + destinedHeight[0]);
-                                final int destinedWidth = pw.getWidth();
-
-                                ((Activity) v.getContext()).runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        pw.setHeight(zie);
-                                        pw.update();
-
-                                    }
-                                });
-                                final int increments = destinedHeight[0] / 100;
-
-                                new Thread() {
-                                    public void run() {
-                                        super.run();
-                                        while (zie < destinedHeight[0]) {
-                                            try {
-                                                Thread.sleep(300);
-                                            } catch (InterruptedException e) {
-                                                e.printStackTrace();
-                                            }
-                                            if(zie == 30)
-                                            ((Activity) v.getContext()).runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    outerLayout.setVisibility(View.VISIBLE);
-                                                }});
-                                            zie += increments;
-
-                                            ((Activity) v.getContext()).runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-
-                                                    pw.update(destinedWidth, zie);
-                                                }
-                                            });
-                                        }
-                                        //pw.update(vWidth, zie);
-
-                                    }
-                                }.start();
-                            }
-                        }.start();
-
-                        //PopupWindowCompat.showAsDropDown(pw, v, 0, 0, Gravity.BOTTOM);
-
-                        //LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        /*pw.setContentView();
-                        PopupWindowCompat.setOverlapAnchor(pw, false);
-                        pw.showAsDropDown(headerTopRoundCardView);*/
-
-                    }
-                });
-                //autoScaleTextView.setTextColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
-                //((PercentRelativeLayout.LayoutParams) peekPanelRoundCardView.getLayoutParams()).addRule(RelativeLayout.BELOW, headerTopRoundCardView.getId());
-                /*if (peekPanel != null) {
-                    peekPanel.updateBaseAttributes(autoScaleTextView);
-                    View.OnClickListener peekPanelOnClick = new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ViewGroup.MarginLayoutParams layoutParams = (OptRoundCardView.MarginLayoutParams) peekPanelRoundCardView.getLayoutParams();
-                            if (autoScaleTextView.getVisibility() == View.VISIBLE) {
-                                layoutParams.topMargin = (int) autoScaleTextView.getTag(R.id.peek_textview_top_margin);
-                                autoScaleTextView.setVisibility(View.GONE);
-                            } else {
-                                autoScaleTextView.setTag(R.id.peek_textview_top_margin, layoutParams.topMargin);
-                                layoutParams.topMargin = 0;
-                                autoScaleTextView.setVisibility(View.VISIBLE);
-
-                            }
-                        }
-                    };
-                    peekPanelRoundCardView.setOnClickListener(peekPanelOnClick);
-                    headerTopRoundCardView.setOnClickListener(peekPanelOnClick);
+                /*LayoutTransition layoutTransition = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+                    layoutTransition = peekPanelRoundCardView.getLayoutTransition();
                 }
-                if (autoScaleTextView != null)
-                    autoScaleTextView.setVisibility(View.GONE);
-                    */
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
+                }*/
+
+                    autoScaleTextView.setId(RenderViewCompat.generateViewId());
+                    peekPanelRoundCardView.setId(RenderViewCompat.generateViewId());
+                    headerTopRoundCardView.setId(RenderViewCompat.generateViewId());
+                    autoScaleTextView.setTextColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
+                    ((PercentRelativeLayout.LayoutParams) peekPanelRoundCardView.getLayoutParams()).addRule(RelativeLayout.BELOW, headerTopRoundCardView.getId());
+                    if (peekPanel != null) {
+                        peekPanel.updateBaseAttributes(autoScaleTextView);
+                        View.OnClickListener peekPanelOnClick = new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ViewGroup.MarginLayoutParams layoutParams = (OptRoundCardView.MarginLayoutParams) peekPanelRoundCardView.getLayoutParams();
+                                if (autoScaleTextView.getVisibility() == View.VISIBLE) {
+                                    layoutParams.topMargin = (int) autoScaleTextView.getTag(R.id.peek_textview_top_margin);
+                                    autoScaleTextView.setVisibility(View.GONE);
+                                } else {
+                                    autoScaleTextView.setTag(R.id.peek_textview_top_margin, layoutParams.topMargin);
+                                    layoutParams.topMargin = 0;
+                                    autoScaleTextView.setVisibility(View.VISIBLE);
+
+                                }
+                            }
+                        };
+                        peekPanelRoundCardView.setOnClickListener(peekPanelOnClick);
+                        headerTopRoundCardView.setOnClickListener(peekPanelOnClick);
+                    }
+                    if (autoScaleTextView != null)
+                        autoScaleTextView.setVisibility(View.GONE);
+                } else {
+                    Log.i(TAG, "SDK less than Kit Kat");
+                    final FrameLayout headerTopRoundCardView = (FrameLayout) tempRoot.findViewById(R.id.g_header_peek_outerlayout_optroundcardview);
+                    headerTopRoundCardView.setId(RenderViewCompat.generateViewId());
+                    View peekView = inflater.inflate(R.layout.g_peek_panel_cliff, viewGroup);
+                    final FrameLayout fl = (FrameLayout) peekView.findViewById(R.id.g_header_peek_cliff_framelayout);
+
+                    ((RelativeLayout.LayoutParams) fl.getLayoutParams()).addRule(RelativeLayout.BELOW, headerTopRoundCardView.getId());
+
+                    headerTopRoundCardView.setOnClickListener(new View.OnClickListener() {
+                                                                  @Override
+                                                                  public void onClick(final View view) {
+
+                                                                          LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                                                          View inflatedView = inflater.inflate(R.layout.g_peek_panel, null, false);
+                                                                          final FrameLayout outerLayout = (FrameLayout) inflatedView.findViewById(R.id.g_header_peek_peeklayout_optroundcardview);
+
+
+                                                                          final AutoScaleTextView autoScaleTextView = (AutoScaleTextView) inflatedView.findViewById(R.id.g_header_peak_peak_textview);
+                                                                          autoScaleTextView.setTextColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
+                                                                          peekPanel.updateBaseAttributes(autoScaleTextView);
+                                                                          final PopupWindow pw = new PopupWindow(inflatedView);
+                                                                          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                                                                              pw.setAttachedInDecor(true);
+                                                                          }
+                                                                          pw.setTouchInterceptor(new View.OnTouchListener() {
+                                                                              @Override
+                                                                              public boolean onTouch(View v, MotionEvent event) {
+
+                                                                                  pw.dismiss();
+                                                                                  new Thread()
+                                                                                  {
+                                                                                      public void run()
+                                                                                      {
+                                                                                          super.run();
+                                                                                          try {
+                                                                                              sleep(15);
+                                                                                              ((Activity)context).runOnUiThread(new Runnable() {
+                                                                                                  @Override
+                                                                                                  public void run() {
+                                                                                                      view.setClickable(true);
+                                                                                                  }
+                                                                                              });
+                                                                                          } catch (InterruptedException e) {
+
+
+                                                                                          }
+                                                                                      }
+                                                                                  }.start();
+                                                                                  Log.i(TAG, "OnTouch Interceptor");
+                                                                                  return true;
+                                                                              }
+                                                                          });
+                                                                          pw.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                                                                              @Override
+                                                                              public void onDismiss() {
+                                                                                  Log.i(TAG, "On Dismiss Listener is called");
+
+                                                                              }
+                                                                          });
+                                                                          pw.setBackgroundDrawable(new BitmapDrawable());
+                                                                          pw.setWidth(fl.getWidth());
+                                                                          pw.setFocusable(false);
+                                                                          pw.setOutsideTouchable(true);
+                                                                          pw.setTouchable(true);
+                                                                          pw.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+                                                                          pw.showAsDropDown(view);
+                                                                          view.setClickable(false);
+                                                                          pw.setClippingEnabled(true);
+
+
+                                                                  }
+                                                              }
+
+                    );
+                }
+
                 break;
             case straight:
                 tempRoot = inflater.inflate(R.layout.g_header_straight, viewGroup);
@@ -181,15 +190,11 @@ public class GTitle extends GCoordinator {
                 break;
             default:
                 tempRoot = inflater.inflate(R.layout.g_header_default, viewGroup);
-//                OptRoundCardView optRoundCardView = (OptRoundCardView) tempRoot.findViewById(R.id.g_header_default_outerlayout_optroundcardview);
-//
-//                    optRoundCardView.showLeftEdgeShadow(false);
 
                 if (number != null) {
                     number.defaultColor(position);
                     number.updateBaseAttributes((AutoScaleTextView) tempRoot.findViewById(R.id.g_header_default_number_textview));
                 }
-                //setUpNumberTextView((AutoScaleTextView) tempRoot.findViewById(R.id.g_header_default_number_textview), position);
                 break;
 
         }
