@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+       xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <FrameLayout
+    <com.github.captain_miao.optroundcardview.OptRoundCardView
         android:id="@+id/g_header_default_outerlayout_optroundcardview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginRight="@dimen/header_right_margin"
         android:layout_alignParentLeft="true"
-        android:padding="6dp"
-        android:background="@drawable/appcompat_title_background_peek"
         android:layout_marginTop="@dimen/header_top_margin"
-        android:tag="top">
+        android:tag="top"
+        app:optRoundCardBackgroundColor="@android:color/white"
+        app:optRoundCardCornerRadius="8dp"
+        app:optRoundCardShowLeftEdgeShadow="false"
+        app:optRoundCardElevation="20dp"
+        app:optRoundCardLeftBottomCorner="false"
+        app:optRoundCardLeftTopCorner="false"
+        app:optRoundCardRightBottomCorner="true"
+        app:optRoundCardRightTopCorner="true"
+        app:optRoundContentPadding="6dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,10 +41,10 @@
                 android:layout_gravity="center_vertical"
                 android:layout_height="wrap_content"
                 android:text="@string/sample_text_g_header_default_header_textview"
-                 />
+                />
 
 
         </LinearLayout>
 
-    </FrameLayout>
+    </com.github.captain_miao.optroundcardview.OptRoundCardView>
 </merge>
