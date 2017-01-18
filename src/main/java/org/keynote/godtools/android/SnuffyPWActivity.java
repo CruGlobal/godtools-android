@@ -1,7 +1,6 @@
 package org.keynote.godtools.android;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.os.Process;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -48,8 +46,6 @@ import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.notifications.NotificationInfo;
 import org.keynote.godtools.android.snuffy.SnuffyAboutActivity;
 import org.keynote.godtools.android.snuffy.SnuffyHelpActivity;
-import org.keynote.godtools.android.snuffy.model.GtFollowupModal;
-import org.keynote.godtools.android.support.v4.fragment.GtFollowupModalDialogFragment;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
 import org.keynote.godtools.renderer.crureader.XMLUtil;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocument;
@@ -94,12 +90,13 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 import static org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent.EventID.SUBSCRIBE_EVENT;
 
 public class SnuffyPWActivity extends AppCompatActivity {
+
     private static final String TAG = "SnuffyActivity";
     private static final String TAG_FOLLOWUP_MODAL = "followupModal";
-    private static final int DIALOG_PROCESS_PACKAGE_PROGRESS = 1;
 
     @BindView(R.id.snuffyRecyclerView)
     public RecyclerView snuffyRecyclerView;
+
     GtPagesPagerAdapter mPagerAdapter;
     @Nullable
     String mCurrentPageId;
@@ -113,22 +110,13 @@ public class SnuffyPWActivity extends AppCompatActivity {
     private String mConfigPrimary, mConfigParallel;
     private GTPackage mParallelPackage;
     private boolean isUsingPrimaryLanguage, isParallelLanguageSet;
-    private boolean mAsyncLoadComplete = false;
     private SharedPreferences settings;
     private String regid;
     private Timer timer;
     private LinearLayoutManager mLinearLayoutManager;
-    /* BEGIN lifecycle */
-    private ProgressDialog mProgressDialog;
     private int mPositionBeforeLanguageSwitch;
     private Queue<ActivityReadyAction> activityReadyQueue = new LinkedList<>();
     private boolean mIsConfigChange;
-
-    /* END lifecycle */
-
-    private String getLanguage() {
-        return mAppLanguage;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,8 +125,9 @@ public class SnuffyPWActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.snuffy_main);
+        Diagnostics.StartMethodTracingByKey("ButterknifeBind");
         ButterKnife.bind(this);
-
+        Diagnostics.StopMethodTracingByKey("ButterknifeBind");
         setupActionBar();
         mAppPackage = getIntent().getStringExtra("PackageName");        // "kgp"
         mAppLanguage = getIntent().getStringExtra("LanguageCode");      // "en"
@@ -149,11 +138,11 @@ public class SnuffyPWActivity extends AppCompatActivity {
         mConfigPrimary = mConfigFileName;
         isUsingPrimaryLanguage = true;
 
+        Diagnostics.StartMethodTracingByKey("langPara");
         // check if parallel language is set
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String langParallel = settings.getString(LANGUAGE_PARALLEL, "");
 
-        Diagnostics.StartMethodTracingByKey("langPara");
         // get package if parallel language is set
 
         if (!langParallel.isEmpty()) {
@@ -162,16 +151,10 @@ public class SnuffyPWActivity extends AppCompatActivity {
             mParallelPackage =
                     DBAdapter.getInstance(this).find(GTPackage.class, langParallel, GTPackage.STATUS_LIVE, mAppPackage);
         }
-        Diagnostics.StopMethodTracingByKey("langPara");
 
         if (mParallelPackage != null) {
             mConfigParallel = mParallelPackage.getConfigFileName();
         }
-
-        //doSetup(100); // used to be 1 second delay required to make sure activity fully created
-        // - is there something we can test for that is better than a fixed timeout?
-        // We reduce this now to 100 msec since we are not measuring the device size here
-        // since that is done in GodTools which calls us and passes the dimensions in.
 
         regid = settings.getString(PROPERTY_REG_ID, "");
 
@@ -190,9 +173,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
                             Log.e(NotificationInfo.NOTIFICATION_TAG, "10 Presentation notification notice failed to send to API");
                         }
                     });
-
         }
-        Diagnostics.StopMethodTracingByKey("SnuffyPWActivityonCreate");
     }
 
     protected void onResume() {
@@ -235,19 +216,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Event triggered when a child page should be shown
-     *
-     * @param position
-     */
-    public void onShowChildPage(final int position) {
-        //mVisibleChildPages.add(id);
-        //TODO: figure this out.
-        //updateViewPager();
-
-        showPage(position);
-    }
-
     private void setupActionBar() {
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -269,75 +237,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
         if (location > 0) {
             mLinearLayoutManager.scrollToPosition(location);
         }
-
-    }
-
-    private void setupViewPager() {
-        if (snuffyRecyclerView != null) {
-
-            // configure page change listener
-//            snuffyRecyclerView.addOnPageChangedListener(new RecyclerViewPager.OnPageChangedListener() {
-//                @Override
-//                public void OnPageChanged(int oldPosition, int newPosition) {
-//
-//                    //TODO: RM I don't fully understand this.
-//                    /*if (mCurrentPageId != null) {
-//                        final GPage page = mPagerAdapter.getItemFromPosition(newPosition); //TODO: forloops getItem(mCurrentPageId);
-//                        if (page != null) {
-//                            // trigger the exit page event
-//
-//                            //TODO: RM trigger onExitPage();
-//                            //page.onExitPage();
-//                        }
-//                    }*/
-//
-//                    /*final GPage page = mPagerAdapter.getItemFromPosition(newPosition);
-//                    if (page != null) {*/
-//                    //TODO: RM track pages that turned, figure out need for onEnterPage()
-//                        /*final GtPage model = page.getModel();
-//
-//                        // track the currently active page
-//                        mCurrentPageId = page.getModel().getId();
-//                        trackPageView(model);
-//
-//                        // trigger the enter page event
-//                        page.onEnterPage();
-//                        */
-//                    /*}*/
-//
-//                    // This notification has been updated to only be sent after the app has been opened 3 times
-//                    // The api will only send a notice once, so it can be sent from here multiple times.
-//
-//                    // if the prayer pages are ever moved this will need to be updated.
-//                    //TODO: RM why is this here, this should be elsewhere.
-//
-//
-                    /* if (settings.getInt(COUNT, 0) >= 3) {
-                        if ((mAppPackage.equalsIgnoreCase(KGP) && newPosition == 7) ||
-                                (mAppPackage.equalsIgnoreCase(FOUR_LAWS) && newPosition == 6)) {
-                            Log.i(TAG, "App used 3 times and prayer page reached.");
-                            GodToolsApiClient.updateNotification(
-                                    settings.getString(AUTH_CODE, ""), regid, NotificationInfo.AFTER_1_PRESENTATION,
-                                    new NotificationUpdateTask.NotificationUpdateTaskHandler() {
-                                        @Override
-                                        public void registrationComplete(String regId) {
-                                            Log.i(NotificationInfo.NOTIFICATION_TAG,
-                                                    "1 Presentation Notification notice sent to API");
-                                        }
-
-                                        @Override
-                                        public void registrationFailed() {
-                                            Log.e(NotificationInfo.NOTIFICATION_TAG,
-                                                    "1 Presentation notification notice failed to send to API");
-                                        }
-                                    });
-                        }
-                    }*/
-
-            //   }
-            //});
-        }
-
     }
 
     @Override
@@ -345,10 +244,10 @@ public class SnuffyPWActivity extends AppCompatActivity {
         super.onPostResume();
         mIsConfigChange = false;
         Log.i(TAG, "On Post Resume");
-        while(true)
-        {
+        while (true) {
             ActivityReadyAction activityReadyAction = activityReadyQueue.poll();
-            if(activityReadyAction == null) break;
+            if (activityReadyAction == null)
+                break;
             activityReadyAction.onActivityReady();
         }
     }
@@ -441,24 +340,12 @@ public class SnuffyPWActivity extends AppCompatActivity {
     }
 
     private boolean triggerLocalPageNavigation(@NonNull final GodToolsEvent event) {
-        Log.i(TAG, "EventBus triggerLocalPageNavigation");
         if (event.getPosition() >= -1) {
-            onShowChildPage(event.getPosition());
-
+            showPage(event.getPosition());
             return true;
         }
 
         return false;
-    }
-
-    private void showFollowupModal(@NonNull final GtFollowupModal modal) {
-        // dismiss any previous followup modal
-        //dismissFollowupModal();
-
-        // create the newnew followup modal
-        final FragmentManager fm = getSupportFragmentManager();
-        GtFollowupModalDialogFragment.newInstance(mAppPackage, mAppLanguage, mPackageStatus, modal.getId())
-                .show(fm.beginTransaction().addToBackStack(TAG_FOLLOWUP_MODAL), TAG_FOLLOWUP_MODAL);
     }
 
     private void dismissFollowupModal() {
@@ -504,24 +391,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
         mProcessPackageAsync.execute(startPosition);
     }
 
-    private void completeSetup(boolean bSuccess) {
-        /*if (!bSuccess) { // now testing is done - only show msg on failure
-            Toast.makeText(SnuffyPWActivity.this.getApplicationContext(),
-                    getString(R.string.processing_failed),
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }*/
-
-        // track a page view of the most recently loaded page
-//        final GtPagesPagerAdapter.ViewHolder holder = mPagerAdapter.getPrimaryItem();
-//        if (holder != null) {
-//            Diagnostics.StartMethodTracingByKey("Tracker");
-//            trackPageView(mPagerAdapter.getItemFromPosition(0));
-//            Diagnostics.StopMethodTracingByKey("Tracker");
-//        }
-
-    }
-
     private void doCmdHelp() {
         Intent intent = new Intent(this, SnuffyHelpActivity.class);
         startActivity(intent);
@@ -564,12 +433,13 @@ public class SnuffyPWActivity extends AppCompatActivity {
         return messageBody;
     }
 
+    private void doCmdInfo(View v) {
+
+        Intent intent = new Intent(this, SnuffyAboutActivity.class);
+        startActivity(intent);
+    }
+
     private void doCmdShowPageMenu(View v) {
-        // store pages before triggering Activity launch
-        //TODO: figure out why we store?
-        /*Crashlytics.log("Storing SnuffyPages in Application before launching SnuffyPageMenuPWActivity: " +
-                (mPages != null ? mPages.size() : "null"));*/
-        //TODO: determine how much of SnuffyApp we need to use.
 
         Intent intent = new Intent(this, SnuffyPageMenuPWActivity.class);
         intent.putExtra("LanguageCode", mAppLanguage);
@@ -620,14 +490,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
                     .create();
             builder.show();
         }
-
-    }
-
-    private void doCmdInfo(View v) {
-
-        Intent intent = new Intent(this, SnuffyAboutActivity.class);
-
-        startActivity(intent);
 
     }
 
@@ -726,11 +588,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
                 });*/
     }
 
-    void trackPageView(@NonNull final GPage page) {
-        EventTracker.getInstance(this).screenView(page.gtapiTrxId, getLanguage());
-
-    }
-
     private void startTimer() {
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -795,11 +652,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
             this.notifyItemChanged(location);
         }
 
-        public void setPages(@NonNull final List<GPage> pages) {
-            mPages = pages;
-            notifyDataSetChanged();
-        }
-
         @Override
         public long getItemId(final int position) {
             //TODO:// FIXME: 12/19/2016
@@ -847,9 +699,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
         protected List<GPage> doInBackground(Integer... params) {
             // params are not used
             final int loadingStartPosition = params.length > 0 ? params[0] : 0;
-            Log.i(TAG, "loadingStartPosition: " + loadingStartPosition);
-
-            Diagnostics.StartMethodTracingByKey("snuffy");
 
             File f = new File(FileUtils.getResourcesDir(), mConfigFileName);
 
@@ -877,7 +726,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
                                                 public void run() {
                                                     /* Lower the thread priority, so it doesn't interfere with loading images from the disk */
                                                     Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND - 1);
-                                                    Log.i("AsyncLoad", "I'm less important!!!!!");
                                                     Thread.yield();
                                                     for (int i = loadingStartPosition + 1; i < gDocument.documentPages.size(); i++) {
                                                         GDocumentPage gdp = gDocument.documentPages.get(i);
@@ -886,7 +734,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
                                                         try {
                                                             final GPage gPage = XMLUtil.parseGPage(fileForGDP);
                                                             final int addIndex = i;
-                                                            //sleepWhilstWaiting();
                                                             SnuffyPWActivity.this.runOnUiThread(new Runnable() {
                                                                 @Override
                                                                 public void run() {
@@ -906,10 +753,8 @@ public class SnuffyPWActivity extends AppCompatActivity {
                                     /* Lower the thread priority, so it doesn't interfere with loading images from the disk */
                                     Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND - 1);
                                     Thread.yield();
-                                    Log.i("AsyncLoad", "I'm less important!!!!!");
                                     final GPage gPage = XMLUtil.parseGPage(fileForGDP);
                                     final int addIndex = i;
-                                    //sleepWhilstWaiting();
                                     SnuffyPWActivity.this.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -926,21 +771,13 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
                 }.start();
 
-                Diagnostics.StopMethodTracingByKey("snuffy");
             } catch (Exception e) {
                 Crashlytics.logException(e);
                 e.printStackTrace();
-            } finally {
-                return null;
             }
+            return null;
         }
 
-        @Override
-        @UiThread
-        protected void onPostExecute(List<GPage> result) {
-
-            completeSetup(result != null);
-        }
     }
 
 }
