@@ -17,6 +17,7 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.TypefaceUtils;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
 
 import java.util.List;
 
@@ -120,7 +121,7 @@ public class PackageListFragment extends ListFragment
 			this.mIsEnabled = true;
 
 			SnuffyApplication mApp = (SnuffyApplication) getActivity().getApplication();
-			resourcesDir = mApp.getResourcesDir().getAbsolutePath() + "/";
+			resourcesDir = FileUtils.getResourcesDir().getAbsolutePath() + "/";
 		}
 
 		@Override

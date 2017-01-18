@@ -1,8 +1,10 @@
-package org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers;
+package org.keynote.godtools.renderer.crureader.bo.GPage.Util;
 
 import android.os.Debug;
 import android.os.Looper;
 import android.util.Log;
+
+import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 
 /**
  * Created by rmatt on 11/29/2016.

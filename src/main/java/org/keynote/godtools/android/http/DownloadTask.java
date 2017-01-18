@@ -14,7 +14,7 @@ import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
 import org.keynote.godtools.android.snuffy.Decompress;
-import org.keynote.godtools.android.utils.FileUtils;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -51,15 +51,15 @@ import org.keynote.godtools.android.snuffy.SnuffyHelpActivity;
 import org.keynote.godtools.android.snuffy.model.GtFollowupModal;
 import org.keynote.godtools.android.support.v4.fragment.GtFollowupModalDialogFragment;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
-import org.keynote.godtools.android.utils.FileUtils;
-import org.keynote.godtools.renderer.crureader.OnDismissEvent;
 import org.keynote.godtools.renderer.crureader.XMLUtil;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocument;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocumentPage;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Event.OnDismissEvent;
 import org.keynote.godtools.renderer.crureader.bo.GPage.GPage;
-import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.Diagnostics;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.Diagnostics;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.BottomSheetDialog;
 
 import java.io.File;
@@ -132,6 +132,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Diagnostics.StartMethodTracingByKey("SnuffyPWActivityonCreate");
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
@@ -191,6 +192,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
                     });
 
         }
+        Diagnostics.StopMethodTracingByKey("SnuffyPWActivityonCreate");
     }
 
     protected void onResume() {
@@ -849,7 +851,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
             Diagnostics.StartMethodTracingByKey("snuffy");
 
-            File f = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), mConfigFileName);
+            File f = new File(FileUtils.getResourcesDir(), mConfigFileName);
 
             try {
                 RenderSingleton.getInstance().setGDocument(XMLUtil.parseGDocument(f));
@@ -863,7 +865,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
                         for (int i = loadingStartPosition; i >= 0; i--) {
                             GDocumentPage gdp = gDocument.documentPages.get(i);
 
-                            File fileForGDP = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), gdp.filename);
+                            File fileForGDP = new File(FileUtils.getResourcesDir(), gdp.filename);
                             try {
                                 if (i == loadingStartPosition) {
                                     final GPage gPage = XMLUtil.parseGPage(fileForGDP);
@@ -880,7 +882,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
                                                     for (int i = loadingStartPosition + 1; i < gDocument.documentPages.size(); i++) {
                                                         GDocumentPage gdp = gDocument.documentPages.get(i);
 
-                                                        File fileForGDP = new File(FileUtils.getResourcesDir(SnuffyPWActivity.this), gdp.filename);
+                                                        File fileForGDP = new File(FileUtils.getResourcesDir(), gdp.filename);
                                                         try {
                                                             final GPage gPage = XMLUtil.parseGPage(fileForGDP);
                                                             final int addIndex = i;

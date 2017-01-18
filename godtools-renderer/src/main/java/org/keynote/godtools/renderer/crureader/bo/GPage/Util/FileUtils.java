@@ -1,11 +1,11 @@
-package org.keynote.godtools.android.utils;
+package org.keynote.godtools.renderer.crureader.bo.GPage.Util;
 
 import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.crashlytics.android.Crashlytics;
+import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,21 +37,23 @@ public final class FileUtils {
     }
 
     @NonNull
-    public static File getResourcesDir(@NonNull final Context context) {
+    public static File getResourcesDir() {
         // prefer using external storage when available
+        Context context = RenderSingleton.getInstance().getContext();
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             final File root = context.getExternalFilesDir(null);
             if (root != null) {
                 final File dir = new File(root, "resources");
-                Crashlytics.log("Potential External Resources Dir: " + dir);
+                //TODO: IOC crashlytics
+                //Crashlytics.log("Potential External Resources Dir: " + dir);
 
                 // make sure the resources directory exists before returning
                 if (dir.isDirectory() || dir.mkdirs()) {
                     return dir;
                 }
-
+                //TODO: IOC crashlytics
                 // log that we were unable to create external resources directory for any future exception/crash
-                Crashlytics.log("unable to create external resources directory");
+                //Crashlytics.log("unable to create external resources directory");
             }
         }
 
@@ -59,7 +61,8 @@ public final class FileUtils {
         final File dir = new File(context.getFilesDir(), "resources");
         if (!dir.isDirectory() && !dir.mkdirs()) {
             // we can't create an internal resources directory, log an error because something crazy may happen!
-            Crashlytics.log("unable to create internal resources directory: " + dir);
+            //TODO: IOC crashlytics
+            //Crashlytics.log("unable to create internal resources directory: " + dir);
         }
         return dir;
     }

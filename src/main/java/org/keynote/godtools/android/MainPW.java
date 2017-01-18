@@ -1,14 +1,15 @@
 package org.keynote.godtools.android;
 
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.content.LocalBroadcastManager;
@@ -62,12 +63,10 @@ import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
-
 public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
         DownloadTask.DownloadTaskHandler,
         MetaTask.MetaTaskHandler,
-        View.OnClickListener
-{
+        View.OnClickListener {
     private static final String TAG = "MainPW";
     private static final int REQUEST_SETTINGS = 1001;
 
@@ -97,8 +96,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     /* BEGIN lifecycle */
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
@@ -123,8 +121,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         setupLayout();
 
-        if (!isFirstLaunch())
-        {
+        if (!isFirstLaunch()) {
             showLoading();
             GodToolsApiClient.getListOfPackages(META, this);
             settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
@@ -160,11 +157,9 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         manager.initLoader(LOADER_LIVE_PACKAGES, null, mLoaderCallbacksPackages);
     }
 
-    private boolean isFirstLaunch()
-    {
+    private boolean isFirstLaunch() {
         boolean isFirst = settings.getBoolean(FIRST_LAUNCH, true);
-        if (isFirst)
-        {
+        if (isFirst) {
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean(FIRST_LAUNCH, false);
             editor.apply();
@@ -172,8 +167,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         return isFirst;
     }
 
-    private void setupLayout()
-    {
+    private void setupLayout() {
         layouts = new ArrayList<HomescreenLayout>();
 
         HomescreenLayout first = new HomescreenLayout();
@@ -206,11 +200,9 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     }
 
-    private void showLayoutsWithPackages()
-    {
+    private void showLayoutsWithPackages() {
         // now there will only be four packages shown on the homescreen
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             if (mPackages != null && mPackages.size() > i) {
                 GTPackage gtPackage = mPackages.get(i);
                 HomescreenLayout layout = layouts.get(i);
@@ -232,9 +224,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 if (EVERY_STUDENT.equals(gtPackage.getCode()))
                     layout.getImageView().setImageResource(R.drawable.gt4_homescreen_esicon);
 
-            }
-            else
-            {
+            } else {
                 HomescreenLayout layout = layouts.get(i);
                 layout.getLayout().setVisibility(View.INVISIBLE);
                 layout.getLayout().setClickable(false);
@@ -243,27 +233,21 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     }
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         super.onDestroy();
         removeBroadcastReceiver();
     }
 
-    private void setupBroadcastReceiver()
-    {
+    private void setupBroadcastReceiver() {
         broadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
 
-        broadcastReceiver = new BroadcastReceiver()
-        {
+        broadcastReceiver = new BroadcastReceiver() {
             @Override
-            public void onReceive(Context context, Intent intent)
-            {
-                if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
-                {
+            public void onReceive(Context context, Intent intent) {
+                if (BroadcastUtil.ACTION_STOP.equals(intent.getAction())) {
                     Type type = (Type) intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE);
 
-                    if (Type.ENABLE_TRANSLATOR.equals(type))
-                    {
+                    if (Type.ENABLE_TRANSLATOR.equals(type)) {
                         Toast.makeText(MainPW.this, getString(R.string.translator_enabled), Toast.LENGTH_LONG).show();
 
                         finish();
@@ -275,15 +259,13 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.stopFilter());
     }
 
-    private void removeBroadcastReceiver()
-    {
+    private void removeBroadcastReceiver() {
         broadcastManager.unregisterReceiver(broadcastReceiver);
         broadcastReceiver = null;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.homescreen_menu, menu);
 
@@ -291,10 +273,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.homescreen_settings:
                 onCmd_settings();
                 return true;
@@ -307,19 +287,16 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (resultCode)
-        {
+        switch (resultCode) {
             /* It's possible that both primary and parallel languages that were previously downloaded were changed at the same time.
              * If only one or the other were changed, no harm in running this code, but we do need to make sure the main screen updates
              * if the both were changed.  If if both were changed RESULT_CHANGED_PARALLEL were not added here, then the home screen would
              * not reflect the changed primary language*/
             case RESULT_CHANGED_PRIMARY:
-            case RESULT_CHANGED_PARALLEL:
-            {
+            case RESULT_CHANGED_PARALLEL: {
                 final String currentLanguage = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
 
                 EventTracker.getInstance(this).screenView("HomeScreen", currentLanguage);
@@ -330,8 +307,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         doSetup();
     }
@@ -341,8 +317,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 .screenView("HomeScreen", settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT));
     }
 
-    private void getScreenSize()
-    {
+    private void getScreenSize() {
         /*
          * Although these measurements are not used on this screen, they are passed to and used by
 		 * the following screens. At some point maybe all layouts can be updated to relative layout.
@@ -360,13 +335,10 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         double aspectRatioTarget = (double) MainPW.REFERENCE_DEVICE_WIDTH / (double) MainPW.REFERENCE_DEVICE_HEIGHT;
         double aspectRatio = (double) rect.width() / (double) rect.height();
 
-        if (aspectRatio > aspectRatioTarget)
-        {
+        if (aspectRatio > aspectRatioTarget) {
             height = rect.height();
             width = (int) Math.round(height * aspectRatioTarget);
-        }
-        else
-        {
+        } else {
             width = rect.width();
             height = (int) Math.round(width / aspectRatioTarget);
         }
@@ -380,18 +352,15 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         mPageHeight = height;
     }
 
-    private void showLoading()
-    {
+    private void showLoading() {
         supportInvalidateOptionsMenu();
 
         setSupportProgressBarIndeterminateVisibility(true);
     }
 
     @Override
-    public void onPackageSelected(final GTPackage gtPackage)
-    {
-        if (gtPackage.getCode().equalsIgnoreCase("everystudent"))
-        {
+    public void onPackageSelected(final GTPackage gtPackage) {
+        if (gtPackage.getCode().equalsIgnoreCase("everystudent")) {
             Intent intent = new Intent(this, EveryStudent.class);
             intent.putExtra("PackageName", gtPackage.getCode());
             startActivity(intent);
@@ -403,12 +372,17 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         intent.putExtra("LanguageCode", gtPackage.getLanguage());
         intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
         intent.putExtra("Status", gtPackage.getStatus());
-        startActivity(intent);
+        Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(this, android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            startActivity(intent, bundle);
+        } else {
+            startActivity(intent);
+        }
+
     }
 
     @Override
-    public void onClick(View view)
-    {
+    public void onClick(View view) {
         if (mPackages != null) {
             for (GTPackage gtPackage : mPackages) {
                 Log.i(TAG, view.getId() + " " + gtPackage.getLayout().getLayout().getId());
@@ -422,21 +396,18 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         }
     }
 
-    private void hideLoading()
-    {
+    private void hideLoading() {
         supportInvalidateOptionsMenu();
 
         setSupportProgressBarIndeterminateVisibility(false);
     }
 
-    private void onCmd_settings()
-    {
+    private void onCmd_settings() {
         Intent intent = new Intent(this, SettingsPW.class);
         startActivityForResult(intent, REQUEST_SETTINGS);
     }
 
-    private void doCmdShare()
-    {
+    private void doCmdShare() {
         String messageBody = buildMessageBody();
 
         Intent share = new Intent(Intent.ACTION_SEND);
@@ -446,8 +417,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         startActivity(Intent.createChooser(share, getString(R.string.share_prompt)));
     }
 
-    private String buildMessageBody()
-    {
+    private String buildMessageBody() {
         String messageBody = getString(R.string.share_general_message);
 
         // knowgod.com + /language example:  http://www.knowgod.com/en
@@ -457,29 +427,24 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         return messageBody;
     }
 
-
-    private SnuffyApplication getApp()
-    {
+    private SnuffyApplication getApp() {
         return (SnuffyApplication) getApplication();
     }
 
     @Override
-    public void metaTaskComplete(List<GTLanguage> languageList, String tag)
-    {
+    public void metaTaskComplete(List<GTLanguage> languageList, String tag) {
         UpdatePackageListTask.run(languageList, DBAdapter.getInstance(this));
 
         hideLoading();
     }
 
     @Override
-    public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode)
-    {
+    public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode) {
         hideLoading();
     }
 
     @Override
-    public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
-    {
+    public void downloadTaskComplete(String url, String filePath, String langCode, String tag) {
         // mark language as downloaded
         final GTLanguage gtl = new GTLanguage();
         gtl.setLanguageCode(langCode);
@@ -490,12 +455,9 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         hideLoading();
 
         // update primary or parallel language
-        if (tag.equalsIgnoreCase(KEY_PRIMARY))
-        {
+        if (tag.equalsIgnoreCase(KEY_PRIMARY)) {
             settings.edit().putString(GTLanguage.KEY_PRIMARY, langCode).apply();
-        }
-        else if (tag.equalsIgnoreCase(KEY_PARALLEL))
-        {
+        } else if (tag.equalsIgnoreCase(KEY_PARALLEL)) {
             settings.edit().putString(GTLanguage.KEY_PARALLEL, langCode).apply();
         }
 
@@ -504,10 +466,8 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     }
 
     @Override
-    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
-    {
-        if (tag.equalsIgnoreCase(KEY_PRIMARY) || tag.equalsIgnoreCase(KEY_PARALLEL))
-        {
+    public void downloadTaskFailure(String url, String filePath, String langCode, String tag) {
+        if (tag.equalsIgnoreCase(KEY_PRIMARY) || tag.equalsIgnoreCase(KEY_PARALLEL)) {
             Toast.makeText(MainPW.this, getString(R.string.failed_download_resources), Toast.LENGTH_SHORT).show();
         }
 
