@@ -1,9 +1,6 @@
 package org.keynote.godtools.renderer.crureader.bo.GPage;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.percent.PercentRelativeLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +11,10 @@ import org.keynote.godtools.renderer.crureader.R;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseTextAttributes;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GModal;
-import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.Diagnostics;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.ImageAsyncTask;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.Diagnostics;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -64,20 +61,7 @@ public class GPage extends GCoordinator {
     @Element(name = "question", required = false)
     public GQuestion gQuestion;
 
-    public static void setImageView(String content, final ImageView imageView) {
 
-        new ImageAsyncTask() {
-            @Override
-            protected void onPostExecute(Drawable drawable) {
-                super.onPostExecute(drawable);
-                Log.i("AsyncLoad", "I'm an important!!!!!");
-                if (drawable != null && imageView != null) {
-                    imageView.setImageDrawable(drawable);
-                }
-            }
-        }.start(content);
-
-    }
 
     public String getBackgroundColor() {
         if (color != null) return color;
@@ -92,16 +76,14 @@ public class GPage extends GCoordinator {
         PercentRelativeLayout percentRelativeLayout = (PercentRelativeLayout) rootView.findViewById(R.id.g_page_main_layout_percentrelativelayout);
 
         ImageView backgroundImageView = (ImageView) percentRelativeLayout.findViewById(R.id.g_page_background_imageview);
-        Context context = inflater.getContext();
+
         /* Background color */
 
-        //container.setBackgroundTintList();
         percentRelativeLayout.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(position));
 
         Integer topId = -1;
         Integer bottomId = -1;
 
-        //percentRelativeLayout.setId();
         loadBackground(backgroundImageView, position);
 
         if (title != null) {
@@ -134,8 +116,9 @@ public class GPage extends GCoordinator {
                 ((RelativeLayout.LayoutParams) percentRelativeLayout.findViewById(midSectionId).getLayoutParams()).addRule(PercentRelativeLayout.ABOVE, bottomId);
 
         }
-
+        Diagnostics.StartMethodTracingByKey("RenderConstants.setUpFollowups(followupModalsArrayList);");
         RenderConstants.setUpFollowups(followupModalsArrayList);
+        Diagnostics.StopMethodTracingByKey("RenderConstants.setUpFollowups(followupModalsArrayList);");
 
         return percentRelativeLayout.getId();
 
@@ -146,63 +129,10 @@ public class GPage extends GCoordinator {
         final String resourceName = (watermark != null && watermark.length() > 0) ? watermark : backgroundImage;
 
         if (resourceName != null) {
-
             ImageAsyncTask.setImageView(resourceName, iv);
-            new ImageAsyncTask() {
-                @Override
-                protected void onPostExecute(Drawable drawable) {
-                    super.onPostExecute(drawable);
-                    if (drawable != null && iv != null) {
-                        iv.setImageDrawable(drawable);
-                    }
-                }
-            }.start(resourceName);
-
         }
-
     }
 
-    //TODO: add back sliding panel for peek view
-    //vgTop.setId(RenderViewCompat.generateViewId());
-    //topId = vgTop.getId();
-    //Log.i(TAG, "View Compat top Id: " + topId);
-    //percentRelativeLayout.addView(vgTop);
-            /*if(title.mode == GTitle.HeadingMode.peek && title.peekPanel != null)
-            {
-                final TextView tv = title.peekPanel.render(percentRelativeLayout, position);
-                tv.setVisibility(View.GONE);
-                tv.setTextColor(Color.BLACK);
-                tv.setPadding(20, 20, 20, 20);
-
-                PercentRelativeLayout.LayoutParams slidingViewLayoutParams = newnew PercentRelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                slidingViewLayoutParams.addRule(PercentRelativeLayout.BELOW, topId);
-                slidingViewLayoutParams.getPercentLayoutInfo().rightMarginPercent = GTitle.DEFAULT_RIGHT_MARGIN + .02f;
-                OptRoundCardView cv = newnew OptRoundCardView(context);
-                cv.showCorner(false, false, false, true);
-                cv.setRadius(GTitle.TITLE_CORNER_RADIUS - 10);
-                //cv.setShadowPadding(10, 10, 10, 10);
-                cv.setCardElevation(GTitle.TITLE_ELEVATION - 10);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                    cv.setLayoutTransition(newnew LayoutTransition());
-                }
-
-                cv.setMinimumHeight(60);
-                cv.setCardBackgroundColor(Color.WHITE);
-                cv.addView(tv, newnew FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                View.OnClickListener slidingPanelOnClickListener = newnew View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (tv.getVisibility() == View.VISIBLE) {
-                            tv.setVisibility(View.GONE);
-                        } else {
-                            tv.setVisibility(View.VISIBLE);
-                        }
-                    }
-                };
-                vgTop.setOnClickListener(slidingPanelOnClickListener);
-                cv.setOnClickListener(slidingPanelOnClickListener);
-                percentRelativeLayout.addView(cv, slidingViewLayoutParams);
-            }*/
 
 }
 

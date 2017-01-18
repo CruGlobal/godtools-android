@@ -6,7 +6,10 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.ImageView;
 
-import java.io.IOException;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.Diagnostics;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
+
+import java.io.File;
 
 /**
  * Created by rmatt on 12/1/2016.
@@ -18,11 +21,10 @@ public class ImageAsyncTask extends AsyncTask<String, Void, Drawable> {
         Diagnostics.StartMethodTracingByKey(content);
         new ImageAsyncTask() {
             @Override
-            protected void onPostExecute(Drawable drawable) {
-                super.onPostExecute(drawable);
-                Log.i("AsyncLoad", "I'm an important!!!!!");
-                if (drawable != null && imageView != null) {
-                    imageView.setImageDrawable(drawable);
+            protected void onPostExecute(Drawable bm) {
+
+                if (bm != null && imageView != null) {
+                    imageView.setImageDrawable(bm);
                     Diagnostics.StopMethodTracingByKey(content);
                 }
             }
@@ -39,15 +41,9 @@ public class ImageAsyncTask extends AsyncTask<String, Void, Drawable> {
     @Override
     protected Drawable doInBackground(String... fileLocation) {
 
-        Drawable d = null;
-        try {
-            d = Drawable.createFromStream(RenderSingleton.getInstance().getContext().getAssets().open(fileLocation[0]), null);
-        } catch (IOException e) {
+        File fileForGDP = new File(FileUtils.getResourcesDir(), fileLocation[0]);
+        return Drawable.createFromPath(fileForGDP.getPath());
 
-            //Do nothing
-            e.printStackTrace();
-        }
-        return d;
     }
 
     public void start(String param) {

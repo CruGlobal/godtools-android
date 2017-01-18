@@ -24,6 +24,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Compat.RenderViewCompat;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Event.OnDismissEvent;
 import org.keynote.godtools.renderer.crureader.bo.GPage.IDO.IContexual;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.ImageAsyncTask;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderConstants;

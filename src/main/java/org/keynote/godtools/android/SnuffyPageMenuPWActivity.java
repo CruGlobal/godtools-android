@@ -20,6 +20,7 @@ import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.TypefaceUtils;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocumentPage;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -29,9 +30,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 //@TODO: look into this
-public class SnuffyPageMenuPWActivity extends ListActivity
-{
+public class SnuffyPageMenuPWActivity extends ListActivity {
     private static String TAG = "SnuffyPageMenuActivity";
     List<HashMap<String, Object>> mList = new ArrayList<HashMap<String, Object>>(2);
     private boolean mFromAssets;
@@ -39,8 +40,7 @@ public class SnuffyPageMenuPWActivity extends ListActivity
     private String mFilesDir;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -51,7 +51,7 @@ public class SnuffyPageMenuPWActivity extends ListActivity
         mLanguageCode = getIntent().getStringExtra("LanguageCode");
         SnuffyApplication app = (SnuffyApplication) getApplication();
         mFromAssets = false;
-        mFilesDir = app.getResourcesDir().getPath();
+        mFilesDir = FileUtils.getResourcesDir().getPath();
 
         setTitle(RenderSingleton.getInstance().getGDocument().packagename.content);
 
@@ -80,43 +80,33 @@ public class SnuffyPageMenuPWActivity extends ListActivity
     }
 
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id)
-    {
+    protected void onListItemClick(ListView l, View v, int position, long id) {
         setResult(RESULT_FIRST_USER + position);
         finish();
     }
 
-
     //TODO: rework this
-    private Bitmap getBitmapFromAssetOrFile(Context context, String imageFileName)
-    {
+    private Bitmap getBitmapFromAssetOrFile(Context context, String imageFileName) {
         // a path is passed such as: /Packages/kgp/en_US/thumbs/uspagethumb_10.png
 
         // first the package-specific folder
         String path = imageFileName;
         InputStream isImage = null;
-        try
-        {
+        try {
             if (mFromAssets)
                 isImage = context.getAssets().open(path, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
-            else
-            {
+            else {
                 isImage = new BufferedInputStream(new FileInputStream(mFilesDir + "/" + path));
             }
             return BitmapFactory.decodeStream(isImage);
 
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             // try the next path instead
-        } finally
-        {
-            if (isImage != null)
-            {
-                try
-                {
+        } finally {
+            if (isImage != null) {
+                try {
                     isImage.close();
-                } catch (IOException e)
-                {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -125,30 +115,23 @@ public class SnuffyPageMenuPWActivity extends ListActivity
         // next the package-specific folder with a @2x
         path = imageFileName.replace(".png", "@2x.png");
         isImage = null;
-        try
-        {
+        try {
             if (mFromAssets)
                 isImage = context.getAssets().open(path, AssetManager.ACCESS_BUFFER); // read into memory since it's not very large
-            else
-            {
+            else {
                 Log.d(TAG, "getBitmapFromAssetOrFile:" + mFilesDir + "/" + path);
                 isImage = new BufferedInputStream(new FileInputStream(mFilesDir + "/" + path));
             }
             return BitmapFactory.decodeStream(isImage);
 
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             Log.e(TAG, "Cannot open or read bitmap file: " + imageFileName);
             return null;
-        } finally
-        {
-            if (isImage != null)
-            {
-                try
-                {
+        } finally {
+            if (isImage != null) {
+                try {
                     isImage.close();
-                } catch (IOException e)
-                {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -156,34 +139,28 @@ public class SnuffyPageMenuPWActivity extends ListActivity
 
     }
 
-    private class SimpleImageAdapter extends SimpleAdapter
-    {
+    private class SimpleImageAdapter extends SimpleAdapter {
 
         public SimpleImageAdapter(Context context,
                                   List<? extends Map<String, ?>> data, int resource,
-                                  String[] from, int[] to)
-        {
+                                  String[] from, int[] to) {
             super(context, data, resource, from, to);
         }
 
         @Override
-        public void setViewImage(@NonNull ImageView v, String value)
-        {
+        public void setViewImage(@NonNull ImageView v, String value) {
             Log.d(TAG, "setViewImage: " + value);
 
-            try
-            {
+            try {
                 Bitmap bm = getBitmapFromAssetOrFile(getApplicationContext(), value);
                 v.setImageBitmap(bm);
-            } catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
+        public View getView(int position, View convertView, ViewGroup parent) {
             View view = super.getView(position, convertView, parent);
 
             if (view instanceof ViewGroup) {

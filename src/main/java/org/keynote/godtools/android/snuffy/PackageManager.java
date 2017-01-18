@@ -15,7 +15,7 @@ import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.snuffy.model.GtManifest;
 import org.keynote.godtools.android.snuffy.model.GtPage;
-import org.keynote.godtools.android.utils.FileUtils;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -122,7 +122,7 @@ public class PackageManager {
         final Closer closer = Closer.create();
         try {
             // open file
-            final File file = new File(FileUtils.getResourcesDir(mContext), manifestFileName);
+            final File file = new File(FileUtils.getResourcesDir(), manifestFileName);
             final InputStream fileIn = closer.register(new FileInputStream(file));
             final InputStream bufIn = closer.register(new BufferedInputStream(fileIn));
 
@@ -160,7 +160,7 @@ public class PackageManager {
         final Closer closer = Closer.create();
         try {
             // open file
-            final File file = new File(FileUtils.getResourcesDir(mContext), page.getFileName());
+            final File file = new File(FileUtils.getResourcesDir(), page.getFileName());
             final InputStream fileIn = closer.register(new FileInputStream(file));
             final InputStream bufIn = closer.register(new BufferedInputStream(fileIn));
 

@@ -1,7 +1,6 @@
 package org.keynote.godtools.android.snuffy;
 
 import android.os.Environment;
-import android.support.annotation.NonNull;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
@@ -9,7 +8,6 @@ import com.newrelic.agent.android.NewRelic;
 
 import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.RenderAppConfig;
-import org.keynote.godtools.android.utils.FileUtils;
 import org.keynote.godtools.renderer.crureader.BaseAppConfig;
 import org.keynote.godtools.renderer.crureader.RenderApp;
 
@@ -68,11 +66,7 @@ public class SnuffyApplication extends RenderApp {
         return documentsDir;
     }
 
-    @NonNull
-    @Deprecated
-    public File getResourcesDir() {
-        return FileUtils.getResourcesDir(this);
-    }
+
 
 //    @Override
 //    protected void attachBaseContext(Context base) {
