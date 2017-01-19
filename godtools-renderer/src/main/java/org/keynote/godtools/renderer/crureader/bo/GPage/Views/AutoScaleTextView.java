@@ -35,6 +35,7 @@ public class AutoScaleTextView extends AppCompatTextView {
     private void initialize(Context context, AttributeSet attrs, int defStyleAttr) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AutoScaleTextView, defStyleAttr, R.style.AutoScaleTextView);
         textSizeScalar = a.getInteger(R.styleable.AutoScaleTextView_textSizeScalar, 17);
+        a.recycle();
     }
 
     @Override

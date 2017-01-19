@@ -24,7 +24,7 @@ public class GBaseTextAttributes extends GCoordinator {
 
 
     private static final String TAG = "GBaseTextAttributes";
-    @org.simpleframework.xml.Text(required = false, empty = "")
+    @org.simpleframework.xml.Text(required = false)
     public String content;
     @Attribute(required = false)
     public String textalign;

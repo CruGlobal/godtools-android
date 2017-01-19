@@ -52,18 +52,12 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     private LinearLayout ll;
     private float Y;
     private boolean fixed = false;
-    private int screenHeight;
     private String title;
     private String mImageLocation;
     private int mImageWidth;
     private int mImageHeight;
 
     private int mPosition;
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,7 +203,7 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
 
     private void TranslateView() {
         DisplayMetrics metrics = PopupDialogActivity.this.getResources().getDisplayMetrics();
-        screenHeight = metrics.heightPixels;
+        int screenHeight = metrics.heightPixels;
         PercentLayoutHelper.PercentLayoutParams layoutParams = (PercentLayoutHelper.PercentLayoutParams) ll.getLayoutParams();
         PercentLayoutHelper.PercentLayoutInfo percentLayoutInfo = layoutParams.getPercentLayoutInfo();
         percentLayoutInfo.topMarginPercent = Y / (float) screenHeight;

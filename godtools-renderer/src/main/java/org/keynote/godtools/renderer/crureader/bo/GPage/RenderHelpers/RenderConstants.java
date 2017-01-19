@@ -82,7 +82,7 @@ public class RenderConstants {
 
         }
     };
-    static View.OnClickListener onClick = new View.OnClickListener() {
+    static final View.OnClickListener onClick = new View.OnClickListener() {
 
         public void onClick(View view) {
 
@@ -115,7 +115,7 @@ public class RenderConstants {
     };
 
     //TODO: this is messy clean up.
-    static View.OnClickListener simpleOnClick = new View.OnClickListener() {
+    static final View.OnClickListener simpleOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
 

@@ -173,7 +173,7 @@ public class OptRoundCardView extends FrameLayout implements CardViewDelegate {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            if (IMPL instanceof CardViewApi21 == false) {
+            if (!(IMPL instanceof CardViewApi21)) {
 //                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
 //                {
 //

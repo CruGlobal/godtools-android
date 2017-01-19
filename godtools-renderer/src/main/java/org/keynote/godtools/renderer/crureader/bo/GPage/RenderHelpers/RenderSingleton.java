@@ -35,7 +35,7 @@ public class RenderSingleton {
     /*
     This holds page local events
      */
-    public SparseArray<GCoordinator> gPanelHashMap = new SparseArray<>();
+    public final SparseArray<GCoordinator> gPanelHashMap = new SparseArray<>();
 
     /*
     screenScalar
@@ -44,22 +44,22 @@ public class RenderSingleton {
     /*
     <Position in View Pager, background color>
      */
-    public SparseArray<String> globalColors = new SparseArray<String>();
+    public final SparseArray<String> globalColors = new SparseArray<String>();
     /*
     Commonly called dimensions are hashmaped.
      */
-    int screenWidth;
-    int screenHeight;
-    float screenDensity;
-    private Hashtable<String, Long> methodTraceMilliSecondsKeyMap = new Hashtable<String, Long>();
-    private Context context;
+    final int screenWidth;
+    final int screenHeight;
+    final float screenDensity;
+    private final Hashtable<String, Long> methodTraceMilliSecondsKeyMap = new Hashtable<String, Long>();
+    private final Context context;
     /*
     Currently rendered GDocument
      */
     private GDocument GDocument;
 
     private BaseAppConfig baseAppConfig;
-    View.OnClickListener mLinksOnClick = new View.OnClickListener() {
+    final View.OnClickListener mLinksOnClick = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {

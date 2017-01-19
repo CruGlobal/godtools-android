@@ -33,12 +33,6 @@ public class ImageAsyncTask extends AsyncTask<String, Void, Drawable> {
     }
 
     @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-
-    }
-
-    @Override
     protected Drawable doInBackground(String... fileLocation) {
 
         File fileForGDP = new File(FileUtils.getResourcesDir(), fileLocation[0]);

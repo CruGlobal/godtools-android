@@ -6,8 +6,7 @@
         android:id="@+id/g_header_header_textview"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:includeFontPadding="false"
-        android:text="@string/sample_text_g_header_clear_header_textview" />
+        android:includeFontPadding="false" />
 
     <org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView
         android:id="@+id/g_header_subheader_textview"
@@ -15,7 +14,6 @@
         android:layout_height="wrap_content"
         android:includeFontPadding="false"
         android:tag="top"
-        android:text="@string/sample_text_g_header_clear_subheader_textview"
         android:layout_width="match_parent" />
 
 </merge>

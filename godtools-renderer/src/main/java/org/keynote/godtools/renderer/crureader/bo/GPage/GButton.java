@@ -30,7 +30,7 @@ public class GButton extends GBaseButtonAttributes {
 
     private static final String TAG = "GButton";
 
-    public String textColor;
+    private String textColor;
 
     @Element(required = false)
     public GImage image;
@@ -169,10 +169,7 @@ public class GButton extends GBaseButtonAttributes {
 
         if (imageFrame != null) {
 
-            final String finalImageContent = imageContent;
-            final FrameLayout finalImageFrame = imageFrame;
-            final int finalImageId = imageId;
-            RenderConstants.addOnClickPanelListener(position, content, finalImageContent, panel, outerLayout);
+            RenderConstants.addOnClickPanelListener(position, content, imageContent, panel, outerLayout);
         }
         return outerLayout.getId();
 

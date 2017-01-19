@@ -168,11 +168,6 @@ public class OptRoundRectDrawable extends RoundRectDrawable {
         super.setRadius(radius);
     }
 
-    @Override
-    public void setColor(int color) {
-        super.setColor(color);
-    }
-
     public void showCorner(boolean leftTop, boolean rightTop, boolean leftBottom, boolean rightBottom){
         this.leftTopRect = !leftTop;
         this.rightTopRect = !rightTop;

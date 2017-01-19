@@ -23,21 +23,28 @@ public class GtManifest extends GtModel {
     private static final String XML_PACKAGE = "document";
     private static final String XML_TITLE = "packagename";
     private static final String XML_TITLE_LEGACY = "displayname";
-
-    private String mTitle;
-    private GtPage mAbout;
     private final List<GtPage> mPages = new ArrayList<>();
     private final SimpleArrayMap<String, GtPage> mPagesIndex = new SimpleArrayMap<>();
-
     @NonNull
     private final String mPackageCode;
     @NonNull
     private final String mLanguage;
+    private String mTitle;
+    private GtPage mAbout;
 
     @VisibleForTesting
     GtManifest(@NonNull final String code, @NonNull final String language) {
         mPackageCode = code;
         mLanguage = language;
+    }
+
+    @NonNull
+    @WorkerThread
+    public static GtManifest fromXml(@NonNull final XmlPullParser parser, @NonNull final String packageCode,
+                                     @NonNull final String language) throws IOException, XmlPullParserException {
+        final GtManifest manifest = new GtManifest(packageCode, language);
+        manifest.parse(parser);
+        return manifest;
     }
 
     @NonNull
@@ -49,11 +56,9 @@ public class GtManifest extends GtModel {
     @Nullable
     @Override
     public GtPage getPage() {
-        if (BuildConfig.DEBUG) {
-            throw new IllegalStateException("It is impossible for a manifest to be a child of a page");
-        }
 
-        return null;
+        throw new IllegalStateException("It is impossible for a manifest to be a child of a page");
+
     }
 
     public String getTitle() {
@@ -94,15 +99,6 @@ public class GtManifest extends GtModel {
         return null;
     }
 
-    @NonNull
-    @WorkerThread
-    public static GtManifest fromXml(@NonNull final XmlPullParser parser, @NonNull final String packageCode,
-                                     @NonNull final String language) throws IOException, XmlPullParserException {
-        final GtManifest manifest = new GtManifest(packageCode, language);
-        manifest.parse(parser);
-        return manifest;
-    }
-
     private void parse(final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, null, XML_PACKAGE);
 
@@ -126,7 +122,7 @@ public class GtManifest extends GtModel {
                 case GtPage.XML_ABOUT:
                     if (mAbout != null) {
                         throw new XmlPullParserException("Package XML has more than 1 about page defined", parser,
-                                                         null);
+                                null);
                     }
                     mAbout = GtPage.fromManifestXml(this, "about", parser);
                     mPagesIndex.put(mAbout.getId(), mAbout);

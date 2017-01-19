@@ -1,19 +1,7 @@
 <resources>
     <string name="app_name">CRUReader</string>
-    <string name="button_tv_transistion_title">button_transistion</string>
+    <string name="button_tv_transistion_title">button_transition</string>
     <string name="inner_ll_transistion_title">inner_ll_transition</string>
-    <string name="sample_text_g_header_peak_header_textview">The Empowering Presence</string>
-    <string name="sample_text_g_header_peak_subheader_textview">We are filled with the Spirit by faith, enabling us to experience intimacy with God and enjoy all He has for us.</string>
-    <string name="sample_text_g_header_straight_header_textview">YOU CAN EXPRESS YOUR ATTITUDE TOWARDS GOD THROUGH PRAYER.</string>
-    <string name="sample_text_g_header_straight_subheader_textview">Prayer is simply talking with God.</string>
-    <string name="sample_text_g_header_clear_header_textview">KNOWING GOD</string>
-    <string name="sample_text_g_header_clear_subheader_textview">personally</string>
-    <string name="sample_text_g_header_peak_peak_textview">Growing | Frustrated\nDisappointing | Fulfilled\nForgiven | Stuck | Struggling\nJoyful | Defeated | Exciting\nUp and Down | Empty\nDiscouraged | Duty\nIntimate | Mediocre\nPainful | Dynamic | Guilty\nVital | So-so | Others?</string>
-    <string name="sample_text_g_header_default_header_textview">GOD LOVES YOU AND OFFERS A WONDERFUL PLAN FOR YOUR LIFE.</string>
-    <string name="sample_text_g_header_default_number_textview">1</string>
-    <string name="sample_text_gheader_straight_textview">Which circle best describes you?  \n Which would you like to describe you? </string>
-    <string name="sample_text_gheader_textview">What would you like to be when you grow up? </string>
-    <string name="sample_text_g_button_g">What if I could see? </string>
     <string name="scannable_text_input">"scannableTextInput"</string>
     <string name="fallback">fallback</string>
     <string name="invalid_error_resource"/>

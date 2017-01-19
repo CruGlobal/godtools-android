@@ -27,7 +27,6 @@ import android.graphics.RadialGradient;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 
@@ -51,11 +50,11 @@ class RoundRectDrawableWithShadow extends Drawable {
     * */
     static RoundRectHelper sRoundRectHelper;
 
-    Paint mPaint;
+    final Paint mPaint;
 
-    Paint mCornerShadowPaint;
+    final Paint mCornerShadowPaint;
 
-    Paint mEdgeShadowPaint;
+    final Paint mEdgeShadowPaint;
 
     final RectF mCardBounds;
 
@@ -358,7 +357,7 @@ class RoundRectDrawableWithShadow extends Drawable {
         invalidateSelf();
     }
 
-    static interface RoundRectHelper {
+    interface RoundRectHelper {
         void drawRoundRect(Canvas canvas, RectF bounds, float cornerRadius, Paint paint);
     }
 }

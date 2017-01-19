@@ -1,7 +1,6 @@
 package org.keynote.godtools.renderer.crureader;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -85,15 +84,4 @@ public class SlidePageFragment extends Fragment {
         return new TextView(inflater.getContext());
     }
 
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        //FrameLayout.LayoutParams layoutParams = newnew FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-
-        //mGPage.render(thisView, mPosition);
-
-
-    }
 }

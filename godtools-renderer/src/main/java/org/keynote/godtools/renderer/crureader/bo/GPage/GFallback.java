@@ -1,7 +1,6 @@
 package org.keynote.godtools.renderer.crureader.bo.GPage;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import org.keynote.godtools.renderer.crureader.R;
@@ -41,11 +40,9 @@ public class GFallback extends GCoordinator {
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
 
         RenderConstants.setUpFollowups(GCoordinatorFollowupList);
-        int viewId = RenderConstants.renderLinearLayoutListWeighted(inflater,
+
+        return RenderConstants.renderLinearLayoutListWeighted(inflater,
                 viewGroup, GCoordinatorArrayList, position, Math.round(inflater.getContext().getResources().getDimension(R.dimen.fallback_element_space)));
-
-
-        return viewId;
 
     }
 

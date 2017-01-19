@@ -19,7 +19,6 @@ public class GodToolsEvent {
     private long mFollowUpId = INVALID_ID;
     private String mLanguage;
     private int position = INVALID_ID;
-    private GBaseButtonAttributes.ButtonMode errorMode;
     private String errorContent;
     private boolean mode;
 
@@ -79,7 +78,7 @@ public class GodToolsEvent {
     }
 
     public void setErrorMode(GBaseButtonAttributes.ButtonMode errorMode) {
-        this.errorMode = errorMode;
+        GBaseButtonAttributes.ButtonMode errorMode1 = errorMode;
     }
 
     public void setErrorContent(String errorContent) {
