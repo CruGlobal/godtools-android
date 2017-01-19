@@ -14,7 +14,6 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GModal;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.ImageAsyncTask;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
-import org.keynote.godtools.renderer.crureader.bo.GPage.Util.Diagnostics;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -87,13 +86,11 @@ public class GPage extends GCoordinator {
 
             title.render(inflater, percentRelativeLayout, position);
 
-            Diagnostics.StartMethodTracingByKey("findViewWithTag(top)");
             View topView = percentRelativeLayout.findViewWithTag("top");
 
             if (topView != null) {
                 topId = topView.getId();
             }
-            Diagnostics.StopMethodTracingByKey("findViewWithTag(top)");
 
         }
 
@@ -113,9 +110,7 @@ public class GPage extends GCoordinator {
                 ((RelativeLayout.LayoutParams) percentRelativeLayout.findViewById(midSectionId).getLayoutParams()).addRule(PercentRelativeLayout.ABOVE, bottomId);
 
         }
-        Diagnostics.StartMethodTracingByKey("RenderConstants.setUpFollowups(followupModalsArrayList);");
         RenderConstants.setUpFollowups(followupModalsArrayList);
-        Diagnostics.StopMethodTracingByKey("RenderConstants.setUpFollowups(followupModalsArrayList);");
 
         return percentRelativeLayout.getId();
 
