@@ -93,9 +93,9 @@ public class GInputField extends GCoordinator {
 
     public String getErrorResource() {
         if (validFormat != null) {
-            return RenderSingleton.getInstance().getAppConfig().getFollowupModalInputValidGeneric();
+            return String.format(RenderSingleton.getInstance().getAppConfig().getFollowupModalInputValidGeneric(), name.toUpperCase()) ;
         } else if (type == InputFieldType.email) {
-            return RenderSingleton.getInstance().getAppConfig().getFollowupModalInputValidGeneric();
+            return String.format(RenderSingleton.getInstance().getAppConfig().getFollowupModalInputValidGeneric(), name.toUpperCase()) ;
         } else {
             return "Invalid Error Resource";
         }
