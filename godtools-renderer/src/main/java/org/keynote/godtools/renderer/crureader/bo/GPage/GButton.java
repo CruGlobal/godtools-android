@@ -2,6 +2,7 @@ package org.keynote.godtools.renderer.crureader.bo.GPage;
 
 import android.graphics.Color;
 import android.os.Build;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.core.Commit;
 
 @Root(name = "button")
 public class GButton extends GBaseButtonAttributes {
@@ -85,7 +87,6 @@ public class GButton extends GBaseButtonAttributes {
 
         applyTextSize(button);
         updateBaseAttributes(button);
-
         button.setId(RenderViewCompat.generateViewId());
         button.setTag(tapEvents);
 
@@ -137,6 +138,22 @@ public class GButton extends GBaseButtonAttributes {
         return outerLayout.getId();
 
     }
+
+    @Commit
+    public void internal_addToAllUrls() {
+        Log.i(TAG, "GButton Commit");
+        if (mode != null && mode != ButtonMode.big) {
+            if(buttonText != null)
+            {
+                Log.i(TAG, "GButtonComplexConverter -- Button Text: " + buttonText.content);
+            }
+            else
+            {
+                Log.i(TAG, "GButtonComplexConverter -- Button Text as content: " + text);
+            }
+        }
+    }
+
 
     private int methodBig(LayoutInflater inflater, ViewGroup viewGroup, final int position) {
 

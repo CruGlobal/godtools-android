@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 
@@ -16,6 +17,7 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttribut
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 import org.keynote.godtools.renderer.crureader.bo.GPage.GPage;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import static org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttributes.ButtonMode.phone;
@@ -33,6 +35,12 @@ public class RenderSingleton {
     This holds page local events
      */
     public final SparseArray<GCoordinator> gPanelHashMap = new SparseArray<>();
+
+
+    /*
+    This holds urls on page
+     */
+    public final ArrayList<String> urls = new ArrayList<>();
 
     /*
     screenScalar
@@ -62,25 +70,37 @@ public class RenderSingleton {
         public void onClick(View v) {
             final GBaseButtonAttributes.ButtonMode mode = GBaseButtonAttributes.ButtonMode.valueOf((String) v.getTag(R.id.button_mode));
             final String content = (String) v.getTag(R.id.button_content);
-
+            String urlScheme;
+            Intent intent;
             switch (mode) {
 
                 case email:
 
                 case phone:
 
-                    String urlScheme = mode == phone ? "tel:" : "mailto:";
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlScheme + content));
+                    urlScheme = mode == phone ? "tel:" : "mailto:";
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlScheme + content));
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     RenderSingleton.getInstance().getContext().startActivity(intent);
                     break;
+                case allurl:
+                    intent = new Intent(RenderSingleton.getInstance().getContext(), AlertDialogActivity.class);
+
+                    intent.putExtra(AlertDialogActivity.CONSTANTS_ALERT_DIALOG_CONTENT_STRING_EXTRA, RenderSingleton.getInstance().getUrlsFormatted());
+                    intent.putExtra(AlertDialogActivity.CONSTANTS_ALERT_DIALOG_MODE_STRING_EXTRA, mode.toString());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    RenderSingleton.getInstance().getContext().startActivity(intent);
+                    Log.i("allurl", "allurl: " + RenderSingleton.getInstance().getUrlsFormatted());
+
+
+                    break;
 
                 default:
-                    Intent i = new Intent(RenderSingleton.getInstance().getContext(), AlertDialogActivity.class);
-                    i.putExtra(AlertDialogActivity.CONSTANTS_ALERT_DIALOG_CONTENT_STRING_EXTRA, content);
-                    i.putExtra(AlertDialogActivity.CONSTANTS_ALERT_DIALOG_MODE_STRING_EXTRA, mode.toString());
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    RenderSingleton.getInstance().getContext().startActivity(i);
+                    intent = new Intent(RenderSingleton.getInstance().getContext(), AlertDialogActivity.class);
+                    intent.putExtra(AlertDialogActivity.CONSTANTS_ALERT_DIALOG_CONTENT_STRING_EXTRA, content);
+                    intent.putExtra(AlertDialogActivity.CONSTANTS_ALERT_DIALOG_MODE_STRING_EXTRA, mode.toString());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    RenderSingleton.getInstance().getContext().startActivity(intent);
                     break;
             }
 
@@ -154,5 +174,16 @@ public class RenderSingleton {
 
     public BaseAppConfig getAppConfig() {
         return baseAppConfig;
+    }
+
+    public String getUrlsFormatted() {
+        String urlContent = "";
+        Log.i("allurl", "urls size " + urls.size());
+        for(String url : urls)
+        {
+            Log.i("allurl", "url" + urls.size());
+            urlContent += url + "\n";
+        }
+        return urlContent;
     }
 }

@@ -8,11 +8,16 @@ import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class GButtonComplexConverter implements Converter<GButton> {
+
+    public static final String TAG = "GButtonComplex";
+
+
     @Override
     public GButton read(InputNode node) throws Exception {
         Serializer serializer = new Persister();
         String gButtonText = node.getValue();
         GButton gButton = serializer.read(GButton.class, node);
+
         gButton.setText(gButtonText);
         return gButton;
 

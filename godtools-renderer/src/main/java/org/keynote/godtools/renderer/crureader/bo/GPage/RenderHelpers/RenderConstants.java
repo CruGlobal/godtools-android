@@ -383,16 +383,17 @@ public class RenderConstants {
         textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
     }
 
-    public static void sendEmailWithContent(String subjectLine, String msgBody) {
+    public static void sendEmailWithContent(Context context, String subjectLine, String msgBody) {
         try {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setData(Uri.parse("mailto:"));
             intent.putExtra(Intent.EXTRA_SUBJECT, subjectLine);
             intent.putExtra(Intent.EXTRA_TEXT, msgBody);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            RenderSingleton.getInstance().getContext().startActivity(Intent.createChooser(intent, RenderSingleton.getInstance().getAppConfig().getChooseYourEmailProvider()));
+            ///intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(Intent.createChooser(intent, RenderSingleton.getInstance().getAppConfig().getChooseYourEmailProvider()));
         } catch (Exception e) { //TODO: this is bad practice all of these should be removed and defensive coding should be used, discuss with team.
             //TODO: discussed, but hook from crashlytics register into renderer singleton.
+            e.printStackTrace();
             showErrorDialog(RenderSingleton.getInstance().getAppConfig().getCannotSendEmail());
         }
     }
