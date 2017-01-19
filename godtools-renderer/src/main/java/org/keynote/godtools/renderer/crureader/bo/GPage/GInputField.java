@@ -22,6 +22,12 @@ import java.util.regex.Pattern;
 @Root(name = "input-field")
 public class GInputField extends GCoordinator {
 
+
+    public static final String FIELD_EMAIL = "email";
+    public static final String FIELD_FIRST_NAME = "first_name";
+    public static final String FIELD_LAST_NAME = "last_name";
+    public static final String FIELD_NAME = "name";
+
     private static final String TAG = "GInputField";
     @Attribute(name = "valid-format", required = false)
     public String validFormat;
