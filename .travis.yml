@@ -10,7 +10,7 @@ env:
   matrix:
     - ANDROID_TARGET=android-15 ANDROID_ABI=armeabi-v7a
 #    - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-23 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-24 ANDROID_ABI=armeabi-v7a
 branches:
   only:
     - master
@@ -25,6 +25,7 @@ android:
     - extra-google-m2repository
 
     # system image for testing
+    - $ANDROID_TARGET
     - sys-img-$ANDROID_ABI-$ANDROID_TARGET
 
 before_cache:
