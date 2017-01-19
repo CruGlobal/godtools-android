@@ -6,7 +6,6 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.ImageView;
 
-import org.keynote.godtools.renderer.crureader.bo.GPage.Util.Diagnostics;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
 
 import java.io.File;
@@ -14,14 +13,14 @@ import java.io.File;
 public class ImageAsyncTask extends AsyncTask<String, Void, Drawable> {
 
     public static void setImageView(final String content, final ImageView imageView) {
-        Diagnostics.StartMethodTracingByKey(content);
+
         new ImageAsyncTask() {
             @Override
             protected void onPostExecute(Drawable bm) {
 
                 if (bm != null && imageView != null) {
                     imageView.setImageDrawable(bm);
-                    Diagnostics.StopMethodTracingByKey(content);
+
                 }
             }
         }.start(content);

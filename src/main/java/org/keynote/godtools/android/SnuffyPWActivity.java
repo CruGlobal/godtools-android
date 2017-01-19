@@ -54,7 +54,6 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Event.OnDismissEvent;
 import org.keynote.godtools.renderer.crureader.bo.GPage.GPage;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
-import org.keynote.godtools.renderer.crureader.bo.GPage.Util.Diagnostics;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.BottomSheetDialog;
 
@@ -72,10 +71,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.support.v4.app.FragmentManager.POP_BACK_STACK_INCLUSIVE;
-import static org.keynote.godtools.renderer.crureader.bo.GPage.GInputField.FIELD_EMAIL;
-import static org.keynote.godtools.renderer.crureader.bo.GPage.GInputField.FIELD_FIRST_NAME;
-import static org.keynote.godtools.renderer.crureader.bo.GPage.GInputField.FIELD_LAST_NAME;
-import static org.keynote.godtools.renderer.crureader.bo.GPage.GInputField.FIELD_NAME;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
@@ -88,6 +83,10 @@ import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 import static org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent.EventID.SUBSCRIBE_EVENT;
+import static org.keynote.godtools.renderer.crureader.bo.GPage.GInputField.FIELD_EMAIL;
+import static org.keynote.godtools.renderer.crureader.bo.GPage.GInputField.FIELD_FIRST_NAME;
+import static org.keynote.godtools.renderer.crureader.bo.GPage.GInputField.FIELD_LAST_NAME;
+import static org.keynote.godtools.renderer.crureader.bo.GPage.GInputField.FIELD_NAME;
 
 public class SnuffyPWActivity extends AppCompatActivity {
 
@@ -122,9 +121,9 @@ public class SnuffyPWActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.snuffy_main);
-        Diagnostics.StartMethodTracingByKey("ButterknifeBind");
+
         ButterKnife.bind(this);
-        Diagnostics.StopMethodTracingByKey("ButterknifeBind");
+
         setupActionBar();
         mAppPackage = getIntent().getStringExtra("PackageName");        // "kgp"
         mAppLanguage = getIntent().getStringExtra("LanguageCode");      // "en"
@@ -135,7 +134,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
         mConfigPrimary = mConfigFileName;
         isUsingPrimaryLanguage = true;
 
-        Diagnostics.StartMethodTracingByKey("langPara");
         // check if parallel language is set
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String langParallel = settings.getString(LANGUAGE_PARALLEL, "");

@@ -1,6 +1,5 @@
 package org.keynote.godtools.renderer.crureader.bo.GPage.Util;
 
-import android.os.Debug;
 import android.os.Looper;
 import android.util.Log;
 
@@ -45,22 +44,21 @@ public class Diagnostics {
 
                 }
             }
-            logMemory(leadingMessage);
         }
 
     }
 
-
-    public static void logMemory(String leadingMessage) {
-        Debug.MemoryInfo memoryInfo = new Debug.MemoryInfo();
-        Debug.getMemoryInfo(memoryInfo);
-
-        String memMessage = String.format("Memory_ + " + leadingMessage + "_: Pss=%.2f MB, Private=%.2f MB, Shared=%.2f MB", memoryInfo.getTotalPss() / 1024.0,
-                memoryInfo.getTotalPrivateDirty() / 1024.0, memoryInfo.getTotalSharedDirty() / 1024.0);
-
-        Log.v(TAG, memMessage);
-
-    }
+/*Very bad for performance*/
+//    public static void logMemory(String leadingMessage) {
+//        Debug.MemoryInfo memoryInfo = new Debug.MemoryInfo();
+//        Debug.getMemoryInfo(memoryInfo);
+//
+//        String memMessage = String.format("Memory_ + " + leadingMessage + "_: Pss=%.2f MB, Private=%.2f MB, Shared=%.2f MB", memoryInfo.getTotalPss() / 1024.0,
+//                memoryInfo.getTotalPrivateDirty() / 1024.0, memoryInfo.getTotalSharedDirty() / 1024.0);
+//
+//        Log.v(TAG, memMessage);
+//
+//    }
 
     public static boolean isOnUIThread() {
         return Looper.myLooper() == Looper.getMainLooper();
