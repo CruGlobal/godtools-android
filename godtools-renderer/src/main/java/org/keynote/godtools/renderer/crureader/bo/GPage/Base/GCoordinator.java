@@ -16,10 +16,6 @@ import org.simpleframework.xml.Attribute;
 
 import java.util.List;
 
-/**
- * Created by rmatt on 10/24/2016.
- */
-
 public abstract class GCoordinator {
 
     private static final String TAG = "GCoordinator";

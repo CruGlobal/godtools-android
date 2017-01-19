@@ -1,9 +1,5 @@
 package org.keynote.godtools.renderer.crureader.bo.GPage.Views;
 
-/**
- * Created by rmatt on 12/5/2016.
- */
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;

@@ -11,10 +11,6 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
 
 import java.io.File;
 
-/**
- * Created by rmatt on 12/1/2016.
- */
-
 public class ImageAsyncTask extends AsyncTask<String, Void, Drawable> {
 
     public static void setImageView(final String content, final ImageView imageView) {

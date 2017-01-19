@@ -27,10 +27,6 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
-/**
- * Created by rmatt on 10/18/2016.
- */
-
 @Root(name = "title")
 public class GTitle extends GCoordinator {
 

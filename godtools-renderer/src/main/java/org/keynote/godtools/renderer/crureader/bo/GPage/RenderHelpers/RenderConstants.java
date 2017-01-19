@@ -44,10 +44,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by rmatt on 11/3/2016.
- */
-
 public class RenderConstants {
 
     /* The dimensions w, h,

@@ -16,10 +16,6 @@ import org.simpleframework.xml.Attribute;
 
 import me.grantland.widget.AutofitHelper;
 
-/**
- * Created by rmatt on 10/31/2016.
- */
-
 public class GBaseTextAttributes extends GCoordinator {
 
 

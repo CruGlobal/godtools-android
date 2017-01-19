@@ -6,10 +6,6 @@ import android.util.Log;
 
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 
-/**
- * Created by rmatt on 11/29/2016.
- */
-
 public class Diagnostics {
 
 

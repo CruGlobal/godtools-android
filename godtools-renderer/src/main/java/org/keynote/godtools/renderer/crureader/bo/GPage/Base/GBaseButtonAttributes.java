@@ -2,10 +2,6 @@ package org.keynote.godtools.renderer.crureader.bo.GPage.Base;
 
 import org.simpleframework.xml.Attribute;
 
-/**
- * Created by rmatt on 10/25/2016.
- */
-
 public abstract class GBaseButtonAttributes extends GCoordinator {
 
     private static final String TAG = "GBaseButtonAttributes";

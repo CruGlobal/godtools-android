@@ -4,9 +4,6 @@ import android.app.Application;
 
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 
-/**
- * Created by rmatt on 11/16/2016.
- */
 public abstract class RenderApp extends Application {
 
     private RenderSingleton renderSingleton;

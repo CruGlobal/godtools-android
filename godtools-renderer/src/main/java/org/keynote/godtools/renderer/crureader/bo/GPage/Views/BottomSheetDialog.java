@@ -1,9 +1,5 @@
 package org.keynote.godtools.renderer.crureader.bo.GPage.Views;
 
-/**
- * Created by rmatt on 12/11/2016.
- */
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;

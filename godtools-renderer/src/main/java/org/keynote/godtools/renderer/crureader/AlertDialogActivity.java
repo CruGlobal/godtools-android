@@ -25,9 +25,6 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSing
 import static org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttributes.ButtonMode.allurl;
 import static org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttributes.ButtonMode.url;
 
-/**
- * Created by rmatt on 11/14/2016.
- */
 public class AlertDialogActivity extends Activity {
 
     public static final String TAG = "PopupDialogActivity";

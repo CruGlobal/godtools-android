@@ -20,9 +20,6 @@ import java.util.Hashtable;
 
 import static org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttributes.ButtonMode.phone;
 
-/**
- * Created by rmatt on 11/16/2016.
- */
 
 public class RenderSingleton {
 

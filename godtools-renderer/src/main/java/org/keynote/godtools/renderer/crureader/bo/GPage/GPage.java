@@ -23,9 +23,6 @@ import org.simpleframework.xml.Root;
 
 import java.util.ArrayList;
 
-/**
- * Created by rmatt on 10/18/2016.
- */
 @Root(name = "page")
 public class GPage extends GCoordinator {
     private static final String TAG = "GPage";

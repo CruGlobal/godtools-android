@@ -13,10 +13,6 @@ import org.simpleframework.xml.strategy.Strategy;
 
 import java.io.File;
 
-/**
- * Created by rmatt on 10/24/2016.
- */
-
 public class XMLUtil {
 
     public static GPage parseGPage(File file) throws Exception {

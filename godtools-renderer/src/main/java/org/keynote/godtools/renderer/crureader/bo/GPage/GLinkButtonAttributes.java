@@ -13,9 +13,6 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderCons
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
-/**
- * Created by rmatt on 10/25/2016.
- */
 @Root(name = "link-button")
 public class GLinkButtonAttributes extends GBaseTextAttributes {
 
