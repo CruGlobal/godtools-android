@@ -72,10 +72,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.support.v4.app.FragmentManager.POP_BACK_STACK_INCLUSIVE;
-import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_EMAIL;
-import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_FIRST_NAME;
-import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_LAST_NAME;
-import static org.keynote.godtools.android.snuffy.model.GtInputField.FIELD_NAME;
+import static org.keynote.godtools.renderer.crureader.bo.GPage.GInputField.FIELD_EMAIL;
+import static org.keynote.godtools.renderer.crureader.bo.GPage.GInputField.FIELD_FIRST_NAME;
+import static org.keynote.godtools.renderer.crureader.bo.GPage.GInputField.FIELD_LAST_NAME;
+import static org.keynote.godtools.renderer.crureader.bo.GPage.GInputField.FIELD_NAME;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
