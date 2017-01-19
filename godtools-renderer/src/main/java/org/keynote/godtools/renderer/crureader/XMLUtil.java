@@ -20,7 +20,9 @@ public class XMLUtil {
         Registry registry = new Registry();
         Strategy strategy = new RegistryStrategy(registry);
         Serializer serializer = new Persister(strategy);
+        //registry.bind(GSimpleButton.class, GSimpleButtonComplexConverter.class);
         registry.bind(GButton.class, GButtonComplexConverter.class);
+
         return serializer.read(GPage.class, file);
     }
 
@@ -29,6 +31,7 @@ public class XMLUtil {
         Strategy strategy = new RegistryStrategy(registry);
         Serializer serializer = new Persister(strategy);
         registry.bind(GDocument.class, GDocumentComplexConverter.class);
+
         return serializer.read(GDocument.class, file);
     }
 

@@ -1,6 +1,7 @@
 package org.keynote.godtools.renderer.crureader.bo.GPage;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderCons
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleButtonView;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.core.Commit;
 
 @Root(name = "button")
 public class GSimpleButton extends GBaseButtonAttributes {
@@ -72,6 +74,19 @@ public class GSimpleButton extends GBaseButtonAttributes {
 
         return button.getId();
 
+    }
+
+    @Commit
+    public void internal_addToAllUrls() {
+        Log.i(TAG, "GSimpleButton Commit");
+        if (mode != null && mode == ButtonMode.url)
+        {
+            if(content != null)
+            {
+                Log.i(TAG, "GSimpleButtonCommit -- Button Text: " + content);
+                RenderSingleton.getInstance().urls.add(content);
+            }
+        }
     }
 
     public void defaultColor(int position) {

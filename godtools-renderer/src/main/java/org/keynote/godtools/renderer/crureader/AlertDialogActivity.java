@@ -30,6 +30,7 @@ public class AlertDialogActivity extends Activity {
     public static final String TAG = "PopupDialogActivity";
     public static final String CONSTANTS_ALERT_DIALOG_MODE_STRING_EXTRA = "mode";
     public static final String CONSTANTS_ALERT_DIALOG_CONTENT_STRING_EXTRA = "content";
+    public static final String CONSTANTS_ALERT_DIALOG_SUBJECT_STRING_EXTRA = "subject";
 
     public GBaseButtonAttributes.ButtonMode mButtonMode;
     public String content;
@@ -87,7 +88,7 @@ public class AlertDialogActivity extends Activity {
                         // most receivers will turn the link into a hyperlink automatically
 
                         String msgBody = "http://" + content;
-                        RenderConstants.sendEmailWithContent(subjectLine, msgBody);
+                        RenderConstants.sendEmailWithContent(AlertDialogActivity.this, subjectLine, msgBody);
                     }
                 });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {

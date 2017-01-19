@@ -32,15 +32,13 @@ public class SearchableViewUtil {
 
     public static View findFallBackPanel(View view) {
         View parentView = (View) view.getParent();
-        if(parentView == null) return null;
+        if (parentView == null) return null;
 
-        if(parentView.getTag(R.string.fallback) != null)
-        {
+        if (parentView.getTag(R.string.fallback) != null) {
             return parentView;
-        }
-        else
-        {
+        } else {
             return findFallBackPanel(parentView);
         }
     }
+
 }
