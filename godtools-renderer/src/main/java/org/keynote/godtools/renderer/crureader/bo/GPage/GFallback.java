@@ -14,10 +14,6 @@ import org.simpleframework.xml.Root;
 
 import java.util.ArrayList;
 
-/**
- * Created by rmatt on 10/26/2016.
- * This is a bottom sheet
- */
 @Root(name = "fallback")
 public class GFallback extends GCoordinator {
 

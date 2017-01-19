@@ -9,10 +9,6 @@ import android.util.Log;
 import org.keynote.godtools.renderer.crureader.R;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 
-/**
- * Created by rmatt on 12/11/2016.
- */
-
 public class AutoScaleButtonView extends AppCompatButton {
 
     private int textSizeScalar;

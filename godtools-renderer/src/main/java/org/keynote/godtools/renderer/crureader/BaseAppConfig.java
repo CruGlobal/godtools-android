@@ -1,8 +1,5 @@
 package org.keynote.godtools.renderer.crureader;
 
-/**
- * Created by rmatt on 1/4/2017.
- */
 public abstract class BaseAppConfig {
     public abstract String getCannotSendEmail();
 

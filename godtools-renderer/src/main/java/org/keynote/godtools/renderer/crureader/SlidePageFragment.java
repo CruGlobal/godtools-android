@@ -14,9 +14,6 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSing
 
 import java.io.File;
 
-/**
- * Created by rmatt on 10/24/2016.
- */
 public class SlidePageFragment extends Fragment {
 
 

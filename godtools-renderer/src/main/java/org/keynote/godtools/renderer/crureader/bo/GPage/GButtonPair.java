@@ -12,9 +12,6 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Compat.RenderViewCompat;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
-/**
- * Created by rmatt on 10/25/2016.
- */
 @Root(name = "button-pair")
 public class GButtonPair extends GCoordinator {
 

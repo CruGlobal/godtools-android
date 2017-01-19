@@ -15,26 +15,6 @@ import org.simpleframework.xml.Root;
 
 import java.util.ArrayList;
 
-/**
- * Created by rmatt on 10/26/2016.
- * <thank-you listeners="follow-up-send">
- * <text modifier="bold" size="100" textalign="center" x-trailing-offset="30"
- * xoffset="30">Thank you
- * </text>
- * <text size="100" textalign="left" x-trailing-offset="30" xoffset="30">Check your
- * email soon for your first study in following Jesus Christ.
- * </text>
- * <text size="100" textalign="left" x-trailing-offset="30" xoffset="30">If you don't
- * receive it, please check your spam folder.
- * </text>
- * <link-button tap-events="follow-up-thank-you-done" textalign="center">Done
- * </link-button>
- * </thank-you>
- */
-
-/*
-    This is an activity
- */
 @Root(name = "thank-you")
 public class GThankYou extends GModal {
 

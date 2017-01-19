@@ -32,9 +32,6 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSing
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleButtonView;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView;
 
-/**
- * Created by rmatt on 11/14/2016.
- */
 public class PopupDialogActivity extends FragmentActivity implements IContexual {
 
     public static final String TAG = "PopupDialogActivity";

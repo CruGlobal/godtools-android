@@ -7,10 +7,6 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderCons
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created by rmatt on 11/21/2016.
- */
-
 public class RenderViewCompat {
 
     public static final boolean SDK_LOLLIPOP = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;  //21

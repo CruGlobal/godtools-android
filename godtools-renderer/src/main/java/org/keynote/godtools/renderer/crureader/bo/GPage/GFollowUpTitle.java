@@ -11,12 +11,6 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView;
 
 import org.simpleframework.xml.Root;
 
-/**
- * Created by rmatt on 10/26/2016.
- * <followup-title modifier="bold" x="0" x-trailing-offset="20" xoffset="20">Jesus has come
- * into your life as he promised.
- * </followup-title>
- */
 @Root(name = "followup-title")
 public class GFollowUpTitle extends GBaseTextAttributes {
 

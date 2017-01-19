@@ -16,9 +16,6 @@ import org.simpleframework.xml.Root;
 
 import java.util.ArrayList;
 
-/**
- * Created by rmatt on 10/18/2016.
- */
 @Root(name = "panel")
 public class GPanel extends GCoordinator {
 

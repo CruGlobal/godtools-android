@@ -11,14 +11,6 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Text;
 
-/**
- * Created by rmatt on 10/24/2016.
- * <p>
- * <about filename="6c31dc4c-1cc8-47e1-aa34-1c86049af426.xml"
- * gtapi-trx-id="0c41ea49-9905-46f0-bfa9-400d3807545c" translate="true">About
- * </about>
- */
-
 @Root(name = "about")
 public class GAbout extends GCoordinator {
 
