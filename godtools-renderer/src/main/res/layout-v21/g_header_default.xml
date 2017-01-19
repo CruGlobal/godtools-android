@@ -31,8 +31,7 @@
                 style="@style/AutoScaleTextView.HeaderNumberTextView"
                 android:id="@+id/g_header_default_number_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sample_text_g_header_default_number_textview" />
+                android:layout_height="wrap_content" />
 
             <org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView
                 style="@style/AutoScaleTextView.HeaderHeaderTextView"
@@ -40,7 +39,6 @@
                 android:layout_width="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_height="wrap_content"
-                android:text="@string/sample_text_g_header_default_header_textview"
                 />
 
 

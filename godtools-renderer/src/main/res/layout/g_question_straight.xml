@@ -16,8 +16,7 @@
             android:id="@+id/g_question_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Question.QuestionStraightTextView"
-            android:text="@string/sample_text_gheader_straight_textview"/>
+            style="@style/Question.QuestionStraightTextView"/>
 
 
     </com.github.captain_miao.optroundcardview.OptRoundCardView>

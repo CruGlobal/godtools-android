@@ -20,9 +20,7 @@
             style="@style/AutoScaleTextView.HeaderSubheadingTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="@string/sample_text_g_header_peak_subheader_textview"
-            android:textSize="28dp"/>
+            android:layout_gravity="center_vertical"/>
 
 
     </FrameLayout>

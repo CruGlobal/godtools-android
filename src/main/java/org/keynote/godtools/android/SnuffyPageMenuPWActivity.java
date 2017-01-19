@@ -33,8 +33,8 @@ import java.util.Map;
 
 //@TODO: look into this
 public class SnuffyPageMenuPWActivity extends ListActivity {
-    private static String TAG = "SnuffyPageMenuActivity";
-    List<HashMap<String, Object>> mList = new ArrayList<HashMap<String, Object>>(2);
+    private static final String TAG = "SnuffyPageMenuActivity";
+    final List<HashMap<String, Object>> mList = new ArrayList<HashMap<String, Object>>(2);
     private boolean mFromAssets;
     private String mLanguageCode;
     private String mFilesDir;

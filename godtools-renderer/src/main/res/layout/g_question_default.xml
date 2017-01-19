@@ -8,8 +8,7 @@
             android:layout_marginBottom="20dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            style="@style/Question.QuestionDefaultTextView"
-            android:text="@string/sample_text_gheader_textview"/>
+            style="@style/Question.QuestionDefaultTextView"/>
 
 
 </merge>

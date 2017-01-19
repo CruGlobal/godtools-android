@@ -106,7 +106,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
     private String mAppLanguage = ENGLISH_DEFAULT;
     private boolean mSetupRequired = true;
     private String mPackageStatus;
-    private ProcessPackageAsync mProcessPackageAsync;
     private String mConfigPrimary, mConfigParallel;
     private GTPackage mParallelPackage;
     private boolean isUsingPrimaryLanguage, isParallelLanguageSet;
@@ -114,13 +113,11 @@ public class SnuffyPWActivity extends AppCompatActivity {
     private String regid;
     private Timer timer;
     private LinearLayoutManager mLinearLayoutManager;
-    private int mPositionBeforeLanguageSwitch;
-    private Queue<ActivityReadyAction> activityReadyQueue = new LinkedList<>();
+    private final Queue<ActivityReadyAction> activityReadyQueue = new LinkedList<>();
     private boolean mIsConfigChange;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Diagnostics.StartMethodTracingByKey("SnuffyPWActivityonCreate");
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
@@ -387,7 +384,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
     void doSetup(final int startPosition) {
 
         // trigger the actual load of pages
-        mProcessPackageAsync = new ProcessPackageAsync();
+        ProcessPackageAsync mProcessPackageAsync = new ProcessPackageAsync();
         mProcessPackageAsync.execute(startPosition);
     }
 
@@ -396,7 +393,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void doCmdShare(View v) {
+    private void doCmdShare() {
         String messageBody = buildMessageBody();
 
         Intent share = new Intent(Intent.ACTION_SEND);
@@ -433,13 +430,13 @@ public class SnuffyPWActivity extends AppCompatActivity {
         return messageBody;
     }
 
-    private void doCmdInfo(View v) {
+    private void doCmdInfo() {
 
         Intent intent = new Intent(this, SnuffyAboutActivity.class);
         startActivity(intent);
     }
 
-    private void doCmdShowPageMenu(View v) {
+    private void doCmdShowPageMenu() {
 
         Intent intent = new Intent(this, SnuffyPageMenuPWActivity.class);
         intent.putExtra("LanguageCode", mAppLanguage);
@@ -465,7 +462,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
         int snapPositionWithNoVelocity = helper.findTargetSnapPosition(mLinearLayoutManager, 0, 0);
 
         Log.i(TAG, "Snap Position with No velocity: " + snapPositionWithNoVelocity);
-        mPositionBeforeLanguageSwitch = snapPositionWithNoVelocity;
+        int mPositionBeforeLanguageSwitch = snapPositionWithNoVelocity;
         if (isParallelLanguageSet && mParallelPackage != null) {
             if (isUsingPrimaryLanguage) {
                 mConfigFileName = mConfigParallel;
@@ -519,17 +516,17 @@ public class SnuffyPWActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.CMD_ABOUT: {
                 EventTracker.getInstance(this).menuEvent("About");
-                doCmdInfo(null);
+                doCmdInfo();
                 break;
             }
             case R.id.CMD_CONTENT: {
                 EventTracker.getInstance(this).menuEvent("Content");
-                doCmdShowPageMenu(null);
+                doCmdShowPageMenu();
                 break;
             }
             case R.id.CMD_EMAIL: {
                 EventTracker.getInstance(this).menuEvent("Share");
-                doCmdShare(null);
+                doCmdShare();
                 break;
             }
             case R.id.CMD_HELP: {
@@ -619,7 +616,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
     static class GtPagesPagerAdapter extends RecyclerView.Adapter<SnuffyPWActivity.ViewHolder> {
 
-        private List<GPage> mPages;
+        private final List<GPage> mPages;
 
         public GtPagesPagerAdapter(int location, int capacity, GPage gPage) {
             GPage blankPage = new GPage();

@@ -27,7 +27,6 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements ICon
     private static final String ARG_POSITION = "position";
     private static final String ARG_CACHE_ID = "cacheId";
     PercentRelativeLayout prl;
-    private int mCacheId;
     private int mPosition;
     private GCoordinator mGCoordinator;
 
@@ -44,7 +43,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements ICon
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mCacheId = getArguments().getInt(ARG_CACHE_ID);
+        int mCacheId = getArguments().getInt(ARG_CACHE_ID);
         mPosition = getArguments().getInt(ARG_POSITION);
         mGCoordinator = RenderSingleton.getInstance().gPanelHashMap.get(mCacheId);
     }

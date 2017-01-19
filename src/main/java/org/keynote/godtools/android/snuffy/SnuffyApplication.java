@@ -17,8 +17,6 @@ import io.fabric.sdk.android.Fabric;
 
 public class SnuffyApplication extends RenderApp {
 
-
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -26,15 +24,17 @@ public class SnuffyApplication extends RenderApp {
         // Enable crash reporting
         // Set up Crashlytics, disabled for debug builds
 
-        Crashlytics crashlyticsKit = new Crashlytics.Builder()
-                .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
-                .build();
+//        Crashlytics crashlyticsKit = new Crashlytics.Builder()
+//                .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+//                .build();
 
+        Crashlytics crashlyticsKit = new Crashlytics.Builder()
+                .core(new CrashlyticsCore.Builder().build())
+                .build();
         // Initialize Fabric with the debug-disabled crashlytics.
         Fabric.with(this, crashlyticsKit);
-        if(!BuildConfig.DEBUG) {
-            NewRelic.withApplicationToken(BuildConfig.NEW_RELIC_API_KEY).start(this);
-        }
+
+        NewRelic.withApplicationToken(BuildConfig.NEW_RELIC_API_KEY).start(this);
 
     }
 
@@ -42,8 +42,6 @@ public class SnuffyApplication extends RenderApp {
     public BaseAppConfig getBaseAppConfig() {
         return new RenderAppConfig();
     }
-
-
 
     public File getDocumentsDir() {
         File documentsDir = null;
@@ -65,8 +63,6 @@ public class SnuffyApplication extends RenderApp {
         }
         return documentsDir;
     }
-
-
 
 //    @Override
 //    protected void attachBaseContext(Context base) {

@@ -25,7 +25,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:gravity="center_horizontal"
-                android:text="@string/sample_text_g_header_straight_header_textview"
                 android:textColor="@android:color/black"
                 app:layout_marginLeftPercent="3%"
                 app:layout_widthPercent="@fraction/header_straight_percent_width"/>
@@ -35,7 +34,6 @@
                 style="@style/AutoScaleTextView.HeaderSubheadingTextView"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/g_header_header_textview"
-                android:text="@string/sample_text_g_header_straight_subheader_textview"
                 android:textColor="@android:color/black"
                 app:layout_widthPercent="@fraction/header_straight_percent_width"/>
 

@@ -8,7 +8,6 @@
         app:buttonTextSizeScalar="20"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Link Button"
         tools:text="Link Button"/>
 
 </merge>

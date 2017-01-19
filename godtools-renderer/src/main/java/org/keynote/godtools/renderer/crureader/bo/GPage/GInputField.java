@@ -96,7 +96,7 @@ public class GInputField extends GCoordinator {
     }
 
     public enum InputFieldType {
-        email, text;
+        email, text
     }
 
 }

@@ -65,32 +65,24 @@ dependencies {
     compile project(path: ':godtools-renderer')
 }
 
+
 android {
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
-
     // XXX: we need to remove usage of the Apache HttpClient
     useLibrary 'org.apache.http.legacy'
-
     defaultConfig {
         applicationId 'org.keynote.godtools.android'
-
         versionName project.version
-        versionCode buildVersionCode()
-
         minSdkVersion 10
         targetSdkVersion 25
-
         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
         proguardFiles 'proguard-rules.pro'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
         buildConfigField "String", "GOOGLE_ANALYTICS_CLIENT_ID", "\"UA-325725-50\""
         buildConfigField "String", "GROWTH_SPACES_URL", "\"https://www.growthspaces.org/api/v1/\""
         buildConfigField "String", "INTERPRETER_VERSION", "\"1\""
-
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
@@ -114,20 +106,16 @@ android {
             java.srcDir 'src/testShared/java'
         }
     }
-
     signingConfigs {
         release {
-            storeFile file(androidKeystorePath)
-            storePassword androidKeystoreStorePassword
-            keyAlias androidKeystoreKeyAlias
-            keyPassword androidKeystoreKeyPassword
+            storeFile file('E:/CRU/godtools-android/testreleasekeystore.jks')
+            storePassword 'ayngayn6'
+            keyAlias 'godtools'
+            keyPassword 'ayngayn6'
         }
     }
-
     buildTypes {
         debug {
-
-            ext.enableCrashlytics = false
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
 //            buildConfigField "String", "BASE_URL_V2", "\"https://api.godtoolsapp.com/godtools-api/rest/v2/\""
@@ -137,6 +125,7 @@ android {
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AA2f0cb2d41f6ac7dcc256eaa9ca7e0f640859fd52\""
         }
         release {
+            shrinkResources true
             minifyEnabled true
             if (signingConfigs.release.storeFile.exists()) {
                 signingConfig signingConfigs.release
@@ -147,10 +136,11 @@ android {
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AAcaf7bbfe3ffda5dcb1455d3bc16b0c5da1cd71e9\""
         }
     }
-
     applicationVariants.all {
         buildConfigField "String", "EVERY_STUDENT_AUTHORITY", '"' + applicationId + '.everystudent.EveryStudentProvider"'
         resValue "string", "every_student_authority", applicationId + ".everystudent.EveryStudentProvider"
+    }
+    productFlavors {
     }
 }
 
@@ -187,7 +177,4 @@ allprojects {
         jcenter()
 
     }
-}
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }
