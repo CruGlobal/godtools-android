@@ -48,13 +48,16 @@ before_script:
 #  --parallel      : build/test multiple subprojects simultaneously
 #  --continue      : continue processing on an error to try and capture all errors
 #  --stacktrace    : output stacktraces for failures to aid in debugging
+#  --max-workers   : limit the number of workers gradle will spawn
+#  --no-daemon     : disable the background gradle build daemon
 #  -PdisablePreDex : disable library pre-dex to improve build server performance
 script:
-  - ./gradlew build -PdisablePreDex --continue --stacktrace
+  - ./gradlew --stop
+  - ./gradlew build -PdisablePreDex --continue --stacktrace --max-workers 2 --no-daemon
   - android-wait-for-emulator
   - adb devices
   - adb shell input keyevent 82 &
-  - ./gradlew connectedAndroidTest -PdisablePreDex --continue --stacktrace
+  - ./gradlew connectedAndroidTest -PdisablePreDex --continue --stacktrace --max-workers 2 --no-daemon
 
 after_failure:
   - cat /home/travis/build/CruGlobal/godtools-android/build/outputs/lint-results*.xml
