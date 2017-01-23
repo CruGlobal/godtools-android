@@ -10,21 +10,23 @@ env:
   matrix:
     - ANDROID_TARGET=android-15 ANDROID_ABI=armeabi-v7a
 #    - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-23 ANDROID_ABI=armeabi-v7a
+#    - ANDROID_TARGET=android-23 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-24 ANDROID_ABI=armeabi-v7a
 branches:
   only:
     - master
 
 android:
   components:
-    - platform-tools
     - tools
-    - build-tools-23.0.3
-    - android-23
+    - platform-tools
+    - build-tools-25.0.2
+    - android-25
     - extra-android-m2repository
     - extra-google-m2repository
 
     # system image for testing
+    - $ANDROID_TARGET
     - sys-img-$ANDROID_ABI-$ANDROID_TARGET
 
 before_cache:
@@ -46,13 +48,16 @@ before_script:
 #  --parallel      : build/test multiple subprojects simultaneously
 #  --continue      : continue processing on an error to try and capture all errors
 #  --stacktrace    : output stacktraces for failures to aid in debugging
+#  --max-workers   : limit the number of workers gradle will spawn
+#  --no-daemon     : disable the background gradle build daemon
 #  -PdisablePreDex : disable library pre-dex to improve build server performance
 script:
-  - ./gradlew build -PdisablePreDex --continue --stacktrace
+  - ./gradlew --stop
+  - ./gradlew build -PdisablePreDex --continue --stacktrace --max-workers 2 --no-daemon
   - android-wait-for-emulator
   - adb devices
   - adb shell input keyevent 82 &
-  - ./gradlew connectedAndroidTest -PdisablePreDex --continue --stacktrace
+  - ./gradlew connectedAndroidTest -PdisablePreDex --continue --stacktrace --max-workers 2 --no-daemon
 
 after_failure:
   - cat /home/travis/build/CruGlobal/godtools-android/build/outputs/lint-results*.xml
