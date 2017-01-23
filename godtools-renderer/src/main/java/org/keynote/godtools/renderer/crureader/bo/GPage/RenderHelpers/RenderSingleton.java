@@ -25,7 +25,7 @@ import static org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonA
 
 public class RenderSingleton {
 
-    public static final boolean IS_DEBUG_BUILD = true;
+    public static final boolean IS_DEBUG_BUILD = false;
     public static final float KNOWN_HEIGHT = 700.0F;
 
     private static RenderSingleton renderSingleton;
