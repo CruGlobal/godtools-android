@@ -1,10 +1,12 @@
 package org.keynote.godtools.android;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
 import android.support.annotation.NonNull;
@@ -305,6 +307,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private boolean triggerFollowupModal(@NonNull final GodToolsEvent event) {
         // check for a followup modal on the current page
         Log.i(TAG, "EventBus triggerFollowupModal");
