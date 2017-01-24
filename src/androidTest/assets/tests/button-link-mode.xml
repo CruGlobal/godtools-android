@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<button mode="link" tap-events="event1,external:event2">Button Text</button>

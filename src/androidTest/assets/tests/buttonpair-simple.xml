@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<button-pair>
-    <positive-button tap-events="follow-up-send,followup:subscribe">Send</positive-button>
-    <negative-button mode="link" tap-events="follow-up-no-thanks">No Thanks</negative-button>
-</button-pair>
