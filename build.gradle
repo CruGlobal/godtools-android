@@ -110,20 +110,19 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('E:/CRU/godtools-android/testreleasekeystore.jks')
-            storePassword 'ayngayn6'
-            keyAlias 'godtools'
-            keyPassword 'ayngayn6'
+            storeFile file(androidKeystorePath)
+            storePassword androidKeystoreStorePassword
+            keyAlias androidKeystoreKeyAlias
+            keyPassword androidKeystoreKeyPassword
         }
     }
+
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
-            buildConfigField "String", "BASE_URL_V2", "\"https://api.godtoolsapp.com/godtools-api/rest/v2/\""
-            buildConfigField "String", "BASE_URL", "\"https://api.godtoolsapp.com/godtools-api/rest/\""
-         //   buildConfigField "String", "BASE_URL_V2", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/v2/\""
-          //  buildConfigField "String", "BASE_URL", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/\""
+            buildConfigField "String", "BASE_URL_V2", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/v2/\""
+            buildConfigField "String", "BASE_URL", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/\""
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AA2f0cb2d41f6ac7dcc256eaa9ca7e0f640859fd52\""
         }
         release {
@@ -141,8 +140,6 @@ android {
     applicationVariants.all {
         buildConfigField "String", "EVERY_STUDENT_AUTHORITY", '"' + applicationId + '.everystudent.EveryStudentProvider"'
         resValue "string", "every_student_authority", applicationId + ".everystudent.EveryStudentProvider"
-    }
-    productFlavors {
     }
 }
 
