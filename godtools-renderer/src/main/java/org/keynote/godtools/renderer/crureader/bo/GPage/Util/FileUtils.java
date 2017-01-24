@@ -44,16 +44,16 @@ public final class FileUtils {
             final File root = context.getExternalFilesDir(null);
             if (root != null) {
                 final File dir = new File(root, "resources");
-                //TODO: IOC crashlytics
-                //Crashlytics.log("Potential External Resources Dir: " + dir);
+                RenderSingleton.getInstance().getAppConfig().overLog("Potential External Resources Dir: " + dir);
+
 
                 // make sure the resources directory exists before returning
                 if (dir.isDirectory() || dir.mkdirs()) {
                     return dir;
                 }
-                //TODO: IOC crashlytics
+
                 // log that we were unable to create external resources directory for any future exception/crash
-                //Crashlytics.log("unable to create external resources directory");
+                RenderSingleton.getInstance().getAppConfig().overLog("unable to create external resources directory");
             }
         }
 
@@ -61,8 +61,8 @@ public final class FileUtils {
         final File dir = new File(context.getFilesDir(), "resources");
         if (!dir.isDirectory() && !dir.mkdirs()) {
             // we can't create an internal resources directory, log an error because something crazy may happen!
-            //TODO: IOC crashlytics
-            //Crashlytics.log("unable to create internal resources directory: " + dir);
+
+            RenderSingleton.getInstance().getAppConfig().overLog("unable to create internal resources directory: " + dir);
         }
         return dir;
     }

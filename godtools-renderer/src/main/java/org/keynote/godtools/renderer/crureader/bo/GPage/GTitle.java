@@ -1,6 +1,5 @@
 package org.keynote.godtools.renderer.crureader.bo.GPage;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
@@ -127,25 +126,16 @@ public class GTitle extends GCoordinator {
                                                                               public boolean onTouch(View v, MotionEvent event) {
 
                                                                                   pw.dismiss();
-                                                                                  new Thread()
-                                                                                  {
-                                                                                      public void run()
-                                                                                      {
-                                                                                          super.run();
-                                                                                          try {
-                                                                                              sleep(15);
-                                                                                              ((Activity)context).runOnUiThread(new Runnable() {
-                                                                                                  @Override
-                                                                                                  public void run() {
-                                                                                                      view.setClickable(true);
-                                                                                                  }
-                                                                                              });
-                                                                                          } catch (InterruptedException e) {
 
-
-                                                                                          }
+                                                                                  v.postDelayed(new Runnable() {
+                                                                                      @Override
+                                                                                      public void run() {
+                                                                                          view.setClickable(true);
                                                                                       }
-                                                                                  }.start();
+
+
+                                                                                  }, 15);
+
                                                                                   Log.i(TAG, "OnTouch Interceptor");
                                                                                   return true;
                                                                               }

@@ -29,4 +29,5 @@ public abstract class BaseAppConfig {
 
     public abstract String getFollowupModalInputInvalidEmail();
 
+    public abstract void overLog(String s);
 }
