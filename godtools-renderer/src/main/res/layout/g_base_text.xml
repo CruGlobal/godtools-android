@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView
+        android:id="@+id/g_base_text"
+        style="@style/AutoScaleTextView"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</merge>
+
+

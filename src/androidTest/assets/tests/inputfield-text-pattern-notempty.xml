@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<input-field name="name" type="text" valid-format=".*\S+.*">
-    <input-label>Label</input-label>
-    <input-placeholder>Placeholder</input-placeholder>
-</input-field>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                               android:id="@+id/popup_percentFrameLayout"
+                                               android:layout_width="match_parent"
+                                               android:layout_height="match_parent"
+                                               android:clickable="false"
+                                               android:hapticFeedbackEnabled="false">
+
+
+    <LinearLayout
+        android:id="@+id/popup_innerLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:transitionName="@string/inner_ll_transistion_title">
+
+        <ImageView
+            android:id="@+id/popup_imageView"
+            style="@style/Image">
+
+        </ImageView>
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView
+                android:id="@+id/popin_button_tv"
+                style="@style/NormalButtonTextView"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"/>
+
+            <ImageView
+                android:id="@+id/popin_iv_expand_imageview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_expand_less_white_48dp"></ImageView>
+
+        </FrameLayout>
+
+        <android.support.percent.PercentRelativeLayout
+            android:id="@+id/extra_wrapper_fl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:visibility="visible">
+
+
+        </android.support.percent.PercentRelativeLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/popup_innerLinearLayout"
+        android:scaleType="fitXY"
+        android:src="@drawable/grad_shad_top"/>
+
+</android.support.percent.PercentRelativeLayout>

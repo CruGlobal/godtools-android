@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/g_button_link_textview"
+        style="@style/Link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Link Button" />
+
+</merge>

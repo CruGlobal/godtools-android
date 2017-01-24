@@ -7,11 +7,11 @@ env:
     - GRADLE_OPTS="-Xmx2048m"
     # wait up to 10 minutes for adb to connect to emulator
     - ADB_INSTALL_TIMEOUT=10
-  matrix:
-    - ANDROID_TARGET=android-15 ANDROID_ABI=armeabi-v7a
+#  matrix:
+#    - ANDROID_TARGET=android-15 ANDROID_ABI=armeabi-v7a
 #    - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
 #    - ANDROID_TARGET=android-23 ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-24 ANDROID_ABI=armeabi-v7a
+#    - ANDROID_TARGET=android-24 ANDROID_ABI=armeabi-v7a
 branches:
   only:
     - master
@@ -26,8 +26,8 @@ android:
     - extra-google-m2repository
 
     # system image for testing
-    - $ANDROID_TARGET
-    - sys-img-$ANDROID_ABI-$ANDROID_TARGET
+#    - $ANDROID_TARGET
+#    - sys-img-$ANDROID_ABI-$ANDROID_TARGET
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -39,10 +39,10 @@ cache:
     - $HOME/.gradle/native
     - $HOME/.gradle/wrapper/
 
-before_script:
-  # Emulator Management: Create, Start and Wait
-  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
-  - emulator -avd test -no-skin -no-audio -no-window &
+#before_script:
+#  # Emulator Management: Create, Start and Wait
+#  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+#  - emulator -avd test -no-skin -no-audio -no-window &
 
 # gradle options
 #  --parallel      : build/test multiple subprojects simultaneously
@@ -53,11 +53,12 @@ before_script:
 #  -PdisablePreDex : disable library pre-dex to improve build server performance
 script:
   - ./gradlew --stop
-  - ./gradlew build -PdisablePreDex --continue --stacktrace --max-workers 2 --no-daemon
-  - android-wait-for-emulator
-  - adb devices
-  - adb shell input keyevent 82 &
-  - ./gradlew connectedAndroidTest -PdisablePreDex --continue --stacktrace --max-workers 2 --no-daemon
+  - ./gradlew lint -PdisablePreDex --continue --stacktrace --max-workers 2 --no-daemon
+  - ./gradlew build -PdisablePreDex --continue --stacktrace --max-workers 2 --no-daemon -x lint
+#  - android-wait-for-emulator
+#  - adb devices
+#  - adb shell input keyevent 82 &
+#  - ./gradlew connectedAndroidTest -PdisablePreDex --continue --stacktrace --max-workers 2 --no-daemon
 
 after_failure:
   - cat /home/travis/build/CruGlobal/godtools-android/build/outputs/lint-results*.xml

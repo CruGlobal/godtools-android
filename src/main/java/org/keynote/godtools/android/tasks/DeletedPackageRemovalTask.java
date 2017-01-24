@@ -1,8 +1,5 @@
 package org.keynote.godtools.android.tasks;
 
-import static org.keynote.godtools.android.business.GTPackage.STATUS_LIVE;
-import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.FIELD_LANGUAGE;
-
 import android.util.Log;
 
 import com.google.common.collect.Sets;
@@ -12,6 +9,7 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -29,6 +27,9 @@ import java.util.Set;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import static org.keynote.godtools.android.business.GTPackage.STATUS_LIVE;
+import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.FIELD_LANGUAGE;
+
 public class DeletedPackageRemovalTask implements Runnable
 {
     private final static String TAG = DeletedPackageRemovalTask.class.getSimpleName();
@@ -42,7 +43,7 @@ public class DeletedPackageRemovalTask implements Runnable
     {
         this.godToolsLanguage = godToolsLanguage;
         this.application = application;
-        this.resourcesDirectory = application.getResourcesDir();
+        this.resourcesDirectory = FileUtils.getResourcesDir();
     }
 
     @Override

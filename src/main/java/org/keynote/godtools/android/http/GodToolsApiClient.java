@@ -3,6 +3,7 @@ package org.keynote.godtools.android.http;
 import android.support.v4.os.AsyncTaskCompat;
 
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
 
 import java.io.File;
 
@@ -91,7 +92,7 @@ public class GodToolsApiClient {
 
     private static void download(SnuffyApplication app, String url, String filePath, String tag, String authorization,
                                  String langCode, DownloadTask.DownloadTaskHandler taskHandler) {
-        DownloadTask downloadTask = new DownloadTask(app.getApplicationContext(), app.getResourcesDir(), taskHandler);
+        DownloadTask downloadTask = new DownloadTask(app.getApplicationContext(), FileUtils.getResourcesDir(), taskHandler);
 
         AsyncTaskCompat.executeParallel(downloadTask, url, filePath, tag, authorization, langCode);
     }

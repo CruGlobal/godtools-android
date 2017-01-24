@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<button tap-events="event1,external:event2" w="20" h="10" x="15" y="5" yoffset="-3" xoffset="-2"
-    x-trailing-offset="17">Button Text
-</button>
