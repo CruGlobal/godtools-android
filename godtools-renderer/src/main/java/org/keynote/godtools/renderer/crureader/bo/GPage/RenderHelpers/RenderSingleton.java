@@ -173,7 +173,7 @@ public class RenderSingleton {
         Log.i("allurl", "urls size " + urls.size());
         for (String url : urls) {
             Log.i("allurl", "url" + urls.size());
-            if (!url.contains("http://") || !url.contains("https://")) {
+            if (!url.contains("http://") && !url.contains("https://")) {
                 urlContent += "http://" + url + "\n";
             } else {
                 urlContent += url + "\n";
