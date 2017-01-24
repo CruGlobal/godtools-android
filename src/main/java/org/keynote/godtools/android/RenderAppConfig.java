@@ -1,5 +1,7 @@
 package org.keynote.godtools.android;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.keynote.godtools.renderer.crureader.BaseAppConfig;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 
@@ -76,6 +78,11 @@ public class RenderAppConfig extends BaseAppConfig {
     @Override
     public String getFollowupModalInputInvalidEmail() {
         return get(R.string.followup_modal_input_invalid_email);
+    }
+
+    @Override
+    public void overLog(String s) {
+        Crashlytics.log(s);
     }
 
     public String get(int id) {

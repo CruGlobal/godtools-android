@@ -61,6 +61,8 @@ dependencies {
     testCompile 'junit:junit:' + deps.junit
     testCompile 'org.hamcrest:hamcrest-library:1.3'
     apt 'com.jakewharton:butterknife-compiler:' + deps.butterknife
+    debugCompile 'com.facebook.stetho:stetho:' + deps.facebookStetho
+    debugCompile 'com.facebook.stetho:stetho-okhttp3:' + deps.facebookStetho
 
     compile project(path: ':godtools-renderer')
 }
@@ -142,7 +144,7 @@ android {
 }
 
 repositories {
-    mavenCentral()
+
     mavenLocal()
     jcenter()
     maven {
