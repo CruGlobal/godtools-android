@@ -22,7 +22,6 @@ import java.util.Hashtable;
 
 import static org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttributes.ButtonMode.phone;
 
-
 public class RenderSingleton {
 
     public static final boolean IS_DEBUG_BUILD = false;
@@ -30,22 +29,15 @@ public class RenderSingleton {
 
     private static RenderSingleton renderSingleton;
 
-
     /*
     This holds page local events
      */
     public final SparseArray<GCoordinator> gPanelHashMap = new SparseArray<>();
 
-
     /*
     This holds urls on page
      */
     public final ArrayList<String> urls = new ArrayList<>();
-
-    /*
-    screenScalar
-     */
-    public float screenScalar = -1.0F;
     /*
     <Position in View Pager, background color>
      */
@@ -58,12 +50,6 @@ public class RenderSingleton {
     final float screenDensity;
     private final Hashtable<String, Long> methodTraceMilliSecondsKeyMap = new Hashtable<String, Long>();
     private final Context context;
-    /*
-    Currently rendered GDocument
-     */
-    private GDocument GDocument;
-
-    private BaseAppConfig baseAppConfig;
     final View.OnClickListener mLinksOnClick = new View.OnClickListener() {
 
         @Override
@@ -92,7 +78,6 @@ public class RenderSingleton {
                     RenderSingleton.getInstance().getContext().startActivity(intent);
                     Log.i("allurl", "allurl: " + RenderSingleton.getInstance().getUrlsFormatted());
 
-
                     break;
 
                 default:
@@ -106,6 +91,15 @@ public class RenderSingleton {
 
         }
     };
+    /*
+    screenScalar
+     */
+    public float screenScalar = -1.0F;
+    /*
+    Currently rendered GDocument
+     */
+    private GDocument GDocument;
+    private BaseAppConfig baseAppConfig;
 
     private RenderSingleton(Context context) {
         this.context = context;
@@ -166,8 +160,6 @@ public class RenderSingleton {
         return getGDocument().getPages().get(mPosition);
     }
 
-
-
     public void setBaseAppConfig(BaseAppConfig baseAppConfig) {
         this.baseAppConfig = baseAppConfig;
     }
@@ -179,10 +171,13 @@ public class RenderSingleton {
     public String getUrlsFormatted() {
         String urlContent = "";
         Log.i("allurl", "urls size " + urls.size());
-        for(String url : urls)
-        {
+        for (String url : urls) {
             Log.i("allurl", "url" + urls.size());
-            urlContent += url + "\n";
+            if (!url.contains("http://") || !url.contains("https://")) {
+                urlContent += "http://" + url + "\n";
+            } else {
+                urlContent += url + "\n";
+            }
         }
         return urlContent;
     }
