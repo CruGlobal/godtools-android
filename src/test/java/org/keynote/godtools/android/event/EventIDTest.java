@@ -3,6 +3,7 @@ package org.keynote.godtools.android.event;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
 
 /**
  * Created by dsgoers on 4/15/16.

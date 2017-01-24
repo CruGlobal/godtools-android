@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <FrameLayout
+        android:id="@+id/g_header_plain_outerlayout_framelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="@dimen/header_right_margin"
+        android:layout_marginTop="@dimen/header_top_margin"
+        android:background="@drawable/appcompat_title_background_peek"
+        android:tag="top"
+        >
+
+
+        <org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView
+            android:id="@+id/g_header_subheader_textview"
+            style="@style/AutoScaleTextView.HeaderSubheadingTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"/>
+
+
+    </FrameLayout>
+
+
+</merge>

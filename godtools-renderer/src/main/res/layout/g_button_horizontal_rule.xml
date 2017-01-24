@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <View
+        android:id="@+id/g_button_horizontal_rule_top_view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/g_button_upper_border_color"></View>
+
+    <View
+        android:id="@+id/g_button_horizontal_rule_bottom_view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/g_button_bottom_border_color"></View>
+</LinearLayout>

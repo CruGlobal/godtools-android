@@ -24,7 +24,7 @@ public class NotificationUtilities
         }
 
         // Check if app was updated; if so, it must clear the registration ID
-        // since the existing regID is not guaranteed to work with the new
+        // since the existing regID is not guaranteed to work with the newnew
         // app version.
         int registeredVersion = userSettings.getInt(APP_VERSION, Integer.MIN_VALUE);
         int currentVersion = getAppVersion(context);

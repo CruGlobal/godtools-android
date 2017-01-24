@@ -49,7 +49,7 @@ public class GTPackageTest {
         assertThat(package1.compareVersionTo(package2), is(lessThan(0)));
         assertThat(package2.compareVersionTo(package1), is(greaterThan(0)));
 
-        // test new minor version
+        // test newnew minor version
         package1.setVersion("1.3");
         package2.setVersion("1.3.1");
         assertThat(package1.compareVersionTo(package2), is(lessThan(0)));

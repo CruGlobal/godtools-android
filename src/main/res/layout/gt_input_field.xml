@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/inputLayout"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/inputLayout"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+style="@style/Widget.GodTools.Content.FollowupModal.Input"
+app:hintAnimationEnabled="true"
+app:hintEnabled="true">
+
+<android.support.design.widget.TextInputEditText
+    android:id="@+id/input"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="@style/Widget.GodTools.Content.FollowupModal.Input"
-    app:hintAnimationEnabled="true"
-    app:hintEnabled="true">
-
-    <android.support.design.widget.TextInputEditText
-        android:id="@+id/input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        style="@style/Widget.GodTools.Content.FollowupModal.Input.Field"
-        tools:hint="Email"/>
+    android:layout_alignParentTop="true"
+    style="@style/Widget.GodTools.Content.FollowupModal.Input.Field"
+    tools:hint="Email"/>
 </android.support.design.widget.TextInputLayout>

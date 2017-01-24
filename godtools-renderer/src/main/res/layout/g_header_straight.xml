@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <FrameLayout
+        android:id="@+id/g_header_straight_outerlayout_optroundcardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/header_top_margin"
+        android:background="@drawable/appcompat_title_background_peek_no_corners"
+        android:tag="top">
+
+        <android.support.percent.PercentRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical">
+
+
+            <org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView
+                android:id="@+id/g_header_header_textview"
+                style="@style/AutoScaleTextView.HeaderHeaderTextView"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:gravity="center_horizontal"
+                android:textColor="@android:color/black"
+                app:layout_marginLeftPercent="3%"
+                app:layout_widthPercent="@fraction/header_straight_percent_width"/>
+
+            <org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView
+                android:id="@+id/g_header_subheader_textview"
+                style="@style/AutoScaleTextView.HeaderSubheadingTextView"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/g_header_header_textview"
+                android:textColor="@android:color/black"
+                app:layout_widthPercent="@fraction/header_straight_percent_width"/>
+
+
+        </android.support.percent.PercentRelativeLayout>
+
+    </FrameLayout>
+</merge>

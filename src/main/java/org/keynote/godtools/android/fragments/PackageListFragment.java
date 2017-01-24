@@ -13,14 +13,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.TypefaceUtils;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
 
-import java.io.File;
 import java.util.List;
 
 public class PackageListFragment extends ListFragment
@@ -123,7 +121,7 @@ public class PackageListFragment extends ListFragment
 			this.mIsEnabled = true;
 
 			SnuffyApplication mApp = (SnuffyApplication) getActivity().getApplication();
-			resourcesDir = mApp.getResourcesDir().getAbsolutePath() + "/";
+			resourcesDir = FileUtils.getResourcesDir().getAbsolutePath() + "/";
 		}
 
 		@Override
@@ -171,9 +169,11 @@ public class PackageListFragment extends ListFragment
             holder.packageName.setText(gtp.getName());
             if (translatorMode) holder.status.setText(gtp.getStatus());
 
+			//TODO: replace image provider
+			/*
             Picasso.with(getActivity())
                     .load(new File(resourcesDir + gtp.getIcon()))
-                    .into(holder.icon);
+                    .into(holder.icon);*/
 
             return convertView;
 		}

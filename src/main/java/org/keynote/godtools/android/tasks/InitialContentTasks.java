@@ -29,7 +29,7 @@ import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.model.Followup;
-import org.keynote.godtools.android.utils.FileUtils;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -210,7 +210,7 @@ public class InitialContentTasks {
         @WorkerThread
         private void copyResources() throws IOException {
             // copy the files from assets/english to documents directory
-            final File resourcesDir = FileUtils.getResourcesDir(mContext);
+            final File resourcesDir = FileUtils.getResourcesDir();
             for (String fileName : mAssets.list("english")) {
                 final Closer closer = Closer.create();
                 try {
