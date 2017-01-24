@@ -15,13 +15,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        warning 'InvalidPackage'
+    }
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/LICENSE'
-
-    }
-
-    productFlavors {
     }
 }
 dependencies {
@@ -39,6 +38,3 @@ dependencies {
     compile 'me.grantland:autofittextview:0.2.+'
     compile 'org.greenrobot:eventbus:3.0.0'
 }
-
-
-
