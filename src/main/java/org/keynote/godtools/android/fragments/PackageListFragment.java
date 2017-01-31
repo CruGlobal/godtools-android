@@ -16,8 +16,8 @@ import android.widget.TextView;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
-import org.keynote.godtools.android.utils.TypefaceUtils;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.TypefaceUtils;
 
 import java.util.List;
 

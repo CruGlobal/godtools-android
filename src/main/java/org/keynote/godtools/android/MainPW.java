@@ -45,7 +45,7 @@ import org.keynote.godtools.android.notifications.NotificationsClient;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.support.v4.content.LivePackagesLoader;
-import org.keynote.godtools.android.utils.TypefaceUtils;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.TypefaceUtils;
 
 import java.util.ArrayList;
 import java.util.List;

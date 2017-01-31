@@ -29,7 +29,7 @@ import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.tasks.DeletedPackageRemovalTask;
 import org.keynote.godtools.android.utils.Device;
-import org.keynote.godtools.android.utils.TypefaceUtils;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.TypefaceUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
