@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.utils;
+package org.keynote.godtools.renderer.crureader.bo.GPage.Util;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.LruCache;
 
-import com.crashlytics.android.Crashlytics;
+import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 
 /**
  * Created by ryancarlson on 4/17/14.
@@ -26,8 +26,8 @@ class TypefaceCache {
                     tf = Typeface.createFromAsset(c.getAssets(), path);
                     TYPEFACE_CACHE.put(path, tf);
                 } catch (@NonNull final Exception e) {
-                    Crashlytics.log("Unable to load custom typeface: " + path);
-                    Crashlytics.logException(e);
+                    RenderSingleton.getInstance().getAppConfig().overLog("Unable to load custom typeface: " + path);
+                    RenderSingleton.getInstance().getAppConfig().logException(e);
                     return null;
                 }
             }

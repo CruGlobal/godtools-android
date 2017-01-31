@@ -44,7 +44,6 @@ dependencies {
     compile 'com.android.support:design:' + deps.androidSupport
     compile 'com.google.android.gms:play-services-analytics:' + deps.playServices
     compile 'com.google.android.gms:play-services-gcm:' + deps.playServices
-    compile 'org.ccci.gto.android:gto-support-core:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-db:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-db-async:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-gson:' + deps.gtoSupport
@@ -142,14 +141,7 @@ repositories {
 
     mavenLocal()
     jcenter()
-    maven {
-        name "maven.gcx.org"
-        url "https://maven.gcx.org/"
-        credentials {
-            username gcxMavenRepositoryUsername
-            password gcxMavenRepositoryPassword
-        }
-    }
+
     maven { url 'https://maven.fabric.io/public' }
 
     maven {
@@ -169,6 +161,13 @@ afterEvaluate { project ->
 allprojects {
     repositories {
         jcenter()
-
+        maven {
+            name "maven.gcx.org"
+            url "https://maven.gcx.org/"
+            credentials {
+                username gcxMavenRepositoryUsername
+                password gcxMavenRepositoryPassword
+            }
+        }
     }
 }

@@ -33,7 +33,7 @@ import org.keynote.godtools.android.fragments.ConfirmDialogFragment;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.utils.Device;
-import org.keynote.godtools.android.utils.TypefaceUtils;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.TypefaceUtils;
 
 import java.util.Locale;
 
