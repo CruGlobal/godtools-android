@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import com.google.common.base.Strings;
 
-import org.apache.commons.lang3.text.WordUtils;
 import org.ccci.gto.android.common.util.LocaleCompat;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
@@ -33,6 +32,7 @@ import org.keynote.godtools.android.fragments.ConfirmDialogFragment;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.utils.Device;
+import org.keynote.godtools.android.utils.WordUtils;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Util.TypefaceUtils;
 
 import java.util.Locale;
