@@ -38,7 +38,7 @@ class EveryStudentDatabase
 
     public static final String TITLE = "title";
     public static final String CONTENT = "content";
-    private static final int DATABASE_VERSION = 3; // Change this number when EveryStudent.xml is updated/changed.
+    private static final int DATABASE_VERSION = 4; // Change this number when EveryStudent.xml is updated/changed.
     private static final String DATABASE_NAME = "godtools";
     private static final String TABLE_NAME = "everystudent";
     private static final String ROWID = "rowid";
