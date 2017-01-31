@@ -2,9 +2,9 @@ package org.keynote.godtools.android.business;
 
 import android.content.Context;
 
-import org.apache.commons.lang3.text.WordUtils;
 import org.ccci.gto.android.common.util.LocaleCompat;
 import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.utils.WordUtils;
 
 import java.io.Serializable;
 import java.util.List;
