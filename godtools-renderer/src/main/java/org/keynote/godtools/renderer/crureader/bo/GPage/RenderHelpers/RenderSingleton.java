@@ -15,7 +15,6 @@ import org.keynote.godtools.renderer.crureader.R;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocument;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttributes;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
-import org.keynote.godtools.renderer.crureader.bo.GPage.GPage;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -154,10 +153,6 @@ public class RenderSingleton {
 
     public void setGDocument(GDocument GDocument) {
         this.GDocument = GDocument;
-    }
-
-    public GPage getPages(int mPosition) {
-        return getGDocument().getPages().get(mPosition);
     }
 
     public void setBaseAppConfig(BaseAppConfig baseAppConfig) {

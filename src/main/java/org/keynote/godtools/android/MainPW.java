@@ -368,6 +368,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         }
 
         Intent intent = new Intent(this, SnuffyPWActivity.class);
+
         intent.putExtra("PackageName", gtPackage.getCode());
         intent.putExtra("LanguageCode", gtPackage.getLanguage());
         intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());

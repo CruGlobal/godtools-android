@@ -22,6 +22,11 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/LICENSE'
     }
+    sourceSets {
+        main {
+            assets.srcDirs = ['src/main/assets', 'src/main/assets/']
+        }
+    }
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -37,4 +42,5 @@ dependencies {
     compile project(':optroundcardview')
     compile 'me.grantland:autofittextview:0.2.+'
     compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'org.ccci.gto.android:gto-support-core:0.9.0'
 }

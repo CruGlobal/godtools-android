@@ -85,6 +85,11 @@ public class RenderAppConfig extends BaseAppConfig {
         Crashlytics.log(s);
     }
 
+    @Override
+    public void logException(Exception e) {
+        Crashlytics.logException(e);
+    }
+
     public String get(int id) {
         return RenderSingleton.getInstance().getContext().getString(id);
     }

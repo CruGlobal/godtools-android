@@ -20,19 +20,23 @@ public class XMLUtil {
         Registry registry = new Registry();
         Strategy strategy = new RegistryStrategy(registry);
         Serializer serializer = new Persister(strategy);
-        //registry.bind(GSimpleButton.class, GSimpleButtonComplexConverter.class);
         registry.bind(GButton.class, GButtonComplexConverter.class);
 
         return serializer.read(GPage.class, file);
     }
 
-    public static GDocument parseGDocument(File file) throws Exception {
+    public static GDocument parseGDocument(File file, String mFileName, String mPackageName, String mLanguageCode) throws Exception {
         Registry registry = new Registry();
         Strategy strategy = new RegistryStrategy(registry);
         Serializer serializer = new Persister(strategy);
         registry.bind(GDocument.class, GDocumentComplexConverter.class);
 
-        return serializer.read(GDocument.class, file);
+        GDocument gDocument = serializer.read(GDocument.class, file);
+        gDocument.setConfigFileName(mFileName);
+        gDocument.setPackageName(mPackageName);
+        gDocument.setLanguageCode(mLanguageCode);
+
+        return gDocument;
     }
 
 }

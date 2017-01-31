@@ -56,10 +56,7 @@ public class SlidePageFragment extends Fragment {
                 Log.w(TAG, "XMLDocument: " + mXmlDocumentId);
                 mGPage = XMLUtil.parseGPage(new File(mXmlDocumentId));
             }
-            else
-            {
-                mGPage = RenderSingleton.getInstance().getPages(mPosition);
-            }
+
 
 
         } catch (Exception e) {
@@ -73,11 +70,8 @@ public class SlidePageFragment extends Fragment {
 
         RenderSingleton.getInstance().addGlobalColor(mPosition, mGPage.getBackgroundColor());
 
+        int viewId = mGPage.render(inflater, container, mPosition);
 
-
-        int viewId = mGPage.render(inflater, container, mPosition); //inflater.inflate(R.layout.page, container, false);
-
-        //thisView = (FrameLayout) rootView.findViewById(R.id.gpage_root);
         return new TextView(inflater.getContext());
     }
 

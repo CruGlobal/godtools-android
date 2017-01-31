@@ -11,6 +11,7 @@ import org.keynote.godtools.renderer.crureader.R;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Compat.RenderViewCompat;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderConstants;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
+import org.keynote.godtools.renderer.crureader.bo.GPage.Util.TypefaceUtils;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView;
 import org.simpleframework.xml.Attribute;
 
@@ -48,9 +49,16 @@ public class GBaseTextAttributes extends GCoordinator {
             applyTextSize(textViewCast);
             applyTextAlign(textViewCast);
             applyTextContent(textViewCast);
+            applyTypeface(textViewCast);
         }
         else
             new Exception("Must be autoscaletextview to extend GBaseTextAttributes");
+    }
+
+    private void applyTypeface(AutoScaleTextView textViewCast) {
+        String languageCode = RenderSingleton.getInstance().getGDocument().getLanguageCode();
+        Log.i(TAG, "textViewCast language: " +  languageCode != null ? languageCode : " language code is null!");
+        TypefaceUtils.setTypeface(textViewCast, languageCode);
     }
 
     private void applyTextContent(AutoScaleTextView textViewCast) {
@@ -66,11 +74,7 @@ public class GBaseTextAttributes extends GCoordinator {
 
     private void applyTextAlign(AutoScaleTextView textViewCast) {
         if (textalign != null && !textalign.equalsIgnoreCase("")) {
-
             RenderViewCompat.textViewAlign(textViewCast, textalign);
-
-            //layoutAlign = textalign;
-           // updateAlignment(textViewCast);
         }
     }
 

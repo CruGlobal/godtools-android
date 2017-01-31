@@ -31,6 +31,9 @@ public class GDocument {
     public String lang;
 
     private List<GPage> pages;
+    private String mConfigFileName;
+    private String mLanguageCode;
+    private String mPackageName;
 
     public List<GPage> getPages() {
         return pages;
@@ -47,4 +50,27 @@ public class GDocument {
         return GodToolsEvent.INVALID_ID;
     }
 
+    public String getConfigFileName() {
+        return this.mConfigFileName;
+    }
+
+    public void setConfigFileName(String configFileName) {
+        this.mConfigFileName = configFileName;
+    }
+
+    public String getLanguageCode() {
+        return this.mLanguageCode;
+    }
+
+    public void setLanguageCode(String languageCode) {
+        this.mLanguageCode = languageCode;
+    }
+
+    public String getPackageName() {
+        return this.mPackageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.mPackageName = packageName;
+    }
 }
