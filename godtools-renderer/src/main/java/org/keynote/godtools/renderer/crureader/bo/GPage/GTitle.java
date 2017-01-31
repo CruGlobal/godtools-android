@@ -60,6 +60,7 @@ public class GTitle extends GCoordinator {
                     final OptRoundCardView headerTopRoundCardView = (OptRoundCardView) tempRoot.findViewById(R.id.g_header_peek_outerlayout_optroundcardview);
                     final OptRoundCardView peekPanelRoundCardView = (OptRoundCardView) tempRoot.findViewById(R.id.g_header_peek_peeklayout_optroundcardview);
                     final AutoScaleTextView autoScaleTextView = (AutoScaleTextView) tempRoot.findViewById(R.id.g_header_peak_peak_textview);
+                    final TextView peekCliffTextView = (TextView)tempRoot.findViewById(R.id.g_header_peak_cliff);
 
                 /*LayoutTransition layoutTransition = null;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
@@ -83,10 +84,13 @@ public class GTitle extends GCoordinator {
                                 if (autoScaleTextView.getVisibility() == View.VISIBLE) {
                                     layoutParams.topMargin = (int) autoScaleTextView.getTag(R.id.peek_textview_top_margin);
                                     autoScaleTextView.setVisibility(View.GONE);
+                                    peekCliffTextView.setVisibility(View.VISIBLE);
                                 } else {
                                     autoScaleTextView.setTag(R.id.peek_textview_top_margin, layoutParams.topMargin);
                                     layoutParams.topMargin = 0;
+                                    peekCliffTextView.setVisibility(View.GONE);
                                     autoScaleTextView.setVisibility(View.VISIBLE);
+
 
                                 }
                             }

@@ -74,6 +74,20 @@
         app:optRoundCardTopEdges="false">
 
 
+        <TextView
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="14dp"
+            android:paddingTop="6dp"
+            android:gravity="center"
+            android:id="@+id/g_header_peak_cliff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:text="-"
+            android:textColor="@android:color/black"
+            android:textSize="12dp"/>
+
 
         <org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView
             android:id="@+id/g_header_peak_peak_textview"
