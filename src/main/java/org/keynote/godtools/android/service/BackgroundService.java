@@ -99,13 +99,14 @@ public class BackgroundService extends IntentService
                     .registerDeviceForNotifications(intent.getStringExtra(REGISTRATION_ID),
                                                     intent.getStringExtra(DEVICE_ID),
                                                     intent.getBooleanExtra(NOTIFICATIONS_ON, true)).execute();
-
+            Log.i(TAG, "registerDeviceForNotifications Success: " + response.isSuccessful());
             if (response.isSuccessful()) {
                 registrationComplete(regId);
             } else {
                 registrationFailed();
             }
         } catch (final IOException e) {
+            e.printStackTrace();
             registrationFailed();
         }
     }
@@ -115,8 +116,10 @@ public class BackgroundService extends IntentService
             // get an auth token for the specified access_code
             final Response<ResponseBody> response =
                     GodToolsApi.INSTANCE.getAuthToken(intent.getStringExtra(ACCESS_CODE)).execute();
-
+            //Added Logging
+            Log.i(TAG, "Response Code: " + response.code());
             // a 204 response is successful, auth_token is in the Authorization header
+
             if (response.code() == HttpURLConnection.HTTP_NO_CONTENT) {
                 authComplete(response.headers().get(HttpHeaders.AUTHORIZATION), true, false);
             }
@@ -125,6 +128,9 @@ public class BackgroundService extends IntentService
                 authFailed(true, false);
             }
         } catch (final IOException e) {
+            /*Added stack trace */
+            /*e.printStackTrace() should always exist or be thrown */
+            e.printStackTrace();
             // any IOException should be considered a failure currently
             authFailed(true, false);
         }
@@ -136,7 +142,7 @@ public class BackgroundService extends IntentService
             final String authToken = intent.getStringExtra(ACCESS_CODE);
             final Response<ResponseBody> response = GodToolsApi.INSTANCE.verifyAuthToken(authToken)
                     .execute();
-
+            Log.i(TAG, "verifyAuthToken response.code(): " + response.code());
             // a 204 response is successful
             if (response.code() == HttpURLConnection.HTTP_NO_CONTENT) {
                 authComplete(authToken, false, true);
@@ -146,6 +152,7 @@ public class BackgroundService extends IntentService
                 authFailed(false, true);
             }
         } catch (final IOException e) {
+            e.printStackTrace();
             authFailed(false, true);
         }
     }

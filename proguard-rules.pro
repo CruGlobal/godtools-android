@@ -36,7 +36,7 @@
       public <init>(android.content.Context, android.util.AttributeSet, int);
       public void set*(...);
 }
-
+-keep public interface org.keynote.godtools.android.api.GodToolsApi
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
 -keep public class * extends android.app.Service
@@ -95,10 +95,39 @@
 -dontwarn com.squareup.okhttp.**
 
 
-## Retrofit2
+# Retrofit
+# Platform calls Class.forName on types which do not exist on Android to determine platform.
+-dontnote retrofit2.Platform
+# Platform used when running on RoboVM on iOS. Will not be used at runtime.
+-dontnote retrofit2.Platform$IOS$MainThreadExecutor
+# Platform used when running on Java 8 VMs. Will not be used at runtime.
+-dontwarn retrofit2.Platform$Java8
+# Retain generic type information for use by reflection by converters and adapters.
+-keepattributes Signature
+# Retain declared checked exceptions for use by a Proxy instance.
+-keepattributes Exceptions
+
 -dontwarn retrofit2.**
+-dontwarn org.codehaus.mojo.**
 -keep class retrofit2.** { *; }
--keepattributes Signature,Exceptions
+-keepattributes Signature
+-keepattributes Exceptions
+-keepattributes *Annotation*
+
+-keepattributes RuntimeVisibleAnnotations
+-keepattributes RuntimeInvisibleAnnotations
+-keepattributes RuntimeVisibleParameterAnnotations
+-keepattributes RuntimeInvisibleParameterAnnotations
+
+-keepattributes EnclosingMethod
+
+-keepclasseswithmembers interface * {
+    @retrofit2.* <methods>;
+}
+
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
 
 # Simple XML
 
@@ -178,19 +207,3 @@
   @android.support.annotation.Keep <methods>;
 }
 
--keep @interface com.google.android.gms.common.annotation.KeepName
--keepnames @com.google.android.gms.common.annotation.KeepName class *
--keepclassmembernames class * {
-  @com.google.android.gms.common.annotation.KeepName *;
-}
-
--keep @interface com.google.android.gms.common.util.DynamiteApi
--keep public @com.google.android.gms.common.util.DynamiteApi class * {
-  public <fields>;
-  public <methods>;
-}
-
--dontwarn android.security.NetworkSecurityPolicy
-
--keep class com.google.android.gms.iid.zzd { *; }
--keep class android.support.v4.content.ContextCompat { *; }
