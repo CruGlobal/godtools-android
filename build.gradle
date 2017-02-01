@@ -34,7 +34,7 @@ ext.deps = [
         guava                : '19.0',
         junit                : '4.12',
         playServices         : '9.0.2',
-        retrofit2            : '2.0.2'
+        retrofit2            : '2.1.0'
 ]
 
 dependencies {
@@ -114,6 +114,7 @@ android {
         debug {
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
+
             buildConfigField "String", "BASE_URL_V2", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/v2/\""
             buildConfigField "String", "BASE_URL", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/\""
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AA2f0cb2d41f6ac7dcc256eaa9ca7e0f640859fd52\""
