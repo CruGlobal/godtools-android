@@ -22,7 +22,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 apply from: 'versioning.gradle'
 
 group 'org.cru.android'
-version '4.3.1-SNAPSHOT'
+version '4.3.1'
 
 // define dependency versions for this project
 ext.deps = [
