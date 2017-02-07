@@ -24,12 +24,18 @@ import org.ccci.gto.android.common.gson.GsonIgnoreExclusionStrategy;
 import org.ccci.gto.android.common.util.IOUtils;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.business.GTLanguage;
+import org.keynote.godtools.android.business.GTLanguages;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.convert.Registry;
+import org.simpleframework.xml.convert.RegistryStrategy;
+import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.strategy.Strategy;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -140,7 +146,7 @@ public class InitialContentTasks {
                 if (c != null && c.getCount() == 0) {
                     loadDefaultLanguages();
                 }
-            } catch (final IOException e) {
+            } catch (final Exception e) {
                 Crashlytics.logException(e);
                 throw Throwables.propagate(e);
             } finally {
@@ -153,12 +159,18 @@ public class InitialContentTasks {
         }
 
         @WorkerThread
-        private void loadDefaultLanguages() throws IOException {
+        private void loadDefaultLanguages() throws Exception {
             // meta.xml file contains the list of supported languages
             InputStream metaStream = mAssets.open("meta.xml");
-            List<GTLanguage> languageList = GTPackageReader.processMetaResponse(metaStream);
-            for (GTLanguage gtl : languageList) {
-                mDao.updateOrInsert(gtl, GTLanguageTable.COL_NAME, GTLanguageTable.COL_DRAFT);
+            Registry registry = new Registry();
+            Strategy strategy = new RegistryStrategy(registry);
+            Serializer serializer = new Persister(strategy);
+
+
+            GTLanguages gtLanguages = serializer.read(GTLanguages.class, metaStream);
+
+            for (GTLanguage gtl : gtLanguages.mLanguages) {
+                mDao.updateOrInsert(gtl, GTLanguageTable.COL_NAME /*, GTLanguageTable.COL_DRAFT*/ );
             }
         }
     }

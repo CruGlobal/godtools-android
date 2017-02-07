@@ -6,10 +6,13 @@ import android.support.annotation.Nullable;
 import com.google.common.base.Function;
 
 import org.keynote.godtools.android.model.HomescreenLayout;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
 
 import java.util.Comparator;
 import java.util.regex.Pattern;
 
+@Root(name="package")
 public class GTPackage {
     public static final String EVERYSTUDENT_PACKAGE_CODE = "everystudent";
 
@@ -31,13 +34,18 @@ public class GTPackage {
     };
     private static final Comparator<GTPackage> COMPARATOR_VERSION = new VersionComparator();
 
-    String code;
     private String name;
-    @NonNull
-    String version = DEFAULT_VERSION;
     private String language;
     private String configFileName;
-    private String status;
+
+    @Attribute(name = "code", required = true)
+    public String code;
+    @Attribute(name = "version", required = true, empty=DEFAULT_VERSION)
+    public String version;
+    @Attribute(name = "status", required = true)
+    public String status;
+
+
     private String icon;
     private HomescreenLayout layout;
 

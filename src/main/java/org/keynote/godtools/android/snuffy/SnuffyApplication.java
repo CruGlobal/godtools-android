@@ -4,6 +4,7 @@ import android.os.Environment;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
+import com.facebook.stetho.Stetho;
 import com.newrelic.agent.android.NewRelic;
 
 import org.keynote.godtools.android.BuildConfig;
@@ -27,7 +28,7 @@ public class SnuffyApplication extends RenderApp {
 //        Crashlytics crashlyticsKit = new Crashlytics.Builder()
 //                .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
 //                .build();
-
+        Stetho.initializeWithDefaults(this);
         Crashlytics crashlyticsKit = new Crashlytics.Builder()
                 .core(new CrashlyticsCore.Builder().build())
                 .build();

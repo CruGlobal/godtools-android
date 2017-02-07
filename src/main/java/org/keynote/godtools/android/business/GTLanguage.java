@@ -5,27 +5,48 @@ import android.content.Context;
 import org.ccci.gto.android.common.util.LocaleCompat;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.utils.WordUtils;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.core.Commit;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+@Root(name = "language")
 public class GTLanguage implements Serializable {
 
     public static final String KEY_PRIMARY = "languagePrimary";
     public static final String KEY_PARALLEL = "languageParallel";
-
-    private String languageName;
+    @Attribute(name = "name", required = true)
+    public String languageName;
+    @Attribute(name = "code", required = true)
     private String languageCode;
     private boolean downloaded;
-    private boolean draft;
-    private List<GTPackage> listPackages;
+    @ElementList(name = "packages", entry = "package", required = true, type = GTPackage.class)
+    private List<GTPackage> listPackages = new ArrayList<GTPackage>();
+
+    private boolean isDraft;
 
     public GTLanguage() {
     }
 
-    public GTLanguage(String languageCode)
-    {
+    @Commit
+    public void onCommit() {
+        isDraft = isDraftCheck();
+        addLanguageCodeToPackages();
+    }
+
+    private void addLanguageCodeToPackages() {
+        for(GTPackage gtPackage : listPackages)
+        {
+            gtPackage.setLanguage(languageCode);
+        }
+    }
+
+    public GTLanguage(String languageCode) {
         this.languageCode = languageCode;
         this.languageName = WordUtils.capitalize(
                 LocaleCompat.forLanguageTag(languageCode).getDisplayName());
@@ -37,8 +58,28 @@ public class GTLanguage implements Serializable {
         this.languageCode = languageCode;
     }
 
+    /**
+     * Gets all languages where the name is translated to the locale that is passed in
+     * via @param locale.
+     */
+    public static List<GTLanguage> getAll(Context context, Locale locale) {
+        DBAdapter adapter = DBAdapter.getInstance(context);
+
+        List<GTLanguage> allLanguages = adapter.get(GTLanguage.class);
+
+        for (GTLanguage language : allLanguages) {
+            String displayName = LocaleCompat.forLanguageTag(language.getLanguageCode()).getDisplayName(locale);
+            language.setLanguageName(WordUtils.capitalize(displayName));
+        }
+        return allLanguages;
+    }
+
     public String getLanguageName() {
         return languageName;
+    }
+
+    public void setLanguageName(String languageName) {
+        this.languageName = languageName;
     }
 
     public String getLanguageCode() {
@@ -47,10 +88,6 @@ public class GTLanguage implements Serializable {
 
     public void setLanguageCode(String languageCode) {
         this.languageCode = languageCode;
-    }
-
-    public void setLanguageName(String languageName) {
-        this.languageName = languageName;
     }
 
     public boolean isDownloaded() {
@@ -69,43 +106,34 @@ public class GTLanguage implements Serializable {
         this.listPackages = listPackages;
     }
 
+    /*
+    * If any package is live for the language the language will be live. It should
+    * not be change back to draft by another package.*/
+    public boolean isDraftCheck() {
+        for (int i = 0; i < listPackages.size(); i++) {
+            if ("live".equalsIgnoreCase(listPackages.get(i).status))
+                return false;
+        }
+        return true;
+    }
+
     public boolean isDraft()
     {
-        return draft;
+        return isDraft;
     }
 
-    public void setDraft(boolean draft)
+    public void setDraft(boolean isDraft)
     {
-        this.draft = draft;
-    }
-
-    /**
-     * Gets all languages where the name is translated to the locale that is passed in
-     * via @param locale.
-     */
-    public static List<GTLanguage> getAll(Context context, Locale locale) {
-        DBAdapter adapter = DBAdapter.getInstance(context);
-
-        List<GTLanguage> allLanguages = adapter.get(GTLanguage.class);
-
-        for(GTLanguage language : allLanguages)
-        {
-            String displayName = LocaleCompat.forLanguageTag(language.getLanguageCode()).getDisplayName(locale);
-            language.setLanguageName(WordUtils.capitalize(displayName));
-        }
-        return allLanguages;
+        this.isDraft = isDraft;
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (o == this)
-        {
+    public boolean equals(Object o) {
+        if (o == this) {
             return true;
         }
 
-        if (!(o instanceof GTLanguage))
-        {
+        if (!(o instanceof GTLanguage)) {
             return false;
         }
 

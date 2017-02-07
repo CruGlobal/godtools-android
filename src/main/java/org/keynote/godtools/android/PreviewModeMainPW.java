@@ -36,9 +36,6 @@ import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.expandableList.ExpandableListAdapter;
 import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
 import org.keynote.godtools.android.http.DownloadTask;
-import org.keynote.godtools.android.http.GodToolsApiClient;
-import org.keynote.godtools.android.http.MetaTask;
-import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
@@ -47,7 +44,6 @@ import java.util.List;
 
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.SQL_WHERE_DRAFT_BY_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.APPLICATION_NAME;
-import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
@@ -59,9 +55,11 @@ import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 import static org.keynote.godtools.android.utils.Constants.WEB_URL;
 
+//import org.keynote.godtools.android.http.MetaTask;
+
 public class PreviewModeMainPW extends BaseActionBarActivity implements
         DownloadTask.DownloadTaskHandler,
-        MetaTask.MetaTaskHandler,
+//        MetaTask.MetaTaskHandler,
         View.OnClickListener,
         AccessCodeDialogFragment.AccessCodeDialogListener
 {
@@ -459,15 +457,15 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         if (Device.isConnected(PreviewModeMainPW.this))
         {
             swipeRefreshLayout.setRefreshing(true);
-
-            GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
+            //TODO: Fix this, API
+            /*GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
                     languagePrimary, KEY_DRAFT, this);
 
             GodToolsApiClient.downloadDrafts(getApp(),
                     settings.getString(AUTH_DRAFT, ""),
                     languagePrimary,
                     KEY_DRAFT,
-                    this);
+                    this);*/
         }
         else
         {
@@ -527,34 +525,34 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         pdLoading.show();
 
     }
-
-    @Override
-    public void metaTaskComplete(List<GTLanguage> languageList, String tag)
-    {
-        UpdatePackageListTask.run(languageList, DBAdapter.getInstance(this));
-    }
-
-    @Override
-    public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode)
-    {
-        if (401 == statusCode)
-        {
-            showAccessCodeDialog();
-            Toast.makeText(PreviewModeMainPW.this, getString(R.string.expired_passcode), Toast.LENGTH_LONG).show();
-        }
-        else
-        {
-            Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_update_draft), Toast.LENGTH_SHORT).show();
-        }
-
-        if (tag.equalsIgnoreCase(KEY_DRAFT) || tag.equalsIgnoreCase(KEY_DRAFT_PRIMARY))
-        {
-            getPackageList();
-        }
-
-        swipeRefreshLayout.setRefreshing(false);
-        Log.i(TAG, "Done refreshing");
-    }
+//TODO: fix this API
+//    @Override
+//    public void metaTaskComplete(List<GTLanguage> languageList, String tag)
+//    {
+//        UpdatePackageListTask.run(languageList, DBAdapter.getInstance(this));
+//    }
+//
+//    @Override
+//    public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode)
+//    {
+//        if (401 == statusCode)
+//        {
+//            showAccessCodeDialog();
+//            Toast.makeText(PreviewModeMainPW.this, getString(R.string.expired_passcode), Toast.LENGTH_LONG).show();
+//        }
+//        else
+//        {
+//            Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_update_draft), Toast.LENGTH_SHORT).show();
+//        }
+//
+//        if (tag.equalsIgnoreCase(KEY_DRAFT) || tag.equalsIgnoreCase(KEY_DRAFT_PRIMARY))
+//        {
+//            getPackageList();
+//        }
+//
+//        swipeRefreshLayout.setRefreshing(false);
+//        Log.i(TAG, "Done refreshing");
+//    }
 
     @Override
     public void downloadTaskComplete(String url, String filePath, String langCode, String tag)

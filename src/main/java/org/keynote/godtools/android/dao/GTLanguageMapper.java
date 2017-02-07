@@ -49,7 +49,7 @@ public class GTLanguageMapper extends AbstractMapper<GTLanguage> {
         language.setLanguageCode(getString(c, COL_CODE));
         language.setLanguageName(getString(c, COL_NAME));
         language.setDownloaded(getBool(c, COL_DOWNLOADED, false));
-        language.setDraft(getBool(c, COL_DRAFT, false));
+
 
         return language;
     }

@@ -16,12 +16,13 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.util.MainThreadExecutor;
+import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.business.GTLanguage;
+import org.keynote.godtools.android.business.GTLanguages;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.GodToolsApiClient;
-import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
@@ -32,10 +33,12 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
-import static org.keynote.godtools.android.utils.Constants.META;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
@@ -51,11 +54,9 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
     If not first load:
         - go to main activity (home screen)
  */
-public class Splash extends Activity implements MetaTask.MetaTaskHandler, DownloadTask.DownloadTaskHandler {
-    private static final String TAG = Splash.class.getSimpleName();
-
+public class Splash extends Activity implements DownloadTask.DownloadTaskHandler {
     static final long MIN_LOAD_DELAY = 500;
-
+    private static final String TAG = Splash.class.getSimpleName();
     @BindView(R.id.tvTask)
     TextView mUpdateText;
     @BindView(R.id.progressBar)
@@ -86,8 +87,37 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
             settings.edit().putString(GTLanguage.KEY_PRIMARY, Locale.getDefault().getLanguage()).apply();
 
             showLoading();
+            GodToolsApi.INSTANCE.getListOfPackages().enqueue(new Callback<GTLanguages>() {
+                @Override
+                public void onResponse(Call<GTLanguages> call, Response<GTLanguages> response) {
+                    UpdatePackageListTask.run(response.body().mLanguages, DBAdapter.getInstance(Splash.this));
 
-            GodToolsApiClient.getListOfPackages(META,this);
+                    // if the API has packages available for the device default language then download them
+                    // this is determined by going through the results of the meta download
+                    if (apiHasDeviceDefaultLanguage(response.body().mLanguages)) {
+                        GodToolsApiClient.downloadLanguagePack(
+                                getApp(),
+                                Locale.getDefault().getLanguage(),
+                                "primary",
+                                Splash.this);
+                    }
+                    // if not, then switch back to English and download those latest resources
+                    else {
+                        settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
+
+                        GodToolsApiClient.downloadLanguagePack(
+                                getApp(),
+                                ENGLISH_DEFAULT,
+                                "primary",
+                                Splash.this);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<GTLanguages> call, Throwable t) {
+                    goToMainActivity();
+                }
+            });
         }
         // subsequent use update tasks still running
         else if (mUpdateTasks != null && !mUpdateTasks.isDone()) {
@@ -136,8 +166,7 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
         );
     }
 
-    private boolean isFirstLaunch()
-    {
+    private boolean isFirstLaunch() {
         return settings.getBoolean(FIRST_LAUNCH, true);
     }
 
@@ -150,8 +179,7 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
         // so now that we are expiring the translator code after 12 hours we will auto "log out" the
         // user when the app is restarted.
 
-        if (settings.getBoolean(TRANSLATOR_MODE, false))
-        {
+        if (settings.getBoolean(TRANSLATOR_MODE, false)) {
             settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
         }
 
@@ -160,47 +188,28 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
         finish();
     }
 
-    private SnuffyApplication getApp()
-    {
+    private SnuffyApplication getApp() {
         return (SnuffyApplication) getApplication();
     }
 
-    @Override
-    public void metaTaskComplete(List<GTLanguage> languageList, String tag)
-    {
-        UpdatePackageListTask.run(languageList,DBAdapter.getInstance(this));
+//    @Override
+//    public void metaTaskComplete(List<GTLanguage> languageList, String tag)
+//    {
+//
+//
+//    }
+//
+//
+//    @Override
+//    public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode)
+//    {
+//
+//    }
 
-        // if the API has packages available for the device default language then download them
-        // this is determined by going through the results of the meta download
-        if(apiHasDeviceDefaultLanguage(languageList))
-        {
-            GodToolsApiClient.downloadLanguagePack(
-                    getApp(),
-                    Locale.getDefault().getLanguage(),
-                    "primary",
-                    this);
-        }
-        // if not, then switch back to English and download those latest resources
-        else
-        {
-            settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
-
-            GodToolsApiClient.downloadLanguagePack(
-                    getApp(),
-                    ENGLISH_DEFAULT,
-                    "primary",
-                    this);
-        }
-
-    }
-
-    private boolean apiHasDeviceDefaultLanguage(List<GTLanguage> languageList)
-    {
-        for(GTLanguage metaLanguageFromInitialDownload : languageList)
-        {
-            if(metaLanguageFromInitialDownload.getLanguageCode().equalsIgnoreCase(Locale.getDefault().getLanguage()) &&
-                    !metaLanguageFromInitialDownload.getPackages().isEmpty())
-            {
+    private boolean apiHasDeviceDefaultLanguage(List<GTLanguage> languageList) {
+        for (GTLanguage metaLanguageFromInitialDownload : languageList) {
+            if (metaLanguageFromInitialDownload.getLanguageCode().equalsIgnoreCase(Locale.getDefault().getLanguage()) &&
+                    !metaLanguageFromInitialDownload.getPackages().isEmpty()) {
                 return true;
             }
         }
@@ -208,14 +217,7 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
     }
 
     @Override
-    public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode)
-    {
-        goToMainActivity();
-    }
-
-    @Override
-    public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
-    {
+    public void downloadTaskComplete(String url, String filePath, String langCode, String tag) {
         final GTLanguage language = new GTLanguage();
         language.setLanguageCode(langCode);
         language.setDownloaded(true);
@@ -225,8 +227,7 @@ public class Splash extends Activity implements MetaTask.MetaTaskHandler, Downlo
     }
 
     @Override
-    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
-    {
+    public void downloadTaskFailure(String url, String filePath, String langCode, String tag) {
         // if there was an error downloading resources, then switch the phone's language back to English since those are the
         // resources that were bundled.  user would get a blank screen if not
         settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
