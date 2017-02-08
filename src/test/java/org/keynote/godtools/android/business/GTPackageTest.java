@@ -4,7 +4,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.keynote.godtools.android.api.GodToolsApi;
-import org.keynote.godtools.android.api.model.languages.Languages;
 
 import java.io.IOException;
 
@@ -68,10 +67,10 @@ public class GTPackageTest {
     @Test
     public void checkGodToolsAPIGetMeta()
     {
-        Call<Languages> languagesCall = GodToolsApi.INSTANCE.metaAllGet();
+        Call<GTLanguages> languagesCall = GodToolsApi.INSTANCE.getListOfPackages();
         try {
-            Response<Languages> execute = languagesCall.execute();
-            Languages body = execute.body();
+            Response<GTLanguages> execute = languagesCall.execute();
+            GTLanguages body = execute.body();
             Assert.assertNotNull(body);
             Assert.assertEquals(true, body.mLanguages.size() > 0);
         } catch (IOException e) {

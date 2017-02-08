@@ -1,13 +1,13 @@
 package org.keynote.godtools.android.api;
 
 import org.keynote.godtools.android.BuildConfig;
-import org.keynote.godtools.android.api.converters.simplexml.SimpleXmlConverterFactory;
 import org.keynote.godtools.android.business.GTLanguages;
 import org.keynote.godtools.android.business.GTNotificationRegister;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;

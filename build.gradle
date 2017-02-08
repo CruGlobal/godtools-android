@@ -56,6 +56,13 @@ dependencies {
     compile 'com.jakewharton:butterknife:' + deps.butterknife
     compile 'com.squareup.retrofit2:retrofit:' + deps.retrofit2
     compile 'com.squareup.retrofit2:converter-gson:' + deps.retrofit2
+    compile('com.squareup.retrofit2:converter-simplexml:' + deps.retrofit2)
+            {
+                exclude module: 'stax'
+                exclude module: 'stax-api'
+                exclude module: 'xpp3'
+            };
+
     androidTestCompile 'com.android.support.test:runner:' + deps.androidTestingSupport
     androidTestCompile 'com.android.support.test:rules:' + deps.androidTestingSupport
     androidTestCompile 'com.android.support:support-annotations:' + deps.androidSupport
