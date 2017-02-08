@@ -33,7 +33,8 @@ ext.deps = [
         gtoSupport           : '0.9.0',
         guava                : '19.0',
         junit                : '4.12',
-        playServices         : '9.0.2'
+        playServices         : '9.0.2',
+        retrofit2            : '2.1.0'
 
 ]
 
