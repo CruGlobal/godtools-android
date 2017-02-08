@@ -104,7 +104,7 @@ android {
         preDexLibraries !project.hasProperty('disablePreDex')
     }
     lintOptions {
-        warning 'MissingTranslation'
+        warning 'MissingTranslation','InvalidPackage'
     }
     packagingOptions {
         pickFirst 'META-INF/NOTICE.txt'
