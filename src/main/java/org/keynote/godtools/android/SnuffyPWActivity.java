@@ -38,12 +38,12 @@ import com.google.common.base.Strings;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.business.GSSubscriber;
+import org.keynote.godtools.android.business.GTNotificationRegister;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
-import org.keynote.godtools.android.http.GodToolsApiClient;
-import org.keynote.godtools.android.http.NotificationUpdateTask;
 import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.notifications.NotificationInfo;
 import org.keynote.godtools.android.snuffy.SnuffyAboutActivity;
@@ -71,6 +71,10 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.support.v4.app.FragmentManager.POP_BACK_STACK_INCLUSIVE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_CODE;
@@ -157,18 +161,28 @@ public class SnuffyPWActivity extends AppCompatActivity {
                 if (mAppPackage.equalsIgnoreCase(KGP) || mAppPackage.equalsIgnoreCase(FOUR_LAWS)) {
                     startTimer();
 
-                    GodToolsApiClient.updateNotification(settings.getString(AUTH_CODE, ""),
-                            mRegID, NotificationInfo.AFTER_10_PRESENTATIONS, new NotificationUpdateTask.NotificationUpdateTaskHandler() {
-                                @Override
-                                public void registrationComplete(String regId) {
-                                    Log.i(NotificationInfo.NOTIFICATION_TAG, "10 Presentation Notification notice sent to API");
-                                }
 
-                                @Override
-                                public void registrationFailed() {
-                                    Log.e(NotificationInfo.NOTIFICATION_TAG, "10 Presentation notification notice failed to send to API");
-                                }
-                            });
+                    GTNotificationRegister gtNotificationRegister = new GTNotificationRegister(mRegID, NotificationInfo.AFTER_10_PRESENTATIONS);
+                    GodToolsApi.INSTANCE.updateNotification(settings.getString(AUTH_CODE, ""), gtNotificationRegister).enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if(response.isSuccessful())
+                            {
+                                Log.i(NotificationInfo.NOTIFICATION_TAG, "10 Presentation Notification notice sent to API");
+                            }
+                            else
+                            {
+                                Log.e(NotificationInfo.NOTIFICATION_TAG, "10 Presentation notification notice failed to send to API");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Log.e(NotificationInfo.NOTIFICATION_TAG, "10 Presentation notification notice failed to send to API");
+                            t.printStackTrace();
+                        }
+                    });
+
                 }
                 return null;
             }
@@ -313,7 +327,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
     private boolean triggerFollowupModal(@NonNull final GodToolsEvent event) {
         // check for a followup modal on the current page
         Log.i(TAG, "EventBus triggerFollowupModal");
-        //TODO: RM rework this
         if (mSnuffyPagerAdapter != null) {
             final int hashCode = event.getEventID().getId().hashCode();
             if (RenderSingleton.getInstance().gPanelHashMap.get(hashCode) != null) {
@@ -565,7 +578,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
         showLoading(getString(R.string.update_page));
 
         final SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        GodToolsApiClient.downloadDraftPage((SnuffyApplication) getApplication(),
+        PackageDownloadHelper.downloadDraftPage((SnuffyApplication) getApplication(),
                 settings.getString(AUTH_DRAFT, ""),
                 mAppLanguage,
                 mAppPackage,
@@ -593,18 +606,25 @@ public class SnuffyPWActivity extends AppCompatActivity {
             public void run() {
                 Log.i(TAG, "Timer complete");
                 SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-                GodToolsApiClient.updateNotification(settings.getString(AUTH_CODE, ""),
-                        mRegID, NotificationInfo.DAY_AFTER_SHARE, new NotificationUpdateTask.NotificationUpdateTaskHandler() {
-                            @Override
-                            public void registrationComplete(String regId) {
-                                Log.i(NotificationInfo.NOTIFICATION_TAG, "Day After Share Notification notice sent to API");
-                            }
+                GTNotificationRegister gtNotificationRegister = new GTNotificationRegister(mRegID, NotificationInfo.DAY_AFTER_SHARE);
+                GodToolsApi.INSTANCE.updateNotification(settings.getString(AUTH_CODE, ""), gtNotificationRegister).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful())
+                        {
+                            Log.i(NotificationInfo.NOTIFICATION_TAG, "Day After Share Notification notice sent to API");
+                        }
+                        else
+                        {
+                            Log.e(NotificationInfo.NOTIFICATION_TAG, "Day After Share notification notice failed to send to API");
+                        }
+                    }
 
-                            @Override
-                            public void registrationFailed() {
-                                Log.e(NotificationInfo.NOTIFICATION_TAG, "Day After Share notification notice failed to send to API");
-                            }
-                        });
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.e(NotificationInfo.NOTIFICATION_TAG, "Day After Share notification notice failed to send to API");
+                    }
+                });
             }
         };
 

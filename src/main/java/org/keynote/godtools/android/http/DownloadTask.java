@@ -3,12 +3,12 @@ package org.keynote.godtools.android.http;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.common.base.Strings;
 
 import org.ccci.gto.android.common.util.IOUtils;
-import org.keynote.godtools.android.BuildConfig;
+import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
@@ -21,15 +21,15 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.OutputStream;
 import java.util.List;
 
-import static org.keynote.godtools.android.utils.Constants.INTERPRETER_HEADER;
-
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
+    private static final String TAG = "DownloadTask";
     private DownloadTaskHandler mTaskHandler;
     private Context mContext;
     @NonNull
@@ -60,6 +60,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
 
         // get a temporary directory for extracting the zip file to
         final File tmpDir = FileUtils.getTmpDir(mContext);
+        final File zipfile = new File(tmpDir, "package.zip");
         if (tmpDir == null) {
             Crashlytics.logException(new Exception("unable to get temporary directory for download: " + url));
             return false;
@@ -68,69 +69,63 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
         // download & extract zip file to tmp directory
         try {
             // download zip file
-            HttpURLConnection connection = null;
-            final File zipfile = new File(tmpDir, "package.zip");
-            try {
-                connection = getHttpURLConnection(url, authorization);
-                downloadResponseCode = connection.getResponseCode();
-                downloadContentLength = connection.getContentLength();
 
-                // output zip file
-                InputStream is = connection.getInputStream();
-                FileOutputStream fout = new FileOutputStream(zipfile);
-                IOUtils.copy(is, fout);
-                is.close();
-                fout.close();
-            } catch (final IOException e) {
-                // don't log IOExceptions when downloading, they will be tracked by newrelic
-                return false;
-            } finally {
-                IOUtils.closeQuietly(connection);
+            Response<ResponseBody> response = GodToolsApi.INSTANCE.downloadPackages(authorization, langCode).execute();
+            if (response.isSuccessful()) {
+                Log.d(TAG, "server contacted and has file");
+                boolean writtenToDisk = writeResponseBodyToDisk(response.body(), zipfile);
+                Log.d(TAG, "file download was a success? " + writtenToDisk);
+                if(writtenToDisk)
+                {
+                    new Decompress().unzip(zipfile, tmpDir);
+
+                    // parse content.xml
+                    File contentFile = new File(tmpDir, "contents.xml");
+                    List<GTPackage> packageList = GTPackageReader.processContentFile(contentFile);
+
+                    DBAdapter adapter = DBAdapter.getInstance(mContext);
+
+                    // delete draft packages before storing download
+                    if (tag.contains("draft")) {
+                        adapter.delete(GTPackage.class, GTPackageTable.SQL_WHERE_DRAFT_BY_LANGUAGE.args(langCode));
+                    }
+
+                    // save the parsed packages to database
+                    for (GTPackage gtp : packageList) {
+                        adapter.updateOrInsert(gtp);
+                    }
+
+                    // delete package.zip and contents.xml
+                    zipfile.delete();
+                    contentFile.delete();
+
+                    // move files to main directory
+                    FileInputStream inputStream;
+                    FileOutputStream outputStream;
+
+                    File[] fileList = tmpDir.listFiles();
+                    File oldFile;
+                    for (int i = 0; i < fileList.length; i++) {
+                        oldFile = fileList[i];
+                        inputStream = new FileInputStream(oldFile);
+                        outputStream = new FileOutputStream(new File(mResourcesDir, oldFile.getName()));
+
+                        IOUtils.copy(inputStream, outputStream);
+
+                        inputStream.close();
+                        outputStream.flush();
+                        outputStream.close();
+                        oldFile.delete();
+                    }
+
+                    return true;
+                }
+
+            } else {
+                Log.d(TAG, "server contact failed");
             }
 
-            // unzip package.zip
-            new Decompress().unzip(zipfile, tmpDir);
 
-            // parse content.xml
-            File contentFile = new File(tmpDir, "contents.xml");
-            List<GTPackage> packageList = GTPackageReader.processContentFile(contentFile);
-
-            DBAdapter adapter = DBAdapter.getInstance(mContext);
-
-            // delete draft packages before storing download
-            if (tag.contains("draft")) {
-                adapter.delete(GTPackage.class, GTPackageTable.SQL_WHERE_DRAFT_BY_LANGUAGE.args(langCode));
-            }
-
-            // save the parsed packages to database
-            for (GTPackage gtp : packageList) {
-                adapter.updateOrInsert(gtp);
-            }
-
-            // delete package.zip and contents.xml
-            zipfile.delete();
-            contentFile.delete();
-
-            // move files to main directory
-            FileInputStream inputStream;
-            FileOutputStream outputStream;
-
-            File[] fileList = tmpDir.listFiles();
-            File oldFile;
-            for (int i = 0; i < fileList.length; i++) {
-                oldFile = fileList[i];
-                inputStream = new FileInputStream(oldFile);
-                outputStream = new FileOutputStream(new File(mResourcesDir, oldFile.getName()));
-
-                IOUtils.copy(inputStream, outputStream);
-
-                inputStream.close();
-                outputStream.flush();
-                outputStream.close();
-                oldFile.delete();
-            }
-
-            return true;
         } catch (Exception e) {
             // log any other exceptions encountered
             Crashlytics.setString("url", url);
@@ -147,22 +142,58 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             // delete unzip directory
             FileUtils.deleteRecursive(tmpDir, false);
         }
+        return false;
     }
 
-    private HttpURLConnection getHttpURLConnection(String url, String authorization) throws IOException
-    {
-        HttpURLConnection getDownloadUrlConnection = (HttpURLConnection) new URL(url).openConnection();
-        getDownloadUrlConnection.setReadTimeout(90000 /* milliseconds */);
-        getDownloadUrlConnection.setConnectTimeout(10000 /* milliseconds */);
-        getDownloadUrlConnection.setRequestMethod("GET");
-        getDownloadUrlConnection.setRequestProperty(INTERPRETER_HEADER, BuildConfig.INTERPRETER_VERSION);
+    private boolean writeResponseBodyToDisk(ResponseBody body, File outputFile) {
+        try {
 
-        if(!Strings.isNullOrEmpty(authorization))
-        {
-            getDownloadUrlConnection.setRequestProperty("Authorization", authorization);
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[4096];
+
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(outputFile);
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+
+                    fileSizeDownloaded += read;
+
+                    Log.d(TAG, "file download: " + fileSizeDownloaded + " of " + fileSize);
+                }
+
+                outputStream.flush();
+
+                return true;
+            } catch (IOException e) {
+                return false;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return false;
         }
-        return getDownloadUrlConnection;
     }
+
 
     @Override
     protected void onPostExecute(Boolean isSuccessful) {

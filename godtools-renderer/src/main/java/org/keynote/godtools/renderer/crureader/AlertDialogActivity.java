@@ -80,7 +80,6 @@ public class AlertDialogActivity extends Activity {
                     public void onClick(DialogInterface dialog, int id) {
                         // This code - to send an email with subject and body - is similar
                         // to code in SnuffyActivity: doCmdShare. Can we abstract to a common function?
-                        //todo: determine what to do here?   We need a special parse circumstance for all urls
                         String subjectLine = RenderSingleton.getInstance().getGDocument().packagename.content + (mButtonMode == GBaseButtonAttributes.ButtonMode.allurl ?
                                 RenderSingleton.getInstance().getAppConfig().getMultiWebsiteString() :
                                 RenderSingleton.getInstance().getAppConfig().getSingleWebsiteAssistString());

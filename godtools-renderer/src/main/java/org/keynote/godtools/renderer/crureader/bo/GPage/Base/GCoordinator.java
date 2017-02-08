@@ -60,7 +60,6 @@ public abstract class GCoordinator {
 
     public void updateBaseAttributes(View view) {
         if (view != null && view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            Log.i(TAG, "View is percent layout");
 
             ViewGroup.MarginLayoutParams percentLayoutInfo = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
 

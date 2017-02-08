@@ -36,8 +36,6 @@ public class GBaseTextAttributes extends GCoordinator {
     @Attribute(required = false, name = "alpha")
     public String alpha;
 
-
-    //TODO: cast T to skip unboxing.
     @Override
     public void updateBaseAttributes(View view) {
         super.updateBaseAttributes(view);
@@ -57,7 +55,6 @@ public class GBaseTextAttributes extends GCoordinator {
 
     private void applyTypeface(AutoScaleTextView textViewCast) {
         String languageCode = RenderSingleton.getInstance().getGDocument().getLanguageCode();
-        Log.i(TAG, "textViewCast language: " +  languageCode != null ? languageCode : " language code is null!");
         TypefaceUtils.setTypeface(textViewCast, languageCode);
     }
 

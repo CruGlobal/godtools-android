@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.keynote.godtools.renderer.crureader.bo.GPage.GPage;
@@ -20,7 +19,6 @@ public class SlidePageFragment extends Fragment {
     private static final String ARG_DOCUMENT_ID = "DOCUMENT_ID";
     private static final String ARG_POSITION = "POSITION";
     private static final String TAG = "SlidePageFragment";
-    FrameLayout thisView;
     private String mXmlDocumentId;
     private GPage mGPage;
     private int mPosition;

@@ -22,7 +22,7 @@ import org.keynote.godtools.android.business.GTLanguages;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.http.DownloadTask;
-import org.keynote.godtools.android.http.GodToolsApiClient;
+import org.keynote.godtools.android.http.PackageDownloadHelper;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
@@ -95,7 +95,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
                     // if the API has packages available for the device default language then download them
                     // this is determined by going through the results of the meta download
                     if (apiHasDeviceDefaultLanguage(response.body().mLanguages)) {
-                        GodToolsApiClient.downloadLanguagePack(
+                        PackageDownloadHelper.downloadLanguagePack(
                                 getApp(),
                                 Locale.getDefault().getLanguage(),
                                 "primary",
@@ -105,7 +105,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
                     else {
                         settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
 
-                        GodToolsApiClient.downloadLanguagePack(
+                        PackageDownloadHelper.downloadLanguagePack(
                                 getApp(),
                                 ENGLISH_DEFAULT,
                                 "primary",

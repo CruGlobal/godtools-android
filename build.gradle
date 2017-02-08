@@ -71,8 +71,7 @@ dependencies {
 android {
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
-    // XXX: we need to remove usage of the Apache HttpClient
-    useLibrary 'org.apache.http.legacy'
+
     defaultConfig {
         applicationId 'org.keynote.godtools.android'
         versionName project.version

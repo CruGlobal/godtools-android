@@ -27,23 +27,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.ccci.gto.android.common.db.Query;
+import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
+import org.keynote.godtools.android.business.GTLanguages;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.expandableList.ExpandableListAdapter;
 import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
 import org.keynote.godtools.android.http.DownloadTask;
+import org.keynote.godtools.android.http.PackageDownloadHelper;
+import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.utils.Device;
 
 import java.util.Iterator;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.SQL_WHERE_DRAFT_BY_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.APPLICATION_NAME;
+import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KEY_DRAFT;
@@ -55,14 +64,10 @@ import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 import static org.keynote.godtools.android.utils.Constants.WEB_URL;
 
-//import org.keynote.godtools.android.http.MetaTask;
-
 public class PreviewModeMainPW extends BaseActionBarActivity implements
         DownloadTask.DownloadTaskHandler,
-//        MetaTask.MetaTaskHandler,
         View.OnClickListener,
-        AccessCodeDialogFragment.AccessCodeDialogListener
-{
+        AccessCodeDialogFragment.AccessCodeDialogListener {
     private static final String TAG = "PreviewModeMainPW";
     private static final int REQUEST_SETTINGS = 1001;
 
@@ -86,24 +91,20 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 
     private ProgressDialog pdLoading;
 
-
     /**
      * Called when the activity is first created.
      */
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.preview_mode_main_pw);
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
-        {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh()
-            {
+            public void onRefresh() {
                 Log.i(TAG, "Starting refresh");
                 refreshDrafts();
             }
@@ -128,43 +129,33 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         refreshDrafts();
     }
 
-    private void setupExpandableList()
-    {
+    private void setupExpandableList() {
         ExpandableListView listView = (ExpandableListView) findViewById(R.id.expandable_list);
         ExpandableListAdapter listAdapter = new ExpandableListAdapter(this, packageList, languagePrimary);
         listView.setAdapter(listAdapter);
 
-        listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener()
-        {
+        listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
-            public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long l)
-            {
+            public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long l) {
                 TextView textView = (TextView) view.findViewById(R.id.tv_trans_view);
                 String packageName = (String) textView.getText();
                 Log.i(TAG, "Clicked: " + packageName);
 
-                for (GTPackage gtPackage : packageList)
-                {
-                    if (packageName.equals(gtPackage.getName()))
-                    {
-                        if (gtPackage.getCode().equalsIgnoreCase("everystudent"))
-                        {
+                for (GTPackage gtPackage : packageList) {
+                    if (packageName.equals(gtPackage.getName())) {
+                        if (gtPackage.getCode().equalsIgnoreCase("everystudent")) {
                             Intent intent = new Intent(context, EveryStudent.class);
                             intent.putExtra("PackageName", gtPackage.getCode());
                             startActivity(intent);
                             return true;
-                        }
-                        else if (gtPackage.isAvailable())
-                        {
+                        } else if (gtPackage.isAvailable()) {
                             Intent intent = new Intent(context, SnuffyPWActivity.class);
                             intent.putExtra("PackageName", gtPackage.getCode());
                             intent.putExtra("LanguageCode", gtPackage.getLanguage());
                             intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
                             intent.putExtra("Status", gtPackage.getStatus());
                             startActivity(intent);
-                        }
-                        else
-                        {
+                        } else {
                             Toast.makeText(context, getString(R.string.package_not_created), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -175,43 +166,35 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         });
     }
 
-    private void setupBroadcastReceiver()
-    {
+    private void setupBroadcastReceiver() {
         broadcastManager = LocalBroadcastManager.getInstance(context);
 
-        broadcastReceiver = new BroadcastReceiver()
-        {
+        broadcastReceiver = new BroadcastReceiver() {
             @Override
-            public void onReceive(Context context, Intent intent)
-            {
+            public void onReceive(Context context, Intent intent) {
 
-                if (BroadcastUtil.ACTION_DRAFT_START.equals(intent.getAction()))
-                {
+                if (BroadcastUtil.ACTION_DRAFT_START.equals(intent.getAction())) {
                     showLoading(getString(R.string.connecting));
-                }
-                else if (BroadcastUtil.ACTION_STOP.equals(intent.getAction()))
-                {
+                } else if (BroadcastUtil.ACTION_STOP.equals(intent.getAction())) {
 
                     Type type = (Type) intent.getSerializableExtra(BroadcastUtil.ACTION_TYPE);
 
-                    if (Type.DISABLE_TRANSLATOR.equals(type))
-                    {
-                        if (pdLoading != null) pdLoading.hide();
+                    if (Type.DISABLE_TRANSLATOR.equals(type)) {
+                        if (pdLoading != null)
+                            pdLoading.hide();
 
                         Toast.makeText(PreviewModeMainPW.this, getString(R.string.translator_disabled),
                                 Toast.LENGTH_LONG).show();
 
                         finish();
-                    }
-                    else
-                    {
+                    } else {
                         refreshDrafts();
                     }
                 }
 
-                if (BroadcastUtil.ACTION_FAIL.equals(intent.getAction()))
-                {
-                    if (pdLoading != null) pdLoading.hide();
+                if (BroadcastUtil.ACTION_FAIL.equals(intent.getAction())) {
+                    if (pdLoading != null)
+                        pdLoading.hide();
                 }
             }
         };
@@ -221,25 +204,21 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         broadcastManager.registerReceiver(broadcastReceiver, BroadcastUtil.failedFilter());
     }
 
-    private void removeBroadcastReceiver()
-    {
+    private void removeBroadcastReceiver() {
         broadcastManager.unregisterReceiver(broadcastReceiver);
         broadcastReceiver = null;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.homescreen_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.homescreen_settings:
                 onCmd_settings();
                 return true;
@@ -252,12 +231,10 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (resultCode)
-        {
+        switch (resultCode) {
             /* It's possible that both primary and parallel languages that were previously downloaded were changed at the same time.
              * If only one or the other were changed, no harm in running this code, but we do need to make sure the main screen updates
              * if the both were changed.  If if both were changed RESULT_CHANGED_PARALLEL were not added here, then the home screen would
@@ -266,8 +243,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
             default:
                 refreshDrafts();
             case RESULT_CHANGED_PRIMARY:
-            case RESULT_CHANGED_PARALLEL:
-            {
+            case RESULT_CHANGED_PARALLEL: {
                 languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
 
                 getPackageList();
@@ -278,30 +254,26 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     }
 
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
         SharedPreferences.Editor ed = settings.edit();
         ed.apply();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         getPackageList();
         getScreenSize();
     }
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         super.onDestroy();
         removeBroadcastReceiver();
     }
 
-    private void getScreenSize()
-    {
+    private void getScreenSize() {
         /*
          * Although these measurements are not used on this screen, they are passed to and used by
 		 * the following screens. At some point maybe all layouts can be updated to relative layout.
@@ -316,13 +288,10 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         double aspectRatioTarget = (double) PreviewModeMainPW.REFERENCE_DEVICE_WIDTH / (double) PreviewModeMainPW.REFERENCE_DEVICE_HEIGHT;
         double aspectRatio = (double) rect.width() / (double) rect.height();
 
-        if (aspectRatio > aspectRatioTarget)
-        {
+        if (aspectRatio > aspectRatioTarget) {
             height = rect.height();
             width = (int) Math.round(height * aspectRatioTarget);
-        }
-        else
-        {
+        } else {
             width = rect.width();
             height = (int) Math.round(width / aspectRatioTarget);
         }
@@ -336,8 +305,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         mPageHeight = height;
     }
 
-    private void getPackageList()
-    {
+    private void getPackageList() {
         boolean kgpPresent = false;
         boolean satisfiedPresent = false;
         boolean fourlawsPresent = false;
@@ -347,26 +315,25 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         List<GTPackage> packageByLanguage = dao.get(Query.select(GTPackage.class).where(
                 SQL_WHERE_DRAFT_BY_LANGUAGE.args(languagePrimary)));
 
-        if (ENGLISH_DEFAULT.equals(languagePrimary))
-        {
+        if (ENGLISH_DEFAULT.equals(languagePrimary)) {
             removeEveryStudent(packageByLanguage);
         }
 
         Log.i(TAG, "Package size: " + packageByLanguage.size());
 
-        for (GTPackage gtPackage : packageByLanguage)
-        {
+        for (GTPackage gtPackage : packageByLanguage) {
 
-            if (KGP.equals(gtPackage.getCode())) kgpPresent = true;
-            if (SATISFIED.equals(gtPackage.getCode())) satisfiedPresent = true;
-            if (FOUR_LAWS.equals(gtPackage.getCode())) fourlawsPresent = true;
+            if (KGP.equals(gtPackage.getCode()))
+                kgpPresent = true;
+            if (SATISFIED.equals(gtPackage.getCode()))
+                satisfiedPresent = true;
+            if (FOUR_LAWS.equals(gtPackage.getCode()))
+                fourlawsPresent = true;
         }
 
-        if (!kgpPresent || !satisfiedPresent || !fourlawsPresent)
-        {
+        if (!kgpPresent || !satisfiedPresent || !fourlawsPresent) {
 
-            if (!kgpPresent)
-            {
+            if (!kgpPresent) {
                 GTPackage kgpPack = new GTPackage();
                 kgpPack.setCode("draftkgp");
                 kgpPack.setName(getString(R.string.menu_item_kgp));
@@ -374,8 +341,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 packageByLanguage.add(kgpPack);
             }
 
-            if (!satisfiedPresent)
-            {
+            if (!satisfiedPresent) {
                 GTPackage satPack = new GTPackage();
                 satPack.setCode("draftsatisfied");
                 satPack.setName(getString(R.string.menu_item_satisfied));
@@ -383,8 +349,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 packageByLanguage.add(satPack);
             }
 
-            if (!fourlawsPresent)
-            {
+            if (!fourlawsPresent) {
                 GTPackage fourLawPack = new GTPackage();
                 fourLawPack.setCode("draftfourlaws");
                 fourLawPack.setName(getString(R.string.menu_item_4laws));
@@ -400,42 +365,34 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         setupExpandableList();
     }
 
-    private void removeEveryStudent(List<GTPackage> packages)
-    {
+    private void removeEveryStudent(List<GTPackage> packages) {
         Iterator<GTPackage> i = packages.iterator();
-        for (; i.hasNext(); )
-        {
-            if (i.next().getCode().equals(GTPackage.EVERYSTUDENT_PACKAGE_CODE)) i.remove();
+        for (; i.hasNext(); ) {
+            if (i.next().getCode().equals(GTPackage.EVERYSTUDENT_PACKAGE_CODE))
+                i.remove();
         }
     }
 
     @Override
-    public void onClick(View view)
-    {
+    public void onClick(View view) {
         Log.i(TAG, "View clicked");
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if (keyCode == KeyEvent.KEYCODE_MENU)
-        {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(false)
                     .setMessage(R.string.quit_dialog_message)
-                    .setPositiveButton(R.string.quit_dialog_confirm, new DialogInterface.OnClickListener()
-                    {
+                    .setPositiveButton(R.string.quit_dialog_confirm, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialogInterface, int i)
-                        {
+                        public void onClick(DialogInterface dialogInterface, int i) {
                             finish();
                         }
                     })
-                    .setNegativeButton(R.string.quit_dialog_cancel, new DialogInterface.OnClickListener()
-                    {
+                    .setNegativeButton(R.string.quit_dialog_cancel, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialogInterface, int i)
-                        {
+                        public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.cancel();
                         }
                     });
@@ -446,39 +403,54 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         return super.onKeyDown(keyCode, event);
     }
 
-    private void onCmd_settings()
-    {
+    private void onCmd_settings() {
         Intent intent = new Intent(this, SettingsPW.class);
         startActivityForResult(intent, REQUEST_SETTINGS);
     }
 
-    private void refreshDrafts()
-    {
-        if (Device.isConnected(PreviewModeMainPW.this))
-        {
+    private void refreshDrafts() {
+        if (Device.isConnected(PreviewModeMainPW.this)) {
             swipeRefreshLayout.setRefreshing(true);
-            //TODO: Fix this, API
-            /*GodToolsApiClient.getListOfDrafts(settings.getString(AUTH_DRAFT, ""),
-                    languagePrimary, KEY_DRAFT, this);
+            GodToolsApi.INSTANCE.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), languagePrimary).enqueue(new Callback<GTLanguages>() {
+                @Override
+                public void onResponse(Call<GTLanguages> call, Response<GTLanguages> response) {
+                    if (response.isSuccessful()) {
+                        UpdatePackageListTask.run(response.body().mLanguages, DBAdapter.getInstance(PreviewModeMainPW.this));
+                        PackageDownloadHelper.downloadDrafts(getApp(),
+                                settings.getString(AUTH_DRAFT, ""),
+                                languagePrimary,
+                                KEY_DRAFT,
+                                PreviewModeMainPW.this);
+                    } else if (response.code() == 401) {
+                        showAccessCodeDialog();
+                        Toast.makeText(PreviewModeMainPW.this, getString(R.string.expired_passcode), Toast.LENGTH_LONG).show();
+                    }
+                }
 
-            GodToolsApiClient.downloadDrafts(getApp(),
-                    settings.getString(AUTH_DRAFT, ""),
-                    languagePrimary,
-                    KEY_DRAFT,
-                    this);*/
-        }
-        else
-        {
+                @Override
+                public void onFailure(Call<GTLanguages> call, Throwable t) {
+
+                    Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_update_draft), Toast.LENGTH_SHORT).show();
+
+                    getPackageList();
+
+                    swipeRefreshLayout.setRefreshing(false);
+                    Log.i(TAG, "Done refreshing");
+
+                }
+            });
+
+
+        } else {
             Toast.makeText(PreviewModeMainPW.this, getString(R.string.internet_needed),
                     Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void doCmdShare()
-    {
+    private void doCmdShare() {
         String messageBody = getString(R.string.share_general_subject);
         messageBody = messageBody.replace(APPLICATION_NAME, getString(R.string.app_name));
-        messageBody = messageBody.replace(WEB_URL, "\n"+getString(R.string.app_share_link_base_link));
+        messageBody = messageBody.replace(WEB_URL, "\n" + getString(R.string.app_share_link_base_link));
 
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
@@ -487,17 +459,14 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         startActivity(Intent.createChooser(share, getString(R.string.share_prompt)));
     }
 
-    private SnuffyApplication getApp()
-    {
+    private SnuffyApplication getApp() {
         return (SnuffyApplication) getApplication();
     }
 
-    private void showAccessCodeDialog()
-    {
+    private void showAccessCodeDialog() {
         FragmentManager fm = getSupportFragmentManager();
         DialogFragment frag = (DialogFragment) fm.findFragmentByTag("access_dialog");
-        if (frag == null)
-        {
+        if (frag == null) {
             frag = new AccessCodeDialogFragment();
             frag.setCancelable(false);
             frag.show(fm, "access_dialog");
@@ -505,27 +474,23 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     }
 
     @Override
-    public void onAccessDialogClick(boolean success)
-    {
-        if (!success)
-        {
-            if (pdLoading != null) pdLoading.dismiss();
-        }
-        else
-        {
+    public void onAccessDialogClick(boolean success) {
+        if (!success) {
+            if (pdLoading != null)
+                pdLoading.dismiss();
+        } else {
             showLoading(getString(R.string.authenticate_code));
         }
     }
 
-    private void showLoading(String msg)
-    {
+    private void showLoading(String msg) {
         pdLoading = new ProgressDialog(PreviewModeMainPW.this);
         pdLoading.setCancelable(false);
         pdLoading.setMessage(msg);
         pdLoading.show();
 
     }
-//TODO: fix this API
+
 //    @Override
 //    public void metaTaskComplete(List<GTLanguage> languageList, String tag)
 //    {
@@ -555,23 +520,18 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
 //    }
 
     @Override
-    public void downloadTaskComplete(String url, String filePath, String langCode, String tag)
-    {
-        if (tag.equalsIgnoreCase(KEY_DRAFT))
-        {
+    public void downloadTaskComplete(String url, String filePath, String langCode, String tag) {
+        if (tag.equalsIgnoreCase(KEY_DRAFT)) {
             Toast.makeText(PreviewModeMainPW.this, getString(R.string.drafts_updated), Toast.LENGTH_SHORT).show();
             getPackageList();
 
             Log.i(TAG, "Done refreshing");
-        }
-        else if (tag.equalsIgnoreCase(KEY_DRAFT_PRIMARY))
-        {
+        } else if (tag.equalsIgnoreCase(KEY_DRAFT_PRIMARY)) {
             languagePrimary = langCode;
             getPackageList();
         }
 
-        if (pdLoading != null && pdLoading.isShowing())
-        {
+        if (pdLoading != null && pdLoading.isShowing()) {
             pdLoading.hide();
         }
 
@@ -579,28 +539,21 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     }
 
     @Override
-    public void downloadTaskFailure(String url, String filePath, String langCode, String tag)
-    {
+    public void downloadTaskFailure(String url, String filePath, String langCode, String tag) {
 
-        if (tag.equalsIgnoreCase(KEY_DRAFT))
-        {
+        if (tag.equalsIgnoreCase(KEY_DRAFT)) {
             Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_update_draft),
                     Toast.LENGTH_SHORT).show();
-        }
-        else if (tag.equalsIgnoreCase(KEY_DRAFT_PRIMARY))
-        {
+        } else if (tag.equalsIgnoreCase(KEY_DRAFT_PRIMARY)) {
             getPackageList();
             Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_download_draft),
                     Toast.LENGTH_SHORT).show();
-        }
-        else if (tag.equalsIgnoreCase(KEY_PRIMARY) || tag.equalsIgnoreCase(KEY_PARALLEL))
-        {
+        } else if (tag.equalsIgnoreCase(KEY_PRIMARY) || tag.equalsIgnoreCase(KEY_PARALLEL)) {
             Toast.makeText(PreviewModeMainPW.this, getString(R.string.failed_download_resources),
                     Toast.LENGTH_SHORT).show();
         }
 
-        if (pdLoading != null && pdLoading.isShowing())
-        {
+        if (pdLoading != null && pdLoading.isShowing()) {
             pdLoading.hide();
         }
 
