@@ -46,7 +46,15 @@ public class GTitle extends GCoordinator {
 
     public int render(LayoutInflater inflater, final ViewGroup viewGroup, final int position) {
         final Context context = viewGroup.getContext();
-        if (mode == null) mode = HeadingMode.none;
+
+        // force a rendering mode based on the presence of a peek panel
+        if (peekPanel != null) {
+            mode = HeadingMode.peek;
+        } else if (mode == HeadingMode.peek && peekPanel == null) {
+            mode = HeadingMode.straight;
+        } else if (mode == null) {
+            mode = HeadingMode.none;
+        }
 
         View tempRoot = null;
         switch (mode) {
