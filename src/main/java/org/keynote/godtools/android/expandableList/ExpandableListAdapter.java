@@ -17,16 +17,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.http.DraftCreationTask;
-import org.keynote.godtools.android.http.DraftPublishTask;
-import org.keynote.godtools.android.http.GodToolsApiClient;
 import org.keynote.godtools.android.utils.Device;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static org.keynote.godtools.android.broadcast.BroadcastUtil.draftBroadcast;
 import static org.keynote.godtools.android.broadcast.BroadcastUtil.stopBroadcast;
@@ -253,26 +256,29 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                             case DialogInterface.BUTTON_POSITIVE:
                                 
                                 broadcastManager.sendBroadcast(draftBroadcast());
-                                
-                                GodToolsApiClient.publishDraft(settings.getString(AUTH_DRAFT, ""),
-                                        currentPackage.getLanguage(),
-                                        currentPackage.getCode(),
-                                        new DraftPublishTask.DraftTaskHandler()
+                                GodToolsApi.INSTANCE.createDraft(settings.getString(AUTH_DRAFT, ""), currentPackage.getLanguage(), currentPackage.getCode(), true).enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if(response.isSuccessful())
                                         {
-                                            @Override
-                                            public void draftTaskComplete()
-                                            {
-                                                Toast.makeText(context, context.getString(R.string.draft_published), Toast.LENGTH_SHORT).show();
-                                                broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_PUBLISH_TASK));
-                                            }
+                                            Toast.makeText(context, context.getString(R.string.draft_published), Toast.LENGTH_SHORT).show();
+                                            broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_PUBLISH_TASK));
+                                        }
+                                        else
+                                        {
+                                            Toast.makeText(context, context.getString(R.string.draft_publish_fail), Toast.LENGTH_SHORT).show();
+                                            broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR, response.code()));
+                                        }
+                                    }
 
-                                            @Override
-                                            public void draftTaskFailure(int statusCode)
-                                            {
-                                                Toast.makeText(context, context.getString(R.string.draft_publish_fail), Toast.LENGTH_SHORT).show();
-                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR, statusCode));
-                                            }
-                                        });
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        Toast.makeText(context, context.getString(R.string.draft_publish_fail), Toast.LENGTH_SHORT).show();
+                                        broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR, 400));
+
+                                    }
+                                });
+
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -300,27 +306,28 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                 
                                 broadcastManager.sendBroadcast(draftBroadcast());
                                 Log.i(TAG, "Creating Draft");
-                                
-                                GodToolsApiClient.createDraft(settings.getString(AUTH_DRAFT, ""),
-                                        languagePrimary,
-                                        currentPackage.getCode(),
-                                        new DraftCreationTask.DraftTaskHandler()
+                                GodToolsApi.INSTANCE.createDraft(settings.getString(AUTH_DRAFT, ""), languagePrimary, currentPackage.getCode(), false).enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if(response.isSuccessful()) {
+                                            Toast.makeText(context.getApplicationContext(), context.getString(R.string.draft_created), Toast.LENGTH_SHORT).show();
+                                            broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_CREATION_TASK));
+                                        }
+                                        else
                                         {
-                                            @Override
-                                            public void draftTaskComplete()
-                                            {
-                                                Toast.makeText(context.getApplicationContext(), context.getString(R.string.draft_created), Toast.LENGTH_SHORT).show();
-                                                broadcastManager.sendBroadcast(stopBroadcast(Type.DRAFT_CREATION_TASK));
-                                            }
+                                            Toast.makeText(context.getApplicationContext(), context.getString(R.string.draft_create_failed), Toast.LENGTH_SHORT).show();
+                                            broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR, response.code()));
+                                        }
+                                    }
 
-                                            @Override
-                                            public void draftTaskFailure(int code)
-                                            {
-                                                Toast.makeText(context.getApplicationContext(), context.getString(R.string.draft_create_failed), Toast.LENGTH_SHORT).show();
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        Toast.makeText(context.getApplicationContext(), context.getString(R.string.draft_create_failed), Toast.LENGTH_SHORT).show();
 
-                                                broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR, code));
-                                            }
-                                        });
+                                        broadcastManager.sendBroadcast(stopBroadcast(Type.ERROR, 400));
+                                    }
+                                });
+
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
                                 dialogInterface.cancel();

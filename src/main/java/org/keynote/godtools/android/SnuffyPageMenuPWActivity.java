@@ -31,7 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//@TODO: look into this
 public class SnuffyPageMenuPWActivity extends ListActivity {
     private static final String TAG = "SnuffyPageMenuActivity";
     final List<HashMap<String, Object>> mList = new ArrayList<HashMap<String, Object>>(2);

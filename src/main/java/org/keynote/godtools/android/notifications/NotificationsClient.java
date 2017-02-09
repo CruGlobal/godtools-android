@@ -5,13 +5,18 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import org.keynote.godtools.android.http.GodToolsApiClient;
-import org.keynote.godtools.android.http.NotificationUpdateTask;
+import org.keynote.godtools.android.api.GodToolsApi;
+import org.keynote.godtools.android.business.GTNotificationRegister;
 import org.keynote.godtools.android.utils.Constants;
 
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by ryancarlson on 7/20/15.
@@ -39,20 +44,26 @@ public class NotificationsClient
         String registrationId = NotificationUtilities.getStoredRegistrationId(context, userSettings);
 
         // send notification update each time app is used for notification type 1
-        GodToolsApiClient.updateNotification(authorization,registrationId, NotificationInfo.NOT_USED_2_WEEKS, new NotificationUpdateTask.NotificationUpdateTaskHandler()
+        GTNotificationRegister gtNotificationRegister = new GTNotificationRegister(registrationId, NotificationInfo.NOT_USED_2_WEEKS);
+        GodToolsApi.INSTANCE.updateNotification(authorization, gtNotificationRegister).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful())
                 {
-                    @Override
-                    public void registrationComplete(String regId)
-                    {
-                        Log.i(NotificationInfo.NOTIFICATION_TAG, "Used Notification notice sent to API");
-                    }
+                    Log.i(NotificationInfo.NOTIFICATION_TAG, "Used Notification notice sent to API");
+                }
+                else
+                {
+                    Log.e(NotificationInfo.NOTIFICATION_TAG, "Used notification notice failed to send to API");
+                }
+            }
 
-                    @Override
-                    public void registrationFailed()
-                    {
-                        Log.e(NotificationInfo.NOTIFICATION_TAG, "Used notification notice failed to send to API");
-                    }
-                });
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e(NotificationInfo.NOTIFICATION_TAG, "Used notification notice failed to send to API");
+            }
+        });
+
     }
 
     public void startTimerForTrackingAppUsageTime()
@@ -77,21 +88,28 @@ public class NotificationsClient
     {
         String authorization = userSettings.getString(Constants.AUTH_CODE,"");
         String registrationId = NotificationUtilities.getStoredRegistrationId(context, userSettings);
-
-        GodToolsApiClient.updateNotification(authorization, registrationId, NotificationInfo.AFTER_3_USES, new NotificationUpdateTask.NotificationUpdateTaskHandler()
+        GTNotificationRegister gtNotificationRegister = new GTNotificationRegister(registrationId, NotificationInfo.AFTER_3_USES);
+        GodToolsApi.INSTANCE.updateNotification(authorization, gtNotificationRegister).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful())
                 {
-                    @Override
-                    public void registrationComplete(String regId)
-                    {
-                        Log.i(NotificationInfo.NOTIFICATION_TAG, "3 Uses Notification notice sent to API");
-                    }
+                    Log.i(NotificationInfo.NOTIFICATION_TAG, "3 Uses Notification notice sent to API");
+                }
+                else
+                {
+                    Log.e(NotificationInfo.NOTIFICATION_TAG, "3 Uses notification notice failed to send to API");
+                }
+            }
 
-                    @Override
-                    public void registrationFailed()
-                    {
-                        Log.e(NotificationInfo.NOTIFICATION_TAG, "3 Uses notification notice failed to send to API");
-                    }
-                });
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e(NotificationInfo.NOTIFICATION_TAG, "3 Uses notification notice failed to send to API");
+                t.printStackTrace();
+
+            }
+        });
+
     }
 
     private boolean isAppInForeground()

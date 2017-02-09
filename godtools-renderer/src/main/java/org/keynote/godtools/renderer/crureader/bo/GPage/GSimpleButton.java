@@ -36,10 +36,10 @@ public class GSimpleButton extends GBaseButtonAttributes {
                     inflate = inflater.inflate(R.layout.g_button_url, viewGroup);
                     defaultColor(position);
                     break;
-                case allurl: //TODO: rm
+                case allurl:
                     inflate = inflater.inflate(R.layout.g_button_url, viewGroup);
                     break;
-                case email: //TODO: rm
+                case email:
                     inflate = inflater.inflate(R.layout.g_button_url, viewGroup);
                     break;
                 case link:
@@ -78,12 +78,10 @@ public class GSimpleButton extends GBaseButtonAttributes {
 
     @Commit
     public void internal_addToAllUrls() {
-        Log.i(TAG, "GSimpleButton Commit");
         if (mode != null && mode == ButtonMode.url)
         {
             if(content != null)
             {
-                Log.i(TAG, "GSimpleButtonCommit -- Button Text: " + content);
                 RenderSingleton.getInstance().urls.add(content);
             }
         }

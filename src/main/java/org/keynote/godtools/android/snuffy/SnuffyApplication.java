@@ -3,7 +3,6 @@ package org.keynote.godtools.android.snuffy;
 import android.os.Environment;
 
 import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.core.CrashlyticsCore;
 import com.newrelic.agent.android.NewRelic;
 
 import org.keynote.godtools.android.BuildConfig;
@@ -22,20 +21,8 @@ public class SnuffyApplication extends RenderApp {
         super.onCreate();
 
         // Enable crash reporting
-        // Set up Crashlytics, disabled for debug builds
-
-//        Crashlytics crashlyticsKit = new Crashlytics.Builder()
-//                .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
-//                .build();
-
-        Crashlytics crashlyticsKit = new Crashlytics.Builder()
-                .core(new CrashlyticsCore.Builder().build())
-                .build();
-        // Initialize Fabric with the debug-disabled crashlytics.
-        Fabric.with(this, crashlyticsKit);
-
+        Fabric.with(this, new Crashlytics());
         NewRelic.withApplicationToken(BuildConfig.NEW_RELIC_API_KEY).start(this);
-
     }
 
     @Override
@@ -63,10 +50,4 @@ public class SnuffyApplication extends RenderApp {
         }
         return documentsDir;
     }
-
-//    @Override
-//    protected void attachBaseContext(Context base) {
-//        super.attachBaseContext(base);
-//        MultiDex.install(this);
-//    }
 }

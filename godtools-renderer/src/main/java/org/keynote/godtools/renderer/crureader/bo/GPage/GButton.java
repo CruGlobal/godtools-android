@@ -2,7 +2,6 @@ package org.keynote.godtools.renderer.crureader.bo.GPage;
 
 import android.graphics.Color;
 import android.os.Build;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,12 +22,10 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Commit;
 
 @Root(name = "button")
 public class GButton extends GBaseButtonAttributes {
 
-    public static final int BACKGROUND_COLOR_KEY = "background".hashCode();
 
     private static final String TAG = "GButton";
 
@@ -139,38 +136,18 @@ public class GButton extends GBaseButtonAttributes {
 
     }
 
-    @Commit
-    public void internal_addToAllUrls() {
-        Log.i(TAG, "GButton Commit");
-        if (mode != null && mode != ButtonMode.big) {
-            if(buttonText != null)
-            {
-                Log.i(TAG, "GButtonComplexConverter -- Button Text: " + buttonText.content);
-            }
-            else
-            {
-                Log.i(TAG, "GButtonComplexConverter -- Button Text as content: " + text);
-            }
-        }
-    }
-
 
     private int methodBig(LayoutInflater inflater, ViewGroup viewGroup, final int position) {
 
-        int imageId = 0;
         String imageContent = null;
         buttonText.textalign = "center";
         View buttonLayout = inflater.inflate(R.layout.g_big_button, viewGroup);
         final LinearLayout outerLayout = (LinearLayout) buttonLayout.findViewById(R.id.g_big_button_outer_linearlayout);
         FrameLayout imageFrame = (FrameLayout) buttonLayout.findViewById(R.id.g_big_button_image_framelayout);
-//
-//        if (!firstElementInList) {
-//            imageFrame.removeAllViews();
-//        }
+
         imageFrame.setId(RenderViewCompat.generateViewId());
         if (image != null) {
             imageContent = image.content;
-            imageId = image.render(inflater, imageFrame, position);
 
         }
 

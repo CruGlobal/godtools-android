@@ -25,7 +25,7 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.http.DownloadTask;
-import org.keynote.godtools.android.http.GodToolsApiClient;
+import org.keynote.godtools.android.http.PackageDownloadHelper;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.tasks.DeletedPackageRemovalTask;
 import org.keynote.godtools.android.utils.Device;
@@ -238,7 +238,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
                 if(isTranslator)
                 {
-                    GodToolsApiClient.downloadDrafts((SnuffyApplication) getApplication(),
+                    PackageDownloadHelper.downloadDrafts((SnuffyApplication) getApplication(),
                             settings.getString(AUTH_DRAFT,""),
                             selectedLanguage.getLanguageCode(),
                             "draft",
@@ -246,7 +246,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 }
                 else
                 {
-                    GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                    PackageDownloadHelper.downloadLanguagePack((SnuffyApplication) getApplication(),
                             selectedLanguage.getLanguageCode(),
                             "primary",
                             this);
@@ -275,7 +275,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 currentView.tvDownload.setText(R.string.downloading);
                 currentView.pbDownloading.setVisibility(View.VISIBLE);
 
-                GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+                PackageDownloadHelper.downloadLanguagePack((SnuffyApplication) getApplication(),
                         selectedLanguage.getLanguageCode(),
                         KEY_PRIMARY,
                         this);
@@ -345,7 +345,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
             currentView.tvDownload.setText(R.string.downloading);
 
-            GodToolsApiClient.downloadLanguagePack((SnuffyApplication) getApplication(),
+            PackageDownloadHelper.downloadLanguagePack((SnuffyApplication) getApplication(),
                     language.getLanguageCode(),
                     "primary",
                     this);

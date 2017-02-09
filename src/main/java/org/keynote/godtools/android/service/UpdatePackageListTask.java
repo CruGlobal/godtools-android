@@ -4,25 +4,23 @@ import android.util.Log;
 
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 
-import java.io.InputStream;
 import java.util.List;
 
 public class UpdatePackageListTask
 {
     private static final String TAG = "UpdatePackageListTask";
 
-    public static void run(InputStream is, DBAdapter adapter)
-    {
-        Log.i(TAG, "Update Package List Backgroupd");
-
-        List<GTLanguage> languageList = GTPackageReader.processMetaResponse(is);
-
-        run(languageList, adapter);
-    }
+//    public static void run(InputStream is, DBAdapter adapter)
+//    {
+//        Log.i(TAG, "Update Package List Backgroupd");
+//
+//        List<GTLanguage> languageList = GTPackageReader.processMetaResponse(is);
+//
+//        run(languageList, adapter);
+//    }
 
     public static void run(List<GTLanguage> languageList, DBAdapter adapter)
     {
@@ -30,7 +28,7 @@ public class UpdatePackageListTask
 
         for (GTLanguage languageFromMetaDownload : languageList)
         {
-            adapter.updateOrInsert(languageFromMetaDownload, GTLanguageTable.COL_NAME, GTLanguageTable.COL_DRAFT);
+            adapter.updateOrInsert(languageFromMetaDownload, GTLanguageTable.COL_NAME/*, GTLanguageTable.COL_DRAFT*/);
 
             GTLanguage languageRetrievedFromDatabase = adapter.refresh(languageFromMetaDownload);
             if(languageRetrievedFromDatabase != null) {

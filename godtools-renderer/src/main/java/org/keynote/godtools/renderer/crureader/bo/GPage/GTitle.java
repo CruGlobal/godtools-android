@@ -64,19 +64,11 @@ public class GTitle extends GCoordinator {
 
                 //TODO: revert this back to original approach
                 if (RenderViewCompat.SDK_LOLLIPOP) {
-                    Log.i(TAG, "SDK Kit Kat or higher");
                     final OptRoundCardView headerTopRoundCardView = (OptRoundCardView) tempRoot.findViewById(R.id.g_header_peek_outerlayout_optroundcardview);
                     final OptRoundCardView peekPanelRoundCardView = (OptRoundCardView) tempRoot.findViewById(R.id.g_header_peek_peeklayout_optroundcardview);
                     final AutoScaleTextView autoScaleTextView = (AutoScaleTextView) tempRoot.findViewById(R.id.g_header_peak_peak_textview);
                     final TextView peekCliffTextView = (TextView)tempRoot.findViewById(R.id.g_header_peak_cliff);
 
-                /*LayoutTransition layoutTransition = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-                    layoutTransition = peekPanelRoundCardView.getLayoutTransition();
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
-                }*/
 
                     autoScaleTextView.setId(RenderViewCompat.generateViewId());
                     peekPanelRoundCardView.setId(RenderViewCompat.generateViewId());
@@ -109,7 +101,6 @@ public class GTitle extends GCoordinator {
                     if (autoScaleTextView != null)
                         autoScaleTextView.setVisibility(View.GONE);
                 } else {
-                    Log.i(TAG, "SDK less than Kit Kat");
                     final FrameLayout headerTopRoundCardView = (FrameLayout) tempRoot.findViewById(R.id.g_header_peek_outerlayout_optroundcardview);
                     headerTopRoundCardView.setId(RenderViewCompat.generateViewId());
                     View peekView = inflater.inflate(R.layout.g_peek_panel_cliff, viewGroup);

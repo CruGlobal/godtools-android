@@ -27,9 +27,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
+import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
+import org.keynote.godtools.android.business.GTLanguages;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
@@ -37,8 +39,6 @@ import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.DownloadTask;
-import org.keynote.godtools.android.http.GodToolsApiClient;
-import org.keynote.godtools.android.http.MetaTask;
 import org.keynote.godtools.android.model.HomescreenLayout;
 import org.keynote.godtools.android.notifications.GoogleCloudMessagingClient;
 import org.keynote.godtools.android.notifications.NotificationsClient;
@@ -50,6 +50,10 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Util.TypefaceUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
 import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
@@ -57,7 +61,6 @@ import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KEY_PARALLEL;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
 import static org.keynote.godtools.android.utils.Constants.KGP;
-import static org.keynote.godtools.android.utils.Constants.META;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
@@ -65,7 +68,7 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
 public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
         DownloadTask.DownloadTaskHandler,
-        MetaTask.MetaTaskHandler,
+
         View.OnClickListener {
     private static final String TAG = "MainPW";
     private static final int REQUEST_SETTINGS = 1001;
@@ -123,7 +126,19 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         if (!isFirstLaunch()) {
             showLoading();
-            GodToolsApiClient.getListOfPackages(META, this);
+            GodToolsApi.INSTANCE.getListOfPackages().enqueue(new Callback<GTLanguages>() {
+                @Override
+                public void onResponse(Call<GTLanguages> call, Response<GTLanguages> response) {
+
+                    UpdatePackageListTask.run(response.body().mLanguages, DBAdapter.getInstance(MainPW.this));
+                    hideLoading();
+                }
+
+                @Override
+                public void onFailure(Call<GTLanguages> call, Throwable t) {
+                    hideLoading();
+                }
+            });
             settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
         }
 
@@ -432,17 +447,17 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         return (SnuffyApplication) getApplication();
     }
 
-    @Override
-    public void metaTaskComplete(List<GTLanguage> languageList, String tag) {
-        UpdatePackageListTask.run(languageList, DBAdapter.getInstance(this));
-
-        hideLoading();
-    }
-
-    @Override
-    public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode) {
-        hideLoading();
-    }
+//    @Override
+//    public void metaTaskComplete(List<GTLanguage> languageList, String tag) {
+//        UpdatePackageListTask.run(languageList, DBAdapter.getInstance(this));
+//
+//        hideLoading();
+//    }
+//
+//    @Override
+//    public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode) {
+//        hideLoading();
+//    }
 
     @Override
     public void downloadTaskComplete(String url, String filePath, String langCode, String tag) {
