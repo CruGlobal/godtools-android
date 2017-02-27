@@ -22,7 +22,8 @@
                 android:background="@color/gray_E6"
                 android:scaleType="centerCrop"
                 app:layout_aspectRatio="210%"
-                app:layout_widthPercent="100%" />
+                app:layout_widthPercent="100%"
+                tools:src="@drawable/bk_coast" />
 
             <ProgressBar
                 android:id="@+id/download_progress"
