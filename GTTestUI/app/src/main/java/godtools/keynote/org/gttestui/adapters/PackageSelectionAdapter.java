@@ -15,7 +15,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import godtools.keynote.org.gttestui.R;
-import godtools.keynote.org.gttestui.R2;
 
 /**
  * Created by rmatt on 2/15/2017.
@@ -53,17 +52,17 @@ public class PackageSelectionAdapter extends RecyclerView.Adapter<PackageSelecti
     public static class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
-        @BindView(R2.id.list_item_package_selection_card_view)
+        @BindView(R.id.list_item_package_selection_card_view)
         CardView listItemPackageSelectionCardView;
-        @BindView(R2.id.list_item_package_selection_rich_media_image_view)
+        @BindView(R.id.list_item_package_selection_rich_media_image_view)
         ImageView listItemPackageSelectionRichMediaImageView;
-        @BindView(R2.id.list_item_package_selection_package_title_textview)
+        @BindView(R.id.list_item_package_selection_package_title_textview)
         TextView listItemPackageSelectionPackageTitleTextview;
-        @BindView(R2.id.list_item_package_selection_shares_textview)
+        @BindView(R.id.list_item_package_selection_shares_textview)
         TextView listItemPackageSelectionSharesTextview;
-        @BindView(R2.id.list_item_package_selection_switch_language_imageview)
+        @BindView(R.id.list_item_package_selection_switch_language_imageview)
         ImageButton listItemPackageSelectionSwitchLanguageImageview;
-        @BindView(R2.id.list_item_package_selection_info_imageview)
+        @BindView(R.id.list_item_package_selection_info_imageview)
         ImageButton listItemPackageSelectionInfoImageview;
 
         public ViewHolder(View view) {

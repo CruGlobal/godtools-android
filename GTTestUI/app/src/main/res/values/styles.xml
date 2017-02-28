@@ -16,6 +16,8 @@
             @color/colorBackground
         </item>
 
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+
 
     </style>
 
