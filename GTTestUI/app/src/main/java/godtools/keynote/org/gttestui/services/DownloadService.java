@@ -33,10 +33,10 @@ public class DownloadService extends IntentService {
 
         String dataString = workIntent.getDataString();
 
-        for (int i = 0; i < 100; i+=2) {
+        for (int i = 0; i <= 100; i+=2) {
             //Sample reporting
             try {
-                Thread.sleep(100);
+                Thread.sleep(1000);
 
                 Intent localIntent =
                         new Intent(DownloadService.DOWNLOAD_BROADCAST_ACTION)
