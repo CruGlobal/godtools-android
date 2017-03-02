@@ -19,9 +19,16 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".HelpActivity"
+            android:theme="@style/Popin"/>
+
         <service
             android:name=".services.DownloadService"
             android:exported="false"/>
+
+        <activity android:name=".Splash">
+        </activity>
     </application>
 
 </manifest>
