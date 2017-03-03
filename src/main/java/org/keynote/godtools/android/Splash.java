@@ -23,6 +23,7 @@ import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.PackageDownloadHelper;
+import org.keynote.godtools.android.newnew.activity.MainActivity;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
@@ -188,7 +189,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
             settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
         }
 
-        Intent intent = new Intent(this, MainPW.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }
@@ -227,7 +228,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         language.setLanguageCode(langCode);
         language.setDownloaded(true);
         GodToolsDao.getInstance(this).updateAsync(language, GTLanguageTable.COL_DOWNLOADED);
-
+        settings.edit().putString(GTLanguage.KEY_PRIMARY, langCode).apply();
         goToMainActivity();
     }
 

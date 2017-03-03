@@ -48,6 +48,8 @@ dependencies {
     compile "com.android.support:cardview-v7:${deps.androidSupport}"
     compile "com.android.support:customtabs:${deps.androidSupport}"
     compile 'com.android.support:design:' + deps.androidSupport
+    compile "com.android.support:preference-v7:${deps.androidSupport}"
+    compile "com.android.support:support-v4:${deps.androidSupport}"
 
     compile 'com.google.android.gms:play-services-analytics:' + deps.playServices
     compile 'com.google.android.gms:play-services-gcm:' + deps.playServices

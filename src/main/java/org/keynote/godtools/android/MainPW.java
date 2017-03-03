@@ -36,12 +36,11 @@ import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.everystudent.EveryStudent;
-import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.model.HomescreenLayout;
-import org.keynote.godtools.android.notifications.GoogleCloudMessagingClient;
-import org.keynote.godtools.android.notifications.NotificationsClient;
+import org.keynote.godtools.android.newnew.activity.MainActivity;
+import org.keynote.godtools.android.newnew.adapters.OnPackageSelectedListener;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.support.v4.content.LivePackagesLoader;
@@ -66,7 +65,7 @@ import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
 
-public class MainPW extends BaseActionBarActivity implements PackageListFragment.OnPackageSelectedListener,
+public class MainPW extends BaseActionBarActivity implements OnPackageSelectedListener,
         DownloadTask.DownloadTaskHandler,
 
         View.OnClickListener {
@@ -144,17 +143,20 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         showLayoutsWithPackages();
 
-        GoogleCloudMessagingClient googleCloudMessagingClient = GoogleCloudMessagingClient.getInstance(getApplicationContext(),
-                (SnuffyApplication) getApplication(),
-                this,
-                settings);
+//        GoogleCloudMessagingClient googleCloudMessagingClient = GoogleCloudMessagingClient.getInstance(getApplicationContext(),
+//                (SnuffyApplication) getApplication(),
+//                this,
+//                settings);
+//
+//        NotificationsClient notificationsClient = NotificationsClient.getInstance(getApplicationContext(), settings);
+//
+//        googleCloudMessagingClient.registerForNotificationsIfNecessary(TAG);
+//
+//        notificationsClient.sendLastUsageUpdateToGodToolsAPI();
+//        notificationsClient.startTimerForTrackingAppUsageTime();
 
-        NotificationsClient notificationsClient = NotificationsClient.getInstance(getApplicationContext(), settings);
-
-        googleCloudMessagingClient.registerForNotificationsIfNecessary(TAG);
-
-        notificationsClient.sendLastUsageUpdateToGodToolsAPI();
-        notificationsClient.startTimerForTrackingAppUsageTime();
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
     }
 
     void onLoadPackages(@Nullable final List<GTPackage> packages) {
@@ -290,6 +292,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
             case R.id.homescreen_settings:
                 onCmd_settings();
                 return true;
@@ -300,6 +303,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -373,29 +377,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         setSupportProgressBarIndeterminateVisibility(true);
     }
 
-    @Override
-    public void onPackageSelected(final GTPackage gtPackage) {
-        if (gtPackage.getCode().equalsIgnoreCase("everystudent")) {
-            Intent intent = new Intent(this, EveryStudent.class);
-            intent.putExtra("PackageName", gtPackage.getCode());
-            startActivity(intent);
-            return;
-        }
 
-        Intent intent = new Intent(this, SnuffyPWActivity.class);
-
-        intent.putExtra("PackageName", gtPackage.getCode());
-        intent.putExtra("LanguageCode", gtPackage.getLanguage());
-        intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
-        intent.putExtra("Status", gtPackage.getStatus());
-        Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(this, android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            startActivity(intent, bundle);
-        } else {
-            startActivity(intent);
-        }
-
-    }
 
     @Override
     public void onClick(View view) {
@@ -405,7 +387,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
                 if (view.getId() == gtPackage.getLayout().getLayout().getId()) {
                     Log.i(TAG, "clicked: " + gtPackage.getCode());
-                    onPackageSelected(gtPackage);
+                    onPackageSelected(gtPackage, false);
                     break;
                 }
             }
@@ -488,6 +470,30 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         }
 
         hideLoading();
+    }
+
+    @Override
+    public void onPackageSelected(GTPackage gtPackage, boolean details) {
+        if (gtPackage.getCode().equalsIgnoreCase("everystudent")) {
+            Intent intent = new Intent(this, EveryStudent.class);
+            intent.putExtra("PackageName", gtPackage.getCode());
+            startActivity(intent);
+            return;
+        }
+
+        Intent intent = new Intent(this, SnuffyPWActivity.class);
+
+        intent.putExtra("PackageName", gtPackage.getCode());
+        intent.putExtra("LanguageCode", gtPackage.getLanguage());
+        intent.putExtra("ConfigFileName", gtPackage.getConfigFileName());
+        intent.putExtra("Status", gtPackage.getStatus());
+        Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(this, android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            startActivity(intent, bundle);
+        } else {
+            startActivity(intent);
+        }
+
     }
 
     private class PackagesLoaderCallbacks extends SimpleLoaderCallbacks<List<GTPackage>> {

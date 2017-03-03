@@ -78,4 +78,5 @@
 
         <View style="@style/Widget.GodTools2.Settings.Language.Spacer" />
     </LinearLayout>
+
 </android.support.v4.widget.NestedScrollView>

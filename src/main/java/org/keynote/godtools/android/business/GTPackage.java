@@ -1,5 +1,7 @@
 package org.keynote.godtools.android.business;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -9,11 +11,12 @@ import org.keynote.godtools.android.model.HomescreenLayout;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.regex.Pattern;
 
 @Root(name="package")
-public class GTPackage {
+public class GTPackage implements Parcelable, Serializable {
     public static final String EVERYSTUDENT_PACKAGE_CODE = "everystudent";
 
     public static final String INVALID_CODE = "";
@@ -136,6 +139,8 @@ public class GTPackage {
         this.available = available;
     }
 
+
+
     /**
      * @param other the package to compare versions against
      * @return an integer < 0 if the version of this package is less than the version of {@code other}, 0 if they are
@@ -163,4 +168,42 @@ public class GTPackage {
             return 0;
         }
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.name);
+        dest.writeString(this.language);
+        dest.writeString(this.configFileName);
+        dest.writeString(this.code);
+        dest.writeString(this.version);
+        dest.writeString(this.status);
+        dest.writeByte(this.available ? (byte) 1 : (byte) 0);
+    }
+
+    protected GTPackage(Parcel in) {
+        this.name = in.readString();
+        this.language = in.readString();
+        this.configFileName = in.readString();
+        this.code = in.readString();
+        this.version = in.readString();
+        this.status = in.readString();
+        this.available = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<GTPackage> CREATOR = new Parcelable.Creator<GTPackage>() {
+        @Override
+        public GTPackage createFromParcel(Parcel source) {
+            return new GTPackage(source);
+        }
+
+        @Override
+        public GTPackage[] newArray(int size) {
+            return new GTPackage[size];
+        }
+    };
 }

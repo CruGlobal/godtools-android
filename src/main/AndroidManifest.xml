@@ -3,8 +3,8 @@
     package="org.keynote.godtools.android">
 
     <supports-screens
-        android:smallScreens="false"
-        android:resizeable="false"/>
+        android:resizeable="false"
+        android:smallScreens="false"/>
 
     <!-- These permissions should be obvious -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -48,8 +48,8 @@
             android:name=".MainPW"
             android:launchMode="singleTop"
             android:screenOrientation="userPortrait"/>
-        
-        <activity 
+
+        <activity
             android:name=".PreviewModeMainPW"
             android:launchMode="singleTop"
             android:screenOrientation="userPortrait"/>
@@ -57,47 +57,47 @@
         <activity
             android:name=".SettingsPW"
             android:label="@string/settings_title"
-            android:screenOrientation="userPortrait"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainPW">
+            android:parentActivityName=".MainPW"
+            android:screenOrientation="userPortrait">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.keynote.godtools.android.MainPW" />
+                android:value="org.keynote.godtools.android.MainPW"/>
 
         </activity>
 
         <activity
             android:name=".SelectLanguagePW"
             android:label="Select Language"
-            android:screenOrientation="userPortrait"
-            android:parentActivityName="org.keynote.godtools.android.SettingsPW">
+            android:parentActivityName="org.keynote.godtools.android.SettingsPW"
+            android:screenOrientation="userPortrait">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.keynote.godtools.android.SettingsPW" />
+                android:value="org.keynote.godtools.android.SettingsPW"/>
 
         </activity>
 
         <activity
             android:name=".everystudent.EveryStudent"
             android:label="@string/app_name_everystudent"
-            android:theme="@android:style/Theme.Light" />
+            android:theme="@android:style/Theme.Light"/>
         <activity
             android:name=".everystudent.EveryStudentView"
             android:label="@string/app_name_everystudent"
-            android:theme="@android:style/Theme.Light" />
+            android:theme="@android:style/Theme.Light"/>
         <activity
             android:name=".everystudent.EveryStudentSearchResults"
             android:label="@string/app_name_everystudent"
             android:theme="@android:style/Theme.Light">
             <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
+                <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
+                android:resource="@xml/searchable"/>
         </activity>
 
         <activity
@@ -153,11 +153,11 @@
 
         <provider
             android:name=".everystudent.EveryStudentProvider"
-            android:authorities="@string/every_student_authority" />
+            android:authorities="@string/every_student_authority"/>
 
         <meta-data
             android:name="android.app.default_searchable"
-            android:value=".everystudent.EveryStudentSearchResults" />
+            android:value=".everystudent.EveryStudentSearchResults"/>
 
         <activity
             android:name=".snuffy.SnuffyAboutActivity"
@@ -166,7 +166,7 @@
         <activity
             android:name=".snuffy.SnuffyHelpActivity"
             android:screenOrientation="userPortrait"
-            android:theme="@android:style/Theme.Dialog" />
+            android:theme="@android:style/Theme.Dialog"/>
 
         <activity
             android:name=".SnuffyPWActivity"
@@ -175,29 +175,34 @@
         <activity
             android:name=".SnuffyPageMenuPWActivity"
             android:screenOrientation="userPortrait"
-            android:theme="@android:style/Theme.Light" />
+            android:theme="@android:style/Theme.Light"/>
 
-        <receiver android:name=".notifications.GcmBroadcastReceiver"
-                  android:permission="com.google.android.c2dm.permission.SEND" >
+        <receiver
+            android:name=".notifications.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="org.keynote.godtools.android" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <category android:name="org.keynote.godtools.android"/>
             </intent-filter>
         </receiver>
 
-        <service android:name=".notifications.GcmIntentService" />
+        <service android:name=".notifications.GcmIntentService"/>
 
-        <service android:name=".service.BackgroundService"
-                 android:exported="false" />
+        <service
+            android:name=".service.BackgroundService"
+            android:exported="false"/>
 
         <service
             android:name=".sync.GodToolsSyncService"
             android:exported="false"/>
 
-        <meta-data android:name="com.google.android.gms.version"
-                   android:value="@integer/google_play_services_version" />
+        <service android:name=".newnew.services.DownloadService"/>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="4c6c9eb55214633c5eca4176c06b20bb8fd07a72" />
+            android:value="4c6c9eb55214633c5eca4176c06b20bb8fd07a72"/>
     </application>
 </manifest>

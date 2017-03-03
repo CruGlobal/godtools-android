@@ -2,6 +2,7 @@ package org.keynote.godtools.android.support.v4.content;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.common.collect.FluentIterable;
 
@@ -47,6 +48,8 @@ public class LivePackagesLoader extends AsyncTaskSharedPreferencesChangeLoader<L
 
     @Override
     public List<GTPackage> loadInBackground() {
+
+        Log.i("DoIt", "DoIt");
         // load packages for the selected language first
         final String language = mPrefs.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
         final List<GTPackage> packages = mDao.get(BASE_QUERY.where(BASE_WHERE.args(language)));

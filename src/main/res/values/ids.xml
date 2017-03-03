@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item type="id" name="tag_gt_model_view_holder"/>
+    <item name="is_info_button" type="id"/>
 </resources>
