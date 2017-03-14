@@ -103,11 +103,7 @@ public class DownloadService extends IntentService {
             Crashlytics.logException(new Exception("unable to get temporary directory for download: " + dsBO.getUrl()));
             return false;
         }
-        try {
-            Thread.sleep(15000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         sendProgress(dsBO.getLangCode(), 5);
 
         // download & extract zip file to tmp directory
