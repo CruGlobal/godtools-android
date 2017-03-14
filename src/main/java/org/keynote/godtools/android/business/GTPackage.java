@@ -15,8 +15,11 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.regex.Pattern;
 
-@Root(name="package")
+@Root(name = "package")
 public class GTPackage implements Parcelable, Serializable {
+
+    public static final String TAG = "GTPackage";
+
     public static final String EVERYSTUDENT_PACKAGE_CODE = "everystudent";
 
     public static final String INVALID_CODE = "";
@@ -25,9 +28,6 @@ public class GTPackage implements Parcelable, Serializable {
     public static final String STATUS_DRAFT = "draft";
 
     public static final String DEFAULT_VERSION = "0";
-
-    private static final Pattern PATTERN_VERSION = Pattern.compile("[0-9]+(?:\\.[0-9]+)*");
-
     public static final Function<GTPackage, String> FUNCTION_CODE = new Function<GTPackage, String>() {
         @Nullable
         @Override
@@ -35,31 +35,47 @@ public class GTPackage implements Parcelable, Serializable {
             return input != null ? input.code : null;
         }
     };
+    public static final Parcelable.Creator<GTPackage> CREATOR = new Parcelable.Creator<GTPackage>() {
+        @Override
+        public GTPackage createFromParcel(Parcel source) {
+            return new GTPackage(source);
+        }
+
+        @Override
+        public GTPackage[] newArray(int size) {
+            return new GTPackage[size];
+        }
+    };
+    private static final Pattern PATTERN_VERSION = Pattern.compile("[0-9]+(?:\\.[0-9]+)*");
     private static final Comparator<GTPackage> COMPARATOR_VERSION = new VersionComparator();
-
-    private String name;
-    private String language;
-    private String configFileName;
-
     @Attribute(name = "code", required = true)
     public String code;
-    @Attribute(name = "version", required = true, empty=DEFAULT_VERSION)
+    @Attribute(name = "version", required = true, empty = DEFAULT_VERSION)
     public String version;
     @Attribute(name = "status", required = true)
     public String status;
-
-
+    private String name;
+    private String language;
+    private String configFileName;
     private String icon;
     private HomescreenLayout layout;
-
     // in preview mode, all packages are shown; however, a package may not actually be available
     // to view.
     private boolean available;
 
     // set available to true as default
-    public GTPackage()
-    {
+    public GTPackage() {
         this.setAvailable(true);
+    }
+
+    protected GTPackage(Parcel in) {
+        this.name = in.readString();
+        this.language = in.readString();
+        this.configFileName = in.readString();
+        this.code = in.readString();
+        this.version = in.readString();
+        this.status = in.readString();
+        this.available = in.readByte() != 0;
     }
 
     public String getCode() {
@@ -119,27 +135,21 @@ public class GTPackage implements Parcelable, Serializable {
         this.icon = icon;
     }
 
-    public HomescreenLayout getLayout()
-    {
+    public HomescreenLayout getLayout() {
         return layout;
     }
 
-    public void setLayout(HomescreenLayout layout)
-    {
+    public void setLayout(HomescreenLayout layout) {
         this.layout = layout;
     }
 
-    public boolean isAvailable()
-    {
+    public boolean isAvailable() {
         return available;
     }
 
-    public void setAvailable(boolean available)
-    {
+    public void setAvailable(boolean available) {
         this.available = available;
     }
-
-
 
     /**
      * @param other the package to compare versions against
@@ -148,6 +158,22 @@ public class GTPackage implements Parcelable, Serializable {
      */
     public int compareVersionTo(@NonNull final GTPackage other) {
         return COMPARATOR_VERSION.compare(this, other);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.name);
+        dest.writeString(this.language);
+        dest.writeString(this.configFileName);
+        dest.writeString(this.code);
+        dest.writeString(this.version);
+        dest.writeString(this.status);
+        dest.writeByte(this.available ? (byte) 1 : (byte) 0);
     }
 
     static class VersionComparator implements Comparator<GTPackage> {
@@ -168,42 +194,4 @@ public class GTPackage implements Parcelable, Serializable {
             return 0;
         }
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.name);
-        dest.writeString(this.language);
-        dest.writeString(this.configFileName);
-        dest.writeString(this.code);
-        dest.writeString(this.version);
-        dest.writeString(this.status);
-        dest.writeByte(this.available ? (byte) 1 : (byte) 0);
-    }
-
-    protected GTPackage(Parcel in) {
-        this.name = in.readString();
-        this.language = in.readString();
-        this.configFileName = in.readString();
-        this.code = in.readString();
-        this.version = in.readString();
-        this.status = in.readString();
-        this.available = in.readByte() != 0;
-    }
-
-    public static final Parcelable.Creator<GTPackage> CREATOR = new Parcelable.Creator<GTPackage>() {
-        @Override
-        public GTPackage createFromParcel(Parcel source) {
-            return new GTPackage(source);
-        }
-
-        @Override
-        public GTPackage[] newArray(int size) {
-            return new GTPackage[size];
-        }
-    };
 }

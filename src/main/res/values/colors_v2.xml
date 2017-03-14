@@ -8,6 +8,7 @@
     <color name="colorAccent">#3DA4DB</color>
     <color name="colorBackground">#FFFFFF</color>
 
+    <color name="colorWhite">#FFFFFF</color>
     <!--Primary text 87%-->
     <color name="colorTextPrimary">#DD000000
     </color>

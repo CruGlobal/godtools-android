@@ -229,6 +229,12 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         language.setDownloaded(true);
         GodToolsDao.getInstance(this).updateAsync(language, GTLanguageTable.COL_DOWNLOADED);
         settings.edit().putString(GTLanguage.KEY_PRIMARY, langCode).apply();
+        //TODO: this changed
+
+        if(isFirstLaunch())
+        {
+            //goToLanguageSetup();
+        }
         goToMainActivity();
     }
 

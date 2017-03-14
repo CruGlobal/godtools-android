@@ -172,6 +172,8 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
                     outputStream.write(fileReader, 0, read);
 
                     fileSizeDownloaded += read;
+                    int percentDownloaded = Math.round((fileSizeDownloaded / fileSize) * 100);
+
 
                     Log.d(TAG, "file download: " + fileSizeDownloaded + " of " + fileSize);
                 }
