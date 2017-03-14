@@ -101,7 +101,7 @@ public class MainPW extends BaseActionBarActivity implements OnPackageSelectedLi
     public void onCreate(Bundle savedInstanceState) {
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+
 
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);

@@ -51,6 +51,7 @@ public class Constants
     public static final String LANGUAGE_PARALLEL = "languageParallel";
     public static final String ENGLISH_DEFAULT = "en";
 
+    public static final String PRODUCTION_PACKAGE_NAME = "org.keynote.godtools.android";
     /**
      * Place holder texts
      *
