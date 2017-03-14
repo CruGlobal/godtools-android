@@ -44,40 +44,40 @@
             <!--</intent-filter>-->
         <!--</activity>-->
 
-        <activity
-            android:name=".MainPW"
-            android:launchMode="singleTop"
-            android:screenOrientation="userPortrait"/>
+        <!--<activity-->
+            <!--android:name=".MainPW"-->
+            <!--android:launchMode="singleTop"-->
+            <!--android:screenOrientation="userPortrait"/>-->
 
-        <activity
-            android:name=".PreviewModeMainPW"
-            android:launchMode="singleTop"
-            android:screenOrientation="userPortrait"/>
+        <!--<activity-->
+            <!--android:name=".PreviewModeMainPW"-->
+            <!--android:launchMode="singleTop"-->
+            <!--android:screenOrientation="userPortrait"/>-->
 
-        <activity
-            android:name=".SettingsPW"
-            android:label="@string/settings_title"
-            android:launchMode="singleTop"
-            android:parentActivityName=".MainPW"
-            android:screenOrientation="userPortrait">
+        <!--<activity-->
+            <!--android:name=".SettingsPW"-->
+            <!--android:label="@string/settings_title"-->
+            <!--android:launchMode="singleTop"-->
+            <!--android:parentActivityName=".MainPW"-->
+            <!--android:screenOrientation="userPortrait">-->
 
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.keynote.godtools.android.MainPW"/>
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="org.keynote.godtools.android.MainPW"/>-->
 
-        </activity>
+        <!--</activity>-->
 
-        <activity
-            android:name=".SelectLanguagePW"
-            android:label="Select Language"
-            android:parentActivityName="org.keynote.godtools.android.SettingsPW"
-            android:screenOrientation="userPortrait">
+        <!--<activity-->
+            <!--android:name=".SelectLanguagePW"-->
+            <!--android:label="Select Language"-->
+            <!--android:parentActivityName="org.keynote.godtools.android.SettingsPW"-->
+            <!--android:screenOrientation="userPortrait">-->
 
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.keynote.godtools.android.SettingsPW"/>
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="org.keynote.godtools.android.SettingsPW"/>-->
 
-        </activity>
+        <!--</activity>-->
 
         <activity
             android:name=".everystudent.EveryStudent"

@@ -3,19 +3,25 @@ package org.keynote.godtools.android.newnew.services;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by rmatt on 3/14/2017.
- */
-
 public class DownloadServiceBO implements Parcelable {
 
 
+    public static final Parcelable.Creator<DownloadServiceBO> CREATOR = new Parcelable.Creator<DownloadServiceBO>() {
+        @Override
+        public DownloadServiceBO createFromParcel(Parcel source) {
+            return new DownloadServiceBO(source);
+        }
 
-    String url;
-    String filePath;
-    String tag;
-    String authorization;
-    String langCode;
+        @Override
+        public DownloadServiceBO[] newArray(int size) {
+            return new DownloadServiceBO[size];
+        }
+    };
+    private String url;
+    private String filePath;
+    private String tag;
+    private String authorization;
+    private String langCode;
 
     public DownloadServiceBO(String url, String filePath, String tag, String authorization, String langCode) {
         this.url = url;
@@ -70,14 +76,6 @@ public class DownloadServiceBO implements Parcelable {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.url);
-        dest.writeString(this.filePath);
-        dest.writeString(this.tag);
-        dest.writeString(this.authorization);
-        dest.writeString(this.langCode);
-    }
 
     protected DownloadServiceBO(Parcel in) {
         this.url = in.readString();
@@ -87,15 +85,26 @@ public class DownloadServiceBO implements Parcelable {
         this.langCode = in.readString();
     }
 
-    public static final Parcelable.Creator<DownloadServiceBO> CREATOR = new Parcelable.Creator<DownloadServiceBO>() {
-        @Override
-        public DownloadServiceBO createFromParcel(Parcel source) {
-            return new DownloadServiceBO(source);
-        }
 
-        @Override
-        public DownloadServiceBO[] newArray(int size) {
-            return new DownloadServiceBO[size];
-        }
-    };
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.url);
+        dest.writeString(this.filePath);
+        dest.writeString(this.tag);
+        dest.writeString(this.authorization);
+        dest.writeString(this.langCode);
+    }
+
+
+    @Override
+    public String toString() {
+        return "DownloadServiceBO{" +
+                "url='" + url + '\'' +
+                ", filePath='" + filePath + '\'' +
+                ", tag='" + tag + '\'' +
+                ", authorization='" + authorization + '\'' +
+                ", langCode='" + langCode + '\'' +
+                '}';
+    }
+
 }

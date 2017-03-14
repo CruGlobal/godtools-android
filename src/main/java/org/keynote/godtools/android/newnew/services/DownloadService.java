@@ -34,15 +34,16 @@ import retrofit2.Response;
 
 public class DownloadService extends IntentService {
 
-    public static final String DOWNLOAD_SERVICE_BO_KEY = "org.keynote.godtools.android.newnew.services";
-
+    public static final String DOWNLOAD_SERVICE_BO_KEY = "org.keynote.godtools.android.newnew.services.BO_KEY";
+    public static final String DOWNLOAD_COMPLETED_KEY = "org.keynote.godtools.android.newnew.services.DOWNLOAD_COMPLETED_KEY";
+    public static final String DOWNLOAD_SUCCESSFUL_KEY = "org.keynote.godtools.android.newnew.services.DOWNLOAD_SUCCESSFUL_KEY";
     public static final String DOWNLOAD_BROADCAST_ACTION =
             "godtools.keynote.org.gttestui.services.download_broadcast";
     // Defines the key for the status "extra" in an Intent
     public static final String DOWNLOAD_EXTENDED_DATA_PROGRESS =
             "godtools.keynote.org.gttestui.services.download_progress";
     private static final String TAG = "DownloadService";
-    private static final String DOWNLOAD_EXTENDED_DATA_LANGUAGE_CODE = "godtools.keynote.org.gttestui.services.language_code";
+    public static final String DOWNLOAD_EXTENDED_DATA_LANGUAGE_CODE = "godtools.keynote.org.gttestui.services.language_code";
 
     public DownloadService() {
         super("DownloadService");
@@ -63,9 +64,8 @@ public class DownloadService extends IntentService {
     protected void onHandleIntent(Intent workIntent) {
 
         DownloadServiceBO dsBO = workIntent.getParcelableExtra(DOWNLOAD_SERVICE_BO_KEY);
-        doInBackground(dsBO);
+        sendResult(dsBO, doInBackground(dsBO));
     }
-
 
     /*10% setup, 60% for download, 20% for unzip, 10% for delete and cleanup */
     protected void sendProgress(String langCode, int percent) {
@@ -74,6 +74,18 @@ public class DownloadService extends IntentService {
         // Puts the status into the Intent
         localIntent.putExtra(DOWNLOAD_EXTENDED_DATA_PROGRESS, percent);
         localIntent.putExtra(DOWNLOAD_EXTENDED_DATA_LANGUAGE_CODE, langCode);
+        // Broadcasts the Intent to receivers in this app.
+        LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
+
+    }
+
+    protected void sendResult(DownloadServiceBO dsBO, boolean successful) {
+        Intent localIntent =
+                new Intent(DownloadService.DOWNLOAD_BROADCAST_ACTION);
+        // Puts the status into the Intent
+        localIntent.putExtra(DOWNLOAD_COMPLETED_KEY, true);
+        localIntent.putExtra(DOWNLOAD_SUCCESSFUL_KEY, successful);
+        localIntent.putExtra(DOWNLOAD_SERVICE_BO_KEY, dsBO);
         // Broadcasts the Intent to receivers in this app.
         LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
 
@@ -162,11 +174,7 @@ public class DownloadService extends IntentService {
 
         } catch (Exception e) {
             // log any other exceptions encountered
-            Crashlytics.setString("url", dsBO.getUrl());
-            Crashlytics.setString("filePath", dsBO.getFilePath());
-            Crashlytics.setString("tag", dsBO.getTag());
-            Crashlytics.setString("authorization", dsBO.getAuthorization());
-            Crashlytics.setString("langCode", dsBO.getLangCode());
+            Crashlytics.setString("downloadParameters", dsBO.getTag().toString());
             Crashlytics.setString("downloadResponseStatus", Integer.toString(downloadResponseCode));
             Crashlytics.setString("downloadContentLength", Integer.toString(downloadContentLength));
 

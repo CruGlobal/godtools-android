@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 
 import com.google.common.base.Function;
 
+import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.model.HomescreenLayout;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -15,14 +16,16 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.regex.Pattern;
 
+import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
+import static org.keynote.godtools.android.utils.Constants.KGP;
+import static org.keynote.godtools.android.utils.Constants.SATISFIED;
+
 @Root(name = "package")
 public class GTPackage implements Parcelable, Serializable {
 
     public static final String TAG = "GTPackage";
 
     public static final String EVERYSTUDENT_PACKAGE_CODE = "everystudent";
-
-    public static final String INVALID_CODE = "";
 
     public static final String STATUS_LIVE = "live";
     public static final String STATUS_DRAFT = "draft";
@@ -76,6 +79,18 @@ public class GTPackage implements Parcelable, Serializable {
         this.version = in.readString();
         this.status = in.readString();
         this.available = in.readByte() != 0;
+    }
+
+    public static int getImageResourceByCode(String code) {
+        if (KGP.equals(code)) {
+            return R.drawable.bk_kgp;
+        } else if (FOUR_LAWS.equals(code)) {
+            return R.drawable.bk_waterfall;
+        } else if (SATISFIED.equals(code)) {
+            return R.drawable.bk_coast;
+        } else {
+            return R.drawable.bk_waterfall;
+        }
     }
 
     public String getCode() {
