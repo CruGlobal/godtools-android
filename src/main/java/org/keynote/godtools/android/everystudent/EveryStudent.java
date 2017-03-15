@@ -23,14 +23,14 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.SimpleExpandableListAdapter;
 
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.googleAnalytics.EventTracker;
+import org.keynote.godtools.android.utils.EventTracker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.keynote.godtools.android.googleAnalytics.EventTracker.SCREEN_EVERYSTUDENT;
+import static org.keynote.godtools.android.utils.EventTracker.SCREEN_EVERYSTUDENT;
 
 @SuppressWarnings("deprecation")
 public class EveryStudent extends ExpandableListActivity

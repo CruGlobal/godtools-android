@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.googleAnalytics;
+package org.keynote.godtools.android.utils;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,7 +10,6 @@ import com.google.android.gms.analytics.Tracker;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.keynote.godtools.android.utils.GoogleAnalytics;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
 
 /**

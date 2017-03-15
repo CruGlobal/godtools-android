@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.fragments;
+package org.keynote.godtools.android.newnew.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -38,7 +38,7 @@ public class ConfirmDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mListener = (OnConfirmClickListener) activity;
+        mListener = (OnConfirmClickListener) getParentFragment();
     }
 
     @Override

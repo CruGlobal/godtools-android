@@ -36,7 +36,7 @@ import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.expandableList.ExpandableListAdapter;
-import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
+import org.keynote.godtools.android.newnew.fragments.AccessCodeDialogFragment;
 import org.keynote.godtools.android.http.PackageDownloadHelper;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
