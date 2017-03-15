@@ -71,13 +71,14 @@ public class Splash extends Activity {
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         startUpdateTasks();
         syncData();
 
         setContentView(R.layout.splash_pw);
         ButterKnife.bind(this);
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
+        //settings.edit().putBoolean(FIRST_LAUNCH, true).commit();
         // first use
         if (isFirstLaunch()) {
             Log.i(TAG, "First Launch");
@@ -115,6 +116,7 @@ public class Splash extends Activity {
 
                 @Override
                 public void onFailure(Call<GTLanguages> call, Throwable t) {
+                    t.printStackTrace();
                     goToMainActivity();
                 }
             });

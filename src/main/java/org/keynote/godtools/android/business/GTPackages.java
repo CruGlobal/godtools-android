@@ -11,19 +11,21 @@ import org.simpleframework.xml.strategy.Strategy;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-@Root(name = "languages")
-public class GTLanguages {
-    @ElementList(inline = true, required = true, name = "content", entry = "language", type = GTLanguage.class)
-    public ArrayList<GTLanguage> mLanguages = new ArrayList<GTLanguage>();
+/**
+ * Created by rmatt on 2/7/2017.
+ */
+@Root(name = "packages")
+public class GTPackages {
+    @ElementList(inline = true, required = true, name = "content", entry = "resource", type = GTPackage.class)
+    public ArrayList<GTPackage> mPackages = new ArrayList<GTPackage>();
 
-    public static ArrayList<GTLanguage> processContentFile(InputStream is) {
+    public static ArrayList<GTPackage> processContentFile(InputStream contentFile) {
 
         Registry registry = new Registry();
         Strategy strategy = new RegistryStrategy(registry);
         Serializer serializer = new Persister(strategy);
-
         try {
-            return serializer.read(GTLanguages.class, is).mLanguages;
+            return serializer.read(GTPackages.class, contentFile).mPackages;
         } catch (Exception e) {
             e.printStackTrace();
         }

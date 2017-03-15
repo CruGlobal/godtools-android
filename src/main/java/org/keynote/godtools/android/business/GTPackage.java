@@ -8,9 +8,9 @@ import android.support.annotation.Nullable;
 import com.google.common.base.Function;
 
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.model.HomescreenLayout;
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.core.Commit;
 
 import java.io.Serializable;
 import java.util.Comparator;
@@ -20,7 +20,7 @@ import static org.keynote.godtools.android.utils.Constants.FOUR_LAWS;
 import static org.keynote.godtools.android.utils.Constants.KGP;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 
-@Root(name = "package")
+@Element
 public class GTPackage implements Parcelable, Serializable {
 
     public static final String TAG = "GTPackage";
@@ -29,7 +29,6 @@ public class GTPackage implements Parcelable, Serializable {
 
     public static final String STATUS_LIVE = "live";
     public static final String STATUS_DRAFT = "draft";
-
     public static final String DEFAULT_VERSION = "0";
     public static final Function<GTPackage, String> FUNCTION_CODE = new Function<GTPackage, String>() {
         @Nullable
@@ -51,17 +50,22 @@ public class GTPackage implements Parcelable, Serializable {
     };
     private static final Pattern PATTERN_VERSION = Pattern.compile("[0-9]+(?:\\.[0-9]+)*");
     private static final Comparator<GTPackage> COMPARATOR_VERSION = new VersionComparator();
-    @Attribute(name = "code", required = true)
+    @Attribute(name = "code", required = false)
+    public String dummyCode;
+    @Attribute(name = "package", required = false)
     public String code;
-    @Attribute(name = "version", required = true, empty = DEFAULT_VERSION)
+    @Attribute(name = "version", required = false)
     public String version;
-    @Attribute(name = "status", required = true)
+    @Attribute(name = "status")
     public String status;
-    private String name;
-    private String language;
-    private String configFileName;
-    private String icon;
-    private HomescreenLayout layout;
+    @Attribute(name = "name", required = false)
+    public String name;
+    @Attribute(name = "language", required = false)
+    public String language;
+    @Attribute(name = "config", required = false)
+    public String configFileName;
+    @Attribute(name = "icon", required = false)
+    public String icon;
     // in preview mode, all packages are shown; however, a package may not actually be available
     // to view.
     private boolean available;
@@ -89,7 +93,7 @@ public class GTPackage implements Parcelable, Serializable {
         } else if (SATISFIED.equals(code)) {
             return R.drawable.bk_coast;
         } else {
-            return R.drawable.bk_waterfall;
+            return R.drawable.place_holder_rich_media;
         }
     }
 
@@ -150,20 +154,20 @@ public class GTPackage implements Parcelable, Serializable {
         this.icon = icon;
     }
 
-    public HomescreenLayout getLayout() {
-        return layout;
-    }
-
-    public void setLayout(HomescreenLayout layout) {
-        this.layout = layout;
-    }
-
     public boolean isAvailable() {
         return available;
     }
 
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    @Commit
+    public void onCommit() {
+        setVersion(version);
+        if (dummyCode != null && !dummyCode.equalsIgnoreCase("")) {
+            code = dummyCode;
+        }
     }
 
     /**

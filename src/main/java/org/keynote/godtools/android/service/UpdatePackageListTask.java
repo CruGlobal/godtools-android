@@ -12,7 +12,7 @@ import java.util.List;
 public class UpdatePackageListTask {
     public static void run(@NonNull final List<GTLanguage> languages, @NonNull final DBAdapter adapter) {
         for (final GTLanguage language : languages) {
-            adapter.updateOrInsert(language, GTLanguageTable.COL_NAME);
+            adapter.updateOrInsert(language, GTLanguageTable.COL_NAME, GTLanguageTable.COL_DRAFT);
 
             for (final GTPackage newPackage : language.getPackages()) {
                 newPackage.setLanguage(language.getLanguageCode());
@@ -26,6 +26,5 @@ public class UpdatePackageListTask {
                 }
             }
         }
-
     }
 }
