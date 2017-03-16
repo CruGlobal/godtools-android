@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.newnew;
+package org.keynote.godtools.android.newnew.fragments;
 
 import android.content.IntentFilter;
 import android.os.Bundle;

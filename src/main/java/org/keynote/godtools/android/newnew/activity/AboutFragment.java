@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.newnew.OnFragmentInteractionListener;
+import org.keynote.godtools.android.newnew.fragments.OnFragmentInteractionListener;
 
 /**
  * Created by rmatt on 3/3/2017.
