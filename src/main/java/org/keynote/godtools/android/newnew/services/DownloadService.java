@@ -10,6 +10,7 @@ import com.crashlytics.android.Crashlytics;
 
 import org.ccci.gto.android.common.util.IOUtils;
 import org.keynote.godtools.android.api.GodToolsApi;
+import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackages;
 import org.keynote.godtools.android.dao.DBContract;
@@ -160,6 +161,10 @@ public class DownloadService extends IntentService {
                         outputStream.close();
                         oldFile.delete();
                     }
+                    GTLanguage language = new GTLanguage();
+                    language.setLanguageCode(dsBO.getLangCode());
+                    language.setDownloaded(true);
+                    GodToolsDao.getInstance(this).updateAsync(language, DBContract.GTLanguageTable.COL_DOWNLOADED);
                     sendProgress(dsBO.getLangCode(), 100);
                     return true;
                 }

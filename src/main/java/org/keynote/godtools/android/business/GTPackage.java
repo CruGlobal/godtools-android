@@ -69,6 +69,7 @@ public class GTPackage implements Parcelable, Serializable {
     // in preview mode, all packages are shown; however, a package may not actually be available
     // to view.
     private boolean available;
+    private boolean languageObj;
 
     // set available to true as default
     public GTPackage() {
@@ -194,6 +195,8 @@ public class GTPackage implements Parcelable, Serializable {
         dest.writeString(this.status);
         dest.writeByte(this.available ? (byte) 1 : (byte) 0);
     }
+
+
 
     static class VersionComparator implements Comparator<GTPackage> {
         @Override
