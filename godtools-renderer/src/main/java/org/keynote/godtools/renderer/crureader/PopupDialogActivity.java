@@ -54,7 +54,8 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     @Nullable
     @BindView(R2.id.popin_button_tv)
     AutoScaleTextView tv;
-    private ImageView iv;
+    @BindView(R2.id.popup_imageView)
+    ImageView iv;
     LinearLayout ll;
 
     private float Y = 0;
@@ -68,20 +69,17 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     /* BEGIN lifecycle */
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             requestWindowFeature(Window.FEATURE_CONTENT_TRANSITIONS);
             getWindow().setAllowEnterTransitionOverlap(false);
             getWindow().setAllowReturnTransitionOverlap(false);
         }
-
-        upwrapExtras();
+        readExtras();
 
         bindLayouts();
         setUpDismissAction();
-
-        setUpImageView();
 
         if (RenderViewCompat.SDK_JELLY_BEAN) {
 
@@ -125,6 +123,7 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
         super.onContentChanged();
         ButterKnife.bind(this);
         setupHeader();
+        setUpImageView();
     }
 
     /* END lifecycle */
@@ -148,7 +147,7 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
         layoutParams.addRule(PercentRelativeLayout.CENTER_IN_PARENT);
     }
 
-    private void upwrapExtras() {
+    private void readExtras() {
         final Intent intent = getIntent();
 
         gPanel = RenderSingleton.getInstance().gPanelHashMap
@@ -160,7 +159,6 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
         mImageWidth = intent.getIntExtra(CONSTANTS_IMAGE_WIDTH_INT_EXTRA, mImageWidth);
         mImageHeight = intent.getIntExtra(CONSTANTS_IMAGE_HEIGHT_INT_EXTRA, mImageHeight);
         mPosition = intent.getIntExtra(CONSTANTS_POSITION_INT_EXTRA, mPosition);
-
     }
 
     private void setupHeader() {
@@ -174,7 +172,6 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     private void bindLayouts() {
         setContentView(R.layout.activity_popupdialog);
         ll = (LinearLayout) findViewById(R.id.popup_innerLinearLayout);
-        iv = (ImageView) findViewById(R.id.popup_imageView);
         ll.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(mPosition));
     }
 
