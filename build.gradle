@@ -26,11 +26,11 @@ version '4.3.2-SNAPSHOT'
 
 // define dependency versions for this project
 ext.deps = [
-        androidSupport       : '25.1.0',
+        androidSupport       : '25.3.0',
         androidTestingSupport: '0.5',
         butterknife          : '8.5.1',
         facebookStetho       : '1.4.2',
-        gtoSupport           : '0.9.0',
+        gtoSupport           : '1.0.4',
         guava                : '19.0',
         junit                : '4.12',
         playServices         : '9.0.2',
