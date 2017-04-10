@@ -37,8 +37,8 @@
                 android:id="@+id/popin_iv_expand_imageview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"
-
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
                 android:src="@drawable/ic_expand_less_white_48dp"></ImageView>
 
