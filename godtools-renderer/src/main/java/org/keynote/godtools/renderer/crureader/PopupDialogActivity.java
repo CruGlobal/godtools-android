@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.percent.PercentLayoutHelper;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.FragmentActivity;
@@ -50,7 +51,9 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
 
     @BindView(R2.id.extra_wrapper_fl)
     PercentRelativeLayout extraContent;
-    private AutoScaleTextView tv;
+    @Nullable
+    @BindView(R2.id.popin_button_tv)
+    AutoScaleTextView tv;
     private ImageView iv;
     LinearLayout ll;
 
@@ -106,7 +109,7 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
             });
 
         }
-        bindHeader();
+
         bindPanelContent();
 
         if (RenderViewCompat.SDK_JELLY_BEAN) {
@@ -121,6 +124,7 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     public void onContentChanged() {
         super.onContentChanged();
         ButterKnife.bind(this);
+        setupHeader();
     }
 
     /* END lifecycle */
@@ -140,7 +144,6 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     }
 
     private void TranslateViewJellyBeanCompat() {
-
         PercentRelativeLayout.LayoutParams layoutParams = (PercentRelativeLayout.LayoutParams) ll.getLayoutParams();
         layoutParams.addRule(PercentRelativeLayout.CENTER_IN_PARENT);
     }
@@ -160,15 +163,16 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
 
     }
 
-    private void bindHeader() {
-        tv.setTextColor(Color.parseColor(RenderConstants.DEFAULT_TEXT_COLOR));
-        tv.setText(title);
+    private void setupHeader() {
+        if (tv != null) {
+            tv.setText(title);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100.0f);
+            tv.setTextColor(Color.parseColor(RenderConstants.DEFAULT_TEXT_COLOR));
+        }
     }
 
     private void bindLayouts() {
         setContentView(R.layout.activity_popupdialog);
-        tv = (AutoScaleTextView) findViewById(R.id.popin_button_tv);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100.0f);
         ll = (LinearLayout) findViewById(R.id.popup_innerLinearLayout);
         iv = (ImageView) findViewById(R.id.popup_imageView);
         ll.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(mPosition));
@@ -179,7 +183,9 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
             iv.getLayoutParams().height = mImageHeight;
             iv.getLayoutParams().width = mImageWidth;
             ImageAsyncTask.setImageView(mImageLocation, iv);
-            tv.setGravity(Gravity.CENTER_HORIZONTAL);
+            if (tv != null) {
+                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+            }
         }
     }
 
