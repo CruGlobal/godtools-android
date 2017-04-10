@@ -43,54 +43,30 @@
 
     </style>
 
-    <style name="Widget"></style>
-
-    <style name="Widget.GodToolsRenderer">
-        <item name="android:layout_marginRight">
-            8dp
-        </item>
-        <item name="android:layout_marginLeft">
-            8dp
-        </item>
+    <style name="Widget.GodToolsRenderer" parent="">
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
     </style>
 
     <style name="Image" parent="Widget.GodToolsRenderer">
-        <item name="android:layout_gravity">
-            center_horizontal
-        </item>
-        <item name="android:scaleType">fitCenter
-        </item>
-        <item name="android:layout_height">
-            wrap_content
-        </item>
-        <item name="android:layout_width">
-            match_parent
-        </item>
-        <item name="android:adjustViewBounds">
-            true
-        </item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:adjustViewBounds">true</item>
     </style>
 
     <style name="AutoScaleTextView" parent="Widget.GodToolsRenderer">
+        <!--Default Text Size Scalar-->
         <item name="textSizeScalar">17</item>
-        //Default Text Size Scalar
-        <item name="android:visibility">gone
-        </item>
-
-
+        <item name="android:visibility">gone</item>
     </style>
 
-    <style name="Widget.GodToolsRenderer.AutoScaleButtonView" parent="@style/Widget.AppCompat.Button">
-
-
-    </style>
+    <style name="Widget.GodToolsRenderer.AutoScaleButtonView" parent="Widget.AppCompat.Button" />
 
     <style name="Widget.GodToolsRenderer.AutoScaleBorderlessButtonView" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="background">@null</item>
-        <item name="android:background">@null
-        </item>
-
-
+        <item name="android:background">@null</item>
     </style>
 
     <style name="AutoScaleTextView.HeaderNumberTextView">
