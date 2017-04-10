@@ -60,9 +60,8 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            requestWindowFeature(Window.FEATURE_CONTENT_TRANSITIONS);
             getWindow().setAllowEnterTransitionOverlap(false);
             getWindow().setAllowReturnTransitionOverlap(false);
         }
