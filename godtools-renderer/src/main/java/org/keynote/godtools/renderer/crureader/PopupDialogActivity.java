@@ -33,8 +33,7 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleButtonVie
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView;
 
 public class PopupDialogActivity extends FragmentActivity implements IContexual {
-
-    public static final String TAG = "PopupDialogActivity";
+    private static final String TAG = "PopupDialogActivity";
     public static final String CONSTANTS_PANEL_HASH_KEY_INT_EXTRA = "panelhash";
     public static final String CONSTANTS_PANEL_TITLE_STRING_EXTRA = "title";
     public static final String CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA = "Y";
