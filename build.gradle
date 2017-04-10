@@ -34,7 +34,7 @@ ext.deps = [
         guava                : '19.0',
         junit                : '4.12',
         playServices         : '9.0.2',
-        retrofit2            : '2.1.0'
+        retrofit2            : '2.2.0'
 ]
 
 dependencies {
