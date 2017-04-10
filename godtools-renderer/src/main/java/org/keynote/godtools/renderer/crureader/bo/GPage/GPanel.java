@@ -1,14 +1,12 @@
 package org.keynote.godtools.renderer.crureader.bo.GPage;
 
 import android.content.Context;
-import android.support.percent.PercentRelativeLayout;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseTextAttributes;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderConstants;
-
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.ElementListUnion;
@@ -37,7 +35,7 @@ public class GPanel extends GCoordinator {
         Context context = viewGroup.getContext();
 
         return RenderConstants.renderLinearLayoutListWeighted(inflater,
-                (PercentRelativeLayout) viewGroup, GCoordinatorArrayList, position, 40);
+                viewGroup, GCoordinatorArrayList, position, 40);
     }
 
 }
