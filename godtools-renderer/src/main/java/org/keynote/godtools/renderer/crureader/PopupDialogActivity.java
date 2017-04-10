@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.percent.PercentLayoutHelper;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -17,15 +16,14 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
-import org.keynote.godtools.renderer.crureader.bo.GPage.Compat.RenderViewCompat;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Event.OnDismissEvent;
 import org.keynote.godtools.renderer.crureader.bo.GPage.IDO.IContexual;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.ImageAsyncTask;
@@ -36,6 +34,8 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.view.View.MeasureSpec.makeMeasureSpec;
 
 public class PopupDialogActivity extends FragmentActivity implements IContexual {
     private static final String TAG = "PopupDialogActivity";
@@ -56,10 +56,10 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     AutoScaleTextView tv;
     @BindView(R2.id.popup_imageView)
     ImageView iv;
+    @BindView(R2.id.popup_innerLinearLayout)
     LinearLayout ll;
 
     private float Y = 0;
-    boolean fixed = false;
     private String title;
     private String mImageLocation;
     private int mImageWidth = 0;
@@ -77,53 +77,18 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
             getWindow().setAllowReturnTransitionOverlap(false);
         }
         readExtras();
-
-        bindLayouts();
+        setContentView(R.layout.activity_popupdialog);
         setUpDismissAction();
-
-        if (RenderViewCompat.SDK_JELLY_BEAN) {
-
-            ll.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    ll.measure(View.MeasureSpec.makeMeasureSpec(ll.getWidth(), View.MeasureSpec.AT_MOST),
-                            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-
-                    if (ll.getHeight() < ll.getMeasuredHeight() && !fixed) {
-                        fixed = true;
-                        PercentLayoutHelper.PercentLayoutParams layoutParams = (PercentLayoutHelper.PercentLayoutParams) ll.getLayoutParams();
-                        PercentLayoutHelper.PercentLayoutInfo percentLayoutInfo = layoutParams.getPercentLayoutInfo();
-                        percentLayoutInfo.topMarginPercent = percentLayoutInfo.topMarginPercent - ((
-                                (float) ll.getMeasuredHeight() - (float) ll.getHeight())
-                                / ((float) ((View) ll.getParent()).getHeight()));
-
-                        return false;
-                    }
-
-                    return true;
-
-                }
-
-            });
-
-        }
-
-        bindPanelContent();
-
-        if (RenderViewCompat.SDK_JELLY_BEAN) {
-            TranslateView();
-        } else {
-            TranslateViewJellyBeanCompat();
-        }
-
     }
 
     @Override
     public void onContentChanged() {
         super.onContentChanged();
         ButterKnife.bind(this);
+        loadPanelContent();
         setupHeader();
         setUpImageView();
+        setupPanel();
     }
 
     @Override
@@ -155,7 +120,7 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     /* END lifecycle */
 
     private void setUpDismissAction() {
-        this.getWindow().getDecorView().setOnTouchListener(new View.OnTouchListener() {
+        getWindow().getDecorView().setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -166,11 +131,6 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
                 return true;
             }
         });
-    }
-
-    private void TranslateViewJellyBeanCompat() {
-        PercentRelativeLayout.LayoutParams layoutParams = (PercentRelativeLayout.LayoutParams) ll.getLayoutParams();
-        layoutParams.addRule(PercentRelativeLayout.CENTER_IN_PARENT);
     }
 
     private void readExtras() {
@@ -195,10 +155,24 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
         }
     }
 
-    private void bindLayouts() {
-        setContentView(R.layout.activity_popupdialog);
-        ll = (LinearLayout) findViewById(R.id.popup_innerLinearLayout);
-        ll.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(mPosition));
+    private void setupPanel() {
+        if (ll != null) {
+            ll.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(mPosition));
+
+            // update the content stack layout position
+            final ViewGroup.LayoutParams lp = ll.getLayoutParams();
+            if (lp instanceof RelativeLayout.LayoutParams) {
+                // measure the content stack
+                final DisplayMetrics metrics = getResources().getDisplayMetrics();
+                ll.measure(makeMeasureSpec(metrics.widthPixels, View.MeasureSpec.EXACTLY),
+                           makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+                // update the top margin
+                ((RelativeLayout.LayoutParams) lp).topMargin =
+                        Math.min(Math.max(metrics.heightPixels - ll.getMeasuredHeight(), 0), (int) Y);
+                ll.setLayoutParams(lp);
+            }
+        }
     }
 
     private void setUpImageView() {
@@ -216,7 +190,7 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
         return mImageLocation != null && !mImageLocation.equalsIgnoreCase("");
     }
 
-    private void bindPanelContent() {
+    private void loadPanelContent() {
         gPanel.render(getLayoutInflater(), extraContent, mPosition);
         if (hasImageExtraFromBigButton()) {
             centerAllChildren(extraContent);
@@ -235,14 +209,6 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
             LinearLayout.LayoutParams llParams = (LinearLayout.LayoutParams) v.getLayoutParams();
             llParams.gravity = Gravity.CENTER_HORIZONTAL;
         }
-    }
-
-    private void TranslateView() {
-        DisplayMetrics metrics = PopupDialogActivity.this.getResources().getDisplayMetrics();
-        int screenHeight = metrics.heightPixels;
-        PercentLayoutHelper.PercentLayoutParams layoutParams = (PercentLayoutHelper.PercentLayoutParams) ll.getLayoutParams();
-        PercentLayoutHelper.PercentLayoutInfo percentLayoutInfo = layoutParams.getPercentLayoutInfo();
-        percentLayoutInfo.topMarginPercent = Y / (float) screenHeight;
     }
 
     @Override
