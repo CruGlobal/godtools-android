@@ -46,9 +46,9 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     private PercentRelativeLayout extraContent;
     private AutoScaleTextView tv;
     private ImageView iv;
-    private LinearLayout ll;
+    LinearLayout ll;
     private float Y;
-    private boolean fixed = false;
+    boolean fixed = false;
     private String title;
     private String mImageLocation;
     private int mImageWidth;
@@ -232,15 +232,10 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
 
     }
 
-
-
-
     @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
     }
-
-
 }
 
