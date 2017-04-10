@@ -143,8 +143,3 @@
 -keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
     public static final *** NULL;
 }
-
--keepnames class * implements android.os.Parcelable
--keepclassmembers class * implements android.os.Parcelable {
-  public static final *** CREATOR;
-}
