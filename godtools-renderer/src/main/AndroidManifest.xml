@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="org.keynote.godtools.renderer.crureader">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.keynote.godtools.renderer.crureader">
 
     <uses-sdk
         android:targetSdkVersion="17"
-        tools:overrideLibrary="me.grantland.widget"/>
-
+        tools:overrideLibrary="me.grantland.widget" />
     <application
         android:allowBackup="true"
         android:supportsRtl="true">
@@ -14,15 +13,11 @@
             android:name=".AlertDialogActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Popin"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".PopupDialogActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Popin"
-            android:windowSoftInputMode="adjustPan"/>
-
+            android:windowSoftInputMode="adjustPan" />
     </application>
-
 </manifest>
