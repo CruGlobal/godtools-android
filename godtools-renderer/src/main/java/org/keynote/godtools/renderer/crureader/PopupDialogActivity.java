@@ -1,5 +1,6 @@
 package org.keynote.godtools.renderer.crureader;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,8 +34,7 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleButtonVie
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView;
 
 public class PopupDialogActivity extends FragmentActivity implements IContexual {
-
-    public static final String TAG = "PopupDialogActivity";
+    private static final String TAG = "PopupDialogActivity";
     public static final String CONSTANTS_PANEL_HASH_KEY_INT_EXTRA = "panelhash";
     public static final String CONSTANTS_PANEL_TITLE_STRING_EXTRA = "title";
     public static final String CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA = "Y";
@@ -42,19 +42,19 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     public static final String CONSTANTS_IMAGE_HEIGHT_INT_EXTRA = "ImageHeight";
     public static final String CONSTANTS_POSITION_INT_EXTRA = "position";
     public static final String CONSTANTS_IMAGE_LOCATION = "imageLocation";
+
     GCoordinator gPanel;
     private PercentRelativeLayout extraContent;
     private AutoScaleTextView tv;
     private ImageView iv;
     LinearLayout ll;
-    private float Y;
+    private float Y = 0;
     boolean fixed = false;
     private String title;
     private String mImageLocation;
-    private int mImageWidth;
-    private int mImageHeight;
-
-    private int mPosition;
+    private int mImageWidth = 0;
+    private int mImageHeight = 0;
+    private int mPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,15 +131,17 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     }
 
     private void upwrapExtras() {
+        final Intent intent = getIntent();
 
-        Y = this.getIntent().getExtras().getFloat(CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA);
-        int panelKey = this.getIntent().getExtras().getInt(CONSTANTS_PANEL_HASH_KEY_INT_EXTRA);
-        title = this.getIntent().getExtras().getString(CONSTANTS_PANEL_TITLE_STRING_EXTRA);
-        mImageLocation = this.getIntent().getExtras().getString(CONSTANTS_IMAGE_LOCATION);
-        gPanel = RenderSingleton.getInstance().gPanelHashMap.get(panelKey);
-        mImageWidth = this.getIntent().getExtras().getInt(CONSTANTS_IMAGE_WIDTH_INT_EXTRA);
-        mImageHeight = this.getIntent().getExtras().getInt(CONSTANTS_IMAGE_HEIGHT_INT_EXTRA);
-        mPosition = this.getIntent().getExtras().getInt(CONSTANTS_POSITION_INT_EXTRA);
+        gPanel = RenderSingleton.getInstance().gPanelHashMap
+                .get(intent.getIntExtra(CONSTANTS_PANEL_HASH_KEY_INT_EXTRA, 0));
+        Y = intent.getFloatExtra(CONSTANTS_Y_FROM_TOP_FLOAT_EXTRA, Y);
+        title = intent.getStringExtra(CONSTANTS_PANEL_TITLE_STRING_EXTRA);
+
+        mImageLocation = intent.getStringExtra(CONSTANTS_IMAGE_LOCATION);
+        mImageWidth = intent.getIntExtra(CONSTANTS_IMAGE_WIDTH_INT_EXTRA, mImageWidth);
+        mImageHeight = intent.getIntExtra(CONSTANTS_IMAGE_HEIGHT_INT_EXTRA, mImageHeight);
+        mPosition = intent.getIntExtra(CONSTANTS_POSITION_INT_EXTRA, mPosition);
 
     }
 
@@ -237,4 +239,3 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
         EventBus.getDefault().register(this);
     }
 }
-
