@@ -126,6 +126,32 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
         setUpImageView();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void onDismissEvent(@NonNull final OnDismissEvent event) {
+        Log.i(TAG, "On Dismiss event");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            if (!this.isChangingConfigurations()) {
+                finish();
+            }
+        } else {
+            if (!this.isFinishing()) {
+                finish();
+            }
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
     /* END lifecycle */
 
     private void setUpDismissAction() {
@@ -222,31 +248,5 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     @Override
     public FragmentManager getContexualFragmentActivity() {
         return this.getSupportFragmentManager();
-    }
-
-    @Subscribe
-    public void onDismissEvent(@NonNull final OnDismissEvent event) {
-        Log.i(TAG, "On Dismiss event");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            if (!this.isChangingConfigurations())
-                finish();
-        } else {
-            if (!this.isFinishing()) {
-                finish();
-            }
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
     }
 }
