@@ -33,6 +33,9 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSing
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleButtonView;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.AutoScaleTextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class PopupDialogActivity extends FragmentActivity implements IContexual {
     private static final String TAG = "PopupDialogActivity";
     public static final String CONSTANTS_PANEL_HASH_KEY_INT_EXTRA = "panelhash";
@@ -44,10 +47,13 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     public static final String CONSTANTS_IMAGE_LOCATION = "imageLocation";
 
     GCoordinator gPanel;
-    private PercentRelativeLayout extraContent;
+
+    @BindView(R2.id.extra_wrapper_fl)
+    PercentRelativeLayout extraContent;
     private AutoScaleTextView tv;
     private ImageView iv;
     LinearLayout ll;
+
     private float Y = 0;
     boolean fixed = false;
     private String title;
@@ -56,10 +62,11 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     private int mImageHeight = 0;
     private int mPosition = 0;
 
+    /* BEGIN lifecycle */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             requestWindowFeature(Window.FEATURE_CONTENT_TRANSITIONS);
             getWindow().setAllowEnterTransitionOverlap(false);
@@ -110,6 +117,14 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
 
     }
 
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        ButterKnife.bind(this);
+    }
+
+    /* END lifecycle */
+
     private void setUpDismissAction() {
         this.getWindow().getDecorView().setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -146,20 +161,17 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     }
 
     private void bindHeader() {
-
         tv.setTextColor(Color.parseColor(RenderConstants.DEFAULT_TEXT_COLOR));
         tv.setText(title);
     }
 
     private void bindLayouts() {
         setContentView(R.layout.activity_popupdialog);
-        extraContent = (PercentRelativeLayout) findViewById(R.id.extra_wrapper_fl);
         tv = (AutoScaleTextView) findViewById(R.id.popin_button_tv);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100.0f);
         ll = (LinearLayout) findViewById(R.id.popup_innerLinearLayout);
         iv = (ImageView) findViewById(R.id.popup_imageView);
         ll.setBackgroundColor(RenderSingleton.getInstance().getPositionGlobalColorAsInt(mPosition));
-
     }
 
     private void setUpImageView() {
@@ -190,12 +202,9 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
         } else if (v instanceof AutoScaleTextView) {
             LinearLayout.LayoutParams llParams = (LinearLayout.LayoutParams) v.getLayoutParams();
             llParams.gravity = Gravity.CENTER_HORIZONTAL;
-
         } else if (v instanceof AutoScaleButtonView) {
-
             LinearLayout.LayoutParams llParams = (LinearLayout.LayoutParams) v.getLayoutParams();
             llParams.gravity = Gravity.CENTER_HORIZONTAL;
-
         }
     }
 
@@ -209,7 +218,6 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
 
     @Override
     public FragmentManager getContexualFragmentActivity() {
-
         return this.getSupportFragmentManager();
     }
 
