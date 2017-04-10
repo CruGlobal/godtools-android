@@ -9,7 +9,6 @@ import org.keynote.godtools.renderer.crureader.R;
 import org.keynote.godtools.renderer.crureader.bo.GPage.RenderHelpers.RenderSingleton;
 
 public class AutoScaleTextView extends AppCompatTextView {
-
     private int textSizeScalar;
 
     public AutoScaleTextView(Context context) {
@@ -35,11 +34,7 @@ public class AutoScaleTextView extends AppCompatTextView {
 
     @Override
     public void setTextSize(int unit, float size) {
-
         float adjustedSize = ((size) * (float)textSizeScalar * RenderSingleton.getInstance().getScreenHeightForNonRotationDesign()) / 80.0F;
         super.setTextSize(unit, adjustedSize);
     }
-
-
-
 }
