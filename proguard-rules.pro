@@ -63,6 +63,21 @@
 -keepattributes Exceptions
 
 
+#SimpleXML
+-dontwarn com.bea.xml.stream.**
+-dontwarn org.simpleframework.xml.stream.**
+-keep class org.simpleframework.xml.**{ *; }
+-keepclassmembers,allowobfuscation class * {
+    @org.simpleframework.xml.* <fields>;
+    @org.simpleframework.xml.* <init>(...);
+}
+
+
+
+
+
+
+
 #Android
 -keepclassmembers class * extends android.content.Context {
     public void *(android.view.View);
@@ -112,30 +127,6 @@
     @retrofit2.http.* <methods>;
 }
 
-# Simple XML
-
--keepattributes SourceFile,LineNumberTable
-
-
--keepclassmembers class * extends java.lang.Enum {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
-}
-
-
--keep public class org.simpleframework.**{ *; }
--keep class org.simpleframework.xml.**{ *; }
--keep class org.simpleframework.xml.core.**{ *; }
--keep class org.simpleframework.xml.util.**{ *; }
-
-
-
--keepattributes ElementList, Root, Element, ElementListUnion
-
--keepclassmembers class * {
-    @org.simpleframework.xml.* *;
-}
-
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;
     static final java.io.ObjectStreamField[] serialPersistentFields;
@@ -145,30 +136,7 @@
     java.lang.Object readResolve();
 }
 
--keep interface org.simpleframework.xml.core.Label {
-   public *;
-}
--keep class * implements org.simpleframework.xml.core.Label {
-   public *;
-}
--keep interface org.simpleframework.xml.core.Parameter {
-   public *;
-}
--keep class * implements org.simpleframework.xml.core.Parameter {
-   public *;
-}
--keep interface org.simpleframework.xml.core.Extractor {
-   public *;
-}
--keep class * implements org.simpleframework.xml.core.Extractor {
-   public *;
-}
-
 -keep class  org.keynote.godtools.renderer.crureader.bo.** { *; }
--keep public class * extends android.app.Activity
-
--dontwarn org.simpleframework.xml.stream.**
--dontwarn javax.xml.stream.events.**
 
 #GooglePlay
 
