@@ -29,11 +29,13 @@ android {
     }
 }
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:support-annotations:25.1.0'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:percent:25.1.0'
-    compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:support-annotations:' + deps.androidSupport
+    compile 'com.android.support:appcompat-v7:' + deps.androidSupport
+    compile 'com.android.support:percent:' + deps.androidSupport
+    compile 'com.android.support:design:' + deps.androidSupport
+
+    compile 'org.ccci.gto.android:gto-support-core:' + deps.gtoSupport
+
     compile('org.simpleframework:simple-xml:2.7.1') {
         exclude module: 'stax'
         exclude module: 'stax-api'
@@ -42,5 +44,4 @@ dependencies {
     compile project(':optroundcardview')
     compile 'me.grantland:autofittextview:0.2.+'
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'org.ccci.gto.android:gto-support-core:0.9.0'
 }
