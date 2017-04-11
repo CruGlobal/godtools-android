@@ -28,6 +28,7 @@ import android.widget.TextView;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.renderer.crureader.PopupDialogActivity;
 import org.keynote.godtools.renderer.crureader.R;
+import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocument;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GBaseButtonAttributes;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GCoordinator;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Base.GModal;
@@ -115,9 +116,10 @@ public class RenderConstants {
 
             String[] tapEvents = RenderConstants.splitEvents((String) view.getTag());
             int position = (int) view.getTag(R.id.button_position);
-            String packageName = RenderSingleton.getInstance().getGDocument().packagename.content;
+            final GDocument document = RenderSingleton.getInstance().getGDocument();
+            String packageName = document.packagename.content;
             boolean valid = true;
-            ArrayList<GodToolsEvent> sendList = new ArrayList<GodToolsEvent>();
+            ArrayList<GodToolsEvent> sendList = new ArrayList<>();
             for (String tap : tapEvents) {
 
                 if (RenderSingleton.getInstance().gPanelHashMap.get(tap.hashCode()) != null) {
@@ -132,7 +134,7 @@ public class RenderConstants {
                     if (parentView != null) {
                         final GodToolsEvent event = new GodToolsEvent(GodToolsEvent.EventID.SUBSCRIBE_EVENT);
                         event.setPackageCode(packageName);
-                        event.setLanguage("en");
+                        event.setLanguage(document.getLanguageCode());
                         event.setFollowUpId((int) parentView.getTag(R.string.fallback));
 
                         ArrayList<View> viewsByTag = SearchableViewUtil.getViewsByTag((ViewGroup) parentView, parentView.getContext().getString(R.string.scannable_text_input));
@@ -157,7 +159,6 @@ public class RenderConstants {
                         }
 
                         sendList.add(event);
-
                     }
                 } else {
                     GodToolsEvent.EventID eventId = new GodToolsEvent.EventID(packageName, tap);
@@ -412,5 +413,4 @@ public class RenderConstants {
         button.setTag(R.id.button_position, position);
         button.setOnClickListener(simpleOnClick);
     }
-
 }
