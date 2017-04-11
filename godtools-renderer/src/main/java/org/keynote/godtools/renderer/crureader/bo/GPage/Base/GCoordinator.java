@@ -17,7 +17,6 @@ import org.simpleframework.xml.Attribute;
 import java.util.List;
 
 public abstract class GCoordinator {
-
     private static final String TAG = "GCoordinator";
 
     public List<GodToolsEvent.EventID> eventListeners;
@@ -92,21 +91,17 @@ public abstract class GCoordinator {
     //TODO: override this for imageview.
      */
     protected void updateAlignment(View view) {
-
         if (layoutAlign != null) {
             if (view.getLayoutParams() instanceof RelativeLayout.LayoutParams) {
                 RelativeLayout.LayoutParams relativeLayoutLayoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
                 relativeLayoutLayoutParams.addRule(RenderConstants.getRelativeLayoutRuleFromAlign(layoutAlign));
             } else if (view.getLayoutParams() instanceof PercentRelativeLayout.LayoutParams) {
-                int z = 5 / 0;
                 PercentRelativeLayout.LayoutParams percentRelativeLayoutLayoutParams = (PercentRelativeLayout.LayoutParams) view.getLayoutParams();
                 percentRelativeLayoutLayoutParams.addRule(RenderConstants.getRelativeLayoutRuleFromAlign(layoutAlign));
-
             } else if (view.getLayoutParams() instanceof FrameLayout.LayoutParams) {
                 FrameLayout.LayoutParams frameLayouts = (FrameLayout.LayoutParams) view.getLayoutParams();
                 frameLayouts.gravity = RenderConstants.getGravityFromAlign(layoutAlign);
             }
-
         }
     }
 
@@ -137,10 +132,6 @@ public abstract class GCoordinator {
         if (endMargin != null) {
             percentLayoutInfo.rightMargin += RenderConstants.getHorizontalPixels(endMargin);
         }
-//        if (getTopMargin() != null) {
-//
-//            percentLayoutInfo.topMargin += RenderConstants.getVerticalPixels(getTopMargin());
-//        }
         if (y != null) {
 
             percentLayoutInfo.topMargin += RenderConstants.getVerticalPixels(y);
@@ -160,10 +151,6 @@ public abstract class GCoordinator {
     }
 
     public abstract int render(LayoutInflater inflater, ViewGroup viewGroup, int position);
-
-//    public void setFirstElementInList(boolean firstElementInList) {
-//        this.firstElementInList = firstElementInList;
-//    }
 
     public boolean shouldUnderline() {
         return false;

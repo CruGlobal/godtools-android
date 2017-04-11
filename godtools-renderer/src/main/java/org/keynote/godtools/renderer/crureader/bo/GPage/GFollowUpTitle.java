@@ -13,9 +13,7 @@ import org.simpleframework.xml.Root;
 
 @Root(name = "followup-title")
 public class GFollowUpTitle extends GBaseTextAttributes {
-
     private static final String TAG = "GFollowUpTitle";
-
 
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {

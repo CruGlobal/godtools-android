@@ -41,8 +41,6 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Views.BottomSheetDialog;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Views.Space;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RenderConstants {
 
@@ -132,30 +130,27 @@ public class RenderConstants {
                 } else if (tap.equalsIgnoreCase("followup:subscribe")) {
                     View parentView = SearchableViewUtil.findFallBackPanel(view);
                     if (parentView != null) {
-
                         final GodToolsEvent event = new GodToolsEvent(GodToolsEvent.EventID.SUBSCRIBE_EVENT);
                         event.setPackageCode(packageName);
                         event.setLanguage("en");
                         event.setFollowUpId((int) parentView.getTag(R.string.fallback));
 
                         ArrayList<View> viewsByTag = SearchableViewUtil.getViewsByTag((ViewGroup) parentView, parentView.getContext().getString(R.string.scannable_text_input));
-                        Map<String, String> mFields = new HashMap<>();
+
                         // set all input fields as data
-                        if (mFields != null) {
-                            for (View scannedView : viewsByTag) {
-
-                                if (scannedView instanceof TextInputLayout && scannedView.getTag() != null) {
-
-                                    TextInputEditText editText = (TextInputEditText) (((FrameLayout) ((TextInputLayout) scannedView).getChildAt(0)).getChildAt(0));
-                                    String content = editText.getText() != null ? editText.getText().toString() : "";
-                                    GInputField gInputField = (GInputField) editText.getTag();
-                                    if (gInputField.hasValidation()) {
-                                        if (gInputField.isValidValue(content)) {
-                                            event.setField(gInputField.name, content);
-                                        } else {
-                                            valid = false;
-                                            gInputField.showError((TextInputLayout) scannedView);
-                                        }
+                        for (View scannedView : viewsByTag) {
+                            if (scannedView instanceof TextInputLayout && scannedView.getTag() != null) {
+                                TextInputEditText editText =
+                                        (TextInputEditText) (((FrameLayout) ((TextInputLayout) scannedView)
+                                                .getChildAt(0)).getChildAt(0));
+                                String content = editText.getText() != null ? editText.getText().toString() : "";
+                                GInputField gInputField = (GInputField) editText.getTag();
+                                if (gInputField.hasValidation()) {
+                                    if (gInputField.isValidValue(content)) {
+                                        event.setField(gInputField.name, content);
+                                    } else {
+                                        valid = false;
+                                        gInputField.showError((TextInputLayout) scannedView);
                                     }
                                 }
                             }

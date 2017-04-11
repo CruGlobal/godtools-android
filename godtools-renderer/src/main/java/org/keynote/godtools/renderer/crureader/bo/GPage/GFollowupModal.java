@@ -12,8 +12,6 @@ import org.simpleframework.xml.Root;
 
 @Root(name = "followup-modal")
 public class GFollowupModal extends GModal {
-
-
     public static final long DEFAULT_CONTEXT = -1;
 
     private static final String TAG = "GFollowupModal";

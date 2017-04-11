@@ -13,7 +13,6 @@ import org.simpleframework.xml.Root;
 
 @Root(name = "followup-body")
 public class GFollowUpBody extends GBaseTextAttributes {
-
     @Override
     public int render(LayoutInflater inflater, ViewGroup viewGroup, int position) {
         View inflatedView = inflater.inflate(R.layout.g_followup_body, viewGroup);
@@ -23,6 +22,4 @@ public class GFollowUpBody extends GBaseTextAttributes {
         updateBaseAttributes(tv);
         return tv.getId();
     }
-
-
 }
