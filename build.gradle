@@ -30,7 +30,7 @@ ext.deps = [
         androidTestingSupport: '0.5',
         butterknife          : '8.5.1',
         facebookStetho       : '1.4.2',
-        gtoSupport           : '1.0.4',
+        gtoSupport           : '1.1.0-SNAPSHOT',
         guava                : '19.0',
         junit                : '4.12',
         playServices         : '9.0.2',
@@ -68,9 +68,11 @@ dependencies {
     testCompile 'org.hamcrest:hamcrest-library:1.3'
 
     debugCompile 'com.android.support:multidex:1.0.1'
+    debugCompile 'org.ccci.gto.android:gto-support-leakcanary:' + deps.gtoSupport
     debugCompile 'com.facebook.stetho:stetho:' + deps.facebookStetho
     debugCompile 'com.facebook.stetho:stetho-okhttp3:' + deps.facebookStetho
     debugCompile 'com.facebook.stetho:stetho-urlconnection:' + deps.facebookStetho
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
 
     compile project(path: ':godtools-renderer')
 
