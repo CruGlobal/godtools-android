@@ -148,7 +148,7 @@ public class GButton extends GBaseButtonAttributes {
         imageFrame.setId(RenderViewCompat.generateViewId());
         if (image != null) {
             imageContent = image.content;
-
+            image.render(inflater, imageFrame, position);
         }
 
         setOuterLayoutToTransistion(outerLayout);
