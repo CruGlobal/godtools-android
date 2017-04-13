@@ -21,12 +21,10 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:srcCompat="@drawable/img_language"/>
 
-    <org.keynote.godtools.android.newnew.appcompat.VectorTextView
+    <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="God Tools"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
-
-
 </LinearLayout>
