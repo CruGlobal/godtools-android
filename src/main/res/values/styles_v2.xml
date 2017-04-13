@@ -54,12 +54,8 @@
     </style>
 
     <style name="Button.Green" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:theme">
-            @style/Theme.Green
-        </item>
-        <item name="android:layout_gravity">
-            center_horizontal
-        </item>
+        <item name="android:theme">@style/Theme.Green</item>
+        <item name="android:layout_gravity">center_horizontal</item>
     </style>
 
     <style name="Button.Transparent" parent="Button.FullWidth">
