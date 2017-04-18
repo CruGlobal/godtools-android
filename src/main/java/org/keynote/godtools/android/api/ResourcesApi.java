@@ -11,10 +11,13 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
+import static org.keynote.godtools.android.BuildConfig.MOBILE_CONTENT_SYSTEM;
+
 public interface ResourcesApi {
     String PATH_RESOURCES = "resources";
+    String FILTER_SYSTEM = "filter[system]";
 
-    @GET(PATH_RESOURCES)
+    @GET(PATH_RESOURCES + "?" + FILTER_SYSTEM + "=" + MOBILE_CONTENT_SYSTEM)
     Call<JsonApiObject<Resource>> list(@QueryMap @NonNull JsonApiParams params);
 
     @GET(PATH_RESOURCES + "/{id}")
