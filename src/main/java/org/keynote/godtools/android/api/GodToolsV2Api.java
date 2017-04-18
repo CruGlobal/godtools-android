@@ -5,8 +5,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.GsonBuilder;
+
 import org.ccci.gto.android.common.api.okhttp3.util.OkHttpClientUtil;
 import org.ccci.gto.android.common.api.retrofit2.converter.LocaleConverterFactory;
+import org.ccci.gto.android.common.gson.GsonIgnoreExclusionStrategy;
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory;
@@ -17,7 +21,9 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
+import static org.keynote.godtools.android.BuildConfig.GROWTH_SPACES_URL;
 import static org.keynote.godtools.android.BuildConfig.MOBILE_CONTENT_API;
 
 public class GodToolsV2Api {
@@ -26,6 +32,8 @@ public class GodToolsV2Api {
 
     @NonNull
     public final ResourcesApi resources;
+    @NonNull
+    public final GrowthSpacesApi growthSpaces;
 
     private GodToolsV2Api(@NonNull final Context context) {
         mContext = context;
@@ -36,6 +44,13 @@ public class GodToolsV2Api {
                 .callFactory(okhttp())
                 .build()
                 .create(ResourcesApi.class);
+
+        growthSpaces = new Retrofit.Builder()
+                .baseUrl(GROWTH_SPACES_URL)
+                .addConverterFactory(gsonConverter())
+                .callFactory(okhttp())
+                .build()
+                .create(GrowthSpacesApi.class);
     }
 
     @Nullable
@@ -56,6 +71,14 @@ public class GodToolsV2Api {
                 // attach the various converter factories
                 .addConverterFactory(new LocaleConverterFactory())
                 .addConverterFactory(JsonApiConverterFactory.create(jsonApiConverter()));
+    }
+
+    private GsonConverterFactory gsonConverter() {
+        return GsonConverterFactory.create(
+                new GsonBuilder()
+                        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                        .setExclusionStrategies(new GsonIgnoreExclusionStrategy())
+                        .create());
     }
 
     @NonNull
