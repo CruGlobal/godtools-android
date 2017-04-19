@@ -33,6 +33,7 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
      * 4: 2016-04-01
      * 5: 2016-04-04
      * 6: 2016-04-05
+     * v4.2.0 - v4.3.2
      */
 
     private static final String DATABASE_NAME = "resource.db";
