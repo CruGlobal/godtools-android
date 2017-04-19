@@ -9,12 +9,10 @@ import org.ccci.gto.android.common.db.async.AbstractAsyncDao;
 import org.keynote.godtools.android.business.GSSubscriber;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.dao.DBContract.FollowupTable;
 import org.keynote.godtools.android.dao.DBContract.GSSubscriberTable;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
 import org.keynote.godtools.android.db.GodToolsDao;
-import org.keynote.godtools.android.model.Followup;
 
 @Deprecated
 public class DBAdapter extends AbstractAsyncDao {
@@ -27,8 +25,6 @@ public class DBAdapter extends AbstractAsyncDao {
                      new GTLanguageMapper(), GTLanguageTable.SQL_WHERE_PRIMARY_KEY);
         registerType(GSSubscriber.class, GSSubscriberTable.TABLE_NAME, GSSubscriberTable.PROJECTION_ALL,
                      new GSSubscriberMapper(), GSSubscriberTable.SQL_WHERE_PRIMARY_KEY);
-        registerType(Followup.class, FollowupTable.TABLE_NAME, FollowupTable.PROJECTION_ALL, new FollowupMapper(),
-                     FollowupTable.SQL_WHERE_PRIMARY_KEY);
     }
 
     @Deprecated
@@ -47,9 +43,6 @@ public class DBAdapter extends AbstractAsyncDao {
             return getPrimaryKeyWhere(GTLanguage.class, ((GTLanguage) obj).getLanguageCode());
         } else if (obj instanceof GSSubscriber) {
             return getPrimaryKeyWhere(GSSubscriber.class, ((GSSubscriber) obj).getId());
-        } else if (obj instanceof Followup) {
-            final Followup followup = (Followup) obj;
-            return getPrimaryKeyWhere(Followup.class, followup.getId(), followup.getContextId());
         }
 
         return super.getPrimaryKeyWhere(obj);

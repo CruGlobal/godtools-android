@@ -4,11 +4,17 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.ccci.gto.android.common.db.Expression;
 import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.db.Contract.FollowupTable;
+import org.keynote.godtools.android.model.Followup;
 
 public class GodToolsDao extends DBAdapter {
     private GodToolsDao(@NonNull final Context context) {
         super(GodToolsDatabase.getInstance(context));
+
+        registerType(Followup.class, FollowupTable.TABLE_NAME, FollowupTable.PROJECTION_ALL, new FollowupMapper(),
+                     FollowupTable.SQL_WHERE_PRIMARY_KEY);
     }
 
     @Nullable
@@ -22,5 +28,16 @@ public class GodToolsDao extends DBAdapter {
         }
 
         return sInstance;
+    }
+
+    @NonNull
+    @Override
+    protected Expression getPrimaryKeyWhere(@NonNull final Object obj) {
+        if (obj instanceof Followup) {
+            final Followup followup = (Followup) obj;
+            return getPrimaryKeyWhere(Followup.class, followup.getId(), followup.getContextId());
+        }
+
+        return super.getPrimaryKeyWhere(obj);
     }
 }

@@ -12,10 +12,10 @@ import com.google.common.base.Throwables;
 
 import org.ccci.gto.android.common.app.ApplicationUtils;
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper;
-import org.keynote.godtools.android.dao.DBContract.FollowupTable;
 import org.keynote.godtools.android.dao.DBContract.GSSubscriberTable;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
+import org.keynote.godtools.android.db.Contract.FollowupTable;
 
 import io.fabric.sdk.android.Fabric;
 
