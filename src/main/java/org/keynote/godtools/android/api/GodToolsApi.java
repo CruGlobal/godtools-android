@@ -35,6 +35,8 @@ public class GodToolsApi {
     private final Context mContext;
 
     @NonNull
+    public final LanguagesApi languages;
+    @NonNull
     public final ResourcesApi resources;
     @NonNull
     public final GrowthSpacesApi growthSpaces;
@@ -49,6 +51,7 @@ public class GodToolsApi {
         final Retrofit retrofit = mobileContentRetrofit()
                 .callFactory(okhttp)
                 .build();
+        languages = retrofit.create(LanguagesApi.class);
         resources = retrofit.create(ResourcesApi.class);
 
         growthSpaces = new Retrofit.Builder()
