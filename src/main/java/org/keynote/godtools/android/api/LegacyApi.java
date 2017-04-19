@@ -17,7 +17,7 @@ import retrofit2.http.Query;
 import static com.google.common.net.HttpHeaders.AUTHORIZATION;
 import static org.keynote.godtools.android.utils.Constants.INTERPRETER_HEADER;
 
-public interface GodToolsApi {
+public interface LegacyApi {
     String V2 = "v2";
     String AUTH = V2 + "/auth";
     String NOTIFICATION = "notification";

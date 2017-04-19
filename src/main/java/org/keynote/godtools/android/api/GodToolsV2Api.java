@@ -39,7 +39,7 @@ public class GodToolsV2Api {
     @NonNull
     public final GrowthSpacesApi growthSpaces;
     @NonNull
-    public final GodToolsApi legacy;
+    public final LegacyApi legacy;
 
     private GodToolsV2Api(@NonNull final Context context) {
         mContext = context;
@@ -63,7 +63,7 @@ public class GodToolsV2Api {
                 .addConverterFactory(SimpleXmlConverterFactory.create())
                 .callFactory(okhttp)
                 .build()
-                .create(GodToolsApi.class);
+                .create(LegacyApi.class);
     }
 
     @Nullable
