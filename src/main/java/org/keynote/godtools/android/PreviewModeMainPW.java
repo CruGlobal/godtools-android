@@ -33,7 +33,7 @@ import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTLanguages;
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.expandableList.ExpandableListAdapter;
 import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
@@ -311,7 +311,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         boolean fourlawsPresent = false;
 
         // only return draft packages with translator mode
-        final DBAdapter dao = DBAdapter.getInstance(this);
+        final GodToolsDao dao = GodToolsDao.getInstance(this);
         List<GTPackage> packageByLanguage = dao.get(Query.select(GTPackage.class).where(
                 SQL_WHERE_DRAFT_BY_LANGUAGE.args(languagePrimary)));
 
@@ -416,7 +416,8 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 @Override
                 public void onResponse(Call<GTLanguages> call, Response<GTLanguages> response) {
                     if (response.isSuccessful()) {
-                        UpdatePackageListTask.run(response.body().mLanguages, DBAdapter.getInstance(PreviewModeMainPW.this));
+                        UpdatePackageListTask
+                                .run(response.body().mLanguages, GodToolsDao.getInstance(PreviewModeMainPW.this));
                         PackageDownloadHelper.downloadDrafts(getApp(),
                                 settings.getString(AUTH_DRAFT, ""),
                                 languagePrimary,

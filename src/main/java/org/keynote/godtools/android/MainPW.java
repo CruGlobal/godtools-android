@@ -33,8 +33,8 @@ import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTLanguages;
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
+import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.everystudent.EveryStudent;
 import org.keynote.godtools.android.fragments.PackageListFragment;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
@@ -130,7 +130,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
                 @Override
                 public void onResponse(Call<GTLanguages> call, Response<GTLanguages> response) {
 
-                    UpdatePackageListTask.run(response.body().mLanguages, DBAdapter.getInstance(MainPW.this));
+                    UpdatePackageListTask.run(response.body().mLanguages, GodToolsDao.getInstance(MainPW.this));
                     hideLoading();
                 }
 
@@ -465,7 +465,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         final GTLanguage gtl = new GTLanguage();
         gtl.setLanguageCode(langCode);
         gtl.setDownloaded(true);
-        DBAdapter.getInstance(this).update(gtl, GTLanguageTable.COL_DOWNLOADED);
+        GodToolsDao.getInstance(this).update(gtl, GTLanguageTable.COL_DOWNLOADED);
 
         // hide loading state? What does this actually do in MainPW? -DF
         hideLoading();
