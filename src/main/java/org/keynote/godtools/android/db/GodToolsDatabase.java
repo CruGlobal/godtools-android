@@ -16,12 +16,13 @@ import org.keynote.godtools.android.dao.DBContract.GSSubscriberTable;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
 import org.keynote.godtools.android.db.Contract.FollowupTable;
+import org.keynote.godtools.android.db.Contract.LanguageTable;
 
 import io.fabric.sdk.android.Fabric;
 
 public class GodToolsDatabase extends WalSQLiteOpenHelper {
     private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     /*
      * Version history
@@ -35,6 +36,7 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
      * 5: 2016-04-04
      * 6: 2016-04-05
      * v4.2.0 - v4.3.2
+     * 7: 2017-04-19
      */
 
     @NonNull
@@ -67,6 +69,7 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(GTLanguageTable.SQL_CREATE_TABLE);
             db.execSQL(GSSubscriberTable.SQL_CREATE_TABLE);
             db.execSQL(FollowupTable.SQL_CREATE_TABLE);
+            db.execSQL(LanguageTable.SQL_CREATE_TABLE);
 
             db.setTransactionSuccessful();
         } finally {
@@ -131,6 +134,9 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
                         // delete old table
                         db.execSQL(GTLanguageTable.SQL_DELETE_OLD_TABLE);
                         break;
+                    case 7:
+                        db.execSQL(LanguageTable.SQL_CREATE_TABLE);
+                        break;
                     default:
                         // unrecognized version
                         throw new SQLiteException("Unrecognized database version");
@@ -169,6 +175,7 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(GTLanguageTable.SQL_DELETE_OLD_TABLE);
             db.execSQL(GSSubscriberTable.SQL_DELETE_TABLE);
             db.execSQL(FollowupTable.SQL_DELETE_TABLE);
+            db.execSQL(LanguageTable.SQL_DELETE_TABLE);
 
             onCreate(db);
 
