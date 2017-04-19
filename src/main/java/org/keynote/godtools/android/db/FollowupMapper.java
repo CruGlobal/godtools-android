@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.dao;
+package org.keynote.godtools.android.db;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -7,14 +7,14 @@ import android.support.annotation.NonNull;
 import org.ccci.gto.android.common.db.AbstractMapper;
 import org.keynote.godtools.android.model.Followup;
 
-import static org.keynote.godtools.android.dao.DBContract.FollowupTable.COLUMN_CONTEXT_ID;
-import static org.keynote.godtools.android.dao.DBContract.FollowupTable.COLUMN_GS_ACCESS_ID;
-import static org.keynote.godtools.android.dao.DBContract.FollowupTable.COLUMN_GS_ACCESS_SECRET;
-import static org.keynote.godtools.android.dao.DBContract.FollowupTable.COLUMN_GS_ROUTE_ID;
-import static org.keynote.godtools.android.dao.DBContract.FollowupTable.COLUMN_ID;
+import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_CONTEXT_ID;
+import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_GS_ACCESS_ID;
+import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_GS_ACCESS_SECRET;
+import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_GS_ROUTE_ID;
+import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_ID;
 import static org.keynote.godtools.android.model.Followup.DEFAULT_CONTEXT;
 
-public class FollowupMapper extends AbstractMapper<Followup> {
+final class FollowupMapper extends AbstractMapper<Followup> {
     @Override
     protected void mapField(@NonNull final ContentValues values, @NonNull final String field,
                             @NonNull final Followup followup) {

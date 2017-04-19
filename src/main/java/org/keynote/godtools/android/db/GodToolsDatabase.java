@@ -1,24 +1,28 @@
-package org.keynote.godtools.android.dao;
+package org.keynote.godtools.android.db;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.common.base.Throwables;
 
 import org.ccci.gto.android.common.app.ApplicationUtils;
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper;
-import org.keynote.godtools.android.dao.DBContract.FollowupTable;
+import org.keynote.godtools.android.dao.DBContract.GSSubscriberTable;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
+import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
+import org.keynote.godtools.android.db.Contract.FollowupTable;
+import org.keynote.godtools.android.db.Contract.LanguageTable;
 
 import io.fabric.sdk.android.Fabric;
 
-public class GodToolsDatabase extends WalSQLiteOpenHelper {
-    private static final String TAG = "GodToolsDatabase";
+final class GodToolsDatabase extends WalSQLiteOpenHelper {
+    private static final String DATABASE_NAME = "resource.db";
+    private static final int DATABASE_VERSION = 7;
 
     /*
      * Version history
@@ -31,12 +35,9 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
      * 4: 2016-04-01
      * 5: 2016-04-04
      * 6: 2016-04-05
+     * v4.2.0 - v4.3.2
+     * 7: 2017-04-19
      */
-
-    private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 6;
-
-    private static GodToolsDatabase INSTANCE;
 
     @NonNull
     private final Context mContext;
@@ -46,15 +47,17 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
         mContext = context;
     }
 
+    @SuppressLint("StaticFieldLeak")
+    private static GodToolsDatabase sInstance;
     @NonNull
     public static GodToolsDatabase getInstance(@NonNull final Context context) {
         synchronized (GodToolsDatabase.class) {
-            if (INSTANCE == null) {
-                INSTANCE = new GodToolsDatabase(context.getApplicationContext());
+            if (sInstance == null) {
+                sInstance = new GodToolsDatabase(context.getApplicationContext());
             }
         }
 
-        return INSTANCE;
+        return sInstance;
     }
 
     @Override
@@ -62,10 +65,11 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
         try {
             db.beginTransaction();
 
-            db.execSQL(DBContract.GTPackageTable.SQL_CREATE_TABLE);
+            db.execSQL(GTPackageTable.SQL_CREATE_TABLE);
             db.execSQL(GTLanguageTable.SQL_CREATE_TABLE);
-            db.execSQL(DBContract.GSSubscriberTable.SQL_CREATE_TABLE);
+            db.execSQL(GSSubscriberTable.SQL_CREATE_TABLE);
             db.execSQL(FollowupTable.SQL_CREATE_TABLE);
+            db.execSQL(LanguageTable.SQL_CREATE_TABLE);
 
             db.setTransactionSuccessful();
         } finally {
@@ -85,7 +89,7 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
                         db.execSQL(GTLanguageTable.SQL_RENAME_TABLE);
 
                         // create tables
-                        db.execSQL(DBContract.GTPackageTable.SQL_V2_CREATE_TABLE);
+                        db.execSQL(GTPackageTable.SQL_V2_CREATE_TABLE);
                         db.execSQL(GTLanguageTable.SQL_V2_CREATE_TABLE);
 
                         // copy old data to newnew table
@@ -96,22 +100,22 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
                         break;
                     case 3:
                         // rename old packages table
-                        db.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_TABLE);
-                        db.execSQL(DBContract.GTPackageTable.SQL_RENAME_TABLE);
+                        db.execSQL(GTPackageTable.SQL_DELETE_OLD_TABLE);
+                        db.execSQL(GTPackageTable.SQL_RENAME_TABLE);
 
                         // create newnew table
-                        db.execSQL(DBContract.GTPackageTable.SQL_CREATE_TABLE);
+                        db.execSQL(GTPackageTable.SQL_CREATE_TABLE);
 
                         // migrate data
-                        db.execSQL(DBContract.GTPackageTable.SQL_V3_MIGRATE_DATA);
+                        db.execSQL(GTPackageTable.SQL_V3_MIGRATE_DATA);
 
                         // delete old table
-                        db.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_TABLE);
+                        db.execSQL(GTPackageTable.SQL_DELETE_OLD_TABLE);
 
                         break;
                     case 4:
                         //create Growth Spaces Subscriber table
-                        db.execSQL(DBContract.GSSubscriberTable.SQL_CREATE_TABLE);
+                        db.execSQL(GSSubscriberTable.SQL_CREATE_TABLE);
                         break;
                     case 5:
                         db.execSQL(FollowupTable.SQL_CREATE_TABLE);
@@ -130,6 +134,9 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
                         // delete old table
                         db.execSQL(GTLanguageTable.SQL_DELETE_OLD_TABLE);
                         break;
+                    case 7:
+                        db.execSQL(LanguageTable.SQL_CREATE_TABLE);
+                        break;
                     default:
                         // unrecognized version
                         throw new SQLiteException("Unrecognized database version");
@@ -139,8 +146,6 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
                 upgradeTo++;
             }
         } catch (final SQLException e) {
-            Log.e(TAG, "error upgrading database", e);
-
             // report (or rethrow) exception
             if (ApplicationUtils.isDebuggable(mContext)) {
                 throw Throwables.propagate(e);
@@ -164,12 +169,13 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.beginTransaction();
 
             // delete any existing tables
-            db.execSQL(DBContract.GTPackageTable.SQL_DELETE_TABLE);
-            db.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_TABLE);
+            db.execSQL(GTPackageTable.SQL_DELETE_TABLE);
+            db.execSQL(GTPackageTable.SQL_DELETE_OLD_TABLE);
             db.execSQL(GTLanguageTable.SQL_DELETE_TABLE);
             db.execSQL(GTLanguageTable.SQL_DELETE_OLD_TABLE);
-            db.execSQL(DBContract.GSSubscriberTable.SQL_DELETE_TABLE);
+            db.execSQL(GSSubscriberTable.SQL_DELETE_TABLE);
             db.execSQL(FollowupTable.SQL_DELETE_TABLE);
+            db.execSQL(LanguageTable.SQL_DELETE_TABLE);
 
             onCreate(db);
 
