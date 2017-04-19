@@ -1,11 +1,11 @@
 package org.keynote.godtools.android.db;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.common.base.Throwables;
@@ -20,7 +20,8 @@ import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
 import io.fabric.sdk.android.Fabric;
 
 public class GodToolsDatabase extends WalSQLiteOpenHelper {
-    private static final String TAG = "GodToolsDatabase";
+    private static final String DATABASE_NAME = "resource.db";
+    private static final int DATABASE_VERSION = 6;
 
     /*
      * Version history
@@ -36,11 +37,6 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
      * v4.2.0 - v4.3.2
      */
 
-    private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 6;
-
-    private static GodToolsDatabase INSTANCE;
-
     @NonNull
     private final Context mContext;
 
@@ -49,15 +45,17 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
         mContext = context;
     }
 
+    @SuppressLint("StaticFieldLeak")
+    private static GodToolsDatabase sInstance;
     @NonNull
     public static GodToolsDatabase getInstance(@NonNull final Context context) {
         synchronized (GodToolsDatabase.class) {
-            if (INSTANCE == null) {
-                INSTANCE = new GodToolsDatabase(context.getApplicationContext());
+            if (sInstance == null) {
+                sInstance = new GodToolsDatabase(context.getApplicationContext());
             }
         }
 
-        return INSTANCE;
+        return sInstance;
     }
 
     @Override
@@ -142,8 +140,6 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
                 upgradeTo++;
             }
         } catch (final SQLException e) {
-            Log.e(TAG, "error upgrading database", e);
-
             // report (or rethrow) exception
             if (ApplicationUtils.isDebuggable(mContext)) {
                 throw Throwables.propagate(e);
