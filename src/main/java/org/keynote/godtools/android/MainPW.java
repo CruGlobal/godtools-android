@@ -126,7 +126,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         if (!isFirstLaunch()) {
             showLoading();
-            GodToolsApi.INSTANCE.getListOfPackages().enqueue(new Callback<GTLanguages>() {
+            GodToolsApi.getInstance(this).legacy.getListOfPackages().enqueue(new Callback<GTLanguages>() {
                 @Override
                 public void onResponse(Call<GTLanguages> call, Response<GTLanguages> response) {
 

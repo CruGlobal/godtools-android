@@ -1,78 +1,117 @@
 package org.keynote.godtools.android.api;
 
-import org.keynote.godtools.android.BuildConfig;
-import org.keynote.godtools.android.business.GTLanguages;
-import org.keynote.godtools.android.business.GTNotificationRegister;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.GsonBuilder;
+
+import org.ccci.gto.android.common.api.okhttp3.util.OkHttpClientUtil;
+import org.ccci.gto.android.common.api.retrofit2.converter.LocaleConverterFactory;
+import org.ccci.gto.android.common.gson.GsonIgnoreExclusionStrategy;
+import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
+import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
+import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory;
+import org.keynote.godtools.android.model.Language;
+import org.keynote.godtools.android.model.Resource;
+import org.keynote.godtools.android.model.Translation;
+
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.Header;
-import retrofit2.http.Headers;
-import retrofit2.http.POST;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
 
-import static com.google.common.net.HttpHeaders.AUTHORIZATION;
-import static org.keynote.godtools.android.utils.Constants.INTERPRETER_HEADER;
+import static org.keynote.godtools.android.BuildConfig.BASE_URL;
+import static org.keynote.godtools.android.BuildConfig.GROWTH_SPACES_URL;
+import static org.keynote.godtools.android.BuildConfig.MOBILE_CONTENT_API;
 
-public interface GodToolsApi {
-    String V2 = "v2";
-    String AUTH = V2 + "/auth";
-    String NOTIFICATION = "notification";
-    String NOTIFICATION_UPDATE = NOTIFICATION + "/" + "update";
-    String META = V2 + "/meta/all";
-    String ENDPOINT_DRAFTS = V2 + "/drafts";
-    String ENDPOINT_PACKAGES = V2 + "/packages";
-    String ENDPOINT_TRANSLATIONS = V2 + "/translations";
+public class GodToolsApi {
+    @NonNull
+    private final Context mContext;
 
+    @NonNull
+    public final LanguagesApi languages;
+    @NonNull
+    public final ResourcesApi resources;
+    @NonNull
+    public final GrowthSpacesApi growthSpaces;
+    @NonNull
+    public final LegacyApi legacy;
 
-    GodToolsApi INSTANCE = new Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL).addConverterFactory(SimpleXmlConverterFactory.create())
-            .build()
-            .create(GodToolsApi.class);
+    private GodToolsApi(@NonNull final Context context) {
+        mContext = context;
 
-    @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
-    @POST(AUTH + "/{code}")
-    Call<ResponseBody> getAuthToken(@Path("code") String code);
+        // create Retrofit APIs
+        final Call.Factory okhttp = okhttp();
+        final Retrofit retrofit = mobileContentRetrofit()
+                .callFactory(okhttp)
+                .build();
+        languages = retrofit.create(LanguagesApi.class);
+        resources = retrofit.create(ResourcesApi.class);
 
-    @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
-    @GET(AUTH + "/status")
-    Call<ResponseBody> verifyAuthToken(@Header(AUTHORIZATION) String token);
+        growthSpaces = new Retrofit.Builder()
+                .baseUrl(GROWTH_SPACES_URL)
+                .addConverterFactory(gsonConverter())
+                .callFactory(okhttp)
+                .build()
+                .create(GrowthSpacesApi.class);
 
-    @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
-    @POST(NOTIFICATION + "/{registrationId}")
-    Call<ResponseBody> registerDeviceForNotifications(@Path("registrationId") String regId,
-                                                      @Header("deviceId") String deviceId,
-                                                      @Header("notificationsOn") boolean enableNotifications);
+        legacy = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(SimpleXmlConverterFactory.create())
+                .callFactory(okhttp)
+                .build()
+                .create(LegacyApi.class);
+    }
 
+    @Nullable
+    @SuppressLint("StaticFieldLeak")
+    private static GodToolsApi sInstance;
+    @NonNull
+    public static synchronized GodToolsApi getInstance(@NonNull final Context context) {
+        if (sInstance == null) {
+            sInstance = new GodToolsApi(context.getApplicationContext());
+        }
+        return sInstance;
+    }
 
-    @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
-    @POST(NOTIFICATION_UPDATE)
-    Call<ResponseBody> updateNotification(@Header(AUTHORIZATION) String token, @Body GTNotificationRegister notificationRegister);
+    @NonNull
+    private Retrofit.Builder mobileContentRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(MOBILE_CONTENT_API)
+                // attach the various converter factories
+                .addConverterFactory(new LocaleConverterFactory())
+                .addConverterFactory(JsonApiConverterFactory.create(jsonApiConverter()));
+    }
 
-    @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
-    @GET(META)
-    Call<GTLanguages> getListOfPackages();
+    private GsonConverterFactory gsonConverter() {
+        return GsonConverterFactory.create(
+                new GsonBuilder()
+                        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                        .setExclusionStrategies(new GsonIgnoreExclusionStrategy())
+                        .create());
+    }
 
-    @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
-    @GET(META + "/{langCode}")
-    Call<GTLanguages> getListOfDrafts(@Header(AUTHORIZATION) String token, @Path("langCode") String langCode);
+    @NonNull
+    private JsonApiConverter jsonApiConverter() {
+        return new JsonApiConverter.Builder()
+                .addClasses(Language.class)
+                .addClasses(Resource.class)
+                .addClasses(Translation.class)
+                .addConverters(new LocaleTypeConverter())
+                .build();
+    }
 
-    @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
-    @GET(ENDPOINT_DRAFTS + "/{langCode}")
-    Call<ResponseBody> downloadDrafts(@Header(AUTHORIZATION) String token, @Path("langCode") String langCode, @Query("compressed") boolean compressed);
-
-    @Headers({INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION})
-    @GET(ENDPOINT_PACKAGES + "/{langCode}")
-    Call<ResponseBody> downloadPackages(@Header(AUTHORIZATION) String token, @Path("langCode") String langCode);
-
-
-    @Headers({INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION,"Accept:application/xml","Content-type:application/xml"})
-    @POST(ENDPOINT_TRANSLATIONS + "/{langCode}/{packageCode}")
-    Call<ResponseBody> createDraft(@Header(AUTHORIZATION) String token, @Path("langCode") String langCode,
-                                   @Path("packageCode") String packageCode, @Query("publish") boolean publish);
+    @NonNull
+    private OkHttpClient okhttp() {
+        final OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS);
+        return OkHttpClientUtil.attachGlobalInterceptors(builder).build();
+    }
 }

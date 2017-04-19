@@ -95,7 +95,7 @@ public class BackgroundService extends IntentService
     private void registerDeviceForNotifications(@NonNull final Intent intent) {
         try {
             final String regId = intent.getStringExtra(REGISTRATION_ID);
-            final Response<ResponseBody> response = GodToolsApi.INSTANCE
+            final Response<ResponseBody> response = GodToolsApi.getInstance(this).legacy
                     .registerDeviceForNotifications(intent.getStringExtra(REGISTRATION_ID),
                                                     intent.getStringExtra(DEVICE_ID),
                                                     intent.getBooleanExtra(NOTIFICATIONS_ON, true)).execute();
@@ -115,7 +115,7 @@ public class BackgroundService extends IntentService
         try {
             // get an auth token for the specified access_code
             final Response<ResponseBody> response =
-                    GodToolsApi.INSTANCE.getAuthToken(intent.getStringExtra(ACCESS_CODE)).execute();
+                    GodToolsApi.getInstance(this).legacy.getAuthToken(intent.getStringExtra(ACCESS_CODE)).execute();
             //Added Logging
             Log.i(TAG, "Response Code: " + response.code());
             // a 204 response is successful, auth_token is in the Authorization header
@@ -140,8 +140,8 @@ public class BackgroundService extends IntentService
         try {
             // verify that the specified auth_token is still valid
             final String authToken = intent.getStringExtra(ACCESS_CODE);
-            final Response<ResponseBody> response = GodToolsApi.INSTANCE.verifyAuthToken(authToken)
-                    .execute();
+            final Response<ResponseBody> response =
+                    GodToolsApi.getInstance(this).legacy.verifyAuthToken(authToken).execute();
             Log.i(TAG, "verifyAuthToken response.code(): " + response.code());
             // a 204 response is successful
             if (response.code() == HttpURLConnection.HTTP_NO_CONTENT) {

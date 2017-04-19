@@ -70,7 +70,8 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
         try {
             // download zip file
 
-            Response<ResponseBody> response = GodToolsApi.INSTANCE.downloadPackages(authorization, langCode).execute();
+            Response<ResponseBody> response =
+                    GodToolsApi.getInstance(mContext).legacy.downloadPackages(authorization, langCode).execute();
             if (response.isSuccessful()) {
                 Log.d(TAG, "server contacted and has file");
                 boolean writtenToDisk = writeResponseBodyToDisk(response.body(), zipfile);

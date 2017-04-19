@@ -163,7 +163,9 @@ public class SnuffyPWActivity extends AppCompatActivity {
 
 
                     GTNotificationRegister gtNotificationRegister = new GTNotificationRegister(mRegID, NotificationInfo.AFTER_10_PRESENTATIONS);
-                    GodToolsApi.INSTANCE.updateNotification(settings.getString(AUTH_CODE, ""), gtNotificationRegister).enqueue(new Callback<ResponseBody>() {
+                    GodToolsApi.getInstance(SnuffyPWActivity.this).legacy
+                            .updateNotification(settings.getString(AUTH_CODE, ""), gtNotificationRegister)
+                            .enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if(response.isSuccessful())
@@ -607,7 +609,9 @@ public class SnuffyPWActivity extends AppCompatActivity {
                 Log.i(TAG, "Timer complete");
                 SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                 GTNotificationRegister gtNotificationRegister = new GTNotificationRegister(mRegID, NotificationInfo.DAY_AFTER_SHARE);
-                GodToolsApi.INSTANCE.updateNotification(settings.getString(AUTH_CODE, ""), gtNotificationRegister).enqueue(new Callback<ResponseBody>() {
+                GodToolsApi.getInstance(SnuffyPWActivity.this).legacy
+                        .updateNotification(settings.getString(AUTH_CODE, ""), gtNotificationRegister)
+                        .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful())

@@ -87,7 +87,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
             settings.edit().putString(GTLanguage.KEY_PRIMARY, Locale.getDefault().getLanguage()).apply();
 
             showLoading();
-            GodToolsApi.INSTANCE.getListOfPackages().enqueue(new Callback<GTLanguages>() {
+            GodToolsApi.getInstance(this).legacy.getListOfPackages().enqueue(new Callback<GTLanguages>() {
                 @Override
                 public void onResponse(Call<GTLanguages> call, Response<GTLanguages> response) {
                     UpdatePackageListTask.run(response.body().mLanguages, DBAdapter.getInstance(Splash.this));

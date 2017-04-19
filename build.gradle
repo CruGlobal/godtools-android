@@ -41,11 +41,17 @@ dependencies {
     compile 'com.android.support:appcompat-v7:' + deps.androidSupport
     compile 'com.android.support:support-annotations:' + deps.androidSupport
     compile 'com.android.support:design:' + deps.androidSupport
+
     compile 'com.google.android.gms:play-services-analytics:' + deps.playServices
     compile 'com.google.android.gms:play-services-gcm:' + deps.playServices
+
+    compile 'org.ccci.gto.android:gto-support-api-okhttp3:' + deps.gtoSupport
+    compile 'org.ccci.gto.android:gto-support-api-retrofit2:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-db:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-db-async:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-gson:' + deps.gtoSupport
+    compile 'org.ccci.gto.android:gto-support-jsonapi:' + deps.gtoSupport
+    compile 'org.ccci.gto.android:gto-support-jsonapi-retrofit2:' + deps.gtoSupport
 
     compile 'com.crashlytics.sdk.android:crashlytics:2.6.7'
     compile 'com.newrelic.agent.android:android-agent:5.12.2'
@@ -94,6 +100,8 @@ android {
         proguardFiles 'proguard-rules.pro'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api-stage.cru.org/\""
+        buildConfigField "String", "MOBILE_CONTENT_SYSTEM", "\"GodTools\""
         buildConfigField "String", "GOOGLE_ANALYTICS_CLIENT_ID", "\"UA-325725-50\""
         buildConfigField "String", "GROWTH_SPACES_URL", "\"https://www.growthspaces.org/api/v1/\""
         buildConfigField "String", "INTERPRETER_VERSION", "\"1\""

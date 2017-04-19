@@ -256,7 +256,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                             case DialogInterface.BUTTON_POSITIVE:
                                 
                                 broadcastManager.sendBroadcast(draftBroadcast());
-                                GodToolsApi.INSTANCE.createDraft(settings.getString(AUTH_DRAFT, ""), currentPackage.getLanguage(), currentPackage.getCode(), true).enqueue(new Callback<ResponseBody>() {
+                                GodToolsApi.getInstance(context).legacy
+                                        .createDraft(settings.getString(AUTH_DRAFT, ""), currentPackage.getLanguage(),
+                                                     currentPackage.getCode(), true)
+                                        .enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         if(response.isSuccessful())
@@ -306,7 +309,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                 
                                 broadcastManager.sendBroadcast(draftBroadcast());
                                 Log.i(TAG, "Creating Draft");
-                                GodToolsApi.INSTANCE.createDraft(settings.getString(AUTH_DRAFT, ""), languagePrimary, currentPackage.getCode(), false).enqueue(new Callback<ResponseBody>() {
+                                GodToolsApi.getInstance(context).legacy
+                                        .createDraft(settings.getString(AUTH_DRAFT, ""), languagePrimary,
+                                                     currentPackage.getCode(), false)
+                                        .enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         if(response.isSuccessful()) {

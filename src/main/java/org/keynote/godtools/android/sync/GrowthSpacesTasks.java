@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
 
 import org.ccci.gto.android.common.db.Query;
-import org.keynote.godtools.android.api.GrowthSpacesApi;
+import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.business.GSSubscriber;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.FollowupTable;
@@ -21,7 +21,7 @@ import static org.ccci.gto.android.common.db.Expression.bind;
 @WorkerThread
 class GrowthSpacesTasks {
     static synchronized void syncSubscribers(@NonNull final Context context) {
-        final GrowthSpacesApi api = GrowthSpacesApi.INSTANCE;
+        final GodToolsApi api = GodToolsApi.getInstance(context);
         final DBAdapter dao = DBAdapter.getInstance(context);
 
         // fetch any pending subscribers
@@ -34,9 +34,9 @@ class GrowthSpacesTasks {
             if (followups.size() > 0) {
                 final Followup followup = followups.get(0);
                 try {
-                    final Response<GSSubscriber> response =
-                            api.createSubscriber(followup.getGrowthSpacesAccessId(),
-                                                 followup.getGrowthSpacesAccessSecret(), subscriber).execute();
+                    final Response<GSSubscriber> response = api.growthSpaces
+                            .createSubscriber(followup.getGrowthSpacesAccessId(),
+                                              followup.getGrowthSpacesAccessSecret(), subscriber).execute();
                     if (response.isSuccessful()) {
                         dao.delete(subscriber);
                     }

@@ -411,7 +411,8 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     private void refreshDrafts() {
         if (Device.isConnected(PreviewModeMainPW.this)) {
             swipeRefreshLayout.setRefreshing(true);
-            GodToolsApi.INSTANCE.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), languagePrimary).enqueue(new Callback<GTLanguages>() {
+            GodToolsApi.getInstance(this).legacy.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), languagePrimary)
+                    .enqueue(new Callback<GTLanguages>() {
                 @Override
                 public void onResponse(Call<GTLanguages> call, Response<GTLanguages> response) {
                     if (response.isSuccessful()) {
