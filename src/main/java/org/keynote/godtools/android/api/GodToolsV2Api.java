@@ -14,6 +14,7 @@ import org.ccci.gto.android.common.gson.GsonIgnoreExclusionStrategy;
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory;
+import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.Resource;
 import org.keynote.godtools.android.model.Translation;
 
@@ -84,6 +85,7 @@ public class GodToolsV2Api {
     @NonNull
     private JsonApiConverter jsonApiConverter() {
         return new JsonApiConverter.Builder()
+                .addClasses(Language.class)
                 .addClasses(Resource.class)
                 .addClasses(Translation.class)
                 .addConverters(new LocaleTypeConverter())
