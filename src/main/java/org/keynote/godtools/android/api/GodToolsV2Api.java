@@ -20,10 +20,13 @@ import org.keynote.godtools.android.model.Translation;
 
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
+import static org.keynote.godtools.android.BuildConfig.BASE_URL;
 import static org.keynote.godtools.android.BuildConfig.GROWTH_SPACES_URL;
 import static org.keynote.godtools.android.BuildConfig.MOBILE_CONTENT_API;
 
@@ -35,23 +38,32 @@ public class GodToolsV2Api {
     public final ResourcesApi resources;
     @NonNull
     public final GrowthSpacesApi growthSpaces;
+    @NonNull
+    public final GodToolsApi legacy;
 
     private GodToolsV2Api(@NonNull final Context context) {
         mContext = context;
 
         // create Retrofit APIs
-        final Retrofit.Builder retrofit = mobileContentRetrofit();
-        resources = retrofit
-                .callFactory(okhttp())
-                .build()
-                .create(ResourcesApi.class);
+        final Call.Factory okhttp = okhttp();
+        final Retrofit retrofit = mobileContentRetrofit()
+                .callFactory(okhttp)
+                .build();
+        resources = retrofit.create(ResourcesApi.class);
 
         growthSpaces = new Retrofit.Builder()
                 .baseUrl(GROWTH_SPACES_URL)
                 .addConverterFactory(gsonConverter())
-                .callFactory(okhttp())
+                .callFactory(okhttp)
                 .build()
                 .create(GrowthSpacesApi.class);
+
+        legacy = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(SimpleXmlConverterFactory.create())
+                .callFactory(okhttp)
+                .build()
+                .create(GodToolsApi.class);
     }
 
     @Nullable
