@@ -16,6 +16,7 @@ import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.model.Followup;
 
+@Deprecated
 public class DBAdapter extends AbstractAsyncDao {
     protected DBAdapter(@NonNull final SQLiteOpenHelper helper) {
         super(helper);
@@ -30,6 +31,7 @@ public class DBAdapter extends AbstractAsyncDao {
                      FollowupTable.SQL_WHERE_PRIMARY_KEY);
     }
 
+    @Deprecated
     public static DBAdapter getInstance(@NonNull final Context context) {
         return GodToolsDao.getInstance(context);
     }
