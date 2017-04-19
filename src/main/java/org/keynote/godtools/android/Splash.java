@@ -16,7 +16,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.util.MainThreadExecutor;
-import org.keynote.godtools.android.api.GodToolsApi;
+import org.keynote.godtools.android.api.GodToolsV2Api;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTLanguages;
 import org.keynote.godtools.android.dao.DBAdapter;
@@ -87,7 +87,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
             settings.edit().putString(GTLanguage.KEY_PRIMARY, Locale.getDefault().getLanguage()).apply();
 
             showLoading();
-            GodToolsApi.INSTANCE.getListOfPackages().enqueue(new Callback<GTLanguages>() {
+            GodToolsV2Api.getInstance(this).legacy.getListOfPackages().enqueue(new Callback<GTLanguages>() {
                 @Override
                 public void onResponse(Call<GTLanguages> call, Response<GTLanguages> response) {
                     UpdatePackageListTask.run(response.body().mLanguages, DBAdapter.getInstance(Splash.this));

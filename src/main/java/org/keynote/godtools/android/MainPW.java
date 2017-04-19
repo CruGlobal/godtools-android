@@ -27,7 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
-import org.keynote.godtools.android.api.GodToolsApi;
+import org.keynote.godtools.android.api.GodToolsV2Api;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
@@ -126,7 +126,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         if (!isFirstLaunch()) {
             showLoading();
-            GodToolsApi.INSTANCE.getListOfPackages().enqueue(new Callback<GTLanguages>() {
+            GodToolsV2Api.getInstance(this).legacy.getListOfPackages().enqueue(new Callback<GTLanguages>() {
                 @Override
                 public void onResponse(Call<GTLanguages> call, Response<GTLanguages> response) {
 

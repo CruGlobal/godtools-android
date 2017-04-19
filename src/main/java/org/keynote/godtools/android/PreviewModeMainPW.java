@@ -27,7 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.ccci.gto.android.common.db.Query;
-import org.keynote.godtools.android.api.GodToolsApi;
+import org.keynote.godtools.android.api.GodToolsV2Api;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;
@@ -411,7 +411,8 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     private void refreshDrafts() {
         if (Device.isConnected(PreviewModeMainPW.this)) {
             swipeRefreshLayout.setRefreshing(true);
-            GodToolsApi.INSTANCE.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), languagePrimary).enqueue(new Callback<GTLanguages>() {
+            GodToolsV2Api.getInstance(this).legacy.getListOfDrafts(settings.getString(AUTH_DRAFT, ""), languagePrimary)
+                    .enqueue(new Callback<GTLanguages>() {
                 @Override
                 public void onResponse(Call<GTLanguages> call, Response<GTLanguages> response) {
                     if (response.isSuccessful()) {
