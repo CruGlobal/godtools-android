@@ -6,8 +6,6 @@ import org.keynote.godtools.android.business.GTNotificationRegister;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -28,12 +26,6 @@ public interface GodToolsApi {
     String ENDPOINT_DRAFTS = V2 + "/drafts";
     String ENDPOINT_PACKAGES = V2 + "/packages";
     String ENDPOINT_TRANSLATIONS = V2 + "/translations";
-
-
-    GodToolsApi INSTANCE = new Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL).addConverterFactory(SimpleXmlConverterFactory.create())
-            .build()
-            .create(GodToolsApi.class);
 
     @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
     @POST(AUTH + "/{code}")
