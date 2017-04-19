@@ -5,10 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
 
 import org.ccci.gto.android.common.db.Query;
-import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.business.GSSubscriber;
 import org.keynote.godtools.android.db.Contract.FollowupTable;
-import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.model.Followup;
 
 import java.io.IOException;
@@ -19,28 +17,34 @@ import retrofit2.Response;
 import static org.ccci.gto.android.common.db.Expression.bind;
 
 @WorkerThread
-class GrowthSpacesTasks {
-    static synchronized void syncSubscribers(@NonNull final Context context) {
-        final GodToolsApi api = GodToolsApi.getInstance(context);
-        final GodToolsDao dao = GodToolsDao.getInstance(context);
+class GrowthSpacesTasks extends BaseSyncTasks {
+    private static final Object LOCK_SUBSCRIBERS = new Object();
 
-        // fetch any pending subscribers
-        final List<GSSubscriber> subscribers = dao.get(Query.select(GSSubscriber.class));
-        for (final GSSubscriber subscriber : subscribers) {
-            // fetch the followup record for this subscriber (to retrieve access-id and access-secret)
-            final List<Followup> followups =
-                    dao.get(Query.select(Followup.class)
-                                    .where(FollowupTable.FIELD_GS_ROUTE_ID.eq(bind(subscriber.getRouteId()))).limit(1));
-            if (followups.size() > 0) {
-                final Followup followup = followups.get(0);
-                try {
-                    final Response<GSSubscriber> response = api.growthSpaces
-                            .createSubscriber(followup.getGrowthSpacesAccessId(),
-                                              followup.getGrowthSpacesAccessSecret(), subscriber).execute();
-                    if (response.isSuccessful()) {
-                        dao.delete(subscriber);
+    GrowthSpacesTasks(@NonNull final Context context) {
+        super(context);
+    }
+
+    void syncSubscribers() {
+        synchronized (LOCK_SUBSCRIBERS) {
+            // fetch any pending subscribers
+            final List<GSSubscriber> subscribers = mDao.get(Query.select(GSSubscriber.class));
+            for (final GSSubscriber subscriber : subscribers) {
+                // fetch the followup record for this subscriber (to retrieve access-id and access-secret)
+                final List<Followup> followups =
+                        mDao.get(Query.select(Followup.class)
+                                         .where(FollowupTable.FIELD_GS_ROUTE_ID.eq(bind(subscriber.getRouteId())))
+                                         .limit(1));
+                if (followups.size() > 0) {
+                    final Followup followup = followups.get(0);
+                    try {
+                        final Response<GSSubscriber> response = mApi.growthSpaces
+                                .createSubscriber(followup.getGrowthSpacesAccessId(),
+                                                  followup.getGrowthSpacesAccessSecret(), subscriber).execute();
+                        if (response.isSuccessful()) {
+                            mDao.delete(subscriber);
+                        }
+                    } catch (final IOException ignored) {
                     }
-                } catch (final IOException ignored) {
                 }
             }
         }

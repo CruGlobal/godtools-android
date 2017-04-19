@@ -12,6 +12,8 @@ public class GodToolsSyncService extends IntentService {
     static final int SYNCTYPE_NONE = 0;
     static final int SYNCTYPE_GROWTHSPACESSUBSCRIBERS = 1;
 
+    private GrowthSpacesTasks mGrowthSpacesTasks;
+
     public GodToolsSyncService() {
         super("GtSyncService");
     }
@@ -22,12 +24,22 @@ public class GodToolsSyncService extends IntentService {
         context.startService(intent);
     }
 
+    /* BEGIN lifecycle */
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mGrowthSpacesTasks = new GrowthSpacesTasks(this);
+    }
+
     @Override
     protected void onHandleIntent(@NonNull final Intent intent) {
         switch (intent.getIntExtra(EXTRA_SYNCTYPE, SYNCTYPE_NONE)) {
             case SYNCTYPE_GROWTHSPACESSUBSCRIBERS:
-                GrowthSpacesTasks.syncSubscribers(this);
+                mGrowthSpacesTasks.syncSubscribers();
                 break;
         }
     }
+
+    /* END lifecycle */
 }
