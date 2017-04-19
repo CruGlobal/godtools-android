@@ -3,7 +3,7 @@ package org.keynote.godtools.android.business;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.keynote.godtools.android.api.GodToolsV2Api;
+import org.keynote.godtools.android.api.GodToolsApi;
 
 import java.io.IOException;
 
@@ -68,7 +68,7 @@ public class GTPackageTest {
     @Ignore
     public void checkGodToolsAPIGetMeta()
     {
-        Call<GTLanguages> languagesCall = GodToolsV2Api.getInstance(null).legacy.getListOfPackages();
+        Call<GTLanguages> languagesCall = GodToolsApi.getInstance(null).legacy.getListOfPackages();
         try {
             Response<GTLanguages> execute = languagesCall.execute();
             GTLanguages body = execute.body();

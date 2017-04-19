@@ -8,7 +8,7 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 
 import org.ccci.gto.android.common.util.IOUtils;
-import org.keynote.godtools.android.api.GodToolsV2Api;
+import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBAdapter;
@@ -71,7 +71,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
             // download zip file
 
             Response<ResponseBody> response =
-                    GodToolsV2Api.getInstance(mContext).legacy.downloadPackages(authorization, langCode).execute();
+                    GodToolsApi.getInstance(mContext).legacy.downloadPackages(authorization, langCode).execute();
             if (response.isSuccessful()) {
                 Log.d(TAG, "server contacted and has file");
                 boolean writtenToDisk = writeResponseBodyToDisk(response.body(), zipfile);

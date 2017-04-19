@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import org.keynote.godtools.android.api.GodToolsV2Api;
+import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.business.GTNotificationRegister;
 import org.keynote.godtools.android.utils.Constants;
 
@@ -45,7 +45,7 @@ public class NotificationsClient
 
         // send notification update each time app is used for notification type 1
         GTNotificationRegister gtNotificationRegister = new GTNotificationRegister(registrationId, NotificationInfo.NOT_USED_2_WEEKS);
-        GodToolsV2Api.getInstance(context).legacy.updateNotification(authorization, gtNotificationRegister)
+        GodToolsApi.getInstance(context).legacy.updateNotification(authorization, gtNotificationRegister)
                 .enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -90,7 +90,7 @@ public class NotificationsClient
         String authorization = userSettings.getString(Constants.AUTH_CODE,"");
         String registrationId = NotificationUtilities.getStoredRegistrationId(context, userSettings);
         GTNotificationRegister gtNotificationRegister = new GTNotificationRegister(registrationId, NotificationInfo.AFTER_3_USES);
-        GodToolsV2Api.getInstance(context).legacy.updateNotification(authorization, gtNotificationRegister)
+        GodToolsApi.getInstance(context).legacy.updateNotification(authorization, gtNotificationRegister)
                 .enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

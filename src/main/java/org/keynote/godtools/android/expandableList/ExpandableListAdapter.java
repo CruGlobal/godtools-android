@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.api.GodToolsV2Api;
+import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.utils.Device;
@@ -256,7 +256,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                             case DialogInterface.BUTTON_POSITIVE:
                                 
                                 broadcastManager.sendBroadcast(draftBroadcast());
-                                GodToolsV2Api.getInstance(context).legacy
+                                GodToolsApi.getInstance(context).legacy
                                         .createDraft(settings.getString(AUTH_DRAFT, ""), currentPackage.getLanguage(),
                                                      currentPackage.getCode(), true)
                                         .enqueue(new Callback<ResponseBody>() {
@@ -309,7 +309,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                                 
                                 broadcastManager.sendBroadcast(draftBroadcast());
                                 Log.i(TAG, "Creating Draft");
-                                GodToolsV2Api.getInstance(context).legacy
+                                GodToolsApi.getInstance(context).legacy
                                         .createDraft(settings.getString(AUTH_DRAFT, ""), languagePrimary,
                                                      currentPackage.getCode(), false)
                                         .enqueue(new Callback<ResponseBody>() {

@@ -30,7 +30,7 @@ import static org.keynote.godtools.android.BuildConfig.BASE_URL;
 import static org.keynote.godtools.android.BuildConfig.GROWTH_SPACES_URL;
 import static org.keynote.godtools.android.BuildConfig.MOBILE_CONTENT_API;
 
-public class GodToolsV2Api {
+public class GodToolsApi {
     @NonNull
     private final Context mContext;
 
@@ -41,7 +41,7 @@ public class GodToolsV2Api {
     @NonNull
     public final LegacyApi legacy;
 
-    private GodToolsV2Api(@NonNull final Context context) {
+    private GodToolsApi(@NonNull final Context context) {
         mContext = context;
 
         // create Retrofit APIs
@@ -68,11 +68,11 @@ public class GodToolsV2Api {
 
     @Nullable
     @SuppressLint("StaticFieldLeak")
-    private static GodToolsV2Api sInstance;
+    private static GodToolsApi sInstance;
     @NonNull
-    public static synchronized GodToolsV2Api getInstance(@NonNull final Context context) {
+    public static synchronized GodToolsApi getInstance(@NonNull final Context context) {
         if (sInstance == null) {
-            sInstance = new GodToolsV2Api(context.getApplicationContext());
+            sInstance = new GodToolsApi(context.getApplicationContext());
         }
         return sInstance;
     }
