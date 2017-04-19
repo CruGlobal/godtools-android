@@ -12,6 +12,7 @@ import org.keynote.godtools.android.dao.DBContract.FollowupTable;
 import org.keynote.godtools.android.dao.DBContract.GSSubscriberTable;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
+import org.keynote.godtools.android.db.GodToolsDatabase;
 import org.keynote.godtools.android.model.Followup;
 
 public class DBAdapter extends AbstractAsyncDao {

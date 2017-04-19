@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.dao;
+package org.keynote.godtools.android.db;
 
 import android.content.Context;
 import android.database.SQLException;
@@ -13,7 +13,9 @@ import com.google.common.base.Throwables;
 import org.ccci.gto.android.common.app.ApplicationUtils;
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper;
 import org.keynote.godtools.android.dao.DBContract.FollowupTable;
+import org.keynote.godtools.android.dao.DBContract.GSSubscriberTable;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
+import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -62,9 +64,9 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
         try {
             db.beginTransaction();
 
-            db.execSQL(DBContract.GTPackageTable.SQL_CREATE_TABLE);
+            db.execSQL(GTPackageTable.SQL_CREATE_TABLE);
             db.execSQL(GTLanguageTable.SQL_CREATE_TABLE);
-            db.execSQL(DBContract.GSSubscriberTable.SQL_CREATE_TABLE);
+            db.execSQL(GSSubscriberTable.SQL_CREATE_TABLE);
             db.execSQL(FollowupTable.SQL_CREATE_TABLE);
 
             db.setTransactionSuccessful();
@@ -85,7 +87,7 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
                         db.execSQL(GTLanguageTable.SQL_RENAME_TABLE);
 
                         // create tables
-                        db.execSQL(DBContract.GTPackageTable.SQL_V2_CREATE_TABLE);
+                        db.execSQL(GTPackageTable.SQL_V2_CREATE_TABLE);
                         db.execSQL(GTLanguageTable.SQL_V2_CREATE_TABLE);
 
                         // copy old data to newnew table
@@ -96,22 +98,22 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
                         break;
                     case 3:
                         // rename old packages table
-                        db.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_TABLE);
-                        db.execSQL(DBContract.GTPackageTable.SQL_RENAME_TABLE);
+                        db.execSQL(GTPackageTable.SQL_DELETE_OLD_TABLE);
+                        db.execSQL(GTPackageTable.SQL_RENAME_TABLE);
 
                         // create newnew table
-                        db.execSQL(DBContract.GTPackageTable.SQL_CREATE_TABLE);
+                        db.execSQL(GTPackageTable.SQL_CREATE_TABLE);
 
                         // migrate data
-                        db.execSQL(DBContract.GTPackageTable.SQL_V3_MIGRATE_DATA);
+                        db.execSQL(GTPackageTable.SQL_V3_MIGRATE_DATA);
 
                         // delete old table
-                        db.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_TABLE);
+                        db.execSQL(GTPackageTable.SQL_DELETE_OLD_TABLE);
 
                         break;
                     case 4:
                         //create Growth Spaces Subscriber table
-                        db.execSQL(DBContract.GSSubscriberTable.SQL_CREATE_TABLE);
+                        db.execSQL(GSSubscriberTable.SQL_CREATE_TABLE);
                         break;
                     case 5:
                         db.execSQL(FollowupTable.SQL_CREATE_TABLE);
@@ -164,11 +166,11 @@ public class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.beginTransaction();
 
             // delete any existing tables
-            db.execSQL(DBContract.GTPackageTable.SQL_DELETE_TABLE);
-            db.execSQL(DBContract.GTPackageTable.SQL_DELETE_OLD_TABLE);
+            db.execSQL(GTPackageTable.SQL_DELETE_TABLE);
+            db.execSQL(GTPackageTable.SQL_DELETE_OLD_TABLE);
             db.execSQL(GTLanguageTable.SQL_DELETE_TABLE);
             db.execSQL(GTLanguageTable.SQL_DELETE_OLD_TABLE);
-            db.execSQL(DBContract.GSSubscriberTable.SQL_DELETE_TABLE);
+            db.execSQL(GSSubscriberTable.SQL_DELETE_TABLE);
             db.execSQL(FollowupTable.SQL_DELETE_TABLE);
 
             onCreate(db);

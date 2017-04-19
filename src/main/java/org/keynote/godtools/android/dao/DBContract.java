@@ -62,17 +62,17 @@ public class DBContract extends BaseContract {
 
         // migration db queries
         public static final String OLD_TABLE_NAME = "gtpackages_old";
-        static final String SQL_RENAME_TABLE = "ALTER TABLE " + TABLE_NAME + " RENAME TO " + OLD_TABLE_NAME;
-        static final String SQL_DELETE_OLD_TABLE = drop(OLD_TABLE_NAME);
+        public static final String SQL_RENAME_TABLE = "ALTER TABLE " + TABLE_NAME + " RENAME TO " + OLD_TABLE_NAME;
+        public static final String SQL_DELETE_OLD_TABLE = drop(OLD_TABLE_NAME);
         @Deprecated
-        static final String SQL_V2_CREATE_TABLE =
+        public static final String SQL_V2_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_NAME, SQL_COLUMN_LANGUAGE,
                        SQL_COLUMN_CONFIG_FILE_NAME, SQL_COLUMN_ICON, SQL_COLUMN_STATUS, SQL_COLUMN_VERSION);
         @Deprecated
         private static final String SQL_V3_MIGRATE_COLUMNS = TextUtils.join(",", new Object[] {COL_LANGUAGE, COL_STATUS,
                 COL_CODE, COL_NAME, COL_VERSION, COL_CONFIG_FILE_NAME, COL_ICON});
         @Deprecated
-        static final String SQL_V3_MIGRATE_DATA =
+        public static final String SQL_V3_MIGRATE_DATA =
                 "INSERT OR IGNORE INTO " + TABLE_NAME + " (" + SQL_V3_MIGRATE_COLUMNS + ") SELECT " +
                         SQL_V3_MIGRATE_COLUMNS + " FROM " + OLD_TABLE_NAME;
     }
@@ -96,32 +96,32 @@ public class DBContract extends BaseContract {
 
         static final Expression SQL_WHERE_PRIMARY_KEY = TABLE.field(COL_CODE).eq(bind());
 
-        static final String SQL_CREATE_TABLE =
+        public static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_DOWNLOADED, SQL_COLUMN_DRAFT,
                        SQL_COLUMN_NAME, SQL_PRIMARY_KEY);
-        static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
+        public static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
 
         // migration db queries
-        static final String OLD_TABLE_NAME = "gtlanguages_old";
-        static final String SQL_RENAME_TABLE = "ALTER TABLE " + TABLE_NAME + " RENAME TO " + OLD_TABLE_NAME;
-        static final String SQL_DELETE_OLD_TABLE = drop(OLD_TABLE_NAME);
+        public static final String OLD_TABLE_NAME = "gtlanguages_old";
+        public static final String SQL_RENAME_TABLE = "ALTER TABLE " + TABLE_NAME + " RENAME TO " + OLD_TABLE_NAME;
+        public static final String SQL_DELETE_OLD_TABLE = drop(OLD_TABLE_NAME);
 
         @Deprecated
-        static final String SQL_V1_MIGRATE_DATA = "INSERT INTO " + TABLE_NAME
+        public static final String SQL_V1_MIGRATE_DATA = "INSERT INTO " + TABLE_NAME
                 + " (" + GTLanguageTable._ID + COMMA_SEP
                 + GTLanguageTable.COL_CODE + COMMA_SEP
                 + GTLanguageTable.COL_DOWNLOADED + COMMA_SEP
                 + GTLanguageTable.COL_DRAFT + ")" +
                 " SELECT * FROM " + OLD_TABLE_NAME;
         @Deprecated
-        static final String SQL_V2_CREATE_TABLE =
+        public static final String SQL_V2_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_DOWNLOADED, SQL_COLUMN_DRAFT,
                        SQL_COLUMN_NAME);
         @Deprecated
         private static final String SQL_V6_MIGRATE_COLUMNS = TextUtils.join(",", new Object[] {COL_CODE, COL_DOWNLOADED,
                 COL_DRAFT, COL_DOWNLOADED});
         @Deprecated
-        static final String SQL_V6_MIGRATE_DATA =
+        public static final String SQL_V6_MIGRATE_DATA =
                 "INSERT OR IGNORE INTO " + TABLE_NAME + " (" + SQL_V6_MIGRATE_COLUMNS + ") SELECT " +
                         SQL_V6_MIGRATE_COLUMNS + " FROM " + OLD_TABLE_NAME;
     }
