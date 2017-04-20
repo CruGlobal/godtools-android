@@ -20,7 +20,7 @@ import org.keynote.godtools.android.db.Contract.LanguageTable;
 
 import io.fabric.sdk.android.Fabric;
 
-final class GodToolsDatabase extends WalSQLiteOpenHelper {
+public final class GodToolsDatabase extends WalSQLiteOpenHelper {
     private static final String DATABASE_NAME = "resource.db";
     private static final int DATABASE_VERSION = 7;
 

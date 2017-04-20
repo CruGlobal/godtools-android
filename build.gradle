@@ -29,8 +29,8 @@ ext.deps = [
         androidSupport       : '25.3.0',
         androidTestingSupport: '0.5',
         butterknife          : '8.5.1',
-        facebookStetho       : '1.4.2',
-        gtoSupport           : '1.1.0',
+        facebookStetho       : '1.5.0',
+        gtoSupport           : '1.1.1-SNAPSHOT',
         guava                : '19.0',
         junit                : '4.12',
         playServices         : '9.0.2',
@@ -75,6 +75,7 @@ dependencies {
 
     debugCompile 'com.android.support:multidex:1.0.1'
     debugCompile 'org.ccci.gto.android:gto-support-leakcanary:' + deps.gtoSupport
+    debugCompile "org.ccci.gto.android:gto-support-stetho:${deps.gtoSupport}"
     debugCompile 'com.facebook.stetho:stetho:' + deps.facebookStetho
     debugCompile 'com.facebook.stetho:stetho-okhttp3:' + deps.facebookStetho
     debugCompile 'com.facebook.stetho:stetho-urlconnection:' + deps.facebookStetho
