@@ -20,7 +20,7 @@ public final class Contract extends BaseContract {
         private static final Table<Language> TABLE = Table.forClass(Language.class);
 
         private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
-        static final String COLUMN_LOCALE = "locale";
+        public static final String COLUMN_LOCALE = "locale";
 
         public static final Field FIELD_LOCALE = TABLE.field(COLUMN_LOCALE);
 

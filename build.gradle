@@ -52,6 +52,7 @@ dependencies {
     compile 'org.ccci.gto.android:gto-support-gson:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-jsonapi:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-jsonapi-retrofit2:' + deps.gtoSupport
+    compile "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
     compile 'com.crashlytics.sdk.android:crashlytics:2.6.7'
     compile 'com.newrelic.agent.android:android-agent:5.12.2'
