@@ -22,7 +22,7 @@ apply plugin: 'newrelic'
 apply from: 'versioning.gradle'
 
 group 'org.cru.android'
-version '4.3.3-SNAPSHOT'
+version '4.3.3'
 
 // define dependency versions for this project
 ext.deps = [
@@ -30,7 +30,7 @@ ext.deps = [
         androidTestingSupport: '0.5',
         butterknife          : '8.5.1',
         facebookStetho       : '1.4.2',
-        gtoSupport           : '1.1.0-SNAPSHOT',
+        gtoSupport           : '1.1.0',
         guava                : '19.0',
         junit                : '4.12',
         playServices         : '9.0.2',
