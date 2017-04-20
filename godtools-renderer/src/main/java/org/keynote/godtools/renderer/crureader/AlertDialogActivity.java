@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
-import android.view.Window;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -44,12 +43,12 @@ public class AlertDialogActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setAllowEnterTransitionOverlap(false);
-            getWindow().setAllowReturnTransitionOverlap(false);
-        }
+//        requestWindowFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().setAllowEnterTransitionOverlap(false);
+//            getWindow().setAllowReturnTransitionOverlap(false);
+//        }
 
         getIntentData();
         bindAlertDialogAndShow();
