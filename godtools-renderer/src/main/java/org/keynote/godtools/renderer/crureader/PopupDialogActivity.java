@@ -16,7 +16,6 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -71,11 +70,11 @@ public class PopupDialogActivity extends FragmentActivity implements IContexual 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            requestWindowFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-            getWindow().setAllowEnterTransitionOverlap(false);
-            getWindow().setAllowReturnTransitionOverlap(false);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            requestWindowFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+//            getWindow().setAllowEnterTransitionOverlap(false);
+//            getWindow().setAllowReturnTransitionOverlap(false);
+//        }
         readExtras();
         setContentView(R.layout.activity_popupdialog);
         setUpDismissAction();
