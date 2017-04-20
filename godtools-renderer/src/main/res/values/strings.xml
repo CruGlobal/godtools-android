@@ -1,10 +1,7 @@
 <resources>
-    <string name="app_name">CRUReader</string>
     <string name="button_tv_transistion_title">button_transition</string>
     <string name="inner_ll_transistion_title">inner_ll_transition</string>
     <string name="scannable_text_input">"scannableTextInput"</string>
     <string name="fallback">fallback</string>
     <string name="invalid_error_resource"/>
-
-
 </resources>
