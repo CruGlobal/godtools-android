@@ -30,10 +30,10 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
         return new SyncTask(context, intent);
     }
 
-    public static void syncGrowthSpacesSubscribers(final Context context) {
+    public static SyncTask syncGrowthSpacesSubscribers(final Context context) {
         final Intent intent = new Intent(context, GodToolsSyncService.class);
         intent.putExtra(EXTRA_SYNCTYPE, SYNCTYPE_GROWTHSPACESSUBSCRIBERS);
-        context.startService(intent);
+        return new SyncTask(context, intent);
     }
 
     public GodToolsSyncService() {
