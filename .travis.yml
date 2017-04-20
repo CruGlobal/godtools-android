@@ -16,7 +16,6 @@ branches:
   only:
     - develop
     - master
-    - v4.3.x
 
 android:
   components:
