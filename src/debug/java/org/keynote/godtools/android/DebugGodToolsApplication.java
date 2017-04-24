@@ -6,8 +6,8 @@ import android.support.multidex.MultiDex;
 
 import com.facebook.stetho.InspectorModulesProvider;
 import com.facebook.stetho.Stetho;
+import com.facebook.stetho.inspector.database.SqliteDatabaseDriver;
 import com.facebook.stetho.inspector.protocol.ChromeDevtoolsDomain;
-import com.facebook.stetho.inspector.protocol.module.Database;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.squareup.leakcanary.AndroidExcludedRefs;
 import com.squareup.leakcanary.LeakCanary;
@@ -46,7 +46,7 @@ public class DebugGodToolsApplication extends SnuffyApplication {
     }
 
     private void initStetho() {
-        final Database.DatabaseDriver dbDriver =
+        final SqliteDatabaseDriver dbDriver =
                 new SQLiteOpenHelperStethoDatabaseProvider(GodToolsDatabase.getInstance(this)).toDatabaseDriver(this);
 
         final Stetho.InitializerBuilder stethoBuilder = Stetho.newInitializerBuilder(this);
