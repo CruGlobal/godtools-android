@@ -320,7 +320,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
             // store subscriber if it's valid & trigger background sync
             if (subscriber.isValid()) {
                 dao.insert(subscriber);
-                GodToolsSyncService.syncGrowthSpacesSubscribers(this);
+                GodToolsSyncService.syncGrowthSpacesSubscribers(this).sync();
             }
         }
     }
