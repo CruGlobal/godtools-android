@@ -73,7 +73,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         startUpdateTasks();
-        GodToolsSyncService.syncGrowthSpacesSubscribers(this).sync();
+        syncData();
 
         setContentView(R.layout.splash_pw);
         ButterKnife.bind(this);
@@ -148,6 +148,11 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
     }
 
     /* END lifecycle */
+
+    private void syncData() {
+        GodToolsSyncService.syncLanguages(this).sync();
+        GodToolsSyncService.syncGrowthSpacesSubscribers(this).sync();
+    }
 
     private void startUpdateTasks() {
         final InitialContentTasks initTasks = new InitialContentTasks(getApplicationContext());
