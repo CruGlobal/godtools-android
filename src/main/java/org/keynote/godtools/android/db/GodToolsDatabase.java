@@ -92,7 +92,7 @@ final class GodToolsDatabase extends WalSQLiteOpenHelper {
                         db.execSQL(GTPackageTable.SQL_V2_CREATE_TABLE);
                         db.execSQL(GTLanguageTable.SQL_V2_CREATE_TABLE);
 
-                        // copy old data to newnew table
+                        // copy old data to new table
                         db.execSQL(GTLanguageTable.SQL_V1_MIGRATE_DATA);
 
                         // delete old table
@@ -103,7 +103,7 @@ final class GodToolsDatabase extends WalSQLiteOpenHelper {
                         db.execSQL(GTPackageTable.SQL_DELETE_OLD_TABLE);
                         db.execSQL(GTPackageTable.SQL_RENAME_TABLE);
 
-                        // create newnew table
+                        // create new table
                         db.execSQL(GTPackageTable.SQL_CREATE_TABLE);
 
                         // migrate data
@@ -125,10 +125,10 @@ final class GodToolsDatabase extends WalSQLiteOpenHelper {
                         db.execSQL(GTLanguageTable.SQL_DELETE_OLD_TABLE);
                         db.execSQL(GTLanguageTable.SQL_RENAME_TABLE);
 
-                        // create newnew table
+                        // create new table
                         db.execSQL(GTLanguageTable.SQL_CREATE_TABLE);
 
-                        // copy old data to newnew table
+                        // copy old data to new table
                         db.execSQL(GTLanguageTable.SQL_V6_MIGRATE_DATA);
 
                         // delete old table
