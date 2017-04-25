@@ -1,4 +1,3 @@
-
 <resources>
 
     <!-- Base application theme. -->
@@ -105,41 +104,29 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="G2AppTheme.AppBarOverlay"
-           parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="G2AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="G2AppTheme.PopupOverlay"
-           parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="G2AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
     <style name="Text.Header" parent="TextAppearance.AppCompat.Headline">
-        <item name="android:textColor">
-            @color/colorTextPrimary
-        </item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
     </style>
 
     <style name="Text.PackageDetailsHeader" parent="TextAppearance.AppCompat.Headline">
-        <item name="android:textColor">
-            @color/colorTextPrimary
-        </item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
     </style>
 
     <style name="Text.ListHeader" parent="TextAppearance.AppCompat.Small">
-        <item name="android:textColor">
-            @color/colorTextPrimary
-        </item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
     </style>
 
     <style name="Text.ListSubheader" parent="TextAppearance.AppCompat.Small">
-        <item name="android:textColor">
-            @color/colorTextDisabled
-        </item>
+        <item name="android:textColor">@color/colorTextDisabled</item>
     </style>
 
     <style name="Text.Subheader" parent="TextAppearance.AppCompat.Medium">
-        <item name="android:textColor">
-            @color/colorTextDisabled
-        </item>
+        <item name="android:textColor">@color/colorTextDisabled</item>
     </style>
 
     <style name="ImageButton" parent="Widget.AppCompat.ImageButton">
@@ -151,7 +138,7 @@
         <item name="android:adjustViewBounds">true</item>
     </style>
 
-    <style name="Layout"/>
+    <style name="Layout" />
 
     <style name="Layout.Padded">
         <item name="android:paddingBottom">
@@ -168,7 +155,7 @@
         </item>
     </style>
 
-    <style name="Text"/>
+    <style name="Text" />
 
     <style name="Text.LanguageHeaders">
         <item name="android:layout_width">
