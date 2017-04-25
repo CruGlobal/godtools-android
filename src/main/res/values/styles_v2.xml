@@ -143,21 +143,12 @@
     </style>
 
     <style name="ImageButton" parent="Widget.AppCompat.ImageButton">
-        <item name="android:layout_width">
-            @dimen/imagebutton_width
-        </item>
-        <item name="android:layout_height">
-            @dimen/imagebutton_height
-        </item>
-        <item name="android:background">
-            ?attr/selectableItemBackgroundBorderless
-        </item>
+        <item name="android:layout_width">@dimen/imagebutton_width</item>
+        <item name="android:layout_height">@dimen/imagebutton_height</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
         <item name="android:padding">10dp</item>
-        <item name="android:scaleType">fitCenter
-        </item>
-        <item name="android:adjustViewBounds">
-            true
-        </item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:adjustViewBounds">true</item>
     </style>
 
     <style name="Layout"/>
