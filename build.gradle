@@ -99,8 +99,12 @@ android {
 
         minSdkVersion 10
         targetSdkVersion 25
+
         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
         proguardFiles 'proguard-rules.pro'
+
+        vectorDrawables.useSupportLibrary = true
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api-stage.cru.org/\""
