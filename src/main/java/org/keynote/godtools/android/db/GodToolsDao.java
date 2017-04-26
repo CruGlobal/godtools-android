@@ -8,9 +8,11 @@ import org.ccci.gto.android.common.db.Expression;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.db.Contract.FollowupTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
+import org.keynote.godtools.android.db.Contract.ResourceTable;
 import org.keynote.godtools.android.model.Base;
 import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.model.Language;
+import org.keynote.godtools.android.model.Resource;
 
 public class GodToolsDao extends DBAdapter {
     private GodToolsDao(@NonNull final Context context) {
@@ -20,6 +22,8 @@ public class GodToolsDao extends DBAdapter {
                      FollowupTable.SQL_WHERE_PRIMARY_KEY);
         registerType(Language.class, LanguageTable.TABLE_NAME, LanguageTable.PROJECTION_ALL, new LanguageMapper(),
                      LanguageTable.SQL_WHERE_PRIMARY_KEY);
+        registerType(Resource.class, ResourceTable.TABLE_NAME, ResourceTable.PROJECTION_ALL, new ResourceMapper(),
+                     ResourceTable.SQL_WHERE_PRIMARY_KEY);
     }
 
     @Nullable

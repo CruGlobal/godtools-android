@@ -3,6 +3,7 @@ package org.keynote.godtools.android.model;
 import android.support.annotation.Nullable;
 
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute;
+import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
 
 import java.util.List;
@@ -21,7 +22,31 @@ public class Resource extends Base {
     private List<Translation> mLatestTranslations;
 
     @Nullable
+    @JsonApiAttribute(name = JSON_NAME)
+    private String mName;
+
+    @JsonApiIgnore
+    private boolean mAdded = false;
+
+    @Nullable
     public List<Translation> getLatestTranslations() {
         return mLatestTranslations;
+    }
+
+    @Nullable
+    public String getName() {
+        return mName;
+    }
+
+    public void setName(@Nullable final String name) {
+        mName = name;
+    }
+
+    public boolean isAdded() {
+        return mAdded;
+    }
+
+    public void setAdded(final boolean state) {
+        mAdded = state;
     }
 }

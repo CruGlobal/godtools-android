@@ -6,6 +6,7 @@ import org.ccci.gto.android.common.db.Expression.Field;
 import org.ccci.gto.android.common.db.Table;
 import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.model.Language;
+import org.keynote.godtools.android.model.Resource;
 
 import static org.ccci.gto.android.common.db.Expression.bind;
 
@@ -19,10 +20,10 @@ public final class Contract extends BaseContract {
         static final String TABLE_NAME = "languages";
         private static final Table<Language> TABLE = Table.forClass(Language.class);
 
-        private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
         public static final String COLUMN_LOCALE = "locale";
         public static final String COLUMN_ADDED = "added";
 
+        private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
         public static final Field FIELD_LOCALE = TABLE.field(COLUMN_LOCALE);
 
         static final String[] PROJECTION_ALL = {COLUMN_ID, COLUMN_LOCALE, COLUMN_ADDED};
@@ -42,6 +43,27 @@ public final class Contract extends BaseContract {
         static final String SQL_V9_UNIQUE_LOCALE =
                 "CREATE UNIQUE INDEX " + TABLE_NAME + "_" + COLUMN_LOCALE + " ON " + TABLE_NAME + " (" + COLUMN_LOCALE +
                         ")";
+    }
+
+    public static class ResourceTable extends BaseTable {
+        static final String TABLE_NAME = "resources";
+        private static final Table<Resource> TABLE = Table.forClass(Resource.class);
+
+        static final String COLUMN_NAME = "name";
+        static final String COLUMN_ADDED = "added";
+
+        private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
+
+        static final String[] PROJECTION_ALL = {COLUMN_ID, COLUMN_NAME, COLUMN_ADDED};
+
+        private static final String SQL_COLUMN_NAME = COLUMN_NAME + " TEXT";
+        private static final String SQL_COLUMN_ADDED = COLUMN_ADDED + " INTEGER";
+
+        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
+
+        static final String SQL_CREATE_TABLE =
+                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_NAME, SQL_COLUMN_ADDED);
+        static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
     }
 
     public static class FollowupTable implements Base {
