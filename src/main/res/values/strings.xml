@@ -54,8 +54,12 @@
     <string name="share_prompt">Select how you would like to share</string>
 
     <!-- Language Selection UI -->
+    <string name="title_language_settings">Language Settings</string>
     <string name="title_language_primary">Primary Language</string>
     <string name="title_language_parallel">Parallel Language</string>
+    <string name="action_language_parallel_select">Select a Parallel Language</string>
+    <string name="text_language_parallel_description">Share GodTools with someone in their native language.</string>
+    <string name="text_language_warning">Not every tool is available in every language.</string>
     <string name="download">Download</string>
     <string name="downloading">Downloading</string>
     <string name="delete">Delete</string>

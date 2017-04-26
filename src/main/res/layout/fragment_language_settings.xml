@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <View style="@style/Widget.GodTools2.Settings.Language.Spacer" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:tint="@color/gt_blue"
+            app:srcCompat="@drawable/ic_language" />
+
+        <View style="@style/Widget.GodTools2.Settings.Language.Spacer" />
+
+        <TextView
+            style="@style/Widget.GodTools2.Settings.Language.Label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:gravity="center_horizontal"
+            android:text="@string/title_language_primary" />
+
+        <Button
+            android:id="@+id/primary_language"
+            style="@style/Widget.GodTools2.Settings.Language.Button"
+            tools:text="Czech" />
+
+        <View style="@style/Widget.GodTools2.Settings.Language.Spacer" />
+
+        <TextView
+            style="@style/Widget.GodTools2.Settings.Language.Label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:gravity="center_horizontal"
+            android:text="@string/title_language_parallel" />
+
+        <TextView
+            style="@style/Widget.GodTools2.Settings.Language.Description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:gravity="center_horizontal"
+            android:text="@string/text_language_parallel_description" />
+
+        <Button
+            android:id="@+id/parallel_language"
+            style="@style/Widget.GodTools2.Settings.Language.Button"
+            android:text="@string/action_language_parallel_select" />
+
+        <View style="@style/Widget.GodTools2.Settings.Language.Spacer" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:tint="@color/gt_red"
+            app:srcCompat="@drawable/ic_warning" />
+
+        <TextView
+            style="@style/Widget.GodTools2.Settings.Language.Description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:gravity="center_horizontal"
+            android:text="@string/text_language_warning"
+            android:textColor="@color/gt_red" />
+
+        <View style="@style/Widget.GodTools2.Settings.Language.Spacer" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
