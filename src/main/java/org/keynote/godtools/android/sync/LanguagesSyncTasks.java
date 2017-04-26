@@ -3,6 +3,7 @@ package org.keynote.godtools.android.sync;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.util.SimpleArrayMap;
 
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams;
@@ -25,6 +26,8 @@ final class LanguagesSyncTasks extends BaseDataSyncTasks {
     }
 
     boolean syncLanguages(@NonNull final Bundle args) throws IOException {
+        final SimpleArrayMap<Class<?>, Object> events = new SimpleArrayMap<>();
+
         synchronized (LOCK_SYNC_LANGUAGES) {
             // short-circuit if we aren't forcing a sync and the data isn't stale
             final boolean force = isForced(args);
@@ -43,8 +46,11 @@ final class LanguagesSyncTasks extends BaseDataSyncTasks {
             // store languages
             final JsonApiObject<Language> json = response.body();
             for (final Language language : json.getData()) {
-                storeLanguage(language);
+                storeLanguage(events, language);
             }
+
+            // send any pending events
+            sendEvents(events);
 
             // update the sync time
             mDao.updateLastSyncTime(SYNC_TIME_LANGUAGES);
