@@ -23,6 +23,16 @@ public class ActiveLocaleLoader extends AsyncTaskSharedPreferencesChangeLoader<L
         addPreferenceKey(prefName());
     }
 
+    /* BEGIN lifecycle */
+
+    @Override
+    protected void onStartLoading() {
+        deliverResult(getCurrentLocale());
+        super.onStartLoading();
+    }
+
+    /* END lifecycle */
+
     private String prefName() {
         return mPrimary ? PREF_PRIMARY_LANGUAGE : PREF_PARALLEL_LANGUAGE;
     }
@@ -30,6 +40,11 @@ public class ActiveLocaleLoader extends AsyncTaskSharedPreferencesChangeLoader<L
     @Nullable
     @Override
     public Locale loadInBackground() {
+        return getCurrentLocale();
+    }
+
+    @Nullable
+    private Locale getCurrentLocale() {
         final String raw = mPrefs.getString(prefName(), null);
         return raw != null ? LocaleCompat.forLanguageTag(raw) : null;
     }
