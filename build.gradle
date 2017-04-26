@@ -49,6 +49,7 @@ dependencies {
     compile 'org.ccci.gto.android:gto-support-api-retrofit2:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-db:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-db-async:' + deps.gtoSupport
+    compile "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     compile 'org.ccci.gto.android:gto-support-gson:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-jsonapi:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-jsonapi-retrofit2:' + deps.gtoSupport
@@ -98,8 +99,12 @@ android {
 
         minSdkVersion 10
         targetSdkVersion 25
+
         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
         proguardFiles 'proguard-rules.pro'
+
+        vectorDrawables.useSupportLibrary = true
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api-stage.cru.org/\""

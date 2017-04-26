@@ -101,6 +101,20 @@
                 android:resource="@xml/searchable" />
         </activity>
 
+        <activity
+            android:name=".activity.LanguageSettingsActivity"
+            android:label="@string/title_language_settings"
+            android:theme="@style/Theme.GodTools2.AppBar" />
+
+        <activity
+            android:name=".activity.LanguageSelectionActivity"
+            android:parentActivityName=".activity.LanguageSettingsActivity"
+            android:theme="@style/Theme.GodTools2.AppBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.keynote.godtools.android.activity.LanguageSettingsActivity" />
+        </activity>
+
         <provider
             android:name=".everystudent.EveryStudentProvider"
             android:authorities="@string/every_student_authority" />

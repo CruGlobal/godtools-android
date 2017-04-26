@@ -11,6 +11,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 
+import static android.content.ContentResolver.SYNC_EXTRAS_MANUAL;
 import static com.google.common.base.MoreObjects.firstNonNull;
 
 public class GodToolsSyncService extends ThreadedSyncIntentService {
@@ -24,9 +25,10 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
     private GrowthSpacesTasks mGrowthSpacesTasks;
     private LanguagesSyncTasks mLanguagesSyncTasks;
 
-    public static SyncTask syncLanguages(final Context context) {
+    public static SyncTask syncLanguages(final Context context, final boolean force) {
         final Intent intent = new Intent(context, GodToolsSyncService.class);
         intent.putExtra(EXTRA_SYNCTYPE, SYNCTYPE_LANGUAGES);
+        intent.putExtra(SYNC_EXTRAS_MANUAL, force);
         return new SyncTask(context, intent);
     }
 

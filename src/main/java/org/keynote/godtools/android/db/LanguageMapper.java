@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import org.keynote.godtools.android.model.Language;
 
+import static org.keynote.godtools.android.db.Contract.LanguageTable.COLUMN_ADDED;
 import static org.keynote.godtools.android.db.Contract.LanguageTable.COLUMN_LOCALE;
 
 final class LanguageMapper extends BaseMapper<Language> {
@@ -15,6 +16,9 @@ final class LanguageMapper extends BaseMapper<Language> {
         switch (field) {
             case COLUMN_LOCALE:
                 values.put(field, serialize(language.getLocale()));
+                break;
+            case COLUMN_ADDED:
+                values.put(field, language.isAdded());
                 break;
             default:
                 super.mapField(values, field, language);
@@ -34,6 +38,7 @@ final class LanguageMapper extends BaseMapper<Language> {
         final Language language = super.toObject(c);
 
         language.setLocale(getLocale(c, COLUMN_LOCALE, null));
+        language.setAdded(getBool(c, COLUMN_ADDED, false));
 
         return language;
     }

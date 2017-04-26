@@ -15,11 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
+import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
+
 @Root(name = "language")
 public class GTLanguage implements Serializable {
+    public static final String KEY_PRIMARY = PREF_PRIMARY_LANGUAGE;
+    public static final String KEY_PARALLEL = PREF_PARALLEL_LANGUAGE;
 
-    public static final String KEY_PRIMARY = "languagePrimary";
-    public static final String KEY_PARALLEL = "languageParallel";
     @Attribute(name = "name", required = true)
     public String languageName;
     @Attribute(name = "code", required = true)

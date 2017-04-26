@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="about_text">#000</color>
     <color name="about_background">#fff</color>
@@ -26,4 +27,15 @@
     <color name="new_draft_opacity">#14FFFFFF</color>
     <color name="current_draft_opacity">#95b9b9b9</color>
 
+    <!-- standard colors -->
+    <color name="tintable">#FF000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="gt_blue">#3BA4DB</color>
+    <color name="gt_blue_dark">#1978C4</color>
+    <color name="gt_green">#6EDC50</color>
+    <color name="gt_green_25">#406EDC50</color>
+    <color name="gt_red">#E55B36</color>
+
+    <color name="gray_5A">#5A5A5A</color>
 </resources>
