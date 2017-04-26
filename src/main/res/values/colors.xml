@@ -31,6 +31,8 @@
     <color name="tintable">#FF000000</color>
     <color name="white">#FFFFFF</color>
 
+    <color name="gt_blue">#3BA4DB</color>
+    <color name="gt_blue_dark">#1978C4</color>
     <color name="gt_green">#6EDC50</color>
     <color name="gt_green_25">#406EDC50</color>
     <color name="gt_red">#E55B36</color>

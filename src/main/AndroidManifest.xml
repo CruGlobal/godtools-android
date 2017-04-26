@@ -103,7 +103,7 @@
 
         <activity
             android:name=".activity.LanguageSelectionActivity"
-            android:label="@string/app_name" />
+            android:theme="@style/Theme.GodTools2.AppBar" />
 
         <provider
             android:name=".everystudent.EveryStudentProvider"
