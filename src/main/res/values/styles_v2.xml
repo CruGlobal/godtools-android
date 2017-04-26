@@ -3,41 +3,22 @@
     <!-- Base application theme. -->
     <style name="G2AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">
-            @color/colorPrimary
-        </item>
-        <item name="colorPrimaryDark">
-            @color/colorPrimaryDark
-        </item>
-        <item name="colorAccent">
-            @color/colorPrimary
-        </item>
-        <item name="android:windowBackground">
-            @color/colorBackground
-        </item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
 
-        <item name="preferenceTheme">
-            @style/PreferenceThemeOverlay
-        </item>
-
-        <item name="actionBarStyle">
-            @style/GTActionBarStyle
-        </item>
-
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="actionBarStyle">@style/GTActionBarStyle</item>
     </style>
 
     <style name="GTActionBarStyle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
-        <item name="titleTextStyle">
-            @style/GTTitleText
-        </item>
-        <item name="displayOptions">
-            showHome|showTitle
-        </item>
+        <item name="titleTextStyle">@style/GTTitleText</item>
+        <item name="displayOptions">showHome|showTitle</item>
     </style>
 
     <style name="GTTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">#FFFFFF
-        </item>
+        <item name="android:textColor">#FFFFFF</item>
     </style>
 
     <style name="Theme.White" parent="@style/G2AppTheme">
@@ -58,33 +39,19 @@
     </style>
 
     <style name="Button.Transparent" parent="Button.FullWidth">
-        <item name="android:theme">
-            @style/Theme.Transparent
-        </item>
+        <item name="android:theme">@style/Theme.Transparent</item>
     </style>
 
     <style name="Button.White" parent="Button.FullWidth">
-        <item name="android:theme">
-            @style/Theme.White
-        </item>
-        <item name="android:textColor">
-            @color/colorPrimaryTextFade
-        </item>
+        <item name="android:theme">@style/Theme.White</item>
+        <item name="android:textColor">@color/colorPrimaryTextFade</item>
     </style>
 
     <style name="Button.FullWidth" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:layout_marginRight">
-            20dp
-        </item>
-        <item name="android:layout_marginLeft">
-            20dp
-        </item>
-        <item name="android:layout_marginBottom">
-            8dp
-        </item>
-        <item name="android:layout_marginTop">
-            8dp
-        </item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
         <item name="android:padding">20dp</item>
         <item name="android:layout_gravity">
             center_horizontal
