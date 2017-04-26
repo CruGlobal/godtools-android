@@ -10,16 +10,13 @@
 
     <color name="colorWhite">#FFFFFF</color>
     <!--Primary text 87%-->
-    <color name="colorTextPrimary">#DD000000
-    </color>
+    <color name="colorTextPrimary">#DD000000</color>
 
     <!--Secondary text 54% -->
-    <color name="colorTextSecondary">#8A000000
-    </color>
+    <color name="colorTextSecondary">#8A000000</color>
 
     <!-- Disabled text, hint text, and icons 38% -->
-    <color name="colorTextDisabled">#61000000
-    </color>
+    <color name="colorTextDisabled">#61000000</color>
 
     <!-- Dividers 12% -->
     <color name="colorDividers">#25000000</color>
@@ -32,6 +29,5 @@
     <color name="ic_language_blue">#3aa3da</color>
     <color name="ic_remove_red">#e55b36</color>
     <color name="ic_switch_blue">#3ba4dc</color>
-    <color name="ic_download_white">#FFFFFF
-    </color>
+    <color name="ic_download_white">#FFFFFF</color>
 </resources>
