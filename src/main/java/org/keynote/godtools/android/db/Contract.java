@@ -7,6 +7,7 @@ import org.ccci.gto.android.common.db.Table;
 import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.Resource;
+import org.keynote.godtools.android.model.Translation;
 
 import static org.ccci.gto.android.common.db.Expression.bind;
 
@@ -63,6 +64,35 @@ public final class Contract extends BaseContract {
 
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_NAME, SQL_COLUMN_ADDED);
+        static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
+    }
+
+    public static class TranslationTable extends BaseTable {
+        static final String TABLE_NAME = "translations";
+        private static final Table<Translation> TABLE = Table.forClass(Translation.class);
+
+        public static final String COLUMN_RESOURCE = "resource";
+        public static final String COLUMN_LANGUAGE = "language";
+        public static final String COLUMN_VERSION = "version";
+        public static final String COLUMN_PUBLISHED = "published";
+        static final String COLUMN_DOWNLOADED = "downloaded";
+
+        private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
+
+        static final String[] PROJECTION_ALL =
+                {COLUMN_ID, COLUMN_RESOURCE, COLUMN_LANGUAGE, COLUMN_VERSION, COLUMN_PUBLISHED, COLUMN_DOWNLOADED};
+
+        private static final String SQL_COLUMN_RESOURCE = COLUMN_RESOURCE + " INTEGER";
+        private static final String SQL_COLUMN_LANGUAGE = COLUMN_LANGUAGE + " INTEGER";
+        private static final String SQL_COLUMN_VERSION = COLUMN_VERSION + " INTEGER";
+        private static final String SQL_COLUMN_PUBLISHED = COLUMN_PUBLISHED + " INTEGER";
+        private static final String SQL_COLUMN_DOWNLOADED = COLUMN_DOWNLOADED + " INTEGER";
+
+        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
+
+        static final String SQL_CREATE_TABLE =
+                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_RESOURCE, SQL_COLUMN_LANGUAGE, SQL_COLUMN_VERSION,
+                       SQL_COLUMN_PUBLISHED, SQL_COLUMN_DOWNLOADED);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
     }
 

@@ -19,12 +19,13 @@ import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
 import org.keynote.godtools.android.db.Contract.FollowupTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
 import org.keynote.godtools.android.db.Contract.ResourceTable;
+import org.keynote.godtools.android.db.Contract.TranslationTable;
 
 import io.fabric.sdk.android.Fabric;
 
 public final class GodToolsDatabase extends WalSQLiteOpenHelper {
     private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
 
     /*
      * Version history
@@ -42,6 +43,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
      * 8: 2017-04-19
      * 9: 2017-04-24
      * 10: 2017-04-26
+     * 11: 2017-04-27
      */
 
     @NonNull
@@ -77,6 +79,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(FollowupTable.SQL_CREATE_TABLE);
             db.execSQL(LanguageTable.SQL_CREATE_TABLE);
             db.execSQL(ResourceTable.SQL_CREATE_TABLE);
+            db.execSQL(TranslationTable.SQL_CREATE_TABLE);
 
             db.setTransactionSuccessful();
         } finally {
@@ -154,6 +157,9 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
                     case 10:
                         db.execSQL(ResourceTable.SQL_CREATE_TABLE);
                         break;
+                    case 11:
+                        db.execSQL(TranslationTable.SQL_CREATE_TABLE);
+                        break;
                     default:
                         // unrecognized version
                         throw new SQLiteException("Unrecognized database version");
@@ -192,6 +198,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(GTLanguageTable.SQL_DELETE_OLD_TABLE);
             db.execSQL(GSSubscriberTable.SQL_DELETE_TABLE);
             db.execSQL(FollowupTable.SQL_DELETE_TABLE);
+            db.execSQL(TranslationTable.SQL_DELETE_TABLE);
             db.execSQL(ResourceTable.SQL_DELETE_TABLE);
             db.execSQL(LanguageTable.SQL_DELETE_TABLE);
             db.execSQL(LastSyncTable.SQL_DELETE_TABLE);

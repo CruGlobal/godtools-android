@@ -16,7 +16,8 @@ public class Translation extends Base {
     private static final String JSON_VERSION = "version";
     private static final String JSON_IS_PUBLISHED = "is-published";
 
-    private static final boolean PUBLISHED_DEFAULT = false;
+    public static final boolean DEFAULT_PUBLISHED = false;
+    public static final int DEFAULT_VERSION = 0;
 
     @Nullable
     @JsonApiIgnore
@@ -32,9 +33,12 @@ public class Translation extends Base {
     private Language mLanguage;
 
     @JsonApiAttribute(name = JSON_VERSION)
-    private int mVersion = 0;
+    private int mVersion = DEFAULT_VERSION;
     @JsonApiAttribute(name = JSON_IS_PUBLISHED)
-    private boolean mPublished = PUBLISHED_DEFAULT;
+    private boolean mPublished = DEFAULT_PUBLISHED;
+
+    @JsonApiIgnore
+    private boolean mDownloaded = false;
 
     public long getResourceId() {
         return mResourceId != null && mResourceId != Resource.INVALID_ID ? mResourceId :
@@ -68,5 +72,13 @@ public class Translation extends Base {
 
     public void setPublished(final boolean published) {
         mPublished = published;
+    }
+
+    public boolean isDownloaded() {
+        return mDownloaded;
+    }
+
+    public void setDownloaded(final boolean state) {
+        mDownloaded = state;
     }
 }
