@@ -2,6 +2,8 @@ package org.keynote.godtools.android.sync;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.util.LongSparseArray;
 import android.support.v4.util.SimpleArrayMap;
 
 import org.ccci.gto.android.common.jsonapi.util.Includes;
@@ -28,8 +30,29 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
         coalesceEvent(events, new LanguageUpdateEvent());
     }
 
-    void storeResource(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final Resource resource,
-                       @NonNull final Includes includes) {
+    void storeResources(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final List<Resource> resources,
+                        @Nullable final LongSparseArray<Resource> existing, @NonNull final Includes includes) {
+        for (final Resource resource : resources) {
+            if (existing != null) {
+                existing.remove(resource.getId());
+            }
+            storeResource(events, resource, includes);
+        }
+
+        // prune any existing resources that weren't synced and aren't already added to the device
+        if (existing != null) {
+            for (int i = 0; i < existing.size(); i++) {
+                final Resource resource = existing.valueAt(i);
+                if (!resource.isAdded()) {
+                    mDao.delete(resource);
+                    coalesceEvent(events, new ResourceUpdateEvent());
+                }
+            }
+        }
+    }
+
+    private void storeResource(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final Resource resource,
+                               @NonNull final Includes includes) {
         mDao.updateOrInsert(resource, API_FIELDS_RESOURCE);
         coalesceEvent(events, new ResourceUpdateEvent());
 

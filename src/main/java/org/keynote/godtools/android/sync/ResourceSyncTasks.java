@@ -3,8 +3,10 @@ package org.keynote.godtools.android.sync;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.util.LongSparseArray;
 import android.support.v4.util.SimpleArrayMap;
 
+import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams;
 import org.ccci.gto.android.common.jsonapi.util.Includes;
@@ -40,7 +42,7 @@ final class ResourceSyncTasks extends BaseDataSyncTasks {
             }
 
             // generate params & includes objects
-            final Includes include = new Includes(INCLUDE_LATEST_TRANSLATIONS);
+            final Includes includes = new Includes(INCLUDE_LATEST_TRANSLATIONS);
             final JsonApiParams params = new JsonApiParams().include(INCLUDE_LATEST_TRANSLATIONS);
 
             // fetch resources from the API
@@ -50,10 +52,11 @@ final class ResourceSyncTasks extends BaseDataSyncTasks {
                 return false;
             }
 
-            // store resources
+            // store fetched resources
             final JsonApiObject<Resource> json = response.body();
-            for (final Resource resource : json.getData()) {
-                storeResource(events, resource, include);
+            if (json != null) {
+                final LongSparseArray<Resource> existing = index(mDao.get(Query.select(Resource.class)));
+                storeResources(events, json.getData(), existing, includes);
             }
 
             // send any pending events
