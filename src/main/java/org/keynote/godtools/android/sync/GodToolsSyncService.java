@@ -21,13 +21,22 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
     static final int SYNCTYPE_NONE = 0;
     static final int SYNCTYPE_GROWTHSPACESSUBSCRIBERS = 1;
     static final int SYNCTYPE_LANGUAGES = 2;
+    static final int SYNCTYPE_RESOURCES = 3;
 
     private GrowthSpacesTasks mGrowthSpacesTasks;
     private LanguagesSyncTasks mLanguagesSyncTasks;
+    private ResourceSyncTasks mResourceSyncTasks;
 
     public static SyncTask syncLanguages(final Context context, final boolean force) {
         final Intent intent = new Intent(context, GodToolsSyncService.class);
         intent.putExtra(EXTRA_SYNCTYPE, SYNCTYPE_LANGUAGES);
+        intent.putExtra(SYNC_EXTRAS_MANUAL, force);
+        return new SyncTask(context, intent);
+    }
+
+    public static SyncTask syncResources(final Context context, final boolean force) {
+        final Intent intent = new Intent(context, GodToolsSyncService.class);
+        intent.putExtra(EXTRA_SYNCTYPE, SYNCTYPE_RESOURCES);
         intent.putExtra(SYNC_EXTRAS_MANUAL, force);
         return new SyncTask(context, intent);
     }
@@ -49,6 +58,7 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
         super.onCreate();
         mGrowthSpacesTasks = new GrowthSpacesTasks(this);
         mLanguagesSyncTasks = new LanguagesSyncTasks(this);
+        mResourceSyncTasks = new ResourceSyncTasks(this);
     }
 
     @Override
@@ -61,6 +71,9 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
                     break;
                 case SYNCTYPE_LANGUAGES:
                     mLanguagesSyncTasks.syncLanguages(args);
+                    break;
+                case SYNCTYPE_RESOURCES:
+                    mResourceSyncTasks.syncResources(args);
                     break;
             }
         } catch (final IOException ignored) {

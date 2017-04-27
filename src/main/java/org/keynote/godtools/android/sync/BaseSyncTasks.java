@@ -4,11 +4,15 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
+import android.support.v4.util.LongSparseArray;
 import android.support.v4.util.SimpleArrayMap;
 
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.db.GodToolsDao;
+import org.keynote.godtools.android.model.Base;
+
+import java.util.Collection;
 
 import static android.content.ContentResolver.SYNC_EXTRAS_MANUAL;
 
@@ -17,7 +21,7 @@ abstract class BaseSyncTasks {
     private final Context mContext;
     final GodToolsApi mApi;
     final GodToolsDao mDao;
-    final EventBus mEventBus;
+    private final EventBus mEventBus;
 
     BaseSyncTasks(@NonNull final Context context) {
         mContext = context;
@@ -30,7 +34,16 @@ abstract class BaseSyncTasks {
         return extras.getBoolean(SYNC_EXTRAS_MANUAL, false);
     }
 
-    void coalesceEvent(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final Object event) {
+    @NonNull
+    static <E extends Base> LongSparseArray<E> index(@NonNull final Collection<E> items) {
+        final LongSparseArray<E> index = new LongSparseArray<>();
+        for (final E item : items) {
+            index.put(item.getId(), item);
+        }
+        return index;
+    }
+
+    static void coalesceEvent(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final Object event) {
         final Class<?> type = event.getClass();
         Object currEvent = events.get(type);
         if (currEvent != null) {
