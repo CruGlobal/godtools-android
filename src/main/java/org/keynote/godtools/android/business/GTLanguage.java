@@ -3,7 +3,7 @@ package org.keynote.godtools.android.business;
 import android.content.Context;
 
 import org.ccci.gto.android.common.util.LocaleCompat;
-import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.utils.WordUtils;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
@@ -66,7 +66,7 @@ public class GTLanguage implements Serializable {
      * via @param locale.
      */
     public static List<GTLanguage> getAll(Context context, Locale locale) {
-        DBAdapter adapter = DBAdapter.getInstance(context);
+        final GodToolsDao adapter = GodToolsDao.getInstance(context);
 
         List<GTLanguage> allLanguages = adapter.get(GTLanguage.class);
 

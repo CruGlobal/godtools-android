@@ -19,8 +19,8 @@ import org.ccci.gto.android.common.util.MainThreadExecutor;
 import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTLanguages;
-import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
+import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.PackageDownloadHelper;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
@@ -90,7 +90,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
             GodToolsApi.getInstance(this).legacy.getListOfPackages().enqueue(new Callback<GTLanguages>() {
                 @Override
                 public void onResponse(Call<GTLanguages> call, Response<GTLanguages> response) {
-                    UpdatePackageListTask.run(response.body().mLanguages, DBAdapter.getInstance(Splash.this));
+                    UpdatePackageListTask.run(response.body().mLanguages, GodToolsDao.getInstance(Splash.this));
 
                     // if the API has packages available for the device default language then download them
                     // this is determined by going through the results of the meta download
@@ -226,7 +226,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         final GTLanguage language = new GTLanguage();
         language.setLanguageCode(langCode);
         language.setDownloaded(true);
-        DBAdapter.getInstance(this).updateAsync(language, GTLanguageTable.COL_DOWNLOADED);
+        GodToolsDao.getInstance(this).updateAsync(language, GTLanguageTable.COL_DOWNLOADED);
 
         goToMainActivity();
     }

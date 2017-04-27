@@ -11,8 +11,8 @@ import org.ccci.gto.android.common.util.IOUtils;
 import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
-import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
+import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.snuffy.Decompress;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
 
@@ -84,7 +84,7 @@ public class DownloadTask extends AsyncTask<Object, Void, Boolean> {
                     File contentFile = new File(tmpDir, "contents.xml");
                     List<GTPackage> packageList = GTPackageReader.processContentFile(contentFile);
 
-                    DBAdapter adapter = DBAdapter.getInstance(mContext);
+                    final GodToolsDao adapter = GodToolsDao.getInstance(mContext);
 
                     // delete draft packages before storing download
                     if (tag.contains("draft")) {
