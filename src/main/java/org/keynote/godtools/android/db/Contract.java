@@ -49,7 +49,7 @@ public final class Contract extends BaseContract {
         static final String TABLE_NAME = "resources";
         private static final Table<Resource> TABLE = Table.forClass(Resource.class);
 
-        static final String COLUMN_NAME = "name";
+        public static final String COLUMN_NAME = "name";
         static final String COLUMN_ADDED = "added";
 
         private static final Field FIELD_ID = TABLE.field(COLUMN_ID);

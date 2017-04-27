@@ -15,7 +15,7 @@ public class Resource extends Base {
     static final String JSON_API_TYPE = "resource";
     private static final String JSON_NAME = "name";
     private static final String JSON_ABBREVIATION = "abbreviation";
-    private static final String JSON_LATEST_TRANSLATIONS = "latest-translations";
+    public static final String JSON_LATEST_TRANSLATIONS = "latest-translations";
 
     @Nullable
     @JsonApiAttribute(name = JSON_LATEST_TRANSLATIONS)

@@ -30,7 +30,7 @@ abstract class BaseSyncTasks {
         return extras.getBoolean(SYNC_EXTRAS_MANUAL, false);
     }
 
-    void coalesceEvent(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final Object event) {
+    static void coalesceEvent(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final Object event) {
         final Class<?> type = event.getClass();
         Object currEvent = events.get(type);
         if (currEvent != null) {
