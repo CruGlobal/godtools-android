@@ -12,6 +12,7 @@ import org.keynote.godtools.android.db.Contract.ResourceTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.event.LanguageUpdateEvent;
 import org.keynote.godtools.android.event.ResourceUpdateEvent;
+import org.keynote.godtools.android.event.TranslationUpdateEvent;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.Resource;
 import org.keynote.godtools.android.model.Translation;
@@ -79,5 +80,6 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
     private void storeTranslation(@NonNull final SimpleArrayMap<Class<?>, Object> events,
                                   @NonNull final Translation translation, @NonNull final Includes includes) {
         mDao.updateOrInsert(translation, API_FIELDS_TRANSLATION);
+        coalesceEvent(events, new TranslationUpdateEvent());
     }
 }

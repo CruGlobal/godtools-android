@@ -21,7 +21,7 @@ abstract class BaseSyncTasks {
     private final Context mContext;
     final GodToolsApi mApi;
     final GodToolsDao mDao;
-    final EventBus mEventBus;
+    private final EventBus mEventBus;
 
     BaseSyncTasks(@NonNull final Context context) {
         mContext = context;
