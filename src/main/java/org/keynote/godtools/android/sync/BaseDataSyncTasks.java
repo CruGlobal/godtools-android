@@ -9,6 +9,7 @@ import android.support.v4.util.SimpleArrayMap;
 import org.ccci.gto.android.common.jsonapi.util.Includes;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
 import org.keynote.godtools.android.db.Contract.ResourceTable;
+import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.event.LanguageUpdateEvent;
 import org.keynote.godtools.android.event.ResourceUpdateEvent;
 import org.keynote.godtools.android.model.Language;
@@ -20,6 +21,9 @@ import java.util.List;
 abstract class BaseDataSyncTasks extends BaseSyncTasks {
     private static final String[] API_FIELDS_LANGUAGE = {LanguageTable.COLUMN_LOCALE};
     private static final String[] API_FIELDS_RESOURCE = {ResourceTable.COLUMN_NAME};
+    private static final String[] API_FIELDS_TRANSLATION =
+            {TranslationTable.COLUMN_RESOURCE, TranslationTable.COLUMN_LANGUAGE, TranslationTable.COLUMN_VERSION,
+                    TranslationTable.COLUMN_PUBLISHED};
 
     BaseDataSyncTasks(@NonNull Context context) {
         super(context);
@@ -74,5 +78,6 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
 
     private void storeTranslation(@NonNull final SimpleArrayMap<Class<?>, Object> events,
                                   @NonNull final Translation translation, @NonNull final Includes includes) {
+        mDao.updateOrInsert(translation, API_FIELDS_TRANSLATION);
     }
 }
