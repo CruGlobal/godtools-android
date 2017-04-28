@@ -44,9 +44,9 @@ public final class GodToolsResourceManager {
     public void addLanguage(@Nullable final Locale locale) {
         if (locale != null) {
             final Language language = new Language();
+            language.setCode(locale);
             language.setAdded(true);
-            final ListenableFuture<Integer> update =
-                    mDao.updateAsync(language, LanguageTable.FIELD_CODE.eq(locale), LanguageTable.COLUMN_ADDED);
+            final ListenableFuture<Integer> update = mDao.updateAsync(language, LanguageTable.COLUMN_ADDED);
             update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new LanguageUpdateEvent()),
                                directExecutor());
         }
@@ -55,9 +55,9 @@ public final class GodToolsResourceManager {
     public void removeLanguage(@Nullable final Locale locale) {
         if (locale != null) {
             final Language language = new Language();
+            language.setCode(locale);
             language.setAdded(false);
-            final ListenableFuture<Integer> update =
-                    mDao.updateAsync(language, LanguageTable.FIELD_CODE.eq(locale), LanguageTable.COLUMN_ADDED);
+            final ListenableFuture<Integer> update = mDao.updateAsync(language, LanguageTable.COLUMN_ADDED);
             update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new LanguageUpdateEvent()),
                                directExecutor());
         }
