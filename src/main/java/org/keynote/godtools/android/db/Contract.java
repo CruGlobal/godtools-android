@@ -76,7 +76,7 @@ public final class Contract extends BaseContract {
                 {COLUMN_ID, COLUMN_RESOURCE, COLUMN_LANGUAGE, COLUMN_VERSION, COLUMN_PUBLISHED, COLUMN_DOWNLOADED};
 
         private static final String SQL_COLUMN_RESOURCE = COLUMN_RESOURCE + " INTEGER";
-        private static final String SQL_COLUMN_LANGUAGE = COLUMN_LANGUAGE + " INTEGER";
+        private static final String SQL_COLUMN_LANGUAGE = COLUMN_LANGUAGE + " TEXT NOT NULL";
         private static final String SQL_COLUMN_VERSION = COLUMN_VERSION + " INTEGER";
         private static final String SQL_COLUMN_PUBLISHED = COLUMN_PUBLISHED + " INTEGER";
         private static final String SQL_COLUMN_DOWNLOADED = COLUMN_DOWNLOADED + " INTEGER";

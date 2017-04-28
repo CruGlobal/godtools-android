@@ -25,7 +25,7 @@ import io.fabric.sdk.android.Fabric;
 
 public final class GodToolsDatabase extends WalSQLiteOpenHelper {
     private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
 
     /*
      * Version history
@@ -45,6 +45,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
      * 10: 2017-04-26
      * 11: 2017-04-27
      * 12: 2017-04-28
+     * 13: 2017-04-28
      */
 
     @NonNull
@@ -153,11 +154,14 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
                         db.execSQL(ResourceTable.SQL_CREATE_TABLE);
                         break;
                     case 11:
-                        db.execSQL(TranslationTable.SQL_CREATE_TABLE);
                         break;
                     case 12:
                         db.execSQL(LanguageTable.SQL_DELETE_TABLE);
                         db.execSQL(LanguageTable.SQL_CREATE_TABLE);
+                        break;
+                    case 13:
+                        db.execSQL(TranslationTable.SQL_DELETE_TABLE);
+                        db.execSQL(TranslationTable.SQL_CREATE_TABLE);
 
                         db.execSQL(LastSyncTable.SQL_DELETE_TABLE);
                         db.execSQL(LastSyncTable.SQL_CREATE_TABLE);

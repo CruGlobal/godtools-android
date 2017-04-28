@@ -25,7 +25,7 @@ final class TranslationMapper extends BaseMapper<Translation> {
                 values.put(field, resource.getResourceId());
                 break;
             case COLUMN_LANGUAGE:
-                values.put(field, resource.getLanguageId());
+                values.put(field, serialize(resource.getLanguageCode()));
                 break;
             case COLUMN_VERSION:
                 values.put(field, resource.getVersion());
@@ -54,7 +54,7 @@ final class TranslationMapper extends BaseMapper<Translation> {
         final Translation resource = super.toObject(c);
 
         resource.setResourceId(getLong(c, COLUMN_RESOURCE, Resource.INVALID_ID));
-        resource.setLanguageId(getLong(c, COLUMN_LANGUAGE, Language.INVALID_ID));
+        resource.setLanguageCode(getLocale(c, COLUMN_LANGUAGE, Language.INVALID_CODE));
         resource.setVersion(getInt(c, COLUMN_VERSION, DEFAULT_VERSION));
         resource.setPublished(getBool(c, COLUMN_PUBLISHED, DEFAULT_PUBLISHED));
         resource.setDownloaded(getBool(c, COLUMN_DOWNLOADED, false));

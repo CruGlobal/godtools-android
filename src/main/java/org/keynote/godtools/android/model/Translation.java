@@ -1,10 +1,13 @@
 package org.keynote.godtools.android.model;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
+
+import java.util.Locale;
 
 import static org.keynote.godtools.android.model.Translation.JSON_API_TYPE;
 
@@ -27,7 +30,7 @@ public class Translation extends Base {
     private Resource mResource;
     @Nullable
     @JsonApiIgnore
-    private Long mLanguageId;
+    private Locale mLanguageCode;
     @Nullable
     @JsonApiAttribute(name = JSON_LANGUAGE)
     private Language mLanguage;
@@ -49,9 +52,10 @@ public class Translation extends Base {
         mResourceId = resourceId;
     }
 
-    public long getLanguageId() {
-        return mLanguageId != null && mLanguageId != Language.INVALID_ID ? mLanguageId :
-                mLanguage != null ? mLanguage.getId() : Language.INVALID_ID;
+    @NonNull
+    public Locale getLanguageCode() {
+        return mLanguageCode != null && !mLanguageCode.equals(Language.INVALID_CODE) ? mLanguageCode :
+                mLanguage != null ? mLanguage.getCode() : Language.INVALID_CODE;
     }
 
     @Nullable
@@ -59,8 +63,8 @@ public class Translation extends Base {
         return mLanguage;
     }
 
-    public void setLanguageId(@Nullable final Long languageId) {
-        mLanguageId = languageId;
+    public void setLanguageCode(@Nullable Locale code) {
+        mLanguageCode = code;
     }
 
     public int getVersion() {
