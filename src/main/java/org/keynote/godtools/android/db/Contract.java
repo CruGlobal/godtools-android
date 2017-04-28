@@ -21,29 +21,22 @@ public final class Contract extends BaseContract {
         static final String TABLE_NAME = "languages";
         private static final Table<Language> TABLE = Table.forClass(Language.class);
 
-        public static final String COLUMN_LOCALE = "locale";
+        public static final String COLUMN_CODE = "code";
         public static final String COLUMN_ADDED = "added";
 
-        private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
-        public static final Field FIELD_LOCALE = TABLE.field(COLUMN_LOCALE);
+        public static final Field FIELD_CODE = TABLE.field(COLUMN_CODE);
 
-        static final String[] PROJECTION_ALL = {COLUMN_ID, COLUMN_LOCALE, COLUMN_ADDED};
+        static final String[] PROJECTION_ALL = {COLUMN_ID, COLUMN_CODE, COLUMN_ADDED};
 
-        private static final String SQL_COLUMN_LOCALE = COLUMN_LOCALE + " TEXT";
+        private static final String SQL_COLUMN_CODE = COLUMN_CODE + " TEXT NOT NULL";
         private static final String SQL_COLUMN_ADDED = COLUMN_ADDED + " INTEGER";
-        private static final String SQL_UNIQUE_LOCALE = uniqueIndex(COLUMN_LOCALE);
+        private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_CODE);
 
-        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
+        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind());
 
         static final String SQL_CREATE_TABLE =
-                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_LOCALE, SQL_COLUMN_ADDED, SQL_UNIQUE_LOCALE);
+                create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_ADDED, SQL_PRIMARY_KEY);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
-
-        static final String SQL_V7_CREATE_TABLE = create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_LOCALE);
-        static final String SQL_V9_ALTER_ADDED = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_ADDED;
-        static final String SQL_V9_UNIQUE_LOCALE =
-                "CREATE UNIQUE INDEX " + TABLE_NAME + "_" + COLUMN_LOCALE + " ON " + TABLE_NAME + " (" + COLUMN_LOCALE +
-                        ")";
     }
 
     public static class ResourceTable extends BaseTable {

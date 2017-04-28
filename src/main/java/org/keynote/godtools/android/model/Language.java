@@ -14,21 +14,24 @@ import static org.keynote.godtools.android.model.Language.JSON_API_TYPE;
 @JsonApiType(JSON_API_TYPE)
 public class Language extends Base {
     static final String JSON_API_TYPE = "language";
-    private static final String JSON_LOCALE = "code";
+    private static final String JSON_CODE = "code";
+
+    public static final Locale DEFAULT_CODE = new Locale("x", "def");
 
     @Nullable
-    @JsonApiAttribute(name = JSON_LOCALE)
-    private Locale mLocale;
+    @JsonApiAttribute(name = JSON_CODE)
+    private Locale mCode;
 
     @JsonApiIgnore
     private boolean mAdded = false;
 
-    public Locale getLocale() {
-        return mLocale;
+    @NonNull
+    public Locale getCode() {
+        return mCode != null ? mCode : DEFAULT_CODE;
     }
 
-    public void setLocale(@Nullable final Locale locale) {
-        mLocale = locale;
+    public void setCode(@Nullable final Locale code) {
+        mCode = code;
     }
 
     public boolean isAdded() {
@@ -41,6 +44,6 @@ public class Language extends Base {
 
     @NonNull
     public String getDisplayName() {
-        return mLocale != null ? mLocale.getDisplayName() : "";
+        return mCode != null ? mCode.getDisplayName() : "";
     }
 }
