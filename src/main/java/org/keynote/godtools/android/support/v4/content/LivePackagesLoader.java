@@ -1,5 +1,19 @@
 package org.keynote.godtools.android.support.v4.content;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+
+import com.google.common.collect.FluentIterable;
+
+import org.ccci.gto.android.common.db.Expression;
+import org.ccci.gto.android.common.db.Query;
+import org.ccci.gto.android.common.support.v4.content.AsyncTaskSharedPreferencesChangeLoader;
+import org.keynote.godtools.android.business.GTLanguage;
+import org.keynote.godtools.android.business.GTPackage;
+import org.keynote.godtools.android.db.GodToolsDao;
+
+import java.util.List;
+
 import static android.content.Context.MODE_PRIVATE;
 import static org.ccci.gto.android.common.db.Expression.bind;
 import static org.ccci.gto.android.common.db.Expression.constants;
@@ -12,22 +26,8 @@ import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.FIELD_S
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-
-import com.google.common.collect.FluentIterable;
-
-import org.ccci.gto.android.common.db.Expression;
-import org.ccci.gto.android.common.db.Query;
-import org.ccci.gto.android.common.support.v4.content.AsyncTaskSharedPreferencesChangeLoader;
-import org.keynote.godtools.android.business.GTLanguage;
-import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.dao.DBAdapter;
-
-import java.util.List;
-
 public class LivePackagesLoader extends AsyncTaskSharedPreferencesChangeLoader<List<GTPackage>> {
-    private final DBAdapter mDao;
+    private final GodToolsDao mDao;
 
     // SELECT FROM GTPackage
     // ORDER BY
@@ -39,7 +39,7 @@ public class LivePackagesLoader extends AsyncTaskSharedPreferencesChangeLoader<L
 
     public LivePackagesLoader(@NonNull final Context context) {
         super(context, context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE));
-        mDao = DBAdapter.getInstance(context);
+        mDao = GodToolsDao.getInstance(context);
 
         // watch for the primary language to change
         addPreferenceKey(GTLanguage.KEY_PRIMARY);

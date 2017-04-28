@@ -7,7 +7,7 @@ import com.google.common.collect.Sets;
 import org.ccci.gto.android.common.db.Query;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
 import org.w3c.dom.Document;
@@ -49,7 +49,7 @@ public class DeletedPackageRemovalTask implements Runnable
     @Override
     public void run()
     {
-        DBAdapter dbAdapter = DBAdapter.getInstance(application.getApplicationContext());
+        final GodToolsDao dbAdapter = GodToolsDao.getInstance(application.getApplicationContext());
 
         final List<GTPackage> godToolsPackages = dbAdapter
                 .get(Query.select(GTPackage.class).where(FIELD_LANGUAGE.eq(godToolsLanguage.getLanguageCode())));

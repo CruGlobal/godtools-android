@@ -22,8 +22,8 @@ import android.widget.Toast;
 
 import org.ccci.gto.android.common.util.AsyncTaskCompat;
 import org.keynote.godtools.android.business.GTLanguage;
-import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
+import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.PackageDownloadHelper;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
@@ -409,7 +409,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             final GTLanguage language = new GTLanguage();
             language.setLanguageCode(langCode);
             language.setDownloaded(downloaded);
-            DBAdapter.getInstance(this).updateAsync(language, GTLanguageTable.COL_DOWNLOADED);
+            GodToolsDao.getInstance(this).updateAsync(language, GTLanguageTable.COL_DOWNLOADED);
         }
 
         // update value in local list

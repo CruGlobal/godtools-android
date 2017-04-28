@@ -27,8 +27,8 @@ import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTLanguages;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
-import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
+import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
 import org.simpleframework.xml.Serializer;
@@ -49,12 +49,12 @@ import java.util.List;
 
 public class InitialContentTasks {
     final Context mContext;
-    final DBAdapter mDao;
+    final GodToolsDao mDao;
     final AssetManager mAssets;
 
     public InitialContentTasks(@NonNull final Context context) {
         mContext = context.getApplicationContext();
-        mDao = DBAdapter.getInstance(mContext);
+        mDao = GodToolsDao.getInstance(mContext);
         mAssets = context.getAssets();
     }
 

@@ -42,7 +42,7 @@ import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.business.GSSubscriber;
 import org.keynote.godtools.android.business.GTNotificationRegister;
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.dao.DBAdapter;
+import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.notifications.NotificationInfo;
@@ -139,7 +139,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
         isUsingPrimaryLanguage = true;
 
         //noinspection WrongThread
-        mMainPackage = DBAdapter.getInstance(this).find(GTPackage.class, mAppLanguage, mPackageStatus, mAppPackage);
+        mMainPackage = GodToolsDao.getInstance(this).find(GTPackage.class, mAppLanguage, mPackageStatus, mAppPackage);
         // check if parallel language is set
         doSetup(0, mMainPackage);
         new AsyncTask<Void, Void, Void>() {
@@ -152,8 +152,8 @@ public class SnuffyPWActivity extends AppCompatActivity {
                 // get package if parallel language is set
 
                 if (!langParallel.isEmpty()) {
-                    mParallelPackage =
-                            DBAdapter.getInstance(SnuffyPWActivity.this).find(GTPackage.class, langParallel, GTPackage.STATUS_LIVE, mAppPackage);
+                    mParallelPackage = GodToolsDao.getInstance(SnuffyPWActivity.this)
+                            .find(GTPackage.class, langParallel, GTPackage.STATUS_LIVE, mAppPackage);
                 }
 
                 mRegID = settings.getString(PROPERTY_REG_ID, "");
@@ -284,7 +284,7 @@ public class SnuffyPWActivity extends AppCompatActivity {
     @WorkerThread
     private void processSubscriberEvent(@NonNull final GodToolsEvent event) {
         // look up the followup for the active context
-        final DBAdapter dao = DBAdapter.getInstance(this);
+        final GodToolsDao dao = GodToolsDao.getInstance(this);
         final Followup followup = dao.find(Followup.class, event.getFollowUpId(), Followup.DEFAULT_CONTEXT);
         if (followup != null) {
             // generate subscriber record
