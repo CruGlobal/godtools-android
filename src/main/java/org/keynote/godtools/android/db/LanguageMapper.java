@@ -37,7 +37,7 @@ final class LanguageMapper extends BaseMapper<Language> {
     public Language toObject(@NonNull final Cursor c) {
         final Language language = super.toObject(c);
 
-        language.setCode(getLocale(c, COLUMN_CODE, null));
+        language.setCode(getLocale(c, COLUMN_CODE, Language.INVALID_CODE));
         language.setAdded(getBool(c, COLUMN_ADDED, false));
 
         return language;

@@ -16,7 +16,7 @@ public class Language extends Base {
     static final String JSON_API_TYPE = "language";
     private static final String JSON_CODE = "code";
 
-    public static final Locale DEFAULT_CODE = new Locale("x", "def");
+    public static final Locale INVALID_CODE = new Locale("x", "inv");
 
     @Nullable
     @JsonApiAttribute(name = JSON_CODE)
@@ -27,7 +27,7 @@ public class Language extends Base {
 
     @NonNull
     public Locale getCode() {
-        return mCode != null ? mCode : DEFAULT_CODE;
+        return mCode != null ? mCode : INVALID_CODE;
     }
 
     public void setCode(@Nullable final Locale code) {
