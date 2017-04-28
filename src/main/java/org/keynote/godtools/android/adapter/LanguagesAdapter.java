@@ -45,6 +45,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
     Locale mSelected;
 
     public LanguagesAdapter(@NonNull final Context context) {
+        setHasStableIds(true);
         mDao = GodToolsDao.getInstance(context);
         mResources = GodToolsResourceManager.getInstance(context);
     }
@@ -66,6 +67,11 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
     @Override
     public int getItemCount() {
         return mLanguages.size();
+    }
+
+    @Override
+    public long getItemId(final int position) {
+        return mLanguages.get(position).getId();
     }
 
     @Override
