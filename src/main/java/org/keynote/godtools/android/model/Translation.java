@@ -12,7 +12,7 @@ import static org.keynote.godtools.android.model.Translation.JSON_API_TYPE;
 public class Translation extends Base {
     static final String JSON_API_TYPE = "translation";
     private static final String JSON_RESOURCE = "resource";
-    private static final String JSON_LANGUAGE = "language";
+    public static final String JSON_LANGUAGE = "language";
     private static final String JSON_VERSION = "version";
     private static final String JSON_IS_PUBLISHED = "is-published";
 
@@ -52,6 +52,11 @@ public class Translation extends Base {
     public long getLanguageId() {
         return mLanguageId != null && mLanguageId != Language.INVALID_ID ? mLanguageId :
                 mLanguage != null ? mLanguage.getId() : Language.INVALID_ID;
+    }
+
+    @Nullable
+    public Language getLanguage() {
+        return mLanguage;
     }
 
     public void setLanguageId(@Nullable final Long languageId) {

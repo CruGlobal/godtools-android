@@ -81,5 +81,12 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
                                   @NonNull final Translation translation, @NonNull final Includes includes) {
         mDao.updateOrInsert(translation, API_FIELDS_TRANSLATION);
         coalesceEvent(events, new TranslationUpdateEvent());
+
+        if (includes.include(Translation.JSON_LANGUAGE)) {
+            final Language language = translation.getLanguage();
+            if (language != null) {
+                storeLanguage(events, language);
+            }
+        }
     }
 }
