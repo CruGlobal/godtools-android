@@ -49,6 +49,8 @@ public class GodToolsDao extends DBAdapter {
         if (obj instanceof Followup) {
             final Followup followup = (Followup) obj;
             return getPrimaryKeyWhere(Followup.class, followup.getId(), followup.getContextId());
+        } else if (obj instanceof Language) {
+            return getPrimaryKeyWhere(Language.class, ((Language) obj).getCode());
         } else if (obj instanceof Base) {
             return getPrimaryKeyWhere(obj.getClass(), ((Base) obj).getId());
         }

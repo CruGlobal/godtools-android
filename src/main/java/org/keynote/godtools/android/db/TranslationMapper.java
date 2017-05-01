@@ -19,25 +19,25 @@ import static org.keynote.godtools.android.model.Translation.DEFAULT_VERSION;
 final class TranslationMapper extends BaseMapper<Translation> {
     @Override
     protected void mapField(@NonNull final ContentValues values, @NonNull final String field,
-                            @NonNull final Translation resource) {
+                            @NonNull final Translation translation) {
         switch (field) {
             case COLUMN_RESOURCE:
-                values.put(field, resource.getResourceId());
+                values.put(field, translation.getResourceId());
                 break;
             case COLUMN_LANGUAGE:
-                values.put(field, resource.getLanguageId());
+                values.put(field, serialize(translation.getLanguageCode()));
                 break;
             case COLUMN_VERSION:
-                values.put(field, resource.getVersion());
+                values.put(field, translation.getVersion());
                 break;
             case COLUMN_PUBLISHED:
-                values.put(field, resource.isPublished());
+                values.put(field, translation.isPublished());
                 break;
             case COLUMN_DOWNLOADED:
-                values.put(field, resource.isDownloaded());
+                values.put(field, translation.isDownloaded());
                 break;
             default:
-                super.mapField(values, field, resource);
+                super.mapField(values, field, translation);
                 break;
         }
     }
@@ -51,14 +51,14 @@ final class TranslationMapper extends BaseMapper<Translation> {
     @NonNull
     @Override
     public Translation toObject(@NonNull final Cursor c) {
-        final Translation resource = super.toObject(c);
+        final Translation translation = super.toObject(c);
 
-        resource.setResourceId(getLong(c, COLUMN_RESOURCE, Resource.INVALID_ID));
-        resource.setLanguageId(getLong(c, COLUMN_LANGUAGE, Language.INVALID_ID));
-        resource.setVersion(getInt(c, COLUMN_VERSION, DEFAULT_VERSION));
-        resource.setPublished(getBool(c, COLUMN_PUBLISHED, DEFAULT_PUBLISHED));
-        resource.setDownloaded(getBool(c, COLUMN_DOWNLOADED, false));
+        translation.setResourceId(getLong(c, COLUMN_RESOURCE, Resource.INVALID_ID));
+        translation.setLanguageCode(getLocale(c, COLUMN_LANGUAGE, Language.INVALID_CODE));
+        translation.setVersion(getInt(c, COLUMN_VERSION, DEFAULT_VERSION));
+        translation.setPublished(getBool(c, COLUMN_PUBLISHED, DEFAULT_PUBLISHED));
+        translation.setDownloaded(getBool(c, COLUMN_DOWNLOADED, false));
 
-        return resource;
+        return translation;
     }
 }
