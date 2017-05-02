@@ -3,13 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
+    style="@style/Widget.GodTools2.Resources.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
     android:background="@color/white"
-    android:clipToPadding="false"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="8dp">
+    android:clipToPadding="false">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -49,7 +47,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:padding="8dp"
-                android:tint="@color/ic_download_green"
+                android:tint="@color/gt_green"
                 app:srcCompat="@drawable/ic_download" />
 
             <View
@@ -73,7 +71,7 @@
                 app:srcCompat="@drawable/ic_info" />
 
             <android.support.v7.widget.AppCompatTextViewImpl
-                android:id="@+id/language"
+                android:id="@+id/language_parallel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -89,9 +87,9 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_toEndOf="@id/divider_download"
-                android:layout_toLeftOf="@id/language"
+                android:layout_toLeftOf="@id/language_parallel"
                 android:layout_toRightOf="@id/divider_download"
-                android:layout_toStartOf="@id/language">
+                android:layout_toStartOf="@id/language_parallel">
 
                 <android.support.v7.widget.AppCompatTextViewImpl
                     android:id="@+id/title"

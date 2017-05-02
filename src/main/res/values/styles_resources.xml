@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="resources_card_corner_radius">0dp</dimen>
+    <dimen name="resources_card_elevation">2dp</dimen>
+    <dimen name="resources_card_margin_horiz">14dp</dimen>
+    <dimen name="resources_card_margin_vert">2dp</dimen>
+
+    <style name="Widget.GodTools2.Resources.CardView" parent="Widget.GodTools2.CardView">
+        <item name="android:layout_marginBottom">@dimen/resources_card_margin_vert</item>
+        <item name="android:layout_marginLeft">@dimen/resources_card_margin_horiz</item>
+        <item name="android:layout_marginRight">@dimen/resources_card_margin_horiz</item>
+        <item name="android:layout_marginTop">@dimen/resources_card_margin_vert</item>
+        <item name="cardElevation">@dimen/resources_card_elevation</item>
+        <item name="cardMaxElevation">@dimen/resources_card_elevation</item>
+        <item name="cardCornerRadius">@dimen/resources_card_corner_radius</item>
+    </style>
+</resources>
