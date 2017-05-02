@@ -16,7 +16,11 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.db.Contract.ResourceTable;
 import org.keynote.godtools.android.model.Resource;
 
+import java.util.List;
+
 import butterknife.BindView;
+import butterknife.BindViews;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
 
@@ -29,8 +33,14 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
         void onResourceAdd(long id);
     }
 
+    final boolean mHideAddAction;
+
     @Nullable
     Callbacks mCallbacks;
+
+    public ResourcesAdapter(final boolean hideAddAction) {
+        mHideAddAction = hideAddAction;
+    }
 
     public void setCallbacks(@Nullable final Callbacks callbacks) {
         mCallbacks = callbacks;
@@ -61,6 +71,9 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
         @Nullable
         @BindView(R.id.action_add)
         View mActionAdd;
+        @Nullable
+        @BindViews({R.id.action_add, R.id.divider_download})
+        List<View> mAddViews;
 
         long mId;
         @Nullable
@@ -71,6 +84,10 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
 
         ResourceViewHolder(@NonNull final View view) {
             super(view);
+            if (mAddViews != null) {
+                ButterKnife.apply(mAddViews, (ButterKnife.Action<View>) (v, i) -> v
+                        .setVisibility(mHideAddAction ? View.GONE : View.VISIBLE));
+            }
         }
 
         void bind(@Nullable final Cursor cursor) {
@@ -95,7 +112,7 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
                 mTitleView.setText(mTitle);
             }
             if (mActionAdd != null) {
-                mActionAdd.setVisibility(mAdded ? View.GONE : View.VISIBLE);
+                mActionAdd.setEnabled(!mAdded);
             }
             if (mDownloadProgress != null) {
                 mDownloadProgress.setVisibility(mAdded && (mDownloading || !mDownloaded) ? View.VISIBLE : View.GONE);
