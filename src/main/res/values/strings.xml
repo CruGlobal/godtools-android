@@ -7,7 +7,6 @@
     <string name="menu_item_share">Share</string>
     <string name="menu_item_contents">Contents</string>
     <string name="menu_item_help">Help</string>
-    <string name="menu_switch_language">Switch Language</string>
     <string name="menu_update_page">Update Page (draft)</string>
     <string name="menu_flip">Flip</string>
     <string name="app_name_everystudent">Questions About God?</string>
@@ -52,6 +51,10 @@
     <string name="authenticate_code">Authenticating access code</string>
     <!-- Main Activity-->
     <string name="share_prompt">Select how you would like to share</string>
+
+    <!-- Resources UI -->
+    <string name="title_resources_add">Add Tools</string>
+    <string name="menu_switch_language">Switch Language</string>
 
     <!-- Language Selection UI -->
     <string name="title_language_settings">Language Settings</string>
