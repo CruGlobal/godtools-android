@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.support.v4.content.DaoCursorLoader;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
+import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.adapter.ResourcesAdapter;
 import org.keynote.godtools.android.content.ResourcesCursorLoader;
@@ -28,6 +29,12 @@ import butterknife.Unbinder;
 
 public class ResourcesFragment extends Fragment implements ResourcesAdapter.Callbacks {
     private static final String EXTRA_MODE = ResourcesFragment.class.getName() + ".MODE";
+
+    public interface Callbacks {
+        void onResourceInfo(long id);
+
+        void onResourceSelect(long id);
+    }
 
     private static final int MODE_ADDED = 1;
     private static final int MODE_AVAILABLE = 2;
@@ -101,12 +108,18 @@ public class ResourcesFragment extends Fragment implements ResourcesAdapter.Call
 
     @Override
     public void onResourceSelect(final long id) {
-        // TODO
+        final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
+        if (listener != null) {
+            listener.onResourceSelect(id);
+        }
     }
 
     @Override
     public void onResourceInfo(final long id) {
-        // TODO
+        final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
+        if (listener != null) {
+            listener.onResourceInfo(id);
+        }
     }
 
     @Override
