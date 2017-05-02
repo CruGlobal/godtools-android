@@ -19,8 +19,8 @@
             android:layout_height="60dp"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/bk_coast" />
+            android:background="@color/gray_E6"
+            android:scaleType="centerCrop" />
 
         <ProgressBar
             android:id="@+id/download_progress"
