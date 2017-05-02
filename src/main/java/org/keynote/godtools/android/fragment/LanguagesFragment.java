@@ -113,6 +113,14 @@ public class LanguagesFragment extends Fragment implements LanguagesAdapter.Call
     }
 
     @Override
+    public void onLanguageSelected(@NonNull final Locale language) {
+        final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
+        if (listener != null) {
+            listener.onLocaleSelected(language);
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         cleanupLanguagesList();
@@ -159,14 +167,6 @@ public class LanguagesFragment extends Fragment implements LanguagesAdapter.Call
             mLanguagesAdapter.setCallbacks(null);
         }
         mLanguagesAdapter = null;
-    }
-
-    @Override
-    public void onLanguageSelected(@NonNull final Locale language) {
-        final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
-        if (listener != null) {
-            listener.onLocaleSelected(language);
-        }
     }
 
     class LanguagesLoaderCallbacks extends SimpleLoaderCallbacks<List<Language>> {
