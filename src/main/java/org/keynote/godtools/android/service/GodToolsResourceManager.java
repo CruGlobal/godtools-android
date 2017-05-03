@@ -9,10 +9,13 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.eventbus.task.EventBusDelayedPost;
 import org.greenrobot.eventbus.EventBus;
+import org.keynote.godtools.android.db.Contract;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.event.LanguageUpdateEvent;
+import org.keynote.godtools.android.event.ResourceUpdateEvent;
 import org.keynote.godtools.android.model.Language;
+import org.keynote.godtools.android.model.Resource;
 
 import java.util.Locale;
 
@@ -61,5 +64,21 @@ public final class GodToolsResourceManager {
             update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new LanguageUpdateEvent()),
                                directExecutor());
         }
+    }
+
+    public void addResource(final long id) {
+        final Resource resource = new Resource();
+        resource.setId(id);
+        resource.setAdded(true);
+        final ListenableFuture<Integer> update = mDao.updateAsync(resource, Contract.ResourceTable.COLUMN_ADDED);
+        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ResourceUpdateEvent()), directExecutor());
+    }
+
+    public void removeResource(final long id) {
+        final Resource resource = new Resource();
+        resource.setId(id);
+        resource.setAdded(false);
+        final ListenableFuture<Integer> update = mDao.updateAsync(resource, Contract.ResourceTable.COLUMN_ADDED);
+        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ResourceUpdateEvent()), directExecutor());
     }
 }

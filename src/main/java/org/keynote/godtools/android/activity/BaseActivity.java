@@ -38,6 +38,8 @@ public abstract class BaseActivity extends AppCompatActivity
     @Nullable
     private ActionBarDrawerToggle mDrawerToggle;
 
+    private boolean mVisible = false;
+
     /* BEGIN lifecycle */
 
     @Override
@@ -49,6 +51,12 @@ public abstract class BaseActivity extends AppCompatActivity
     }
 
     protected void onSetupActionBar(@NonNull final ActionBar actionBar) {}
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mVisible = true;
+    }
 
     protected void onUpdateActionBar(@NonNull final ActionBar actionBar) {}
 
@@ -77,6 +85,12 @@ public abstract class BaseActivity extends AppCompatActivity
     @CallSuper
     public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
         return onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mVisible = false;
     }
 
     /* END lifecycle */
@@ -111,7 +125,23 @@ public abstract class BaseActivity extends AppCompatActivity
             mDrawerToggle.syncState();
         }
         if (mDrawerMenu != null) {
-            mDrawerMenu.setNavigationItemSelectedListener(this);
+            mDrawerMenu.setNavigationItemSelectedListener(item -> {
+                final boolean handled = onNavigationItemSelected(item);
+                if (handled) {
+                    closeNavigationDrawer();
+                }
+                return handled;
+            });
+        }
+    }
+
+    protected final void closeNavigationDrawer() {
+        closeNavigationDrawer(mVisible);
+    }
+
+    protected final void closeNavigationDrawer(final boolean animate) {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(GravityCompat.START, animate);
         }
     }
 

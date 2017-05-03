@@ -12,4 +12,7 @@
     <style name="Theme.GodTools2.Button.Blue">
         <item name="colorAccent">@color/gt_blue</item>
     </style>
+
+    <!-- CardView Widgets -->
+    <style name="Widget.GodTools2.CardView" parent="CardView.Light" />
 </resources>

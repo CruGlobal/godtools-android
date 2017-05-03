@@ -44,9 +44,10 @@ public final class Contract extends BaseContract {
         private static final Table<Resource> TABLE = Table.forClass(Resource.class);
 
         public static final String COLUMN_NAME = "name";
-        static final String COLUMN_ADDED = "added";
+        public static final String COLUMN_ADDED = "added";
 
         private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
+        public static final Field FIELD_ADDED = TABLE.field(COLUMN_ADDED);
 
         static final String[] PROJECTION_ALL = {COLUMN_ID, COLUMN_NAME, COLUMN_ADDED};
 

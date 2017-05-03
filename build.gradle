@@ -7,7 +7,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.4.0-alpha6'
+        classpath 'com.android.tools.build:gradle:2.4.0-alpha7'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
         classpath 'com.newrelic.agent.android:agent-gradle-plugin:5.12.2'
@@ -39,7 +39,7 @@ ext.deps = [
 
 dependencies {
     compile 'com.android.support:appcompat-v7:' + deps.androidSupport
-    compile 'com.android.support:support-annotations:' + deps.androidSupport
+    compile "com.android.support:cardview-v7:${deps.androidSupport}"
     compile 'com.android.support:design:' + deps.androidSupport
 
     compile 'com.google.android.gms:play-services-analytics:' + deps.playServices
@@ -53,6 +53,7 @@ dependencies {
     compile 'org.ccci.gto.android:gto-support-gson:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-jsonapi:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-jsonapi-retrofit2:' + deps.gtoSupport
+    compile "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
     compile 'com.crashlytics.sdk.android:crashlytics:2.6.7'
