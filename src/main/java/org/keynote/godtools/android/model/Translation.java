@@ -18,6 +18,8 @@ public class Translation extends Base {
     public static final String JSON_LANGUAGE = "language";
     private static final String JSON_VERSION = "version";
     private static final String JSON_IS_PUBLISHED = "is-published";
+    private static final String JSON_NAME = "translated-name";
+    private static final String JSON_DESCRIPTION = "translated-description";
 
     public static final boolean DEFAULT_PUBLISHED = false;
     public static final int DEFAULT_VERSION = 0;
@@ -34,9 +36,16 @@ public class Translation extends Base {
     @Nullable
     @JsonApiAttribute(name = JSON_LANGUAGE)
     private Language mLanguage;
-
     @JsonApiAttribute(name = JSON_VERSION)
     private int mVersion = DEFAULT_VERSION;
+
+    @Nullable
+    @JsonApiAttribute(name = JSON_NAME)
+    private String mName;
+    @Nullable
+    @JsonApiAttribute(name = JSON_DESCRIPTION)
+    private String mDescription;
+
     @JsonApiAttribute(name = JSON_IS_PUBLISHED)
     private boolean mPublished = DEFAULT_PUBLISHED;
 
@@ -73,6 +82,24 @@ public class Translation extends Base {
 
     public void setVersion(final int version) {
         mVersion = version;
+    }
+
+    @Nullable
+    public String getName() {
+        return mName;
+    }
+
+    public void setName(@Nullable final String name) {
+        mName = name;
+    }
+
+    @Nullable
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public void setDescription(@Nullable final String description) {
+        mDescription = description;
     }
 
     public boolean isPublished() {
