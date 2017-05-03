@@ -56,7 +56,7 @@ dependencies {
     compile "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
-    compile 'com.crashlytics.sdk.android:crashlytics:2.6.7'
+    compile 'com.crashlytics.sdk.android:crashlytics:2.6.8'
     compile 'com.newrelic.agent.android:android-agent:5.12.2'
 
     compile 'com.google.guava:guava:' + deps.guava
