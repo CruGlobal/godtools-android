@@ -24,6 +24,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
     private static final String[] API_FIELDS_RESOURCE = {ResourceTable.COLUMN_NAME, ResourceTable.COLUMN_SHARES};
     private static final String[] API_FIELDS_TRANSLATION =
             {TranslationTable.COLUMN_RESOURCE, TranslationTable.COLUMN_LANGUAGE, TranslationTable.COLUMN_VERSION,
+                    TranslationTable.COLUMN_NAME, TranslationTable.COLUMN_DESCRIPTION,
                     TranslationTable.COLUMN_PUBLISHED};
 
     BaseDataSyncTasks(@NonNull Context context) {
