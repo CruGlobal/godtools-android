@@ -24,6 +24,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
 
+import static org.keynote.godtools.android.util.ViewUtils.bindShares;
+
 public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceViewHolder> {
     public interface Callbacks {
         void onResourceInfo(long id);
@@ -66,6 +68,9 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
         @BindView(R.id.title)
         TextView mTitleView;
         @Nullable
+        @BindView(R.id.shares)
+        TextView mSharesView;
+        @Nullable
         @BindView(R.id.download_progress)
         ProgressBar mDownloadProgress;
         @Nullable
@@ -78,6 +83,7 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
         long mId;
         @Nullable
         String mTitle;
+        int mShares = 0;
         boolean mAdded = false;
         boolean mDownloading = false;
         boolean mDownloaded = true;
@@ -96,9 +102,11 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
                 mId = CursorUtils.getLong(cursor, ResourceTable.COLUMN_ID, Resource.INVALID_ID);
                 mTitle = CursorUtils.getString(cursor, ResourceTable.COLUMN_NAME, null);
                 mAdded = CursorUtils.getBool(cursor, ResourceTable.COLUMN_ADDED, false);
+                mShares = CursorUtils.getInt(cursor, ResourceTable.COLUMN_SHARES, 0);
             } else {
                 mId = Resource.INVALID_ID;
                 mTitle = null;
+                mShares = 0;
                 mAdded = false;
                 mDownloaded = false;
                 mDownloading = false;
@@ -111,6 +119,7 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
             if (mTitleView != null) {
                 mTitleView.setText(mTitle);
             }
+            bindShares(mSharesView, mShares);
             if (mActionAdd != null) {
                 mActionAdd.setEnabled(!mAdded);
             }

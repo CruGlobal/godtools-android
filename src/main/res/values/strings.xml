@@ -55,6 +55,10 @@
     <!-- Resources UI -->
     <string name="title_resources_add">Add Tools</string>
     <string name="menu_switch_language">Switch Language</string>
+    <plurals name="label_shares">
+        <item quantity="one">%1$,d View</item>
+        <item quantity="other">%1$,d Views</item>
+    </plurals>
 
     <!-- Language Selection UI -->
     <string name="title_language_settings">Language Settings</string>
