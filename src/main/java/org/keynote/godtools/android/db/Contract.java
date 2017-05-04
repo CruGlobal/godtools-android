@@ -81,6 +81,7 @@ public final class Contract extends BaseContract {
         static final String COLUMN_DOWNLOADED = "downloaded";
 
         private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
+        public static final Field FIELD_RESOURCE = TABLE.field(COLUMN_RESOURCE);
 
         static final String[] PROJECTION_ALL =
                 {COLUMN_ID, COLUMN_RESOURCE, COLUMN_LANGUAGE, COLUMN_VERSION, COLUMN_NAME, COLUMN_DESCRIPTION,
