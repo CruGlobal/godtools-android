@@ -44,21 +44,28 @@ public final class Contract extends BaseContract {
         private static final Table<Resource> TABLE = Table.forClass(Resource.class);
 
         public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_SHARES = "shares";
         public static final String COLUMN_ADDED = "added";
 
         private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
         public static final Field FIELD_ADDED = TABLE.field(COLUMN_ADDED);
 
-        static final String[] PROJECTION_ALL = {COLUMN_ID, COLUMN_NAME, COLUMN_ADDED};
+        static final String[] PROJECTION_ALL = {COLUMN_ID, COLUMN_NAME, COLUMN_SHARES, COLUMN_ADDED};
 
         private static final String SQL_COLUMN_NAME = COLUMN_NAME + " TEXT";
+        private static final String SQL_COLUMN_SHARES = COLUMN_SHARES + " INTEGER";
         private static final String SQL_COLUMN_ADDED = COLUMN_ADDED + " INTEGER";
 
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
 
         static final String SQL_CREATE_TABLE =
-                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_NAME, SQL_COLUMN_ADDED);
+                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_NAME, SQL_COLUMN_SHARES, SQL_COLUMN_ADDED);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
+
+        /* DB migrations */
+        static final String SQL_V10_CREATE_TABLE =
+                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_NAME, SQL_COLUMN_ADDED);
+        static final String SQL_V15_ALTER_SHARES = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_SHARES;
     }
 
     public static class TranslationTable extends BaseTable {
