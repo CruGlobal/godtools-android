@@ -49,6 +49,7 @@ dependencies {
     compile 'org.ccci.gto.android:gto-support-api-retrofit2:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-db:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-db-async:' + deps.gtoSupport
+    compile "org.ccci.gto.android:gto-support-db-stream:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     compile 'org.ccci.gto.android:gto-support-gson:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-jsonapi:' + deps.gtoSupport
@@ -56,7 +57,7 @@ dependencies {
     compile "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
-    compile 'com.crashlytics.sdk.android:crashlytics:2.6.7'
+    compile 'com.crashlytics.sdk.android:crashlytics:2.6.8'
     compile 'com.newrelic.agent.android:android-agent:5.12.2'
 
     compile 'com.google.guava:guava:' + deps.guava
@@ -91,7 +92,7 @@ dependencies {
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '25.0.3'
 
     defaultConfig {
         applicationId 'org.keynote.godtools.android'

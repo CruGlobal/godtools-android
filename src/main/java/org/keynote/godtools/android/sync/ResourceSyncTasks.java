@@ -65,7 +65,7 @@ final class ResourceSyncTasks extends BaseDataSyncTasks {
             sendEvents(events);
 
             // update the sync time
-            mDao.updateLastSyncTime(LOCK_SYNC_RESOURCES);
+            mDao.updateLastSyncTime(SYNC_TIME_RESOURCES);
         }
 
         return true;

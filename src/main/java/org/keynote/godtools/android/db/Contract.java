@@ -44,21 +44,28 @@ public final class Contract extends BaseContract {
         private static final Table<Resource> TABLE = Table.forClass(Resource.class);
 
         public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_SHARES = "shares";
         public static final String COLUMN_ADDED = "added";
 
         private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
         public static final Field FIELD_ADDED = TABLE.field(COLUMN_ADDED);
 
-        static final String[] PROJECTION_ALL = {COLUMN_ID, COLUMN_NAME, COLUMN_ADDED};
+        static final String[] PROJECTION_ALL = {COLUMN_ID, COLUMN_NAME, COLUMN_SHARES, COLUMN_ADDED};
 
         private static final String SQL_COLUMN_NAME = COLUMN_NAME + " TEXT";
+        private static final String SQL_COLUMN_SHARES = COLUMN_SHARES + " INTEGER";
         private static final String SQL_COLUMN_ADDED = COLUMN_ADDED + " INTEGER";
 
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
 
         static final String SQL_CREATE_TABLE =
-                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_NAME, SQL_COLUMN_ADDED);
+                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_NAME, SQL_COLUMN_SHARES, SQL_COLUMN_ADDED);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
+
+        /* DB migrations */
+        static final String SQL_V10_CREATE_TABLE =
+                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_NAME, SQL_COLUMN_ADDED);
+        static final String SQL_V15_ALTER_SHARES = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_SHARES;
     }
 
     public static class TranslationTable extends BaseTable {
@@ -68,25 +75,34 @@ public final class Contract extends BaseContract {
         public static final String COLUMN_RESOURCE = "resource";
         public static final String COLUMN_LANGUAGE = "language";
         public static final String COLUMN_VERSION = "version";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_DESCRIPTION = "description";
         public static final String COLUMN_PUBLISHED = "published";
         static final String COLUMN_DOWNLOADED = "downloaded";
 
         private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
+        public static final Field FIELD_RESOURCE = TABLE.field(COLUMN_RESOURCE);
+        private static final Field FIELD_LANGUAGE = TABLE.field(COLUMN_LANGUAGE);
 
         static final String[] PROJECTION_ALL =
-                {COLUMN_ID, COLUMN_RESOURCE, COLUMN_LANGUAGE, COLUMN_VERSION, COLUMN_PUBLISHED, COLUMN_DOWNLOADED};
+                {COLUMN_ID, COLUMN_RESOURCE, COLUMN_LANGUAGE, COLUMN_VERSION, COLUMN_NAME, COLUMN_DESCRIPTION,
+                        COLUMN_PUBLISHED, COLUMN_DOWNLOADED};
 
         private static final String SQL_COLUMN_RESOURCE = COLUMN_RESOURCE + " INTEGER";
         private static final String SQL_COLUMN_LANGUAGE = COLUMN_LANGUAGE + " TEXT NOT NULL";
         private static final String SQL_COLUMN_VERSION = COLUMN_VERSION + " INTEGER";
+        private static final String SQL_COLUMN_NAME = COLUMN_NAME + " TEXT";
+        private static final String SQL_COLUMN_DESCRIPTION = COLUMN_DESCRIPTION + " TEXT";
         private static final String SQL_COLUMN_PUBLISHED = COLUMN_PUBLISHED + " INTEGER";
         private static final String SQL_COLUMN_DOWNLOADED = COLUMN_DOWNLOADED + " INTEGER";
 
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
+        public static final Expression SQL_WHERE_RESOURCE_LANGUAGE =
+                FIELD_RESOURCE.eq(bind()).and(FIELD_LANGUAGE.eq(bind()));
 
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_RESOURCE, SQL_COLUMN_LANGUAGE, SQL_COLUMN_VERSION,
-                       SQL_COLUMN_PUBLISHED, SQL_COLUMN_DOWNLOADED);
+                       SQL_COLUMN_NAME, SQL_COLUMN_DESCRIPTION, SQL_COLUMN_PUBLISHED, SQL_COLUMN_DOWNLOADED);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
     }
 

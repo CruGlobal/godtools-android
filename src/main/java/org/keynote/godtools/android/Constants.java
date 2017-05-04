@@ -6,6 +6,9 @@ public final class Constants {
     public static final String ARG_LANGUAGE = "lang";
     public static final String ARG_MODAL_ID = "modal_id";
 
+    // common extras
+    public static final String EXTRA_RESOURCE = "resource";
+
     /* SharedPreferences for this app */
     public static final String PREFS_SETTINGS = "GodTools";
     public static final String PREF_PRIMARY_LANGUAGE = "languagePrimary";

@@ -8,8 +8,10 @@ import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.Resource;
 import org.keynote.godtools.android.model.Translation;
 
+import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DESCRIPTION;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DOWNLOADED;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_LANGUAGE;
+import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_NAME;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_PUBLISHED;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_RESOURCE;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_VERSION;
@@ -29,6 +31,12 @@ final class TranslationMapper extends BaseMapper<Translation> {
                 break;
             case COLUMN_VERSION:
                 values.put(field, translation.getVersion());
+                break;
+            case COLUMN_NAME:
+                values.put(field, translation.getName());
+                break;
+            case COLUMN_DESCRIPTION:
+                values.put(field, translation.getDescription());
                 break;
             case COLUMN_PUBLISHED:
                 values.put(field, translation.isPublished());
@@ -56,6 +64,8 @@ final class TranslationMapper extends BaseMapper<Translation> {
         translation.setResourceId(getLong(c, COLUMN_RESOURCE, Resource.INVALID_ID));
         translation.setLanguageCode(getLocale(c, COLUMN_LANGUAGE, Language.INVALID_CODE));
         translation.setVersion(getInt(c, COLUMN_VERSION, DEFAULT_VERSION));
+        translation.setName(getString(c, COLUMN_NAME, null));
+        translation.setDescription(getString(c, COLUMN_DESCRIPTION, null));
         translation.setPublished(getBool(c, COLUMN_PUBLISHED, DEFAULT_PUBLISHED));
         translation.setDownloaded(getBool(c, COLUMN_DOWNLOADED, false));
 

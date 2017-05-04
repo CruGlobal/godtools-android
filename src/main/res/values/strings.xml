@@ -54,7 +54,19 @@
 
     <!-- Resources UI -->
     <string name="title_resources_add">Add Tools</string>
+    <string name="menu_add_tool">Add Tool</string>
     <string name="menu_switch_language">Switch Language</string>
+    <string name="action_resources_download">Download</string>
+    <string name="action_resources_remove">Remove</string>
+    <plurals name="label_resources_shares">
+        <item quantity="one">%1$,d View</item>
+        <item quantity="other">%1$,d Views</item>
+    </plurals>
+    <string name="label_resources_about">About</string>
+    <plurals name="label_resources_languages">
+        <item quantity="one">%1$,d Language</item>
+        <item quantity="other">%1$,d Languages</item>
+    </plurals>
 
     <!-- Language Selection UI -->
     <string name="title_language_settings">Language Settings</string>

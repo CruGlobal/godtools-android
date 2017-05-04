@@ -102,9 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/title"
-                    android:visibility="gone"
-                    tools:text="20,000 Shares"
-                    tools:visibility="visible" />
+                    tools:text="20,000 Shares" />
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
