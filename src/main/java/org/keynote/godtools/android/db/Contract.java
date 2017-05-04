@@ -100,14 +100,6 @@ public final class Contract extends BaseContract {
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_RESOURCE, SQL_COLUMN_LANGUAGE, SQL_COLUMN_VERSION,
                        SQL_COLUMN_NAME, SQL_COLUMN_DESCRIPTION, SQL_COLUMN_PUBLISHED, SQL_COLUMN_DOWNLOADED);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
-
-        /* DB migrations */
-        static final String SQL_V13_CREATE_TABLE =
-                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_RESOURCE, SQL_COLUMN_LANGUAGE, SQL_COLUMN_VERSION,
-                       SQL_COLUMN_PUBLISHED, SQL_COLUMN_DOWNLOADED);
-        static final String SQL_V14_ALTER_NAME = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_NAME;
-        static final String SQL_V14_ALTER_DESCRIPTION =
-                "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_DESCRIPTION;
     }
 
     public static class FollowupTable implements Base {

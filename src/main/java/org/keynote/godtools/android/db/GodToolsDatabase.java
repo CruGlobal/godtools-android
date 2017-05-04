@@ -163,15 +163,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
                         db.execSQL(LanguageTable.SQL_CREATE_TABLE);
                         break;
                     case 13:
-                        db.execSQL(TranslationTable.SQL_DELETE_TABLE);
-                        db.execSQL(TranslationTable.SQL_V13_CREATE_TABLE);
-
-                        db.execSQL(LastSyncTable.SQL_DELETE_TABLE);
-                        db.execSQL(LastSyncTable.SQL_CREATE_TABLE);
-                        break;
                     case 14:
-                        db.execSQL(TranslationTable.SQL_V14_ALTER_NAME);
-                        db.execSQL(TranslationTable.SQL_V14_ALTER_DESCRIPTION);
                         break;
                     case 15:
                         db.execSQL(ResourceTable.SQL_V15_ALTER_SHARES);
