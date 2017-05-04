@@ -98,7 +98,7 @@ public final class Contract extends BaseContract {
 
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_RESOURCE, SQL_COLUMN_LANGUAGE, SQL_COLUMN_VERSION,
-                       SQL_COLUMN_PUBLISHED, SQL_COLUMN_DOWNLOADED);
+                       SQL_COLUMN_NAME, SQL_COLUMN_DESCRIPTION, SQL_COLUMN_PUBLISHED, SQL_COLUMN_DOWNLOADED);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
 
         /* DB migrations */
