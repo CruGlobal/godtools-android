@@ -4,7 +4,11 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.annimon.stream.Stream;
+
 import org.ccci.gto.android.common.db.Expression;
+import org.ccci.gto.android.common.db.Query;
+import org.ccci.gto.android.common.db.StreamDao;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.db.Contract.FollowupTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
@@ -16,7 +20,7 @@ import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.Resource;
 import org.keynote.godtools.android.model.Translation;
 
-public class GodToolsDao extends DBAdapter {
+public class GodToolsDao extends DBAdapter implements StreamDao {
     private GodToolsDao(@NonNull final Context context) {
         super(GodToolsDatabase.getInstance(context));
 
@@ -56,5 +60,11 @@ public class GodToolsDao extends DBAdapter {
         }
 
         return super.getPrimaryKeyWhere(obj);
+    }
+
+    @NonNull
+    @Override
+    public <T> Stream<T> streamCompat(@NonNull final Query<T> query) {
+        return StreamHelper.stream(this, query);
     }
 }
