@@ -14,9 +14,19 @@ import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
 import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 
 public final class Settings {
+    private static final String PREF_TOUR_COMPLETED = "tour_completed";
+
     @NonNull
     public static SharedPreferences getSettings(@NonNull final Context context) {
         return context.getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE);
+    }
+
+    public static boolean isTourCompleted(@NonNull final Context context) {
+        return !getSettings(context).getBoolean(PREF_TOUR_COMPLETED, false);
+    }
+
+    public static void setTourCompleted(@NonNull final Context context) {
+        getSettings(context).edit().putBoolean(PREF_TOUR_COMPLETED, true).apply();
     }
 
     @NonNull
