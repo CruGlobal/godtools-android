@@ -1,0 +1,72 @@
+package org.keynote.godtools.android.activity;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.MainThread;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
+
+import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.fragment.ResourceDetailsFragment;
+import org.keynote.godtools.android.model.Resource;
+
+import static org.keynote.godtools.android.Constants.EXTRA_RESOURCE;
+
+public class ResourceDetailsActivity extends BaseActivity {
+    private static final String TAG_MAIN_FRAGMENT = "mainFragment";
+
+    private long mResource = Resource.INVALID_ID;
+
+    public static void start(@NonNull final Context context, final long resourceId) {
+        final Intent intent = new Intent(context, ResourceDetailsActivity.class);
+        intent.putExtra(EXTRA_RESOURCE, resourceId);
+        context.startActivity(intent);
+    }
+
+    /* BEGIN lifecycle */
+
+    @Override
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_generic_fragment);
+
+        final Intent intent = getIntent();
+        if (intent != null) {
+            mResource = intent.getLongExtra(EXTRA_RESOURCE, mResource);
+        }
+    }
+
+    @Override
+    protected void onSetupActionBar(@NonNull final ActionBar actionBar) {
+        super.onSetupActionBar(actionBar);
+        setTitle("");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadInitialFragmentIfNeeded();
+    }
+
+    /* END lifecycle */
+
+    @MainThread
+    private void loadInitialFragmentIfNeeded() {
+        final FragmentManager fm = getSupportFragmentManager();
+
+        // short-circuit if there is a currently attached fragment
+        Fragment fragment = fm.findFragmentByTag(TAG_MAIN_FRAGMENT);
+        if (fragment != null) {
+            return;
+        }
+
+        // update the displayed fragment
+        fm.beginTransaction()
+                .replace(R.id.frame, ResourceDetailsFragment.newInstance(mResource), TAG_MAIN_FRAGMENT)
+                .commit();
+    }
+}

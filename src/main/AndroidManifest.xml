@@ -107,6 +107,10 @@
             android:theme="@style/Theme.GodTools2.AppBar" />
 
         <activity
+            android:name=".activity.ResourceDetailsActivity"
+            android:theme="@style/Theme.GodTools2.AppBar" />
+
+        <activity
             android:name=".activity.LanguageSettingsActivity"
             android:label="@string/title_language_settings"
             android:theme="@style/Theme.GodTools2.AppBar" />
