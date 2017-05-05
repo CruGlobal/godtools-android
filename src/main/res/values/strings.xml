@@ -53,6 +53,7 @@
     <string name="share_prompt">Select how you would like to share</string>
 
     <!-- Navigation Menu -->
+    <string name="menu_heading_general">General</string>
     <string name="menu_heading_share">Share</string>
     <string name="menu_rate">Rate GodTools</string>
 
@@ -73,6 +74,7 @@
     </plurals>
 
     <!-- Language Selection UI -->
+    <string name="menu_language_settings">Language Settings</string>
     <string name="title_language_settings">Language Settings</string>
     <string name="title_language_primary">Primary Language</string>
     <string name="title_language_parallel">Parallel Language</string>

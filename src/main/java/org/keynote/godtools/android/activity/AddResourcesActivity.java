@@ -3,14 +3,12 @@ package org.keynote.godtools.android.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.fragment.ResourcesFragment;
@@ -34,17 +32,6 @@ public class AddResourcesActivity extends BaseActivity implements ResourcesFragm
     public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
         getMenuInflater().inflate(R.menu.activity_add_resources, menu);
         return true;
-    }
-
-    @Override
-    @CallSuper
-    public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_switch_langauge:
-                LanguageSettingsActivity.start(this);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

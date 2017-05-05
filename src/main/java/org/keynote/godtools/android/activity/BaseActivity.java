@@ -81,6 +81,9 @@ public abstract class BaseActivity extends AppCompatActivity
                     }
                 }
                 break;
+            case R.id.action_switch_language:
+                LanguageSettingsActivity.start(this);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
