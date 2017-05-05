@@ -55,6 +55,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_general">General</string>
     <string name="menu_heading_share">Share</string>
+    <string name="menu_share">Share GodTools</string>
     <string name="menu_rate">Rate GodTools</string>
 
     <!-- Resources UI -->

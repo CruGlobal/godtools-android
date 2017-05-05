@@ -17,11 +17,14 @@ import android.view.MenuItem;
 
 import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.Settings;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static org.ccci.gto.android.common.Constants.INVALID_STRING_RES;
+import static org.keynote.godtools.android.Constants.URI_SHARE_BASE;
+import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 
 public abstract class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -94,6 +97,9 @@ public abstract class BaseActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.action_rate:
                 openPlayStore();
+                return true;
+            case R.id.action_share:
+                launchShare();
                 return true;
         }
 
@@ -169,5 +175,16 @@ public abstract class BaseActivity extends AppCompatActivity
             startActivity(new Intent(Intent.ACTION_VIEW,
                                      Uri.parse("https://play.google.com/store/apps/details?id=" + appId)));
         }
+    }
+
+    private void launchShare() {
+        final String text = getString(R.string.share_general_message)
+                .replace(SHARE_LINK, URI_SHARE_BASE + Settings.getPrimaryLanguage(this));
+
+        final Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+        share.putExtra(Intent.EXTRA_TEXT, text);
+        startActivity(Intent.createChooser(share, getString(R.string.share_prompt)));
     }
 }
