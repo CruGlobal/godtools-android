@@ -131,6 +131,7 @@ public abstract class BaseActivity extends AppCompatActivity
         if (mDrawerLayout != null) {
             mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, INVALID_STRING_RES, INVALID_STRING_RES);
             mDrawerToggle.setDrawerIndicatorEnabled(showNavigationDrawerIndicator());
+            mDrawerToggle.setDrawerSlideAnimationEnabled(false);
             mDrawerLayout.addDrawerListener(mDrawerToggle);
             mDrawerToggle.syncState();
         }
