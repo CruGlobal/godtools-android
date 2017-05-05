@@ -15,6 +15,7 @@ public class Resource extends Base {
     static final String JSON_API_TYPE = "resource";
     private static final String JSON_NAME = "name";
     private static final String JSON_ABBREVIATION = "abbreviation";
+    private static final String JSON_DESCRIPTION = "description";
     private static final String JSON_TOTAL_VIEWS = "total-views";
     public static final String JSON_LATEST_TRANSLATIONS = "latest-translations";
 
@@ -25,6 +26,9 @@ public class Resource extends Base {
     @Nullable
     @JsonApiAttribute(name = JSON_NAME)
     private String mName;
+    @Nullable
+    @JsonApiAttribute(name = JSON_DESCRIPTION)
+    private String mDescription;
 
     @JsonApiAttribute(name = JSON_TOTAL_VIEWS)
     private int mShares = 0;
@@ -44,6 +48,15 @@ public class Resource extends Base {
 
     public void setName(@Nullable final String name) {
         mName = name;
+    }
+
+    @Nullable
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public void setDescription(@Nullable final String description) {
+        mDescription = description;
     }
 
     public int getShares() {

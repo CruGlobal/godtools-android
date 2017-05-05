@@ -1,36 +1,32 @@
 package org.keynote.godtools.android.activity;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.Settings;
 import org.keynote.godtools.android.fragment.ResourcesFragment;
 
-public class AddResourcesActivity extends BaseActivity implements ResourcesFragment.Callbacks {
+public class MainActivity extends BaseActivity implements ResourcesFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
-
-    public static void start(@NonNull final Context context) {
-        context.startActivity(new Intent(context, AddResourcesActivity.class));
-    }
 
     /* BEGIN lifecycle */
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generic_fragment);
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_add_resources, menu);
+        getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
 
@@ -38,11 +34,22 @@ public class AddResourcesActivity extends BaseActivity implements ResourcesFragm
     protected void onStart() {
         super.onStart();
         loadInitialFragmentIfNeeded();
+        showTourIfNeeded();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                AddResourcesActivity.start(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onResourceSelect(final long id) {
-        ResourceDetailsActivity.start(this, id);
+        // TODO
     }
 
     @Override
@@ -51,6 +58,11 @@ public class AddResourcesActivity extends BaseActivity implements ResourcesFragm
     }
 
     /* END lifecycle */
+
+    @Override
+    protected boolean showNavigationDrawerIndicator() {
+        return true;
+    }
 
     @MainThread
     private void loadInitialFragmentIfNeeded() {
@@ -64,7 +76,12 @@ public class AddResourcesActivity extends BaseActivity implements ResourcesFragm
 
         // update the displayed fragment
         fm.beginTransaction()
-                .replace(R.id.frame, ResourcesFragment.newAvailableInstance(), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, ResourcesFragment.newAddedInstance(), TAG_MAIN_FRAGMENT)
                 .commit();
+    }
+
+    private void showTourIfNeeded() {
+        if (!Settings.isTourCompleted(this)) {
+        }
     }
 }
