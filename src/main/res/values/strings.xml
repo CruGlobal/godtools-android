@@ -52,6 +52,10 @@
     <!-- Main Activity-->
     <string name="share_prompt">Select how you would like to share</string>
 
+    <!-- Navigation Menu -->
+    <string name="menu_heading_share">Share</string>
+    <string name="menu_rate">Rate GodTools</string>
+
     <!-- Resources UI -->
     <string name="title_resources_add">Add Tools</string>
     <string name="menu_add_tool">Add Tool</string>

@@ -1,3 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:orderInCategory="200"
+        android:title="@string/menu_heading_share">
+        <menu>
+            <item
+                android:id="@+id/action_rate"
+                android:orderInCategory="300"
+                android:title="@string/menu_rate" />
+        </menu>
+    </item>
 </menu>
