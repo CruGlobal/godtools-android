@@ -54,13 +54,13 @@ public class AddResourcesActivity extends BaseActivity implements ResourcesFragm
     }
 
     @Override
-    public void onResourceSelect(long id) {
-        // TODO
+    public void onResourceSelect(final long id) {
+        ResourceDetailsActivity.start(this, id);
     }
 
     @Override
-    public void onResourceInfo(long id) {
-        // TODO
+    public void onResourceInfo(final long id) {
+        ResourceDetailsActivity.start(this, id);
     }
 
     /* END lifecycle */
