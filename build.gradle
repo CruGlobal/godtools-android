@@ -33,6 +33,7 @@ ext.deps = [
         gtoSupport           : '1.1.1-SNAPSHOT',
         guava                : '19.0',
         junit                : '4.12',
+        leakcanary           : '1.5.1',
         playServices         : '9.0.2',
         retrofit2            : '2.2.0'
 ]
@@ -84,7 +85,7 @@ dependencies {
     debugCompile 'com.facebook.stetho:stetho:' + deps.facebookStetho
     debugCompile 'com.facebook.stetho:stetho-okhttp3:' + deps.facebookStetho
     debugCompile 'com.facebook.stetho:stetho-urlconnection:' + deps.facebookStetho
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    debugCompile "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
 
     compile project(path: ':godtools-renderer')
 
