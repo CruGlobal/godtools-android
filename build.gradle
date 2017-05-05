@@ -100,7 +100,7 @@ android {
         versionName project.version
         versionCode buildVersionCode()
 
-        minSdkVersion 10
+        minSdkVersion 15
         targetSdkVersion 25
 
         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
