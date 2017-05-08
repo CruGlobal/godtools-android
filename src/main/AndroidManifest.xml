@@ -147,6 +147,10 @@
                 android:value="org.keynote.godtools.android.activity.LanguageSettingsActivity" />
         </activity>
 
+        <activity
+            android:name=".activity.TourActivity"
+            android:theme="@style/Theme.GodTools2.Activity.Tour" />
+
         <provider
             android:name=".everystudent.EveryStudentProvider"
             android:authorities="@string/every_student_authority" />
