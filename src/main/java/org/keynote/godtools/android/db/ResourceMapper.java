@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import org.keynote.godtools.android.model.Resource;
 
 import static org.keynote.godtools.android.db.Contract.ResourceTable.COLUMN_ADDED;
+import static org.keynote.godtools.android.db.Contract.ResourceTable.COLUMN_COPYRIGHT;
 import static org.keynote.godtools.android.db.Contract.ResourceTable.COLUMN_DESCRIPTION;
 import static org.keynote.godtools.android.db.Contract.ResourceTable.COLUMN_NAME;
 import static org.keynote.godtools.android.db.Contract.ResourceTable.COLUMN_SHARES;
@@ -24,6 +25,9 @@ final class ResourceMapper extends BaseMapper<Resource> {
                 break;
             case COLUMN_SHARES:
                 values.put(field, resource.getShares());
+                break;
+            case COLUMN_COPYRIGHT:
+                values.put(field, resource.getCopyright());
                 break;
             case COLUMN_ADDED:
                 values.put(field, resource.isAdded());
@@ -48,6 +52,7 @@ final class ResourceMapper extends BaseMapper<Resource> {
         resource.setName(getString(c, COLUMN_NAME, null));
         resource.setDescription(getString(c, COLUMN_DESCRIPTION, null));
         resource.setShares(getInt(c, COLUMN_SHARES, 0));
+        resource.setCopyright(getString(c, COLUMN_COPYRIGHT, null));
         resource.setAdded(getBool(c, COLUMN_ADDED, false));
 
         return resource;
