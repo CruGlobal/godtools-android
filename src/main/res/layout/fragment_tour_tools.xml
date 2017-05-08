@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:background="@android:color/black"
+    tools:context=".activity.TourActivity">
+
+    <LinearLayout
+        android:layout_width="268dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <View style="@style/Widget.GodTools2.Tour.Spacer" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:tint="@color/white"
+            app:srcCompat="@drawable/ic_add" />
+
+        <TextView
+            style="@style/Widget.GodTools2.Tour.Label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:text="@string/title_tour_tools" />
+
+        <View style="@style/Widget.GodTools2.Tour.Spacer" />
+
+        <Button
+            android:id="@+id/action_tour_languages"
+            style="@style/Widget.GodTools2.Tour.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_tour_ok" />
+
+        <View style="@style/Widget.GodTools2.Tour.Spacer" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                app:srcCompat="@drawable/ic_tour_page_indicator_selected" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                app:srcCompat="@drawable/ic_tour_page_indicator" />
+        </LinearLayout>
+
+        <View style="@style/Widget.GodTools2.Tour.Spacer" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
