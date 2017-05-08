@@ -1,8 +1,10 @@
 package org.keynote.godtools.android.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
@@ -13,15 +15,24 @@ import org.keynote.godtools.android.Settings;
 import org.keynote.godtools.android.fragment.ResourcesFragment;
 
 public class MainActivity extends BaseActivity implements ResourcesFragment.Callbacks {
+    private static final String EXTRA_TOUR_LAUNCHED = MainActivity.class.getName() + ".TOUR_LAUNCHED";
+
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
+
+    private static final int REQUEST_TOUR = 101;
+
+    private boolean mTourLaunched = false;
 
     /* BEGIN lifecycle */
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generic_fragment);
 
+        if (savedInstanceState != null) {
+            mTourLaunched = savedInstanceState.getBoolean(EXTRA_TOUR_LAUNCHED, mTourLaunched);
+        }
     }
 
     @Override
@@ -35,6 +46,17 @@ public class MainActivity extends BaseActivity implements ResourcesFragment.Call
         super.onStart();
         loadInitialFragmentIfNeeded();
         showTourIfNeeded();
+    }
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, @Nullable final Intent data) {
+        switch (requestCode) {
+            case REQUEST_TOUR:
+                Settings.setTourCompleted(this);
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
@@ -55,6 +77,12 @@ public class MainActivity extends BaseActivity implements ResourcesFragment.Call
     @Override
     public void onResourceInfo(final long id) {
         ResourceDetailsActivity.start(this, id);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(EXTRA_TOUR_LAUNCHED, mTourLaunched);
     }
 
     /* END lifecycle */
@@ -81,7 +109,9 @@ public class MainActivity extends BaseActivity implements ResourcesFragment.Call
     }
 
     private void showTourIfNeeded() {
-        if (!Settings.isTourCompleted(this)) {
+        if (!Settings.isTourCompleted(this) && !mTourLaunched) {
+            mTourLaunched = true;
+            TourActivity.startForResult(this, REQUEST_TOUR);
         }
     }
 }
