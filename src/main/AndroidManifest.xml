@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="org.keynote.godtools.android">
+    package="org.keynote.godtools.android">
 
     <supports-screens
         android:smallScreens="false"
@@ -32,18 +31,18 @@
     <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE"/>
 
     <application
+        android:name=".snuffy.SnuffyApplication"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:name=".snuffy.SnuffyApplication"
         android:theme="@style/Theme.GodTools">
-        <activity
-            android:name="Splash"
-            android:screenOrientation="userPortrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <!--<activity-->
+            <!--android:name="Splash"-->
+            <!--android:screenOrientation="userPortrait">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
 
         <activity
             android:name=".MainPW"
@@ -103,7 +102,12 @@
 
         <activity
             android:name=".activity.MainActivity"
-            android:theme="@style/Theme.GodTools2.AppBar" />
+            android:theme="@style/Theme.GodTools2.AppBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".activity.AddResourcesActivity"

@@ -17,6 +17,7 @@ public class Resource extends Base {
     private static final String JSON_ABBREVIATION = "abbreviation";
     private static final String JSON_DESCRIPTION = "description";
     private static final String JSON_TOTAL_VIEWS = "total-views";
+    private static final String JSON_COPYRIGHT = "attr-copyright";
     public static final String JSON_LATEST_TRANSLATIONS = "latest-translations";
 
     @Nullable
@@ -32,6 +33,10 @@ public class Resource extends Base {
 
     @JsonApiAttribute(name = JSON_TOTAL_VIEWS)
     private int mShares = 0;
+
+    @Nullable
+    @JsonApiAttribute(name = JSON_COPYRIGHT)
+    private String mCopyright;
 
     @JsonApiIgnore
     private boolean mAdded = false;
@@ -65,6 +70,15 @@ public class Resource extends Base {
 
     public void setShares(final int shares) {
         mShares = shares;
+    }
+
+    @Nullable
+    public String getCopyright() {
+        return mCopyright;
+    }
+
+    public void setCopyright(@Nullable final String copyright) {
+        mCopyright = copyright;
     }
 
     public boolean isAdded() {

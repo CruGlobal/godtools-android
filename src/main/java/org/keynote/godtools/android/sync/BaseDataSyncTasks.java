@@ -22,7 +22,8 @@ import java.util.List;
 abstract class BaseDataSyncTasks extends BaseSyncTasks {
     private static final String[] API_FIELDS_LANGUAGE = {LanguageTable.COLUMN_CODE};
     private static final String[] API_FIELDS_RESOURCE =
-            {ResourceTable.COLUMN_NAME, ResourceTable.COLUMN_DESCRIPTION, ResourceTable.COLUMN_SHARES};
+            {ResourceTable.COLUMN_NAME, ResourceTable.COLUMN_DESCRIPTION, ResourceTable.COLUMN_SHARES,
+                    ResourceTable.COLUMN_COPYRIGHT};
     private static final String[] API_FIELDS_TRANSLATION =
             {TranslationTable.COLUMN_RESOURCE, TranslationTable.COLUMN_LANGUAGE, TranslationTable.COLUMN_VERSION,
                     TranslationTable.COLUMN_NAME, TranslationTable.COLUMN_DESCRIPTION,
