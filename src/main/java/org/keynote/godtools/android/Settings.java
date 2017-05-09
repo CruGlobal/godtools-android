@@ -98,4 +98,11 @@ public final class Settings {
     public void unregisterOnSharedPreferenceChangeListener(final OnSharedPreferenceChangeListener listener) {
         mPrefs.unregisterOnSharedPreferenceChangeListener(listener);
     }
+
+    public boolean isLanguageProtected(@Nullable final Locale locale) {
+        return locale != null &&
+                !locale.equals(getDefaultLanguage()) &&
+                !locale.equals(getPrimaryLanguage()) &&
+                !locale.equals(getParallelLanguage());
+    }
 }
