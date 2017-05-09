@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
@@ -14,6 +15,9 @@ import org.keynote.godtools.android.Settings;
 
 import java.util.Locale;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
 import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 
@@ -21,6 +25,9 @@ public abstract class BaseFragment extends Fragment {
     @Nullable
     private SharedPreferences mPrefs;
     private final ChangeListener mPrefsChangeListener = new ChangeListener();
+
+    @Nullable
+    private Unbinder mButterKnife;
 
     @NonNull
     protected Locale mPrimaryLanguage = Locale.getDefault();
@@ -44,6 +51,12 @@ public abstract class BaseFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mButterKnife = ButterKnife.bind(this, view);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         startLanguagesChangeListener();
@@ -58,6 +71,15 @@ public abstract class BaseFragment extends Fragment {
     public void onStop() {
         super.onStop();
         stopLanguagesChangeListener();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mButterKnife != null) {
+            mButterKnife.unbind();
+        }
+        mButterKnife = null;
     }
 
     /* END lifecycle */
