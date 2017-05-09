@@ -58,6 +58,13 @@
     <string name="menu_share">Share GodTools</string>
     <string name="menu_rate">Rate GodTools</string>
 
+    <!-- Tour UI -->
+    <string name="title_tour_tools">Add New Tools</string>
+    <string name="title_tour_language">Set Your Languages</string>
+    <string name="action_tour_ok">Okay</string>
+    <string name="action_tour_now">Now</string>
+    <string name="action_tour_later">Later</string>
+
     <!-- Resources UI -->
     <string name="title_resources_add">Add Tools</string>
     <string name="menu_add_tool">Add Tool</string>

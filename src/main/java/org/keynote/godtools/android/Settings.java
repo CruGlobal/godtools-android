@@ -22,7 +22,7 @@ public final class Settings {
     }
 
     public static boolean isTourCompleted(@NonNull final Context context) {
-        return !getSettings(context).getBoolean(PREF_TOUR_COMPLETED, false);
+        return getSettings(context).getBoolean(PREF_TOUR_COMPLETED, false);
     }
 
     public static void setTourCompleted(@NonNull final Context context) {
