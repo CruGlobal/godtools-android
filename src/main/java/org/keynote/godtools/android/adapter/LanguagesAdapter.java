@@ -1,6 +1,7 @@
 package org.keynote.godtools.android.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
@@ -8,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.annimon.stream.Collectors;
@@ -25,9 +27,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import butterknife.BindColor;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
+
+import static org.keynote.godtools.android.butterknife.Setters.TINT_LIST;
 
 public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
     public interface Callbacks {
@@ -105,6 +111,9 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
     }
 
     class LanguageViewHolder extends BaseViewHolder {
+        @BindColor(R.color.states_remove)
+        ColorStateList mActionRemoveTint;
+
         @Nullable
         @BindView(R.id.root)
         View mRoot;
@@ -116,7 +125,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         View mActionAdd;
         @Nullable
         @BindView(R.id.action_remove)
-        View mActionRemove;
+        ImageView mActionRemove;
 
         @Nullable
         Locale mLocale = null;
@@ -124,6 +133,9 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
 
         LanguageViewHolder(@NonNull final View view) {
             super(view);
+            if (mActionRemove != null) {
+                ButterKnife.apply(mActionRemove, TINT_LIST, mActionRemoveTint);
+            }
         }
 
         @Override

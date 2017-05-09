@@ -37,7 +37,6 @@
         android:layout_toLeftOf="@id/action_add"
         android:layout_toStartOf="@id/action_add"
         android:padding="8dp"
-        android:tint="@color/gt_red"
         android:visibility="gone"
         app:srcCompat="@drawable/ic_remove" />
 
