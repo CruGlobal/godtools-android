@@ -23,8 +23,8 @@ import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 
 public abstract class BaseFragment extends Fragment {
     @Nullable
-    private SharedPreferences mPrefs;
-    private final ChangeListener mPrefsChangeListener = new ChangeListener();
+    Settings mSettings;
+    private final ChangeListener mSettingsChangeListener = new ChangeListener();
 
     @Nullable
     private Unbinder mButterKnife;
@@ -39,8 +39,8 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
-        if (context != null && mPrefs == null) {
-            mPrefs = Settings.getSettings(context);
+        if (context != null) {
+            mSettings = Settings.getInstance(context);
         }
     }
 
@@ -85,11 +85,11 @@ public abstract class BaseFragment extends Fragment {
     /* END lifecycle */
 
     void loadLanguages(final boolean initial) {
-        if (mPrefs != null) {
+        if (mSettings != null) {
             final Locale oldPrimary = mPrimaryLanguage;
-            mPrimaryLanguage = Settings.getPrimaryLanguage(mPrefs);
+            mPrimaryLanguage = mSettings.getPrimaryLanguage();
             final Locale oldParallel = mParallelLanguage;
-            mParallelLanguage = Settings.getParallelLanguage(mPrefs);
+            mParallelLanguage = mSettings.getParallelLanguage();
 
             // trigger lifecycle events
             if (!initial) {
@@ -104,14 +104,14 @@ public abstract class BaseFragment extends Fragment {
     }
 
     private void startLanguagesChangeListener() {
-        if (mPrefs != null) {
-            mPrefs.registerOnSharedPreferenceChangeListener(mPrefsChangeListener);
+        if (mSettings != null) {
+            mSettings.registerOnSharedPreferenceChangeListener(mSettingsChangeListener);
         }
     }
 
     private void stopLanguagesChangeListener() {
-        if (mPrefs != null) {
-            mPrefs.unregisterOnSharedPreferenceChangeListener(mPrefsChangeListener);
+        if (mSettings != null) {
+            mSettings.unregisterOnSharedPreferenceChangeListener(mSettingsChangeListener);
         }
     }
 

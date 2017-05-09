@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.Settings;
 import org.keynote.godtools.android.fragment.ResourcesFragment;
 
 public class MainActivity extends BaseActivity implements ResourcesFragment.Callbacks {
@@ -52,7 +51,7 @@ public class MainActivity extends BaseActivity implements ResourcesFragment.Call
     protected void onActivityResult(final int requestCode, final int resultCode, @Nullable final Intent data) {
         switch (requestCode) {
             case REQUEST_TOUR:
-                Settings.setTourCompleted(this);
+                prefs().setTourCompleted();
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
@@ -109,7 +108,7 @@ public class MainActivity extends BaseActivity implements ResourcesFragment.Call
     }
 
     private void showTourIfNeeded() {
-        if (!Settings.isTourCompleted(this) && !mTourLaunched) {
+        if (!prefs().isTourCompleted() && !mTourLaunched) {
             mTourLaunched = true;
             TourActivity.startForResult(this, REQUEST_TOUR);
         }

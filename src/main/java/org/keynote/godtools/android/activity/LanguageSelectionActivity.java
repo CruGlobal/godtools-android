@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.Settings;
 import org.keynote.godtools.android.fragment.LanguagesFragment;
 import org.keynote.godtools.android.service.GodToolsResourceManager;
 
@@ -68,9 +67,9 @@ public class LanguageSelectionActivity extends BaseActivity implements Languages
 
     private void storeLocale(@Nullable final Locale locale) {
         if (mPrimary) {
-            Settings.setPrimaryLanguage(this, locale);
+            prefs().setPrimaryLanguage(locale);
         } else {
-            Settings.setParallelLanguage(this, locale);
+            prefs().setParallelLanguage(locale);
         }
     }
 
