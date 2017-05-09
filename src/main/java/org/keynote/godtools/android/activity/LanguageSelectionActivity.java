@@ -10,16 +10,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 
-import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.Settings;
 import org.keynote.godtools.android.fragment.LanguagesFragment;
 import org.keynote.godtools.android.service.GodToolsResourceManager;
 
 import java.util.Locale;
-
-import static org.keynote.godtools.android.Constants.PREFS_SETTINGS;
-import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
-import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 
 public class LanguageSelectionActivity extends BaseActivity implements LanguagesFragment.Callbacks {
     private static final String EXTRA_PRIMARY = LanguageSelectionActivity.class.getName() + ".PRIMARY";
@@ -70,11 +66,12 @@ public class LanguageSelectionActivity extends BaseActivity implements Languages
 
     /* END lifecycle */
 
-    private void storeLocale(@NonNull final Locale locale) {
-        getSharedPreferences(PREFS_SETTINGS, MODE_PRIVATE).edit()
-                .putString(mPrimary ? PREF_PRIMARY_LANGUAGE : PREF_PARALLEL_LANGUAGE,
-                           LocaleCompat.toLanguageTag(locale))
-                .apply();
+    private void storeLocale(@Nullable final Locale locale) {
+        if (mPrimary) {
+            Settings.setPrimaryLanguage(this, locale);
+        } else {
+            Settings.setParallelLanguage(this, locale);
+        }
     }
 
     @MainThread
