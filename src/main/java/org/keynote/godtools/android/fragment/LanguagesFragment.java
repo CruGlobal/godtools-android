@@ -138,6 +138,7 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
             mLanguagesView.addItemDecoration(new DividerItemDecoration(context, layoutManager.getOrientation()));
 
             mLanguagesAdapter = new LanguagesAdapter(context);
+            mLanguagesAdapter.setShowNone(!mPrimary);
             mLanguagesAdapter.setCallbacks(this);
             mLanguagesView.setAdapter(mLanguagesAdapter);
         }
