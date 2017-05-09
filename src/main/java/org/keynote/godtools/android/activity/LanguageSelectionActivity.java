@@ -57,7 +57,7 @@ public class LanguageSelectionActivity extends BaseActivity implements Languages
     }
 
     @Override
-    public void onLocaleSelected(@NonNull final Locale locale) {
+    public void onLocaleSelected(@Nullable final Locale locale) {
         GodToolsResourceManager.getInstance(this).addLanguage(locale);
         storeLocale(locale);
         finish();

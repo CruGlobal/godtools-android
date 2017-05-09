@@ -37,7 +37,7 @@ import static org.keynote.godtools.android.butterknife.Setters.TINT_LIST;
 
 public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
     public interface Callbacks {
-        void onLanguageSelected(@NonNull Locale language);
+        void onLanguageSelected(@Nullable Locale language);
     }
 
     @NonNull
@@ -83,10 +83,8 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
                 .collect(Collectors.toSet());
     }
 
-    public void setProtected(@NonNull final Locale... languages) {
-        mProtected = Stream.of(languages)
-                .withoutNulls()
-                .collect(Collectors.toSet());
+    public void setProtected(@Nullable final Set<Locale> languages) {
+        mProtected = languages != null ? languages : Collections.emptySet();
     }
 
     @Override
@@ -163,12 +161,10 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         @OnClick(R.id.root)
         void onSelectLanguage() {
             if (mCallbacks != null) {
-                if (mLocale != null) {
-                    if (!mDisabled.contains(mLocale)) {
-                        mCallbacks.onLanguageSelected(mLocale);
-                    } else {
-                        // TODO: toast: You cannot select this language.
-                    }
+                if (!mDisabled.contains(mLocale)) {
+                    mCallbacks.onLanguageSelected(mLocale);
+                } else {
+                    // TODO: toast: You cannot select this language.
                 }
             }
         }

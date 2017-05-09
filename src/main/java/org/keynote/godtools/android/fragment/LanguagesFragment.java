@@ -34,7 +34,7 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
     private static final int LOADER_LANGUAGES = 101;
 
     public interface Callbacks {
-        void onLocaleSelected(@NonNull final Locale locale);
+        void onLocaleSelected(@Nullable final Locale locale);
     }
 
     @Nullable
@@ -107,7 +107,7 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
     }
 
     @Override
-    public void onLanguageSelected(@NonNull final Locale language) {
+    public void onLanguageSelected(@Nullable final Locale language) {
         final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
         if (listener != null) {
             listener.onLocaleSelected(language);
@@ -148,7 +148,7 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
             mLanguagesAdapter.setSelected(mPrimary ? mPrimaryLanguage : mParallelLanguage);
             mLanguagesAdapter.setLanguages(mLanguages);
             mLanguagesAdapter.setDisabled(mPrimary ? null : mPrimaryLanguage);
-            mLanguagesAdapter.setProtected(Locale.ENGLISH, mPrimaryLanguage, mParallelLanguage);
+            mLanguagesAdapter.setProtected(mSettings != null ? mSettings.getProtectedLanguages() : null);
         }
     }
 

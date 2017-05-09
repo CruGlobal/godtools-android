@@ -6,9 +6,12 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.common.collect.ImmutableSet;
+
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 
 import java.util.Locale;
+import java.util.Set;
 
 import static org.keynote.godtools.android.Constants.PREFS_SETTINGS;
 import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
@@ -99,10 +102,12 @@ public final class Settings {
         mPrefs.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
+    @NonNull
+    public Set<Locale> getProtectedLanguages() {
+        return ImmutableSet.of(getDefaultLanguage(), getPrimaryLanguage());
+    }
+
     public boolean isLanguageProtected(@Nullable final Locale locale) {
-        return locale != null &&
-                !locale.equals(getDefaultLanguage()) &&
-                !locale.equals(getPrimaryLanguage()) &&
-                !locale.equals(getParallelLanguage());
+        return getProtectedLanguages().contains(locale);
     }
 }

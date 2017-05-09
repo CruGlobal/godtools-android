@@ -60,6 +60,12 @@ public final class GodToolsResourceManager {
 
     public void removeLanguage(@Nullable final Locale locale) {
         if (locale != null && !mPrefs.isLanguageProtected(locale)) {
+            // clear the parallel language if it is the language being removed
+            if (locale.equals(mPrefs.getParallelLanguage())) {
+                mPrefs.setParallelLanguage(null);
+            }
+
+            // remove the language from the device
             final Language language = new Language();
             language.setCode(locale);
             language.setAdded(false);
