@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.annimon.stream.Stream;
+
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.keynote.godtools.android.R;
@@ -23,8 +25,6 @@ import org.keynote.godtools.android.content.LanguagesLoader;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -98,9 +98,9 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         if (languages == null) {
             mLanguages = null;
         } else {
-            mLanguages = new ArrayList<>(languages);
-            //noinspection ComparatorCombinators,Java8ListSort
-            Collections.sort(mLanguages, (l1, l2) -> l1.getDisplayName().compareTo(l2.getDisplayName()));
+            mLanguages = Stream.of(languages)
+                    .sorted((l1, l2) -> l1.getDisplayName().compareToIgnoreCase(l2.getDisplayName()))
+                    .toList();
         }
 
         updateLanguagesList();
