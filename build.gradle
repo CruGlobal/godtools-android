@@ -12,6 +12,7 @@ buildscript {
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
         classpath 'com.newrelic.agent.android:agent-gradle-plugin:5.12.2'
         classpath 'io.fabric.tools:gradle:1.22.1'
+        classpath 'org.ajoberstar:gradle-git:1.7.1'
     }
 }
 
@@ -19,10 +20,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'newrelic'
 
-apply from: 'versioning.gradle'
-
 group 'org.cru.android'
 version '4.3.4-SNAPSHOT'
+
+apply plugin: 'org.ajoberstar.grgit'
+ext.grgit = org.ajoberstar.grgit.Grgit.open()
 
 // define dependency versions for this project
 ext.deps = [
@@ -99,7 +101,7 @@ android {
     defaultConfig {
         applicationId 'org.keynote.godtools.android'
         versionName project.version
-        versionCode buildVersionCode()
+        versionCode grgit.log(includes:['HEAD']).size() + 4029047
 
         minSdkVersion 15
         targetSdkVersion 25
