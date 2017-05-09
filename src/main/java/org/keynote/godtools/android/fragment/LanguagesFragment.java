@@ -29,10 +29,8 @@ import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
-public class LanguagesFragment extends Fragment implements LanguagesAdapter.Callbacks {
+public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.Callbacks {
     private static final String EXTRA_PRIMARY = LanguagesFragment.class.getName() + ".PRIMARY";
 
     private static final int LOADER_LANGUAGES = 101;
@@ -41,9 +39,6 @@ public class LanguagesFragment extends Fragment implements LanguagesAdapter.Call
     public interface Callbacks {
         void onLocaleSelected(@NonNull final Locale locale);
     }
-
-    @Nullable
-    Unbinder mButterKnife;
 
     @Nullable
     @BindView(R.id.languages)
@@ -91,7 +86,6 @@ public class LanguagesFragment extends Fragment implements LanguagesAdapter.Call
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
         setupLanguagesList();
     }
 
@@ -122,12 +116,8 @@ public class LanguagesFragment extends Fragment implements LanguagesAdapter.Call
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         cleanupLanguagesList();
-        if (mButterKnife != null) {
-            mButterKnife.unbind();
-        }
-        mButterKnife = null;
+        super.onDestroyView();
     }
 
     /* END lifecycle */
