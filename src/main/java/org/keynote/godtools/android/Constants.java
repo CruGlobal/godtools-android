@@ -1,5 +1,7 @@
 package org.keynote.godtools.android;
 
+import android.net.Uri;
+
 public final class Constants {
     public static final String ARG_PACKAGE = "package_code";
     public static final String ARG_STATUS = "package_status";
@@ -15,5 +17,6 @@ public final class Constants {
     public static final String PREF_PARALLEL_LANGUAGE = "languageParallel";
 
     // Common base URI's
+    public static final Uri URI_HELP = Uri.parse("http://help.missionhub.com/");
     public static final String URI_SHARE_BASE = "http://www.knowgod.com/";
 }
