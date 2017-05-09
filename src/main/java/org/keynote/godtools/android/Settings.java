@@ -44,7 +44,7 @@ public final class Settings {
         return locale;
     }
 
-    public static void setPrimaryLanguage(@NonNull final Context context, @Nullable Locale locale) {
+    public static void setPrimaryLanguage(@NonNull final Context context, @Nullable final Locale locale) {
         setPrimaryLanguage(getSettings(context), locale);
     }
 
@@ -52,19 +52,39 @@ public final class Settings {
         if (locale == null) {
             locale = Locale.getDefault();
         }
-        prefs.edit()
-                .putString(PREF_PRIMARY_LANGUAGE, LocaleCompat.toLanguageTag(locale))
-                .apply();
+
+        // update the primary language, and remove the parallel language if it is the new primary language
+        final SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PREF_PRIMARY_LANGUAGE, LocaleCompat.toLanguageTag(locale));
+        if (locale.equals(getParallelLanguage(prefs))) {
+            editor.remove(PREF_PARALLEL_LANGUAGE);
+        }
+        editor.apply();
     }
 
     @Nullable
     public static Locale getParallelLanguage(@NonNull final Context context) {
-        return getPrimaryLanguage(getSettings(context));
+        return getParallelLanguage(getSettings(context));
     }
 
     @Nullable
     public static Locale getParallelLanguage(@NonNull final SharedPreferences prefs) {
         final String raw = prefs.getString(PREF_PARALLEL_LANGUAGE, null);
         return raw != null ? LocaleCompat.forLanguageTag(raw) : null;
+    }
+
+    public static void setParallelLanguage(@NonNull final Context context, @Nullable final Locale locale) {
+        setParallelLanguage(getSettings(context), locale);
+    }
+
+    public static void setParallelLanguage(@NonNull final SharedPreferences prefs, @Nullable final Locale locale) {
+        // short-circuit if the specified language is currently the primary language
+        if (getPrimaryLanguage(prefs).equals(locale)) {
+            return;
+        }
+
+        prefs.edit()
+                .putString(PREF_PARALLEL_LANGUAGE, locale != null ? LocaleCompat.toLanguageTag(locale) : null)
+                .apply();
     }
 }
