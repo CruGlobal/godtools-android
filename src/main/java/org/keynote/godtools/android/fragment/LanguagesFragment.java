@@ -147,6 +147,8 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         if (mLanguagesAdapter != null) {
             mLanguagesAdapter.setSelected(mPrimary ? mPrimaryLanguage : mParallelLanguage);
             mLanguagesAdapter.setLanguages(mLanguages);
+            mLanguagesAdapter.setDisabled(mPrimary ? null : mPrimaryLanguage);
+            mLanguagesAdapter.setProtected(Locale.ENGLISH, mPrimaryLanguage, mParallelLanguage);
         }
     }
 
