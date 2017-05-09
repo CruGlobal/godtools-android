@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,7 +19,6 @@ import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.adapter.LanguagesAdapter;
-import org.keynote.godtools.android.content.ActiveLocaleLoader;
 import org.keynote.godtools.android.content.LanguagesLoader;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
@@ -34,7 +32,6 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
     private static final String EXTRA_PRIMARY = LanguagesFragment.class.getName() + ".PRIMARY";
 
     private static final int LOADER_LANGUAGES = 101;
-    private static final int LOADER_SELECTED_LOCALE = 102;
 
     public interface Callbacks {
         void onLocaleSelected(@NonNull final Locale locale);
@@ -49,8 +46,6 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
     // these properties should be treated as final and only set/modified in onCreate()
     /*final*/ boolean mPrimary = true;
 
-    @Nullable
-    private Locale mSelectedLocale;
     @Nullable
     private List<Language> mLanguages;
 
@@ -89,8 +84,13 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         setupLanguagesList();
     }
 
-    void onLoadSelectedLocale(@Nullable final Locale locale) {
-        mSelectedLocale = locale;
+    @Override
+    protected void onUpdatePrimaryLanguage() {
+        updateLanguagesList();
+    }
+
+    @Override
+    protected void onUpdateParallelLanguage() {
         updateLanguagesList();
     }
 
@@ -123,9 +123,7 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
     /* END lifecycle */
 
     private void startLoaders() {
-        final LoaderManager lm = getLoaderManager();
-        lm.initLoader(LOADER_LANGUAGES, null, new LanguagesLoaderCallbacks());
-        lm.initLoader(LOADER_SELECTED_LOCALE, null, new LocaleLoaderCallbacks());
+        getLoaderManager().initLoader(LOADER_LANGUAGES, null, new LanguagesLoaderCallbacks());
     }
 
     private void syncData(final boolean force) {
@@ -147,7 +145,7 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
 
     private void updateLanguagesList() {
         if (mLanguagesAdapter != null) {
-            mLanguagesAdapter.setSelected(mSelectedLocale);
+            mLanguagesAdapter.setSelected(mPrimary ? mPrimaryLanguage : mParallelLanguage);
             mLanguagesAdapter.setLanguages(mLanguages);
         }
     }
@@ -177,28 +175,6 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
             switch (loader.getId()) {
                 case LOADER_LANGUAGES:
                     onLoadLanguages(languages);
-                    break;
-            }
-        }
-    }
-
-    class LocaleLoaderCallbacks extends SimpleLoaderCallbacks<Locale> {
-        @Nullable
-        @Override
-        public Loader<Locale> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id) {
-                case LOADER_SELECTED_LOCALE:
-                    return new ActiveLocaleLoader(getContext(), mPrimary);
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<Locale> loader, @Nullable final Locale locale) {
-            switch (loader.getId()) {
-                case LOADER_SELECTED_LOCALE:
-                    onLoadSelectedLocale(locale);
                     break;
             }
         }
