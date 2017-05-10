@@ -15,18 +15,18 @@ import java.util.Locale;
 public final class AvailableLanguagesLoader extends CachingAsyncTaskEventBusLoader<List<Locale>> {
     @NonNull
     private final GodToolsDao mDao;
-    private final long mResourceId;
+    private final long mToolId;
 
-    public AvailableLanguagesLoader(@NonNull final Context context, final long resourceId) {
+    public AvailableLanguagesLoader(@NonNull final Context context, final long toolId) {
         super(context);
         mDao = GodToolsDao.getInstance(context);
-        mResourceId = resourceId;
+        mToolId = toolId;
         addEventBusSubscriber(new TranslationEventBusSubscriber(this));
     }
 
     @Override
     public List<Locale> loadInBackground() {
-        return mDao.streamCompat(Query.select(Translation.class).where(TranslationTable.FIELD_TOOL.eq(mResourceId)))
+        return mDao.streamCompat(Query.select(Translation.class).where(TranslationTable.FIELD_TOOL.eq(mToolId)))
                 .map(Translation::getLanguageCode)
                 .withoutNulls()
                 .distinct()

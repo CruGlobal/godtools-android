@@ -124,7 +124,7 @@ public class ToolDetailsFragment extends BaseFragment {
         updateLatestTranslationLoader();
     }
 
-    void onLoadResource(@Nullable final Tool tool) {
+    void onLoadTool(@Nullable final Tool tool) {
         mTool = tool;
         updateViews();
     }
@@ -215,7 +215,7 @@ public class ToolDetailsFragment extends BaseFragment {
         public void onLoadFinished(@NonNull final Loader<Tool> loader, @Nullable final Tool tool) {
             switch (loader.getId()) {
                 case LOADER_TOOL:
-                    onLoadResource(tool);
+                    onLoadTool(tool);
                     break;
             }
         }

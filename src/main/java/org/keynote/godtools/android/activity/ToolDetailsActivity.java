@@ -21,9 +21,9 @@ public class ToolDetailsActivity extends BaseActivity {
 
     private long mTool = Tool.INVALID_ID;
 
-    public static void start(@NonNull final Context context, final long resourceId) {
+    public static void start(@NonNull final Context context, final long toolId) {
         final Intent intent = new Intent(context, ToolDetailsActivity.class);
-        intent.putExtra(EXTRA_TOOL, resourceId);
+        intent.putExtra(EXTRA_TOOL, toolId);
         context.startActivity(intent);
     }
 
