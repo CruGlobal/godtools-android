@@ -6,7 +6,7 @@ import org.ccci.gto.android.common.db.Expression.Field;
 import org.ccci.gto.android.common.db.Table;
 import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.model.Language;
-import org.keynote.godtools.android.model.Resource;
+import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
 
 import static org.ccci.gto.android.common.db.Expression.bind;
@@ -41,7 +41,7 @@ public final class Contract extends BaseContract {
 
     public static class ResourceTable extends BaseTable {
         static final String TABLE_NAME = "resources";
-        private static final Table<Resource> TABLE = Table.forClass(Resource.class);
+        private static final Table<Tool> TABLE = Table.forClass(Tool.class);
 
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";

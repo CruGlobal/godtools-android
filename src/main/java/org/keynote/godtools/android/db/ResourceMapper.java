@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
-import org.keynote.godtools.android.model.Resource;
+import org.keynote.godtools.android.model.Tool;
 
 import static org.keynote.godtools.android.db.Contract.ResourceTable.COLUMN_ADDED;
 import static org.keynote.godtools.android.db.Contract.ResourceTable.COLUMN_COPYRIGHT;
@@ -12,49 +12,49 @@ import static org.keynote.godtools.android.db.Contract.ResourceTable.COLUMN_DESC
 import static org.keynote.godtools.android.db.Contract.ResourceTable.COLUMN_NAME;
 import static org.keynote.godtools.android.db.Contract.ResourceTable.COLUMN_SHARES;
 
-final class ResourceMapper extends BaseMapper<Resource> {
+final class ResourceMapper extends BaseMapper<Tool> {
     @Override
     protected void mapField(@NonNull final ContentValues values, @NonNull final String field,
-                            @NonNull final Resource resource) {
+                            @NonNull final Tool tool) {
         switch (field) {
             case COLUMN_NAME:
-                values.put(field, resource.getName());
+                values.put(field, tool.getName());
                 break;
             case COLUMN_DESCRIPTION:
-                values.put(field, resource.getDescription());
+                values.put(field, tool.getDescription());
                 break;
             case COLUMN_SHARES:
-                values.put(field, resource.getShares());
+                values.put(field, tool.getShares());
                 break;
             case COLUMN_COPYRIGHT:
-                values.put(field, resource.getCopyright());
+                values.put(field, tool.getCopyright());
                 break;
             case COLUMN_ADDED:
-                values.put(field, resource.isAdded());
+                values.put(field, tool.isAdded());
                 break;
             default:
-                super.mapField(values, field, resource);
+                super.mapField(values, field, tool);
                 break;
         }
     }
 
     @NonNull
     @Override
-    protected Resource newObject(@NonNull final Cursor c) {
-        return new Resource();
+    protected Tool newObject(@NonNull final Cursor c) {
+        return new Tool();
     }
 
     @NonNull
     @Override
-    public Resource toObject(@NonNull final Cursor c) {
-        final Resource resource = super.toObject(c);
+    public Tool toObject(@NonNull final Cursor c) {
+        final Tool tool = super.toObject(c);
 
-        resource.setName(getString(c, COLUMN_NAME, null));
-        resource.setDescription(getString(c, COLUMN_DESCRIPTION, null));
-        resource.setShares(getInt(c, COLUMN_SHARES, 0));
-        resource.setCopyright(getString(c, COLUMN_COPYRIGHT, null));
-        resource.setAdded(getBool(c, COLUMN_ADDED, false));
+        tool.setName(getString(c, COLUMN_NAME, null));
+        tool.setDescription(getString(c, COLUMN_DESCRIPTION, null));
+        tool.setShares(getInt(c, COLUMN_SHARES, 0));
+        tool.setCopyright(getString(c, COLUMN_COPYRIGHT, null));
+        tool.setAdded(getBool(c, COLUMN_ADDED, false));
 
-        return resource;
+        return tool;
     }
 }

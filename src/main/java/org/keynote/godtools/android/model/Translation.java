@@ -29,7 +29,7 @@ public class Translation extends Base {
     private Long mResourceId;
     @Nullable
     @JsonApiAttribute(name = JSON_RESOURCE)
-    private Resource mResource;
+    private Tool mTool;
     @Nullable
     @JsonApiIgnore
     private Locale mLanguageCode;
@@ -53,8 +53,8 @@ public class Translation extends Base {
     private boolean mDownloaded = false;
 
     public long getResourceId() {
-        return mResourceId != null && mResourceId != Resource.INVALID_ID ? mResourceId :
-                mResource != null ? mResource.getId() : Resource.INVALID_ID;
+        return mResourceId != null && mResourceId != Tool.INVALID_ID ? mResourceId :
+                mTool != null ? mTool.getId() : Tool.INVALID_ID;
     }
 
     public void setResourceId(@Nullable final Long resourceId) {

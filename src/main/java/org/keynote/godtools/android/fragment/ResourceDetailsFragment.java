@@ -20,7 +20,7 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.content.AvailableLanguagesLoader;
 import org.keynote.godtools.android.content.LatestTranslationLoader;
 import org.keynote.godtools.android.content.ResourceLoader;
-import org.keynote.godtools.android.model.Resource;
+import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
 import org.keynote.godtools.android.service.GodToolsResourceManager;
 import org.keynote.godtools.android.util.ModelUtils;
@@ -42,7 +42,7 @@ public class ResourceDetailsFragment extends BaseFragment {
     private static final int LOADER_AVAILABLE_LANGUAGES = 103;
 
     // these properties should be treated as final and only set/modified in onCreate()
-    /*final*/ long mResourceId = Resource.INVALID_ID;
+    /*final*/ long mResourceId = Tool.INVALID_ID;
 
     @Nullable
     @BindView(R.id.banner)
@@ -73,7 +73,7 @@ public class ResourceDetailsFragment extends BaseFragment {
     View mActionRemove;
 
     @Nullable
-    private Resource mResource;
+    private Tool mTool;
     @Nullable
     private Translation mLatestTranslation;
     @NonNull
@@ -124,8 +124,8 @@ public class ResourceDetailsFragment extends BaseFragment {
         updateLatestTranslationLoader();
     }
 
-    void onLoadResource(@Nullable final Resource resource) {
-        mResource = resource;
+    void onLoadResource(@Nullable final Tool tool) {
+        mTool = tool;
         updateViews();
     }
 
@@ -143,9 +143,9 @@ public class ResourceDetailsFragment extends BaseFragment {
 
     private void updateViews() {
         if (mTitle != null) {
-            mTitle.setText(ModelUtils.getTranslationName(mLatestTranslation, mResource));
+            mTitle.setText(ModelUtils.getTranslationName(mLatestTranslation, mTool));
         }
-        bindShares(mShares, mResource);
+        bindShares(mShares, mTool);
         if (mDescription != null) {
             mDescription.setText(mLatestTranslation != null ? mLatestTranslation.getDescription() : "");
         }
@@ -164,12 +164,12 @@ public class ResourceDetailsFragment extends BaseFragment {
                                            .orElse(""));
         }
         if (mActionAdd != null) {
-            mActionAdd.setEnabled(mResource != null && !mResource.isAdded());
-            mActionAdd.setVisibility(mResource == null || !mResource.isAdded() ? View.VISIBLE : View.GONE);
+            mActionAdd.setEnabled(mTool != null && !mTool.isAdded());
+            mActionAdd.setVisibility(mTool == null || !mTool.isAdded() ? View.VISIBLE : View.GONE);
         }
         if (mActionRemove != null) {
-            mActionRemove.setEnabled(mResource != null && mResource.isAdded());
-            mActionRemove.setVisibility(mResource == null || mResource.isAdded() ? View.VISIBLE : View.GONE);
+            mActionRemove.setEnabled(mTool != null && mTool.isAdded());
+            mActionRemove.setVisibility(mTool == null || mTool.isAdded() ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -199,10 +199,10 @@ public class ResourceDetailsFragment extends BaseFragment {
         }
     }
 
-    class ResourceLoaderCallbacks extends SimpleLoaderCallbacks<Resource> {
+    class ResourceLoaderCallbacks extends SimpleLoaderCallbacks<Tool> {
         @Nullable
         @Override
-        public Loader<Resource> onCreateLoader(final int id, @Nullable final Bundle args) {
+        public Loader<Tool> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_RESOURCE:
                     return new ResourceLoader(getContext(), mResourceId);
@@ -212,10 +212,10 @@ public class ResourceDetailsFragment extends BaseFragment {
         }
 
         @Override
-        public void onLoadFinished(@NonNull final Loader<Resource> loader, @Nullable final Resource resource) {
+        public void onLoadFinished(@NonNull final Loader<Tool> loader, @Nullable final Tool tool) {
             switch (loader.getId()) {
                 case LOADER_RESOURCE:
-                    onLoadResource(resource);
+                    onLoadResource(tool);
                     break;
             }
         }

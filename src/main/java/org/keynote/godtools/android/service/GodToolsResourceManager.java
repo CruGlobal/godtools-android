@@ -16,7 +16,7 @@ import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.event.LanguageUpdateEvent;
 import org.keynote.godtools.android.event.ResourceUpdateEvent;
 import org.keynote.godtools.android.model.Language;
-import org.keynote.godtools.android.model.Resource;
+import org.keynote.godtools.android.model.Tool;
 
 import java.util.Locale;
 
@@ -76,18 +76,18 @@ public final class GodToolsResourceManager {
     }
 
     public void addResource(final long id) {
-        final Resource resource = new Resource();
-        resource.setId(id);
-        resource.setAdded(true);
-        final ListenableFuture<Integer> update = mDao.updateAsync(resource, Contract.ResourceTable.COLUMN_ADDED);
+        final Tool tool = new Tool();
+        tool.setId(id);
+        tool.setAdded(true);
+        final ListenableFuture<Integer> update = mDao.updateAsync(tool, Contract.ResourceTable.COLUMN_ADDED);
         update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ResourceUpdateEvent()), directExecutor());
     }
 
     public void removeResource(final long id) {
-        final Resource resource = new Resource();
-        resource.setId(id);
-        resource.setAdded(false);
-        final ListenableFuture<Integer> update = mDao.updateAsync(resource, Contract.ResourceTable.COLUMN_ADDED);
+        final Tool tool = new Tool();
+        tool.setId(id);
+        tool.setAdded(false);
+        final ListenableFuture<Integer> update = mDao.updateAsync(tool, Contract.ResourceTable.COLUMN_ADDED);
         update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ResourceUpdateEvent()), directExecutor());
     }
 }

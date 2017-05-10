@@ -20,7 +20,7 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.adapter.ResourcesAdapter;
 import org.keynote.godtools.android.content.ResourcesCursorLoader;
 import org.keynote.godtools.android.db.Contract.ResourceTable;
-import org.keynote.godtools.android.model.Resource;
+import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.service.GodToolsResourceManager;
 
 import butterknife.BindView;
@@ -178,7 +178,7 @@ public class ResourcesFragment extends Fragment implements ResourcesAdapter.Call
         public Loader<Cursor> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_RESOURCES:
-                    final DaoCursorLoader<Resource> loader = new ResourcesCursorLoader(getContext(), args);
+                    final DaoCursorLoader<Tool> loader = new ResourcesCursorLoader(getContext(), args);
                     final Expression where = ResourceTable.FIELD_ADDED.eq(mMode == MODE_ADDED);
                     loader.setWhere(where);
                     return loader;

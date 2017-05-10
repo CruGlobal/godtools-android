@@ -8,10 +8,10 @@ import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
 
 import java.util.List;
 
-import static org.keynote.godtools.android.model.Resource.JSON_API_TYPE;
+import static org.keynote.godtools.android.model.Tool.JSON_API_TYPE;
 
 @JsonApiType(JSON_API_TYPE)
-public class Resource extends Base {
+public class Tool extends Base {
     static final String JSON_API_TYPE = "resource";
     private static final String JSON_NAME = "name";
     private static final String JSON_ABBREVIATION = "abbreviation";

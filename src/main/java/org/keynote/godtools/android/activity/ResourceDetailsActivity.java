@@ -12,14 +12,14 @@ import android.support.v7.app.ActionBar;
 
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.fragment.ResourceDetailsFragment;
-import org.keynote.godtools.android.model.Resource;
+import org.keynote.godtools.android.model.Tool;
 
 import static org.keynote.godtools.android.Constants.EXTRA_RESOURCE;
 
 public class ResourceDetailsActivity extends BaseActivity {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
-    private long mResource = Resource.INVALID_ID;
+    private long mResource = Tool.INVALID_ID;
 
     public static void start(@NonNull final Context context, final long resourceId) {
         final Intent intent = new Intent(context, ResourceDetailsActivity.class);

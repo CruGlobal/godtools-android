@@ -10,7 +10,7 @@ import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams;
 import org.ccci.gto.android.common.jsonapi.util.Includes;
-import org.keynote.godtools.android.model.Resource;
+import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ final class ResourceSyncTasks extends BaseDataSyncTasks {
     private static final long STALE_DURATION_RESOURCES = DAY_IN_MS;
 
     private static final String INCLUDE_LATEST_TRANSLATIONS =
-            Resource.JSON_LATEST_TRANSLATIONS + "." + Translation.JSON_LANGUAGE;
+            Tool.JSON_LATEST_TRANSLATIONS + "." + Translation.JSON_LANGUAGE;
 
     ResourceSyncTasks(@NonNull final Context context) {
         super(context);
@@ -49,15 +49,15 @@ final class ResourceSyncTasks extends BaseDataSyncTasks {
 
             // fetch resources from the API
             // short-circuit if this response is invalid
-            final Response<JsonApiObject<Resource>> response = mApi.resources.list(params).execute();
+            final Response<JsonApiObject<Tool>> response = mApi.resources.list(params).execute();
             if (response == null || response.code() != 200) {
                 return false;
             }
 
             // store fetched resources
-            final JsonApiObject<Resource> json = response.body();
+            final JsonApiObject<Tool> json = response.body();
             if (json != null) {
-                final LongSparseArray<Resource> existing = index(mDao.get(Query.select(Resource.class)));
+                final LongSparseArray<Tool> existing = index(mDao.get(Query.select(Tool.class)));
                 storeResources(events, json.getData(), existing, includes);
             }
 

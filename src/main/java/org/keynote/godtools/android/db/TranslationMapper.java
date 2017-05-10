@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import org.keynote.godtools.android.model.Language;
-import org.keynote.godtools.android.model.Resource;
+import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
 
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DESCRIPTION;
@@ -61,7 +61,7 @@ final class TranslationMapper extends BaseMapper<Translation> {
     public Translation toObject(@NonNull final Cursor c) {
         final Translation translation = super.toObject(c);
 
-        translation.setResourceId(getLong(c, COLUMN_RESOURCE, Resource.INVALID_ID));
+        translation.setResourceId(getLong(c, COLUMN_RESOURCE, Tool.INVALID_ID));
         translation.setLanguageCode(getLocale(c, COLUMN_LANGUAGE, Language.INVALID_CODE));
         translation.setVersion(getInt(c, COLUMN_VERSION, DEFAULT_VERSION));
         translation.setName(getString(c, COLUMN_NAME, null));

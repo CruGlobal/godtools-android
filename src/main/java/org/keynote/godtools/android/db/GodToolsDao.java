@@ -17,7 +17,7 @@ import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.model.Base;
 import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.model.Language;
-import org.keynote.godtools.android.model.Resource;
+import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
 
 public class GodToolsDao extends DBAdapter implements StreamDao {
@@ -28,7 +28,7 @@ public class GodToolsDao extends DBAdapter implements StreamDao {
                      FollowupTable.SQL_WHERE_PRIMARY_KEY);
         registerType(Language.class, LanguageTable.TABLE_NAME, LanguageTable.PROJECTION_ALL, new LanguageMapper(),
                      LanguageTable.SQL_WHERE_PRIMARY_KEY);
-        registerType(Resource.class, ResourceTable.TABLE_NAME, ResourceTable.PROJECTION_ALL, new ResourceMapper(),
+        registerType(Tool.class, ResourceTable.TABLE_NAME, ResourceTable.PROJECTION_ALL, new ResourceMapper(),
                      ResourceTable.SQL_WHERE_PRIMARY_KEY);
         registerType(Translation.class, TranslationTable.TABLE_NAME, TranslationTable.PROJECTION_ALL,
                      new TranslationMapper(), TranslationTable.SQL_WHERE_PRIMARY_KEY);
