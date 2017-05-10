@@ -7,7 +7,7 @@ import android.support.v4.content.Loader;
 import org.ccci.gto.android.common.eventbus.content.EventBusSubscriber;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.keynote.godtools.android.event.ResourceUpdateEvent;
+import org.keynote.godtools.android.event.ToolUpdateEvent;
 
 public final class ResourceEventBusSubscriber extends EventBusSubscriber {
     ResourceEventBusSubscriber(@NonNull final Loader loader) {
@@ -16,7 +16,7 @@ public final class ResourceEventBusSubscriber extends EventBusSubscriber {
 
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResourceUpdateEvent(@NonNull final ResourceUpdateEvent event) {
+    public void onResourceUpdateEvent(@NonNull final ToolUpdateEvent event) {
         triggerLoad();
     }
 }

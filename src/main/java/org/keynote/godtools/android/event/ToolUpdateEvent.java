@@ -1,3 +1,3 @@
 package org.keynote.godtools.android.event;
 
-public final class ResourceUpdateEvent {}
+public final class ToolUpdateEvent {}

@@ -14,7 +14,7 @@ import org.keynote.godtools.android.db.Contract;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.event.LanguageUpdateEvent;
-import org.keynote.godtools.android.event.ResourceUpdateEvent;
+import org.keynote.godtools.android.event.ToolUpdateEvent;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.Tool;
 
@@ -80,7 +80,7 @@ public final class GodToolsResourceManager {
         tool.setId(id);
         tool.setAdded(true);
         final ListenableFuture<Integer> update = mDao.updateAsync(tool, Contract.ResourceTable.COLUMN_ADDED);
-        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ResourceUpdateEvent()), directExecutor());
+        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
     }
 
     public void removeResource(final long id) {
@@ -88,6 +88,6 @@ public final class GodToolsResourceManager {
         tool.setId(id);
         tool.setAdded(false);
         final ListenableFuture<Integer> update = mDao.updateAsync(tool, Contract.ResourceTable.COLUMN_ADDED);
-        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ResourceUpdateEvent()), directExecutor());
+        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
     }
 }

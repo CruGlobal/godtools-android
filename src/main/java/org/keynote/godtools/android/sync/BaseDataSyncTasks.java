@@ -11,7 +11,7 @@ import org.keynote.godtools.android.db.Contract.LanguageTable;
 import org.keynote.godtools.android.db.Contract.ResourceTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.event.LanguageUpdateEvent;
-import org.keynote.godtools.android.event.ResourceUpdateEvent;
+import org.keynote.godtools.android.event.ToolUpdateEvent;
 import org.keynote.godtools.android.event.TranslationUpdateEvent;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.Tool;
@@ -53,7 +53,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
                 final Tool tool = existing.valueAt(i);
                 if (!tool.isAdded()) {
                     mDao.delete(tool);
-                    coalesceEvent(events, new ResourceUpdateEvent());
+                    coalesceEvent(events, new ToolUpdateEvent());
                 }
             }
         }
@@ -62,7 +62,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
     private void storeResource(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final Tool tool,
                                @NonNull final Includes includes) {
         mDao.updateOrInsert(tool, API_FIELDS_RESOURCE);
-        coalesceEvent(events, new ResourceUpdateEvent());
+        coalesceEvent(events, new ToolUpdateEvent());
 
         // persist any related included objects
         if (includes.include(Tool.JSON_LATEST_TRANSLATIONS)) {
