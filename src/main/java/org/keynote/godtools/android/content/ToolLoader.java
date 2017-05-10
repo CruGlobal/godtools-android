@@ -7,12 +7,12 @@ import org.ccci.gto.android.common.eventbus.content.CachingAsyncTaskEventBusLoad
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.model.Tool;
 
-public final class ResourceLoader extends CachingAsyncTaskEventBusLoader<Tool> {
+public final class ToolLoader extends CachingAsyncTaskEventBusLoader<Tool> {
     @NonNull
     private final GodToolsDao mDao;
     private final long mId;
 
-    public ResourceLoader(@NonNull final Context context, final long id) {
+    public ToolLoader(@NonNull final Context context, final long id) {
         super(context);
         mDao = GodToolsDao.getInstance(context);
         mId = id;

@@ -18,7 +18,7 @@ import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.adapter.ResourcesAdapter;
-import org.keynote.godtools.android.content.ResourcesCursorLoader;
+import org.keynote.godtools.android.content.ToolsCursorLoader;
 import org.keynote.godtools.android.db.Contract.ResourceTable;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.service.GodToolsResourceManager;
@@ -39,7 +39,7 @@ public class ToolsFragment extends Fragment implements ResourcesAdapter.Callback
     private static final int MODE_ADDED = 1;
     private static final int MODE_AVAILABLE = 2;
 
-    private static final int LOADER_RESOURCES = 101;
+    private static final int LOADER_TOOLS = 101;
 
     private final CursorLoaderCallbacks mCursorLoaderCallbacks = new CursorLoaderCallbacks();
 
@@ -143,7 +143,7 @@ public class ToolsFragment extends Fragment implements ResourcesAdapter.Callback
     }
 
     private void startLoaders() {
-        getLoaderManager().initLoader(LOADER_RESOURCES, null, mCursorLoaderCallbacks);
+        getLoaderManager().initLoader(LOADER_TOOLS, null, mCursorLoaderCallbacks);
     }
 
     private void setupResourcesList() {
@@ -177,8 +177,8 @@ public class ToolsFragment extends Fragment implements ResourcesAdapter.Callback
         @Override
         public Loader<Cursor> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
-                case LOADER_RESOURCES:
-                    final DaoCursorLoader<Tool> loader = new ResourcesCursorLoader(getContext(), args);
+                case LOADER_TOOLS:
+                    final DaoCursorLoader<Tool> loader = new ToolsCursorLoader(getContext(), args);
                     final Expression where = ResourceTable.FIELD_ADDED.eq(mMode == MODE_ADDED);
                     loader.setWhere(where);
                     return loader;
@@ -190,7 +190,7 @@ public class ToolsFragment extends Fragment implements ResourcesAdapter.Callback
         @Override
         public void onLoadFinished(@NonNull final Loader<Cursor> loader, @Nullable final Cursor cursor) {
             switch (loader.getId()) {
-                case LOADER_RESOURCES:
+                case LOADER_TOOLS:
                     onLoadResources(cursor);
                     break;
             }

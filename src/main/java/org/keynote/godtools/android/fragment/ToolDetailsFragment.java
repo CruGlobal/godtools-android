@@ -19,7 +19,7 @@ import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.content.AvailableLanguagesLoader;
 import org.keynote.godtools.android.content.LatestTranslationLoader;
-import org.keynote.godtools.android.content.ResourceLoader;
+import org.keynote.godtools.android.content.ToolLoader;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
 import org.keynote.godtools.android.service.GodToolsResourceManager;
@@ -37,7 +37,7 @@ import static org.keynote.godtools.android.Constants.EXTRA_RESOURCE;
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
 public class ToolDetailsFragment extends BaseFragment {
-    private static final int LOADER_RESOURCE = 101;
+    private static final int LOADER_TOOL = 101;
     private static final int LOADER_LATEST_TRANSLATION = 102;
     private static final int LOADER_AVAILABLE_LANGUAGES = 103;
 
@@ -187,7 +187,7 @@ public class ToolDetailsFragment extends BaseFragment {
 
     private void startLoaders() {
         final LoaderManager lm = getLoaderManager();
-        lm.initLoader(LOADER_RESOURCE, null, new ResourceLoaderCallbacks());
+        lm.initLoader(LOADER_TOOL, null, new ToolLoaderCallbacks());
         lm.initLoader(LOADER_LATEST_TRANSLATION, null, new TranslationLoaderCallbacks());
         lm.initLoader(LOADER_AVAILABLE_LANGUAGES, null, new LocalesLoaderCallbacks());
     }
@@ -199,13 +199,13 @@ public class ToolDetailsFragment extends BaseFragment {
         }
     }
 
-    class ResourceLoaderCallbacks extends SimpleLoaderCallbacks<Tool> {
+    class ToolLoaderCallbacks extends SimpleLoaderCallbacks<Tool> {
         @Nullable
         @Override
         public Loader<Tool> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
-                case LOADER_RESOURCE:
-                    return new ResourceLoader(getContext(), mResourceId);
+                case LOADER_TOOL:
+                    return new ToolLoader(getContext(), mResourceId);
                 default:
                     return null;
             }
@@ -214,7 +214,7 @@ public class ToolDetailsFragment extends BaseFragment {
         @Override
         public void onLoadFinished(@NonNull final Loader<Tool> loader, @Nullable final Tool tool) {
             switch (loader.getId()) {
-                case LOADER_RESOURCE:
+                case LOADER_TOOL:
                     onLoadResource(tool);
                     break;
             }
