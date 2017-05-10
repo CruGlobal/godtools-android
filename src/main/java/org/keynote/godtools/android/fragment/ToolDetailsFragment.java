@@ -36,7 +36,7 @@ import butterknife.Optional;
 import static org.keynote.godtools.android.Constants.EXTRA_RESOURCE;
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
-public class ResourceDetailsFragment extends BaseFragment {
+public class ToolDetailsFragment extends BaseFragment {
     private static final int LOADER_RESOURCE = 101;
     private static final int LOADER_LATEST_TRANSLATION = 102;
     private static final int LOADER_AVAILABLE_LANGUAGES = 103;
@@ -80,7 +80,7 @@ public class ResourceDetailsFragment extends BaseFragment {
     private List<Locale> mLanguages = Collections.emptyList();
 
     public static Fragment newInstance(final long id) {
-        final ResourceDetailsFragment fragment = new ResourceDetailsFragment();
+        final ToolDetailsFragment fragment = new ToolDetailsFragment();
         final Bundle args = new Bundle(1);
         args.putLong(EXTRA_RESOURCE, id);
         fragment.setArguments(args);

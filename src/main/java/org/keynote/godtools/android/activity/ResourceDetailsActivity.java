@@ -11,7 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.fragment.ResourceDetailsFragment;
+import org.keynote.godtools.android.fragment.ToolDetailsFragment;
 import org.keynote.godtools.android.model.Tool;
 
 import static org.keynote.godtools.android.Constants.EXTRA_RESOURCE;
@@ -66,7 +66,7 @@ public class ResourceDetailsActivity extends BaseActivity {
 
         // update the displayed fragment
         fm.beginTransaction()
-                .replace(R.id.frame, ResourceDetailsFragment.newInstance(mResource), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, ToolDetailsFragment.newInstance(mResource), TAG_MAIN_FRAGMENT)
                 .commit();
     }
 }
