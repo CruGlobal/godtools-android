@@ -11,9 +11,9 @@ import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.fragment.ResourcesFragment;
+import org.keynote.godtools.android.fragment.ToolsFragment;
 
-public class AddResourcesActivity extends BaseActivity implements ResourcesFragment.Callbacks {
+public class AddResourcesActivity extends BaseActivity implements ToolsFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
     public static void start(@NonNull final Context context) {
@@ -64,7 +64,7 @@ public class AddResourcesActivity extends BaseActivity implements ResourcesFragm
 
         // update the displayed fragment
         fm.beginTransaction()
-                .replace(R.id.frame, ResourcesFragment.newAvailableInstance(), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, ToolsFragment.newAvailableInstance(), TAG_MAIN_FRAGMENT)
                 .commit();
     }
 }

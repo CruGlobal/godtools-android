@@ -27,8 +27,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class ResourcesFragment extends Fragment implements ResourcesAdapter.Callbacks {
-    private static final String EXTRA_MODE = ResourcesFragment.class.getName() + ".MODE";
+public class ToolsFragment extends Fragment implements ResourcesAdapter.Callbacks {
+    private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
 
     public interface Callbacks {
         void onResourceInfo(long id);
@@ -59,7 +59,7 @@ public class ResourcesFragment extends Fragment implements ResourcesAdapter.Call
     private Cursor mResources;
 
     public static Fragment newAddedInstance() {
-        final Fragment fragment = new ResourcesFragment();
+        final Fragment fragment = new ToolsFragment();
         final Bundle args = new Bundle(1);
         args.putInt(EXTRA_MODE, MODE_ADDED);
         fragment.setArguments(args);
@@ -67,7 +67,7 @@ public class ResourcesFragment extends Fragment implements ResourcesAdapter.Call
     }
 
     public static Fragment newAvailableInstance() {
-        final Fragment fragment = new ResourcesFragment();
+        final Fragment fragment = new ToolsFragment();
         final Bundle args = new Bundle();
         args.putInt(EXTRA_MODE, MODE_AVAILABLE);
         fragment.setArguments(args);

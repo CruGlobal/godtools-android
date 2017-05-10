@@ -11,9 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.fragment.ResourcesFragment;
+import org.keynote.godtools.android.fragment.ToolsFragment;
 
-public class MainActivity extends BaseActivity implements ResourcesFragment.Callbacks {
+public class MainActivity extends BaseActivity implements ToolsFragment.Callbacks {
     private static final String EXTRA_TOUR_LAUNCHED = MainActivity.class.getName() + ".TOUR_LAUNCHED";
 
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
@@ -103,7 +103,7 @@ public class MainActivity extends BaseActivity implements ResourcesFragment.Call
 
         // update the displayed fragment
         fm.beginTransaction()
-                .replace(R.id.frame, ResourcesFragment.newAddedInstance(), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, ToolsFragment.newAddedInstance(), TAG_MAIN_FRAGMENT)
                 .commit();
     }
 
