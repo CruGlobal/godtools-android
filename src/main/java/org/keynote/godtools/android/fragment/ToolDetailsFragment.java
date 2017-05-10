@@ -22,7 +22,7 @@ import org.keynote.godtools.android.content.LatestTranslationLoader;
 import org.keynote.godtools.android.content.ToolLoader;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
-import org.keynote.godtools.android.service.GodToolsResourceManager;
+import org.keynote.godtools.android.service.GodToolsToolManager;
 import org.keynote.godtools.android.util.ModelUtils;
 
 import java.util.Collections;
@@ -176,13 +176,13 @@ public class ToolDetailsFragment extends BaseFragment {
     @Optional
     @OnClick(R.id.action_add)
     void addResource() {
-        GodToolsResourceManager.getInstance(getContext()).addResource(mToolId);
+        GodToolsToolManager.getInstance(getContext()).addTool(mToolId);
     }
 
     @Optional
     @OnClick(R.id.action_remove)
     void removeResource() {
-        GodToolsResourceManager.getInstance(getContext()).removeResource(mToolId);
+        GodToolsToolManager.getInstance(getContext()).removeTool(mToolId);
     }
 
     private void startLoaders() {

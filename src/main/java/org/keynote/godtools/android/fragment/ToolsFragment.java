@@ -21,7 +21,7 @@ import org.keynote.godtools.android.adapter.ResourcesAdapter;
 import org.keynote.godtools.android.content.ToolsCursorLoader;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.model.Tool;
-import org.keynote.godtools.android.service.GodToolsResourceManager;
+import org.keynote.godtools.android.service.GodToolsToolManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -124,7 +124,7 @@ public class ToolsFragment extends Fragment implements ResourcesAdapter.Callback
 
     @Override
     public void onResourceAdd(final long id) {
-        GodToolsResourceManager.getInstance(getContext()).addResource(id);
+        GodToolsToolManager.getInstance(getContext()).addTool(id);
     }
 
     @Override

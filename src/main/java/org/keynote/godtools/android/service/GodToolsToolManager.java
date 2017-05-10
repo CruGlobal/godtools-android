@@ -22,12 +22,12 @@ import java.util.Locale;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
-public final class GodToolsResourceManager {
+public final class GodToolsToolManager {
     private final Context mContext;
     private final GodToolsDao mDao;
     private final Settings mPrefs;
 
-    private GodToolsResourceManager(@NonNull final Context context) {
+    private GodToolsToolManager(@NonNull final Context context) {
         mContext = context;
         mDao = GodToolsDao.getInstance(mContext);
         mPrefs = Settings.getInstance(mContext);
@@ -35,12 +35,12 @@ public final class GodToolsResourceManager {
 
     @Nullable
     @SuppressLint("StaticFieldLeak")
-    private static GodToolsResourceManager sInstance;
+    private static GodToolsToolManager sInstance;
     @NonNull
-    public static GodToolsResourceManager getInstance(@NonNull final Context context) {
-        synchronized (GodToolsResourceManager.class) {
+    public static GodToolsToolManager getInstance(@NonNull final Context context) {
+        synchronized (GodToolsToolManager.class) {
             if (sInstance == null) {
-                sInstance = new GodToolsResourceManager(context.getApplicationContext());
+                sInstance = new GodToolsToolManager(context.getApplicationContext());
             }
         }
 
@@ -75,7 +75,7 @@ public final class GodToolsResourceManager {
         }
     }
 
-    public void addResource(final long id) {
+    public void addTool(final long id) {
         final Tool tool = new Tool();
         tool.setId(id);
         tool.setAdded(true);
@@ -83,7 +83,7 @@ public final class GodToolsResourceManager {
         update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
     }
 
-    public void removeResource(final long id) {
+    public void removeTool(final long id) {
         final Tool tool = new Tool();
         tool.setId(id);
         tool.setAdded(false);
