@@ -6,13 +6,13 @@ import android.support.annotation.NonNull;
 
 import org.keynote.godtools.android.model.Tool;
 
-import static org.keynote.godtools.android.db.Contract.ResourceTable.COLUMN_ADDED;
-import static org.keynote.godtools.android.db.Contract.ResourceTable.COLUMN_COPYRIGHT;
-import static org.keynote.godtools.android.db.Contract.ResourceTable.COLUMN_DESCRIPTION;
-import static org.keynote.godtools.android.db.Contract.ResourceTable.COLUMN_NAME;
-import static org.keynote.godtools.android.db.Contract.ResourceTable.COLUMN_SHARES;
+import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_ADDED;
+import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_COPYRIGHT;
+import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DESCRIPTION;
+import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_NAME;
+import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_SHARES;
 
-final class ResourceMapper extends BaseMapper<Tool> {
+final class ToolMapper extends BaseMapper<Tool> {
     @Override
     protected void mapField(@NonNull final ContentValues values, @NonNull final String field,
                             @NonNull final Tool tool) {

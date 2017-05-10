@@ -26,7 +26,7 @@ public final class AvailableLanguagesLoader extends CachingAsyncTaskEventBusLoad
 
     @Override
     public List<Locale> loadInBackground() {
-        return mDao.streamCompat(Query.select(Translation.class).where(TranslationTable.FIELD_RESOURCE.eq(mResourceId)))
+        return mDao.streamCompat(Query.select(Translation.class).where(TranslationTable.FIELD_TOOL.eq(mResourceId)))
                 .map(Translation::getLanguageCode)
                 .withoutNulls()
                 .distinct()

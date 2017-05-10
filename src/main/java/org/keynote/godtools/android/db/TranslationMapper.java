@@ -13,7 +13,7 @@ import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_D
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_LANGUAGE;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_NAME;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_PUBLISHED;
-import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_RESOURCE;
+import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_TOOL;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_VERSION;
 import static org.keynote.godtools.android.model.Translation.DEFAULT_PUBLISHED;
 import static org.keynote.godtools.android.model.Translation.DEFAULT_VERSION;
@@ -23,7 +23,7 @@ final class TranslationMapper extends BaseMapper<Translation> {
     protected void mapField(@NonNull final ContentValues values, @NonNull final String field,
                             @NonNull final Translation translation) {
         switch (field) {
-            case COLUMN_RESOURCE:
+            case COLUMN_TOOL:
                 values.put(field, translation.getToolId());
                 break;
             case COLUMN_LANGUAGE:
@@ -61,7 +61,7 @@ final class TranslationMapper extends BaseMapper<Translation> {
     public Translation toObject(@NonNull final Cursor c) {
         final Translation translation = super.toObject(c);
 
-        translation.setToolId(getLong(c, COLUMN_RESOURCE, Tool.INVALID_ID));
+        translation.setToolId(getLong(c, COLUMN_TOOL, Tool.INVALID_ID));
         translation.setLanguageCode(getLocale(c, COLUMN_LANGUAGE, Language.INVALID_CODE));
         translation.setVersion(getInt(c, COLUMN_VERSION, DEFAULT_VERSION));
         translation.setName(getString(c, COLUMN_NAME, null));

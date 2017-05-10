@@ -42,7 +42,7 @@ public final class LatestTranslationLoader extends CachingAsyncTaskEventBusLoade
     @Override
     public Translation loadInBackground() {
         final List<Translation> translations =
-                mDao.get(QUERY.where(TranslationTable.SQL_WHERE_RESOURCE_LANGUAGE.args(mResourceId, mLocale)));
+                mDao.get(QUERY.where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(mResourceId, mLocale)));
         return translations.isEmpty() ? null : translations.get(0);
     }
 }

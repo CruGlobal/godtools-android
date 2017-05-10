@@ -19,7 +19,7 @@ import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.adapter.ResourcesAdapter;
 import org.keynote.godtools.android.content.ToolsCursorLoader;
-import org.keynote.godtools.android.db.Contract.ResourceTable;
+import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.service.GodToolsResourceManager;
 
@@ -179,7 +179,7 @@ public class ToolsFragment extends Fragment implements ResourcesAdapter.Callback
             switch (id) {
                 case LOADER_TOOLS:
                     final DaoCursorLoader<Tool> loader = new ToolsCursorLoader(getContext(), args);
-                    final Expression where = ResourceTable.FIELD_ADDED.eq(mMode == MODE_ADDED);
+                    final Expression where = ToolTable.FIELD_ADDED.eq(mMode == MODE_ADDED);
                     loader.setWhere(where);
                     return loader;
                 default:

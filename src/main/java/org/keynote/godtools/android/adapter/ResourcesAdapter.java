@@ -13,7 +13,7 @@ import android.widget.TextView;
 import org.ccci.gto.android.common.db.util.CursorUtils;
 import org.ccci.gto.android.common.recyclerview.adapter.CursorAdapter;
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.db.Contract.ResourceTable;
+import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.model.Tool;
 
 import java.util.List;
@@ -99,10 +99,10 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
         void bind(@Nullable final Cursor cursor) {
             // update data from Cursor
             if (cursor != null) {
-                mId = CursorUtils.getLong(cursor, ResourceTable.COLUMN_ID, Tool.INVALID_ID);
-                mTitle = CursorUtils.getString(cursor, ResourceTable.COLUMN_NAME, null);
-                mAdded = CursorUtils.getBool(cursor, ResourceTable.COLUMN_ADDED, false);
-                mShares = CursorUtils.getInt(cursor, ResourceTable.COLUMN_SHARES, 0);
+                mId = CursorUtils.getLong(cursor, ToolTable.COLUMN_ID, Tool.INVALID_ID);
+                mTitle = CursorUtils.getString(cursor, ToolTable.COLUMN_NAME, null);
+                mAdded = CursorUtils.getBool(cursor, ToolTable.COLUMN_ADDED, false);
+                mShares = CursorUtils.getInt(cursor, ToolTable.COLUMN_SHARES, 0);
             } else {
                 mId = Tool.INVALID_ID;
                 mTitle = null;

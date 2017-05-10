@@ -10,8 +10,8 @@ import com.google.common.util.concurrent.ListenableFuture;
 import org.ccci.gto.android.common.eventbus.task.EventBusDelayedPost;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.Settings;
-import org.keynote.godtools.android.db.Contract;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
+import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.event.LanguageUpdateEvent;
 import org.keynote.godtools.android.event.ToolUpdateEvent;
@@ -79,7 +79,7 @@ public final class GodToolsResourceManager {
         final Tool tool = new Tool();
         tool.setId(id);
         tool.setAdded(true);
-        final ListenableFuture<Integer> update = mDao.updateAsync(tool, Contract.ResourceTable.COLUMN_ADDED);
+        final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
         update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
     }
 
@@ -87,7 +87,7 @@ public final class GodToolsResourceManager {
         final Tool tool = new Tool();
         tool.setId(id);
         tool.setAdded(false);
-        final ListenableFuture<Integer> update = mDao.updateAsync(tool, Contract.ResourceTable.COLUMN_ADDED);
+        final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
         update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
     }
 }

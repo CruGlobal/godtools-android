@@ -8,7 +8,7 @@ import android.support.v4.util.SimpleArrayMap;
 
 import org.ccci.gto.android.common.jsonapi.util.Includes;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
-import org.keynote.godtools.android.db.Contract.ResourceTable;
+import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.event.LanguageUpdateEvent;
 import org.keynote.godtools.android.event.ToolUpdateEvent;
@@ -22,10 +22,10 @@ import java.util.List;
 abstract class BaseDataSyncTasks extends BaseSyncTasks {
     private static final String[] API_FIELDS_LANGUAGE = {LanguageTable.COLUMN_CODE};
     private static final String[] API_FIELDS_TOOL =
-            {ResourceTable.COLUMN_NAME, ResourceTable.COLUMN_DESCRIPTION, ResourceTable.COLUMN_SHARES,
-                    ResourceTable.COLUMN_COPYRIGHT};
+            {ToolTable.COLUMN_NAME, ToolTable.COLUMN_DESCRIPTION, ToolTable.COLUMN_SHARES,
+                    ToolTable.COLUMN_COPYRIGHT};
     private static final String[] API_FIELDS_TRANSLATION =
-            {TranslationTable.COLUMN_RESOURCE, TranslationTable.COLUMN_LANGUAGE, TranslationTable.COLUMN_VERSION,
+            {TranslationTable.COLUMN_TOOL, TranslationTable.COLUMN_LANGUAGE, TranslationTable.COLUMN_VERSION,
                     TranslationTable.COLUMN_NAME, TranslationTable.COLUMN_DESCRIPTION,
                     TranslationTable.COLUMN_PUBLISHED};
 
