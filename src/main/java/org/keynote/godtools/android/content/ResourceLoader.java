@@ -16,7 +16,7 @@ public final class ResourceLoader extends CachingAsyncTaskEventBusLoader<Tool> {
         super(context);
         mDao = GodToolsDao.getInstance(context);
         mId = id;
-        addEventBusSubscriber(new ResourceEventBusSubscriber(this));
+        addEventBusSubscriber(new ToolEventBusSubscriber(this));
     }
 
     @Override

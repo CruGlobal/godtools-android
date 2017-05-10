@@ -12,6 +12,6 @@ import org.keynote.godtools.android.model.Tool;
 public final class ResourcesCursorLoader extends DaoCursorEventBusLoader<Tool> {
     public ResourcesCursorLoader(@NonNull final Context context, @Nullable final Bundle args) {
         super(context, GodToolsDao.getInstance(context), Tool.class, args);
-        addEventBusSubscriber(new ResourceEventBusSubscriber(this));
+        addEventBusSubscriber(new ToolEventBusSubscriber(this));
     }
 }
