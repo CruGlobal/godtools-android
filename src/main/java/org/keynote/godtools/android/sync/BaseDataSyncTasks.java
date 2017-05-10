@@ -21,7 +21,7 @@ import java.util.List;
 
 abstract class BaseDataSyncTasks extends BaseSyncTasks {
     private static final String[] API_FIELDS_LANGUAGE = {LanguageTable.COLUMN_CODE};
-    private static final String[] API_FIELDS_RESOURCE =
+    private static final String[] API_FIELDS_TOOL =
             {ResourceTable.COLUMN_NAME, ResourceTable.COLUMN_DESCRIPTION, ResourceTable.COLUMN_SHARES,
                     ResourceTable.COLUMN_COPYRIGHT};
     private static final String[] API_FIELDS_TRANSLATION =
@@ -38,13 +38,13 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
         coalesceEvent(events, new LanguageUpdateEvent());
     }
 
-    void storeResources(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final List<Tool> tools,
-                        @Nullable final LongSparseArray<Tool> existing, @NonNull final Includes includes) {
+    void storeTools(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final List<Tool> tools,
+                    @Nullable final LongSparseArray<Tool> existing, @NonNull final Includes includes) {
         for (final Tool tool : tools) {
             if (existing != null) {
                 existing.remove(tool.getId());
             }
-            storeResource(events, tool, includes);
+            storeTool(events, tool, includes);
         }
 
         // prune any existing resources that weren't synced and aren't already added to the device
@@ -59,9 +59,9 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
         }
     }
 
-    private void storeResource(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final Tool tool,
-                               @NonNull final Includes includes) {
-        mDao.updateOrInsert(tool, API_FIELDS_RESOURCE);
+    private void storeTool(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final Tool tool,
+                           @NonNull final Includes includes) {
+        mDao.updateOrInsert(tool, API_FIELDS_TOOL);
         coalesceEvent(events, new ToolUpdateEvent());
 
         // persist any related included objects

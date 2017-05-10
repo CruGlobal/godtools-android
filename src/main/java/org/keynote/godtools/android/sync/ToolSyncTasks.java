@@ -19,7 +19,7 @@ import retrofit2.Response;
 
 import static org.ccci.gto.android.common.TimeConstants.DAY_IN_MS;
 
-final class ResourceSyncTasks extends BaseDataSyncTasks {
+final class ToolSyncTasks extends BaseDataSyncTasks {
     private static final Object LOCK_SYNC_RESOURCES = new Object();
 
     private static final String SYNC_TIME_RESOURCES = "last_synced.resources";
@@ -28,7 +28,7 @@ final class ResourceSyncTasks extends BaseDataSyncTasks {
     private static final String INCLUDE_LATEST_TRANSLATIONS =
             Tool.JSON_LATEST_TRANSLATIONS + "." + Translation.JSON_LANGUAGE;
 
-    ResourceSyncTasks(@NonNull final Context context) {
+    ToolSyncTasks(@NonNull final Context context) {
         super(context);
     }
 
@@ -58,7 +58,7 @@ final class ResourceSyncTasks extends BaseDataSyncTasks {
             final JsonApiObject<Tool> json = response.body();
             if (json != null) {
                 final LongSparseArray<Tool> existing = index(mDao.get(Query.select(Tool.class)));
-                storeResources(events, json.getData(), existing, includes);
+                storeTools(events, json.getData(), existing, includes);
             }
 
             // send any pending events
