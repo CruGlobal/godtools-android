@@ -1,6 +1,7 @@
 package org.keynote.godtools.android.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
@@ -8,8 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Stream;
 import com.google.common.base.Objects;
 
 import org.keynote.godtools.android.R;
@@ -21,14 +25,19 @@ import org.keynote.godtools.android.service.GodToolsResourceManager;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
+import butterknife.BindColor;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
 
+import static org.keynote.godtools.android.butterknife.Setters.TINT_LIST;
+
 public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
     public interface Callbacks {
-        void onLanguageSelected(@NonNull Locale language);
+        void onLanguageSelected(@Nullable Locale language);
     }
 
     @NonNull
@@ -39,10 +48,16 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
     @Nullable
     Callbacks mCallbacks;
 
+    boolean mShowNone = false;
+
     @NonNull
     List<Language> mLanguages = Collections.emptyList();
     @Nullable
     Locale mSelected;
+    @NonNull
+    Set<Locale> mDisabled = Collections.emptySet();
+    @NonNull
+    Set<Locale> mProtected = Collections.emptySet();
 
     public LanguagesAdapter(@NonNull final Context context) {
         setHasStableIds(true);
@@ -54,6 +69,18 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         mCallbacks = callbacks;
     }
 
+    public void setShowNone(final boolean state) {
+        final boolean old = mShowNone;
+        mShowNone = state;
+        if (old != mShowNone) {
+            if (mShowNone) {
+                notifyItemInserted(0);
+            } else {
+                notifyItemRemoved(0);
+            }
+        }
+    }
+
     public void setLanguages(@Nullable final List<Language> languages) {
         mLanguages = languages != null ? languages : Collections.emptyList();
         notifyDataSetChanged();
@@ -61,17 +88,32 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
 
     public void setSelected(@Nullable final Locale selected) {
         mSelected = selected;
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, getItemCount());
+    }
+
+    public void setDisabled(@NonNull final Locale... disabled) {
+        mDisabled = Stream.of(disabled)
+                .withoutNulls()
+                .collect(Collectors.toSet());
+        notifyItemRangeChanged(0, getItemCount());
+    }
+
+    public void setProtected(@Nullable final Set<Locale> languages) {
+        mProtected = languages != null ? languages : Collections.emptySet();
+        notifyItemRangeChanged(0, getItemCount());
     }
 
     @Override
     public int getItemCount() {
-        return mLanguages.size();
+        return mLanguages.size() + (mShowNone ? 1 : 0);
     }
 
     @Override
     public long getItemId(final int position) {
-        return mLanguages.get(position).getId();
+        if (mShowNone && position == 0) {
+            return View.NO_ID;
+        }
+        return mLanguages.get(position - (mShowNone ? 1 : 0)).getId();
     }
 
     @Override
@@ -86,6 +128,9 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
     }
 
     class LanguageViewHolder extends BaseViewHolder {
+        @BindColor(R.color.states_remove)
+        ColorStateList mActionRemoveTint;
+
         @Nullable
         @BindView(R.id.root)
         View mRoot;
@@ -97,7 +142,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         View mActionAdd;
         @Nullable
         @BindView(R.id.action_remove)
-        View mActionRemove;
+        ImageView mActionRemove;
 
         @Nullable
         Locale mLocale = null;
@@ -105,11 +150,15 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
 
         LanguageViewHolder(@NonNull final View view) {
             super(view);
+            if (mActionRemove != null) {
+                ButterKnife.apply(mActionRemove, TINT_LIST, mActionRemoveTint);
+            }
         }
 
         @Override
         void bind(final int position) {
-            final Language language = mLanguages.get(position);
+            final Language language = mShowNone && position == 0 ? null :
+                    mLanguages.get(position - (mShowNone ? 1 : 0));
             mLocale = language != null ? language.getCode() : null;
             mAdded = language != null && language.isAdded();
 
@@ -117,12 +166,17 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
                 mRoot.setSelected(Objects.equal(mSelected, mLocale));
             }
             if (mTitle != null) {
-                mTitle.setText(mLocale != null ? mLocale.getDisplayName() : "");
+                if (mLocale != null) {
+                    mTitle.setText(mLocale.getDisplayName());
+                } else {
+                    mTitle.setText(R.string.label_language_none);
+                }
             }
             if (mActionAdd != null) {
-                mActionAdd.setVisibility(mAdded ? View.GONE : View.VISIBLE);
+                mActionAdd.setVisibility(mAdded || mLocale == null ? View.GONE : View.VISIBLE);
             }
             if (mActionRemove != null) {
+                mActionRemove.setEnabled(!mProtected.contains(mLocale));
                 mActionRemove.setVisibility(mAdded ? View.VISIBLE : View.GONE);
             }
         }
@@ -131,8 +185,10 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         @OnClick(R.id.root)
         void onSelectLanguage() {
             if (mCallbacks != null) {
-                if (mLocale != null) {
+                if (!mDisabled.contains(mLocale)) {
                     mCallbacks.onLanguageSelected(mLocale);
+                } else {
+                    // TODO: toast: You cannot select this language.
                 }
             }
         }
@@ -147,7 +203,11 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         @Optional
         @OnClick(R.id.action_remove)
         void onRemoveLanguage() {
-            mResources.removeLanguage(mLocale);
+            if (!mProtected.contains(mLocale)) {
+                mResources.removeLanguage(mLocale);
+            } else {
+                // TODO: toast: You cannot remove this language from the device
+            }
         }
     }
 }

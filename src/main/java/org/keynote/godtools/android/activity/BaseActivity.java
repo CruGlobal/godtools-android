@@ -18,11 +18,13 @@ import android.view.MenuItem;
 import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.Settings;
+import org.keynote.godtools.android.util.WebUrlLauncher;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static org.ccci.gto.android.common.Constants.INVALID_STRING_RES;
+import static org.keynote.godtools.android.Constants.URI_HELP;
 import static org.keynote.godtools.android.Constants.URI_SHARE_BASE;
 import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 
@@ -95,6 +97,9 @@ public abstract class BaseActivity extends AppCompatActivity
     @CallSuper
     public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_help:
+                WebUrlLauncher.openUrl(this, URI_HELP);
+                return true;
             case R.id.action_rate:
                 openPlayStore();
                 return true;
@@ -113,6 +118,11 @@ public abstract class BaseActivity extends AppCompatActivity
     }
 
     /* END lifecycle */
+
+    @NonNull
+    protected Settings prefs() {
+        return Settings.getInstance(this);
+    }
 
     private void setupActionBar() {
         if (mToolbar != null) {
@@ -179,7 +189,7 @@ public abstract class BaseActivity extends AppCompatActivity
 
     private void launchShare() {
         final String text = getString(R.string.share_general_message)
-                .replace(SHARE_LINK, URI_SHARE_BASE + Settings.getPrimaryLanguage(this));
+                .replace(SHARE_LINK, URI_SHARE_BASE + prefs().getPrimaryLanguage());
 
         final Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");

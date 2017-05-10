@@ -8,6 +8,10 @@
                 android:id="@+id/action_switch_language"
                 android:orderInCategory="100"
                 android:title="@string/menu_language_settings" />
+            <item
+                android:id="@+id/action_help"
+                android:orderInCategory="300"
+                android:title="@string/menu_help" />
         </menu>
     </item>
     <item

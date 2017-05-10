@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,36 +13,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.annimon.stream.Stream;
+
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.adapter.LanguagesAdapter;
-import org.keynote.godtools.android.content.ActiveLocaleLoader;
 import org.keynote.godtools.android.content.LanguagesLoader;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
-public class LanguagesFragment extends Fragment implements LanguagesAdapter.Callbacks {
+public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.Callbacks {
     private static final String EXTRA_PRIMARY = LanguagesFragment.class.getName() + ".PRIMARY";
 
     private static final int LOADER_LANGUAGES = 101;
-    private static final int LOADER_SELECTED_LOCALE = 102;
 
     public interface Callbacks {
-        void onLocaleSelected(@NonNull final Locale locale);
+        void onLocaleSelected(@Nullable final Locale locale);
     }
-
-    @Nullable
-    Unbinder mButterKnife;
 
     @Nullable
     @BindView(R.id.languages)
@@ -54,8 +46,6 @@ public class LanguagesFragment extends Fragment implements LanguagesAdapter.Call
     // these properties should be treated as final and only set/modified in onCreate()
     /*final*/ boolean mPrimary = true;
 
-    @Nullable
-    private Locale mSelectedLocale;
     @Nullable
     private List<Language> mLanguages;
 
@@ -91,12 +81,16 @@ public class LanguagesFragment extends Fragment implements LanguagesAdapter.Call
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
         setupLanguagesList();
     }
 
-    void onLoadSelectedLocale(@Nullable final Locale locale) {
-        mSelectedLocale = locale;
+    @Override
+    protected void onUpdatePrimaryLanguage() {
+        updateLanguagesList();
+    }
+
+    @Override
+    protected void onUpdateParallelLanguage() {
         updateLanguagesList();
     }
 
@@ -104,16 +98,16 @@ public class LanguagesFragment extends Fragment implements LanguagesAdapter.Call
         if (languages == null) {
             mLanguages = null;
         } else {
-            mLanguages = new ArrayList<>(languages);
-            //noinspection ComparatorCombinators,Java8ListSort
-            Collections.sort(mLanguages, (l1, l2) -> l1.getDisplayName().compareTo(l2.getDisplayName()));
+            mLanguages = Stream.of(languages)
+                    .sorted((l1, l2) -> l1.getDisplayName().compareToIgnoreCase(l2.getDisplayName()))
+                    .toList();
         }
 
         updateLanguagesList();
     }
 
     @Override
-    public void onLanguageSelected(@NonNull final Locale language) {
+    public void onLanguageSelected(@Nullable final Locale language) {
         final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
         if (listener != null) {
             listener.onLocaleSelected(language);
@@ -122,20 +116,14 @@ public class LanguagesFragment extends Fragment implements LanguagesAdapter.Call
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         cleanupLanguagesList();
-        if (mButterKnife != null) {
-            mButterKnife.unbind();
-        }
-        mButterKnife = null;
+        super.onDestroyView();
     }
 
     /* END lifecycle */
 
     private void startLoaders() {
-        final LoaderManager lm = getLoaderManager();
-        lm.initLoader(LOADER_LANGUAGES, null, new LanguagesLoaderCallbacks());
-        lm.initLoader(LOADER_SELECTED_LOCALE, null, new LocaleLoaderCallbacks());
+        getLoaderManager().initLoader(LOADER_LANGUAGES, null, new LanguagesLoaderCallbacks());
     }
 
     private void syncData(final boolean force) {
@@ -150,6 +138,7 @@ public class LanguagesFragment extends Fragment implements LanguagesAdapter.Call
             mLanguagesView.addItemDecoration(new DividerItemDecoration(context, layoutManager.getOrientation()));
 
             mLanguagesAdapter = new LanguagesAdapter(context);
+            mLanguagesAdapter.setShowNone(!mPrimary);
             mLanguagesAdapter.setCallbacks(this);
             mLanguagesView.setAdapter(mLanguagesAdapter);
         }
@@ -157,8 +146,10 @@ public class LanguagesFragment extends Fragment implements LanguagesAdapter.Call
 
     private void updateLanguagesList() {
         if (mLanguagesAdapter != null) {
-            mLanguagesAdapter.setSelected(mSelectedLocale);
+            mLanguagesAdapter.setSelected(mPrimary ? mPrimaryLanguage : mParallelLanguage);
             mLanguagesAdapter.setLanguages(mLanguages);
+            mLanguagesAdapter.setDisabled(mPrimary ? null : mPrimaryLanguage);
+            mLanguagesAdapter.setProtected(mSettings != null ? mSettings.getProtectedLanguages() : null);
         }
     }
 
@@ -187,28 +178,6 @@ public class LanguagesFragment extends Fragment implements LanguagesAdapter.Call
             switch (loader.getId()) {
                 case LOADER_LANGUAGES:
                     onLoadLanguages(languages);
-                    break;
-            }
-        }
-    }
-
-    class LocaleLoaderCallbacks extends SimpleLoaderCallbacks<Locale> {
-        @Nullable
-        @Override
-        public Loader<Locale> onCreateLoader(final int id, @Nullable final Bundle args) {
-            switch (id) {
-                case LOADER_SELECTED_LOCALE:
-                    return new ActiveLocaleLoader(getContext(), mPrimary);
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public void onLoadFinished(@NonNull final Loader<Locale> loader, @Nullable final Locale locale) {
-            switch (loader.getId()) {
-                case LOADER_SELECTED_LOCALE:
-                    onLoadSelectedLocale(locale);
                     break;
             }
         }
