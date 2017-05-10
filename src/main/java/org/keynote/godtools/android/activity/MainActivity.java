@@ -62,7 +62,7 @@ public class MainActivity extends BaseActivity implements ToolsFragment.Callback
     public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                AddResourcesActivity.start(this);
+                AddToolsActivity.start(this);
                 return true;
         }
         return super.onOptionsItemSelected(item);

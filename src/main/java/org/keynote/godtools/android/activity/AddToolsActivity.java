@@ -13,11 +13,11 @@ import android.view.Menu;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.fragment.ToolsFragment;
 
-public class AddResourcesActivity extends BaseActivity implements ToolsFragment.Callbacks {
+public class AddToolsActivity extends BaseActivity implements ToolsFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
     public static void start(@NonNull final Context context) {
-        context.startActivity(new Intent(context, AddResourcesActivity.class));
+        context.startActivity(new Intent(context, AddToolsActivity.class));
     }
 
     /* BEGIN lifecycle */
