@@ -40,7 +40,7 @@ public final class Contract extends BaseContract {
     }
 
     public static class ToolTable extends BaseTable {
-        static final String TABLE_NAME = "resources";
+        static final String TABLE_NAME = "tools";
         private static final Table<Tool> TABLE = Table.forClass(Tool.class);
 
         public static final String COLUMN_NAME = "name";
@@ -69,20 +69,14 @@ public final class Contract extends BaseContract {
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
 
         /* DB migrations */
-        static final String SQL_V10_CREATE_TABLE =
-                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_NAME, SQL_COLUMN_ADDED);
-        static final String SQL_V15_ALTER_SHARES = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_SHARES;
-        static final String SQL_V17_ALTER_DESCRIPTION =
-                "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_DESCRIPTION;
-        static final String SQL_V18_ALTER_COPYRIGHT =
-                "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_COPYRIGHT;
+        static final String SQL_V19_DROP_LEGACY = drop("resources");
     }
 
     public static class TranslationTable extends BaseTable {
         static final String TABLE_NAME = "translations";
         private static final Table<Translation> TABLE = Table.forClass(Translation.class);
 
-        public static final String COLUMN_TOOL = "resource";
+        public static final String COLUMN_TOOL = "tool";
         public static final String COLUMN_LANGUAGE = "language";
         public static final String COLUMN_VERSION = "version";
         public static final String COLUMN_NAME = "name";
