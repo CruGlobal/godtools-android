@@ -91,7 +91,7 @@ public class ToolsFragment extends Fragment implements ResourcesAdapter.Callback
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container,
                              @Nullable final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_resources, container, false);
+        return inflater.inflate(R.layout.fragment_tools, container, false);
     }
 
     @Override

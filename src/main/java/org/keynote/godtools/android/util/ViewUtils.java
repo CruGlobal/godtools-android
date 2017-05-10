@@ -13,7 +13,7 @@ public final class ViewUtils {
 
     public static void bindShares(@Nullable final TextView view, final int shares) {
         if (view != null) {
-            view.setText(view.getResources().getQuantityString(R.plurals.label_resources_shares, shares, shares));
+            view.setText(view.getResources().getQuantityString(R.plurals.label_tools_shares, shares, shares));
         }
     }
 }

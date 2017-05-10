@@ -111,7 +111,7 @@
 
         <activity
             android:name=".activity.AddToolsActivity"
-            android:label="@string/title_resources_add"
+            android:label="@string/title_tools_add"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/Theme.GodTools2.AppBar">
             <meta-data

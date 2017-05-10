@@ -66,7 +66,7 @@
             android:layout_marginLeft="@dimen/resources_details_margin_horiz"
             android:layout_marginRight="@dimen/resources_details_margin_horiz"
             android:layout_marginTop="16dp"
-            android:text="@string/action_resources_download" />
+            android:text="@string/action_tools_download" />
 
         <android.support.v7.widget.AppCompatButtonImpl
             android:id="@+id/action_remove"
@@ -79,7 +79,7 @@
             android:layout_marginRight="@dimen/resources_details_margin_horiz"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:text="@string/action_resources_remove"
+            android:text="@string/action_tools_remove"
             tools:visibility="gone" />
 
         <android.support.v7.widget.AppCompatTextView
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/resources_details_margin_horiz"
             android:layout_marginRight="@dimen/resources_details_margin_horiz"
-            android:text="@string/label_resources_about" />
+            android:text="@string/label_tools_about" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/description"

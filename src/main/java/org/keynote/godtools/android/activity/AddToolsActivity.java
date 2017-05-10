@@ -30,7 +30,7 @@ public class AddToolsActivity extends BaseActivity implements ToolsFragment.Call
 
     @Override
     public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_add_resources, menu);
+        getMenuInflater().inflate(R.menu.activity_add_tools, menu);
         return true;
     }
 

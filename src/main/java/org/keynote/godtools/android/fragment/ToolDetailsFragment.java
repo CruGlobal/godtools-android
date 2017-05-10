@@ -104,7 +104,7 @@ public class ToolDetailsFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container,
                              @Nullable final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_resource_details, container, false);
+        return inflater.inflate(R.layout.fragment_tool_details, container, false);
     }
 
     @Override
@@ -152,7 +152,7 @@ public class ToolDetailsFragment extends BaseFragment {
         if (mLanguagesHeader != null) {
             final int count = mLanguages.size();
             mLanguagesHeader.setText(mLanguagesHeader.getResources()
-                                             .getQuantityString(R.plurals.label_resources_languages, count, count));
+                                             .getQuantityString(R.plurals.label_tools_languages, count, count));
         }
         if (mLanguagesView != null) {
             mLanguagesView.setVisibility(mLanguages.isEmpty() ? View.GONE : View.VISIBLE);
