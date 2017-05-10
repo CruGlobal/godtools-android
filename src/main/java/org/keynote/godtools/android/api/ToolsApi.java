@@ -13,7 +13,7 @@ import retrofit2.http.QueryMap;
 
 import static org.keynote.godtools.android.BuildConfig.MOBILE_CONTENT_SYSTEM;
 
-public interface ResourcesApi {
+public interface ToolsApi {
     String PATH_RESOURCES = "resources";
     String FILTER_SYSTEM = "filter[system]";
 

@@ -37,7 +37,7 @@ public class GodToolsApi {
     @NonNull
     public final LanguagesApi languages;
     @NonNull
-    public final ResourcesApi resources;
+    public final ToolsApi tools;
     @NonNull
     public final GrowthSpacesApi growthSpaces;
     @NonNull
@@ -52,7 +52,7 @@ public class GodToolsApi {
                 .callFactory(okhttp)
                 .build();
         languages = retrofit.create(LanguagesApi.class);
-        resources = retrofit.create(ResourcesApi.class);
+        tools = retrofit.create(ToolsApi.class);
 
         growthSpaces = new Retrofit.Builder()
                 .baseUrl(GROWTH_SPACES_URL)
