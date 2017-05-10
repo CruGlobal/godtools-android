@@ -42,12 +42,12 @@ public class AddResourcesActivity extends BaseActivity implements ToolsFragment.
 
     @Override
     public void onResourceSelect(final long id) {
-        ResourceDetailsActivity.start(this, id);
+        ToolDetailsActivity.start(this, id);
     }
 
     @Override
     public void onResourceInfo(final long id) {
-        ResourceDetailsActivity.start(this, id);
+        ToolDetailsActivity.start(this, id);
     }
 
     /* END lifecycle */

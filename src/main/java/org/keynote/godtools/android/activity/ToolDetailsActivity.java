@@ -14,16 +14,16 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.fragment.ToolDetailsFragment;
 import org.keynote.godtools.android.model.Tool;
 
-import static org.keynote.godtools.android.Constants.EXTRA_RESOURCE;
+import static org.keynote.godtools.android.Constants.EXTRA_TOOL;
 
-public class ResourceDetailsActivity extends BaseActivity {
+public class ToolDetailsActivity extends BaseActivity {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
-    private long mResource = Tool.INVALID_ID;
+    private long mTool = Tool.INVALID_ID;
 
     public static void start(@NonNull final Context context, final long resourceId) {
-        final Intent intent = new Intent(context, ResourceDetailsActivity.class);
-        intent.putExtra(EXTRA_RESOURCE, resourceId);
+        final Intent intent = new Intent(context, ToolDetailsActivity.class);
+        intent.putExtra(EXTRA_TOOL, resourceId);
         context.startActivity(intent);
     }
 
@@ -36,7 +36,7 @@ public class ResourceDetailsActivity extends BaseActivity {
 
         final Intent intent = getIntent();
         if (intent != null) {
-            mResource = intent.getLongExtra(EXTRA_RESOURCE, mResource);
+            mTool = intent.getLongExtra(EXTRA_TOOL, mTool);
         }
     }
 
@@ -66,7 +66,7 @@ public class ResourceDetailsActivity extends BaseActivity {
 
         // update the displayed fragment
         fm.beginTransaction()
-                .replace(R.id.frame, ToolDetailsFragment.newInstance(mResource), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, ToolDetailsFragment.newInstance(mTool), TAG_MAIN_FRAGMENT)
                 .commit();
     }
 }

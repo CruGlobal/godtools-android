@@ -120,7 +120,7 @@
         </activity>
 
         <activity
-            android:name=".activity.ResourceDetailsActivity"
+            android:name=".activity.ToolDetailsActivity"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/Theme.GodTools2.AppBar">
             <meta-data
