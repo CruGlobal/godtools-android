@@ -171,18 +171,6 @@ android {
     }
 }
 
-repositories {
-
-    mavenLocal()
-    jcenter()
-
-    maven { url 'https://maven.fabric.io/public' }
-
-    maven {
-        url "https://oss.sonatype.org/content/repositories/releases"
-    }
-}
-
 apply from: "maven_publish.gradle"
 afterEvaluate { project ->
     artifacts {
@@ -194,6 +182,7 @@ afterEvaluate { project ->
 
 allprojects {
     repositories {
+        mavenLocal()
         jcenter()
         maven {
             name "maven.gcx.org"
@@ -203,5 +192,7 @@ allprojects {
                 password gcxMavenRepositoryPassword
             }
         }
+        maven { url 'https://maven.fabric.io/public' }
+        maven { url "https://oss.sonatype.org/content/repositories/releases" }
     }
 }
