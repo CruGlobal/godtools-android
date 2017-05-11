@@ -15,7 +15,7 @@ import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory;
 import org.keynote.godtools.android.model.Language;
-import org.keynote.godtools.android.model.Resource;
+import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
 
 import java.util.concurrent.TimeUnit;
@@ -37,7 +37,7 @@ public class GodToolsApi {
     @NonNull
     public final LanguagesApi languages;
     @NonNull
-    public final ResourcesApi resources;
+    public final ToolsApi tools;
     @NonNull
     public final GrowthSpacesApi growthSpaces;
     @NonNull
@@ -52,7 +52,7 @@ public class GodToolsApi {
                 .callFactory(okhttp)
                 .build();
         languages = retrofit.create(LanguagesApi.class);
-        resources = retrofit.create(ResourcesApi.class);
+        tools = retrofit.create(ToolsApi.class);
 
         growthSpaces = new Retrofit.Builder()
                 .baseUrl(GROWTH_SPACES_URL)
@@ -101,7 +101,7 @@ public class GodToolsApi {
     private JsonApiConverter jsonApiConverter() {
         return new JsonApiConverter.Builder()
                 .addClasses(Language.class)
-                .addClasses(Resource.class)
+                .addClasses(Tool.class)
                 .addClasses(Translation.class)
                 .addConverters(new LocaleTypeConverter())
                 .build();

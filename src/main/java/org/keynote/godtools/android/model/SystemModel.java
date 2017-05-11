@@ -21,10 +21,10 @@ public class SystemModel extends Base {
 
     @Nullable
     @JsonApiAttribute(name = JSON_RESOURCES)
-    private List<Resource> mResources;
+    private List<Tool> mTools;
 
     @Nullable
-    public List<Resource> getResources() {
-        return mResources;
+    public List<Tool> getTools() {
+        return mTools;
     }
 }

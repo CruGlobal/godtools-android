@@ -18,17 +18,17 @@ import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.adapter.ResourcesAdapter;
-import org.keynote.godtools.android.content.ResourcesCursorLoader;
-import org.keynote.godtools.android.db.Contract.ResourceTable;
-import org.keynote.godtools.android.model.Resource;
-import org.keynote.godtools.android.service.GodToolsResourceManager;
+import org.keynote.godtools.android.content.ToolsCursorLoader;
+import org.keynote.godtools.android.db.Contract.ToolTable;
+import org.keynote.godtools.android.model.Tool;
+import org.keynote.godtools.android.service.GodToolsToolManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class ResourcesFragment extends Fragment implements ResourcesAdapter.Callbacks {
-    private static final String EXTRA_MODE = ResourcesFragment.class.getName() + ".MODE";
+public class ToolsFragment extends Fragment implements ResourcesAdapter.Callbacks {
+    private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
 
     public interface Callbacks {
         void onResourceInfo(long id);
@@ -39,7 +39,7 @@ public class ResourcesFragment extends Fragment implements ResourcesAdapter.Call
     private static final int MODE_ADDED = 1;
     private static final int MODE_AVAILABLE = 2;
 
-    private static final int LOADER_RESOURCES = 101;
+    private static final int LOADER_TOOLS = 101;
 
     private final CursorLoaderCallbacks mCursorLoaderCallbacks = new CursorLoaderCallbacks();
 
@@ -59,7 +59,7 @@ public class ResourcesFragment extends Fragment implements ResourcesAdapter.Call
     private Cursor mResources;
 
     public static Fragment newAddedInstance() {
-        final Fragment fragment = new ResourcesFragment();
+        final Fragment fragment = new ToolsFragment();
         final Bundle args = new Bundle(1);
         args.putInt(EXTRA_MODE, MODE_ADDED);
         fragment.setArguments(args);
@@ -67,7 +67,7 @@ public class ResourcesFragment extends Fragment implements ResourcesAdapter.Call
     }
 
     public static Fragment newAvailableInstance() {
-        final Fragment fragment = new ResourcesFragment();
+        final Fragment fragment = new ToolsFragment();
         final Bundle args = new Bundle();
         args.putInt(EXTRA_MODE, MODE_AVAILABLE);
         fragment.setArguments(args);
@@ -91,7 +91,7 @@ public class ResourcesFragment extends Fragment implements ResourcesAdapter.Call
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container,
                              @Nullable final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_resources, container, false);
+        return inflater.inflate(R.layout.fragment_tools, container, false);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class ResourcesFragment extends Fragment implements ResourcesAdapter.Call
 
     @Override
     public void onResourceAdd(final long id) {
-        GodToolsResourceManager.getInstance(getContext()).addResource(id);
+        GodToolsToolManager.getInstance(getContext()).addTool(id);
     }
 
     @Override
@@ -143,7 +143,7 @@ public class ResourcesFragment extends Fragment implements ResourcesAdapter.Call
     }
 
     private void startLoaders() {
-        getLoaderManager().initLoader(LOADER_RESOURCES, null, mCursorLoaderCallbacks);
+        getLoaderManager().initLoader(LOADER_TOOLS, null, mCursorLoaderCallbacks);
     }
 
     private void setupResourcesList() {
@@ -177,9 +177,9 @@ public class ResourcesFragment extends Fragment implements ResourcesAdapter.Call
         @Override
         public Loader<Cursor> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
-                case LOADER_RESOURCES:
-                    final DaoCursorLoader<Resource> loader = new ResourcesCursorLoader(getContext(), args);
-                    final Expression where = ResourceTable.FIELD_ADDED.eq(mMode == MODE_ADDED);
+                case LOADER_TOOLS:
+                    final DaoCursorLoader<Tool> loader = new ToolsCursorLoader(getContext(), args);
+                    final Expression where = ToolTable.FIELD_ADDED.eq(mMode == MODE_ADDED);
                     loader.setWhere(where);
                     return loader;
                 default:
@@ -190,7 +190,7 @@ public class ResourcesFragment extends Fragment implements ResourcesAdapter.Call
         @Override
         public void onLoadFinished(@NonNull final Loader<Cursor> loader, @Nullable final Cursor cursor) {
             switch (loader.getId()) {
-                case LOADER_RESOURCES:
+                case LOADER_TOOLS:
                     onLoadResources(cursor);
                     break;
             }

@@ -5,22 +5,22 @@ import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.eventbus.content.CachingAsyncTaskEventBusLoader;
 import org.keynote.godtools.android.db.GodToolsDao;
-import org.keynote.godtools.android.model.Resource;
+import org.keynote.godtools.android.model.Tool;
 
-public final class ResourceLoader extends CachingAsyncTaskEventBusLoader<Resource> {
+public final class ToolLoader extends CachingAsyncTaskEventBusLoader<Tool> {
     @NonNull
     private final GodToolsDao mDao;
     private final long mId;
 
-    public ResourceLoader(@NonNull final Context context, final long id) {
+    public ToolLoader(@NonNull final Context context, final long id) {
         super(context);
         mDao = GodToolsDao.getInstance(context);
         mId = id;
-        addEventBusSubscriber(new ResourceEventBusSubscriber(this));
+        addEventBusSubscriber(new ToolEventBusSubscriber(this));
     }
 
     @Override
-    public Resource loadInBackground() {
-        return mDao.find(Resource.class, mId);
+    public Tool loadInBackground() {
+        return mDao.find(Tool.class, mId);
     }
 }

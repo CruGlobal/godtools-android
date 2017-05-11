@@ -20,7 +20,7 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.adapter.LanguagesAdapter.LanguageViewHolder;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.model.Language;
-import org.keynote.godtools.android.service.GodToolsResourceManager;
+import org.keynote.godtools.android.service.GodToolsToolManager;
 
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +43,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
     @NonNull
     final GodToolsDao mDao;
     @NonNull
-    final GodToolsResourceManager mResources;
+    final GodToolsToolManager mTools;
 
     @Nullable
     Callbacks mCallbacks;
@@ -62,7 +62,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
     public LanguagesAdapter(@NonNull final Context context) {
         setHasStableIds(true);
         mDao = GodToolsDao.getInstance(context);
-        mResources = GodToolsResourceManager.getInstance(context);
+        mTools = GodToolsToolManager.getInstance(context);
     }
 
     public void setCallbacks(@Nullable final Callbacks callbacks) {
@@ -197,14 +197,14 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         @UiThread
         @OnClick(R.id.action_add)
         void onAddLanguage() {
-            mResources.addLanguage(mLocale);
+            mTools.addLanguage(mLocale);
         }
 
         @Optional
         @OnClick(R.id.action_remove)
         void onRemoveLanguage() {
             if (!mProtected.contains(mLocale)) {
-                mResources.removeLanguage(mLocale);
+                mTools.removeLanguage(mLocale);
             } else {
                 // TODO: toast: You cannot remove this language from the device
             }

@@ -10,24 +10,24 @@ import com.google.common.util.concurrent.ListenableFuture;
 import org.ccci.gto.android.common.eventbus.task.EventBusDelayedPost;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.Settings;
-import org.keynote.godtools.android.db.Contract;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
+import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.event.LanguageUpdateEvent;
-import org.keynote.godtools.android.event.ResourceUpdateEvent;
+import org.keynote.godtools.android.event.ToolUpdateEvent;
 import org.keynote.godtools.android.model.Language;
-import org.keynote.godtools.android.model.Resource;
+import org.keynote.godtools.android.model.Tool;
 
 import java.util.Locale;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
-public final class GodToolsResourceManager {
+public final class GodToolsToolManager {
     private final Context mContext;
     private final GodToolsDao mDao;
     private final Settings mPrefs;
 
-    private GodToolsResourceManager(@NonNull final Context context) {
+    private GodToolsToolManager(@NonNull final Context context) {
         mContext = context;
         mDao = GodToolsDao.getInstance(mContext);
         mPrefs = Settings.getInstance(mContext);
@@ -35,12 +35,12 @@ public final class GodToolsResourceManager {
 
     @Nullable
     @SuppressLint("StaticFieldLeak")
-    private static GodToolsResourceManager sInstance;
+    private static GodToolsToolManager sInstance;
     @NonNull
-    public static GodToolsResourceManager getInstance(@NonNull final Context context) {
-        synchronized (GodToolsResourceManager.class) {
+    public static GodToolsToolManager getInstance(@NonNull final Context context) {
+        synchronized (GodToolsToolManager.class) {
             if (sInstance == null) {
-                sInstance = new GodToolsResourceManager(context.getApplicationContext());
+                sInstance = new GodToolsToolManager(context.getApplicationContext());
             }
         }
 
@@ -75,19 +75,19 @@ public final class GodToolsResourceManager {
         }
     }
 
-    public void addResource(final long id) {
-        final Resource resource = new Resource();
-        resource.setId(id);
-        resource.setAdded(true);
-        final ListenableFuture<Integer> update = mDao.updateAsync(resource, Contract.ResourceTable.COLUMN_ADDED);
-        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ResourceUpdateEvent()), directExecutor());
+    public void addTool(final long id) {
+        final Tool tool = new Tool();
+        tool.setId(id);
+        tool.setAdded(true);
+        final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
+        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
     }
 
-    public void removeResource(final long id) {
-        final Resource resource = new Resource();
-        resource.setId(id);
-        resource.setAdded(false);
-        final ListenableFuture<Integer> update = mDao.updateAsync(resource, Contract.ResourceTable.COLUMN_ADDED);
-        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ResourceUpdateEvent()), directExecutor());
+    public void removeTool(final long id) {
+        final Tool tool = new Tool();
+        tool.setId(id);
+        tool.setAdded(false);
+        final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
+        update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
     }
 }

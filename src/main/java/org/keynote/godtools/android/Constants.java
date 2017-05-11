@@ -9,7 +9,7 @@ public final class Constants {
     public static final String ARG_MODAL_ID = "modal_id";
 
     // common extras
-    public static final String EXTRA_RESOURCE = "resource";
+    public static final String EXTRA_TOOL = "tool";
 
     // SharedPreferences for this app
     public static final String PREFS_SETTINGS = "GodTools";

@@ -18,14 +18,14 @@ import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
 import org.keynote.godtools.android.db.Contract.FollowupTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
-import org.keynote.godtools.android.db.Contract.ResourceTable;
+import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 
 import io.fabric.sdk.android.Fabric;
 
 public final class GodToolsDatabase extends WalSQLiteOpenHelper {
     private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 18;
+    private static final int DATABASE_VERSION = 19;
 
     /*
      * Version history
@@ -51,6 +51,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
      * 16: 2017-05-04
      * 17: 2017-05-05
      * 18: 2017-05-08
+     * 19: 2017-05-10
      */
 
     @NonNull
@@ -85,7 +86,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(GSSubscriberTable.SQL_CREATE_TABLE);
             db.execSQL(FollowupTable.SQL_CREATE_TABLE);
             db.execSQL(LanguageTable.SQL_CREATE_TABLE);
-            db.execSQL(ResourceTable.SQL_CREATE_TABLE);
+            db.execSQL(ToolTable.SQL_CREATE_TABLE);
             db.execSQL(TranslationTable.SQL_CREATE_TABLE);
 
             db.setTransactionSuccessful();
@@ -154,10 +155,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
                     case 7:
                     case 8:
                     case 9:
-                        break;
                     case 10:
-                        db.execSQL(ResourceTable.SQL_V10_CREATE_TABLE);
-                        break;
                     case 11:
                         break;
                     case 12:
@@ -166,22 +164,20 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
                         break;
                     case 13:
                     case 14:
-                        break;
                     case 15:
-                        db.execSQL(ResourceTable.SQL_V15_ALTER_SHARES);
-                        break;
                     case 16:
+                    case 17:
+                    case 18:
+                        break;
+                    case 19:
+                        db.execSQL(ToolTable.SQL_V19_DROP_LEGACY);
+                        db.execSQL(ToolTable.SQL_CREATE_TABLE);
+
                         db.execSQL(TranslationTable.SQL_DELETE_TABLE);
                         db.execSQL(TranslationTable.SQL_CREATE_TABLE);
 
                         db.execSQL(LastSyncTable.SQL_DELETE_TABLE);
                         db.execSQL(LastSyncTable.SQL_CREATE_TABLE);
-                        break;
-                    case 17:
-                        db.execSQL(ResourceTable.SQL_V17_ALTER_DESCRIPTION);
-                        break;
-                    case 18:
-                        db.execSQL(ResourceTable.SQL_V18_ALTER_COPYRIGHT);
                         break;
                     default:
                         // unrecognized version
@@ -222,7 +218,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(GSSubscriberTable.SQL_DELETE_TABLE);
             db.execSQL(FollowupTable.SQL_DELETE_TABLE);
             db.execSQL(TranslationTable.SQL_DELETE_TABLE);
-            db.execSQL(ResourceTable.SQL_DELETE_TABLE);
+            db.execSQL(ToolTable.SQL_DELETE_TABLE);
             db.execSQL(LanguageTable.SQL_DELETE_TABLE);
             db.execSQL(LastSyncTable.SQL_DELETE_TABLE);
 

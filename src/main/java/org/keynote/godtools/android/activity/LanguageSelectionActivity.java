@@ -12,7 +12,7 @@ import android.support.v7.app.ActionBar;
 
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.fragment.LanguagesFragment;
-import org.keynote.godtools.android.service.GodToolsResourceManager;
+import org.keynote.godtools.android.service.GodToolsToolManager;
 
 import java.util.Locale;
 
@@ -58,7 +58,7 @@ public class LanguageSelectionActivity extends BaseActivity implements Languages
 
     @Override
     public void onLocaleSelected(@Nullable final Locale locale) {
-        GodToolsResourceManager.getInstance(this).addLanguage(locale);
+        GodToolsToolManager.getInstance(this).addLanguage(locale);
         storeLocale(locale);
         finish();
     }

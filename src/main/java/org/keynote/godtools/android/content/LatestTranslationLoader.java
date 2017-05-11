@@ -20,15 +20,15 @@ public final class LatestTranslationLoader extends CachingAsyncTaskEventBusLoade
 
     @NonNull
     private final GodToolsDao mDao;
-    private final long mResourceId;
+    private final long mToolId;
     @NonNull
     private Locale mLocale;
 
-    public LatestTranslationLoader(@NonNull final Context context, final long resourceId,
+    public LatestTranslationLoader(@NonNull final Context context, final long toolId,
                                    @NonNull final Locale locale) {
         super(context);
         mDao = GodToolsDao.getInstance(context);
-        mResourceId = resourceId;
+        mToolId = toolId;
         mLocale = locale;
         addEventBusSubscriber(new TranslationEventBusSubscriber(this));
     }
@@ -42,7 +42,7 @@ public final class LatestTranslationLoader extends CachingAsyncTaskEventBusLoade
     @Override
     public Translation loadInBackground() {
         final List<Translation> translations =
-                mDao.get(QUERY.where(TranslationTable.SQL_WHERE_RESOURCE_LANGUAGE.args(mResourceId, mLocale)));
+                mDao.get(QUERY.where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(mToolId, mLocale)));
         return translations.isEmpty() ? null : translations.get(0);
     }
 }

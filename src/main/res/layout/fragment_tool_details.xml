@@ -26,7 +26,7 @@
 
             <ProgressBar
                 android:id="@+id/download_progress"
-                style="@style/Widget.GodTools2.Resources.Download.ProgressBar"
+                style="@style/Widget.GodTools2.Tools.Download.ProgressBar"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_alignBottom="@id/banner"
@@ -38,21 +38,21 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/title"
-            style="@style/TextAppearance.GodTools2.Resources.Details.Title"
+            style="@style/TextAppearance.GodTools2.Tools.Details.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/resources_details_margin_horiz"
-            android:layout_marginRight="@dimen/resources_details_margin_horiz"
+            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
+            android:layout_marginRight="@dimen/tools_details_margin_horiz"
             android:layout_marginTop="40dp"
             tools:text="Knowing God Personally" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/shares"
-            style="@style/TextAppearance.GodTools2.Resources.Details.Shares"
+            style="@style/TextAppearance.GodTools2.Tools.Details.Shares"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/resources_details_margin_horiz"
-            android:layout_marginRight="@dimen/resources_details_margin_horiz"
+            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
+            android:layout_marginRight="@dimen/tools_details_margin_horiz"
             android:layout_marginTop="10dp"
             tools:text="45,876 Views" />
 
@@ -63,10 +63,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="32dp"
-            android:layout_marginLeft="@dimen/resources_details_margin_horiz"
-            android:layout_marginRight="@dimen/resources_details_margin_horiz"
+            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
+            android:layout_marginRight="@dimen/tools_details_margin_horiz"
             android:layout_marginTop="16dp"
-            android:text="@string/action_resources_download" />
+            android:text="@string/action_tools_download" />
 
         <android.support.v7.widget.AppCompatButtonImpl
             android:id="@+id/action_remove"
@@ -75,49 +75,49 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="32dp"
-            android:layout_marginLeft="@dimen/resources_details_margin_horiz"
-            android:layout_marginRight="@dimen/resources_details_margin_horiz"
+            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
+            android:layout_marginRight="@dimen/tools_details_margin_horiz"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:text="@string/action_resources_remove"
+            android:text="@string/action_tools_remove"
             tools:visibility="gone" />
 
         <android.support.v7.widget.AppCompatTextView
-            style="@style/TextAppearance.GodTools2.Resources.Details.Subhead"
+            style="@style/TextAppearance.GodTools2.Tools.Details.Subhead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/resources_details_margin_horiz"
-            android:layout_marginRight="@dimen/resources_details_margin_horiz"
-            android:text="@string/label_resources_about" />
+            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
+            android:layout_marginRight="@dimen/tools_details_margin_horiz"
+            android:text="@string/label_tools_about" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/description"
-            style="@style/TextAppearance.GodTools2.Resources.Details.Content"
+            style="@style/TextAppearance.GodTools2.Tools.Details.Content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:layout_marginLeft="@dimen/resources_details_margin_horiz"
-            android:layout_marginRight="@dimen/resources_details_margin_horiz"
+            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
+            android:layout_marginRight="@dimen/tools_details_margin_horiz"
             android:layout_marginTop="8dp"
             tools:text="Chili can be enameled with bitter sausages, also try soaking the sauce with ice water.  To the diced avocado add ground beef, strudel, ricotta and tender chocolate.  Try toasting cucumber ricotta tossed with rice vinegar." />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/languages_header"
-            style="@style/TextAppearance.GodTools2.Resources.Details.Subhead"
+            style="@style/TextAppearance.GodTools2.Tools.Details.Subhead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/resources_details_margin_horiz"
-            android:layout_marginRight="@dimen/resources_details_margin_horiz"
+            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
+            android:layout_marginRight="@dimen/tools_details_margin_horiz"
             tools:text="40 Languages" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/languages"
-            style="@style/TextAppearance.GodTools2.Resources.Details.Content"
+            style="@style/TextAppearance.GodTools2.Tools.Details.Content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:layout_marginLeft="@dimen/resources_details_margin_horiz"
-            android:layout_marginRight="@dimen/resources_details_margin_horiz"
+            android:layout_marginLeft="@dimen/tools_details_margin_horiz"
+            android:layout_marginRight="@dimen/tools_details_margin_horiz"
             android:layout_marginTop="8dp"
             tools:text="English, French, Spanish" />
     </LinearLayout>

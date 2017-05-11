@@ -21,11 +21,11 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
     static final int SYNCTYPE_NONE = 0;
     static final int SYNCTYPE_GROWTHSPACESSUBSCRIBERS = 1;
     static final int SYNCTYPE_LANGUAGES = 2;
-    static final int SYNCTYPE_RESOURCES = 3;
+    static final int SYNCTYPE_TOOLS = 3;
 
     private GrowthSpacesTasks mGrowthSpacesTasks;
     private LanguagesSyncTasks mLanguagesSyncTasks;
-    private ResourceSyncTasks mResourceSyncTasks;
+    private ToolSyncTasks mToolSyncTasks;
 
     public static SyncTask syncLanguages(final Context context, final boolean force) {
         final Intent intent = new Intent(context, GodToolsSyncService.class);
@@ -34,9 +34,9 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
         return new SyncTask(context, intent);
     }
 
-    public static SyncTask syncResources(final Context context, final boolean force) {
+    public static SyncTask syncTools(final Context context, final boolean force) {
         final Intent intent = new Intent(context, GodToolsSyncService.class);
-        intent.putExtra(EXTRA_SYNCTYPE, SYNCTYPE_RESOURCES);
+        intent.putExtra(EXTRA_SYNCTYPE, SYNCTYPE_TOOLS);
         intent.putExtra(SYNC_EXTRAS_MANUAL, force);
         return new SyncTask(context, intent);
     }
@@ -58,7 +58,7 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
         super.onCreate();
         mGrowthSpacesTasks = new GrowthSpacesTasks(this);
         mLanguagesSyncTasks = new LanguagesSyncTasks(this);
-        mResourceSyncTasks = new ResourceSyncTasks(this);
+        mToolSyncTasks = new ToolSyncTasks(this);
     }
 
     @Override
@@ -72,8 +72,8 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
                 case SYNCTYPE_LANGUAGES:
                     mLanguagesSyncTasks.syncLanguages(args);
                     break;
-                case SYNCTYPE_RESOURCES:
-                    mResourceSyncTasks.syncResources(args);
+                case SYNCTYPE_TOOLS:
+                    mToolSyncTasks.syncResources(args);
                     break;
             }
         } catch (final IOException ignored) {

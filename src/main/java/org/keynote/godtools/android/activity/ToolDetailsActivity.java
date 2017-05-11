@@ -8,46 +8,48 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.view.Menu;
+import android.support.v7.app.ActionBar;
 
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.fragment.ResourcesFragment;
+import org.keynote.godtools.android.fragment.ToolDetailsFragment;
+import org.keynote.godtools.android.model.Tool;
 
-public class AddResourcesActivity extends BaseActivity implements ResourcesFragment.Callbacks {
+import static org.keynote.godtools.android.Constants.EXTRA_TOOL;
+
+public class ToolDetailsActivity extends BaseActivity {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
-    public static void start(@NonNull final Context context) {
-        context.startActivity(new Intent(context, AddResourcesActivity.class));
+    private long mTool = Tool.INVALID_ID;
+
+    public static void start(@NonNull final Context context, final long toolId) {
+        final Intent intent = new Intent(context, ToolDetailsActivity.class);
+        intent.putExtra(EXTRA_TOOL, toolId);
+        context.startActivity(intent);
     }
 
     /* BEGIN lifecycle */
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generic_fragment);
+
+        final Intent intent = getIntent();
+        if (intent != null) {
+            mTool = intent.getLongExtra(EXTRA_TOOL, mTool);
+        }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_add_resources, menu);
-        return true;
+    protected void onSetupActionBar(@NonNull final ActionBar actionBar) {
+        super.onSetupActionBar(actionBar);
+        setTitle("");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         loadInitialFragmentIfNeeded();
-    }
-
-    @Override
-    public void onResourceSelect(final long id) {
-        ResourceDetailsActivity.start(this, id);
-    }
-
-    @Override
-    public void onResourceInfo(final long id) {
-        ResourceDetailsActivity.start(this, id);
     }
 
     /* END lifecycle */
@@ -64,7 +66,7 @@ public class AddResourcesActivity extends BaseActivity implements ResourcesFragm
 
         // update the displayed fragment
         fm.beginTransaction()
-                .replace(R.id.frame, ResourcesFragment.newAvailableInstance(), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, ToolDetailsFragment.newInstance(mTool), TAG_MAIN_FRAGMENT)
                 .commit();
     }
 }

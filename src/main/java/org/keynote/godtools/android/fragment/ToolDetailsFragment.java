@@ -19,10 +19,10 @@ import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.content.AvailableLanguagesLoader;
 import org.keynote.godtools.android.content.LatestTranslationLoader;
-import org.keynote.godtools.android.content.ResourceLoader;
-import org.keynote.godtools.android.model.Resource;
+import org.keynote.godtools.android.content.ToolLoader;
+import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
-import org.keynote.godtools.android.service.GodToolsResourceManager;
+import org.keynote.godtools.android.service.GodToolsToolManager;
 import org.keynote.godtools.android.util.ModelUtils;
 
 import java.util.Collections;
@@ -33,16 +33,16 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
 
-import static org.keynote.godtools.android.Constants.EXTRA_RESOURCE;
+import static org.keynote.godtools.android.Constants.EXTRA_TOOL;
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
-public class ResourceDetailsFragment extends BaseFragment {
-    private static final int LOADER_RESOURCE = 101;
+public class ToolDetailsFragment extends BaseFragment {
+    private static final int LOADER_TOOL = 101;
     private static final int LOADER_LATEST_TRANSLATION = 102;
     private static final int LOADER_AVAILABLE_LANGUAGES = 103;
 
     // these properties should be treated as final and only set/modified in onCreate()
-    /*final*/ long mResourceId = Resource.INVALID_ID;
+    /*final*/ long mToolId = Tool.INVALID_ID;
 
     @Nullable
     @BindView(R.id.banner)
@@ -73,16 +73,16 @@ public class ResourceDetailsFragment extends BaseFragment {
     View mActionRemove;
 
     @Nullable
-    private Resource mResource;
+    private Tool mTool;
     @Nullable
     private Translation mLatestTranslation;
     @NonNull
     private List<Locale> mLanguages = Collections.emptyList();
 
     public static Fragment newInstance(final long id) {
-        final ResourceDetailsFragment fragment = new ResourceDetailsFragment();
+        final ToolDetailsFragment fragment = new ToolDetailsFragment();
         final Bundle args = new Bundle(1);
-        args.putLong(EXTRA_RESOURCE, id);
+        args.putLong(EXTRA_TOOL, id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -95,7 +95,7 @@ public class ResourceDetailsFragment extends BaseFragment {
 
         final Bundle args = getArguments();
         if (args != null) {
-            mResourceId = args.getLong(EXTRA_RESOURCE, mResourceId);
+            mToolId = args.getLong(EXTRA_TOOL, mToolId);
         }
 
         startLoaders();
@@ -104,7 +104,7 @@ public class ResourceDetailsFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container,
                              @Nullable final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_resource_details, container, false);
+        return inflater.inflate(R.layout.fragment_tool_details, container, false);
     }
 
     @Override
@@ -124,8 +124,8 @@ public class ResourceDetailsFragment extends BaseFragment {
         updateLatestTranslationLoader();
     }
 
-    void onLoadResource(@Nullable final Resource resource) {
-        mResource = resource;
+    void onLoadTool(@Nullable final Tool tool) {
+        mTool = tool;
         updateViews();
     }
 
@@ -143,16 +143,16 @@ public class ResourceDetailsFragment extends BaseFragment {
 
     private void updateViews() {
         if (mTitle != null) {
-            mTitle.setText(ModelUtils.getTranslationName(mLatestTranslation, mResource));
+            mTitle.setText(ModelUtils.getTranslationName(mLatestTranslation, mTool));
         }
-        bindShares(mShares, mResource);
+        bindShares(mShares, mTool);
         if (mDescription != null) {
             mDescription.setText(mLatestTranslation != null ? mLatestTranslation.getDescription() : "");
         }
         if (mLanguagesHeader != null) {
             final int count = mLanguages.size();
             mLanguagesHeader.setText(mLanguagesHeader.getResources()
-                                             .getQuantityString(R.plurals.label_resources_languages, count, count));
+                                             .getQuantityString(R.plurals.label_tools_languages, count, count));
         }
         if (mLanguagesView != null) {
             mLanguagesView.setVisibility(mLanguages.isEmpty() ? View.GONE : View.VISIBLE);
@@ -164,30 +164,30 @@ public class ResourceDetailsFragment extends BaseFragment {
                                            .orElse(""));
         }
         if (mActionAdd != null) {
-            mActionAdd.setEnabled(mResource != null && !mResource.isAdded());
-            mActionAdd.setVisibility(mResource == null || !mResource.isAdded() ? View.VISIBLE : View.GONE);
+            mActionAdd.setEnabled(mTool != null && !mTool.isAdded());
+            mActionAdd.setVisibility(mTool == null || !mTool.isAdded() ? View.VISIBLE : View.GONE);
         }
         if (mActionRemove != null) {
-            mActionRemove.setEnabled(mResource != null && mResource.isAdded());
-            mActionRemove.setVisibility(mResource == null || mResource.isAdded() ? View.VISIBLE : View.GONE);
+            mActionRemove.setEnabled(mTool != null && mTool.isAdded());
+            mActionRemove.setVisibility(mTool == null || mTool.isAdded() ? View.VISIBLE : View.GONE);
         }
     }
 
     @Optional
     @OnClick(R.id.action_add)
     void addResource() {
-        GodToolsResourceManager.getInstance(getContext()).addResource(mResourceId);
+        GodToolsToolManager.getInstance(getContext()).addTool(mToolId);
     }
 
     @Optional
     @OnClick(R.id.action_remove)
     void removeResource() {
-        GodToolsResourceManager.getInstance(getContext()).removeResource(mResourceId);
+        GodToolsToolManager.getInstance(getContext()).removeTool(mToolId);
     }
 
     private void startLoaders() {
         final LoaderManager lm = getLoaderManager();
-        lm.initLoader(LOADER_RESOURCE, null, new ResourceLoaderCallbacks());
+        lm.initLoader(LOADER_TOOL, null, new ToolLoaderCallbacks());
         lm.initLoader(LOADER_LATEST_TRANSLATION, null, new TranslationLoaderCallbacks());
         lm.initLoader(LOADER_AVAILABLE_LANGUAGES, null, new LocalesLoaderCallbacks());
     }
@@ -199,23 +199,23 @@ public class ResourceDetailsFragment extends BaseFragment {
         }
     }
 
-    class ResourceLoaderCallbacks extends SimpleLoaderCallbacks<Resource> {
+    class ToolLoaderCallbacks extends SimpleLoaderCallbacks<Tool> {
         @Nullable
         @Override
-        public Loader<Resource> onCreateLoader(final int id, @Nullable final Bundle args) {
+        public Loader<Tool> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
-                case LOADER_RESOURCE:
-                    return new ResourceLoader(getContext(), mResourceId);
+                case LOADER_TOOL:
+                    return new ToolLoader(getContext(), mToolId);
                 default:
                     return null;
             }
         }
 
         @Override
-        public void onLoadFinished(@NonNull final Loader<Resource> loader, @Nullable final Resource resource) {
+        public void onLoadFinished(@NonNull final Loader<Tool> loader, @Nullable final Tool tool) {
             switch (loader.getId()) {
-                case LOADER_RESOURCE:
-                    onLoadResource(resource);
+                case LOADER_TOOL:
+                    onLoadTool(tool);
                     break;
             }
         }
@@ -227,7 +227,7 @@ public class ResourceDetailsFragment extends BaseFragment {
         public Loader<Translation> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_LATEST_TRANSLATION:
-                    return new LatestTranslationLoader(getContext(), mResourceId, mPrimaryLanguage);
+                    return new LatestTranslationLoader(getContext(), mToolId, mPrimaryLanguage);
                 default:
                     return null;
             }
@@ -249,7 +249,7 @@ public class ResourceDetailsFragment extends BaseFragment {
         public Loader<List<Locale>> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_AVAILABLE_LANGUAGES:
-                    return new AvailableLanguagesLoader(getContext(), mResourceId);
+                    return new AvailableLanguagesLoader(getContext(), mToolId);
                 default:
                     return null;
             }

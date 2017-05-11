@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tools_card_corner_radius">0dp</dimen>
+    <dimen name="tools_card_elevation">2dp</dimen>
+    <dimen name="tools_card_margin_horiz">14dp</dimen>
+    <dimen name="tools_card_margin_vert">2dp</dimen>
+    <dimen name="tools_details_margin_horiz">56dp</dimen>
+
+    <style name="Widget.GodTools2.Tools.CardView" parent="Widget.GodTools2.CardView">
+        <item name="android:layout_marginBottom">@dimen/tools_card_margin_vert</item>
+        <item name="android:layout_marginLeft">@dimen/tools_card_margin_horiz</item>
+        <item name="android:layout_marginRight">@dimen/tools_card_margin_horiz</item>
+        <item name="android:layout_marginTop">@dimen/tools_card_margin_vert</item>
+        <item name="cardElevation">@dimen/tools_card_elevation</item>
+        <item name="cardMaxElevation">@dimen/tools_card_elevation</item>
+        <item name="cardCornerRadius">@dimen/tools_card_corner_radius</item>
+    </style>
+
+    <style name="Widget.GodTools2.Tools.Download.ProgressBar" parent="Widget.GodTools2.ProgressBar">
+        <item name="android:indeterminate">false</item>
+    </style>
+
+    <style name="Widget.GodTools2.Tools.Details.Title" parent="Base">
+        <item name="android:textAppearance">@style/TextAppearance.GodTools2.Tools.Details.Title</item>
+    </style>
+
+    <style name="Widget.GodTools2.Tools.Details.Shares" parent="Base">
+        <item name="android:textAppearance">@style/TextAppearance.GodTools2.Tools.Details.Shares</item>
+    </style>
+
+    <style name="Widget.GodTools2.Tools.Details.Subhead" parent="Base">
+        <item name="android:textAppearance">@style/TextAppearance.GodTools2.Tools.Details.Subhead</item>
+    </style>
+
+    <style name="Widget.GodTools2.Tools.Details.Content" parent="Base">
+        <item name="android:textAppearance">@style/TextAppearance.GodTools2.Tools.Details.Content</item>
+    </style>
+
+    <style name="TextAppearance.GodTools2.Tools.Details.Title" parent="TextAppearance.GodTools2.Headline">
+        <item name="android:textColor">@color/gray_5A</item>
+    </style>
+
+    <style name="TextAppearance.GodTools2.Tools.Details.Shares" parent="TextAppearance.GodTools2">
+        <item name="android:textColor">@color/gray_5A</item>
+    </style>
+
+    <style name="TextAppearance.GodTools2.Tools.Details.Subhead" parent="TextAppearance.GodTools2.Subhead">
+        <item name="android:textColor">@color/gray_BE</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.GodTools2.Tools.Details.Content" parent="TextAppearance.GodTools2">
+        <item name="android:textColor">@color/gray_5A</item>
+    </style>
+</resources>
