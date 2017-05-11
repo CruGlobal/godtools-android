@@ -6,6 +6,7 @@ import org.ccci.gto.android.common.db.Expression.Field;
 import org.ccci.gto.android.common.db.Table;
 import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.model.Language;
+import org.keynote.godtools.android.model.LocalFile;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
 
@@ -106,6 +107,25 @@ public final class Contract extends BaseContract {
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_TOOL, SQL_COLUMN_LANGUAGE, SQL_COLUMN_VERSION,
                        SQL_COLUMN_NAME, SQL_COLUMN_DESCRIPTION, SQL_COLUMN_PUBLISHED, SQL_COLUMN_DOWNLOADED);
+        static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
+    }
+
+    public static class LocalFileTable implements Base {
+        static final String TABLE_NAME = "files";
+        private static final Table<LocalFile> TABLE = Table.forClass(LocalFile.class);
+
+        static final String COLUMN_NAME = "name";
+
+        private static final Field FIELD_NAME = TABLE.field(COLUMN_NAME);
+
+        static final String[] PROJECTION_ALL = {COLUMN_NAME};
+
+        private static final String SQL_COLUMN_NAME = COLUMN_NAME + " TEXT";
+        private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_NAME);
+
+        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_NAME.eq(bind());
+
+        static final String SQL_CREATE_TABLE = create(TABLE_NAME, SQL_COLUMN_NAME, SQL_PRIMARY_KEY);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
     }
 

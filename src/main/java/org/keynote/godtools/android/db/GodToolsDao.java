@@ -12,11 +12,13 @@ import org.ccci.gto.android.common.db.StreamDao;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.db.Contract.FollowupTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
+import org.keynote.godtools.android.db.Contract.LocalFileTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.model.Base;
 import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.model.Language;
+import org.keynote.godtools.android.model.LocalFile;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
 
@@ -32,6 +34,8 @@ public class GodToolsDao extends DBAdapter implements StreamDao {
                      ToolTable.SQL_WHERE_PRIMARY_KEY);
         registerType(Translation.class, TranslationTable.TABLE_NAME, TranslationTable.PROJECTION_ALL,
                      new TranslationMapper(), TranslationTable.SQL_WHERE_PRIMARY_KEY);
+        registerType(LocalFile.class, LocalFileTable.TABLE_NAME, LocalFileTable.PROJECTION_ALL, new LocalFileMapper(),
+                     LocalFileTable.SQL_WHERE_PRIMARY_KEY);
     }
 
     @Nullable
@@ -53,6 +57,8 @@ public class GodToolsDao extends DBAdapter implements StreamDao {
         if (obj instanceof Followup) {
             final Followup followup = (Followup) obj;
             return getPrimaryKeyWhere(Followup.class, followup.getId(), followup.getContextId());
+        } else if (obj instanceof LocalFile) {
+            return getPrimaryKeyWhere(LocalFile.class, ((LocalFile) obj).getFileName());
         } else if (obj instanceof Language) {
             return getPrimaryKeyWhere(Language.class, ((Language) obj).getCode());
         } else if (obj instanceof Base) {
