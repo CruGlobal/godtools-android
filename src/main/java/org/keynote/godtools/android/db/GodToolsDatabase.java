@@ -20,13 +20,14 @@ import org.keynote.godtools.android.db.Contract.FollowupTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
 import org.keynote.godtools.android.db.Contract.LocalFileTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
+import org.keynote.godtools.android.db.Contract.TranslationFileTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 
 import io.fabric.sdk.android.Fabric;
 
 public final class GodToolsDatabase extends WalSQLiteOpenHelper {
     private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 20;
+    private static final int DATABASE_VERSION = 21;
 
     /*
      * Version history
@@ -54,6 +55,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
      * 18: 2017-05-08
      * 19: 2017-05-10
      * 20: 2017-05-11
+     * 21: 2017-05-11
      */
 
     @NonNull
@@ -91,6 +93,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(ToolTable.SQL_CREATE_TABLE);
             db.execSQL(TranslationTable.SQL_CREATE_TABLE);
             db.execSQL(LocalFileTable.SQL_CREATE_TABLE);
+            db.execSQL(TranslationFileTable.SQL_CREATE_TABLE);
 
             db.setTransactionSuccessful();
         } finally {
@@ -185,6 +188,9 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
                     case 20:
                         db.execSQL(LocalFileTable.SQL_CREATE_TABLE);
                         break;
+                    case 21:
+                        db.execSQL(TranslationFileTable.SQL_CREATE_TABLE);
+                        break;
                     default:
                         // unrecognized version
                         throw new SQLiteException("Unrecognized database version");
@@ -228,6 +234,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(LanguageTable.SQL_DELETE_TABLE);
             db.execSQL(LastSyncTable.SQL_DELETE_TABLE);
             db.execSQL(LocalFileTable.SQL_DELETE_TABLE);
+            db.execSQL(TranslationFileTable.SQL_DELETE_TABLE);
 
             onCreate(db);
 

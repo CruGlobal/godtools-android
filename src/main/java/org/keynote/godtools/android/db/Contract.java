@@ -9,6 +9,7 @@ import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.LocalFile;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
+import org.keynote.godtools.android.model.TranslationFile;
 
 import static org.ccci.gto.android.common.db.Expression.bind;
 
@@ -126,6 +127,29 @@ public final class Contract extends BaseContract {
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_NAME.eq(bind());
 
         static final String SQL_CREATE_TABLE = create(TABLE_NAME, SQL_COLUMN_NAME, SQL_PRIMARY_KEY);
+        static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
+    }
+
+    public static class TranslationFileTable implements Base {
+        static final String TABLE_NAME = "translation_files";
+        private static final Table<TranslationFile> TABLE = Table.forClass(TranslationFile.class);
+
+        static final String COLUMN_TRANSLATION = "translation";
+        static final String COLUMN_FILE = "file";
+
+        private static final Field FIELD_TRANSLATION = TABLE.field(COLUMN_TRANSLATION);
+        private static final Field FIELD_NAME = TABLE.field(COLUMN_FILE);
+
+        static final String[] PROJECTION_ALL = {COLUMN_TRANSLATION, COLUMN_FILE};
+
+        private static final String SQL_COLUMN_TRANSLATION = COLUMN_TRANSLATION + " INTEGER NOT NULL";
+        private static final String SQL_COLUMN_NAME = COLUMN_FILE + " TEXT NOT NULL";
+        private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_TRANSLATION, COLUMN_FILE);
+
+        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_TRANSLATION.eq(bind()).and(FIELD_NAME.eq(bind()));
+
+        static final String SQL_CREATE_TABLE =
+                create(TABLE_NAME, SQL_COLUMN_TRANSLATION, SQL_COLUMN_NAME, SQL_PRIMARY_KEY);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
     }
 

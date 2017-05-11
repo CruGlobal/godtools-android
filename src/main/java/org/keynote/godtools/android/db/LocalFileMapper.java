@@ -34,7 +34,7 @@ final class LocalFileMapper extends AbstractMapper<LocalFile> {
     public LocalFile toObject(@NonNull final Cursor c) {
         final LocalFile file = super.toObject(c);
 
-        file.setFileName(getString(c, COLUMN_NAME, null));
+        file.setFileName(getString(c, COLUMN_NAME, LocalFile.INVALID_FILE_NAME));
 
         return file;
     }
