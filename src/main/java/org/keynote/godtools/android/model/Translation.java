@@ -18,6 +18,7 @@ public class Translation extends Base {
     public static final String JSON_LANGUAGE = "language";
     private static final String JSON_VERSION = "version";
     private static final String JSON_IS_PUBLISHED = "is-published";
+    private static final String JSON_MANIFEST = "manifest-name";
     private static final String JSON_NAME = "translated-name";
     private static final String JSON_DESCRIPTION = "translated-description";
 
@@ -38,6 +39,10 @@ public class Translation extends Base {
     private Language mLanguage;
     @JsonApiAttribute(name = JSON_VERSION)
     private int mVersion = DEFAULT_VERSION;
+
+    @Nullable
+    @JsonApiAttribute(name = JSON_MANIFEST)
+    private String mManifestFileName;
 
     @Nullable
     @JsonApiAttribute(name = JSON_NAME)
@@ -82,6 +87,15 @@ public class Translation extends Base {
 
     public void setVersion(final int version) {
         mVersion = version;
+    }
+
+    @Nullable
+    public String getManifestFileName() {
+        return mManifestFileName;
+    }
+
+    public void setManifestFileName(@Nullable final String name) {
+        mManifestFileName = name;
     }
 
     @Nullable
