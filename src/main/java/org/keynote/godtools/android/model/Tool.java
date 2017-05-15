@@ -19,10 +19,14 @@ public class Tool extends Base {
     private static final String JSON_TOTAL_VIEWS = "total-views";
     private static final String JSON_COPYRIGHT = "attr-copyright";
     public static final String JSON_LATEST_TRANSLATIONS = "latest-translations";
+    public static final String JSON_ATTACHMENTS = "attachments";
 
     @Nullable
     @JsonApiAttribute(name = JSON_LATEST_TRANSLATIONS)
     private List<Translation> mLatestTranslations;
+    @Nullable
+    @JsonApiAttribute(name = JSON_ATTACHMENTS)
+    private List<Attachment> mAttachments;
 
     @Nullable
     @JsonApiAttribute(name = JSON_NAME)
@@ -44,6 +48,11 @@ public class Tool extends Base {
     @Nullable
     public List<Translation> getLatestTranslations() {
         return mLatestTranslations;
+    }
+
+    @Nullable
+    public List<Attachment> getAttachments() {
+        return mAttachments;
     }
 
     @Nullable

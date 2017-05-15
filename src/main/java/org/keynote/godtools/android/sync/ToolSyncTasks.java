@@ -25,8 +25,11 @@ final class ToolSyncTasks extends BaseDataSyncTasks {
     private static final String SYNC_TIME_TOOLS = "last_synced.tools";
     private static final long STALE_DURATION_TOOLS = DAY_IN_MS;
 
+    private static final String INCLUDE_ATTACHMENTS = Tool.JSON_ATTACHMENTS;
     private static final String INCLUDE_LATEST_TRANSLATIONS =
             Tool.JSON_LATEST_TRANSLATIONS + "." + Translation.JSON_LANGUAGE;
+
+    private static final String[] API_GET_INCLUDES = {INCLUDE_ATTACHMENTS, INCLUDE_LATEST_TRANSLATIONS};
 
     ToolSyncTasks(@NonNull final Context context) {
         super(context);
@@ -43,8 +46,8 @@ final class ToolSyncTasks extends BaseDataSyncTasks {
             }
 
             // generate params & includes objects
-            final Includes includes = new Includes(INCLUDE_LATEST_TRANSLATIONS);
-            final JsonApiParams params = new JsonApiParams().include(INCLUDE_LATEST_TRANSLATIONS);
+            final Includes includes = new Includes(API_GET_INCLUDES);
+            final JsonApiParams params = new JsonApiParams().include(API_GET_INCLUDES);
 
             // fetch tools from the API
             // short-circuit if this response is invalid

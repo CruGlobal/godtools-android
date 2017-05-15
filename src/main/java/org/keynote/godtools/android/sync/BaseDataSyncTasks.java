@@ -7,12 +7,15 @@ import android.support.v4.util.LongSparseArray;
 import android.support.v4.util.SimpleArrayMap;
 
 import org.ccci.gto.android.common.jsonapi.util.Includes;
+import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
+import org.keynote.godtools.android.event.AttachmentUpdateEvent;
 import org.keynote.godtools.android.event.LanguageUpdateEvent;
 import org.keynote.godtools.android.event.ToolUpdateEvent;
 import org.keynote.godtools.android.event.TranslationUpdateEvent;
+import org.keynote.godtools.android.model.Attachment;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
@@ -23,6 +26,8 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
     private static final String[] API_FIELDS_LANGUAGE = {LanguageTable.COLUMN_CODE};
     private static final String[] API_FIELDS_TOOL =
             {ToolTable.COLUMN_NAME, ToolTable.COLUMN_DESCRIPTION, ToolTable.COLUMN_SHARES, ToolTable.COLUMN_COPYRIGHT};
+    private static final String[] API_FIELDS_ATTACHMENT =
+            {AttachmentTable.COLUMN_TOOL, AttachmentTable.COLUMN_FILENAME, AttachmentTable.COLUMN_SHA256};
     private static final String[] API_FIELDS_TRANSLATION =
             {TranslationTable.COLUMN_TOOL, TranslationTable.COLUMN_LANGUAGE, TranslationTable.COLUMN_VERSION,
                     TranslationTable.COLUMN_NAME, TranslationTable.COLUMN_DESCRIPTION, TranslationTable.COLUMN_MANIFEST,
@@ -70,6 +75,12 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
                 storeTranslations(events, translations, includes.descendant(Tool.JSON_LATEST_TRANSLATIONS));
             }
         }
+        if (includes.include(Tool.JSON_ATTACHMENTS)) {
+            final List<Attachment> attachments = tool.getAttachments();
+            if (attachments != null) {
+                storeAttachments(events, attachments, includes.descendant(Tool.JSON_ATTACHMENTS));
+            }
+        }
     }
 
     private void storeTranslations(@NonNull final SimpleArrayMap<Class<?>, Object> events,
@@ -90,5 +101,18 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
                 storeLanguage(events, language);
             }
         }
+    }
+
+    private void storeAttachments(@NonNull final SimpleArrayMap<Class<?>, Object> events,
+                                  @NonNull final List<Attachment> attachments, @NonNull final Includes includes) {
+        for (final Attachment attachment : attachments) {
+            storeAttachment(events, attachment, includes);
+        }
+    }
+
+    private void storeAttachment(@NonNull final SimpleArrayMap<Class<?>, Object> events,
+                                 @NonNull final Attachment att, @NonNull final Includes includes) {
+        mDao.updateOrInsert(att, API_FIELDS_ATTACHMENT);
+        coalesceEvent(events, new AttachmentUpdateEvent());
     }
 }
