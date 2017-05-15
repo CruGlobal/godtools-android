@@ -7,6 +7,7 @@ import com.newrelic.agent.android.NewRelic;
 
 import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.RenderAppConfig;
+import org.keynote.godtools.android.service.GodToolsToolManager;
 import org.keynote.godtools.renderer.crureader.BaseAppConfig;
 import org.keynote.godtools.renderer.crureader.RenderApp;
 
@@ -23,6 +24,9 @@ public class SnuffyApplication extends RenderApp {
         // Enable crash reporting
         Fabric.with(this, new Crashlytics());
         NewRelic.withApplicationToken(BuildConfig.NEW_RELIC_API_KEY).start(this);
+
+        // Initialize tool manager
+        GodToolsToolManager.getInstance(this);
     }
 
     @Override
