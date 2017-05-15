@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.util.LongSparseArray;
 import android.support.v4.util.SimpleArrayMap;
 
+import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.jsonapi.util.Includes;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
@@ -52,13 +53,16 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
             storeTool(events, tool, includes);
         }
 
-        // prune any existing resources that weren't synced and aren't already added to the device
+        // prune any existing tools that weren't synced and aren't already added to the device
         if (existing != null) {
             for (int i = 0; i < existing.size(); i++) {
                 final Tool tool = existing.valueAt(i);
                 if (!tool.isAdded()) {
                     mDao.delete(tool);
                     coalesceEvent(events, new ToolUpdateEvent());
+
+                    // delete any attachments for this tool
+                    mDao.delete(Attachment.class, AttachmentTable.FIELD_TOOL.eq(tool.getId()));
                 }
             }
         }
@@ -79,7 +83,9 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
         if (includes.include(Tool.JSON_ATTACHMENTS)) {
             final List<Attachment> attachments = tool.getAttachments();
             if (attachments != null) {
-                storeAttachments(events, attachments, includes.descendant(Tool.JSON_ATTACHMENTS));
+                final LongSparseArray<Attachment> existing = index(mDao.get(
+                        Query.select(Attachment.class).where(AttachmentTable.FIELD_TOOL.eq(tool.getId()))));
+                storeAttachments(events, attachments, existing, includes.descendant(Tool.JSON_ATTACHMENTS));
             }
         }
     }
@@ -105,15 +111,29 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
     }
 
     private void storeAttachments(@NonNull final SimpleArrayMap<Class<?>, Object> events,
-                                  @NonNull final List<Attachment> attachments, @NonNull final Includes includes) {
+                                  @NonNull final List<Attachment> attachments,
+                                  @Nullable final LongSparseArray<Attachment> existing,
+                                  @NonNull final Includes includes) {
         for (final Attachment attachment : attachments) {
+            if (existing != null) {
+                existing.remove(attachment.getId());
+            }
             storeAttachment(events, attachment, includes);
+        }
+
+        // prune any existing attachments that weren't synced
+        if (existing != null) {
+            for (int i = 0; i < existing.size(); i++) {
+                final Attachment attachment = existing.valueAt(i);
+                mDao.delete(attachment);
+                coalesceEvent(events, new AttachmentUpdateEvent());
+            }
         }
     }
 
     private void storeAttachment(@NonNull final SimpleArrayMap<Class<?>, Object> events,
-                                 @NonNull final Attachment att, @NonNull final Includes includes) {
-        mDao.updateOrInsert(att, API_FIELDS_ATTACHMENT);
+                                 @NonNull final Attachment attachment, @NonNull final Includes includes) {
+        mDao.updateOrInsert(attachment, API_FIELDS_ATTACHMENT);
         coalesceEvent(events, new AttachmentUpdateEvent());
     }
 }
