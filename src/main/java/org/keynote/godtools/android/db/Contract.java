@@ -5,6 +5,7 @@ import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Expression.Field;
 import org.ccci.gto.android.common.db.Join;
 import org.ccci.gto.android.common.db.Table;
+import org.keynote.godtools.android.model.Attachment;
 import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.LocalFile;
@@ -18,6 +19,12 @@ public final class Contract extends BaseContract {
     public abstract static class BaseTable implements Base {
         public static final String COLUMN_ID = COLUMN_ROWID;
         static final String SQL_COLUMN_ID = SQL_COLUMN_ROWID;
+    }
+
+    @SuppressWarnings("checkstyle:InterfaceIsType")
+    interface ToolId {
+        String COLUMN_TOOL = "tool";
+        String SQL_COLUMN_TOOL = COLUMN_TOOL + " INTEGER";
     }
 
     public static class LanguageTable extends BaseTable {
@@ -76,11 +83,10 @@ public final class Contract extends BaseContract {
         static final String SQL_V19_DROP_LEGACY = drop("resources");
     }
 
-    public static class TranslationTable extends BaseTable {
+    public static class TranslationTable extends BaseTable implements ToolId {
         static final String TABLE_NAME = "translations";
         private static final Table<Translation> TABLE = Table.forClass(Translation.class);
 
-        public static final String COLUMN_TOOL = "tool";
         public static final String COLUMN_LANGUAGE = "language";
         public static final String COLUMN_VERSION = "version";
         public static final String COLUMN_NAME = "name";
@@ -99,7 +105,6 @@ public final class Contract extends BaseContract {
                 {COLUMN_ID, COLUMN_TOOL, COLUMN_LANGUAGE, COLUMN_VERSION, COLUMN_NAME, COLUMN_DESCRIPTION,
                         COLUMN_MANIFEST, COLUMN_PUBLISHED, COLUMN_DOWNLOADED};
 
-        private static final String SQL_COLUMN_TOOL = COLUMN_TOOL + " INTEGER";
         private static final String SQL_COLUMN_LANGUAGE = COLUMN_LANGUAGE + " TEXT NOT NULL";
         private static final String SQL_COLUMN_VERSION = COLUMN_VERSION + " INTEGER";
         private static final String SQL_COLUMN_NAME = COLUMN_NAME + " TEXT";
@@ -169,6 +174,33 @@ public final class Contract extends BaseContract {
 
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_TRANSLATION, SQL_COLUMN_NAME, SQL_PRIMARY_KEY);
+        static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
+    }
+
+    public static class AttachmentTable extends BaseTable implements ToolId {
+        static final String TABLE_NAME = "attachments";
+        private static final Table<Attachment> TABLE = Table.forClass(Attachment.class);
+
+        public static final String COLUMN_FILENAME = "filename";
+        public static final String COLUMN_SHA256 = "sha256";
+        static final String COLUMN_LOCALFILENAME = "local_filename";
+        static final String COLUMN_DOWNLOADED = "downloaded";
+
+        private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
+
+        static final String[] PROJECTION_ALL =
+                {COLUMN_ID, COLUMN_TOOL, COLUMN_FILENAME, COLUMN_SHA256, COLUMN_LOCALFILENAME, COLUMN_DOWNLOADED};
+
+        private static final String SQL_COLUMN_FILENAME = COLUMN_FILENAME + " TEXT";
+        private static final String SQL_COLUMN_SHA256 = COLUMN_SHA256 + " TEXT";
+        private static final String SQL_COLUMN_LOCALFILENAME = COLUMN_LOCALFILENAME + " TEXT";
+        private static final String SQL_COLUMN_DOWNLOADED = COLUMN_DOWNLOADED + " INTEGER";
+
+        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
+
+        static final String SQL_CREATE_TABLE =
+                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_TOOL, SQL_COLUMN_FILENAME, SQL_COLUMN_SHA256,
+                       SQL_COLUMN_LOCALFILENAME, SQL_COLUMN_DOWNLOADED);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
     }
 

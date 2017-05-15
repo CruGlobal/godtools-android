@@ -16,6 +16,7 @@ import org.ccci.gto.android.common.db.WalSQLiteOpenHelper;
 import org.keynote.godtools.android.dao.DBContract.GSSubscriberTable;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
+import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.FollowupTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
 import org.keynote.godtools.android.db.Contract.LocalFileTable;
@@ -27,7 +28,7 @@ import io.fabric.sdk.android.Fabric;
 
 public final class GodToolsDatabase extends WalSQLiteOpenHelper {
     private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 22;
+    private static final int DATABASE_VERSION = 23;
 
     /*
      * Version history
@@ -57,6 +58,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
      * 20: 2017-05-11
      * 21: 2017-05-11
      * 22: 2017-05-15
+     * 23: 2017-05-15
      */
 
     @NonNull
@@ -95,6 +97,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(TranslationTable.SQL_CREATE_TABLE);
             db.execSQL(LocalFileTable.SQL_CREATE_TABLE);
             db.execSQL(TranslationFileTable.SQL_CREATE_TABLE);
+            db.execSQL(AttachmentTable.SQL_CREATE_TABLE);
 
             db.setTransactionSuccessful();
         } finally {
@@ -195,6 +198,9 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
                     case 22:
                         db.execSQL(TranslationTable.SQL_V22_ALTER_MANIFEST);
                         break;
+                    case 23:
+                        db.execSQL(AttachmentTable.SQL_CREATE_TABLE);
+                        break;
                     default:
                         // unrecognized version
                         throw new SQLiteException("Unrecognized database version");
@@ -239,6 +245,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(LastSyncTable.SQL_DELETE_TABLE);
             db.execSQL(LocalFileTable.SQL_DELETE_TABLE);
             db.execSQL(TranslationFileTable.SQL_DELETE_TABLE);
+            db.execSQL(AttachmentTable.SQL_DELETE_TABLE);
 
             onCreate(db);
 
