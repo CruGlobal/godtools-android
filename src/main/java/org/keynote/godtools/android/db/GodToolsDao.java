@@ -12,13 +12,17 @@ import org.ccci.gto.android.common.db.StreamDao;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.db.Contract.FollowupTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
+import org.keynote.godtools.android.db.Contract.LocalFileTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
+import org.keynote.godtools.android.db.Contract.TranslationFileTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.model.Base;
 import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.model.Language;
+import org.keynote.godtools.android.model.LocalFile;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
+import org.keynote.godtools.android.model.TranslationFile;
 
 public class GodToolsDao extends DBAdapter implements StreamDao {
     private GodToolsDao(@NonNull final Context context) {
@@ -32,6 +36,10 @@ public class GodToolsDao extends DBAdapter implements StreamDao {
                      ToolTable.SQL_WHERE_PRIMARY_KEY);
         registerType(Translation.class, TranslationTable.TABLE_NAME, TranslationTable.PROJECTION_ALL,
                      new TranslationMapper(), TranslationTable.SQL_WHERE_PRIMARY_KEY);
+        registerType(LocalFile.class, LocalFileTable.TABLE_NAME, LocalFileTable.PROJECTION_ALL, new LocalFileMapper(),
+                     LocalFileTable.SQL_WHERE_PRIMARY_KEY);
+        registerType(TranslationFile.class, TranslationFileTable.TABLE_NAME, TranslationFileTable.PROJECTION_ALL,
+                     new TranslationFileMapper(), TranslationFileTable.SQL_WHERE_PRIMARY_KEY);
     }
 
     @Nullable
@@ -53,6 +61,11 @@ public class GodToolsDao extends DBAdapter implements StreamDao {
         if (obj instanceof Followup) {
             final Followup followup = (Followup) obj;
             return getPrimaryKeyWhere(Followup.class, followup.getId(), followup.getContextId());
+        } else if (obj instanceof LocalFile) {
+            return getPrimaryKeyWhere(LocalFile.class, ((LocalFile) obj).getFileName());
+        } else if (obj instanceof TranslationFile) {
+            final TranslationFile file = (TranslationFile) obj;
+            return getPrimaryKeyWhere(TranslationFile.class, file.getTranslationId(), file.getFileName());
         } else if (obj instanceof Language) {
             return getPrimaryKeyWhere(Language.class, ((Language) obj).getCode());
         } else if (obj instanceof Base) {

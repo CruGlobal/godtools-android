@@ -3,11 +3,14 @@ package org.keynote.godtools.android.db;
 import org.ccci.gto.android.common.db.BaseContract;
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Expression.Field;
+import org.ccci.gto.android.common.db.Join;
 import org.ccci.gto.android.common.db.Table;
 import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.model.Language;
+import org.keynote.godtools.android.model.LocalFile;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
+import org.keynote.godtools.android.model.TranslationFile;
 
 import static org.ccci.gto.android.common.db.Expression.bind;
 
@@ -19,12 +22,13 @@ public final class Contract extends BaseContract {
 
     public static class LanguageTable extends BaseTable {
         static final String TABLE_NAME = "languages";
-        private static final Table<Language> TABLE = Table.forClass(Language.class);
+        static final Table<Language> TABLE = Table.forClass(Language.class);
 
         public static final String COLUMN_CODE = "code";
         public static final String COLUMN_ADDED = "added";
 
         public static final Field FIELD_CODE = TABLE.field(COLUMN_CODE);
+        public static final Field FIELD_ADDED = TABLE.field(COLUMN_ADDED);
 
         static final String[] PROJECTION_ALL = {COLUMN_ID, COLUMN_CODE, COLUMN_ADDED};
 
@@ -41,7 +45,7 @@ public final class Contract extends BaseContract {
 
     public static class ToolTable extends BaseTable {
         static final String TABLE_NAME = "tools";
-        private static final Table<Tool> TABLE = Table.forClass(Tool.class);
+        static final Table<Tool> TABLE = Table.forClass(Tool.class);
 
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";
@@ -49,7 +53,7 @@ public final class Contract extends BaseContract {
         public static final String COLUMN_COPYRIGHT = "copyright";
         public static final String COLUMN_ADDED = "added";
 
-        private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
+        static final Field FIELD_ID = TABLE.field(COLUMN_ID);
         public static final Field FIELD_ADDED = TABLE.field(COLUMN_ADDED);
 
         static final String[] PROJECTION_ALL =
@@ -82,11 +86,13 @@ public final class Contract extends BaseContract {
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";
         public static final String COLUMN_PUBLISHED = "published";
-        static final String COLUMN_DOWNLOADED = "downloaded";
+        public static final String COLUMN_DOWNLOADED = "downloaded";
 
         private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
         public static final Field FIELD_TOOL = TABLE.field(COLUMN_TOOL);
         private static final Field FIELD_LANGUAGE = TABLE.field(COLUMN_LANGUAGE);
+        private static final Field FIELD_PUBLISHED = TABLE.field(COLUMN_PUBLISHED);
+        public static final Field FIELD_DOWNLOADED = TABLE.field(COLUMN_DOWNLOADED);
 
         static final String[] PROJECTION_ALL =
                 {COLUMN_ID, COLUMN_TOOL, COLUMN_LANGUAGE, COLUMN_VERSION, COLUMN_NAME, COLUMN_DESCRIPTION,
@@ -100,12 +106,60 @@ public final class Contract extends BaseContract {
         private static final String SQL_COLUMN_PUBLISHED = COLUMN_PUBLISHED + " INTEGER";
         private static final String SQL_COLUMN_DOWNLOADED = COLUMN_DOWNLOADED + " INTEGER";
 
+        public static final Join<Translation, Language> SQL_JOIN_LANGUAGE =
+                Join.create(TABLE, LanguageTable.TABLE).on(FIELD_LANGUAGE.eq(LanguageTable.FIELD_CODE));
+        public static final Join<Translation, Tool> SQL_JOIN_TOOL =
+                Join.create(TABLE, ToolTable.TABLE).on(FIELD_TOOL.eq(ToolTable.FIELD_ID));
+
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
         public static final Expression SQL_WHERE_TOOL_LANGUAGE = FIELD_TOOL.eq(bind()).and(FIELD_LANGUAGE.eq(bind()));
+        public static final Expression SQL_WHERE_PUBLISHED = FIELD_PUBLISHED.eq(true);
 
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_TOOL, SQL_COLUMN_LANGUAGE, SQL_COLUMN_VERSION,
                        SQL_COLUMN_NAME, SQL_COLUMN_DESCRIPTION, SQL_COLUMN_PUBLISHED, SQL_COLUMN_DOWNLOADED);
+        static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
+    }
+
+    public static class LocalFileTable implements Base {
+        static final String TABLE_NAME = "files";
+        private static final Table<LocalFile> TABLE = Table.forClass(LocalFile.class);
+
+        static final String COLUMN_NAME = "name";
+
+        private static final Field FIELD_NAME = TABLE.field(COLUMN_NAME);
+
+        static final String[] PROJECTION_ALL = {COLUMN_NAME};
+
+        private static final String SQL_COLUMN_NAME = COLUMN_NAME + " TEXT";
+        private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_NAME);
+
+        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_NAME.eq(bind());
+
+        static final String SQL_CREATE_TABLE = create(TABLE_NAME, SQL_COLUMN_NAME, SQL_PRIMARY_KEY);
+        static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
+    }
+
+    public static class TranslationFileTable implements Base {
+        static final String TABLE_NAME = "translation_files";
+        private static final Table<TranslationFile> TABLE = Table.forClass(TranslationFile.class);
+
+        static final String COLUMN_TRANSLATION = "translation";
+        static final String COLUMN_FILE = "file";
+
+        private static final Field FIELD_TRANSLATION = TABLE.field(COLUMN_TRANSLATION);
+        private static final Field FIELD_NAME = TABLE.field(COLUMN_FILE);
+
+        static final String[] PROJECTION_ALL = {COLUMN_TRANSLATION, COLUMN_FILE};
+
+        private static final String SQL_COLUMN_TRANSLATION = COLUMN_TRANSLATION + " INTEGER NOT NULL";
+        private static final String SQL_COLUMN_NAME = COLUMN_FILE + " TEXT NOT NULL";
+        private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_TRANSLATION, COLUMN_FILE);
+
+        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_TRANSLATION.eq(bind()).and(FIELD_NAME.eq(bind()));
+
+        static final String SQL_CREATE_TABLE =
+                create(TABLE_NAME, SQL_COLUMN_TRANSLATION, SQL_COLUMN_NAME, SQL_PRIMARY_KEY);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
     }
 
