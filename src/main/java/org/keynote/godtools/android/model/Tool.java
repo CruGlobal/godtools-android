@@ -17,12 +17,17 @@ public class Tool extends Base {
     private static final String JSON_ABBREVIATION = "abbreviation";
     private static final String JSON_DESCRIPTION = "description";
     private static final String JSON_TOTAL_VIEWS = "total-views";
+    private static final String JSON_BANNER = "attr-banner";
     private static final String JSON_COPYRIGHT = "attr-copyright";
     public static final String JSON_LATEST_TRANSLATIONS = "latest-translations";
+    public static final String JSON_ATTACHMENTS = "attachments";
 
     @Nullable
     @JsonApiAttribute(name = JSON_LATEST_TRANSLATIONS)
     private List<Translation> mLatestTranslations;
+    @Nullable
+    @JsonApiAttribute(name = JSON_ATTACHMENTS)
+    private List<Attachment> mAttachments;
 
     @Nullable
     @JsonApiAttribute(name = JSON_NAME)
@@ -34,6 +39,8 @@ public class Tool extends Base {
     @JsonApiAttribute(name = JSON_TOTAL_VIEWS)
     private int mShares = 0;
 
+    @JsonApiAttribute(name = JSON_BANNER)
+    private long mBannerId = Attachment.INVALID_ID;
     @Nullable
     @JsonApiAttribute(name = JSON_COPYRIGHT)
     private String mCopyright;
@@ -44,6 +51,11 @@ public class Tool extends Base {
     @Nullable
     public List<Translation> getLatestTranslations() {
         return mLatestTranslations;
+    }
+
+    @Nullable
+    public List<Attachment> getAttachments() {
+        return mAttachments;
     }
 
     @Nullable
@@ -70,6 +82,14 @@ public class Tool extends Base {
 
     public void setShares(final int shares) {
         mShares = shares;
+    }
+
+    public long getBannerId() {
+        return mBannerId;
+    }
+
+    public void setBannerId(final long attachmentId) {
+        mBannerId = attachmentId;
     }
 
     @Nullable

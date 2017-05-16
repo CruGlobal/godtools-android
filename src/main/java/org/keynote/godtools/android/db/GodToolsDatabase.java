@@ -16,6 +16,7 @@ import org.ccci.gto.android.common.db.WalSQLiteOpenHelper;
 import org.keynote.godtools.android.dao.DBContract.GSSubscriberTable;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
+import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.FollowupTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
 import org.keynote.godtools.android.db.Contract.LocalFileTable;
@@ -27,7 +28,7 @@ import io.fabric.sdk.android.Fabric;
 
 public final class GodToolsDatabase extends WalSQLiteOpenHelper {
     private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 21;
+    private static final int DATABASE_VERSION = 24;
 
     /*
      * Version history
@@ -56,6 +57,9 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
      * 19: 2017-05-10
      * 20: 2017-05-11
      * 21: 2017-05-11
+     * 22: 2017-05-15
+     * 23: 2017-05-15
+     * 24: 2017-05-15
      */
 
     @NonNull
@@ -94,6 +98,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(TranslationTable.SQL_CREATE_TABLE);
             db.execSQL(LocalFileTable.SQL_CREATE_TABLE);
             db.execSQL(TranslationFileTable.SQL_CREATE_TABLE);
+            db.execSQL(AttachmentTable.SQL_CREATE_TABLE);
 
             db.setTransactionSuccessful();
         } finally {
@@ -177,10 +182,10 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
                         break;
                     case 19:
                         db.execSQL(ToolTable.SQL_V19_DROP_LEGACY);
-                        db.execSQL(ToolTable.SQL_CREATE_TABLE);
+                        db.execSQL(ToolTable.SQL_V19_CREATE_TABLE);
 
                         db.execSQL(TranslationTable.SQL_DELETE_TABLE);
-                        db.execSQL(TranslationTable.SQL_CREATE_TABLE);
+                        db.execSQL(TranslationTable.SQL_V19_CREATE_TABLE);
 
                         db.execSQL(LastSyncTable.SQL_DELETE_TABLE);
                         db.execSQL(LastSyncTable.SQL_CREATE_TABLE);
@@ -190,6 +195,15 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
                         break;
                     case 21:
                         db.execSQL(TranslationFileTable.SQL_CREATE_TABLE);
+                        break;
+                    case 22:
+                        db.execSQL(TranslationTable.SQL_V22_ALTER_MANIFEST);
+                        break;
+                    case 23:
+                        db.execSQL(AttachmentTable.SQL_CREATE_TABLE);
+                        break;
+                    case 24:
+                        db.execSQL(ToolTable.SQL_V24_ALTER_BANNER);
                         break;
                     default:
                         // unrecognized version
@@ -235,6 +249,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(LastSyncTable.SQL_DELETE_TABLE);
             db.execSQL(LocalFileTable.SQL_DELETE_TABLE);
             db.execSQL(TranslationFileTable.SQL_DELETE_TABLE);
+            db.execSQL(AttachmentTable.SQL_DELETE_TABLE);
 
             onCreate(db);
 

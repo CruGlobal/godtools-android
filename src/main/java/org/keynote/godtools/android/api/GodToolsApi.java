@@ -14,6 +14,7 @@ import org.ccci.gto.android.common.gson.GsonIgnoreExclusionStrategy;
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory;
+import org.keynote.godtools.android.model.Attachment;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
@@ -41,6 +42,8 @@ public class GodToolsApi {
     @NonNull
     public final TranslationsApi translations;
     @NonNull
+    public final AttachmentsApi attachments;
+    @NonNull
     public final GrowthSpacesApi growthSpaces;
     @NonNull
     public final LegacyApi legacy;
@@ -56,6 +59,7 @@ public class GodToolsApi {
         languages = retrofit.create(LanguagesApi.class);
         tools = retrofit.create(ToolsApi.class);
         translations = retrofit.create(TranslationsApi.class);
+        attachments = retrofit.create(AttachmentsApi.class);
 
         growthSpaces = new Retrofit.Builder()
                 .baseUrl(GROWTH_SPACES_URL)
@@ -105,6 +109,7 @@ public class GodToolsApi {
         return new JsonApiConverter.Builder()
                 .addClasses(Language.class)
                 .addClasses(Tool.class)
+                .addClasses(Attachment.class)
                 .addClasses(Translation.class)
                 .addConverters(new LocaleTypeConverter())
                 .build();

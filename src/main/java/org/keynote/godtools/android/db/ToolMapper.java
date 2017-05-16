@@ -4,9 +4,11 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
+import org.keynote.godtools.android.model.Attachment;
 import org.keynote.godtools.android.model.Tool;
 
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_ADDED;
+import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_BANNER;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_COPYRIGHT;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DESCRIPTION;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_NAME;
@@ -25,6 +27,9 @@ final class ToolMapper extends BaseMapper<Tool> {
                 break;
             case COLUMN_SHARES:
                 values.put(field, tool.getShares());
+                break;
+            case COLUMN_BANNER:
+                values.put(field, tool.getBannerId());
                 break;
             case COLUMN_COPYRIGHT:
                 values.put(field, tool.getCopyright());
@@ -52,6 +57,7 @@ final class ToolMapper extends BaseMapper<Tool> {
         tool.setName(getString(c, COLUMN_NAME, null));
         tool.setDescription(getString(c, COLUMN_DESCRIPTION, null));
         tool.setShares(getInt(c, COLUMN_SHARES, 0));
+        tool.setBannerId(getLong(c, COLUMN_BANNER, Attachment.INVALID_ID));
         tool.setCopyright(getString(c, COLUMN_COPYRIGHT, null));
         tool.setAdded(getBool(c, COLUMN_ADDED, false));
 
