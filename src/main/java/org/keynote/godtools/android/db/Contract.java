@@ -76,6 +76,9 @@ public final class Contract extends BaseContract {
         private static final String SQL_COLUMN_COPYRIGHT = COLUMN_COPYRIGHT + " TEXT";
         private static final String SQL_COLUMN_ADDED = COLUMN_ADDED + " INTEGER";
 
+        public static final Join<Tool, Attachment> SQL_JOIN_BANNER =
+                Join.create(TABLE, AttachmentTable.TABLE).on(FIELD_BANNER.eq(AttachmentTable.FIELD_ID));
+
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
 
         static final String SQL_CREATE_TABLE =
@@ -186,12 +189,12 @@ public final class Contract extends BaseContract {
     }
 
     public static class AttachmentTable extends BaseTable implements ToolId {
-        static final String TABLE_NAME = "attachments";
-        private static final Table<Attachment> TABLE = Table.forClass(Attachment.class);
+        public static final String TABLE_NAME = "attachments";
+        static final Table<Attachment> TABLE = Table.forClass(Attachment.class);
 
         public static final String COLUMN_FILENAME = "filename";
         public static final String COLUMN_SHA256 = "sha256";
-        static final String COLUMN_LOCALFILENAME = "local_filename";
+        public static final String COLUMN_LOCALFILENAME = "local_filename";
         public static final String COLUMN_DOWNLOADED = "downloaded";
 
         public static final Field FIELD_ID = TABLE.field(COLUMN_ID);
