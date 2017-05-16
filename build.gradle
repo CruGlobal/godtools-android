@@ -59,6 +59,7 @@ dependencies {
     compile 'org.ccci.gto.android:gto-support-gson:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-jsonapi:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-jsonapi-retrofit2:' + deps.gtoSupport
+    compile "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
@@ -67,6 +68,7 @@ dependencies {
 
     compile 'com.google.guava:guava:' + deps.guava
     compile 'com.jakewharton:butterknife:' + deps.butterknife
+    compile "com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0"
     compile 'com.squareup.retrofit2:retrofit:' + deps.retrofit2
     compile 'com.squareup.retrofit2:converter-gson:' + deps.retrofit2
     compile('com.squareup.retrofit2:converter-simplexml:' + deps.retrofit2)
