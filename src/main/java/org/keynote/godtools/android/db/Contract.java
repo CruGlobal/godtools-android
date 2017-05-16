@@ -52,7 +52,7 @@ public final class Contract extends BaseContract {
 
     public static class ToolTable extends BaseTable {
         static final String TABLE_NAME = "tools";
-        static final Table<Tool> TABLE = Table.forClass(Tool.class);
+        public static final Table<Tool> TABLE = Table.forClass(Tool.class);
 
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";
@@ -62,6 +62,7 @@ public final class Contract extends BaseContract {
         public static final String COLUMN_ADDED = "added";
 
         static final Field FIELD_ID = TABLE.field(COLUMN_ID);
+        public static final Field FIELD_BANNER = TABLE.field(COLUMN_BANNER);
         public static final Field FIELD_ADDED = TABLE.field(COLUMN_ADDED);
 
         static final String[] PROJECTION_ALL =
@@ -144,11 +145,11 @@ public final class Contract extends BaseContract {
 
     public static class LocalFileTable implements Base {
         static final String TABLE_NAME = "files";
-        private static final Table<LocalFile> TABLE = Table.forClass(LocalFile.class);
+        static final Table<LocalFile> TABLE = Table.forClass(LocalFile.class);
 
         static final String COLUMN_NAME = "name";
 
-        private static final Field FIELD_NAME = TABLE.field(COLUMN_NAME);
+        public static final Field FIELD_NAME = TABLE.field(COLUMN_NAME);
 
         static final String[] PROJECTION_ALL = {COLUMN_NAME};
 
@@ -161,7 +162,7 @@ public final class Contract extends BaseContract {
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
     }
 
-    public static class TranslationFileTable implements Base {
+    static class TranslationFileTable implements Base {
         static final String TABLE_NAME = "translation_files";
         private static final Table<TranslationFile> TABLE = Table.forClass(TranslationFile.class);
 
@@ -191,9 +192,12 @@ public final class Contract extends BaseContract {
         public static final String COLUMN_FILENAME = "filename";
         public static final String COLUMN_SHA256 = "sha256";
         static final String COLUMN_LOCALFILENAME = "local_filename";
-        static final String COLUMN_DOWNLOADED = "downloaded";
+        public static final String COLUMN_DOWNLOADED = "downloaded";
 
-        private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
+        public static final Field FIELD_ID = TABLE.field(COLUMN_ID);
+        public static final Field FIELD_TOOL = TABLE.field(COLUMN_TOOL);
+        private static final Field FIELD_LOCALFILENAME = TABLE.field(COLUMN_LOCALFILENAME);
+        public static final Field FIELD_DOWNLOADED = TABLE.field(COLUMN_DOWNLOADED);
 
         static final String[] PROJECTION_ALL =
                 {COLUMN_ID, COLUMN_TOOL, COLUMN_FILENAME, COLUMN_SHA256, COLUMN_LOCALFILENAME, COLUMN_DOWNLOADED};
@@ -203,7 +207,11 @@ public final class Contract extends BaseContract {
         private static final String SQL_COLUMN_LOCALFILENAME = COLUMN_LOCALFILENAME + " TEXT";
         private static final String SQL_COLUMN_DOWNLOADED = COLUMN_DOWNLOADED + " INTEGER";
 
+        public static final Join<Attachment, LocalFile> SQL_JOIN_LOCAL_FILE =
+                Join.create(TABLE, LocalFileTable.TABLE).on(FIELD_LOCALFILENAME.eq(LocalFileTable.FIELD_NAME));
+
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
+        public static final Expression SQL_WHERE_DOWNLOADED = FIELD_DOWNLOADED.eq(true);
 
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_TOOL, SQL_COLUMN_FILENAME, SQL_COLUMN_SHA256,

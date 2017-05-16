@@ -42,6 +42,8 @@ public class GodToolsApi {
     @NonNull
     public final TranslationsApi translations;
     @NonNull
+    public final AttachmentsApi attachments;
+    @NonNull
     public final GrowthSpacesApi growthSpaces;
     @NonNull
     public final LegacyApi legacy;
@@ -57,6 +59,7 @@ public class GodToolsApi {
         languages = retrofit.create(LanguagesApi.class);
         tools = retrofit.create(ToolsApi.class);
         translations = retrofit.create(TranslationsApi.class);
+        attachments = retrofit.create(AttachmentsApi.class);
 
         growthSpaces = new Retrofit.Builder()
                 .baseUrl(GROWTH_SPACES_URL)

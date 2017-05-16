@@ -6,16 +6,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.ArrayMap;
+import android.support.v4.util.LongSparseArray;
 
-import com.annimon.stream.ComparatorCompat;
-import com.annimon.stream.Stream;
-import com.annimon.stream.function.ToLongFunction;
 import com.google.common.base.Objects;
 import com.google.common.io.Closer;
 import com.google.common.io.CountingInputStream;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
+import org.ccci.gto.android.common.db.Join;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.eventbus.task.EventBusDelayedPost;
 import org.ccci.gto.android.common.util.IOUtils;
@@ -25,13 +24,17 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.keynote.godtools.android.Settings;
 import org.keynote.godtools.android.api.GodToolsApi;
+import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
+import org.keynote.godtools.android.db.Contract.LocalFileTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
+import org.keynote.godtools.android.event.AttachmentUpdateEvent;
 import org.keynote.godtools.android.event.LanguageUpdateEvent;
 import org.keynote.godtools.android.event.ToolUpdateEvent;
 import org.keynote.godtools.android.event.TranslationUpdateEvent;
+import org.keynote.godtools.android.model.Attachment;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.LocalFile;
 import org.keynote.godtools.android.model.Tool;
@@ -43,12 +46,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Comparator;
 import java.util.Locale;
-import java.util.PriorityQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
@@ -58,25 +59,24 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
+import static org.ccci.gto.android.common.db.Expression.NULL;
 import static org.ccci.gto.android.common.util.ThreadUtils.getLock;
 
 public final class GodToolsToolManager {
-    private static final int DOWNLOAD_CONCURRENCY = 2;
+    private static final int DOWNLOAD_CONCURRENCY = 4;
 
-    private static final ArrayMap<String, Object> LOCKS_FILES = new ArrayMap<>();
+    private static final LongSparseArray<Object> LOCKS_ATTACHMENTS = new LongSparseArray<>();
     private static final ArrayMap<TranslationKey, Object> LOCKS_TRANSLATION_DOWNLOADS = new ArrayMap<>();
+    private static final ArrayMap<String, Object> LOCKS_FILES = new ArrayMap<>();
 
     private final Context mContext;
     private final GodToolsApi mApi;
     private final GodToolsDao mDao;
     private final EventBus mEventBus;
-    private final Settings mPrefs;
+    final Settings mPrefs;
     private final ThreadPoolExecutor mExecutor;
-    private final BlockingQueue<Runnable> mExecutorQueue;
 
-    @NonNull
-    PriorityQueue<TranslationKey> mPending;
-    private final Object mPendingLock = new Object();
+    final LongSparseArray<Boolean> mDownloadingAttachments = new LongSparseArray<>();
 
     private GodToolsToolManager(@NonNull final Context context) {
         mContext = context;
@@ -84,11 +84,7 @@ public final class GodToolsToolManager {
         mDao = GodToolsDao.getInstance(mContext);
         mEventBus = EventBus.getDefault();
         mPrefs = Settings.getInstance(mContext);
-        mPending = new PriorityQueue<>(11, TranslationKey.COMPARATOR);
-
-        // build download executor
-        mExecutorQueue = new LinkedBlockingQueue<>(Math.max(DOWNLOAD_CONCURRENCY / 2, 1));
-        mExecutor = new ThreadPoolExecutor(0, DOWNLOAD_CONCURRENCY, 10, TimeUnit.SECONDS, mExecutorQueue,
+        mExecutor = new ThreadPoolExecutor(0, DOWNLOAD_CONCURRENCY, 10, TimeUnit.SECONDS, new PriorityBlockingQueue<>(),
                                            new NamedThreadFactory(GodToolsToolManager.class.getSimpleName()));
 
         // register with EventBus
@@ -120,6 +116,7 @@ public final class GodToolsToolManager {
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onToolUpdate(@NonNull final ToolUpdateEvent event) {
+        enqueueToolBannerAttachments();
         enqueuePendingPublishedTranslations();
     }
 
@@ -127,6 +124,12 @@ public final class GodToolsToolManager {
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onTranslationUpdate(@NonNull final TranslationUpdateEvent event) {
         enqueuePendingPublishedTranslations();
+    }
+
+    @WorkerThread
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onAttachmentUpdate(@NonNull final AttachmentUpdateEvent event) {
+        enqueueStaleAttachments();
     }
 
     /* END lifecycle */
@@ -173,6 +176,79 @@ public final class GodToolsToolManager {
         tool.setAdded(false);
         final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
         update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
+    }
+
+    @WorkerThread
+    void downloadAttachment(final long attachmentId) {
+        synchronized (getLock(LOCKS_ATTACHMENTS, attachmentId)) {
+            // short-circuit if attachment doesn't exist
+            final Attachment attachment = mDao.find(Attachment.class, attachmentId);
+            if (attachment == null) {
+                return;
+            }
+
+            // short-circuit if we don't have a local filename
+            final String fileName = attachment.getLocalFileName();
+            if (fileName == null) {
+                return;
+            }
+
+            synchronized (getLock(LOCKS_FILES, fileName)) {
+                // short-circuit if the attachment is actually downloaded
+                LocalFile localFile = mDao.find(LocalFile.class, fileName);
+                if (attachment.isDownloaded() && localFile != null) {
+                    return;
+                }
+                attachment.setDownloaded(false);
+
+                // create a new local file object
+                localFile = new LocalFile();
+                localFile.setFileName(fileName);
+
+                try {
+                    // download attachment
+                    final Response<ResponseBody> response = mApi.attachments.download(attachmentId).execute();
+                    if (response.isSuccessful()) {
+                        final ResponseBody body = response.body();
+                        if (body != null) {
+                            processDownload(localFile, body);
+
+                            // store local file in database
+                            mDao.updateOrInsert(localFile);
+                            attachment.setDownloaded(true);
+                        }
+                    }
+                } catch (final IOException ignored) {
+                }
+
+                // update attachment download state
+                mDao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED);
+                mEventBus.post(new AttachmentUpdateEvent());
+            }
+        }
+    }
+
+    private void processDownload(@NonNull final LocalFile localFile, @NonNull final ResponseBody body)
+            throws IOException {
+        final Closer closer = Closer.create();
+        try {
+            // short-circuit if we can't create the local file
+            final File file = localFile.getFile(mContext);
+            if (file == null) {
+                throw new FileNotFoundException(localFile.getFileName() + " (File could not be created)");
+            }
+
+            // write file
+            final InputStream in = closer.register(new BufferedInputStream(body.byteStream()));
+            final OutputStream os = closer.register(new FileOutputStream(file));
+            IOUtils.copy(in, os);
+            os.flush();
+            os.close();
+        } catch (final Throwable e) {
+            throw closer.rethrow(e);
+        } finally {
+            closer.close();
+        }
     }
 
     @WorkerThread
@@ -231,7 +307,7 @@ public final class GodToolsToolManager {
                         localFile = new LocalFile();
                         localFile.setFileName(fileName);
 
-                        // short-circuit if the local file doesn't exist
+                        // short-circuit if we can't create the local file
                         final File file = localFile.getFile(mContext);
                         if (file == null) {
                             throw new FileNotFoundException(fileName + " (File could not be created)");
@@ -276,79 +352,46 @@ public final class GodToolsToolManager {
                                                  .and(TranslationTable.SQL_WHERE_PUBLISHED)
                                                  .and(TranslationTable.FIELD_DOWNLOADED.eq(false))))
                 .map(TranslationKey::new)
-                .peek(this::updateLocaleType)
-                .forEach(this::enqueue);
-
-        scheduleWork();
+                .map(DownloadTranslationRunnable::new)
+                .forEach(mExecutor::execute);
     }
 
     @WorkerThread
-    void scheduleWork() {
-        synchronized (mPendingLock) {
-            while (!mPending.isEmpty() && mExecutorQueue.remainingCapacity() > 0) {
-                final TranslationKey key = mPending.poll();
-                if (key != null) {
-                    mExecutor.execute(new DownloadTranslationRunnable(key));
-                }
+    private void enqueueToolBannerAttachments() {
+        mDao.streamCompat(Query.select(Attachment.class)
+                                  .join(Join.<Attachment, Tool>create(ToolTable.TABLE)
+                                                .on(ToolTable.FIELD_BANNER.eq(AttachmentTable.FIELD_ID)))
+                                  .where(AttachmentTable.FIELD_DOWNLOADED.eq(false)))
+                .mapToLong(Attachment::getId)
+                .forEach(this::enqueueAttachmentDownload);
+    }
+
+    @WorkerThread
+    private void enqueueStaleAttachments() {
+        mDao.streamCompat(Query.select(Attachment.class)
+                                  .join(AttachmentTable.SQL_JOIN_LOCAL_FILE.type("LEFT"))
+                                  .where(AttachmentTable.SQL_WHERE_DOWNLOADED.and(LocalFileTable.FIELD_NAME.is(NULL))))
+                .mapToLong(Attachment::getId)
+                .forEach(this::enqueueAttachmentDownload);
+    }
+
+    private void enqueueAttachmentDownload(final long attachmentId) {
+        synchronized (mDownloadingAttachments) {
+            if (!mDownloadingAttachments.get(attachmentId, false)) {
+                mExecutor.execute(new DownloadAttachmentRunnable(attachmentId));
+                mDownloadingAttachments.put(attachmentId, true);
             }
         }
-    }
-
-    @WorkerThread
-    void enqueue(@NonNull final TranslationKey key) {
-        synchronized (mPendingLock) {
-            mPending.add(key);
-        }
-    }
-
-    // TODO: run when primary or parallel language changes
-    @WorkerThread
-    private void resortQueue() {
-        synchronized (mPendingLock) {
-            // short-circuit if the pending queue is empty
-            if (mPending.isEmpty()) {
-                return;
-            }
-
-            // rebuild the queue with updated locale types
-            final PriorityQueue<TranslationKey> old = mPending;
-            mPending = new PriorityQueue<>(old.size(), TranslationKey.COMPARATOR);
-            Stream.of(old).distinct()
-                    .peek(this::updateLocaleType)
-                    .forEach(mPending::offer);
-        }
-    }
-
-    private void updateLocaleType(@NonNull final TranslationKey key) {
-        key.updateLocaleType(mPrefs.getPrimaryLanguage(), mPrefs.getParallelLanguage());
     }
 
     static final class TranslationKey {
-        private static final int TYPE_PRIMARY = 1;
-        private static final int TYPE_PARALLEL = 2;
-        private static final int TYPE_OTHER = 3;
-
-        static final Comparator<TranslationKey> COMPARATOR =
-                ComparatorCompat.<TranslationKey>comparingInt(k -> k.mLocaleType)
-                        .thenComparingLong((ToLongFunction<? super TranslationKey>) k -> k.mToolId);
-
         final long mToolId;
         @NonNull
         final Locale mLocale;
-        transient int mLocaleType = TYPE_OTHER;
 
         TranslationKey(@NonNull final Translation translation) {
-            this(translation.getToolId(), translation.getLanguageCode());
-        }
-
-        TranslationKey(final long toolId, @NonNull final Locale locale) {
-            mToolId = toolId;
-            mLocale = locale;
-        }
-
-        void updateLocaleType(@NonNull final Locale primary, @Nullable final Locale parallel) {
-            mLocaleType = mLocale.equals(primary) ? TYPE_PRIMARY :
-                    mLocale.equals(parallel) ? TYPE_PARALLEL : TYPE_OTHER;
+            mToolId = translation.getToolId();
+            mLocale = translation.getLanguageCode();
         }
 
         @Override
@@ -370,18 +413,65 @@ public final class GodToolsToolManager {
         }
     }
 
-    final class DownloadTranslationRunnable implements Runnable {
+    abstract class PriorityRunnable implements Comparable<PriorityRunnable>, Runnable {
+        protected int getPriority() {
+            return Integer.MAX_VALUE;
+        }
+
+        @Override
+        public final int compareTo(@NonNull final PriorityRunnable o) {
+            return ((Integer) o.getPriority()).compareTo(getPriority());
+        }
+    }
+
+    final class DownloadTranslationRunnable extends PriorityRunnable {
+        private static final int PRIORITY_PRIMARY = -10;
+        private static final int PRIORITY_PARALLEL = 10;
+        private static final int PRIORITY_OTHER = 20;
+
         @NonNull
         final TranslationKey mKey;
+        final int mPriority;
 
         DownloadTranslationRunnable(@NonNull final TranslationKey key) {
             mKey = key;
+            final Locale primary = mPrefs.getPrimaryLanguage();
+            final Locale parallel = mPrefs.getParallelLanguage();
+            mPriority = mKey.mLocale.equals(primary) ? PRIORITY_PRIMARY :
+                    mKey.mLocale.equals(parallel) ? PRIORITY_PARALLEL : PRIORITY_OTHER;
+        }
+
+        @Override
+        protected int getPriority() {
+            return mPriority;
         }
 
         @Override
         public void run() {
             downloadLatestPublishedTranslation(mKey);
-            scheduleWork();
+        }
+    }
+
+    final class DownloadAttachmentRunnable extends PriorityRunnable {
+        private static final int PRIORITY_ATTACHMENT = 0;
+
+        private final long mAttachmentId;
+
+        DownloadAttachmentRunnable(final long attachmentId) {
+            mAttachmentId = attachmentId;
+        }
+
+        @Override
+        protected int getPriority() {
+            return PRIORITY_ATTACHMENT;
+        }
+
+        @Override
+        public void run() {
+            downloadAttachment(mAttachmentId);
+            synchronized (mDownloadingAttachments) {
+                mDownloadingAttachments.remove(mAttachmentId);
+            }
         }
     }
 }
