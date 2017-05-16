@@ -50,6 +50,8 @@ final class AttachmentMapper extends BaseMapper<Attachment> {
         final Attachment attachment = super.toObject(c);
 
         attachment.setToolId(getLong(c, COLUMN_TOOL, Tool.INVALID_ID));
+        attachment.setFileName(getString(c, COLUMN_FILENAME, null));
+        attachment.setSha256(getString(c, COLUMN_SHA256, null));
         attachment.setDownloaded(getBool(c, COLUMN_DOWNLOADED, false));
 
         return attachment;
