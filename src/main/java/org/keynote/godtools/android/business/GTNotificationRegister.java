@@ -1,9 +1,5 @@
 package org.keynote.godtools.android.business;
 
-/**
- * Created by rmatt on 2/8/2017.
- */
-
 public class GTNotificationRegister {
 
     private String registrationId;
@@ -43,15 +39,5 @@ public class GTNotificationRegister {
         this.notificationsSent = notificationsSent;
     }
 
-    //    jsonObject.put("id", null); // done by api
-//    jsonObject.put("registrationId", objects[2].toString());
-//    Log.i("registrationId", objects[2].toString());
-//
-//    jsonObject.put("notificationType", objects[3].toString());
-//    Log.i("notificationType", objects[3].toString());
-//
-//    jsonObject.put("presentations", null); //done by api
-//    jsonObject.put("notificationSent", false);
-//    jsonObject.put("createdTimestamp", null); // done by api
 
 }

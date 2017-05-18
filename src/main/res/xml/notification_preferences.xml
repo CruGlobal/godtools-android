@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:key="notification_preference_key"
+        android:persistent="true"
+        android:summary="Would you like to receive reminders from GodTools"
+        android:title="Notifications"/>
+
+    <SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="translator_preference_key"
+        android:persistent="true"
+        android:summary="Allows translators to see preview pages"
+        android:title="Preview Mode (Translators Only)"/>
+</PreferenceScreen>

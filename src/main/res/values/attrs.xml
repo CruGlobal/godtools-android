@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Vector">
+        <attr name="drawableLeftCompat" format="reference"></attr>
+        <attr name="drawableRightCompat" format="reference"></attr>
+        <attr name="drawableBottomCompat" format="reference"></attr>
+        <attr name="drawableTopCompat" format="reference"></attr>
+        <attr name="drawableTint" format="color"></attr>
+    </declare-styleable>
+
+</resources>

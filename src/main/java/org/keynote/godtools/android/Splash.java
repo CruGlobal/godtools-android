@@ -19,10 +19,9 @@ import org.ccci.gto.android.common.util.MainThreadExecutor;
 import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTLanguages;
-import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.db.GodToolsDao;
-import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.PackageDownloadHelper;
+import org.keynote.godtools.android.newnew.activity.MainActivity;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
@@ -54,7 +53,7 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
     If not first load:
         - go to main activity (home screen)
  */
-public class Splash extends Activity implements DownloadTask.DownloadTaskHandler {
+public class Splash extends Activity {
     static final long MIN_LOAD_DELAY = 500;
     private static final String TAG = Splash.class.getSimpleName();
     @BindView(R.id.tvTask)
@@ -72,13 +71,14 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         startUpdateTasks();
         syncData();
 
         setContentView(R.layout.splash_pw);
         ButterKnife.bind(this);
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
+        //settings.edit().putBoolean(FIRST_LAUNCH, true).commit();
         // first use
         if (isFirstLaunch()) {
             Log.i(TAG, "First Launch");
@@ -98,8 +98,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
                         PackageDownloadHelper.downloadLanguagePack(
                                 getApp(),
                                 Locale.getDefault().getLanguage(),
-                                "primary",
-                                Splash.this);
+                                "primary");
                     }
                     // if not, then switch back to English and download those latest resources
                     else {
@@ -108,13 +107,16 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
                         PackageDownloadHelper.downloadLanguagePack(
                                 getApp(),
                                 ENGLISH_DEFAULT,
-                                "primary",
-                                Splash.this);
+                                "primary");
+
                     }
+
+                    goToMainActivity();
                 }
 
                 @Override
                 public void onFailure(Call<GTLanguages> call, Throwable t) {
+                    t.printStackTrace();
                     goToMainActivity();
                 }
             });
@@ -188,7 +190,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
             settings.edit().putBoolean(TRANSLATOR_MODE, false).apply();
         }
 
-        Intent intent = new Intent(this, MainPW.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }
@@ -221,21 +223,27 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         return false;
     }
 
-    @Override
-    public void downloadTaskComplete(String url, String filePath, String langCode, String tag) {
-        final GTLanguage language = new GTLanguage();
-        language.setLanguageCode(langCode);
-        language.setDownloaded(true);
-        GodToolsDao.getInstance(this).updateAsync(language, GTLanguageTable.COL_DOWNLOADED);
-
-        goToMainActivity();
-    }
-
-    @Override
-    public void downloadTaskFailure(String url, String filePath, String langCode, String tag) {
-        // if there was an error downloading resources, then switch the phone's language back to English since those are the
-        // resources that were bundled.  user would get a blank screen if not
-        settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
-        goToMainActivity();
-    }
+//    @Override
+//    public void downloadTaskComplete(String url, String filePath, String langCode, String tag) {
+//        final GTLanguage language = new GTLanguage();
+//        language.setLanguageCode(langCode);
+//        language.setDownloaded(true);
+//        DBAdapter.getInstance(this).updateAsync(language, GTLanguageTable.COL_DOWNLOADED);
+//        settings.edit().putString(GTLanguage.KEY_PRIMARY, langCode).apply();
+//        //TODO: this changed
+//
+//        if(isFirstLaunch())
+//        {
+//            //goToLanguageSetup();
+//        }
+//        goToMainActivity();
+//    }
+//
+//    @Override
+//    public void downloadTaskFailure(String url, String filePath, String langCode, String tag) {
+//        // if there was an error downloading resources, then switch the phone's language back to English since those are the
+//        // resources that were bundled.  user would get a blank screen if not
+//        settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
+//        goToMainActivity();
+//    }
 }

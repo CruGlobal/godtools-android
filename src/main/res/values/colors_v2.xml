@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Original color #4FA5DD changed to use swatches -->
+    <color name="colorPrimary">#3ba4db</color>
+    <color name="colorPrimaryTextFade">#cc3ba4db</color>
+    <color name="colorPrimaryDark">#3D94CC</color>
+    <color name="colorAccent">#3DA4DB</color>
+    <color name="colorBackground">#FFFFFF</color>
+
+    <color name="colorWhite">#FFFFFF</color>
+    <!--Primary text 87%-->
+    <color name="colorTextPrimary">#DD000000</color>
+
+    <!--Secondary text 54% -->
+    <color name="colorTextSecondary">#8A000000</color>
+
+    <!-- Disabled text, hint text, and icons 38% -->
+    <color name="colorTextDisabled">#61000000</color>
+
+    <!-- Dividers 12% -->
+    <color name="colorDividers">#25000000</color>
+
+    <color name="colorListViewHighlight">#9A70Fe53</color>
+    <color name="grey_tint">#88888888</color>
+
+    <color name="ic_download_green">#6ecd51</color>
+    <color name="ic_info_blue">#3ba4dd</color>
+    <color name="ic_language_blue">#3aa3da</color>
+    <color name="ic_remove_red">#e55b36</color>
+    <color name="ic_switch_blue">#3ba4dc</color>
+    <color name="ic_download_white">#FFFFFF</color>
+</resources>

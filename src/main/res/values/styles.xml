@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="Base"/>
 
     <!-- GodTools theme -->
@@ -25,68 +24,36 @@
 
     <!-- Legacy GodTools theme -->
     <style name="Theme.GodTools" parent="Theme.AppCompat">
-        <item name="android:windowFullscreen">
-            true
-        </item>
-        <item name="actionBarStyle">
-            @style/Widget.GodTools.ActionBar
-        </item>
-        <item name="android:buttonStyle">
-            @style/Widget.GodTools.Button
-        </item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="actionBarStyle">@style/Widget.GodTools.ActionBar</item>
+        <item name="android:buttonStyle">@style/Widget.GodTools.Button</item>
     </style>
 
     <style name="Theme.GodTools.TransparentActionBar">
-        <item name="android:windowContentOverlay">
-            @null
-        </item>
-        <item name="windowActionBarOverlay">true
-        </item>
-        <item name="android:itemBackground">
-            @android:color/background_dark
-        </item>
-        <item name="actionBarStyle">
-            @style/Widget.GodTools.ActionBar.Transparent
-        </item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:itemBackground">@android:color/background_dark</item>
+        <item name="actionBarStyle">@style/Widget.GodTools.ActionBar.Transparent</item>
     </style>
 
     <!-- GodTools theme with a transparent ActionBar (used to get Action Overflow Button only) -->
     <style name="Theme.GodTools.Activity.Content" parent="Theme.GodTools.TransparentActionBar">
-        <item name="windowActionBarOverlay">
-            false
-        </item>
-
+        <item name="windowActionBarOverlay">false</item>
     </style>
 
-
     <style name="Widget.GodTools.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
-        <item name="android:background">
-            @color/cru_bright_blue
-        </item>
-        <item name="background">
-            @color/cru_bright_blue
-        </item>
-        <item name="android:icon">
-            @android:color/transparent
-        </item>
-        <item name="displayOptions">showHome
-        </item>
+        <item name="android:background">@color/cru_bright_blue</item>
+        <item name="background">@color/cru_bright_blue</item>
+        <item name="android:icon">@android:color/transparent</item>
+        <item name="displayOptions">showHome</item>
     </style>
 
     <style name="Widget.GodTools.Button" parent="@style/Widget.AppCompat.Button"/>
 
     <style name="Widget.GodTools.Text" parent="Base"/>
 
-
     <style name="Widget.GodTools.ActionBar.Transparent">
-
-        <item name="android:background">
-            @android:color/transparent
-        </item>
-        <item name="background">
-            @android:color/transparent
-        </item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="background">@android:color/transparent</item>
     </style>
-
-
 </resources>

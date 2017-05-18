@@ -26,16 +26,11 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTLanguages;
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.business.GTPackageReader;
+import org.keynote.godtools.android.business.GTPackages;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.convert.Registry;
-import org.simpleframework.xml.convert.RegistryStrategy;
-import org.simpleframework.xml.core.Persister;
-import org.simpleframework.xml.strategy.Strategy;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -125,7 +120,8 @@ public class InitialContentTasks {
                 final InputStream in = closer.register(mContext.getAssets().open("followup.json"));
                 final Reader reader = closer.register(new InputStreamReader(in));
                 final ArrayList<Followup> followups =
-                        gson.fromJson(reader, new TypeToken<ArrayList<Followup>>() {}.getType());
+                        gson.fromJson(reader, new TypeToken<ArrayList<Followup>>() {
+                        }.getType());
 
                 for (final Followup followup : followups) {
                     mDao.updateOrInsert(followup);
@@ -162,15 +158,10 @@ public class InitialContentTasks {
         private void loadDefaultLanguages() throws Exception {
             // meta.xml file contains the list of supported languages
             InputStream metaStream = mAssets.open("meta.xml");
-            Registry registry = new Registry();
-            Strategy strategy = new RegistryStrategy(registry);
-            Serializer serializer = new Persister(strategy);
+            ArrayList<GTLanguage> gtLanguages = GTLanguages.processContentFile(metaStream);
 
-
-            GTLanguages gtLanguages = serializer.read(GTLanguages.class, metaStream);
-
-            for (GTLanguage gtl : gtLanguages.mLanguages) {
-                mDao.updateOrInsert(gtl, GTLanguageTable.COL_NAME /*, GTLanguageTable.COL_DRAFT*/ );
+            for (GTLanguage gtl : gtLanguages) {
+                mDao.updateOrInsert(gtl, GTLanguageTable.COL_NAME, GTLanguageTable.COL_DRAFT);
             }
         }
     }
@@ -202,7 +193,7 @@ public class InitialContentTasks {
             try {
                 // contents.xml file contains information about the bundled english resources
                 InputStream in = closer.register(mAssets.open("contents.xml"));
-                final List<GTPackage> packages = GTPackageReader.processContentFile(in);
+                final List<GTPackage> packages = GTPackages.processContentFile(in);
                 for (GTPackage gtp : packages) {
                     final GTPackage current = mDao.refresh(gtp);
                     if (current == null || current.compareVersionTo(gtp) < 0) {

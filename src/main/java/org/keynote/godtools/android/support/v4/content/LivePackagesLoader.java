@@ -47,6 +47,7 @@ public class LivePackagesLoader extends AsyncTaskSharedPreferencesChangeLoader<L
 
     @Override
     public List<GTPackage> loadInBackground() {
+
         // load packages for the selected language first
         final String language = mPrefs.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
         final List<GTPackage> packages = mDao.get(BASE_QUERY.where(BASE_WHERE.args(language)));

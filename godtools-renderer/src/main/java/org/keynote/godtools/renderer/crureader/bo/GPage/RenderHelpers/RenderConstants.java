@@ -79,8 +79,63 @@ public class RenderConstants {
     };
     static final View.OnClickListener onClick = new View.OnClickListener() {
 
-        public void onClick(View view) {
+        public void onClick(final View view) {
+//            GPanel gPanel = (GPanel) view.getTag(R.id.gpanel_tag);
+//            PercentRelativeLayout vg = new PercentRelativeLayout(view.getContext());
+//            vg.setLayoutParams(new PercentRelativeLayout.LayoutParams(PercentRelativeLayout.LayoutParams.MATCH_PARENT, PercentRelativeLayout.LayoutParams.WRAP_CONTENT));
+//            vg.setBackgroundColor(Color.LTGRAY);
+//            int position = (int) view.getTag(R.id.position);
+//            int renderId  = gPanel.render((LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+//                    vg, position);
+//            final PopupWindow pw = new PopupWindow(
+//                    vg, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+//                pw.setAttachedInDecor(true);
+//            }
+//            pw.setTouchInterceptor(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(final View v, MotionEvent event) {
+//
+//                    pw.dismiss();
+//
+//                    view.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            view.setClickable(true);
+//                        }
+//
+//
+//                    }, 15);
+//
+//                    Log.i(TAG, "OnTouch Interceptor");
+//                    return true;
+//                }
+//            });
+//            pw.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//                @Override
+//                public void onDismiss() {
+//                    Log.i(TAG, "On Dismiss Listener is called");
+//
+//                }
+//            });
+//            pw.setBackgroundDrawable(new BitmapDrawable());
+//           // pw.setWidth(view.getWidth());
+//            pw.setFocusable(false);
+//            pw.setOutsideTouchable(true);
+//            pw.setTouchable(true);
+//           // pw.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+//            pw.setClippingEnabled(false);
+//            //pw.showAsDropDown(view);//, 0, -1 * view.getHeight());
+//            //PopupWindowCompat.setWindowLayoutType(pw, WindowManager.LayoutParams.TYPE_APPLICATION);
+//            PopupWindowCompat.setOverlapAnchor(pw, false);
+//            pw.showAtLocation(view, 0, 0, Gravity.CENTER);
+//    //        PopupWindowCompat.showAsDropDown(pw, view, 0, 0, Gravity.CENTER);
+//
+//            view.setClickable(false);
 
+
+//
             final LinearLayout ll = (LinearLayout) view;
             Context context = view.getContext();
             int distanceTooTop = ll.getTop() + ((View) ll.getParent()).getTop();
@@ -98,7 +153,8 @@ public class RenderConstants {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, ll, context.getString(R.string.inner_ll_transistion_title));
+                ActivityOptionsCompat
+                        options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, ll, context.getString(R.string.inner_ll_transistion_title));
 
                 ((Activity) context).startActivityForResult(intent, 999, options.toBundle());
 

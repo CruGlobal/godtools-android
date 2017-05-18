@@ -1,0 +1,143 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="G2AppTheme" parent="Theme.GodTools2">
+    </style>
+
+    <style name="GTActionBarStyle" parent="Widget.GodTools2.ActionBar.Solid">
+        <item name="titleTextStyle">@style/GTTitleText</item>
+    </style>
+
+    <style name="GTTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="Theme.White" parent="G2AppTheme">
+        <item name="colorAccent">#FFFFFF</item>
+    </style>
+
+    <style name="Theme.Green" parent="G2AppTheme">
+        <item name="colorAccent">#6ecd51</item>
+    </style>
+
+    <style name="Theme.Transparent" parent="G2AppTheme">
+        <item name="colorAccent">#00FFFFFF</item>
+    </style>
+
+    <style name="Button.Green" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:theme">@style/Theme.Green</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="Button.Transparent" parent="Button.FullWidth">
+        <item name="android:theme">@style/Theme.Transparent</item>
+    </style>
+
+    <style name="Button.White" parent="Button.FullWidth">
+        <item name="android:theme">@style/Theme.White</item>
+        <item name="android:textColor">@color/colorPrimaryTextFade</item>
+    </style>
+
+    <style name="Button.FullWidth" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:padding">20dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:maxWidth">320dp</item>
+    </style>
+
+    <style name="G2AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="G2AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="G2AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Text.Header" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:textColor">@color/colorTextPrimary</item>
+    </style>
+
+    <style name="Text.PackageDetailsHeader" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:textColor">@color/colorTextPrimary</item>
+    </style>
+
+    <style name="Text.ListHeader" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/colorTextPrimary</item>
+    </style>
+
+    <style name="Text.ListSubheader" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/colorTextDisabled</item>
+    </style>
+
+    <style name="Text.Subheader" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/colorTextDisabled</item>
+    </style>
+
+    <style name="ImageButton" parent="Widget.AppCompat.ImageButton">
+        <item name="android:layout_width">@dimen/imagebutton_width</item>
+        <item name="android:layout_height">@dimen/imagebutton_height</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:adjustViewBounds">true</item>
+    </style>
+
+    <style name="Layout" />
+
+    <style name="Layout.Padded">
+        <item name="android:paddingBottom">@dimen/activity_vertical_margin</item>
+        <item name="android:paddingTop">@dimen/activity_vertical_margin</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
+    </style>
+
+    <style name="Text" />
+
+    <style name="Text.LanguageHeaders">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Large</item>
+    </style>
+
+    <style name="Text.Subheader.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Text_Description" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+    </style>
+
+    <style name="Popin" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:fitsSystemWindows">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">.75</item>
+    </style>
+
+    <style name="HelpArrow" parent="ImageButton">
+        <item name="android:tint">@color/ic_download_white</item>
+    </style>
+
+    <style name="NavigationCircle">
+        <item name="android:layout_width">@dimen/navigation_width</item>
+        <item name="android:layout_height">@dimen/navigation_height</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:adjustViewBounds">true</item>
+    </style>
+</resources>

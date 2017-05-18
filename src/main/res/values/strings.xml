@@ -30,14 +30,17 @@
     <string name="email">Email</string>
     <string name="copy">Copy</string>
     <string name="all_websites">All Websites</string>
+
     <!-- Renderer Activity -->
     <string name="processing_package">Loading pages…</string>
     <string name="processing_failed">Package processing failed</string>
     <string name="select_share">Select how you would like to share</string>
     <string name="update_page">Updating page…</string>
     <string name="page_error">Error refreshing page</string>
+
     <!-- Splash Activity -->
     <string name="check_update">Checking for updates…</string>
+
     <!-- Settings Activity -->
     <string name="settings_title">Settings</string>
     <string name="settings_main_language">Main Language:</string>
@@ -49,6 +52,7 @@
     <string name="wrong_passcode">Please try again</string>
     <string name="expired_passcode">Preview mode session expired</string>
     <string name="authenticate_code">Authenticating access code</string>
+
     <!-- Main Activity-->
     <string name="share_prompt">Select how you would like to share</string>
 
@@ -95,6 +99,7 @@
     <string name="downloading">Downloading</string>
     <string name="delete">Delete</string>
     <string name="retry">Retry</string>
+
     <!-- Translator Mode Dialog -->
     <string name="dialog_translator_mode_title">Exit Preview Mode?</string>
     <string name="dialog_translator_mode_body">Drafts will not be displayed</string>
@@ -108,14 +113,17 @@
     <string name="draft_created">Draft has been created</string>
     <string name="draft_create_failed">Failed to create a new draft</string>
     <string name="draft_start_message">Create new draft?</string>
+
     <!-- Access Code Dialog -->
     <string name="dialog_access_code_title">Enter Access Code:</string>
     <string name="invalid_code">Invalid Access Code</string>
+
     <!-- Preview Mode -->
     <string name="pull_down_info">pull to refresh drafts</string>
     <string name="preview_mode_title">Preview Mode</string>
     <string name="package_not_created">Package not yet created</string>
     <string name="connecting">Connecting with server</string>
+
     <!-- Package Reader -->
     <string name="open">Open</string>
     <string name="cannot_launch_browser">Cannot launch browser</string>
@@ -123,8 +131,10 @@
     <string name="single_website_assist">- a website to assist you</string>
     <string name="cannot_dial">Cannot launch dialler</string>
     <string name="cannot_email">Cannot launch email app</string>
+
     <!-- Every Student-->
     <string name="could_not_load_content">Could not load the content</string>
+
     <!-- Shared Strings -->
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -140,6 +150,7 @@
     <string name="internet_needed">An internet connection is needed to complete this request</string>
     <string name="alternate_language">Parallel Language</string>
     <string name="alternate_language_message">The parallel language selected is not available for this tool.</string>
+
     <!-- Sharing -->
     <string name="app_email_subject">Our conversation about {{package_name}} today</string>
     <string name="share_general_subject">{{app_name}}</string>
@@ -157,6 +168,7 @@
 		{{share_link}}</string>
     <string name="satisfied_share" formatted="false">It was great talking with you today about how we can experience The Holy Spirit’s power in our lives. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
     <string name="everystudent_share">It was great talking with you today about your spiritual questions. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
+
     <!-- iOS -->
     <string name="translator_mode">[ Translator Mode ]</string>
     <string name="intro_share_instructions">Share with a friend</string>
@@ -190,4 +202,5 @@
     <string name="initial_setup_error_message">Unfortunately we could not load any resources. Please quit the app and reopen. If the problem persists contact support@godtoolsapp.com</string>
     <string name="followup_modal_input_invalid_email">Please enter a valid email address</string>
     <string name="followup_modal_input_invalid_generic">%1$s was not properly formatted</string>
+    <string name="nav_add_package">ADD_PACKAGE</string>
 </resources>
