@@ -206,4 +206,10 @@ allprojects {
         maven { url 'https://maven.fabric.io/public' }
         maven { url "https://oss.sonatype.org/content/repositories/releases" }
     }
+
+    afterEvaluate {
+        dependencies {
+            compile "com.android.support:support-annotations:${deps.androidSupport}"
+        }
+    }
 }
