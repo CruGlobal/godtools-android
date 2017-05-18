@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.model.Attachment;
 import org.keynote.godtools.android.model.Tool;
 
 public final class ViewUtils {
@@ -16,6 +17,10 @@ public final class ViewUtils {
         if (view != null) {
             view.setText(view.getResources().getQuantityString(R.plurals.label_tools_shares, shares, shares));
         }
+    }
+
+    public static void bindLocalImage(@Nullable final PicassoImageView view, @Nullable final Attachment attachment) {
+        bindLocalImage(view, attachment != null ? attachment.getLocalFileName() : null);
     }
 
     public static void bindLocalImage(@Nullable final PicassoImageView view, @Nullable final String filename) {
