@@ -27,6 +27,12 @@ apply plugin: 'org.ajoberstar.grgit'
 ext.grgit = org.ajoberstar.grgit.Grgit.open()
 
 // define dependency versions for this project
+ext {
+    buildTools = "25.0.3"
+    compileSdk = 25
+    minSdk     = 15
+    targetSdk  = 25
+}
 ext.deps = [
         androidSupport       : '25.3.1',
         androidTestingSupport: '0.5',
@@ -98,16 +104,16 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    buildToolsVersion buildTools
+    compileSdkVersion compileSdk
 
     defaultConfig {
         applicationId 'org.keynote.godtools.android'
         versionName project.version
         versionCode grgit.log(includes:['HEAD']).size() + 4029047
 
-        minSdkVersion 15
-        targetSdkVersion 25
+        minSdkVersion minSdk
+        targetSdkVersion targetSdk
 
         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
         proguardFiles 'proguard-rules.pro'
