@@ -9,21 +9,24 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.annimon.stream.Stream;
 
+import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.keynote.godtools.android.R;
+import org.keynote.godtools.android.content.AttachmentLoader;
 import org.keynote.godtools.android.content.AvailableLanguagesLoader;
 import org.keynote.godtools.android.content.LatestTranslationLoader;
 import org.keynote.godtools.android.content.ToolLoader;
+import org.keynote.godtools.android.model.Attachment;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
 import org.keynote.godtools.android.service.GodToolsToolManager;
 import org.keynote.godtools.android.util.ModelUtils;
+import org.keynote.godtools.android.util.ViewUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,15 +41,16 @@ import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
 public class ToolDetailsFragment extends BaseFragment {
     private static final int LOADER_TOOL = 101;
-    private static final int LOADER_LATEST_TRANSLATION = 102;
-    private static final int LOADER_AVAILABLE_LANGUAGES = 103;
+    private static final int LOADER_BANNER = 102;
+    private static final int LOADER_LATEST_TRANSLATION = 103;
+    private static final int LOADER_AVAILABLE_LANGUAGES = 104;
 
     // these properties should be treated as final and only set/modified in onCreate()
     /*final*/ long mToolId = Tool.INVALID_ID;
 
     @Nullable
     @BindView(R.id.banner)
-    ImageView mBanner;
+    PicassoImageView mBanner;
     @Nullable
     @BindView(R.id.title)
     TextView mTitle;
@@ -74,6 +78,8 @@ public class ToolDetailsFragment extends BaseFragment {
 
     @Nullable
     private Tool mTool;
+    @Nullable
+    private Attachment mBannerAttachment;
     @Nullable
     private Translation mLatestTranslation;
     @NonNull
@@ -126,6 +132,12 @@ public class ToolDetailsFragment extends BaseFragment {
 
     void onLoadTool(@Nullable final Tool tool) {
         mTool = tool;
+        updateBannerLoader();
+        updateViews();
+    }
+
+    void onLoadBanner(@Nullable final Attachment banner) {
+        mBannerAttachment = banner;
         updateViews();
     }
 
@@ -142,6 +154,7 @@ public class ToolDetailsFragment extends BaseFragment {
     /* END lifecycle */
 
     private void updateViews() {
+        ViewUtils.bindLocalImage(mBanner, mBannerAttachment);
         if (mTitle != null) {
             mTitle.setText(ModelUtils.getTranslationName(mLatestTranslation, mTool));
         }
@@ -159,7 +172,7 @@ public class ToolDetailsFragment extends BaseFragment {
             mLanguagesView.setText(Stream.of(mLanguages)
                                            .map(Locale::getDisplayLanguage)
                                            .withoutNulls()
-                                           .sorted(String::compareToIgnoreCase)
+                                           .sorted(String.CASE_INSENSITIVE_ORDER)
                                            .reduce((l1, l2) -> l1 + ", " + l2)
                                            .orElse(""));
         }
@@ -188,8 +201,18 @@ public class ToolDetailsFragment extends BaseFragment {
     private void startLoaders() {
         final LoaderManager lm = getLoaderManager();
         lm.initLoader(LOADER_TOOL, null, new ToolLoaderCallbacks());
+        lm.initLoader(LOADER_BANNER, null, new AttachmentLoaderCallbacks());
         lm.initLoader(LOADER_LATEST_TRANSLATION, null, new TranslationLoaderCallbacks());
         lm.initLoader(LOADER_AVAILABLE_LANGUAGES, null, new LocalesLoaderCallbacks());
+
+        updateBannerLoader();
+    }
+
+    private void updateBannerLoader() {
+        final Loader loader = getLoaderManager().getLoader(LOADER_BANNER);
+        if (loader instanceof AttachmentLoader) {
+            ((AttachmentLoader) loader).setId(mTool != null ? mTool.getBannerId() : Attachment.INVALID_ID);
+        }
     }
 
     private void updateLatestTranslationLoader() {
@@ -216,6 +239,28 @@ public class ToolDetailsFragment extends BaseFragment {
             switch (loader.getId()) {
                 case LOADER_TOOL:
                     onLoadTool(tool);
+                    break;
+            }
+        }
+    }
+
+    class AttachmentLoaderCallbacks extends SimpleLoaderCallbacks<Attachment> {
+        @Nullable
+        @Override
+        public Loader<Attachment> onCreateLoader(final int id, @Nullable final Bundle args) {
+            switch (id) {
+                case LOADER_BANNER:
+                    return new AttachmentLoader(getContext());
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public void onLoadFinished(@NonNull final Loader<Attachment> loader, @Nullable final Attachment attachment) {
+            switch (loader.getId()) {
+                case LOADER_BANNER:
+                    onLoadBanner(attachment);
                     break;
             }
         }

@@ -6,15 +6,16 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.ccci.gto.android.common.db.util.CursorUtils;
+import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.ccci.gto.android.common.recyclerview.adapter.CursorAdapter;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.model.Tool;
+import org.keynote.godtools.android.util.ViewUtils;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ import butterknife.Optional;
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
 public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceViewHolder> {
+    public static final String COL_BANNER = "banner";
     public interface Callbacks {
         void onResourceInfo(long id);
 
@@ -63,7 +65,7 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
     class ResourceViewHolder extends BaseViewHolder {
         @Nullable
         @BindView(R.id.banner)
-        ImageView mBanner;
+        PicassoImageView mBanner;
         @Nullable
         @BindView(R.id.title)
         TextView mTitleView;
@@ -83,6 +85,8 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
         long mId;
         @Nullable
         String mTitle;
+        @Nullable
+        String mBannerFile;
         int mShares = 0;
         boolean mAdded = false;
         boolean mDownloading = false;
@@ -101,11 +105,13 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
             if (cursor != null) {
                 mId = CursorUtils.getLong(cursor, ToolTable.COLUMN_ID, Tool.INVALID_ID);
                 mTitle = CursorUtils.getString(cursor, ToolTable.COLUMN_NAME, null);
+                mBannerFile = CursorUtils.getString(cursor, COL_BANNER, null);
                 mAdded = CursorUtils.getBool(cursor, ToolTable.COLUMN_ADDED, false);
                 mShares = CursorUtils.getInt(cursor, ToolTable.COLUMN_SHARES, 0);
             } else {
                 mId = Tool.INVALID_ID;
                 mTitle = null;
+                mBannerFile = null;
                 mShares = 0;
                 mAdded = false;
                 mDownloaded = false;
@@ -113,9 +119,7 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
             }
 
             // update any bound views
-            if (mBanner != null) {
-                // TODO
-            }
+            ViewUtils.bindLocalImage(mBanner, mBannerFile);
             if (mTitleView != null) {
                 mTitleView.setText(mTitle);
             }

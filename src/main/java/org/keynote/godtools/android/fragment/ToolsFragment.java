@@ -13,12 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.ccci.gto.android.common.db.Expression;
+import org.ccci.gto.android.common.db.Join;
 import org.ccci.gto.android.common.db.support.v4.content.DaoCursorLoader;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.adapter.ResourcesAdapter;
 import org.keynote.godtools.android.content.ToolsCursorLoader;
+import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.service.GodToolsToolManager;
@@ -172,6 +174,17 @@ public class ToolsFragment extends Fragment implements ResourcesAdapter.Callback
         mResourcesAdapter = null;
     }
 
+    static final String[] TOOLS_PROJECTION = {
+            ToolTable.COLUMN_ID,
+            ToolTable.COLUMN_NAME,
+            ToolTable.COLUMN_SHARES,
+            ToolTable.COLUMN_ADDED,
+            AttachmentTable.TABLE_NAME + "." + AttachmentTable.COLUMN_LOCALFILENAME + " AS " +
+                    ResourcesAdapter.COL_BANNER
+    };
+    @SuppressWarnings("unchecked")
+    static final Join<Tool, ?>[] TOOLS_JOINS = new Join[] {ToolTable.SQL_JOIN_BANNER.type("LEFT")};
+
     class CursorLoaderCallbacks extends SimpleLoaderCallbacks<Cursor> {
         @Nullable
         @Override
@@ -179,6 +192,8 @@ public class ToolsFragment extends Fragment implements ResourcesAdapter.Callback
             switch (id) {
                 case LOADER_TOOLS:
                     final DaoCursorLoader<Tool> loader = new ToolsCursorLoader(getContext(), args);
+                    loader.setProjection(TOOLS_PROJECTION);
+                    loader.setJoins(TOOLS_JOINS);
                     final Expression where = ToolTable.FIELD_ADDED.eq(mMode == MODE_ADDED);
                     loader.setWhere(where);
                     return loader;
