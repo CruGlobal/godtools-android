@@ -9,3 +9,7 @@ android {
         targetSdkVersion targetSdk
     }
 }
+
+dependencies {
+    compile "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+}
