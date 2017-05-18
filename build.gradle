@@ -27,6 +27,9 @@ apply plugin: 'org.ajoberstar.grgit'
 ext.grgit = org.ajoberstar.grgit.Grgit.open()
 
 // define dependency versions for this project
+ext {
+    minSdk = 15
+}
 ext.deps = [
         androidSupport       : '25.3.1',
         androidTestingSupport: '0.5',
@@ -106,7 +109,7 @@ android {
         versionName project.version
         versionCode grgit.log(includes:['HEAD']).size() + 4029047
 
-        minSdkVersion 15
+        minSdkVersion minSdk
         targetSdkVersion 25
 
         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
