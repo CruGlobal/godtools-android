@@ -47,6 +47,8 @@ ext.deps = [
 ]
 
 dependencies {
+    compile project(':godtools-base')
+
     compile 'com.android.support:appcompat-v7:' + deps.androidSupport
     compile "com.android.support:cardview-v7:${deps.androidSupport}"
     compile "com.android.support:customtabs:${deps.androidSupport}"
