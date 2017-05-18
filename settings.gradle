@@ -1,2 +1,2 @@
 rootProject.name='godtools'
-include ':godtools-base', ':godtools-renderer', ':optroundcardview'
+include ':godtools-base', ':godtools-renderer', ':godtools-tract-renderer', ':optroundcardview'
