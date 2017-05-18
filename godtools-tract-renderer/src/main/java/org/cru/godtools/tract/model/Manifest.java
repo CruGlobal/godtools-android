@@ -1,6 +1,7 @@
 package org.cru.godtools.tract.model;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
@@ -18,8 +19,10 @@ public class Manifest extends Base {
     private static final String XML_PAGES = "pages";
     private static final String XML_RESOURCES = "resources";
 
-    private List<Page> mPages = new ArrayList<>();
-    private List<Resource> mResources = new ArrayList<>();
+    @VisibleForTesting
+    final List<Page> mPages = new ArrayList<>();
+    @VisibleForTesting
+    final List<Resource> mResources = new ArrayList<>();
 
     @NonNull
     @WorkerThread
@@ -29,7 +32,8 @@ public class Manifest extends Base {
         return manifest;
     }
 
-    private Manifest() {
+    @VisibleForTesting
+    Manifest() {
         super();
     }
 

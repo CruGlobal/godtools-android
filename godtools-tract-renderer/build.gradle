@@ -7,9 +7,15 @@ android {
     defaultConfig {
         minSdkVersion minSdk
         targetSdkVersion targetSdk
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 }
 
 dependencies {
     compile "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+
+    androidTestCompile "com.android.support.test:runner:${deps.androidTestingSupport}"
+    androidTestCompile "com.android.support.test:rules:${deps.androidTestingSupport}"
+    androidTestCompile "org.hamcrest:hamcrest-library:${deps.hamcrest}"
 }
