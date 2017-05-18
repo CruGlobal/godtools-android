@@ -207,4 +207,24 @@ allprojects {
         maven { url 'https://maven.fabric.io/public' }
         maven { url "https://oss.sonatype.org/content/repositories/releases" }
     }
+
+    // configure checkstyle
+    apply plugin: 'checkstyle'
+    checkstyle {
+        toolVersion '6.19'
+    }
+    task checkstyle(type: Checkstyle) {
+        configFile rootProject.file('checkstyle.xml')
+        source 'src'
+        include '*/java/**/*.java'
+        ignoreFailures true
+        showViolations true
+
+        classpath = files()
+    }
+    afterEvaluate {
+        if (project.tasks.findByName('check')) {
+            check.dependsOn('checkstyle')
+        }
+    }
 }
