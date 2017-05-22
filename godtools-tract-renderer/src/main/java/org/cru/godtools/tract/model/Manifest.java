@@ -7,7 +7,6 @@ import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
-import org.cru.godtools.tract.util.ParserUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -94,7 +93,7 @@ public final class Manifest extends Base {
     private void parseManifest(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_MANIFEST);
 
-        mBackgroundColor = ParserUtils.parseColor(parser.getAttributeValue(null, XML_BACKGROUND_COLOR), mBackgroundColor);
+        mBackgroundColor = Utils.parseColor(parser.getAttributeValue(null, XML_BACKGROUND_COLOR), mBackgroundColor);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
