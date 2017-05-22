@@ -91,7 +91,7 @@ public final class Text extends Content {
     private Text parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_TEXT);
 
-        mTextColor = parseColor(parser.getAttributeValue(null, XML_TEXT_COLOR), mTextColor);
+        mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
         mTextScale = NumberUtils.toDouble(parser.getAttributeValue(null, XML_TEXT_SCALE), mTextScale);
 
         mText = XmlPullParserUtils.safeNextText(parser);

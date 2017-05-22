@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
+import static org.cru.godtools.tract.model.Utils.parseColor;
 
 public final class Page extends Base {
     static final String XML_PAGE = "page";
@@ -99,10 +100,10 @@ public final class Page extends Base {
         }
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_PAGE);
 
-        mPrimaryColor = Utils.parseColor(parser.getAttributeValue(null, XML_PRIMARY_COLOR), mPrimaryColor);
-        mPrimaryTextColor = Utils.parseColor(parser.getAttributeValue(null, XML_PRIMARY_TEXT_COLOR), mPrimaryTextColor);
-        mTextColor = Utils.parseColor(parser.getAttributeValue(null, XML_TEXT_COLOR), mTextColor);
-        mBackgroundColor = Utils.parseColor(parser.getAttributeValue(null, XML_BACKGROUND_COLOR), mBackgroundColor);
+        mPrimaryColor = parseColor(parser, XML_PRIMARY_COLOR, mPrimaryColor);
+        mPrimaryTextColor = parseColor(parser, XML_PRIMARY_TEXT_COLOR, mPrimaryTextColor);
+        mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
+        mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {

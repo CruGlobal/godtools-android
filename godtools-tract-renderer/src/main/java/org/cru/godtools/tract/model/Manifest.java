@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
+import static org.cru.godtools.tract.model.Utils.parseColor;
 
 public final class Manifest extends Base {
     private static final String XML_MANIFEST = "manifest";
@@ -92,9 +93,9 @@ public final class Manifest extends Base {
     private void parseManifest(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_MANIFEST);
 
-        mPrimaryColor = Utils.parseColor(parser.getAttributeValue(null, XML_PRIMARY_COLOR), mPrimaryColor);
-        mTextColor = Utils.parseColor(parser.getAttributeValue(null, XML_TEXT_COLOR), mTextColor);
-        mBackgroundColor = Utils.parseColor(parser.getAttributeValue(null, XML_BACKGROUND_COLOR), mBackgroundColor);
+        mPrimaryColor = parseColor(parser, XML_PRIMARY_COLOR, mPrimaryColor);
+        mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
+        mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
