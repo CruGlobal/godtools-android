@@ -10,7 +10,9 @@
         <item name="colorAccent">@color/gt_blue</item>
         <item name="android:windowBackground">@color/white</item>
 
+        <item name="actionBarTheme">@style/ThemeOverlay.GodTools2.Toolbar.AppBar</item>
         <item name="actionBarStyle">@style/Widget.GodTools2.ActionBar.Solid</item>
+        <item name="toolbarStyle">@style/Widget.GodTools2.Toolbar.AppBar</item>
     </style>
 
     <style name="Theme.GodTools2.AppBar">
