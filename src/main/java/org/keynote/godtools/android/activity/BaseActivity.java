@@ -2,7 +2,9 @@ package org.keynote.godtools.android.activity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,21 +17,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.google.common.base.Objects;
+import com.google.common.base.Strings;
+
 import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.Settings;
 import org.keynote.godtools.android.util.WebUrlLauncher;
 
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static org.ccci.gto.android.common.Constants.INVALID_STRING_RES;
+import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
+import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 import static org.keynote.godtools.android.Constants.URI_HELP;
 import static org.keynote.godtools.android.Constants.URI_SHARE_BASE;
 import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 
 public abstract class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private final ChangeListener mSettingsChangeListener = new ChangeListener();
+
     // App/Action Bar
     @Nullable
     @BindView(R.id.appBar)
@@ -47,9 +58,20 @@ public abstract class BaseActivity extends AppCompatActivity
     @Nullable
     private ActionBarDrawerToggle mDrawerToggle;
 
+    @NonNull
+    protected Locale mPrimaryLanguage = Settings.getDefaultLanguage();
+    @Nullable
+    protected Locale mParallelLanguage;
+
     private boolean mVisible = false;
 
     /* BEGIN lifecycle */
+
+    @Override
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        loadLanguages(true);
+    }
 
     @Override
     public void onContentChanged() {
@@ -65,9 +87,15 @@ public abstract class BaseActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         mVisible = true;
+        startLanguagesChangeListener();
+        loadLanguages(false);
     }
 
     protected void onUpdateActionBar(@NonNull final ActionBar actionBar) {}
+
+    protected void onUpdatePrimaryLanguage() {}
+
+    protected void onUpdateParallelLanguage() {}
 
     @Override
     @CallSuper
@@ -115,6 +143,7 @@ public abstract class BaseActivity extends AppCompatActivity
     protected void onStop() {
         super.onStop();
         mVisible = false;
+        stopLanguagesChangeListener();
     }
 
     /* END lifecycle */
@@ -177,6 +206,32 @@ public abstract class BaseActivity extends AppCompatActivity
 
     protected boolean showNavigationDrawerIndicator() {return false;}
 
+    void loadLanguages(final boolean initial) {
+        final Settings settings = prefs();
+        final Locale oldPrimary = mPrimaryLanguage;
+        mPrimaryLanguage = settings.getPrimaryLanguage();
+        final Locale oldParallel = mParallelLanguage;
+        mParallelLanguage = settings.getParallelLanguage();
+
+        // trigger lifecycle events
+        if (!initial) {
+            if (!Objects.equal(oldPrimary, mPrimaryLanguage)) {
+                onUpdatePrimaryLanguage();
+            }
+            if (!Objects.equal(oldParallel, mParallelLanguage)) {
+                onUpdateParallelLanguage();
+            }
+        }
+    }
+
+    private void startLanguagesChangeListener() {
+        prefs().registerOnSharedPreferenceChangeListener(mSettingsChangeListener);
+    }
+
+    private void stopLanguagesChangeListener() {
+        prefs().unregisterOnSharedPreferenceChangeListener(mSettingsChangeListener);
+    }
+
     private void openPlayStore() {
         final String appId = BuildConfig.APPLICATION_ID;
         try {
@@ -196,5 +251,17 @@ public abstract class BaseActivity extends AppCompatActivity
         share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
         share.putExtra(Intent.EXTRA_TEXT, text);
         startActivity(Intent.createChooser(share, getString(R.string.share_prompt)));
+    }
+
+    class ChangeListener implements SharedPreferences.OnSharedPreferenceChangeListener {
+        @Override
+        public void onSharedPreferenceChanged(@Nullable final SharedPreferences preferences,
+                                              @Nullable final String key) {
+            switch (Strings.nullToEmpty(key)) {
+                case PREF_PRIMARY_LANGUAGE:
+                case PREF_PARALLEL_LANGUAGE:
+                    loadLanguages(false);
+            }
+        }
     }
 }
