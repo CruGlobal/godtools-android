@@ -30,7 +30,7 @@ public abstract class BaseFragment extends Fragment {
     private Unbinder mButterKnife;
 
     @NonNull
-    protected Locale mPrimaryLanguage = Locale.getDefault();
+    protected Locale mPrimaryLanguage = Settings.getDefaultLanguage();
     @Nullable
     protected Locale mParallelLanguage;
 
