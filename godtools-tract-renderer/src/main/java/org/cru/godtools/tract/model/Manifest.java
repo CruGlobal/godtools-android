@@ -21,7 +21,6 @@ public final class Manifest extends Base {
     private static final String XML_MANIFEST = "manifest";
     private static final String XML_PAGES = "pages";
     private static final String XML_RESOURCES = "resources";
-    private static final String XML_BACKGROUND_COLOR = "background-color";
 
     @ColorInt
     private static final int DEFAULT_PRIMARY_COLOR = Color.argb(255, 59, 164, 219);
@@ -93,6 +92,8 @@ public final class Manifest extends Base {
     private void parseManifest(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_MANIFEST);
 
+        mPrimaryColor = Utils.parseColor(parser.getAttributeValue(null, XML_PRIMARY_COLOR), mPrimaryColor);
+        mTextColor = Utils.parseColor(parser.getAttributeValue(null, XML_TEXT_COLOR), mTextColor);
         mBackgroundColor = Utils.parseColor(parser.getAttributeValue(null, XML_BACKGROUND_COLOR), mBackgroundColor);
 
         // process any child elements

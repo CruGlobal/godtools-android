@@ -3,6 +3,11 @@ package org.cru.godtools.tract.model;
 import android.support.annotation.NonNull;
 
 abstract class Base {
+    static final String XML_PRIMARY_COLOR = "primary-color";
+    static final String XML_PRIMARY_TEXT_COLOR = "primary-text-color";
+    static final String XML_TEXT_COLOR = "text-color";
+    static final String XML_BACKGROUND_COLOR = "background-color";
+
     @NonNull
     private final Base mParent;
 
@@ -20,6 +25,14 @@ abstract class Base {
             throw new IllegalStateException();
         } else {
             return mParent.getManifest();
+        }
+    }
+
+    protected Page getPage() {
+        if (mParent == this) {
+            throw new IllegalStateException();
+        } else {
+            return mParent.getPage();
         }
     }
 }
