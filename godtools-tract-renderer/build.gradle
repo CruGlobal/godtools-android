@@ -10,12 +10,22 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
+    compile project(':godtools-base')
+
     provided 'org.jetbrains:annotations:15.0'
 
     compile "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+
+    compile "com.annimon:stream:${deps.lightweightStream}"
+    compile "com.google.guava:guava:${deps.guava}"
 
     androidTestCompile "com.android.support.test:runner:${deps.androidTestingSupport}"
     androidTestCompile "com.android.support.test:rules:${deps.androidTestingSupport}"
