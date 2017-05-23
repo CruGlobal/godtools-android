@@ -19,19 +19,9 @@ enum Align {
     @Contract("_, !null -> !null")
     static Align parseAlign(@Nullable final String value, @Nullable final Align defValue) {
         if (value != null) {
-            switch (value) {
-                case "center":
-                    return CENTER;
-                case "start":
-                    return START;
-                case "end":
-                    return END;
-                case "top":
-                    return TOP;
-                case "bottom":
-                    return BOTTOM;
-                case "repeat":
-                    return REPEAT;
+            try {
+                return Align.valueOf(value.toUpperCase());
+            } catch (final Exception ignored) {
             }
         }
         return defValue;
