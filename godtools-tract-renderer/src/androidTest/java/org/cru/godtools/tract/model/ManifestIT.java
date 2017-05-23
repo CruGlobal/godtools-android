@@ -17,7 +17,7 @@ public class ManifestIT {
     public void verifyParseEmptyManifest() throws Exception {
         final Manifest manifest = parseManifestXml("manifest-empty.xml");
         assertThat(manifest.getPages(), is(empty()));
-        assertThat(manifest.mResources, is(empty()));
+        assertThat(manifest.mResources.size(), is(0));
     }
 
     @NonNull

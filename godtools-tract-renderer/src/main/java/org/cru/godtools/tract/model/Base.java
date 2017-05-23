@@ -1,6 +1,7 @@
 package org.cru.godtools.tract.model;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 abstract class Base {
     static final String XML_PRIMARY_COLOR = "primary-color";
@@ -28,6 +29,11 @@ abstract class Base {
         } else {
             return mParent.getManifest();
         }
+    }
+
+    @Nullable
+    Resource getResource(@Nullable final String name) {
+        return getManifest().getResource(name);
     }
 
     @NonNull

@@ -3,8 +3,10 @@ package org.cru.godtools.tract.model;
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
+import android.support.v4.util.SimpleArrayMap;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.xmlpull.v1.XmlPullParser;
@@ -43,7 +45,7 @@ public final class Manifest extends Base {
 
     private final List<Page> mPages = new ArrayList<>();
     @VisibleForTesting
-    final List<Resource> mResources = new ArrayList<>();
+    final SimpleArrayMap<String, Resource> mResources = new SimpleArrayMap<>();
 
     @NonNull
     @WorkerThread
@@ -67,6 +69,16 @@ public final class Manifest extends Base {
     @NonNull
     public List<Page> getPages() {
         return Collections.unmodifiableList(mPages);
+    }
+
+    @Nullable
+    @Override
+    Resource getResource(@Nullable final String name) {
+        if (name != null) {
+            return mResources.get(name);
+        }
+
+        return null;
     }
 
     @ColorInt
@@ -163,7 +175,8 @@ public final class Manifest extends Base {
                 case XMLNS_MANIFEST:
                     switch (parser.getName()) {
                         case Resource.XML_RESOURCE:
-                            mResources.add(Resource.fromXml(this, parser));
+                            final Resource resource = Resource.fromXml(this, parser);
+                            mResources.put(resource.getName(), resource);
                             continue;
                     }
                     break;
