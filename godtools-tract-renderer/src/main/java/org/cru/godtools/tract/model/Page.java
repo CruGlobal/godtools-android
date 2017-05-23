@@ -22,6 +22,7 @@ public final class Page extends Base {
 
     @ColorInt
     public static final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
+    public static final Align DEFAULT_BACKGROUND_IMAGE_ALIGN = Align.CENTER;
 
     @Nullable
     private String mLocalFileName;
@@ -38,6 +39,10 @@ public final class Page extends Base {
     private Integer mTextColor = null;
     @ColorInt
     private int mBackgroundColor = DEFAULT_BACKGROUND_COLOR;
+    @Nullable
+    private String mBackgroundImage;
+    @NonNull
+    private Align mBackgroundImageAlign = DEFAULT_BACKGROUND_IMAGE_ALIGN;
 
     @NonNull
     @WorkerThread
@@ -52,6 +57,7 @@ public final class Page extends Base {
         super(manifest);
     }
 
+    @NonNull
     @Override
     protected Page getPage() {
         return this;
@@ -104,6 +110,8 @@ public final class Page extends Base {
         mPrimaryTextColor = parseColor(parser, XML_PRIMARY_TEXT_COLOR, mPrimaryTextColor);
         mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
+        mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
+        mBackgroundImageAlign = Align.parseAlign(parser, XML_BACKGROUND_IMAGE_ALIGN, mBackgroundImageAlign);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {

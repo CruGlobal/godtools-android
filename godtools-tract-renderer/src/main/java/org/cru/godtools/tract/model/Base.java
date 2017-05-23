@@ -7,6 +7,8 @@ abstract class Base {
     static final String XML_PRIMARY_TEXT_COLOR = "primary-text-color";
     static final String XML_TEXT_COLOR = "text-color";
     static final String XML_BACKGROUND_COLOR = "background-color";
+    static final String XML_BACKGROUND_IMAGE = "background-image";
+    static final String XML_BACKGROUND_IMAGE_ALIGN = "background-image-align";
 
     @NonNull
     private final Base mParent;
@@ -28,6 +30,7 @@ abstract class Base {
         }
     }
 
+    @NonNull
     protected Page getPage() {
         if (mParent == this) {
             throw new IllegalStateException();
