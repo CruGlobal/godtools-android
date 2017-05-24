@@ -13,7 +13,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-import static android.util.TypedValue.COMPLEX_UNIT_SP;
+import static android.util.TypedValue.COMPLEX_UNIT_PX;
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 
@@ -21,7 +21,6 @@ public final class Text extends Content {
     private static final String XML_TEXT = "text";
     private static final String XML_TEXT_SCALE = "text-scale";
 
-    public static final float BASE_TEXT_SIZE = 16;
     public static final double DEFAULT_TEXT_SCALE = 1.0;
 
     @ColorInt
@@ -69,7 +68,7 @@ public final class Text extends Content {
         return text;
     }
 
-    Text(@NonNull final Base parent) {
+    private Text(@NonNull final Base parent) {
         super(parent);
     }
 
@@ -96,5 +95,25 @@ public final class Text extends Content {
 
         mText = XmlPullParserUtils.safeNextText(parser);
         return this;
+    }
+
+    public static void bind(@Nullable Text text, @Nullable final TextView view, @ColorInt final int defaultTextColor,
+                            final float textSize) {
+        bind(text, view, defaultTextColor, textSize, DEFAULT_TEXT_SCALE);
+    }
+
+    public static void bind(@Nullable Text text, @Nullable final TextView view, @ColorInt final int defaultTextColor,
+                            final float textSize, final double defaultTextScale) {
+        if (view != null) {
+            if (text != null) {
+                view.setText(text.mText);
+                view.setTextSize(COMPLEX_UNIT_PX, (float) (textSize * text.getTextScale(defaultTextScale)));
+                view.setTextColor(text.getTextColor(defaultTextColor));
+            } else {
+                view.setText(null);
+                view.setTextSize(COMPLEX_UNIT_PX, (float) (textSize * defaultTextScale));
+                view.setTextColor(defaultTextColor);
+            }
+        }
     }
 }
