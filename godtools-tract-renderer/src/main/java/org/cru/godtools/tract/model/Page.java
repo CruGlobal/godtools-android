@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
+import static org.cru.godtools.tract.model.Header.XML_HEADER;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 
 public final class Page extends Base {
@@ -21,8 +22,8 @@ public final class Page extends Base {
     private static final String XML_MANIFEST_SRC = "src";
 
     @ColorInt
-    public static final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
-    public static final Align DEFAULT_BACKGROUND_IMAGE_ALIGN = Align.CENTER;
+    private static final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
+    private static final Align DEFAULT_BACKGROUND_IMAGE_ALIGN = Align.CENTER;
 
     @Nullable
     private String mLocalFileName;
@@ -43,6 +44,9 @@ public final class Page extends Base {
     private String mBackgroundImage;
     @NonNull
     private Align mBackgroundImageAlign = DEFAULT_BACKGROUND_IMAGE_ALIGN;
+
+    @Nullable
+    private Header mHeader;
 
     @NonNull
     @WorkerThread
@@ -88,6 +92,11 @@ public final class Page extends Base {
         return mBackgroundColor;
     }
 
+    @Nullable
+    public Header getHeader() {
+        return mHeader;
+    }
+
     @WorkerThread
     private void parseManifestXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGE);
@@ -117,6 +126,17 @@ public final class Page extends Base {
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
+            }
+
+            // process recognized nodes
+            switch (parser.getNamespace()) {
+                case XMLNS_TRACT:
+                    switch (parser.getName()) {
+                        case XML_HEADER:
+                            mHeader = Header.fromXml(this, parser);
+                            continue;
+                    }
+                    break;
             }
 
             // skip unrecognized nodes
