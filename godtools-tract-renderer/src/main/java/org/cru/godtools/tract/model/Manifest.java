@@ -7,7 +7,9 @@ import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.SimpleArrayMap;
+import android.view.View;
 
+import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -33,6 +35,7 @@ public final class Manifest extends Base {
     private static final int DEFAULT_TEXT_COLOR = Color.argb(255, 90, 90, 90);
     @ColorInt
     public static final int DEFAULT_BACKGROUND_COLOR = Color.WHITE;
+    public static final Align DEFAULT_BACKGROUND_IMAGE_ALIGN = Align.CENTER;
 
     @ColorInt
     private int mPrimaryColor = DEFAULT_PRIMARY_COLOR;
@@ -42,6 +45,10 @@ public final class Manifest extends Base {
     private int mTextColor = DEFAULT_TEXT_COLOR;
     @ColorInt
     private int mBackgroundColor = DEFAULT_BACKGROUND_COLOR;
+    @Nullable
+    private String mBackgroundImage;
+    @NonNull
+    private Align mBackgroundImageAlign = DEFAULT_BACKGROUND_IMAGE_ALIGN;
 
     private final List<Page> mPages = new ArrayList<>();
     @VisibleForTesting
@@ -82,13 +89,23 @@ public final class Manifest extends Base {
     }
 
     @ColorInt
-    public int getPrimaryColor() {
+    int getPrimaryColor() {
         return mPrimaryColor;
     }
 
     @ColorInt
-    public int getPrimaryTextColor() {
+    public static int getPrimaryColor(@Nullable final Manifest manifest) {
+        return manifest != null ? manifest.mPrimaryColor : DEFAULT_PRIMARY_COLOR;
+    }
+
+    @ColorInt
+    int getPrimaryTextColor() {
         return mPrimaryTextColor;
+    }
+
+    @ColorInt
+    public static int getPrimaryTextColor(@Nullable final Manifest manifest) {
+        return manifest != null ? manifest.mPrimaryTextColor : DEFAULT_PRIMARY_TEXT_COLOR;
     }
 
     @ColorInt
@@ -97,8 +114,8 @@ public final class Manifest extends Base {
     }
 
     @ColorInt
-    public int getBackgroundColor() {
-        return mBackgroundColor;
+    public static int getBackgroundColor(@Nullable final Manifest manifest) {
+        return manifest != null ? manifest.mBackgroundColor : DEFAULT_BACKGROUND_COLOR;
     }
 
     @WorkerThread
@@ -106,8 +123,11 @@ public final class Manifest extends Base {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_MANIFEST);
 
         mPrimaryColor = parseColor(parser, XML_PRIMARY_COLOR, mPrimaryColor);
+        mPrimaryTextColor = parseColor(parser, XML_PRIMARY_TEXT_COLOR, mPrimaryTextColor);
         mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
+        mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
+        mBackgroundImageAlign = Align.parseAlign(parser, XML_BACKGROUND_IMAGE_ALIGN, mBackgroundImageAlign);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -185,5 +205,12 @@ public final class Manifest extends Base {
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
+    }
+
+    public static void bindBackgroundImage(@Nullable final Manifest manifest,
+                                           @NonNull final SimplePicassoImageView view) {
+        final Resource resource = manifest != null ? manifest.getResource(manifest.mBackgroundImage) : null;
+        view.setVisibility(resource != null ? View.VISIBLE : View.GONE);
+        Resource.bind(resource, view);
     }
 }
