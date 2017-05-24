@@ -73,7 +73,6 @@ dependencies {
     compile "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
-    compile 'com.crashlytics.sdk.android:crashlytics:2.6.8'
     compile "com.newrelic.agent.android:android-agent:5.13.0"
 
     compile "com.google.guava:guava:${deps.guava}"
@@ -212,6 +211,8 @@ allprojects {
     afterEvaluate {
         dependencies {
             compile "com.android.support:support-annotations:${deps.androidSupport}"
+
+            compile 'com.crashlytics.sdk.android:crashlytics:2.6.8'
         }
     }
 }
