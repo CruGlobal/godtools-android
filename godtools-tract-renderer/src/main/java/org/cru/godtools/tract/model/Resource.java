@@ -4,12 +4,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
+import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
+import static org.cru.godtools.base.util.FileUtils.getFile;
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
 
 public final class Resource extends Base {
@@ -49,5 +51,11 @@ public final class Resource extends Base {
 
         // discard any nested nodes
         XmlPullParserUtils.skipTag(parser);
+    }
+
+    public static void bind(@Nullable final Resource resource, @Nullable final PicassoImageView view) {
+        if (view != null) {
+            view.setPicassoFile(resource != null ? getFile(view.getContext(), resource.mLocalName) : null);
+        }
     }
 }

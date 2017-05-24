@@ -23,6 +23,7 @@ dependencies {
     provided 'org.jetbrains:annotations:15.0'
 
     compile "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+    compile "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
 
     compile "com.annimon:stream:${deps.lightweightStream}"
     compile "com.google.guava:guava:${deps.guava}"
