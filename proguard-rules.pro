@@ -25,17 +25,11 @@
 
 # Google Guava
 # http://stackoverflow.com/questions/9120338/proguard-configuration-for-guava-with-obfuscation-and-optimization
+-dontwarn com.google.errorprone.annotations.**
 -dontwarn com.google.j2objc.annotations.Weak
 -dontwarn java.lang.ClassValue
--dontwarn javax.annotation.**
--dontwarn javax.inject.**
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 -dontwarn sun.misc.Unsafe
-
-
-## Google Play Services workaround for: https://code.google.com/p/android-developer-preview/issues/detail?id=3001
-#-keep class com.google.android.gms.** { *; }
-#-dontwarn com.google.android.gms.**
 
 
 # newrelic settings
