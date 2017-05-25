@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
+import org.cru.godtools.base.util.FileUtils;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.model.Attachment;
 import org.keynote.godtools.android.model.Tool;

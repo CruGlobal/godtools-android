@@ -1,0 +1,38 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.jakewharton.butterknife'
+
+android {
+    buildToolsVersion buildTools
+    compileSdkVersion compileSdk
+
+    defaultConfig {
+        minSdkVersion minSdk
+        targetSdkVersion targetSdk
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    compile project(':godtools-base')
+
+    compile "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+    compile "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
+
+    compile "com.annimon:stream:${deps.lightweightStream}"
+    compile "com.google.guava:guava:${deps.guava}"
+    compile "com.jakewharton:butterknife:${deps.butterknife}"
+
+    provided 'org.jetbrains:annotations:15.0'
+
+    androidTestCompile "com.android.support.test:runner:${deps.androidTestingSupport}"
+    androidTestCompile "com.android.support.test:rules:${deps.androidTestingSupport}"
+    androidTestCompile "org.hamcrest:hamcrest-library:${deps.hamcrest}"
+
+    annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
+}
