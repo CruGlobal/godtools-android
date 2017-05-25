@@ -17,6 +17,7 @@ import java.io.IOException;
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 import static org.cru.godtools.tract.model.Header.XML_HEADER;
+import static org.cru.godtools.tract.model.Hero.XML_HERO;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 
 public final class Page extends Base {
@@ -49,6 +50,8 @@ public final class Page extends Base {
 
     @Nullable
     private Header mHeader;
+    @Nullable
+    private Hero mHero;
 
     @NonNull
     @WorkerThread
@@ -104,6 +107,11 @@ public final class Page extends Base {
         return mHeader;
     }
 
+    @Nullable
+    public Hero getHero() {
+        return mHero;
+    }
+
     @WorkerThread
     private void parseManifestXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGE);
@@ -142,6 +150,9 @@ public final class Page extends Base {
                         case XML_HEADER:
                             mHeader = Header.fromXml(this, parser);
                             continue;
+                        case XML_HERO:
+                            mHero = Hero.fromXml(this, parser);
+                            break;
                     }
                     break;
             }
