@@ -36,6 +36,7 @@ ext.deps = [
         androidSupport       : '25.3.1',
         androidTestingSupport: '0.5',
         butterknife          : '8.6.0',
+        crashlytics          : '2.6.8',
         facebookStetho       : '1.5.0',
         gtoSupport           : '1.1.2-SNAPSHOT',
         guava                : '22.0-android',
@@ -72,7 +73,8 @@ dependencies {
     compile "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
-    compile "com.newrelic.agent.android:android-agent:5.13.0"
+    implementation "com.newrelic.agent.android:android-agent:5.13.0"
+    implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
 
     compile "com.google.guava:guava:${deps.guava}"
     compile "com.jakewharton:butterknife:${deps.butterknife}"
@@ -208,13 +210,5 @@ allprojects {
         maven { url 'https://maven.google.com' }
         maven { url 'https://maven.fabric.io/public' }
         maven { url "https://oss.sonatype.org/content/repositories/releases" }
-    }
-
-    afterEvaluate {
-        dependencies {
-            compile "com.android.support:support-annotations:${deps.androidSupport}"
-
-            compile 'com.crashlytics.sdk.android:crashlytics:2.6.8'
-        }
     }
 }

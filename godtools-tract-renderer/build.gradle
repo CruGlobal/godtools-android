@@ -24,6 +24,8 @@ dependencies {
     compile "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
 
+    implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
+
     compile "com.annimon:stream:${deps.lightweightStream}"
     compile "com.google.guava:guava:${deps.guava}"
     compile "com.jakewharton:butterknife:${deps.butterknife}"
