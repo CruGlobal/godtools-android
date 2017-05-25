@@ -13,9 +13,12 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
+import static org.cru.godtools.tract.model.Card.XML_CARD;
 import static org.cru.godtools.tract.model.Header.XML_HEADER;
 import static org.cru.godtools.tract.model.Hero.XML_HERO;
 import static org.cru.godtools.tract.model.Utils.parseColor;
@@ -23,6 +26,7 @@ import static org.cru.godtools.tract.model.Utils.parseColor;
 public final class Page extends Base {
     static final String XML_PAGE = "page";
     private static final String XML_MANIFEST_SRC = "src";
+    private static final String XML_CARDS = "cards";
 
     @ColorInt
     private static final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
@@ -52,6 +56,7 @@ public final class Page extends Base {
     private Header mHeader;
     @Nullable
     private Hero mHero;
+    private final List<Card> mCards = new ArrayList<>();
 
     @NonNull
     @WorkerThread
@@ -152,7 +157,10 @@ public final class Page extends Base {
                             continue;
                         case XML_HERO:
                             mHero = Hero.fromXml(this, parser);
-                            break;
+                            continue;
+                        case XML_CARDS:
+                            parseCardsXml(parser);
+                            continue;
                     }
                     break;
             }
@@ -163,6 +171,31 @@ public final class Page extends Base {
 
         // mark page XML as parsed
         mPageXmlParsed = true;
+    }
+
+    private void parseCardsXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CARDS);
+
+        // process any child elements
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+
+            // process recognized nodes
+            switch (parser.getNamespace()) {
+                case XMLNS_TRACT:
+                    switch (parser.getName()) {
+                        case XML_CARD:
+                            mCards.add(Card.fromXml(this, parser));
+                            continue;
+                    }
+                    break;
+            }
+
+            // skip unrecognized nodes
+            XmlPullParserUtils.skipTag(parser);
+        }
     }
 
     public static void bindBackgroundImage(@Nullable final Page page, @NonNull final SimplePicassoImageView view) {
