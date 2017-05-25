@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.jakewharton.butterknife'
 
 android {
     buildToolsVersion buildTools
@@ -20,15 +21,18 @@ android {
 dependencies {
     compile project(':godtools-base')
 
-    provided 'org.jetbrains:annotations:15.0'
-
     compile "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
 
     compile "com.annimon:stream:${deps.lightweightStream}"
     compile "com.google.guava:guava:${deps.guava}"
+    compile "com.jakewharton:butterknife:${deps.butterknife}"
+
+    provided 'org.jetbrains:annotations:15.0'
 
     androidTestCompile "com.android.support.test:runner:${deps.androidTestingSupport}"
     androidTestCompile "com.android.support.test:rules:${deps.androidTestingSupport}"
     androidTestCompile "org.hamcrest:hamcrest-library:${deps.hamcrest}"
+
+    annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }
