@@ -4,21 +4,27 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.ccci.gto.android.common.util.NumberUtils;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.cru.godtools.tract.R;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+
+import butterknife.ButterKnife;
 
 import static android.util.TypedValue.COMPLEX_UNIT_PX;
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 
 public final class Text extends Content {
-    private static final String XML_TEXT = "text";
+    static final String XML_TEXT = "text";
     private static final String XML_TEXT_SCALE = "text-scale";
 
     private static final double DEFAULT_TEXT_SCALE = 1.0;
@@ -97,10 +103,6 @@ public final class Text extends Content {
         return this;
     }
 
-    public static void bind(@Nullable final Text text, @Nullable final TextView view) {
-        bind(text, view, Page.getTextColor(text != null ? text.getPage() : null));
-    }
-
     public static void bind(@Nullable final Text text, @Nullable final TextView view,
                             @ColorInt final int defaultTextColor) {
         if (view != null) {
@@ -127,5 +129,19 @@ public final class Text extends Content {
                 view.setTextColor(defaultTextColor);
             }
         }
+    }
+
+    @NonNull
+    @Override
+    public View render(@NonNull final LinearLayout parent) {
+        final View view =
+                LayoutInflater.from(parent.getContext()).inflate(R.layout.tract_content_text, parent, false);
+
+        final TextView content = ButterKnife.findById(view, R.id.content);
+        if (content != null) {
+            bind(this, content, Page.getTextColor(getPage()));
+        }
+
+        return view;
     }
 }
