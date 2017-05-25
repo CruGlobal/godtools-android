@@ -30,7 +30,7 @@ dependencies {
     compile "com.google.guava:guava:${deps.guava}"
     compile "com.jakewharton:butterknife:${deps.butterknife}"
 
-    provided 'org.jetbrains:annotations:15.0'
+    compileOnly 'org.jetbrains:annotations:15.0'
 
     androidTestCompile "com.android.support.test:runner:${deps.androidTestingSupport}"
     androidTestCompile "com.android.support.test:rules:${deps.androidTestingSupport}"
