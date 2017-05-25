@@ -34,8 +34,8 @@ public final class Manifest extends Base {
     @ColorInt
     private static final int DEFAULT_TEXT_COLOR = Color.argb(255, 90, 90, 90);
     @ColorInt
-    public static final int DEFAULT_BACKGROUND_COLOR = Color.WHITE;
-    public static final Align DEFAULT_BACKGROUND_IMAGE_ALIGN = Align.CENTER;
+    private static final int DEFAULT_BACKGROUND_COLOR = Color.WHITE;
+    private static final Align DEFAULT_BACKGROUND_IMAGE_ALIGN = Align.CENTER;
 
     @ColorInt
     private int mPrimaryColor = DEFAULT_PRIMARY_COLOR;
@@ -109,8 +109,8 @@ public final class Manifest extends Base {
     }
 
     @ColorInt
-    public int getTextColor() {
-        return mTextColor;
+    public static int getTextColor(@Nullable final Manifest manifest) {
+        return manifest != null ? manifest.mTextColor : DEFAULT_TEXT_COLOR;
     }
 
     @ColorInt

@@ -21,7 +21,7 @@ public final class Text extends Content {
     private static final String XML_TEXT = "text";
     private static final String XML_TEXT_SCALE = "text-scale";
 
-    public static final double DEFAULT_TEXT_SCALE = 1.0;
+    private static final double DEFAULT_TEXT_SCALE = 1.0;
 
     @ColorInt
     @Nullable
@@ -97,13 +97,25 @@ public final class Text extends Content {
         return this;
     }
 
-    public static void bind(@Nullable Text text, @Nullable final TextView view, @ColorInt final int defaultTextColor,
-                            final float textSize) {
+    public static void bind(@Nullable final Text text, @Nullable final TextView view) {
+        bind(text, view, Page.getTextColor(text != null ? text.getPage() : null));
+    }
+
+    public static void bind(@Nullable final Text text, @Nullable final TextView view,
+                            @ColorInt final int defaultTextColor) {
+        if (view != null) {
+            final float textSize = view.getContext().getResources().getDimension(R.dimen.text_size_base);
+            bind(text, view, defaultTextColor, textSize, DEFAULT_TEXT_SCALE);
+        }
+    }
+
+    public static void bind(@Nullable final Text text, @Nullable final TextView view,
+                            @ColorInt final int defaultTextColor, final float textSize) {
         bind(text, view, defaultTextColor, textSize, DEFAULT_TEXT_SCALE);
     }
 
-    public static void bind(@Nullable Text text, @Nullable final TextView view, @ColorInt final int defaultTextColor,
-                            final float textSize, final double defaultTextScale) {
+    public static void bind(@Nullable final Text text, @Nullable final TextView view,
+                            @ColorInt final int defaultTextColor, final float textSize, final double defaultTextScale) {
         if (view != null) {
             if (text != null) {
                 view.setText(text.mText);
