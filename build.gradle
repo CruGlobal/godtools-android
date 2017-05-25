@@ -38,7 +38,7 @@ ext.deps = [
         butterknife          : '8.6.0',
         facebookStetho       : '1.5.0',
         gtoSupport           : '1.1.2-SNAPSHOT',
-        guava                : '22.0-rc1-android',
+        guava                : '22.0-android',
         hamcrest             : '1.3',
         junit                : '4.12',
         leakcanary           : '1.5.1',
