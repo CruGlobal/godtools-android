@@ -14,11 +14,12 @@ import android.view.ViewGroup;
 
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Join;
-import org.ccci.gto.android.common.db.support.v4.content.DaoCursorLoader;
+import org.ccci.gto.android.common.eventbus.content.DaoCursorEventBusLoader;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.adapter.ResourcesAdapter;
+import org.keynote.godtools.android.content.AttachmentEventBusSubscriber;
 import org.keynote.godtools.android.content.ToolsCursorLoader;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
@@ -197,7 +198,8 @@ public class ToolsFragment extends Fragment implements ResourcesAdapter.Callback
         public Loader<Cursor> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_TOOLS:
-                    final DaoCursorLoader<Tool> loader = new ToolsCursorLoader(getContext(), args);
+                    final DaoCursorEventBusLoader<Tool> loader = new ToolsCursorLoader(getContext(), args);
+                    loader.addEventBusSubscriber(new AttachmentEventBusSubscriber(loader));
                     loader.setProjection(TOOLS_PROJECTION);
                     loader.setJoins(TOOLS_JOINS);
                     final Expression where = ToolTable.FIELD_ADDED.eq(mMode == MODE_ADDED);
