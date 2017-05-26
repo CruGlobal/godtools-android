@@ -10,6 +10,7 @@ import android.support.v4.content.Loader;
 
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.BundleUtils;
+import org.cru.godtools.tract.activity.BaseTractActivity;
 import org.cru.godtools.tract.model.Manifest;
 import org.keynote.godtools.android.content.TractManifestLoader;
 import org.keynote.godtools.android.model.Language;
@@ -21,7 +22,7 @@ import static org.keynote.godtools.android.Constants.EXTRA_PARALLEL_LANGUAGE;
 import static org.keynote.godtools.android.Constants.EXTRA_PRIMARY_LANGUAGE;
 import static org.keynote.godtools.android.Constants.EXTRA_TOOL;
 
-public class TractActivity extends org.cru.godtools.tract.activity.TractActivity {
+public class TractActivity extends BaseTractActivity {
     private static final int LOADER_MANIFEST_PRIMARY = 101;
     private static final int LOADER_MANIFEST_PARALLEL = 102;
 

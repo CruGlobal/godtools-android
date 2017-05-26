@@ -20,7 +20,7 @@ import org.cru.godtools.tract.util.DrawableUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class TractActivity extends AppCompatActivity {
+public abstract class BaseTractActivity extends AppCompatActivity {
     // App/Action Bar
     @BindView(R2.id.appBar)
     Toolbar mToolbar;
