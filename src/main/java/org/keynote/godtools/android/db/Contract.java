@@ -132,6 +132,9 @@ public final class Contract extends BaseContract {
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
         public static final Expression SQL_WHERE_TOOL_LANGUAGE = FIELD_TOOL.eq(bind()).and(FIELD_LANGUAGE.eq(bind()));
         public static final Expression SQL_WHERE_PUBLISHED = FIELD_PUBLISHED.eq(true);
+        public static final Expression SQL_WHERE_DOWNLOADED = FIELD_DOWNLOADED.eq(true);
+
+        public static final String SQL_ORDER_BY_VERSION_DESC = COLUMN_VERSION + " DESC";
 
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_TOOL, SQL_COLUMN_LANGUAGE, SQL_COLUMN_VERSION,
