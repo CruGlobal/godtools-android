@@ -24,7 +24,7 @@ public class Paragraph extends Content {
     static final String XML_PARAGRAPH = "paragraph";
 
     @NonNull
-    private List<Content> mContent = new ArrayList<>();
+    private final List<Content> mContent = new ArrayList<>();
 
     private Paragraph(@NonNull final Base parent) {
         super(parent);

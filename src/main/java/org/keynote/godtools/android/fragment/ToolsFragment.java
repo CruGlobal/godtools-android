@@ -24,6 +24,7 @@ import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.service.GodToolsToolManager;
+import org.keynote.godtools.android.sync.GodToolsSyncService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -87,6 +88,7 @@ public class ToolsFragment extends Fragment implements ResourcesAdapter.Callback
             mMode = args.getInt(EXTRA_MODE, mMode);
         }
 
+        syncData(false);
         startLoaders();
     }
 
@@ -142,6 +144,10 @@ public class ToolsFragment extends Fragment implements ResourcesAdapter.Callback
 
     private boolean showDownloading() {
         return mMode == MODE_AVAILABLE;
+    }
+
+    private void syncData(final boolean force) {
+        GodToolsSyncService.syncTools(getContext(), force).sync();
     }
 
     private void startLoaders() {

@@ -2,4 +2,8 @@
 <resources>
     <dimen name="text_size_base">16sp</dimen>
     <dimen name="text_size_header">18sp</dimen>
+    <dimen name="text_size_hero">16sp</dimen>
+    <dimen name="horiz_margin_hero">32dp</dimen>
+
+    <style name="Theme.GodTools.Tract" parent="Theme.AppCompat" />
 </resources>
