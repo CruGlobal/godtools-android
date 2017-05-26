@@ -204,7 +204,9 @@ public abstract class BaseActivity extends AppCompatActivity
         }
     }
 
-    protected boolean showNavigationDrawerIndicator() {return false;}
+    protected boolean showNavigationDrawerIndicator() {
+        return false;
+    }
 
     void loadLanguages(final boolean initial) {
         final Settings settings = prefs();
