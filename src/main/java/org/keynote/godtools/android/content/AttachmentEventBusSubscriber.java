@@ -10,7 +10,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.keynote.godtools.android.event.AttachmentUpdateEvent;
 
 public final class AttachmentEventBusSubscriber extends EventBusSubscriber {
-    AttachmentEventBusSubscriber(@NonNull final Loader loader) {
+    public AttachmentEventBusSubscriber(@NonNull final Loader loader) {
         super(loader);
     }
 
