@@ -6,8 +6,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.annimon.stream.Stream;
-
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
 import org.xmlpull.v1.XmlPullParser;
@@ -109,7 +107,7 @@ public final class Hero extends Base {
         if (container != null) {
             container.removeAllViews();
             if (hero != null) {
-                Stream.of(hero.mContent).map(c -> c.render(container)).forEach(container::addView);
+                Content.renderAll(container, hero.mContent);
             }
         }
     }

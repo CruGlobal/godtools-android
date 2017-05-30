@@ -5,10 +5,13 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.annimon.stream.Stream;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
@@ -43,5 +46,9 @@ public abstract class Content extends Base {
     }
 
     @NonNull
-    public abstract View render(@NonNull final LinearLayout container);
+    abstract View render(@NonNull final LinearLayout container);
+
+    static void renderAll(@NonNull final LinearLayout container, @NonNull final List<? extends Content> content) {
+        Stream.of(content).map(c -> c.render(container)).forEach(container::addView);
+    }
 }

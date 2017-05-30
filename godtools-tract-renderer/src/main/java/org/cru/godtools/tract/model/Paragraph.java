@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.annimon.stream.Stream;
-
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
 import org.xmlpull.v1.XmlPullParser;
@@ -69,7 +67,7 @@ public class Paragraph extends Content {
         // attach all the content to this layout
         final LinearLayout content = ButterKnife.findById(view, R.id.content);
         if (content != null) {
-            Stream.of(mContent).map(c -> c.render(content)).forEach(content::addView);
+            Content.renderAll(content, mContent);
         }
 
         return view;
