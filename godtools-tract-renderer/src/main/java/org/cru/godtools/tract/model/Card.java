@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.model;
 
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -12,10 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
+import static org.cru.godtools.tract.model.Utils.parseColor;
 
 public final class Card extends Base {
     static final String XML_CARD = "card";
     private static final String XML_LABEL = "label";
+
+    @Nullable
+    @ColorInt
+    private Integer mBackgroundColor = null;
 
     @Nullable
     private Text mLabel;
@@ -27,6 +33,18 @@ public final class Card extends Base {
         super(parent);
     }
 
+    @ColorInt
+    private int getBackgroundColor() {
+        // XXX: this may need to inherit differently
+        return mBackgroundColor != null ? mBackgroundColor : Manifest.getBackgroundColor(getManifest());
+    }
+
+    @ColorInt
+    static int getBackgroundColor(@Nullable final Card card) {
+        // XXX: this may need to inherit differently
+        return card != null ? card.getBackgroundColor() : Manifest.getBackgroundColor(null);
+    }
+
     @NonNull
     static Card fromXml(@NonNull final Base parent, @NonNull final XmlPullParser parser)
             throws IOException, XmlPullParserException {
@@ -36,6 +54,8 @@ public final class Card extends Base {
     @NonNull
     private Card parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CARD);
+
+        mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
