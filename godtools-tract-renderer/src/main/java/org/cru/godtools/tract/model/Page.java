@@ -88,6 +88,11 @@ public final class Page extends Base {
     }
 
     @ColorInt
+    static int getPrimaryColor(@Nullable final Page page) {
+        return page != null ? page.getPrimaryColor() : Manifest.getPrimaryColor(null);
+    }
+
+    @ColorInt
     int getPrimaryTextColor() {
         return mPrimaryTextColor != null ? mPrimaryTextColor : getManifest().getPrimaryTextColor();
     }
@@ -98,7 +103,7 @@ public final class Page extends Base {
     }
 
     @ColorInt
-    public static int getTextColor(@Nullable final Page page) {
+    static int getTextColor(@Nullable final Page page) {
         return page != null ? page.getTextColor() : Manifest.getTextColor(null);
     }
 
