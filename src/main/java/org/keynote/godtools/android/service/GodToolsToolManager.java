@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.ArrayMap;
+import android.support.v4.util.ArraySet;
 import android.support.v4.util.LongSparseArray;
 
 import com.google.common.base.Objects;
@@ -49,6 +50,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Locale;
+import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -200,6 +202,19 @@ public final class GodToolsToolManager {
                 .or(TranslationTable.FIELD_LANGUAGE.notIn(constants(languages)))
                 .and(TranslationTable.SQL_WHERE_DOWNLOADED), TranslationTable.COLUMN_DOWNLOADED);
 
+        // remove any translation we have a newer version of
+        final Set<TranslationKey> seen = new ArraySet<>();
+        changes += mDao.streamCompat(Query.select(Translation.class)
+                                             .where(TranslationTable.SQL_WHERE_DOWNLOADED)
+                                             .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC))
+                // filter out the newest version of every translation
+                .filterNot(t -> seen.add(new TranslationKey(t)))
+                .peek(t -> {
+                    t.setDownloaded(false);
+                    mDao.update(t, TranslationTable.COLUMN_DOWNLOADED);
+                })
+                .count();
+
         // if any translations were updated, send a broadcast
         if (changes > 0) {
             EventBus.getDefault().post(new TranslationUpdateEvent());
@@ -304,6 +319,9 @@ public final class GodToolsToolManager {
                             translation.setDownloaded(true);
                             mDao.update(translation, TranslationTable.COLUMN_DOWNLOADED);
                             mEventBus.post(new TranslationUpdateEvent());
+
+                            // prune any old translations
+                            pruneOldTranslations();
                         }
                     }
                 } catch (final IOException ignored) {
