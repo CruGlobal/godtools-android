@@ -60,6 +60,7 @@ import retrofit2.Response;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 import static org.ccci.gto.android.common.db.Expression.NULL;
+import static org.ccci.gto.android.common.db.Expression.constants;
 import static org.ccci.gto.android.common.util.ThreadUtils.getLock;
 
 public final class GodToolsToolManager {
@@ -157,6 +158,7 @@ public final class GodToolsToolManager {
             language.setCode(locale);
             language.setAdded(false);
             final ListenableFuture<Integer> update = mDao.updateAsync(language, LanguageTable.COLUMN_ADDED);
+            update.addListener(this::pruneOldTranslations, directExecutor());
             update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new LanguageUpdateEvent()),
                                directExecutor());
         }
@@ -175,7 +177,33 @@ public final class GodToolsToolManager {
         tool.setId(id);
         tool.setAdded(false);
         final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
+        update.addListener(this::pruneOldTranslations, directExecutor());
         update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
+    }
+
+    @WorkerThread
+    void pruneOldTranslations() {
+        // load the tools and languages that are added to this device
+        final Object[] tools = mDao
+                .streamCompat(Query.select(Tool.class).where(ToolTable.FIELD_ADDED.eq(true)))
+                .map(Tool::getId)
+                .toArray();
+        final Object[] languages = mDao
+                .streamCompat(Query.select(Language.class).where(LanguageTable.FIELD_ADDED.eq(true)))
+                .map(Language::getCode)
+                .toArray();
+
+        // remove any translation that is no longer added to this device
+        final Translation translation = new Translation();
+        translation.setDownloaded(false);
+        int changes = mDao.update(translation, TranslationTable.FIELD_TOOL.notIn(constants(tools))
+                .or(TranslationTable.FIELD_LANGUAGE.notIn(constants(languages)))
+                .and(TranslationTable.SQL_WHERE_DOWNLOADED), TranslationTable.COLUMN_DOWNLOADED);
+
+        // if any translations were updated, send a broadcast
+        if (changes > 0) {
+            EventBus.getDefault().post(new TranslationUpdateEvent());
+        }
     }
 
     @WorkerThread
