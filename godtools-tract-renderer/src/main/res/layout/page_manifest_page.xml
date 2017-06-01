@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/page"
     android:layout_width="match_parent"
@@ -13,73 +14,85 @@
         android:cropToPadding="false" />
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/page_content_parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v4.widget.NestedScrollView
+        <org.cru.godtools.tract.widget.PageContentLayout
+            android:id="@+id/page_content_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <RelativeLayout
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/initial_page_content"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                app:layout_childType="hero"
+                app:layout_dynamicHeight="true">
 
                 <RelativeLayout
-                    android:id="@+id/header"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:background="@android:color/holo_red_dark">
+                    android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/header_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginStart="16dp"
-                        android:textIsSelectable="false"
-                        tools:text="1"
-                        tools:textSize="54sp" />
-
-                    <TextView
-                        android:id="@+id/header_title"
+                    <RelativeLayout
+                        android:id="@+id/header"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_margin="16dp"
-                        android:layout_toEndOf="@id/header_number"
-                        android:layout_toRightOf="@id/header_number"
-                        android:textIsSelectable="true"
-                        tools:text="GOD LOVES YOU AND CREATED YOU TO KNOW HIM PERSONALLY."
-                        tools:textSize="18sp" />
+                        tools:background="@android:color/Purple_800">
+
+                        <TextView
+                            android:id="@+id/header_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"
+                            android:textIsSelectable="false"
+                            tools:text="1"
+                            tools:textSize="54sp" />
+
+                        <TextView
+                            android:id="@+id/header_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_margin="16dp"
+                            android:layout_toEndOf="@id/header_number"
+                            android:layout_toRightOf="@id/header_number"
+                            android:textIsSelectable="true"
+                            tools:text="GOD LOVES YOU AND CREATED YOU TO KNOW HIM PERSONALLY."
+                            tools:textSize="18sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/hero"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/header"
+                        android:layout_marginLeft="@dimen/horiz_margin_hero"
+                        android:layout_marginRight="@dimen/horiz_margin_hero">
+
+                        <TextView
+                            android:id="@+id/hero_heading"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:textIsSelectable="true"
+                            tools:text="Knowing God Personally"
+                            tools:textSize="54sp" />
+
+                        <LinearLayout
+                            android:id="@+id/hero_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/hero_heading"
+                            android:layout_marginTop="16dp"
+                            android:orientation="vertical" />
+                    </RelativeLayout>
                 </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/hero"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/header"
-                    android:layout_marginLeft="@dimen/horiz_margin_hero"
-                    android:layout_marginRight="@dimen/horiz_margin_hero">
-
-                    <TextView
-                        android:id="@+id/hero_heading"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:textIsSelectable="true"
-                        tools:text="Knowing God Personally"
-                        tools:textSize="54sp" />
-
-                    <LinearLayout
-                        android:id="@+id/hero_content"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/hero_heading"
-                        android:layout_marginTop="16dp"
-                        android:orientation="vertical" />
-                </RelativeLayout>
-            </RelativeLayout>
-        </android.support.v4.widget.NestedScrollView>
+            </android.support.v4.widget.NestedScrollView>
+        </org.cru.godtools.tract.widget.PageContentLayout>
     </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>

@@ -1,7 +1,13 @@
 package org.cru.godtools.tract.model;
 
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View;
+
+import org.cru.godtools.tract.R;
+
+import butterknife.ButterKnife;
 
 abstract class Base {
     static final String XML_PRIMARY_COLOR = "primary-color";
@@ -43,5 +49,27 @@ abstract class Base {
         } else {
             return mParent.getPage();
         }
+    }
+
+    static abstract class BaseViewHolder<T extends Base> {
+        @NonNull
+        public final View mRoot;
+
+        @Nullable
+        T mModel;
+
+        BaseViewHolder(@NonNull final View root) {
+            mRoot = root;
+            ButterKnife.bind(this, mRoot);
+            mRoot.setTag(R.id.view_holder, this);
+        }
+
+        public final void setModel(@Nullable final T model) {
+            mModel = model;
+            bind();
+        }
+
+        @CallSuper
+        void bind() {}
     }
 }

@@ -14,6 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
@@ -82,9 +83,19 @@ public final class Page extends Base {
         return mLocalFileName;
     }
 
+    @NonNull
+    public List<Card> getCards() {
+        return Collections.unmodifiableList(mCards);
+    }
+
     @ColorInt
     int getPrimaryColor() {
         return mPrimaryColor != null ? mPrimaryColor : getManifest().getPrimaryColor();
+    }
+
+    @ColorInt
+    static int getPrimaryColor(@Nullable final Page page) {
+        return page != null ? page.getPrimaryColor() : Manifest.getPrimaryColor(null);
     }
 
     @ColorInt
@@ -98,7 +109,7 @@ public final class Page extends Base {
     }
 
     @ColorInt
-    public static int getTextColor(@Nullable final Page page) {
+    static int getTextColor(@Nullable final Page page) {
         return page != null ? page.getTextColor() : Manifest.getTextColor(null);
     }
 
