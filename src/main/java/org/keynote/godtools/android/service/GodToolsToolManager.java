@@ -333,6 +333,7 @@ public final class GodToolsToolManager {
     /**
      * Process a streaming zip response.
      */
+    @WorkerThread
     private void processZipDownload(@NonNull final Translation translation, @NonNull final ResponseBody body)
             throws IOException {
         final long size = body.contentLength();
