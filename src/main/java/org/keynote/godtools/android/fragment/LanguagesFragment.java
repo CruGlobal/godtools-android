@@ -2,6 +2,7 @@ package org.keynote.godtools.android.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -68,7 +69,6 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
             mPrimary = args.getBoolean(EXTRA_PRIMARY, mPrimary);
         }
 
-        syncData(false);
         startLoaders();
     }
 
@@ -126,8 +126,10 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         getLoaderManager().initLoader(LOADER_LANGUAGES, null, new LanguagesLoaderCallbacks());
     }
 
-    private void syncData(final boolean force) {
-        GodToolsSyncService.syncLanguages(getContext(), force).sync();
+    @CallSuper
+    protected void syncData(final boolean force) {
+        super.syncData(force);
+        mSyncHelper.sync(GodToolsSyncService.syncLanguages(getContext(), force));
     }
 
     private void setupLanguagesList() {
