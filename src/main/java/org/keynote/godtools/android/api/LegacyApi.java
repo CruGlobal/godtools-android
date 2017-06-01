@@ -41,10 +41,10 @@ public interface LegacyApi {
                                                       @Header("deviceId") String deviceId,
                                                       @Header("notificationsOn") boolean enableNotifications);
 
-
     @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
     @POST(NOTIFICATION_UPDATE)
-    Call<ResponseBody> updateNotification(@Header(AUTHORIZATION) String token, @Body GTNotificationRegister notificationRegister);
+    Call<ResponseBody> updateNotification(@Header(AUTHORIZATION) String token,
+                                          @Body GTNotificationRegister notificationRegister);
 
     @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
     @GET(META)
@@ -56,14 +56,18 @@ public interface LegacyApi {
 
     @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
     @GET(ENDPOINT_DRAFTS + "/{langCode}")
-    Call<ResponseBody> downloadDrafts(@Header(AUTHORIZATION) String token, @Path("langCode") String langCode, @Query("compressed") boolean compressed);
+    Call<ResponseBody> downloadDrafts(@Header(AUTHORIZATION) String token, @Path("langCode") String langCode,
+                                      @Query("compressed") boolean compressed);
 
     @Headers({INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION})
     @GET(ENDPOINT_PACKAGES + "/{langCode}")
     Call<ResponseBody> downloadPackages(@Header(AUTHORIZATION) String token, @Path("langCode") String langCode);
 
-
-    @Headers({INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION,"Accept:application/xml","Content-type:application/xml"})
+    @Headers({
+            INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION,
+            "Accept: application/xml",
+            "Content-type: application/xml"
+    })
     @POST(ENDPOINT_TRANSLATIONS + "/{langCode}/{packageCode}")
     Call<ResponseBody> createDraft(@Header(AUTHORIZATION) String token, @Path("langCode") String langCode,
                                    @Path("packageCode") String packageCode, @Query("publish") boolean publish);
