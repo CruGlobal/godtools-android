@@ -2,6 +2,7 @@ package org.keynote.godtools.android.fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,10 +29,8 @@ import org.keynote.godtools.android.service.GodToolsToolManager;
 import org.keynote.godtools.android.sync.GodToolsSyncService;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
-public class ToolsFragment extends Fragment implements ResourcesAdapter.Callbacks {
+public class ToolsFragment extends BaseFragment implements ResourcesAdapter.Callbacks {
     private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
 
     public interface Callbacks {
@@ -49,9 +48,6 @@ public class ToolsFragment extends Fragment implements ResourcesAdapter.Callback
 
     // these properties should be treated as final and only set/modified in onCreate()
     /*final*/ int mMode = MODE_ADDED;
-
-    @Nullable
-    Unbinder mButterKnife;
 
     @Nullable
     @BindView(R.id.resources)
@@ -89,7 +85,6 @@ public class ToolsFragment extends Fragment implements ResourcesAdapter.Callback
             mMode = args.getInt(EXTRA_MODE, mMode);
         }
 
-        syncData(false);
         startLoaders();
     }
 
@@ -102,7 +97,6 @@ public class ToolsFragment extends Fragment implements ResourcesAdapter.Callback
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mButterKnife = ButterKnife.bind(this, view);
         setupResourcesList();
     }
 
@@ -134,11 +128,8 @@ public class ToolsFragment extends Fragment implements ResourcesAdapter.Callback
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         cleanupResourcesList();
-        if (mButterKnife != null) {
-            mButterKnife.unbind();
-        }
+        super.onDestroyView();
     }
 
     /* END lifecycle */
@@ -147,8 +138,10 @@ public class ToolsFragment extends Fragment implements ResourcesAdapter.Callback
         return mMode == MODE_AVAILABLE;
     }
 
-    private void syncData(final boolean force) {
-        GodToolsSyncService.syncTools(getContext(), force).sync();
+    @CallSuper
+    protected void syncData(final boolean force) {
+        super.syncData(force);
+        mSyncHelper.sync(GodToolsSyncService.syncTools(getContext(), force));
     }
 
     private void startLoaders() {
