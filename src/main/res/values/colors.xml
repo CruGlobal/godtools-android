@@ -28,7 +28,6 @@
     <color name="current_draft_opacity">#95b9b9b9</color>
 
     <!-- standard colors -->
-    <color name="tintable">#FF000000</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="white_20">#33FFFFFF</color>
