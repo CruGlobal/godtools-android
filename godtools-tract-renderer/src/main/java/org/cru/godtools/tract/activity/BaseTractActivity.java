@@ -1,6 +1,5 @@
 package org.cru.godtools.tract.activity;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -116,7 +115,6 @@ public abstract class BaseTractActivity extends AppCompatActivity implements Man
         final Manifest manifest = getActiveManifest();
 
         // set toolbar background color
-        mToolbar.setBackgroundColor(Color.GREEN);
         mToolbar.setBackgroundColor(Manifest.getPrimaryColor(manifest));
 
         // set text & controls color
