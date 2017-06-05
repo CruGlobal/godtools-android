@@ -93,6 +93,42 @@
                     </RelativeLayout>
                 </RelativeLayout>
             </android.support.v4.widget.NestedScrollView>
+
+            <RelativeLayout
+                android:id="@+id/call_to_action"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                app:layout_childType="call_to_action"
+                app:layout_dynamicHeight="false">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/call_to_action_arrow"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/horiz_margin_call_to_action_arrow"
+                    android:layout_marginRight="@dimen/horiz_margin_call_to_action_arrow"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_call_to_action"
+                    tools:src="@drawable/ic_call_to_action"
+                    tools:tint="@android:color/Purple_800" />
+
+                <TextView
+                    android:id="@+id/call_to_action_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/horiz_margin_call_to_action_label"
+                    android:layout_marginStart="@dimen/horiz_margin_call_to_action_label"
+                    android:layout_toLeftOf="@id/call_to_action_arrow"
+                    android:layout_toStartOf="@id/call_to_action_arrow"
+                    android:textIsSelectable="true"
+                    tools:text="Call To Action" />
+            </RelativeLayout>
         </org.cru.godtools.tract.widget.PageContentLayout>
     </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>
