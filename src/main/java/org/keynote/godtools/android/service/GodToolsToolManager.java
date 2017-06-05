@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.ArrayMap;
+import android.support.v4.util.ArraySet;
 import android.support.v4.util.LongSparseArray;
 
 import com.google.common.base.Objects;
@@ -49,6 +50,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Locale;
+import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -60,6 +62,7 @@ import retrofit2.Response;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 import static org.ccci.gto.android.common.db.Expression.NULL;
+import static org.ccci.gto.android.common.db.Expression.constants;
 import static org.ccci.gto.android.common.util.ThreadUtils.getLock;
 
 public final class GodToolsToolManager {
@@ -157,6 +160,7 @@ public final class GodToolsToolManager {
             language.setCode(locale);
             language.setAdded(false);
             final ListenableFuture<Integer> update = mDao.updateAsync(language, LanguageTable.COLUMN_ADDED);
+            update.addListener(this::pruneOldTranslations, directExecutor());
             update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new LanguageUpdateEvent()),
                                directExecutor());
         }
@@ -175,7 +179,46 @@ public final class GodToolsToolManager {
         tool.setId(id);
         tool.setAdded(false);
         final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
+        update.addListener(this::pruneOldTranslations, directExecutor());
         update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
+    }
+
+    @WorkerThread
+    void pruneOldTranslations() {
+        // load the tools and languages that are added to this device
+        final Object[] tools = mDao
+                .streamCompat(Query.select(Tool.class).where(ToolTable.FIELD_ADDED.eq(true)))
+                .map(Tool::getId)
+                .toArray();
+        final Object[] languages = mDao
+                .streamCompat(Query.select(Language.class).where(LanguageTable.FIELD_ADDED.eq(true)))
+                .map(Language::getCode)
+                .toArray();
+
+        // remove any translation that is no longer added to this device
+        final Translation translation = new Translation();
+        translation.setDownloaded(false);
+        int changes = mDao.update(translation, TranslationTable.FIELD_TOOL.notIn(constants(tools))
+                .or(TranslationTable.FIELD_LANGUAGE.notIn(constants(languages)))
+                .and(TranslationTable.SQL_WHERE_DOWNLOADED), TranslationTable.COLUMN_DOWNLOADED);
+
+        // remove any translation we have a newer version of
+        final Set<TranslationKey> seen = new ArraySet<>();
+        changes += mDao.streamCompat(Query.select(Translation.class)
+                                             .where(TranslationTable.SQL_WHERE_DOWNLOADED)
+                                             .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC))
+                // filter out the newest version of every translation
+                .filterNot(t -> seen.add(new TranslationKey(t)))
+                .peek(t -> {
+                    t.setDownloaded(false);
+                    mDao.update(t, TranslationTable.COLUMN_DOWNLOADED);
+                })
+                .count();
+
+        // if any translations were updated, send a broadcast
+        if (changes > 0) {
+            EventBus.getDefault().post(new TranslationUpdateEvent());
+        }
     }
 
     @WorkerThread
@@ -276,6 +319,9 @@ public final class GodToolsToolManager {
                             translation.setDownloaded(true);
                             mDao.update(translation, TranslationTable.COLUMN_DOWNLOADED);
                             mEventBus.post(new TranslationUpdateEvent());
+
+                            // prune any old translations
+                            pruneOldTranslations();
                         }
                     }
                 } catch (final IOException ignored) {
@@ -287,6 +333,7 @@ public final class GodToolsToolManager {
     /**
      * Process a streaming zip response.
      */
+    @WorkerThread
     private void processZipDownload(@NonNull final Translation translation, @NonNull final ResponseBody body)
             throws IOException {
         final long size = body.contentLength();
