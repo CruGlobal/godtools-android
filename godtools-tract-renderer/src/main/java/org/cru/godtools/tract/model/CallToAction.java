@@ -36,7 +36,7 @@ public final class CallToAction extends Base {
 
     private final List<Object> mEvents = new ArrayList<>();
 
-    private CallToAction(@NonNull final Base parent) {
+    CallToAction(@NonNull final Base parent) {
         super(parent);
     }
 
@@ -45,11 +45,13 @@ public final class CallToAction extends Base {
         return Page.getPrimaryColor(callToAction != null ? callToAction.getPage() : null);
     }
 
+    @NonNull
     static CallToAction fromXml(@NonNull final Base parent, @NonNull final XmlPullParser parser)
             throws IOException, XmlPullParserException {
         return new CallToAction(parent).parse(parser);
     }
 
+    @NonNull
     private CallToAction parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CALL_TO_ACTION);
 
@@ -94,6 +96,9 @@ public final class CallToAction extends Base {
     private static void bindArrow(@Nullable final CallToAction callToAction, @Nullable final ImageView arrow,
                                   @Nullable final Callbacks callbacks) {
         if (arrow != null) {
+            final boolean visible =
+                    callToAction == null || !callToAction.getPage().isLastPage() || !callToAction.mEvents.isEmpty();
+            arrow.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
             arrow.setImageDrawable(DrawableUtils.tint(arrow.getDrawable(), CallToAction.getArrowColor(callToAction)));
             arrow.setOnClickListener((v) -> CallToAction.trigger(callToAction, callbacks));
         }

@@ -61,12 +61,13 @@ public final class Page extends Base {
     @Nullable
     private Hero mHero;
     private final List<Card> mCards = new ArrayList<>();
-    @Nullable
+    @NonNull
     private CallToAction mCallToAction;
 
     private Page(@NonNull final Manifest manifest, final int position) {
         super(manifest);
         mPosition = position;
+        mCallToAction = new CallToAction(this);
     }
 
     @NonNull
@@ -77,6 +78,10 @@ public final class Page extends Base {
 
     public int getPosition() {
         return mPosition;
+    }
+
+    boolean isLastPage() {
+        return mPosition == getManifest().getPages().size() - 1;
     }
 
     @Nullable
@@ -129,7 +134,7 @@ public final class Page extends Base {
         return Collections.unmodifiableList(mCards);
     }
 
-    @Nullable
+    @NonNull
     public CallToAction getCallToAction() {
         return mCallToAction;
     }
