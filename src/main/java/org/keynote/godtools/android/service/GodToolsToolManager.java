@@ -15,8 +15,10 @@ import com.google.common.io.CountingInputStream;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
+import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Join;
 import org.ccci.gto.android.common.db.Query;
+import org.ccci.gto.android.common.db.Transaction;
 import org.ccci.gto.android.common.eventbus.task.EventBusDelayedPost;
 import org.ccci.gto.android.common.util.IOUtils;
 import org.ccci.gto.android.common.util.IOUtils.ProgressCallback;
@@ -29,6 +31,7 @@ import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
 import org.keynote.godtools.android.db.Contract.LocalFileTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
+import org.keynote.godtools.android.db.Contract.TranslationFileTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.event.AttachmentUpdateEvent;
@@ -160,7 +163,7 @@ public final class GodToolsToolManager {
             language.setCode(locale);
             language.setAdded(false);
             final ListenableFuture<Integer> update = mDao.updateAsync(language, LanguageTable.COLUMN_ADDED);
-            update.addListener(this::pruneOldTranslations, directExecutor());
+            update.addListener(this::pruneStaleTranslations, directExecutor());
             update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new LanguageUpdateEvent()),
                                directExecutor());
         }
@@ -179,45 +182,61 @@ public final class GodToolsToolManager {
         tool.setId(id);
         tool.setAdded(false);
         final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
-        update.addListener(this::pruneOldTranslations, directExecutor());
+        update.addListener(this::pruneStaleTranslations, directExecutor());
         update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
     }
 
     @WorkerThread
-    void pruneOldTranslations() {
-        // load the tools and languages that are added to this device
-        final Object[] tools = mDao
-                .streamCompat(Query.select(Tool.class).where(ToolTable.FIELD_ADDED.eq(true)))
-                .map(Tool::getId)
-                .toArray();
-        final Object[] languages = mDao
-                .streamCompat(Query.select(Language.class).where(LanguageTable.FIELD_ADDED.eq(true)))
-                .map(Language::getCode)
-                .toArray();
+    void pruneStaleTranslations() {
+        final Transaction tx = mDao.newTransaction();
+        try {
+            // load the tools and languages that are added to this device
+            final Object[] tools = mDao
+                    .streamCompat(Query.select(Tool.class).where(ToolTable.FIELD_ADDED.eq(true)))
+                    .map(Tool::getId)
+                    .toArray();
+            final Object[] languages = mDao
+                    .streamCompat(Query.select(Language.class).where(LanguageTable.FIELD_ADDED.eq(true)))
+                    .map(Language::getCode)
+                    .toArray();
 
-        // remove any translation that is no longer added to this device
-        final Translation translation = new Translation();
-        translation.setDownloaded(false);
-        int changes = mDao.update(translation, TranslationTable.FIELD_TOOL.notIn(constants(tools))
-                .or(TranslationTable.FIELD_LANGUAGE.notIn(constants(languages)))
-                .and(TranslationTable.SQL_WHERE_DOWNLOADED), TranslationTable.COLUMN_DOWNLOADED);
+            // remove any translation that is no longer added to this device
+            final Translation translation = new Translation();
+            translation.setDownloaded(false);
+            int changes = mDao.update(translation, TranslationTable.FIELD_TOOL.notIn(constants(tools))
+                    .or(TranslationTable.FIELD_LANGUAGE.notIn(constants(languages)))
+                    .and(TranslationTable.SQL_WHERE_DOWNLOADED), TranslationTable.COLUMN_DOWNLOADED);
 
-        // remove any translation we have a newer version of
-        final Set<TranslationKey> seen = new ArraySet<>();
-        changes += mDao.streamCompat(Query.select(Translation.class)
-                                             .where(TranslationTable.SQL_WHERE_DOWNLOADED)
-                                             .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC))
-                // filter out the newest version of every translation
-                .filterNot(t -> seen.add(new TranslationKey(t)))
-                .peek(t -> {
-                    t.setDownloaded(false);
-                    mDao.update(t, TranslationTable.COLUMN_DOWNLOADED);
-                })
-                .count();
+            // remove any translation we have a newer version of
+            final Set<TranslationKey> seen = new ArraySet<>();
+            changes += mDao.streamCompat(Query.select(Translation.class)
+                                                 .where(TranslationTable.SQL_WHERE_DOWNLOADED)
+                                                 .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC))
+                    // filter out the newest version of every translation
+                    .filterNot(t -> seen.add(new TranslationKey(t)))
+                    .peek(t -> {
+                        t.setDownloaded(false);
+                        mDao.update(t, TranslationTable.COLUMN_DOWNLOADED);
+                    })
+                    .count();
 
-        // if any translations were updated, send a broadcast
-        if (changes > 0) {
-            EventBus.getDefault().post(new TranslationUpdateEvent());
+            // remove any TranslationFiles for translations that are no longer downloaded
+            mDao.streamCompat(Query.select(TranslationFile.class)
+                                      .join(TranslationFileTable.SQL_JOIN_TRANSLATION.type("LEFT")
+                                                    .andOn(TranslationTable.SQL_WHERE_DOWNLOADED))
+                                      .where(TranslationTable.FIELD_ID.is(Expression.NULL)))
+                    .forEach(mDao::delete);
+
+            // mark this transaction as successful
+            tx.setTransactionSuccessful();
+
+            // if any translations were updated, send a broadcast
+            final EventBus eventBus = EventBus.getDefault();
+            if (changes > 0) {
+                eventBus.post(new TranslationUpdateEvent());
+            }
+        } finally {
+            tx.endTransaction().recycle();
         }
     }
 
@@ -321,7 +340,7 @@ public final class GodToolsToolManager {
                             mEventBus.post(new TranslationUpdateEvent());
 
                             // prune any old translations
-                            pruneOldTranslations();
+                            pruneStaleTranslations();
                         }
                     }
                 } catch (final IOException ignored) {
