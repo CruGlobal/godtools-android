@@ -103,6 +103,10 @@ public final class Text extends Content {
         return this;
     }
 
+    public static void bind(@Nullable final Text text, @Nullable final TextView view) {
+        bind(text, view, Page.getTextColor(text != null ? text.getPage() : null));
+    }
+
     public static void bind(@Nullable final Text text, @Nullable final TextView view,
                             @ColorInt final int defaultTextColor) {
         if (view != null) {
@@ -139,7 +143,7 @@ public final class Text extends Content {
 
         final TextView content = ButterKnife.findById(view, R.id.content);
         if (content != null) {
-            bind(this, content, Page.getTextColor(getPage()));
+            bind(this, content);
         }
 
         return view;
