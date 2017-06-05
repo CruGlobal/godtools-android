@@ -15,6 +15,7 @@ import org.ccci.gto.android.common.support.v4.adapter.ViewHolderPagerAdapter;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter.PageViewHolder;
+import org.cru.godtools.tract.model.CallToAction;
 import org.cru.godtools.tract.model.Card;
 import org.cru.godtools.tract.model.Header;
 import org.cru.godtools.tract.model.Hero;
@@ -32,8 +33,19 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 
 public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewHolder> {
+    public interface Callbacks {
+        void goToPage(int position);
+    }
+
+    @Nullable
+    Callbacks mCallbacks;
+
     @Nullable
     private Manifest mManifest;
+
+    public void setCallbacks(@Nullable final Callbacks callbacks) {
+        mCallbacks = callbacks;
+    }
 
     public void setManifest(@Nullable final Manifest manifest) {
         final Manifest old = mManifest;
@@ -62,7 +74,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         holder.bind(mManifest.getPages().get(position));
     }
 
-    class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder {
+    class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements CallToAction.Callbacks {
         @BindView(R2.id.page)
         View mPageView;
         @BindView(R2.id.background_image)
@@ -85,6 +97,10 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         @Nullable
         @BindView(R2.id.hero)
         View mHero;
+
+        // call to action
+        @BindView(R2.id.call_to_action)
+        View mCallToAction;
 
         @NonNull
         private final Pools.Pool<Card.CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
@@ -114,6 +130,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
             bindHeader(page);
             Hero.bind(page != null ? page.getHero() : null, mHero);
             bindCards(page);
+            CallToAction.bind(page != null ? page.getCallToAction() : null, mCallToAction, this);
         }
 
         private void bindPage(@Nullable final Page page) {
@@ -165,6 +182,13 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
                 i.remove();
                 holder.setModel(null);
                 mRecycledCardViewHolders.release(holder);
+            }
+        }
+
+        @Override
+        public void goToNextPage() {
+            if (mCallbacks != null && mPage != null) {
+                mCallbacks.goToPage(mPage.getPosition() + 1);
             }
         }
     }

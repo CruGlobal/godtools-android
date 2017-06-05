@@ -169,7 +169,7 @@ public final class Manifest extends Base {
                 case XMLNS_MANIFEST:
                     switch (parser.getName()) {
                         case Page.XML_PAGE:
-                            mPages.add(Page.fromManifestXml(this, parser));
+                            mPages.add(Page.fromManifestXml(this, mPages.size(),  parser));
                             continue;
                     }
                     break;

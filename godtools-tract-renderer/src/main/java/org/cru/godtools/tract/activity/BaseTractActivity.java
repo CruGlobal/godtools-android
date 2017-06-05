@@ -1,6 +1,5 @@
 package org.cru.godtools.tract.activity;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,7 +19,7 @@ import org.cru.godtools.tract.util.DrawableUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class BaseTractActivity extends AppCompatActivity {
+public abstract class BaseTractActivity extends AppCompatActivity implements ManifestPagerAdapter.Callbacks {
     // App/Action Bar
     @BindView(R2.id.appBar)
     Toolbar mToolbar;
@@ -116,7 +115,6 @@ public abstract class BaseTractActivity extends AppCompatActivity {
         final Manifest manifest = getActiveManifest();
 
         // set toolbar background color
-        mToolbar.setBackgroundColor(Color.GREEN);
         mToolbar.setBackgroundColor(Manifest.getPrimaryColor(manifest));
 
         // set text & controls color
@@ -135,8 +133,16 @@ public abstract class BaseTractActivity extends AppCompatActivity {
     private void setupPager() {
         if (mPager != null) {
             mPagerAdapter = new ManifestPagerAdapter();
+            mPagerAdapter.setCallbacks(this);
             mPager.setAdapter(mPagerAdapter);
             updatePager();
+        }
+    }
+
+    @Override
+    public void goToPage(final int position) {
+        if (mPager != null) {
+            mPager.setCurrentItem(position);
         }
     }
 
@@ -145,5 +151,4 @@ public abstract class BaseTractActivity extends AppCompatActivity {
             mPagerAdapter.setManifest(getActiveManifest());
         }
     }
-
 }

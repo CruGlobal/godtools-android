@@ -165,6 +165,8 @@ public class PageContentLayout extends LinearLayoutCompat implements NestedScrol
         }
 
         // update card heights if we have any and calculate card label height
+        final int callToActionHeight = getCallToActionMeasuredHeight();
+        final int height = Math.max(0, parentHeight - callToActionHeight);
         final int count = getChildCount();
         boolean layoutUpdated = false;
         for (int i = 1; i < count; ++i) {
@@ -173,8 +175,8 @@ public class PageContentLayout extends LinearLayoutCompat implements NestedScrol
                 final LayoutParams lp = (LayoutParams) child.getLayoutParams();
                 if (lp.childType == CHILD_TYPE_CARD) {
                     if (lp.dynamicHeight) {
-                        if (lp.height != parentHeight) {
-                            lp.height = parentHeight;
+                        if (lp.height != height) {
+                            lp.height = height;
                             layoutUpdated = true;
                         }
                     }
