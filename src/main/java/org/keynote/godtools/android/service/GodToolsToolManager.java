@@ -22,6 +22,7 @@ import org.ccci.gto.android.common.db.Transaction;
 import org.ccci.gto.android.common.eventbus.task.EventBusDelayedPost;
 import org.ccci.gto.android.common.util.IOUtils;
 import org.ccci.gto.android.common.util.IOUtils.ProgressCallback;
+import org.cru.godtools.base.util.FileUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -242,6 +243,11 @@ public final class GodToolsToolManager {
 
     @WorkerThread
     void downloadAttachment(final long attachmentId) {
+        // short-circuit if the resources directory isn't valid
+        if (!FileUtils.createResourcesDir(mContext)) {
+            return;
+        }
+
         synchronized (getLock(LOCKS_ATTACHMENTS, attachmentId)) {
             // short-circuit if attachment doesn't exist
             final Attachment attachment = mDao.find(Attachment.class, attachmentId);
@@ -315,6 +321,11 @@ public final class GodToolsToolManager {
 
     @WorkerThread
     void downloadLatestPublishedTranslation(@NonNull final TranslationKey key) {
+        // short-circuit if the resources directory isn't valid
+        if (!FileUtils.createResourcesDir(mContext)) {
+            return;
+        }
+
         // lock translation
         synchronized (getLock(LOCKS_TRANSLATION_DOWNLOADS, key)) {
             // process the most recent published version
