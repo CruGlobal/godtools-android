@@ -34,6 +34,8 @@ public final class Page extends Base {
     private static final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
     private static final Align DEFAULT_BACKGROUND_IMAGE_ALIGN = Align.CENTER;
 
+    private final int mPosition;
+
     @Nullable
     private String mLocalFileName;
     private boolean mPageXmlParsed = false;
@@ -62,14 +64,19 @@ public final class Page extends Base {
     @Nullable
     private CallToAction mCallToAction;
 
-    private Page(@NonNull final Manifest manifest) {
+    private Page(@NonNull final Manifest manifest, final int position) {
         super(manifest);
+        mPosition = position;
     }
 
     @NonNull
     @Override
     protected Page getPage() {
         return this;
+    }
+
+    public int getPosition() {
+        return mPosition;
     }
 
     @Nullable
@@ -129,9 +136,10 @@ public final class Page extends Base {
 
     @NonNull
     @WorkerThread
-    static Page fromManifestXml(@NonNull final Manifest manifest, @NonNull final XmlPullParser parser)
+    static Page fromManifestXml(@NonNull final Manifest manifest, final int position,
+                                @NonNull final XmlPullParser parser)
             throws XmlPullParserException, IOException {
-        return new Page(manifest).parseManifestXml(parser);
+        return new Page(manifest, position).parseManifestXml(parser);
     }
 
     @WorkerThread
