@@ -58,8 +58,13 @@ import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import javax.annotation.concurrent.GuardedBy;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -72,6 +77,7 @@ import static org.ccci.gto.android.common.util.ThreadUtils.getLock;
 public final class GodToolsToolManager {
     private static final int DOWNLOAD_CONCURRENCY = 4;
 
+    private static final ReadWriteLock LOCK_FILESYSTEM = new ReentrantReadWriteLock();
     private static final LongSparseArray<Object> LOCKS_ATTACHMENTS = new LongSparseArray<>();
     private static final ArrayMap<TranslationKey, Object> LOCKS_TRANSLATION_DOWNLOADS = new ArrayMap<>();
     private static final ArrayMap<String, Object> LOCKS_FILES = new ArrayMap<>();
@@ -261,37 +267,43 @@ public final class GodToolsToolManager {
                 return;
             }
 
-            synchronized (getLock(LOCKS_FILES, fileName)) {
-                // short-circuit if the attachment is actually downloaded
-                LocalFile localFile = mDao.find(LocalFile.class, fileName);
-                if (attachment.isDownloaded() && localFile != null) {
-                    return;
-                }
-                attachment.setDownloaded(false);
-
-                // create a new local file object
-                localFile = new LocalFile();
-                localFile.setFileName(fileName);
-
-                try {
-                    // download attachment
-                    final Response<ResponseBody> response = mApi.attachments.download(attachmentId).execute();
-                    if (response.isSuccessful()) {
-                        final ResponseBody body = response.body();
-                        if (body != null) {
-                            processDownload(localFile, body);
-
-                            // store local file in database
-                            mDao.updateOrInsert(localFile);
-                            attachment.setDownloaded(true);
-                        }
+            final Lock lock = LOCK_FILESYSTEM.readLock();
+            try {
+                lock.lock();
+                synchronized (getLock(LOCKS_FILES, fileName)) {
+                    // short-circuit if the attachment is actually downloaded
+                    LocalFile localFile = mDao.find(LocalFile.class, fileName);
+                    if (attachment.isDownloaded() && localFile != null) {
+                        return;
                     }
-                } catch (final IOException ignored) {
-                }
+                    attachment.setDownloaded(false);
 
-                // update attachment download state
-                mDao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED);
-                mEventBus.post(new AttachmentUpdateEvent());
+                    // create a new local file object
+                    localFile = new LocalFile();
+                    localFile.setFileName(fileName);
+
+                    try {
+                        // download attachment
+                        final Response<ResponseBody> response = mApi.attachments.download(attachmentId).execute();
+                        if (response.isSuccessful()) {
+                            final ResponseBody body = response.body();
+                            if (body != null) {
+                                processDownload(localFile, body);
+
+                                // store local file in database
+                                mDao.updateOrInsert(localFile);
+                                attachment.setDownloaded(true);
+                            }
+                        }
+                    } catch (final IOException ignored) {
+                    }
+
+                    // update attachment download state
+                    mDao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED);
+                    mEventBus.post(new AttachmentUpdateEvent());
+                }
+            } finally {
+                lock.unlock();
             }
         }
     }
@@ -343,12 +355,20 @@ public final class GodToolsToolManager {
                     if (response.isSuccessful()) {
                         final ResponseBody body = response.body();
                         if (body != null) {
-                            processZipDownload(translation, body);
+                            final Lock lock = LOCK_FILESYSTEM.readLock();
+                            try {
+                                lock.lock();
 
-                            // mark translation as downloaded
-                            translation.setDownloaded(true);
-                            mDao.update(translation, TranslationTable.COLUMN_DOWNLOADED);
-                            mEventBus.post(new TranslationUpdateEvent());
+                                // process the download
+                                processZipDownload(translation, body);
+
+                                // mark translation as downloaded
+                                translation.setDownloaded(true);
+                                mDao.update(translation, TranslationTable.COLUMN_DOWNLOADED);
+                                mEventBus.post(new TranslationUpdateEvent());
+                            } finally {
+                                lock.unlock();
+                            }
 
                             // prune any old translations
                             pruneStaleTranslations();
@@ -364,6 +384,7 @@ public final class GodToolsToolManager {
      * Process a streaming zip response.
      */
     @WorkerThread
+    @GuardedBy("LOCK_FILESYSTEM")
     private void processZipDownload(@NonNull final Translation translation, @NonNull final ResponseBody body)
             throws IOException {
         final long size = body.contentLength();
