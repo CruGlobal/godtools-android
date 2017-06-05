@@ -3,15 +3,21 @@ package org.cru.godtools.tract.model;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.util.DrawableUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.ButterKnife;
 
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
@@ -21,8 +27,14 @@ public final class CallToAction extends Base {
     static final String XML_CALL_TO_ACTION = "call-to-action";
     private static final String XML_EVENT = "event";
 
+    public interface Callbacks {
+        void goToNextPage();
+    }
+
     @Nullable
     private Text mLabel;
+
+    private final List<Object> mEvents = new ArrayList<>();
 
     private CallToAction(@NonNull final Base parent) {
         super(parent);
@@ -65,15 +77,33 @@ public final class CallToAction extends Base {
         return this;
     }
 
-    public static void bindLabel(@Nullable final CallToAction callToAction, @Nullable final TextView mLabel) {
+    public static void bind(@Nullable final CallToAction callToAction, @Nullable final View view,
+                            @Nullable final Callbacks callbacks) {
+        if (view != null) {
+            bindLabel(callToAction, ButterKnife.findById(view, R.id.call_to_action_label));
+            bindArrow(callToAction, ButterKnife.findById(view, R.id.call_to_action_arrow), callbacks);
+        }
+    }
+
+    private static void bindLabel(@Nullable final CallToAction callToAction, @Nullable final TextView mLabel) {
         if (mLabel != null) {
             Text.bind(callToAction != null ? callToAction.mLabel : null, mLabel);
         }
     }
 
-    public static void bindArrow(@Nullable final CallToAction callToAction, @Nullable final ImageView arrow) {
+    private static void bindArrow(@Nullable final CallToAction callToAction, @Nullable final ImageView arrow,
+                                  @Nullable final Callbacks callbacks) {
         if (arrow != null) {
             arrow.setImageDrawable(DrawableUtils.tint(arrow.getDrawable(), CallToAction.getArrowColor(callToAction)));
+            arrow.setOnClickListener((v) -> CallToAction.trigger(callToAction, callbacks));
+        }
+    }
+
+    static void trigger(@Nullable final CallToAction callToAction, @Nullable final Callbacks callbacks) {
+        if (callbacks != null && (callToAction == null || callToAction.mEvents.isEmpty())) {
+            callbacks.goToNextPage();
+        } else if (callToAction != null) {
+            //TODO: trigger events
         }
     }
 }
