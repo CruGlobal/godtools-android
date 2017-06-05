@@ -19,6 +19,7 @@ import java.util.List;
 
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
+import static org.cru.godtools.tract.model.CallToAction.XML_CALL_TO_ACTION;
 import static org.cru.godtools.tract.model.Card.XML_CARD;
 import static org.cru.godtools.tract.model.Header.XML_HEADER;
 import static org.cru.godtools.tract.model.Hero.XML_HERO;
@@ -58,15 +59,8 @@ public final class Page extends Base {
     @Nullable
     private Hero mHero;
     private final List<Card> mCards = new ArrayList<>();
-
-    @NonNull
-    @WorkerThread
-    static Page fromManifestXml(@NonNull final Manifest manifest, @NonNull final XmlPullParser parser)
-            throws XmlPullParserException, IOException {
-        final Page page = new Page(manifest);
-        page.parseManifestXml(parser);
-        return page;
-    }
+    @Nullable
+    private CallToAction mCallToAction;
 
     private Page(@NonNull final Manifest manifest) {
         super(manifest);
@@ -81,11 +75,6 @@ public final class Page extends Base {
     @Nullable
     public String getLocalFileName() {
         return mLocalFileName;
-    }
-
-    @NonNull
-    public List<Card> getCards() {
-        return Collections.unmodifiableList(mCards);
     }
 
     @ColorInt
@@ -128,14 +117,33 @@ public final class Page extends Base {
         return mHero;
     }
 
+    @NonNull
+    public List<Card> getCards() {
+        return Collections.unmodifiableList(mCards);
+    }
+
+    @Nullable
+    public CallToAction getCallToAction() {
+        return mCallToAction;
+    }
+
+    @NonNull
     @WorkerThread
-    private void parseManifestXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
+    static Page fromManifestXml(@NonNull final Manifest manifest, @NonNull final XmlPullParser parser)
+            throws XmlPullParserException, IOException {
+        return new Page(manifest).parseManifestXml(parser);
+    }
+
+    @WorkerThread
+    private Page parseManifestXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGE);
 
         mLocalFileName = parser.getAttributeValue(null, XML_MANIFEST_SRC);
 
         // discard any nested nodes
         XmlPullParserUtils.skipTag(parser);
+
+        return this;
     }
 
     @WorkerThread
@@ -171,6 +179,9 @@ public final class Page extends Base {
                             continue;
                         case XML_CARDS:
                             parseCardsXml(parser);
+                            continue;
+                        case XML_CALL_TO_ACTION:
+                            mCallToAction = CallToAction.fromXml(this, parser);
                             continue;
                     }
                     break;
