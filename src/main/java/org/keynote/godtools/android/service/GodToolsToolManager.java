@@ -9,6 +9,8 @@ import android.support.v4.util.ArrayMap;
 import android.support.v4.util.ArraySet;
 import android.support.v4.util.LongSparseArray;
 
+import com.annimon.stream.Optional;
+import com.annimon.stream.Stream;
 import com.google.common.base.Objects;
 import com.google.common.io.Closer;
 import com.google.common.io.CountingInputStream;
@@ -137,12 +139,14 @@ public final class GodToolsToolManager {
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onTranslationUpdate(@NonNull final TranslationUpdateEvent event) {
         enqueuePendingPublishedTranslations();
+        enqueueCleanFilesystem();
     }
 
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onAttachmentUpdate(@NonNull final AttachmentUpdateEvent event) {
         enqueueStaleAttachments();
+        enqueueCleanFilesystem();
     }
 
     /* END lifecycle */
@@ -226,13 +230,6 @@ public final class GodToolsToolManager {
                         mDao.update(t, TranslationTable.COLUMN_DOWNLOADED);
                     })
                     .count();
-
-            // remove any TranslationFiles for translations that are no longer downloaded
-            mDao.streamCompat(Query.select(TranslationFile.class)
-                                      .join(TranslationFileTable.SQL_JOIN_TRANSLATION.type("LEFT")
-                                                    .andOn(TranslationTable.SQL_WHERE_DOWNLOADED))
-                                      .where(TranslationTable.FIELD_ID.is(Expression.NULL)))
-                    .forEach(mDao::delete);
 
             // mark this transaction as successful
             tx.setTransactionSuccessful();
@@ -437,6 +434,48 @@ public final class GodToolsToolManager {
         }
     }
 
+    @WorkerThread
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    void cleanFilesystem() {
+        // short-circuit if the resources directory isn't valid
+        if (!FileUtils.createResourcesDir(mContext)) {
+            return;
+        }
+
+        // acquire filesystem lock
+        final Lock lock = LOCK_FILESYSTEM.writeLock();
+        try {
+            lock.lock();
+
+            // remove any TranslationFiles for translations that are no longer downloaded
+            mDao.streamCompat(Query.select(TranslationFile.class)
+                                      .join(TranslationFileTable.SQL_JOIN_TRANSLATION.type("LEFT")
+                                                    .andOn(TranslationTable.SQL_WHERE_DOWNLOADED))
+                                      .where(TranslationTable.FIELD_ID.is(Expression.NULL)))
+                    .forEach(mDao::delete);
+
+            // delete any LocalFiles that are no longer being used
+            mDao.streamCompat(Query.select(LocalFile.class)
+                                      .join(LocalFileTable.SQL_JOIN_ATTACHMENT.type("LEFT"))
+                                      .join(LocalFileTable.SQL_JOIN_TRANSLATION_FILE.type("LEFT"))
+                                      .where(AttachmentTable.FIELD_ID.is(Expression.NULL)
+                                                     .and(TranslationFileTable.FIELD_FILE.is(Expression.NULL))))
+                    .peek(mDao::delete)
+                    .map(f -> f.getFile(mContext))
+                    .withoutNulls()
+                    .forEach(File::delete);
+
+            // delete any orphaned files
+            Optional.ofNullable(FileUtils.getResourcesDir(mContext).listFiles())
+                    .map(Stream::of).stream().flatMap(s -> s)
+                    .filter(f -> mDao.find(LocalFile.class, f.getName()) == null)
+                    .forEach(File::delete);
+        } finally {
+            // release filesystem lock
+            lock.unlock();
+        }
+    }
+
     private void updateProgress(@NonNull final Translation translation, final long progress, final long total) {
         // TODO
     }
@@ -482,6 +521,10 @@ public final class GodToolsToolManager {
         }
     }
 
+    private void enqueueCleanFilesystem() {
+        mExecutor.execute(new CleanFileSystem());
+    }
+
     static final class TranslationKey {
         final long mToolId;
         @NonNull
@@ -511,7 +554,9 @@ public final class GodToolsToolManager {
         }
     }
 
-    abstract class PriorityRunnable implements Comparable<PriorityRunnable>, Runnable {
+    abstract static class PriorityRunnable implements Comparable<PriorityRunnable>, Runnable {
+        static final int PRIMARY_PRUNE_FILESYSTEM = Integer.MAX_VALUE;
+
         protected int getPriority() {
             return Integer.MAX_VALUE;
         }
@@ -570,6 +615,18 @@ public final class GodToolsToolManager {
             synchronized (mDownloadingAttachments) {
                 mDownloadingAttachments.remove(mAttachmentId);
             }
+        }
+    }
+
+    final class CleanFileSystem extends PriorityRunnable {
+        @Override
+        protected int getPriority() {
+            return PRIMARY_PRUNE_FILESYSTEM;
+        }
+
+        @Override
+        public void run() {
+            cleanFilesystem();
         }
     }
 }

@@ -34,7 +34,7 @@ public final class Contract extends BaseContract {
         public static final String COLUMN_CODE = "code";
         public static final String COLUMN_ADDED = "added";
 
-        public static final Field FIELD_CODE = TABLE.field(COLUMN_CODE);
+        static final Field FIELD_CODE = TABLE.field(COLUMN_CODE);
         public static final Field FIELD_ADDED = TABLE.field(COLUMN_ADDED);
 
         static final String[] PROJECTION_ALL = {COLUMN_ID, COLUMN_CODE, COLUMN_ADDED};
@@ -96,7 +96,7 @@ public final class Contract extends BaseContract {
 
     public static class TranslationTable extends BaseTable implements ToolId {
         static final String TABLE_NAME = "translations";
-        private static final Table<Translation> TABLE = Table.forClass(Translation.class);
+        static final Table<Translation> TABLE = Table.forClass(Translation.class);
 
         public static final String COLUMN_LANGUAGE = "language";
         public static final String COLUMN_VERSION = "version";
@@ -106,7 +106,7 @@ public final class Contract extends BaseContract {
         public static final String COLUMN_PUBLISHED = "published";
         public static final String COLUMN_DOWNLOADED = "downloaded";
 
-        private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
+        public static final Field FIELD_ID = TABLE.field(COLUMN_ID);
         public static final Field FIELD_TOOL = TABLE.field(COLUMN_TOOL);
         public static final Field FIELD_LANGUAGE = TABLE.field(COLUMN_LANGUAGE);
         private static final Field FIELD_PUBLISHED = TABLE.field(COLUMN_PUBLISHED);
@@ -162,21 +162,26 @@ public final class Contract extends BaseContract {
         private static final String SQL_COLUMN_NAME = COLUMN_NAME + " TEXT";
         private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_NAME);
 
+        public static final Join<LocalFile, Attachment> SQL_JOIN_ATTACHMENT =
+                Join.create(TABLE, AttachmentTable.TABLE).on(FIELD_NAME.eq(AttachmentTable.FIELD_LOCALFILENAME));
+        public static final Join<LocalFile, TranslationFile> SQL_JOIN_TRANSLATION_FILE =
+                Join.create(TABLE, TranslationFileTable.TABLE).on(FIELD_NAME.eq(TranslationFileTable.FIELD_FILE));
+
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_NAME.eq(bind());
 
         static final String SQL_CREATE_TABLE = create(TABLE_NAME, SQL_COLUMN_NAME, SQL_PRIMARY_KEY);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
     }
 
-    static class TranslationFileTable implements Base {
+    public static class TranslationFileTable implements Base {
         static final String TABLE_NAME = "translation_files";
-        private static final Table<TranslationFile> TABLE = Table.forClass(TranslationFile.class);
+        static final Table<TranslationFile> TABLE = Table.forClass(TranslationFile.class);
 
         static final String COLUMN_TRANSLATION = "translation";
         static final String COLUMN_FILE = "file";
 
         private static final Field FIELD_TRANSLATION = TABLE.field(COLUMN_TRANSLATION);
-        private static final Field FIELD_NAME = TABLE.field(COLUMN_FILE);
+        public static final Field FIELD_FILE = TABLE.field(COLUMN_FILE);
 
         static final String[] PROJECTION_ALL = {COLUMN_TRANSLATION, COLUMN_FILE};
 
@@ -184,7 +189,10 @@ public final class Contract extends BaseContract {
         private static final String SQL_COLUMN_NAME = COLUMN_FILE + " TEXT NOT NULL";
         private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_TRANSLATION, COLUMN_FILE);
 
-        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_TRANSLATION.eq(bind()).and(FIELD_NAME.eq(bind()));
+        public static final Join<TranslationFile, Translation> SQL_JOIN_TRANSLATION =
+                Join.create(TABLE, TranslationTable.TABLE).on(FIELD_TRANSLATION.eq(TranslationTable.FIELD_ID));
+
+        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_TRANSLATION.eq(bind()).and(FIELD_FILE.eq(bind()));
 
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_TRANSLATION, SQL_COLUMN_NAME, SQL_PRIMARY_KEY);
@@ -202,7 +210,7 @@ public final class Contract extends BaseContract {
 
         public static final Field FIELD_ID = TABLE.field(COLUMN_ID);
         public static final Field FIELD_TOOL = TABLE.field(COLUMN_TOOL);
-        private static final Field FIELD_LOCALFILENAME = TABLE.field(COLUMN_LOCALFILENAME);
+        static final Field FIELD_LOCALFILENAME = TABLE.field(COLUMN_LOCALFILENAME);
         public static final Field FIELD_DOWNLOADED = TABLE.field(COLUMN_DOWNLOADED);
 
         static final String[] PROJECTION_ALL =
