@@ -4,22 +4,60 @@ import org.junit.Test;
 
 import static org.cru.godtools.tract.model.ImageScaleType.BOTTOM;
 import static org.cru.godtools.tract.model.ImageScaleType.CENTER;
-import static org.cru.godtools.tract.model.ImageScaleType.CENTER_Y;
 import static org.cru.godtools.tract.model.ImageScaleType.END;
 import static org.cru.godtools.tract.model.ImageScaleType.START;
 import static org.cru.godtools.tract.model.ImageScaleType.TOP;
+import static org.cru.godtools.tract.model.ImageScaleType.isBottom;
+import static org.cru.godtools.tract.model.ImageScaleType.isCenter;
+import static org.cru.godtools.tract.model.ImageScaleType.isCenterX;
+import static org.cru.godtools.tract.model.ImageScaleType.isCenterY;
+import static org.cru.godtools.tract.model.ImageScaleType.isEnd;
+import static org.cru.godtools.tract.model.ImageScaleType.isStart;
+import static org.cru.godtools.tract.model.ImageScaleType.isTop;
 import static org.cru.godtools.tract.model.ImageScaleType.parse;
-import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
+@SuppressWarnings("ConstantConditions")
 public class ImageScaleTypeTest {
     @Test
     public void verifyParse() throws Exception {
-        assertThat(parse("start center", null), allOf(is(START | CENTER_Y), not(CENTER)));
-        assertThat(parse("start invalid center", null), is(START | CENTER_Y));
-        assertThat(parse("start end", null), allOf(is(END | CENTER_Y), not(START | CENTER_Y)));
+        int scaleType = parse("start unrecognized center", null);
+        assertFalse(isCenterX(scaleType));
+        assertTrue(isStart(scaleType));
+        assertFalse(isEnd(scaleType));
+        assertTrue(isCenterY(scaleType));
+        assertFalse(isTop(scaleType));
+        assertFalse(isBottom(scaleType));
+        assertFalse(isCenter(scaleType));
+
+        scaleType =  parse("center end", null);
+        assertFalse(isCenterX(scaleType));
+        assertFalse(isStart(scaleType));
+        assertTrue(isEnd(scaleType));
+        assertTrue(isCenterY(scaleType));
+        assertFalse(isTop(scaleType));
+        assertFalse(isBottom(scaleType));
+        assertFalse(isCenter(scaleType));
+
+        scaleType =  parse("center", null);
+        assertTrue(isCenterX(scaleType));
+        assertFalse(isStart(scaleType));
+        assertFalse(isEnd(scaleType));
+        assertTrue(isCenterY(scaleType));
+        assertFalse(isTop(scaleType));
+        assertFalse(isBottom(scaleType));
+        assertTrue(isCenter(scaleType));
+    }
+
+    @Test
+    public void verifyParseConflictingTypes() throws Exception {
+        assertThat(parse("start end", null), nullValue());
+        assertThat(parse("start top end", null), nullValue());
+        assertThat(parse("bottom top end", null), nullValue());
     }
 
     @Test
