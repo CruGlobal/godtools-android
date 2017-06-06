@@ -1,23 +1,31 @@
 package org.cru.godtools.tract.model;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.crashlytics.android.Crashlytics;
 
 import org.jetbrains.annotations.Contract;
+import org.xmlpull.v1.XmlPullParser;
 
 import io.fabric.sdk.android.Fabric;
 
-final class ImageScaleType {
-    public static final int START = 1 << 0;
+final class ImageAlign {
+    static final int START = 1 << 0;
     public static final int END = 1 << 1;
-    public static final int TOP = 1 << 2;
-    public static final int BOTTOM = 1 << 3;
-    public static final int CENTER_X = START | END;
-    public static final int CENTER_Y = TOP | BOTTOM;
-    public static final int CENTER = CENTER_X | CENTER_Y;
+    static final int TOP = 1 << 2;
+    static final int BOTTOM = 1 << 3;
+    private static final int CENTER_X = START | END;
+    private static final int CENTER_Y = TOP | BOTTOM;
+    static final int CENTER = CENTER_X | CENTER_Y;
     private static final int X_AXIS = START | END | CENTER_X;
     private static final int Y_AXIS = TOP | BOTTOM | CENTER_Y;
+
+    @Nullable
+    public static Integer parse(@NonNull final XmlPullParser parser, @NonNull final String attribute,
+                                @Nullable final Integer defValue) {
+        return parse(parser.getAttributeValue(null, attribute), defValue);
+    }
 
     @Nullable
     @Contract("_, !null -> !null")
@@ -83,35 +91,35 @@ final class ImageScaleType {
         return defValue;
     }
 
-    static boolean isCenter(final int scaleType) {
-        return (scaleType & CENTER) == CENTER;
+    static boolean isCenter(final int align) {
+        return (align & CENTER) == CENTER;
     }
 
     /* X-Axis tests */
 
-    static boolean isCenterX(final int scaleType) {
-        return (scaleType & X_AXIS) == CENTER_X;
+    static boolean isCenterX(final int align) {
+        return (align & X_AXIS) == CENTER_X;
     }
 
-    static boolean isStart(final int scaleType) {
-        return (scaleType & X_AXIS) == START;
+    static boolean isStart(final int align) {
+        return (align & X_AXIS) == START;
     }
 
-    static boolean isEnd(final int scaleType) {
-        return (scaleType & X_AXIS) == END;
+    static boolean isEnd(final int align) {
+        return (align & X_AXIS) == END;
     }
 
     /* Y-Axis tests */
 
-    static boolean isCenterY(final int scaleType) {
-        return (scaleType & Y_AXIS) == CENTER_Y;
+    static boolean isCenterY(final int align) {
+        return (align & Y_AXIS) == CENTER_Y;
     }
 
-    static boolean isTop(final int scaleType) {
-        return (scaleType & Y_AXIS) == TOP;
+    static boolean isTop(final int align) {
+        return (align & Y_AXIS) == TOP;
     }
 
-    static boolean isBottom(final int scaleType) {
-        return (scaleType & Y_AXIS) == BOTTOM;
+    static boolean isBottom(final int align) {
+        return (align & Y_AXIS) == BOTTOM;
     }
 }
