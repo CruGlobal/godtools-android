@@ -113,12 +113,13 @@ public abstract class BaseTractActivity extends AppCompatActivity implements Man
 
     private void updateToolbar() {
         final Manifest manifest = getActiveManifest();
+        setTitle(Manifest.getTitle(manifest));
 
         // set toolbar background color
-        mToolbar.setBackgroundColor(Manifest.getPrimaryColor(manifest));
+        mToolbar.setBackgroundColor(Manifest.getNavBarColor(manifest));
 
         // set text & controls color
-        final int controlColor = Manifest.getPrimaryTextColor(manifest);
+        final int controlColor = Manifest.getNavBarControlColor(manifest);
         mToolbar.setTitleTextColor(controlColor);
         mToolbar.setSubtitleTextColor(controlColor);
         mToolbar.setNavigationIcon(DrawableUtils.tint(mToolbar.getNavigationIcon(), controlColor));
