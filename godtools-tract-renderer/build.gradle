@@ -41,5 +41,7 @@ dependencies {
     androidTestCompile "com.android.support.test:rules:${deps.androidTestingSupport}"
     androidTestCompile "org.hamcrest:hamcrest-library:${deps.hamcrest}"
 
+    testImplementation "junit:junit:${deps.junit}"
+
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }
