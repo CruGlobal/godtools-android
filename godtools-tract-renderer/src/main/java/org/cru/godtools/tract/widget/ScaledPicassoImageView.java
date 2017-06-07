@@ -36,14 +36,17 @@ public interface ScaledPicassoImageView extends PicassoImageView {
 
         public final void setScaleType(@NonNull final ScaleType type) {
             mScaleType = type;
+            triggerUpdate();
         }
 
         public final void setGravityHorizontal(@NonNull final GravityHorizontal gravity) {
             mGravityHorizontal = gravity;
+            triggerUpdate();
         }
 
         public final void setGravityVertical(@NonNull final GravityVertical gravity) {
             mGravityVertical = gravity;
+            triggerUpdate();
         }
 
         @Override
@@ -57,7 +60,7 @@ public interface ScaledPicassoImageView extends PicassoImageView {
                     } else if (size.height > 0 && mScaleType == FILL_Y) {
                         update.resize(0, size.height);
                     } else {
-                        update.transform(new ScaleTransformation(size.width, size.height));
+                        update.transform(new ScaleTransformation(size.width, size.height, false));
                     }
 
                     // crop with gravity
