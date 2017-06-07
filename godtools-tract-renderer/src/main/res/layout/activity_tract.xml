@@ -6,10 +6,17 @@
     android:layout_height="match_parent"
     tools:theme="@style/Theme.GodTools.Tract">
 
-    <org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
-        android:id="@+id/background_image"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <org.cru.godtools.tract.widget.TractPicassoImageView
+            android:id="@+id/background_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:cropToPadding="false" />
+    </RelativeLayout>
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
