@@ -10,7 +10,7 @@ import org.xmlpull.v1.XmlPullParser;
 
 import io.fabric.sdk.android.Fabric;
 
-final class ImageAlign {
+final class ImageGravity {
     static final int START = 1 << 0;
     public static final int END = 1 << 1;
     static final int TOP = 1 << 2;
@@ -32,56 +32,56 @@ final class ImageAlign {
     static Integer parse(@Nullable final String raw, @Nullable final Integer defValue) {
         if (raw != null) {
             try {
-                int scaleType = defValue != null ? defValue : CENTER;
+                int gravity = defValue != null ? defValue : CENTER;
                 boolean seenX = false;
                 boolean seenY = false;
                 for (final String type : raw.split("\\s+")) {
                     switch (type) {
                         case "start":
                             if (seenX) {
-                                throw new IllegalArgumentException("multiple X-Axis scale types in: " + raw);
+                                throw new IllegalArgumentException("multiple X-Axis gravities in: " + raw);
                             }
-                            scaleType &= ~X_AXIS;
-                            scaleType |= START;
+                            gravity &= ~X_AXIS;
+                            gravity |= START;
                             seenX = true;
                             break;
                         case "end":
                             if (seenX) {
-                                throw new IllegalArgumentException("multiple X-Axis scale types in: " + raw);
+                                throw new IllegalArgumentException("multiple X-Axis gravities in: " + raw);
                             }
-                            scaleType &= ~X_AXIS;
-                            scaleType |= END;
+                            gravity &= ~X_AXIS;
+                            gravity |= END;
                             seenX = true;
                             break;
                         case "top":
                             if (seenY) {
-                                throw new IllegalArgumentException("multiple Y-Axis scale types in: " + raw);
+                                throw new IllegalArgumentException("multiple Y-Axis gravities in: " + raw);
                             }
-                            scaleType &= ~Y_AXIS;
-                            scaleType |= TOP;
+                            gravity &= ~Y_AXIS;
+                            gravity |= TOP;
                             seenY = true;
                             break;
                         case "bottom":
                             if (seenY) {
-                                throw new IllegalArgumentException("multiple Y-Axis scale types in: " + raw);
+                                throw new IllegalArgumentException("multiple Y-Axis gravities in: " + raw);
                             }
-                            scaleType &= ~Y_AXIS;
-                            scaleType |= BOTTOM;
+                            gravity &= ~Y_AXIS;
+                            gravity |= BOTTOM;
                             seenY = true;
                             break;
                         case "center":
                             if (!seenX) {
-                                scaleType |= CENTER_X;
+                                gravity |= CENTER_X;
                             }
                             if (!seenY) {
-                                scaleType |= CENTER_Y;
+                                gravity |= CENTER_Y;
                             }
                             break;
                         default:
                             // ignore unrecognized types
                     }
                 }
-                return scaleType;
+                return gravity;
             } catch (final IllegalArgumentException e) {
                 if (Fabric.isInitialized()) {
                     Crashlytics.logException(e);

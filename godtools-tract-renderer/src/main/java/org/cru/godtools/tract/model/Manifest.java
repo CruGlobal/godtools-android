@@ -38,8 +38,8 @@ public final class Manifest extends Base {
     private static final int DEFAULT_TEXT_COLOR = Color.argb(255, 90, 90, 90);
     @ColorInt
     private static final int DEFAULT_BACKGROUND_COLOR = Color.WHITE;
-    private static final ImageScale DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScale.FILL;
-    private static final int DEFAULT_BACKGROUND_IMAGE_ALIGN = ImageAlign.CENTER;
+    private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL;
+    private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
 
     @ColorInt
     private int mPrimaryColor = DEFAULT_PRIMARY_COLOR;
@@ -52,8 +52,8 @@ public final class Manifest extends Base {
     @Nullable
     private String mBackgroundImage;
     @NonNull
-    private ImageScale mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
-    private int mBackgroundImageAlign = DEFAULT_BACKGROUND_IMAGE_ALIGN;
+    private ScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
+    private int mBackgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY;
 
     @Nullable
     @ColorInt
@@ -159,7 +159,7 @@ public final class Manifest extends Base {
         mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
-        mBackgroundImageAlign = ImageAlign.parse(parser, XML_BACKGROUND_IMAGE_ALIGN, mBackgroundImageAlign);
+        mBackgroundImageGravity = ImageGravity.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageGravity);
         mNavBarColor = parseColor(parser, XML_NAVBAR_COLOR, mNavBarColor);
         mNavBarControlColor = parseColor(parser, XML_NAVBAR_CONTROL_COLOR, mNavBarControlColor);
 

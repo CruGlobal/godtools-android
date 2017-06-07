@@ -15,7 +15,8 @@ abstract class Base {
     static final String XML_TEXT_COLOR = "text-color";
     static final String XML_BACKGROUND_COLOR = "background-color";
     static final String XML_BACKGROUND_IMAGE = "background-image";
-    static final String XML_BACKGROUND_IMAGE_ALIGN = "background-image-align";
+    static final String XML_BACKGROUND_IMAGE_GRAVITY = "background-image-align";
+    static final String XML_BACKGROUND_IMAGE_SCALE_TYPE = "background-image-scale-type";
 
     @NonNull
     private final Base mParent;

@@ -32,8 +32,8 @@ public final class Page extends Base {
 
     @ColorInt
     private static final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
-    private static final ImageScale DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScale.FILL_X;
-    private static final int DEFAULT_BACKGROUND_IMAGE_ALIGN = ImageAlign.CENTER;
+    private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL_X;
+    private static final int DEFAULT_BACKGROUND_IMAGE_ALIGN = ImageGravity.CENTER;
 
     private final int mPosition;
 
@@ -55,7 +55,7 @@ public final class Page extends Base {
     @Nullable
     private String mBackgroundImage;
     @NonNull
-    private ImageScale mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
+    private ScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
     private int mBackgroundImageAlign = DEFAULT_BACKGROUND_IMAGE_ALIGN;
 
     @Nullable
@@ -174,7 +174,7 @@ public final class Page extends Base {
         mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
-        mBackgroundImageAlign = ImageAlign.parse(parser, XML_BACKGROUND_IMAGE_ALIGN, mBackgroundImageAlign);
+        mBackgroundImageAlign = ImageGravity.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageAlign);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
