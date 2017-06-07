@@ -5,10 +5,10 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
-import android.view.View;
 
-import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.cru.godtools.tract.widget.ScaledPicassoImageView;
+import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -119,6 +119,18 @@ public final class Page extends Base {
     @ColorInt
     public static int getBackgroundColor(@Nullable final Page page) {
         return page != null ? page.mBackgroundColor : DEFAULT_BACKGROUND_COLOR;
+    }
+
+    private static Resource getBackgroundImageResource(@Nullable final Page page) {
+        return page != null ? page.getResource(page.mBackgroundImage) : null;
+    }
+
+    private static int getBackgroundImageAlign(@Nullable final Page page) {
+        return page != null ? page.mBackgroundImageAlign : DEFAULT_BACKGROUND_IMAGE_ALIGN;
+    }
+
+    private static ScaleType getBackgroundImageScaleType(@Nullable final Page page) {
+        return page != null ? page.mBackgroundImageScaleType : DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
     }
 
     @Nullable
@@ -235,9 +247,8 @@ public final class Page extends Base {
         }
     }
 
-    public static void bindBackgroundImage(@Nullable final Page page, @NonNull final SimplePicassoImageView view) {
-        final Resource resource = page != null ? page.getResource(page.mBackgroundImage) : null;
-        Resource.bind(resource, view);
-        view.setVisibility(resource != null ? View.VISIBLE : View.GONE);
+    public static void bindBackgroundImage(@Nullable final Page page, @NonNull final ScaledPicassoImageView view) {
+        Resource.bindBackgroundImage(view, getBackgroundImageResource(page), getBackgroundImageScaleType(page),
+                                     getBackgroundImageAlign(page));
     }
 }

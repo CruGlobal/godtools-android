@@ -9,12 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.util.DrawableUtils;
+import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,7 +27,7 @@ public abstract class BaseTractActivity extends AppCompatActivity implements Man
     private ActionBar mActionBar;
 
     @BindView(R2.id.background_image)
-    SimplePicassoImageView mBackgroundImage;
+    ScaledPicassoImageView mBackgroundImage;
 
     // Manifest page pager
     @Nullable

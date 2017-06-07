@@ -7,10 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.SimpleArrayMap;
-import android.view.View;
 
-import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.cru.godtools.tract.widget.ScaledPicassoImageView;
+import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -138,6 +138,18 @@ public final class Manifest extends Base {
         return manifest != null ? manifest.mBackgroundColor : DEFAULT_BACKGROUND_COLOR;
     }
 
+    private static Resource getBackgroundImageResource(@Nullable final Manifest manifest) {
+        return manifest != null ? manifest.getResource(manifest.mBackgroundImage) : null;
+    }
+
+    private static int getBackgroundImageGravity(@Nullable final Manifest manifest) {
+        return manifest != null ? manifest.mBackgroundImageGravity : DEFAULT_BACKGROUND_IMAGE_GRAVITY;
+    }
+
+    private static ScaleType getBackgroundImageScaleType(@Nullable final Manifest manifest) {
+        return manifest != null ? manifest.mBackgroundImageScaleType : DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
+    }
+
     @ColorInt
     public static int getNavBarColor(@Nullable final Manifest manifest) {
         return manifest != null && manifest.mNavBarColor != null ? manifest.mNavBarColor :
@@ -245,9 +257,8 @@ public final class Manifest extends Base {
     }
 
     public static void bindBackgroundImage(@Nullable final Manifest manifest,
-                                           @NonNull final SimplePicassoImageView view) {
-        final Resource resource = manifest != null ? manifest.getResource(manifest.mBackgroundImage) : null;
-        view.setVisibility(resource != null ? View.VISIBLE : View.GONE);
-        Resource.bind(resource, view);
+                                           @NonNull final ScaledPicassoImageView view) {
+        Resource.bindBackgroundImage(view, getBackgroundImageResource(manifest), getBackgroundImageScaleType(manifest),
+                                     getBackgroundImageGravity(manifest));
     }
 }
