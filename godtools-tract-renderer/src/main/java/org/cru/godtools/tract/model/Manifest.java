@@ -24,6 +24,9 @@ import static org.cru.godtools.tract.model.Utils.parseColor;
 
 public final class Manifest extends Base {
     private static final String XML_MANIFEST = "manifest";
+    private static final String XML_TITLE = "title";
+    private static final String XML_NAVBAR_COLOR = "navbar-color";
+    private static final String XML_NAVBAR_CONTROL_COLOR = "navbar-control-color";
     private static final String XML_PAGES = "pages";
     private static final String XML_RESOURCES = "resources";
 
@@ -50,6 +53,16 @@ public final class Manifest extends Base {
     @NonNull
     private Align mBackgroundImageAlign = DEFAULT_BACKGROUND_IMAGE_ALIGN;
 
+    @Nullable
+    @ColorInt
+    private Integer mNavBarColor;
+    @Nullable
+    @ColorInt
+    private Integer mNavBarControlColor;
+
+    @Nullable
+    private Text mTitle;
+
     private final List<Page> mPages = new ArrayList<>();
     @VisibleForTesting
     final SimpleArrayMap<String, Resource> mResources = new SimpleArrayMap<>();
@@ -71,6 +84,11 @@ public final class Manifest extends Base {
     @Override
     protected Manifest getManifest() {
         return this;
+    }
+
+    @Nullable
+    public static String getTitle(@Nullable final Manifest manifest) {
+        return manifest != null && manifest.mTitle != null ? manifest.mTitle.getText() : null;
     }
 
     @NonNull
@@ -118,6 +136,18 @@ public final class Manifest extends Base {
         return manifest != null ? manifest.mBackgroundColor : DEFAULT_BACKGROUND_COLOR;
     }
 
+    @ColorInt
+    public static int getNavBarColor(@Nullable final Manifest manifest) {
+        return manifest != null && manifest.mNavBarColor != null ? manifest.mNavBarColor :
+                Manifest.getPrimaryColor(manifest);
+    }
+
+    @ColorInt
+    public static int getNavBarControlColor(@Nullable final Manifest manifest) {
+        return manifest != null && manifest.mNavBarControlColor != null ? manifest.mNavBarControlColor :
+                Manifest.getPrimaryTextColor(manifest);
+    }
+
     @WorkerThread
     private void parseManifest(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_MANIFEST);
@@ -128,6 +158,8 @@ public final class Manifest extends Base {
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
         mBackgroundImageAlign = Align.parseAlign(parser, XML_BACKGROUND_IMAGE_ALIGN, mBackgroundImageAlign);
+        mNavBarColor = parseColor(parser, XML_NAVBAR_COLOR, mNavBarColor);
+        mNavBarControlColor = parseColor(parser, XML_NAVBAR_CONTROL_COLOR, mNavBarControlColor);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -139,6 +171,9 @@ public final class Manifest extends Base {
             switch (parser.getNamespace()) {
                 case XMLNS_MANIFEST:
                     switch (parser.getName()) {
+                        case XML_TITLE:
+                            mTitle = Text.fromNestedXml(this, parser, XMLNS_MANIFEST, XML_TITLE);
+                            continue;
                         case XML_PAGES:
                             parsePages(parser);
                             continue;
