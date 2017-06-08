@@ -7,15 +7,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.common.collect.ImmutableSet;
+
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.util.DrawableUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 
@@ -25,7 +27,7 @@ import static org.cru.godtools.tract.model.Text.XML_TEXT;
 
 public final class CallToAction extends Base {
     static final String XML_CALL_TO_ACTION = "call-to-action";
-    private static final String XML_EVENT = "event";
+    private static final String XML_EVENTS = "events";
 
     public interface Callbacks {
         void goToNextPage();
@@ -34,7 +36,8 @@ public final class CallToAction extends Base {
     @Nullable
     private Text mLabel;
 
-    private final List<Object> mEvents = new ArrayList<>();
+    @NonNull
+    private Set<Event.Id> mEvents = ImmutableSet.of();
 
     CallToAction(@NonNull final Base parent) {
         super(parent);
@@ -54,6 +57,8 @@ public final class CallToAction extends Base {
     @NonNull
     private CallToAction parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CALL_TO_ACTION);
+
+        mEvents = parseEvents(parser, XML_EVENTS);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
