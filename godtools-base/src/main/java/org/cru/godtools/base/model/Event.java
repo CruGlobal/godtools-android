@@ -37,14 +37,14 @@ public final class Event {
             return Arrays.hashCode(new String[] {mNamespace.toLowerCase(), mName.toLowerCase()});
         }
 
-        public static Set<Id> parse(@NonNull final String namespace, @Nullable final String raw) {
+        public static Set<Id> parse(@NonNull final String defaultNamespace, @Nullable final String raw) {
             final ImmutableSet.Builder<Id> eventIds = ImmutableSet.builder();
 
             if (raw != null) {
                 for (final String rawEvent : raw.split("\\s+")) {
                     final String[] components = rawEvent.split(":", 2);
                     if (components.length == 1) {
-                        eventIds.add(new Id(namespace, components[0]));
+                        eventIds.add(new Id(defaultNamespace, components[0]));
                     } else {
                         eventIds.add(new Id(components[0], components[1]));
                     }

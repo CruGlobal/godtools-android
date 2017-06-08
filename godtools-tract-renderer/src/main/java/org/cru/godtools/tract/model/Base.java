@@ -5,7 +5,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
+import org.xmlpull.v1.XmlPullParser;
+
+import java.util.Set;
 
 import butterknife.ButterKnife;
 
@@ -38,6 +42,10 @@ abstract class Base {
         }
     }
 
+    String getDefaultEventNamespace() {
+        return getManifest().getCode();
+    }
+
     @Nullable
     Resource getResource(@Nullable final String name) {
         return getManifest().getResource(name);
@@ -50,6 +58,12 @@ abstract class Base {
         } else {
             return mParent.getPage();
         }
+    }
+
+    @NonNull
+    final Set<Event.Id> parseEvents(@NonNull final XmlPullParser parser, @NonNull final String attribute) {
+        final String raw = parser.getAttributeValue(null, attribute);
+        return Event.Id.parse(getDefaultEventNamespace(), raw);
     }
 
     static abstract class BaseViewHolder<T extends Base> {
