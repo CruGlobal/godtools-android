@@ -5,10 +5,10 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
-import android.view.View;
 
-import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.cru.godtools.tract.widget.ScaledPicassoImageView;
+import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -32,7 +32,8 @@ public final class Page extends Base {
 
     @ColorInt
     private static final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
-    private static final Align DEFAULT_BACKGROUND_IMAGE_ALIGN = Align.CENTER;
+    private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL_X;
+    private static final int DEFAULT_BACKGROUND_IMAGE_ALIGN = ImageGravity.CENTER;
 
     private final int mPosition;
 
@@ -54,7 +55,8 @@ public final class Page extends Base {
     @Nullable
     private String mBackgroundImage;
     @NonNull
-    private Align mBackgroundImageAlign = DEFAULT_BACKGROUND_IMAGE_ALIGN;
+    private ScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
+    private int mBackgroundImageAlign = DEFAULT_BACKGROUND_IMAGE_ALIGN;
 
     @Nullable
     private Header mHeader;
@@ -119,6 +121,18 @@ public final class Page extends Base {
         return page != null ? page.mBackgroundColor : DEFAULT_BACKGROUND_COLOR;
     }
 
+    private static Resource getBackgroundImageResource(@Nullable final Page page) {
+        return page != null ? page.getResource(page.mBackgroundImage) : null;
+    }
+
+    private static int getBackgroundImageAlign(@Nullable final Page page) {
+        return page != null ? page.mBackgroundImageAlign : DEFAULT_BACKGROUND_IMAGE_ALIGN;
+    }
+
+    private static ScaleType getBackgroundImageScaleType(@Nullable final Page page) {
+        return page != null ? page.mBackgroundImageScaleType : DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
+    }
+
     @Nullable
     public Header getHeader() {
         return mHeader;
@@ -172,7 +186,7 @@ public final class Page extends Base {
         mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
-        mBackgroundImageAlign = Align.parseAlign(parser, XML_BACKGROUND_IMAGE_ALIGN, mBackgroundImageAlign);
+        mBackgroundImageAlign = ImageGravity.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageAlign);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -233,9 +247,8 @@ public final class Page extends Base {
         }
     }
 
-    public static void bindBackgroundImage(@Nullable final Page page, @NonNull final SimplePicassoImageView view) {
-        final Resource resource = page != null ? page.getResource(page.mBackgroundImage) : null;
-        Resource.bind(resource, view);
-        view.setVisibility(resource != null ? View.VISIBLE : View.GONE);
+    public static void bindBackgroundImage(@Nullable final Page page, @NonNull final ScaledPicassoImageView view) {
+        Resource.bindBackgroundImage(view, getBackgroundImageResource(page), getBackgroundImageScaleType(page),
+                                     getBackgroundImageAlign(page));
     }
 }

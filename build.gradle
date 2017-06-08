@@ -6,7 +6,7 @@ buildscript {
         maven { url 'https://maven.google.com' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha2'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha3'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
         classpath 'com.newrelic.agent.android:agent-gradle-plugin:5.13.0'
@@ -92,8 +92,8 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:' + deps.androidTestingSupport
     androidTestCompile 'com.android.support.test:rules:' + deps.androidTestingSupport
     androidTestCompile "com.android.support:support-annotations:${deps.androidSupport}"
-    testCompile 'junit:junit:' + deps.junit
-    testCompile 'org.hamcrest:hamcrest-library:1.3'
+    testImplementation "junit:junit:${deps.junit}"
+    testImplementation "org.hamcrest:hamcrest-library:${deps.hamcrest}"
 
     debugCompile 'com.android.support:multidex:1.0.1'
     debugCompile 'org.ccci.gto.android:gto-support-leakcanary:' + deps.gtoSupport

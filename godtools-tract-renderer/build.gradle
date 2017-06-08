@@ -34,12 +34,15 @@ dependencies {
     compile "com.annimon:stream:${deps.lightweightStream}"
     compile "com.google.guava:guava:${deps.guava}"
     compile "com.jakewharton:butterknife:${deps.butterknife}"
+    implementation "jp.wasabeef:picasso-transformations:2.1.2"
 
     compileOnly 'org.jetbrains:annotations:15.0'
 
     androidTestCompile "com.android.support.test:runner:${deps.androidTestingSupport}"
     androidTestCompile "com.android.support.test:rules:${deps.androidTestingSupport}"
     androidTestCompile "org.hamcrest:hamcrest-library:${deps.hamcrest}"
+
+    testImplementation "junit:junit:${deps.junit}"
 
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }

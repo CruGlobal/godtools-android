@@ -8,4 +8,13 @@
             <enum name="call_to_action" value="3" />
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="ScaledPicassoImageView">
+        <attr name="scaleType" format="enum">
+            <enum name="fit" value="0" />
+            <enum name="fill" value="1" />
+            <enum name="fill_x" value="2" />
+            <enum name="fill_y" value="3" />
+        </attr>
+    </declare-styleable>
 </resources>

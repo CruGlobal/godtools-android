@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView;
 import org.ccci.gto.android.common.support.v4.adapter.ViewHolderPagerAdapter;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
@@ -22,6 +21,7 @@ import org.cru.godtools.tract.model.Hero;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Page;
 import org.cru.godtools.tract.widget.PageContentLayout;
+import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -78,7 +78,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         @BindView(R2.id.page)
         View mPageView;
         @BindView(R2.id.background_image)
-        SimplePicassoImageView mBackgroundImage;
+        ScaledPicassoImageView mBackgroundImage;
 
         @BindView(R2.id.page_content_parent)
         NestedScrollView mPageContentParent;

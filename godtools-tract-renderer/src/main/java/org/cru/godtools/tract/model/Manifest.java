@@ -7,10 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.SimpleArrayMap;
-import android.view.View;
 
-import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.cru.godtools.tract.widget.ScaledPicassoImageView;
+import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -38,7 +38,8 @@ public final class Manifest extends Base {
     private static final int DEFAULT_TEXT_COLOR = Color.argb(255, 90, 90, 90);
     @ColorInt
     private static final int DEFAULT_BACKGROUND_COLOR = Color.WHITE;
-    private static final Align DEFAULT_BACKGROUND_IMAGE_ALIGN = Align.CENTER;
+    private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL;
+    private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
 
     @ColorInt
     private int mPrimaryColor = DEFAULT_PRIMARY_COLOR;
@@ -51,7 +52,8 @@ public final class Manifest extends Base {
     @Nullable
     private String mBackgroundImage;
     @NonNull
-    private Align mBackgroundImageAlign = DEFAULT_BACKGROUND_IMAGE_ALIGN;
+    private ScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
+    private int mBackgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY;
 
     @Nullable
     @ColorInt
@@ -136,6 +138,18 @@ public final class Manifest extends Base {
         return manifest != null ? manifest.mBackgroundColor : DEFAULT_BACKGROUND_COLOR;
     }
 
+    private static Resource getBackgroundImageResource(@Nullable final Manifest manifest) {
+        return manifest != null ? manifest.getResource(manifest.mBackgroundImage) : null;
+    }
+
+    private static int getBackgroundImageGravity(@Nullable final Manifest manifest) {
+        return manifest != null ? manifest.mBackgroundImageGravity : DEFAULT_BACKGROUND_IMAGE_GRAVITY;
+    }
+
+    private static ScaleType getBackgroundImageScaleType(@Nullable final Manifest manifest) {
+        return manifest != null ? manifest.mBackgroundImageScaleType : DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
+    }
+
     @ColorInt
     public static int getNavBarColor(@Nullable final Manifest manifest) {
         return manifest != null && manifest.mNavBarColor != null ? manifest.mNavBarColor :
@@ -157,7 +171,7 @@ public final class Manifest extends Base {
         mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
-        mBackgroundImageAlign = Align.parseAlign(parser, XML_BACKGROUND_IMAGE_ALIGN, mBackgroundImageAlign);
+        mBackgroundImageGravity = ImageGravity.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageGravity);
         mNavBarColor = parseColor(parser, XML_NAVBAR_COLOR, mNavBarColor);
         mNavBarControlColor = parseColor(parser, XML_NAVBAR_CONTROL_COLOR, mNavBarControlColor);
 
@@ -243,9 +257,8 @@ public final class Manifest extends Base {
     }
 
     public static void bindBackgroundImage(@Nullable final Manifest manifest,
-                                           @NonNull final SimplePicassoImageView view) {
-        final Resource resource = manifest != null ? manifest.getResource(manifest.mBackgroundImage) : null;
-        view.setVisibility(resource != null ? View.VISIBLE : View.GONE);
-        Resource.bind(resource, view);
+                                           @NonNull final ScaledPicassoImageView view) {
+        Resource.bindBackgroundImage(view, getBackgroundImageResource(manifest), getBackgroundImageScaleType(manifest),
+                                     getBackgroundImageGravity(manifest));
     }
 }
