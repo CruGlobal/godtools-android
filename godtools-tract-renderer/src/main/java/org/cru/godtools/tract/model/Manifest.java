@@ -41,6 +41,10 @@ public final class Manifest extends Base {
     private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL;
     private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
 
+    // XXX: for now we will make this fixed
+    @NonNull
+    private final String mCode = "placeholder";
+
     @ColorInt
     private int mPrimaryColor = DEFAULT_PRIMARY_COLOR;
     @ColorInt
@@ -69,14 +73,6 @@ public final class Manifest extends Base {
     @VisibleForTesting
     final SimpleArrayMap<String, Resource> mResources = new SimpleArrayMap<>();
 
-    @NonNull
-    @WorkerThread
-    public static Manifest fromXml(@NonNull final XmlPullParser parser) throws XmlPullParserException, IOException {
-        final Manifest manifest = new Manifest();
-        manifest.parseManifest(parser);
-        return manifest;
-    }
-
     @VisibleForTesting
     Manifest() {
         super();
@@ -86,6 +82,11 @@ public final class Manifest extends Base {
     @Override
     protected Manifest getManifest() {
         return this;
+    }
+
+    @NonNull
+    String getCode() {
+        return mCode;
     }
 
     @Nullable
@@ -162,8 +163,15 @@ public final class Manifest extends Base {
                 Manifest.getPrimaryTextColor(manifest);
     }
 
+    @NonNull
     @WorkerThread
-    private void parseManifest(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
+    public static Manifest fromXml(@NonNull final XmlPullParser parser) throws XmlPullParserException, IOException {
+        return new Manifest().parse(parser);
+    }
+
+    @NonNull
+    @WorkerThread
+    private Manifest parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_MANIFEST);
 
         mPrimaryColor = parseColor(parser, XML_PRIMARY_COLOR, mPrimaryColor);
@@ -201,6 +209,8 @@ public final class Manifest extends Base {
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
+
+        return this;
     }
 
     @WorkerThread

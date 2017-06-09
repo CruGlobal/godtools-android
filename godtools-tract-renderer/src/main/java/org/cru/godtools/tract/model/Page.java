@@ -6,7 +6,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
+import com.google.common.collect.ImmutableSet;
+
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.xmlpull.v1.XmlPullParser;
@@ -16,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
@@ -27,6 +31,7 @@ import static org.cru.godtools.tract.model.Utils.parseColor;
 
 public final class Page extends Base {
     static final String XML_PAGE = "page";
+    private static final String XML_LISTENERS = "listeners";
     private static final String XML_MANIFEST_SRC = "src";
     private static final String XML_CARDS = "cards";
 
@@ -40,6 +45,9 @@ public final class Page extends Base {
     @Nullable
     private String mLocalFileName;
     private boolean mPageXmlParsed = false;
+
+    @NonNull
+    private Set<Event.Id> mListeners = ImmutableSet.of();
 
     @Nullable
     @ColorInt
@@ -181,6 +189,7 @@ public final class Page extends Base {
         }
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_PAGE);
 
+        mListeners = parseEvents(parser, XML_LISTENERS);
         mPrimaryColor = parseColor(parser, XML_PRIMARY_COLOR, mPrimaryColor);
         mPrimaryTextColor = parseColor(parser, XML_PRIMARY_TEXT_COLOR, mPrimaryTextColor);
         mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);

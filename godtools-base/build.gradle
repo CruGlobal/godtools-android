@@ -12,4 +12,9 @@ android {
 
 dependencies {
     implementation "com.android.support:support-annotations:${deps.androidSupport}"
+
+    implementation "com.google.guava:guava:${deps.guava}"
+
+    testImplementation "junit:junit:${deps.junit}"
+    testImplementation "org.hamcrest:hamcrest-library:${deps.hamcrest}"
 }
