@@ -20,6 +20,7 @@ import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.Text.Align;
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -41,6 +42,8 @@ public final class Button extends Content {
     private static final String XML_TYPE_URL = "url";
     private static final String XML_URL = "url";
     private static final String XML_EVENTS = "events";
+
+    static final Align DEFAULT_TEXT_ALIGN = Align.CENTER;
 
     private enum Type {
         EVENT, URL, UNKNOWN;
@@ -151,7 +154,7 @@ public final class Button extends Content {
         void bind() {
             super.bind();
             final Text text = mModel != null ? mModel.mText : null;
-            Text.bind(text, mButton, Container.getPrimaryTextColor(getContainer(mModel)));
+            Text.bind(text, mButton, Container.getPrimaryTextColor(getContainer(mModel)), DEFAULT_TEXT_ALIGN);
             ViewCompat.setBackgroundTintList(mButton, ColorStateList.valueOf(getColor(mModel)));
         }
 
