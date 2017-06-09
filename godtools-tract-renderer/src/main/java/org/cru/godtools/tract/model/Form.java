@@ -18,25 +18,25 @@ import butterknife.ButterKnife;
 
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 
-public final class Paragraph extends Content {
-    static final String XML_PARAGRAPH = "paragraph";
+public final class Form extends Content {
+    static final String XML_FORM = "form";
 
     @NonNull
     private final List<Content> mContent = new ArrayList<>();
 
-    private Paragraph(@NonNull final Base parent) {
+    private Form(@NonNull final Base parent) {
         super(parent);
     }
 
     @NonNull
-    static Paragraph fromXml(@NonNull final Base parent, @NonNull final XmlPullParser parser)
+    static Form fromXml(@NonNull final Base parent, @NonNull final XmlPullParser parser)
             throws IOException, XmlPullParserException {
-        return new Paragraph(parent).parse(parser);
+        return new Form(parent).parse(parser);
     }
 
     @NonNull
-    private Paragraph parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_PARAGRAPH);
+    private Form parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_FORM);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {

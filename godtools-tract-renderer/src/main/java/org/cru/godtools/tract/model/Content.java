@@ -16,6 +16,7 @@ import java.util.List;
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 import static org.cru.godtools.tract.model.Button.XML_BUTTON;
+import static org.cru.godtools.tract.model.Form.XML_FORM;
 import static org.cru.godtools.tract.model.Image.XML_IMAGE;
 import static org.cru.godtools.tract.model.Paragraph.XML_PARAGRAPH;
 import static org.cru.godtools.tract.model.Text.XML_TEXT;
@@ -35,6 +36,8 @@ public abstract class Content extends Base {
                 switch (parser.getName()) {
                     case XML_PARAGRAPH:
                         return Paragraph.fromXml(parent, parser);
+                    case XML_FORM:
+                        return Form.fromXml(parent, parser);
                 }
                 break;
             case XMLNS_CONTENT:
