@@ -30,7 +30,7 @@ import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.util.ViewUtils.getTopOffset;
 
-public final class Card extends Base {
+public final class Card extends Base implements Container {
     static final String XML_CARD = "card";
     private static final String XML_LABEL = "label";
 
@@ -48,15 +48,30 @@ public final class Card extends Base {
         super(parent);
     }
 
+    @Override
+    public int getPrimaryColor() {
+        return Container.getPrimaryColor(getContainer());
+    }
+
+    @Override
+    public int getPrimaryTextColor() {
+        return Container.getPrimaryTextColor(getContainer());
+    }
+
+    @Override
+    public int getTextColor() {
+        return Container.getTextColor(getContainer());
+    }
+
     @ColorInt
     private int getBackgroundColor() {
-        // XXX: this may need to inherit differently
+        // TODO: implement card-background-color on Page & Manifest
         return mBackgroundColor != null ? mBackgroundColor : Manifest.getBackgroundColor(getManifest());
     }
 
     @ColorInt
     static int getBackgroundColor(@Nullable final Card card) {
-        // XXX: this may need to inherit differently
+        // TODO: implement card-background-color on Page & Manifest
         return card != null ? card.getBackgroundColor() : Manifest.getBackgroundColor(null);
     }
 
@@ -141,10 +156,9 @@ public final class Card extends Base {
         }
 
         private void bindLabel() {
-            final Page page = mModel != null ? mModel.getPage() : null;
             final Text label = mModel != null ? mModel.mLabel : null;
-            Text.bind(label, mLabel, Page.getPrimaryColor(page), mLabelTextSize);
-            mDivider.setBackgroundColor(Page.getTextColor(page));
+            Text.bind(label, mLabel, Container.getPrimaryColor(mModel), mLabelTextSize);
+            mDivider.setBackgroundColor(Container.getTextColor(mModel));
         }
 
         private void bindContent() {

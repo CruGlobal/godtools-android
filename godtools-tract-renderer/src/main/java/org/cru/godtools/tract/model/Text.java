@@ -104,7 +104,8 @@ public final class Text extends Content {
     }
 
     public static void bind(@Nullable final Text text, @Nullable final TextView view) {
-        bind(text, view, Page.getTextColor(text != null ? text.getPage() : null));
+        // determine the default text color based on the closest parent container
+        bind(text, view, Container.getTextColor(text != null ? text.getContainer() : null));
     }
 
     public static void bind(@Nullable final Text text, @Nullable final TextView view,
