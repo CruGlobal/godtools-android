@@ -84,6 +84,11 @@ public final class Manifest extends Base {
         return this;
     }
 
+    @NonNull
+    String getCode() {
+        return mCode;
+    }
+
     @Nullable
     public static String getTitle(@Nullable final Manifest manifest) {
         return manifest != null && manifest.mTitle != null ? manifest.mTitle.getText() : null;
