@@ -5,8 +5,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import com.annimon.stream.Stream;
+
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
+import org.greenrobot.eventbus.EventBus;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.util.Set;
@@ -86,5 +89,11 @@ abstract class Base {
 
         @CallSuper
         void bind() {}
+
+        void sendEvents(@NonNull final Set<Event.Id> ids) {
+            if (!ids.isEmpty()) {
+                Stream.of(ids).map(Event::new).forEach(EventBus.getDefault()::post);
+            }
+        }
     }
 }

@@ -11,6 +11,13 @@ import java.util.Set;
 import javax.annotation.concurrent.Immutable;
 
 public final class Event {
+    @NonNull
+    private final Id mId;
+
+    public Event(@NonNull final Id id) {
+        mId = id;
+    }
+
     @Immutable
     public static final class Id {
         public static final Id SUBSCRIBE_EVENT = new Id("followup", "subscribe");
