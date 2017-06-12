@@ -2,19 +2,21 @@ package org.cru.godtools.tract.model;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
 
+import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
+import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.Parent.ParentViewHolder;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-import butterknife.ButterKnife;
+import butterknife.BindView;
 
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 
@@ -27,6 +29,11 @@ public final class Image extends Content {
 
     private Image(@NonNull final Base parent) {
         super(parent);
+    }
+
+    @Nullable
+    static Resource getResource(@Nullable final Image image) {
+        return image != null ? image.getResource(image.mResource) : null;
     }
 
     @WorkerThread
@@ -47,9 +54,24 @@ public final class Image extends Content {
 
     @NonNull
     @Override
-    View render(@NonNull final LinearLayout parent) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tract_content_image, parent, false);
-        Resource.bind(getResource(mResource), ButterKnife.findById(view, R.id.content));
-        return view;
+    ImageViewHolder createViewHolder(@NonNull final ViewGroup parent,
+                                     @Nullable final ParentViewHolder parentViewHolder) {
+        return new ImageViewHolder(parent, parentViewHolder);
+    }
+
+    @UiThread
+    static final class ImageViewHolder extends BaseViewHolder<Image> {
+        @BindView(R2.id.content)
+        PicassoImageView mImage;
+
+        ImageViewHolder(@NonNull final ViewGroup parent, @Nullable final ParentViewHolder parentViewHolder) {
+            super(Image.class, parent, R.layout.tract_content_image, parentViewHolder);
+        }
+
+        @Override
+        void onBind() {
+            super.onBind();
+            Resource.bind(getResource(mModel), mImage);
+        }
     }
 }

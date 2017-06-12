@@ -160,7 +160,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
             // update all visible cards
             for (final Card card : cards) {
                 if (i.hasNext()) {
-                    i.next().setModel(card);
+                    i.next().bind(card);
                 } else {
                     // acquire a view holder
                     Card.CardViewHolder holder = mRecycledCardViewHolders.acquire();
@@ -169,7 +169,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
                     }
 
                     // update holder and add it to the layout
-                    holder.setModel(card);
+                    holder.bind(card);
                     i.add(holder);
                     mPageContentLayout.addCardView(holder.mRoot);
                 }
@@ -180,7 +180,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
                 final Card.CardViewHolder holder = i.next();
                 mPageContentLayout.removeView(holder.mRoot);
                 i.remove();
-                holder.setModel(null);
+                holder.bind(null);
                 mRecycledCardViewHolders.release(holder);
             }
         }

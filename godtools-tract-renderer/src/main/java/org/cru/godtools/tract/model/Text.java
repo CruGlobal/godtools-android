@@ -3,23 +3,24 @@ package org.cru.godtools.tract.model;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.ccci.gto.android.common.util.NumberUtils;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
+import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.Parent.ParentViewHolder;
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-import butterknife.ButterKnife;
+import butterknife.BindView;
 
 import static android.util.TypedValue.COMPLEX_UNIT_PX;
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
@@ -196,15 +197,24 @@ public final class Text extends Content {
 
     @NonNull
     @Override
-    public View render(@NonNull final LinearLayout parent) {
-        final View view =
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.tract_content_text, parent, false);
+    TextViewHolder createViewHolder(@NonNull final ViewGroup parent,
+                                    @Nullable final ParentViewHolder parentViewHolder) {
+        return new TextViewHolder(parent, parentViewHolder);
+    }
 
-        final TextView content = ButterKnife.findById(view, R.id.content);
-        if (content != null) {
-            bind(this, content);
+    @UiThread
+    static final class TextViewHolder extends BaseViewHolder<Text> {
+        @BindView(R2.id.content)
+        TextView mText;
+
+        TextViewHolder(@NonNull final ViewGroup parent, @Nullable final ParentViewHolder parentViewHolder) {
+            super(Text.class, parent, R.layout.tract_content_text, parentViewHolder);
         }
 
-        return view;
+        @Override
+        void onBind() {
+            super.onBind();
+            Text.bind(mModel, mText);
+        }
     }
 }

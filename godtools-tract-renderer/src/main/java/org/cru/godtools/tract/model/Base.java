@@ -1,14 +1,19 @@
 package org.cru.godtools.tract.model;
 
 import android.support.annotation.CallSuper;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.annimon.stream.Stream;
 
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
+import org.cru.godtools.tract.model.Parent.ParentViewHolder;
 import org.greenrobot.eventbus.EventBus;
 import org.xmlpull.v1.XmlPullParser;
 
@@ -85,26 +90,35 @@ abstract class Base {
         return Event.Id.parse(getDefaultEventNamespace(), raw);
     }
 
+    @UiThread
     static abstract class BaseViewHolder<T extends Base> {
+        @Nullable
+        final ParentViewHolder<? extends Base> mParentViewHolder;
+
         @NonNull
         public final View mRoot;
 
+        @NonNull
+        final Class<T> mModelType;
         @Nullable
         T mModel;
 
-        BaseViewHolder(@NonNull final View root) {
-            mRoot = root;
+        BaseViewHolder(@NonNull final Class<T> modelType, @NonNull final ViewGroup parent, @LayoutRes final int layout,
+                       @Nullable final ParentViewHolder<?> parentViewHolder) {
+            mParentViewHolder = parentViewHolder;
+            mModelType = modelType;
+            mRoot = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
             ButterKnife.bind(this, mRoot);
             mRoot.setTag(R.id.view_holder, this);
         }
 
-        public final void setModel(@Nullable final T model) {
+        public final void bind(@Nullable final T model) {
             mModel = model;
-            bind();
+            onBind();
         }
 
         @CallSuper
-        void bind() {}
+        void onBind() {}
 
         void sendEvents(@NonNull final Set<Event.Id> ids) {
             if (!ids.isEmpty()) {

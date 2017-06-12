@@ -6,11 +6,10 @@ import android.net.Uri;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 import android.support.v4.view.ViewCompat;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.common.base.Strings;
@@ -20,6 +19,7 @@ import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.Parent.ParentViewHolder;
 import org.cru.godtools.tract.model.Text.Align;
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlPullParser;
@@ -132,31 +132,31 @@ public final class Button extends Content {
 
     @NonNull
     @Override
-    View render(@NonNull final LinearLayout parent) {
-        final View view =
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.tract_content_button, parent, false);
-
-        // create view holder and set the model for it
-        new ButtonViewHolder(view).setModel(this);
-
-        return view;
+    ButtonViewHolder createViewHolder(@NonNull final ViewGroup parent,
+                                      @Nullable final ParentViewHolder parentViewHolder) {
+        return new ButtonViewHolder(parent, parentViewHolder);
     }
 
+    @UiThread
     static final class ButtonViewHolder extends BaseViewHolder<Button> {
         @BindView(R2.id.button)
         TextView mButton;
 
-        ButtonViewHolder(@NonNull final View root) {
-            super(root);
+        ButtonViewHolder(@NonNull final ViewGroup parent, @Nullable final ParentViewHolder parentViewHolder) {
+            super(Button.class, parent, R.layout.tract_content_button, parentViewHolder);
         }
 
+        /* BEGIN lifecycle */
+
         @Override
-        void bind() {
-            super.bind();
+        void onBind() {
+            super.onBind();
             final Text text = mModel != null ? mModel.mText : null;
             Text.bind(text, mButton, Container.getPrimaryTextColor(getContainer(mModel)), DEFAULT_TEXT_ALIGN);
             ViewCompat.setBackgroundTintList(mButton, ColorStateList.valueOf(getColor(mModel)));
         }
+
+        /* END lifecycle */
 
         @OnClick(R2.id.button)
         void click() {

@@ -4,11 +4,10 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.v7.widget.CardView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.common.collect.ImmutableList;
@@ -154,11 +153,11 @@ public final class Card extends Base implements Container, Parent {
 
     @NonNull
     public static CardViewHolder createViewHolder(@NonNull final ViewGroup parent) {
-        return new CardViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.tract_content_card, parent, false));
+        return new CardViewHolder(parent);
     }
 
-    public static final class CardViewHolder extends BaseViewHolder<Card> {
+    @UiThread
+    public static final class CardViewHolder extends ParentViewHolder<Card> {
         @BindView(R2.id.background_image)
         TractPicassoImageView mBackgroundView;
         @BindView(R2.id.card)
@@ -167,24 +166,21 @@ public final class Card extends Base implements Container, Parent {
         TextView mLabel;
         @BindView(R2.id.label_divider)
         View mDivider;
-        @BindView(R2.id.content)
-        LinearLayout mContent;
 
         private final float mLabelTextSize;
 
-        CardViewHolder(@NonNull final View root) {
-            super(root);
+        CardViewHolder(@NonNull final ViewGroup parent) {
+            super(Card.class, parent, R.layout.tract_content_card, null);
             AutoAttachingGlobalLayoutListener.attach(mRoot, this::updatePeekHeights);
-            mLabelTextSize = root.getResources().getDimension(R.dimen.text_size_card_label);
+            mLabelTextSize = mRoot.getResources().getDimension(R.dimen.text_size_card_label);
         }
 
         @Override
         @CallSuper
-        void bind() {
-            super.bind();
+        void onBind() {
+            super.onBind();
             bindBackground();
             bindLabel();
-            bindContent();
         }
 
         private void bindBackground() {
@@ -197,11 +193,6 @@ public final class Card extends Base implements Container, Parent {
             final Text label = mModel != null ? mModel.mLabel : null;
             Text.bind(label, mLabel, Container.getPrimaryColor(mModel), mLabelTextSize);
             mDivider.setBackgroundColor(Container.getTextColor(mModel));
-        }
-
-        private void bindContent() {
-            mContent.removeAllViews();
-            Content.renderAll(mContent, mModel != null ? mModel.mContent : Collections.emptyList());
         }
 
         // XXX: this should be handled by PageContentLayout utilizing configuration within the LayoutParams

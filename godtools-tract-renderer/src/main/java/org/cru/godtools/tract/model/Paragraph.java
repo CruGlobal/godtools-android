@@ -1,9 +1,9 @@
 package org.cru.godtools.tract.model;
 
 import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
+import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
+import android.view.ViewGroup;
 
 import com.google.common.collect.ImmutableList;
 
@@ -14,8 +14,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.List;
-
-import butterknife.ButterKnife;
 
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 
@@ -69,16 +67,16 @@ public final class Paragraph extends Content implements Parent {
 
     @NonNull
     @Override
-    public View render(@NonNull final LinearLayout parent) {
-        final View view =
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.tract_content_paragraph, parent, false);
+    ParagraphViewHolder createViewHolder(@NonNull final ViewGroup parent,
+                                         @Nullable final ParentViewHolder parentViewHolder) {
+        return new ParagraphViewHolder(parent, parentViewHolder);
+    }
 
-        // attach all the content to this layout
-        final LinearLayout content = ButterKnife.findById(view, R.id.content);
-        if (content != null) {
-            Content.renderAll(content, mContent);
+    @UiThread
+    public static final class ParagraphViewHolder extends ParentViewHolder<Paragraph> {
+        ParagraphViewHolder(@NonNull final ViewGroup parent,
+                            @Nullable final ParentViewHolder parentViewHolder) {
+            super(Paragraph.class, parent, R.layout.tract_content_paragraph, parentViewHolder);
         }
-
-        return view;
     }
 }
