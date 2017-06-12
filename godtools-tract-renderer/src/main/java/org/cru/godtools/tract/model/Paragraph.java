@@ -5,27 +5,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.google.common.collect.ImmutableList;
+
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 
-public final class Paragraph extends Content {
+public final class Paragraph extends Content implements Parent {
     static final String XML_PARAGRAPH = "paragraph";
 
     @NonNull
-    private final List<Content> mContent = new ArrayList<>();
+    private List<Content> mContent = ImmutableList.of();
 
     private Paragraph(@NonNull final Base parent) {
         super(parent);
+    }
+
+    @NonNull
+    @Override
+    public List<Content> getContent() {
+        return mContent;
     }
 
     @NonNull
@@ -39,6 +46,7 @@ public final class Paragraph extends Content {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_PARAGRAPH);
 
         // process any child elements
+        final ImmutableList.Builder<Content> contentList = ImmutableList.builder();
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -47,13 +55,14 @@ public final class Paragraph extends Content {
             // try parsing this child element as a content node
             final Content content = Content.fromXml(this, parser);
             if (content != null) {
-                mContent.add(content);
+                contentList.add(content);
                 continue;
             }
 
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
+        mContent = contentList.build();
 
         return this;
     }
