@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.common.collect.ImmutableList;
+
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
@@ -22,8 +24,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -33,7 +33,7 @@ import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.model.Utils.parseScaleType;
 import static org.cru.godtools.tract.util.ViewUtils.getTopOffset;
 
-public final class Card extends Base implements Container {
+public final class Card extends Base implements Container, Parent {
     static final String XML_CARD = "card";
     private static final String XML_LABEL = "label";
 
@@ -53,7 +53,7 @@ public final class Card extends Base implements Container {
     Text mLabel;
 
     @NonNull
-    final List<Content> mContent = new ArrayList<>();
+    private List<Content> mContent = ImmutableList.of();
 
     private Card(@NonNull final Base parent) {
         super(parent);
@@ -99,6 +99,12 @@ public final class Card extends Base implements Container {
     }
 
     @NonNull
+    @Override
+    public List<Content> getContent() {
+        return mContent;
+    }
+
+    @NonNull
     static Card fromXml(@NonNull final Base parent, @NonNull final XmlPullParser parser)
             throws IOException, XmlPullParserException {
         return new Card(parent).parse(parser);
@@ -114,6 +120,7 @@ public final class Card extends Base implements Container {
         mBackgroundImageScaleType = parseScaleType(parser, XML_BACKGROUND_IMAGE_SCALE_TYPE, mBackgroundImageScaleType);
 
         // process any child elements
+        final ImmutableList.Builder<Content> contentList = ImmutableList.builder();
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -133,13 +140,14 @@ public final class Card extends Base implements Container {
             // try parsing this child element as a content node
             final Content content = Content.fromXml(this, parser);
             if (content != null) {
-                mContent.add(content);
+                contentList.add(content);
                 continue;
             }
 
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
+        mContent = contentList.build();
 
         return this;
     }
