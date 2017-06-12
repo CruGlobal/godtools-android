@@ -29,7 +29,7 @@ import static org.cru.godtools.tract.model.Header.XML_HEADER;
 import static org.cru.godtools.tract.model.Hero.XML_HERO;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 
-public final class Page extends Base {
+public final class Page extends Base implements Container {
     static final String XML_PAGE = "page";
     private static final String XML_LISTENERS = "listeners";
     private static final String XML_MANIFEST_SRC = "src";
@@ -100,28 +100,18 @@ public final class Page extends Base {
     }
 
     @ColorInt
-    int getPrimaryColor() {
+    public int getPrimaryColor() {
         return mPrimaryColor != null ? mPrimaryColor : getManifest().getPrimaryColor();
     }
 
     @ColorInt
-    static int getPrimaryColor(@Nullable final Page page) {
-        return page != null ? page.getPrimaryColor() : Manifest.getPrimaryColor(null);
-    }
-
-    @ColorInt
-    int getPrimaryTextColor() {
+    public int getPrimaryTextColor() {
         return mPrimaryTextColor != null ? mPrimaryTextColor : getManifest().getPrimaryTextColor();
     }
 
     @ColorInt
-    private int getTextColor() {
-        return mTextColor != null ? mTextColor : Manifest.getTextColor(getManifest());
-    }
-
-    @ColorInt
-    static int getTextColor(@Nullable final Page page) {
-        return page != null ? page.getTextColor() : Manifest.getTextColor(null);
+    public int getTextColor() {
+        return mTextColor != null ? mTextColor : getManifest().getTextColor();
     }
 
     @ColorInt

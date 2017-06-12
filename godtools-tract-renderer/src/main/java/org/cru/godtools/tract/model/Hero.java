@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 
-public final class Hero extends Base {
+public final class Hero extends Base implements Container {
     static final String XML_HERO = "hero";
     private static final String XML_HEADING = "heading";
 
@@ -33,6 +33,21 @@ public final class Hero extends Base {
 
     private Hero(@NonNull final Base parent) {
         super(parent);
+    }
+
+    @Override
+    public int getPrimaryColor() {
+        return getPage().getPrimaryColor();
+    }
+
+    @Override
+    public int getPrimaryTextColor() {
+        return getPage().getPrimaryTextColor();
+    }
+
+    @Override
+    public int getTextColor() {
+        return getPage().getTextColor();
     }
 
     @NonNull

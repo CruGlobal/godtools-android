@@ -63,6 +63,22 @@ abstract class Base {
         }
     }
 
+    @Nullable
+    Container getContainer() {
+        if (mParent instanceof Container) {
+            return (Container) mParent;
+        } else if (mParent != this) {
+            return mParent.getContainer();
+        } else {
+            return null;
+        }
+    }
+
+    @Nullable
+    static Container getContainer(@Nullable final Base obj) {
+        return obj != null ? obj.getContainer() : null;
+    }
+
     @NonNull
     final Set<Event.Id> parseEvents(@NonNull final XmlPullParser parser, @NonNull final String attribute) {
         final String raw = parser.getAttributeValue(null, attribute);

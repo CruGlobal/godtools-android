@@ -22,7 +22,7 @@ import java.util.List;
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 
-public final class Manifest extends Base {
+public final class Manifest extends Base implements Container {
     private static final String XML_MANIFEST = "manifest";
     private static final String XML_TITLE = "title";
     private static final String XML_NAVBAR_COLOR = "navbar-color";
@@ -110,28 +110,33 @@ public final class Manifest extends Base {
     }
 
     @ColorInt
-    int getPrimaryColor() {
+    public int getPrimaryColor() {
         return mPrimaryColor;
     }
 
     @ColorInt
-    public static int getPrimaryColor(@Nullable final Manifest manifest) {
-        return manifest != null ? manifest.mPrimaryColor : DEFAULT_PRIMARY_COLOR;
+    static int getDefaultPrimaryColor() {
+        return DEFAULT_PRIMARY_COLOR;
     }
 
     @ColorInt
-    int getPrimaryTextColor() {
+    public int getPrimaryTextColor() {
         return mPrimaryTextColor;
     }
 
     @ColorInt
-    public static int getPrimaryTextColor(@Nullable final Manifest manifest) {
-        return manifest != null ? manifest.mPrimaryTextColor : DEFAULT_PRIMARY_TEXT_COLOR;
+    static int getDefaultPrimaryTextColor() {
+        return DEFAULT_PRIMARY_TEXT_COLOR;
+    }
+
+    @Override
+    public int getTextColor() {
+        return mTextColor;
     }
 
     @ColorInt
-    public static int getTextColor(@Nullable final Manifest manifest) {
-        return manifest != null ? manifest.mTextColor : DEFAULT_TEXT_COLOR;
+    static int getDefaultTextColor() {
+        return DEFAULT_TEXT_COLOR;
     }
 
     @ColorInt
@@ -154,13 +159,13 @@ public final class Manifest extends Base {
     @ColorInt
     public static int getNavBarColor(@Nullable final Manifest manifest) {
         return manifest != null && manifest.mNavBarColor != null ? manifest.mNavBarColor :
-                Manifest.getPrimaryColor(manifest);
+                Container.getPrimaryColor(manifest);
     }
 
     @ColorInt
     public static int getNavBarControlColor(@Nullable final Manifest manifest) {
         return manifest != null && manifest.mNavBarControlColor != null ? manifest.mNavBarControlColor :
-                Manifest.getPrimaryTextColor(manifest);
+                Container.getPrimaryTextColor(manifest);
     }
 
     @NonNull
