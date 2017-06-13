@@ -28,6 +28,7 @@ import static org.cru.godtools.tract.model.Card.XML_CARD;
 import static org.cru.godtools.tract.model.Header.XML_HEADER;
 import static org.cru.godtools.tract.model.Hero.XML_HERO;
 import static org.cru.godtools.tract.model.Utils.parseColor;
+import static org.cru.godtools.tract.model.Utils.parseScaleType;
 
 public final class Page extends Base implements Container {
     static final String XML_PAGE = "page";
@@ -38,7 +39,7 @@ public final class Page extends Base implements Container {
     @ColorInt
     private static final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
     private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL_X;
-    private static final int DEFAULT_BACKGROUND_IMAGE_ALIGN = ImageGravity.CENTER;
+    private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
 
     private final int mPosition;
 
@@ -62,9 +63,9 @@ public final class Page extends Base implements Container {
     private int mBackgroundColor = DEFAULT_BACKGROUND_COLOR;
     @Nullable
     private String mBackgroundImage;
+    private int mBackgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     @NonNull
     private ScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
-    private int mBackgroundImageAlign = DEFAULT_BACKGROUND_IMAGE_ALIGN;
 
     @Nullable
     private Header mHeader;
@@ -123,8 +124,8 @@ public final class Page extends Base implements Container {
         return page != null ? page.getResource(page.mBackgroundImage) : null;
     }
 
-    private static int getBackgroundImageAlign(@Nullable final Page page) {
-        return page != null ? page.mBackgroundImageAlign : DEFAULT_BACKGROUND_IMAGE_ALIGN;
+    private static int getBackgroundImageGravity(@Nullable final Page page) {
+        return page != null ? page.mBackgroundImageGravity : DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     }
 
     private static ScaleType getBackgroundImageScaleType(@Nullable final Page page) {
@@ -185,7 +186,8 @@ public final class Page extends Base implements Container {
         mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
-        mBackgroundImageAlign = ImageGravity.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageAlign);
+        mBackgroundImageGravity = ImageGravity.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageGravity);
+        mBackgroundImageScaleType = parseScaleType(parser, XML_BACKGROUND_IMAGE_SCALE_TYPE, mBackgroundImageScaleType);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -248,6 +250,6 @@ public final class Page extends Base implements Container {
 
     public static void bindBackgroundImage(@Nullable final Page page, @NonNull final ScaledPicassoImageView view) {
         Resource.bindBackgroundImage(view, getBackgroundImageResource(page), getBackgroundImageScaleType(page),
-                                     getBackgroundImageAlign(page));
+                                     getBackgroundImageGravity(page));
     }
 }

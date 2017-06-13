@@ -30,6 +30,7 @@ import butterknife.BindView;
 
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 import static org.cru.godtools.tract.model.Utils.parseColor;
+import static org.cru.godtools.tract.model.Utils.parseScaleType;
 import static org.cru.godtools.tract.util.ViewUtils.getTopOffset;
 
 public final class Card extends Base implements Container {
@@ -37,16 +38,16 @@ public final class Card extends Base implements Container {
     private static final String XML_LABEL = "label";
 
     private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL_X;
-    private static final int DEFAULT_BACKGROUND_IMAGE_ALIGN = ImageGravity.CENTER;
+    private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
 
     @Nullable
     @ColorInt
     private Integer mBackgroundColor = null;
     @Nullable
     private String mBackgroundImage;
+    private int mBackgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     @NonNull
     private ScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
-    private int mBackgroundImageAlign = DEFAULT_BACKGROUND_IMAGE_ALIGN;
 
     @Nullable
     Text mLabel;
@@ -89,8 +90,8 @@ public final class Card extends Base implements Container {
         return card != null ? card.getResource(card.mBackgroundImage) : null;
     }
 
-    static int getBackgroundImageAlign(@Nullable final Card card) {
-        return card != null ? card.mBackgroundImageAlign : DEFAULT_BACKGROUND_IMAGE_ALIGN;
+    static int getBackgroundImageGravity(@Nullable final Card card) {
+        return card != null ? card.mBackgroundImageGravity : DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     }
 
     static ScaleType getBackgroundImageScaleType(@Nullable final Card card) {
@@ -109,7 +110,8 @@ public final class Card extends Base implements Container {
 
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
-        mBackgroundImageAlign = ImageGravity.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageAlign);
+        mBackgroundImageGravity = ImageGravity.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageGravity);
+        mBackgroundImageScaleType = parseScaleType(parser, XML_BACKGROUND_IMAGE_SCALE_TYPE, mBackgroundImageScaleType);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -180,7 +182,7 @@ public final class Card extends Base implements Container {
         private void bindBackground() {
             mCardView.setCardBackgroundColor(Card.getBackgroundColor(mModel));
             Resource.bindBackgroundImage(mBackgroundView, getBackgroundImageResource(mModel),
-                                         getBackgroundImageScaleType(mModel), getBackgroundImageAlign(mModel));
+                                         getBackgroundImageScaleType(mModel), getBackgroundImageGravity(mModel));
         }
 
         private void bindLabel() {
