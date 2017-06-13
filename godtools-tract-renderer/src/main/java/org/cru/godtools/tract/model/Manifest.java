@@ -8,6 +8,8 @@ import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.SimpleArrayMap;
 
+import com.google.common.collect.ImmutableList;
+
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
@@ -15,8 +17,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
@@ -70,7 +70,8 @@ public final class Manifest extends Base implements Container {
     @Nullable
     private Text mTitle;
 
-    private final List<Page> mPages = new ArrayList<>();
+    @NonNull
+    private List<Page> mPages = ImmutableList.of();
     @VisibleForTesting
     final SimpleArrayMap<String, Resource> mResources = new SimpleArrayMap<>();
 
@@ -97,7 +98,7 @@ public final class Manifest extends Base implements Container {
 
     @NonNull
     public List<Page> getPages() {
-        return Collections.unmodifiableList(mPages);
+        return mPages;
     }
 
     @Nullable
@@ -225,6 +226,7 @@ public final class Manifest extends Base implements Container {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGES);
 
         // process any child elements
+        final ImmutableList.Builder<Page> pages = ImmutableList.builder();
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -235,7 +237,7 @@ public final class Manifest extends Base implements Container {
                 case XMLNS_MANIFEST:
                     switch (parser.getName()) {
                         case Page.XML_PAGE:
-                            mPages.add(Page.fromManifestXml(this, mPages.size(),  parser));
+                            pages.add(Page.fromManifestXml(this, mPages.size(), parser));
                             continue;
                     }
                     break;
@@ -244,6 +246,7 @@ public final class Manifest extends Base implements Container {
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
+        mPages = pages.build();
     }
 
     @WorkerThread
