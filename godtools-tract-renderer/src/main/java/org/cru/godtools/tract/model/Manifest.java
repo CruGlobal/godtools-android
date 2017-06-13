@@ -21,6 +21,7 @@ import java.util.List;
 
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.tract.model.Utils.parseColor;
+import static org.cru.godtools.tract.model.Utils.parseScaleType;
 
 public final class Manifest extends Base implements Container {
     private static final String XML_MANIFEST = "manifest";
@@ -55,9 +56,9 @@ public final class Manifest extends Base implements Container {
     private int mBackgroundColor = DEFAULT_BACKGROUND_COLOR;
     @Nullable
     private String mBackgroundImage;
+    private int mBackgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     @NonNull
     private ScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
-    private int mBackgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY;
 
     @Nullable
     @ColorInt
@@ -185,6 +186,7 @@ public final class Manifest extends Base implements Container {
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
         mBackgroundImageGravity = ImageGravity.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageGravity);
+        mBackgroundImageScaleType = parseScaleType(parser, XML_BACKGROUND_IMAGE_SCALE_TYPE, mBackgroundImageScaleType);
         mNavBarColor = parseColor(parser, XML_NAVBAR_COLOR, mNavBarColor);
         mNavBarControlColor = parseColor(parser, XML_NAVBAR_CONTROL_COLOR, mNavBarControlColor);
 
