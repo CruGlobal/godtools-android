@@ -60,7 +60,12 @@ public abstract class Content extends Base {
 
     static void renderAll(@NonNull final ViewGroup parent, @NonNull final List<? extends Content> content) {
         Stream.of(content)
-                .map(c -> c.createViewHolder(parent, null))
+                .map(c -> {
+                    final BaseViewHolder holder = c.createViewHolder(parent, null);
+                    //noinspection unchecked
+                    holder.bind(c);
+                    return holder;
+                })
                 .map(vh -> vh.mRoot)
                 .forEach(parent::addView);
     }
