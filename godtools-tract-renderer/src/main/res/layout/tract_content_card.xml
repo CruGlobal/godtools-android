@@ -21,9 +21,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/horiz_margin_card_content"
-            android:layout_marginRight="@dimen/horiz_margin_card_content"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="16dp"
+            android:clipToPadding="false"
+            android:paddingLeft="@dimen/horiz_margin_card_content"
+            android:paddingRight="@dimen/horiz_margin_card_content">
 
             <TextView
                 android:id="@+id/label"
@@ -38,6 +39,17 @@
                 android:layout_below="@id/label"
                 android:layout_marginTop="12dp"
                 tools:background="#bebebe" />
+
+            <org.cru.godtools.tract.widget.TractPicassoImageView
+                android:id="@+id/background_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/label_divider"
+                android:layout_marginLeft="-16dp"
+                android:layout_marginRight="-16dp"
+                android:layout_marginTop="4dp"
+                android:adjustViewBounds="true"
+                android:cropToPadding="false" />
 
             <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"

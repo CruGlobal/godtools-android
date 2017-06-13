@@ -16,6 +16,8 @@ import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.util.AutoAttachingGlobalLayoutListener;
 import org.cru.godtools.tract.widget.PageContentLayout;
+import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
+import org.cru.godtools.tract.widget.TractPicassoImageView;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -34,9 +36,17 @@ public final class Card extends Base implements Container {
     static final String XML_CARD = "card";
     private static final String XML_LABEL = "label";
 
+    private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL_X;
+    private static final int DEFAULT_BACKGROUND_IMAGE_ALIGN = ImageGravity.CENTER;
+
     @Nullable
     @ColorInt
     private Integer mBackgroundColor = null;
+    @Nullable
+    private String mBackgroundImage;
+    @NonNull
+    private ScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
+    private int mBackgroundImageAlign = DEFAULT_BACKGROUND_IMAGE_ALIGN;
 
     @Nullable
     Text mLabel;
@@ -75,6 +85,18 @@ public final class Card extends Base implements Container {
         return card != null ? card.getBackgroundColor() : Manifest.getBackgroundColor(null);
     }
 
+    static Resource getBackgroundImageResource(@Nullable final Card card) {
+        return card != null ? card.getResource(card.mBackgroundImage) : null;
+    }
+
+    static int getBackgroundImageAlign(@Nullable final Card card) {
+        return card != null ? card.mBackgroundImageAlign : DEFAULT_BACKGROUND_IMAGE_ALIGN;
+    }
+
+    static ScaleType getBackgroundImageScaleType(@Nullable final Card card) {
+        return card != null ? card.mBackgroundImageScaleType : DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
+    }
+
     @NonNull
     static Card fromXml(@NonNull final Base parent, @NonNull final XmlPullParser parser)
             throws IOException, XmlPullParserException {
@@ -86,6 +108,8 @@ public final class Card extends Base implements Container {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CARD);
 
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
+        mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
+        mBackgroundImageAlign = ImageGravity.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageAlign);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -125,6 +149,8 @@ public final class Card extends Base implements Container {
     }
 
     public static final class CardViewHolder extends BaseViewHolder<Card> {
+        @BindView(R2.id.background_image)
+        TractPicassoImageView mBackgroundView;
         @BindView(R2.id.card)
         CardView mCardView;
         @BindView(R2.id.label)
@@ -153,6 +179,8 @@ public final class Card extends Base implements Container {
 
         private void bindBackground() {
             mCardView.setCardBackgroundColor(Card.getBackgroundColor(mModel));
+            Resource.bindBackgroundImage(mBackgroundView, getBackgroundImageResource(mModel),
+                                         getBackgroundImageScaleType(mModel), getBackgroundImageAlign(mModel));
         }
 
         private void bindLabel() {
