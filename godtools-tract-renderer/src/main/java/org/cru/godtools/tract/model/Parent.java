@@ -7,8 +7,12 @@ import android.support.annotation.UiThread;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.annimon.stream.IntStream;
+import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableList;
 
+import org.cru.godtools.base.model.Event;
+import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.model.Base.BaseViewHolder;
 
@@ -31,12 +35,32 @@ interface Parent {
             super(modelType, parent, layout, parentViewHolder);
         }
 
+        /* BEGIN lifecycle */
+
         @Override
         @CallSuper
         void onBind() {
             super.onBind();
             bindContent();
         }
+
+        @Override
+        boolean onValidate() {
+            // only return true if all children validate
+            // XXX: we don't want to short-circuit execution, so we don't use allMatch
+            return streamChildViewHolders().filterNot(BaseViewHolder::onValidate).count() == 0;
+        }
+
+        @Override
+        @CallSuper
+        void onBuildEvent(@NonNull final Event.Builder builder, final boolean recursive) {
+            // if we are in recursive mode, process any children objects
+            if (recursive) {
+                streamChildViewHolders().forEach(vh -> vh.onBuildEvent(builder, true));
+            }
+        }
+
+        /* END lifecycle */
 
         private void bindContent() {
             if (mContent != null) {
@@ -50,6 +74,16 @@ interface Parent {
                     mContent.addView(holder.mRoot);
                 }
             }
+        }
+
+        private Stream<BaseViewHolder> streamChildViewHolders() {
+            if (mContent != null) {
+                return IntStream.range(0, mContent.getChildCount())
+                        .mapToObj(mContent::getChildAt)
+                        .map(v -> v.getTag(R.id.view_holder))
+                        .select(BaseViewHolder.class);
+            }
+            return Stream.empty();
         }
     }
 }

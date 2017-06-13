@@ -84,7 +84,7 @@ public final class Text extends Content {
     }
 
     @ColorInt
-    public int getTextColor(@ColorInt final int defColor) {
+    private int getTextColor(@ColorInt final int defColor) {
         return mTextColor != null ? mTextColor : defColor;
     }
 
@@ -95,6 +95,11 @@ public final class Text extends Content {
     @Nullable
     public String getText() {
         return mText;
+    }
+
+    @Nullable
+    static String getText(@Nullable final Text text) {
+        return text != null ? text.getText() : null;
     }
 
     static Text fromXml(@NonNull final Base parent, @NonNull final XmlPullParser parser)

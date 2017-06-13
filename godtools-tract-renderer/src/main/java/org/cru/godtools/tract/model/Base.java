@@ -50,7 +50,7 @@ abstract class Base {
         }
     }
 
-    String getDefaultEventNamespace() {
+    private String getDefaultEventNamespace() {
         return getManifest().getCode();
     }
 
@@ -112,18 +112,65 @@ abstract class Base {
             mRoot.setTag(R.id.view_holder, this);
         }
 
+        /* BEGIN lifecycle */
+
+        @CallSuper
+        void onBind() {}
+
+        boolean onValidate() {
+            // default to being valid
+            return true;
+        }
+
+        void onBuildEvent(@NonNull final Event.Builder builder, final boolean recursive) {}
+
+        /* END lifecycle */
+
         public final void bind(@Nullable final T model) {
             mModel = model;
             onBind();
         }
 
-        @CallSuper
-        void onBind() {}
-
-        void sendEvents(@NonNull final Set<Event.Id> ids) {
-            if (!ids.isEmpty()) {
-                Stream.of(ids).map(Event::new).forEach(EventBus.getDefault()::post);
+        final void sendEvents(@NonNull final Set<Event.Id> ids) {
+            // short-circuit if there are no events being triggered
+            if (ids.isEmpty()) {
+                return;
             }
+
+            // short-circuit if validation fails when it's required
+            if (!validate(ids)) {
+                return;
+            }
+
+            // try letting a parent build the event object
+            final Event.Builder builder = Event.builder();
+            if (!buildEvent(builder)) {
+                // populate the event with our local state since it wasn't populated by a parent
+                onBuildEvent(builder, false);
+            }
+
+            // trigger an event for every id provided
+            Stream.of(ids)
+                    .map(builder::id)
+                    .map(Event.Builder::build)
+                    .forEach(EventBus.getDefault()::post);
+        }
+
+        /**
+         * @return true if the event has been built by a parent view holder.
+         */
+        boolean buildEvent(@NonNull final Event.Builder builder) {
+            return mParentViewHolder != null && mParentViewHolder.buildEvent(builder);
+        }
+
+        boolean validate(@NonNull final Set<Event.Id> ids) {
+            // navigate up hierarchy before performing validation
+            if (mParentViewHolder != null) {
+                return mParentViewHolder.validate(ids);
+            }
+
+            // no validation is necessary
+            return true;
         }
     }
 }
