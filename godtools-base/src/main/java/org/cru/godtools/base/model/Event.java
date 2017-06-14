@@ -3,24 +3,36 @@ package org.cru.godtools.base.model;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.concurrent.Immutable;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public final class Event {
     @NonNull
     private final Id mId;
+    @NonNull
+    private final Map<String, String> mFields;
 
-    public Event(@NonNull final Id id) {
-        mId = id;
+    Event(@NonNull final Builder builder) {
+        mId = checkNotNull(builder.mId);
+        mFields = ImmutableMap.copyOf(builder.mFields);
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Immutable
     public static final class Id {
-        public static final Id SUBSCRIBE_EVENT = new Id("followup", "subscribe");
+        public static final Id FOLLOWUP_EVENT = new Id("followup", "send");
 
         @NonNull
         private final String mNamespace;
@@ -58,6 +70,30 @@ public final class Event {
                 }
             }
             return eventIds.build();
+        }
+    }
+
+    public static class Builder {
+        @Nullable
+        Id mId;
+
+        @NonNull
+        final Map<String, String> mFields = new HashMap<>();
+
+        Builder() {}
+
+        public Builder id(@NonNull final Id id) {
+            mId = id;
+            return this;
+        }
+
+        public Builder field(@NonNull final String name, @NonNull final String value) {
+            mFields.put(name, value);
+            return this;
+        }
+
+        public Event build() {
+            return new Event(this);
         }
     }
 }

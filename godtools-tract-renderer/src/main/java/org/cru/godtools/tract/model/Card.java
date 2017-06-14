@@ -4,12 +4,13 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.v7.widget.CardView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.common.collect.ImmutableList;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
@@ -22,8 +23,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -33,7 +32,7 @@ import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.model.Utils.parseScaleType;
 import static org.cru.godtools.tract.util.ViewUtils.getTopOffset;
 
-public final class Card extends Base implements Container {
+public final class Card extends Base implements Container, Parent {
     static final String XML_CARD = "card";
     private static final String XML_LABEL = "label";
 
@@ -53,7 +52,7 @@ public final class Card extends Base implements Container {
     Text mLabel;
 
     @NonNull
-    final List<Content> mContent = new ArrayList<>();
+    private List<Content> mContent = ImmutableList.of();
 
     private Card(@NonNull final Base parent) {
         super(parent);
@@ -99,6 +98,12 @@ public final class Card extends Base implements Container {
     }
 
     @NonNull
+    @Override
+    public List<Content> getContent() {
+        return mContent;
+    }
+
+    @NonNull
     static Card fromXml(@NonNull final Base parent, @NonNull final XmlPullParser parser)
             throws IOException, XmlPullParserException {
         return new Card(parent).parse(parser);
@@ -114,6 +119,7 @@ public final class Card extends Base implements Container {
         mBackgroundImageScaleType = parseScaleType(parser, XML_BACKGROUND_IMAGE_SCALE_TYPE, mBackgroundImageScaleType);
 
         // process any child elements
+        final ImmutableList.Builder<Content> contentList = ImmutableList.builder();
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -133,24 +139,25 @@ public final class Card extends Base implements Container {
             // try parsing this child element as a content node
             final Content content = Content.fromXml(this, parser);
             if (content != null) {
-                mContent.add(content);
+                contentList.add(content);
                 continue;
             }
 
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
+        mContent = contentList.build();
 
         return this;
     }
 
     @NonNull
     public static CardViewHolder createViewHolder(@NonNull final ViewGroup parent) {
-        return new CardViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.tract_content_card, parent, false));
+        return new CardViewHolder(parent);
     }
 
-    public static final class CardViewHolder extends BaseViewHolder<Card> {
+    @UiThread
+    public static final class CardViewHolder extends ParentViewHolder<Card> {
         @BindView(R2.id.background_image)
         TractPicassoImageView mBackgroundView;
         @BindView(R2.id.card)
@@ -159,24 +166,21 @@ public final class Card extends Base implements Container {
         TextView mLabel;
         @BindView(R2.id.label_divider)
         View mDivider;
-        @BindView(R2.id.content)
-        LinearLayout mContent;
 
         private final float mLabelTextSize;
 
-        CardViewHolder(@NonNull final View root) {
-            super(root);
+        CardViewHolder(@NonNull final ViewGroup parent) {
+            super(Card.class, parent, R.layout.tract_content_card, null);
             AutoAttachingGlobalLayoutListener.attach(mRoot, this::updatePeekHeights);
-            mLabelTextSize = root.getResources().getDimension(R.dimen.text_size_card_label);
+            mLabelTextSize = mRoot.getResources().getDimension(R.dimen.text_size_card_label);
         }
 
         @Override
         @CallSuper
-        void bind() {
-            super.bind();
+        void onBind() {
+            super.onBind();
             bindBackground();
             bindLabel();
-            bindContent();
         }
 
         private void bindBackground() {
@@ -189,11 +193,6 @@ public final class Card extends Base implements Container {
             final Text label = mModel != null ? mModel.mLabel : null;
             Text.bind(label, mLabel, Container.getPrimaryColor(mModel), mLabelTextSize);
             mDivider.setBackgroundColor(Container.getTextColor(mModel));
-        }
-
-        private void bindContent() {
-            mContent.removeAllViews();
-            Content.renderAll(mContent, mModel != null ? mModel.mContent : Collections.emptyList());
         }
 
         // XXX: this should be handled by PageContentLayout utilizing configuration within the LayoutParams
