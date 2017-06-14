@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteException;
 import android.support.annotation.NonNull;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.common.base.Throwables;
 
 import org.ccci.gto.android.common.app.ApplicationUtils;
 import org.ccci.gto.android.common.db.CommonTables.LastSyncTable;
@@ -216,7 +215,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
         } catch (final SQLException e) {
             // report (or rethrow) exception
             if (ApplicationUtils.isDebuggable(mContext)) {
-                throw Throwables.propagate(e);
+                throw e;
             } else if (Fabric.isInitialized() && Crashlytics.getInstance() != null) {
                 Crashlytics.logException(e);
             }

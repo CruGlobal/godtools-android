@@ -19,6 +19,8 @@ dependencies {
     api "org.ccci.gto.android:gto-support-db-async:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-db-stream:${deps.gtoSupport}"
 
+    implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
+
     // XXX: supporting legacy objects, we may be able to get rid of this at some point
     implementation "org.ccci.gto.android:gto-support-gson:${deps.gtoSupport}"
     implementation("org.simpleframework:simple-xml:${deps.simplexml}") {
