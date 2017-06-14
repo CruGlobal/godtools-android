@@ -15,6 +15,7 @@ import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.COL_NAM
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.COL_STATUS;
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.COL_VERSION;
 
+@Deprecated
 public class GTPackageMapper extends AbstractMapper<GTPackage> {
     @Override
     protected void mapField(@NonNull final ContentValues values, @NonNull final String field,

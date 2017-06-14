@@ -6,12 +6,8 @@ import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.db.AbstractMapper;
 import org.keynote.godtools.android.business.GSSubscriber;
-
 import org.keynote.godtools.android.dao.DBContract.GSSubscriberTable;
 
-/**
- * Created by dsgoers on 3/31/16.
- */
 public class GSSubscriberMapper extends AbstractMapper<GSSubscriber> {
     @NonNull
     @Override

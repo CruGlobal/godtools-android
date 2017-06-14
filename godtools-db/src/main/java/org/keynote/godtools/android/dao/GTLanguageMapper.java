@@ -12,6 +12,7 @@ import static org.keynote.godtools.android.dao.DBContract.GTLanguageTable.COL_DO
 import static org.keynote.godtools.android.dao.DBContract.GTLanguageTable.COL_DRAFT;
 import static org.keynote.godtools.android.dao.DBContract.GTLanguageTable.COL_NAME;
 
+@Deprecated
 public class GTLanguageMapper extends AbstractMapper<GTLanguage> {
     @Override
     protected void mapField(@NonNull final ContentValues values, @NonNull final String field,
@@ -49,7 +50,6 @@ public class GTLanguageMapper extends AbstractMapper<GTLanguage> {
         language.setLanguageCode(getString(c, COL_CODE));
         language.setLanguageName(getString(c, COL_NAME));
         language.setDownloaded(getBool(c, COL_DOWNLOADED, false));
-
 
         return language;
     }
