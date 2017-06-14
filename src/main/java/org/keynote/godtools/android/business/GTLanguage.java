@@ -11,12 +11,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
-
 @Root(name = "language")
 public class GTLanguage implements Serializable {
-    public static final String KEY_PRIMARY = PREF_PRIMARY_LANGUAGE;
-
     @Attribute(name = "name", required = true)
     public String languageName;
     @Attribute(name = "code", required = true)

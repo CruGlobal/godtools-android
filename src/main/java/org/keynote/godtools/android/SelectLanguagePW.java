@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
+import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
@@ -171,7 +172,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     private void initializeViewStateFromSettings()
     {
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        primaryLanguage = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
+        primaryLanguage = settings.getString(PREF_PRIMARY_LANGUAGE, ENGLISH_DEFAULT);
         parallelLanguage = settings.getString(PREF_PARALLEL_LANGUAGE, "");
         isTranslator = settings.getBoolean(TRANSLATOR_MODE, false);
     }
@@ -231,7 +232,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
             if (selectedLanguage.isDownloaded())
             {
-                storeLanguageCodeInSettings(GTLanguage.KEY_PRIMARY, selectedLanguage.getLanguageCode());
+                storeLanguageCodeInSettings(PREF_PRIMARY_LANGUAGE, selectedLanguage.getLanguageCode());
 
                 setResult(RESULT_CHANGED_PRIMARY, returnIntent);
 
@@ -301,7 +302,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
      */
     private void storeLanguageCodeInSettings(String primaryOrParallel, String languageCode)
     {
-        if (GTLanguage.KEY_PRIMARY.equals(primaryOrParallel))
+        if (PREF_PRIMARY_LANGUAGE.equals(primaryOrParallel))
         {
             if (languageCode.equalsIgnoreCase(parallelLanguage))
             {
@@ -400,7 +401,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         if (userIsSelectingPrimaryLanguage)
         {
             setResult(RESULT_CHANGED_PRIMARY, returnIntent);
-            storeLanguageCodeInSettings(GTLanguage.KEY_PRIMARY, langCode);
+            storeLanguageCodeInSettings(PREF_PRIMARY_LANGUAGE, langCode);
         }
         else
         {
@@ -441,7 +442,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             setResult(RESULT_CHANGED_PRIMARY, returnIntent);
             primaryLanguage = langCode;
 
-            storeLanguageCodeInSettings(GTLanguage.KEY_PRIMARY, langCode);
+            storeLanguageCodeInSettings(PREF_PRIMARY_LANGUAGE, langCode);
             applyLanguageListToListView();
         }
         else
