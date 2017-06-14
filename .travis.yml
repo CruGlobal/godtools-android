@@ -60,7 +60,8 @@ script:
   - ./gradlew connectedAndroidTest -PdisablePreDex --continue --stacktrace --max-workers 2 --no-daemon
 
 after_failure:
-  - cat /home/travis/build/CruGlobal/godtools-android/build/outputs/lint-results*.xml
+  - cat /home/travis/build/CruGlobal/godtools-android/build/reports/lint-results*.xml
+  - cat /home/travis/build/CruGlobal/godtools-android/*/build/reports/lint-results*.xml
 
 notifications:
   email: false
