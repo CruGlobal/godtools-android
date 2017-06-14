@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
+@Deprecated
 public class Followup {
     public static final long INVALID_ID = -1;
     public static final long DEFAULT_CONTEXT = -1;
