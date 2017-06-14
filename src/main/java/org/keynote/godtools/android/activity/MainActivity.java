@@ -10,9 +10,9 @@ import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.cru.godtools.tract.service.TractManager;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.fragment.ToolsFragment;
-import org.keynote.godtools.android.util.TractUtil;
 
 public class MainActivity extends BaseActivity implements ToolsFragment.Callbacks {
     private static final String EXTRA_TOUR_LAUNCHED = MainActivity.class.getName() + ".TOUR_LAUNCHED";
@@ -71,7 +71,9 @@ public class MainActivity extends BaseActivity implements ToolsFragment.Callback
 
     @Override
     public void onResourceSelect(final long id) {
-        TractUtil.preloadNewestPublishedTract(this, id, mPrimaryLanguage);
+        // start preloading the tract
+        TractManager.getInstance(this).getLatestPublishedManifest(id, mPrimaryLanguage);
+
         TractActivity.start(this, id, mPrimaryLanguage, mParallelLanguage);
     }
 
