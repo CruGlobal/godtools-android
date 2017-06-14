@@ -19,6 +19,7 @@ import org.ccci.gto.android.common.support.v4.util.WeakLruCache;
 import org.cru.godtools.base.util.FileUtils;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Page;
+import org.keynote.godtools.android.model.Translation;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.BufferedInputStream;
@@ -55,6 +56,18 @@ public class TractManager {
         mContext = context;
         mExecutor = new ThreadPoolExecutor(0, PARSING_CONCURRENCY, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<>(),
                                            new NamedThreadFactory(TractManager.class.getSimpleName()));
+    }
+
+    @NonNull
+    public ListenableFuture<Manifest> getManifest(@NonNull final Translation translation) {
+        // short-circuit if there isn't a manifest file name
+        final String manifestName = translation.getManifestFileName();
+        if (manifestName == null) {
+            return Futures.immediateFuture(null);
+        }
+
+        // return the actual manifest
+        return getManifest(manifestName, false);
     }
 
     @NonNull

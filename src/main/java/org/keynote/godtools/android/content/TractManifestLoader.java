@@ -47,7 +47,6 @@ public class TractManifestLoader extends CachingAsyncTaskEventBusLoader<Manifest
         // parse the manifest for the latest downloaded translation
         return mDao.streamCompat(mQuery)
                 .findFirst()
-                .map(Translation::getManifestFileName)
                 .map(mTractManager::getManifest)
                 .map(future -> {
                     try {

@@ -26,8 +26,6 @@ public final class TractUtil {
                                            .and(TranslationTable.SQL_WHERE_DOWNLOADED))
                             .orderBy(TranslationTable.COLUMN_VERSION + " DESC")
                             .limit(1))
-                    .map(Translation::getManifestFileName)
-                    .withoutNulls()
                     .forEach(tractManager::getManifest));
         }
     }
