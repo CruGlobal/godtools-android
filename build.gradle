@@ -51,6 +51,7 @@ ext.deps = [
 
 dependencies {
     compile project(':godtools-base')
+    implementation project(':godtools-db')
     implementation project(':godtools-model')
     compile project(':godtools-tract-renderer')
 
