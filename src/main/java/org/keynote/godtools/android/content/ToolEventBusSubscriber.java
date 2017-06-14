@@ -5,9 +5,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.Loader;
 
 import org.ccci.gto.android.common.eventbus.content.EventBusSubscriber;
+import org.cru.godtools.model.event.ToolUpdateEvent;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.keynote.godtools.android.event.ToolUpdateEvent;
 
 public final class ToolEventBusSubscriber extends EventBusSubscriber {
     ToolEventBusSubscriber(@NonNull final Loader loader) {
