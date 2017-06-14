@@ -1,7 +1,5 @@
 package org.keynote.godtools.android.business;
 
-import org.ccci.gto.android.common.util.LocaleCompat;
-import org.keynote.godtools.android.utils.WordUtils;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -37,12 +35,6 @@ public class GTLanguage implements Serializable {
         {
             gtPackage.setLanguage(languageCode);
         }
-    }
-
-    public GTLanguage(String languageCode) {
-        this.languageCode = languageCode;
-        this.languageName = WordUtils.capitalize(
-                LocaleCompat.forLanguageTag(languageCode).getDisplayName());
     }
 
     public GTLanguage(String languageCode, String languageName) {
