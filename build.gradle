@@ -54,6 +54,7 @@ dependencies {
     compile project(':godtools-base')
     implementation project(':godtools-db')
     implementation project(':godtools-model')
+    implementation project(':godtools-model-events')
     compile project(':godtools-tract-renderer')
 
     compile "com.android.support:appcompat-v7:${deps.androidSupport}"
