@@ -37,6 +37,7 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Util.TypefaceUtils;
 
 import java.util.Locale;
 
+import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
@@ -104,7 +105,7 @@ public class SettingsPW extends BaseActionBarActivity implements
         boolean allowNotifications = settings.getBoolean("Notifications", true);
         cbNotificationsAllowed.setChecked(allowNotifications);
         String primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
-        String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
+        String parallelLanguageCode = settings.getString(PREF_PARALLEL_LANGUAGE, "");
 
         tvMainLanguage = TypefaceUtils.setTypeface(tvMainLanguage, primaryLanguageCode, Typeface.NORMAL);
         tvParallelLanguage = TypefaceUtils.setTypeface(tvParallelLanguage, primaryLanguageCode, Typeface.NORMAL);

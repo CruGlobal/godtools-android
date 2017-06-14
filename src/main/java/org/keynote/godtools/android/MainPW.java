@@ -54,6 +54,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
 import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
@@ -475,7 +476,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         if (tag.equalsIgnoreCase(KEY_PRIMARY)) {
             settings.edit().putString(GTLanguage.KEY_PRIMARY, langCode).apply();
         } else if (tag.equalsIgnoreCase(KEY_PARALLEL)) {
-            settings.edit().putString(GTLanguage.KEY_PARALLEL, langCode).apply();
+            settings.edit().putString(PREF_PARALLEL_LANGUAGE, langCode).apply();
         }
 
         EventTracker.getInstance(this)

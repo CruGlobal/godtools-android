@@ -38,6 +38,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
@@ -163,7 +164,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     {
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         primaryLanguage = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
-        parallelLanguage = settings.getString(GTLanguage.KEY_PARALLEL, "");
+        parallelLanguage = settings.getString(PREF_PARALLEL_LANGUAGE, "");
         isTranslator = settings.getBoolean(TRANSLATOR_MODE, false);
     }
 
@@ -260,7 +261,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             // set selected language as parallel
             if (selectedLanguage.isDownloaded())
             {
-                storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, selectedLanguage.getLanguageCode());
+                storeLanguageCodeInSettings(PREF_PARALLEL_LANGUAGE, selectedLanguage.getLanguageCode());
 
                 setResult(RESULT_CHANGED_PARALLEL, returnIntent);
 
@@ -296,7 +297,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         {
             if (languageCode.equalsIgnoreCase(parallelLanguage))
             {
-                storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, "");
+                storeLanguageCodeInSettings(PREF_PARALLEL_LANGUAGE, "");
             }
         }
 
@@ -366,7 +367,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 returnIntent = new Intent();
                 setResult(RESULT_CHANGED_PARALLEL, returnIntent);
                 parallelLanguage = null;
-                storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, null);
+                storeLanguageCodeInSettings(PREF_PARALLEL_LANGUAGE, null);
             }
 
             if(!"en".equalsIgnoreCase(language.getLanguageCode()))
@@ -396,7 +397,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         else
         {
             setResult(RESULT_CHANGED_PARALLEL, returnIntent);
-            storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, langCode);
+            storeLanguageCodeInSettings(PREF_PARALLEL_LANGUAGE, langCode);
         }
 
         finish();
