@@ -21,4 +21,9 @@ dependencies {
 
     // XXX: supporting legacy objects, we may be able to get rid of this at some point
     implementation "org.ccci.gto.android:gto-support-gson:${deps.gtoSupport}"
+    implementation("org.simpleframework:simple-xml:${deps.simplexml}") {
+        exclude module: 'stax'
+        exclude module: 'stax-api'
+        exclude module: 'xpp3'
+    }
 }

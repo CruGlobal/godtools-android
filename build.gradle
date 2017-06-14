@@ -46,7 +46,8 @@ ext.deps = [
         leakcanary           : '1.5.1',
         lightweightStream    : '1.1.7',
         playServices         : '9.0.2',
-        retrofit2            : '2.2.0'
+        retrofit2            : '2.2.0',
+        simplexml            : '2.7.1'
 ]
 
 dependencies {
