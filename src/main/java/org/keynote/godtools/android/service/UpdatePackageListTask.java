@@ -4,13 +4,13 @@ import android.support.annotation.NonNull;
 
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
+import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.util.List;
 
 public class UpdatePackageListTask {
-    public static void run(@NonNull final List<GTLanguage> languages, @NonNull final DBAdapter adapter) {
+    public static void run(@NonNull final List<GTLanguage> languages, @NonNull final GodToolsDao adapter) {
         for (final GTLanguage language : languages) {
             adapter.updateOrInsert(language, GTLanguageTable.COL_NAME);
 

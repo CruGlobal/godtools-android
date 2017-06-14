@@ -8,7 +8,6 @@ import com.google.common.collect.FluentIterable;
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.support.v4.content.AsyncTaskSharedPreferencesChangeLoader;
-import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.db.GodToolsDao;
 
@@ -17,6 +16,7 @@ import java.util.List;
 import static android.content.Context.MODE_PRIVATE;
 import static org.ccci.gto.android.common.db.Expression.bind;
 import static org.ccci.gto.android.common.db.Expression.constants;
+import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 import static org.keynote.godtools.android.business.GTPackage.STATUS_LIVE;
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.COL_CODE;
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.COL_NAME;
@@ -42,13 +42,13 @@ public class LivePackagesLoader extends AsyncTaskSharedPreferencesChangeLoader<L
         mDao = GodToolsDao.getInstance(context);
 
         // watch for the primary language to change
-        addPreferenceKey(GTLanguage.KEY_PRIMARY);
+        addPreferenceKey(PREF_PRIMARY_LANGUAGE);
     }
 
     @Override
     public List<GTPackage> loadInBackground() {
         // load packages for the selected language first
-        final String language = mPrefs.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
+        final String language = mPrefs.getString(PREF_PRIMARY_LANGUAGE, ENGLISH_DEFAULT);
         final List<GTPackage> packages = mDao.get(BASE_QUERY.where(BASE_WHERE.args(language)));
 
         // generate a list of query literals for currently loaded packages

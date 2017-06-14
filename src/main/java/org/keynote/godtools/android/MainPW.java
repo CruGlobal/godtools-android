@@ -54,6 +54,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
 import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
@@ -329,7 +330,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private void doSetup() {
         EventTracker.getInstance(this)
-                .screenView("HomeScreen", settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT));
+                .screenView("HomeScreen", settings.getString(PREF_PRIMARY_LANGUAGE, ENGLISH_DEFAULT));
     }
 
     private void getScreenSize() {
