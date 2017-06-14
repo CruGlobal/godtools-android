@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
-import org.keynote.godtools.android.util.ModelUtils;
 
 import static org.keynote.godtools.android.model.Attachment.JSON_API_TYPE;
 
@@ -62,7 +61,17 @@ public class Attachment extends Base {
 
     @Nullable
     public String getLocalFileName() {
-        return ModelUtils.getAttachmentLocalFileName(mSha256, mFileName);
+        return getLocalFileName(mSha256, mFileName);
+    }
+
+    @Nullable
+    public static String getLocalFileName(@Nullable final String sha256, @Nullable final String fileName) {
+        if (sha256 != null) {
+            final int extensionIndex = fileName != null ? fileName.lastIndexOf('.') : -1;
+            final String extension = extensionIndex != -1 ? fileName.substring(extensionIndex) : ".bin";
+            return sha256 + extension;
+        }
+        return null;
     }
 
     public boolean isDownloaded() {

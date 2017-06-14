@@ -33,7 +33,7 @@ ext {
     targetSdk  = 25
 }
 ext.deps = [
-        androidSupport       : '25.3.1',
+        androidSupport       : '25.4.0',
         androidTestingSupport: '0.5',
         butterknife          : '8.6.0',
         crashlytics          : '2.6.8',
@@ -51,6 +51,7 @@ ext.deps = [
 
 dependencies {
     compile project(':godtools-base')
+    implementation project(':godtools-model')
     compile project(':godtools-tract-renderer')
 
     compile "com.android.support:appcompat-v7:${deps.androidSupport}"
@@ -69,7 +70,7 @@ dependencies {
     compile "org.ccci.gto.android:gto-support-db-stream:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     compile 'org.ccci.gto.android:gto-support-gson:' + deps.gtoSupport
-    compile 'org.ccci.gto.android:gto-support-jsonapi:' + deps.gtoSupport
+    implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
     compile 'org.ccci.gto.android:gto-support-jsonapi-retrofit2:' + deps.gtoSupport
     compile "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
