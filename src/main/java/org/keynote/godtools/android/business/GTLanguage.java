@@ -1,9 +1,6 @@
 package org.keynote.godtools.android.business;
 
-import android.content.Context;
-
 import org.ccci.gto.android.common.util.LocaleCompat;
-import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.utils.WordUtils;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
@@ -13,7 +10,6 @@ import org.simpleframework.xml.core.Commit;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 
@@ -57,22 +53,6 @@ public class GTLanguage implements Serializable {
 
         this.languageName = languageName;
         this.languageCode = languageCode;
-    }
-
-    /**
-     * Gets all languages where the name is translated to the locale that is passed in
-     * via @param locale.
-     */
-    public static List<GTLanguage> getAll(Context context, Locale locale) {
-        final GodToolsDao adapter = GodToolsDao.getInstance(context);
-
-        List<GTLanguage> allLanguages = adapter.get(GTLanguage.class);
-
-        for (GTLanguage language : allLanguages) {
-            String displayName = LocaleCompat.forLanguageTag(language.getLanguageCode()).getDisplayName(locale);
-            language.setLanguageName(WordUtils.capitalize(displayName));
-        }
-        return allLanguages;
     }
 
     public String getLanguageName() {

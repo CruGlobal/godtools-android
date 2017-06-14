@@ -20,6 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.ccci.gto.android.common.compat.util.LocaleCompat;
+import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.util.AsyncTaskCompat;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
@@ -29,6 +31,7 @@ import org.keynote.godtools.android.http.PackageDownloadHelper;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.tasks.DeletedPackageRemovalTask;
 import org.keynote.godtools.android.utils.Device;
+import org.keynote.godtools.android.utils.WordUtils;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Util.TypefaceUtils;
 
 import java.util.ArrayList;
@@ -132,7 +135,12 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
      */
     private void prepareLanguageList()
     {
-        languageList = GTLanguage.getAll(this, Locale.getDefault());
+        languageList = GodToolsDao.getInstance(this).streamCompat(Query.select(GTLanguage.class))
+                .peek(l -> {
+                    final String name =
+                            LocaleCompat.forLanguageTag(l.getLanguageCode()).getDisplayName(Locale.getDefault());
+                    l.setLanguageName(WordUtils.capitalize(name));
+                }).toList();
 
         if (!isTranslator)
         {
