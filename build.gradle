@@ -66,9 +66,6 @@ dependencies {
     compile 'org.ccci.gto.android:gto-support-api-okhttp3:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-api-retrofit2:' + deps.gtoSupport
     compile "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
-    compile 'org.ccci.gto.android:gto-support-db:' + deps.gtoSupport
-    compile 'org.ccci.gto.android:gto-support-db-async:' + deps.gtoSupport
-    compile "org.ccci.gto.android:gto-support-db-stream:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     compile 'org.ccci.gto.android:gto-support-gson:' + deps.gtoSupport
     implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
