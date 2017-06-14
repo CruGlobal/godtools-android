@@ -184,7 +184,7 @@ public class InitialContentTasks {
                     copyResources();
 
                     // mark english resources as downloaded
-                    GTLanguage gtlEnglish = new GTLanguage("en");
+                    GTLanguage gtlEnglish = new GTLanguage("en", null);
                     gtlEnglish.setDownloaded(true);
                     mDao.update(gtlEnglish, GTLanguageTable.COL_DOWNLOADED);
                 }

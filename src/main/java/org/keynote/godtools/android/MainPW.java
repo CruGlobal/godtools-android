@@ -54,6 +54,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
+import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.EVERY_STUDENT;
 import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
@@ -162,7 +164,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         showLayoutsWithPackages();
 
         // XXX: hack to keep languagePrimary in sync with the loaded packages
-        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
+        languagePrimary = settings.getString(PREF_PRIMARY_LANGUAGE, ENGLISH_DEFAULT);
     }
 
     /* END lifecycle */
@@ -312,7 +314,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
              * not reflect the changed primary language*/
             case RESULT_CHANGED_PRIMARY:
             case RESULT_CHANGED_PARALLEL: {
-                final String currentLanguage = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
+                final String currentLanguage = settings.getString(PREF_PRIMARY_LANGUAGE, ENGLISH_DEFAULT);
 
                 EventTracker.getInstance(this).screenView("HomeScreen", currentLanguage);
 
@@ -329,7 +331,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
     private void doSetup() {
         EventTracker.getInstance(this)
-                .screenView("HomeScreen", settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT));
+                .screenView("HomeScreen", settings.getString(PREF_PRIMARY_LANGUAGE, ENGLISH_DEFAULT));
     }
 
     private void getScreenSize() {
@@ -472,13 +474,13 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         // update primary or parallel language
         if (tag.equalsIgnoreCase(KEY_PRIMARY)) {
-            settings.edit().putString(GTLanguage.KEY_PRIMARY, langCode).apply();
+            settings.edit().putString(PREF_PRIMARY_LANGUAGE, langCode).apply();
         } else if (tag.equalsIgnoreCase(KEY_PARALLEL)) {
-            settings.edit().putString(GTLanguage.KEY_PARALLEL, langCode).apply();
+            settings.edit().putString(PREF_PARALLEL_LANGUAGE, langCode).apply();
         }
 
         EventTracker.getInstance(this)
-                .screenView("HomeScreen", settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT));
+                .screenView("HomeScreen", settings.getString(PREF_PRIMARY_LANGUAGE, ENGLISH_DEFAULT));
     }
 
     @Override

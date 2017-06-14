@@ -1,10 +1,5 @@
 package org.keynote.godtools.android.business;
 
-import android.content.Context;
-
-import org.ccci.gto.android.common.util.LocaleCompat;
-import org.keynote.godtools.android.db.GodToolsDao;
-import org.keynote.godtools.android.utils.WordUtils;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -13,16 +8,9 @@ import org.simpleframework.xml.core.Commit;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-
-import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
-import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 
 @Root(name = "language")
 public class GTLanguage implements Serializable {
-    public static final String KEY_PRIMARY = PREF_PRIMARY_LANGUAGE;
-    public static final String KEY_PARALLEL = PREF_PARALLEL_LANGUAGE;
-
     @Attribute(name = "name", required = true)
     public String languageName;
     @Attribute(name = "code", required = true)
@@ -49,32 +37,10 @@ public class GTLanguage implements Serializable {
         }
     }
 
-    public GTLanguage(String languageCode) {
-        this.languageCode = languageCode;
-        this.languageName = WordUtils.capitalize(
-                LocaleCompat.forLanguageTag(languageCode).getDisplayName());
-    }
-
     public GTLanguage(String languageCode, String languageName) {
 
         this.languageName = languageName;
         this.languageCode = languageCode;
-    }
-
-    /**
-     * Gets all languages where the name is translated to the locale that is passed in
-     * via @param locale.
-     */
-    public static List<GTLanguage> getAll(Context context, Locale locale) {
-        final GodToolsDao adapter = GodToolsDao.getInstance(context);
-
-        List<GTLanguage> allLanguages = adapter.get(GTLanguage.class);
-
-        for (GTLanguage language : allLanguages) {
-            String displayName = LocaleCompat.forLanguageTag(language.getLanguageCode()).getDisplayName(locale);
-            language.setLanguageName(WordUtils.capitalize(displayName));
-        }
-        return allLanguages;
     }
 
     public String getLanguageName() {

@@ -37,6 +37,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.FIRST_LAUNCH;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
@@ -84,7 +85,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
             Log.i(TAG, "First Launch");
 
             // set primary language on first start
-            settings.edit().putString(GTLanguage.KEY_PRIMARY, Locale.getDefault().getLanguage()).apply();
+            settings.edit().putString(PREF_PRIMARY_LANGUAGE, Locale.getDefault().getLanguage()).apply();
 
             showLoading();
             GodToolsApi.getInstance(this).legacy.getListOfPackages().enqueue(new Callback<GTLanguages>() {
@@ -103,7 +104,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
                     }
                     // if not, then switch back to English and download those latest resources
                     else {
-                        settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
+                        settings.edit().putString(PREF_PRIMARY_LANGUAGE, ENGLISH_DEFAULT).apply();
 
                         PackageDownloadHelper.downloadLanguagePack(
                                 getApp(),
@@ -235,7 +236,7 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
     public void downloadTaskFailure(String url, String filePath, String langCode, String tag) {
         // if there was an error downloading resources, then switch the phone's language back to English since those are the
         // resources that were bundled.  user would get a blank screen if not
-        settings.edit().putString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT).apply();
+        settings.edit().putString(PREF_PRIMARY_LANGUAGE, ENGLISH_DEFAULT).apply();
         goToMainActivity();
     }
 }

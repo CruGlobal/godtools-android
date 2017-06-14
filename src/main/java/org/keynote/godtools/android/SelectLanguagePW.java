@@ -20,6 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.ccci.gto.android.common.compat.util.LocaleCompat;
+import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.util.AsyncTaskCompat;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
@@ -29,6 +31,7 @@ import org.keynote.godtools.android.http.PackageDownloadHelper;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 import org.keynote.godtools.android.tasks.DeletedPackageRemovalTask;
 import org.keynote.godtools.android.utils.Device;
+import org.keynote.godtools.android.utils.WordUtils;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Util.TypefaceUtils;
 
 import java.util.ArrayList;
@@ -38,6 +41,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
+import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.KEY_PRIMARY;
@@ -131,7 +136,12 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
      */
     private void prepareLanguageList()
     {
-        languageList = GTLanguage.getAll(this, Locale.getDefault());
+        languageList = GodToolsDao.getInstance(this).streamCompat(Query.select(GTLanguage.class))
+                .peek(l -> {
+                    final String name =
+                            LocaleCompat.forLanguageTag(l.getLanguageCode()).getDisplayName(Locale.getDefault());
+                    l.setLanguageName(WordUtils.capitalize(name));
+                }).toList();
 
         if (!isTranslator)
         {
@@ -162,8 +172,8 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
     private void initializeViewStateFromSettings()
     {
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        primaryLanguage = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
-        parallelLanguage = settings.getString(GTLanguage.KEY_PARALLEL, "");
+        primaryLanguage = settings.getString(PREF_PRIMARY_LANGUAGE, ENGLISH_DEFAULT);
+        parallelLanguage = settings.getString(PREF_PARALLEL_LANGUAGE, "");
         isTranslator = settings.getBoolean(TRANSLATOR_MODE, false);
     }
 
@@ -222,7 +232,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
 
             if (selectedLanguage.isDownloaded())
             {
-                storeLanguageCodeInSettings(GTLanguage.KEY_PRIMARY, selectedLanguage.getLanguageCode());
+                storeLanguageCodeInSettings(PREF_PRIMARY_LANGUAGE, selectedLanguage.getLanguageCode());
 
                 setResult(RESULT_CHANGED_PRIMARY, returnIntent);
 
@@ -260,7 +270,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             // set selected language as parallel
             if (selectedLanguage.isDownloaded())
             {
-                storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, selectedLanguage.getLanguageCode());
+                storeLanguageCodeInSettings(PREF_PARALLEL_LANGUAGE, selectedLanguage.getLanguageCode());
 
                 setResult(RESULT_CHANGED_PARALLEL, returnIntent);
 
@@ -292,11 +302,11 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
      */
     private void storeLanguageCodeInSettings(String primaryOrParallel, String languageCode)
     {
-        if (GTLanguage.KEY_PRIMARY.equals(primaryOrParallel))
+        if (PREF_PRIMARY_LANGUAGE.equals(primaryOrParallel))
         {
             if (languageCode.equalsIgnoreCase(parallelLanguage))
             {
-                storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, "");
+                storeLanguageCodeInSettings(PREF_PARALLEL_LANGUAGE, "");
             }
         }
 
@@ -366,7 +376,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
                 returnIntent = new Intent();
                 setResult(RESULT_CHANGED_PARALLEL, returnIntent);
                 parallelLanguage = null;
-                storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, null);
+                storeLanguageCodeInSettings(PREF_PARALLEL_LANGUAGE, null);
             }
 
             if(!"en".equalsIgnoreCase(language.getLanguageCode()))
@@ -391,12 +401,12 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
         if (userIsSelectingPrimaryLanguage)
         {
             setResult(RESULT_CHANGED_PRIMARY, returnIntent);
-            storeLanguageCodeInSettings(GTLanguage.KEY_PRIMARY, langCode);
+            storeLanguageCodeInSettings(PREF_PRIMARY_LANGUAGE, langCode);
         }
         else
         {
             setResult(RESULT_CHANGED_PARALLEL, returnIntent);
-            storeLanguageCodeInSettings(GTLanguage.KEY_PARALLEL, langCode);
+            storeLanguageCodeInSettings(PREF_PARALLEL_LANGUAGE, langCode);
         }
 
         finish();
@@ -432,7 +442,7 @@ public class SelectLanguagePW extends BaseActionBarActivity implements AdapterVi
             setResult(RESULT_CHANGED_PRIMARY, returnIntent);
             primaryLanguage = langCode;
 
-            storeLanguageCodeInSettings(GTLanguage.KEY_PRIMARY, langCode);
+            storeLanguageCodeInSettings(PREF_PRIMARY_LANGUAGE, langCode);
             applyLanguageListToListView();
         }
         else

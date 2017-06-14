@@ -26,7 +26,6 @@ import com.google.common.base.Strings;
 import org.ccci.gto.android.common.util.LocaleCompat;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
-import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
 import org.keynote.godtools.android.fragments.ConfirmDialogFragment;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
@@ -37,6 +36,8 @@ import org.keynote.godtools.renderer.crureader.bo.GPage.Util.TypefaceUtils;
 
 import java.util.Locale;
 
+import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
+import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
 import static org.keynote.godtools.android.utils.Constants.ENGLISH_DEFAULT;
 import static org.keynote.godtools.android.utils.Constants.PREFS_NAME;
@@ -103,8 +104,8 @@ public class SettingsPW extends BaseActionBarActivity implements
         boolean isTranslatorEnabled = settings.getBoolean(TRANSLATOR_MODE, false);
         boolean allowNotifications = settings.getBoolean("Notifications", true);
         cbNotificationsAllowed.setChecked(allowNotifications);
-        String primaryLanguageCode = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
-        String parallelLanguageCode = settings.getString(GTLanguage.KEY_PARALLEL, "");
+        String primaryLanguageCode = settings.getString(PREF_PRIMARY_LANGUAGE, ENGLISH_DEFAULT);
+        String parallelLanguageCode = settings.getString(PREF_PARALLEL_LANGUAGE, "");
 
         tvMainLanguage = TypefaceUtils.setTypeface(tvMainLanguage, primaryLanguageCode, Typeface.NORMAL);
         tvParallelLanguage = TypefaceUtils.setTypeface(tvParallelLanguage, primaryLanguageCode, Typeface.NORMAL);
