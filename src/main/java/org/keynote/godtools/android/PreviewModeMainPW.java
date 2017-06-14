@@ -30,7 +30,6 @@ import org.ccci.gto.android.common.db.Query;
 import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
-import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTLanguages;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.db.GodToolsDao;
@@ -50,6 +49,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 import static org.keynote.godtools.android.dao.DBContract.GTPackageTable.SQL_WHERE_DRAFT_BY_LANGUAGE;
 import static org.keynote.godtools.android.utils.Constants.APPLICATION_NAME;
 import static org.keynote.godtools.android.utils.Constants.AUTH_DRAFT;
@@ -124,7 +124,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
         setupBroadcastReceiver();
 
         settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
+        languagePrimary = settings.getString(PREF_PRIMARY_LANGUAGE, ENGLISH_DEFAULT);
 
         refreshDrafts();
     }
@@ -244,7 +244,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
                 refreshDrafts();
             case RESULT_CHANGED_PRIMARY:
             case RESULT_CHANGED_PARALLEL: {
-                languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, "");
+                languagePrimary = settings.getString(PREF_PRIMARY_LANGUAGE, "");
 
                 getPackageList();
 

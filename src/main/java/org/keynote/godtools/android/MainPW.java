@@ -164,7 +164,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
         showLayoutsWithPackages();
 
         // XXX: hack to keep languagePrimary in sync with the loaded packages
-        languagePrimary = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
+        languagePrimary = settings.getString(PREF_PRIMARY_LANGUAGE, ENGLISH_DEFAULT);
     }
 
     /* END lifecycle */
@@ -314,7 +314,7 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
              * not reflect the changed primary language*/
             case RESULT_CHANGED_PRIMARY:
             case RESULT_CHANGED_PARALLEL: {
-                final String currentLanguage = settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT);
+                final String currentLanguage = settings.getString(PREF_PRIMARY_LANGUAGE, ENGLISH_DEFAULT);
 
                 EventTracker.getInstance(this).screenView("HomeScreen", currentLanguage);
 
@@ -474,13 +474,13 @@ public class MainPW extends BaseActionBarActivity implements PackageListFragment
 
         // update primary or parallel language
         if (tag.equalsIgnoreCase(KEY_PRIMARY)) {
-            settings.edit().putString(GTLanguage.KEY_PRIMARY, langCode).apply();
+            settings.edit().putString(PREF_PRIMARY_LANGUAGE, langCode).apply();
         } else if (tag.equalsIgnoreCase(KEY_PARALLEL)) {
             settings.edit().putString(PREF_PARALLEL_LANGUAGE, langCode).apply();
         }
 
         EventTracker.getInstance(this)
-                .screenView("HomeScreen", settings.getString(GTLanguage.KEY_PRIMARY, ENGLISH_DEFAULT));
+                .screenView("HomeScreen", settings.getString(PREF_PRIMARY_LANGUAGE, ENGLISH_DEFAULT));
     }
 
     @Override
