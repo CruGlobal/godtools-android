@@ -9,6 +9,8 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.BundleUtils;
@@ -37,6 +39,8 @@ public abstract class BaseTractActivity extends ImmersiveActivity implements Man
     // App/Action Bar
     @BindView(R2.id.appBar)
     Toolbar mToolbar;
+    @Nullable
+    private Menu mToolbarMenu;
     @Nullable
     private ActionBar mActionBar;
 
@@ -95,6 +99,18 @@ public abstract class BaseTractActivity extends ImmersiveActivity implements Man
         setupPager();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
+        mToolbarMenu = menu;
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(final Menu menu) {
+        updateToolbarMenu();
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     /* END lifecycle */
 
     private void setupToolbar() {
@@ -143,6 +159,19 @@ public abstract class BaseTractActivity extends ImmersiveActivity implements Man
         mToolbar.setTitleTextColor(controlColor);
         mToolbar.setSubtitleTextColor(controlColor);
         mToolbar.setNavigationIcon(DrawableUtils.tint(mToolbar.getNavigationIcon(), controlColor));
+
+        updateToolbarMenu();
+    }
+
+    private void updateToolbarMenu() {
+        if (mToolbarMenu != null) {
+            // tint all action icons
+            final int controlColor = Manifest.getNavBarControlColor(getActiveManifest());
+            for (int i = 0; i < mToolbarMenu.size(); ++i) {
+                final MenuItem item = mToolbarMenu.getItem(i);
+                item.setIcon(DrawableUtils.tint(item.getIcon(), controlColor));
+            }
+        }
     }
 
     private void updateBackground() {
