@@ -5,6 +5,7 @@ import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.eventbus.content.CachingAsyncTaskEventBusLoader;
+import org.cru.godtools.model.event.content.AttachmentEventBusSubscriber;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.model.Attachment;
 

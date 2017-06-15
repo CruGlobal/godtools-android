@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.eventbus.content.CachingAsyncTaskEventBusLoader;
+import org.cru.godtools.model.event.content.TranslationEventBusSubscriber;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.service.TractManager;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
