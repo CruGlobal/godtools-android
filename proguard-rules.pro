@@ -73,34 +73,6 @@
 
 
 #Android
--keepclassmembers class * extends android.content.Context {
-    public void *(android.view.View);
-    public void *(android.view.MenuItem);
-}
-
--keepclassmembers class * {
-    @android.webkit.JavascriptInterface <methods>;
-}
-
--keepclasseswithmembers class * {
-    public <init>(android.content.Context, android.util.AttributeSet, int);
-}
-
--keepclasseswithmembers class * {
-    public <init>(android.content.Context, android.util.AttributeSet);
-}
--keep public class * extends android.view.View {
-      public <init>(android.content.Context);
-      public <init>(android.content.Context, android.util.AttributeSet);
-      public <init>(android.content.Context, android.util.AttributeSet, int);
-      public void set*(...);
-}
--keep public interface org.keynote.godtools.android.api.GodToolsApi
--keep public class * extends android.app.Activity
--keep public class * extends android.app.Application
--keep public class * extends android.app.Service
--keep public class * extends android.content.BroadcastReceiver
--keep public class * extends android.content.ContentProvider
 
 
 -dontwarn org.codehaus.mojo.**
@@ -129,8 +101,6 @@
     java.lang.Object writeReplace();
     java.lang.Object readResolve();
 }
-
--keep class  org.keynote.godtools.renderer.crureader.bo.** { *; }
 
 #GooglePlay
 
