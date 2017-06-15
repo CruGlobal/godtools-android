@@ -151,10 +151,6 @@
             android:name=".activity.TourActivity"
             android:theme="@style/Theme.GodTools2.Activity.Tour" />
 
-        <activity
-            android:name=".activity.TractActivity"
-            android:theme="@style/Theme.GodTools2.AppBar" />
-
         <provider
             android:name=".everystudent.EveryStudentProvider"
             android:authorities="@string/every_student_authority" />

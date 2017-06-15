@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,7 +33,7 @@ import static org.cru.godtools.base.Constants.EXTRA_PARALLEL_LANGUAGE;
 import static org.cru.godtools.base.Constants.EXTRA_PRIMARY_LANGUAGE;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 
-public abstract class BaseTractActivity extends ImmersiveActivity implements ManifestPagerAdapter.Callbacks {
+public class TractActivity extends ImmersiveActivity implements ManifestPagerAdapter.Callbacks {
     static final int LOADER_MANIFEST_PRIMARY = 101;
     static final int LOADER_MANIFEST_PARALLEL = 102;
 
@@ -71,6 +72,13 @@ public abstract class BaseTractActivity extends ImmersiveActivity implements Man
         extras.putLong(EXTRA_TOOL, toolId);
         BundleUtils.putLocale(extras, EXTRA_PRIMARY_LANGUAGE, primary);
         BundleUtils.putLocale(extras, EXTRA_PARALLEL_LANGUAGE, parallel);
+    }
+
+    public static void start(@NonNull final Context context, final long toolId, @NonNull final Locale primary,
+                             @Nullable final Locale parallel) {
+        final Bundle extras = new Bundle();
+        populateExtras(extras, toolId, primary, parallel);
+        context.startActivity(new Intent(context, TractActivity.class).putExtras(extras));
     }
 
     /* BEGIN lifecycle */
@@ -219,10 +227,10 @@ public abstract class BaseTractActivity extends ImmersiveActivity implements Man
         public Loader<Manifest> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_MANIFEST_PRIMARY:
-                    return new TractManifestLoader(BaseTractActivity.this, mTool, mPrimaryLocale);
+                    return new TractManifestLoader(TractActivity.this, mTool, mPrimaryLocale);
                 case LOADER_MANIFEST_PARALLEL:
                     if (mParallelLocale != null) {
-                        return new TractManifestLoader(BaseTractActivity.this, mTool, mParallelLocale);
+                        return new TractManifestLoader(TractActivity.this, mTool, mParallelLocale);
                     }
                 default:
                     return null;

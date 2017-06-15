@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.cru.godtools.tract.activity.TractActivity;
 import org.cru.godtools.tract.service.TractManager;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.fragment.ToolsFragment;
