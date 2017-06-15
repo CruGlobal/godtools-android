@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -17,9 +16,8 @@ import org.cru.godtools.tract.util.DrawableUtils;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public abstract class BaseTractActivity extends AppCompatActivity implements ManifestPagerAdapter.Callbacks {
+public abstract class BaseTractActivity extends ImmersiveActivity implements ManifestPagerAdapter.Callbacks {
     // App/Action Bar
     @BindView(R2.id.appBar)
     Toolbar mToolbar;
@@ -48,17 +46,11 @@ public abstract class BaseTractActivity extends AppCompatActivity implements Man
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tract);
-
-        //TODO: enable immersive mode
-        final View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(decorView.getSystemUiVisibility() | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                                                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
 
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        ButterKnife.bind(this);
         setupActionBar();
         setupPager();
     }
