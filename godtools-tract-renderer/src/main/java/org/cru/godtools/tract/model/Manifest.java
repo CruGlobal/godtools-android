@@ -18,6 +18,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.tract.model.Utils.parseColor;
@@ -42,9 +43,16 @@ public final class Manifest extends Base implements Container {
     private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL;
     private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
 
+    @NonNull
+    private final String mManifestName;
+
     // XXX: for now we will make this fixed
     @NonNull
-    private final String mCode = "placeholder";
+    private final String mCode = "kgp";
+    @Deprecated
+    private final long mToolId;
+    @NonNull
+    private final Locale mLocale;
 
     @ColorInt
     private int mPrimaryColor = DEFAULT_PRIMARY_COLOR;
@@ -76,19 +84,37 @@ public final class Manifest extends Base implements Container {
     final SimpleArrayMap<String, Resource> mResources = new SimpleArrayMap<>();
 
     @VisibleForTesting
-    Manifest() {
+    Manifest(@NonNull final String manifestName, final long toolId, @NonNull final Locale locale) {
         super();
+        mManifestName = manifestName;
+        mToolId = toolId;
+        mLocale = locale;
     }
 
     @NonNull
     @Override
-    protected Manifest getManifest() {
+    public Manifest getManifest() {
         return this;
+    }
+
+    @NonNull
+    public String getManifestName() {
+        return mManifestName;
+    }
+
+    @Deprecated
+    public long getToolId() {
+        return mToolId;
     }
 
     @NonNull
     String getCode() {
         return mCode;
+    }
+
+    @NonNull
+    public Locale getLocale() {
+        return mLocale;
     }
 
     @Nullable
@@ -172,8 +198,10 @@ public final class Manifest extends Base implements Container {
 
     @NonNull
     @WorkerThread
-    public static Manifest fromXml(@NonNull final XmlPullParser parser) throws XmlPullParserException, IOException {
-        return new Manifest().parse(parser);
+    public static Manifest fromXml(@NonNull final XmlPullParser parser, @NonNull final String manifestName,
+                                   final long toolId, @NonNull final Locale locale)
+            throws XmlPullParserException, IOException {
+        return new Manifest(manifestName, toolId, locale).parse(parser);
     }
 
     @NonNull

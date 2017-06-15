@@ -2,6 +2,7 @@ package org.cru.godtools.tract.service;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.LruCache;
@@ -68,7 +69,7 @@ public class TractManager {
     @NonNull
     public ListenableFuture<Manifest> getLatestPublishedManifest(final long toolId, @NonNull final Locale locale) {
         final SettableFuture<Translation> latestTranslation = SettableFuture.create();
-        mExecutor.execute(() -> latestTranslation.set(
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> latestTranslation.set(
                 mDao.streamCompat(
                         Query.select(Translation.class)
                                 .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(toolId, locale)
@@ -96,12 +97,18 @@ public class TractManager {
         }
 
         // return the actual manifest
-        return getManifest(manifestName, translation.getLanguageCode(), false);
+        return getManifest(manifestName, translation.getToolId(), translation.getLanguageCode(), false);
     }
 
     @NonNull
-    private ListenableFuture<Manifest> getManifest(@NonNull final String manifestName, @NonNull final Locale locale,
-                                                   final boolean forceReload) {
+    public ListenableFuture<Manifest> getManifest(@NonNull final String manifestName, final long toolId,
+                                                  @NonNull final Locale locale) {
+        return getManifest(manifestName, toolId, locale, false);
+    }
+
+    @NonNull
+    private ListenableFuture<Manifest> getManifest(@NonNull final String manifestName, final long toolId,
+                                                   @NonNull final Locale locale, final boolean forceReload) {
         synchronized (mCache) {
             if (!forceReload) {
                 // check to see if this manifest is already loaded (or currently loading)
@@ -112,14 +119,15 @@ public class TractManager {
             }
 
             // trigger a background load of this manifest
-            final ListenableFuture<Manifest> manifest = loadManifest(manifestName, locale);
+            final ListenableFuture<Manifest> manifest = loadManifest(manifestName, toolId, locale);
             mCache.put(manifestName, manifest);
             return manifest;
         }
     }
 
     @NonNull
-    private ListenableFuture<Manifest> loadManifest(@NonNull final String manifestName, @NonNull final Locale locale) {
+    private ListenableFuture<Manifest> loadManifest(@NonNull final String manifestName, final long toolId,
+                                                    @NonNull final Locale locale) {
         // load the manifest
         final SettableFuture<Manifest> manifestTask = SettableFuture.create();
         mExecutor.execute(() -> {
@@ -136,7 +144,7 @@ public class TractManager {
                     parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
                     parser.setInput(in, "UTF-8");
                     parser.nextTag();
-                    manifest = Manifest.fromXml(parser);
+                    manifest = Manifest.fromXml(parser, manifestName, toolId, locale);
                 } catch (final Throwable t) {
                     throw closer.rethrow(t);
                 } finally {

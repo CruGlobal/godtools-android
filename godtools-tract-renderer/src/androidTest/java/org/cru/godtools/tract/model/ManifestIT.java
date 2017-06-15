@@ -6,6 +6,8 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Locale;
+
 import static org.cru.godtools.tract.util.TestParserUtils.getParserForTestAsset;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.empty;
@@ -22,6 +24,6 @@ public class ManifestIT {
 
     @NonNull
     private Manifest parseManifestXml(@NonNull final String file) throws Exception {
-        return Manifest.fromXml(getParserForTestAsset(file));
+        return Manifest.fromXml(getParserForTestAsset(file), file, 1, Locale.ENGLISH);
     }
 }
