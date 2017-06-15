@@ -101,6 +101,7 @@ public abstract class BaseTractActivity extends ImmersiveActivity implements Man
 
     @Override
     public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_tract, menu);
         mToolbarMenu = menu;
         return super.onCreateOptionsMenu(menu);
     }
