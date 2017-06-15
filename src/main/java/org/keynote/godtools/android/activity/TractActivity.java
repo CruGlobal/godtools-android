@@ -11,8 +11,8 @@ import android.support.v4.content.Loader;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.BundleUtils;
 import org.cru.godtools.tract.activity.BaseTractActivity;
+import org.cru.godtools.tract.content.TractManifestLoader;
 import org.cru.godtools.tract.model.Manifest;
-import org.keynote.godtools.android.content.TractManifestLoader;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.Tool;
 
