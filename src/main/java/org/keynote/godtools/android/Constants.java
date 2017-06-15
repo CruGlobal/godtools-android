@@ -9,9 +9,9 @@ public final class Constants {
     public static final String ARG_MODAL_ID = "modal_id";
 
     // common extras
-    public static final String EXTRA_TOOL = "tool";
-    public static final String EXTRA_PRIMARY_LANGUAGE = "language_primary";
-    public static final String EXTRA_PARALLEL_LANGUAGE = "language_parallel";
+    public static final String EXTRA_TOOL = org.cru.godtools.base.Constants.EXTRA_TOOL;
+    public static final String EXTRA_PRIMARY_LANGUAGE = org.cru.godtools.base.Constants.EXTRA_PRIMARY_LANGUAGE;
+    public static final String EXTRA_PARALLEL_LANGUAGE = org.cru.godtools.base.Constants.EXTRA_PARALLEL_LANGUAGE;
 
     // SharedPreferences for this app
     public static final String PREFS_SETTINGS = "GodTools";
