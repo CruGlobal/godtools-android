@@ -27,6 +27,7 @@ dependencies {
     implementation project(':godtools-model-events')
     implementation project(':godtools-db')
 
+    api "android.arch.lifecycle:runtime:${deps.androidLifecycle}"
     compile "com.android.support:cardview-v7:${deps.androidSupport}"
     compile "com.android.support:design:${deps.androidSupport}"
 
@@ -49,5 +50,6 @@ dependencies {
 
     testImplementation "junit:junit:${deps.junit}"
 
+    annotationProcessor "android.arch.lifecycle:compiler:${deps.androidLifecycle}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }

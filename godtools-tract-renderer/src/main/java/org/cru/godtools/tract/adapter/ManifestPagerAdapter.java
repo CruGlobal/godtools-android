@@ -1,6 +1,10 @@
 package org.cru.godtools.tract.adapter;
 
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.graphics.Color;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.Pools;
@@ -11,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.ccci.gto.android.common.support.v4.adapter.ViewHolderPagerAdapter;
+import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter.PageViewHolder;
@@ -22,6 +27,9 @@ import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Page;
 import org.cru.godtools.tract.widget.PageContentLayout;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +40,7 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 
-public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewHolder> {
+public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewHolder> implements LifecycleObserver {
     public interface Callbacks {
         void goToPage(int position);
     }
@@ -60,6 +68,13 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         return mManifest != null ? mManifest.getPages().size() : 0;
     }
 
+    /* BEGIN lifecycle */
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    public void onResume() {
+        EventBus.getDefault().register(this);
+    }
+
     @NonNull
     @Override
     protected PageViewHolder onCreateViewHolder(@NonNull final ViewGroup parent) {
@@ -71,8 +86,24 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
     protected void onBindViewHolder(@NonNull final PageViewHolder holder, final int position) {
         super.onBindViewHolder(holder, position);
         assert mManifest != null;
-        holder.bind(mManifest.getPages().get(position));
+        holder.onBind(mManifest.getPages().get(position));
     }
+
+    @MainThread
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onContentEvent(@NonNull final Event event) {
+        // check for the event on the current page
+        final PageViewHolder holder = getPrimaryItem();
+        if (holder != null) {
+        }
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    public void onPause() {
+        EventBus.getDefault().unregister(this);
+    }
+
+    /* END lifecycle */
 
     class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements CallToAction.Callbacks {
         @BindView(R2.id.page)
@@ -119,7 +150,9 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
             mPageContentParent.setOnScrollChangeListener(mPageContentLayout);
         }
 
-        void bind(@Nullable final Page page) {
+        /* BEGIN lifecycle */
+
+        void onBind(@Nullable final Page page) {
             // short-circuit if we aren't changing the page
             if (page == mPage) {
                 return;
@@ -132,6 +165,8 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
             bindCards(page);
             CallToAction.bind(page != null ? page.getCallToAction() : null, mCallToAction, this);
         }
+
+        /* END lifecycle */
 
         private void bindPage(@Nullable final Page page) {
             mPageView.setBackgroundColor(Page.getBackgroundColor(page));

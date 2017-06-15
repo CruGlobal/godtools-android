@@ -194,6 +194,7 @@ public class TractActivity extends ImmersiveActivity implements ManifestPagerAda
             mPagerAdapter = new ManifestPagerAdapter();
             mPagerAdapter.setCallbacks(this);
             mPager.setAdapter(mPagerAdapter);
+            getLifecycle().addObserver(mPagerAdapter);
             updatePager();
         }
     }
