@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.content;
+package org.cru.godtools.model.event.content;
 
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -10,7 +10,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 public final class TranslationEventBusSubscriber extends EventBusSubscriber {
-    TranslationEventBusSubscriber(@NonNull final Loader loader) {
+    public TranslationEventBusSubscriber(@NonNull final Loader loader) {
         super(loader);
     }
 
