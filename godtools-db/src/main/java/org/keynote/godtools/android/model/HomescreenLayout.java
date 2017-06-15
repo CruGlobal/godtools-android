@@ -4,9 +4,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-/**
- * Created by matthewfrederick on 2/10/15.
- */
+@Deprecated
 public class HomescreenLayout
 {
     private LinearLayout layout;

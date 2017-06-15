@@ -46,11 +46,13 @@ ext.deps = [
         leakcanary           : '1.5.1',
         lightweightStream    : '1.1.7',
         playServices         : '9.0.2',
-        retrofit2            : '2.2.0'
+        retrofit2            : '2.2.0',
+        simplexml            : '2.7.1'
 ]
 
 dependencies {
     compile project(':godtools-base')
+    implementation project(':godtools-db')
     implementation project(':godtools-model')
     compile project(':godtools-tract-renderer')
 
@@ -65,9 +67,6 @@ dependencies {
     compile 'org.ccci.gto.android:gto-support-api-okhttp3:' + deps.gtoSupport
     compile 'org.ccci.gto.android:gto-support-api-retrofit2:' + deps.gtoSupport
     compile "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
-    compile 'org.ccci.gto.android:gto-support-db:' + deps.gtoSupport
-    compile 'org.ccci.gto.android:gto-support-db-async:' + deps.gtoSupport
-    compile "org.ccci.gto.android:gto-support-db-stream:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     compile 'org.ccci.gto.android:gto-support-gson:' + deps.gtoSupport
     implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
@@ -89,13 +88,7 @@ dependencies {
                 exclude module: 'stax'
                 exclude module: 'stax-api'
                 exclude module: 'xpp3'
-            };
-
-    androidTestCompile 'com.android.support.test:runner:' + deps.androidTestingSupport
-    androidTestCompile 'com.android.support.test:rules:' + deps.androidTestingSupport
-    androidTestCompile "com.android.support:support-annotations:${deps.androidSupport}"
-    testImplementation "junit:junit:${deps.junit}"
-    testImplementation "org.hamcrest:hamcrest-library:${deps.hamcrest}"
+            }
 
     debugCompile 'com.android.support:multidex:1.0.1'
     debugCompile 'org.ccci.gto.android:gto-support-leakcanary:' + deps.gtoSupport

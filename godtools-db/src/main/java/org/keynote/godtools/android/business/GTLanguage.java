@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 @Root(name = "language")
 public class GTLanguage implements Serializable {
     @Attribute(name = "name", required = true)
@@ -31,8 +32,7 @@ public class GTLanguage implements Serializable {
     }
 
     private void addLanguageCodeToPackages() {
-        for(GTPackage gtPackage : listPackages)
-        {
+        for (GTPackage gtPackage : listPackages) {
             gtPackage.setLanguage(languageCode);
         }
     }
@@ -86,13 +86,11 @@ public class GTLanguage implements Serializable {
         return true;
     }
 
-    public boolean isDraft()
-    {
+    public boolean isDraft() {
         return isDraft;
     }
 
-    public void setDraft(boolean isDraft)
-    {
+    public void setDraft(boolean isDraft) {
         this.isDraft = isDraft;
     }
 

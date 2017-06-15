@@ -12,6 +12,7 @@ import org.simpleframework.xml.Root;
 import java.util.Comparator;
 import java.util.regex.Pattern;
 
+@Deprecated
 @Root(name="package")
 public class GTPackage {
     public static final String EVERYSTUDENT_PACKAGE_CODE = "everystudent";
@@ -45,7 +46,6 @@ public class GTPackage {
     @Attribute(name = "status", required = true)
     public String status;
 
-
     private String icon;
     private HomescreenLayout layout;
 
@@ -54,8 +54,7 @@ public class GTPackage {
     private boolean available;
 
     // set available to true as default
-    public GTPackage()
-    {
+    public GTPackage() {
         this.setAvailable(true);
     }
 
@@ -116,23 +115,19 @@ public class GTPackage {
         this.icon = icon;
     }
 
-    public HomescreenLayout getLayout()
-    {
+    public HomescreenLayout getLayout() {
         return layout;
     }
 
-    public void setLayout(HomescreenLayout layout)
-    {
+    public void setLayout(HomescreenLayout layout) {
         this.layout = layout;
     }
 
-    public boolean isAvailable()
-    {
+    public boolean isAvailable() {
         return available;
     }
 
-    public void setAvailable(boolean available)
-    {
+    public void setAvailable(boolean available) {
         this.available = available;
     }
 

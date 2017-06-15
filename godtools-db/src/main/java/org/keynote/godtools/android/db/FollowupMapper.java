@@ -14,6 +14,7 @@ import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_GS_R
 import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_ID;
 import static org.keynote.godtools.android.model.Followup.DEFAULT_CONTEXT;
 
+@Deprecated
 final class FollowupMapper extends AbstractMapper<Followup> {
     @Override
     protected void mapField(@NonNull final ContentValues values, @NonNull final String field,

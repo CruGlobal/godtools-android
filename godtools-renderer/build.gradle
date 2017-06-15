@@ -20,7 +20,7 @@ dependencies {
     compile 'org.ccci.gto.android:gto-support-core:' + deps.gtoSupport
 
     compile 'com.jakewharton:butterknife:' + deps.butterknife
-    compile('org.simpleframework:simple-xml:2.7.1') {
+    compile("org.simpleframework:simple-xml:${deps.simplexml}") {
         exclude module: 'stax'
         exclude module: 'stax-api'
         exclude module: 'xpp3'

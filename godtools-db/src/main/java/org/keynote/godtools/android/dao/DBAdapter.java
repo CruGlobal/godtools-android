@@ -1,6 +1,5 @@
 package org.keynote.godtools.android.dao;
 
-import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 
@@ -12,7 +11,6 @@ import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.dao.DBContract.GSSubscriberTable;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
-import org.keynote.godtools.android.db.GodToolsDao;
 
 @Deprecated
 public class DBAdapter extends AbstractAsyncDao {
@@ -25,11 +23,6 @@ public class DBAdapter extends AbstractAsyncDao {
                      new GTLanguageMapper(), GTLanguageTable.SQL_WHERE_PRIMARY_KEY);
         registerType(GSSubscriber.class, GSSubscriberTable.TABLE_NAME, GSSubscriberTable.PROJECTION_ALL,
                      new GSSubscriberMapper(), GSSubscriberTable.SQL_WHERE_PRIMARY_KEY);
-    }
-
-    @Deprecated
-    public static DBAdapter getInstance(@NonNull final Context context) {
-        return GodToolsDao.getInstance(context);
     }
 
     @NonNull
