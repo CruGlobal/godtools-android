@@ -105,9 +105,14 @@ abstract class Base {
 
         BaseViewHolder(@NonNull final Class<T> modelType, @NonNull final ViewGroup parent, @LayoutRes final int layout,
                        @Nullable final ParentViewHolder<?> parentViewHolder) {
+            this(modelType, LayoutInflater.from(parent.getContext()).inflate(layout, parent, false), parentViewHolder);
+        }
+
+        BaseViewHolder(@NonNull final Class<T> modelType, @NonNull final View root,
+                       @Nullable final ParentViewHolder<?> parentViewHolder) {
             mParentViewHolder = parentViewHolder;
             mModelType = modelType;
-            mRoot = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
+            mRoot = root;
             ButterKnife.bind(this, mRoot);
             mRoot.setTag(R.id.view_holder, this);
         }
