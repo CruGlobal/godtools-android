@@ -15,6 +15,9 @@ interface StylesParent {
     int getTextColor();
 
     @ColorInt
+    int getButtonColor();
+
+    @ColorInt
     static int getPrimaryColor(@Nullable final StylesParent parent) {
         return parent != null ? parent.getPrimaryColor() : Manifest.getDefaultPrimaryColor();
     }
@@ -27,5 +30,10 @@ interface StylesParent {
     @ColorInt
     static int getTextColor(@Nullable final StylesParent parent) {
         return parent != null ? parent.getTextColor() : Manifest.getDefaultTextColor();
+    }
+
+    @ColorInt
+    static int getButtonColor(@Nullable final StylesParent parent) {
+        return parent != null ? parent.getButtonColor() : getPrimaryColor(null);
     }
 }

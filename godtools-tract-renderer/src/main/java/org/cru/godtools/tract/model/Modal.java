@@ -80,6 +80,11 @@ public final class Modal extends Base implements Parent, StylesParent {
         return Color.WHITE;
     }
 
+    @Override
+    public int getButtonColor() {
+        return Color.WHITE;
+    }
+
     @NonNull
     static Modal fromXml(@NonNull final Base parent, @NonNull final XmlPullParser parser, final int position)
             throws IOException, XmlPullParserException {

@@ -102,6 +102,11 @@ abstract class Base {
         return StylesParent.getTextColor(getStylesParent());
     }
 
+    @ColorInt
+    public int getButtonColor() {
+        return getPrimaryColor();
+    }
+
     /* END: StylesParent default methods */
 
     @NonNull
