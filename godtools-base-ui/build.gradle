@@ -1,0 +1,20 @@
+apply plugin: 'com.android.library'
+
+android {
+    buildToolsVersion buildTools
+    compileSdkVersion compileSdk
+
+    defaultConfig {
+        minSdkVersion minSdk
+        targetSdkVersion targetSdk
+    }
+}
+
+dependencies {
+    api "android.arch.lifecycle:runtime:${deps.androidLifecycle}"
+    api "com.android.support:appcompat-v7:${deps.androidSupport}"
+
+    implementation "com.jakewharton:butterknife:${deps.butterknife}"
+
+    annotationProcessor "android.arch.lifecycle:compiler:${deps.androidLifecycle}"
+}

@@ -21,7 +21,8 @@ android {
 }
 
 dependencies {
-    compile project(':godtools-base')
+    implementation project(':godtools-base')
+    implementation project(':godtools-base-ui')
 
     compile "com.android.support:cardview-v7:${deps.androidSupport}"
     compile "com.android.support:design:${deps.androidSupport}"

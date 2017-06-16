@@ -35,7 +35,6 @@
 
         <Button
             android:id="@+id/action_tour_languages"
-            style="@style/Widget.GodTools2.Tour.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/action_tour_ok" />
