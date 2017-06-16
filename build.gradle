@@ -33,6 +33,7 @@ ext {
     targetSdk  = 25
 }
 ext.deps = [
+        androidLifecycle     : '1.0.0-alpha3',
         androidSupport       : '25.4.0',
         androidTestingSupport: '0.5',
         butterknife          : '8.6.0',
