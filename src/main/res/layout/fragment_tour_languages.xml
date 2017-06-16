@@ -39,14 +39,12 @@
 
             <Button
                 android:id="@+id/action_switch_language"
-                style="@style/Widget.GodTools2.Tour.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/action_tour_now" />
 
             <Button
                 android:id="@+id/action_tour_close"
-                style="@style/Widget.GodTools2.Tour.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
