@@ -32,7 +32,7 @@ import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.model.Utils.parseScaleType;
 import static org.cru.godtools.tract.util.ViewUtils.getTopOffset;
 
-public final class Card extends Base implements StylesParent, Parent {
+public final class Card extends Base implements Styles, Parent {
     static final String XML_CARD = "card";
     private static final String XML_LABEL = "label";
 
@@ -176,8 +176,8 @@ public final class Card extends Base implements StylesParent, Parent {
 
         private void bindLabel() {
             final Text label = mModel != null ? mModel.mLabel : null;
-            Text.bind(label, mLabel, StylesParent.getPrimaryColor(mModel), mLabelTextSize);
-            mDivider.setBackgroundColor(StylesParent.getTextColor(mModel));
+            Text.bind(label, mLabel, Styles.getPrimaryColor(mModel), mLabelTextSize);
+            mDivider.setBackgroundColor(Styles.getTextColor(mModel));
         }
 
         // XXX: this should be handled by PageContentLayout utilizing configuration within the LayoutParams

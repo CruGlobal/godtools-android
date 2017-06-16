@@ -4,7 +4,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 
 // XXX: I really want to use default methods for this interface, but default methods are not backwards compatible
-interface StylesParent {
+interface Styles {
     @ColorInt
     int getPrimaryColor();
 
@@ -18,22 +18,22 @@ interface StylesParent {
     int getButtonColor();
 
     @ColorInt
-    static int getPrimaryColor(@Nullable final StylesParent parent) {
+    static int getPrimaryColor(@Nullable final Styles parent) {
         return parent != null ? parent.getPrimaryColor() : Manifest.getDefaultPrimaryColor();
     }
 
     @ColorInt
-    static int getPrimaryTextColor(@Nullable final StylesParent parent) {
+    static int getPrimaryTextColor(@Nullable final Styles parent) {
         return parent != null ? parent.getPrimaryTextColor() : Manifest.getDefaultPrimaryTextColor();
     }
 
     @ColorInt
-    static int getTextColor(@Nullable final StylesParent parent) {
+    static int getTextColor(@Nullable final Styles parent) {
         return parent != null ? parent.getTextColor() : Manifest.getDefaultTextColor();
     }
 
     @ColorInt
-    static int getButtonColor(@Nullable final StylesParent parent) {
+    static int getButtonColor(@Nullable final Styles parent) {
         return parent != null ? parent.getButtonColor() : getPrimaryColor(null);
     }
 }

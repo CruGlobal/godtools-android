@@ -32,7 +32,7 @@ import static org.cru.godtools.tract.model.Modal.XML_MODAL;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.model.Utils.parseScaleType;
 
-public final class Page extends Base implements StylesParent {
+public final class Page extends Base implements Styles {
     static final String XML_PAGE = "page";
     private static final String XML_LISTENERS = "listeners";
     private static final String XML_MANIFEST_FILENAME = "filename";
@@ -118,17 +118,17 @@ public final class Page extends Base implements StylesParent {
 
     @ColorInt
     public int getPrimaryColor() {
-        return mPrimaryColor != null ? mPrimaryColor : StylesParent.getPrimaryColor(getStylesParent());
+        return mPrimaryColor != null ? mPrimaryColor : Styles.getPrimaryColor(getStylesParent());
     }
 
     @ColorInt
     public int getPrimaryTextColor() {
-        return mPrimaryTextColor != null ? mPrimaryTextColor : StylesParent.getPrimaryTextColor(getStylesParent());
+        return mPrimaryTextColor != null ? mPrimaryTextColor : Styles.getPrimaryTextColor(getStylesParent());
     }
 
     @ColorInt
     public int getTextColor() {
-        return mTextColor != null ? mTextColor : StylesParent.getTextColor(getStylesParent());
+        return mTextColor != null ? mTextColor : Styles.getTextColor(getStylesParent());
     }
 
     @ColorInt

@@ -20,7 +20,7 @@ import java.util.Set;
 
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 
-public final class Modal extends Base implements Parent, StylesParent {
+public final class Modal extends Base implements Parent, Styles {
     static final String XML_MODAL = "modal";
     private static final String XML_TITLE = "title";
     private static final String XML_LISTENERS = "listeners";

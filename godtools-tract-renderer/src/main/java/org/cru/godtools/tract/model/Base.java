@@ -70,9 +70,9 @@ abstract class Base {
     }
 
     @Nullable
-    StylesParent getStylesParent() {
-        if (mParent instanceof StylesParent) {
-            return (StylesParent) mParent;
+    Styles getStylesParent() {
+        if (mParent instanceof Styles) {
+            return (Styles) mParent;
         } else if (mParent != this) {
             return mParent.getStylesParent();
         } else {
@@ -81,25 +81,25 @@ abstract class Base {
     }
 
     @Nullable
-    static StylesParent getStylesParent(@Nullable final Base obj) {
+    static Styles getStylesParent(@Nullable final Base obj) {
         return obj != null ? obj.getStylesParent() : null;
     }
 
-    /* BEGIN: StylesParent default methods */
+    /* BEGIN: Styles default methods */
 
     @ColorInt
     public int getPrimaryColor() {
-        return StylesParent.getPrimaryColor(getStylesParent());
+        return Styles.getPrimaryColor(getStylesParent());
     }
 
     @ColorInt
     public int getPrimaryTextColor() {
-        return StylesParent.getPrimaryTextColor(getStylesParent());
+        return Styles.getPrimaryTextColor(getStylesParent());
     }
 
     @ColorInt
     public int getTextColor() {
-        return StylesParent.getTextColor(getStylesParent());
+        return Styles.getTextColor(getStylesParent());
     }
 
     @ColorInt
@@ -107,7 +107,7 @@ abstract class Base {
         return getPrimaryColor();
     }
 
-    /* END: StylesParent default methods */
+    /* END: Styles default methods */
 
     @NonNull
     final Set<Event.Id> parseEvents(@NonNull final XmlPullParser parser, @NonNull final String attribute) {

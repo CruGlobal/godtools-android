@@ -25,7 +25,7 @@ import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.model.Utils.parseScaleType;
 
-public final class Manifest extends Base implements StylesParent {
+public final class Manifest extends Base implements Styles {
     private static final String XML_MANIFEST = "manifest";
     private static final String XML_TITLE = "title";
     private static final String XML_NAVBAR_COLOR = "navbar-color";
@@ -196,13 +196,13 @@ public final class Manifest extends Base implements StylesParent {
     @ColorInt
     public static int getNavBarColor(@Nullable final Manifest manifest) {
         return manifest != null && manifest.mNavBarColor != null ? manifest.mNavBarColor :
-                StylesParent.getPrimaryColor(manifest);
+                Styles.getPrimaryColor(manifest);
     }
 
     @ColorInt
     public static int getNavBarControlColor(@Nullable final Manifest manifest) {
         return manifest != null && manifest.mNavBarControlColor != null ? manifest.mNavBarControlColor :
-                StylesParent.getPrimaryTextColor(manifest);
+                Styles.getPrimaryTextColor(manifest);
     }
 
     @NonNull
