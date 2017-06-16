@@ -83,12 +83,12 @@ public final class Button extends Content {
 
     @ColorInt
     public int getColor() {
-        return mColor != null ? mColor : Container.getPrimaryColor(getContainer());
+        return mColor != null ? mColor : StylesParent.getPrimaryColor(getStylesParent());
     }
 
     @ColorInt
     static int getColor(@Nullable final Button button) {
-        return button != null ? button.getColor() : Container.getPrimaryColor(null);
+        return button != null ? button.getColor() : StylesParent.getPrimaryColor(null);
     }
 
     @WorkerThread
@@ -152,7 +152,7 @@ public final class Button extends Content {
         void onBind() {
             super.onBind();
             final Text text = mModel != null ? mModel.mText : null;
-            Text.bind(text, mButton, Container.getPrimaryTextColor(getContainer(mModel)), DEFAULT_TEXT_ALIGN);
+            Text.bind(text, mButton, StylesParent.getPrimaryTextColor(getStylesParent(mModel)), DEFAULT_TEXT_ALIGN);
             ViewCompat.setBackgroundTintList(mButton, ColorStateList.valueOf(getColor(mModel)));
         }
 

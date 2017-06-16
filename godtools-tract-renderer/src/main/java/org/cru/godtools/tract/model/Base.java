@@ -69,19 +69,19 @@ abstract class Base {
     }
 
     @Nullable
-    Container getContainer() {
-        if (mParent instanceof Container) {
-            return (Container) mParent;
+    StylesParent getStylesParent() {
+        if (mParent instanceof StylesParent) {
+            return (StylesParent) mParent;
         } else if (mParent != this) {
-            return mParent.getContainer();
+            return mParent.getStylesParent();
         } else {
             return null;
         }
     }
 
     @Nullable
-    static Container getContainer(@Nullable final Base obj) {
-        return obj != null ? obj.getContainer() : null;
+    static StylesParent getStylesParent(@Nullable final Base obj) {
+        return obj != null ? obj.getStylesParent() : null;
     }
 
     @NonNull

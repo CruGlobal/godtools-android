@@ -45,7 +45,7 @@ public final class CallToAction extends Base {
 
     @ColorInt
     private static int getArrowColor(@Nullable final CallToAction callToAction) {
-        return Container.getPrimaryColor(callToAction != null ? callToAction.getPage() : null);
+        return StylesParent.getPrimaryColor(callToAction != null ? callToAction.getPage() : null);
     }
 
     @NonNull

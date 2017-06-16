@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 
-public final class Hero extends Base implements Container {
+public final class Hero extends Base implements StylesParent {
     static final String XML_HERO = "hero";
     private static final String XML_HEADING = "heading";
 

@@ -32,7 +32,7 @@ import static org.cru.godtools.tract.model.Modal.XML_MODAL;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.model.Utils.parseScaleType;
 
-public final class Page extends Base implements Container {
+public final class Page extends Base implements StylesParent {
     static final String XML_PAGE = "page";
     private static final String XML_LISTENERS = "listeners";
     private static final String XML_MANIFEST_FILENAME = "filename";
