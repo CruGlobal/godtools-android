@@ -58,21 +58,6 @@ public final class Card extends Base implements StylesParent, Parent {
         super(parent);
     }
 
-    @Override
-    public int getPrimaryColor() {
-        return StylesParent.getPrimaryColor(getStylesParent());
-    }
-
-    @Override
-    public int getPrimaryTextColor() {
-        return StylesParent.getPrimaryTextColor(getStylesParent());
-    }
-
-    @Override
-    public int getTextColor() {
-        return StylesParent.getTextColor(getStylesParent());
-    }
-
     @ColorInt
     private int getBackgroundColor() {
         // TODO: implement card-background-color on Page & Manifest

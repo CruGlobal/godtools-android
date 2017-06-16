@@ -118,17 +118,17 @@ public final class Page extends Base implements StylesParent {
 
     @ColorInt
     public int getPrimaryColor() {
-        return mPrimaryColor != null ? mPrimaryColor : getManifest().getPrimaryColor();
+        return mPrimaryColor != null ? mPrimaryColor : StylesParent.getPrimaryColor(getStylesParent());
     }
 
     @ColorInt
     public int getPrimaryTextColor() {
-        return mPrimaryTextColor != null ? mPrimaryTextColor : getManifest().getPrimaryTextColor();
+        return mPrimaryTextColor != null ? mPrimaryTextColor : StylesParent.getPrimaryTextColor(getStylesParent());
     }
 
     @ColorInt
     public int getTextColor() {
-        return mTextColor != null ? mTextColor : getManifest().getTextColor();
+        return mTextColor != null ? mTextColor : StylesParent.getTextColor(getStylesParent());
     }
 
     @ColorInt

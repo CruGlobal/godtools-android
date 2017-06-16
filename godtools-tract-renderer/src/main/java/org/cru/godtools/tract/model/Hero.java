@@ -35,21 +35,6 @@ public final class Hero extends Base implements StylesParent {
         super(parent);
     }
 
-    @Override
-    public int getPrimaryColor() {
-        return getPage().getPrimaryColor();
-    }
-
-    @Override
-    public int getPrimaryTextColor() {
-        return getPage().getPrimaryTextColor();
-    }
-
-    @Override
-    public int getTextColor() {
-        return getPage().getTextColor();
-    }
-
     @NonNull
     static Hero fromXml(@NonNull final Base parent, @NonNull final XmlPullParser parser)
             throws IOException, XmlPullParserException {

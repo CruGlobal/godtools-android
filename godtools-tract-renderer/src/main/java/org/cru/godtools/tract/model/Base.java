@@ -1,6 +1,7 @@
 package org.cru.godtools.tract.model;
 
 import android.support.annotation.CallSuper;
+import android.support.annotation.ColorInt;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -83,6 +84,25 @@ abstract class Base {
     static StylesParent getStylesParent(@Nullable final Base obj) {
         return obj != null ? obj.getStylesParent() : null;
     }
+
+    /* BEGIN: StylesParent default methods */
+
+    @ColorInt
+    public int getPrimaryColor() {
+        return StylesParent.getPrimaryColor(getStylesParent());
+    }
+
+    @ColorInt
+    public int getPrimaryTextColor() {
+        return StylesParent.getPrimaryTextColor(getStylesParent());
+    }
+
+    @ColorInt
+    public int getTextColor() {
+        return StylesParent.getTextColor(getStylesParent());
+    }
+
+    /* END: StylesParent default methods */
 
     @NonNull
     final Set<Event.Id> parseEvents(@NonNull final XmlPullParser parser, @NonNull final String attribute) {

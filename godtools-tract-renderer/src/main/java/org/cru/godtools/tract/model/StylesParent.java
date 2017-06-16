@@ -3,6 +3,7 @@ package org.cru.godtools.tract.model;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 
+// XXX: I really want to use default methods for this interface, but default methods are not backwards compatible
 interface StylesParent {
     @ColorInt
     int getPrimaryColor();
