@@ -28,8 +28,6 @@
     <color name="current_draft_opacity">#95b9b9b9</color>
 
     <!-- standard colors -->
-    <color name="white_20">#33FFFFFF</color>
-
     <color name="gt_blue">#3BA4DB</color>
     <color name="gt_blue_dark">#1978C4</color>
     <color name="gt_green">#6EDC50</color>
