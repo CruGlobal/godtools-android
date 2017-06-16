@@ -1,13 +1,16 @@
 package org.cru.godtools.tract.model;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
+import org.cru.godtools.tract.R;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -17,13 +20,18 @@ import java.util.Set;
 
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 
-public final class Modal extends Base {
+public final class Modal extends Base implements Parent, Container {
     static final String XML_MODAL = "modal";
     private static final String XML_TITLE = "title";
     private static final String XML_LISTENERS = "listeners";
+    private static final String XML_DISMISS_LISTENERS = "dismiss-listeners";
+
+    private final int mPosition;
 
     @NonNull
     private Set<Event.Id> mListeners = ImmutableSet.of();
+    @NonNull
+    private Set<Event.Id> mDismissListeners = ImmutableSet.of();
 
     @Nullable
     Text mTitle;
@@ -31,8 +39,14 @@ public final class Modal extends Base {
     @NonNull
     private List<Content> mContent = ImmutableList.of();
 
-    private Modal(@NonNull final Base parent) {
+    private Modal(@NonNull final Base parent, final int position) {
         super(parent);
+        mPosition = position;
+    }
+
+    @NonNull
+    public String getId() {
+        return getPage().getId() + "-" + mPosition;
     }
 
     @NonNull
@@ -41,9 +55,35 @@ public final class Modal extends Base {
     }
 
     @NonNull
-    static Modal fromXml(@NonNull final Base parent, @NonNull final XmlPullParser parser)
+    public Set<Event.Id> getDismissListeners() {
+        return mDismissListeners;
+    }
+
+    @NonNull
+    @Override
+    public List<Content> getContent() {
+        return mContent;
+    }
+
+    @Override
+    public int getTextColor() {
+        return Color.WHITE;
+    }
+
+    @Override
+    public int getPrimaryColor() {
+        return Color.TRANSPARENT;
+    }
+
+    @Override
+    public int getPrimaryTextColor() {
+        return Color.WHITE;
+    }
+
+    @NonNull
+    static Modal fromXml(@NonNull final Base parent, @NonNull final XmlPullParser parser, final int position)
             throws IOException, XmlPullParserException {
-        return new Modal(parent).parse(parser);
+        return new Modal(parent, position).parse(parser);
     }
 
     @NonNull
@@ -51,6 +91,7 @@ public final class Modal extends Base {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_MODAL);
 
         mListeners = parseEvents(parser, XML_LISTENERS);
+        mDismissListeners = parseEvents(parser, XML_DISMISS_LISTENERS);
 
         // process any child elements
         final ImmutableList.Builder<Content> contentList = ImmutableList.builder();
@@ -83,5 +124,26 @@ public final class Modal extends Base {
         mContent = contentList.build();
 
         return this;
+    }
+
+    @NonNull
+    public static ModalViewHolder getViewHolder(@NonNull final View root) {
+        final Object holder = root.getTag(R.id.view_holder);
+        if (holder instanceof ModalViewHolder) {
+            return (ModalViewHolder) holder;
+        } else {
+            return new ModalViewHolder(root);
+        }
+    }
+
+    public static class ModalViewHolder extends ParentViewHolder<Modal> {
+        ModalViewHolder(@NonNull final View root) {
+            super(Modal.class, root, null);
+        }
+
+        @Override
+        void onBind() {
+            super.onBind();
+        }
     }
 }

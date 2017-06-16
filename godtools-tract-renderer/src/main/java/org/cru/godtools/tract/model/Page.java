@@ -275,7 +275,7 @@ public final class Page extends Base implements Container {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_MODALS);
 
         // process any child elements
-        final ImmutableList.Builder<Modal> modals = ImmutableList.builder();
+        final List<Modal> modals = new ArrayList<>();
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -286,7 +286,7 @@ public final class Page extends Base implements Container {
                 case XMLNS_TRACT:
                     switch (parser.getName()) {
                         case XML_MODAL:
-                            modals.add(Modal.fromXml(this, parser));
+                            modals.add(Modal.fromXml(this, parser, modals.size()));
                             continue;
                     }
                     break;
@@ -295,7 +295,7 @@ public final class Page extends Base implements Container {
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
-        mModals = modals.build();
+        mModals = ImmutableList.copyOf(modals);
     }
 
     public static void bindBackgroundImage(@Nullable final Page page, @NonNull final ScaledPicassoImageView view) {
