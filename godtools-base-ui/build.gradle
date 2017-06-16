@@ -9,3 +9,9 @@ android {
         targetSdkVersion targetSdk
     }
 }
+
+dependencies {
+    api "com.android.support:appcompat-v7:${deps.androidSupport}"
+
+    implementation "com.jakewharton:butterknife:${deps.butterknife}"
+}
