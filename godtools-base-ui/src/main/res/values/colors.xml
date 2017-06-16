@@ -2,4 +2,7 @@
 <resources>
     <!-- standard colors -->
     <color name="tintable">#FF000000</color>
+    <color name="tintable_20">#33000000</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
 </resources>
