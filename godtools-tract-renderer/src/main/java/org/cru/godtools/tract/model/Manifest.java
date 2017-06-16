@@ -8,6 +8,7 @@ import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.SimpleArrayMap;
 
+import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableList;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
@@ -125,6 +126,14 @@ public final class Manifest extends Base implements Container {
     @NonNull
     public List<Page> getPages() {
         return mPages;
+    }
+
+    @Nullable
+    public Page findPage(@Nullable final String id) {
+        return Stream.of(mPages)
+                .filter(p -> p.getId().equalsIgnoreCase(id))
+                .findFirst()
+                .orElse(null);
     }
 
     @Nullable

@@ -34,6 +34,7 @@ import static org.cru.godtools.tract.model.Utils.parseScaleType;
 public final class Page extends Base implements Container {
     static final String XML_PAGE = "page";
     private static final String XML_LISTENERS = "listeners";
+    private static final String XML_MANIFEST_FILENAME = "filename";
     private static final String XML_MANIFEST_SRC = "src";
     private static final String XML_CARDS = "cards";
     private static final String XML_MODALS = "modals";
@@ -45,6 +46,8 @@ public final class Page extends Base implements Container {
 
     private final int mPosition;
 
+    @Nullable
+    private String mFileName;
     @Nullable
     private String mLocalFileName;
     private boolean mPageXmlParsed = false;
@@ -82,6 +85,15 @@ public final class Page extends Base implements Container {
         super(manifest);
         mPosition = position;
         mCallToAction = new CallToAction(this);
+    }
+
+    @NonNull
+    public String getId() {
+        if (mFileName != null) {
+            return mFileName;
+        }
+
+        return getManifest().getCode() + "-" + mPosition;
     }
 
     @NonNull
@@ -171,6 +183,7 @@ public final class Page extends Base implements Container {
     private Page parseManifestXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGE);
 
+        mFileName = parser.getAttributeValue(null, XML_MANIFEST_FILENAME);
         mLocalFileName = parser.getAttributeValue(null, XML_MANIFEST_SRC);
 
         // discard any nested nodes
