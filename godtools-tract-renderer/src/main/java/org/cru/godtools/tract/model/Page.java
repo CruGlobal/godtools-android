@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
+import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
@@ -164,6 +165,13 @@ public final class Page extends Base implements Container {
 
     public List<Modal> getModals() {
         return mModals;
+    }
+
+    @Nullable
+    public Modal findModal(@Nullable final String id) {
+        return Stream.of(mModals)
+                .filter(m -> m.getId().equalsIgnoreCase(id))
+                .findFirst().orElse(null);
     }
 
     @NonNull
