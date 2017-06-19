@@ -18,6 +18,7 @@ public class Tool extends Base {
     private static final String JSON_DESCRIPTION = "description";
     private static final String JSON_TOTAL_VIEWS = "total-views";
     private static final String JSON_BANNER = "attr-banner";
+    private static final String JSON_BANNER_DETAILS = "attr-banner-about";
     private static final String JSON_COPYRIGHT = "attr-copyright";
     public static final String JSON_LATEST_TRANSLATIONS = "latest-translations";
     public static final String JSON_ATTACHMENTS = "attachments";
@@ -41,6 +42,8 @@ public class Tool extends Base {
 
     @JsonApiAttribute(name = JSON_BANNER)
     private long mBannerId = Attachment.INVALID_ID;
+    @JsonApiAttribute(name = JSON_BANNER_DETAILS)
+    private long mDetailsBannerId = Attachment.INVALID_ID;
     @Nullable
     @JsonApiAttribute(name = JSON_COPYRIGHT)
     private String mCopyright;
@@ -90,6 +93,14 @@ public class Tool extends Base {
 
     public void setBannerId(final long attachmentId) {
         mBannerId = attachmentId;
+    }
+
+    public long getDetailsBannerId() {
+        return mDetailsBannerId;
+    }
+
+    public void setDetailsBannerId(final long attachmentId) {
+        mDetailsBannerId = attachmentId;
     }
 
     @Nullable
