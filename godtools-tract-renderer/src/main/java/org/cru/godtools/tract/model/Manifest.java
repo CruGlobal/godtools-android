@@ -147,6 +147,7 @@ public final class Manifest extends Base implements Styles {
     }
 
     @ColorInt
+    @Override
     public int getPrimaryColor() {
         return mPrimaryColor;
     }
@@ -157,6 +158,7 @@ public final class Manifest extends Base implements Styles {
     }
 
     @ColorInt
+    @Override
     public int getPrimaryTextColor() {
         return mPrimaryTextColor;
     }
@@ -166,6 +168,7 @@ public final class Manifest extends Base implements Styles {
         return DEFAULT_PRIMARY_TEXT_COLOR;
     }
 
+    @ColorInt
     @Override
     public int getTextColor() {
         return mTextColor;

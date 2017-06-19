@@ -161,7 +161,8 @@ public final class Input extends Content {
         void onBind() {
             super.onBind();
             mRoot.setVisibility(mModel != null && mModel.mType == Type.HIDDEN ? View.GONE : View.VISIBLE);
-            setupInput();
+            bindPlaceholder();
+            bindInput();
         }
 
         /* BEGIN lifecycle */
@@ -205,21 +206,7 @@ public final class Input extends Content {
 
         /* END lifecycle */
 
-        private void setupInput() {
-            // setup inputType
-            if (mInputView != null) {
-                int inputType = InputType.TYPE_CLASS_TEXT;
-                switch (mModel != null ? mModel.mType : Type.DEFAULT) {
-                    case EMAIL:
-                        inputType |= InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
-                        break;
-                    case PHONE:
-                        inputType = InputType.TYPE_CLASS_PHONE;
-                        break;
-                }
-                mInputView.setInputType(inputType);
-            }
-
+        private void bindPlaceholder() {
             // setup the hint, prefer the label (unless we have a separate label view or no label is defined)
             String hint = null;
             if (mModel != null) {
@@ -234,6 +221,31 @@ public final class Input extends Content {
                 mInputLayout.setHint(hint);
             } else if (mInputView != null) {
                 mInputView.setHint(hint);
+            }
+
+            // update hint colors
+            // TODO
+        }
+
+        private void bindInput() {
+            // setup inputType
+            if (mInputView != null) {
+                int inputType = InputType.TYPE_CLASS_TEXT;
+                switch (mModel != null ? mModel.mType : Type.DEFAULT) {
+                    case EMAIL:
+                        inputType |= InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
+                        break;
+                    case PHONE:
+                        inputType = InputType.TYPE_CLASS_PHONE;
+                        break;
+                }
+                mInputView.setInputType(inputType);
+            }
+
+            // style the input view
+            final Styles stylesParent = mModel != null ? mModel.getStylesParent() : null;
+            if (mInputView != null) {
+                mInputView.setTextColor(Styles.getTextColor(stylesParent));
             }
         }
 
