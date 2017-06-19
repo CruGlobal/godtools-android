@@ -18,12 +18,14 @@ import org.ccci.gto.android.common.support.v4.adapter.ViewHolderPagerAdapter;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.activity.ModalActivity;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter.PageViewHolder;
 import org.cru.godtools.tract.model.CallToAction;
 import org.cru.godtools.tract.model.Card;
 import org.cru.godtools.tract.model.Header;
 import org.cru.godtools.tract.model.Hero;
 import org.cru.godtools.tract.model.Manifest;
+import org.cru.godtools.tract.model.Modal;
 import org.cru.godtools.tract.model.Page;
 import org.cru.godtools.tract.widget.PageContentLayout;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
@@ -95,6 +97,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         // check for the event on the current page
         final PageViewHolder holder = getPrimaryItem();
         if (holder != null) {
+            holder.onContentEvent(event);
         }
     }
 
@@ -166,6 +169,12 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
             CallToAction.bind(page != null ? page.getCallToAction() : null, mCallToAction, this);
         }
 
+        void onContentEvent(@NonNull final Event event) {
+            if (mPage != null) {
+                checkForModalEvent(event);
+            }
+        }
+
         /* END lifecycle */
 
         private void bindPage(@Nullable final Page page) {
@@ -217,6 +226,17 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
                 i.remove();
                 holder.bind(null);
                 mRecycledCardViewHolders.release(holder);
+            }
+        }
+
+        private void checkForModalEvent(@NonNull final Event event) {
+            assert mPage != null;
+            final Manifest manifest = mPage.getManifest();
+            for (final Modal modal : mPage.getModals()) {
+                if (modal.getListeners().contains(event.id)) {
+                    ModalActivity.start(mPageView.getContext(), manifest.getManifestName(), manifest.getToolId(),
+                                        manifest.getLocale(), mPage.getId(), modal.getId());
+                }
             }
         }
 

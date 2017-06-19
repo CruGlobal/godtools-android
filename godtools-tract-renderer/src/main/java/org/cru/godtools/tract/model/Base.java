@@ -45,7 +45,7 @@ abstract class Base {
     }
 
     @NonNull
-    protected Manifest getManifest() {
+    public Manifest getManifest() {
         if (mParent == this) {
             throw new IllegalStateException();
         } else {

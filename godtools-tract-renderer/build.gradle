@@ -27,7 +27,6 @@ dependencies {
     implementation project(':godtools-model-events')
     implementation project(':godtools-db')
 
-    api "android.arch.lifecycle:runtime:${deps.androidLifecycle}"
     compile "com.android.support:cardview-v7:${deps.androidSupport}"
     compile "com.android.support:design:${deps.androidSupport}"
 

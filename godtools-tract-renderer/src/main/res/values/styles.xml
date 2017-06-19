@@ -10,6 +10,7 @@
     <dimen name="horiz_margin_card_content">16dp</dimen>
     <dimen name="horiz_margin_call_to_action_label">32dp</dimen>
     <dimen name="horiz_margin_call_to_action_arrow">8dp</dimen>
+    <dimen name="horiz_margin_modal">32dp</dimen>
 
     <style name="Theme.GodTools.Tract" parent="Theme.AppCompat">
         <item name="actionBarTheme">@style/ThemeOverlay.GodTools.Tract.Toolbar.AppBar</item>
@@ -27,6 +28,17 @@
     </style>
 
     <style name="Theme.GodTools.Tract.Activity.Tract" parent="Theme.GodTools.Tract.AppBar" />
+
+    <style name="Theme.GodTools.Tract.Activity.Modal" parent="Theme.GodTools.Tract.NoActionBar">
+        <item name="android:fitsSystemWindows">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.70</item>
+
+        <item name="buttonStyle">@style/Widget.GodTools.Button.Outline</item>
+    </style>
 
     <style name="Widget.GodTools.Tract.Toolbar.AppBar" parent="@style/Widget.AppCompat.Toolbar" />
 
