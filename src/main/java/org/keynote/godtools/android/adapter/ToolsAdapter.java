@@ -27,14 +27,14 @@ import butterknife.Optional;
 
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
-public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceViewHolder> {
+public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
     public static final String COL_BANNER = "banner";
     public interface Callbacks {
-        void onResourceInfo(long id);
+        void onToolInfo(long id);
 
-        void onResourceSelect(long id);
+        void onToolSelect(long id);
 
-        void onResourceAdd(long id);
+        void onToolAdd(long id);
     }
 
     final boolean mHideAddAction;
@@ -42,7 +42,7 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
     @Nullable
     Callbacks mCallbacks;
 
-    public ResourcesAdapter(final boolean hideAddAction) {
+    public ToolsAdapter(final boolean hideAddAction) {
         mHideAddAction = hideAddAction;
     }
 
@@ -51,18 +51,18 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
     }
 
     @Override
-    public ResourceViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
-        return new ResourceViewHolder(LayoutInflater.from(parent.getContext())
+    public ToolViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
+        return new ToolViewHolder(LayoutInflater.from(parent.getContext())
                                               .inflate(R.layout.list_item_resource_card, parent, false));
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull final ResourceViewHolder holder, @Nullable final Cursor cursor,
+    protected void onBindViewHolder(@NonNull final ToolViewHolder holder, @Nullable final Cursor cursor,
                                     final int position) {
         holder.bind(cursor);
     }
 
-    class ResourceViewHolder extends BaseViewHolder {
+    class ToolViewHolder extends BaseViewHolder {
         @Nullable
         @BindView(R.id.banner)
         PicassoImageView mBanner;
@@ -92,7 +92,7 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
         boolean mDownloading = false;
         boolean mDownloaded = true;
 
-        ResourceViewHolder(@NonNull final View view) {
+        ToolViewHolder(@NonNull final View view) {
             super(view);
             if (mAddViews != null) {
                 ButterKnife.apply(mAddViews, (ButterKnife.Action<View>) (v, i) -> v
@@ -136,7 +136,7 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
         @OnClick(R.id.root)
         void select() {
             if (mCallbacks != null) {
-                mCallbacks.onResourceSelect(mId);
+                mCallbacks.onToolSelect(mId);
             }
         }
 
@@ -144,7 +144,7 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
         @OnClick(R.id.action_add)
         void add() {
             if (mCallbacks != null) {
-                mCallbacks.onResourceAdd(mId);
+                mCallbacks.onToolAdd(mId);
             }
         }
 
@@ -152,7 +152,7 @@ public class ResourcesAdapter extends CursorAdapter<ResourcesAdapter.ResourceVie
         @OnClick(R.id.action_info)
         void info() {
             if (mCallbacks != null) {
-                mCallbacks.onResourceInfo(mId);
+                mCallbacks.onToolInfo(mId);
             }
         }
     }

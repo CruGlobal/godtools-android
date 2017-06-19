@@ -20,7 +20,7 @@ import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.model.event.content.AttachmentEventBusSubscriber;
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.adapter.ResourcesAdapter;
+import org.keynote.godtools.android.adapter.ToolsAdapter;
 import org.keynote.godtools.android.content.ToolsCursorLoader;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
@@ -30,7 +30,7 @@ import org.keynote.godtools.android.sync.GodToolsSyncService;
 
 import butterknife.BindView;
 
-public class ToolsFragment extends BaseFragment implements ResourcesAdapter.Callbacks {
+public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callbacks {
     private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
 
     public interface Callbacks {
@@ -53,7 +53,7 @@ public class ToolsFragment extends BaseFragment implements ResourcesAdapter.Call
     @BindView(R.id.resources)
     RecyclerView mResourcesView;
     @Nullable
-    private ResourcesAdapter mResourcesAdapter;
+    private ToolsAdapter mToolsAdapter;
 
     @Nullable
     private Cursor mResources;
@@ -97,16 +97,16 @@ public class ToolsFragment extends BaseFragment implements ResourcesAdapter.Call
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupResourcesList();
+        setupToolsList();
     }
 
     void onLoadResources(@Nullable final Cursor cursor) {
         mResources = cursor;
-        updateResourcesList();
+        updateToolsList();
     }
 
     @Override
-    public void onResourceSelect(final long id) {
+    public void onToolSelect(final long id) {
         final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
         if (listener != null) {
             listener.onResourceSelect(id);
@@ -114,7 +114,7 @@ public class ToolsFragment extends BaseFragment implements ResourcesAdapter.Call
     }
 
     @Override
-    public void onResourceInfo(final long id) {
+    public void onToolInfo(final long id) {
         final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
         if (listener != null) {
             listener.onResourceInfo(id);
@@ -122,13 +122,13 @@ public class ToolsFragment extends BaseFragment implements ResourcesAdapter.Call
     }
 
     @Override
-    public void onResourceAdd(final long id) {
+    public void onToolAdd(final long id) {
         GodToolsToolManager.getInstance(getContext()).addTool(id);
     }
 
     @Override
     public void onDestroyView() {
-        cleanupResourcesList();
+        cleanupToolsList();
         super.onDestroyView();
     }
 
@@ -148,30 +148,30 @@ public class ToolsFragment extends BaseFragment implements ResourcesAdapter.Call
         getLoaderManager().initLoader(LOADER_TOOLS, null, mCursorLoaderCallbacks);
     }
 
-    private void setupResourcesList() {
+    private void setupToolsList() {
         if (mResourcesView != null) {
             mResourcesView.setLayoutManager(new LinearLayoutManager(getActivity()));
             mResourcesView.setHasFixedSize(true);
 
-            mResourcesAdapter = new ResourcesAdapter(mMode == MODE_ADDED);
-            mResourcesAdapter.setCallbacks(this);
-            mResourcesView.setAdapter(mResourcesAdapter);
+            mToolsAdapter = new ToolsAdapter(mMode == MODE_ADDED);
+            mToolsAdapter.setCallbacks(this);
+            mResourcesView.setAdapter(mToolsAdapter);
 
-            updateResourcesList();
+            updateToolsList();
         }
     }
 
-    private void updateResourcesList() {
-        if (mResourcesAdapter != null) {
-            mResourcesAdapter.swapCursor(mResources);
+    private void updateToolsList() {
+        if (mToolsAdapter != null) {
+            mToolsAdapter.swapCursor(mResources);
         }
     }
 
-    private void cleanupResourcesList() {
-        if (mResourcesAdapter != null) {
-            mResourcesAdapter.setCallbacks(null);
+    private void cleanupToolsList() {
+        if (mToolsAdapter != null) {
+            mToolsAdapter.setCallbacks(null);
         }
-        mResourcesAdapter = null;
+        mToolsAdapter = null;
     }
 
     static final String[] TOOLS_PROJECTION = {
@@ -179,8 +179,7 @@ public class ToolsFragment extends BaseFragment implements ResourcesAdapter.Call
             ToolTable.COLUMN_NAME,
             ToolTable.COLUMN_SHARES,
             ToolTable.COLUMN_ADDED,
-            AttachmentTable.TABLE_NAME + "." + AttachmentTable.COLUMN_LOCALFILENAME + " AS " +
-                    ResourcesAdapter.COL_BANNER
+            AttachmentTable.TABLE_NAME + "." + AttachmentTable.COLUMN_LOCALFILENAME + " AS " + ToolsAdapter.COL_BANNER
     };
     @SuppressWarnings("unchecked")
     static final Join<Tool, ?>[] TOOLS_JOINS = new Join[] {ToolTable.SQL_JOIN_BANNER.type("LEFT")};
