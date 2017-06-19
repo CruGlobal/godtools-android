@@ -1,0 +1,1 @@
+-keep class  org.keynote.godtools.renderer.crureader.bo.** { *; }
