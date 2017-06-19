@@ -162,12 +162,9 @@ public final class Card extends Base implements Styles, Parent {
         @BindView(R2.id.label_divider)
         View mDivider;
 
-        private final float mLabelTextSize;
-
         CardViewHolder(@NonNull final ViewGroup parent) {
             super(Card.class, parent, R.layout.tract_content_card, null);
             AutoAttachingGlobalLayoutListener.attach(mRoot, this::updatePeekHeights);
-            mLabelTextSize = mRoot.getResources().getDimension(R.dimen.text_size_card_label);
         }
 
         @Override
@@ -186,7 +183,7 @@ public final class Card extends Base implements Styles, Parent {
 
         private void bindLabel() {
             final Text label = mModel != null ? mModel.mLabel : null;
-            Text.bind(label, mLabel, Styles.getPrimaryColor(mModel), mLabelTextSize);
+            Text.bind(label, mLabel, Styles.getPrimaryColor(mModel), R.dimen.text_size_card_label);
             mDivider.setBackgroundColor(Styles.getTextColor(mModel));
         }
 

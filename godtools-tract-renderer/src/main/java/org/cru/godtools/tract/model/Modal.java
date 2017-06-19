@@ -1,6 +1,7 @@
 package org.cru.godtools.tract.model;
 
 import android.graphics.Color;
+import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -25,6 +26,8 @@ public final class Modal extends Base implements Parent, Styles {
     private static final String XML_TITLE = "title";
     private static final String XML_LISTENERS = "listeners";
     private static final String XML_DISMISS_LISTENERS = "dismiss-listeners";
+
+    private static final double DEFAULT_TITLE_TEXT_SCALE = 3.0;
 
     private final int mPosition;
 
@@ -83,6 +86,12 @@ public final class Modal extends Base implements Parent, Styles {
     @Override
     public int getButtonColor() {
         return Color.WHITE;
+    }
+
+    @DimenRes
+    @Override
+    public int getTextSize() {
+        return R.dimen.text_size_modal;
     }
 
     @NonNull

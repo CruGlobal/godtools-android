@@ -2,6 +2,7 @@ package org.cru.godtools.tract.model;
 
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
+import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
@@ -12,6 +13,7 @@ import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableList;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.xmlpull.v1.XmlPullParser;
@@ -177,6 +179,12 @@ public final class Manifest extends Base implements Styles {
     @ColorInt
     static int getDefaultTextColor() {
         return DEFAULT_TEXT_COLOR;
+    }
+
+    @DimenRes
+    @Override
+    public int getTextSize() {
+        return R.dimen.text_size_base;
     }
 
     @ColorInt

@@ -34,7 +34,7 @@ import butterknife.OnClick;
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.model.Text.XML_TEXT;
 
-public final class Button extends Content {
+public final class Button extends Content implements Styles {
     static final String XML_BUTTON = "button";
     private static final String XML_COLOR = "color";
     private static final String XML_TYPE = "type";
@@ -89,6 +89,11 @@ public final class Button extends Content {
     @ColorInt
     static int getButtonColor(@Nullable final Button button) {
         return button != null ? button.getButtonColor() : Styles.getButtonColor(null);
+    }
+
+    @Override
+    public int getTextColor() {
+        return getPrimaryTextColor();
     }
 
     @WorkerThread
@@ -152,7 +157,7 @@ public final class Button extends Content {
         void onBind() {
             super.onBind();
             final Text text = mModel != null ? mModel.mText : null;
-            Text.bind(text, mButton, Styles.getPrimaryTextColor(getStylesParent(mModel)), DEFAULT_TEXT_ALIGN);
+            Text.bind(text, mButton, DEFAULT_TEXT_ALIGN);
             ViewCompat.setBackgroundTintList(mButton, ColorStateList.valueOf(getButtonColor(mModel)));
         }
 

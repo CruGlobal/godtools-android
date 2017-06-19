@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.model;
 
+import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -33,6 +34,12 @@ public final class Hero extends Base implements Styles {
 
     private Hero(@NonNull final Base parent) {
         super(parent);
+    }
+
+    @DimenRes
+    @Override
+    public int getTextSize() {
+        return R.dimen.text_size_hero;
     }
 
     @NonNull
@@ -95,8 +102,7 @@ public final class Hero extends Base implements Styles {
         if (view != null) {
             if (heading != null) {
                 view.setVisibility(View.VISIBLE);
-                final float textSize = view.getResources().getDimension(R.dimen.text_size_hero);
-                Text.bind(heading, view, heading.getPage().getPrimaryColor(), textSize, DEFAULT_HEADING_TEXT_SCALE);
+                Text.bind(heading, view, heading.getPrimaryColor(), DEFAULT_HEADING_TEXT_SCALE);
             } else {
                 view.setVisibility(View.GONE);
             }

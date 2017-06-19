@@ -2,6 +2,7 @@ package org.cru.godtools.tract.model;
 
 import android.support.annotation.CallSuper;
 import android.support.annotation.ColorInt;
+import android.support.annotation.DimenRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -100,6 +101,11 @@ abstract class Base {
     @ColorInt
     public int getTextColor() {
         return Styles.getTextColor(getStylesParent());
+    }
+
+    @DimenRes
+    public int getTextSize() {
+        return Styles.getTextSize(getStylesParent());
     }
 
     @ColorInt
