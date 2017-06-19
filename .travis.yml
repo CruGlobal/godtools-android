@@ -21,8 +21,7 @@ android:
   components:
     - tools
     - platform-tools
-    - build-tools-26.0.0
-    - android-25
+    - extra-google-m2repository
 
     # system image for testing
     - $ANDROID_TARGET
@@ -39,6 +38,9 @@ cache:
     - $HOME/.gradle/wrapper/
 
 before_script:
+  # Install SDK license so Android Gradle plugin can install deps.
+  - mkdir -p ${ANDROID_HOME}licenses
+  - echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
   # Emulator Management: Create, Start and Wait
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
   - emulator -avd test -no-skin -no-audio -no-window &
