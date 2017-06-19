@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
+import com.annimon.stream.Stream;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
@@ -17,7 +19,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -27,14 +28,18 @@ import static org.cru.godtools.tract.model.CallToAction.XML_CALL_TO_ACTION;
 import static org.cru.godtools.tract.model.Card.XML_CARD;
 import static org.cru.godtools.tract.model.Header.XML_HEADER;
 import static org.cru.godtools.tract.model.Hero.XML_HERO;
+import static org.cru.godtools.tract.model.Modal.XML_MODAL;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.model.Utils.parseScaleType;
 
-public final class Page extends Base implements Container {
+public final class Page extends Base implements Styles {
     static final String XML_PAGE = "page";
     private static final String XML_LISTENERS = "listeners";
+    private static final String XML_MANIFEST_FILENAME = "filename";
     private static final String XML_MANIFEST_SRC = "src";
     private static final String XML_CARDS = "cards";
+    private static final String XML_MODALS = "modals";
+    private static final String XML_CARD_TEXT_COLOR = "card-text-color";
 
     @ColorInt
     private static final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
@@ -43,6 +48,8 @@ public final class Page extends Base implements Container {
 
     private final int mPosition;
 
+    @Nullable
+    private String mFileName;
     @Nullable
     private String mLocalFileName;
     private boolean mPageXmlParsed = false;
@@ -59,6 +66,9 @@ public final class Page extends Base implements Container {
     @Nullable
     @ColorInt
     private Integer mTextColor = null;
+    @Nullable
+    @ColorInt
+    private Integer mCardTextColor = null;
     @ColorInt
     private int mBackgroundColor = DEFAULT_BACKGROUND_COLOR;
     @Nullable
@@ -72,6 +82,7 @@ public final class Page extends Base implements Container {
     @Nullable
     private Hero mHero;
     private final List<Card> mCards = new ArrayList<>();
+    private List<Modal> mModals = ImmutableList.of();
     @NonNull
     private CallToAction mCallToAction;
 
@@ -79,6 +90,15 @@ public final class Page extends Base implements Container {
         super(manifest);
         mPosition = position;
         mCallToAction = new CallToAction(this);
+    }
+
+    @NonNull
+    public String getId() {
+        if (mFileName != null) {
+            return mFileName;
+        }
+
+        return getManifest().getCode() + "-" + mPosition;
     }
 
     @NonNull
@@ -101,18 +121,26 @@ public final class Page extends Base implements Container {
     }
 
     @ColorInt
+    @Override
     public int getPrimaryColor() {
-        return mPrimaryColor != null ? mPrimaryColor : getManifest().getPrimaryColor();
+        return mPrimaryColor != null ? mPrimaryColor : Styles.getPrimaryColor(getStylesParent());
     }
 
     @ColorInt
+    @Override
     public int getPrimaryTextColor() {
-        return mPrimaryTextColor != null ? mPrimaryTextColor : getManifest().getPrimaryTextColor();
+        return mPrimaryTextColor != null ? mPrimaryTextColor : Styles.getPrimaryTextColor(getStylesParent());
     }
 
     @ColorInt
+    @Override
     public int getTextColor() {
-        return mTextColor != null ? mTextColor : getManifest().getTextColor();
+        return mTextColor != null ? mTextColor : Styles.getTextColor(getStylesParent());
+    }
+
+    @ColorInt
+    int getCardTextColor() {
+        return mCardTextColor != null ? mCardTextColor : getTextColor();
     }
 
     @ColorInt
@@ -144,7 +172,18 @@ public final class Page extends Base implements Container {
 
     @NonNull
     public List<Card> getCards() {
-        return Collections.unmodifiableList(mCards);
+        return ImmutableList.copyOf(mCards);
+    }
+
+    public List<Modal> getModals() {
+        return mModals;
+    }
+
+    @Nullable
+    public Modal findModal(@Nullable final String id) {
+        return Stream.of(mModals)
+                .filter(m -> m.getId().equalsIgnoreCase(id))
+                .findFirst().orElse(null);
     }
 
     @NonNull
@@ -164,6 +203,7 @@ public final class Page extends Base implements Container {
     private Page parseManifestXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGE);
 
+        mFileName = parser.getAttributeValue(null, XML_MANIFEST_FILENAME);
         mLocalFileName = parser.getAttributeValue(null, XML_MANIFEST_SRC);
 
         // discard any nested nodes
@@ -184,6 +224,7 @@ public final class Page extends Base implements Container {
         mPrimaryColor = parseColor(parser, XML_PRIMARY_COLOR, mPrimaryColor);
         mPrimaryTextColor = parseColor(parser, XML_PRIMARY_TEXT_COLOR, mPrimaryTextColor);
         mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
+        mCardTextColor = parseColor(parser, XML_CARD_TEXT_COLOR, mCardTextColor);
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
         mBackgroundImageGravity = ImageGravity.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageGravity);
@@ -207,6 +248,9 @@ public final class Page extends Base implements Container {
                             continue;
                         case XML_CARDS:
                             parseCardsXml(parser);
+                            continue;
+                        case XML_MODALS:
+                            parseModalsXml(parser);
                             continue;
                         case XML_CALL_TO_ACTION:
                             mCallToAction = CallToAction.fromXml(this, parser);
@@ -246,6 +290,33 @@ public final class Page extends Base implements Container {
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
+    }
+
+    private void parseModalsXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_MODALS);
+
+        // process any child elements
+        final List<Modal> modals = new ArrayList<>();
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+
+            // process recognized nodes
+            switch (parser.getNamespace()) {
+                case XMLNS_TRACT:
+                    switch (parser.getName()) {
+                        case XML_MODAL:
+                            modals.add(Modal.fromXml(this, parser, modals.size()));
+                            continue;
+                    }
+                    break;
+            }
+
+            // skip unrecognized nodes
+            XmlPullParserUtils.skipTag(parser);
+        }
+        mModals = ImmutableList.copyOf(modals);
     }
 
     public static void bindBackgroundImage(@Nullable final Page page, @NonNull final ScaledPicassoImageView view) {

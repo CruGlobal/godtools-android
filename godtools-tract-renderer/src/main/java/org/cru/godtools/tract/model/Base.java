@@ -1,6 +1,8 @@
 package org.cru.godtools.tract.model;
 
 import android.support.annotation.CallSuper;
+import android.support.annotation.ColorInt;
+import android.support.annotation.DimenRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +16,7 @@ import com.annimon.stream.Stream;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.model.Parent.ParentViewHolder;
+import org.cru.godtools.tract.model.Text.Align;
 import org.greenrobot.eventbus.EventBus;
 import org.xmlpull.v1.XmlPullParser;
 
@@ -42,7 +45,7 @@ abstract class Base {
     }
 
     @NonNull
-    protected Manifest getManifest() {
+    public Manifest getManifest() {
         if (mParent == this) {
             throw new IllegalStateException();
         } else {
@@ -69,20 +72,54 @@ abstract class Base {
     }
 
     @Nullable
-    Container getContainer() {
-        if (mParent instanceof Container) {
-            return (Container) mParent;
-        } else if (mParent != this) {
-            return mParent.getContainer();
-        } else {
+    Styles getStylesParent() {
+        if (mParent == this) {
             return null;
+        } else if (mParent instanceof Styles) {
+            return (Styles) mParent;
+        } else {
+            return mParent.getStylesParent();
         }
     }
 
     @Nullable
-    static Container getContainer(@Nullable final Base obj) {
-        return obj != null ? obj.getContainer() : null;
+    static Styles getStylesParent(@Nullable final Base obj) {
+        return obj != null ? obj.getStylesParent() : null;
     }
+
+    /* BEGIN: Styles default methods */
+
+    @ColorInt
+    public int getPrimaryColor() {
+        return Styles.getPrimaryColor(getStylesParent());
+    }
+
+    @ColorInt
+    public int getPrimaryTextColor() {
+        return Styles.getPrimaryTextColor(getStylesParent());
+    }
+
+    @ColorInt
+    public int getTextColor() {
+        return Styles.getTextColor(getStylesParent());
+    }
+
+    @DimenRes
+    public int getTextSize() {
+        return Styles.getTextSize(getStylesParent());
+    }
+
+    @NonNull
+    public Align getTextAlign() {
+        return Styles.getTextAlign(getStylesParent());
+    }
+
+    @ColorInt
+    public int getButtonColor() {
+        return getPrimaryColor();
+    }
+
+    /* END: Styles default methods */
 
     @NonNull
     final Set<Event.Id> parseEvents(@NonNull final XmlPullParser parser, @NonNull final String attribute) {
@@ -105,9 +142,14 @@ abstract class Base {
 
         BaseViewHolder(@NonNull final Class<T> modelType, @NonNull final ViewGroup parent, @LayoutRes final int layout,
                        @Nullable final ParentViewHolder<?> parentViewHolder) {
+            this(modelType, LayoutInflater.from(parent.getContext()).inflate(layout, parent, false), parentViewHolder);
+        }
+
+        BaseViewHolder(@NonNull final Class<T> modelType, @NonNull final View root,
+                       @Nullable final ParentViewHolder<?> parentViewHolder) {
             mParentViewHolder = parentViewHolder;
             mModelType = modelType;
-            mRoot = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
+            mRoot = root;
             ButterKnife.bind(this, mRoot);
             mRoot.setTag(R.id.view_holder, this);
         }

@@ -34,7 +34,7 @@ import butterknife.OnClick;
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.model.Text.XML_TEXT;
 
-public final class Button extends Content {
+public final class Button extends Content implements Styles {
     static final String XML_BUTTON = "button";
     private static final String XML_COLOR = "color";
     private static final String XML_TYPE = "type";
@@ -43,7 +43,7 @@ public final class Button extends Content {
     private static final String XML_URL = "url";
     private static final String XML_EVENTS = "events";
 
-    static final Align DEFAULT_TEXT_ALIGN = Align.CENTER;
+    private static final Align DEFAULT_TEXT_ALIGN = Align.CENTER;
 
     private enum Type {
         EVENT, URL, UNKNOWN;
@@ -82,13 +82,24 @@ public final class Button extends Content {
     }
 
     @ColorInt
-    public int getColor() {
-        return mColor != null ? mColor : Container.getPrimaryColor(getContainer());
+    public int getButtonColor() {
+        return mColor != null ? mColor : Styles.getButtonColor(getStylesParent());
     }
 
     @ColorInt
-    static int getColor(@Nullable final Button button) {
-        return button != null ? button.getColor() : Container.getPrimaryColor(null);
+    static int getButtonColor(@Nullable final Button button) {
+        return button != null ? button.getButtonColor() : Styles.getButtonColor(null);
+    }
+
+    @Override
+    public int getTextColor() {
+        return getPrimaryTextColor();
+    }
+
+    @NonNull
+    @Override
+    public Align getTextAlign() {
+        return DEFAULT_TEXT_ALIGN;
     }
 
     @WorkerThread
@@ -152,8 +163,8 @@ public final class Button extends Content {
         void onBind() {
             super.onBind();
             final Text text = mModel != null ? mModel.mText : null;
-            Text.bind(text, mButton, Container.getPrimaryTextColor(getContainer(mModel)), DEFAULT_TEXT_ALIGN);
-            ViewCompat.setBackgroundTintList(mButton, ColorStateList.valueOf(getColor(mModel)));
+            Text.bind(text, mButton);
+            ViewCompat.setBackgroundTintList(mButton, ColorStateList.valueOf(getButtonColor(mModel)));
         }
 
         /* END lifecycle */

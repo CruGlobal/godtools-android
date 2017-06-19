@@ -32,12 +32,16 @@ import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.model.Utils.parseScaleType;
 import static org.cru.godtools.tract.util.ViewUtils.getTopOffset;
 
-public final class Card extends Base implements Container, Parent {
+public final class Card extends Base implements Styles, Parent {
     static final String XML_CARD = "card";
     private static final String XML_LABEL = "label";
 
     private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL_X;
     private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
+
+    @Nullable
+    @ColorInt
+    private Integer mTextColor;
 
     @Nullable
     @ColorInt
@@ -54,23 +58,13 @@ public final class Card extends Base implements Container, Parent {
     @NonNull
     private List<Content> mContent = ImmutableList.of();
 
-    private Card(@NonNull final Base parent) {
+    private Card(@NonNull final Page parent) {
         super(parent);
     }
 
     @Override
-    public int getPrimaryColor() {
-        return Container.getPrimaryColor(getContainer());
-    }
-
-    @Override
-    public int getPrimaryTextColor() {
-        return Container.getPrimaryTextColor(getContainer());
-    }
-
-    @Override
     public int getTextColor() {
-        return Container.getTextColor(getContainer());
+        return mTextColor != null ? mTextColor : getPage().getCardTextColor();
     }
 
     @ColorInt
@@ -104,7 +98,7 @@ public final class Card extends Base implements Container, Parent {
     }
 
     @NonNull
-    static Card fromXml(@NonNull final Base parent, @NonNull final XmlPullParser parser)
+    static Card fromXml(@NonNull final Page parent, @NonNull final XmlPullParser parser)
             throws IOException, XmlPullParserException {
         return new Card(parent).parse(parser);
     }
@@ -113,6 +107,7 @@ public final class Card extends Base implements Container, Parent {
     private Card parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CARD);
 
+        mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
         mBackgroundImageGravity = ImageGravity.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageGravity);
@@ -167,12 +162,9 @@ public final class Card extends Base implements Container, Parent {
         @BindView(R2.id.label_divider)
         View mDivider;
 
-        private final float mLabelTextSize;
-
         CardViewHolder(@NonNull final ViewGroup parent) {
             super(Card.class, parent, R.layout.tract_content_card, null);
             AutoAttachingGlobalLayoutListener.attach(mRoot, this::updatePeekHeights);
-            mLabelTextSize = mRoot.getResources().getDimension(R.dimen.text_size_card_label);
         }
 
         @Override
@@ -191,8 +183,8 @@ public final class Card extends Base implements Container, Parent {
 
         private void bindLabel() {
             final Text label = mModel != null ? mModel.mLabel : null;
-            Text.bind(label, mLabel, Container.getPrimaryColor(mModel), mLabelTextSize);
-            mDivider.setBackgroundColor(Container.getTextColor(mModel));
+            Text.bind(label, mLabel, Styles.getPrimaryColor(mModel), R.dimen.text_size_card_label);
+            mDivider.setBackgroundColor(Styles.getTextColor(mModel));
         }
 
         // XXX: this should be handled by PageContentLayout utilizing configuration within the LayoutParams

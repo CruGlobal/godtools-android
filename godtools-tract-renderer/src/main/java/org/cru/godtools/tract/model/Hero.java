@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.model;
 
+import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -19,7 +20,7 @@ import butterknife.ButterKnife;
 
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 
-public final class Hero extends Base implements Container {
+public final class Hero extends Base implements Styles {
     static final String XML_HERO = "hero";
     private static final String XML_HEADING = "heading";
 
@@ -35,19 +36,10 @@ public final class Hero extends Base implements Container {
         super(parent);
     }
 
+    @DimenRes
     @Override
-    public int getPrimaryColor() {
-        return getPage().getPrimaryColor();
-    }
-
-    @Override
-    public int getPrimaryTextColor() {
-        return getPage().getPrimaryTextColor();
-    }
-
-    @Override
-    public int getTextColor() {
-        return getPage().getTextColor();
+    public int getTextSize() {
+        return R.dimen.text_size_hero;
     }
 
     @NonNull
@@ -110,8 +102,7 @@ public final class Hero extends Base implements Container {
         if (view != null) {
             if (heading != null) {
                 view.setVisibility(View.VISIBLE);
-                final float textSize = view.getResources().getDimension(R.dimen.text_size_hero);
-                Text.bind(heading, view, heading.getPage().getPrimaryColor(), textSize, DEFAULT_HEADING_TEXT_SCALE);
+                Text.bind(heading, view, heading.getPrimaryColor(), DEFAULT_HEADING_TEXT_SCALE);
             } else {
                 view.setVisibility(View.GONE);
             }

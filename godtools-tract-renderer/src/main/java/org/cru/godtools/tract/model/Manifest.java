@@ -2,13 +2,19 @@ package org.cru.godtools.tract.model;
 
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
+import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.SimpleArrayMap;
 
+import com.annimon.stream.Stream;
+import com.google.common.collect.ImmutableList;
+
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.cru.godtools.tract.R;
+import org.cru.godtools.tract.model.Text.Align;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.xmlpull.v1.XmlPullParser;
@@ -16,14 +22,14 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.model.Utils.parseScaleType;
 
-public final class Manifest extends Base implements Container {
+public final class Manifest extends Base implements Styles {
     private static final String XML_MANIFEST = "manifest";
     private static final String XML_TITLE = "title";
     private static final String XML_NAVBAR_COLOR = "navbar-color";
@@ -42,9 +48,16 @@ public final class Manifest extends Base implements Container {
     private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL;
     private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
 
+    @NonNull
+    private final String mManifestName;
+
     // XXX: for now we will make this fixed
     @NonNull
-    private final String mCode = "placeholder";
+    private final String mCode = "kgp";
+    @Deprecated
+    private final long mToolId;
+    @NonNull
+    private final Locale mLocale;
 
     @ColorInt
     private int mPrimaryColor = DEFAULT_PRIMARY_COLOR;
@@ -70,24 +83,43 @@ public final class Manifest extends Base implements Container {
     @Nullable
     private Text mTitle;
 
-    private final List<Page> mPages = new ArrayList<>();
+    @NonNull
+    private List<Page> mPages = ImmutableList.of();
     @VisibleForTesting
     final SimpleArrayMap<String, Resource> mResources = new SimpleArrayMap<>();
 
     @VisibleForTesting
-    Manifest() {
+    Manifest(@NonNull final String manifestName, final long toolId, @NonNull final Locale locale) {
         super();
+        mManifestName = manifestName;
+        mToolId = toolId;
+        mLocale = locale;
     }
 
     @NonNull
     @Override
-    protected Manifest getManifest() {
+    public Manifest getManifest() {
         return this;
+    }
+
+    @NonNull
+    public String getManifestName() {
+        return mManifestName;
+    }
+
+    @Deprecated
+    public long getToolId() {
+        return mToolId;
     }
 
     @NonNull
     String getCode() {
         return mCode;
+    }
+
+    @NonNull
+    public Locale getLocale() {
+        return mLocale;
     }
 
     @Nullable
@@ -97,7 +129,15 @@ public final class Manifest extends Base implements Container {
 
     @NonNull
     public List<Page> getPages() {
-        return Collections.unmodifiableList(mPages);
+        return mPages;
+    }
+
+    @Nullable
+    public Page findPage(@Nullable final String id) {
+        return Stream.of(mPages)
+                .filter(p -> p.getId().equalsIgnoreCase(id))
+                .findFirst()
+                .orElse(null);
     }
 
     @Nullable
@@ -111,6 +151,7 @@ public final class Manifest extends Base implements Container {
     }
 
     @ColorInt
+    @Override
     public int getPrimaryColor() {
         return mPrimaryColor;
     }
@@ -121,6 +162,7 @@ public final class Manifest extends Base implements Container {
     }
 
     @ColorInt
+    @Override
     public int getPrimaryTextColor() {
         return mPrimaryTextColor;
     }
@@ -130,6 +172,7 @@ public final class Manifest extends Base implements Container {
         return DEFAULT_PRIMARY_TEXT_COLOR;
     }
 
+    @ColorInt
     @Override
     public int getTextColor() {
         return mTextColor;
@@ -138,6 +181,16 @@ public final class Manifest extends Base implements Container {
     @ColorInt
     static int getDefaultTextColor() {
         return DEFAULT_TEXT_COLOR;
+    }
+
+    @DimenRes
+    static int getDefaultTextSize() {
+        return R.dimen.text_size_base;
+    }
+
+    @NonNull
+    static Align getDefaultTextAlign() {
+        return Align.DEFAULT;
     }
 
     @ColorInt
@@ -160,19 +213,21 @@ public final class Manifest extends Base implements Container {
     @ColorInt
     public static int getNavBarColor(@Nullable final Manifest manifest) {
         return manifest != null && manifest.mNavBarColor != null ? manifest.mNavBarColor :
-                Container.getPrimaryColor(manifest);
+                Styles.getPrimaryColor(manifest);
     }
 
     @ColorInt
     public static int getNavBarControlColor(@Nullable final Manifest manifest) {
         return manifest != null && manifest.mNavBarControlColor != null ? manifest.mNavBarControlColor :
-                Container.getPrimaryTextColor(manifest);
+                Styles.getPrimaryTextColor(manifest);
     }
 
     @NonNull
     @WorkerThread
-    public static Manifest fromXml(@NonNull final XmlPullParser parser) throws XmlPullParserException, IOException {
-        return new Manifest().parse(parser);
+    public static Manifest fromXml(@NonNull final XmlPullParser parser, @NonNull final String manifestName,
+                                   final long toolId, @NonNull final Locale locale)
+            throws XmlPullParserException, IOException {
+        return new Manifest(manifestName, toolId, locale).parse(parser);
     }
 
     @NonNull
@@ -225,6 +280,7 @@ public final class Manifest extends Base implements Container {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGES);
 
         // process any child elements
+        final List<Page> pages = new ArrayList<>();
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -235,7 +291,7 @@ public final class Manifest extends Base implements Container {
                 case XMLNS_MANIFEST:
                     switch (parser.getName()) {
                         case Page.XML_PAGE:
-                            mPages.add(Page.fromManifestXml(this, mPages.size(),  parser));
+                            pages.add(Page.fromManifestXml(this, pages.size(), parser));
                             continue;
                     }
                     break;
@@ -244,6 +300,7 @@ public final class Manifest extends Base implements Container {
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
+        mPages = ImmutableList.copyOf(pages);
     }
 
     @WorkerThread

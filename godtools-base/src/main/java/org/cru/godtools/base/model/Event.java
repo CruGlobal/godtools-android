@@ -17,12 +17,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public final class Event {
     @NonNull
-    private final Id mId;
+    public final Id id;
     @NonNull
     private final Map<String, String> mFields;
 
     Event(@NonNull final Builder builder) {
-        mId = checkNotNull(builder.mId);
+        id = checkNotNull(builder.mId);
         mFields = ImmutableMap.copyOf(builder.mFields);
     }
 

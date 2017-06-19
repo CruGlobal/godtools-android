@@ -1,10 +1,13 @@
 package org.cru.godtools.tract.model;
 
+import android.content.res.ColorStateList;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 import android.support.design.widget.TextInputLayout;
+import android.support.design.widget.TextInputLayoutUtils;
+import android.support.v4.view.ViewCompat;
 import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
@@ -153,6 +156,11 @@ public final class Input extends Content {
         @BindView(R2.id.input)
         EditText mInputView;
 
+        @Nullable
+        private Text mLabel;
+        @Nullable
+        private Text mPlaceholder;
+
         InputViewHolder(@NonNull final ViewGroup parent, @Nullable final ParentViewHolder parentViewHolder) {
             super(Input.class, parent, R.layout.tract_content_input, parentViewHolder);
         }
@@ -160,8 +168,18 @@ public final class Input extends Content {
         @Override
         void onBind() {
             super.onBind();
+            if (mModel != null) {
+                mLabel = mModel.mLabel;
+                mPlaceholder = mModel.mPlaceholder;
+            } else {
+                mLabel = null;
+                mPlaceholder = null;
+            }
+
             mRoot.setVisibility(mModel != null && mModel.mType == Type.HIDDEN ? View.GONE : View.VISIBLE);
-            setupInput();
+            bindLabel();
+            bindPlaceholder();
+            bindInput();
         }
 
         /* BEGIN lifecycle */
@@ -187,7 +205,16 @@ public final class Input extends Content {
             if (valid) {
                 showError(null);
             } else {
-                showError("");
+                final int resId;
+                switch (mModel.mType) {
+                    case EMAIL:
+                        resId = R.string.followup_modal_input_invalid_email;
+                        break;
+                    default:
+                        resId = R.string.followup_modal_input_invalid_generic;
+                        break;
+                }
+                showError(mRoot.getResources().getString(resId, mModel.mName, getValue()));
             }
 
             return valid;
@@ -205,7 +232,39 @@ public final class Input extends Content {
 
         /* END lifecycle */
 
-        private void setupInput() {
+        private void bindLabel() {
+            final Text labelStyles = mLabel != null ? mLabel : mPlaceholder;
+            if (mInputLayout != null) {
+                TextInputLayoutUtils.setCollapsedTextColor(mInputLayout, Text.getTextColor(labelStyles));
+            }
+
+        }
+
+        private void bindPlaceholder() {
+            // setup the hint, prefer the label (unless we have a separate label view or no label is defined)
+            Text hintText = mLabel;
+            if (mLabelView != null || hintText == null) {
+                hintText = mPlaceholder;
+            }
+
+            // set the hint on the layout or the actual input (based on what's available)
+            if (mInputLayout != null) {
+                mInputLayout.setHint(Text.getText(hintText));
+            } else if (mInputView != null) {
+                mInputView.setHint(Text.getText(hintText));
+            }
+
+            // update placeholder styles
+            final Text hintStyles = mPlaceholder != null ? mPlaceholder : mLabel;
+            final int hintColor = Text.getTextColor(hintStyles);
+            if (mInputLayout != null) {
+                TextInputLayoutUtils.setExpandedTextColor(mInputLayout, hintColor);
+            } else if (mInputView != null) {
+                mInputView.setHintTextColor(hintColor);
+            }
+        }
+
+        private void bindInput() {
             // setup inputType
             if (mInputView != null) {
                 int inputType = InputType.TYPE_CLASS_TEXT;
@@ -220,20 +279,12 @@ public final class Input extends Content {
                 mInputView.setInputType(inputType);
             }
 
-            // setup the hint, prefer the label (unless we have a separate label view or no label is defined)
-            String hint = null;
-            if (mModel != null) {
-                hint = Text.getText(mModel.mLabel);
-                if (mLabelView != null || hint == null) {
-                    hint = Text.getText(mModel.mPlaceholder);
-                }
-            }
-
-            // set the hint on the layout or the actual input (based on what's available)
-            if (mInputLayout != null) {
-                mInputLayout.setHint(hint);
-            } else if (mInputView != null) {
-                mInputView.setHint(hint);
+            // style the input view
+            final Styles stylesParent = getStylesParent(mModel);
+            if (mInputView != null) {
+                mInputView.setTextColor(Styles.getTextColor(stylesParent));
+                ViewCompat.setBackgroundTintList(mInputView,
+                                                 ColorStateList.valueOf(Styles.getPrimaryColor(stylesParent)));
             }
         }
 

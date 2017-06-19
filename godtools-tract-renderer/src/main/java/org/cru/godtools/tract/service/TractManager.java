@@ -2,6 +2,7 @@ package org.cru.godtools.tract.service;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.LruCache;
@@ -15,16 +16,21 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
+import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.support.v4.util.WeakLruCache;
 import org.cru.godtools.base.util.FileUtils;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Page;
+import org.keynote.godtools.android.db.Contract.TranslationTable;
+import org.keynote.godtools.android.db.GodToolsDao;
+import org.keynote.godtools.android.model.Translation;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +44,8 @@ public class TractManager {
 
     @NonNull
     private final Context mContext;
+    @NonNull
+    private final GodToolsDao mDao;
     private final ThreadPoolExecutor mExecutor;
 
     @Nullable
@@ -53,17 +61,54 @@ public class TractManager {
 
     private TractManager(@NonNull final Context context) {
         mContext = context;
+        mDao = GodToolsDao.getInstance(mContext);
         mExecutor = new ThreadPoolExecutor(0, PARSING_CONCURRENCY, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<>(),
                                            new NamedThreadFactory(TractManager.class.getSimpleName()));
     }
 
     @NonNull
-    public ListenableFuture<Manifest> getManifest(@NonNull final String manifestName) {
-        return getManifest(manifestName, false);
+    public ListenableFuture<Manifest> getLatestPublishedManifest(final long toolId, @NonNull final Locale locale) {
+        final SettableFuture<Translation> latestTranslation = SettableFuture.create();
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> latestTranslation.set(
+                mDao.streamCompat(
+                        Query.select(Translation.class)
+                                .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(toolId, locale)
+                                               .and(TranslationTable.SQL_WHERE_PUBLISHED)
+                                               .and(TranslationTable.SQL_WHERE_DOWNLOADED))
+                                .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
+                                .limit(1))
+                        .findFirst()
+                        .orElse(null)));
+
+        return Futures.transformAsync(latestTranslation, this::getManifest, directExecutor());
     }
 
     @NonNull
-    public ListenableFuture<Manifest> getManifest(@NonNull final String manifestName, final boolean forceReload) {
+    public ListenableFuture<Manifest> getManifest(@Nullable final Translation translation) {
+        // short-circuit if we don't have a translation
+        if (translation == null) {
+            return Futures.immediateFuture(null);
+        }
+
+        // short-circuit if there isn't a manifest file name
+        final String manifestName = translation.getManifestFileName();
+        if (manifestName == null) {
+            return Futures.immediateFuture(null);
+        }
+
+        // return the actual manifest
+        return getManifest(manifestName, translation.getToolId(), translation.getLanguageCode(), false);
+    }
+
+    @NonNull
+    public ListenableFuture<Manifest> getManifest(@NonNull final String manifestName, final long toolId,
+                                                  @NonNull final Locale locale) {
+        return getManifest(manifestName, toolId, locale, false);
+    }
+
+    @NonNull
+    private ListenableFuture<Manifest> getManifest(@NonNull final String manifestName, final long toolId,
+                                                   @NonNull final Locale locale, final boolean forceReload) {
         synchronized (mCache) {
             if (!forceReload) {
                 // check to see if this manifest is already loaded (or currently loading)
@@ -74,24 +119,21 @@ public class TractManager {
             }
 
             // trigger a background load of this manifest
-            final ListenableFuture<Manifest> manifest = loadManifest(manifestName);
+            final ListenableFuture<Manifest> manifest = loadManifest(manifestName, toolId, locale);
             mCache.put(manifestName, manifest);
             return manifest;
         }
     }
 
     @NonNull
-    private ListenableFuture<Manifest> loadManifest(@NonNull final String manifestName) {
+    private ListenableFuture<Manifest> loadManifest(@NonNull final String manifestName, final long toolId,
+                                                    @NonNull final Locale locale) {
         // load the manifest
         final SettableFuture<Manifest> manifestTask = SettableFuture.create();
         mExecutor.execute(() -> {
             try {
                 // find the file on disk
                 final File file = FileUtils.getFile(mContext, manifestName);
-                if (file == null) {
-                    manifestTask.set(null);
-                    return;
-                }
 
                 // parse the Manifest from the specified XML file
                 final Manifest manifest;
@@ -102,7 +144,7 @@ public class TractManager {
                     parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
                     parser.setInput(in, "UTF-8");
                     parser.nextTag();
-                    manifest = Manifest.fromXml(parser);
+                    manifest = Manifest.fromXml(parser, manifestName, toolId, locale);
                 } catch (final Throwable t) {
                     throw closer.rethrow(t);
                 } finally {

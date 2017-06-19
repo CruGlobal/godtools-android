@@ -7,5 +7,6 @@
     <android.support.design.widget.TextInputEditText
         android:id="@+id/input"
         android:layout_width="match_parent"
+        android:textCursorDrawable="@null"
         android:layout_height="wrap_content" />
 </android.support.design.widget.TextInputLayout>

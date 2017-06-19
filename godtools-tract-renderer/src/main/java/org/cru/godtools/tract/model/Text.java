@@ -1,6 +1,7 @@
 package org.cru.godtools.tract.model;
 
 import android.support.annotation.ColorInt;
+import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
@@ -34,11 +35,12 @@ public final class Text extends Content {
     private static final String XML_TEXT_ALIGN_END = "end";
     private static final String XML_TEXT_SCALE = "text-scale";
 
-    private static final Align DEFAULT_TEXT_ALIGN = Align.START;
     private static final double DEFAULT_TEXT_SCALE = 1.0;
 
     enum Align {
         START(Gravity.START), CENTER(Gravity.CENTER_HORIZONTAL), END(Gravity.END);
+
+        public static final Align DEFAULT = START;
 
         final int mGravity;
 
@@ -79,13 +81,28 @@ public final class Text extends Content {
     }
 
     @NonNull
-    private Align getTextAlign(@NonNull final Align defAlign) {
-        return mTextAlign != null ? mTextAlign : defAlign;
+    public Align getTextAlign() {
+        return mTextAlign != null ? mTextAlign : Styles.getTextAlign(getStylesParent());
+    }
+
+    @NonNull
+    private static Align getTextAlign(@Nullable final Text text) {
+        return text != null ? text.getTextAlign() : Align.DEFAULT;
+    }
+
+    @Override
+    public int getTextColor() {
+        return mTextColor != null ? mTextColor : Styles.getTextColor(getStylesParent());
     }
 
     @ColorInt
     private int getTextColor(@ColorInt final int defColor) {
         return mTextColor != null ? mTextColor : defColor;
+    }
+
+    @ColorInt
+    static int getTextColor(@Nullable final Text text) {
+        return text != null ? text.getTextColor() : Styles.getTextColor(null);
     }
 
     private double getTextScale(final double defScale) {
@@ -150,53 +167,51 @@ public final class Text extends Content {
         return this;
     }
 
-    public static void bind(@Nullable final Text text, @Nullable final TextView view) {
-        // determine the default text color based on the closest parent container
-        bind(text, view, Container.getTextColor(getContainer(text)));
+    @ColorInt
+    private static int defaultTextColor(@Nullable final Text text) {
+        return Styles.getTextColor(getStylesParent(text));
     }
 
-    public static void bind(@Nullable final Text text, @Nullable final TextView view,
-                            @ColorInt final int defaultTextColor) {
-        bind(text, view, defaultTextColor, DEFAULT_TEXT_ALIGN);
+    @DimenRes
+    private static int textSize(@Nullable final Text text) {
+        return Styles.getTextSize(getStylesParent(text));
     }
 
-    public static void bind(@Nullable final Text text, @Nullable final TextView view,
-                            @ColorInt final int defaultTextColor, @NonNull final Align defaultAlign) {
-        if (view != null) {
-            final float textSize = view.getContext().getResources().getDimension(R.dimen.text_size_base);
-            bind(text, view, defaultTextColor, defaultAlign, textSize, DEFAULT_TEXT_SCALE);
-        }
+    static void bind(@Nullable final Text text, @Nullable final TextView view) {
+        bind(text, view, defaultTextColor(text), textSize(text), DEFAULT_TEXT_SCALE);
     }
 
-    public static void bind(@Nullable final Text text, @Nullable final TextView view,
-                            @ColorInt final int defaultTextColor, final float textSize) {
+    static void bind(@Nullable final Text text, @Nullable final TextView view, @ColorInt final int defaultTextColor,
+                     @DimenRes final int textSize) {
         bind(text, view, defaultTextColor, textSize, DEFAULT_TEXT_SCALE);
     }
 
-    public static void bind(@Nullable final Text text, @Nullable final TextView view,
-                            @ColorInt final int defaultTextColor, final float textSize, final double defaultTextScale) {
-        bind(text, view, defaultTextColor, DEFAULT_TEXT_ALIGN, textSize, defaultTextScale);
+    static void bind(@Nullable final Text text, @Nullable final TextView view, @ColorInt final int defaultTextColor,
+                     final double defaultTextScale) {
+        bind(text, view, defaultTextColor, textSize(text), defaultTextScale);
     }
 
-    public static void bind(@Nullable final Text text, @Nullable final TextView view,
-                            @ColorInt final int defaultTextColor, @NonNull final Align defaultAlign,
-                            final float textSize, final double defaultTextScale) {
+    static void bind(@Nullable final Text text, @Nullable final TextView view, final double defaultTextScale) {
+        bind(text, view, defaultTextColor(text), textSize(text), defaultTextScale);
+    }
+
+    private static void bind(@Nullable final Text text, @Nullable final TextView view,
+                             @ColorInt final int defaultTextColor, @DimenRes final int textSize,
+                             final double defaultTextScale) {
         if (view != null) {
-            final Align align;
+            final float size = view.getContext().getResources().getDimension(textSize);
             if (text != null) {
                 view.setText(text.mText);
-                view.setTextSize(COMPLEX_UNIT_PX, (float) (textSize * text.getTextScale(defaultTextScale)));
+                view.setTextSize(COMPLEX_UNIT_PX, (float) (size * text.getTextScale(defaultTextScale)));
                 view.setTextColor(text.getTextColor(defaultTextColor));
-                align = text.getTextAlign(defaultAlign);
             } else {
                 view.setText(null);
-                view.setTextSize(COMPLEX_UNIT_PX, (float) (textSize * defaultTextScale));
+                view.setTextSize(COMPLEX_UNIT_PX, (float) (size * defaultTextScale));
                 view.setTextColor(defaultTextColor);
-                align = defaultAlign;
             }
 
             // set the alignment for the text
-            view.setGravity((view.getGravity() & Gravity.VERTICAL_GRAVITY_MASK) | align.mGravity);
+            view.setGravity((view.getGravity() & Gravity.VERTICAL_GRAVITY_MASK) | Text.getTextAlign(text).mGravity);
         }
     }
 

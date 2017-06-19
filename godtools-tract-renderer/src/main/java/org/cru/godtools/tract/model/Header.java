@@ -1,6 +1,7 @@
 package org.cru.godtools.tract.model;
 
 import android.support.annotation.ColorInt;
+import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 
-public final class Header extends Base {
+public final class Header extends Base implements Styles {
     static final String XML_HEADER = "header";
     private static final String XML_NUMBER = "number";
     private static final String XML_TITLE = "title";
@@ -31,8 +32,20 @@ public final class Header extends Base {
     @Nullable
     private Text mTitle;
 
-    private Header(@NonNull final Base parent) {
+    private Header(@NonNull final Page parent) {
         super(parent);
+    }
+
+    @ColorInt
+    @Override
+    public int getTextColor() {
+        return getPrimaryTextColor();
+    }
+
+    @DimenRes
+    @Override
+    public int getTextSize() {
+        return R.dimen.text_size_header;
     }
 
     @ColorInt
@@ -40,7 +53,7 @@ public final class Header extends Base {
         return mBackgroundColor != null ? mBackgroundColor : getPage().getPrimaryColor();
     }
 
-    static Header fromXml(@NonNull final Base parent, @NonNull final XmlPullParser parser)
+    static Header fromXml(@NonNull final Page parent, @NonNull final XmlPullParser parser)
             throws IOException, XmlPullParserException {
         return new Header(parent).parse(parser);
     }
@@ -80,16 +93,14 @@ public final class Header extends Base {
     public void bindNumber(@Nullable final TextView view) {
         if (view != null) {
             view.setVisibility(mNumber != null ? View.VISIBLE : View.GONE);
-            final float textSize = view.getResources().getDimension(R.dimen.text_size_header);
-            Text.bind(mNumber, view, getPage().getPrimaryTextColor(), textSize, DEFAULT_NUMBER_TEXT_SCALE);
+            Text.bind(mNumber, view, DEFAULT_NUMBER_TEXT_SCALE);
         }
     }
 
     public void bindTitle(@Nullable final TextView view) {
         if (view != null) {
             view.setVisibility(mTitle != null ? View.VISIBLE : View.GONE);
-            final float textSize = view.getResources().getDimension(R.dimen.text_size_header);
-            Text.bind(mTitle, view, getPage().getPrimaryTextColor(), textSize);
+            Text.bind(mTitle, view);
         }
     }
 }
