@@ -205,7 +205,16 @@ public final class Input extends Content {
             if (valid) {
                 showError(null);
             } else {
-                showError("");
+                final int resId;
+                switch (mModel.mType) {
+                    case EMAIL:
+                        resId = R.string.followup_modal_input_invalid_email;
+                        break;
+                    default:
+                        resId = R.string.followup_modal_input_invalid_generic;
+                        break;
+                }
+                showError(mRoot.getResources().getString(resId, mModel.mName, getValue()));
             }
 
             return valid;

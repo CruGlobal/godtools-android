@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share">Share</string>
+
+    <string name="followup_modal_input_invalid_email">Please enter a valid email address</string>
+    <string name="followup_modal_input_invalid_generic">%1$s was not properly formatted</string>
 </resources>
