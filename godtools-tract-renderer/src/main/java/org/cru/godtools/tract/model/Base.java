@@ -72,12 +72,12 @@ abstract class Base {
 
     @Nullable
     Styles getStylesParent() {
-        if (mParent instanceof Styles) {
-            return (Styles) mParent;
-        } else if (mParent != this) {
-            return mParent.getStylesParent();
-        } else {
+        if (mParent == this) {
             return null;
+        } else if (mParent instanceof Styles) {
+            return (Styles) mParent;
+        } else {
+            return mParent.getStylesParent();
         }
     }
 
