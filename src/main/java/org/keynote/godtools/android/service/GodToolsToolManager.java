@@ -497,7 +497,8 @@ public final class GodToolsToolManager {
     private void enqueueToolBannerAttachments() {
         mDao.streamCompat(Query.select(Attachment.class)
                                   .join(Join.<Attachment, Tool>create(ToolTable.TABLE)
-                                                .on(ToolTable.FIELD_BANNER.eq(AttachmentTable.FIELD_ID)))
+                                                .on(ToolTable.FIELD_DETAILS_BANNER.eq(AttachmentTable.FIELD_ID)
+                                                            .or(ToolTable.FIELD_BANNER.eq(AttachmentTable.FIELD_ID))))
                                   .where(AttachmentTable.FIELD_DOWNLOADED.eq(false)))
                 .mapToLong(Attachment::getId)
                 .forEach(this::enqueueAttachmentDownload);
