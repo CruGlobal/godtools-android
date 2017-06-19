@@ -32,6 +32,7 @@ dependencies {
     compile "com.android.support:design:${deps.androidSupport}"
 
     compile "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-design:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
 
