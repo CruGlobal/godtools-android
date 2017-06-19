@@ -41,6 +41,10 @@ public final class Card extends Base implements Styles, Parent {
 
     @Nullable
     @ColorInt
+    private Integer mTextColor;
+
+    @Nullable
+    @ColorInt
     private Integer mBackgroundColor = null;
     @Nullable
     private String mBackgroundImage;
@@ -54,8 +58,13 @@ public final class Card extends Base implements Styles, Parent {
     @NonNull
     private List<Content> mContent = ImmutableList.of();
 
-    private Card(@NonNull final Base parent) {
+    private Card(@NonNull final Page parent) {
         super(parent);
+    }
+
+    @Override
+    public int getTextColor() {
+        return mTextColor != null ? mTextColor : getPage().getCardTextColor();
     }
 
     @ColorInt
@@ -89,7 +98,7 @@ public final class Card extends Base implements Styles, Parent {
     }
 
     @NonNull
-    static Card fromXml(@NonNull final Base parent, @NonNull final XmlPullParser parser)
+    static Card fromXml(@NonNull final Page parent, @NonNull final XmlPullParser parser)
             throws IOException, XmlPullParserException {
         return new Card(parent).parse(parser);
     }
@@ -98,6 +107,7 @@ public final class Card extends Base implements Styles, Parent {
     private Card parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CARD);
 
+        mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
         mBackgroundImageGravity = ImageGravity.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageGravity);

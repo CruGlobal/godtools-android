@@ -39,6 +39,7 @@ public final class Page extends Base implements Styles {
     private static final String XML_MANIFEST_SRC = "src";
     private static final String XML_CARDS = "cards";
     private static final String XML_MODALS = "modals";
+    private static final String XML_CARD_TEXT_COLOR = "card-text-color";
 
     @ColorInt
     private static final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
@@ -65,6 +66,9 @@ public final class Page extends Base implements Styles {
     @Nullable
     @ColorInt
     private Integer mTextColor = null;
+    @Nullable
+    @ColorInt
+    private Integer mCardTextColor = null;
     @ColorInt
     private int mBackgroundColor = DEFAULT_BACKGROUND_COLOR;
     @Nullable
@@ -117,18 +121,26 @@ public final class Page extends Base implements Styles {
     }
 
     @ColorInt
+    @Override
     public int getPrimaryColor() {
         return mPrimaryColor != null ? mPrimaryColor : Styles.getPrimaryColor(getStylesParent());
     }
 
     @ColorInt
+    @Override
     public int getPrimaryTextColor() {
         return mPrimaryTextColor != null ? mPrimaryTextColor : Styles.getPrimaryTextColor(getStylesParent());
     }
 
     @ColorInt
+    @Override
     public int getTextColor() {
         return mTextColor != null ? mTextColor : Styles.getTextColor(getStylesParent());
+    }
+
+    @ColorInt
+    int getCardTextColor() {
+        return mCardTextColor != null ? mCardTextColor : getTextColor();
     }
 
     @ColorInt
@@ -212,6 +224,7 @@ public final class Page extends Base implements Styles {
         mPrimaryColor = parseColor(parser, XML_PRIMARY_COLOR, mPrimaryColor);
         mPrimaryTextColor = parseColor(parser, XML_PRIMARY_TEXT_COLOR, mPrimaryTextColor);
         mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
+        mCardTextColor = parseColor(parser, XML_CARD_TEXT_COLOR, mCardTextColor);
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
         mBackgroundImageGravity = ImageGravity.parse(parser, XML_BACKGROUND_IMAGE_GRAVITY, mBackgroundImageGravity);
