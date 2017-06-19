@@ -21,6 +21,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -279,7 +280,7 @@ public final class Manifest extends Base implements Styles {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGES);
 
         // process any child elements
-        final ImmutableList.Builder<Page> pages = ImmutableList.builder();
+        final List<Page> pages = new ArrayList<>();
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -290,7 +291,7 @@ public final class Manifest extends Base implements Styles {
                 case XMLNS_MANIFEST:
                     switch (parser.getName()) {
                         case Page.XML_PAGE:
-                            pages.add(Page.fromManifestXml(this, mPages.size(), parser));
+                            pages.add(Page.fromManifestXml(this, pages.size(), parser));
                             continue;
                     }
                     break;
@@ -299,7 +300,7 @@ public final class Manifest extends Base implements Styles {
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
-        mPages = pages.build();
+        mPages = ImmutableList.copyOf(pages);
     }
 
     @WorkerThread
