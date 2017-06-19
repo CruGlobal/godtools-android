@@ -14,6 +14,8 @@ android {
 }
 
 dependencies {
+    implementation project(':optroundcardview')
+
     compile 'com.android.support:support-annotations:' + deps.androidSupport
     compile 'com.android.support:appcompat-v7:' + deps.androidSupport
     compile 'com.android.support:percent:' + deps.androidSupport
@@ -27,8 +29,7 @@ dependencies {
         exclude module: 'stax-api'
         exclude module: 'xpp3'
     }
-    compile project(':optroundcardview')
-    compile 'me.grantland:autofittextview:0.2.+'
+    compile 'me.grantland:autofittextview:0.2.1'
     compile 'org.greenrobot:eventbus:3.0.0'
 
     annotationProcessor 'com.jakewharton:butterknife-compiler:' + deps.butterknife

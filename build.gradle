@@ -60,6 +60,7 @@ dependencies {
     implementation project(':godtools-initial-content')
     implementation project(':godtools-model')
     implementation project(':godtools-model-events')
+    implementation project(':godtools-renderer')
     implementation project(':godtools-sync')
     compile project(':godtools-tract-renderer')
 
@@ -94,8 +95,6 @@ dependencies {
     debugCompile 'com.facebook.stetho:stetho-okhttp3:' + deps.facebookStetho
     debugCompile 'com.facebook.stetho:stetho-urlconnection:' + deps.facebookStetho
     debugCompile "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
-
-    compile project(path: ':godtools-renderer')
 
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 
