@@ -43,7 +43,7 @@ public final class Button extends Content implements Styles {
     private static final String XML_URL = "url";
     private static final String XML_EVENTS = "events";
 
-    static final Align DEFAULT_TEXT_ALIGN = Align.CENTER;
+    private static final Align DEFAULT_TEXT_ALIGN = Align.CENTER;
 
     private enum Type {
         EVENT, URL, UNKNOWN;
@@ -94,6 +94,12 @@ public final class Button extends Content implements Styles {
     @Override
     public int getTextColor() {
         return getPrimaryTextColor();
+    }
+
+    @NonNull
+    @Override
+    public Align getTextAlign() {
+        return DEFAULT_TEXT_ALIGN;
     }
 
     @WorkerThread
@@ -157,7 +163,7 @@ public final class Button extends Content implements Styles {
         void onBind() {
             super.onBind();
             final Text text = mModel != null ? mModel.mText : null;
-            Text.bind(text, mButton, DEFAULT_TEXT_ALIGN);
+            Text.bind(text, mButton);
             ViewCompat.setBackgroundTintList(mButton, ColorStateList.valueOf(getButtonColor(mModel)));
         }
 

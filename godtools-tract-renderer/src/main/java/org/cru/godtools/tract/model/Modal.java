@@ -5,6 +5,7 @@ import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -12,12 +13,16 @@ import com.google.common.collect.ImmutableSet;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
+import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.Text.Align;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+
+import butterknife.BindView;
 
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 
@@ -27,6 +32,7 @@ public final class Modal extends Base implements Parent, Styles {
     private static final String XML_LISTENERS = "listeners";
     private static final String XML_DISMISS_LISTENERS = "dismiss-listeners";
 
+    private static final Align DEFAULT_TEXT_ALIGN = Align.CENTER;
     private static final double DEFAULT_TITLE_TEXT_SCALE = 3.0;
 
     private final int mPosition;
@@ -95,6 +101,12 @@ public final class Modal extends Base implements Parent, Styles {
     }
 
     @NonNull
+    @Override
+    public Align getTextAlign() {
+        return DEFAULT_TEXT_ALIGN;
+    }
+
+    @NonNull
     static Modal fromXml(@NonNull final Base parent, @NonNull final XmlPullParser parser, final int position)
             throws IOException, XmlPullParserException {
         return new Modal(parent, position).parse(parser);
@@ -151,6 +163,10 @@ public final class Modal extends Base implements Parent, Styles {
     }
 
     public static class ModalViewHolder extends ParentViewHolder<Modal> {
+        @Nullable
+        @BindView(R2.id.title)
+        TextView mTitle;
+
         ModalViewHolder(@NonNull final View root) {
             super(Modal.class, root, null);
         }
@@ -158,6 +174,7 @@ public final class Modal extends Base implements Parent, Styles {
         @Override
         void onBind() {
             super.onBind();
+            Text.bind(mModel != null ? mModel.mTitle : null, mTitle, DEFAULT_TITLE_TEXT_SCALE);
         }
     }
 }

@@ -14,6 +14,7 @@ import com.google.common.collect.ImmutableList;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
+import org.cru.godtools.tract.model.Text.Align;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.xmlpull.v1.XmlPullParser;
@@ -182,9 +183,13 @@ public final class Manifest extends Base implements Styles {
     }
 
     @DimenRes
-    @Override
-    public int getTextSize() {
+    static int getDefaultTextSize() {
         return R.dimen.text_size_base;
+    }
+
+    @NonNull
+    static Align getDefaultTextAlign() {
+        return Align.DEFAULT;
     }
 
     @ColorInt

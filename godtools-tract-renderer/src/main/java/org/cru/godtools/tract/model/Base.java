@@ -16,6 +16,7 @@ import com.annimon.stream.Stream;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.model.Parent.ParentViewHolder;
+import org.cru.godtools.tract.model.Text.Align;
 import org.greenrobot.eventbus.EventBus;
 import org.xmlpull.v1.XmlPullParser;
 
@@ -106,6 +107,11 @@ abstract class Base {
     @DimenRes
     public int getTextSize() {
         return Styles.getTextSize(getStylesParent());
+    }
+
+    @NonNull
+    public Align getTextAlign() {
+        return Styles.getTextAlign(getStylesParent());
     }
 
     @ColorInt
