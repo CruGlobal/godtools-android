@@ -182,7 +182,8 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
             AttachmentTable.TABLE_NAME + "." + AttachmentTable.COLUMN_LOCALFILENAME + " AS " + ToolsAdapter.COL_BANNER
     };
     @SuppressWarnings("unchecked")
-    static final Join<Tool, ?>[] TOOLS_JOINS = new Join[] {ToolTable.SQL_JOIN_BANNER.type("LEFT")};
+    static final Join<Tool, ?>[] TOOLS_JOINS =
+            new Join[] {ToolTable.SQL_JOIN_BANNER.type("LEFT").andOn(AttachmentTable.SQL_WHERE_DOWNLOADED)};
 
     class CursorLoaderCallbacks extends SimpleLoaderCallbacks<Cursor> {
         @Nullable
