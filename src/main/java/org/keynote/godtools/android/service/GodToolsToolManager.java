@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
+import android.support.annotation.AnyThread;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -84,6 +86,8 @@ import static org.ccci.gto.android.common.util.ThreadUtils.getLock;
 public final class GodToolsToolManager {
     private static final int DOWNLOAD_CONCURRENCY = 4;
     private static final long CLEANER_INTERVAL_IN_MS = HOUR_IN_MS;
+
+    private static final int MSG_CLEAN = 1;
 
     private static final ReadWriteLock LOCK_FILESYSTEM = new ReentrantReadWriteLock();
     private static final LongSparseArray<Object> LOCKS_ATTACHMENTS = new LongSparseArray<>();
@@ -248,6 +252,7 @@ public final class GodToolsToolManager {
             final EventBus eventBus = EventBus.getDefault();
             if (changes > 0) {
                 eventBus.post(new TranslationUpdateEvent());
+                enqueueCleanFilesystem();
             }
         } finally {
             tx.endTransaction().recycle();
@@ -551,6 +556,7 @@ public final class GodToolsToolManager {
                 .forEach(this::enqueueAttachmentDownload);
     }
 
+    @AnyThread
     private void enqueueAttachmentDownload(final long attachmentId) {
         synchronized (mDownloadingAttachments) {
             if (!mDownloadingAttachments.get(attachmentId, false)) {
@@ -560,8 +566,20 @@ public final class GodToolsToolManager {
         }
     }
 
-    void enqueueCleanFilesystem() {
+    @AnyThread
+    private void enqueueCleanFilesystem() {
         mExecutor.execute(new CleanFileSystem());
+    }
+
+    @AnyThread
+    void scheduleNextCleanFilesystem() {
+        // remove any pending executions
+        mHandler.removeMessages(MSG_CLEAN);
+
+        // schedule another execution
+        final Message m = Message.obtain(mHandler, GodToolsToolManager.this::enqueueCleanFilesystem);
+        m.what = MSG_CLEAN;
+        mHandler.sendMessageDelayed(m, CLEANER_INTERVAL_IN_MS);
     }
 
     static final class TranslationKey {
@@ -667,9 +685,7 @@ public final class GodToolsToolManager {
         public void run() {
             detectMissingFiles();
             cleanFilesystem();
-
-            // schedule another execution
-            mHandler.postDelayed(GodToolsToolManager.this::enqueueCleanFilesystem, CLEANER_INTERVAL_IN_MS);
+            scheduleNextCleanFilesystem();
         }
     }
 }
