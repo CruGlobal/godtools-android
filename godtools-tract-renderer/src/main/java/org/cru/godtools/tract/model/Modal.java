@@ -33,7 +33,6 @@ public final class Modal extends Base implements Parent, Styles {
     private static final String XML_DISMISS_LISTENERS = "dismiss-listeners";
 
     private static final Align DEFAULT_TEXT_ALIGN = Align.CENTER;
-    private static final double DEFAULT_TITLE_TEXT_SCALE = 3.0;
 
     private final int mPosition;
 
@@ -174,7 +173,7 @@ public final class Modal extends Base implements Parent, Styles {
         @Override
         void onBind() {
             super.onBind();
-            Text.bind(mModel != null ? mModel.mTitle : null, mTitle, DEFAULT_TITLE_TEXT_SCALE);
+            Text.bind(mModel != null ? mModel.mTitle : null, mTitle, R.dimen.text_size_modal_title);
         }
     }
 }

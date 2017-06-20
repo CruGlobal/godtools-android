@@ -105,8 +105,12 @@ public final class Text extends Content {
         return text != null ? text.getTextColor() : Styles.getTextColor(null);
     }
 
-    private double getTextScale(final double defScale) {
-        return mTextScale != null ? mTextScale : defScale;
+    private double getTextScale() {
+        return mTextScale != null ? mTextScale : DEFAULT_TEXT_SCALE;
+    }
+
+    private static double getTextScale(@Nullable final Text text) {
+        return text != null ? text.getTextScale() : DEFAULT_TEXT_SCALE;
     }
 
     @Nullable
@@ -178,35 +182,24 @@ public final class Text extends Content {
     }
 
     static void bind(@Nullable final Text text, @Nullable final TextView view) {
-        bind(text, view, defaultTextColor(text), textSize(text), DEFAULT_TEXT_SCALE);
+        bind(text, view, defaultTextColor(text), textSize(text));
+    }
+
+    static void bind(@Nullable final Text text, @Nullable final TextView view, @DimenRes final int textSize) {
+        bind(text, view, defaultTextColor(text), textSize);
     }
 
     static void bind(@Nullable final Text text, @Nullable final TextView view, @ColorInt final int defaultTextColor,
                      @DimenRes final int textSize) {
-        bind(text, view, defaultTextColor, textSize, DEFAULT_TEXT_SCALE);
-    }
-
-    static void bind(@Nullable final Text text, @Nullable final TextView view, @ColorInt final int defaultTextColor,
-                     final double defaultTextScale) {
-        bind(text, view, defaultTextColor, textSize(text), defaultTextScale);
-    }
-
-    static void bind(@Nullable final Text text, @Nullable final TextView view, final double defaultTextScale) {
-        bind(text, view, defaultTextColor(text), textSize(text), defaultTextScale);
-    }
-
-    private static void bind(@Nullable final Text text, @Nullable final TextView view,
-                             @ColorInt final int defaultTextColor, @DimenRes final int textSize,
-                             final double defaultTextScale) {
         if (view != null) {
+            view.setText(Text.getText(text));
+
             final float size = view.getContext().getResources().getDimension(textSize);
+            view.setTextSize(COMPLEX_UNIT_PX, (float) (size * Text.getTextScale(text)));
+
             if (text != null) {
-                view.setText(text.mText);
-                view.setTextSize(COMPLEX_UNIT_PX, (float) (size * text.getTextScale(defaultTextScale)));
                 view.setTextColor(text.getTextColor(defaultTextColor));
             } else {
-                view.setText(null);
-                view.setTextSize(COMPLEX_UNIT_PX, (float) (size * defaultTextScale));
                 view.setTextColor(defaultTextColor);
             }
 

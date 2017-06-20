@@ -24,8 +24,6 @@ public final class Hero extends Base implements Styles {
     static final String XML_HERO = "hero";
     private static final String XML_HEADING = "heading";
 
-    private static final double DEFAULT_HEADING_TEXT_SCALE = 3.0;
-
     @Nullable
     private Text mHeading;
 
@@ -102,7 +100,7 @@ public final class Hero extends Base implements Styles {
         if (view != null) {
             if (heading != null) {
                 view.setVisibility(View.VISIBLE);
-                Text.bind(heading, view, heading.getPrimaryColor(), DEFAULT_HEADING_TEXT_SCALE);
+                Text.bind(heading, view, heading.getPrimaryColor(), R.dimen.text_size_hero_heading);
             } else {
                 view.setVisibility(View.GONE);
             }
