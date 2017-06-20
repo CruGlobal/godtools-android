@@ -22,8 +22,6 @@ public final class Header extends Base implements Styles {
     private static final String XML_NUMBER = "number";
     private static final String XML_TITLE = "title";
 
-    private static final double DEFAULT_NUMBER_TEXT_SCALE = 3.0;
-
     @Nullable
     @ColorInt
     private Integer mBackgroundColor = null;
@@ -93,7 +91,7 @@ public final class Header extends Base implements Styles {
     public void bindNumber(@Nullable final TextView view) {
         if (view != null) {
             view.setVisibility(mNumber != null ? View.VISIBLE : View.GONE);
-            Text.bind(mNumber, view, DEFAULT_NUMBER_TEXT_SCALE);
+            Text.bind(mNumber, view, R.dimen.text_size_header_number);
         }
     }
 
