@@ -21,7 +21,7 @@ public final class ViewUtils {
     }
 
     public static void bindLocalImage(@Nullable final PicassoImageView view, @Nullable final Attachment attachment) {
-        bindLocalImage(view, attachment != null ? attachment.getLocalFileName() : null);
+        bindLocalImage(view, attachment != null && attachment.isDownloaded() ? attachment.getLocalFileName() : null);
     }
 
     public static void bindLocalImage(@Nullable final PicassoImageView view, @Nullable final String filename) {

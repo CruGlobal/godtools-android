@@ -211,7 +211,7 @@ public class ToolDetailsFragment extends BaseFragment {
     private void updateBannerLoader() {
         final Loader loader = getLoaderManager().getLoader(LOADER_BANNER);
         if (loader instanceof AttachmentLoader) {
-            ((AttachmentLoader) loader).setId(mTool != null ? mTool.getBannerId() : Attachment.INVALID_ID);
+            ((AttachmentLoader) loader).setId(mTool != null ? mTool.getDetailsBannerId() : Attachment.INVALID_ID);
         }
     }
 
