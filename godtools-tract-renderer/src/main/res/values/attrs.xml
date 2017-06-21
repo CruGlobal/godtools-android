@@ -7,6 +7,9 @@
             <enum name="card" value="2" />
             <enum name="call_to_action" value="3" />
         </attr>
+        <attr name="layout_card_padding_toTopOf" format="reference" />
+        <attr name="layout_card_peek_toTopOf" format="reference" />
+        <attr name="layout_card_stack_toTopOf" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="ScaledPicassoImageView">
