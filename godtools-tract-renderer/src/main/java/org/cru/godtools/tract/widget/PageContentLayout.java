@@ -7,9 +7,12 @@ import android.os.Build;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.NestedScrollingParent;
+import android.support.v4.view.NestedScrollingParentHelper;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
@@ -22,7 +25,9 @@ import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CARD;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_HERO;
 
-public class PageContentLayout extends FrameLayout {
+public class PageContentLayout extends FrameLayout implements NestedScrollingParent {
+    private final NestedScrollingParentHelper mParentHelper;
+
     @Nullable
     private View mActiveView;
     private int mActivePosition = 0;
@@ -38,12 +43,14 @@ public class PageContentLayout extends FrameLayout {
     public PageContentLayout(@NonNull final Context context, @Nullable final AttributeSet attrs,
                              final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mParentHelper = new NestedScrollingParentHelper(this);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public PageContentLayout(@NonNull final Context context, @Nullable final AttributeSet attrs,
                              final int defStyleAttr, final int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        mParentHelper = new NestedScrollingParentHelper(this);
     }
 
     /* BEGIN lifecycle */
@@ -61,6 +68,59 @@ public class PageContentLayout extends FrameLayout {
     }
 
     /* END lifecycle */
+
+    /* BEGIN NestedScrollingParent methods */
+
+    @Override
+    public boolean onStartNestedScroll(final View child, final View target, final int nestedScrollAxes) {
+        // we return true so that we will get the onNestedFling calls from descendant NestedScrollingChild
+        return true;
+    }
+
+    @Override
+    public void onNestedScrollAccepted(final View child, final View target, final int axes) {
+        mParentHelper.onNestedScrollAccepted(child, target, axes);
+    }
+
+    @Override
+    public void onNestedPreScroll(final View target, final int dx, final int dy, final int[] consumed) {}
+
+    @Override
+    public void onNestedScroll(final View target, final int dxConsumed, final int dyConsumed, final int dxUnconsumed,
+                               final int dyUnconsumed) {}
+
+    @Override
+    public void onStopNestedScroll(final View child) {
+        mParentHelper.onStopNestedScroll(child);
+    }
+
+    @Override
+    public boolean onNestedPreFling(final View target, final float velocityX, final float velocityY) {
+        return false;
+    }
+
+    @Override
+    public boolean onNestedFling(final View target, final float velocityX, final float velocityY,
+                                 final boolean consumed) {
+        final int minVelocity = ViewConfiguration.get(target.getContext()).getScaledMinimumFlingVelocity();
+        if (velocityY <= 0 - minVelocity) {
+            changeActivePosition(mActivePosition - 1, true);
+            return true;
+        }
+        if (velocityY >= minVelocity) {
+            changeActivePosition(mActivePosition + 1, true);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public int getNestedScrollAxes() {
+        return mParentHelper.getNestedScrollAxes();
+    }
+
+    /* END NestedScrollingParent methods */
 
     public void addCardView(@NonNull final View view) {
         // find the insertion position
