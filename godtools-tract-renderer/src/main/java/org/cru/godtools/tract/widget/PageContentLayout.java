@@ -23,7 +23,9 @@ import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_HERO;
 
 public class PageContentLayout extends FrameLayout {
-    private int mActiveView = 0;
+    @Nullable
+    private View mActiveView;
+    private int mActivePosition = 0;
 
     public PageContentLayout(@NonNull final Context context) {
         this(context, null);
@@ -44,6 +46,22 @@ public class PageContentLayout extends FrameLayout {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
+    /* BEGIN lifecycle */
+
+    @Override
+    public void onViewAdded(final View child) {
+        super.onViewAdded(child);
+        changeActiveView(mActiveView, false);
+    }
+
+    @Override
+    public void onViewRemoved(final View child) {
+        super.onViewRemoved(child);
+        changeActiveView(mActiveView != child ? mActiveView : getChildAt(mActivePosition - 1), false);
+    }
+
+    /* END lifecycle */
+
     public void addCardView(@NonNull final View view) {
         // find the insertion position
         int i;
@@ -58,6 +76,51 @@ public class PageContentLayout extends FrameLayout {
         addView(view, i);
         ((LayoutParams) view.getLayoutParams()).childType = CHILD_TYPE_CARD;
         view.requestLayout();
+    }
+
+    public void changeActivePosition(final int activeView, final boolean animate) {
+        changeActiveView(getChildAt(activeView), animate);
+    }
+
+    public void changeActiveView(@Nullable final View view, final boolean animate) {
+        if (view != null && view.getParent() != this) {
+            throw new IllegalArgumentException("can't change the active view to a view that isn't a child");
+        }
+
+        // update the active view
+        final View oldActiveView = mActiveView;
+        mActiveView = view;
+        if (view != null) {
+            final LayoutParams lp = (LayoutParams) view.getLayoutParams();
+            if (lp.childType == CHILD_TYPE_CALL_TO_ACTION) {
+                mActiveView = getChildAt(indexOfChild(view) - 1);
+            }
+        }
+
+        if (oldActiveView != mActiveView) {
+            invalidate();
+            requestLayout();
+        }
+
+        updateActivePosition();
+    }
+
+    private void updateActivePosition() {
+        final int oldPosition = mActivePosition;
+        mActivePosition = indexOfChild(mActiveView);
+        if (mActivePosition == -1) {
+            mActiveView = getChildAt(0);
+            mActivePosition = 0;
+        }
+
+        if (oldPosition != mActivePosition) {
+            invalidate();
+            requestLayout();
+        }
+    }
+
+    public int getActivePosition() {
+        return mActivePosition;
     }
 
     @Override
@@ -193,15 +256,15 @@ public class PageContentLayout extends FrameLayout {
             final View child = getChildAt(i);
             if (child.getVisibility() != GONE) {
                 final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-                if (i < mActiveView) {
+                if (i < mActivePosition) {
                     layoutHiddenChild(child);
-                } else if (i == mActiveView) {
+                } else if (i == mActivePosition) {
                     layoutFullyVisibleChild(child, parentLeft, parentTop, parentRight, parentBottom);
-                } else if (lp.childType == CHILD_TYPE_CALL_TO_ACTION && mActiveView >= count - 2) {
+                } else if (lp.childType == CHILD_TYPE_CALL_TO_ACTION && mActivePosition >= count - 2) {
                     layoutFullyVisibleChild(child, parentLeft, parentTop, parentRight, parentBottom);
-                } else if (lp.childType == CHILD_TYPE_CARD && mActiveView == 0) {
+                } else if (lp.childType == CHILD_TYPE_CARD && mActivePosition == 0) {
                     layoutStackingCard(child, parentLeft, parentTop, parentRight, parentBottom);
-                } else if (lp.childType == CHILD_TYPE_CARD && mActiveView == i - 1) {
+                } else if (lp.childType == CHILD_TYPE_CARD && mActivePosition == i - 1) {
                     layoutPeekingCard(child, parentLeft, parentTop, parentRight, parentBottom);
                 } else {
                     layoutHiddenChild(child);
