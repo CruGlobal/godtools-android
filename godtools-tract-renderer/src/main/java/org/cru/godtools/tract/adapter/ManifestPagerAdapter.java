@@ -114,8 +114,6 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         @BindView(R2.id.background_image)
         ScaledPicassoImageView mBackgroundImage;
 
-        @BindView(R2.id.page_content_parent)
-        NestedScrollView mPageContentParent;
         @BindView(R2.id.page_content_layout)
         PageContentLayout mPageContentLayout;
 
@@ -150,7 +148,6 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         PageViewHolder(@NonNull final View view) {
             super(view);
             ButterKnife.bind(this, view);
-            mPageContentParent.setOnScrollChangeListener(mPageContentLayout);
         }
 
         /* BEGIN lifecycle */

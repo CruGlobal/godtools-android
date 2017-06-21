@@ -15,8 +15,6 @@ import com.google.common.collect.ImmutableList;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.util.AutoAttachingGlobalLayoutListener;
-import org.cru.godtools.tract.widget.PageContentLayout;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.cru.godtools.tract.widget.TractPicassoImageView;
 import org.xmlpull.v1.XmlPullParser;
@@ -30,7 +28,6 @@ import butterknife.BindView;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.model.Utils.parseScaleType;
-import static org.cru.godtools.tract.util.ViewUtils.getTopOffset;
 
 public final class Card extends Base implements Styles, Parent {
     static final String XML_CARD = "card";
@@ -164,7 +161,6 @@ public final class Card extends Base implements Styles, Parent {
 
         CardViewHolder(@NonNull final ViewGroup parent) {
             super(Card.class, parent, R.layout.tract_content_card, null);
-            AutoAttachingGlobalLayoutListener.attach(mRoot, this::updatePeekHeights);
         }
 
         @Override
@@ -185,25 +181,6 @@ public final class Card extends Base implements Styles, Parent {
             final Text label = mModel != null ? mModel.mLabel : null;
             Text.bind(label, mLabel, Styles.getPrimaryColor(mModel), R.dimen.text_size_card_label);
             mDivider.setBackgroundColor(Styles.getTextColor(mModel));
-        }
-
-        // XXX: this should be handled by PageContentLayout utilizing configuration within the LayoutParams
-        // XXX: we can attach/detach the GlobalLayoutListner in the PCL onAttach/onDetach.
-        // XXX: we can also track which view ids to use to calculate the peek heights
-        void updatePeekHeights() {
-            final ViewGroup.LayoutParams rawLp = mRoot.getLayoutParams();
-            if (rawLp instanceof PageContentLayout.LayoutParams) {
-                final PageContentLayout.LayoutParams lp = (PageContentLayout.LayoutParams) rawLp;
-
-                // update card peek height & padding values
-                final int cardPeekPadding = getTopOffset((ViewGroup) mRoot, mCardView);
-                final int cardPeekHeight = getTopOffset(mCardView, mDivider);
-                if (cardPeekPadding != lp.cardPeekPadding || cardPeekHeight != lp.cardPeekHeight) {
-                    lp.cardPeekPadding = cardPeekPadding;
-                    lp.cardPeekHeight = cardPeekHeight;
-                    mRoot.requestLayout();
-                }
-            }
         }
     }
 }
