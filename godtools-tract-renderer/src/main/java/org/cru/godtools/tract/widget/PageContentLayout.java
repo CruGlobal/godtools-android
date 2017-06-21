@@ -1,25 +1,29 @@
 package org.cru.godtools.tract.widget;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
+import android.widget.FrameLayout;
 
 import org.cru.godtools.tract.R;
+import org.cru.godtools.tract.util.ViewUtils;
 
+import static android.widget.FrameLayout.LayoutParams.UNSPECIFIED_GRAVITY;
+import static org.ccci.gto.android.common.base.Constants.INVALID_ID_RES;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CARD;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_HERO;
 
-public class PageContentLayout extends LinearLayoutCompat implements NestedScrollView.OnScrollChangeListener {
-    int mScrollY = 0;
+public class PageContentLayout extends FrameLayout {
+    private int mActiveView = 0;
 
     public PageContentLayout(@NonNull final Context context) {
         this(context, null);
@@ -32,6 +36,12 @@ public class PageContentLayout extends LinearLayoutCompat implements NestedScrol
     public PageContentLayout(@NonNull final Context context, @Nullable final AttributeSet attrs,
                              final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public PageContentLayout(@NonNull final Context context, @Nullable final AttributeSet attrs,
+                             final int defStyleAttr, final int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     public void addCardView(@NonNull final View view) {
@@ -51,15 +61,6 @@ public class PageContentLayout extends LinearLayoutCompat implements NestedScrol
     }
 
     @Override
-    public void onScrollChange(final NestedScrollView v, final int scrollX, final int scrollY, final int oldScrollX,
-                               final int oldScrollY) {
-        mScrollY = scrollY;
-        if (updateCardOverlap()) {
-            requestLayout();
-        }
-    }
-
-    @Override
     protected boolean checkLayoutParams(final ViewGroup.LayoutParams p) {
         return p instanceof LayoutParams;
     }
@@ -71,15 +72,13 @@ public class PageContentLayout extends LinearLayoutCompat implements NestedScrol
 
     @Override
     protected LayoutParams generateDefaultLayoutParams() {
-        return new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        return new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     }
 
     @Override
     protected LayoutParams generateLayoutParams(final ViewGroup.LayoutParams p) {
         if (p instanceof LayoutParams) {
             return new LayoutParams((LayoutParams) p);
-        } else if (p instanceof LinearLayoutCompat.LayoutParams) {
-            return new LayoutParams((LinearLayoutCompat.LayoutParams) p);
         } else if (p instanceof MarginLayoutParams) {
             return new LayoutParams((MarginLayoutParams) p);
         } else if (p != null) {
@@ -91,188 +90,178 @@ public class PageContentLayout extends LinearLayoutCompat implements NestedScrol
 
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
-        // perform measure to determine call-to-action height (if we have a call-to-action view)
-        final View callToAction = getCallToActionView();
-        if (callToAction != null) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        }
+        int count = getChildCount();
+        int i = count - 1;
 
-        // update card & hero heights
-        final int parentHeight = getParentMeasuredHeight();
-        final boolean cardsUpdated = updateCardHeights(parentHeight);
-        final boolean heroUpdated = updateHeroHeight(parentHeight);
-        final boolean cardsOverlapUpdated = updateCardOverlap();
+        // track the next card, this is next and not previous because we are walking children backwards
+        LayoutParams nextCardLp = null;
+        int callToActionHeight = 0;
+        int cardStackHeight = 0;
 
-        // perform actual measure if needed
-        if (callToAction == null || cardsUpdated || heroUpdated || cardsOverlapUpdated) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        }
-    }
+        int maxHeight = 0;
+        int maxWidth = 0;
+        int childState = 0;
 
-    private boolean updateHeroHeight(final int parentHeight) {
-        if (parentHeight <= 0) {
-            return false;
-        }
-
-        // short-circuit if we don't have any children
-        final int count = getChildCount();
-        if (count == 0) {
-            return false;
-        }
-
-        // sum up card peek heights from all cards
-        int heightOffset = 0;
-        boolean cardSeen = false;
-        for (int i = 1; i < count; ++i) {
-            final View child = getChildAt(i);
-            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-            if (lp.childType == CHILD_TYPE_CARD) {
-                if (!cardSeen) {
-                    // only adjust for padding of first card
-                    heightOffset = +lp.cardPeekPadding;
-                }
-                heightOffset += lp.cardPeekHeight;
-                cardSeen = true;
-            }
-        }
-
-        // if we don't have cards just offset height based on call to action height
-        if (!cardSeen) {
-            heightOffset = getCallToActionMeasuredHeight();
-        }
-
-        // update the height of the hero
-        final View child = getChildAt(0);
-        final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-        if (lp.childType == CHILD_TYPE_HERO && lp.dynamicHeight) {
-            final int calculatedHeight = Math.max(parentHeight - heightOffset, ViewCompat.getMinimumHeight(child));
-            if (calculatedHeight != lp.height) {
-                lp.height = calculatedHeight;
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @return true if any card layout was updated, false otherwise.
-     */
-    private boolean updateCardHeights(final int parentHeight) {
-        // short-circuit if the parent has no height
-        if (parentHeight <= 0) {
-            return false;
-        }
-
-        // update card heights if we have any and calculate card label height
-        final int callToActionHeight = getCallToActionMeasuredHeight();
-        final int height = Math.max(0, parentHeight - callToActionHeight);
-        final int count = getChildCount();
-        boolean layoutUpdated = false;
-        for (int i = 1; i < count; ++i) {
+        for (; i >= 0; i--) {
             final View child = getChildAt(i);
             if (child.getVisibility() != GONE) {
                 final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-                if (lp.childType == CHILD_TYPE_CARD) {
-                    if (lp.dynamicHeight) {
-                        if (lp.height != height) {
-                            lp.height = height;
-                            layoutUpdated = true;
+
+                // determine how much height is used by subsequent views
+                int heightUsed = 0;
+                switch (lp.childType) {
+                    case CHILD_TYPE_CARD:
+                        heightUsed = Math.max(callToActionHeight, nextCardLp != null ? nextCardLp.cardPeekOffset : 0);
+                        break;
+                    case CHILD_TYPE_HERO:
+                        if (nextCardLp != null) {
+                            heightUsed = cardStackHeight + nextCardLp.cardPaddingOffset;
+                        } else {
+                            heightUsed = callToActionHeight;
                         }
-                    }
+                        break;
+                }
+
+                measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, heightUsed);
+                maxWidth = Math.max(maxWidth, child.getMeasuredWidth() + lp.leftMargin + lp.rightMargin);
+                maxHeight =
+                        Math.max(maxHeight, child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin + heightUsed);
+                childState = combineMeasuredStates(childState, child.getMeasuredState());
+
+                // handle some specific sizing based on view type
+                switch (lp.childType) {
+                    case CHILD_TYPE_CARD:
+                        calculateCardOffsets(child);
+                        lp.siblingStackOffset = cardStackHeight;
+                        cardStackHeight += lp.cardStackOffset - lp.cardPaddingOffset;
+                        nextCardLp = lp;
+                        break;
+                    case CHILD_TYPE_CALL_TO_ACTION:
+                        // call-to-action can only be the last view
+                        if (i == count - 1) {
+                            callToActionHeight = child.getMeasuredHeight();
+                        }
+                        break;
                 }
             }
         }
 
-        return layoutUpdated;
+        // Account for padding too
+        maxWidth += getPaddingLeft() + getPaddingRight();
+        maxHeight += getPaddingTop() + getPaddingBottom();
+
+        // Check against our minimum height and width
+        maxHeight = Math.max(maxHeight, getSuggestedMinimumHeight());
+        maxWidth = Math.max(maxWidth, getSuggestedMinimumWidth());
+
+        setMeasuredDimension(resolveSizeAndState(maxWidth, widthMeasureSpec, childState),
+                             resolveSizeAndState(maxHeight, heightMeasureSpec,
+                                                 childState << MEASURED_HEIGHT_STATE_SHIFT));
     }
 
-    private boolean updateCardOverlap() {
-        final int scrollY = mScrollY;
+    private void calculateCardOffsets(@NonNull final View child) {
+        final LayoutParams lp = (LayoutParams) child.getLayoutParams();
 
-        // calculate the initial scroll percentage
-        int initialHeight = getParentMeasuredHeight();
-        final int count = getChildCount();
-        if (count > 0) {
-            final View hero = getChildAt(0);
-            final LayoutParams lp = (LayoutParams) hero.getLayoutParams();
-            if (lp.childType == CHILD_TYPE_HERO) {
-                initialHeight = lp.height;
-            }
+        if (child instanceof ViewGroup) {
+            final View paddingView =
+                    lp.cardPaddingViewTop != INVALID_ID_RES ? child.findViewById(lp.cardPaddingViewTop) : null;
+            final View peekView = lp.cardPeekViewTop != INVALID_ID_RES ? child.findViewById(lp.cardPeekViewTop) : null;
+            final View stackView =
+                    lp.cardStackViewTop != INVALID_ID_RES ? child.findViewById(lp.cardStackViewTop) : null;
+
+            lp.cardPaddingOffset = paddingView != null ? ViewUtils.getTopOffset((ViewGroup) child, paddingView) : 0;
+            lp.cardPeekOffset = peekView != null ? ViewUtils.getTopOffset((ViewGroup) child, peekView) : 0;
+            lp.cardStackOffset = stackView != null ? ViewUtils.getTopOffset((ViewGroup) child, stackView) : 0;
+        } else {
+            lp.cardPaddingOffset = 0;
+            lp.cardPeekOffset = 0;
+            lp.cardStackOffset = 0;
         }
-        final float scrollPercentage =
-                initialHeight > 0 ? Math.max(0f, ((float) initialHeight - (float) scrollY) / (float) initialHeight) :
-                        0f;
+    }
 
-        boolean firstChild = true;
-        boolean layoutUpdated = false;
-        View previous = null;
-        for (int i = 0; i < count; ++i) {
+    @Override
+    protected void onLayout(final boolean changed, final int left, final int top, final int right, final int bottom) {
+        // calculate the bounds we can draw in
+        final int parentLeft = getPaddingLeft();
+        final int parentRight = right - left - getPaddingRight();
+        final int parentTop = getPaddingTop();
+        final int parentBottom = bottom - top - getPaddingBottom();
+
+        int count = getChildCount();
+        for (int i = 0; i < count; i++) {
+            // only layout children that aren't gone
             final View child = getChildAt(i);
-
-            // skip missing children
-            if (child.getVisibility() == GONE) {
-                continue;
-            }
-
-            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-            if (lp.childType == CHILD_TYPE_CARD) {
-                // calculate the top margin
-                int topMargin = 0;
-                if (previous != null) {
-                    final LayoutParams plp = (LayoutParams) previous.getLayoutParams();
-                    topMargin = 0 - lp.height + lp.cardPeekPadding - plp.cardPeekPadding + plp.cardPeekHeight;
-                    if (firstChild) {
-                        topMargin *= scrollPercentage;
-                        firstChild = false;
-                    } else if (scrollY > initialHeight) {
-                        topMargin = 0;
-                    }
+            if (child.getVisibility() != GONE) {
+                final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+                if (i < mActiveView) {
+                    layoutHiddenChild(child);
+                } else if (i == mActiveView) {
+                    layoutFullyVisibleChild(child, parentLeft, parentTop, parentRight, parentBottom);
+                } else if (lp.childType == CHILD_TYPE_CALL_TO_ACTION && mActiveView >= count - 2) {
+                    layoutFullyVisibleChild(child, parentLeft, parentTop, parentRight, parentBottom);
+                } else if (lp.childType == CHILD_TYPE_CARD && mActiveView == 0) {
+                    layoutStackingCard(child, parentLeft, parentTop, parentRight, parentBottom);
+                } else if (lp.childType == CHILD_TYPE_CARD && mActiveView == i - 1) {
+                    layoutPeekingCard(child, parentLeft, parentTop, parentRight, parentBottom);
+                } else {
+                    layoutHiddenChild(child);
                 }
-
-                // update the top margin
-                if (lp.topMargin != topMargin) {
-                    lp.topMargin = topMargin;
-                    layoutUpdated = true;
-                }
-
-                // track previous sibling
-                previous = child;
-            } else {
-                // reset previous if this wasn't a card
-                previous = null;
             }
         }
-
-        return layoutUpdated;
     }
 
-    private int getParentMeasuredHeight() {
-        final ViewParent parent = getParent();
-        return parent instanceof View ? ((View) parent).getMeasuredHeight() : 0;
+    private void layoutHiddenChild(final View child) {
+        // layout the child completely outside of our visible area
+        child.layout(0 - child.getMeasuredWidth(), 0 - child.getMeasuredHeight(), 0, 0);
     }
 
-    @Nullable
-    private View getCallToActionView() {
-        // call to action view can only be the last child (if it exists)
-        final int count = getChildCount();
-        if (count > 1) {
-            final View child = getChildAt(count - 1);
-            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-            if (lp.childType == CHILD_TYPE_CALL_TO_ACTION) {
-                return child;
-            }
+    private void layoutFullyVisibleChild(final View child, final int parentLeft, final int parentTop,
+                                         final int parentRight, final int parentBottom) {
+        final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+
+        final int width = child.getMeasuredWidth();
+        final int height = child.getMeasuredHeight();
+
+        int childLeft = parentLeft + lp.leftMargin;
+        int childTop;
+
+        int gravity = lp.gravity;
+        if (gravity == UNSPECIFIED_GRAVITY) {
+            gravity = Gravity.TOP;
         }
 
-        return null;
+        switch (gravity & Gravity.VERTICAL_GRAVITY_MASK) {
+            case Gravity.BOTTOM:
+                childTop = parentBottom - height - lp.bottomMargin;
+                break;
+            default:
+                childTop = parentTop + lp.topMargin;
+        }
+
+        child.layout(childLeft, childTop, childLeft + width, childTop + height);
     }
 
-    private int getCallToActionMeasuredHeight() {
-        final View view = getCallToActionView();
-        return view != null ? view.getMeasuredHeight() : 0;
+    private void layoutPeekingCard(final View child, final int parentLeft, final int parentTop,
+                                   final int parentRight, final int parentBottom) {
+        final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+
+        int childLeft = parentLeft + lp.leftMargin;
+        int childTop = parentBottom - lp.cardPeekOffset;
+
+        child.layout(childLeft, childTop, childLeft + child.getMeasuredWidth(), childTop + child.getMeasuredHeight());
     }
 
-    public static class LayoutParams extends LinearLayoutCompat.LayoutParams {
+    private void layoutStackingCard(final View child, final int parentLeft, final int parentTop,
+                                    final int parentRight, final int parentBottom) {
+        final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+
+        int childLeft = parentLeft + lp.leftMargin;
+        int childTop = parentBottom - lp.cardStackOffset - lp.siblingStackOffset;
+
+        child.layout(childLeft, childTop, childLeft + child.getMeasuredWidth(), childTop + child.getMeasuredHeight());
+    }
+
+    public static class LayoutParams extends FrameLayout.LayoutParams {
         public static final int CHILD_TYPE_UNKNOWN = 0;
         public static final int CHILD_TYPE_HERO = 1;
         public static final int CHILD_TYPE_CARD = 2;
@@ -281,9 +270,18 @@ public class PageContentLayout extends LinearLayoutCompat implements NestedScrol
         public int childType = CHILD_TYPE_UNKNOWN;
         public boolean dynamicHeight = false;
 
+        @IdRes
+        public int cardPaddingViewTop = INVALID_ID_RES;
+        @IdRes
+        public int cardPeekViewTop = INVALID_ID_RES;
+        @IdRes
+        public int cardStackViewTop = INVALID_ID_RES;
+
         // card peek heights
-        public int cardPeekPadding = 0;
-        public int cardPeekHeight = 0;
+        int cardPaddingOffset = 0;
+        int cardStackOffset = 0;
+        int cardPeekOffset = 0;
+        int siblingStackOffset = 0;
 
         public LayoutParams(final Context c, final AttributeSet attrs) {
             super(c, attrs);
@@ -291,6 +289,14 @@ public class PageContentLayout extends LinearLayoutCompat implements NestedScrol
 
             childType = a.getInt(R.styleable.PageContentLayout_Layout_layout_childType, childType);
             dynamicHeight = a.getBoolean(R.styleable.PageContentLayout_Layout_layout_dynamicHeight, dynamicHeight);
+
+            // get the views that are used to calculate the various peek heights
+            cardPaddingViewTop =
+                    a.getResourceId(R.styleable.PageContentLayout_Layout_layout_card_padding_toTopOf, INVALID_ID_RES);
+            cardPeekViewTop =
+                    a.getResourceId(R.styleable.PageContentLayout_Layout_layout_card_peek_toTopOf, INVALID_ID_RES);
+            cardStackViewTop =
+                    a.getResourceId(R.styleable.PageContentLayout_Layout_layout_card_stack_toTopOf, INVALID_ID_RES);
 
             a.recycle();
         }
@@ -305,14 +311,14 @@ public class PageContentLayout extends LinearLayoutCompat implements NestedScrol
 
         public LayoutParams(@NonNull final MarginLayoutParams source) {
             super(source);
+            if (source instanceof FrameLayout.LayoutParams) {
+                this.gravity = ((FrameLayout.LayoutParams) source).gravity;
+            }
         }
 
-        public LayoutParams(@NonNull final LinearLayoutCompat.LayoutParams source) {
-            super(source);
-        }
-
-        public LayoutParams(@NonNull final LayoutParams source) {
-            super(source);
+        public LayoutParams(@NonNull final LayoutParams p) {
+            this((MarginLayoutParams) p);
+            this.childType = p.childType;
         }
     }
 }

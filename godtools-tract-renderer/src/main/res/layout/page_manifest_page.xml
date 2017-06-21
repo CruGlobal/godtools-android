@@ -13,17 +13,11 @@
         android:adjustViewBounds="true"
         android:cropToPadding="false" />
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/page_content_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <org.cru.godtools.tract.widget.PageContentLayout
             android:id="@+id/page_content_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_marginTop="?attr/actionBarSize">
 
             <android.support.v4.widget.NestedScrollView
                 android:id="@+id/initial_page_content"
@@ -99,6 +93,7 @@
                 android:id="@+id/call_to_action"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
                 app:layout_childType="call_to_action"
@@ -131,5 +126,4 @@
                     tools:text="Call To Action" />
             </RelativeLayout>
         </org.cru.godtools.tract.widget.PageContentLayout>
-    </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>
