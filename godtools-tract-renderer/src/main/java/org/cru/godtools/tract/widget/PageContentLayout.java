@@ -1,5 +1,8 @@
 package org.cru.godtools.tract.widget;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -14,8 +17,10 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
+import org.ccci.gto.android.common.animation.SimpleAnimatorListener;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.util.ViewUtils;
 
@@ -31,6 +36,23 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     @Nullable
     private View mActiveView;
     private int mActivePosition = 0;
+
+    @Nullable
+    Animator mAnimation;
+    private final Animator.AnimatorListener mAnimationListener = new SimpleAnimatorListener() {
+        @Override
+        public void onAnimationEnd(final Animator animation) {
+            if (mAnimation == animation) {
+                mAnimation = null;
+                updateChildrenOffsets();
+            }
+        }
+
+        @Override
+        public void onAnimationCancel(final Animator animation) {
+            onAnimationEnd(animation);
+        }
+    };
 
     public PageContentLayout(@NonNull final Context context) {
         this(context, null);
@@ -58,13 +80,19 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     @Override
     public void onViewAdded(final View child) {
         super.onViewAdded(child);
-        changeActiveView(mActiveView, false);
+        updateActivePosition(false);
+        updateChildrenOffsets();
     }
 
     @Override
     public void onViewRemoved(final View child) {
         super.onViewRemoved(child);
-        changeActiveView(mActiveView != child ? mActiveView : getChildAt(mActivePosition - 1), false);
+        if (mActiveView != child) {
+            updateActivePosition(false);
+            updateChildrenOffsets();
+        } else {
+            changeActiveView(getChildAt(mActivePosition - 1), false);
+        }
     }
 
     /* END lifecycle */
@@ -150,22 +178,31 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         // update the active view
         final View oldActiveView = mActiveView;
         mActiveView = view;
-        if (view != null) {
-            final LayoutParams lp = (LayoutParams) view.getLayoutParams();
+        if (mActiveView != null) {
+            final LayoutParams lp = (LayoutParams) mActiveView.getLayoutParams();
             if (lp.childType == CHILD_TYPE_CALL_TO_ACTION) {
-                mActiveView = getChildAt(indexOfChild(view) - 1);
+                mActiveView = getChildAt(indexOfChild(mActiveView) - 1);
             }
+        }
+        if (mActiveView == null) {
+            mActiveView = getChildAt(0);
         }
 
         if (oldActiveView != mActiveView) {
-            invalidate();
-            requestLayout();
-        }
+            updateActivePosition(false);
 
-        updateActivePosition();
+            if (animate && mActiveView != null) {
+                mAnimation = buildAnimation();
+                mAnimation.start();
+            }
+
+            updateChildrenOffsets();
+        } else {
+            updateActivePosition(true);
+        }
     }
 
-    private void updateActivePosition() {
+    private void updateActivePosition(final boolean updateOffsets) {
         final int oldPosition = mActivePosition;
         mActivePosition = indexOfChild(mActiveView);
         if (mActivePosition == -1) {
@@ -173,14 +210,28 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             mActivePosition = 0;
         }
 
-        if (oldPosition != mActivePosition) {
-            invalidate();
-            requestLayout();
+        if (updateOffsets && oldPosition != mActivePosition) {
+            updateChildrenOffsets();
         }
     }
 
     public int getActivePosition() {
         return mActivePosition;
+    }
+
+    @NonNull
+    private Animator buildAnimation() {
+        final AnimatorSet animator = new AnimatorSet();
+        for (int i = 0; i < getChildCount(); i++) {
+            final View child = getChildAt(i);
+            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+            if (lp.childType != CHILD_TYPE_CALL_TO_ACTION) {
+                animator.play(ObjectAnimator.ofFloat(child, View.Y, getChildTargetY(i)));
+            }
+        }
+        animator.setInterpolator(new DecelerateInterpolator());
+        animator.addListener(mAnimationListener);
+        return animator;
     }
 
     @Override
@@ -315,27 +366,11 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             // only layout children that aren't gone
             final View child = getChildAt(i);
             if (child.getVisibility() != GONE) {
-                final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-                if (i < mActivePosition) {
-                    layoutHiddenChild(child);
-                } else if (i == mActivePosition) {
-                    layoutFullyVisibleChild(child, parentLeft, parentTop, parentRight, parentBottom);
-                } else if (lp.childType == CHILD_TYPE_CALL_TO_ACTION && mActivePosition >= count - 2) {
-                    layoutFullyVisibleChild(child, parentLeft, parentTop, parentRight, parentBottom);
-                } else if (lp.childType == CHILD_TYPE_CARD && mActivePosition == 0) {
-                    layoutStackingCard(child, parentLeft, parentTop, parentRight, parentBottom);
-                } else if (lp.childType == CHILD_TYPE_CARD && mActivePosition == i - 1) {
-                    layoutPeekingCard(child, parentLeft, parentTop, parentRight, parentBottom);
-                } else {
-                    layoutHiddenChild(child);
-                }
+                layoutFullyVisibleChild(child, parentLeft, parentTop, parentRight, parentBottom);
             }
         }
-    }
 
-    private void layoutHiddenChild(final View child) {
-        // layout the child completely outside of our visible area
-        child.layout(0 - child.getMeasuredWidth(), 0 - child.getMeasuredHeight(), 0, 0);
+        updateChildrenOffsets();
     }
 
     private void layoutFullyVisibleChild(final View child, final int parentLeft, final int parentTop,
@@ -364,24 +399,39 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         child.layout(childLeft, childTop, childLeft + width, childTop + height);
     }
 
-    private void layoutPeekingCard(final View child, final int parentLeft, final int parentTop,
-                                   final int parentRight, final int parentBottom) {
-        final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+    private int getChildTargetY(final int position) {
+        final int parentTop = getPaddingTop();
+        final int parentBottom = getMeasuredHeight() - getPaddingBottom();
 
-        int childLeft = parentLeft + lp.leftMargin;
-        int childTop = parentBottom - lp.cardPeekOffset;
+        final View child = getChildAt(position);
+        if (child != null) {
+            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+            if (lp.childType == CHILD_TYPE_CALL_TO_ACTION) {
+                return child.getTop();
+            } else if (position < mActivePosition) {
+                return 0 - parentBottom;
+            } else if (position == mActivePosition) {
+                return getPaddingTop() + lp.topMargin;
+            } else if (lp.childType == CHILD_TYPE_CARD && mActivePosition == 0) {
+                return parentBottom - lp.cardStackOffset - lp.siblingStackOffset;
+            } else if (lp.childType == CHILD_TYPE_CARD && mActivePosition == position - 1) {
+                return parentBottom - lp.cardPeekOffset;
+            } else {
+                return getMeasuredHeight();
+            }
+        }
 
-        child.layout(childLeft, childTop, childLeft + child.getMeasuredWidth(), childTop + child.getMeasuredHeight());
+        return parentTop;
     }
 
-    private void layoutStackingCard(final View child, final int parentLeft, final int parentTop,
-                                    final int parentRight, final int parentBottom) {
-        final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-
-        int childLeft = parentLeft + lp.leftMargin;
-        int childTop = parentBottom - lp.cardStackOffset - lp.siblingStackOffset;
-
-        child.layout(childLeft, childTop, childLeft + child.getMeasuredWidth(), childTop + child.getMeasuredHeight());
+    void updateChildrenOffsets() {
+        // update the child position if we aren't animating
+        if (mAnimation == null) {
+            int count = getChildCount();
+            for (int i = 0; i < count; i++) {
+                getChildAt(i).setY(getChildTargetY(i));
+            }
+        }
     }
 
     public static class LayoutParams extends FrameLayout.LayoutParams {
