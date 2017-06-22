@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableList;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.Page.PageViewHolder;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.cru.godtools.tract.widget.TractPicassoImageView;
 import org.xmlpull.v1.XmlPullParser;
@@ -154,8 +155,8 @@ public final class Card extends Base implements Styles, Parent {
 
     @NonNull
     public static CardViewHolder createViewHolder(@NonNull final ViewGroup parent,
-                                                  @Nullable final ParentViewHolder parentViewHolder) {
-        return new CardViewHolder(parent, parentViewHolder);
+                                                  @Nullable final PageViewHolder pageViewHolder) {
+        return new CardViewHolder(parent, pageViewHolder);
     }
 
     @UiThread
@@ -176,10 +177,10 @@ public final class Card extends Base implements Styles, Parent {
         @Nullable
         private Callbacks mCallbacks;
 
-        CardViewHolder(@NonNull final ViewGroup parent, @Nullable final ParentViewHolder parentViewHolder) {
-            super(Card.class, parent, R.layout.tract_content_card, parentViewHolder);
-            if (parentViewHolder instanceof Callbacks) {
-                setCallbacks((Callbacks) parentViewHolder);
+        CardViewHolder(@NonNull final ViewGroup parent, @Nullable final PageViewHolder pageViewHolder) {
+            super(Card.class, parent, R.layout.tract_content_card, pageViewHolder);
+            if (pageViewHolder instanceof Callbacks) {
+                setCallbacks((Callbacks) pageViewHolder);
             }
         }
 
