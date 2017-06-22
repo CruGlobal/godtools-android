@@ -135,11 +135,11 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     public boolean onNestedFling(final View target, final float velocityX, final float velocityY,
                                  final boolean consumed) {
         final int minVelocity = ViewConfiguration.get(target.getContext()).getScaledMinimumFlingVelocity();
-        if (velocityY <= 0 - minVelocity) {
+        if (velocityY <= 0 - minVelocity && mActiveCardPosition >= 0) {
             changeActiveCard(mActiveCardPosition - 1, true);
             return true;
         }
-        if (velocityY >= minVelocity) {
+        if (velocityY >= minVelocity && mCardPositionOffset + mActiveCardPosition < getChildCount() - 1) {
             changeActiveCard(mActiveCardPosition + 1, true);
             return true;
         }
