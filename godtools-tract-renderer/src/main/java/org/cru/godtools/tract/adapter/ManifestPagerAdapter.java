@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.util.Pools;
 import android.support.v4.widget.NestedScrollView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,21 +20,15 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.activity.ModalActivity;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter.PageViewHolder;
 import org.cru.godtools.tract.model.CallToAction;
-import org.cru.godtools.tract.model.Card;
-import org.cru.godtools.tract.model.Card.CardViewHolder;
 import org.cru.godtools.tract.model.Header;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Modal;
 import org.cru.godtools.tract.model.Page;
-import org.cru.godtools.tract.widget.PageContentLayout;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 
 import butterknife.BindView;
 import butterknife.BindViews;
@@ -107,15 +100,11 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
 
     /* END lifecycle */
 
-    class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements CallToAction.Callbacks,
-            CardViewHolder.Callbacks {
+    class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements CallToAction.Callbacks {
         private final Page.PageViewHolder mModelViewHolder;
 
         @BindView(R2.id.page)
         View mPageView;
-
-        @BindView(R2.id.page_content_layout)
-        PageContentLayout mPageContentLayout;
 
         // Header & Hero
         @BindView(R2.id.initial_page_content)
@@ -130,11 +119,6 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         // call to action
         @BindView(R2.id.call_to_action)
         View mCallToAction;
-
-        @NonNull
-        private final Pools.Pool<CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
-        @NonNull
-        private final List<CardViewHolder> mCardViewHolders = new ArrayList<>();
 
         @BindViews({R2.id.header, R2.id.header_number, R2.id.header_title})
         List<View> mHeaderViews;
@@ -159,25 +143,12 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
             mModelViewHolder.bind(page);
 
             bindHeader(page);
-            bindCards(page);
             CallToAction.bind(page != null ? page.getCallToAction() : null, mCallToAction, this);
         }
 
         void onContentEvent(@NonNull final Event event) {
             if (mPage != null) {
                 checkForModalEvent(event);
-            }
-        }
-
-        @Override
-        public void onToggleCard(@NonNull final CardViewHolder holder) {
-            final Card card = holder.getModel();
-            if (card != null) {
-                int position = card.getPosition();
-                if (position == mPageContentLayout.getActiveCardPosition()) {
-                    position = -1;
-                }
-                mPageContentLayout.changeActiveCard(position, true);
             }
         }
 
@@ -195,39 +166,6 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
                 header.bindTitle(mHeaderTitle);
             } else {
                 mHeader.setBackgroundColor(Color.TRANSPARENT);
-            }
-        }
-
-        private void bindCards(@Nullable final Page page) {
-            final List<Card> cards = page != null ? page.getCards() : Collections.emptyList();
-            final ListIterator<CardViewHolder> i = mCardViewHolders.listIterator();
-
-            // update all visible cards
-            for (final Card card : cards) {
-                if (i.hasNext()) {
-                    i.next().bind(card);
-                } else {
-                    // acquire a view holder
-                    CardViewHolder holder = mRecycledCardViewHolders.acquire();
-                    if (holder == null) {
-                        holder = Card.createViewHolder(mPageContentLayout, mModelViewHolder);
-                        holder.setCallbacks(this);
-                    }
-
-                    // update holder and add it to the layout
-                    holder.bind(card);
-                    i.add(holder);
-                    mPageContentLayout.addView(holder.mRoot);
-                }
-            }
-
-            // remove any remaining cards that are no longer used
-            while (i.hasNext()) {
-                final CardViewHolder holder = i.next();
-                mPageContentLayout.removeView(holder.mRoot);
-                i.remove();
-                holder.bind(null);
-                mRecycledCardViewHolders.release(holder);
             }
         }
 

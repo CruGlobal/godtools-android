@@ -5,6 +5,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
+import android.support.v4.util.Pools;
 import android.view.View;
 
 import com.annimon.stream.Stream;
@@ -15,6 +16,8 @@ import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.Card.CardViewHolder;
+import org.cru.godtools.tract.widget.PageContentLayout;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.xmlpull.v1.XmlPullParser;
@@ -23,6 +26,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 import butterknife.BindView;
@@ -345,31 +349,87 @@ public final class Page extends Base implements Styles, Parent {
         }
     }
 
-    public static class PageViewHolder extends Parent.ParentViewHolder<Page> {
+    public static class PageViewHolder extends Parent.ParentViewHolder<Page> implements CardViewHolder.Callbacks {
         @BindView(R2.id.page)
         View mPageView;
         @BindView(R2.id.background_image)
         ScaledPicassoImageView mBackgroundImage;
 
+        @BindView(R2.id.page_content_layout)
+        PageContentLayout mPageContentLayout;
+
         @Nullable
         @BindView(R2.id.hero)
         View mHero;
 
+        @NonNull
+        private final Pools.Pool<CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
+        @NonNull
+        private final List<CardViewHolder> mCardViewHolders = new ArrayList<>();
+
         PageViewHolder(@NonNull final View root) {
             super(Page.class, root, null);
         }
+
+        /* BEGIN lifecycle */
 
         @Override
         void onBind() {
             super.onBind();
             bindPage();
             Hero.bind(mModel != null ? mModel.getHero() : null, mHero);
+            bindCards();
         }
+
+        @Override
+        public void onToggleCard(@NonNull final CardViewHolder holder) {
+            if (holder.mModel != null) {
+                int position = holder.mModel.getPosition();
+                if (position == mPageContentLayout.getActiveCardPosition()) {
+                    position = -1;
+                }
+                mPageContentLayout.changeActiveCard(position, true);
+            }
+        }
+
+        /* END lifecycle */
 
         private void bindPage() {
             mPageView.setBackgroundColor(Page.getBackgroundColor(mModel));
             Resource.bindBackgroundImage(mBackgroundImage, getBackgroundImageResource(mModel),
                                          getBackgroundImageScaleType(mModel), getBackgroundImageGravity(mModel));
+        }
+
+        private void bindCards() {
+            final List<Card> cards = mModel != null ? mModel.getCards() : ImmutableList.of();
+            final ListIterator<CardViewHolder> i = mCardViewHolders.listIterator();
+
+            // update all visible cards
+            for (final Card card : cards) {
+                if (i.hasNext()) {
+                    i.next().bind(card);
+                } else {
+                    // acquire a view holder
+                    CardViewHolder holder = mRecycledCardViewHolders.acquire();
+                    if (holder == null) {
+                        holder = Card.createViewHolder(mPageContentLayout, this);
+                    }
+
+                    // update holder and add it to the layout
+                    holder.bind(card);
+                    i.add(holder);
+                    mPageContentLayout.addView(holder.mRoot);
+                }
+            }
+
+            // remove any remaining cards that are no longer used
+            while (i.hasNext()) {
+                final CardViewHolder holder = i.next();
+                mPageContentLayout.removeView(holder.mRoot);
+                i.remove();
+                holder.bind(null);
+                mRecycledCardViewHolders.release(holder);
+            }
         }
     }
 }

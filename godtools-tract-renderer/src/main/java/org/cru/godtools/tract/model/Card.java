@@ -179,8 +179,8 @@ public final class Card extends Base implements Styles, Parent {
 
         CardViewHolder(@NonNull final ViewGroup parent, @Nullable final PageViewHolder pageViewHolder) {
             super(Card.class, parent, R.layout.tract_content_card, pageViewHolder);
-            if (pageViewHolder instanceof Callbacks) {
-                setCallbacks((Callbacks) pageViewHolder);
+            if (pageViewHolder != null) {
+                setCallbacks(pageViewHolder);
             }
         }
 
