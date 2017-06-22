@@ -526,7 +526,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         public static final int CHILD_TYPE_CALL_TO_ACTION = 3;
 
         public int childType = CHILD_TYPE_UNKNOWN;
-        public boolean dynamicHeight = false;
 
         @IdRes
         public int cardPaddingViewTop = INVALID_ID_RES;
@@ -546,7 +545,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             final TypedArray a = c.obtainStyledAttributes(attrs, R.styleable.PageContentLayout_Layout);
 
             childType = a.getInt(R.styleable.PageContentLayout_Layout_layout_childType, childType);
-            dynamicHeight = a.getBoolean(R.styleable.PageContentLayout_Layout_layout_dynamicHeight, dynamicHeight);
 
             // get the views that are used to calculate the various peek heights
             cardPaddingViewTop =

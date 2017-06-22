@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="PageContentLayout_Layout">
-        <attr name="layout_dynamicHeight" format="boolean" />
         <attr name="layout_childType" format="enum">
             <enum name="hero" value="1" />
             <enum name="card" value="2" />

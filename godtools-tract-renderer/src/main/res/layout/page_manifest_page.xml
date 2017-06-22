@@ -24,8 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fillViewport="true"
-                app:layout_childType="hero"
-                app:layout_dynamicHeight="true">
+                app:layout_childType="hero">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -96,8 +95,7 @@
                 android:layout_gravity="bottom"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
-                app:layout_childType="call_to_action"
-                app:layout_dynamicHeight="false">
+                app:layout_childType="call_to_action">
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/call_to_action_arrow"
