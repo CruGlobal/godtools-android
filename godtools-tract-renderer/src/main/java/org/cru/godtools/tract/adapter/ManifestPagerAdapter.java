@@ -22,12 +22,12 @@ import org.cru.godtools.tract.activity.ModalActivity;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter.PageViewHolder;
 import org.cru.godtools.tract.model.CallToAction;
 import org.cru.godtools.tract.model.Card;
+import org.cru.godtools.tract.model.Card.CardViewHolder;
 import org.cru.godtools.tract.model.Header;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Modal;
 import org.cru.godtools.tract.model.Page;
 import org.cru.godtools.tract.widget.PageContentLayout;
-import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -107,13 +107,12 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
 
     /* END lifecycle */
 
-    class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements CallToAction.Callbacks {
+    class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements CallToAction.Callbacks,
+            CardViewHolder.Callbacks {
         private final Page.PageViewHolder mModelViewHolder;
 
         @BindView(R2.id.page)
         View mPageView;
-        @BindView(R2.id.background_image)
-        ScaledPicassoImageView mBackgroundImage;
 
         @BindView(R2.id.page_content_layout)
         PageContentLayout mPageContentLayout;
@@ -133,9 +132,9 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         View mCallToAction;
 
         @NonNull
-        private final Pools.Pool<Card.CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
+        private final Pools.Pool<CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
         @NonNull
-        private final List<Card.CardViewHolder> mCardViewHolders = new ArrayList<>();
+        private final List<CardViewHolder> mCardViewHolders = new ArrayList<>();
 
         @BindViews({R2.id.header, R2.id.header_number, R2.id.header_title})
         List<View> mHeaderViews;
@@ -170,6 +169,18 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
             }
         }
 
+        @Override
+        public void onToggleCard(@NonNull final CardViewHolder holder) {
+            final Card card = holder.getModel();
+            if (card != null) {
+                int position = card.getPosition();
+                if (position == mPageContentLayout.getActiveCardPosition()) {
+                    position = -1;
+                }
+                mPageContentLayout.changeActiveCard(position, true);
+            }
+        }
+
         /* END lifecycle */
 
         private void bindHeader(@Nullable final Page page) {
@@ -189,7 +200,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
 
         private void bindCards(@Nullable final Page page) {
             final List<Card> cards = page != null ? page.getCards() : Collections.emptyList();
-            final ListIterator<Card.CardViewHolder> i = mCardViewHolders.listIterator();
+            final ListIterator<CardViewHolder> i = mCardViewHolders.listIterator();
 
             // update all visible cards
             for (final Card card : cards) {
@@ -197,9 +208,10 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
                     i.next().bind(card);
                 } else {
                     // acquire a view holder
-                    Card.CardViewHolder holder = mRecycledCardViewHolders.acquire();
+                    CardViewHolder holder = mRecycledCardViewHolders.acquire();
                     if (holder == null) {
-                        holder = Card.createViewHolder(mPageContentLayout);
+                        holder = Card.createViewHolder(mPageContentLayout, mModelViewHolder);
+                        holder.setCallbacks(this);
                     }
 
                     // update holder and add it to the layout
@@ -211,7 +223,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
 
             // remove any remaining cards that are no longer used
             while (i.hasNext()) {
-                final Card.CardViewHolder holder = i.next();
+                final CardViewHolder holder = i.next();
                 mPageContentLayout.removeView(holder.mRoot);
                 i.remove();
                 holder.bind(null);

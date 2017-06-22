@@ -168,6 +168,11 @@ abstract class Base {
 
         /* END lifecycle */
 
+        @Nullable
+        public final T getModel() {
+            return mModel;
+        }
+
         public final void bind(@Nullable final T model) {
             final T old = mModel;
             mModel = model;

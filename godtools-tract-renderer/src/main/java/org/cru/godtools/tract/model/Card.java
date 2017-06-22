@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import butterknife.Optional;
 
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 import static org.cru.godtools.tract.model.Utils.parseColor;
@@ -151,12 +153,17 @@ public final class Card extends Base implements Styles, Parent {
     }
 
     @NonNull
-    public static CardViewHolder createViewHolder(@NonNull final ViewGroup parent) {
-        return new CardViewHolder(parent);
+    public static CardViewHolder createViewHolder(@NonNull final ViewGroup parent,
+                                                  @Nullable final ParentViewHolder parentViewHolder) {
+        return new CardViewHolder(parent, parentViewHolder);
     }
 
     @UiThread
     public static final class CardViewHolder extends ParentViewHolder<Card> {
+        public interface Callbacks {
+            void onToggleCard(@NonNull final CardViewHolder holder);
+        }
+
         @BindView(R2.id.background_image)
         TractPicassoImageView mBackgroundView;
         @BindView(R2.id.card)
@@ -166,8 +173,18 @@ public final class Card extends Base implements Styles, Parent {
         @BindView(R2.id.label_divider)
         View mDivider;
 
-        CardViewHolder(@NonNull final ViewGroup parent) {
-            super(Card.class, parent, R.layout.tract_content_card, null);
+        @Nullable
+        private Callbacks mCallbacks;
+
+        CardViewHolder(@NonNull final ViewGroup parent, @Nullable final ParentViewHolder parentViewHolder) {
+            super(Card.class, parent, R.layout.tract_content_card, parentViewHolder);
+            if (parentViewHolder instanceof Callbacks) {
+                setCallbacks((Callbacks) parentViewHolder);
+            }
+        }
+
+        public void setCallbacks(@Nullable final Callbacks callbacks) {
+            mCallbacks = callbacks;
         }
 
         @Override
@@ -188,6 +205,14 @@ public final class Card extends Base implements Styles, Parent {
             final Text label = mModel != null ? mModel.mLabel : null;
             Text.bind(label, mLabel, Styles.getPrimaryColor(mModel), R.dimen.text_size_card_label);
             mDivider.setBackgroundColor(Styles.getTextColor(mModel));
+        }
+
+        @Optional
+        @OnClick(R2.id.action_toggle)
+        void toggleCard() {
+            if (mCallbacks != null) {
+                mCallbacks.onToggleCard(this);
+            }
         }
     }
 }
