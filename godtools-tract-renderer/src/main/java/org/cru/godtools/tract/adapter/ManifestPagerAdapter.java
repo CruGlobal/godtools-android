@@ -23,7 +23,6 @@ import org.cru.godtools.tract.adapter.ManifestPagerAdapter.PageViewHolder;
 import org.cru.godtools.tract.model.CallToAction;
 import org.cru.godtools.tract.model.Card;
 import org.cru.godtools.tract.model.Header;
-import org.cru.godtools.tract.model.Hero;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Modal;
 import org.cru.godtools.tract.model.Page;
@@ -109,6 +108,8 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
     /* END lifecycle */
 
     class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements CallToAction.Callbacks {
+        private final Page.PageViewHolder mModelViewHolder;
+
         @BindView(R2.id.page)
         View mPageView;
         @BindView(R2.id.background_image)
@@ -126,9 +127,6 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         TextView mHeaderNumber;
         @BindView(R2.id.header_title)
         TextView mHeaderTitle;
-        @Nullable
-        @BindView(R2.id.hero)
-        View mHero;
 
         // call to action
         @BindView(R2.id.call_to_action)
@@ -148,6 +146,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         PageViewHolder(@NonNull final View view) {
             super(view);
             ButterKnife.bind(this, view);
+            mModelViewHolder = Page.getViewHolder(view);
         }
 
         /* BEGIN lifecycle */
@@ -158,10 +157,9 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
                 return;
             }
             mPage = page;
+            mModelViewHolder.bind(page);
 
-            bindPage(page);
             bindHeader(page);
-            Hero.bind(page != null ? page.getHero() : null, mHero);
             bindCards(page);
             CallToAction.bind(page != null ? page.getCallToAction() : null, mCallToAction, this);
         }
@@ -173,11 +171,6 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         }
 
         /* END lifecycle */
-
-        private void bindPage(@Nullable final Page page) {
-            mPageView.setBackgroundColor(Page.getBackgroundColor(page));
-            Page.bindBackgroundImage(page, mBackgroundImage);
-        }
 
         private void bindHeader(@Nullable final Page page) {
             final Header header = page != null ? page.getHeader() : null;
@@ -212,7 +205,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
                     // update holder and add it to the layout
                     holder.bind(card);
                     i.add(holder);
-                    mPageContentLayout.addCardView(holder.mRoot);
+                    mPageContentLayout.addView(holder.mRoot);
                 }
             }
 

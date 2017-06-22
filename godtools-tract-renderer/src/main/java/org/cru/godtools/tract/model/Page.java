@@ -5,6 +5,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
+import android.view.View;
 
 import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableList;
@@ -12,6 +13,8 @@ import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
+import org.cru.godtools.tract.R;
+import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.xmlpull.v1.XmlPullParser;
@@ -21,6 +24,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import butterknife.BindView;
 
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
@@ -32,7 +37,7 @@ import static org.cru.godtools.tract.model.Modal.XML_MODAL;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.model.Utils.parseScaleType;
 
-public final class Page extends Base implements Styles {
+public final class Page extends Base implements Styles, Parent {
     static final String XML_PAGE = "page";
     private static final String XML_LISTENERS = "listeners";
     private static final String XML_MANIFEST_FILENAME = "filename";
@@ -148,15 +153,17 @@ public final class Page extends Base implements Styles {
         return page != null ? page.mBackgroundColor : DEFAULT_BACKGROUND_COLOR;
     }
 
-    private static Resource getBackgroundImageResource(@Nullable final Page page) {
+    @Nullable
+    static Resource getBackgroundImageResource(@Nullable final Page page) {
         return page != null ? page.getResource(page.mBackgroundImage) : null;
     }
 
-    private static int getBackgroundImageGravity(@Nullable final Page page) {
+    static int getBackgroundImageGravity(@Nullable final Page page) {
         return page != null ? page.mBackgroundImageGravity : DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     }
 
-    private static ScaleType getBackgroundImageScaleType(@Nullable final Page page) {
+    @NonNull
+    static ScaleType getBackgroundImageScaleType(@Nullable final Page page) {
         return page != null ? page.mBackgroundImageScaleType : DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
     }
 
@@ -168,6 +175,12 @@ public final class Page extends Base implements Styles {
     @Nullable
     public Hero getHero() {
         return mHero;
+    }
+
+    @NonNull
+    @Override
+    public List<Content> getContent() {
+        return ImmutableList.of();
     }
 
     @NonNull
@@ -322,8 +335,41 @@ public final class Page extends Base implements Styles {
         mModals = ImmutableList.copyOf(modals);
     }
 
-    public static void bindBackgroundImage(@Nullable final Page page, @NonNull final ScaledPicassoImageView view) {
-        Resource.bindBackgroundImage(view, getBackgroundImageResource(page), getBackgroundImageScaleType(page),
-                                     getBackgroundImageGravity(page));
+    @NonNull
+    public static PageViewHolder getViewHolder(@NonNull final View root) {
+        final Object holder = root.getTag(R.id.view_holder);
+        if (holder instanceof PageViewHolder) {
+            return (PageViewHolder) holder;
+        } else {
+            return new PageViewHolder(root);
+        }
+    }
+
+    public static class PageViewHolder extends Parent.ParentViewHolder<Page> {
+        @BindView(R2.id.page)
+        View mPageView;
+        @BindView(R2.id.background_image)
+        ScaledPicassoImageView mBackgroundImage;
+
+        @Nullable
+        @BindView(R2.id.hero)
+        View mHero;
+
+        PageViewHolder(@NonNull final View root) {
+            super(Page.class, root, null);
+        }
+
+        @Override
+        void onBind() {
+            super.onBind();
+            bindPage();
+            Hero.bind(mModel != null ? mModel.getHero() : null, mHero);
+        }
+
+        private void bindPage() {
+            mPageView.setBackgroundColor(Page.getBackgroundColor(mModel));
+            Resource.bindBackgroundImage(mBackgroundImage, getBackgroundImageResource(mModel),
+                                         getBackgroundImageScaleType(mModel), getBackgroundImageGravity(mModel));
+        }
     }
 }
