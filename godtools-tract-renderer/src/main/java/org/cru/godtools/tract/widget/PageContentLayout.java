@@ -24,6 +24,9 @@ import org.ccci.gto.android.common.animation.SimpleAnimatorListener;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.util.ViewUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static android.widget.FrameLayout.LayoutParams.UNSPECIFIED_GRAVITY;
 import static org.ccci.gto.android.common.base.Constants.INVALID_ID_RES;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION;
@@ -44,7 +47,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         public void onAnimationEnd(final Animator animation) {
             if (mAnimation == animation) {
                 mAnimation = null;
-                updateChildrenOffsets();
+                updateChildrenOffsetsAndAlpha();
             }
         }
 
@@ -81,7 +84,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     public void onViewAdded(final View child) {
         super.onViewAdded(child);
         updateActivePosition(false);
-        updateChildrenOffsets();
+        updateChildrenOffsetsAndAlpha();
     }
 
     @Override
@@ -89,7 +92,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         super.onViewRemoved(child);
         if (mActiveView != child) {
             updateActivePosition(false);
-            updateChildrenOffsets();
+            updateChildrenOffsetsAndAlpha();
         } else {
             changeActiveView(getChildAt(mActivePosition - 1), false);
         }
@@ -196,7 +199,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
                 mAnimation.start();
             }
 
-            updateChildrenOffsets();
+            updateChildrenOffsetsAndAlpha();
         } else {
             updateActivePosition(true);
         }
@@ -211,7 +214,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         }
 
         if (updateOffsets && oldPosition != mActivePosition) {
-            updateChildrenOffsets();
+            updateChildrenOffsetsAndAlpha();
         }
     }
 
@@ -221,17 +224,69 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
     @NonNull
     private Animator buildAnimation() {
-        final AnimatorSet animator = new AnimatorSet();
-        for (int i = 0; i < getChildCount(); i++) {
+        // build individual animations
+        final List<Animator> offset = new ArrayList<>();
+        final List<Animator> fadeIn = new ArrayList<>();
+        final List<Animator> fadeOut = new ArrayList<>();
+        final int count = getChildCount();
+        for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
             final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-            if (lp.childType != CHILD_TYPE_CALL_TO_ACTION) {
-                animator.play(ObjectAnimator.ofFloat(child, View.Y, getChildTargetY(i)));
+            switch (lp.childType) {
+                case CHILD_TYPE_HERO:
+                case CHILD_TYPE_CARD:
+                    // position offset animation only
+                    final int targetY = getChildTargetY(i);
+                    if (child.getY() != targetY) {
+                        offset.add(ObjectAnimator.ofFloat(child, View.Y, getChildTargetY(i)));
+                    }
+                    break;
+                case CHILD_TYPE_CALL_TO_ACTION:
+                    // alpha animation only
+                    final float targetAlpha = getChildTargetAlpha(child);
+                    if (child.getAlpha() != targetAlpha) {
+                        final Animator animation = ObjectAnimator.ofFloat(child, View.ALPHA, targetAlpha);
+                        if (targetAlpha > 0) {
+                            fadeIn.add(animation);
+                        } else {
+                            fadeOut.add(animation);
+                        }
+                    }
+                    break;
             }
         }
-        animator.setInterpolator(new DecelerateInterpolator());
-        animator.addListener(mAnimationListener);
-        return animator;
+
+        // build final animation
+        final AnimatorSet animation = new AnimatorSet();
+
+        // play each group together
+        animation.playTogether(fadeIn);
+        animation.playTogether(offset);
+        animation.playTogether(fadeOut);
+
+        // chain groups in proper sequence
+        AnimatorSet.Builder builder = null;
+        if (!fadeOut.isEmpty()) {
+            builder = animation.play(fadeOut.get(0));
+        }
+        if (!offset.isEmpty()) {
+            final Animator first = offset.get(0);
+            if (builder != null) {
+                builder.before(first);
+            } else {
+                builder = animation.play(first);
+            }
+        }
+        if (!fadeIn.isEmpty()) {
+            if (builder != null) {
+                builder.before(fadeIn.get(0));
+            }
+        }
+
+        // set a few overall animation parameters
+        animation.setInterpolator(new DecelerateInterpolator());
+        animation.addListener(mAnimationListener);
+        return animation;
     }
 
     @Override
@@ -370,7 +425,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             }
         }
 
-        updateChildrenOffsets();
+        updateChildrenOffsetsAndAlpha();
     }
 
     private void layoutFullyVisibleChild(final View child, final int parentLeft, final int parentTop,
@@ -424,12 +479,28 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         return parentTop;
     }
 
-    void updateChildrenOffsets() {
+    private float getChildTargetAlpha(@Nullable final View child) {
+        if (child != null) {
+            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+            if (lp.childType == CHILD_TYPE_CALL_TO_ACTION) {
+                return mActivePosition >= getChildCount() - 2 ? 1 : 0;
+            }
+        }
+        return 1;
+    }
+
+    void updateChildrenOffsetsAndAlpha() {
         // update the child position if we aren't animating
         if (mAnimation == null) {
             int count = getChildCount();
             for (int i = 0; i < count; i++) {
-                getChildAt(i).setY(getChildTargetY(i));
+                final View child = getChildAt(i);
+                child.setY(getChildTargetY(i));
+
+                final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+                if (lp.childType == CHILD_TYPE_CALL_TO_ACTION) {
+                    child.setAlpha(getChildTargetAlpha(child));
+                }
             }
         }
     }
