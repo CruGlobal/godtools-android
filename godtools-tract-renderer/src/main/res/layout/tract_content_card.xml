@@ -14,11 +14,13 @@
         android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="@dimen/horiz_margin_card"
-        android:layout_marginRight="@dimen/horiz_margin_card"
-        android:layout_marginTop="8dp"
-        app:cardCornerRadius="10dp">
+        android:layout_marginBottom="@dimen/card_margin_bottom"
+        android:layout_marginLeft="@dimen/card_margin_horiz"
+        android:layout_marginRight="@dimen/card_margin_horiz"
+        android:layout_marginTop="@dimen/card_margin_top"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardElevation="@dimen/card_elevation"
+        app:cardMaxElevation="@dimen/card_elevation">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -29,9 +31,9 @@
                 android:id="@+id/label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_card_content_horiz"
-                android:layout_marginRight="@dimen/margin_card_content_horiz"
-                android:layout_marginTop="@dimen/margin_card_content_top"
+                android:layout_marginLeft="@dimen/card_margin_content_horiz"
+                android:layout_marginRight="@dimen/card_margin_content_horiz"
+                android:layout_marginTop="@dimen/card_margin_content_top"
                 tools:text="Card Label" />
 
             <View
@@ -39,8 +41,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@id/label"
-                android:layout_marginLeft="@dimen/margin_card_content_horiz"
-                android:layout_marginRight="@dimen/margin_card_content_horiz"
+                android:layout_marginLeft="@dimen/card_margin_content_horiz"
+                android:layout_marginRight="@dimen/card_margin_content_horiz"
                 android:layout_marginTop="12dp"
                 tools:background="#bebebe" />
 
@@ -63,9 +65,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/label_divider"
-                android:layout_marginBottom="@dimen/margin_card_content_bottom"
-                android:layout_marginLeft="@dimen/margin_card_content_horiz"
-                android:layout_marginRight="@dimen/margin_card_content_horiz"
+                android:layout_marginBottom="@dimen/card_margin_content_bottom"
+                android:layout_marginLeft="@dimen/card_margin_content_horiz"
+                android:layout_marginRight="@dimen/card_margin_content_horiz"
                 android:layout_marginTop="4dp"
                 android:fillViewport="true">
 
