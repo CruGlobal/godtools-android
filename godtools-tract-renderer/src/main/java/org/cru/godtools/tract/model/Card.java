@@ -36,6 +36,8 @@ public final class Card extends Base implements Styles, Parent {
     private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL_X;
     private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
 
+    private final int mPosition;
+
     @Nullable
     @ColorInt
     private Integer mTextColor;
@@ -55,8 +57,13 @@ public final class Card extends Base implements Styles, Parent {
     @NonNull
     private List<Content> mContent = ImmutableList.of();
 
-    private Card(@NonNull final Page parent) {
+    private Card(@NonNull final Page parent, final int position) {
         super(parent);
+        mPosition = position;
+    }
+
+    public int getPosition() {
+        return mPosition;
     }
 
     @Override
@@ -95,9 +102,9 @@ public final class Card extends Base implements Styles, Parent {
     }
 
     @NonNull
-    static Card fromXml(@NonNull final Page parent, @NonNull final XmlPullParser parser)
+    static Card fromXml(@NonNull final Page parent, @NonNull final XmlPullParser parser, final int position)
             throws IOException, XmlPullParserException {
-        return new Card(parent).parse(parser);
+        return new Card(parent, position).parse(parser);
     }
 
     @NonNull

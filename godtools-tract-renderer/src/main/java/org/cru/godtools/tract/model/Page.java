@@ -81,7 +81,7 @@ public final class Page extends Base implements Styles {
     private Header mHeader;
     @Nullable
     private Hero mHero;
-    private final List<Card> mCards = new ArrayList<>();
+    private List<Card> mCards = ImmutableList.of();
     private List<Modal> mModals = ImmutableList.of();
     @NonNull
     private CallToAction mCallToAction;
@@ -172,9 +172,10 @@ public final class Page extends Base implements Styles {
 
     @NonNull
     public List<Card> getCards() {
-        return ImmutableList.copyOf(mCards);
+        return mCards;
     }
 
+    @NonNull
     public List<Modal> getModals() {
         return mModals;
     }
@@ -271,6 +272,7 @@ public final class Page extends Base implements Styles {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CARDS);
 
         // process any child elements
+        final List<Card> cards = new ArrayList<>();
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -281,7 +283,7 @@ public final class Page extends Base implements Styles {
                 case XMLNS_TRACT:
                     switch (parser.getName()) {
                         case XML_CARD:
-                            mCards.add(Card.fromXml(this, parser));
+                            cards.add(Card.fromXml(this, parser, cards.size()));
                             continue;
                     }
                     break;
@@ -290,6 +292,7 @@ public final class Page extends Base implements Styles {
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
+        mCards = ImmutableList.copyOf(cards);
     }
 
     private void parseModalsXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
