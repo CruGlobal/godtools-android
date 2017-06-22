@@ -10,7 +10,9 @@
     <dimen name="text_size_modal_title">54sp</dimen>
     <dimen name="horiz_margin_hero">32dp</dimen>
     <dimen name="horiz_margin_card">16dp</dimen>
-    <dimen name="horiz_margin_card_content">16dp</dimen>
+    <dimen name="margin_card_content_horiz">16dp</dimen>
+    <dimen name="margin_card_content_top">16dp</dimen>
+    <dimen name="margin_card_content_bottom">4dp</dimen>
     <dimen name="horiz_margin_call_to_action_label">32dp</dimen>
     <dimen name="horiz_margin_call_to_action_arrow">8dp</dimen>
     <dimen name="horiz_margin_modal">32dp</dimen>
