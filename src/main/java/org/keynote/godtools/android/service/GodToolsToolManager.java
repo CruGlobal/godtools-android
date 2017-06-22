@@ -2,6 +2,11 @@ package org.keynote.godtools.android.service;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.support.annotation.AnyThread;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
@@ -9,6 +14,7 @@ import android.support.v4.util.ArrayMap;
 import android.support.v4.util.ArraySet;
 import android.support.v4.util.LongSparseArray;
 
+import com.annimon.stream.Collectors;
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 import com.google.common.base.Objects;
@@ -72,12 +78,16 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
+import static org.ccci.gto.android.common.TimeConstants.HOUR_IN_MS;
 import static org.ccci.gto.android.common.db.Expression.NULL;
 import static org.ccci.gto.android.common.db.Expression.constants;
 import static org.ccci.gto.android.common.util.ThreadUtils.getLock;
 
 public final class GodToolsToolManager {
     private static final int DOWNLOAD_CONCURRENCY = 4;
+    private static final long CLEANER_INTERVAL_IN_MS = HOUR_IN_MS;
+
+    private static final int MSG_CLEAN = 1;
 
     private static final ReadWriteLock LOCK_FILESYSTEM = new ReentrantReadWriteLock();
     private static final LongSparseArray<Object> LOCKS_ATTACHMENTS = new LongSparseArray<>();
@@ -90,6 +100,7 @@ public final class GodToolsToolManager {
     private final EventBus mEventBus;
     final Settings mPrefs;
     private final ThreadPoolExecutor mExecutor;
+    final Handler mHandler;
 
     final LongSparseArray<Boolean> mDownloadingAttachments = new LongSparseArray<>();
 
@@ -98,18 +109,23 @@ public final class GodToolsToolManager {
         mApi = GodToolsApi.getInstance(mContext);
         mDao = GodToolsDao.getInstance(mContext);
         mEventBus = EventBus.getDefault();
+        mHandler = new Handler(Looper.getMainLooper());
         mPrefs = Settings.getInstance(mContext);
         mExecutor = new ThreadPoolExecutor(0, DOWNLOAD_CONCURRENCY, 10, TimeUnit.SECONDS, new PriorityBlockingQueue<>(),
                                            new NamedThreadFactory(GodToolsToolManager.class.getSimpleName()));
 
         // register with EventBus
         mEventBus.register(this);
+
+        // enqueue an initial clean filesystem task
+        enqueueCleanFilesystem();
     }
 
     @Nullable
     @SuppressLint("StaticFieldLeak")
     private static GodToolsToolManager sInstance;
     @NonNull
+    @MainThread
     public static GodToolsToolManager getInstance(@NonNull final Context context) {
         synchronized (GodToolsToolManager.class) {
             if (sInstance == null) {
@@ -139,14 +155,12 @@ public final class GodToolsToolManager {
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onTranslationUpdate(@NonNull final TranslationUpdateEvent event) {
         enqueuePendingPublishedTranslations();
-        enqueueCleanFilesystem();
     }
 
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onAttachmentUpdate(@NonNull final AttachmentUpdateEvent event) {
         enqueueStaleAttachments();
-        enqueueCleanFilesystem();
     }
 
     /* END lifecycle */
@@ -238,6 +252,7 @@ public final class GodToolsToolManager {
             final EventBus eventBus = EventBus.getDefault();
             if (changes > 0) {
                 eventBus.post(new TranslationUpdateEvent());
+                enqueueCleanFilesystem();
             }
         } finally {
             tx.endTransaction().recycle();
@@ -476,6 +491,34 @@ public final class GodToolsToolManager {
         }
     }
 
+    @WorkerThread
+    void detectMissingFiles() {
+        // short-circuit if the resources directory isn't valid
+        if (!FileUtils.createResourcesDir(mContext)) {
+            return;
+        }
+
+        // acquire filesystem lock
+        final Lock lock = LOCK_FILESYSTEM.writeLock();
+        try {
+            lock.lock();
+
+            // get the set of all downloaded files
+            final Set<File> files = Optional.ofNullable(FileUtils.getResourcesDir(mContext).listFiles())
+                    .map(Stream::of).stream().flatMap(s -> s)
+                    .filter(File::isFile)
+                    .collect(Collectors.toSet());
+
+            // check for missing files
+            mDao.streamCompat(Query.select(LocalFile.class))
+                    .filter(f -> !files.contains(f.getFile(mContext)))
+                    .forEach(mDao::delete);
+        } finally {
+            // release filesystem lock
+            lock.unlock();
+        }
+    }
+
     private void updateProgress(@NonNull final Translation translation, final long progress, final long total) {
         // TODO
     }
@@ -513,6 +556,7 @@ public final class GodToolsToolManager {
                 .forEach(this::enqueueAttachmentDownload);
     }
 
+    @AnyThread
     private void enqueueAttachmentDownload(final long attachmentId) {
         synchronized (mDownloadingAttachments) {
             if (!mDownloadingAttachments.get(attachmentId, false)) {
@@ -522,8 +566,20 @@ public final class GodToolsToolManager {
         }
     }
 
+    @AnyThread
     private void enqueueCleanFilesystem() {
         mExecutor.execute(new CleanFileSystem());
+    }
+
+    @AnyThread
+    void scheduleNextCleanFilesystem() {
+        // remove any pending executions
+        mHandler.removeMessages(MSG_CLEAN);
+
+        // schedule another execution
+        final Message m = Message.obtain(mHandler, GodToolsToolManager.this::enqueueCleanFilesystem);
+        m.what = MSG_CLEAN;
+        mHandler.sendMessageDelayed(m, CLEANER_INTERVAL_IN_MS);
     }
 
     static final class TranslationKey {
@@ -627,7 +683,9 @@ public final class GodToolsToolManager {
 
         @Override
         public void run() {
+            detectMissingFiles();
             cleanFilesystem();
+            scheduleNextCleanFilesystem();
         }
     }
 }

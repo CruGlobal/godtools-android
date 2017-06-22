@@ -114,6 +114,7 @@ public final class Contract extends BaseContract {
         public static final Field FIELD_ID = TABLE.field(COLUMN_ID);
         public static final Field FIELD_TOOL = TABLE.field(COLUMN_TOOL);
         public static final Field FIELD_LANGUAGE = TABLE.field(COLUMN_LANGUAGE);
+        public static final Field FIELD_MANIFEST = TABLE.field(COLUMN_MANIFEST);
         private static final Field FIELD_PUBLISHED = TABLE.field(COLUMN_PUBLISHED);
         public static final Field FIELD_DOWNLOADED = TABLE.field(COLUMN_DOWNLOADED);
 

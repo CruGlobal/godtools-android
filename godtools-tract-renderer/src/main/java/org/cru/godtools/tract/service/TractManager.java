@@ -3,8 +3,10 @@ package org.cru.godtools.tract.service;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.annotation.AnyThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.WorkerThread;
 import android.support.v4.util.LruCache;
 import android.util.Xml;
 
@@ -19,8 +21,10 @@ import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.support.v4.util.WeakLruCache;
 import org.cru.godtools.base.util.FileUtils;
+import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Page;
+import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.model.Translation;
@@ -29,6 +33,7 @@ import org.xmlpull.v1.XmlPullParser;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Locale;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -67,6 +72,7 @@ public class TractManager {
     }
 
     @NonNull
+    @AnyThread
     public ListenableFuture<Manifest> getLatestPublishedManifest(final long toolId, @NonNull final Locale locale) {
         final SettableFuture<Translation> latestTranslation = SettableFuture.create();
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> latestTranslation.set(
@@ -84,9 +90,10 @@ public class TractManager {
     }
 
     @NonNull
+    @AnyThread
     public ListenableFuture<Manifest> getManifest(@Nullable final Translation translation) {
-        // short-circuit if we don't have a translation
-        if (translation == null) {
+        // short-circuit if we don't have a downloaded translation
+        if (translation == null || !translation.isDownloaded()) {
             return Futures.immediateFuture(null);
         }
 
@@ -101,12 +108,14 @@ public class TractManager {
     }
 
     @NonNull
+    @AnyThread
     public ListenableFuture<Manifest> getManifest(@NonNull final String manifestName, final long toolId,
                                                   @NonNull final Locale locale) {
         return getManifest(manifestName, toolId, locale, false);
     }
 
     @NonNull
+    @AnyThread
     private ListenableFuture<Manifest> getManifest(@NonNull final String manifestName, final long toolId,
                                                    @NonNull final Locale locale, final boolean forceReload) {
         synchronized (mCache) {
@@ -126,6 +135,7 @@ public class TractManager {
     }
 
     @NonNull
+    @AnyThread
     private ListenableFuture<Manifest> loadManifest(@NonNull final String manifestName, final long toolId,
                                                     @NonNull final Locale locale) {
         // load the manifest
@@ -145,6 +155,9 @@ public class TractManager {
                     parser.setInput(in, "UTF-8");
                     parser.nextTag();
                     manifest = Manifest.fromXml(parser, manifestName, toolId, locale);
+                } catch (final FileNotFoundException e) {
+                    brokenManifest(manifestName);
+                    throw closer.rethrow(e);
                 } catch (final Throwable t) {
                     throw closer.rethrow(t);
                 } finally {
@@ -176,6 +189,7 @@ public class TractManager {
     }
 
     @NonNull
+    @AnyThread
     private ListenableFuture<Page> parsePage(@NonNull final Page page) {
         // parse the page
         final SettableFuture<Page> result = SettableFuture.create();
@@ -197,6 +211,9 @@ public class TractManager {
                     parser.setInput(in, "UTF-8");
                     parser.nextTag();
                     page.parsePageXml(parser);
+                } catch (final FileNotFoundException e) {
+                    brokenManifest(page.getManifest().getManifestName());
+                    throw closer.rethrow(e);
                 } catch (final Throwable t) {
                     throw closer.rethrow(t);
                 } finally {
@@ -211,5 +228,18 @@ public class TractManager {
             }
         });
         return result;
+    }
+
+    @WorkerThread
+    private void brokenManifest(@NonNull final String manifestName) {
+        mDao.streamCompat(Query.select(Translation.class).where(TranslationTable.FIELD_MANIFEST.eq(manifestName)))
+                .peek(t -> t.setDownloaded(false))
+                .forEach(t -> mDao.update(t, TranslationTable.COLUMN_DOWNLOADED));
+        EventBus.getDefault().post(new TranslationUpdateEvent());
+
+        // remove the broken manifest from the cache
+        synchronized (mCache) {
+            mCache.remove(manifestName);
+        }
     }
 }
