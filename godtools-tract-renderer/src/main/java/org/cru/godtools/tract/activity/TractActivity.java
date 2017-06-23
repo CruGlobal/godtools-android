@@ -34,8 +34,8 @@ import static org.cru.godtools.base.Constants.EXTRA_PRIMARY_LANGUAGE;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 
 public class TractActivity extends ImmersiveActivity implements ManifestPagerAdapter.Callbacks {
-    static final int LOADER_MANIFEST_PRIMARY = 101;
-    static final int LOADER_MANIFEST_PARALLEL = 102;
+    private static final int LOADER_MANIFEST_PRIMARY = 101;
+    private static final int LOADER_MANIFEST_PARALLEL = 102;
 
     // App/Action Bar
     @BindView(R2.id.appBar)
@@ -118,6 +118,17 @@ public class TractActivity extends ImmersiveActivity implements ManifestPagerAda
     public boolean onPrepareOptionsMenu(final Menu menu) {
         updateToolbarMenu();
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
+        final int id = item.getItemId();
+        if (id == R.id.action_switch) {
+            mPrimaryActive = !mPrimaryActive;
+            updateActiveManifest();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /* END lifecycle */
