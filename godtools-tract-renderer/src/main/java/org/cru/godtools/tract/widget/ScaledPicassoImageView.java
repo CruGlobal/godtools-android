@@ -49,18 +49,27 @@ public interface ScaledPicassoImageView extends PicassoImageView {
         }
 
         public final void setScaleType(@NonNull final ScaleType type) {
+            final ScaleType old = mScaleType;
             mScaleType = type;
-            triggerUpdate();
+            if (old != mScaleType) {
+                triggerUpdate();
+            }
         }
 
         public final void setGravityHorizontal(@NonNull final GravityHorizontal gravity) {
+            final GravityHorizontal old = mGravityHorizontal;
             mGravityHorizontal = gravity;
-            triggerUpdate();
+            if (old != mGravityHorizontal) {
+                triggerUpdate();
+            }
         }
 
         public final void setGravityVertical(@NonNull final GravityVertical gravity) {
+            final GravityVertical old = mGravityVertical;
             mGravityVertical = gravity;
-            triggerUpdate();
+            if (old != mGravityVertical) {
+                triggerUpdate();
+            }
         }
 
         @Override
