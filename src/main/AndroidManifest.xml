@@ -151,6 +151,14 @@
             android:name=".activity.TourActivity"
             android:theme="@style/Theme.GodTools2.Activity.Tour" />
 
+        <activity
+            android:name="org.cru.godtools.tract.activity.TractActivity"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.keynote.godtools.android.activity.MainActivity" />
+        </activity>
+
         <provider
             android:name=".everystudent.EveryStudentProvider"
             android:authorities="@string/every_student_authority" />
