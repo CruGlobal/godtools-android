@@ -12,11 +12,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.NestedScrollingParent;
 import android.support.v4.view.NestedScrollingParentHelper;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
@@ -33,7 +35,8 @@ import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CARD;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_HERO;
 
-public class PageContentLayout extends FrameLayout implements NestedScrollingParent {
+public class PageContentLayout extends FrameLayout implements NestedScrollingParent,
+        ViewTreeObserver.OnGlobalLayoutListener {
     private final NestedScrollingParentHelper mParentHelper;
 
     private int mCardPositionOffset = 2;
@@ -82,6 +85,29 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     /* BEGIN lifecycle */
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        getViewTreeObserver().addOnGlobalLayoutListener(this);
+    }
+
+    @Override
+    public void onGlobalLayout() {
+        // XXX: This is to fix a chicken and egg bug. When measuring views we want to have access to card offsets.
+        // XXX: To get card offsets we need to access the actual layout of nodes. to get the actual layout of nodes we
+        // XXX: need to measure the views first.
+        // XXX: So, to work around this problem we only calculate offsets after a view has been laid out at least once,
+        // XXX: and double check our offsets after any layout pass.
+        boolean changed = false;
+        for (int i = 0; i < getChildCount(); i++) {
+            changed = calculateCardOffsets(getChildAt(i)) || changed;
+        }
+        if (changed) {
+            invalidate();
+            requestLayout();
+        }
+    }
+
+    @Override
     public void onViewAdded(final View child) {
         super.onViewAdded(child);
         updateActiveCardPosition(false);
@@ -97,6 +123,12 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         } else {
             changeActiveCard(getChildAt(mActiveCardPosition + mCardPositionOffset - 1), false);
         }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        getViewTreeObserver().removeGlobalOnLayoutListener(this);
     }
 
     /* END lifecycle */
@@ -379,24 +411,43 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
                                                  childState << MEASURED_HEIGHT_STATE_SHIFT));
     }
 
-    private void calculateCardOffsets(@NonNull final View child) {
-        final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+    private boolean calculateCardOffsets(@NonNull final View child) {
+        // only update card offsets if the child has been laid out and is a ViewGroup
+        if (ViewCompat.isLaidOut(child) && child instanceof ViewGroup) {
+            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
 
-        if (child instanceof ViewGroup) {
-            final View paddingView =
-                    lp.cardPaddingViewTop != INVALID_ID_RES ? child.findViewById(lp.cardPaddingViewTop) : null;
-            final View peekView = lp.cardPeekViewTop != INVALID_ID_RES ? child.findViewById(lp.cardPeekViewTop) : null;
-            final View stackView =
-                    lp.cardStackViewTop != INVALID_ID_RES ? child.findViewById(lp.cardStackViewTop) : null;
+            // calculate the current offsets
+            final int cardPaddingOffset;
+            final int cardPeekOffset;
+            final int cardStackOffset;
+            if (lp.childType == CHILD_TYPE_CARD) {
+                final View paddingView =
+                        lp.cardPaddingViewTop != INVALID_ID_RES ? child.findViewById(lp.cardPaddingViewTop) : null;
+                final View peekView =
+                        lp.cardPeekViewTop != INVALID_ID_RES ? child.findViewById(lp.cardPeekViewTop) : null;
+                final View stackView =
+                        lp.cardStackViewTop != INVALID_ID_RES ? child.findViewById(lp.cardStackViewTop) : null;
 
-            lp.cardPaddingOffset = paddingView != null ? ViewUtils.getTopOffset((ViewGroup) child, paddingView) : 0;
-            lp.cardPeekOffset = peekView != null ? ViewUtils.getTopOffset((ViewGroup) child, peekView) : 0;
-            lp.cardStackOffset = stackView != null ? ViewUtils.getTopOffset((ViewGroup) child, stackView) : 0;
-        } else {
-            lp.cardPaddingOffset = 0;
-            lp.cardPeekOffset = 0;
-            lp.cardStackOffset = 0;
+                cardPaddingOffset = paddingView != null ? ViewUtils.getTopOffset((ViewGroup) child, paddingView) : 0;
+                cardPeekOffset = peekView != null ? ViewUtils.getTopOffset((ViewGroup) child, peekView) : 0;
+                cardStackOffset = stackView != null ? ViewUtils.getTopOffset((ViewGroup) child, stackView) : 0;
+            } else {
+                cardPaddingOffset = 0;
+                cardPeekOffset = 0;
+                cardStackOffset = 0;
+            }
+
+            // only update values if any changed
+            if (lp.cardPaddingOffset != cardPaddingOffset || lp.cardPeekOffset != cardPeekOffset ||
+                    lp.cardStackOffset != cardStackOffset) {
+                lp.cardPaddingOffset = cardPaddingOffset;
+                lp.cardPeekOffset = cardPeekOffset;
+                lp.cardStackOffset = cardStackOffset;
+                return true;
+            }
         }
+
+        return false;
     }
 
     @Override
