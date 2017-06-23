@@ -76,6 +76,8 @@ public final class Resource extends Base {
 
     static void bindBackgroundImage(@NonNull final ScaledPicassoImageView image, @Nullable final Resource resource,
                                     @NonNull final ScaleType scale, final int gravity) {
+        image.toggleBatchUpdates(true);
+
         // set the background image visibility
         final ImageView view = image.asImageView();
         view.setVisibility(resource != null ? View.VISIBLE : View.GONE);
@@ -90,6 +92,8 @@ public final class Resource extends Base {
         image.setGravityVertical(ImageGravity.isTop(gravity) ? GravityVertical.TOP :
                                          ImageGravity.isBottom(gravity) ? GravityVertical.BOTTOM :
                                                  GravityVertical.CENTER);
+
+        image.toggleBatchUpdates(false);
 
         // update layout params
         final ViewGroup.LayoutParams lp = view.getLayoutParams();
