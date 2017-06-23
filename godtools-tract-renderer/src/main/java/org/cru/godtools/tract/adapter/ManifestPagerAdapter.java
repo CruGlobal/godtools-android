@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.util.Pools;
 import android.support.v4.widget.NestedScrollView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,22 +20,15 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.activity.ModalActivity;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter.PageViewHolder;
 import org.cru.godtools.tract.model.CallToAction;
-import org.cru.godtools.tract.model.Card;
 import org.cru.godtools.tract.model.Header;
-import org.cru.godtools.tract.model.Hero;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Modal;
 import org.cru.godtools.tract.model.Page;
-import org.cru.godtools.tract.widget.PageContentLayout;
-import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 
 import butterknife.BindView;
 import butterknife.BindViews;
@@ -109,15 +101,10 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
     /* END lifecycle */
 
     class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements CallToAction.Callbacks {
+        private final Page.PageViewHolder mModelViewHolder;
+
         @BindView(R2.id.page)
         View mPageView;
-        @BindView(R2.id.background_image)
-        ScaledPicassoImageView mBackgroundImage;
-
-        @BindView(R2.id.page_content_parent)
-        NestedScrollView mPageContentParent;
-        @BindView(R2.id.page_content_layout)
-        PageContentLayout mPageContentLayout;
 
         // Header & Hero
         @BindView(R2.id.initial_page_content)
@@ -128,18 +115,10 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         TextView mHeaderNumber;
         @BindView(R2.id.header_title)
         TextView mHeaderTitle;
-        @Nullable
-        @BindView(R2.id.hero)
-        View mHero;
 
         // call to action
         @BindView(R2.id.call_to_action)
         View mCallToAction;
-
-        @NonNull
-        private final Pools.Pool<Card.CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
-        @NonNull
-        private final List<Card.CardViewHolder> mCardViewHolders = new ArrayList<>();
 
         @BindViews({R2.id.header, R2.id.header_number, R2.id.header_title})
         List<View> mHeaderViews;
@@ -150,7 +129,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         PageViewHolder(@NonNull final View view) {
             super(view);
             ButterKnife.bind(this, view);
-            mPageContentParent.setOnScrollChangeListener(mPageContentLayout);
+            mModelViewHolder = Page.getViewHolder(view);
         }
 
         /* BEGIN lifecycle */
@@ -161,11 +140,9 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
                 return;
             }
             mPage = page;
+            mModelViewHolder.bind(page);
 
-            bindPage(page);
             bindHeader(page);
-            Hero.bind(page != null ? page.getHero() : null, mHero);
-            bindCards(page);
             CallToAction.bind(page != null ? page.getCallToAction() : null, mCallToAction, this);
         }
 
@@ -176,11 +153,6 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         }
 
         /* END lifecycle */
-
-        private void bindPage(@Nullable final Page page) {
-            mPageView.setBackgroundColor(Page.getBackgroundColor(page));
-            Page.bindBackgroundImage(page, mBackgroundImage);
-        }
 
         private void bindHeader(@Nullable final Page page) {
             final Header header = page != null ? page.getHeader() : null;
@@ -194,38 +166,6 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
                 header.bindTitle(mHeaderTitle);
             } else {
                 mHeader.setBackgroundColor(Color.TRANSPARENT);
-            }
-        }
-
-        private void bindCards(@Nullable final Page page) {
-            final List<Card> cards = page != null ? page.getCards() : Collections.emptyList();
-            final ListIterator<Card.CardViewHolder> i = mCardViewHolders.listIterator();
-
-            // update all visible cards
-            for (final Card card : cards) {
-                if (i.hasNext()) {
-                    i.next().bind(card);
-                } else {
-                    // acquire a view holder
-                    Card.CardViewHolder holder = mRecycledCardViewHolders.acquire();
-                    if (holder == null) {
-                        holder = Card.createViewHolder(mPageContentLayout);
-                    }
-
-                    // update holder and add it to the layout
-                    holder.bind(card);
-                    i.add(holder);
-                    mPageContentLayout.addCardView(holder.mRoot);
-                }
-            }
-
-            // remove any remaining cards that are no longer used
-            while (i.hasNext()) {
-                final Card.CardViewHolder holder = i.next();
-                mPageContentLayout.removeView(holder.mRoot);
-                i.remove();
-                holder.bind(null);
-                mRecycledCardViewHolders.release(holder);
             }
         }
 

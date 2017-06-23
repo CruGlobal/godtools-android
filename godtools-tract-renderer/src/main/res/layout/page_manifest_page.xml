@@ -13,123 +13,115 @@
         android:adjustViewBounds="true"
         android:cropToPadding="false" />
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/page_content_parent"
-        android:layout_marginTop="?attr/actionBarSize"
+    <org.cru.godtools.tract.widget.PageContentLayout
+        android:id="@+id/page_content_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
 
-        <org.cru.godtools.tract.widget.PageContentLayout
-            android:id="@+id/page_content_layout"
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/initial_page_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <android.support.v4.widget.NestedScrollView
-                android:id="@+id/initial_page_content"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true"
-                app:layout_childType="hero"
-                app:layout_dynamicHeight="true">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <RelativeLayout
-                        android:id="@+id/header"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        tools:background="@android:color/Purple_800">
-
-                        <TextView
-                            android:id="@+id/header_number"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginStart="16dp"
-                            android:textIsSelectable="false"
-                            tools:text="1"
-                            tools:textSize="54sp" />
-
-                        <TextView
-                            android:id="@+id/header_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_margin="16dp"
-                            android:layout_toEndOf="@id/header_number"
-                            android:layout_toRightOf="@id/header_number"
-                            android:textIsSelectable="true"
-                            tools:text="GOD LOVES YOU AND CREATED YOU TO KNOW HIM PERSONALLY."
-                            tools:textSize="18sp" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/hero"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/header"
-                        android:layout_marginLeft="@dimen/horiz_margin_hero"
-                        android:layout_marginRight="@dimen/horiz_margin_hero">
-
-                        <TextView
-                            android:id="@+id/hero_heading"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="24dp"
-                            android:textIsSelectable="true"
-                            tools:text="Knowing God Personally"
-                            tools:textSize="54sp" />
-
-                        <LinearLayout
-                            android:id="@+id/hero_content"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/hero_heading"
-                            android:layout_marginTop="16dp"
-                            android:orientation="vertical" />
-                    </RelativeLayout>
-                </RelativeLayout>
-            </android.support.v4.widget.NestedScrollView>
+            android:fillViewport="true"
+            app:layout_childType="hero">
 
             <RelativeLayout
-                android:id="@+id/call_to_action"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                app:layout_childType="call_to_action"
-                app:layout_dynamicHeight="false">
+                android:layout_height="wrap_content">
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/call_to_action_arrow"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/horiz_margin_call_to_action_arrow"
-                    android:layout_marginRight="@dimen/horiz_margin_call_to_action_arrow"
-                    android:padding="8dp"
-                    app:srcCompat="@drawable/ic_call_to_action"
-                    tools:src="@drawable/ic_call_to_action"
-                    tools:tint="@android:color/Purple_800" />
-
-                <TextView
-                    android:id="@+id/call_to_action_label"
+                <RelativeLayout
+                    android:id="@+id/header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/horiz_margin_call_to_action_label"
-                    android:layout_marginStart="@dimen/horiz_margin_call_to_action_label"
-                    android:layout_toLeftOf="@id/call_to_action_arrow"
-                    android:layout_toStartOf="@id/call_to_action_arrow"
-                    android:textIsSelectable="true"
-                    tools:text="Call To Action" />
+                    tools:background="@android:color/Purple_800">
+
+                    <TextView
+                        android:id="@+id/header_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginStart="16dp"
+                        android:textIsSelectable="false"
+                        tools:text="1"
+                        tools:textSize="54sp" />
+
+                    <TextView
+                        android:id="@+id/header_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="16dp"
+                        android:layout_toEndOf="@id/header_number"
+                        android:layout_toRightOf="@id/header_number"
+                        android:textIsSelectable="true"
+                        tools:text="GOD LOVES YOU AND CREATED YOU TO KNOW HIM PERSONALLY."
+                        tools:textSize="18sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/hero"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/header"
+                    android:layout_marginLeft="@dimen/horiz_margin_hero"
+                    android:layout_marginRight="@dimen/horiz_margin_hero">
+
+                    <TextView
+                        android:id="@+id/hero_heading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:textIsSelectable="true"
+                        tools:text="Knowing God Personally"
+                        tools:textSize="54sp" />
+
+                    <LinearLayout
+                        android:id="@+id/hero_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/hero_heading"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical" />
+                </RelativeLayout>
             </RelativeLayout>
-        </org.cru.godtools.tract.widget.PageContentLayout>
-    </android.support.v4.widget.NestedScrollView>
+        </android.support.v4.widget.NestedScrollView>
+
+        <RelativeLayout
+            android:id="@+id/call_to_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            app:layout_childType="call_to_action">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/call_to_action_arrow"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/horiz_margin_call_to_action_arrow"
+                android:layout_marginRight="@dimen/horiz_margin_call_to_action_arrow"
+                android:padding="8dp"
+                app:srcCompat="@drawable/ic_call_to_action"
+                tools:src="@drawable/ic_call_to_action"
+                tools:tint="@android:color/Purple_800" />
+
+            <TextView
+                android:id="@+id/call_to_action_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/horiz_margin_call_to_action_label"
+                android:layout_marginStart="@dimen/horiz_margin_call_to_action_label"
+                android:layout_toLeftOf="@id/call_to_action_arrow"
+                android:layout_toStartOf="@id/call_to_action_arrow"
+                android:textIsSelectable="true"
+                tools:text="Call To Action" />
+        </RelativeLayout>
+    </org.cru.godtools.tract.widget.PageContentLayout>
 </RelativeLayout>

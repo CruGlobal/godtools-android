@@ -168,9 +168,17 @@ abstract class Base {
 
         /* END lifecycle */
 
+        @Nullable
+        public final T getModel() {
+            return mModel;
+        }
+
         public final void bind(@Nullable final T model) {
+            final T old = mModel;
             mModel = model;
-            onBind();
+            if (old != mModel) {
+                onBind();
+            }
         }
 
         final void sendEvents(@NonNull final Set<Event.Id> ids) {

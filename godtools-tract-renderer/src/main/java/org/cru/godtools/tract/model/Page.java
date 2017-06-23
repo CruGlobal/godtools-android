@@ -5,6 +5,8 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
+import android.support.v4.util.Pools;
+import android.view.View;
 
 import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableList;
@@ -12,6 +14,10 @@ import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
+import org.cru.godtools.tract.R;
+import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.Card.CardViewHolder;
+import org.cru.godtools.tract.widget.PageContentLayout;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.xmlpull.v1.XmlPullParser;
@@ -20,7 +26,10 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
+
+import butterknife.BindView;
 
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
@@ -32,7 +41,7 @@ import static org.cru.godtools.tract.model.Modal.XML_MODAL;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.model.Utils.parseScaleType;
 
-public final class Page extends Base implements Styles {
+public final class Page extends Base implements Styles, Parent {
     static final String XML_PAGE = "page";
     private static final String XML_LISTENERS = "listeners";
     private static final String XML_MANIFEST_FILENAME = "filename";
@@ -81,7 +90,7 @@ public final class Page extends Base implements Styles {
     private Header mHeader;
     @Nullable
     private Hero mHero;
-    private final List<Card> mCards = new ArrayList<>();
+    private List<Card> mCards = ImmutableList.of();
     private List<Modal> mModals = ImmutableList.of();
     @NonNull
     private CallToAction mCallToAction;
@@ -148,15 +157,17 @@ public final class Page extends Base implements Styles {
         return page != null ? page.mBackgroundColor : DEFAULT_BACKGROUND_COLOR;
     }
 
-    private static Resource getBackgroundImageResource(@Nullable final Page page) {
+    @Nullable
+    static Resource getBackgroundImageResource(@Nullable final Page page) {
         return page != null ? page.getResource(page.mBackgroundImage) : null;
     }
 
-    private static int getBackgroundImageGravity(@Nullable final Page page) {
+    static int getBackgroundImageGravity(@Nullable final Page page) {
         return page != null ? page.mBackgroundImageGravity : DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     }
 
-    private static ScaleType getBackgroundImageScaleType(@Nullable final Page page) {
+    @NonNull
+    static ScaleType getBackgroundImageScaleType(@Nullable final Page page) {
         return page != null ? page.mBackgroundImageScaleType : DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
     }
 
@@ -171,10 +182,17 @@ public final class Page extends Base implements Styles {
     }
 
     @NonNull
-    public List<Card> getCards() {
-        return ImmutableList.copyOf(mCards);
+    @Override
+    public List<Content> getContent() {
+        return ImmutableList.of();
     }
 
+    @NonNull
+    public List<Card> getCards() {
+        return mCards;
+    }
+
+    @NonNull
     public List<Modal> getModals() {
         return mModals;
     }
@@ -271,6 +289,7 @@ public final class Page extends Base implements Styles {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CARDS);
 
         // process any child elements
+        final List<Card> cards = new ArrayList<>();
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -281,7 +300,7 @@ public final class Page extends Base implements Styles {
                 case XMLNS_TRACT:
                     switch (parser.getName()) {
                         case XML_CARD:
-                            mCards.add(Card.fromXml(this, parser));
+                            cards.add(Card.fromXml(this, parser, cards.size()));
                             continue;
                     }
                     break;
@@ -290,6 +309,7 @@ public final class Page extends Base implements Styles {
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
+        mCards = ImmutableList.copyOf(cards);
     }
 
     private void parseModalsXml(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -319,8 +339,97 @@ public final class Page extends Base implements Styles {
         mModals = ImmutableList.copyOf(modals);
     }
 
-    public static void bindBackgroundImage(@Nullable final Page page, @NonNull final ScaledPicassoImageView view) {
-        Resource.bindBackgroundImage(view, getBackgroundImageResource(page), getBackgroundImageScaleType(page),
-                                     getBackgroundImageGravity(page));
+    @NonNull
+    public static PageViewHolder getViewHolder(@NonNull final View root) {
+        final Object holder = root.getTag(R.id.view_holder);
+        if (holder instanceof PageViewHolder) {
+            return (PageViewHolder) holder;
+        } else {
+            return new PageViewHolder(root);
+        }
+    }
+
+    public static class PageViewHolder extends Parent.ParentViewHolder<Page> implements CardViewHolder.Callbacks {
+        @BindView(R2.id.page)
+        View mPageView;
+        @BindView(R2.id.background_image)
+        ScaledPicassoImageView mBackgroundImage;
+
+        @BindView(R2.id.page_content_layout)
+        PageContentLayout mPageContentLayout;
+
+        @Nullable
+        @BindView(R2.id.hero)
+        View mHero;
+
+        @NonNull
+        private final Pools.Pool<CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
+        @NonNull
+        private final List<CardViewHolder> mCardViewHolders = new ArrayList<>();
+
+        PageViewHolder(@NonNull final View root) {
+            super(Page.class, root, null);
+        }
+
+        /* BEGIN lifecycle */
+
+        @Override
+        void onBind() {
+            super.onBind();
+            bindPage();
+            Hero.bind(mModel != null ? mModel.getHero() : null, mHero);
+            bindCards();
+        }
+
+        @Override
+        public void onToggleCard(@NonNull final CardViewHolder holder) {
+            if (holder.mModel != null) {
+                int position = holder.mModel.getPosition();
+                if (position == mPageContentLayout.getActiveCardPosition()) {
+                    position = -1;
+                }
+                mPageContentLayout.changeActiveCard(position, true);
+            }
+        }
+
+        /* END lifecycle */
+
+        private void bindPage() {
+            mPageView.setBackgroundColor(Page.getBackgroundColor(mModel));
+            Resource.bindBackgroundImage(mBackgroundImage, getBackgroundImageResource(mModel),
+                                         getBackgroundImageScaleType(mModel), getBackgroundImageGravity(mModel));
+        }
+
+        private void bindCards() {
+            final List<Card> cards = mModel != null ? mModel.getCards() : ImmutableList.of();
+            final ListIterator<CardViewHolder> i = mCardViewHolders.listIterator();
+
+            // update all visible cards
+            for (final Card card : cards) {
+                if (i.hasNext()) {
+                    i.next().bind(card);
+                } else {
+                    // acquire a view holder
+                    CardViewHolder holder = mRecycledCardViewHolders.acquire();
+                    if (holder == null) {
+                        holder = Card.createViewHolder(mPageContentLayout, this);
+                    }
+
+                    // update holder and add it to the layout
+                    holder.bind(card);
+                    i.add(holder);
+                    mPageContentLayout.addView(holder.mRoot);
+                }
+            }
+
+            // remove any remaining cards that are no longer used
+            while (i.hasNext()) {
+                final CardViewHolder holder = i.next();
+                mPageContentLayout.removeView(holder.mRoot);
+                i.remove();
+                holder.bind(null);
+                mRecycledCardViewHolders.release(holder);
+            }
+        }
     }
 }

@@ -15,8 +15,7 @@ import com.google.common.collect.ImmutableList;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.util.AutoAttachingGlobalLayoutListener;
-import org.cru.godtools.tract.widget.PageContentLayout;
+import org.cru.godtools.tract.model.Page.PageViewHolder;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.cru.godtools.tract.widget.TractPicassoImageView;
 import org.xmlpull.v1.XmlPullParser;
@@ -26,11 +25,12 @@ import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import butterknife.Optional;
 
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.model.Utils.parseScaleType;
-import static org.cru.godtools.tract.util.ViewUtils.getTopOffset;
 
 public final class Card extends Base implements Styles, Parent {
     static final String XML_CARD = "card";
@@ -38,6 +38,8 @@ public final class Card extends Base implements Styles, Parent {
 
     private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL_X;
     private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
+
+    private final int mPosition;
 
     @Nullable
     @ColorInt
@@ -58,8 +60,13 @@ public final class Card extends Base implements Styles, Parent {
     @NonNull
     private List<Content> mContent = ImmutableList.of();
 
-    private Card(@NonNull final Page parent) {
+    private Card(@NonNull final Page parent, final int position) {
         super(parent);
+        mPosition = position;
+    }
+
+    public int getPosition() {
+        return mPosition;
     }
 
     @Override
@@ -98,9 +105,9 @@ public final class Card extends Base implements Styles, Parent {
     }
 
     @NonNull
-    static Card fromXml(@NonNull final Page parent, @NonNull final XmlPullParser parser)
+    static Card fromXml(@NonNull final Page parent, @NonNull final XmlPullParser parser, final int position)
             throws IOException, XmlPullParserException {
-        return new Card(parent).parse(parser);
+        return new Card(parent, position).parse(parser);
     }
 
     @NonNull
@@ -147,12 +154,17 @@ public final class Card extends Base implements Styles, Parent {
     }
 
     @NonNull
-    public static CardViewHolder createViewHolder(@NonNull final ViewGroup parent) {
-        return new CardViewHolder(parent);
+    public static CardViewHolder createViewHolder(@NonNull final ViewGroup parent,
+                                                  @Nullable final PageViewHolder pageViewHolder) {
+        return new CardViewHolder(parent, pageViewHolder);
     }
 
     @UiThread
     public static final class CardViewHolder extends ParentViewHolder<Card> {
+        public interface Callbacks {
+            void onToggleCard(@NonNull final CardViewHolder holder);
+        }
+
         @BindView(R2.id.background_image)
         TractPicassoImageView mBackgroundView;
         @BindView(R2.id.card)
@@ -162,9 +174,18 @@ public final class Card extends Base implements Styles, Parent {
         @BindView(R2.id.label_divider)
         View mDivider;
 
-        CardViewHolder(@NonNull final ViewGroup parent) {
-            super(Card.class, parent, R.layout.tract_content_card, null);
-            AutoAttachingGlobalLayoutListener.attach(mRoot, this::updatePeekHeights);
+        @Nullable
+        private Callbacks mCallbacks;
+
+        CardViewHolder(@NonNull final ViewGroup parent, @Nullable final PageViewHolder pageViewHolder) {
+            super(Card.class, parent, R.layout.tract_content_card, pageViewHolder);
+            if (pageViewHolder != null) {
+                setCallbacks(pageViewHolder);
+            }
+        }
+
+        public void setCallbacks(@Nullable final Callbacks callbacks) {
+            mCallbacks = callbacks;
         }
 
         @Override
@@ -187,22 +208,11 @@ public final class Card extends Base implements Styles, Parent {
             mDivider.setBackgroundColor(Styles.getTextColor(mModel));
         }
 
-        // XXX: this should be handled by PageContentLayout utilizing configuration within the LayoutParams
-        // XXX: we can attach/detach the GlobalLayoutListner in the PCL onAttach/onDetach.
-        // XXX: we can also track which view ids to use to calculate the peek heights
-        void updatePeekHeights() {
-            final ViewGroup.LayoutParams rawLp = mRoot.getLayoutParams();
-            if (rawLp instanceof PageContentLayout.LayoutParams) {
-                final PageContentLayout.LayoutParams lp = (PageContentLayout.LayoutParams) rawLp;
-
-                // update card peek height & padding values
-                final int cardPeekPadding = getTopOffset((ViewGroup) mRoot, mCardView);
-                final int cardPeekHeight = getTopOffset(mCardView, mDivider);
-                if (cardPeekPadding != lp.cardPeekPadding || cardPeekHeight != lp.cardPeekHeight) {
-                    lp.cardPeekPadding = cardPeekPadding;
-                    lp.cardPeekHeight = cardPeekHeight;
-                    mRoot.requestLayout();
-                }
+        @Optional
+        @OnClick(R2.id.action_toggle)
+        void toggleCard() {
+            if (mCallbacks != null) {
+                mCallbacks.onToggleCard(this);
             }
         }
     }
