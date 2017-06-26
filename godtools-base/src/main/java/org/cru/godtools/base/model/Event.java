@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableSet;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,11 +19,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public final class Event {
     @NonNull
     public final Id id;
+    @Nullable
+    public final Locale locale;
     @NonNull
     public final Map<String, String> fields;
 
     Event(@NonNull final Builder builder) {
         id = checkNotNull(builder.mId);
+        locale = builder.mLocale;
         fields = ImmutableMap.copyOf(builder.mFields);
     }
 
@@ -77,6 +81,9 @@ public final class Event {
         @Nullable
         Id mId;
 
+        @Nullable
+        Locale mLocale;
+
         @NonNull
         final Map<String, String> mFields = new HashMap<>();
 
@@ -84,6 +91,11 @@ public final class Event {
 
         public Builder id(@NonNull final Id id) {
             mId = id;
+            return this;
+        }
+
+        public Builder locale(@NonNull final Locale locale) {
+            mLocale = locale;
             return this;
         }
 

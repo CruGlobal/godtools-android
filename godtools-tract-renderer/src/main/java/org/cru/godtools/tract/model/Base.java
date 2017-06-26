@@ -215,6 +215,9 @@ abstract class Base {
 
             // try letting a parent build the event object
             final Event.Builder builder = Event.builder();
+            if (mModel != null) {
+                builder.locale(mModel.getManifest().getLocale());
+            }
             if (!buildEvent(builder)) {
                 // populate the event with our local state since it wasn't populated by a parent
                 onBuildEvent(builder, false);

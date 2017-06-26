@@ -14,8 +14,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.keynote.godtools.android.db.GodToolsDao;
 
-import java.util.Locale;
-
 import static org.cru.godtools.base.model.Event.Id.FOLLOWUP_EVENT;
 
 public final class FollowupService {
@@ -51,7 +49,7 @@ public final class FollowupService {
             final Followup followup = new Followup();
             followup.setName(event.fields.get(FIELD_NAME));
             followup.setEmail(event.fields.get(FIELD_EMAIL));
-            followup.setLanguageCode(Locale.ENGLISH);
+            followup.setLanguageCode(event.locale);
             followup.setDestination(NumberUtils.toLong(event.fields.get(FIELD_DESTINATION), null));
             mDao.insertNew(followup);
         }
