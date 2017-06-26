@@ -11,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.model.Page.PageViewHolder;
@@ -23,23 +25,31 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
 
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
+import static org.cru.godtools.tract.model.Utils.parseBoolean;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.model.Utils.parseScaleType;
 
 public final class Card extends Base implements Styles, Parent {
     static final String XML_CARD = "card";
     private static final String XML_LABEL = "label";
+    private static final String XML_HIDDEN = "hidden";
+    private static final String XML_LISTENERS = "listeners";
 
     private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL_X;
     private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
 
     private final int mPosition;
+
+    private boolean mHidden = false;
+    @NonNull
+    private Set<Event.Id> mListeners = ImmutableSet.of();
 
     @Nullable
     @ColorInt
@@ -65,8 +75,18 @@ public final class Card extends Base implements Styles, Parent {
         mPosition = position;
     }
 
-    public int getPosition() {
-        return mPosition;
+    @NonNull
+    public String getId() {
+        return getPage().getId() + "-" + mPosition;
+    }
+
+    boolean isHidden() {
+        return mHidden;
+    }
+
+    @NonNull
+    Set<Event.Id> getListeners() {
+        return mListeners;
     }
 
     @Override
@@ -114,6 +134,8 @@ public final class Card extends Base implements Styles, Parent {
     private Card parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CARD);
 
+        mHidden = parseBoolean(parser.getAttributeValue(null, XML_HIDDEN), mHidden);
+        mListeners = parseEvents(parser, XML_LISTENERS);
         mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);

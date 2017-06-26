@@ -20,6 +20,16 @@ final class Utils {
             Pattern.compile("^\\s*rgba\\(\\s*([0-9]+)\\s*,\\s*([0-9]+)\\s*,\\s*([0-9]+)\\s*,\\s*([0-9.]+)\\s*\\)\\s*$");
 
     @Nullable
+    @Contract("_, !null -> !null")
+    public static Boolean parseBoolean(@Nullable final String raw, @Nullable final Boolean defaultValue) {
+        if (raw != null) {
+            return Boolean.parseBoolean(raw);
+        }
+
+        return defaultValue;
+    }
+
+    @Nullable
     @ColorInt
     static Integer parseColor(@NonNull final XmlPullParser parser, @NonNull final String attribute,
                               @Nullable @ColorInt final Integer defValue) {

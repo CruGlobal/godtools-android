@@ -37,7 +37,14 @@ import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD
 
 public class PageContentLayout extends FrameLayout implements NestedScrollingParent,
         ViewTreeObserver.OnGlobalLayoutListener {
+    public interface OnActiveCardListener {
+        void onActiveCardChanged(@Nullable View activeCard);
+    }
+
     private final NestedScrollingParentHelper mParentHelper;
+
+    @Nullable
+    private OnActiveCardListener mActiveCardListener;
 
     private int mCardPositionOffset = 2;
     @Nullable
@@ -52,6 +59,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             if (mAnimation == animation) {
                 mAnimation = null;
                 updateChildrenOffsetsAndAlpha();
+                dispatchActiveCardChanged();
             }
         }
 
@@ -186,6 +194,17 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
     /* END NestedScrollingParent methods */
 
+    public void setActiveCardListener(@Nullable final OnActiveCardListener listener) {
+        mActiveCardListener = listener;
+    }
+
+    void dispatchActiveCardChanged() {
+        // only dispatch change active card callback if we aren't animating
+        if (mActiveCardListener != null && mAnimation == null) {
+            mActiveCardListener.onActiveCardChanged(mActiveCard);
+        }
+    }
+
     public void changeActiveCard(final int cardPosition, final boolean animate) {
         changeActiveCard(getChildAt(mCardPositionOffset + cardPosition), animate);
     }
@@ -214,6 +233,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             }
 
             updateChildrenOffsetsAndAlpha();
+            dispatchActiveCardChanged();
         } else {
             updateActiveCardPosition(true);
         }
@@ -229,7 +249,13 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
         if (updateOffsets && oldPosition != mActiveCardPosition) {
             updateChildrenOffsetsAndAlpha();
+            dispatchActiveCardChanged();
         }
+    }
+
+    @Nullable
+    public View getActiveCard() {
+        return mActiveCard;
     }
 
     public int getActiveCardPosition() {
