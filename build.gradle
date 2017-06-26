@@ -59,6 +59,7 @@ dependencies {
     implementation project(':godtools-db')
     implementation project(':godtools-model')
     implementation project(':godtools-model-events')
+    implementation project(':godtools-sync')
     compile project(':godtools-tract-renderer')
 
     implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"

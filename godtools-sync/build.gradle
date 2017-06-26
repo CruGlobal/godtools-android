@@ -21,5 +21,9 @@ android {
 }
 
 dependencies {
-    implementation project(':godtools-api')
+    implementation project(':godtools-base')
+    implementation project(':godtools-db')
+    implementation project(':godtools-model')
+
+    implementation "org.greenrobot:eventbus:${deps.eventbus}"
 }

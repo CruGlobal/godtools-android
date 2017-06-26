@@ -1,11 +1,18 @@
 package org.keynote.godtools.android.model;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.Nullable;
 
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiId;
 
+import java.security.SecureRandom;
+import java.util.Random;
+
 public abstract class Base {
     public static final long INVALID_ID = -1;
+
+    @SuppressLint("TrulyRandom")
+    private static final Random RAND = new SecureRandom();
 
     @Nullable
     @JsonApiId
@@ -17,5 +24,11 @@ public abstract class Base {
 
     public void setId(@Nullable final Long id) {
         mId = id;
+    }
+
+    public void initNew() {
+        do {
+            mId = (long) (-1 * RAND.nextInt(Integer.MAX_VALUE));
+        } while (mId >= INVALID_ID || mId < Integer.MIN_VALUE);
     }
 }

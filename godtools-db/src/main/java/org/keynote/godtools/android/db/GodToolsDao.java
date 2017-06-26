@@ -1,6 +1,8 @@
 package org.keynote.godtools.android.db;
 
 import android.content.Context;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -80,5 +82,20 @@ public class GodToolsDao extends DBAdapter implements StreamDao {
     @Override
     public <T> Stream<T> streamCompat(@NonNull final Query<T> query) {
         return StreamHelper.stream(this, query);
+    }
+
+    public long insertNew(final Base obj) {
+        int attempts = 10;
+        while (true) {
+            obj.initNew();
+            try {
+                return insert(obj, SQLiteDatabase.CONFLICT_ABORT);
+            } catch (final SQLException e) {
+                // propagate exception if we've exhausted our attempts
+                if (--attempts < 0) {
+                    throw e;
+                }
+            }
+        }
     }
 }

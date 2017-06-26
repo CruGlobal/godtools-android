@@ -19,11 +19,11 @@ public final class Event {
     @NonNull
     public final Id id;
     @NonNull
-    private final Map<String, String> mFields;
+    public final Map<String, String> fields;
 
     Event(@NonNull final Builder builder) {
         id = checkNotNull(builder.mId);
-        mFields = ImmutableMap.copyOf(builder.mFields);
+        fields = ImmutableMap.copyOf(builder.mFields);
     }
 
     public static Builder builder() {

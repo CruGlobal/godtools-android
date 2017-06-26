@@ -9,6 +9,7 @@ import com.newrelic.agent.android.NewRelic;
 import com.squareup.picasso.Picasso;
 
 import org.ccci.gto.android.common.api.okhttp3.util.OkHttpClientUtil;
+import org.cru.godtools.sync.service.FollowupService;
 import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.RenderAppConfig;
 import org.keynote.godtools.android.service.GodToolsToolManager;
@@ -35,6 +36,7 @@ public class SnuffyApplication extends RenderApp {
 
         // Initialize tool manager
         GodToolsToolManager.getInstance(this);
+        FollowupService.start(this);
     }
 
     @Override
