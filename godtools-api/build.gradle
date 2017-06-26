@@ -13,9 +13,12 @@ android {
 }
 
 dependencies {
-    implementation project(':godtools-model')
+    api project(':godtools-model')
 
     api "org.ccci.gto.android:gto-support-jsonapi-retrofit2:${deps.gtoSupport}"
 
     api "com.squareup.retrofit2:retrofit:${deps.retrofit2}"
+
+    // include this temporarily to support migration of deprecated APIs
+    implementation project(':godtools-db')
 }

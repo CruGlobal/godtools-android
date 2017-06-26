@@ -15,6 +15,7 @@ import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory;
 import org.cru.godtools.api.AttachmentsApi;
+import org.cru.godtools.api.GrowthSpacesApi;
 import org.cru.godtools.api.LanguagesApi;
 import org.cru.godtools.api.ToolsApi;
 import org.cru.godtools.api.TranslationsApi;
