@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import org.keynote.godtools.android.api.GodToolsApi;
-import org.keynote.godtools.android.business.GTNotificationRegister;
+import org.cru.godtools.api.GodToolsApi;
+import org.cru.godtools.api.model.GTNotificationRegister;
 import org.keynote.godtools.android.utils.Constants;
 
 import java.util.List;

@@ -35,12 +35,12 @@ import android.widget.FrameLayout;
 import com.crashlytics.android.Crashlytics;
 import com.google.common.base.Strings;
 
+import org.cru.godtools.api.GodToolsApi;
+import org.cru.godtools.api.model.GTNotificationRegister;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.business.GSSubscriber;
-import org.keynote.godtools.android.business.GTNotificationRegister;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;

@@ -16,9 +16,9 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.util.MainThreadExecutor;
-import org.keynote.godtools.android.api.GodToolsApi;
+import org.cru.godtools.api.GodToolsApi;
+import org.cru.godtools.api.model.GTLanguages;
 import org.keynote.godtools.android.business.GTLanguage;
-import org.keynote.godtools.android.business.GTLanguages;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.http.DownloadTask;

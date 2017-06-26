@@ -8,7 +8,7 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 
 import org.ccci.gto.android.common.util.IOUtils;
-import org.keynote.godtools.android.api.GodToolsApi;
+import org.cru.godtools.api.GodToolsApi;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBContract.GTPackageTable;

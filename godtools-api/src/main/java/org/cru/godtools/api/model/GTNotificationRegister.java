@@ -1,11 +1,7 @@
-package org.keynote.godtools.android.business;
+package org.cru.godtools.api.model;
 
-/**
- * Created by rmatt on 2/8/2017.
- */
-
+@Deprecated
 public class GTNotificationRegister {
-
     private String registrationId;
     private int notificationType;
     private boolean notificationsSent;
@@ -42,16 +38,4 @@ public class GTNotificationRegister {
     public void setNotificationsSent(boolean notificationsSent) {
         this.notificationsSent = notificationsSent;
     }
-
-    //    jsonObject.put("id", null); // done by api
-//    jsonObject.put("registrationId", objects[2].toString());
-//    Log.i("registrationId", objects[2].toString());
-//
-//    jsonObject.put("notificationType", objects[3].toString());
-//    Log.i("notificationType", objects[3].toString());
-//
-//    jsonObject.put("presentations", null); //done by api
-//    jsonObject.put("notificationSent", false);
-//    jsonObject.put("createdTimestamp", null); // done by api
-
 }

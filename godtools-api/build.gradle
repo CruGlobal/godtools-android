@@ -1,0 +1,50 @@
+apply plugin: 'com.android.library'
+
+android {
+    buildToolsVersion buildTools
+    compileSdkVersion compileSdk
+
+    defaultConfig {
+        minSdkVersion minSdk
+        targetSdkVersion targetSdk
+
+        buildConfigField "String", "MOBILE_CONTENT_SYSTEM", "\"GodTools\""
+        buildConfigField "String", "GROWTH_SPACES_URL", "\"https://www.growthspaces.org/api/v1/\""
+    }
+
+    flavorDimensions "env"
+    productFlavors {
+        stage {
+            dimension "env"
+
+            buildConfigField "String", "BASE_URL", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/\""
+            buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api-stage.cru.org/\""
+        }
+        production {
+            dimension "env"
+
+            buildConfigField "String", "BASE_URL", "\"https://api.godtoolsapp.com/godtools-api/rest/\""
+            buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api.cru.org/\""
+        }
+    }
+}
+
+dependencies {
+    api project(':godtools-model')
+
+    implementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-api-retrofit2:${deps.gtoSupport}"
+    api "org.ccci.gto.android:gto-support-jsonapi-retrofit2:${deps.gtoSupport}"
+
+    api "com.squareup.retrofit2:retrofit:${deps.retrofit2}"
+
+    // include these temporarily to support migration of deprecated APIs
+    implementation project(':godtools-db')
+    implementation "org.ccci.gto.android:gto-support-gson:${deps.gtoSupport}"
+    implementation "com.squareup.retrofit2:converter-gson:${deps.retrofit2}"
+    implementation("com.squareup.retrofit2:converter-simplexml:${deps.retrofit2}") {
+        exclude module: 'stax'
+        exclude module: 'stax-api'
+        exclude module: 'xpp3'
+    }
+}

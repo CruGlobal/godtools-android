@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.api;
+package org.cru.godtools.api;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -27,9 +27,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
-import static org.keynote.godtools.android.BuildConfig.BASE_URL;
-import static org.keynote.godtools.android.BuildConfig.GROWTH_SPACES_URL;
-import static org.keynote.godtools.android.BuildConfig.MOBILE_CONTENT_API;
+import static org.cru.godtools.api.BuildConfig.BASE_URL;
+import static org.cru.godtools.api.BuildConfig.GROWTH_SPACES_URL;
+import static org.cru.godtools.api.BuildConfig.MOBILE_CONTENT_API;
 
 public class GodToolsApi {
     @NonNull
@@ -44,8 +44,10 @@ public class GodToolsApi {
     @NonNull
     public final AttachmentsApi attachments;
     @NonNull
+    @Deprecated
     public final GrowthSpacesApi growthSpaces;
     @NonNull
+    @Deprecated
     public final LegacyApi legacy;
 
     private GodToolsApi(@NonNull final Context context) {
@@ -96,6 +98,7 @@ public class GodToolsApi {
                 .addConverterFactory(JsonApiConverterFactory.create(jsonApiConverter()));
     }
 
+    @NonNull
     private GsonConverterFactory gsonConverter() {
         return GsonConverterFactory.create(
                 new GsonBuilder()
