@@ -165,7 +165,7 @@ android {
 
             buildConfigField "String", "BASE_URL_V2", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/v2/\""
             buildConfigField "String", "BASE_URL", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/\""
-            buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api-stage.cru.org/\""
+            buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api.cru.org/\""
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AA2f0cb2d41f6ac7dcc256eaa9ca7e0f640859fd52\""
         }
         release {

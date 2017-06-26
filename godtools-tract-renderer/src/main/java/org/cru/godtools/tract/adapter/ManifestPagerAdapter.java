@@ -13,7 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.common.collect.ImmutableList;
+
 import org.ccci.gto.android.common.support.v4.adapter.ViewHolderPagerAdapter;
+import org.ccci.gto.android.common.support.v4.util.IdUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
@@ -45,6 +48,10 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
     @Nullable
     private Manifest mManifest;
 
+    public ManifestPagerAdapter() {
+        setHasStableIds(true);
+    }
+
     public void setCallbacks(@Nullable final Callbacks callbacks) {
         mCallbacks = callbacks;
     }
@@ -60,6 +67,23 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
     @Override
     public int getCount() {
         return mManifest != null ? mManifest.getPages().size() : 0;
+    }
+
+    @Override
+    public long getItemId(final int position) {
+        assert mManifest != null : "there are no items when the manifest is null";
+        return IdUtils.convertId(mManifest.getPages().get(position).getId());
+    }
+
+    @Override
+    protected int getItemPositionFromId(final long id) {
+        final List<Page> pages = mManifest != null ? mManifest.getPages() : ImmutableList.of();
+        for (int i = 0; i < pages.size(); i++) {
+            if (id == IdUtils.convertId(pages.get(i).getId())) {
+                return i;
+            }
+        }
+        return POSITION_NONE;
     }
 
     /* BEGIN lifecycle */
