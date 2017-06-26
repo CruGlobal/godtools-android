@@ -17,7 +17,6 @@ import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.model.Card.CardViewHolder;
 import org.cru.godtools.tract.widget.PageContentLayout;
@@ -343,12 +342,8 @@ public final class Page extends Base implements Styles, Parent {
 
     @NonNull
     public static PageViewHolder getViewHolder(@NonNull final View root) {
-        final Object holder = root.getTag(R.id.view_holder);
-        if (holder instanceof PageViewHolder) {
-            return (PageViewHolder) holder;
-        } else {
-            return new PageViewHolder(root);
-        }
+        final PageViewHolder holder = BaseViewHolder.forView(root, PageViewHolder.class);
+        return holder != null ? holder : new PageViewHolder(root);
     }
 
     public static class PageViewHolder extends Parent.ParentViewHolder<Page> implements CardViewHolder.Callbacks {

@@ -153,12 +153,8 @@ public final class Modal extends Base implements Parent, Styles {
 
     @NonNull
     public static ModalViewHolder getViewHolder(@NonNull final View root) {
-        final Object holder = root.getTag(R.id.view_holder);
-        if (holder instanceof ModalViewHolder) {
-            return (ModalViewHolder) holder;
-        } else {
-            return new ModalViewHolder(root);
-        }
+        final ModalViewHolder holder = BaseViewHolder.forView(root, ModalViewHolder.class);
+        return holder != null ? holder : new ModalViewHolder(root);
     }
 
     public static class ModalViewHolder extends ParentViewHolder<Modal> {

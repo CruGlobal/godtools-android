@@ -13,7 +13,6 @@ import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableList;
 
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.model.Base.BaseViewHolder;
 
@@ -86,7 +85,7 @@ interface Parent {
             if (mContent != null) {
                 return IntStream.range(0, mContent.getChildCount())
                         .mapToObj(mContent::getChildAt)
-                        .map(v -> v.getTag(R.id.view_holder))
+                        .map(BaseViewHolder::forView)
                         .select(BaseViewHolder.class);
             }
             return Stream.empty();

@@ -154,6 +154,23 @@ abstract class Base {
             mRoot.setTag(R.id.view_holder, this);
         }
 
+        @Nullable
+        public static BaseViewHolder forView(@Nullable final View view) {
+            return forView(view, BaseViewHolder.class);
+        }
+
+        @Nullable
+        public static <T extends BaseViewHolder> T forView(@Nullable final View view, @NonNull final Class<T> clazz) {
+            if (view != null) {
+                final Object holder = view.getTag(R.id.view_holder);
+                if (clazz.isInstance(holder)) {
+                    return clazz.cast(holder);
+                }
+            }
+
+            return null;
+        }
+
         /* BEGIN lifecycle */
 
         @CallSuper
