@@ -24,7 +24,7 @@ import org.ccci.gto.android.common.gson.GsonIgnoreExclusionStrategy;
 import org.ccci.gto.android.common.util.IOUtils;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.business.GTLanguage;
-import org.keynote.godtools.android.business.GTLanguages;
+import org.cru.godtools.api.model.GTLanguages;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;

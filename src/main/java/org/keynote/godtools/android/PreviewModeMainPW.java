@@ -27,10 +27,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.ccci.gto.android.common.db.Query;
+import org.cru.godtools.api.model.GTLanguages;
 import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
-import org.keynote.godtools.android.business.GTLanguages;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.everystudent.EveryStudent;

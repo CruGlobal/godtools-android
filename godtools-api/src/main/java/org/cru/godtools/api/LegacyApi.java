@@ -1,8 +1,7 @@
-package org.keynote.godtools.android.api;
+package org.cru.godtools.api;
 
-import org.keynote.godtools.android.BuildConfig;
-import org.keynote.godtools.android.business.GTLanguages;
-import org.keynote.godtools.android.business.GTNotificationRegister;
+import org.cru.godtools.api.model.GTLanguages;
+import org.cru.godtools.api.model.GTNotificationRegister;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -15,8 +14,8 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 import static com.google.common.net.HttpHeaders.AUTHORIZATION;
-import static org.keynote.godtools.android.utils.Constants.INTERPRETER_HEADER;
 
+@Deprecated
 public interface LegacyApi {
     String V2 = "v2";
     String AUTH = V2 + "/auth";
@@ -27,44 +26,46 @@ public interface LegacyApi {
     String ENDPOINT_PACKAGES = V2 + "/packages";
     String ENDPOINT_TRANSLATIONS = V2 + "/translations";
 
-    @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
+    String HEADER_INTERPRETER = "interpreter: 1";
+
+    @Headers(HEADER_INTERPRETER)
     @POST(AUTH + "/{code}")
     Call<ResponseBody> getAuthToken(@Path("code") String code);
 
-    @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
+    @Headers(HEADER_INTERPRETER)
     @GET(AUTH + "/status")
     Call<ResponseBody> verifyAuthToken(@Header(AUTHORIZATION) String token);
 
-    @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
+    @Headers(HEADER_INTERPRETER)
     @POST(NOTIFICATION + "/{registrationId}")
     Call<ResponseBody> registerDeviceForNotifications(@Path("registrationId") String regId,
                                                       @Header("deviceId") String deviceId,
                                                       @Header("notificationsOn") boolean enableNotifications);
 
-    @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
+    @Headers(HEADER_INTERPRETER)
     @POST(NOTIFICATION_UPDATE)
     Call<ResponseBody> updateNotification(@Header(AUTHORIZATION) String token,
                                           @Body GTNotificationRegister notificationRegister);
 
-    @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
+    @Headers(HEADER_INTERPRETER)
     @GET(META)
     Call<GTLanguages> getListOfPackages();
 
-    @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
+    @Headers(HEADER_INTERPRETER)
     @GET(META + "/{langCode}")
     Call<GTLanguages> getListOfDrafts(@Header(AUTHORIZATION) String token, @Path("langCode") String langCode);
 
-    @Headers(INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION)
+    @Headers(HEADER_INTERPRETER)
     @GET(ENDPOINT_DRAFTS + "/{langCode}")
     Call<ResponseBody> downloadDrafts(@Header(AUTHORIZATION) String token, @Path("langCode") String langCode,
                                       @Query("compressed") boolean compressed);
 
-    @Headers({INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION})
+    @Headers(HEADER_INTERPRETER)
     @GET(ENDPOINT_PACKAGES + "/{langCode}")
     Call<ResponseBody> downloadPackages(@Header(AUTHORIZATION) String token, @Path("langCode") String langCode);
 
     @Headers({
-            INTERPRETER_HEADER + ": " + BuildConfig.INTERPRETER_VERSION,
+            HEADER_INTERPRETER,
             "Accept: application/xml",
             "Content-type: application/xml"
     })
