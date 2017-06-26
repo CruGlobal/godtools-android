@@ -128,10 +128,8 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "MOBILE_CONTENT_SYSTEM", "\"GodTools\""
         buildConfigField "String", "GOOGLE_ANALYTICS_CLIENT_ID", "\"UA-325725-50\""
         buildConfigField "String", "GROWTH_SPACES_URL", "\"https://www.growthspaces.org/api/v1/\""
-        buildConfigField "String", "INTERPRETER_VERSION", "\"1\""
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
