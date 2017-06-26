@@ -7,8 +7,8 @@ import android.support.annotation.WorkerThread;
 import android.support.v4.util.LongSparseArray;
 import android.support.v4.util.SimpleArrayMap;
 
+import org.cru.godtools.api.GodToolsApi;
 import org.greenrobot.eventbus.EventBus;
-import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.model.Base;
 

@@ -13,8 +13,8 @@ import android.widget.Toast;
 import com.google.common.base.Strings;
 import com.google.common.net.HttpHeaders;
 
+import org.cru.godtools.api.GodToolsApi;
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.http.APITasks;

@@ -27,8 +27,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
+import org.cru.godtools.api.GodToolsApi;
 import org.cru.godtools.api.model.GTLanguages;
-import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTLanguage;

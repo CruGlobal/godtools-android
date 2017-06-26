@@ -69,8 +69,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-analytics:' + deps.playServices
     compile 'com.google.android.gms:play-services-gcm:' + deps.playServices
 
-    compile 'org.ccci.gto.android:gto-support-api-okhttp3:' + deps.gtoSupport
-    compile 'org.ccci.gto.android:gto-support-api-retrofit2:' + deps.gtoSupport
+    implementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     compile 'org.ccci.gto.android:gto-support-gson:' + deps.gtoSupport
@@ -85,13 +84,6 @@ dependencies {
     compile "com.google.guava:guava:${deps.guava}"
     compile "com.jakewharton:butterknife:${deps.butterknife}"
     compile "com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0"
-    compile 'com.squareup.retrofit2:converter-gson:' + deps.retrofit2
-    compile('com.squareup.retrofit2:converter-simplexml:' + deps.retrofit2)
-            {
-                exclude module: 'stax'
-                exclude module: 'stax-api'
-                exclude module: 'xpp3'
-            }
 
     debugCompile 'com.android.support:multidex:1.0.1'
     debugCompile 'org.ccci.gto.android:gto-support-leakcanary:' + deps.gtoSupport
@@ -129,7 +121,6 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "GOOGLE_ANALYTICS_CLIENT_ID", "\"UA-325725-50\""
-        buildConfigField "String", "GROWTH_SPACES_URL", "\"https://www.growthspaces.org/api/v1/\""
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -160,9 +151,9 @@ android {
             versionNameSuffix "-debug"
             multiDexEnabled true
 
+            flavorSelection 'env', 'production'
+
             buildConfigField "String", "BASE_URL_V2", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/v2/\""
-            buildConfigField "String", "BASE_URL", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/\""
-            buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api.cru.org/\""
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AA2f0cb2d41f6ac7dcc256eaa9ca7e0f640859fd52\""
         }
         release {
@@ -172,9 +163,9 @@ android {
                 signingConfig signingConfigs.release
             }
 
+            flavorSelection 'env', 'production'
+
             buildConfigField "String", "BASE_URL_V2", "\"https://api.godtoolsapp.com/godtools-api/rest/v2/\""
-            buildConfigField "String", "BASE_URL", "\"https://api.godtoolsapp.com/godtools-api/rest/\""
-            buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api.cru.org/\""
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AAcaf7bbfe3ffda5dcb1455d3bc16b0c5da1cd71e9\""
         }
     }

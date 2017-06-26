@@ -16,8 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.cru.godtools.api.GodToolsApi;
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.api.GodToolsApi;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.utils.Device;
