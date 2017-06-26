@@ -14,6 +14,7 @@ import org.ccci.gto.android.common.gson.GsonIgnoreExclusionStrategy;
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory;
+import org.cru.godtools.model.Followup;
 import org.keynote.godtools.android.model.Attachment;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.Tool;
@@ -44,6 +45,8 @@ public class GodToolsApi {
     @NonNull
     public final AttachmentsApi attachments;
     @NonNull
+    public final FollowupApi followups;
+    @NonNull
     @Deprecated
     public final GrowthSpacesApi growthSpaces;
     @NonNull
@@ -62,6 +65,7 @@ public class GodToolsApi {
         tools = retrofit.create(ToolsApi.class);
         translations = retrofit.create(TranslationsApi.class);
         attachments = retrofit.create(AttachmentsApi.class);
+        followups = retrofit.create(FollowupApi.class);
 
         growthSpaces = new Retrofit.Builder()
                 .baseUrl(GROWTH_SPACES_URL)
@@ -114,6 +118,7 @@ public class GodToolsApi {
                 .addClasses(Tool.class)
                 .addClasses(Attachment.class)
                 .addClasses(Translation.class)
+                .addClasses(Followup.class)
                 .addConverters(new LocaleTypeConverter())
                 .build();
     }
