@@ -4,10 +4,12 @@ import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.Pools;
 import android.view.View;
 
+import com.annimon.stream.IntPair;
 import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -26,7 +28,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Set;
 
 import butterknife.BindView;
@@ -365,7 +366,7 @@ public final class Page extends Base implements Styles, Parent {
         @NonNull
         private final Pools.Pool<CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
         @NonNull
-        private final List<CardViewHolder> mCardViewHolders = new ArrayList<>();
+        private CardViewHolder[] mCardViewHolders = new CardViewHolder[0];
 
         PageViewHolder(@NonNull final View root) {
             super(Page.class, root, null);
@@ -395,36 +396,73 @@ public final class Page extends Base implements Styles, Parent {
                                          getBackgroundImageScaleType(mModel), getBackgroundImageGravity(mModel));
         }
 
+        @UiThread
         private void bindCards() {
-            final List<Card> cards = mModel != null ? mModel.getCards() : ImmutableList.of();
-            final ListIterator<CardViewHolder> i = mCardViewHolders.listIterator();
+            final Card[] cards = mModel != null ? mModel.getCards().toArray(new Card[0]) : new Card[0];
+            final CardViewHolder[] holders = new CardViewHolder[cards.length];
 
-            // update all visible cards
-            for (final Card card : cards) {
-                if (i.hasNext()) {
-                    i.next().bind(card);
+            // map old view holders to new location
+            View activeCard = null;
+            int lastNewPos = -1;
+            for (int pos = 0; pos < mCardViewHolders.length; pos++) {
+                final CardViewHolder holder = mCardViewHolders[pos];
+                final Card card = holder.getModel();
+                final String id = card != null ? card.getId() : null;
+                final int newPos = Stream.of(cards).indexed()
+                        .filter(c -> c.getSecond().getId().equals(id))
+                        .findFirst()
+                        .mapToInt(IntPair::getFirst)
+                        .orElse(-1);
+
+                // store the ViewHolder at the correct new location
+                if (newPos == -1) {
+                    // recycle this view holder
+                    mPageContentLayout.removeView(holder.mRoot);
+                    holder.bind(null);
+                    mRecycledCardViewHolders.release(holder);
                 } else {
-                    // acquire a view holder
-                    CardViewHolder holder = mRecycledCardViewHolders.acquire();
-                    if (holder == null) {
-                        holder = Card.createViewHolder(mPageContentLayout, this);
-                    }
+                    holders[newPos] = holder;
 
-                    // update holder and add it to the layout
-                    holder.bind(card);
-                    i.add(holder);
-                    mPageContentLayout.addView(holder.mRoot);
+                    if (lastNewPos > newPos) {
+                        // is this the active card? if so track it to restore it after we finish binding
+                        if (mPageContentLayout.getActiveCard() == holder.mRoot) {
+                            activeCard = holder.mRoot;
+                        }
+
+                        // remove this view for now, we will re-add it shortly
+                        mPageContentLayout.removeView(holder.mRoot);
+                    } else {
+                        lastNewPos = newPos;
+                    }
                 }
             }
 
-            // remove any remaining cards that are no longer used
-            while (i.hasNext()) {
-                final CardViewHolder holder = i.next();
-                mPageContentLayout.removeView(holder.mRoot);
-                i.remove();
-                holder.bind(null);
-                mRecycledCardViewHolders.release(holder);
+            // bind and create any needed view holders
+            for (int pos = 0; pos < holders.length; pos++) {
+                // create any missing view holders
+                if (holders[pos] == null) {
+                    holders[pos] = mRecycledCardViewHolders.acquire();
+                    if (holders[pos] == null) {
+                        holders[pos] = Card.createViewHolder(mPageContentLayout, this);
+                    }
+                }
+
+                // add views to container if they aren't already there
+                if (holders[pos].mRoot.getParent() != mPageContentLayout) {
+                    mPageContentLayout.addView(holders[pos].mRoot);
+                }
+
+                // bind data
+                holders[pos].bind(cards[pos]);
             }
+
+            // restore the active card
+            if (activeCard != null) {
+                mPageContentLayout.changeActiveCard(activeCard, false);
+            }
+
+            // replace the list of active card view holders
+            mCardViewHolders = holders;
         }
     }
 }
