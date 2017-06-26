@@ -34,7 +34,7 @@ public final class Followup extends Base {
     private Long mLanguageId;
     @Nullable
     @JsonApiAttribute(name = JSON_DESTINATION)
-    private Long mDestinationId;
+    private Long mDestination;
 
     @Nullable
     public String getName() {
@@ -68,11 +68,11 @@ public final class Followup extends Base {
     }
 
     @Nullable
-    public Long getDestinationId() {
-        return mDestinationId;
+    public Long getDestination() {
+        return mDestination;
     }
 
-    public void setDestinationId(@Nullable final Long destinationId) {
-        mDestinationId = destinationId;
+    public void setDestination(@Nullable final Long destination) {
+        mDestination = destination;
     }
 }

@@ -208,6 +208,10 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
                     case 25:
                         db.execSQL(ToolTable.SQL_V25_ALTER_DETAILS_BANNER);
                         break;
+                    case 26:
+                        db.execSQL(FollowupTable.SQL_DELETE_TABLE);
+                        db.execSQL(FollowupTable.SQL_CREATE_TABLE);
+                        break;
                     default:
                         // unrecognized version
                         throw new SQLiteException("Unrecognized database version");

@@ -9,6 +9,7 @@ import com.annimon.stream.Stream;
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.db.StreamDao;
+import org.cru.godtools.model.Followup;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.FollowupTable;
@@ -19,7 +20,6 @@ import org.keynote.godtools.android.db.Contract.TranslationFileTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.model.Attachment;
 import org.keynote.godtools.android.model.Base;
-import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.LocalFile;
 import org.keynote.godtools.android.model.Tool;
@@ -62,10 +62,7 @@ public class GodToolsDao extends DBAdapter implements StreamDao {
     @NonNull
     @Override
     protected Expression getPrimaryKeyWhere(@NonNull final Object obj) {
-        if (obj instanceof Followup) {
-            final Followup followup = (Followup) obj;
-            return getPrimaryKeyWhere(Followup.class, followup.getId(), followup.getContextId());
-        } else if (obj instanceof LocalFile) {
+        if (obj instanceof LocalFile) {
             return getPrimaryKeyWhere(LocalFile.class, ((LocalFile) obj).getFileName());
         } else if (obj instanceof TranslationFile) {
             final TranslationFile file = (TranslationFile) obj;
