@@ -1,3 +1,4 @@
 rootProject.name='godtools'
 include ':godtools-api', ':godtools-base', ':godtools-base-ui', ':godtools-db', ':godtools-model',
-        ':godtools-model-events', ':godtools-renderer', ':godtools-tract-renderer', ':optroundcardview'
+        ':godtools-model-events', ':godtools-renderer', ':godtools-sync', ':godtools-tract-renderer',
+        ':optroundcardview'
