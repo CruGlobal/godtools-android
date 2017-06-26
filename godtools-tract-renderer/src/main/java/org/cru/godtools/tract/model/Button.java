@@ -41,7 +41,6 @@ public final class Button extends Content implements Styles {
     private static final String XML_TYPE_EVENT = "event";
     private static final String XML_TYPE_URL = "url";
     private static final String XML_URL = "url";
-    private static final String XML_EVENTS = "events";
 
     private static final Align DEFAULT_TEXT_ALIGN = Align.CENTER;
 

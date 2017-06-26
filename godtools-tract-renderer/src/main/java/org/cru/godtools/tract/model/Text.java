@@ -182,16 +182,20 @@ public final class Text extends Content {
     }
 
     static void bind(@Nullable final Text text, @Nullable final TextView view) {
-        bind(text, view, defaultTextColor(text), textSize(text));
+        bind(text, view, null, null);
     }
 
-    static void bind(@Nullable final Text text, @Nullable final TextView view, @DimenRes final int textSize) {
-        bind(text, view, defaultTextColor(text), textSize);
-    }
-
-    static void bind(@Nullable final Text text, @Nullable final TextView view, @ColorInt final int defaultTextColor,
-                     @DimenRes final int textSize) {
+    static void bind(@Nullable final Text text, @Nullable final TextView view, @Nullable @DimenRes Integer textSize,
+                     @Nullable @ColorInt Integer defaultTextColor) {
         if (view != null) {
+            // set default values if null
+            if (textSize == null) {
+                textSize = textSize(text);
+            }
+            if (defaultTextColor == null) {
+                defaultTextColor = defaultTextColor(text);
+            }
+
             view.setText(Text.getText(text));
 
             final float size = view.getContext().getResources().getDimension(textSize);

@@ -91,7 +91,7 @@ public final class Header extends Base implements Styles {
     public void bindNumber(@Nullable final TextView view) {
         if (view != null) {
             view.setVisibility(mNumber != null ? View.VISIBLE : View.GONE);
-            Text.bind(mNumber, view, R.dimen.text_size_header_number);
+            Text.bind(mNumber, view, R.dimen.text_size_header_number, null);
         }
     }
 

@@ -167,7 +167,7 @@ public final class Modal extends Base implements Parent, Styles {
         @Override
         void onBind() {
             super.onBind();
-            Text.bind(mModel != null ? mModel.mTitle : null, mTitle, R.dimen.text_size_modal_title);
+            Text.bind(mModel != null ? mModel.mTitle : null, mTitle, R.dimen.text_size_modal_title, null);
         }
     }
 }

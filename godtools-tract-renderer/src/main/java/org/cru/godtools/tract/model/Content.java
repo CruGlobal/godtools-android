@@ -19,6 +19,7 @@ import static org.cru.godtools.tract.model.Button.XML_BUTTON;
 import static org.cru.godtools.tract.model.Form.XML_FORM;
 import static org.cru.godtools.tract.model.Image.XML_IMAGE;
 import static org.cru.godtools.tract.model.Input.XML_INPUT;
+import static org.cru.godtools.tract.model.Link.XML_LINK;
 import static org.cru.godtools.tract.model.Paragraph.XML_PARAGRAPH;
 import static org.cru.godtools.tract.model.Text.XML_TEXT;
 
@@ -51,6 +52,8 @@ public abstract class Content extends Base {
                         return Button.fromXml(parent, parser);
                     case XML_INPUT:
                         return Input.fromXml(parent, parser);
+                    case XML_LINK:
+                        return Link.fromXml(parent, parser);
                 }
         }
 
