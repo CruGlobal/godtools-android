@@ -46,7 +46,6 @@ import static org.cru.godtools.tract.model.Utils.parseScaleType;
 
 public final class Page extends Base implements Styles, Parent {
     static final String XML_PAGE = "page";
-    private static final String XML_LISTENERS = "listeners";
     private static final String XML_MANIFEST_FILENAME = "filename";
     private static final String XML_MANIFEST_SRC = "src";
     private static final String XML_CARDS = "cards";
@@ -411,6 +410,13 @@ public final class Page extends Base implements Styles, Parent {
         }
 
         @Override
+        public void onDismissCard(@NonNull final CardViewHolder holder) {
+            if (holder.mRoot == mPageContentLayout.getActiveCard()) {
+                mPageContentLayout.changeActiveCard(null, true);
+            }
+        }
+
+        @Override
         public void onToggleCard(@NonNull final CardViewHolder holder) {
             mPageContentLayout
                     .changeActiveCard(holder.mRoot != mPageContentLayout.getActiveCard() ? holder.mRoot : null, true);
@@ -524,6 +530,14 @@ public final class Page extends Base implements Styles, Parent {
         }
 
         private void checkForCardEvent(@NonNull final Event event) {
+            // send event to current card
+            final CardViewHolder holder =
+                    BaseViewHolder.forView(mPageContentLayout.getActiveCard(), CardViewHolder.class);
+            if (holder != null) {
+                holder.onContentEvent(event);
+            }
+
+            // check for card display event
             if (mModel != null) {
                 Stream.of(mModel.getCards())
                         .filter(c -> c.getListeners().contains(event.id))

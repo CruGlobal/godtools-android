@@ -40,7 +40,6 @@ public final class Card extends Base implements Styles, Parent {
     static final String XML_CARD = "card";
     private static final String XML_LABEL = "label";
     private static final String XML_HIDDEN = "hidden";
-    private static final String XML_LISTENERS = "listeners";
 
     private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL_X;
     private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
@@ -50,6 +49,8 @@ public final class Card extends Base implements Styles, Parent {
     private boolean mHidden = false;
     @NonNull
     private Set<Event.Id> mListeners = ImmutableSet.of();
+    @NonNull
+    private Set<Event.Id> mDismissListeners = ImmutableSet.of();
 
     @Nullable
     @ColorInt
@@ -87,6 +88,11 @@ public final class Card extends Base implements Styles, Parent {
     @NonNull
     Set<Event.Id> getListeners() {
         return mListeners;
+    }
+
+    @NonNull
+    Set<Event.Id> getDismissListeners() {
+        return mDismissListeners;
     }
 
     @Override
@@ -136,6 +142,7 @@ public final class Card extends Base implements Styles, Parent {
 
         mHidden = parseBoolean(parser.getAttributeValue(null, XML_HIDDEN), mHidden);
         mListeners = parseEvents(parser, XML_LISTENERS);
+        mDismissListeners = parseEvents(parser, XML_DISMISS_LISTENERS);
         mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
@@ -185,6 +192,8 @@ public final class Card extends Base implements Styles, Parent {
     public static final class CardViewHolder extends ParentViewHolder<Card> {
         public interface Callbacks {
             void onToggleCard(@NonNull final CardViewHolder holder);
+
+            void onDismissCard(@NonNull final CardViewHolder holder);
         }
 
         @BindView(R2.id.background_image)
@@ -206,9 +215,7 @@ public final class Card extends Base implements Styles, Parent {
             }
         }
 
-        public void setCallbacks(@Nullable final Callbacks callbacks) {
-            mCallbacks = callbacks;
-        }
+        /* BEGIN lifecycle */
 
         @Override
         @CallSuper
@@ -216,6 +223,16 @@ public final class Card extends Base implements Styles, Parent {
             super.onBind();
             bindBackground();
             bindLabel();
+        }
+
+        public void onContentEvent(@NonNull final Event event) {
+            checkForDismissEvent(event);
+        }
+
+        /* END lifecycle */
+
+        public void setCallbacks(@Nullable final Callbacks callbacks) {
+            mCallbacks = callbacks;
         }
 
         private void bindBackground() {
@@ -228,6 +245,21 @@ public final class Card extends Base implements Styles, Parent {
             final Text label = mModel != null ? mModel.mLabel : null;
             Text.bind(label, mLabel, Styles.getPrimaryColor(mModel), R.dimen.text_size_card_label);
             mDivider.setBackgroundColor(Styles.getTextColor(mModel));
+        }
+
+        private void checkForDismissEvent(@NonNull final Event event) {
+            if (mModel != null) {
+                // check for card dismiss event
+                if (mModel.getDismissListeners().contains(event.id)) {
+                    dismissCard();
+                }
+            }
+        }
+
+        private void dismissCard() {
+            if (mCallbacks != null) {
+                mCallbacks.onDismissCard(this);
+            }
         }
 
         @Optional
