@@ -100,7 +100,7 @@ public final class Hero extends Base implements Styles {
         if (view != null) {
             if (heading != null) {
                 view.setVisibility(View.VISIBLE);
-                Text.bind(heading, view, heading.getPrimaryColor(), R.dimen.text_size_hero_heading);
+                Text.bind(heading, view, R.dimen.text_size_hero_heading, heading.getPrimaryColor());
             } else {
                 view.setVisibility(View.GONE);
             }

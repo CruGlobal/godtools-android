@@ -32,6 +32,8 @@ abstract class Base {
     static final String XML_BACKGROUND_IMAGE = "background-image";
     static final String XML_BACKGROUND_IMAGE_GRAVITY = "background-image-align";
     static final String XML_BACKGROUND_IMAGE_SCALE_TYPE = "background-image-scale-type";
+
+    static final String XML_EVENTS = "events";
     static final String XML_LISTENERS = "listeners";
     static final String XML_DISMISS_LISTENERS = "dismiss-listeners";
 
