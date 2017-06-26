@@ -15,6 +15,7 @@ import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
@@ -347,7 +348,8 @@ public final class Page extends Base implements Styles, Parent {
         return holder != null ? holder : new PageViewHolder(root);
     }
 
-    public static class PageViewHolder extends Parent.ParentViewHolder<Page> implements CardViewHolder.Callbacks {
+    public static class PageViewHolder extends Parent.ParentViewHolder<Page>
+            implements CardViewHolder.Callbacks, PageContentLayout.OnActiveCardListener {
         @BindView(R2.id.page)
         View mPageView;
         @BindView(R2.id.background_image)
@@ -371,6 +373,7 @@ public final class Page extends Base implements Styles, Parent {
 
         PageViewHolder(@NonNull final View root) {
             super(Page.class, root, null);
+            mPageContentLayout.setActiveCardListener(this);
         }
 
         /* BEGIN lifecycle */
@@ -385,6 +388,26 @@ public final class Page extends Base implements Styles, Parent {
 
         public void onContentEvent(@NonNull final Event event) {
             checkForCardEvent(event);
+        }
+
+        @Override
+        public void onActiveCardChanged(@Nullable final View activeCard) {
+            // only process if we have explicitly visible cards
+            if (mVisibleCards.size() > 0) {
+                // generate a set containing the id of the current active card
+                final Set<String> id = Optional.ofNullable(BaseViewHolder.forView(activeCard, CardViewHolder.class))
+                        .map(BaseViewHolder::getModel)
+                        .map(Card::getId)
+                        .map(ImmutableSet::of)
+                        .orElseGet(ImmutableSet::of);
+
+                // remove any non-matching ids from the visible cards set
+                final Set<String> diff = Sets.difference(mVisibleCards, id);
+                if (diff.size() > 0) {
+                    mVisibleCards.removeAll(diff);
+                    updateDisplayedCards();
+                }
+            }
         }
 
         @Override
