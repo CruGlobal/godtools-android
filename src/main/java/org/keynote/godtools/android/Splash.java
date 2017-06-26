@@ -161,8 +161,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
         // background loading tasks
         final ListenableFuture<Object> languagesTask = initTasks.loadDefaultLanguages();
         mUpdateTasks = Futures.successfulAsList(
-                // load the default followup data
-                initTasks.loadFollowups(),
                 // load the list of available languages
                 languagesTask,
                 // setup the Every Student content

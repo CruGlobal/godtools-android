@@ -14,13 +14,8 @@ import com.google.common.base.Throwables;
 import com.google.common.io.Closer;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import org.ccci.gto.android.common.db.Query;
-import org.ccci.gto.android.common.gson.GsonIgnoreExclusionStrategy;
 import org.ccci.gto.android.common.util.IOUtils;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.business.GTLanguage;
@@ -29,7 +24,6 @@ import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.business.GTPackageReader;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.db.GodToolsDao;
-import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Util.FileUtils;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.Registry;
@@ -41,10 +35,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Reader;
-import java.util.ArrayList;
 import java.util.List;
 
 public class InitialContentTasks {
@@ -56,12 +47,6 @@ public class InitialContentTasks {
         mContext = context.getApplicationContext();
         mDao = GodToolsDao.getInstance(mContext);
         mAssets = context.getAssets();
-    }
-
-    @NonNull
-    public ListenableFuture<Object> loadFollowups() {
-        final ListenableFuture<Cursor> followups = mDao.getCursorAsync(Query.select(Followup.class).limit(1));
-        return Futures.transform(followups, new InitFollowups());
     }
 
     @NonNull
@@ -90,53 +75,6 @@ public class InitialContentTasks {
         everyStudent.setLanguage("en");
         everyStudent.setVersion("1.1");
         return mDao.insertAsync(everyStudent, SQLiteDatabase.CONFLICT_IGNORE);
-    }
-
-    final class InitFollowups implements Function<Cursor, Object> {
-        @Override
-        public Object apply(final Cursor c) {
-            try {
-                if (c != null && c.getCount() == 0) {
-                    loadDefaultFollowups();
-                }
-            } catch (final IOException e) {
-                Crashlytics.logException(e);
-                throw Throwables.propagate(e);
-            } finally {
-                if (c != null) {
-                    c.close();
-                }
-            }
-
-            return null;
-        }
-
-        @WorkerThread
-        private void loadDefaultFollowups() throws IOException {
-            // configure Gson
-            final Gson gson = new GsonBuilder()
-                    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                    .setExclusionStrategies(new GsonIgnoreExclusionStrategy())
-                    .create();
-
-            // parse current followups out of the json file
-            final Closer closer = Closer.create();
-            try {
-                final InputStream in = closer.register(mContext.getAssets().open("followup.json"));
-                final Reader reader = closer.register(new InputStreamReader(in));
-                final ArrayList<Followup> followups =
-                        gson.fromJson(reader, new TypeToken<ArrayList<Followup>>() {}.getType());
-
-                for (final Followup followup : followups) {
-                    mDao.updateOrInsert(followup);
-                }
-            } catch (final Throwable t) {
-                throw closer.rethrow(t);
-            } finally {
-                closer.close();
-            }
-
-        }
     }
 
     final class InitLanguages implements Function<Cursor, Object> {

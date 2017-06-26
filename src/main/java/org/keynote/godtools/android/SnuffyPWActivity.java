@@ -44,7 +44,6 @@ import org.keynote.godtools.android.business.GSSubscriber;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
-import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.notifications.NotificationInfo;
 import org.keynote.godtools.android.snuffy.SnuffyAboutActivity;
 import org.keynote.godtools.android.snuffy.SnuffyHelpActivity;
@@ -285,11 +284,10 @@ public class SnuffyPWActivity extends AppCompatActivity {
     private void processSubscriberEvent(@NonNull final GodToolsEvent event) {
         // look up the followup for the active context
         final GodToolsDao dao = GodToolsDao.getInstance(this);
-        final Followup followup = dao.find(Followup.class, event.getFollowUpId(), Followup.DEFAULT_CONTEXT);
-        if (followup != null) {
+        if (true) {
             // generate subscriber record
             final GSSubscriber subscriber = new GSSubscriber();
-            subscriber.setRouteId(followup.getGrowthSpacesRouteId());
+            subscriber.setRouteId(110L);
             subscriber.setLanguageCode(event.getLanguage());
 
             // process any fields
