@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.api;
+package org.cru.godtools.api;
 
 import android.support.annotation.NonNull;
 
@@ -11,7 +11,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
-import static org.keynote.godtools.android.BuildConfig.MOBILE_CONTENT_SYSTEM;
+import static org.cru.godtools.api.BuildConfig.MOBILE_CONTENT_SYSTEM;
 
 public interface ToolsApi {
     String PATH_RESOURCES = "resources";
