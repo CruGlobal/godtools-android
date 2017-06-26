@@ -232,6 +232,11 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         }
     }
 
+    @Nullable
+    public View getActiveCard() {
+        return mActiveCard;
+    }
+
     public int getActiveCardPosition() {
         return mActiveCardPosition;
     }

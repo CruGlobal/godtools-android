@@ -383,13 +383,8 @@ public final class Page extends Base implements Styles, Parent {
 
         @Override
         public void onToggleCard(@NonNull final CardViewHolder holder) {
-            if (holder.mModel != null) {
-                int position = holder.mModel.getPosition();
-                if (position == mPageContentLayout.getActiveCardPosition()) {
-                    position = -1;
-                }
-                mPageContentLayout.changeActiveCard(position, true);
-            }
+            mPageContentLayout
+                    .changeActiveCard(holder.mRoot != mPageContentLayout.getActiveCard() ? holder.mRoot : null, true);
         }
 
         /* END lifecycle */

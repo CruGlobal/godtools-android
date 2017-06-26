@@ -65,10 +65,6 @@ public final class Card extends Base implements Styles, Parent {
         mPosition = position;
     }
 
-    public int getPosition() {
-        return mPosition;
-    }
-
     @Override
     public int getTextColor() {
         return mTextColor != null ? mTextColor : getPage().getCardTextColor();
