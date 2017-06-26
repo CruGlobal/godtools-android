@@ -56,6 +56,8 @@ public final class Input extends Content {
             switch (Strings.nullToEmpty(type)) {
                 case XML_TYPE_EMAIL:
                     return EMAIL;
+                case XML_TYPE_HIDDEN:
+                    return HIDDEN;
                 case XML_TYPE_PHONE:
                     return PHONE;
                 case XML_TYPE_TEXT:
@@ -71,7 +73,7 @@ public final class Input extends Content {
     @Nullable
     String mName;
     @Nullable
-    private String mValue;
+    String mValue;
 
     @Nullable
     Text mLabel;
@@ -299,7 +301,9 @@ public final class Input extends Content {
 
         @Nullable
         private String getValue() {
-            if (mInputView != null) {
+            if (mModel != null && mModel.mType == Type.HIDDEN) {
+                return mModel.mValue;
+            } else if (mInputView != null) {
                 return mInputView.getText().toString();
             }
 
