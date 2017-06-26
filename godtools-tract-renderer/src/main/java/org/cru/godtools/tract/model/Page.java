@@ -10,6 +10,7 @@ import android.support.v4.util.Pools;
 import android.view.View;
 
 import com.annimon.stream.IntPair;
+import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -364,6 +365,9 @@ public final class Page extends Base implements Styles, Parent {
         View mHero;
 
         @NonNull
+        private Card[] mCards = new Card[0];
+
+        @NonNull
         private final Pools.Pool<CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
         @NonNull
         private CardViewHolder[] mCardViewHolders = new CardViewHolder[0];
@@ -377,6 +381,7 @@ public final class Page extends Base implements Styles, Parent {
         @Override
         void onBind() {
             super.onBind();
+            updateDisplayedCards();
             bindPage();
             Hero.bind(mModel != null ? mModel.getHero() : null, mHero);
             bindCards();
@@ -390,6 +395,18 @@ public final class Page extends Base implements Styles, Parent {
 
         /* END lifecycle */
 
+        private boolean isCardVisible(@NonNull final Card card) {
+            return !card.isHidden();
+        }
+
+        private void updateDisplayedCards() {
+            mCards = Optional.ofNullable(mModel).stream()
+                    .map(Page::getCards)
+                    .flatMap(Stream::of)
+                    .filter(this::isCardVisible)
+                    .toArray(Card[]::new);
+        }
+
         private void bindPage() {
             mPageView.setBackgroundColor(Page.getBackgroundColor(mModel));
             Resource.bindBackgroundImage(mBackgroundImage, getBackgroundImageResource(mModel),
@@ -398,8 +415,7 @@ public final class Page extends Base implements Styles, Parent {
 
         @UiThread
         private void bindCards() {
-            final Card[] cards = mModel != null ? mModel.getCards().toArray(new Card[0]) : new Card[0];
-            final CardViewHolder[] holders = new CardViewHolder[cards.length];
+            final CardViewHolder[] holders = new CardViewHolder[mCards.length];
 
             // map old view holders to new location
             View activeCard = null;
@@ -408,7 +424,7 @@ public final class Page extends Base implements Styles, Parent {
                 final CardViewHolder holder = mCardViewHolders[pos];
                 final Card card = holder.getModel();
                 final String id = card != null ? card.getId() : null;
-                final int newPos = Stream.of(cards).indexed()
+                final int newPos = Stream.of(mCards).indexed()
                         .filter(c -> c.getSecond().getId().equals(id))
                         .findFirst()
                         .mapToInt(IntPair::getFirst)
@@ -453,7 +469,7 @@ public final class Page extends Base implements Styles, Parent {
                 }
 
                 // bind data
-                holders[pos].bind(cards[pos]);
+                holders[pos].bind(mCards[pos]);
             }
 
             // restore the active card

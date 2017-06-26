@@ -29,17 +29,21 @@ import butterknife.OnClick;
 import butterknife.Optional;
 
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
+import static org.cru.godtools.tract.model.Utils.parseBoolean;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.model.Utils.parseScaleType;
 
 public final class Card extends Base implements Styles, Parent {
     static final String XML_CARD = "card";
     private static final String XML_LABEL = "label";
+    private static final String XML_HIDDEN = "hidden";
 
     private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL_X;
     private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
 
     private final int mPosition;
+
+    private boolean mHidden = false;
 
     @Nullable
     @ColorInt
@@ -63,6 +67,10 @@ public final class Card extends Base implements Styles, Parent {
     private Card(@NonNull final Page parent, final int position) {
         super(parent);
         mPosition = position;
+    }
+
+    public boolean isHidden() {
+        return mHidden;
     }
 
     @NonNull
@@ -115,6 +123,7 @@ public final class Card extends Base implements Styles, Parent {
     private Card parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CARD);
 
+        mHidden = parseBoolean(parser.getAttributeValue(null, XML_HIDDEN), mHidden);
         mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
         mBackgroundColor = parseColor(parser, XML_BACKGROUND_COLOR, mBackgroundColor);
         mBackgroundImage = parser.getAttributeValue(null, XML_BACKGROUND_IMAGE);
