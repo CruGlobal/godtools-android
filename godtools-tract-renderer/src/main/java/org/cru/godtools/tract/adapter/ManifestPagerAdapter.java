@@ -171,6 +171,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         }
 
         void onContentEvent(@NonNull final Event event) {
+            mModelViewHolder.onContentEvent(event);
             if (mPage != null) {
                 checkForModalEvent(event);
             }

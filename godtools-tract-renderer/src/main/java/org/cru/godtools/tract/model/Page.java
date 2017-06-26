@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
+import android.support.v4.util.ArraySet;
 import android.support.v4.util.Pools;
 import android.view.View;
 
@@ -361,6 +362,7 @@ public final class Page extends Base implements Styles, Parent {
 
         @NonNull
         private Card[] mCards = new Card[0];
+        private Set<String> mVisibleCards = new ArraySet<>();
 
         @NonNull
         private final Pools.Pool<CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
@@ -379,7 +381,10 @@ public final class Page extends Base implements Styles, Parent {
             updateDisplayedCards();
             bindPage();
             Hero.bind(mModel != null ? mModel.getHero() : null, mHero);
-            bindCards();
+        }
+
+        public void onContentEvent(@NonNull final Event event) {
+            checkForCardEvent(event);
         }
 
         @Override
@@ -391,7 +396,7 @@ public final class Page extends Base implements Styles, Parent {
         /* END lifecycle */
 
         private boolean isCardVisible(@NonNull final Card card) {
-            return !card.isHidden();
+            return !card.isHidden() || mVisibleCards.contains(card.getId());
         }
 
         private void updateDisplayedCards() {
@@ -400,6 +405,8 @@ public final class Page extends Base implements Styles, Parent {
                     .flatMap(Stream::of)
                     .filter(this::isCardVisible)
                     .toArray(Card[]::new);
+
+            bindCards();
         }
 
         private void bindPage() {
@@ -474,6 +481,32 @@ public final class Page extends Base implements Styles, Parent {
 
             // replace the list of active card view holders
             mCardViewHolders = holders;
+        }
+
+        private void displayCard(@NonNull final Card card) {
+            final String cardId = card.getId();
+            if (card.isHidden()) {
+                mVisibleCards.add(cardId);
+                updateDisplayedCards();
+            }
+
+            // navigate to this specified card
+            for (int i = 0; i < mCards.length; i++) {
+                if (mCards[i].getId().equals(cardId)) {
+                    mPageContentLayout.changeActiveCard(i, true);
+                    return;
+                }
+            }
+
+        }
+
+        private void checkForCardEvent(@NonNull final Event event) {
+            if (mModel != null) {
+                Stream.of(mModel.getCards())
+                        .filter(c -> c.getListeners().contains(event.id))
+                        .findFirst()
+                        .ifPresent(this::displayCard);
+            }
         }
     }
 }
