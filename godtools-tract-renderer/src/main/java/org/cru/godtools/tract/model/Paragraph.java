@@ -15,7 +15,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.List;
 
-import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
+import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 
 public final class Paragraph extends Content implements Parent {
     static final String XML_PARAGRAPH = "paragraph";
@@ -41,7 +41,7 @@ public final class Paragraph extends Content implements Parent {
 
     @NonNull
     private Paragraph parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_PARAGRAPH);
+        parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_PARAGRAPH);
 
         // process any child elements
         final ImmutableList.Builder<Content> contentList = ImmutableList.builder();

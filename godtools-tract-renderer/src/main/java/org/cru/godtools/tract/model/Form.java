@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
+import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 
 public final class Form extends Content implements Parent {
     static final String XML_FORM = "form";
@@ -43,7 +43,7 @@ public final class Form extends Content implements Parent {
 
     @NonNull
     private Form parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_FORM);
+        parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_FORM);
 
         // process any child elements
         final ImmutableList.Builder<Content> contentList = ImmutableList.builder();
