@@ -6,7 +6,6 @@ import org.ccci.gto.android.common.db.BaseContract;
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Expression.Field;
 import org.ccci.gto.android.common.db.Table;
-import org.keynote.godtools.android.business.GSSubscriber;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 
@@ -123,39 +122,5 @@ public class DBContract extends BaseContract {
         public static final String SQL_V6_MIGRATE_DATA =
                 "INSERT OR IGNORE INTO " + TABLE_NAME + " (" + SQL_V6_MIGRATE_COLUMNS + ") SELECT " +
                         SQL_V6_MIGRATE_COLUMNS + " FROM " + OLD_TABLE_NAME;
-    }
-
-    /*Growth Spaces subscriber table*/
-    public static abstract class GSSubscriberTable implements Base {
-        public static final String TABLE_NAME = "gssubscribers";
-        public static final Table<GSSubscriber> TABLE = Table.forClass(GSSubscriber.class);
-
-        public static final String COLUMN_SUBSCRIBER_ID = _ID;
-        public static final String COL_ROUTE_ID = "route_id";
-        public static final String COL_LANGUAGE_CODE = "language_code";
-        public static final String COL_FIRST_NAME = "first_name";
-        public static final String COL_LAST_NAME = "last_name";
-        public static final String COL_EMAIL = "email";
-        public static final String COL_CREATED_TIMESTAMP = "created_timestamp";
-
-        public static final Field FIELD_SUBSCRIBER_ID = TABLE.field(COLUMN_SUBSCRIBER_ID);
-
-        public static final String[] PROJECTION_ALL =
-                {COLUMN_SUBSCRIBER_ID, COL_ROUTE_ID, COL_LANGUAGE_CODE, COL_FIRST_NAME, COL_LAST_NAME, COL_EMAIL,
-                        COL_CREATED_TIMESTAMP};
-
-        public static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "
-                + GSSubscriberTable.TABLE_NAME + "("
-                + GSSubscriberTable._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP
-                + GSSubscriberTable.COL_ROUTE_ID + INTEGER_TYPE + COMMA_SEP
-                + GSSubscriberTable.COL_LANGUAGE_CODE + TEXT_TYPE + COMMA_SEP
-                + GSSubscriberTable.COL_FIRST_NAME + TEXT_TYPE + COMMA_SEP
-                + GSSubscriberTable.COL_LAST_NAME + TEXT_TYPE + COMMA_SEP
-                + GSSubscriberTable.COL_EMAIL + TEXT_TYPE + COMMA_SEP
-                + GSSubscriberTable.COL_CREATED_TIMESTAMP + INTEGER_TYPE + ")";
-
-        public static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
-
-        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_SUBSCRIBER_ID.eq(bind());
     }
 }

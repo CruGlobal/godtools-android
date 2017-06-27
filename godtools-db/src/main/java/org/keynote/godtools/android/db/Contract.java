@@ -6,7 +6,6 @@ import org.ccci.gto.android.common.db.Expression.Field;
 import org.ccci.gto.android.common.db.Join;
 import org.ccci.gto.android.common.db.Table;
 import org.cru.godtools.model.Followup;
-import org.keynote.godtools.android.dao.DBContract.GSSubscriberTable;
 import org.keynote.godtools.android.model.Attachment;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.LocalFile;
@@ -23,7 +22,7 @@ public final class Contract extends BaseContract {
     }
 
     static class LegacyTables {
-        static final String SQL_DELETE_GSSUBSCRIBERS = drop(GSSubscriberTable.TABLE_NAME);
+        static final String SQL_DELETE_GSSUBSCRIBERS = drop("gssubscribers");
     }
 
     @SuppressWarnings("checkstyle:InterfaceIsType")
@@ -280,12 +279,7 @@ public final class Contract extends BaseContract {
                         COLUMN_LANGUAGE + "," +
                         COLUMN_DESTINATION + "," +
                         COLUMN_CREATE_TIME + ") " +
-                        "SELECT " +
-                        GSSubscriberTable.COL_FIRST_NAME + "||\" \"||" + GSSubscriberTable.COL_LAST_NAME + "," +
-                        GSSubscriberTable.COL_EMAIL + "," +
-                        GSSubscriberTable.COL_LANGUAGE_CODE + "," +
-                        "1," +
-                        GSSubscriberTable.COL_CREATED_TIMESTAMP +
-                        " FROM " + GSSubscriberTable.TABLE_NAME;
+                        "SELECT first_name || ' ' || last_name,email,language_code,1,created_timestamp " +
+                        "FROM gssubscribers";
     }
 }
