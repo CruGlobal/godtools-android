@@ -5,10 +5,8 @@ import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.async.AbstractAsyncDao;
-import org.keynote.godtools.android.business.GSSubscriber;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.dao.DBContract.GSSubscriberTable;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
 
@@ -21,8 +19,6 @@ public class DBAdapter extends AbstractAsyncDao {
                      GTPackageTable.SQL_WHERE_PRIMARY_KEY);
         registerType(GTLanguage.class, GTLanguageTable.TABLE_NAME, GTLanguageTable.PROJECTION_ALL,
                      new GTLanguageMapper(), GTLanguageTable.SQL_WHERE_PRIMARY_KEY);
-        registerType(GSSubscriber.class, GSSubscriberTable.TABLE_NAME, GSSubscriberTable.PROJECTION_ALL,
-                     new GSSubscriberMapper(), GSSubscriberTable.SQL_WHERE_PRIMARY_KEY);
     }
 
     @NonNull
@@ -34,8 +30,6 @@ public class DBAdapter extends AbstractAsyncDao {
                                       gtPackage.getCode());
         } else if (obj instanceof GTLanguage) {
             return getPrimaryKeyWhere(GTLanguage.class, ((GTLanguage) obj).getLanguageCode());
-        } else if (obj instanceof GSSubscriber) {
-            return getPrimaryKeyWhere(GSSubscriber.class, ((GSSubscriber) obj).getId());
         }
 
         return super.getPrimaryKeyWhere(obj);
