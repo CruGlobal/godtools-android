@@ -40,8 +40,6 @@ dependencies {
 
     // include these temporarily to support migration of deprecated APIs
     implementation project(':godtools-db')
-    implementation "org.ccci.gto.android:gto-support-gson:${deps.gtoSupport}"
-    implementation "com.squareup.retrofit2:converter-gson:${deps.retrofit2}"
     implementation("com.squareup.retrofit2:converter-simplexml:${deps.retrofit2}") {
         exclude module: 'stax'
         exclude module: 'stax-api'

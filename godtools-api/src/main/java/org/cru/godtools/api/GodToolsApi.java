@@ -5,15 +5,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.GsonBuilder;
-
 import org.ccci.gto.android.common.api.okhttp3.util.OkHttpClientUtil;
 import org.ccci.gto.android.common.api.retrofit2.converter.LocaleConverterFactory;
-import org.ccci.gto.android.common.gson.GsonIgnoreExclusionStrategy;
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory;
+import org.cru.godtools.model.Followup;
 import org.keynote.godtools.android.model.Attachment;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.Tool;
@@ -24,11 +21,9 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 import static org.cru.godtools.api.BuildConfig.BASE_URL;
-import static org.cru.godtools.api.BuildConfig.GROWTH_SPACES_URL;
 import static org.cru.godtools.api.BuildConfig.MOBILE_CONTENT_API;
 
 public class GodToolsApi {
@@ -44,8 +39,7 @@ public class GodToolsApi {
     @NonNull
     public final AttachmentsApi attachments;
     @NonNull
-    @Deprecated
-    public final GrowthSpacesApi growthSpaces;
+    public final FollowupApi followups;
     @NonNull
     @Deprecated
     public final LegacyApi legacy;
@@ -62,13 +56,7 @@ public class GodToolsApi {
         tools = retrofit.create(ToolsApi.class);
         translations = retrofit.create(TranslationsApi.class);
         attachments = retrofit.create(AttachmentsApi.class);
-
-        growthSpaces = new Retrofit.Builder()
-                .baseUrl(GROWTH_SPACES_URL)
-                .addConverterFactory(gsonConverter())
-                .callFactory(okhttp)
-                .build()
-                .create(GrowthSpacesApi.class);
+        followups = retrofit.create(FollowupApi.class);
 
         legacy = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -99,21 +87,13 @@ public class GodToolsApi {
     }
 
     @NonNull
-    private GsonConverterFactory gsonConverter() {
-        return GsonConverterFactory.create(
-                new GsonBuilder()
-                        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                        .setExclusionStrategies(new GsonIgnoreExclusionStrategy())
-                        .create());
-    }
-
-    @NonNull
     private JsonApiConverter jsonApiConverter() {
         return new JsonApiConverter.Builder()
                 .addClasses(Language.class)
                 .addClasses(Tool.class)
                 .addClasses(Attachment.class)
                 .addClasses(Translation.class)
+                .addClasses(Followup.class)
                 .addConverters(new LocaleTypeConverter())
                 .build();
     }

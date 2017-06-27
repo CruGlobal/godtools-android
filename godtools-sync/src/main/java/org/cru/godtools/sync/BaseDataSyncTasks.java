@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.sync;
+package org.cru.godtools.sync;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -24,7 +24,7 @@ import org.keynote.godtools.android.model.Translation;
 import java.util.List;
 
 abstract class BaseDataSyncTasks extends BaseSyncTasks {
-    private static final String[] API_FIELDS_LANGUAGE = {LanguageTable.COLUMN_CODE};
+    private static final String[] API_FIELDS_LANGUAGE = {LanguageTable.COLUMN_ID};
     private static final String[] API_FIELDS_TOOL =
             {ToolTable.COLUMN_NAME, ToolTable.COLUMN_DESCRIPTION, ToolTable.COLUMN_SHARES, ToolTable.COLUMN_BANNER,
                     ToolTable.COLUMN_DETAILS_BANNER, ToolTable.COLUMN_COPYRIGHT};

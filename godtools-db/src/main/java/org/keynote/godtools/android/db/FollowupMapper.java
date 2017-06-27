@@ -4,36 +4,33 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
-import org.ccci.gto.android.common.db.AbstractMapper;
-import org.keynote.godtools.android.model.Followup;
+import org.cru.godtools.model.Followup;
 
-import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_CONTEXT_ID;
-import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_GS_ACCESS_ID;
-import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_GS_ACCESS_SECRET;
-import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_GS_ROUTE_ID;
-import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_ID;
-import static org.keynote.godtools.android.model.Followup.DEFAULT_CONTEXT;
+import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_CREATE_TIME;
+import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_DESTINATION;
+import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_EMAIL;
+import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_LANGUAGE;
+import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_NAME;
 
-@Deprecated
-final class FollowupMapper extends AbstractMapper<Followup> {
+final class FollowupMapper extends BaseMapper<Followup> {
     @Override
     protected void mapField(@NonNull final ContentValues values, @NonNull final String field,
                             @NonNull final Followup followup) {
         switch (field) {
-            case COLUMN_ID:
-                values.put(field, followup.getId());
+            case COLUMN_NAME:
+                values.put(field, followup.getName());
                 break;
-            case COLUMN_CONTEXT_ID:
-                values.put(field, followup.getContextId());
+            case COLUMN_EMAIL:
+                values.put(field, followup.getEmail());
                 break;
-            case COLUMN_GS_ROUTE_ID:
-                values.put(field, followup.getGrowthSpacesRouteId());
+            case COLUMN_LANGUAGE:
+                values.put(field, serialize(followup.getLanguageCode()));
                 break;
-            case COLUMN_GS_ACCESS_ID:
-                values.put(field, followup.getGrowthSpacesAccessId());
+            case COLUMN_DESTINATION:
+                values.put(field, followup.getDestination());
                 break;
-            case COLUMN_GS_ACCESS_SECRET:
-                values.put(field, followup.getGrowthSpacesAccessSecret());
+            case COLUMN_CREATE_TIME:
+                values.put(field, serialize(followup.getCreateTime()));
                 break;
             default:
                 super.mapField(values, field, followup);
@@ -52,11 +49,11 @@ final class FollowupMapper extends AbstractMapper<Followup> {
     public Followup toObject(@NonNull final Cursor c) {
         final Followup followup = super.toObject(c);
 
-        followup.setId(getLong(c, COLUMN_ID, Followup.INVALID_ID));
-        followup.setContextId(getLong(c, COLUMN_CONTEXT_ID, DEFAULT_CONTEXT));
-        followup.setGrowthSpacesRouteId(getLong(c, COLUMN_GS_ROUTE_ID, null));
-        followup.setGrowthSpacesAccessId(getString(c, COLUMN_GS_ACCESS_ID, null));
-        followup.setGrowthSpacesAccessSecret(getString(c, COLUMN_GS_ACCESS_SECRET, null));
+        followup.setName(getString(c, COLUMN_NAME));
+        followup.setEmail(getString(c, COLUMN_EMAIL));
+        followup.setLanguageCode(getLocale(c, COLUMN_LANGUAGE));
+        followup.setDestination(getLong(c, COLUMN_DESTINATION));
+        followup.setCreateTime(getDate(c, COLUMN_CREATE_TIME));
 
         return followup;
     }

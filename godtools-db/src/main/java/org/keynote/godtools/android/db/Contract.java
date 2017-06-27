@@ -5,8 +5,8 @@ import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Expression.Field;
 import org.ccci.gto.android.common.db.Join;
 import org.ccci.gto.android.common.db.Table;
+import org.cru.godtools.model.Followup;
 import org.keynote.godtools.android.model.Attachment;
-import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.LocalFile;
 import org.keynote.godtools.android.model.Tool;
@@ -19,6 +19,10 @@ public final class Contract extends BaseContract {
     public abstract static class BaseTable implements Base {
         public static final String COLUMN_ID = COLUMN_ROWID;
         static final String SQL_COLUMN_ID = SQL_COLUMN_ROWID;
+    }
+
+    static class LegacyTables {
+        static final String SQL_DELETE_GSSUBSCRIBERS = drop("gssubscribers");
     }
 
     @SuppressWarnings("checkstyle:InterfaceIsType")
@@ -239,35 +243,43 @@ public final class Contract extends BaseContract {
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
     }
 
-    public static class FollowupTable implements Base {
+    static class FollowupTable extends BaseTable {
         static final String TABLE_NAME = "followups";
         private static final Table<Followup> TABLE = Table.forClass(Followup.class);
 
-        static final String COLUMN_ID = "followup_id";
-        static final String COLUMN_CONTEXT_ID = "context_id";
-        static final String COLUMN_GS_ROUTE_ID = "gs_route_id";
-        static final String COLUMN_GS_ACCESS_ID = "gs_access_id";
-        static final String COLUMN_GS_ACCESS_SECRET = "gs_access_secret";
+        static final String COLUMN_NAME = "name";
+        static final String COLUMN_EMAIL = "email";
+        static final String COLUMN_DESTINATION = "destination";
+        static final String COLUMN_LANGUAGE = "language";
+        static final String COLUMN_CREATE_TIME = "created_at";
 
         private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
-        private static final Field FIELD_CONTEXT_ID = TABLE.field(COLUMN_CONTEXT_ID);
-        public static final Field FIELD_GS_ROUTE_ID = TABLE.field(COLUMN_GS_ROUTE_ID);
 
         static final String[] PROJECTION_ALL =
-                {COLUMN_ID, COLUMN_CONTEXT_ID, COLUMN_GS_ROUTE_ID, COLUMN_GS_ACCESS_ID, COLUMN_GS_ACCESS_SECRET};
+                {COLUMN_ID, COLUMN_NAME, COLUMN_EMAIL, COLUMN_DESTINATION, COLUMN_LANGUAGE};
 
-        private static final String SQL_COLUMN_ID = COLUMN_ID + " INTEGER NOT NULL";
-        private static final String SQL_COLUMN_CONTEXT_ID = COLUMN_CONTEXT_ID + " INTEGER NOT NULL";
-        private static final String SQL_COLUMN_GS_ROUTE_ID = COLUMN_GS_ROUTE_ID + " INTEGER";
-        private static final String SQL_COLUMN_GS_ACCESS_ID = COLUMN_GS_ACCESS_ID + " TEXT";
-        private static final String SQL_COLUMN_GS_ACCESS_SECRET = COLUMN_GS_ACCESS_SECRET + " TEXT";
-        private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_ID, COLUMN_CONTEXT_ID);
+        private static final String SQL_COLUMN_NAME = COLUMN_NAME + " TEXT";
+        private static final String SQL_COLUMN_EMAIL = COLUMN_EMAIL + " TEXT";
+        private static final String SQL_COLUMN_DESTINATION = COLUMN_DESTINATION + " INTEGER";
+        private static final String SQL_COLUMN_LANGUAGE = COLUMN_LANGUAGE + " TEXT NOT NULL";
+        private static final String SQL_COLUMN_CREATE_TIME = COLUMN_CREATE_TIME + " INTEGER";
 
-        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind()).and(FIELD_CONTEXT_ID.eq(bind()));
+        static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
 
         static final String SQL_CREATE_TABLE =
-                create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_ID, SQL_COLUMN_CONTEXT_ID, SQL_COLUMN_GS_ROUTE_ID,
-                       SQL_COLUMN_GS_ACCESS_ID, SQL_COLUMN_GS_ACCESS_SECRET, SQL_PRIMARY_KEY);
+                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_NAME, SQL_COLUMN_EMAIL, SQL_COLUMN_DESTINATION,
+                       SQL_COLUMN_LANGUAGE, SQL_COLUMN_CREATE_TIME);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
+
+        /* DB migrations */
+        static final String SQL_V28_MIGRATE_SUBSCRIBERS =
+                "INSERT INTO " + TABLE_NAME + " (" +
+                        COLUMN_NAME + "," +
+                        COLUMN_EMAIL + "," +
+                        COLUMN_LANGUAGE + "," +
+                        COLUMN_DESTINATION + "," +
+                        COLUMN_CREATE_TIME + ") " +
+                        "SELECT first_name || ' ' || last_name,email,language_code,1,created_timestamp " +
+                        "FROM gssubscribers";
     }
 }

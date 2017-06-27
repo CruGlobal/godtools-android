@@ -33,22 +33,17 @@ import android.view.Window;
 import android.widget.FrameLayout;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.common.base.Strings;
 
 import org.cru.godtools.api.GodToolsApi;
 import org.cru.godtools.api.model.GTNotificationRegister;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-import org.keynote.godtools.android.business.GSSubscriber;
 import org.keynote.godtools.android.business.GTPackage;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.googleAnalytics.EventTracker;
-import org.keynote.godtools.android.model.Followup;
 import org.keynote.godtools.android.notifications.NotificationInfo;
 import org.keynote.godtools.android.snuffy.SnuffyAboutActivity;
 import org.keynote.godtools.android.snuffy.SnuffyHelpActivity;
-import org.keynote.godtools.android.sync.GodToolsSyncService;
 import org.keynote.godtools.renderer.crureader.XMLUtil;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocument;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocumentPage;
@@ -63,8 +58,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -88,11 +81,6 @@ import static org.keynote.godtools.android.utils.Constants.PROPERTY_REG_ID;
 import static org.keynote.godtools.android.utils.Constants.SATISFIED;
 import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
-import static org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent.EventID.SUBSCRIBE_EVENT;
-import static org.keynote.godtools.renderer.crureader.bo.GPage.GInputField.FIELD_EMAIL;
-import static org.keynote.godtools.renderer.crureader.bo.GPage.GInputField.FIELD_FIRST_NAME;
-import static org.keynote.godtools.renderer.crureader.bo.GPage.GInputField.FIELD_LAST_NAME;
-import static org.keynote.godtools.renderer.crureader.bo.GPage.GInputField.FIELD_NAME;
 
 public class SnuffyPWActivity extends AppCompatActivity {
 
@@ -222,15 +210,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
         }
     }
 
-    @WorkerThread
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
-    public void onSubscribeEvent(@NonNull final GodToolsEvent event) {
-        if (event.getEventID().equals(SUBSCRIBE_EVENT)) {
-            Log.i(TAG, "Subscribe event");
-            processSubscriberEvent(event);
-        }
-    }
-
     private void setupActionBar() {
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -279,50 +258,6 @@ public class SnuffyPWActivity extends AppCompatActivity {
             return super.isChangingConfigurations() || mIsConfigChange;
         else
             return mIsConfigChange;
-    }
-
-    @WorkerThread
-    private void processSubscriberEvent(@NonNull final GodToolsEvent event) {
-        // look up the followup for the active context
-        final GodToolsDao dao = GodToolsDao.getInstance(this);
-        final Followup followup = dao.find(Followup.class, event.getFollowUpId(), Followup.DEFAULT_CONTEXT);
-        if (followup != null) {
-            // generate subscriber record
-            final GSSubscriber subscriber = new GSSubscriber();
-            subscriber.setRouteId(followup.getGrowthSpacesRouteId());
-            subscriber.setLanguageCode(event.getLanguage());
-
-            // process any fields
-            for (final Map.Entry<String, String> field : event.getFields().entrySet()) {
-                switch (Strings.nullToEmpty(field.getKey()).toLowerCase(Locale.US)) {
-                    case FIELD_EMAIL:
-                        subscriber.setEmail(field.getValue());
-                        break;
-                    case FIELD_FIRST_NAME:
-                        subscriber.setFirstName(field.getValue());
-                        break;
-                    case FIELD_LAST_NAME:
-                        subscriber.setLastName(field.getValue());
-                        break;
-                    case FIELD_NAME:
-                        // XXX: This is a best attempt at doing the right thing with a full name when the API expects
-                        // XXX: separate first and last names. This handles edge cases by putting all names beyond the
-                        // XXX: first one in the last name field.
-                        final String[] parts = field.getValue().split(" ", 2);
-                        subscriber.setFirstName(parts[0]);
-                        if (parts.length > 1) {
-                            subscriber.setLastName(parts[1]);
-                        }
-                        break;
-                }
-            }
-
-            // store subscriber if it's valid & trigger background sync
-            if (subscriber.isValid()) {
-                dao.insert(subscriber);
-                GodToolsSyncService.syncGrowthSpacesSubscribers(this).sync();
-            }
-        }
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)

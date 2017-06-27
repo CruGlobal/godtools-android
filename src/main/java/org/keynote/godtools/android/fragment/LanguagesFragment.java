@@ -18,11 +18,11 @@ import com.annimon.stream.Stream;
 
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
+import org.cru.godtools.sync.GodToolsSyncService;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.adapter.LanguagesAdapter;
 import org.keynote.godtools.android.content.LanguagesLoader;
 import org.keynote.godtools.android.model.Language;
-import org.keynote.godtools.android.sync.GodToolsSyncService;
 
 import java.util.List;
 import java.util.Locale;

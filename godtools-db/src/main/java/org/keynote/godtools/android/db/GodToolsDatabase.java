@@ -12,12 +12,12 @@ import com.crashlytics.android.Crashlytics;
 import org.ccci.gto.android.common.app.ApplicationUtils;
 import org.ccci.gto.android.common.db.CommonTables.LastSyncTable;
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper;
-import org.keynote.godtools.android.dao.DBContract.GSSubscriberTable;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.FollowupTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
+import org.keynote.godtools.android.db.Contract.LegacyTables;
 import org.keynote.godtools.android.db.Contract.LocalFileTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationFileTable;
@@ -27,7 +27,7 @@ import io.fabric.sdk.android.Fabric;
 
 public final class GodToolsDatabase extends WalSQLiteOpenHelper {
     private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 25;
+    private static final int DATABASE_VERSION = 29;
 
     /*
      * Version history
@@ -60,6 +60,10 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
      * 23: 2017-05-15
      * 24: 2017-05-15
      * 25: 2017-06-19
+     * 26: 2017-06-26
+     * 27: 2017-06-27
+     * 28: 2017-06-27
+     * 29: 2017-06-27
      */
 
     @NonNull
@@ -91,7 +95,6 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(GTPackageTable.SQL_CREATE_TABLE);
             db.execSQL(GTLanguageTable.SQL_CREATE_TABLE);
             db.execSQL(LastSyncTable.SQL_CREATE_TABLE);
-            db.execSQL(GSSubscriberTable.SQL_CREATE_TABLE);
             db.execSQL(FollowupTable.SQL_CREATE_TABLE);
             db.execSQL(LanguageTable.SQL_CREATE_TABLE);
             db.execSQL(ToolTable.SQL_CREATE_TABLE);
@@ -143,11 +146,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
 
                         break;
                     case 4:
-                        //create Growth Spaces Subscriber table
-                        db.execSQL(GSSubscriberTable.SQL_CREATE_TABLE);
-                        break;
                     case 5:
-                        db.execSQL(FollowupTable.SQL_CREATE_TABLE);
                         break;
                     case 6:
                         // rename table to save data
@@ -208,6 +207,18 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
                     case 25:
                         db.execSQL(ToolTable.SQL_V25_ALTER_DETAILS_BANNER);
                         break;
+                    case 26:
+                        break;
+                    case 27:
+                        db.execSQL(FollowupTable.SQL_DELETE_TABLE);
+                        db.execSQL(FollowupTable.SQL_CREATE_TABLE);
+                        break;
+                    case 28:
+                        db.execSQL(FollowupTable.SQL_V28_MIGRATE_SUBSCRIBERS);
+                        break;
+                    case 29:
+                        db.execSQL(LegacyTables.SQL_DELETE_GSSUBSCRIBERS);
+                        break;
                     default:
                         // unrecognized version
                         throw new SQLiteException("Unrecognized database version");
@@ -244,7 +255,6 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(GTPackageTable.SQL_DELETE_OLD_TABLE);
             db.execSQL(GTLanguageTable.SQL_DELETE_TABLE);
             db.execSQL(GTLanguageTable.SQL_DELETE_OLD_TABLE);
-            db.execSQL(GSSubscriberTable.SQL_DELETE_TABLE);
             db.execSQL(FollowupTable.SQL_DELETE_TABLE);
             db.execSQL(TranslationTable.SQL_DELETE_TABLE);
             db.execSQL(ToolTable.SQL_DELETE_TABLE);
@@ -253,6 +263,9 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(LocalFileTable.SQL_DELETE_TABLE);
             db.execSQL(TranslationFileTable.SQL_DELETE_TABLE);
             db.execSQL(AttachmentTable.SQL_DELETE_TABLE);
+
+            // legacy tables
+            db.execSQL(LegacyTables.SQL_DELETE_GSSUBSCRIBERS);
 
             onCreate(db);
 

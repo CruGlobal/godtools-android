@@ -59,6 +59,7 @@ dependencies {
     implementation project(':godtools-db')
     implementation project(':godtools-model')
     implementation project(':godtools-model-events')
+    implementation project(':godtools-sync')
     compile project(':godtools-tract-renderer')
 
     implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
@@ -77,7 +78,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
-    compile "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
     implementation "com.newrelic.agent.android:android-agent:5.13.0"
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
