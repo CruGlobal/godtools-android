@@ -22,6 +22,10 @@ public final class Contract extends BaseContract {
         static final String SQL_COLUMN_ID = SQL_COLUMN_ROWID;
     }
 
+    static class LegacyTables {
+        static final String SQL_DELETE_GSSUBSCRIBERS = drop(GSSubscriberTable.TABLE_NAME);
+    }
+
     @SuppressWarnings("checkstyle:InterfaceIsType")
     interface ToolId {
         String COLUMN_TOOL = "tool";
@@ -240,7 +244,7 @@ public final class Contract extends BaseContract {
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
     }
 
-    public static class FollowupTable extends BaseTable {
+    static class FollowupTable extends BaseTable {
         static final String TABLE_NAME = "followups";
         private static final Table<Followup> TABLE = Table.forClass(Followup.class);
 
