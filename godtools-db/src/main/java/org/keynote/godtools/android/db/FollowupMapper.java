@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import org.cru.godtools.model.Followup;
 
+import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_CREATE_TIME;
 import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_DESTINATION;
 import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_EMAIL;
 import static org.keynote.godtools.android.db.Contract.FollowupTable.COLUMN_LANGUAGE;
@@ -27,6 +28,10 @@ final class FollowupMapper extends BaseMapper<Followup> {
                 break;
             case COLUMN_DESTINATION:
                 values.put(field, followup.getDestination());
+                break;
+            case COLUMN_CREATE_TIME:
+                values.put(field, serialize(followup.getCreateTime()));
+                break;
             default:
                 super.mapField(values, field, followup);
                 break;
@@ -48,6 +53,7 @@ final class FollowupMapper extends BaseMapper<Followup> {
         followup.setEmail(getString(c, COLUMN_EMAIL));
         followup.setLanguageCode(getLocale(c, COLUMN_LANGUAGE));
         followup.setDestination(getLong(c, COLUMN_DESTINATION));
+        followup.setCreateTime(getDate(c, COLUMN_CREATE_TIME));
 
         return followup;
     }

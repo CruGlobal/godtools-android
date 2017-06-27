@@ -247,6 +247,7 @@ public final class Contract extends BaseContract {
         static final String COLUMN_EMAIL = "email";
         static final String COLUMN_DESTINATION = "destination";
         static final String COLUMN_LANGUAGE = "language";
+        static final String COLUMN_CREATE_TIME = "created_at";
 
         private static final Field FIELD_ID = TABLE.field(COLUMN_ID);
 
@@ -257,12 +258,13 @@ public final class Contract extends BaseContract {
         private static final String SQL_COLUMN_EMAIL = COLUMN_EMAIL + " TEXT";
         private static final String SQL_COLUMN_DESTINATION = COLUMN_DESTINATION + " INTEGER";
         private static final String SQL_COLUMN_LANGUAGE = COLUMN_LANGUAGE + " TEXT NOT NULL";
+        private static final String SQL_COLUMN_CREATE_TIME = COLUMN_CREATE_TIME + " INTEGER";
 
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
 
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_NAME, SQL_COLUMN_EMAIL, SQL_COLUMN_DESTINATION,
-                       SQL_COLUMN_LANGUAGE);
+                       SQL_COLUMN_LANGUAGE, SQL_COLUMN_CREATE_TIME);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
     }
 }

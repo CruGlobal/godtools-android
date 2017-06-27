@@ -9,6 +9,7 @@ import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
 import org.keynote.godtools.android.model.Base;
 import org.keynote.godtools.android.model.Language;
 
+import java.util.Date;
 import java.util.Locale;
 
 import static org.cru.godtools.model.Followup.JSON_API_TYPE;
@@ -36,6 +37,9 @@ public final class Followup extends Base {
     @Nullable
     @JsonApiAttribute(name = JSON_DESTINATION)
     private Long mDestination;
+    @Nullable
+    @JsonApiIgnore
+    private Date mCreateTime = new Date();
 
     @Nullable
     public String getName() {
@@ -75,6 +79,15 @@ public final class Followup extends Base {
 
     public void setDestination(@Nullable final Long destination) {
         mDestination = destination;
+    }
+
+    @Nullable
+    public Date getCreateTime() {
+        return mCreateTime;
+    }
+
+    public void setCreateTime(@Nullable final Date time) {
+        mCreateTime = time != null ? time : new Date();
     }
 
     public boolean isValid() {
