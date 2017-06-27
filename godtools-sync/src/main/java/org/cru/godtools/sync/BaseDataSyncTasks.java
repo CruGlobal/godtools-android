@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.sync;
+package org.cru.godtools.sync;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

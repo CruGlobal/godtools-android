@@ -37,6 +37,7 @@ import com.google.common.base.Strings;
 
 import org.cru.godtools.api.GodToolsApi;
 import org.cru.godtools.api.model.GTNotificationRegister;
+import org.cru.godtools.sync.GodToolsSyncService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -47,7 +48,6 @@ import org.keynote.godtools.android.googleAnalytics.EventTracker;
 import org.keynote.godtools.android.notifications.NotificationInfo;
 import org.keynote.godtools.android.snuffy.SnuffyAboutActivity;
 import org.keynote.godtools.android.snuffy.SnuffyHelpActivity;
-import org.keynote.godtools.android.sync.GodToolsSyncService;
 import org.keynote.godtools.renderer.crureader.XMLUtil;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocument;
 import org.keynote.godtools.renderer.crureader.bo.GDocument.GDocumentPage;

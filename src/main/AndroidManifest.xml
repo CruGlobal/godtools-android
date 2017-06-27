@@ -198,10 +198,6 @@
         <service android:name=".service.BackgroundService"
                  android:exported="false" />
 
-        <service
-            android:name=".sync.GodToolsSyncService"
-            android:exported="false"/>
-
         <meta-data android:name="com.google.android.gms.version"
                    android:value="@integer/google_play_services_version" />
         <meta-data

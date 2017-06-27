@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.sync;
+package org.cru.godtools.sync;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -12,6 +12,7 @@ import java.util.List;
 
 import retrofit2.Response;
 
+@Deprecated
 @WorkerThread
 class GrowthSpacesTasks extends BaseSyncTasks {
     private static final Object LOCK_SUBSCRIBERS = new Object();

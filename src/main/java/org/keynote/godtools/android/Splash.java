@@ -18,6 +18,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import org.ccci.gto.android.common.util.MainThreadExecutor;
 import org.cru.godtools.api.GodToolsApi;
 import org.cru.godtools.api.model.GTLanguages;
+import org.cru.godtools.sync.GodToolsSyncService;
 import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.db.GodToolsDao;
@@ -25,7 +26,6 @@ import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.PackageDownloadHelper;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
-import org.keynote.godtools.android.sync.GodToolsSyncService;
 import org.keynote.godtools.android.tasks.InitialContentTasks;
 
 import java.util.List;
