@@ -19,12 +19,10 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
 
     // supported sync types
     static final int SYNCTYPE_NONE = 0;
-    static final int SYNCTYPE_GROWTHSPACESSUBSCRIBERS = 1;
     static final int SYNCTYPE_LANGUAGES = 2;
     static final int SYNCTYPE_TOOLS = 3;
     static final int SYNCTYPE_FOLLOWUPS = 4;
 
-    private GrowthSpacesTasks mGrowthSpacesTasks;
     private LanguagesSyncTasks mLanguagesSyncTasks;
     private ToolSyncTasks mToolSyncTasks;
     private FollowupSyncTasks mFollowupSyncTasks;
@@ -50,13 +48,6 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
         return new SyncTask(context, intent);
     }
 
-    @Deprecated
-    public static SyncTask syncGrowthSpacesSubscribers(final Context context) {
-        final Intent intent = new Intent(context, GodToolsSyncService.class);
-        intent.putExtra(EXTRA_SYNCTYPE, SYNCTYPE_GROWTHSPACESSUBSCRIBERS);
-        return new SyncTask(context, intent);
-    }
-
     public GodToolsSyncService() {
         super("GtSyncService");
     }
@@ -66,7 +57,6 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        mGrowthSpacesTasks = new GrowthSpacesTasks(this);
         mLanguagesSyncTasks = new LanguagesSyncTasks(this);
         mToolSyncTasks = new ToolSyncTasks(this);
         mFollowupSyncTasks = new FollowupSyncTasks(this);
@@ -77,9 +67,6 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
         try {
             final Bundle args = firstNonNull(intent.getExtras(), Bundle.EMPTY);
             switch (intent.getIntExtra(EXTRA_SYNCTYPE, SYNCTYPE_NONE)) {
-                case SYNCTYPE_GROWTHSPACESSUBSCRIBERS:
-                    mGrowthSpacesTasks.syncSubscribers();
-                    break;
                 case SYNCTYPE_LANGUAGES:
                     mLanguagesSyncTasks.syncLanguages(args);
                     break;

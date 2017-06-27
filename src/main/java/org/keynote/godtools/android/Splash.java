@@ -152,7 +152,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
     private void syncData() {
         GodToolsSyncService.syncLanguages(this, false).sync();
-        GodToolsSyncService.syncGrowthSpacesSubscribers(this).sync();
     }
 
     private void startUpdateTasks() {
