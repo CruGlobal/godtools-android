@@ -22,10 +22,12 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
     static final int SYNCTYPE_GROWTHSPACESSUBSCRIBERS = 1;
     static final int SYNCTYPE_LANGUAGES = 2;
     static final int SYNCTYPE_TOOLS = 3;
+    static final int SYNCTYPE_FOLLOWUPS = 4;
 
     private GrowthSpacesTasks mGrowthSpacesTasks;
     private LanguagesSyncTasks mLanguagesSyncTasks;
     private ToolSyncTasks mToolSyncTasks;
+    private FollowupSyncTasks mFollowupSyncTasks;
 
     public static SyncTask syncLanguages(final Context context, final boolean force) {
         final Intent intent = new Intent(context, GodToolsSyncService.class);
@@ -41,6 +43,14 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
         return new SyncTask(context, intent);
     }
 
+    @NonNull
+    public static SyncTask syncFollowups(final Context context) {
+        final Intent intent = new Intent(context, GodToolsSyncService.class);
+        intent.putExtra(EXTRA_SYNCTYPE, SYNCTYPE_FOLLOWUPS);
+        return new SyncTask(context, intent);
+    }
+
+    @Deprecated
     public static SyncTask syncGrowthSpacesSubscribers(final Context context) {
         final Intent intent = new Intent(context, GodToolsSyncService.class);
         intent.putExtra(EXTRA_SYNCTYPE, SYNCTYPE_GROWTHSPACESSUBSCRIBERS);
@@ -59,6 +69,7 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
         mGrowthSpacesTasks = new GrowthSpacesTasks(this);
         mLanguagesSyncTasks = new LanguagesSyncTasks(this);
         mToolSyncTasks = new ToolSyncTasks(this);
+        mFollowupSyncTasks = new FollowupSyncTasks(this);
     }
 
     @Override
@@ -74,6 +85,9 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
                     break;
                 case SYNCTYPE_TOOLS:
                     mToolSyncTasks.syncResources(args);
+                    break;
+                case SYNCTYPE_FOLLOWUPS:
+                    mFollowupSyncTasks.syncFollowups();
                     break;
             }
         } catch (final IOException ignored) {

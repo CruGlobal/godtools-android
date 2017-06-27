@@ -13,5 +13,5 @@ public interface FollowupApi {
     String PATH_FOLLOWUPS = "follow_ups";
 
     @POST(PATH_FOLLOWUPS)
-    Call<JsonApiObject<Followup>> create(@Body @NonNull JsonApiObject<Followup> followup);
+    Call<JsonApiObject<Followup>> subscribe(@Body @NonNull Followup followup);
 }

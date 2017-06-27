@@ -1,5 +1,6 @@
 package org.cru.godtools.sync.service;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.annotation.WorkerThread;
 import org.ccci.gto.android.common.util.NumberUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.model.Followup;
+import org.cru.godtools.sync.GodToolsSyncService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -21,14 +23,17 @@ public final class FollowupService {
     private static final String FIELD_EMAIL = "email";
     private static final String FIELD_DESTINATION = "destination_id";
 
+    private final Context mContext;
     private final GodToolsDao mDao;
 
     private FollowupService(@NonNull final Context context) {
+        mContext = context;
         mDao = GodToolsDao.getInstance(context);
         EventBus.getDefault().register(this);
     }
 
     @Nullable
+    @SuppressLint("StaticFieldLeak")
     private static FollowupService sInstance;
     @NonNull
     @MainThread
@@ -52,6 +57,9 @@ public final class FollowupService {
             followup.setLanguageCode(event.locale);
             followup.setDestination(NumberUtils.toLong(event.fields.get(FIELD_DESTINATION), null));
             mDao.insertNew(followup);
+
+            // trigger a sync of followups
+            GodToolsSyncService.syncFollowups(mContext).run();
         }
     }
 }
