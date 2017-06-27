@@ -1,6 +1,7 @@
 package org.cru.godtools.model;
 
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore;
@@ -74,5 +75,9 @@ public final class Followup extends Base {
 
     public void setDestination(@Nullable final Long destination) {
         mDestination = destination;
+    }
+
+    public boolean isValid() {
+        return mDestination != null && mLanguageCode != null && !TextUtils.isEmpty(mEmail);
     }
 }

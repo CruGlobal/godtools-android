@@ -56,10 +56,12 @@ public final class FollowupService {
             followup.setEmail(event.fields.get(FIELD_EMAIL));
             followup.setLanguageCode(event.locale);
             followup.setDestination(NumberUtils.toLong(event.fields.get(FIELD_DESTINATION), null));
-            mDao.insertNew(followup);
 
-            // trigger a sync of followups
-            GodToolsSyncService.syncFollowups(mContext).run();
+            // only store this followup if it's valid
+            if (followup.isValid()) {
+                mDao.insertNew(followup);
+                GodToolsSyncService.syncFollowups(mContext).run();
+            }
         }
     }
 }
