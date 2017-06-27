@@ -19,6 +19,7 @@ import static org.cru.godtools.tract.model.Image.XML_IMAGE;
 import static org.cru.godtools.tract.model.Input.XML_INPUT;
 import static org.cru.godtools.tract.model.Link.XML_LINK;
 import static org.cru.godtools.tract.model.Paragraph.XML_PARAGRAPH;
+import static org.cru.godtools.tract.model.Tabs.XML_TABS;
 import static org.cru.godtools.tract.model.Text.XML_TEXT;
 
 public abstract class Content extends Base {
@@ -36,6 +37,8 @@ public abstract class Content extends Base {
                 switch (parser.getName()) {
                     case XML_PARAGRAPH:
                         return Paragraph.fromXml(parent, parser);
+                    case XML_TABS:
+                        return Tabs.fromXml(parent, parser);
                     case XML_TEXT:
                         return Text.fromXml(parent, parser);
                     case XML_IMAGE:
