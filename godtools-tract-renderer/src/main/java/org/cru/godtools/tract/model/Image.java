@@ -10,7 +10,6 @@ import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.Parent.ParentViewHolder;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -54,8 +53,7 @@ public final class Image extends Content {
 
     @NonNull
     @Override
-    ImageViewHolder createViewHolder(@NonNull final ViewGroup parent,
-                                     @Nullable final ParentViewHolder parentViewHolder) {
+    ImageViewHolder createViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
         return new ImageViewHolder(parent, parentViewHolder);
     }
 
@@ -64,7 +62,7 @@ public final class Image extends Content {
         @BindView(R2.id.content)
         PicassoImageView mImage;
 
-        ImageViewHolder(@NonNull final ViewGroup parent, @Nullable final ParentViewHolder parentViewHolder) {
+        ImageViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
             super(Image.class, parent, R.layout.tract_content_image, parentViewHolder);
         }
 

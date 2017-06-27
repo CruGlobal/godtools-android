@@ -14,7 +14,6 @@ import org.ccci.gto.android.common.util.NumberUtils;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.Parent.ParentViewHolder;
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -214,8 +213,7 @@ public final class Text extends Content {
 
     @NonNull
     @Override
-    TextViewHolder createViewHolder(@NonNull final ViewGroup parent,
-                                    @Nullable final ParentViewHolder parentViewHolder) {
+    TextViewHolder createViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
         return new TextViewHolder(parent, parentViewHolder);
     }
 
@@ -224,7 +222,7 @@ public final class Text extends Content {
         @BindView(R2.id.content)
         TextView mText;
 
-        TextViewHolder(@NonNull final ViewGroup parent, @Nullable final ParentViewHolder parentViewHolder) {
+        TextViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
             super(Text.class, parent, R.layout.tract_content_text, parentViewHolder);
         }
 

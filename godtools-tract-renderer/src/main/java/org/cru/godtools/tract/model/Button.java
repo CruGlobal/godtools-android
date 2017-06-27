@@ -19,7 +19,6 @@ import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.Parent.ParentViewHolder;
 import org.cru.godtools.tract.model.Text.Align;
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlPullParser;
@@ -143,7 +142,7 @@ public final class Button extends Content implements Styles {
     @NonNull
     @Override
     ButtonViewHolder createViewHolder(@NonNull final ViewGroup parent,
-                                      @Nullable final ParentViewHolder parentViewHolder) {
+                                      @Nullable final BaseViewHolder parentViewHolder) {
         return new ButtonViewHolder(parent, parentViewHolder);
     }
 
@@ -152,7 +151,7 @@ public final class Button extends Content implements Styles {
         @BindView(R2.id.button)
         TextView mButton;
 
-        ButtonViewHolder(@NonNull final ViewGroup parent, @Nullable final ParentViewHolder parentViewHolder) {
+        ButtonViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
             super(Button.class, parent, R.layout.tract_content_button, parentViewHolder);
         }
 

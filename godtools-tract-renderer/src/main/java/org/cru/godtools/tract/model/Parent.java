@@ -31,12 +31,12 @@ interface Parent {
         LinearLayout mContent;
 
         ParentViewHolder(@NonNull final Class<T> modelType, @NonNull final ViewGroup parent, final int layout,
-                         @Nullable final ParentViewHolder<?> parentViewHolder) {
+                         @Nullable final BaseViewHolder parentViewHolder) {
             super(modelType, parent, layout, parentViewHolder);
         }
 
         ParentViewHolder(@NonNull final Class<T> modelType, @NonNull final View root,
-                         @Nullable final ParentViewHolder<?> parentViewHolder) {
+                         @Nullable final BaseViewHolder parentViewHolder) {
             super(modelType, root, parentViewHolder);
         }
 

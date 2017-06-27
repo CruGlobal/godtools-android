@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 
 import com.annimon.stream.Stream;
 
-import org.cru.godtools.tract.model.Parent.ParentViewHolder;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -61,8 +60,8 @@ public abstract class Content extends Base {
     }
 
     @NonNull
-    abstract BaseViewHolder<?> createViewHolder(@NonNull final ViewGroup parent,
-                                                @Nullable final ParentViewHolder parentViewHolder);
+    abstract BaseViewHolder createViewHolder(@NonNull final ViewGroup parent,
+                                             @Nullable final BaseViewHolder parentViewHolder);
 
     static void renderAll(@NonNull final ViewGroup parent, @NonNull final List<? extends Content> content) {
         Stream.of(content)

@@ -69,14 +69,13 @@ public final class Form extends Content implements Parent {
 
     @NonNull
     @Override
-    FormViewHolder createViewHolder(@NonNull final ViewGroup parent,
-                                    @Nullable final ParentViewHolder parentViewHolder) {
+    FormViewHolder createViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
         return new FormViewHolder(parent, parentViewHolder);
     }
 
     @UiThread
     public static final class FormViewHolder extends ParentViewHolder<Form> {
-        FormViewHolder(@NonNull final ViewGroup parent, @Nullable final ParentViewHolder parentViewHolder) {
+        FormViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
             super(Form.class, parent, R.layout.tract_content_paragraph, parentViewHolder);
         }
 
