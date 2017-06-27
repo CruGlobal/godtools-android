@@ -5,12 +5,8 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.GsonBuilder;
-
 import org.ccci.gto.android.common.api.okhttp3.util.OkHttpClientUtil;
 import org.ccci.gto.android.common.api.retrofit2.converter.LocaleConverterFactory;
-import org.ccci.gto.android.common.gson.GsonIgnoreExclusionStrategy;
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory;
@@ -25,11 +21,9 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 import static org.cru.godtools.api.BuildConfig.BASE_URL;
-import static org.cru.godtools.api.BuildConfig.GROWTH_SPACES_URL;
 import static org.cru.godtools.api.BuildConfig.MOBILE_CONTENT_API;
 
 public class GodToolsApi {
@@ -48,9 +42,6 @@ public class GodToolsApi {
     public final FollowupApi followups;
     @NonNull
     @Deprecated
-    public final GrowthSpacesApi growthSpaces;
-    @NonNull
-    @Deprecated
     public final LegacyApi legacy;
 
     private GodToolsApi(@NonNull final Context context) {
@@ -66,13 +57,6 @@ public class GodToolsApi {
         translations = retrofit.create(TranslationsApi.class);
         attachments = retrofit.create(AttachmentsApi.class);
         followups = retrofit.create(FollowupApi.class);
-
-        growthSpaces = new Retrofit.Builder()
-                .baseUrl(GROWTH_SPACES_URL)
-                .addConverterFactory(gsonConverter())
-                .callFactory(okhttp)
-                .build()
-                .create(GrowthSpacesApi.class);
 
         legacy = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -100,15 +84,6 @@ public class GodToolsApi {
                 // attach the various converter factories
                 .addConverterFactory(new LocaleConverterFactory())
                 .addConverterFactory(JsonApiConverterFactory.create(jsonApiConverter()));
-    }
-
-    @NonNull
-    private GsonConverterFactory gsonConverter() {
-        return GsonConverterFactory.create(
-                new GsonBuilder()
-                        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                        .setExclusionStrategies(new GsonIgnoreExclusionStrategy())
-                        .create());
     }
 
     @NonNull
