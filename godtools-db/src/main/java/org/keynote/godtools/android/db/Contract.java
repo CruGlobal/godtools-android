@@ -48,6 +48,7 @@ public final class Contract extends BaseContract {
         private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_CODE);
 
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind());
+        public static final Expression SQL_WHERE_ADDED = FIELD_ADDED.eq(true);
 
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_ADDED, SQL_PRIMARY_KEY);

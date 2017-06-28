@@ -221,7 +221,7 @@ public final class GodToolsToolManager {
                     .map(Tool::getId)
                     .toArray();
             final Object[] languages = mDao
-                    .streamCompat(Query.select(Language.class).where(LanguageTable.FIELD_ADDED.eq(true)))
+                    .streamCompat(Query.select(Language.class).where(LanguageTable.SQL_WHERE_ADDED))
                     .map(Language::getCode)
                     .toArray();
 
@@ -527,7 +527,7 @@ public final class GodToolsToolManager {
     private void enqueuePendingPublishedTranslations() {
         mDao.streamCompat(Query.select(Translation.class)
                                   .joins(TranslationTable.SQL_JOIN_LANGUAGE, TranslationTable.SQL_JOIN_TOOL)
-                                  .where(LanguageTable.FIELD_ADDED.eq(true)
+                                  .where(LanguageTable.SQL_WHERE_ADDED
                                                  .and(ToolTable.FIELD_ADDED.eq(true))
                                                  .and(TranslationTable.SQL_WHERE_PUBLISHED)
                                                  .and(TranslationTable.FIELD_DOWNLOADED.eq(false))))
