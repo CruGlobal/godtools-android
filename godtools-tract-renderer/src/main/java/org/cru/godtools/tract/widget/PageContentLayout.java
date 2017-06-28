@@ -42,6 +42,8 @@ import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD
 
 public class PageContentLayout extends FrameLayout implements NestedScrollingParent,
         ViewTreeObserver.OnGlobalLayoutListener {
+    private final int FLING_SCALE_FACTOR = 10;
+
     public interface OnActiveCardListener {
         void onActiveCardChanged(@Nullable View activeCard);
     }
@@ -199,7 +201,8 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     @Override
     public boolean onNestedFling(final View target, final float velocityX, final float velocityY,
                                  final boolean consumed) {
-        final int minVelocity = ViewConfiguration.get(target.getContext()).getScaledMinimumFlingVelocity();
+        final int minVelocity =
+                ViewConfiguration.get(target.getContext()).getScaledMinimumFlingVelocity() * FLING_SCALE_FACTOR;
         if (velocityY <= 0 - minVelocity && mActiveCardPosition >= 0) {
             changeActiveCard(mActiveCardPosition - 1, true);
             return true;
