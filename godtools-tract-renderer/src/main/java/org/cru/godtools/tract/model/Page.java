@@ -131,6 +131,11 @@ public final class Page extends Base implements Styles, Parent {
         return mLocalFileName;
     }
 
+    @NonNull
+    public Set<Event.Id> getListeners() {
+        return mListeners;
+    }
+
     @ColorInt
     @Override
     public int getPrimaryColor() {
