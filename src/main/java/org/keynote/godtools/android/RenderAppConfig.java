@@ -72,12 +72,12 @@ public class RenderAppConfig extends BaseAppConfig {
 
     @Override
     public String getFollowupModalInputValidGeneric() {
-        return get(R.string.followup_modal_input_invalid_generic);
+        return get(R.string.tract_content_input_error_invalid_generic);
     }
 
     @Override
     public String getFollowupModalInputInvalidEmail() {
-        return get(R.string.followup_modal_input_invalid_email);
+        return get(R.string.tract_content_input_error_invalid_email);
     }
 
     @Override

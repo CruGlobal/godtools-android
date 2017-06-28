@@ -3,6 +3,7 @@ package org.cru.godtools.tract.model;
 import android.content.res.ColorStateList;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 import android.support.design.widget.TextInputLayout;
@@ -26,12 +27,15 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
 
+import static org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES;
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
+import static org.cru.godtools.tract.model.Utils.parseBoolean;
 
 public final class Input extends Content {
     static final String XML_INPUT = "input";
@@ -41,9 +45,29 @@ public final class Input extends Content {
     private static final String XML_TYPE_PHONE = "phone";
     private static final String XML_TYPE_HIDDEN = "hidden";
     private static final String XML_NAME = "name";
+    private static final String XML_REQUIRED = "required";
     private static final String XML_VALUE = "value";
     private static final String XML_LABEL = "label";
     private static final String XML_PLACEHOLDER = "placeholder";
+
+    private static final Pattern VALIDATE_EMAIL = Pattern.compile(".+@.+");
+
+    static class Error {
+        @StringRes
+        final int msgId;
+        @NonNull
+        final String msg;
+
+        Error(@StringRes final int resId) {
+            msgId = resId;
+            msg = "Error!";
+        }
+
+        Error(@NonNull final String error) {
+            msg = error;
+            msgId = INVALID_STRING_RES;
+        }
+    }
 
     private enum Type {
         TEXT, EMAIL, PHONE, HIDDEN;
@@ -75,6 +99,8 @@ public final class Input extends Content {
     @Nullable
     String mValue;
 
+    boolean mRequired = false;
+
     @Nullable
     Text mLabel;
     @Nullable
@@ -84,19 +110,29 @@ public final class Input extends Content {
         super(parent);
     }
 
-    boolean isValidValue(@Nullable String value) {
-        value = Strings.nullToEmpty(value);
+    @Nullable
+    Error validateValue(@Nullable final String raw) {
+        final String value = Strings.nullToEmpty(raw);
+
+        // check to see if the field is required
+        if (mRequired) {
+            if (value.trim().length() == 0) {
+                return new Error(R.string.tract_content_input_error_required);
+            }
+        }
 
         // handle any pre-defined type formats
         switch (mType) {
             case EMAIL:
                 // XXX: this pattern is too strict
-                // return Patterns.EMAIL_ADDRESS.matcher(value).matches();
-                return value.contains("@");
+                // Patterns.EMAIL_ADDRESS.matcher(value).matches();
+                if (!VALIDATE_EMAIL.matcher(value).matches()) {
+                    return new Error(R.string.tract_content_input_error_invalid_email);
+                }
         }
 
-        // default to true
-        return true;
+        // default to no error
+        return null;
     }
 
     @WorkerThread
@@ -112,6 +148,7 @@ public final class Input extends Content {
         mType = Type.parse(parser.getAttributeValue(null, XML_TYPE), mType);
         mName = parser.getAttributeValue(null, XML_NAME);
         mValue = parser.getAttributeValue(null, XML_VALUE);
+        mRequired = parseBoolean(parser.getAttributeValue(null, XML_REQUIRED), mRequired);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -203,23 +240,12 @@ public final class Input extends Content {
 
         @Override
         boolean onValidate() {
-            final boolean valid = mModel == null || mModel.isValidValue(getValue());
-            if (valid) {
-                showError(null);
-            } else {
-                final int resId;
-                switch (mModel.mType) {
-                    case EMAIL:
-                        resId = R.string.followup_modal_input_invalid_email;
-                        break;
-                    default:
-                        resId = R.string.followup_modal_input_invalid_generic;
-                        break;
-                }
-                showError(mRoot.getResources().getString(resId, mModel.mName, getValue()));
-            }
-
-            return valid;
+            final String value = getValue();
+            final Error error = mModel != null ? mModel.validateValue(value) : null;
+            final String msg = error == null ? null : error.msgId != INVALID_STRING_RES ?
+                    mRoot.getResources().getString(error.msgId, mModel.mName, value) : error.msg;
+            showError(msg);
+            return error == null;
         }
 
         @Override
