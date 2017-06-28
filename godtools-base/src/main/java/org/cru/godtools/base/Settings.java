@@ -1,4 +1,4 @@
-package org.keynote.godtools.android;
+package org.cru.godtools.base;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,11 +13,10 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import java.util.Locale;
 import java.util.Set;
 
-import static org.keynote.godtools.android.Constants.PREFS_SETTINGS;
-import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
-import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
-
 public final class Settings {
+    private static final String PREFS_SETTINGS = "GodTools";
+    private static final String PREF_PRIMARY_LANGUAGE = "languagePrimary";
+    private static final String PREF_PARALLEL_LANGUAGE = "languageParallel";
     private static final String PREF_TOUR_COMPLETED = "tour_completed";
 
     @NonNull

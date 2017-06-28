@@ -22,7 +22,7 @@ import com.google.common.base.Strings;
 
 import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.Settings;
+import org.cru.godtools.base.Settings;
 import org.keynote.godtools.android.util.WebUrlLauncher;
 
 import java.util.Locale;

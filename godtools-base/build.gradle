@@ -13,6 +13,8 @@ android {
 dependencies {
     implementation "com.android.support:support-annotations:${deps.androidSupport}"
 
+    implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
+
     implementation "com.google.guava:guava:${deps.guava}"
 
     testImplementation "junit:junit:${deps.junit}"

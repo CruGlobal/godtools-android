@@ -39,7 +39,7 @@ import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.keynote.godtools.android.Settings;
+import org.cru.godtools.base.Settings;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
 import org.keynote.godtools.android.db.Contract.LocalFileTable;
