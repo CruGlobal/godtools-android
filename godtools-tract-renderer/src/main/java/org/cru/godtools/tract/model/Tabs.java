@@ -149,7 +149,7 @@ final class Tabs extends Content {
             // update background tint
             Drawable bkg = mTabs.getBackground();
             if (bkg != null) {
-                bkg = bkg.mutate();
+                bkg = DrawableCompat.wrap(bkg).mutate();
                 DrawableCompat.setTint(bkg, primaryColor);
                 ViewCompat.setBackground(mTabs, bkg);
             }
@@ -170,7 +170,7 @@ final class Tabs extends Content {
                     // set the tab background
                     bkg = AppCompatResources.getDrawable(mTabs.getContext(), R.drawable.bkg_content_tab_label);
                     if (bkg != null) {
-                        bkg = bkg.mutate();
+                        bkg = DrawableCompat.wrap(bkg).mutate();
                         DrawableCompat.setTint(bkg, primaryColor);
                     }
                     TabLayoutUtils.setBackground(tab2, bkg);
