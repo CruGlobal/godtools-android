@@ -15,11 +15,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.os.ParcelableCompat;
 import android.support.v4.os.ParcelableCompatCreatorCallbacks;
 import android.support.v4.view.AbsSavedState;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.NestedScrollingParent;
 import android.support.v4.view.NestedScrollingParentHelper;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
@@ -48,6 +51,14 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         void onActiveCardChanged(@Nullable View activeCard);
     }
 
+    private final GestureDetectorCompat mGestureDetector;
+    private final GestureDetector.OnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
+        @Override
+        public boolean onFling(final MotionEvent e1, final MotionEvent e2, final float velocityX,
+                               final float velocityY) {
+            return flingCard(velocityY);
+        }
+    };
     private final NestedScrollingParentHelper mParentHelper;
 
     @Nullable
@@ -87,6 +98,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     public PageContentLayout(@NonNull final Context context, @Nullable final AttributeSet attrs,
                              final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mGestureDetector = new GestureDetectorCompat(context, mGestureListener);
         mParentHelper = new NestedScrollingParentHelper(this);
     }
 
@@ -94,6 +106,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     public PageContentLayout(@NonNull final Context context, @Nullable final AttributeSet attrs,
                              final int defStyleAttr, final int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        mGestureDetector = new GestureDetectorCompat(context, mGestureListener);
         mParentHelper = new NestedScrollingParentHelper(this);
     }
 
@@ -154,6 +167,22 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     }
 
     @Override
+    public boolean onInterceptTouchEvent(final MotionEvent ev) {
+        return mGestureDetector.onTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onTouchEvent(@NonNull final MotionEvent event) {
+        if (mGestureDetector.onTouchEvent(event)) {
+            return true;
+        } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            // we always consume the down event if it reaches us so that we can continue to process future events
+            return true;
+        }
+        return super.onTouchEvent(event);
+    }
+
+    @Override
     protected Parcelable onSaveInstanceState() {
         final SavedState state = new SavedState(super.onSaveInstanceState());
         state.activeCardPosition = mActiveCardPosition;
@@ -201,18 +230,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     @Override
     public boolean onNestedFling(final View target, final float velocityX, final float velocityY,
                                  final boolean consumed) {
-        final int minVelocity =
-                ViewConfiguration.get(target.getContext()).getScaledMinimumFlingVelocity() * FLING_SCALE_FACTOR;
-        if (velocityY <= 0 - minVelocity && mActiveCardPosition >= 0) {
-            changeActiveCard(mActiveCardPosition - 1, true);
-            return true;
-        }
-        if (velocityY >= minVelocity && mCardPositionOffset + mActiveCardPosition < getChildCount() - 1) {
-            changeActiveCard(mActiveCardPosition + 1, true);
-            return true;
-        }
-
-        return false;
+        return flingCard(velocityY * -1);
     }
 
     @Override
@@ -221,6 +239,21 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     }
 
     /* END NestedScrollingParent methods */
+
+    boolean flingCard(final float velocityY) {
+        final int minVelocity =
+                ViewConfiguration.get(getContext()).getScaledMinimumFlingVelocity() * FLING_SCALE_FACTOR;
+        if (velocityY >= minVelocity && mActiveCardPosition >= 0) {
+            changeActiveCard(mActiveCardPosition - 1, true);
+            return true;
+        }
+        if (velocityY <= 0 - minVelocity && mCardPositionOffset + mActiveCardPosition < getChildCount() - 1) {
+            changeActiveCard(mActiveCardPosition + 1, true);
+            return true;
+        }
+
+        return false;
+    }
 
     public void setActiveCardListener(@Nullable final OnActiveCardListener listener) {
         mActiveCardListener = listener;
