@@ -80,11 +80,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
                 dispatchActiveCardChanged();
             }
         }
-
-        @Override
-        public void onAnimationCancel(final Animator animation) {
-            onAnimationEnd(animation);
-        }
     };
 
     public PageContentLayout(@NonNull final Context context) {
@@ -289,7 +284,11 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             updateActiveCardPosition(false);
 
             if (animate) {
+                final Animator oldAnimation = mAnimation;
                 mAnimation = buildAnimation();
+                if (oldAnimation != null) {
+                    oldAnimation.cancel();
+                }
                 mAnimation.start();
             }
 
