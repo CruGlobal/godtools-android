@@ -34,6 +34,8 @@ import static org.cru.godtools.base.Constants.EXTRA_PRIMARY_LANGUAGE;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 
 public class TractActivity extends ImmersiveActivity implements ManifestPagerAdapter.Callbacks {
+    private static final String EXTRA_PRIMARY_ACTIVE = TractActivity.class.getName() + ".PRIMARY_ACTIVE";
+
     private static final int LOADER_MANIFEST_PRIMARY = 101;
     private static final int LOADER_MANIFEST_PARALLEL = 102;
 
@@ -97,6 +99,11 @@ public class TractActivity extends ImmersiveActivity implements ManifestPagerAda
             mParallelLocale = BundleUtils.getLocale(extras, EXTRA_PARALLEL_LANGUAGE, mParallelLocale);
         }
 
+        // restore any persisted state
+        if (savedInstanceState != null) {
+            mPrimaryActive = savedInstanceState.getBoolean(EXTRA_PRIMARY_ACTIVE, mPrimaryActive);
+        }
+
         startLoaders();
     }
 
@@ -129,6 +136,12 @@ public class TractActivity extends ImmersiveActivity implements ManifestPagerAda
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(EXTRA_PRIMARY_ACTIVE, mPrimaryActive);
     }
 
     /* END lifecycle */

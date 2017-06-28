@@ -7,9 +7,14 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.os.ParcelableCompat;
+import android.support.v4.os.ParcelableCompatCreatorCallbacks;
+import android.support.v4.view.AbsSavedState;
 import android.support.v4.view.NestedScrollingParent;
 import android.support.v4.view.NestedScrollingParentHelper;
 import android.support.v4.view.ViewCompat;
@@ -99,6 +104,19 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     }
 
     @Override
+    protected void onRestoreInstanceState(final Parcelable state) {
+        if (!(state instanceof SavedState)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+
+        final SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+
+        changeActiveCard(ss.activeCardPosition, false);
+    }
+
+    @Override
     public void onGlobalLayout() {
         // XXX: This is to fix a chicken and egg bug. When measuring views we want to have access to card offsets.
         // XXX: To get card offsets we need to access the actual layout of nodes. to get the actual layout of nodes we
@@ -131,6 +149,13 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         } else {
             changeActiveCard(getChildAt(mActiveCardPosition + mCardPositionOffset - 1), false);
         }
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        final SavedState state = new SavedState(super.onSaveInstanceState());
+        state.activeCardPosition = mActiveCardPosition;
+        return state;
     }
 
     @Override
@@ -594,6 +619,38 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
                 }
             }
         }
+    }
+
+    protected static class SavedState extends AbsSavedState {
+        int activeCardPosition;
+
+        public SavedState(Parcel in, ClassLoader loader) {
+            super(in, loader);
+            activeCardPosition = in.readInt();
+        }
+
+        public SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            super.writeToParcel(dest, flags);
+            dest.writeInt(activeCardPosition);
+        }
+
+        public static final Creator<SavedState> CREATOR = ParcelableCompat.newCreator(
+                new ParcelableCompatCreatorCallbacks<SavedState>() {
+                    @Override
+                    public SavedState createFromParcel(Parcel in, ClassLoader loader) {
+                        return new SavedState(in, loader);
+                    }
+
+                    @Override
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                });
     }
 
     public static class LayoutParams extends FrameLayout.LayoutParams {

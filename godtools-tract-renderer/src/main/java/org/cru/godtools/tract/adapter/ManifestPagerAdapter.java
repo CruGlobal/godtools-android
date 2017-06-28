@@ -117,6 +117,12 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         }
     }
 
+    @Override
+    protected void onViewHolderRecycled(@NonNull final PageViewHolder holder) {
+        super.onViewHolderRecycled(holder);
+        holder.onBind(null);
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     public void onPause() {
         EventBus.getDefault().unregister(this);
