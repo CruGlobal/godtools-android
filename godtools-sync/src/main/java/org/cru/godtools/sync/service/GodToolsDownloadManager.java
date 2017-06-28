@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.service;
+package org.cru.godtools.sync.service;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -83,7 +83,7 @@ import static org.ccci.gto.android.common.db.Expression.NULL;
 import static org.ccci.gto.android.common.db.Expression.constants;
 import static org.ccci.gto.android.common.util.ThreadUtils.getLock;
 
-public final class GodToolsToolManager {
+public final class GodToolsDownloadManager {
     private static final int DOWNLOAD_CONCURRENCY = 4;
     private static final long CLEANER_INTERVAL_IN_MS = HOUR_IN_MS;
 
@@ -104,7 +104,7 @@ public final class GodToolsToolManager {
 
     final LongSparseArray<Boolean> mDownloadingAttachments = new LongSparseArray<>();
 
-    private GodToolsToolManager(@NonNull final Context context) {
+    private GodToolsDownloadManager(@NonNull final Context context) {
         mContext = context;
         mApi = GodToolsApi.getInstance(mContext);
         mDao = GodToolsDao.getInstance(mContext);
@@ -112,7 +112,7 @@ public final class GodToolsToolManager {
         mHandler = new Handler(Looper.getMainLooper());
         mPrefs = Settings.getInstance(mContext);
         mExecutor = new ThreadPoolExecutor(0, DOWNLOAD_CONCURRENCY, 10, TimeUnit.SECONDS, new PriorityBlockingQueue<>(),
-                                           new NamedThreadFactory(GodToolsToolManager.class.getSimpleName()));
+                                           new NamedThreadFactory(GodToolsDownloadManager.class.getSimpleName()));
 
         // register with EventBus
         mEventBus.register(this);
@@ -123,13 +123,13 @@ public final class GodToolsToolManager {
 
     @Nullable
     @SuppressLint("StaticFieldLeak")
-    private static GodToolsToolManager sInstance;
+    private static GodToolsDownloadManager sInstance;
     @NonNull
     @MainThread
-    public static GodToolsToolManager getInstance(@NonNull final Context context) {
-        synchronized (GodToolsToolManager.class) {
+    public static GodToolsDownloadManager getInstance(@NonNull final Context context) {
+        synchronized (GodToolsDownloadManager.class) {
             if (sInstance == null) {
-                sInstance = new GodToolsToolManager(context.getApplicationContext());
+                sInstance = new GodToolsDownloadManager(context.getApplicationContext());
             }
         }
 
@@ -577,7 +577,7 @@ public final class GodToolsToolManager {
         mHandler.removeMessages(MSG_CLEAN);
 
         // schedule another execution
-        final Message m = Message.obtain(mHandler, GodToolsToolManager.this::enqueueCleanFilesystem);
+        final Message m = Message.obtain(mHandler, GodToolsDownloadManager.this::enqueueCleanFilesystem);
         m.what = MSG_CLEAN;
         mHandler.sendMessageDelayed(m, CLEANER_INTERVAL_IN_MS);
     }

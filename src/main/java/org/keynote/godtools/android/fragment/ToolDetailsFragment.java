@@ -16,6 +16,7 @@ import com.annimon.stream.Stream;
 
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
+import org.cru.godtools.sync.service.GodToolsDownloadManager;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.content.AttachmentLoader;
 import org.keynote.godtools.android.content.AvailableLanguagesLoader;
@@ -24,7 +25,6 @@ import org.keynote.godtools.android.content.ToolLoader;
 import org.keynote.godtools.android.model.Attachment;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
-import org.keynote.godtools.android.service.GodToolsToolManager;
 import org.keynote.godtools.android.util.ModelUtils;
 import org.keynote.godtools.android.util.ViewUtils;
 
@@ -189,13 +189,13 @@ public class ToolDetailsFragment extends BaseFragment {
     @Optional
     @OnClick(R.id.action_add)
     void addResource() {
-        GodToolsToolManager.getInstance(getContext()).addTool(mToolId);
+        GodToolsDownloadManager.getInstance(getContext()).addTool(mToolId);
     }
 
     @Optional
     @OnClick(R.id.action_remove)
     void removeResource() {
-        GodToolsToolManager.getInstance(getContext()).removeTool(mToolId);
+        GodToolsDownloadManager.getInstance(getContext()).removeTool(mToolId);
     }
 
     private void startLoaders() {

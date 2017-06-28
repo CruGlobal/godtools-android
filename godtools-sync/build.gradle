@@ -8,6 +8,10 @@ android {
         minSdkVersion minSdk
         targetSdkVersion targetSdk
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     flavorDimensions "env"
     productFlavors {

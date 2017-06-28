@@ -10,9 +10,9 @@ import com.squareup.picasso.Picasso;
 
 import org.ccci.gto.android.common.api.okhttp3.util.OkHttpClientUtil;
 import org.cru.godtools.sync.service.FollowupService;
+import org.cru.godtools.sync.service.GodToolsDownloadManager;
 import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.RenderAppConfig;
-import org.keynote.godtools.android.service.GodToolsToolManager;
 import org.keynote.godtools.renderer.crureader.BaseAppConfig;
 import org.keynote.godtools.renderer.crureader.RenderApp;
 
@@ -35,7 +35,7 @@ public class SnuffyApplication extends RenderApp {
         Picasso.setSingletonInstance(picassoBuilder().build());
 
         // Initialize tool manager
-        GodToolsToolManager.getInstance(this);
+        GodToolsDownloadManager.getInstance(this);
         FollowupService.start(this);
     }
 

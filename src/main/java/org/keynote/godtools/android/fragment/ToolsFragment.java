@@ -20,13 +20,13 @@ import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.model.event.content.AttachmentEventBusSubscriber;
 import org.cru.godtools.sync.GodToolsSyncService;
+import org.cru.godtools.sync.service.GodToolsDownloadManager;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.adapter.ToolsAdapter;
 import org.keynote.godtools.android.content.ToolsCursorLoader;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.model.Tool;
-import org.keynote.godtools.android.service.GodToolsToolManager;
 
 import butterknife.BindView;
 
@@ -123,7 +123,7 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
 
     @Override
     public void onToolAdd(final long id) {
-        GodToolsToolManager.getInstance(getContext()).addTool(id);
+        GodToolsDownloadManager.getInstance(getContext()).addTool(id);
     }
 
     @Override

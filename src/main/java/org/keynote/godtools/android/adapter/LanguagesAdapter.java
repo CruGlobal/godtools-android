@@ -16,11 +16,11 @@ import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.google.common.base.Objects;
 
+import org.cru.godtools.sync.service.GodToolsDownloadManager;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.adapter.LanguagesAdapter.LanguageViewHolder;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.model.Language;
-import org.keynote.godtools.android.service.GodToolsToolManager;
 
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +43,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
     @NonNull
     final GodToolsDao mDao;
     @NonNull
-    final GodToolsToolManager mTools;
+    final GodToolsDownloadManager mTools;
 
     @Nullable
     Callbacks mCallbacks;
@@ -62,7 +62,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
     public LanguagesAdapter(@NonNull final Context context) {
         setHasStableIds(true);
         mDao = GodToolsDao.getInstance(context);
-        mTools = GodToolsToolManager.getInstance(context);
+        mTools = GodToolsDownloadManager.getInstance(context);
     }
 
     public void setCallbacks(@Nullable final Callbacks callbacks) {
