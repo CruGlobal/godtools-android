@@ -327,7 +327,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         // build individual animations
         final List<Animator> offset = new ArrayList<>();
         final List<Animator> fadeIn = new ArrayList<>();
-        final List<Animator> fadeOut = new ArrayList<>();
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
@@ -349,7 +348,8 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
                         if (targetAlpha > 0) {
                             fadeIn.add(animation);
                         } else {
-                            fadeOut.add(animation);
+                            // fading out the call to action can happen at the same time as offset animations
+                            offset.add(animation);
                         }
                     }
                     break;
@@ -362,25 +362,10 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         // play each group together
         animation.playTogether(fadeIn);
         animation.playTogether(offset);
-        animation.playTogether(fadeOut);
 
         // chain groups in proper sequence
-        AnimatorSet.Builder builder = null;
-        if (!fadeOut.isEmpty()) {
-            builder = animation.play(fadeOut.get(0));
-        }
-        if (!offset.isEmpty()) {
-            final Animator first = offset.get(0);
-            if (builder != null) {
-                builder.before(first);
-            } else {
-                builder = animation.play(first);
-            }
-        }
-        if (!fadeIn.isEmpty()) {
-            if (builder != null) {
-                builder.before(fadeIn.get(0));
-            }
+        if (!offset.isEmpty() && !fadeIn.isEmpty()) {
+            animation.playSequentially(offset.get(0), fadeIn.get(0));
         }
 
         // set a few overall animation parameters

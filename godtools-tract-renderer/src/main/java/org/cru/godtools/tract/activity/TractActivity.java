@@ -3,6 +3,7 @@ package org.cru.godtools.tract.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -15,13 +16,18 @@ import android.view.MenuItem;
 
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.BundleUtils;
+import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
 import org.cru.godtools.tract.content.TractManifestLoader;
 import org.cru.godtools.tract.model.Manifest;
+import org.cru.godtools.tract.model.Page;
 import org.cru.godtools.tract.util.DrawableUtils;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.Tool;
 
@@ -128,6 +134,12 @@ public class TractActivity extends ImmersiveActivity implements ManifestPagerAda
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
         final int id = item.getItemId();
         if (id == R.id.action_switch) {
@@ -136,6 +148,18 @@ public class TractActivity extends ImmersiveActivity implements ManifestPagerAda
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @MainThread
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onContentEvent(@NonNull final Event event) {
+        checkForPageEvent(event);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -220,6 +244,17 @@ public class TractActivity extends ImmersiveActivity implements ManifestPagerAda
             mPager.setAdapter(mPagerAdapter);
             getLifecycle().addObserver(mPagerAdapter);
             updatePager();
+        }
+    }
+
+    private void checkForPageEvent(@NonNull final Event event) {
+        final Manifest manifest = getActiveManifest();
+        if (manifest != null) {
+            for (final Page page : manifest.getPages()) {
+                if (page.getListeners().contains(event.id)) {
+                    goToPage(page.getPosition());
+                }
+            }
         }
     }
 

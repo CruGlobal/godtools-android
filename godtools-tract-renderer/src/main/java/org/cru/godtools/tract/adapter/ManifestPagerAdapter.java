@@ -88,8 +88,8 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
 
     /* BEGIN lifecycle */
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    public void onResume() {
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    public void onStart() {
         EventBus.getDefault().register(this);
     }
 
@@ -123,8 +123,8 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         holder.onBind(null);
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    public void onPause() {
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    public void onStop() {
         EventBus.getDefault().unregister(this);
     }
 
