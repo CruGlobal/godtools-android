@@ -24,7 +24,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Expression;
-import org.ccci.gto.android.common.db.Join;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.db.Transaction;
 import org.ccci.gto.android.common.eventbus.task.EventBusDelayedPost;
@@ -559,9 +558,9 @@ public final class GodToolsDownloadManager {
     @WorkerThread
     private void enqueueToolBannerAttachments() {
         mDao.streamCompat(Query.select(Attachment.class)
-                                  .join(Join.<Attachment, Tool>create(ToolTable.TABLE)
-                                                .on(ToolTable.FIELD_DETAILS_BANNER.eq(AttachmentTable.FIELD_ID)
-                                                            .or(ToolTable.FIELD_BANNER.eq(AttachmentTable.FIELD_ID))))
+                                  .join(AttachmentTable.SQL_JOIN_TOOL.andOn(
+                                          ToolTable.FIELD_DETAILS_BANNER.eq(AttachmentTable.FIELD_ID)
+                                                  .or(ToolTable.FIELD_BANNER.eq(AttachmentTable.FIELD_ID))))
                                   .where(AttachmentTable.FIELD_DOWNLOADED.eq(false)))
                 .mapToLong(Attachment::getId)
                 .forEach(this::enqueueAttachmentDownload);

@@ -232,6 +232,8 @@ public final class Contract extends BaseContract {
         private static final String SQL_COLUMN_LOCALFILENAME = COLUMN_LOCALFILENAME + " TEXT";
         private static final String SQL_COLUMN_DOWNLOADED = COLUMN_DOWNLOADED + " INTEGER";
 
+        public static final Join<Attachment, Tool> SQL_JOIN_TOOL =
+                Join.create(TABLE, ToolTable.TABLE).on(FIELD_TOOL.eq(ToolTable.FIELD_ID));
         public static final Join<Attachment, LocalFile> SQL_JOIN_LOCAL_FILE =
                 Join.create(TABLE, LocalFileTable.TABLE).on(FIELD_LOCALFILENAME.eq(LocalFileTable.FIELD_NAME));
 
