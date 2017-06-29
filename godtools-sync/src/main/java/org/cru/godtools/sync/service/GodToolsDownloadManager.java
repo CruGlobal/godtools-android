@@ -301,10 +301,9 @@ public final class GodToolsDownloadManager {
                             if (response.isSuccessful()) {
                                 final ResponseBody body = response.body();
                                 if (body != null) {
-                                    processDownload(localFile, body);
+                                    processStream(localFile, body.byteStream());
 
-                                    // store local file in database
-                                    mDao.updateOrInsert(localFile);
+                                    // mark attachment as downloaded
                                     attachment.setDownloaded(true);
                                 }
                             }
@@ -326,7 +325,7 @@ public final class GodToolsDownloadManager {
         }
     }
 
-    private void processDownload(@NonNull final LocalFile localFile, @NonNull final ResponseBody body)
+    private void processStream(@NonNull final LocalFile localFile, @NonNull final InputStream stream)
             throws IOException {
         final Closer closer = Closer.create();
         try {
@@ -337,11 +336,14 @@ public final class GodToolsDownloadManager {
             }
 
             // write file
-            final InputStream in = closer.register(new BufferedInputStream(body.byteStream()));
+            final InputStream in = closer.register(new BufferedInputStream(stream));
             final OutputStream os = closer.register(new FileOutputStream(file));
             IOUtils.copy(in, os);
             os.flush();
             os.close();
+
+            // store local file in database
+            mDao.updateOrInsert(localFile);
         } catch (final Throwable e) {
             throw closer.rethrow(e);
         } finally {
