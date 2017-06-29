@@ -1,0 +1,333 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "type": "language",
+      "attributes": {
+        "code": "en"
+      }
+    },
+    {
+      "id": "2",
+      "type": "language",
+      "attributes": {
+        "code": "fr"
+      }
+    },
+    {
+      "id": "3",
+      "type": "language",
+      "attributes": {
+        "code": "es"
+      }
+    },
+    {
+      "id": "4",
+      "type": "language",
+      "attributes": {
+        "code": "de"
+      }
+    },
+    {
+      "id": "5",
+      "type": "language",
+      "attributes": {
+        "code": "pl"
+      }
+    },
+    {
+      "id": "6",
+      "type": "language",
+      "attributes": {
+        "code": "bs-BA"
+      }
+    },
+    {
+      "id": "7",
+      "type": "language",
+      "attributes": {
+        "code": "sr-RS"
+      }
+    },
+    {
+      "id": "8",
+      "type": "language",
+      "attributes": {
+        "code": "fa"
+      }
+    },
+    {
+      "id": "9",
+      "type": "language",
+      "attributes": {
+        "code": "hi-IN"
+      }
+    },
+    {
+      "id": "10",
+      "type": "language",
+      "attributes": {
+        "code": "pt"
+      }
+    },
+    {
+      "id": "11",
+      "type": "language",
+      "attributes": {
+        "code": "cs"
+      }
+    },
+    {
+      "id": "12",
+      "type": "language",
+      "attributes": {
+        "code": "zh-CN"
+      }
+    },
+    {
+      "id": "13",
+      "type": "language",
+      "attributes": {
+        "code": "sl-SI"
+      }
+    },
+    {
+      "id": "14",
+      "type": "language",
+      "attributes": {
+        "code": "sq"
+      }
+    },
+    {
+      "id": "15",
+      "type": "language",
+      "attributes": {
+        "code": "mk-MK"
+      }
+    },
+    {
+      "id": "16",
+      "type": "language",
+      "attributes": {
+        "code": "hr"
+      }
+    },
+    {
+      "id": "17",
+      "type": "language",
+      "attributes": {
+        "code": "hu"
+      }
+    },
+    {
+      "id": "18",
+      "type": "language",
+      "attributes": {
+        "code": "it"
+      }
+    },
+    {
+      "id": "19",
+      "type": "language",
+      "attributes": {
+        "code": "sk"
+      }
+    },
+    {
+      "id": "20",
+      "type": "language",
+      "attributes": {
+        "code": "bg"
+      }
+    },
+    {
+      "id": "21",
+      "type": "language",
+      "attributes": {
+        "code": "ms"
+      }
+    },
+    {
+      "id": "22",
+      "type": "language",
+      "attributes": {
+        "code": "pt-PT"
+      }
+    },
+    {
+      "id": "23",
+      "type": "language",
+      "attributes": {
+        "code": "ru"
+      }
+    },
+    {
+      "id": "24",
+      "type": "language",
+      "attributes": {
+        "code": "ro"
+      }
+    },
+    {
+      "id": "25",
+      "type": "language",
+      "attributes": {
+        "code": "th"
+      }
+    },
+    {
+      "id": "26",
+      "type": "language",
+      "attributes": {
+        "code": "is-IS"
+      }
+    },
+    {
+      "id": "27",
+      "type": "language",
+      "attributes": {
+        "code": "uk"
+      }
+    },
+    {
+      "id": "28",
+      "type": "language",
+      "attributes": {
+        "code": "no"
+      }
+    },
+    {
+      "id": "29",
+      "type": "language",
+      "attributes": {
+        "code": "zh-TW"
+      }
+    },
+    {
+      "id": "30",
+      "type": "language",
+      "attributes": {
+        "code": "ta"
+      }
+    },
+    {
+      "id": "31",
+      "type": "language",
+      "attributes": {
+        "code": "sn"
+      }
+    },
+    {
+      "id": "32",
+      "type": "language",
+      "attributes": {
+        "code": "he"
+      }
+    },
+    {
+      "id": "33",
+      "type": "language",
+      "attributes": {
+        "code": "ja"
+      }
+    },
+    {
+      "id": "34",
+      "type": "language",
+      "attributes": {
+        "code": "bn"
+      }
+    },
+    {
+      "id": "35",
+      "type": "language",
+      "attributes": {
+        "code": "hy"
+      }
+    },
+    {
+      "id": "36",
+      "type": "language",
+      "attributes": {
+        "code": "vi"
+      }
+    },
+    {
+      "id": "37",
+      "type": "language",
+      "attributes": {
+        "code": "si"
+      }
+    },
+    {
+      "id": "38",
+      "type": "language",
+      "attributes": {
+        "code": "zn-Hans-CN"
+      }
+    },
+    {
+      "id": "39",
+      "type": "language",
+      "attributes": {
+        "code": "te-IN"
+      }
+    },
+    {
+      "id": "40",
+      "type": "language",
+      "attributes": {
+        "code": "da"
+      }
+    },
+    {
+      "id": "41",
+      "type": "language",
+      "attributes": {
+        "code": "el"
+      }
+    },
+    {
+      "id": "42",
+      "type": "language",
+      "attributes": {
+        "code": "id"
+      }
+    },
+    {
+      "id": "43",
+      "type": "language",
+      "attributes": {
+        "code": "et-EE"
+      }
+    },
+    {
+      "id": "44",
+      "type": "language",
+      "attributes": {
+        "code": "sr-ME"
+      }
+    },
+    {
+      "id": "45",
+      "type": "language",
+      "attributes": {
+        "code": "af"
+      }
+    },
+    {
+      "id": "46",
+      "type": "language",
+      "attributes": {
+        "code": "fr-CA"
+      }
+    },
+    {
+      "id": "47",
+      "type": "language",
+      "attributes": {
+        "code": "ko"
+      }
+    }
+  ]
+}

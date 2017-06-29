@@ -45,7 +45,7 @@ import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 public class TractManager {
     private static final int PARSING_CONCURRENCY = 6;
 
-    private final LruCache<String, ListenableFuture<Manifest>> mCache = new WeakLruCache<>(1);
+    private final LruCache<String, ListenableFuture<Manifest>> mCache = new WeakLruCache<>(6);
 
     @NonNull
     private final Context mContext;

@@ -48,6 +48,7 @@ public final class Contract extends BaseContract {
         private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_CODE);
 
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind());
+        public static final Expression SQL_WHERE_ADDED = FIELD_ADDED.eq(true);
 
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_ADDED, SQL_PRIMARY_KEY);
@@ -231,6 +232,8 @@ public final class Contract extends BaseContract {
         private static final String SQL_COLUMN_LOCALFILENAME = COLUMN_LOCALFILENAME + " TEXT";
         private static final String SQL_COLUMN_DOWNLOADED = COLUMN_DOWNLOADED + " INTEGER";
 
+        public static final Join<Attachment, Tool> SQL_JOIN_TOOL =
+                Join.create(TABLE, ToolTable.TABLE).on(FIELD_TOOL.eq(ToolTable.FIELD_ID));
         public static final Join<Attachment, LocalFile> SQL_JOIN_LOCAL_FILE =
                 Join.create(TABLE, LocalFileTable.TABLE).on(FIELD_LOCALFILENAME.eq(LocalFileTable.FIELD_NAME));
 

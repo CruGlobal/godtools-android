@@ -4,18 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-
-import org.ccci.gto.android.common.util.MainThreadExecutor;
 import org.cru.godtools.api.GodToolsApi;
 import org.cru.godtools.api.model.GTLanguages;
 import org.cru.godtools.sync.GodToolsSyncService;
@@ -26,7 +20,6 @@ import org.keynote.godtools.android.http.DownloadTask;
 import org.keynote.godtools.android.http.PackageDownloadHelper;
 import org.keynote.godtools.android.service.UpdatePackageListTask;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
-import org.keynote.godtools.android.tasks.InitialContentTasks;
 
 import java.util.List;
 import java.util.Locale;
@@ -56,7 +49,6 @@ import static org.keynote.godtools.android.utils.Constants.TRANSLATOR_MODE;
         - go to main activity (home screen)
  */
 public class Splash extends Activity implements DownloadTask.DownloadTaskHandler {
-    static final long MIN_LOAD_DELAY = 500;
     private static final String TAG = Splash.class.getSimpleName();
     @BindView(R.id.tvTask)
     TextView mUpdateText;
@@ -65,15 +57,11 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
     private SharedPreferences settings;
 
-    @Nullable
-    private ListenableFuture<?> mUpdateTasks;
-
     /* BEGIN lifecycle */
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startUpdateTasks();
         syncData();
 
         setContentView(R.layout.splash_pw);
@@ -120,28 +108,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
                 }
             });
         }
-        // subsequent use update tasks still running
-        else if (mUpdateTasks != null && !mUpdateTasks.isDone()) {
-            // wait for background tasks to finish, then proceed to the app (waiting at least MIN_LOAD_DELAY)
-            final long startTime = System.currentTimeMillis();
-            mUpdateTasks.addListener(new Runnable() {
-                @Override
-                public void run() {
-                    final long elapsed = System.currentTimeMillis() - startTime;
-                    if (elapsed > MIN_LOAD_DELAY) {
-                        goToMainActivity();
-                    } else {
-                        final Handler handler = new Handler(Looper.getMainLooper());
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                goToMainActivity();
-                            }
-                        }, MIN_LOAD_DELAY - elapsed);
-                    }
-                }
-            }, new MainThreadExecutor());
-        }
         // all updates are complete, proceed directly to Main Activity
         else {
             goToMainActivity();
@@ -152,21 +118,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
 
     private void syncData() {
         GodToolsSyncService.syncLanguages(this, false).sync();
-    }
-
-    private void startUpdateTasks() {
-        final InitialContentTasks initTasks = new InitialContentTasks(getApplicationContext());
-
-        // background loading tasks
-        final ListenableFuture<Object> languagesTask = initTasks.loadDefaultLanguages();
-        mUpdateTasks = Futures.successfulAsList(
-                // load the list of available languages
-                languagesTask,
-                // setup the Every Student content
-                initTasks.installEveryStudentPackage(),
-                // load any bundled packages
-                initTasks.loadBundledPackages(languagesTask)
-        );
     }
 
     private boolean isFirstLaunch() {
@@ -194,20 +145,6 @@ public class Splash extends Activity implements DownloadTask.DownloadTaskHandler
     private SnuffyApplication getApp() {
         return (SnuffyApplication) getApplication();
     }
-
-//    @Override
-//    public void metaTaskComplete(List<GTLanguage> languageList, String tag)
-//    {
-//
-//
-//    }
-//
-//
-//    @Override
-//    public void metaTaskFailure(List<GTLanguage> languageList, String tag, int statusCode)
-//    {
-//
-//    }
 
     private boolean apiHasDeviceDefaultLanguage(List<GTLanguage> languageList) {
         for (GTLanguage metaLanguageFromInitialDownload : languageList) {

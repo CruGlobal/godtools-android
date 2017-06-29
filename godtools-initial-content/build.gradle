@@ -25,14 +25,13 @@ android {
 }
 
 dependencies {
-    implementation project(':godtools-api')
     implementation project(':godtools-base')
     implementation project(':godtools-db')
     implementation project(':godtools-model')
     implementation project(':godtools-model-events')
+    implementation project(':godtools-sync')
 
-    implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
 
-    implementation "org.greenrobot:eventbus:${deps.eventbus}"
+    implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
 }

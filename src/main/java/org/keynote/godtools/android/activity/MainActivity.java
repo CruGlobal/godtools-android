@@ -1,6 +1,7 @@
 package org.keynote.godtools.android.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.cru.godtools.init.content.task.InitialContentTasks;
 import org.cru.godtools.tract.activity.TractActivity;
 import org.cru.godtools.tract.service.TractManager;
 import org.keynote.godtools.android.R;
@@ -34,6 +36,9 @@ public class MainActivity extends BaseActivity implements ToolsFragment.Callback
         if (savedInstanceState != null) {
             mTourLaunched = savedInstanceState.getBoolean(EXTRA_TOUR_LAUNCHED, mTourLaunched);
         }
+
+        // install any missing initial content
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(new InitialContentTasks(this));
     }
 
     @Override

@@ -20,7 +20,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.Settings;
+import org.cru.godtools.base.Settings;
 
 import java.util.Locale;
 
