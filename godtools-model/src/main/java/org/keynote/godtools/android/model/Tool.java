@@ -39,6 +39,8 @@ public class Tool extends Base {
 
     @JsonApiAttribute(name = JSON_TOTAL_VIEWS)
     private int mShares = 0;
+    @JsonApiIgnore
+    private int mPendingShares = 0;
 
     @JsonApiAttribute(name = JSON_BANNER)
     private long mBannerId = Attachment.INVALID_ID;
@@ -85,6 +87,18 @@ public class Tool extends Base {
 
     public void setShares(final int shares) {
         mShares = shares;
+    }
+
+    public int getPendingShares() {
+        return mPendingShares;
+    }
+
+    public void setPendingShares(final int shares) {
+        mPendingShares = shares;
+    }
+
+    public int getTotalShares() {
+        return mPendingShares + mShares;
     }
 
     public long getBannerId() {
