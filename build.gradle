@@ -75,7 +75,6 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-gson:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
@@ -101,7 +100,6 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 
     // fix conflicts in transitive dependencies
-    implementation "com.google.code.gson:gson:${deps.gson}"
     androidTestCompile 'com.google.code.findbugs:jsr305:2.0.1'
 }
 

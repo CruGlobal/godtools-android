@@ -22,7 +22,6 @@ public interface LegacyApi {
     String NOTIFICATION = "notification";
     String NOTIFICATION_UPDATE = NOTIFICATION + "/" + "update";
     String META = V2 + "/meta/all";
-    String ENDPOINT_DRAFTS = V2 + "/drafts";
     String ENDPOINT_PACKAGES = V2 + "/packages";
     String ENDPOINT_TRANSLATIONS = V2 + "/translations";
 
@@ -54,11 +53,6 @@ public interface LegacyApi {
     @Headers(HEADER_INTERPRETER)
     @GET(META + "/{langCode}")
     Call<GTLanguages> getListOfDrafts(@Header(AUTHORIZATION) String token, @Path("langCode") String langCode);
-
-    @Headers(HEADER_INTERPRETER)
-    @GET(ENDPOINT_DRAFTS + "/{langCode}")
-    Call<ResponseBody> downloadDrafts(@Header(AUTHORIZATION) String token, @Path("langCode") String langCode,
-                                      @Query("compressed") boolean compressed);
 
     @Headers(HEADER_INTERPRETER)
     @GET(ENDPOINT_PACKAGES + "/{langCode}")
