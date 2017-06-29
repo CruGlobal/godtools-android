@@ -8,6 +8,7 @@ import android.support.annotation.WorkerThread;
 
 import com.annimon.stream.Stream;
 import com.crashlytics.android.Crashlytics;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Closer;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
@@ -33,10 +34,14 @@ import org.keynote.godtools.android.model.Translation;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
+import java.util.Map;
 
 import static android.database.sqlite.SQLiteDatabase.CONFLICT_IGNORE;
 
 public class InitialContentTasks implements Runnable {
+    private static final ImmutableMap<Long, String> BUNDLED_TRANSLATIONS = ImmutableMap.of(
+    );
+
     private final AssetManager mAssets;
     private final Settings mSettings;
     private final Context mContext;
@@ -65,6 +70,7 @@ public class InitialContentTasks implements Runnable {
 
         // tools init
         loadBundledTools();
+        importBundledTranslations();
     }
 
     @NonNull
@@ -185,6 +191,34 @@ public class InitialContentTasks implements Runnable {
         } catch (final Exception e) {
             // log exception, but it shouldn't be fatal (for now)
             Crashlytics.logException(e);
+        }
+    }
+
+    private void importBundledTranslations() {
+        for (final Map.Entry<Long, String> bundle : BUNDLED_TRANSLATIONS.entrySet()) {
+            // short-circuit if this translation doesn't exist, or is already downloaded
+            final Translation translation = mDao.find(Translation.class, bundle.getKey());
+            if (translation == null || translation.isDownloaded()) {
+                continue;
+            }
+
+            try {
+                final String fileName = "translations/" + bundle.getValue();
+
+                // open zip file
+                final Closer closer = Closer.create();
+                try {
+                    final InputStream in = closer.register(mAssets.open(fileName));
+                    mDownloadManager.storeTranslation(translation, in, -1);
+                } catch (final IOException e) {
+                    throw closer.rethrow(e);
+                } finally {
+                    closer.close();
+                }
+
+            } catch (final Exception e) {
+                Crashlytics.logException(e);
+            }
         }
     }
 }
