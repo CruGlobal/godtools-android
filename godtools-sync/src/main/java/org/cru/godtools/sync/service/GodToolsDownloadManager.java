@@ -290,24 +290,31 @@ public final class GodToolsDownloadManager {
                     }
                     attachment.setDownloaded(false);
 
-                    // create a new local file object
-                    localFile = new LocalFile();
-                    localFile.setFileName(fileName);
+                    // we don't have a local file, so download it
+                    if (localFile == null) {
+                        // create a new local file object
+                        localFile = new LocalFile();
+                        localFile.setFileName(fileName);
 
-                    try {
-                        // download attachment
-                        final Response<ResponseBody> response = mApi.attachments.download(attachmentId).execute();
-                        if (response.isSuccessful()) {
-                            final ResponseBody body = response.body();
-                            if (body != null) {
-                                processDownload(localFile, body);
+                        try {
+                            // download attachment
+                            final Response<ResponseBody> response = mApi.attachments.download(attachmentId).execute();
+                            if (response.isSuccessful()) {
+                                final ResponseBody body = response.body();
+                                if (body != null) {
+                                    processDownload(localFile, body);
 
-                                // store local file in database
-                                mDao.updateOrInsert(localFile);
-                                attachment.setDownloaded(true);
+                                    // store local file in database
+                                    mDao.updateOrInsert(localFile);
+                                    attachment.setDownloaded(true);
+                                }
                             }
+                        } catch (final IOException ignored) {
                         }
-                    } catch (final IOException ignored) {
+                    }
+                    // this file is already available locally, so just mark it as downloaded
+                    else {
+                        attachment.setDownloaded(true);
                     }
 
                     // update attachment download state
