@@ -366,6 +366,8 @@ public final class Page extends Base implements Styles, Parent {
         @BindView(R2.id.hero)
         View mHero;
 
+        private boolean mBindingCards = false;
+        private boolean mNeedsCardsRebind = false;
         @NonNull
         private Card[] mCards = new Card[0];
         private Set<String> mVisibleCards = new ArraySet<>();
@@ -397,7 +399,7 @@ public final class Page extends Base implements Styles, Parent {
         @Override
         public void onActiveCardChanged(@Nullable final View activeCard) {
             // only process if we have explicitly visible cards
-            if (mVisibleCards.size() > 0) {
+            if (!mBindingCards && mVisibleCards.size() > 0) {
                 // generate a set containing the id of the current active card
                 final Set<String> id = Optional.ofNullable(BaseViewHolder.forView(activeCard, CardViewHolder.class))
                         .map(BaseViewHolder::getModel)
@@ -451,13 +453,19 @@ public final class Page extends Base implements Styles, Parent {
 
         @UiThread
         private void bindCards() {
-            final CardViewHolder[] holders = new CardViewHolder[mCards.length];
+            // short-circuit since we are already binding cards
+            if (mBindingCards) {
+                mNeedsCardsRebind = true;
+                return;
+            }
+            mBindingCards = true;
+            mNeedsCardsRebind = false;
 
             // map old view holders to new location
+            final CardViewHolder[] holders = new CardViewHolder[mCards.length];
             View activeCard = null;
             int lastNewPos = -1;
-            for (int pos = 0; pos < mCardViewHolders.length; pos++) {
-                final CardViewHolder holder = mCardViewHolders[pos];
+            for (final CardViewHolder holder : mCardViewHolders) {
                 final Card card = holder.getModel();
                 final String id = card != null ? card.getId() : null;
                 final int newPos = Stream.of(mCards).indexed()
@@ -501,20 +509,31 @@ public final class Page extends Base implements Styles, Parent {
 
                 // add views to container if they aren't already there
                 if (holders[pos].mRoot.getParent() != mPageContentLayout) {
-                    mPageContentLayout.addView(holders[pos].mRoot);
+                    mPageContentLayout.addView(holders[pos].mRoot, pos);
                 }
 
                 // bind data
                 holders[pos].bind(mCards[pos]);
             }
 
+            // replace the list of active card view holders
+            mCardViewHolders = holders;
+
+            // finished binding cards
+            mBindingCards = false;
+
             // restore the active card
             if (activeCard != null) {
                 mPageContentLayout.changeActiveCard(activeCard, false);
+            } else {
+                // trigger onActiveCard in case the active card changed during binding
+                onActiveCardChanged(mPageContentLayout.getActiveCard());
             }
 
-            // replace the list of active card view holders
-            mCardViewHolders = holders;
+            // rebind cards if a request to bind happened while we were already binding
+            if (mNeedsCardsRebind) {
+                bindCards();
+            }
         }
 
         private void displayCard(@NonNull final Card card) {
