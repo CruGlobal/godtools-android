@@ -1,0 +1,2682 @@
+{
+  "data": [
+    {
+      "id": "3",
+      "type": "resource",
+      "attributes": {
+        "name": "Knowing God Personally (U.S. Version)",
+        "abbreviation": "kgp-us",
+        "description": "U.S. Version of the Knowing God Personally Booklet",
+        "onesky-project-id": 250026,
+        "total-views": 92,
+        "resource-type": "tract",
+        "attr-banner": "39",
+        "attr-banner-about": "38"
+      },
+      "relationships": {
+        "system": {
+          "data": {
+            "id": "1",
+            "type": "system"
+          }
+        },
+        "latest-translations": {
+          "data": [
+            {
+              "id": "219",
+              "type": "translation"
+            }
+          ]
+        },
+        "attachments": {
+          "data": [
+            {
+              "id": "38",
+              "type": "attachment"
+            },
+            {
+              "id": "39",
+              "type": "attachment"
+            },
+            {
+              "id": "40",
+              "type": "attachment"
+            },
+            {
+              "id": "41",
+              "type": "attachment"
+            },
+            {
+              "id": "42",
+              "type": "attachment"
+            },
+            {
+              "id": "43",
+              "type": "attachment"
+            },
+            {
+              "id": "44",
+              "type": "attachment"
+            },
+            {
+              "id": "45",
+              "type": "attachment"
+            },
+            {
+              "id": "46",
+              "type": "attachment"
+            },
+            {
+              "id": "47",
+              "type": "attachment"
+            },
+            {
+              "id": "48",
+              "type": "attachment"
+            },
+            {
+              "id": "49",
+              "type": "attachment"
+            },
+            {
+              "id": "50",
+              "type": "attachment"
+            },
+            {
+              "id": "51",
+              "type": "attachment"
+            },
+            {
+              "id": "52",
+              "type": "attachment"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "1",
+      "type": "resource",
+      "attributes": {
+        "name": "Knowing God Personally",
+        "abbreviation": "kgp",
+        "description": null,
+        "onesky-project-id": 35010,
+        "total-views": 1560,
+        "resource-type": "tract",
+        "attr-banner": "7",
+        "attr-banner-about": "8"
+      },
+      "relationships": {
+        "system": {
+          "data": {
+            "id": "1",
+            "type": "system"
+          }
+        },
+        "latest-translations": {
+          "data": [
+            {
+              "id": "200",
+              "type": "translation"
+            },
+            {
+              "id": "201",
+              "type": "translation"
+            },
+            {
+              "id": "203",
+              "type": "translation"
+            },
+            {
+              "id": "204",
+              "type": "translation"
+            },
+            {
+              "id": "205",
+              "type": "translation"
+            },
+            {
+              "id": "206",
+              "type": "translation"
+            },
+            {
+              "id": "209",
+              "type": "translation"
+            },
+            {
+              "id": "234",
+              "type": "translation"
+            }
+          ]
+        },
+        "attachments": {
+          "data": [
+            {
+              "id": "36",
+              "type": "attachment"
+            },
+            {
+              "id": "8",
+              "type": "attachment"
+            },
+            {
+              "id": "7",
+              "type": "attachment"
+            },
+            {
+              "id": "9",
+              "type": "attachment"
+            },
+            {
+              "id": "10",
+              "type": "attachment"
+            },
+            {
+              "id": "11",
+              "type": "attachment"
+            },
+            {
+              "id": "12",
+              "type": "attachment"
+            },
+            {
+              "id": "13",
+              "type": "attachment"
+            },
+            {
+              "id": "14",
+              "type": "attachment"
+            },
+            {
+              "id": "15",
+              "type": "attachment"
+            },
+            {
+              "id": "16",
+              "type": "attachment"
+            },
+            {
+              "id": "17",
+              "type": "attachment"
+            },
+            {
+              "id": "19",
+              "type": "attachment"
+            },
+            {
+              "id": "20",
+              "type": "attachment"
+            },
+            {
+              "id": "21",
+              "type": "attachment"
+            },
+            {
+              "id": "22",
+              "type": "attachment"
+            },
+            {
+              "id": "23",
+              "type": "attachment"
+            },
+            {
+              "id": "24",
+              "type": "attachment"
+            },
+            {
+              "id": "25",
+              "type": "attachment"
+            },
+            {
+              "id": "34",
+              "type": "attachment"
+            },
+            {
+              "id": "18",
+              "type": "attachment"
+            },
+            {
+              "id": "35",
+              "type": "attachment"
+            },
+            {
+              "id": "53",
+              "type": "attachment"
+            },
+            {
+              "id": "55",
+              "type": "attachment"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "2",
+      "type": "resource",
+      "attributes": {
+        "name": "Satisfied?",
+        "abbreviation": "sat",
+        "description": null,
+        "onesky-project-id": 35011,
+        "total-views": 375,
+        "resource-type": "tract",
+        "attr-banner-about": "53",
+        "attr-banner": "54"
+      },
+      "relationships": {
+        "latest-translations": {
+          "data": [
+            {
+              "id": "173",
+              "type": "translation"
+            },
+            {
+              "id": "174",
+              "type": "translation"
+            },
+            {
+              "id": "175",
+              "type": "translation"
+            },
+            {
+              "id": "237",
+              "type": "translation"
+            }
+          ]
+        },
+        "attachments": {
+          "data": [
+            {
+              "id": "5",
+              "type": "attachment"
+            },
+            {
+              "id": "6",
+              "type": "attachment"
+            },
+            {
+              "id": "26",
+              "type": "attachment"
+            },
+            {
+              "id": "27",
+              "type": "attachment"
+            },
+            {
+              "id": "28",
+              "type": "attachment"
+            },
+            {
+              "id": "29",
+              "type": "attachment"
+            },
+            {
+              "id": "30",
+              "type": "attachment"
+            },
+            {
+              "id": "31",
+              "type": "attachment"
+            },
+            {
+              "id": "32",
+              "type": "attachment"
+            },
+            {
+              "id": "33",
+              "type": "attachment"
+            },
+            {
+              "id": "54",
+              "type": "attachment"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5",
+      "type": "resource",
+      "attributes": {
+        "name": "Questions About God?\n(Coming soon!)",
+        "abbreviation": "es",
+        "description": null,
+        "onesky-project-id": null,
+        "total-views": 0,
+        "resource-type": "tract"
+      },
+      "relationships": {
+        "system": {
+          "data": {
+            "id": "1",
+            "type": "system"
+          }
+        },
+        "translations": {
+          "data": []
+        },
+        "latest-translations": {
+          "data": []
+        },
+        "pages": {
+          "data": []
+        },
+        "attachments": {
+          "data": []
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "id": "219",
+      "type": "translation",
+      "attributes": {
+        "is-published": true,
+        "version": 24,
+        "manifest-name": "7c2d1dac7f2ee122fe3e1f66e2d02a9ef9ac2f44c04d569c627fb264dfaf48b6.xml",
+        "translated-name": "Knowing God Personally (U.S. Version)",
+        "translated-description": "U.S. Version of the Knowing God Personally Booklet"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        },
+        "language": {
+          "data": {
+            "id": "1",
+            "type": "language"
+          }
+        },
+        "custom-pages": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "1",
+      "type": "language",
+      "attributes": {
+        "code": "en"
+      },
+      "relationships": {
+        "translations": {
+          "data": [
+            {
+              "id": "1",
+              "type": "translation"
+            },
+            {
+              "id": "3",
+              "type": "translation"
+            },
+            {
+              "id": "5",
+              "type": "translation"
+            },
+            {
+              "id": "8",
+              "type": "translation"
+            },
+            {
+              "id": "29",
+              "type": "translation"
+            },
+            {
+              "id": "12",
+              "type": "translation"
+            },
+            {
+              "id": "13",
+              "type": "translation"
+            },
+            {
+              "id": "15",
+              "type": "translation"
+            },
+            {
+              "id": "18",
+              "type": "translation"
+            },
+            {
+              "id": "19",
+              "type": "translation"
+            },
+            {
+              "id": "21",
+              "type": "translation"
+            },
+            {
+              "id": "22",
+              "type": "translation"
+            },
+            {
+              "id": "23",
+              "type": "translation"
+            },
+            {
+              "id": "25",
+              "type": "translation"
+            },
+            {
+              "id": "26",
+              "type": "translation"
+            },
+            {
+              "id": "27",
+              "type": "translation"
+            },
+            {
+              "id": "28",
+              "type": "translation"
+            },
+            {
+              "id": "30",
+              "type": "translation"
+            },
+            {
+              "id": "32",
+              "type": "translation"
+            },
+            {
+              "id": "33",
+              "type": "translation"
+            },
+            {
+              "id": "34",
+              "type": "translation"
+            },
+            {
+              "id": "35",
+              "type": "translation"
+            },
+            {
+              "id": "36",
+              "type": "translation"
+            },
+            {
+              "id": "42",
+              "type": "translation"
+            },
+            {
+              "id": "44",
+              "type": "translation"
+            },
+            {
+              "id": "45",
+              "type": "translation"
+            },
+            {
+              "id": "46",
+              "type": "translation"
+            },
+            {
+              "id": "48",
+              "type": "translation"
+            },
+            {
+              "id": "54",
+              "type": "translation"
+            },
+            {
+              "id": "55",
+              "type": "translation"
+            },
+            {
+              "id": "57",
+              "type": "translation"
+            },
+            {
+              "id": "31",
+              "type": "translation"
+            },
+            {
+              "id": "59",
+              "type": "translation"
+            },
+            {
+              "id": "60",
+              "type": "translation"
+            },
+            {
+              "id": "61",
+              "type": "translation"
+            },
+            {
+              "id": "62",
+              "type": "translation"
+            },
+            {
+              "id": "63",
+              "type": "translation"
+            },
+            {
+              "id": "64",
+              "type": "translation"
+            },
+            {
+              "id": "65",
+              "type": "translation"
+            },
+            {
+              "id": "66",
+              "type": "translation"
+            },
+            {
+              "id": "67",
+              "type": "translation"
+            },
+            {
+              "id": "68",
+              "type": "translation"
+            },
+            {
+              "id": "73",
+              "type": "translation"
+            },
+            {
+              "id": "69",
+              "type": "translation"
+            },
+            {
+              "id": "74",
+              "type": "translation"
+            },
+            {
+              "id": "75",
+              "type": "translation"
+            },
+            {
+              "id": "76",
+              "type": "translation"
+            },
+            {
+              "id": "77",
+              "type": "translation"
+            },
+            {
+              "id": "78",
+              "type": "translation"
+            },
+            {
+              "id": "79",
+              "type": "translation"
+            },
+            {
+              "id": "80",
+              "type": "translation"
+            },
+            {
+              "id": "81",
+              "type": "translation"
+            },
+            {
+              "id": "82",
+              "type": "translation"
+            },
+            {
+              "id": "83",
+              "type": "translation"
+            },
+            {
+              "id": "84",
+              "type": "translation"
+            },
+            {
+              "id": "85",
+              "type": "translation"
+            },
+            {
+              "id": "86",
+              "type": "translation"
+            },
+            {
+              "id": "87",
+              "type": "translation"
+            },
+            {
+              "id": "88",
+              "type": "translation"
+            },
+            {
+              "id": "89",
+              "type": "translation"
+            },
+            {
+              "id": "90",
+              "type": "translation"
+            },
+            {
+              "id": "91",
+              "type": "translation"
+            },
+            {
+              "id": "92",
+              "type": "translation"
+            },
+            {
+              "id": "93",
+              "type": "translation"
+            },
+            {
+              "id": "96",
+              "type": "translation"
+            },
+            {
+              "id": "97",
+              "type": "translation"
+            },
+            {
+              "id": "98",
+              "type": "translation"
+            },
+            {
+              "id": "99",
+              "type": "translation"
+            },
+            {
+              "id": "100",
+              "type": "translation"
+            },
+            {
+              "id": "101",
+              "type": "translation"
+            },
+            {
+              "id": "102",
+              "type": "translation"
+            },
+            {
+              "id": "103",
+              "type": "translation"
+            },
+            {
+              "id": "104",
+              "type": "translation"
+            },
+            {
+              "id": "105",
+              "type": "translation"
+            },
+            {
+              "id": "106",
+              "type": "translation"
+            },
+            {
+              "id": "107",
+              "type": "translation"
+            },
+            {
+              "id": "108",
+              "type": "translation"
+            },
+            {
+              "id": "109",
+              "type": "translation"
+            },
+            {
+              "id": "110",
+              "type": "translation"
+            },
+            {
+              "id": "111",
+              "type": "translation"
+            },
+            {
+              "id": "112",
+              "type": "translation"
+            },
+            {
+              "id": "113",
+              "type": "translation"
+            },
+            {
+              "id": "117",
+              "type": "translation"
+            },
+            {
+              "id": "122",
+              "type": "translation"
+            },
+            {
+              "id": "133",
+              "type": "translation"
+            },
+            {
+              "id": "135",
+              "type": "translation"
+            },
+            {
+              "id": "136",
+              "type": "translation"
+            },
+            {
+              "id": "137",
+              "type": "translation"
+            },
+            {
+              "id": "138",
+              "type": "translation"
+            },
+            {
+              "id": "139",
+              "type": "translation"
+            },
+            {
+              "id": "142",
+              "type": "translation"
+            },
+            {
+              "id": "143",
+              "type": "translation"
+            },
+            {
+              "id": "144",
+              "type": "translation"
+            },
+            {
+              "id": "145",
+              "type": "translation"
+            },
+            {
+              "id": "148",
+              "type": "translation"
+            },
+            {
+              "id": "151",
+              "type": "translation"
+            },
+            {
+              "id": "154",
+              "type": "translation"
+            },
+            {
+              "id": "155",
+              "type": "translation"
+            },
+            {
+              "id": "161",
+              "type": "translation"
+            },
+            {
+              "id": "192",
+              "type": "translation"
+            },
+            {
+              "id": "176",
+              "type": "translation"
+            },
+            {
+              "id": "177",
+              "type": "translation"
+            },
+            {
+              "id": "178",
+              "type": "translation"
+            },
+            {
+              "id": "179",
+              "type": "translation"
+            },
+            {
+              "id": "180",
+              "type": "translation"
+            },
+            {
+              "id": "181",
+              "type": "translation"
+            },
+            {
+              "id": "182",
+              "type": "translation"
+            },
+            {
+              "id": "183",
+              "type": "translation"
+            },
+            {
+              "id": "184",
+              "type": "translation"
+            },
+            {
+              "id": "185",
+              "type": "translation"
+            },
+            {
+              "id": "186",
+              "type": "translation"
+            },
+            {
+              "id": "187",
+              "type": "translation"
+            },
+            {
+              "id": "188",
+              "type": "translation"
+            },
+            {
+              "id": "189",
+              "type": "translation"
+            },
+            {
+              "id": "190",
+              "type": "translation"
+            },
+            {
+              "id": "191",
+              "type": "translation"
+            },
+            {
+              "id": "193",
+              "type": "translation"
+            },
+            {
+              "id": "194",
+              "type": "translation"
+            },
+            {
+              "id": "195",
+              "type": "translation"
+            },
+            {
+              "id": "196",
+              "type": "translation"
+            },
+            {
+              "id": "197",
+              "type": "translation"
+            },
+            {
+              "id": "198",
+              "type": "translation"
+            },
+            {
+              "id": "199",
+              "type": "translation"
+            },
+            {
+              "id": "207",
+              "type": "translation"
+            },
+            {
+              "id": "210",
+              "type": "translation"
+            },
+            {
+              "id": "211",
+              "type": "translation"
+            },
+            {
+              "id": "212",
+              "type": "translation"
+            },
+            {
+              "id": "213",
+              "type": "translation"
+            },
+            {
+              "id": "214",
+              "type": "translation"
+            },
+            {
+              "id": "215",
+              "type": "translation"
+            },
+            {
+              "id": "216",
+              "type": "translation"
+            },
+            {
+              "id": "217",
+              "type": "translation"
+            },
+            {
+              "id": "218",
+              "type": "translation"
+            },
+            {
+              "id": "219",
+              "type": "translation"
+            },
+            {
+              "id": "220",
+              "type": "translation"
+            },
+            {
+              "id": "221",
+              "type": "translation"
+            },
+            {
+              "id": "222",
+              "type": "translation"
+            },
+            {
+              "id": "223",
+              "type": "translation"
+            },
+            {
+              "id": "224",
+              "type": "translation"
+            },
+            {
+              "id": "225",
+              "type": "translation"
+            },
+            {
+              "id": "226",
+              "type": "translation"
+            },
+            {
+              "id": "227",
+              "type": "translation"
+            },
+            {
+              "id": "228",
+              "type": "translation"
+            },
+            {
+              "id": "229",
+              "type": "translation"
+            },
+            {
+              "id": "230",
+              "type": "translation"
+            },
+            {
+              "id": "231",
+              "type": "translation"
+            },
+            {
+              "id": "232",
+              "type": "translation"
+            },
+            {
+              "id": "233",
+              "type": "translation"
+            },
+            {
+              "id": "234",
+              "type": "translation"
+            },
+            {
+              "id": "235",
+              "type": "translation"
+            },
+            {
+              "id": "236",
+              "type": "translation"
+            },
+            {
+              "id": "237",
+              "type": "translation"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "38",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/038/original/kgp-us-about_1x.jpg?1498489999",
+        "is-zipped": false,
+        "file-file-name": "kgp-us-about_1x.jpg",
+        "sha256": "8a2312f958cdf6548a1637347bf89560f6ebf284549669638dfef944d8268a08"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "39",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/039/original/kgp-us-home_1x.jpg?1498490008",
+        "is-zipped": false,
+        "file-file-name": "kgp-us-home_1x.jpg",
+        "sha256": "86c8e65bddaa4b889e572aa89714ee846f27294abc62b69d291b52ea1cc05144"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "40",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/040/original/kgp-us-graphics-01.png?1498490015",
+        "is-zipped": true,
+        "file-file-name": "kgp-us-graphics-01.png",
+        "sha256": "e999cffea463f50d4f801306199a4cb8268c5b5acb0cc3073f38f5da8af762c3"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "41",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/041/original/kgp-us-graphics-02.png?1498490019",
+        "is-zipped": true,
+        "file-file-name": "kgp-us-graphics-02.png",
+        "sha256": "9e954c42047e15dc9eaa8429b0c58e268f8342a91ffed4328be3b00debc247a9"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "42",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/042/original/kgp-us-graphics-03.png?1498490025",
+        "is-zipped": true,
+        "file-file-name": "kgp-us-graphics-03.png",
+        "sha256": "881c1d5f912f4f6832afc5cfd93ccd58ace9c7335238de171770948194548d8e"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "43",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/043/original/kgp-us-tract-bkg-image-1_1x.jpg?1498490031",
+        "is-zipped": true,
+        "file-file-name": "kgp-us-tract-bkg-image-1_1x.jpg",
+        "sha256": "f484bf7059733bf0c652ab39029ef65c2100aeb863ae690be87303bee15ac62e"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "44",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/044/original/kgp-us-tract-bkg-image-2_1x.jpg?1498490036",
+        "is-zipped": true,
+        "file-file-name": "kgp-us-tract-bkg-image-2_1x.jpg",
+        "sha256": "4a0b41af07fcd50f45a2b6895ab391153be46f3d794d7959452a9b60f6ce654c"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "45",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/045/original/kgp-us-tract-bkg-image-3_1x.jpg?1498490042",
+        "is-zipped": true,
+        "file-file-name": "kgp-us-tract-bkg-image-3_1x.jpg",
+        "sha256": "877eb43b8676c85fde140c3bf9af17d83bba3357f9fb5ef5732db20d50f19e37"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "46",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/046/original/kgp-us-tract-bkg-image-4_1x.jpg?1498490047",
+        "is-zipped": true,
+        "file-file-name": "kgp-us-tract-bkg-image-4_1x.jpg",
+        "sha256": "9d940d19b024135f733de518a9de658d8b191bfab8851c500c78595a9ca2e219"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "47",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/047/original/kgp-us-tract-bkg-image-5_1x.jpg?1498490052",
+        "is-zipped": true,
+        "file-file-name": "kgp-us-tract-bkg-image-5_1x.jpg",
+        "sha256": "977c91837161f0f7bd52ed1de60273d7bd07ae978dde92ea60bbca714d9226c2"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "48",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/048/original/kgp-us-tract-bkg-image-6_1x.jpg?1498490058",
+        "is-zipped": true,
+        "file-file-name": "kgp-us-tract-bkg-image-6_1x.jpg",
+        "sha256": "2cae5e273a0cf2c0f799ddf7293e7bd127ad5f663ff366593bb8a9a78c14d8bb"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "49",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/049/original/kgp-us-tract-bkg-image-7_1x.jpg?1498490063",
+        "is-zipped": true,
+        "file-file-name": "kgp-us-tract-bkg-image-7_1x.jpg",
+        "sha256": "23db768132715456229c3bbe05af2113eabc92cbe69a87790617a62bf4608902"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "50",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/050/original/kgp-us-tract-bkg-image-8_1x.jpg?1498490070",
+        "is-zipped": true,
+        "file-file-name": "kgp-us-tract-bkg-image-8_1x.jpg",
+        "sha256": "a8d1925c8cc778eb7a9fd678e7df19a129facd5ed0537ed0ccf1e773d94b9bb3"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "51",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/051/original/kgp-us-tract-bkg-image-9_1x.jpg?1498490083",
+        "is-zipped": true,
+        "file-file-name": "kgp-us-tract-bkg-image-9_1x.jpg",
+        "sha256": "b190823807c2bd3bd883e89e5e18ac98e9ba41adbe61617ec6d571b424a30d73"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "52",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/052/original/kgp-us-tract-bkg-image-10_1x.jpg?1498490088",
+        "is-zipped": true,
+        "file-file-name": "kgp-us-tract-bkg-image-10_1x.jpg",
+        "sha256": "61e9a858153df82aaa880d086c93c65e94649777d58b9e15f20e4b593ebd445e"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "200",
+      "type": "translation",
+      "attributes": {
+        "is-published": true,
+        "version": 20,
+        "manifest-name": "7562fb638191b2dbcff64cdecac82f33c3bbc16ec0c34db7f1021924232dbb92.xml",
+        "translated-name": "Connaître Dieu Personnellement",
+        "translated-description": "Presentation qui utilizer des images dessinées à la main pour illustrer l'invitation de Dieu de lui connaître personnellement.\n\nDémarreur de conversation: Quelqu'un a-t-il déjà partager avec vous comment vous pouvez connaître Dieu personnellement?\n\nToutes les citations bibliques sont tirées de la version Parole Vivante."
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        },
+        "language": {
+          "data": {
+            "id": "2",
+            "type": "language"
+          }
+        },
+        "custom-pages": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "2",
+      "type": "language",
+      "attributes": {
+        "code": "fr"
+      },
+      "relationships": {
+        "translations": {
+          "data": [
+            {
+              "id": "2",
+              "type": "translation"
+            },
+            {
+              "id": "4",
+              "type": "translation"
+            },
+            {
+              "id": "6",
+              "type": "translation"
+            },
+            {
+              "id": "51",
+              "type": "translation"
+            },
+            {
+              "id": "53",
+              "type": "translation"
+            },
+            {
+              "id": "58",
+              "type": "translation"
+            },
+            {
+              "id": "70",
+              "type": "translation"
+            },
+            {
+              "id": "94",
+              "type": "translation"
+            },
+            {
+              "id": "123",
+              "type": "translation"
+            },
+            {
+              "id": "114",
+              "type": "translation"
+            },
+            {
+              "id": "116",
+              "type": "translation"
+            },
+            {
+              "id": "118",
+              "type": "translation"
+            },
+            {
+              "id": "120",
+              "type": "translation"
+            },
+            {
+              "id": "126",
+              "type": "translation"
+            },
+            {
+              "id": "128",
+              "type": "translation"
+            },
+            {
+              "id": "129",
+              "type": "translation"
+            },
+            {
+              "id": "130",
+              "type": "translation"
+            },
+            {
+              "id": "140",
+              "type": "translation"
+            },
+            {
+              "id": "146",
+              "type": "translation"
+            },
+            {
+              "id": "152",
+              "type": "translation"
+            },
+            {
+              "id": "162",
+              "type": "translation"
+            },
+            {
+              "id": "165",
+              "type": "translation"
+            },
+            {
+              "id": "169",
+              "type": "translation"
+            },
+            {
+              "id": "173",
+              "type": "translation"
+            },
+            {
+              "id": "200",
+              "type": "translation"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "201",
+      "type": "translation",
+      "attributes": {
+        "is-published": true,
+        "version": 26,
+        "manifest-name": "c2286b861bb8cca959d9e9d9df9191f60e18bc4dca659b7a72df834fdd4a31e7.xml",
+        "translated-name": "Conociendo a Dios Personalmente",
+        "translated-description": "Una presentación del Evangelio que utiliza imágenes dibujadas a mano para ayudar a ilustrar la invitación de Dios a conocerle personalmente.\n\nIniciador de conversación: ¿Alguna vez alguien ha compartido contigo cómo puedes conocer a Dios personalmente?"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        },
+        "language": {
+          "data": {
+            "id": "3",
+            "type": "language"
+          }
+        },
+        "custom-pages": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "3",
+      "type": "language",
+      "attributes": {
+        "code": "es"
+      },
+      "relationships": {
+        "translations": {
+          "data": [
+            {
+              "id": "7",
+              "type": "translation"
+            },
+            {
+              "id": "10",
+              "type": "translation"
+            },
+            {
+              "id": "14",
+              "type": "translation"
+            },
+            {
+              "id": "16",
+              "type": "translation"
+            },
+            {
+              "id": "17",
+              "type": "translation"
+            },
+            {
+              "id": "20",
+              "type": "translation"
+            },
+            {
+              "id": "24",
+              "type": "translation"
+            },
+            {
+              "id": "37",
+              "type": "translation"
+            },
+            {
+              "id": "38",
+              "type": "translation"
+            },
+            {
+              "id": "39",
+              "type": "translation"
+            },
+            {
+              "id": "40",
+              "type": "translation"
+            },
+            {
+              "id": "41",
+              "type": "translation"
+            },
+            {
+              "id": "43",
+              "type": "translation"
+            },
+            {
+              "id": "47",
+              "type": "translation"
+            },
+            {
+              "id": "49",
+              "type": "translation"
+            },
+            {
+              "id": "50",
+              "type": "translation"
+            },
+            {
+              "id": "52",
+              "type": "translation"
+            },
+            {
+              "id": "71",
+              "type": "translation"
+            },
+            {
+              "id": "95",
+              "type": "translation"
+            },
+            {
+              "id": "115",
+              "type": "translation"
+            },
+            {
+              "id": "124",
+              "type": "translation"
+            },
+            {
+              "id": "141",
+              "type": "translation"
+            },
+            {
+              "id": "147",
+              "type": "translation"
+            },
+            {
+              "id": "149",
+              "type": "translation"
+            },
+            {
+              "id": "150",
+              "type": "translation"
+            },
+            {
+              "id": "153",
+              "type": "translation"
+            },
+            {
+              "id": "163",
+              "type": "translation"
+            },
+            {
+              "id": "174",
+              "type": "translation"
+            },
+            {
+              "id": "201",
+              "type": "translation"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "203",
+      "type": "translation",
+      "attributes": {
+        "is-published": true,
+        "version": 5,
+        "manifest-name": "5e90c6154c5a8969c7393b000bc06d6b670f7aacce6dd9085f8586ce739f1215.xml",
+        "translated-name": "Przyjaźń z Bogiem",
+        "translated-description": "Ta aplikacja wyjaśnia za pomocą czterech punktów jak nawiązać przyjaźń z Bogiem. Zawiera ona ilustracje pomocne w przekazywaniu tych prawd.\n\nPytanie pomocne w rozpoczęciu rozmowy: \n\"Czy kiedykolwiek zastanawiałeś się czy i jak można nawiązać przyjaźń z Bogiem?\"\n\nCytaty biblijne pochodzą z Biblii Tysiąclecia (wydanie IV. 1989 r.)"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        },
+        "language": {
+          "data": {
+            "id": "5",
+            "type": "language"
+          }
+        },
+        "custom-pages": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "5",
+      "type": "language",
+      "attributes": {
+        "code": "pl"
+      },
+      "relationships": {
+        "translations": {
+          "data": [
+            {
+              "id": "56",
+              "type": "translation"
+            },
+            {
+              "id": "72",
+              "type": "translation"
+            },
+            {
+              "id": "119",
+              "type": "translation"
+            },
+            {
+              "id": "121",
+              "type": "translation"
+            },
+            {
+              "id": "125",
+              "type": "translation"
+            },
+            {
+              "id": "172",
+              "type": "translation"
+            },
+            {
+              "id": "175",
+              "type": "translation"
+            },
+            {
+              "id": "203",
+              "type": "translation"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "204",
+      "type": "translation",
+      "attributes": {
+        "is-published": true,
+        "version": 6,
+        "manifest-name": "7b438ad34ea9f28126f8db55d7a00f860c9f750bdc13afb17644fbc372a2240b.xml",
+        "translated-name": "परमेश्वर को व्यक्तिगत् जानना",
+        "translated-description": "Gospel presentation that uses hand drawn images to hep illustrate God's invitation to know Him personally. \n\nConversation starter: Has anyone ever shared with you how you can know God personally?"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        },
+        "language": {
+          "data": {
+            "id": "9",
+            "type": "language"
+          }
+        },
+        "custom-pages": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "9",
+      "type": "language",
+      "attributes": {
+        "code": "hi-IN"
+      },
+      "relationships": {
+        "translations": {
+          "data": [
+            {
+              "id": "156",
+              "type": "translation"
+            },
+            {
+              "id": "157",
+              "type": "translation"
+            },
+            {
+              "id": "160",
+              "type": "translation"
+            },
+            {
+              "id": "166",
+              "type": "translation"
+            },
+            {
+              "id": "170",
+              "type": "translation"
+            },
+            {
+              "id": "204",
+              "type": "translation"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "205",
+      "type": "translation",
+      "attributes": {
+        "is-published": true,
+        "version": 4,
+        "manifest-name": "01bdd8e2a4d84986e3e33f2943bc1256d7abe8f5c69798ad2f37b3c20fe4956f.xml",
+        "translated-name": "亲自认识神",
+        "translated-description": "一份福音演示文稿，使用手绘图像清晰阐明神的宴会，从而与祂有心灵的交流。\n\n对话开场白：有没有人和你分享过怎样亲自认识神？"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        },
+        "language": {
+          "data": {
+            "id": "12",
+            "type": "language"
+          }
+        },
+        "custom-pages": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "12",
+      "type": "language",
+      "attributes": {
+        "code": "zh-CN"
+      },
+      "relationships": {
+        "translations": {
+          "data": [
+            {
+              "id": "131",
+              "type": "translation"
+            },
+            {
+              "id": "132",
+              "type": "translation"
+            },
+            {
+              "id": "167",
+              "type": "translation"
+            },
+            {
+              "id": "205",
+              "type": "translation"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "206",
+      "type": "translation",
+      "attributes": {
+        "is-published": true,
+        "version": 4,
+        "manifest-name": "3874d5a186d69a6055a206ff21426195a2c93bce05f4b3e2dda7e04fa0b8a730.xml",
+        "translated-name": "දෙවියන්වහන්සේව පුද්ගලිකව දැනගැනීම",
+        "translated-description": "Gospel presentation that uses hand drawn images to hep illustrate God's invitation to know Him personally. \n\nConversation starter: Has anyone ever shared with you how you can know God personally?"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        },
+        "language": {
+          "data": {
+            "id": "37",
+            "type": "language"
+          }
+        },
+        "custom-pages": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "37",
+      "type": "language",
+      "attributes": {
+        "code": "si"
+      },
+      "relationships": {
+        "translations": {
+          "data": [
+            {
+              "id": "158",
+              "type": "translation"
+            },
+            {
+              "id": "159",
+              "type": "translation"
+            },
+            {
+              "id": "168",
+              "type": "translation"
+            },
+            {
+              "id": "206",
+              "type": "translation"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "209",
+      "type": "translation",
+      "attributes": {
+        "is-published": true,
+        "version": 7,
+        "manifest-name": "bfdee9799553680ff9c05278e58bc3673deeeaccb52bb80e2c925aab81f93bf3.xml",
+        "translated-name": "Gott Persönlich Kennenlernen",
+        "translated-description": "Dieses Tool hilft dir jemanden dazu einzuladen, eine Beziehung mit Gott zu beginnen. (unterstützt durch Skizzen)\n\nEinstiegsfrage: Hast du schon mal davon gehört, wie du Gott kennenlernen kannst?\n\nDie Bibelstellen stammen aus der Neuen evangelistischen Übersetzung, der Guten Nachricht-Bibel oder der Neuen Genfer Übersetzung."
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        },
+        "language": {
+          "data": {
+            "id": "4",
+            "type": "language"
+          }
+        },
+        "custom-pages": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "4",
+      "type": "language",
+      "attributes": {
+        "code": "de"
+      },
+      "relationships": {
+        "translations": {
+          "data": [
+            {
+              "id": "127",
+              "type": "translation"
+            },
+            {
+              "id": "134",
+              "type": "translation"
+            },
+            {
+              "id": "164",
+              "type": "translation"
+            },
+            {
+              "id": "171",
+              "type": "translation"
+            },
+            {
+              "id": "202",
+              "type": "translation"
+            },
+            {
+              "id": "208",
+              "type": "translation"
+            },
+            {
+              "id": "209",
+              "type": "translation"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "234",
+      "type": "translation",
+      "attributes": {
+        "is-published": true,
+        "version": 94,
+        "manifest-name": "59253c1c61f81146206ebc308116e07bd8a82970a4d01bbea57ea72d3952d756.xml",
+        "translated-name": "Knowing God Personally",
+        "translated-description": "A Gospel presentation that uses hand drawn images to help illustrate God's invitation to know Him personally. \n\nConversation starter: Has anyone ever shared with you how you can know God personally?"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        },
+        "language": {
+          "data": {
+            "id": "1",
+            "type": "language"
+          }
+        },
+        "custom-pages": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "36",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/036/original/kgp-image-christ-directed.png?1498674315",
+        "is-zipped": true,
+        "file-file-name": "kgp-image-christ-directed.png",
+        "sha256": "58d11ade8326f3d9c165b7493aab832cee043a02b8269147f1a0b348ba2b007b"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "8",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/008/original/kgp-about_1x.jpg?1497384770",
+        "is-zipped": false,
+        "file-file-name": "kgp-about_1x.jpg",
+        "sha256": "9a8cfa08121f0f0e78dbed54652c2c3f1d51c001a0b81dfdd092d378fd43633c"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "7",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/007/original/kgp-home_1x.jpg?1497384779",
+        "is-zipped": false,
+        "file-file-name": "kgp-home_1x.jpg",
+        "sha256": "a6765002e46cea44dc6245bcb842ce01a0134c147c47cf108134a4c4d1a5c129"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "9",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/009/original/kgp-page-bkg-image-growth-1_1x.jpg?1497384803",
+        "is-zipped": true,
+        "file-file-name": "kgp-page-bkg-image-growth-1_1x.jpg",
+        "sha256": "ad6ab3f1f1ecb37c706172a27687e3637c889e52d2078677e7224dee8a759372"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "10",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/010/original/kgp-page-bkg-image-growth-2_1x.jpg?1497384808",
+        "is-zipped": true,
+        "file-file-name": "kgp-page-bkg-image-growth-2_1x.jpg",
+        "sha256": "2e75693d8650bc8ab474a5ad9f3a599e7f176e6c9297a49876435324319086f0"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "11",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/011/original/kgp-page-bkg-image-growth-3_1x.jpg?1497384813",
+        "is-zipped": true,
+        "file-file-name": "kgp-page-bkg-image-growth-3_1x.jpg",
+        "sha256": "a0261e25c1b014f62f5f78febbf03d6060cf1df09049a96bfe1e0e0fbd88e1fc"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "12",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/012/original/kgp-page-bkg-image-growth-4_1x.jpg?1497384817",
+        "is-zipped": true,
+        "file-file-name": "kgp-page-bkg-image-growth-4_1x.jpg",
+        "sha256": "d8ec986e90ae19f779b61077e9dce76edbdcdb1ad9048ad0cffe355b077f8a78"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "13",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/013/original/kgp-page-bkg-image-growth-5_1x.jpg?1497384822",
+        "is-zipped": true,
+        "file-file-name": "kgp-page-bkg-image-growth-5_1x.jpg",
+        "sha256": "809260cdf807fd22f6db8a698eb042794114847a9c1023bfabe1062c833695a9"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "14",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/014/original/kgp-page-bkg-image-growth-6_1x.jpg?1497384826",
+        "is-zipped": true,
+        "file-file-name": "kgp-page-bkg-image-growth-6_1x.jpg",
+        "sha256": "d1c1c28400a46a091077c6763e186ec53c320e8696e9e693e02c707817107737"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "15",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/015/original/kgp-page-bkg-image-hands_1x.jpg?1497384833",
+        "is-zipped": true,
+        "file-file-name": "kgp-page-bkg-image-hands_1x.jpg",
+        "sha256": "bee86764814fe23046dc582ad86caf0e260847c2bf89b396b48390fc3beae45d"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "16",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/016/original/kgp-page-bkg-image-people_1x.jpg?1497384837",
+        "is-zipped": true,
+        "file-file-name": "kgp-page-bkg-image-people_1x.jpg",
+        "sha256": "f2a6b497d67ca7a7165358c624327b8ea102b74088f060b387741072054ee25f"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "17",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/017/original/kgp-page-bkg-image-plane_1x.jpg?1497384841",
+        "is-zipped": true,
+        "file-file-name": "kgp-page-bkg-image-plane_1x.jpg",
+        "sha256": "17ce33f516b0b5316503e7d887ba3ff0789748289c1f473181ccc1c2d77868d9"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "19",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/019/original/kgp-tract-bkg-image-1_1x.jpg?1497384854",
+        "is-zipped": true,
+        "file-file-name": "kgp-tract-bkg-image-1_1x.jpg",
+        "sha256": "8ac297f0635cadde00240745637b83c255e18bf3fab0d6639de0b0a82f0ba2f3"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "20",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/020/original/kgp-tract-bkg-image-2_1x.jpg?1497384858",
+        "is-zipped": true,
+        "file-file-name": "kgp-tract-bkg-image-2_1x.jpg",
+        "sha256": "c49e3c64a089f32ef89bc38a9c55bccfdebee7e5396d7c2a8ff15f9be7ba3523"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "21",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/021/original/kgp-tract-bkg-image-3_1x.jpg?1497384863",
+        "is-zipped": true,
+        "file-file-name": "kgp-tract-bkg-image-3_1x.jpg",
+        "sha256": "8ae8dcf98a10bfd136d8e214449c08384c2e08dadcedce5f2baf3d7dbdc238d3"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "22",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/022/original/kgp-tract-bkg-image-4_1x.jpg?1497384867",
+        "is-zipped": true,
+        "file-file-name": "kgp-tract-bkg-image-4_1x.jpg",
+        "sha256": "24881e5ad3c11ef5bf728e795689973ead1a6fbfd79bf768e769a61d365be02b"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "23",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/023/original/kgp-tract-bkg-image-5_1x.jpg?1497384872",
+        "is-zipped": true,
+        "file-file-name": "kgp-tract-bkg-image-5_1x.jpg",
+        "sha256": "27a79e316b6c9308acb7b0058b2b6a271310e448a70380fc0c4d644f51d4e166"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "24",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/024/original/kgp-tract-bkg-image-6_1x.jpg?1497384877",
+        "is-zipped": true,
+        "file-file-name": "kgp-tract-bkg-image-6_1x.jpg",
+        "sha256": "092d0da81686bc00339350483494705d290e901802bb2ff89dec37ee270f7bd5"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "25",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/025/original/kgp-tract-bkg-image-8_1x.jpg?1497384881",
+        "is-zipped": true,
+        "file-file-name": "kgp-tract-bkg-image-8_1x.jpg",
+        "sha256": "61dfdbd4859460d9d7e06a7ce4bf76380a84662c0525df4776a41d74e78c1685"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "34",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/034/original/kgp-tract-bkg-image-7_1x.jpg?1498162863",
+        "is-zipped": true,
+        "file-file-name": "kgp-tract-bkg-image-7_1x.jpg",
+        "sha256": "344c74b735c5abb1f85f658aaaf8c2209147cdaf5f9641d00acc497d748d79e2"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "18",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/018/original/kgp-tract-bkg-image-0_1x.jpg?1498163316",
+        "is-zipped": true,
+        "file-file-name": "kgp-tract-bkg-image-0_1x.jpg",
+        "sha256": "ab21203b684c681813c13fdb3318d8bb3f4bf02a4d8527fa61c24a8ae22b6af2"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "35",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/035/original/kgp-tract-bkg-image-9_1x.jpg?1498163414",
+        "is-zipped": true,
+        "file-file-name": "kgp-tract-bkg-image-9_1x.jpg",
+        "sha256": "d4ee8bcde434b4e075b338d914f9998fc171b72d30bed57de398c4919e8ea7d3"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "53",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/053/original/kgp-page-image-card-divider_1x.png?1498653305",
+        "is-zipped": true,
+        "file-file-name": "kgp-page-image-card-divider_1x.png",
+        "sha256": "035136f7e8579926e5e2acca5fc93843abe3600a1423bb1ce9639099e4f08aa2"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "55",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/055/original/kgp-image-self-directed.png?1498674187",
+        "is-zipped": true,
+        "file-file-name": "kgp-image-self-directed.png",
+        "sha256": "caa2f0cf497e76628a54c4f0cc36c5bcd0cfa13cfcd9120d46732b5406e92083"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "173",
+      "type": "translation",
+      "attributes": {
+        "is-published": true,
+        "version": 5,
+        "manifest-name": "a0ddfc7b21998c83052fcce91b2a565e9007f23be6145d72df606eb4f4e8ba77.xml",
+        "translated-name": "Satisfait(e)?",
+        "translated-description": "Satisfait(e)?"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        },
+        "language": {
+          "data": {
+            "id": "2",
+            "type": "language"
+          }
+        },
+        "custom-pages": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "174",
+      "type": "translation",
+      "attributes": {
+        "is-published": true,
+        "version": 3,
+        "manifest-name": "c005e854bd012d8d787bcb5a065218f62753fac0de8bb97fa858eccd1e0767b2.xml",
+        "translated-name": "¿Satisfecho?",
+        "translated-description": "Helps Christians understand and enjoy the presence  \nof God's Holy Spirit in their daily lives.   \n\nConversation starter: I have a tool that helps me experience God's presence in my life. May I share it with you?"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        },
+        "language": {
+          "data": {
+            "id": "3",
+            "type": "language"
+          }
+        },
+        "custom-pages": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "175",
+      "type": "translation",
+      "attributes": {
+        "is-published": true,
+        "version": 3,
+        "manifest-name": "e5c76e8bf356205bc9d84b587266fc7b9ebff573b3f79033a82335250ba1314c.xml",
+        "translated-name": "Zadowolony?",
+        "translated-description": "Helps Christians understand and enjoy the presence  \nof God's Holy Spirit in their daily lives.   \n\nConversation starter: I have a tool that helps me experience God's presence in my life. May I share it with you?"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        },
+        "language": {
+          "data": {
+            "id": "5",
+            "type": "language"
+          }
+        },
+        "custom-pages": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "237",
+      "type": "translation",
+      "attributes": {
+        "is-published": true,
+        "version": 34,
+        "manifest-name": "d2d534d100a4e445d882462c00c13f5051da46c5614ffc5f3a37c30e5adeaf42.xml",
+        "translated-name": "Satisfied?",
+        "translated-description": "This tool helps Christians understand and enjoy the presence of God's Holy Spirit in their daily lives.   \n\nConversation starter: I have a tool that helps me experience God's presence in my life. May I share it with you?"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        },
+        "language": {
+          "data": {
+            "id": "1",
+            "type": "language"
+          }
+        },
+        "custom-pages": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "5",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/005/original/dry_lake_bed.jpg?1496876649",
+        "is-zipped": true,
+        "file-file-name": "dry_lake_bed.jpg",
+        "sha256": "3d369a1d8b2df92e69294a696c06e98dcc588190d0f4af6e4c6c3b02dc3708db"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "6",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/006/original/dry_lake_bed_dark.jpg?1496876872",
+        "is-zipped": true,
+        "file-file-name": "dry_lake_bed_dark.jpg",
+        "sha256": "a2193396d0acde245f53ec2ef10b46961863d9d6673b2826e27912a8717929fc"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "26",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/026/original/satisfied-tract-bkg-image-0_1x.jpg?1497886487",
+        "is-zipped": true,
+        "file-file-name": "satisfied-tract-bkg-image-0_1x.jpg",
+        "sha256": "21b747d4300725cd1f0612a85dfcc80a5b23d1d407385ecfa2fb476cf44cd600"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "27",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/027/original/satisfied-tract-bkg-image-1_1x.jpg?1497886804",
+        "is-zipped": true,
+        "file-file-name": "satisfied-tract-bkg-image-1_1x.jpg",
+        "sha256": "2c96f60c1a265bea9f459e1b434aef95ce56c170d8487b683d097415bdb3f8a2"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "28",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/028/original/satisfied-tract-bkg-image-2_1x.jpg?1497886811",
+        "is-zipped": true,
+        "file-file-name": "satisfied-tract-bkg-image-2_1x.jpg",
+        "sha256": "878f0cf441ece0e5bf979e13a593f4b96126dd9755e9600566699d010fc29eaf"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "29",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/029/original/satisfied-tract-bkg-image-3_1x.jpg?1497892861",
+        "is-zipped": true,
+        "file-file-name": "satisfied-tract-bkg-image-3_1x.jpg",
+        "sha256": "e598a167ff30e390a31d21f276b20828cfdb101ffbbd2bd3c721db087fddff5d"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "30",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/030/original/satisfied-tract-bkg-image-4_1x.jpg?1497900284",
+        "is-zipped": true,
+        "file-file-name": "satisfied-tract-bkg-image-4_1x.jpg",
+        "sha256": "a3a4be34f22e3b661e878a8ec7e442d1a5f27af216f586396e252c1fa3cf0c5a"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "31",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/031/original/satisfied-tract-bkg-image-5_1x.jpg?1497901237",
+        "is-zipped": true,
+        "file-file-name": "satisfied-tract-bkg-image-5_1x.jpg",
+        "sha256": "bd2b29b0d1da0f3d11a6a001dafc0e550e4361261de4eedc0721932c1b9519d8"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "32",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/032/original/satisfied-tract-bkg-image-6_1x.jpg?1497901243",
+        "is-zipped": true,
+        "file-file-name": "satisfied-tract-bkg-image-6_1x.jpg",
+        "sha256": "f1db298aa161f1a548cbe36025533ff4e4c4266c21dc7f59bb08f8574ea4d298"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "33",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/033/original/satisfied-tract-bkg-image-7_1x.jpg?1497901249",
+        "is-zipped": true,
+        "file-file-name": "satisfied-tract-bkg-image-7_1x.jpg",
+        "sha256": "43c29299d7ba72ddd1e5238e060dafdff0c3efada71604ab989124d2d7e2936a"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "54",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/054/original/satisfied-home_1x.jpg?1498509410",
+        "is-zipped": false,
+        "file-file-name": "satisfied-home_1x.jpg",
+        "sha256": "2626c83091f11eb08c2bded5d4a237fa986fe3a318d1fb14933906021a7493a7"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    }
+  ]
+}
