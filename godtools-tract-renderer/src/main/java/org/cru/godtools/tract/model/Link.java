@@ -13,7 +13,6 @@ import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.Parent.ParentViewHolder;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -77,8 +76,7 @@ public final class Link extends Content {
 
     @NonNull
     @Override
-    BaseViewHolder<?> createViewHolder(@NonNull final ViewGroup parent,
-                                       @Nullable final ParentViewHolder parentViewHolder) {
+    LinkViewHolder createViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
         return new LinkViewHolder(parent, parentViewHolder);
     }
 
@@ -87,7 +85,7 @@ public final class Link extends Content {
         @BindView(R2.id.content)
         TextView mLink;
 
-        LinkViewHolder(@NonNull final ViewGroup parent, @Nullable final ParentViewHolder parentViewHolder) {
+        LinkViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
             super(Link.class, parent, R.layout.tract_content_text, parentViewHolder);
         }
 

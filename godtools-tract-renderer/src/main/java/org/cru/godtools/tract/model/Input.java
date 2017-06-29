@@ -21,7 +21,6 @@ import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.Parent.ParentViewHolder;
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -179,8 +178,7 @@ public final class Input extends Content {
 
     @NonNull
     @Override
-    InputViewHolder createViewHolder(@NonNull final ViewGroup parent,
-                                     @Nullable final ParentViewHolder parentViewHolder) {
+    InputViewHolder createViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
         return new InputViewHolder(parent, parentViewHolder);
     }
 
@@ -200,7 +198,7 @@ public final class Input extends Content {
         @Nullable
         private Text mPlaceholder;
 
-        InputViewHolder(@NonNull final ViewGroup parent, @Nullable final ParentViewHolder parentViewHolder) {
+        InputViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
             super(Input.class, parent, R.layout.tract_content_input, parentViewHolder);
         }
 

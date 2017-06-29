@@ -15,7 +15,6 @@ import com.annimon.stream.Stream;
 
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
-import org.cru.godtools.tract.model.Parent.ParentViewHolder;
 import org.cru.godtools.tract.model.Text.Align;
 import org.greenrobot.eventbus.EventBus;
 import org.xmlpull.v1.XmlPullParser;
@@ -134,7 +133,7 @@ abstract class Base {
     @UiThread
     static abstract class BaseViewHolder<T extends Base> {
         @Nullable
-        final ParentViewHolder<? extends Base> mParentViewHolder;
+        final BaseViewHolder mParentViewHolder;
 
         @NonNull
         public final View mRoot;
@@ -145,12 +144,12 @@ abstract class Base {
         T mModel;
 
         BaseViewHolder(@NonNull final Class<T> modelType, @NonNull final ViewGroup parent, @LayoutRes final int layout,
-                       @Nullable final ParentViewHolder<?> parentViewHolder) {
+                       @Nullable final BaseViewHolder parentViewHolder) {
             this(modelType, LayoutInflater.from(parent.getContext()).inflate(layout, parent, false), parentViewHolder);
         }
 
         BaseViewHolder(@NonNull final Class<T> modelType, @NonNull final View root,
-                       @Nullable final ParentViewHolder<?> parentViewHolder) {
+                       @Nullable final BaseViewHolder parentViewHolder) {
             mParentViewHolder = parentViewHolder;
             mModelType = modelType;
             mRoot = root;
