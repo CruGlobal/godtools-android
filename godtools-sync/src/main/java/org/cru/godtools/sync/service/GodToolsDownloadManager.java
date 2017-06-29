@@ -389,6 +389,11 @@ public final class GodToolsDownloadManager {
     @WorkerThread
     public void storeTranslation(@NonNull final Translation translation, @NonNull final InputStream zipStream,
                                  final long size) throws IOException {
+        // short-circuit if the resources directory isn't valid
+        if (!FileUtils.createResourcesDir(mContext)) {
+            return;
+        }
+
         // lock translation
         synchronized (getLock(LOCKS_TRANSLATION_DOWNLOADS, new TranslationKey(translation))) {
             final Lock lock = LOCK_FILESYSTEM.readLock();
@@ -396,7 +401,7 @@ public final class GodToolsDownloadManager {
                 lock.lock();
 
                 // process the download
-                processZipDownload(translation, zipStream, size);
+                processZipStream(translation, zipStream, size);
 
                 // mark translation as downloaded
                 translation.setDownloaded(true);
@@ -413,9 +418,8 @@ public final class GodToolsDownloadManager {
      */
     @WorkerThread
     @GuardedBy("LOCK_FILESYSTEM")
-    private void processZipDownload(@NonNull final Translation translation, @NonNull final InputStream zipStream,
-                                    final long size)
-            throws IOException {
+    private void processZipStream(@NonNull final Translation translation, @NonNull final InputStream zipStream,
+                                  final long size) throws IOException {
         final Closer closer = Closer.create();
         try {
             final CountingInputStream count = closer.register(new CountingInputStream(zipStream));
