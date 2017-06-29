@@ -9,6 +9,7 @@ import android.support.annotation.WorkerThread;
 import com.annimon.stream.Stream;
 import com.crashlytics.android.Crashlytics;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Closer;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
@@ -33,8 +34,10 @@ import org.keynote.godtools.android.model.Translation;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import static android.database.sqlite.SQLiteDatabase.CONFLICT_IGNORE;
 
@@ -71,6 +74,7 @@ public class InitialContentTasks implements Runnable {
         // tools init
         loadBundledTools();
         importBundledTranslations();
+        importBundledAttachments();
     }
 
     @NonNull
@@ -219,6 +223,35 @@ public class InitialContentTasks implements Runnable {
             } catch (final Exception e) {
                 Crashlytics.logException(e);
             }
+        }
+    }
+
+    private void importBundledAttachments() {
+        try {
+            // bundled attachments
+            final Set<String> files = ImmutableSet.copyOf(mAssets.list("attachments"));
+
+            // find any attachments that aren't download, but we came bundled with the resource for
+            final List<Attachment> attachments = mDao.streamCompat(Query.select(Attachment.class))
+                    .filterNot(Attachment::isDownloaded)
+                    .filter(a -> files.contains(a.getLocalFileName()))
+                    .toList();
+
+            for (final Attachment attachment : attachments) {
+                final Closer closer = Closer.create();
+                try {
+                    final InputStream in =
+                            closer.register(mAssets.open("attachments/" + attachment.getLocalFileName()));
+
+                    mDownloadManager.importAttachment(attachment, in);
+                } catch (final Throwable t) {
+                    throw closer.rethrow(t);
+                } finally {
+                    closer.close();
+                }
+            }
+        } catch (final Exception e) {
+            Crashlytics.logException(e);
         }
     }
 }
