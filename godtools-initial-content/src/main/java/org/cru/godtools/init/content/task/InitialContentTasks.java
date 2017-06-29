@@ -17,6 +17,7 @@ import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.ccci.gto.android.common.util.IOUtils;
 import org.cru.godtools.base.Settings;
+import org.cru.godtools.model.event.AttachmentUpdateEvent;
 import org.cru.godtools.model.event.LanguageUpdateEvent;
 import org.cru.godtools.model.event.ToolUpdateEvent;
 import org.cru.godtools.model.event.TranslationUpdateEvent;
@@ -132,11 +133,6 @@ public class InitialContentTasks implements Runnable {
     }
 
     private void loadBundledTools() {
-        // short-circuit if we already have any tools
-        if (!mDao.get(Query.select(Tool.class).limit(1)).isEmpty()) {
-            return;
-        }
-
         try {
             // read in raw tools json
             final Closer closer = Closer.create();
@@ -152,28 +148,40 @@ public class InitialContentTasks implements Runnable {
 
             // convert to a usable object
             final JsonApiObject<Tool> tools = getJsonApiConverter().fromJson(raw, Tool.class);
-            final long toolsChanged = Stream.of(tools.getData())
-                    .mapToLong(t -> mDao.insert(t, CONFLICT_IGNORE))
-                    .sum();
-            final long translationsChanged = Stream.of(tools.getData())
-                    .map(Tool::getLatestTranslations)
-                    .flatMap(Stream::of)
-                    .mapToLong(t -> mDao.insert(t, CONFLICT_IGNORE))
-                    .sum();
 
-            // send a broadcast if we inserted any tools or translations
-            if (toolsChanged > 0) {
+            // add any tools that we don't already have
+            boolean toolsChanged = false;
+            boolean translationsChanged = false;
+            boolean attachmentsChanged = false;
+            for (final Tool tool : tools.getData()) {
+                if (mDao.refresh(tool) != null) {
+                    if (mDao.insert(tool, CONFLICT_IGNORE) > 0) {
+                        mDownloadManager.addTool(tool.getId());
+                        toolsChanged = true;
+
+                        // import all bundled translations
+                        translationsChanged = Stream.of(tool.getLatestTranslations())
+                                .mapToLong(t -> mDao.insert(t, CONFLICT_IGNORE))
+                                .sum() > 0 || translationsChanged;
+
+                        // import all bundled attachments
+                        attachmentsChanged = Stream.of(tool.getAttachments())
+                                .mapToLong(a -> mDao.insert(a, CONFLICT_IGNORE))
+                                .sum() > 0 || attachmentsChanged;
+                    }
+                }
+            }
+
+            // send a broadcast if we inserted any tools, translations, or attachments
+            if (toolsChanged) {
                 mEventBus.post(new ToolUpdateEvent());
             }
-            if (translationsChanged > 0) {
+            if (translationsChanged) {
                 mEventBus.post(new TranslationUpdateEvent());
             }
-
-            // add default tools
-            // TODO: make actual list of default tools and not just all tools
-            mDao.streamCompat(Query.select(Tool.class))
-                    .mapToLong(Tool::getId)
-                    .forEach(mDownloadManager::addTool);
+            if (attachmentsChanged) {
+                mEventBus.post(new AttachmentUpdateEvent());
+            }
         } catch (final Exception e) {
             // log exception, but it shouldn't be fatal (for now)
             Crashlytics.logException(e);
