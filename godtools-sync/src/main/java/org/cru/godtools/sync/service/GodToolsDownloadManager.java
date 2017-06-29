@@ -31,6 +31,7 @@ import org.ccci.gto.android.common.eventbus.task.EventBusDelayedPost;
 import org.ccci.gto.android.common.util.IOUtils;
 import org.ccci.gto.android.common.util.IOUtils.ProgressCallback;
 import org.cru.godtools.api.GodToolsApi;
+import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.util.FileUtils;
 import org.cru.godtools.model.event.AttachmentUpdateEvent;
 import org.cru.godtools.model.event.LanguageUpdateEvent;
@@ -39,7 +40,6 @@ import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.cru.godtools.base.Settings;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
 import org.keynote.godtools.android.db.Contract.LocalFileTable;
@@ -367,20 +367,7 @@ public final class GodToolsDownloadManager {
                     if (response.isSuccessful()) {
                         final ResponseBody body = response.body();
                         if (body != null) {
-                            final Lock lock = LOCK_FILESYSTEM.readLock();
-                            try {
-                                lock.lock();
-
-                                // process the download
-                                processZipDownload(translation, body);
-
-                                // mark translation as downloaded
-                                translation.setDownloaded(true);
-                                mDao.update(translation, TranslationTable.COLUMN_DOWNLOADED);
-                                mEventBus.post(new TranslationUpdateEvent());
-                            } finally {
-                                lock.unlock();
-                            }
+                            storeTranslation(translation, body.byteStream(), body.contentLength());
 
                             // prune any old translations
                             pruneStaleTranslations();
@@ -392,17 +379,39 @@ public final class GodToolsDownloadManager {
         }
     }
 
+    @WorkerThread
+    public void storeTranslation(@NonNull final Translation translation, @NonNull final InputStream zipStream,
+                                 final long size) throws IOException {
+        // lock translation
+        synchronized (getLock(LOCKS_TRANSLATION_DOWNLOADS, new TranslationKey(translation))) {
+            final Lock lock = LOCK_FILESYSTEM.readLock();
+            try {
+                lock.lock();
+
+                // process the download
+                processZipDownload(translation, zipStream, size);
+
+                // mark translation as downloaded
+                translation.setDownloaded(true);
+                mDao.update(translation, TranslationTable.COLUMN_DOWNLOADED);
+                mEventBus.post(new TranslationUpdateEvent());
+            } finally {
+                lock.unlock();
+            }
+        }
+    }
+
     /**
      * Process a streaming zip response.
      */
     @WorkerThread
     @GuardedBy("LOCK_FILESYSTEM")
-    private void processZipDownload(@NonNull final Translation translation, @NonNull final ResponseBody body)
+    private void processZipDownload(@NonNull final Translation translation, @NonNull final InputStream zipStream,
+                                    final long size)
             throws IOException {
-        final long size = body.contentLength();
         final Closer closer = Closer.create();
         try {
-            final CountingInputStream count = closer.register(new CountingInputStream(body.byteStream()));
+            final CountingInputStream count = closer.register(new CountingInputStream(zipStream));
             final ZipInputStream zin = closer.register(new ZipInputStream(new BufferedInputStream(count)));
             final ProgressCallback progressCallback = (s) -> updateProgress(translation, count.getCount(), size);
 
