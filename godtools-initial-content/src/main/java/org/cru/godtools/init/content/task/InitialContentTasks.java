@@ -154,7 +154,7 @@ public class InitialContentTasks implements Runnable {
             boolean translationsChanged = false;
             boolean attachmentsChanged = false;
             for (final Tool tool : tools.getData()) {
-                if (mDao.refresh(tool) != null) {
+                if (mDao.refresh(tool) == null) {
                     if (mDao.insert(tool, CONFLICT_IGNORE) > 0) {
                         mDownloadManager.addTool(tool.getId());
                         toolsChanged = true;
