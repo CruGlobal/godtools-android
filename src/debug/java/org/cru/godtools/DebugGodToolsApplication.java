@@ -1,13 +1,11 @@
-package org.keynote.godtools.android;
+package org.cru.godtools;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 
-import com.facebook.stetho.InspectorModulesProvider;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.inspector.database.SqliteDatabaseDriver;
-import com.facebook.stetho.inspector.protocol.ChromeDevtoolsDomain;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.squareup.leakcanary.AndroidExcludedRefs;
 import com.squareup.leakcanary.LeakCanary;
@@ -51,13 +49,10 @@ public class DebugGodToolsApplication extends SnuffyApplication {
 
         final Stetho.InitializerBuilder stethoBuilder = Stetho.newInitializerBuilder(this);
         stethoBuilder.enableDumpapp(Stetho.defaultDumperPluginsProvider(this));
-        stethoBuilder.enableWebKitInspector(new InspectorModulesProvider() {
-            public Iterable<ChromeDevtoolsDomain> get() {
-                return new Stetho.DefaultInspectorModulesBuilder(DebugGodToolsApplication.this)
+        stethoBuilder.enableWebKitInspector(
+                () -> new Stetho.DefaultInspectorModulesBuilder(DebugGodToolsApplication.this)
                         .provideDatabaseDriver(dbDriver)
-                        .finish();
-            }
-        });
+                        .finish());
         Stetho.initialize(stethoBuilder.build());
         OkHttpClientUtil.addGlobalNetworkInterceptor(new StethoInterceptor());
     }
