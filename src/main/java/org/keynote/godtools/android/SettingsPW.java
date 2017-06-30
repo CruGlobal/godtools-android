@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.google.common.base.Strings;
 
 import org.ccci.gto.android.common.util.LocaleCompat;
+import org.keynote.godtools.android.activity.LanguageSelectionActivity;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.fragments.AccessCodeDialogFragment;
@@ -50,8 +51,6 @@ public class SettingsPW extends BaseActionBarActivity implements
         AccessCodeDialogFragment.AccessCodeDialogListener
 {
     private static final String TAG = SettingsPW.class.getSimpleName();
-    private static final int REQUEST_PRIMARY = 1002;
-    private static final int REQUEST_PARALLEL = 1003;
 
     private LocalBroadcastManager broadcastManager;
     private BroadcastReceiver broadcastReceiver;
@@ -263,22 +262,16 @@ public class SettingsPW extends BaseActionBarActivity implements
     @Override
     public void onClick(View v)
     {
-
-        Intent intent = new Intent(SettingsPW.this, SelectLanguagePW.class);
-
         switch (v.getId())
         {
             case R.id.rlMainLanguage:
-                intent.putExtra("languageType", getString(R.string.settings_main_language));
-                startActivityForResult(intent, REQUEST_PRIMARY);
+                LanguageSelectionActivity.start(this, true);
                 break;
 
             case R.id.rlParallelLanguage:
-                intent.putExtra("languageType", getString(R.string.settings_parallel_language));
-                startActivityForResult(intent, REQUEST_PARALLEL);
+                LanguageSelectionActivity.start(this, true);
                 break;
         }
-
     }
 
     public void onToggleClicked(View view)

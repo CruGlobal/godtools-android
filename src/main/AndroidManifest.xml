@@ -59,18 +59,6 @@
         </activity>
 
         <activity
-            android:name=".SelectLanguagePW"
-            android:label="Select Language"
-            android:screenOrientation="userPortrait"
-            android:parentActivityName="org.keynote.godtools.android.SettingsPW">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.keynote.godtools.android.SettingsPW" />
-
-        </activity>
-
-        <activity
             android:name=".everystudent.EveryStudent"
             android:label="@string/app_name_everystudent"
             android:theme="@android:style/Theme.Light" />
