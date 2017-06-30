@@ -12,6 +12,9 @@ public final class Constants {
     public static final String PREF_PARALLEL_LANGUAGE = "languageParallel";
 
     // Common base URI's
-    public static final Uri URI_HELP = Uri.parse("http://help.missionhub.com/");
+    public static final Uri MAILTO_SUPPORT = Uri.parse("mailto:support@godtoolsapp.com");
+    public static final Uri URI_HELP = Uri.parse("http://www.godtoolsapp.com/");
+    public static final Uri URI_PRIVACY = Uri.parse("https://www.cru.org/about/privacy.html");
+    public static final Uri URI_TERMS_OF_USE = Uri.parse("http://www.godtoolsapp.com/");
     public static final String URI_SHARE_BASE = "http://www.knowgod.com/";
 }

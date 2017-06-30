@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_share">Share</string>
+    <string name="menu_share_tract">Share</string>
 
     <string name="tract_content_input_error_required">%1$s is required</string>
     <string name="tract_content_input_error_invalid_email">Please enter a valid email address</string>

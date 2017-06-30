@@ -13,31 +13,32 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 
+import org.cru.godtools.base.Settings;
 import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.R;
-import org.cru.godtools.base.Settings;
 import org.keynote.godtools.android.util.WebUrlLauncher;
 
 import java.util.Locale;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 import static org.ccci.gto.android.common.Constants.INVALID_STRING_RES;
+import static org.keynote.godtools.android.Constants.MAILTO_SUPPORT;
 import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
 import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 import static org.keynote.godtools.android.Constants.URI_HELP;
+import static org.keynote.godtools.android.Constants.URI_PRIVACY;
 import static org.keynote.godtools.android.Constants.URI_SHARE_BASE;
+import static org.keynote.godtools.android.Constants.URI_TERMS_OF_USE;
 import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 
-public abstract class BaseActivity extends AppCompatActivity
+public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private final ChangeListener mSettingsChangeListener = new ChangeListener();
 
@@ -76,7 +77,6 @@ public abstract class BaseActivity extends AppCompatActivity
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        ButterKnife.bind(this);
         setupActionBar();
         setupNavigationDrawer();
     }
@@ -133,6 +133,18 @@ public abstract class BaseActivity extends AppCompatActivity
                 return true;
             case R.id.action_share:
                 launchShare();
+                return true;
+            case R.id.action_share_story:
+                launchShareStory();
+                return true;
+            case R.id.action_contact_us:
+                launchContactUs();
+                return true;
+            case R.id.action_terms_of_use:
+                WebUrlLauncher.openUrl(this, URI_TERMS_OF_USE);
+                return true;
+            case R.id.action_privacy_policy:
+                WebUrlLauncher.openUrl(this, URI_PRIVACY);
                 return true;
         }
 
@@ -234,6 +246,8 @@ public abstract class BaseActivity extends AppCompatActivity
         prefs().unregisterOnSharedPreferenceChangeListener(mSettingsChangeListener);
     }
 
+    /* Navigation Menu actions */
+
     private void openPlayStore() {
         final String appId = BuildConfig.APPLICATION_ID;
         try {
@@ -242,6 +256,11 @@ public abstract class BaseActivity extends AppCompatActivity
             startActivity(new Intent(Intent.ACTION_VIEW,
                                      Uri.parse("https://play.google.com/store/apps/details?id=" + appId)));
         }
+    }
+
+    private void launchContactUs() {
+        final Intent intent = new Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT);
+        startActivity(intent);
     }
 
     private void launchShare() {
@@ -253,6 +272,12 @@ public abstract class BaseActivity extends AppCompatActivity
         share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
         share.putExtra(Intent.EXTRA_TEXT, text);
         startActivity(Intent.createChooser(share, getString(R.string.share_prompt)));
+    }
+
+    private void launchShareStory() {
+        final Intent intent = new Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT);
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_story_subject));
+        startActivity(intent);
     }
 
     class ChangeListener implements SharedPreferences.OnSharedPreferenceChangeListener {
