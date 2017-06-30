@@ -235,6 +235,10 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
     /* END NestedScrollingParent methods */
 
+    public void addCard(@NonNull final View card, final int position) {
+        addView(card, position + mCardPositionOffset);
+    }
+
     boolean flingCard(final float velocityY) {
         final int minVelocity =
                 ViewConfiguration.get(getContext()).getScaledMinimumFlingVelocity() * FLING_SCALE_FACTOR;

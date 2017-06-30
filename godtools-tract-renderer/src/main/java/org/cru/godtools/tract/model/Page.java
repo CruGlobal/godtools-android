@@ -509,7 +509,7 @@ public final class Page extends Base implements Styles, Parent {
 
                 // add views to container if they aren't already there
                 if (holders[pos].mRoot.getParent() != mPageContentLayout) {
-                    mPageContentLayout.addView(holders[pos].mRoot, pos);
+                    mPageContentLayout.addCard(holders[pos].mRoot, pos);
                 }
 
                 // bind data
