@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
-import org.keynote.godtools.android.model.Attachment;
+import org.cru.godtools.model.Attachment;
 import org.keynote.godtools.android.model.Tool;
 
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_ADDED;
