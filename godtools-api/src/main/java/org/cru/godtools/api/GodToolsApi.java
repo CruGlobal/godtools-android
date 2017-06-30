@@ -15,6 +15,7 @@ import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Followup;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Translation;
+import org.cru.godtools.model.jsonapi.ToolTypeConverter;
 import org.keynote.godtools.android.model.Tool;
 
 import java.util.concurrent.TimeUnit;
@@ -98,6 +99,7 @@ public class GodToolsApi {
                 .addClasses(Attachment.class)
                 .addClasses(Translation.class)
                 .addClasses(Followup.class)
+                .addConverters(new ToolTypeConverter())
                 .addConverters(new LocaleTypeConverter())
                 .build();
     }
