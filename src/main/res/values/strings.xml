@@ -168,36 +168,4 @@
 		{{share_link}}</string>
     <string name="satisfied_share" formatted="false">It was great talking with you today about how we can experience The Holy Spirit’s power in our lives. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
     <string name="everystudent_share">It was great talking with you today about your spiritual questions. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
-
-    <!-- iOS -->
-    <string name="translator_mode">[ Translator Mode ]</string>
-    <string name="intro_share_instructions">Share with a friend</string>
-    <string name="intro_tool_instructions">Pick a tool</string>
-    <string name="intro_language_instructions">Pick a Language</string>
-    <string name="settings_language_none_selected">None Selected</string>
-    <string name="settings_parallel_info_tap">Tap screen during presentation to view menu.</string>
-    <string name="settings_parallel_info_switch_button">Will toggle the 2 languages</string>
-    <string name="settings_parallel_info_toggle_explaination">The toggle button will not show up in the menu if the booklet is not available in the parallel language</string>
-    <string name="menu_item_languages">Language</string>
-    <string name="access_code_placeholder">Passcode</string>
-    <string name="status_updating_resources">Updating resources...</string>
-    <string name="status_updating_drafts">Updating drafts...</string>
-    <string name="status_creating_drafts">Creating draft...</string>
-    <string name="status_publishing_drafts">Publishing draft...</string>
-    <string name="status_updating_menu">Updating menu...</string>
-    <string name="status_checking_for_updates">Checking for Updates...</string>
-    <string name="status_initial_setup">Initial Setup...</string>
-    <string name="status_downloading_resources">Downloading Resources...</string>
-    <string name="language_alert_title">Language Settings</string>
-    <string name="language_alert_body">Would you like to make {{language_name}} the default language?</string>
-    <string name="language_delete_primary">Current primary language cannot be deleted</string>
-    <string name="draft_refresh_message">Refreshing draft...</string>
-    <string name="draft_refresh_error">Refresh failure</string>
-    <string name="everystudent_title">Topics</string>
-    <string name="error_title">Error</string>
-    <string name="menu_download_bad_xml">Data was missing when asking the server for menu information.</string>
-    <string name="packages_download_error">There was an error downloading the packages</string>
-    <string name="page_download_error">There was an error downloading the page</string>
-    <string name="server_error">There were server issues encountered</string>
-    <string name="initial_setup_error_message">Unfortunately we could not load any resources. Please quit the app and reopen. If the problem persists contact support@godtoolsapp.com</string>
 </resources>
