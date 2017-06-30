@@ -76,7 +76,6 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
