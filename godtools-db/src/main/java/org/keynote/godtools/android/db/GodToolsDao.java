@@ -17,6 +17,7 @@ import org.ccci.gto.android.common.util.ArrayUtils;
 import org.cru.godtools.model.Base;
 import org.cru.godtools.model.Followup;
 import org.cru.godtools.model.LocalFile;
+import org.cru.godtools.model.TranslationFile;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.FollowupTable;
@@ -29,7 +30,6 @@ import org.keynote.godtools.android.model.Attachment;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
-import org.keynote.godtools.android.model.TranslationFile;
 
 public class GodToolsDao extends DBAdapter implements StreamDao {
     private GodToolsDao(@NonNull final Context context) {

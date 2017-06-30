@@ -1,8 +1,8 @@
-package org.keynote.godtools.android.model;
+package org.cru.godtools.model;
 
 import android.support.annotation.Nullable;
 
-import org.cru.godtools.model.LocalFile;
+import org.keynote.godtools.android.model.Translation;
 
 public final class TranslationFile {
     @Nullable
