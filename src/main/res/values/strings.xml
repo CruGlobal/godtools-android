@@ -59,11 +59,14 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_general">General</string>
     <string name="menu_heading_share">Share</string>
+    <string name="menu_heading_legal">Legal</string>
     <string name="menu_help">Help</string>
     <string name="menu_contact_us">Contact Us</string>
     <string name="menu_share_godtools">Share GodTools</string>
     <string name="menu_share_story">Share a Story With Us</string>
     <string name="menu_rate">Rate GodTools</string>
+    <string name="menu_terms_of_use">Terms of Use</string>
+    <string name="menu_privacy_policy">Privacy Policy</string>
 
     <!-- Share a story -->
     <string name="share_story_subject">Hear how God is moving!</string>

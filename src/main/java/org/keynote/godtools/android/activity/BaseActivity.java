@@ -33,7 +33,9 @@ import static org.keynote.godtools.android.Constants.MAILTO_SUPPORT;
 import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
 import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 import static org.keynote.godtools.android.Constants.URI_HELP;
+import static org.keynote.godtools.android.Constants.URI_PRIVACY;
 import static org.keynote.godtools.android.Constants.URI_SHARE_BASE;
+import static org.keynote.godtools.android.Constants.URI_TERMS_OF_USE;
 import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 
 public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.BaseActivity
@@ -137,6 +139,12 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
                 return true;
             case R.id.action_contact_us:
                 launchContactUs();
+                return true;
+            case R.id.action_terms_of_use:
+                WebUrlLauncher.openUrl(this, URI_TERMS_OF_USE);
+                return true;
+            case R.id.action_privacy_policy:
+                WebUrlLauncher.openUrl(this, URI_PRIVACY);
                 return true;
         }
 

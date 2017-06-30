@@ -18,6 +18,7 @@
                 android:title="@string/menu_contact_us" />
         </menu>
     </item>
+
     <item
         android:orderInCategory="200"
         android:title="@string/menu_heading_share">
@@ -34,6 +35,22 @@
                 android:id="@+id/action_rate"
                 android:orderInCategory="300"
                 android:title="@string/menu_rate" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/action_legal"
+        android:orderInCategory="300"
+        android:title="@string/menu_heading_legal">
+        <menu>
+            <item
+                android:id="@+id/action_terms_of_use"
+                android:orderInCategory="100"
+                android:title="@string/menu_terms_of_use" />
+            <item
+                android:id="@+id/action_privacy_policy"
+                android:orderInCategory="200"
+                android:title="@string/menu_privacy_policy" />
         </menu>
     </item>
 </menu>
