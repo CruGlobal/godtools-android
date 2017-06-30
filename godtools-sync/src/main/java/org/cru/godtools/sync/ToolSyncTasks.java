@@ -10,10 +10,13 @@ import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams;
 import org.ccci.gto.android.common.jsonapi.util.Includes;
+import org.cru.godtools.api.model.ToolViews;
+import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
 
 import java.io.IOException;
+import java.util.List;
 
 import retrofit2.Response;
 
@@ -21,6 +24,7 @@ import static org.ccci.gto.android.common.TimeConstants.DAY_IN_MS;
 
 final class ToolSyncTasks extends BaseDataSyncTasks {
     private static final Object LOCK_SYNC_TOOLS = new Object();
+    private static final Object LOCK_SYNC_SHARES = new Object();
 
     private static final String SYNC_TIME_TOOLS = "last_synced.tools";
     private static final long STALE_DURATION_TOOLS = DAY_IN_MS;
@@ -70,6 +74,26 @@ final class ToolSyncTasks extends BaseDataSyncTasks {
             mDao.updateLastSyncTime(SYNC_TIME_TOOLS);
         }
 
+        return true;
+    }
+
+    boolean syncShares() {
+        synchronized (LOCK_SYNC_SHARES) {
+            final List<ToolViews> viewsList =
+                    mDao.streamCompat(Query.select(Tool.class).where(ToolTable.SQL_WHERE_HAS_PENDING_SHARES))
+                            .map(ToolViews::new)
+                            .toList();
+
+            for (final ToolViews views : viewsList) {
+                try {
+                    final Response<JsonApiObject<ToolViews>> response = mApi.views.submitViews(views).execute();
+                    if (response.isSuccessful()) {
+                        mDao.updateSharesDelta(views.getToolId(), 0 - views.getQuantity());
+                    }
+                } catch (final IOException ignored) {
+                }
+            }
+        }
         return true;
     }
 }
