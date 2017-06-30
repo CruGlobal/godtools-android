@@ -8,9 +8,9 @@ import android.support.v4.util.LongSparseArray;
 import android.support.v4.util.SimpleArrayMap;
 
 import org.cru.godtools.api.GodToolsApi;
+import org.cru.godtools.model.Base;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.GodToolsDao;
-import org.keynote.godtools.android.model.Base;
 
 import java.util.Collection;
 

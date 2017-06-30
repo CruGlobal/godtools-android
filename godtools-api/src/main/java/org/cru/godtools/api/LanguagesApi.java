@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams;
-import org.keynote.godtools.android.model.Language;
+import org.cru.godtools.model.Language;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

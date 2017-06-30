@@ -5,13 +5,13 @@ import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Expression.Field;
 import org.ccci.gto.android.common.db.Join;
 import org.ccci.gto.android.common.db.Table;
+import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Followup;
-import org.keynote.godtools.android.model.Attachment;
-import org.keynote.godtools.android.model.Language;
-import org.keynote.godtools.android.model.LocalFile;
+import org.cru.godtools.model.Language;
+import org.cru.godtools.model.LocalFile;
+import org.cru.godtools.model.Translation;
+import org.cru.godtools.model.TranslationFile;
 import org.keynote.godtools.android.model.Tool;
-import org.keynote.godtools.android.model.Translation;
-import org.keynote.godtools.android.model.TranslationFile;
 
 import static org.ccci.gto.android.common.db.Expression.bind;
 

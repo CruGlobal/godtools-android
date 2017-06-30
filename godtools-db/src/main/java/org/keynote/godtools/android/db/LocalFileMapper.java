@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.db.AbstractMapper;
-import org.keynote.godtools.android.model.LocalFile;
+import org.cru.godtools.model.LocalFile;
 
 import static org.keynote.godtools.android.db.Contract.LocalFileTable.COLUMN_NAME;
 

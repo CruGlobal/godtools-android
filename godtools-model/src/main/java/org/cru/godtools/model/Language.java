@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.model;
+package org.cru.godtools.model;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,7 +9,7 @@ import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
 
 import java.util.Locale;
 
-import static org.keynote.godtools.android.model.Language.JSON_API_TYPE;
+import static org.cru.godtools.model.Language.JSON_API_TYPE;
 
 @JsonApiType(JSON_API_TYPE)
 public class Language extends Base {

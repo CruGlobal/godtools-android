@@ -6,8 +6,8 @@ import android.support.annotation.Nullable;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 
+import org.cru.godtools.model.Translation;
 import org.keynote.godtools.android.model.Tool;
-import org.keynote.godtools.android.model.Translation;
 
 public final class ModelUtils {
     @NonNull

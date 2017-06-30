@@ -11,11 +11,11 @@ import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory;
 import org.cru.godtools.api.model.ToolViews;
+import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Followup;
-import org.keynote.godtools.android.model.Attachment;
-import org.keynote.godtools.android.model.Language;
+import org.cru.godtools.model.Language;
+import org.cru.godtools.model.Translation;
 import org.keynote.godtools.android.model.Tool;
-import org.keynote.godtools.android.model.Translation;
 
 import java.util.concurrent.TimeUnit;
 

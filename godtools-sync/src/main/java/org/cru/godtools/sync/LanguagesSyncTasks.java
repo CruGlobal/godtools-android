@@ -7,7 +7,7 @@ import android.support.v4.util.SimpleArrayMap;
 
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams;
-import org.keynote.godtools.android.model.Language;
+import org.cru.godtools.model.Language;
 
 import java.io.IOException;
 

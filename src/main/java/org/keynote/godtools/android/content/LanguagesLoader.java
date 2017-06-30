@@ -5,9 +5,9 @@ import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.eventbus.content.CachingAsyncTaskEventBusLoader;
+import org.cru.godtools.model.Language;
 import org.cru.godtools.model.event.content.LanguageEventBusSubscriber;
 import org.keynote.godtools.android.db.GodToolsDao;
-import org.keynote.godtools.android.model.Language;
 
 import java.util.List;
 

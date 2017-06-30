@@ -6,10 +6,10 @@ import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.eventbus.content.CachingAsyncTaskEventBusLoader;
+import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.event.content.TranslationEventBusSubscriber;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
-import org.keynote.godtools.android.model.Translation;
 
 import java.util.List;
 import java.util.Locale;

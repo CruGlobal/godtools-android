@@ -21,13 +21,13 @@ import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.support.v4.util.WeakLruCache;
 import org.cru.godtools.base.util.FileUtils;
+import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Page;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
-import org.keynote.godtools.android.model.Translation;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.BufferedInputStream;

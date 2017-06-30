@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.cru.godtools.model.Followup;
-import org.keynote.godtools.android.model.Language;
+import org.cru.godtools.model.Language;
 
 import java.io.IOException;
 import java.util.List;

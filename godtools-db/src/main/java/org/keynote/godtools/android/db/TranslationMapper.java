@@ -4,10 +4,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
-import org.keynote.godtools.android.model.Language;
+import org.cru.godtools.model.Language;
+import org.cru.godtools.model.Translation;
 import org.keynote.godtools.android.model.Tool;
-import org.keynote.godtools.android.model.Translation;
 
+import static org.cru.godtools.model.Translation.DEFAULT_PUBLISHED;
+import static org.cru.godtools.model.Translation.DEFAULT_VERSION;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DESCRIPTION;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DOWNLOADED;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_LANGUAGE;
@@ -16,8 +18,6 @@ import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_N
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_PUBLISHED;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_TOOL;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_VERSION;
-import static org.keynote.godtools.android.model.Translation.DEFAULT_PUBLISHED;
-import static org.keynote.godtools.android.model.Translation.DEFAULT_VERSION;
 
 final class TranslationMapper extends BaseMapper<Translation> {
     @Override
