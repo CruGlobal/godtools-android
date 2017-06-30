@@ -9,7 +9,6 @@
     <string name="menu_item_help">Pomoc</string>
     <string name="menu_switch_language">Zamień język</string>
     <string name="menu_update_page">Aktualizuj stronę (wersja robocza)</string>
-    <string name="menu_flip">Obróć</string>
     <string name="app_name_everystudent">Pytania na temat Boga?</string>
     <string name="quit_dialog_message">Na pewno chcesz zamknąć God Tools?</string>
     <string name="quit_dialog_confirm">Wyjście</string>
@@ -28,19 +27,12 @@
     <string name="copy">Kopiuj</string>
     <string name="all_websites">Wszystkie strony WWW</string>
     <!-- Renderer Activity -->
-    <string name="processing_package">Trwa ładowanie...</string>
-    <string name="processing_failed">Błąd pakietu</string>
-    <string name="select_share">Wybierz sposób podzielenia się</string>
-    <string name="update_page">Trwa aktualizowanie...</string>
-    <string name="page_error">Błąd odświeżenia strony</string>
     <!-- Splash Activity -->
-    <string name="check_update">Trwa sprawdzanie aktualizacji...</string>
     <!-- Settings Activity -->
     <string name="settings_title">Ustawienia</string>
     <string name="settings_main_language">Język główny</string>
     <string name="settings_parallel_language">Język równoległy:</string>
     <string name="settings_parallel_info">"Dotknij ekranu i wybierz komendę \"Zamień język\" aby zobaczyć treść prezentacji w innym języku. Ta opcja nie działa jeśli tłumaczenie danej prezentacji nie jest dostępne.  "</string>
-    <string name="settings_select">Wybierz</string>
     <string name="settings_translator_mode">Tryb podglądu (dla tłumaczy)</string>
     <string name="settings_notification">Pozwól na zawiadomienia</string>
     <string name="wrong_passcode">Proszę spróbować ponownie</string>
@@ -49,10 +41,6 @@
     <!-- Main Activity-->
     <string name="share_prompt">Wybierz sposób podzielenia się</string>
     <!-- Language List -->
-    <string name="download">Pobierz</string>
-    <string name="downloading">Pobieranie</string>
-    <string name="delete">Usuń</string>
-    <string name="retry">Powtórz</string>
     <!-- Translator Mode Dialog -->
     <string name="dialog_translator_mode_title">Zakończyć tryb podglądu wersji roboczej?</string>
     <string name="dialog_translator_mode_body">Wersja robocza nie może być wyświetlona</string>
@@ -94,51 +82,18 @@
     <string name="failed_update_draft">Błąd aktualizacji wersji roboczych tłumaczeń</string>
     <string name="failed_download_draft">Błąd pobrania wersji roboczych tłumaczeń</string>
     <string name="failed_download_resources">Błąd pobrania źródła</string>
-    <string name="success">Sukces!</string>
     <string name="internet_needed">Do wykonania polecenia niezbędne jest połączenie z internetem</string>
     <string name="alternate_language">Język równoległy</string>
     <string name="alternate_language_message">Tłumaczenie w wybrany języku nie jest jeszcze dostępne.</string>
     <!-- Sharing -->
-    <string name="app_email_subject">Nasza dzisiejsza rozmowa o prezentacji \"{{package_name}}\"</string>
     <string name="share_general_subject">{{app_name}}</string>
     <string name="share_general_message">Tutaj jest link do ściągnięcia aplikacja o której dzisiaj rozmawialiśmy:
 http://godtoolsapp.com
 A tutaj możesz zobaczyć te treści na stronie internetowej {{share_link}}
 Bądźmy w kontakcie!</string>
     <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
-    <string name="share_from_page_subject">{{app_name}}</string>
     <string name="share_from_page_message" formatted="false">Przesyłam link do prezentacji, o której rozmawialiśmy dzisiaj. Ten link kieruje do ostatniej strony prezentacji, którą razem omawialiśmy: {{share_link}}
 Bądźmy w kontakcie!</string>
     <string name="satisfied_share" formatted="false">Bardzo się cieszę, że mogliśmy porozmawiać dzisiaj jak możemy doświadczać mocy Ducha Świętego w naszym życiu. Mam nadzięję, że będziemy mogli o tym jeszcze wkrótce porozmawiać. A póki co przesyłam link do prezentacji, którą omawialiśmy:  {{share_link}}</string>
-    <string name="everystudent_share">Bardzo się cieszę, że mogliśmy porozmawiać dzisiaj o ważnych duchowych kwestiach. Mam nadzięję, że będziemy mogli o tym jeszcze wkrótce porozmawiać. A póki co przesyłam link do prezentacji, którą omawialiśmy:  {{share_link}}</string>
     <!-- iOS -->
-    <string name="translator_mode">[ Tryb dla tłumaczy ]</string>
-    <string name="intro_share_instructions">Podziel się</string>
-    <string name="intro_tool_instructions">Wybierz prezentację</string>
-    <string name="intro_language_instructions">Wybierz język</string>
-    <string name="settings_language_none_selected">Żaden nie jest wybrany</string>
-    <string name="settings_parallel_info_tap">Dotknij ekranu, aby zobaczyć menu.</string>
-    <string name="settings_parallel_info_switch_button">Możliwość zamiany  dotyczy 2 języków</string>
-    <string name="settings_parallel_info_toggle_explaination">Przycisk zamiany języka nie ukaże się, jeśli prezentacja nie jest dostępna w równoległym języku</string>
-    <string name="menu_item_languages">Język</string>
-    <string name="access_code_placeholder">Kod dostęu</string>
-    <string name="status_updating_resources">Trwa aktualizowanie danych...</string>
-    <string name="status_updating_drafts">Trwa aktualizowanie wersji roboczych tłumaczeń...</string>
-    <string name="status_creating_drafts">Trwa tworzenie wersji roboczej tłumaczenia...</string>
-    <string name="status_publishing_drafts">Trwa proces publikowania wersji roboczej do statusu oficjalnego tłumaczenia....</string>
-    <string name="status_updating_menu">Aktualizacje menu...</string>
-    <string name="status_checking_for_updates">Trwa sprawdzanie aktualizacji...</string>
-    <string name="status_initial_setup">Ustawienia początkowe...</string>
-    <string name="status_downloading_resources">Trwa pobieranie danych...</string>
-    <string name="language_alert_title">Ustawienia języka</string>
-    <string name="language_alert_body">Czy {{language_name}} ma być domyślnym językiem?</string>
-    <string name="draft_refresh_message">Trwa odświeżanie wersji roboczej tłumaczenia...</string>
-    <string name="draft_refresh_error">Błąd odświeżenia wersji roboczej</string>
-    <string name="everystudent_title">Tematy</string>
-    <string name="error_title">Błąd</string>
-    <string name="menu_download_bad_xml">Brak danych na serwerze.</string>
-    <string name="packages_download_error">Nastąpił błąd podczas pobierania pakietów</string>
-    <string name="page_download_error">Nastąpił błąd podczas pobierania strony</string>
-    <string name="server_error">Wystąpiły problemy z serwerem</string>
-    <string name="initial_setup_error_message">Niestety nie można załadować danych. Zamknij aplikację i uruchom ją ponownie. Jeśli problem będzie się powtarzał skontaktuj sie z nami: support@godtoolsapp.com</string>
 </resources>

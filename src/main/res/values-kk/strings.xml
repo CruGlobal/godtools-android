@@ -9,7 +9,6 @@
     <string name="menu_item_help">Көмек</string>
     <string name="menu_switch_language">Тілді ауыстыру</string>
     <string name="menu_update_page">Парақшаны жаңарту (жоба)</string>
-    <string name="menu_flip">Шерту</string>
     <string name="app_name_everystudent">Құдай туралы сұрақтар?</string>
     <string name="quit_dialog_message">Қызмет құралдарынан шыққыңыз келе ме?</string>
     <string name="quit_dialog_confirm">Шығу</string>
@@ -28,19 +27,12 @@
     <string name="copy">Көшірме</string>
     <string name="all_websites">Барлық сайттар</string>
     <!-- Renderer Activity -->
-    <string name="processing_package">Парақшаны жүктеу...</string>
-    <string name="processing_failed">Пакетті өңдеу іске аспады</string>
-    <string name="select_share">Қалай бөліскіңіз келетінін таңдаңыз</string>
-    <string name="update_page">Парақшаны жаңарту</string>
-    <string name="page_error">Парақшаны өңдеу кезінде туындаған қателік</string>
     <!-- Splash Activity -->
-    <string name="check_update">Жаңартуларды тексеру</string>
     <!-- Settings Activity -->
     <string name="settings_title">Баптаулар</string>
     <string name="settings_main_language">Негізгі тіл:</string>
     <string name="settings_parallel_language">Қатарлас тіл:</string>
     <string name="settings_parallel_info">Көрсетілім кезінде басқа тілге ауысу үшін, экранда \"басқа тілге ауысу\" батырмасын басыңыз.</string>
-    <string name="settings_select">Таңдау</string>
     <string name="settings_translator_mode">Алдын ала қарап шығу тәртібі (аударма)</string>
     <string name="settings_notification">Хабарламаға рұқсат</string>
     <string name="wrong_passcode">Өтініш тағы бір рет байқап көріңіз</string>
@@ -49,10 +41,6 @@
     <!-- Main Activity-->
     <string name="share_prompt">Қалай бөліскіңіз келетінін таңдаңыз</string>
     <!-- Language List -->
-    <string name="download">Жүктеу</string>
-    <string name="downloading">Жүктеу</string>
-    <string name="delete">Өшіру</string>
-    <string name="retry">Қайталаңыз</string>
     <!-- Translator Mode Dialog -->
     <string name="dialog_translator_mode_title">Алдын ала қарап шығу режимінен шығу</string>
     <string name="dialog_translator_mode_body">Жобалар экранға шығарылмайды</string>
@@ -94,51 +82,18 @@
     <string name="failed_update_draft">Жобаларды жаңарту іске аспады</string>
     <string name="failed_download_draft">"Жобаларды жүктеу іске аспады "</string>
     <string name="failed_download_resources">Қоларды жүктеу іске аспады</string>
-    <string name="success">Сәтті!</string>
     <string name="internet_needed">Интернет байланысы осы сұранысты аяқтау үшін қажет</string>
     <string name="alternate_language">Қатарлас Тілдер</string>
     <string name="alternate_language_message">Таңдалған қатарлас тіл осы құралы үшін қол жетімді емес.</string>
     <!-- Sharing -->
-    <string name="app_email_subject">"Бүгінгі сұхбатымыз  {{package_name}} туралы "</string>
     <string name="share_general_subject">{{app_name}}</string>
     <string name="share_general_message">Мұнда бүгін қарайтын бағдарламаны жүктеу үшін сілтеме: http://godtoolsapp.com
 Мұнда бағдарламаның {{share_link}} веб нұсқасына сілтеме
 Көбірек әңгімелесейік!</string>
     <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
-    <string name="share_from_page_subject">{{app_name}}</string>
     <string name="share_from_page_message" formatted="false">Бүгінгі таңда біз көретін буклет осы. Бұл сілтеме сіздермен соңғы рет көрген беттің веб-нұсқасы:
 {{share_link}}
 Қане, көбірек сөйлесейік!</string>
     <string name="satisfied_share" formatted="false">Өмірімізде Киелі Рухтың күшін көріп жатқанымызды айтудың өзі керемет. Жақын арада осы жайында көбірек айтатын боламыз деп үміттенемін. Сондай-ақ, бүгін таңда біз {{share_link}} қарағанымызды тексере аласыз.</string>
-    <string name="everystudent_share">Бүгінгі таңда сіздердің рухани сұрақтарыңыз жайлы сөйлескеніміз өте жақсы. Жақын арада осы жайында көбірек сөйлесеміз деп үміттенемін. Сондай-ақ {{share_link}} - те қарағандарымызды тексере аласыз</string>
     <!-- iOS -->
-    <string name="translator_mode">[Аудармашы режимі]</string>
-    <string name="intro_share_instructions">Бөлісу</string>
-    <string name="intro_tool_instructions">Құралды таңдаңыз</string>
-    <string name="intro_language_instructions">Тілді таңдаңыз</string>
-    <string name="settings_language_none_selected">Бірде біреуі таңдалған жоқ</string>
-    <string name="settings_parallel_info_tap">Көрсетілім кезінде мәзірді қарау үшін экранды басыңыз.</string>
-    <string name="settings_parallel_info_switch_button">Екі тілді ауыстырып қосады</string>
-    <string name="settings_parallel_info_toggle_explaination">Егер кітапша қатарлас тілде берілмеген болса, ауыстыру батырмасы мәзірде көрсетілмейді</string>
-    <string name="menu_item_languages">Тіл</string>
-    <string name="access_code_placeholder">Құпиясөз</string>
-    <string name="status_updating_resources">Қорларды жаңарту</string>
-    <string name="status_updating_drafts">Жобаларды жаңарту</string>
-    <string name="status_creating_drafts">Жобаны құру</string>
-    <string name="status_publishing_drafts">Жобаның басылымы</string>
-    <string name="status_updating_menu">Мәзірді жаңарту</string>
-    <string name="status_checking_for_updates">Жаңартуларды тексеру</string>
-    <string name="status_initial_setup">Бастапқы орнату</string>
-    <string name="status_downloading_resources">Қорларды жүктеу</string>
-    <string name="language_alert_title">Тілдік баптаулар</string>
-    <string name="language_alert_body">Тілді үнсіз келісім бойынша қосқыңыз келеді ме? {{language_name}}</string>
-    <string name="draft_refresh_message">Жаңарған проект</string>
-    <string name="draft_refresh_error">Істен шыққанды жаңарту</string>
-    <string name="everystudent_title">Тақырыптар</string>
-    <string name="error_title">Қате</string>
-    <string name="menu_download_bad_xml">"Серверде мәзір жайлы ақпарат жоқ "</string>
-    <string name="packages_download_error">Пакеттерді жүктеу кезінде қателік жіберілді.</string>
-    <string name="page_download_error">Парақшаны жүктеу кезінде қателік жіберілді</string>
-    <string name="server_error">Серверде әдетте кездесетін мәселелер болды</string>
-    <string name="initial_setup_error_message">Өкінішке орай қорларды жүктей алмадық. Өтініш құралды жауып, қайта ашыңыз. Егер мәселе шешілмей жатса, мына мекен-жайға байланысқа шығыңыз support@godtoolsapp.com</string>
 </resources>

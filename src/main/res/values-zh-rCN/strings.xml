@@ -9,7 +9,6 @@
     <string name="menu_item_help">帮助</string>
     <string name="menu_switch_language">切换的语言</string>
     <string name="menu_update_page">更新页面(草稿)</string>
-    <string name="menu_flip">翻转</string>
     <string name="app_name_everystudent">有关生命和上帝的疑问</string>
     <string name="quit_dialog_message">你确认你要退出God Tools吗？</string>
     <string name="quit_dialog_confirm">退出</string>
@@ -28,19 +27,12 @@
     <string name="copy">复制</string>
     <string name="all_websites">所有网站</string>
     <!-- Renderer Activity -->
-    <string name="processing_package">加载页面...</string>
-    <string name="processing_failed">打包处理失败</string>
-    <string name="select_share">选择你想用的分享的方式</string>
-    <string name="update_page">更新页面...</string>
-    <string name="page_error">刷新页面的错误</string>
     <!-- Splash Activity -->
-    <string name="check_update">检查更新...</string>
     <!-- Settings Activity -->
     <string name="settings_title">设置</string>
     <string name="settings_main_language">主要语言</string>
     <string name="settings_parallel_language">同步语言</string>
     <string name="settings_parallel_info">在福音介绍的时候轻按屏幕用\"切换语言\"来选择语言“选项。如果没有福音册子将不会显示选项。</string>
-    <string name="settings_select">选择</string>
     <string name="settings_translator_mode">预览模式</string>
     <string name="settings_notification">所有通知</string>
     <string name="wrong_passcode">请重新尝试</string>
@@ -49,10 +41,6 @@
     <!-- Main Activity-->
     <string name="share_prompt">选择你想如何分享</string>
     <!-- Language List -->
-    <string name="download">下载</string>
-    <string name="downloading">正在下载</string>
-    <string name="delete">删除</string>
-    <string name="retry">重新尝试</string>
     <!-- Translator Mode Dialog -->
     <string name="dialog_translator_mode_title">退出预览模式</string>
     <string name="dialog_translator_mode_body">草稿将无法显示</string>
@@ -94,12 +82,10 @@
     <string name="failed_update_draft">无法更新草稿</string>
     <string name="failed_download_draft">无法下载草稿</string>
     <string name="failed_download_resources">无法下载资源</string>
-    <string name="success">成功</string>
     <string name="internet_needed">完成这个请求需要网络访问</string>
     <string name="alternate_language">同步语言</string>
     <string name="alternate_language_message">你无法获得所选择的同步语言</string>
     <!-- Sharing -->
-    <string name="app_email_subject">我们今天的话题是关于 {{package_name}}</string>
     <string name="share_general_subject">{{app_name}}</string>
     <string name="share_general_message">这里有一个下载我们今天看到的应用：http://godtoolsapp.com
 
@@ -107,43 +93,11 @@
 
 我们可以聊更多</string>
     <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
-    <string name="share_from_page_subject">{{app_name}}</string>
     <string name="share_from_page_message" formatted="false">这里是我们今天看的小册子，这个链接会带你去到一个网页版。
 
 {{share_link}}
 
 我们可以聊更多</string>
     <string name="satisfied_share" formatted="false">今天很开心能够和你一起聊如何在我们生命中经历圣灵的大能。我希望能够很快有机会探讨更多。于此同时，你可以看我们今天聊的内容{{share_link}}</string>
-    <string name="everystudent_share">今天很开心能够和你一起聊属灵的问题。我希望我们很快可以有更多的探讨。于此同时，你可以看我们今天聊的内容{{share_link}}</string>
     <!-- iOS -->
-    <string name="translator_mode">[ 翻译模式 ]</string>
-    <string name="intro_share_instructions">分享</string>
-    <string name="intro_tool_instructions">选择一个工具</string>
-    <string name="intro_language_instructions">选择语言</string>
-    <string name="settings_language_none_selected">没有选择</string>
-    <string name="settings_parallel_info_tap">在看信息时轻击屏幕会弹出菜单</string>
-    <string name="settings_parallel_info_switch_button">将会切换两个语言</string>
-    <string name="settings_parallel_info_toggle_explaination">如果没有册子切换按钮将不会出现</string>
-    <string name="menu_item_languages">语言</string>
-    <string name="access_code_placeholder">密码</string>
-    <string name="status_updating_resources">更新资源...</string>
-    <string name="status_updating_drafts">更新草稿...</string>
-    <string name="status_creating_drafts">创建草稿...</string>
-    <string name="status_publishing_drafts">发布草稿...</string>
-    <string name="status_updating_menu">更新菜单...</string>
-    <string name="status_checking_for_updates">检查更新...</string>
-    <string name="status_initial_setup">最初设置...</string>
-    <string name="status_downloading_resources">下载资源...</string>
-    <string name="language_alert_title">语言选项...</string>
-    <string name="language_alert_body">"你想将{{language_name}}设为默认语言吗?  "</string>
-    <string name="language_delete_primary">现有的主要语言被删除</string>
-    <string name="draft_refresh_message">更新草稿...</string>
-    <string name="draft_refresh_error">更新失败...</string>
-    <string name="everystudent_title">话题</string>
-    <string name="error_title">错误</string>
-    <string name="menu_download_bad_xml">当我们向服务器请求菜单信息时数据丢失.</string>
-    <string name="packages_download_error">我们下载包的时候有错误出现</string>
-    <string name="page_download_error">下载页面的时候有错误出现</string>
-    <string name="server_error">出现服务器错误</string>
-    <string name="initial_setup_error_message">很抱歉我们无法加载新的资源。请退出应用重新打开应用。如果错误持续出现请联系support@godtoolsapp.com</string>
 </resources>
