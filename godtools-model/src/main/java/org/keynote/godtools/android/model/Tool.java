@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.model;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute;
@@ -114,9 +115,9 @@ public class Tool extends Base {
         mCode = code;
     }
 
-    @Nullable
+    @NonNull
     public Type getType() {
-        return mType;
+        return mType != null ? mType : Type.UNKNOWN;
     }
 
     public void setType(@Nullable final Type type) {
