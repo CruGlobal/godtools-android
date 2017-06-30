@@ -7,6 +7,7 @@ import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Base;
+import org.cru.godtools.model.Translation;
 
 import java.util.List;
 

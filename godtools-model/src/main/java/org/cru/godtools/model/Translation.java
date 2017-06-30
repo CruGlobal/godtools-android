@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.model;
+package org.cru.godtools.model;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -6,12 +6,11 @@ import android.support.annotation.Nullable;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
-import org.cru.godtools.model.Base;
-import org.cru.godtools.model.Language;
+import org.keynote.godtools.android.model.Tool;
 
 import java.util.Locale;
 
-import static org.keynote.godtools.android.model.Translation.JSON_API_TYPE;
+import static org.cru.godtools.model.Translation.JSON_API_TYPE;
 
 @JsonApiType(JSON_API_TYPE)
 public class Translation extends Base {

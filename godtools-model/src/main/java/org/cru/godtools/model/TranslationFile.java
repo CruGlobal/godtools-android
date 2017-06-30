@@ -2,8 +2,6 @@ package org.cru.godtools.model;
 
 import android.support.annotation.Nullable;
 
-import org.keynote.godtools.android.model.Translation;
-
 public final class TranslationFile {
     @Nullable
     private Long mTranslationId = Translation.INVALID_ID;
