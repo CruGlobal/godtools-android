@@ -7,9 +7,9 @@ import org.ccci.gto.android.common.db.Join;
 import org.ccci.gto.android.common.db.Table;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Followup;
+import org.cru.godtools.model.Language;
 import org.cru.godtools.model.LocalFile;
 import org.cru.godtools.model.TranslationFile;
-import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
 

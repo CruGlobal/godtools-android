@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
-import org.keynote.godtools.android.model.Language;
+import org.cru.godtools.model.Language;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
 

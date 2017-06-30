@@ -20,6 +20,7 @@ import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.ccci.gto.android.common.util.IOUtils;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.model.Attachment;
+import org.cru.godtools.model.Language;
 import org.cru.godtools.model.event.AttachmentUpdateEvent;
 import org.cru.godtools.model.event.LanguageUpdateEvent;
 import org.cru.godtools.model.event.ToolUpdateEvent;
@@ -28,7 +29,6 @@ import org.cru.godtools.sync.service.GodToolsDownloadManager;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
 import org.keynote.godtools.android.db.GodToolsDao;
-import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
 

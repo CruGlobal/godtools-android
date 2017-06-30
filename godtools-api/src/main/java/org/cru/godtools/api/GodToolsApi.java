@@ -13,7 +13,7 @@ import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory;
 import org.cru.godtools.api.model.ToolViews;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Followup;
-import org.keynote.godtools.android.model.Language;
+import org.cru.godtools.model.Language;
 import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.model.Translation;
 
