@@ -10,6 +10,7 @@ import org.ccci.gto.android.common.api.retrofit2.converter.LocaleConverterFactor
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory;
+import org.cru.godtools.api.model.ToolViews;
 import org.cru.godtools.model.Followup;
 import org.keynote.godtools.android.model.Attachment;
 import org.keynote.godtools.android.model.Language;
@@ -41,6 +42,8 @@ public class GodToolsApi {
     @NonNull
     public final FollowupApi followups;
     @NonNull
+    public final ViewsApi views;
+    @NonNull
     @Deprecated
     public final LegacyApi legacy;
 
@@ -57,6 +60,7 @@ public class GodToolsApi {
         translations = retrofit.create(TranslationsApi.class);
         attachments = retrofit.create(AttachmentsApi.class);
         followups = retrofit.create(FollowupApi.class);
+        views = retrofit.create(ViewsApi.class);
 
         legacy = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -90,7 +94,7 @@ public class GodToolsApi {
     private JsonApiConverter jsonApiConverter() {
         return new JsonApiConverter.Builder()
                 .addClasses(Language.class)
-                .addClasses(Tool.class)
+                .addClasses(Tool.class, ToolViews.class)
                 .addClasses(Attachment.class)
                 .addClasses(Translation.class)
                 .addClasses(Followup.class)
