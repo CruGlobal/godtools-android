@@ -20,6 +20,6 @@ public final class Constants {
 
     // Common base URI's
     public static final Uri MAILTO_SUPPORT = Uri.parse("mailto:support@godtoolsapp.com");
-    public static final Uri URI_HELP = Uri.parse("http://help.missionhub.com/");
+    public static final Uri URI_HELP = Uri.parse("http://www.godtoolsapp.com/");
     public static final String URI_SHARE_BASE = "http://www.knowgod.com/";
 }
