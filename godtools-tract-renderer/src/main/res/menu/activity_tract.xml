@@ -11,6 +11,6 @@
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share"
         android:orderInCategory="200"
-        android:title="@string/menu_share"
+        android:title="@string/menu_share_tract"
         app:showAsAction="always" />
 </menu>

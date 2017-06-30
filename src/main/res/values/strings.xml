@@ -61,8 +61,12 @@
     <string name="menu_heading_share">Share</string>
     <string name="menu_help">Help</string>
     <string name="menu_contact_us">Contact Us</string>
-    <string name="menu_share">Share GodTools</string>
+    <string name="menu_share_godtools">Share GodTools</string>
+    <string name="menu_share_story">Share a Story With Us</string>
     <string name="menu_rate">Rate GodTools</string>
+
+    <!-- Share a story -->
+    <string name="share_story_subject">Hear how God is moving!</string>
 
     <!-- Tour UI -->
     <string name="title_tour_tools">Add New Tools</string>

@@ -132,6 +132,9 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
             case R.id.action_share:
                 launchShare();
                 return true;
+            case R.id.action_share_story:
+                launchShareStory();
+                return true;
             case R.id.action_contact_us:
                 launchContactUs();
                 return true;
@@ -235,6 +238,8 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
         prefs().unregisterOnSharedPreferenceChangeListener(mSettingsChangeListener);
     }
 
+    /* Navigation Menu actions */
+
     private void openPlayStore() {
         final String appId = BuildConfig.APPLICATION_ID;
         try {
@@ -259,6 +264,12 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
         share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
         share.putExtra(Intent.EXTRA_TEXT, text);
         startActivity(Intent.createChooser(share, getString(R.string.share_prompt)));
+    }
+
+    private void launchShareStory() {
+        final Intent intent = new Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT);
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_story_subject));
+        startActivity(intent);
     }
 
     class ChangeListener implements SharedPreferences.OnSharedPreferenceChangeListener {
