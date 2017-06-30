@@ -72,6 +72,7 @@ public final class Contract extends BaseContract {
         public static final Field FIELD_BANNER = TABLE.field(COLUMN_BANNER);
         public static final Field FIELD_DETAILS_BANNER = TABLE.field(COLUMN_DETAILS_BANNER);
         public static final Field FIELD_ADDED = TABLE.field(COLUMN_ADDED);
+        private static final Field FIELD_PENDING_SHARES = TABLE.field(COLUMN_PENDING_SHARES);
 
         static final String[] PROJECTION_ALL =
                 {COLUMN_ID, COLUMN_NAME, COLUMN_DESCRIPTION, COLUMN_SHARES, COLUMN_PENDING_SHARES, COLUMN_BANNER,
@@ -90,6 +91,7 @@ public final class Contract extends BaseContract {
                 Join.create(TABLE, AttachmentTable.TABLE).on(FIELD_BANNER.eq(AttachmentTable.FIELD_ID));
 
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
+        public static final Expression SQL_WHERE_HAS_PENDING_SHARES = FIELD_PENDING_SHARES.gt(0);
 
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_NAME, SQL_COLUMN_DESCRIPTION, SQL_COLUMN_SHARES,
