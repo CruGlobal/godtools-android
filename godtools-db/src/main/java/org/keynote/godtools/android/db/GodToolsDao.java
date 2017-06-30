@@ -127,7 +127,7 @@ public class GodToolsDao extends DBAdapter implements StreamDao {
             db.execSQL(sql.toString(), args);
             tx.setTransactionSuccessful();
         } finally {
-            tx.endTransaction();
+            tx.endTransaction().recycle();
         }
     }
 }
