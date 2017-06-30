@@ -8,7 +8,6 @@
     <string name="menu_item_contents">Contents</string>
     <string name="menu_item_help">Help</string>
     <string name="menu_update_page">Update Page (draft)</string>
-    <string name="menu_flip">Flip</string>
     <string name="app_name_everystudent">Questions About God?</string>
     <string name="quit_dialog_message">Are you sure you want to exit God Tools?</string>
     <string name="quit_dialog_confirm">Exit</string>
@@ -31,22 +30,11 @@
     <string name="copy">Copy</string>
     <string name="all_websites">All Websites</string>
 
-    <!-- Renderer Activity -->
-    <string name="processing_package">Loading pages…</string>
-    <string name="processing_failed">Package processing failed</string>
-    <string name="select_share">Select how you would like to share</string>
-    <string name="update_page">Updating page…</string>
-    <string name="page_error">Error refreshing page</string>
-
-    <!-- Splash Activity -->
-    <string name="check_update">Checking for updates…</string>
-
     <!-- Settings Activity -->
     <string name="settings_title">Settings</string>
     <string name="settings_main_language">Main Language:</string>
     <string name="settings_parallel_language">Parallel Language:</string>
     <string name="settings_parallel_info">Tap screen during presentation and use \"Switch Language\" to toggle language. Option is not shown if booklet is not available.</string>
-    <string name="settings_select">Select</string>
     <string name="settings_translator_mode">Preview Mode (Translators)</string>
     <string name="settings_notification">Allow Notifications</string>
     <string name="wrong_passcode">Please try again</string>
@@ -95,10 +83,6 @@
     <string name="text_language_parallel_description">Share GodTools with someone in their native language.</string>
     <string name="text_language_warning">Not every tool is available in every language.</string>
     <string name="label_language_none">None</string>
-    <string name="download">Download</string>
-    <string name="downloading">Downloading</string>
-    <string name="delete">Delete</string>
-    <string name="retry">Retry</string>
 
     <!-- Translator Mode Dialog -->
     <string name="dialog_translator_mode_title">Exit Preview Mode?</string>
@@ -146,13 +130,11 @@
     <string name="failed_update_draft">Failed to update drafts</string>
     <string name="failed_download_draft">Failed to download drafts</string>
     <string name="failed_download_resources">Failed to download resources</string>
-    <string name="success">Success!</string>
     <string name="internet_needed">An internet connection is needed to complete this request</string>
     <string name="alternate_language">Parallel Language</string>
     <string name="alternate_language_message">The parallel language selected is not available for this tool.</string>
 
     <!-- Sharing -->
-    <string name="app_email_subject">Our conversation about {{package_name}} today</string>
     <string name="share_general_subject">{{app_name}}</string>
     <string name="share_general_message">Here’s the link to download the app we were looking at today: http://godtoolsapp.com \n\n
 
@@ -160,12 +142,10 @@
 
 		Let’s talk more!</string>
     <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
-    <string name="share_from_page_subject">{{app_name}}</string>
     <string name="share_from_page_message" formatted="false">Here is the booklet we were looking at today. This link will take you to the web version of the page we were last looking at together:
 
 		Let’s talk more!
 
 		{{share_link}}</string>
     <string name="satisfied_share" formatted="false">It was great talking with you today about how we can experience The Holy Spirit’s power in our lives. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
-    <string name="everystudent_share">It was great talking with you today about your spiritual questions. I hope we can talk more about this soon. In the meantime, you can check out what we looked at today at {{share_link}}</string>
 </resources>
