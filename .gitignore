@@ -7,13 +7,6 @@ gen/
 .gradle/
 build/
 
-# eclipse project ignores
-.classpath
-.project
-.settings/
-.wtpmodules
-bin/
-
 # Android Studio project ignores
 .idea/
 *.iml
