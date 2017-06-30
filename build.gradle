@@ -41,7 +41,6 @@ ext.deps = [
         crashlytics          : '2.6.8',
         eventbus             : '3.0.0',
         facebookStetho       : '1.5.0',
-        gson                 : '2.8.1',
         gtoSupport           : '1.1.2-SNAPSHOT',
         guava                : '22.0-android',
         hamcrest             : '1.3',
