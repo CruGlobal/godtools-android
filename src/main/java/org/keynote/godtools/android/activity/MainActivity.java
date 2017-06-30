@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.cru.godtools.init.content.task.InitialContentTasks;
+import org.cru.godtools.sync.GodToolsSyncService;
 import org.cru.godtools.tract.activity.TractActivity;
 import org.cru.godtools.tract.service.TractManager;
 import org.keynote.godtools.android.R;
@@ -39,6 +40,9 @@ public class MainActivity extends BaseActivity implements ToolsFragment.Callback
 
         // install any missing initial content
         AsyncTask.THREAD_POOL_EXECUTOR.execute(new InitialContentTasks(this));
+
+        // sync any pending updates
+        syncData();
     }
 
     @Override
@@ -95,6 +99,11 @@ public class MainActivity extends BaseActivity implements ToolsFragment.Callback
     }
 
     /* END lifecycle */
+
+    private void syncData() {
+        GodToolsSyncService.syncFollowups(this).sync();
+        GodToolsSyncService.syncToolShares(this).sync();
+    }
 
     @Override
     protected boolean showNavigationDrawerIndicator() {
