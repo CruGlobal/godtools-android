@@ -29,6 +29,7 @@ import android.widget.Toast;
 import org.ccci.gto.android.common.db.Query;
 import org.cru.godtools.api.GodToolsApi;
 import org.cru.godtools.api.model.GTLanguages;
+import org.keynote.godtools.android.activity.LanguageSettingsActivity;
 import org.keynote.godtools.android.broadcast.BroadcastUtil;
 import org.keynote.godtools.android.broadcast.Type;
 import org.keynote.godtools.android.business.GTPackage;
@@ -404,8 +405,7 @@ public class PreviewModeMainPW extends BaseActionBarActivity implements
     }
 
     private void onCmd_settings() {
-        Intent intent = new Intent(this, SettingsPW.class);
-        startActivityForResult(intent, REQUEST_SETTINGS);
+        LanguageSettingsActivity.start(this);
     }
 
     private void refreshDrafts() {
