@@ -8,9 +8,10 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.0-alpha4'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        //noinspection GradleDependency
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
-        classpath 'com.newrelic.agent.android:agent-gradle-plugin:5.13.0'
-        classpath 'io.fabric.tools:gradle:1.22.1'
+        classpath 'com.newrelic.agent.android:agent-gradle-plugin:5.14.0'
+        classpath 'io.fabric.tools:gradle:1.22.2'
         classpath 'org.ajoberstar:gradle-git:1.7.1'
     }
 }
@@ -80,7 +81,7 @@ dependencies {
     compile "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
-    implementation "com.newrelic.agent.android:android-agent:5.13.0"
+    implementation "com.newrelic.agent.android:android-agent:5.14.0"
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
 
     compile "com.google.guava:guava:${deps.guava}"
