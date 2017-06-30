@@ -22,6 +22,7 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
     static final int SYNCTYPE_LANGUAGES = 2;
     static final int SYNCTYPE_TOOLS = 3;
     static final int SYNCTYPE_FOLLOWUPS = 4;
+    static final int SYNCTYPE_TOOL_SHARES = 5;
 
     private LanguagesSyncTasks mLanguagesSyncTasks;
     private ToolSyncTasks mToolSyncTasks;
@@ -45,6 +46,13 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
     public static SyncTask syncFollowups(final Context context) {
         final Intent intent = new Intent(context, GodToolsSyncService.class);
         intent.putExtra(EXTRA_SYNCTYPE, SYNCTYPE_FOLLOWUPS);
+        return new SyncTask(context, intent);
+    }
+
+    @NonNull
+    public static SyncTask syncToolShares(@NonNull final Context context) {
+        final Intent intent = new Intent(context, GodToolsSyncService.class);
+        intent.putExtra(EXTRA_SYNCTYPE, SYNCTYPE_TOOL_SHARES);
         return new SyncTask(context, intent);
     }
 
@@ -75,6 +83,9 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
                     break;
                 case SYNCTYPE_FOLLOWUPS:
                     mFollowupSyncTasks.syncFollowups();
+                    break;
+                case SYNCTYPE_TOOL_SHARES:
+                    mToolSyncTasks.syncShares();
                     break;
             }
         } catch (final IOException ignored) {

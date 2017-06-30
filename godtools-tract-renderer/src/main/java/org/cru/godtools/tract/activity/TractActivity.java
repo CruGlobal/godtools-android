@@ -2,6 +2,7 @@ package org.cru.godtools.tract.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -28,6 +29,7 @@ import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.model.Language;
 import org.keynote.godtools.android.model.Tool;
 
@@ -108,6 +110,12 @@ public class TractActivity extends ImmersiveActivity implements ManifestPagerAda
         // restore any persisted state
         if (savedInstanceState != null) {
             mPrimaryActive = savedInstanceState.getBoolean(EXTRA_PRIMARY_ACTIVE, mPrimaryActive);
+        }
+
+        // track this share
+        if (savedInstanceState == null) {
+            final GodToolsDao dao = GodToolsDao.getInstance(this);
+            AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> dao.updateSharesDelta(mTool, 1));
         }
 
         startLoaders();
