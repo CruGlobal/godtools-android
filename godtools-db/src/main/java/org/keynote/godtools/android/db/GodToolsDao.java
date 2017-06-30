@@ -5,12 +5,15 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Pair;
 
 import com.annimon.stream.Stream;
 
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.db.StreamDao;
+import org.ccci.gto.android.common.db.Transaction;
+import org.ccci.gto.android.common.util.ArrayUtils;
 import org.cru.godtools.model.Followup;
 import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
@@ -84,6 +87,8 @@ public class GodToolsDao extends DBAdapter implements StreamDao {
         return StreamHelper.stream(this, query);
     }
 
+    /* Miscellaneous app specific dao methods */
+
     public long insertNew(final Base obj) {
         int attempts = 10;
         while (true) {
@@ -96,6 +101,33 @@ public class GodToolsDao extends DBAdapter implements StreamDao {
                     throw e;
                 }
             }
+        }
+    }
+
+    public void updateSharesDelta(final long toolId, final int shares) {
+        // short-circuit if the delta isn't actually changing
+        if (shares == 0) {
+            return;
+        }
+
+        // build update query
+        final Pair<String, String[]> where = compileExpression(getPrimaryKeyWhere(Tool.class, toolId));
+        final StringBuilder sql = new StringBuilder();
+        sql.append("UPDATE ").append(getTable(Tool.class))
+                .append(" SET " + ToolTable.COLUMN_PENDING_SHARES +
+                                " = max(0, coalesce(" + ToolTable.COLUMN_PENDING_SHARES + ", 0) + ?)")
+                .append(" WHERE ").append(where.first);
+        final String[] args = ArrayUtils.merge(String.class, bindValues(shares), where.second);
+
+        // perform update and sanitize PersonalMeasurements
+        final SQLiteDatabase db = getWritableDatabase();
+        final Transaction tx = newTransaction(db);
+        try {
+            tx.beginTransactionNonExclusive();
+            db.execSQL(sql.toString(), args);
+            tx.setTransactionSuccessful();
+        } finally {
+            tx.endTransaction();
         }
     }
 }
