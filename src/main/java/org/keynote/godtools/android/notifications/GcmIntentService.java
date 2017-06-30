@@ -13,8 +13,7 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.Splash;
-import org.keynote.godtools.android.notifications.GcmBroadcastReceiver;
+import org.keynote.godtools.android.activity.MainActivity;
 
 /**
  * Created by matthewfrederick on 12/19/14.
@@ -105,7 +104,7 @@ public class GcmIntentService extends IntentService
         }
         else
         {
-            resultIntent = new Intent(this, Splash.class);
+            resultIntent = new Intent(this, MainActivity.class);
         }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
