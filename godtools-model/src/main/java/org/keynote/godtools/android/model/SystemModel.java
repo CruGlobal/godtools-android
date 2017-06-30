@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
+import org.cru.godtools.model.Base;
 
 import java.util.List;
 

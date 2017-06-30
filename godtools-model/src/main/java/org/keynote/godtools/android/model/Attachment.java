@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
+import org.cru.godtools.model.Base;
 
 import static org.keynote.godtools.android.model.Attachment.JSON_API_TYPE;
 

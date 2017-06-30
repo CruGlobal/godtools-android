@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.model;
+package org.cru.godtools.model;
 
 import android.annotation.SuppressLint;
 import android.support.annotation.Nullable;
