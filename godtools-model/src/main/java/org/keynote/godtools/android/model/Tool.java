@@ -20,7 +20,7 @@ public class Tool extends Base {
     private static final String JSON_NAME = "name";
     private static final String JSON_TYPE = "resource-type";
     private static final String JSON_TYPE_TRACT = "tract";
-    private static final String JSON_TYPE_ARTICLE = "tract";
+    private static final String JSON_TYPE_ARTICLE = "article";
     private static final String JSON_ABBREVIATION = "abbreviation";
     private static final String JSON_DESCRIPTION = "description";
     private static final String JSON_TOTAL_VIEWS = "total-views";
@@ -32,6 +32,8 @@ public class Tool extends Base {
 
     public enum Type {
         TRACT(JSON_TYPE_TRACT), ARTICLE(JSON_TYPE_ARTICLE), UNKNOWN(null);
+
+        public static final Type DEFAULT = UNKNOWN;
 
         @Nullable
         private final String mJson;
@@ -50,7 +52,7 @@ public class Tool extends Base {
                     return type;
                 }
             }
-            return UNKNOWN;
+            return DEFAULT;
         }
 
         @Nullable
@@ -117,7 +119,7 @@ public class Tool extends Base {
 
     @NonNull
     public Type getType() {
-        return mType != null ? mType : Type.UNKNOWN;
+        return mType != null ? mType : Type.DEFAULT;
     }
 
     public void setType(@Nullable final Type type) {
