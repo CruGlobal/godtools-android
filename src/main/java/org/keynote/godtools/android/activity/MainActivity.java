@@ -19,6 +19,7 @@ import org.cru.godtools.tract.activity.TractActivity;
 import org.cru.godtools.tract.service.TractManager;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.fragment.ToolsFragment;
+import org.keynote.godtools.android.model.Tool;
 
 import java.util.Locale;
 
@@ -84,14 +85,16 @@ public class MainActivity extends BaseActivity implements ToolsFragment.Callback
     }
 
     @Override
-    public void onResourceSelect(final long id, Locale... languages) {
-        if (languages != null) {
-            languages = Stream.of(languages).withoutNulls().toArray(Locale[]::new);
-            if (languages.length > 0) {
-                // start preloading the tract in the first language
-                TractManager.getInstance(this).getLatestPublishedManifest(id, languages[0]);
+    public void onResourceSelect(final long id, @NonNull final Tool.Type type, Locale... languages) {
+        if (type == Tool.Type.TRACT) {
+            if (languages != null) {
+                languages = Stream.of(languages).withoutNulls().toArray(Locale[]::new);
+                if (languages.length > 0) {
+                    // start preloading the tract in the first language
+                    TractManager.getInstance(this).getLatestPublishedManifest(id, languages[0]);
 
-                TractActivity.start(this, id, languages[0], languages.length > 1 ? languages[1] : null);
+                    TractActivity.start(this, id, languages[0], languages.length > 1 ? languages[1] : null);
+                }
             }
         }
     }

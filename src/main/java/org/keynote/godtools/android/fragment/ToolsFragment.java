@@ -43,7 +43,7 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
     public interface Callbacks {
         void onResourceInfo(long id);
 
-        void onResourceSelect(long id, Locale... languages);
+        void onResourceSelect(long id, @NonNull Tool.Type type, Locale... languages);
     }
 
     private static final int MODE_ADDED = 1;
@@ -125,10 +125,10 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
     }
 
     @Override
-    public void onToolSelect(final long id, final Locale... languages) {
+    public void onToolSelect(final long id, @NonNull final Tool.Type type, final Locale... languages) {
         final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
         if (listener != null) {
-            listener.onResourceSelect(id, languages);
+            listener.onResourceSelect(id, type, languages);
         }
     }
 
@@ -221,6 +221,7 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
 
     static final String[] TOOLS_PROJECTION = {
             ToolTable.COLUMN_ID,
+            ToolTable.COLUMN_TYPE,
             "coalesce(" +
                     TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_NAME + "," +
                     TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_NAME + "," +

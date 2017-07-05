@@ -37,7 +37,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
     public interface Callbacks {
         void onToolInfo(long id);
 
-        void onToolSelect(long id, Locale... languages);
+        void onToolSelect(long id, @NonNull Tool.Type type, Locale... languages);
 
         void onToolAdd(long id);
     }
@@ -91,6 +91,8 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         List<View> mAddViews;
 
         long mId;
+        @NonNull
+        Tool.Type mType = Tool.Type.DEFAULT;
         @Nullable
         String mTitle;
         @Nullable
@@ -118,6 +120,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
             // update data from Cursor
             if (cursor != null) {
                 mId = CursorUtils.getLong(cursor, ToolTable.COLUMN_ID, Tool.INVALID_ID);
+                mType = CursorUtils.getEnum(cursor, ToolTable.COLUMN_TYPE, Tool.Type.class, Tool.Type.DEFAULT);
                 mTitle = CursorUtils.getString(cursor, COL_TITLE, null);
                 mBannerFile = CursorUtils.getString(cursor, COL_BANNER, null);
                 mPrimaryLanguage = CursorUtils.getLocale(cursor, COL_PRIMARY_LANGUAGE, null);
@@ -128,6 +131,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
                         CursorUtils.getInt(cursor, ToolTable.COLUMN_PENDING_SHARES, 0);
             } else {
                 mId = Tool.INVALID_ID;
+                mType = Tool.Type.DEFAULT;
                 mTitle = null;
                 mBannerFile = null;
                 mPrimaryLanguage = mDefaultLanguage = mParallelLanguage = null;
@@ -165,11 +169,11 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         void select() {
             if (mCallbacks != null) {
                 if (mPrimaryLanguage != null) {
-                    mCallbacks.onToolSelect(mId, mPrimaryLanguage, mParallelLanguage);
+                    mCallbacks.onToolSelect(mId, mType, mPrimaryLanguage, mParallelLanguage);
                 } else if (mDefaultLanguage != null) {
-                    mCallbacks.onToolSelect(mId, mDefaultLanguage, mParallelLanguage);
+                    mCallbacks.onToolSelect(mId, mType, mDefaultLanguage, mParallelLanguage);
                 } else if (mParallelLanguage != null) {
-                    mCallbacks.onToolSelect(mId, mParallelLanguage);
+                    mCallbacks.onToolSelect(mId, mType, mParallelLanguage);
                 } else {
                     // do nothing
                 }

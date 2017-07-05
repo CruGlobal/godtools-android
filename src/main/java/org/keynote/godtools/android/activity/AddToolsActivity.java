@@ -12,6 +12,7 @@ import android.view.Menu;
 
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.fragment.ToolsFragment;
+import org.keynote.godtools.android.model.Tool;
 
 import java.util.Locale;
 
@@ -43,7 +44,7 @@ public class AddToolsActivity extends BaseActivity implements ToolsFragment.Call
     }
 
     @Override
-    public void onResourceSelect(final long id, final Locale... languages) {
+    public void onResourceSelect(final long id, @NonNull final Tool.Type type, final Locale... languages) {
         ToolDetailsActivity.start(this, id);
     }
 
