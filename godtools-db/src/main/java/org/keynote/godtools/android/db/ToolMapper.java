@@ -6,21 +6,30 @@ import android.support.annotation.NonNull;
 
 import org.cru.godtools.model.Attachment;
 import org.keynote.godtools.android.model.Tool;
+import org.keynote.godtools.android.model.Tool.Type;
 
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_ADDED;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_BANNER;
+import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_CODE;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_COPYRIGHT;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DESCRIPTION;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DETAILS_BANNER;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_NAME;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_PENDING_SHARES;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_SHARES;
+import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_TYPE;
 
 final class ToolMapper extends BaseMapper<Tool> {
     @Override
     protected void mapField(@NonNull final ContentValues values, @NonNull final String field,
                             @NonNull final Tool tool) {
         switch (field) {
+            case COLUMN_CODE:
+                values.put(field, tool.getCode());
+                break;
+            case COLUMN_TYPE:
+                values.put(field, serialize(tool.getType()));
+                break;
             case COLUMN_NAME:
                 values.put(field, tool.getName());
                 break;
@@ -62,6 +71,8 @@ final class ToolMapper extends BaseMapper<Tool> {
     public Tool toObject(@NonNull final Cursor c) {
         final Tool tool = super.toObject(c);
 
+        tool.setCode(getString(c, COLUMN_CODE, null));
+        tool.setType(getEnum(c, COLUMN_TYPE, Type.class, null));
         tool.setName(getString(c, COLUMN_NAME, null));
         tool.setDescription(getString(c, COLUMN_DESCRIPTION, null));
         tool.setShares(getInt(c, COLUMN_SHARES, 0));

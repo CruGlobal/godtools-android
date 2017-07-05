@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.model;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute;
@@ -17,6 +18,9 @@ import static org.keynote.godtools.android.model.Tool.JSON_API_TYPE;
 public class Tool extends Base {
     static final String JSON_API_TYPE = "resource";
     private static final String JSON_NAME = "name";
+    private static final String JSON_TYPE = "resource-type";
+    private static final String JSON_TYPE_TRACT = "tract";
+    private static final String JSON_TYPE_ARTICLE = "tract";
     private static final String JSON_ABBREVIATION = "abbreviation";
     private static final String JSON_DESCRIPTION = "description";
     private static final String JSON_TOTAL_VIEWS = "total-views";
@@ -26,12 +30,48 @@ public class Tool extends Base {
     public static final String JSON_LATEST_TRANSLATIONS = "latest-translations";
     public static final String JSON_ATTACHMENTS = "attachments";
 
+    public enum Type {
+        TRACT(JSON_TYPE_TRACT), ARTICLE(JSON_TYPE_ARTICLE), UNKNOWN(null);
+
+        @Nullable
+        private final String mJson;
+
+        Type(final String json) {
+            mJson = json;
+        }
+
+        @Nullable
+        public static Type fromJson(@Nullable final String json) {
+            if (json == null) {
+                return null;
+            }
+            for (final Type type : values()) {
+                if (json.equals(type.mJson)) {
+                    return type;
+                }
+            }
+            return UNKNOWN;
+        }
+
+        @Nullable
+        public String toJson() {
+            return mJson;
+        }
+    }
+
     @Nullable
     @JsonApiAttribute(name = JSON_LATEST_TRANSLATIONS)
     private List<Translation> mLatestTranslations;
     @Nullable
     @JsonApiAttribute(name = JSON_ATTACHMENTS)
     private List<Attachment> mAttachments;
+
+    @Nullable
+    @JsonApiAttribute(name = JSON_ABBREVIATION)
+    private String mCode;
+    @Nullable
+    @JsonApiAttribute(name = JSON_TYPE)
+    private Type mType;
 
     @Nullable
     @JsonApiAttribute(name = JSON_NAME)
@@ -64,6 +104,24 @@ public class Tool extends Base {
     @Nullable
     public List<Attachment> getAttachments() {
         return mAttachments;
+    }
+
+    @Nullable
+    public String getCode() {
+        return mCode;
+    }
+
+    public void setCode(@Nullable final String code) {
+        mCode = code;
+    }
+
+    @NonNull
+    public Type getType() {
+        return mType != null ? mType : Type.UNKNOWN;
+    }
+
+    public void setType(@Nullable final Type type) {
+        mType = type;
     }
 
     @Nullable

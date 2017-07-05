@@ -59,6 +59,8 @@ public final class Contract extends BaseContract {
         static final String TABLE_NAME = "tools";
         public static final Table<Tool> TABLE = Table.forClass(Tool.class);
 
+        public static final String COLUMN_CODE = "code";
+        public static final String COLUMN_TYPE = "type";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";
         public static final String COLUMN_SHARES = "shares";
@@ -75,9 +77,11 @@ public final class Contract extends BaseContract {
         private static final Field FIELD_PENDING_SHARES = TABLE.field(COLUMN_PENDING_SHARES);
 
         static final String[] PROJECTION_ALL =
-                {COLUMN_ID, COLUMN_NAME, COLUMN_DESCRIPTION, COLUMN_SHARES, COLUMN_PENDING_SHARES, COLUMN_BANNER,
-                        COLUMN_DETAILS_BANNER, COLUMN_COPYRIGHT, COLUMN_ADDED};
+                {COLUMN_ID, COLUMN_CODE, COLUMN_TYPE, COLUMN_NAME, COLUMN_DESCRIPTION, COLUMN_SHARES,
+                        COLUMN_PENDING_SHARES, COLUMN_BANNER, COLUMN_DETAILS_BANNER, COLUMN_COPYRIGHT, COLUMN_ADDED};
 
+        private static final String SQL_COLUMN_CODE = COLUMN_CODE + " TEXT";
+        private static final String SQL_COLUMN_TYPE = COLUMN_TYPE + " TEXT";
         private static final String SQL_COLUMN_NAME = COLUMN_NAME + " TEXT";
         private static final String SQL_COLUMN_DESCRIPTION = COLUMN_DESCRIPTION + " TEXT";
         private static final String SQL_COLUMN_SHARES = COLUMN_SHARES + " INTEGER";
@@ -94,9 +98,9 @@ public final class Contract extends BaseContract {
         public static final Expression SQL_WHERE_HAS_PENDING_SHARES = FIELD_PENDING_SHARES.gt(0);
 
         static final String SQL_CREATE_TABLE =
-                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_NAME, SQL_COLUMN_DESCRIPTION, SQL_COLUMN_SHARES,
-                       SQL_COLUMN_PENDING_SHARES, SQL_COLUMN_BANNER, SQL_COLUMN_DETAILS_BANNER, SQL_COLUMN_COPYRIGHT,
-                       SQL_COLUMN_ADDED);
+                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_CODE, SQL_COLUMN_TYPE, SQL_COLUMN_NAME,
+                       SQL_COLUMN_DESCRIPTION, SQL_COLUMN_SHARES, SQL_COLUMN_PENDING_SHARES, SQL_COLUMN_BANNER,
+                       SQL_COLUMN_DETAILS_BANNER, SQL_COLUMN_COPYRIGHT, SQL_COLUMN_ADDED);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
 
         /* DB migrations */
@@ -109,6 +113,10 @@ public final class Contract extends BaseContract {
                 "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_DETAILS_BANNER;
         static final String SQL_V30_ALTER_PENDING_SHARES =
                 "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_PENDING_SHARES;
+        static final String SQL_V31_ALTER_CODE =
+                "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_CODE;
+        static final String SQL_V31_ALTER_TYPE =
+                "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_TYPE;
     }
 
     public static class TranslationTable extends BaseTable implements ToolId {

@@ -26,6 +26,7 @@ import org.cru.godtools.model.event.AttachmentUpdateEvent;
 import org.cru.godtools.model.event.LanguageUpdateEvent;
 import org.cru.godtools.model.event.ToolUpdateEvent;
 import org.cru.godtools.model.event.TranslationUpdateEvent;
+import org.cru.godtools.model.jsonapi.ToolTypeConverter;
 import org.cru.godtools.sync.service.GodToolsDownloadManager;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
@@ -83,6 +84,7 @@ public class InitialContentTasks implements Runnable {
             mJsonApiConverter = new JsonApiConverter.Builder()
                     .addClasses(Language.class)
                     .addClasses(Tool.class, Translation.class, Attachment.class)
+                    .addConverters(new ToolTypeConverter())
                     .addConverters(new LocaleTypeConverter())
                     .build();
         }
