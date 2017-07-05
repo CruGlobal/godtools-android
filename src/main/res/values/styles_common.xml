@@ -2,6 +2,8 @@
 <resources>
     <style name="TextAppearance.GodTools2" parent="TextAppearance.AppCompat" />
 
+    <style name="TextAppearance.GodTools2.Small" parent="TextAppearance.AppCompat.Small" />
+
     <style name="TextAppearance.GodTools2.Medium" parent="TextAppearance.AppCompat.Medium" />
 
     <style name="TextAppearance.GodTools2.Large" parent="TextAppearance.AppCompat.Large" />

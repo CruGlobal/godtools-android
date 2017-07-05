@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -49,6 +50,10 @@ public class EveryStudent extends ExpandableListActivity
 
     private List<List<Map<String, String>>> mTopics;
     private List<Map<String, String>> mCategories;
+
+    public static void start(@NonNull final Context context) {
+        context.startActivity(new Intent(context, EveryStudent.class));
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)

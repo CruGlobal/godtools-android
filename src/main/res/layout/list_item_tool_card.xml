@@ -24,11 +24,10 @@
 
         <ProgressBar
             android:id="@+id/download_progress"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            style="@style/Widget.GodTools2.Tools.Download.ProgressBar"
             android:layout_width="match_parent"
             android:layout_height="10dp"
             android:layout_alignBottom="@id/banner"
-            android:indeterminate="false"
             android:visibility="gone"
             tools:max="12"
             tools:progress="5"
@@ -77,7 +76,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/action_info"
                 android:layout_toStartOf="@id/action_info"
-                android:visibility="gone"
+                android:textAppearance="@style/TextAppearance.GodTools2.Tools.Card.ParallelLanguage"
                 tools:text="French" />
 
             <RelativeLayout
@@ -95,12 +94,16 @@
                     android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.GodTools2.Tools.Card.Title"
+                    android:ellipsize="end"
+                    android:lines="1"
                     tools:text="Knowing God Personally" />
 
                 <android.support.v7.widget.AppCompatTextViewImpl
                     android:id="@+id/shares"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.GodTools2.Tools.Card.Shares"
                     android:layout_below="@id/title"
                     tools:text="20,000 Shares" />
             </RelativeLayout>
