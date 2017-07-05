@@ -174,6 +174,9 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
                     mCallbacks.onToolSelect(mId, mType, mDefaultLanguage, mParallelLanguage);
                 } else if (mParallelLanguage != null) {
                     mCallbacks.onToolSelect(mId, mType, mParallelLanguage);
+                } else if (mType == Tool.Type.ARTICLE && mId == 5) {
+                    // everystudent content for now
+                    mCallbacks.onToolSelect(mId, mType);
                 } else {
                     // do nothing
                 }
