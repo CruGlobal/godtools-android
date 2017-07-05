@@ -113,6 +113,18 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
     }
 
     @Override
+    protected void onUpdatePrimaryLanguage() {
+        super.onUpdatePrimaryLanguage();
+        restartToolsLoader();
+    }
+
+    @Override
+    protected void onUpdateParallelLanguage() {
+        super.onUpdateParallelLanguage();
+        restartToolsLoader();
+    }
+
+    @Override
     public void onToolSelect(final long id, final Locale... languages) {
         final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
         if (listener != null) {
@@ -152,7 +164,11 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
     }
 
     private void startLoaders() {
-        getLoaderManager().initLoader(LOADER_TOOLS, null, mCursorLoaderCallbacks);
+        restartToolsLoader();
+    }
+
+    private void restartToolsLoader() {
+        getLoaderManager().restartLoader(LOADER_TOOLS, null, mCursorLoaderCallbacks);
     }
 
     private void setupToolsList() {
