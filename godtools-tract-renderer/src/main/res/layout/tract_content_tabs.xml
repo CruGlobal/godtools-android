@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -8,9 +7,7 @@
         android:id="@+id/tabs"
         style="@style/Widget.GodTools.Tract.Content.Tabs"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/bkg_content_tabs"
-        app:tabIndicatorHeight="0dp" />
+        android:layout_centerHorizontal="true" />
 
     <FrameLayout
         android:id="@+id/tab"
