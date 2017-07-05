@@ -219,7 +219,7 @@ public final class Text extends Content {
 
     @UiThread
     static final class TextViewHolder extends BaseViewHolder<Text> {
-        @BindView(R2.id.content)
+        @BindView(R2.id.content_text)
         TextView mText;
 
         TextViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
