@@ -2,19 +2,27 @@ package org.cru.godtools.tract.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.design.widget.TabLayoutUtils;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.Toolbar;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.annimon.stream.Stream;
 
@@ -28,6 +36,7 @@ import org.cru.godtools.tract.content.TractManifestLoader;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Page;
 import org.cru.godtools.tract.util.DrawableUtils;
+import org.cru.godtools.tract.util.ViewUtils;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -41,7 +50,8 @@ import butterknife.BindView;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 
-public class TractActivity extends ImmersiveActivity implements ManifestPagerAdapter.Callbacks {
+public class TractActivity extends ImmersiveActivity
+        implements ManifestPagerAdapter.Callbacks, TabLayout.OnTabSelectedListener {
     private static final String EXTRA_LANGUAGES = TractActivity.class.getName() + ".LANGUAGES";
     private static final String EXTRA_ACTIVE_LANGUAGE = TractActivity.class.getName() + ".ACTIVE_LANGUAGE";
 
@@ -55,6 +65,9 @@ public class TractActivity extends ImmersiveActivity implements ManifestPagerAda
     @Nullable
     private ActionBar mActionBar;
 
+    @Nullable
+    @BindView(R2.id.language_toggle)
+    TabLayout mLanguageTabs;
     @BindView(R2.id.background_image)
     ScaledPicassoImageView mBackgroundImage;
 
@@ -154,10 +167,28 @@ public class TractActivity extends ImmersiveActivity implements ManifestPagerAda
     @Override
     public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
         final int id = item.getItemId();
-        if (id == R.id.action_switch) {
+        if (id == R.id.action_share) {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onTabSelected(final TabLayout.Tab tab) {
+        final Locale locale = (Locale) tab.getTag();
+        for (int i = 0; i < mLanguages.length; i++) {
+            if (mLanguages[i].equals(locale)) {
+                mActiveLanguage = i;
+                updateActiveManifest();
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void onTabUnselected(final TabLayout.Tab tab) {}
+
+    @Override
+    public void onTabReselected(final TabLayout.Tab tab) {}
 
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -191,7 +222,25 @@ public class TractActivity extends ImmersiveActivity implements ManifestPagerAda
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
+        setupLanguageToggle();
         updateToolbar();
+        updateLanguageToggle();
+    }
+
+    private void setupLanguageToggle() {
+        if (mLanguageTabs != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mLanguageTabs.setClipToOutline(true);
+            }
+
+            for (final Locale locale : mLanguages) {
+                mLanguageTabs.addTab(mLanguageTabs.newTab()
+                                             .setText(locale.getDisplayName())
+                                             .setTag(locale));
+            }
+
+            mLanguageTabs.addOnTabSelectedListener(this);
+        }
     }
 
     void setManifest(@NonNull final Locale locale, @Nullable final Manifest manifest) {
@@ -206,6 +255,7 @@ public class TractActivity extends ImmersiveActivity implements ManifestPagerAda
                 if (i == mActiveLanguage) {
                     updateActiveManifest();
                 }
+                updateLanguageToggle();
                 break;
             }
         }
@@ -236,6 +286,48 @@ public class TractActivity extends ImmersiveActivity implements ManifestPagerAda
         mToolbar.setNavigationIcon(DrawableUtils.tint(mToolbar.getNavigationIcon(), controlColor));
 
         updateToolbarMenu();
+        updateLanguageToggle();
+    }
+
+    private void updateLanguageToggle() {
+        // show or hide the title based on if we have visible language tabs
+        if (mActionBar != null) {
+            mActionBar.setDisplayShowTitleEnabled(mLanguageTabs == null || mManifests.size() <= 1);
+        }
+
+        // update the styles for the language tabs
+        if (mLanguageTabs != null) {
+            mLanguageTabs.setVisibility(mManifests.size() > 1 ? View.VISIBLE : View.GONE);
+
+            // determine colors for the language toggle
+            final Manifest manifest = getActiveManifest();
+            final int controlColor = Manifest.getNavBarControlColor(manifest);
+            int selectedColor = Manifest.getNavBarColor(manifest);
+            if (Color.alpha(selectedColor) < 255) {
+                // XXX: the expected behavior is to support transparent text. But we currently don't support
+                // XXX: transparent text, so pick white or black based on the control color
+                final float[] hsv = new float[3];
+                Color.colorToHSV(controlColor, hsv);
+                selectedColor = hsv[2] > 0.6 ? Color.BLACK : Color.WHITE;
+            }
+
+            // update colors for tab text, and background
+            ViewUtils.setBackgroundTint(mLanguageTabs, controlColor);
+            mLanguageTabs.setTabTextColors(controlColor, selectedColor);
+            for (int i = 0; i < mLanguageTabs.getTabCount(); i++) {
+                final TabLayout.Tab tab = mLanguageTabs.getTabAt(i);
+
+                if (tab != null) {
+                    // set the tab background
+                    Drawable bkg = AppCompatResources.getDrawable(mLanguageTabs.getContext(), R.drawable.bkg_tab_label);
+                    if (bkg != null) {
+                        bkg = DrawableCompat.wrap(bkg).mutate();
+                        DrawableCompat.setTint(bkg, controlColor);
+                    }
+                    TabLayoutUtils.setBackground(tab, bkg);
+                }
+            }
+        }
     }
 
     private void updateToolbarMenu() {
