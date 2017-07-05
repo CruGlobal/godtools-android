@@ -11,7 +11,7 @@ import org.keynote.godtools.android.model.Tool;
 
 public final class ViewUtils {
     public static void bindShares(@Nullable final TextView view, @Nullable final Tool tool) {
-        bindShares(view, tool != null ? tool.getShares() : 0);
+        bindShares(view, tool != null ? tool.getTotalShares() : 0);
     }
 
     public static void bindShares(@Nullable final TextView view, final int shares) {
