@@ -56,7 +56,7 @@ public final class Contract extends BaseContract {
     }
 
     public static class ToolTable extends BaseTable {
-        static final String TABLE_NAME = "tools";
+        public static final String TABLE_NAME = "tools";
         public static final Table<Tool> TABLE = Table.forClass(Tool.class);
 
         public static final String COLUMN_CODE = "code";
@@ -70,7 +70,7 @@ public final class Contract extends BaseContract {
         public static final String COLUMN_COPYRIGHT = "copyright";
         public static final String COLUMN_ADDED = "added";
 
-        static final Field FIELD_ID = TABLE.field(COLUMN_ID);
+        public static final Field FIELD_ID = TABLE.field(COLUMN_ID);
         public static final Field FIELD_BANNER = TABLE.field(COLUMN_BANNER);
         public static final Field FIELD_DETAILS_BANNER = TABLE.field(COLUMN_DETAILS_BANNER);
         public static final Field FIELD_ADDED = TABLE.field(COLUMN_ADDED);
@@ -121,7 +121,7 @@ public final class Contract extends BaseContract {
 
     public static class TranslationTable extends BaseTable implements ToolId {
         static final String TABLE_NAME = "translations";
-        static final Table<Translation> TABLE = Table.forClass(Translation.class);
+        public static final Table<Translation> TABLE = Table.forClass(Translation.class);
 
         public static final String COLUMN_LANGUAGE = "language";
         public static final String COLUMN_VERSION = "version";
