@@ -26,6 +26,11 @@ public class TractManifestLoader extends CachingAsyncTaskEventBusLoader<Manifest
         addEventBusSubscriber(new TranslationEventBusSubscriber(this));
     }
 
+    @NonNull
+    public Locale getLocale() {
+        return mLocale;
+    }
+
     @Override
     public Manifest loadInBackground() {
         try {
