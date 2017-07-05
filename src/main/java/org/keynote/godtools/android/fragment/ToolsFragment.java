@@ -14,10 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.ccci.gto.android.common.db.Expression;
+import org.ccci.gto.android.common.db.Expression.Field;
 import org.ccci.gto.android.common.db.Join;
+import org.ccci.gto.android.common.db.Table;
 import org.ccci.gto.android.common.eventbus.content.DaoCursorEventBusLoader;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
+import org.cru.godtools.base.Settings;
+import org.cru.godtools.model.Language;
 import org.cru.godtools.model.event.content.AttachmentEventBusSubscriber;
 import org.cru.godtools.sync.GodToolsSyncService;
 import org.cru.godtools.sync.service.GodToolsDownloadManager;
@@ -26,7 +30,10 @@ import org.keynote.godtools.android.adapter.ToolsAdapter;
 import org.keynote.godtools.android.content.ToolsCursorLoader;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
+import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.model.Tool;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 
@@ -36,7 +43,7 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
     public interface Callbacks {
         void onResourceInfo(long id);
 
-        void onResourceSelect(long id);
+        void onResourceSelect(long id, Locale... languages);
     }
 
     private static final int MODE_ADDED = 1;
@@ -106,10 +113,10 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
     }
 
     @Override
-    public void onToolSelect(final long id) {
+    public void onToolSelect(final long id, final Locale... languages) {
         final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
         if (listener != null) {
-            listener.onResourceSelect(id);
+            listener.onResourceSelect(id, languages);
         }
     }
 
@@ -174,16 +181,47 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
         mToolsAdapter = null;
     }
 
+    // set repetitive TranslationTable objects for primary, parallel, and default
+    private static final int TRANS_COUNT = 3;
+    private static final int TRANS_PRIMARY = 0;
+    private static final int TRANS_PARALLEL = 1;
+    private static final int TRANS_DEFAULT = 2;
+    static final String[] TRANS_ALIAS = new String[TRANS_COUNT];
+    static final Table[] TRANS_TABLE = new Table[TRANS_COUNT];
+    static final Join[] TRANS_JOIN = new Join[TRANS_COUNT];
+    static final Field[] TRANS_FIELD_LANG = new Field[TRANS_COUNT];
+
+    static {
+        for (int i = 0; i < TRANS_COUNT; i++) {
+            TRANS_ALIAS[i] = "trans" + i;
+            TRANS_TABLE[i] = TranslationTable.TABLE.as(TRANS_ALIAS[i]);
+            TRANS_FIELD_LANG[i] = TRANS_TABLE[i].field(TranslationTable.COLUMN_LANGUAGE);
+            //noinspection unchecked
+            TRANS_JOIN[i] = Join.create(TRANS_TABLE[i]).type("LEFT")
+                    .on(TRANS_TABLE[i].field(TranslationTable.COLUMN_TOOL).eq(ToolTable.FIELD_ID))
+                    .andOn(TRANS_TABLE[i].field(TranslationTable.COLUMN_PUBLISHED).eq(true));
+        }
+    }
+
     static final String[] TOOLS_PROJECTION = {
             ToolTable.COLUMN_ID,
-            ToolTable.COLUMN_NAME,
+            "coalesce(" +
+                    TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_NAME + "," +
+                    TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_NAME + "," +
+                    ToolTable.TABLE_NAME + "." + ToolTable.COLUMN_NAME + ") " +
+                    "AS " + ToolsAdapter.COL_TITLE,
             ToolTable.COLUMN_SHARES,
             ToolTable.COLUMN_ADDED,
+            TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_LANGUAGE + " AS " +
+                    ToolsAdapter.COL_PRIMARY_LANGUAGE,
+            TRANS_ALIAS[TRANS_PARALLEL] + "." + TranslationTable.COLUMN_LANGUAGE + " AS " +
+                    ToolsAdapter.COL_PARALLEL_LANGUAGE,
+            TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_LANGUAGE + " AS " +
+                    ToolsAdapter.COL_DEFAULT_LANGUAGE,
             AttachmentTable.TABLE_NAME + "." + AttachmentTable.COLUMN_LOCALFILENAME + " AS " + ToolsAdapter.COL_BANNER
     };
-    @SuppressWarnings("unchecked")
-    static final Join<Tool, ?>[] TOOLS_JOINS =
-            new Join[] {ToolTable.SQL_JOIN_BANNER.type("LEFT").andOn(AttachmentTable.SQL_WHERE_DOWNLOADED)};
+    static final Join TOOLS_JOIN_BANNER =
+            ToolTable.SQL_JOIN_BANNER.type("LEFT").andOn(AttachmentTable.SQL_WHERE_DOWNLOADED);
 
     class CursorLoaderCallbacks extends SimpleLoaderCallbacks<Cursor> {
         @Nullable
@@ -194,9 +232,19 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
                     final DaoCursorEventBusLoader<Tool> loader = new ToolsCursorLoader(getContext(), args);
                     loader.addEventBusSubscriber(new AttachmentEventBusSubscriber(loader));
                     loader.setProjection(TOOLS_PROJECTION);
-                    loader.setJoins(TOOLS_JOINS);
+                    //noinspection unchecked
+                    loader.setJoins(
+                            TOOLS_JOIN_BANNER,
+                            TRANS_JOIN[TRANS_PRIMARY].andOn(TRANS_FIELD_LANG[TRANS_PRIMARY].eq(mPrimaryLanguage)),
+                            TRANS_JOIN[TRANS_PARALLEL].andOn(
+                                    TRANS_FIELD_LANG[TRANS_PARALLEL]
+                                            .eq(mParallelLanguage != null ? mParallelLanguage : Language.INVALID_CODE)),
+                            TRANS_JOIN[TRANS_DEFAULT]
+                                    .andOn(TRANS_FIELD_LANG[TRANS_DEFAULT].eq(Settings.getDefaultLanguage()))
+                    );
                     final Expression where = ToolTable.FIELD_ADDED.eq(mMode == MODE_ADDED);
                     loader.setWhere(where);
+                    loader.setGroupBy(ToolTable.FIELD_ID);
                     return loader;
                 default:
                     return null;

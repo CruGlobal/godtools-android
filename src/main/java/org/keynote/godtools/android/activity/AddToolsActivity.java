@@ -13,6 +13,8 @@ import android.view.Menu;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.fragment.ToolsFragment;
 
+import java.util.Locale;
+
 public class AddToolsActivity extends BaseActivity implements ToolsFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
@@ -41,7 +43,7 @@ public class AddToolsActivity extends BaseActivity implements ToolsFragment.Call
     }
 
     @Override
-    public void onResourceSelect(final long id) {
+    public void onResourceSelect(final long id, final Locale... languages) {
         ToolDetailsActivity.start(this, id);
     }
 

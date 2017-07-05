@@ -18,6 +18,7 @@ import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.util.ViewUtils;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.BindViews;
@@ -28,11 +29,15 @@ import butterknife.Optional;
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
 public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
+    public static final String COL_TITLE = "title";
     public static final String COL_BANNER = "banner";
+    public static final String COL_PRIMARY_LANGUAGE = "primary_language";
+    public static final String COL_PARALLEL_LANGUAGE = "parallel_language";
+    public static final String COL_DEFAULT_LANGUAGE = "default_language";
     public interface Callbacks {
         void onToolInfo(long id);
 
-        void onToolSelect(long id);
+        void onToolSelect(long id, Locale... languages);
 
         void onToolAdd(long id);
     }
@@ -87,6 +92,12 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         String mTitle;
         @Nullable
         String mBannerFile;
+        @Nullable
+        Locale mPrimaryLanguage;
+        @Nullable
+        Locale mParallelLanguage;
+        @Nullable
+        Locale mDefaultLanguage;
         int mShares = 0;
         boolean mAdded = false;
         boolean mDownloading = false;
@@ -104,14 +115,18 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
             // update data from Cursor
             if (cursor != null) {
                 mId = CursorUtils.getLong(cursor, ToolTable.COLUMN_ID, Tool.INVALID_ID);
-                mTitle = CursorUtils.getString(cursor, ToolTable.COLUMN_NAME, null);
+                mTitle = CursorUtils.getString(cursor, COL_TITLE, null);
                 mBannerFile = CursorUtils.getString(cursor, COL_BANNER, null);
+                mPrimaryLanguage = CursorUtils.getLocale(cursor, COL_PRIMARY_LANGUAGE, null);
+                mDefaultLanguage = CursorUtils.getLocale(cursor, COL_DEFAULT_LANGUAGE, null);
+                mParallelLanguage = CursorUtils.getLocale(cursor, COL_PARALLEL_LANGUAGE, null);
                 mAdded = CursorUtils.getBool(cursor, ToolTable.COLUMN_ADDED, false);
                 mShares = CursorUtils.getInt(cursor, ToolTable.COLUMN_SHARES, 0);
             } else {
                 mId = Tool.INVALID_ID;
                 mTitle = null;
                 mBannerFile = null;
+                mPrimaryLanguage = mDefaultLanguage = mParallelLanguage = null;
                 mShares = 0;
                 mAdded = false;
                 mDownloaded = false;
@@ -136,7 +151,15 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         @OnClick(R.id.root)
         void select() {
             if (mCallbacks != null) {
-                mCallbacks.onToolSelect(mId);
+                if (mPrimaryLanguage != null) {
+                    mCallbacks.onToolSelect(mId, mPrimaryLanguage, mParallelLanguage);
+                } else if (mDefaultLanguage != null) {
+                    mCallbacks.onToolSelect(mId, mDefaultLanguage, mParallelLanguage);
+                } else if (mParallelLanguage != null) {
+                    mCallbacks.onToolSelect(mId, mParallelLanguage);
+                } else {
+                    // do nothing
+                }
             }
         }
 
