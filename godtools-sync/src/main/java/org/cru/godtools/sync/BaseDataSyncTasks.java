@@ -78,7 +78,9 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
         if (includes.include(Tool.JSON_LATEST_TRANSLATIONS)) {
             final List<Translation> translations = tool.getLatestTranslations();
             if (translations != null) {
-                storeTranslations(events, translations, includes.descendant(Tool.JSON_LATEST_TRANSLATIONS));
+                final LongSparseArray<Translation> existing = index(mDao.get(
+                        Query.select(Translation.class).where(TranslationTable.FIELD_TOOL.eq(tool.getId()))));
+                storeTranslations(events, translations, existing, includes.descendant(Tool.JSON_LATEST_TRANSLATIONS));
             }
         }
         if (includes.include(Tool.JSON_ATTACHMENTS)) {
@@ -92,9 +94,25 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
     }
 
     private void storeTranslations(@NonNull final SimpleArrayMap<Class<?>, Object> events,
-                                   @NonNull final List<Translation> translations, @NonNull final Includes includes) {
+                                   @NonNull final List<Translation> translations,
+                                   @Nullable final LongSparseArray<Translation> existing,
+                                   @NonNull final Includes includes) {
         for (final Translation translation : translations) {
+            if (existing != null) {
+                existing.remove(translation.getId());
+            }
             storeTranslation(events, translation, includes);
+        }
+
+        // prune any existing translations that weren't synced and aren't downloaded to the device
+        if (existing != null) {
+            for (int i = 0; i < existing.size(); i++) {
+                final Translation translation = mDao.refresh(existing.valueAt(i));
+                if (translation != null && !translation.isDownloaded()) {
+                    mDao.delete(translation);
+                    coalesceEvent(events, new TranslationUpdateEvent());
+                }
+            }
         }
     }
 
