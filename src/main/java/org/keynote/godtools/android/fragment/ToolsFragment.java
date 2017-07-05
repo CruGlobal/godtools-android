@@ -227,6 +227,7 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
                     ToolTable.TABLE_NAME + "." + ToolTable.COLUMN_NAME + ") " +
                     "AS " + ToolsAdapter.COL_TITLE,
             ToolTable.COLUMN_SHARES,
+            ToolTable.COLUMN_PENDING_SHARES,
             ToolTable.COLUMN_ADDED,
             TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_LANGUAGE + " AS " +
                     ToolsAdapter.COL_PRIMARY_LANGUAGE,

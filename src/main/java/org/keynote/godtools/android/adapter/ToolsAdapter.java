@@ -124,7 +124,8 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
                 mDefaultLanguage = CursorUtils.getLocale(cursor, COL_DEFAULT_LANGUAGE, null);
                 mParallelLanguage = CursorUtils.getLocale(cursor, COL_PARALLEL_LANGUAGE, null);
                 mAdded = CursorUtils.getBool(cursor, ToolTable.COLUMN_ADDED, false);
-                mShares = CursorUtils.getInt(cursor, ToolTable.COLUMN_SHARES, 0);
+                mShares = CursorUtils.getInt(cursor, ToolTable.COLUMN_SHARES, 0) +
+                        CursorUtils.getInt(cursor, ToolTable.COLUMN_PENDING_SHARES, 0);
             } else {
                 mId = Tool.INVALID_ID;
                 mTitle = null;
