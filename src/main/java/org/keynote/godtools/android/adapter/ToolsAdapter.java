@@ -58,7 +58,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
     @Override
     public ToolViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
         return new ToolViewHolder(LayoutInflater.from(parent.getContext())
-                                              .inflate(R.layout.list_item_resource_card, parent, false));
+                                          .inflate(R.layout.list_item_tool_card, parent, false));
     }
 
     @Override
@@ -77,6 +77,9 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         @Nullable
         @BindView(R.id.shares)
         TextView mSharesView;
+        @Nullable
+        @BindView(R.id.language_parallel)
+        TextView mParallelLanguageView;
         @Nullable
         @BindView(R.id.download_progress)
         ProgressBar mDownloadProgress;
@@ -139,6 +142,15 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
                 mTitleView.setText(mTitle);
             }
             bindShares(mSharesView, mShares);
+            if (mParallelLanguageView != null) {
+                if (mParallelLanguage != null) {
+                    mParallelLanguageView.setVisibility(View.VISIBLE);
+                    mParallelLanguageView.setText(mParallelLanguage.getDisplayName());
+                } else {
+                    mParallelLanguageView.setVisibility(View.GONE);
+                    mParallelLanguageView.setText(null);
+                }
+            }
             if (mActionAdd != null) {
                 mActionAdd.setEnabled(!mAdded);
             }

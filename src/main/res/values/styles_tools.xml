@@ -20,6 +20,21 @@
         <item name="android:indeterminate">false</item>
     </style>
 
+    <style name="TextAppearance.GodTools2.Tools.Card.Title" parent="TextAppearance.GodTools2">
+        <item name="android:textColor">@color/gray_5A</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.GodTools2.Tools.Card.Shares" parent="TextAppearance.GodTools2.Small">
+        <item name="android:textColor">@color/gray_BE</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.GodTools2.Tools.Card.ParallelLanguage" parent="TextAppearance.GodTools2.Small">
+        <item name="android:textColor">@color/gray_5A</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="Widget.GodTools2.Tools.Details.Title" parent="Base">
         <item name="android:textAppearance">@style/TextAppearance.GodTools2.Tools.Details.Title</item>
     </style>
