@@ -14,6 +14,7 @@ import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.fragment.ToolDetailsFragment;
 import org.keynote.godtools.android.model.Tool;
 
+import static org.cru.godtools.analytics.AnalyticsService.SCREEN_TOOL_DETAILS;
 import static org.keynote.godtools.android.Constants.EXTRA_TOOL;
 
 public class ToolDetailsActivity extends BaseActivity implements ToolDetailsFragment.Callbacks {
@@ -50,6 +51,12 @@ public class ToolDetailsActivity extends BaseActivity implements ToolDetailsFrag
     protected void onStart() {
         super.onStart();
         loadInitialFragmentIfNeeded();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAnalytics.trackScreen(SCREEN_TOOL_DETAILS);
     }
 
     @Override

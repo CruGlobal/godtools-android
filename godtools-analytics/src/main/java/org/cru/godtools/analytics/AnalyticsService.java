@@ -16,6 +16,7 @@ import org.greenrobot.eventbus.ThreadMode;
 public class AnalyticsService {
     /* Screen event names */
     public static final String SCREEN_HOME = "Home";
+    public static final String SCREEN_TOOL_DETAILS = "Tool Info";
 
     /* Legacy constants */
     public static final String SCREEN_EVERYSTUDENT = "EveryStudent";
@@ -26,7 +27,6 @@ public class AnalyticsService {
     private Tracker mTracker = null;
 
     private AnalyticsService(@NonNull final Context context) {
-
         mTracker = GoogleAnalytics.getTracker(context);
 
         EventBus.getDefault().register(this);
