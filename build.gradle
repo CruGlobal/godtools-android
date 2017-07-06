@@ -62,7 +62,6 @@ dependencies {
     implementation project(':godtools-initial-content')
     implementation project(':godtools-model')
     implementation project(':godtools-model-events')
-    implementation project(':godtools-renderer')
     implementation project(':godtools-sync')
     compile project(':godtools-tract-renderer')
 
@@ -71,6 +70,7 @@ dependencies {
     compile "com.android.support:cardview-v7:${deps.androidSupport}"
     compile "com.android.support:customtabs:${deps.androidSupport}"
     compile "com.android.support:design:${deps.androidSupport}"
+    implementation "com.android.support:percent:${deps.androidSupport}"
 
     compile "com.google.android.gms:play-services-analytics:${deps.playServices}"
     compile 'com.google.android.gms:play-services-gcm:' + deps.playServices

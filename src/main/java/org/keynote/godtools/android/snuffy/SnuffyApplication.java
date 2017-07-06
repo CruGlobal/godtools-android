@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.snuffy;
 
+import android.app.Application;
 import android.support.annotation.NonNull;
 
 import com.crashlytics.android.Crashlytics;
@@ -17,15 +18,11 @@ import org.cru.godtools.sync.service.GodToolsDownloadManager;
 import org.cru.godtools.tract.TractEventBusIndex;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.BuildConfig;
-import org.keynote.godtools.android.RenderAppConfig;
-import org.keynote.godtools.renderer.crureader.BaseAppConfig;
-import org.keynote.godtools.renderer.crureader.RenderApp;
 
 import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
 
-public class SnuffyApplication extends RenderApp {
-
+public class SnuffyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
@@ -43,11 +40,6 @@ public class SnuffyApplication extends RenderApp {
         // Initialize tool manager
         GodToolsDownloadManager.getInstance(this);
         FollowupService.start(this);
-    }
-
-    @Override
-    public BaseAppConfig getBaseAppConfig() {
-        return new RenderAppConfig();
     }
 
     @NonNull
