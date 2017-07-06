@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 
+import org.cru.godtools.analytics.AnalyticsService;
 import org.cru.godtools.base.Settings;
 import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.R;
@@ -41,6 +42,9 @@ import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private final ChangeListener mSettingsChangeListener = new ChangeListener();
+
+    @NonNull
+    protected /*final*/ AnalyticsService mAnalytics;
 
     // App/Action Bar
     @Nullable
@@ -71,6 +75,7 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAnalytics = AnalyticsService.getInstance(this);
         loadLanguages(true);
     }
 

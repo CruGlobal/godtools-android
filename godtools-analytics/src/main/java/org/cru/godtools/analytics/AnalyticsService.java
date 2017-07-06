@@ -14,6 +14,10 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 public class AnalyticsService {
+    /* Screen event names */
+    public static final String SCREEN_HOME = "Home";
+
+    /* Legacy constants */
     public static final String SCREEN_EVERYSTUDENT = "EveryStudent";
     public static final String CATEGORY_MENU = "Menu Event";
     public static final String CATEGORY_CONTENT_EVENT = "Content Event";
@@ -39,13 +43,12 @@ public class AnalyticsService {
         return sInstance;
     }
 
-    public void activeScreen(@NonNull final String screen) {
-
+    public void trackScreen(@NonNull final String screen) {
         mTracker.setScreenName(screen);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     public void screenView(@NonNull final String name, @NonNull final String language) {
-
         mTracker.setScreenName(name);
         mTracker.send(new HitBuilders.ScreenViewBuilder()
                 .setCustomDimension(DIMENSION_SCREEN_NAME, name)
