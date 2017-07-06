@@ -3,6 +3,7 @@ package org.cru.godtools.analytics;
 import android.content.Context;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -14,13 +15,10 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class AnalyticsService {
     public static final String SCREEN_EVERYSTUDENT = "EveryStudent";
-    public static final String SCREEN_SETTINGS = "Settings";
     public static final String CATEGORY_MENU = "Menu Event";
     public static final String CATEGORY_CONTENT_EVENT = "Content Event";
-    private static final String TAG = "EventTracker";
     private static final int DIMENSION_SCREEN_NAME = 1;
     private static final int DIMENSION_LANGUAGE = 2;
-    private static AnalyticsService instance;
     private Tracker mTracker = null;
 
     private AnalyticsService(@NonNull final Context context) {
@@ -30,16 +28,15 @@ public class AnalyticsService {
         EventBus.getDefault().register(this);
     }
 
+    @Nullable
+    private static AnalyticsService sInstance;
     @NonNull
-    public static AnalyticsService getInstance(@NonNull final Context context) {
-        synchronized (AnalyticsService.class) {
-
-            if (instance == null) {
-                instance = new AnalyticsService(context.getApplicationContext());
-            }
-
-            return instance;
+    public static synchronized AnalyticsService getInstance(@NonNull final Context context) {
+        if (sInstance == null) {
+            sInstance = new AnalyticsService(context.getApplicationContext());
         }
+
+        return sInstance;
     }
 
     public void activeScreen(@NonNull final String screen) {
