@@ -95,7 +95,7 @@ public class MainActivity extends BaseActivity implements ToolsFragment.Callback
                         // start preloading the tract in the first language
                         TractManager.getInstance(this).getLatestPublishedManifest(id, languages[0]);
 
-                        TractActivity.start(this, id, languages[0], languages.length > 1 ? languages[1] : null);
+                        TractActivity.start(this, id, languages);
                     }
                 }
                 break;
