@@ -21,8 +21,8 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import org.cru.godtools.analytics.GoogleAnalytics;
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.utils.GoogleAnalytics;
 
 import java.util.Arrays;
 import java.util.Iterator;

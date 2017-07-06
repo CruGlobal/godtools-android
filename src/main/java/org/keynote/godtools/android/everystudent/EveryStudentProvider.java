@@ -12,8 +12,8 @@ import android.support.annotation.NonNull;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import org.cru.godtools.analytics.GoogleAnalytics;
 import org.keynote.godtools.android.BuildConfig;
-import org.keynote.godtools.android.utils.GoogleAnalytics;
 
 /**
  * Provides access to the EveryStudent database.

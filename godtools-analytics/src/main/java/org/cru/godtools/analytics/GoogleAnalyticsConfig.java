@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.utils;
+package org.cru.godtools.analytics;
 
 public class GoogleAnalyticsConfig {
     public static final int DISPATCH_PERIOD = 30;

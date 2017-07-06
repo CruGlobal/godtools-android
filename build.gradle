@@ -53,6 +53,7 @@ ext.deps = [
 ]
 
 dependencies {
+    implementation project(':godtools-analytics')
     implementation project(':godtools-api')
     implementation project(':godtools-base')
     implementation project(':godtools-base-ui')
@@ -70,7 +71,7 @@ dependencies {
     compile "com.android.support:customtabs:${deps.androidSupport}"
     compile "com.android.support:design:${deps.androidSupport}"
 
-    compile 'com.google.android.gms:play-services-analytics:' + deps.playServices
+    compile "com.google.android.gms:play-services-analytics:${deps.playServices}"
     compile 'com.google.android.gms:play-services-gcm:' + deps.playServices
 
     implementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
@@ -119,8 +120,6 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        buildConfigField "String", "GOOGLE_ANALYTICS_CLIENT_ID", "\"UA-325725-50\""
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

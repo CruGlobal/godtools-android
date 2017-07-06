@@ -7,17 +7,13 @@ import android.util.Log;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import org.cru.godtools.analytics.GoogleAnalytics;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.keynote.godtools.android.utils.GoogleAnalytics;
 import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
 
-/**
- * This class is used to track events for Google Analytics.
- */
 public class EventTracker {
-
     public static final String SCREEN_EVERYSTUDENT = "EveryStudent";
     public static final String SCREEN_SETTINGS = "Settings";
     public static final String CATEGORY_MENU = "Menu Event";
