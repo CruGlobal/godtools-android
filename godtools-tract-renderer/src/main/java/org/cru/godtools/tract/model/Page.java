@@ -483,12 +483,12 @@ public final class Page extends Base implements Styles, Parent {
                 } else {
                     holders[newPos] = holder;
 
-                    if (lastNewPos > newPos) {
-                        // is this the active card? if so track it to restore it after we finish binding
-                        if (mPageContentLayout.getActiveCard() == holder.mRoot) {
-                            activeCard = holder.mRoot;
-                        }
+                    // is this the active card? if so track it to restore it after we finish binding
+                    if (activeCard == null && mPageContentLayout.getActiveCard() == holder.mRoot) {
+                        activeCard = holder.mRoot;
+                    }
 
+                    if (lastNewPos > newPos) {
                         // remove this view for now, we will re-add it shortly
                         mPageContentLayout.removeView(holder.mRoot);
                     } else {
