@@ -123,10 +123,6 @@
             android:name="android.app.default_searchable"
             android:value=".everystudent.EveryStudentSearchResults" />
 
-        <activity
-            android:name=".snuffy.SnuffyAboutActivity"
-            android:screenOrientation="userPortrait"/>
-
         <receiver android:name=".notifications.GcmBroadcastReceiver"
                   android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
