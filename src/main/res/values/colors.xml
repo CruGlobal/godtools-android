@@ -6,15 +6,6 @@
     <color name="es_article_background">#fff</color>
     <color name="es_article_foreground">#000</color>
 
-    <!-- black n grey/transparent gradient -->
-    <color name="toolbar_top">#40c0c0c0</color>
-    <color name="toolbar_bottom">#ff000000</color>
-    <!-- solid organgish color when pressed -->
-    <color name="highlight_top">#ffffc600</color>
-    <color name="highlight_bottom">#ffcf9600</color>
-    <!--  buttons themselves are white -->
-    <color name="toolbar_fg">#ffffffff</color>
-
     <!-- This is "Cru Bright Blue" used in the Cru Logo-->
     <color name="cru_bright_blue">#3eb1c8</color>
     <color name="cru_gold">#f9b625</color>
