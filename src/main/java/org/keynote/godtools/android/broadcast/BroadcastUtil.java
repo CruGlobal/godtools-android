@@ -1,7 +1,6 @@
 package org.keynote.godtools.android.broadcast;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 
 import static org.keynote.godtools.android.utils.Constants.STATUS_CODE;
 
@@ -11,7 +10,6 @@ import static org.keynote.godtools.android.utils.Constants.STATUS_CODE;
 public final class BroadcastUtil
 {
     public static final String ACTION_START = BroadcastUtil.class.getName() + ".ACTION_START";
-    public static final String ACTION_DRAFT_START = BroadcastUtil.class.getName() + ".DRAFT_START";
     public static final String ACTION_STOP = BroadcastUtil.class.getName() + ".ACTION_STOP";
     public static final String ACTION_TYPE = BroadcastUtil.class.getName() + ".ACTION_TYPE";
     public static final String ACTION_FAIL = BroadcastUtil.class.getName() + ".ACTION_FAIL";
@@ -21,11 +19,6 @@ public final class BroadcastUtil
         return new Intent(ACTION_START);
     }
 
-    public static Intent draftBroadcast()
-    {
-        return new Intent(ACTION_DRAFT_START);
-    }
-    
     public static Intent stopBroadcast(Type type)
     {
         return stopBroadcast(type, 0);
@@ -44,25 +37,5 @@ public final class BroadcastUtil
         Intent intent = new Intent(ACTION_FAIL);
         intent.putExtra(ACTION_TYPE, type);
         return intent;
-    }
-
-    public static IntentFilter startFilter()
-    {
-        return new IntentFilter(ACTION_START);
-    }
-
-    public static IntentFilter startDraftFilter()
-    {
-        return new IntentFilter(ACTION_DRAFT_START);
-    }
-
-    public static IntentFilter stopFilter()
-    {
-        return new IntentFilter(ACTION_STOP);
-    }
-
-    public static IntentFilter failedFilter()
-    {
-        return new IntentFilter(ACTION_FAIL);
     }
 }

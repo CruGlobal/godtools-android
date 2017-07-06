@@ -173,24 +173,6 @@ public class BackgroundService extends IntentService
         context.startService(intent);
     }
 
-    public static void authenticateAccessCode(Context context, String accessCode)
-    {
-        final Bundle extras = new Bundle(2);
-        extras.putSerializable(TYPE, APITasks.AUTHENTICATE_ACCESS_CODE);
-        extras.putString(ACCESS_CODE, accessCode);
-        Intent intent = baseIntent(context, extras);
-        context.startService(intent);
-    }
-
-    public static void verifyStatusOfAuthToken(Context context, String accessCode)
-    {
-        final Bundle extras = new Bundle(2);
-        extras.putSerializable(TYPE, APITasks.VERIFY_ACCESS_CODE);
-        extras.putString(ACCESS_CODE, accessCode);
-        Intent intent = baseIntent(context, extras);
-        context.startService(intent);
-    }
-
     private void authComplete(String authorization, boolean authenticateAccessCode, boolean verifyStatus)
     {
         Log.i(TAG, "Now Authorized");
