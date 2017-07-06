@@ -18,10 +18,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
-import org.cru.godtools.analytics.GoogleAnalytics;
+import org.cru.godtools.analytics.AnalyticsService;
 import org.keynote.godtools.android.R;
 
 import java.util.Arrays;
@@ -111,17 +108,8 @@ public class EveryStudentView extends Activity
         }
     }
 
-    private void recordScreenView()
-    {
-        Tracker tracker = GoogleAnalytics.getTracker(getApplicationContext());
-
-        tracker.setScreenName("everystudent-" + massageTitleToTrainCase());
-
-        tracker.send(new HitBuilders.AppViewBuilder()
-                .setCustomDimension(1, "everystudent")
-                .setCustomDimension(2, "en_classic")
-                .setCustomDimension(3, "en_classic-everystudent-1") //language-package-version_number
-                .build());
+    private void recordScreenView() {
+        AnalyticsService.getInstance(this).trackScreen("everystudent-" + massageTitleToTrainCase());
     }
 
     private String massageTitleToTrainCase()

@@ -80,6 +80,15 @@ public class AnalyticsService {
 
     }
 
+    public void trackEveryStudentSearch(@NonNull final String query) {
+        mTracker.setScreenName("everystudent-search");
+        mTracker.send(new HitBuilders.EventBuilder()
+                              .setCategory("searchbar")
+                              .setAction("tap")
+                              .setLabel(query)
+                              .build());
+    }
+
     public void menuEvent(@NonNull final String item) {
 
         mTracker.send(new HitBuilders.EventBuilder()

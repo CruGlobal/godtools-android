@@ -4,15 +4,13 @@ import android.app.SearchManager;
 import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
-import org.cru.godtools.analytics.GoogleAnalytics;
+import org.cru.godtools.analytics.AnalyticsService;
 import org.keynote.godtools.android.BuildConfig;
 
 /**
@@ -119,16 +117,10 @@ public class EveryStudentProvider extends ContentProvider
     {
         if (!query.equalsIgnoreCase("search_suggest_query"))
         {
-            Tracker tracker = GoogleAnalytics.getTracker(getContext());
-            tracker.setScreenName("everystudent-search");
-            tracker.send(new HitBuilders.EventBuilder()
-                    .setCustomDimension(1, "everystudent")
-                    .setCustomDimension(2, "en_classic")
-                    .setCustomDimension(3, "en_classic-everystudent-1")
-                    .setCategory("searchbar")
-                    .setAction("tap")
-                    .setLabel(query)
-                    .build());
+            final Context context = getContext();
+            if (context != null) {
+                AnalyticsService.getInstance(context).trackEveryStudentSearch(query);
+            }
         }
 
         query = query.toLowerCase();
