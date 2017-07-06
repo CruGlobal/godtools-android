@@ -12,6 +12,12 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [eventBusIndex: 'org.cru.godtools.tract.TractEventBusIndex']
+            }
+        }
     }
 
     compileOptions {
@@ -52,4 +58,5 @@ dependencies {
 
     annotationProcessor "android.arch.lifecycle:compiler:${deps.androidLifecycle}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
+    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
 }

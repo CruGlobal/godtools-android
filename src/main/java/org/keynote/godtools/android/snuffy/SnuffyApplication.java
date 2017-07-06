@@ -8,8 +8,11 @@ import com.newrelic.agent.android.NewRelic;
 import com.squareup.picasso.Picasso;
 
 import org.ccci.gto.android.common.api.okhttp3.util.OkHttpClientUtil;
+import org.cru.godtools.AppEventBusIndex;
 import org.cru.godtools.sync.service.FollowupService;
 import org.cru.godtools.sync.service.GodToolsDownloadManager;
+import org.cru.godtools.tract.TractEventBusIndex;
+import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.RenderAppConfig;
 import org.keynote.godtools.renderer.crureader.BaseAppConfig;
@@ -27,6 +30,9 @@ public class SnuffyApplication extends RenderApp {
         // Enable crash reporting
         Fabric.with(this, new Crashlytics());
         NewRelic.withApplicationToken(BuildConfig.NEW_RELIC_API_KEY).start(this);
+
+        // configure eventbus
+        configureEventbus();
 
         // initialize several support libraries
         Picasso.setSingletonInstance(picassoBuilder().build());
@@ -52,5 +58,12 @@ public class SnuffyApplication extends RenderApp {
         builder.downloader(new OkHttp3Downloader(okhttp));
 
         return builder;
+    }
+
+    private void configureEventbus() {
+        EventBus.builder()
+                .addIndex(new AppEventBusIndex())
+                .addIndex(new TractEventBusIndex())
+                .installDefaultEventBus();
     }
 }
