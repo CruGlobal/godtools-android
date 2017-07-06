@@ -1,100 +1,6 @@
 {
   "data": [
     {
-      "id": "3",
-      "type": "resource",
-      "attributes": {
-        "name": "Knowing God Personally (U.S. Version)",
-        "abbreviation": "kgp-us",
-        "description": "U.S. Version of the Knowing God Personally Booklet",
-        "onesky-project-id": 250026,
-        "total-views": 92,
-        "resource-type": "tract",
-        "attr-banner": "39",
-        "attr-banner-about": "38"
-      },
-      "relationships": {
-        "system": {
-          "data": {
-            "id": "1",
-            "type": "system"
-          }
-        },
-        "latest-translations": {
-          "data": [
-            {
-              "id": "219",
-              "type": "translation"
-            }
-          ]
-        },
-        "attachments": {
-          "data": [
-            {
-              "id": "38",
-              "type": "attachment"
-            },
-            {
-              "id": "39",
-              "type": "attachment"
-            },
-            {
-              "id": "40",
-              "type": "attachment"
-            },
-            {
-              "id": "41",
-              "type": "attachment"
-            },
-            {
-              "id": "42",
-              "type": "attachment"
-            },
-            {
-              "id": "43",
-              "type": "attachment"
-            },
-            {
-              "id": "44",
-              "type": "attachment"
-            },
-            {
-              "id": "45",
-              "type": "attachment"
-            },
-            {
-              "id": "46",
-              "type": "attachment"
-            },
-            {
-              "id": "47",
-              "type": "attachment"
-            },
-            {
-              "id": "48",
-              "type": "attachment"
-            },
-            {
-              "id": "49",
-              "type": "attachment"
-            },
-            {
-              "id": "50",
-              "type": "attachment"
-            },
-            {
-              "id": "51",
-              "type": "attachment"
-            },
-            {
-              "id": "52",
-              "type": "attachment"
-            }
-          ]
-        }
-      }
-    },
-    {
       "id": "1",
       "type": "resource",
       "attributes": {
@@ -102,7 +8,7 @@
         "abbreviation": "kgp",
         "description": null,
         "onesky-project-id": 35010,
-        "total-views": 1560,
+        "total-views": 1865,
         "resource-type": "tract",
         "attr-banner": "7",
         "attr-banner-about": "8"
@@ -145,7 +51,7 @@
               "type": "translation"
             },
             {
-              "id": "234",
+              "id": "296",
               "type": "translation"
             }
           ]
@@ -153,7 +59,7 @@
         "attachments": {
           "data": [
             {
-              "id": "36",
+              "id": "20",
               "type": "attachment"
             },
             {
@@ -205,19 +111,7 @@
               "type": "attachment"
             },
             {
-              "id": "20",
-              "type": "attachment"
-            },
-            {
               "id": "21",
-              "type": "attachment"
-            },
-            {
-              "id": "22",
-              "type": "attachment"
-            },
-            {
-              "id": "23",
               "type": "attachment"
             },
             {
@@ -229,10 +123,6 @@
               "type": "attachment"
             },
             {
-              "id": "34",
-              "type": "attachment"
-            },
-            {
               "id": "18",
               "type": "attachment"
             },
@@ -241,11 +131,39 @@
               "type": "attachment"
             },
             {
-              "id": "53",
+              "id": "22",
               "type": "attachment"
             },
             {
-              "id": "55",
+              "id": "23",
+              "type": "attachment"
+            },
+            {
+              "id": "34",
+              "type": "attachment"
+            },
+            {
+              "id": "82",
+              "type": "attachment"
+            },
+            {
+              "id": "83",
+              "type": "attachment"
+            },
+            {
+              "id": "84",
+              "type": "attachment"
+            },
+            {
+              "id": "85",
+              "type": "attachment"
+            },
+            {
+              "id": "87",
+              "type": "attachment"
+            },
+            {
+              "id": "110",
               "type": "attachment"
             }
           ]
@@ -260,12 +178,18 @@
         "abbreviation": "sat",
         "description": null,
         "onesky-project-id": 35011,
-        "total-views": 375,
+        "total-views": 451,
         "resource-type": "tract",
         "attr-banner-about": "53",
         "attr-banner": "54"
       },
       "relationships": {
+        "system": {
+          "data": {
+            "id": "1",
+            "type": "system"
+          }
+        },
         "latest-translations": {
           "data": [
             {
@@ -273,29 +197,21 @@
               "type": "translation"
             },
             {
-              "id": "174",
-              "type": "translation"
-            },
-            {
               "id": "175",
               "type": "translation"
             },
             {
-              "id": "237",
+              "id": "281",
+              "type": "translation"
+            },
+            {
+              "id": "297",
               "type": "translation"
             }
           ]
         },
         "attachments": {
           "data": [
-            {
-              "id": "5",
-              "type": "attachment"
-            },
-            {
-              "id": "6",
-              "type": "attachment"
-            },
             {
               "id": "26",
               "type": "attachment"
@@ -331,21 +247,59 @@
             {
               "id": "54",
               "type": "attachment"
+            },
+            {
+              "id": "53",
+              "type": "attachment"
+            },
+            {
+              "id": "101",
+              "type": "attachment"
+            },
+            {
+              "id": "103",
+              "type": "attachment"
+            },
+            {
+              "id": "104",
+              "type": "attachment"
+            },
+            {
+              "id": "106",
+              "type": "attachment"
+            },
+            {
+              "id": "107",
+              "type": "attachment"
+            },
+            {
+              "id": "102",
+              "type": "attachment"
+            },
+            {
+              "id": "105",
+              "type": "attachment"
+            },
+            {
+              "id": "111",
+              "type": "attachment"
             }
           ]
         }
       }
     },
     {
-      "id": "5",
+      "id": "4",
       "type": "resource",
       "attributes": {
-        "name": "Questions About God?\n(Coming soon!)",
-        "abbreviation": "es",
+        "name": "Four Spiritual Laws",
+        "abbreviation": "4sl",
         "description": null,
-        "onesky-project-id": null,
-        "total-views": 0,
-        "resource-type": "tract"
+        "onesky-project-id": 35009,
+        "total-views": 125,
+        "resource-type": "tract",
+        "attr-banner": "59",
+        "attr-banner-about": "58"
       },
       "relationships": {
         "system": {
@@ -354,31 +308,111 @@
             "type": "system"
           }
         },
-        "translations": {
-          "data": []
-        },
         "latest-translations": {
-          "data": []
-        },
-        "pages": {
-          "data": []
+          "data": [
+            {
+              "id": "268",
+              "type": "translation"
+            },
+            {
+              "id": "299",
+              "type": "translation"
+            }
+          ]
         },
         "attachments": {
-          "data": []
+          "data": [
+            {
+              "id": "56",
+              "type": "attachment"
+            },
+            {
+              "id": "57",
+              "type": "attachment"
+            },
+            {
+              "id": "59",
+              "type": "attachment"
+            },
+            {
+              "id": "60",
+              "type": "attachment"
+            },
+            {
+              "id": "61",
+              "type": "attachment"
+            },
+            {
+              "id": "62",
+              "type": "attachment"
+            },
+            {
+              "id": "63",
+              "type": "attachment"
+            },
+            {
+              "id": "64",
+              "type": "attachment"
+            },
+            {
+              "id": "65",
+              "type": "attachment"
+            },
+            {
+              "id": "66",
+              "type": "attachment"
+            },
+            {
+              "id": "67",
+              "type": "attachment"
+            },
+            {
+              "id": "58",
+              "type": "attachment"
+            },
+            {
+              "id": "76",
+              "type": "attachment"
+            },
+            {
+              "id": "77",
+              "type": "attachment"
+            },
+            {
+              "id": "78",
+              "type": "attachment"
+            },
+            {
+              "id": "79",
+              "type": "attachment"
+            },
+            {
+              "id": "80",
+              "type": "attachment"
+            },
+            {
+              "id": "81",
+              "type": "attachment"
+            },
+            {
+              "id": "113",
+              "type": "attachment"
+            }
+          ]
         }
       }
     }
   ],
   "included": [
     {
-      "id": "219",
+      "id": "298",
       "type": "translation",
       "attributes": {
         "is-published": true,
-        "version": 24,
-        "manifest-name": "7c2d1dac7f2ee122fe3e1f66e2d02a9ef9ac2f44c04d569c627fb264dfaf48b6.xml",
-        "translated-name": "Knowing God Personally (U.S. Version)",
-        "translated-description": "U.S. Version of the Knowing God Personally Booklet"
+        "version": 34,
+        "manifest-name": "13d37bbd6ae10c20d7e35c066fb3a8416d7af6640624a402858fbfdd5330fd6b.xml",
+        "translated-name": "Know God Personally",
+        "translated-description": "Gospel presentation that uses four principles to invite anyone to begin a personal relationship with God through Jesus Christ. \n\nConversation Starter: Would you tell me what you think about this explanation of how people can know God?\n\nBible references are from the NIV and NASB."
       },
       "relationships": {
         "resource": {
@@ -1014,6 +1048,226 @@
             {
               "id": "237",
               "type": "translation"
+            },
+            {
+              "id": "238",
+              "type": "translation"
+            },
+            {
+              "id": "239",
+              "type": "translation"
+            },
+            {
+              "id": "240",
+              "type": "translation"
+            },
+            {
+              "id": "241",
+              "type": "translation"
+            },
+            {
+              "id": "245",
+              "type": "translation"
+            },
+            {
+              "id": "246",
+              "type": "translation"
+            },
+            {
+              "id": "243",
+              "type": "translation"
+            },
+            {
+              "id": "247",
+              "type": "translation"
+            },
+            {
+              "id": "248",
+              "type": "translation"
+            },
+            {
+              "id": "249",
+              "type": "translation"
+            },
+            {
+              "id": "250",
+              "type": "translation"
+            },
+            {
+              "id": "251",
+              "type": "translation"
+            },
+            {
+              "id": "252",
+              "type": "translation"
+            },
+            {
+              "id": "253",
+              "type": "translation"
+            },
+            {
+              "id": "254",
+              "type": "translation"
+            },
+            {
+              "id": "255",
+              "type": "translation"
+            },
+            {
+              "id": "256",
+              "type": "translation"
+            },
+            {
+              "id": "257",
+              "type": "translation"
+            },
+            {
+              "id": "258",
+              "type": "translation"
+            },
+            {
+              "id": "259",
+              "type": "translation"
+            },
+            {
+              "id": "260",
+              "type": "translation"
+            },
+            {
+              "id": "261",
+              "type": "translation"
+            },
+            {
+              "id": "262",
+              "type": "translation"
+            },
+            {
+              "id": "263",
+              "type": "translation"
+            },
+            {
+              "id": "265",
+              "type": "translation"
+            },
+            {
+              "id": "266",
+              "type": "translation"
+            },
+            {
+              "id": "269",
+              "type": "translation"
+            },
+            {
+              "id": "271",
+              "type": "translation"
+            },
+            {
+              "id": "270",
+              "type": "translation"
+            },
+            {
+              "id": "272",
+              "type": "translation"
+            },
+            {
+              "id": "273",
+              "type": "translation"
+            },
+            {
+              "id": "274",
+              "type": "translation"
+            },
+            {
+              "id": "275",
+              "type": "translation"
+            },
+            {
+              "id": "276",
+              "type": "translation"
+            },
+            {
+              "id": "277",
+              "type": "translation"
+            },
+            {
+              "id": "278",
+              "type": "translation"
+            },
+            {
+              "id": "279",
+              "type": "translation"
+            },
+            {
+              "id": "282",
+              "type": "translation"
+            },
+            {
+              "id": "283",
+              "type": "translation"
+            },
+            {
+              "id": "284",
+              "type": "translation"
+            },
+            {
+              "id": "285",
+              "type": "translation"
+            },
+            {
+              "id": "286",
+              "type": "translation"
+            },
+            {
+              "id": "287",
+              "type": "translation"
+            },
+            {
+              "id": "288",
+              "type": "translation"
+            },
+            {
+              "id": "289",
+              "type": "translation"
+            },
+            {
+              "id": "290",
+              "type": "translation"
+            },
+            {
+              "id": "291",
+              "type": "translation"
+            },
+            {
+              "id": "293",
+              "type": "translation"
+            },
+            {
+              "id": "297",
+              "type": "translation"
+            },
+            {
+              "id": "292",
+              "type": "translation"
+            },
+            {
+              "id": "294",
+              "type": "translation"
+            },
+            {
+              "id": "296",
+              "type": "translation"
+            },
+            {
+              "id": "298",
+              "type": "translation"
+            },
+            {
+              "id": "295",
+              "type": "translation"
+            },
+            {
+              "id": "299",
+              "type": "translation"
             }
           ]
         }
@@ -1045,60 +1299,6 @@
         "is-zipped": false,
         "file-file-name": "kgp-us-home_1x.jpg",
         "sha256": "86c8e65bddaa4b889e572aa89714ee846f27294abc62b69d291b52ea1cc05144"
-      },
-      "relationships": {
-        "resource": {
-          "data": {
-            "id": "3",
-            "type": "resource"
-          }
-        }
-      }
-    },
-    {
-      "id": "40",
-      "type": "attachment",
-      "attributes": {
-        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/040/original/kgp-us-graphics-01.png?1498490015",
-        "is-zipped": true,
-        "file-file-name": "kgp-us-graphics-01.png",
-        "sha256": "e999cffea463f50d4f801306199a4cb8268c5b5acb0cc3073f38f5da8af762c3"
-      },
-      "relationships": {
-        "resource": {
-          "data": {
-            "id": "3",
-            "type": "resource"
-          }
-        }
-      }
-    },
-    {
-      "id": "41",
-      "type": "attachment",
-      "attributes": {
-        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/041/original/kgp-us-graphics-02.png?1498490019",
-        "is-zipped": true,
-        "file-file-name": "kgp-us-graphics-02.png",
-        "sha256": "9e954c42047e15dc9eaa8429b0c58e268f8342a91ffed4328be3b00debc247a9"
-      },
-      "relationships": {
-        "resource": {
-          "data": {
-            "id": "3",
-            "type": "resource"
-          }
-        }
-      }
-    },
-    {
-      "id": "42",
-      "type": "attachment",
-      "attributes": {
-        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/042/original/kgp-us-graphics-03.png?1498490025",
-        "is-zipped": true,
-        "file-file-name": "kgp-us-graphics-03.png",
-        "sha256": "881c1d5f912f4f6832afc5cfd93ccd58ace9c7335238de171770948194548d8e"
       },
       "relationships": {
         "resource": {
@@ -1279,6 +1479,168 @@
         "is-zipped": true,
         "file-file-name": "kgp-us-tract-bkg-image-10_1x.jpg",
         "sha256": "61e9a858153df82aaa880d086c93c65e94649777d58b9e15f20e4b593ebd445e"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "68",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/068/original/kgp-us-train-7-english.png?1499104152",
+        "is-zipped": true,
+        "file-file-name": "kgp-us-train-7-english.png",
+        "sha256": "5acbb481c2b4740c9b21f270ec84ec2e0eed37d53ebb331adef7586400fd057e"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "69",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/069/original/kgp-us-train-7.png?1499104157",
+        "is-zipped": true,
+        "file-file-name": "kgp-us-train-7.png",
+        "sha256": "1312e2c6565051b4218b58a54bf184d010e92a5c2bbe4a717d4403346fd39225"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "70",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/070/original/kpg-us-christ-directed-person.png?1499104163",
+        "is-zipped": true,
+        "file-file-name": "kpg-us-christ-directed-person.png",
+        "sha256": "834b2923bae5942e2a51b409d2eba8faf10578ee49d7009576d8358a64d055f5"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "71",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/071/original/kpg-us-god-proves-his-love-english.png?1499104168",
+        "is-zipped": true,
+        "file-file-name": "kpg-us-god-proves-his-love-english.png",
+        "sha256": "c30349e22a62278162f90b1d0dbbd4f90e03bdbc2f13dac8a5bbf672adea68dc"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "72",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/072/original/kpg-us-self-directed-person.png?1499104173",
+        "is-zipped": true,
+        "file-file-name": "kpg-us-self-directed-person.png",
+        "sha256": "00a6b85979d77e24a25c8cb09e6e9d974eec75db69ebb2bfa156c54656a24e7d"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "73",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/073/original/kpg-us-sin-has-consequences-english.png?1499104179",
+        "is-zipped": true,
+        "file-file-name": "kpg-us-sin-has-consequences-english.png",
+        "sha256": "3579f6751ea2a54b6fd83d97874bdb2cbeea4f0bcf9dc4ad97858fb9d5a00a0a"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "74",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/074/original/kpg-us-sin-has-consequences-french.png?1499104183",
+        "is-zipped": true,
+        "file-file-name": "kpg-us-sin-has-consequences-french.png",
+        "sha256": "25d2aed7e8acf604f7abade78ee41827eca314ec5432d3cd765412c07ac8b7c9"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "75",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/075/original/kpg-us-god-proves-his-love-french.png?1499104317",
+        "is-zipped": true,
+        "file-file-name": "kpg-us-god-proves-his-love-french.png",
+        "sha256": "7099d0c8c21920e24a8b39bf7ecfadf6cc58febd0b3c6af94d6dbe96651e5f3a"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "3",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "112",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/112/original/generic-divider-grey.png?1499263196",
+        "is-zipped": true,
+        "file-file-name": "generic-divider-grey.png",
+        "sha256": "035136f7e8579926e5e2acca5fc93843abe3600a1423bb1ce9639099e4f08aa2"
       },
       "relationships": {
         "resource": {
@@ -1581,6 +1943,34 @@
             },
             {
               "id": "201",
+              "type": "translation"
+            },
+            {
+              "id": "242",
+              "type": "translation"
+            },
+            {
+              "id": "244",
+              "type": "translation"
+            },
+            {
+              "id": "264",
+              "type": "translation"
+            },
+            {
+              "id": "267",
+              "type": "translation"
+            },
+            {
+              "id": "268",
+              "type": "translation"
+            },
+            {
+              "id": "280",
+              "type": "translation"
+            },
+            {
+              "id": "281",
               "type": "translation"
             }
           ]
@@ -1909,12 +2299,12 @@
       }
     },
     {
-      "id": "234",
+      "id": "296",
       "type": "translation",
       "attributes": {
         "is-published": true,
-        "version": 94,
-        "manifest-name": "59253c1c61f81146206ebc308116e07bd8a82970a4d01bbea57ea72d3952d756.xml",
+        "version": 99,
+        "manifest-name": "19d0f8ac90385f57f461376c6df1b4956fd8995ded3700435ffa33e9dfc7231d.xml",
         "translated-name": "Knowing God Personally",
         "translated-description": "A Gospel presentation that uses hand drawn images to help illustrate God's invitation to know Him personally. \n\nConversation starter: Has anyone ever shared with you how you can know God personally?"
       },
@@ -1937,13 +2327,13 @@
       }
     },
     {
-      "id": "36",
+      "id": "20",
       "type": "attachment",
       "attributes": {
-        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/036/original/kgp-image-christ-directed.png?1498674315",
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/020/original/kgp-tract-bkg-image-2_1x.jpg?1499288699",
         "is-zipped": true,
-        "file-file-name": "kgp-image-christ-directed.png",
-        "sha256": "58d11ade8326f3d9c165b7493aab832cee043a02b8269147f1a0b348ba2b007b"
+        "file-file-name": "kgp-tract-bkg-image-2_1x.jpg",
+        "sha256": "2ae9e94da7965f9f68e5e52c4d5f88c1f970d557ff9806f2aecec83ede9e9c69"
       },
       "relationships": {
         "resource": {
@@ -2171,24 +2561,6 @@
       }
     },
     {
-      "id": "20",
-      "type": "attachment",
-      "attributes": {
-        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/020/original/kgp-tract-bkg-image-2_1x.jpg?1497384858",
-        "is-zipped": true,
-        "file-file-name": "kgp-tract-bkg-image-2_1x.jpg",
-        "sha256": "c49e3c64a089f32ef89bc38a9c55bccfdebee7e5396d7c2a8ff15f9be7ba3523"
-      },
-      "relationships": {
-        "resource": {
-          "data": {
-            "id": "1",
-            "type": "resource"
-          }
-        }
-      }
-    },
-    {
       "id": "21",
       "type": "attachment",
       "attributes": {
@@ -2196,42 +2568,6 @@
         "is-zipped": true,
         "file-file-name": "kgp-tract-bkg-image-3_1x.jpg",
         "sha256": "8ae8dcf98a10bfd136d8e214449c08384c2e08dadcedce5f2baf3d7dbdc238d3"
-      },
-      "relationships": {
-        "resource": {
-          "data": {
-            "id": "1",
-            "type": "resource"
-          }
-        }
-      }
-    },
-    {
-      "id": "22",
-      "type": "attachment",
-      "attributes": {
-        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/022/original/kgp-tract-bkg-image-4_1x.jpg?1497384867",
-        "is-zipped": true,
-        "file-file-name": "kgp-tract-bkg-image-4_1x.jpg",
-        "sha256": "24881e5ad3c11ef5bf728e795689973ead1a6fbfd79bf768e769a61d365be02b"
-      },
-      "relationships": {
-        "resource": {
-          "data": {
-            "id": "1",
-            "type": "resource"
-          }
-        }
-      }
-    },
-    {
-      "id": "23",
-      "type": "attachment",
-      "attributes": {
-        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/023/original/kgp-tract-bkg-image-5_1x.jpg?1497384872",
-        "is-zipped": true,
-        "file-file-name": "kgp-tract-bkg-image-5_1x.jpg",
-        "sha256": "27a79e316b6c9308acb7b0058b2b6a271310e448a70380fc0c4d644f51d4e166"
       },
       "relationships": {
         "resource": {
@@ -2279,24 +2615,6 @@
       }
     },
     {
-      "id": "34",
-      "type": "attachment",
-      "attributes": {
-        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/034/original/kgp-tract-bkg-image-7_1x.jpg?1498162863",
-        "is-zipped": true,
-        "file-file-name": "kgp-tract-bkg-image-7_1x.jpg",
-        "sha256": "344c74b735c5abb1f85f658aaaf8c2209147cdaf5f9641d00acc497d748d79e2"
-      },
-      "relationships": {
-        "resource": {
-          "data": {
-            "id": "1",
-            "type": "resource"
-          }
-        }
-      }
-    },
-    {
       "id": "18",
       "type": "attachment",
       "attributes": {
@@ -2333,13 +2651,13 @@
       }
     },
     {
-      "id": "53",
+      "id": "22",
       "type": "attachment",
       "attributes": {
-        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/053/original/kgp-page-image-card-divider_1x.png?1498653305",
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/022/original/kgp-tract-bkg-image-4_1x.jpg?1499288718",
         "is-zipped": true,
-        "file-file-name": "kgp-page-image-card-divider_1x.png",
-        "sha256": "035136f7e8579926e5e2acca5fc93843abe3600a1423bb1ce9639099e4f08aa2"
+        "file-file-name": "kgp-tract-bkg-image-4_1x.jpg",
+        "sha256": "f7184f15ad2a6e0d5dc578d541a94ab6d8ec37a22cd64d2708c3d90b79d37b4e"
       },
       "relationships": {
         "resource": {
@@ -2351,13 +2669,139 @@
       }
     },
     {
-      "id": "55",
+      "id": "23",
       "type": "attachment",
       "attributes": {
-        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/055/original/kgp-image-self-directed.png?1498674187",
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/023/original/kgp-tract-bkg-image-5_1x.jpg?1499288727",
         "is-zipped": true,
-        "file-file-name": "kgp-image-self-directed.png",
-        "sha256": "caa2f0cf497e76628a54c4f0cc36c5bcd0cfa13cfcd9120d46732b5406e92083"
+        "file-file-name": "kgp-tract-bkg-image-5_1x.jpg",
+        "sha256": "40ce27f2a4d1282beb13c58045e6c6e009ad9a1ef90113e97c6e1dd65290877d"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "34",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/034/original/kgp-tract-bkg-image-7_1x.jpg?1499288738",
+        "is-zipped": true,
+        "file-file-name": "kgp-tract-bkg-image-7_1x.jpg",
+        "sha256": "7d9284584f7c6d01461c1c5d6cb111c2320da3f771053a48e12fd0a19a2316f5"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "82",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/082/original/kpg-christ-directed-person.png?1499104442",
+        "is-zipped": true,
+        "file-file-name": "kpg-christ-directed-person.png",
+        "sha256": "5d44a121641ab216196d0e65a0166f0a7487040e68deafe509e4cd83d11ce384"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "83",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/083/original/kpg-god-proves-his-love-person.png?1499104447",
+        "is-zipped": true,
+        "file-file-name": "kpg-god-proves-his-love-person.png",
+        "sha256": "4b34d6c823a65b1e3816b5de457bfc97e43ac37a496a8ad965a803af75de0665"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "84",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/084/original/kpg-self-directed-person.png?1499104451",
+        "is-zipped": true,
+        "file-file-name": "kpg-self-directed-person.png",
+        "sha256": "2db4477c644fe4bbad60a022a0a48fb3506d2cd0cf2014385a4c9a55baa59428"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "85",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/085/original/kpg-sin-has-consequences-graphic-person.png?1499104457",
+        "is-zipped": true,
+        "file-file-name": "kpg-sin-has-consequences-graphic-person.png",
+        "sha256": "d9d738d45c9d76c70f5fd57dca60db25ba86abe0330e003ab46af41a022d0ba8"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "87",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/087/original/kpg-trust-facts-not-feelings.png?1499104469",
+        "is-zipped": true,
+        "file-file-name": "kpg-trust-facts-not-feelings.png",
+        "sha256": "6ec9a36367ac3ad5bc61561381d3e8513e15f234a2391e0c12075d95d9b6fa4f"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "1",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "110",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/110/original/generic-divider-grey.png?1499263189",
+        "is-zipped": true,
+        "file-file-name": "generic-divider-grey.png",
+        "sha256": "035136f7e8579926e5e2acca5fc93843abe3600a1423bb1ce9639099e4f08aa2"
       },
       "relationships": {
         "resource": {
@@ -2397,34 +2841,6 @@
       }
     },
     {
-      "id": "174",
-      "type": "translation",
-      "attributes": {
-        "is-published": true,
-        "version": 3,
-        "manifest-name": "c005e854bd012d8d787bcb5a065218f62753fac0de8bb97fa858eccd1e0767b2.xml",
-        "translated-name": "¿Satisfecho?",
-        "translated-description": "Helps Christians understand and enjoy the presence  \nof God's Holy Spirit in their daily lives.   \n\nConversation starter: I have a tool that helps me experience God's presence in my life. May I share it with you?"
-      },
-      "relationships": {
-        "resource": {
-          "data": {
-            "id": "2",
-            "type": "resource"
-          }
-        },
-        "language": {
-          "data": {
-            "id": "3",
-            "type": "language"
-          }
-        },
-        "custom-pages": {
-          "data": []
-        }
-      }
-    },
-    {
       "id": "175",
       "type": "translation",
       "attributes": {
@@ -2453,12 +2869,40 @@
       }
     },
     {
-      "id": "237",
+      "id": "281",
       "type": "translation",
       "attributes": {
         "is-published": true,
-        "version": 34,
-        "manifest-name": "d2d534d100a4e445d882462c00c13f5051da46c5614ffc5f3a37c30e5adeaf42.xml",
+        "version": 5,
+        "manifest-name": "df24c6e1eb0b586b9a7396047c24644e2348c4d446d5dff1f5b58c30453e0aba.xml",
+        "translated-name": "¿Satisfecho?",
+        "translated-description": "Ayuda a los cristianos a entender y a disfrutar la presencia\ndel Espíritu Santo de Dios en sus vidas cotidianas.\n\nIniciador de conversación: Tengo una herramienta que me ayuda a experimentar la presencia de Dios en mi vida. ¿Puedo compartirla contigo?"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        },
+        "language": {
+          "data": {
+            "id": "3",
+            "type": "language"
+          }
+        },
+        "custom-pages": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "297",
+      "type": "translation",
+      "attributes": {
+        "is-published": true,
+        "version": 44,
+        "manifest-name": "f68380f4ea9e9fa9fc77eb44fc98de638d2c0356833eacc8ccafdfeaa2a81b88.xml",
         "translated-name": "Satisfied?",
         "translated-description": "This tool helps Christians understand and enjoy the presence of God's Holy Spirit in their daily lives.   \n\nConversation starter: I have a tool that helps me experience God's presence in my life. May I share it with you?"
       },
@@ -2477,42 +2921,6 @@
         },
         "custom-pages": {
           "data": []
-        }
-      }
-    },
-    {
-      "id": "5",
-      "type": "attachment",
-      "attributes": {
-        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/005/original/dry_lake_bed.jpg?1496876649",
-        "is-zipped": true,
-        "file-file-name": "dry_lake_bed.jpg",
-        "sha256": "3d369a1d8b2df92e69294a696c06e98dcc588190d0f4af6e4c6c3b02dc3708db"
-      },
-      "relationships": {
-        "resource": {
-          "data": {
-            "id": "2",
-            "type": "resource"
-          }
-        }
-      }
-    },
-    {
-      "id": "6",
-      "type": "attachment",
-      "attributes": {
-        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/006/original/dry_lake_bed_dark.jpg?1496876872",
-        "is-zipped": true,
-        "file-file-name": "dry_lake_bed_dark.jpg",
-        "sha256": "a2193396d0acde245f53ec2ef10b46961863d9d6673b2826e27912a8717929fc"
-      },
-      "relationships": {
-        "resource": {
-          "data": {
-            "id": "2",
-            "type": "resource"
-          }
         }
       }
     },
@@ -2673,6 +3081,602 @@
         "resource": {
           "data": {
             "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "53",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/053/original/satisfied-about_1x.jpg?1498763958",
+        "is-zipped": false,
+        "file-file-name": "satisfied-about_1x.jpg",
+        "sha256": "d84e2ee6bc7b949ac74213678a72487e511313579eeb6ace9f03364f31e41f19"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "101",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/101/original/satisfied-life-with-the-spirit-english.png?1499175076",
+        "is-zipped": true,
+        "file-file-name": "satisfied-life-with-the-spirit-english.png",
+        "sha256": "accbcf754467bb06313d243b8a9f0b9062885c2630e1d017eee5f7a78823a5f5"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "103",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/103/original/satisfied-life-without-the-spirit.png?1499175085",
+        "is-zipped": true,
+        "file-file-name": "satisfied-life-without-the-spirit.png",
+        "sha256": "52937e4a51c39115c0a9f8242e8e3bc246e56e1632e04ad50ef7e84326be4df3"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "104",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/104/original/satisfied-the-christ-centered-life-english.png?1499175098",
+        "is-zipped": true,
+        "file-file-name": "satisfied-the-christ-centered-life-english.png",
+        "sha256": "27159a5ad8b3d088862212c8cd63139214e06efbd4a823f409db9964f5cb88ae"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "106",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/106/original/satisfied-three-kinds-of-lifestyles.png?1499175107",
+        "is-zipped": true,
+        "file-file-name": "satisfied-three-kinds-of-lifestyles.png",
+        "sha256": "8a6565384a9614bb7c29eb0ae38d1bdfb63bee17865893b7b0052a15449bcf1c"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "107",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/107/original/satisfied-trust-facts-not-feelings.png?1499175119",
+        "is-zipped": true,
+        "file-file-name": "satisfied-trust-facts-not-feelings.png",
+        "sha256": "6ec9a36367ac3ad5bc61561381d3e8513e15f234a2391e0c12075d95d9b6fa4f"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "102",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/102/original/satisfied-life-with-the-spirit.png?1499175080",
+        "is-zipped": true,
+        "file-file-name": "satisfied-life-with-the-spirit.png",
+        "sha256": "3a31e31b41efef5d0ea1cfc3e00cdb210c325d68149163172598e98775dad6a5"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "105",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/105/original/satisfied-the-christ-centered-life.png?1499175103",
+        "is-zipped": true,
+        "file-file-name": "satisfied-the-christ-centered-life.png",
+        "sha256": "4fc4b9c1c61691c723d7d66f42169c0461d2cf8827f3e40d335d62c480413f39"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "111",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/111/original/generic-divider-grey.png?1499263194",
+        "is-zipped": true,
+        "file-file-name": "generic-divider-grey.png",
+        "sha256": "035136f7e8579926e5e2acca5fc93843abe3600a1423bb1ce9639099e4f08aa2"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "2",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "268",
+      "type": "translation",
+      "attributes": {
+        "is-published": true,
+        "version": 5,
+        "manifest-name": "c8e9bf9fec1dbc289fe65b28ab0a5b12886d198d31e312f02855f5684043029f.xml",
+        "translated-name": "Four Spiritual Laws",
+        "translated-description": "Classic gospel presentation of God's invitation to those who don't yet know him. \n\nConversation starter: I have a summary of the Bible's message using four simple ideas. May I share it with you?"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        },
+        "language": {
+          "data": {
+            "id": "3",
+            "type": "language"
+          }
+        },
+        "custom-pages": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "299",
+      "type": "translation",
+      "attributes": {
+        "is-published": true,
+        "version": 30,
+        "manifest-name": "04b4bb7fa02d281edbfdc361d6dbf05c65d1bdfa47c3cd79664a3fa05a02e07e.xml",
+        "translated-name": "Four Spiritual Laws",
+        "translated-description": "Classic gospel presentation of God's invitation to those who don't yet know him. \n\nConversation starter: I have a summary of the Bible's message using four simple ideas. May I share it with you?\n\nAll Bible references are from the New American Standard Bible unless otherwise stated."
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        },
+        "language": {
+          "data": {
+            "id": "1",
+            "type": "language"
+          }
+        },
+        "custom-pages": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "56",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/056/original/laws-tract-bkg-image-8.jpg?1498763201",
+        "is-zipped": true,
+        "file-file-name": "laws-tract-bkg-image-8.jpg",
+        "sha256": "fedd51055ce5ca6351d19f781601eb94192915597b4b023172acaab4fac04794"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "57",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/057/original/laws-tract-bkg-image-1.jpg?1498765450",
+        "is-zipped": true,
+        "file-file-name": "laws-tract-bkg-image-1.jpg",
+        "sha256": "1141677806e0a16b5ba6c1ad1d2fe9b6d55f8b04026b5e143c86391db67bf1ea"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "59",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/059/original/laws-home_1x.jpg?1498767493",
+        "is-zipped": false,
+        "file-file-name": "laws-home_1x.jpg",
+        "sha256": "36ec96dc7e53cf2387e448a34740c599fe6fb3c51a597fc49667664ca2828e52"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "60",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/060/original/laws-tract-bkg-image-2.jpg?1498767506",
+        "is-zipped": true,
+        "file-file-name": "laws-tract-bkg-image-2.jpg",
+        "sha256": "3c93d006591cf6bd7ae6a271e793e7e4bb6ae05bba7a542b890da9aa843779f3"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "61",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/061/original/laws-tract-bkg-image-3.jpg?1498767510",
+        "is-zipped": true,
+        "file-file-name": "laws-tract-bkg-image-3.jpg",
+        "sha256": "b345284ce389a5d80c53b91afcc6d16d66f742e7128ee4a99065c48e98df4f0e"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "62",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/062/original/laws-tract-bkg-image-4.jpg?1498767516",
+        "is-zipped": true,
+        "file-file-name": "laws-tract-bkg-image-4.jpg",
+        "sha256": "a04c3da9760149fedd96f1a82b5b3113159a110f0750687de11956d773a7bb27"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "63",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/063/original/laws-tract-bkg-image-4b.jpg?1498767521",
+        "is-zipped": true,
+        "file-file-name": "laws-tract-bkg-image-4b.jpg",
+        "sha256": "25f96c770f21afe142a9a8317c5a2c08629acc7ff373090616a6fd2c21e12f6e"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "64",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/064/original/laws-tract-bkg-image-5.jpg?1498767527",
+        "is-zipped": true,
+        "file-file-name": "laws-tract-bkg-image-5.jpg",
+        "sha256": "157e1820bb23d20cbb169902b41ae556c0684e7d7f7769373dc398ebe868d7ee"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "65",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/065/original/laws-tract-bkg-image-5b.jpg?1498767532",
+        "is-zipped": true,
+        "file-file-name": "laws-tract-bkg-image-5b.jpg",
+        "sha256": "343495cd09ef4c161d0a6555a41f2b120269f63e6843de834da063dcdefb2480"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "66",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/066/original/laws-tract-bkg-image-6.jpg?1498767537",
+        "is-zipped": true,
+        "file-file-name": "laws-tract-bkg-image-6.jpg",
+        "sha256": "99ddb3b2b32446a8fe86476fdc8f4aad5a3491e864374ae66b1f8597129c5fd8"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "67",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/067/original/laws-tract-bkg-image-7.jpg?1498767542",
+        "is-zipped": true,
+        "file-file-name": "laws-tract-bkg-image-7.jpg",
+        "sha256": "8f0a5d2a8499ebac05eb7cdc96f2e666736d6e0ec50318f8f28e540e4a7bcedf"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "58",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/058/original/laws-about_1x.jpg?1499104298",
+        "is-zipped": false,
+        "file-file-name": "laws-about_1x.jpg",
+        "sha256": "95ad213fe1106f7a12d0f0f7c1f82e53200021d7759bb543eb36cde626e37658"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "76",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/076/original/laws-christ-directed-life.png?1499104363",
+        "is-zipped": true,
+        "file-file-name": "laws-christ-directed-life.png",
+        "sha256": "a9bcd4bafa3c3b370c65aca5a0e108dd1b69b5783a21c4271bd124aeb733fcbc"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "77",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/077/original/laws-do-not-depend-on-feelings.png?1499104368",
+        "is-zipped": true,
+        "file-file-name": "laws-do-not-depend-on-feelings.png",
+        "sha256": "1312e2c6565051b4218b58a54bf184d010e92a5c2bbe4a717d4403346fd39225"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "78",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/078/original/laws-he-is-the-only-way-to-god-person.png?1499104373",
+        "is-zipped": true,
+        "file-file-name": "laws-he-is-the-only-way-to-god-person.png",
+        "sha256": "4b34d6c823a65b1e3816b5de457bfc97e43ac37a496a8ad965a803af75de0665"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "79",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/079/original/laws-man-is-separated-person.png?1499104378",
+        "is-zipped": true,
+        "file-file-name": "laws-man-is-separated-person.png",
+        "sha256": "d9d738d45c9d76c70f5fd57dca60db25ba86abe0330e003ab46af41a022d0ba8"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "80",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/080/original/laws-man-is-separated-star.png?1499104383",
+        "is-zipped": true,
+        "file-file-name": "laws-man-is-separated-star.png",
+        "sha256": "c01808964e666316d3b1b8b4290880d83f0f485278d677c3c97cbdd835ccf5e0"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "81",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/081/original/laws-self-directed-life.png?1499104388",
+        "is-zipped": true,
+        "file-file-name": "laws-self-directed-life.png",
+        "sha256": "475689a7ca5a21f44a61e130cf6bc78d302d563cc9fb6fb285ce839073331203"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "113",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/113/original/generic-divider-grey.png?1499263199",
+        "is-zipped": true,
+        "file-file-name": "generic-divider-grey.png",
+        "sha256": "035136f7e8579926e5e2acca5fc93843abe3600a1423bb1ce9639099e4f08aa2"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "4",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "109",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/109/original/questions-about_3x.png?1499185416",
+        "is-zipped": false,
+        "file-file-name": "questions-about_3x.png",
+        "sha256": "19bcb0bf06ef5a3cb10065470b4a5c0f07b9b762a507a7d8e7c790dabda87fa3"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "5",
+            "type": "resource"
+          }
+        }
+      }
+    },
+    {
+      "id": "108",
+      "type": "attachment",
+      "attributes": {
+        "file": "https://s3.amazonaws.com/cru-mobilecontentapi-prod/attachments/files/000/000/108/original/questions-home_3x.png?1499185396",
+        "is-zipped": false,
+        "file-file-name": "questions-home_3x.png",
+        "sha256": "e997ead9b4b7e87939872c48785cef5352e1b1aa82760c8a87e1638a61d1c085"
+      },
+      "relationships": {
+        "resource": {
+          "data": {
+            "id": "5",
             "type": "resource"
           }
         }

@@ -54,7 +54,7 @@ public class InitialContentTasks implements Runnable {
     private final EventBus mEventBus;
 
     @Nullable
-    JsonApiConverter mJsonApiConverter;
+    private JsonApiConverter mJsonApiConverter;
 
     public InitialContentTasks(@NonNull final Context context) {
         mContext = context.getApplicationContext();
