@@ -20,8 +20,6 @@ public interface LegacyApi {
     String AUTH = V2 + "/auth";
     String NOTIFICATION = "notification";
     String NOTIFICATION_UPDATE = NOTIFICATION + "/" + "update";
-    String META = V2 + "/meta/all";
-    String ENDPOINT_PACKAGES = V2 + "/packages";
     String ENDPOINT_TRANSLATIONS = V2 + "/translations";
 
     String HEADER_INTERPRETER = "interpreter: 1";
