@@ -8,6 +8,8 @@ android {
         minSdkVersion minSdk
         targetSdkVersion targetSdk
 
+        consumerProguardFiles 'proguard-rules-retrofit2.pro'
+
         buildConfigField "String", "MOBILE_CONTENT_SYSTEM", "\"GodTools\""
         buildConfigField "String", "GROWTH_SPACES_URL", "\"https://www.growthspaces.org/api/v1/\""
     }
