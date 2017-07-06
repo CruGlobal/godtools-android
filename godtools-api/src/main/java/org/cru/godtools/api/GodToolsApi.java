@@ -23,9 +23,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
-import static org.cru.godtools.api.BuildConfig.BASE_URL;
 import static org.cru.godtools.api.BuildConfig.MOBILE_CONTENT_API;
 
 public class GodToolsApi {
@@ -44,9 +42,6 @@ public class GodToolsApi {
     public final FollowupApi followups;
     @NonNull
     public final ViewsApi views;
-    @NonNull
-    @Deprecated
-    public final LegacyApi legacy;
 
     private GodToolsApi(@NonNull final Context context) {
         mContext = context;
@@ -62,13 +57,6 @@ public class GodToolsApi {
         attachments = retrofit.create(AttachmentsApi.class);
         followups = retrofit.create(FollowupApi.class);
         views = retrofit.create(ViewsApi.class);
-
-        legacy = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(SimpleXmlConverterFactory.create())
-                .callFactory(okhttp)
-                .build()
-                .create(LegacyApi.class);
     }
 
     @Nullable

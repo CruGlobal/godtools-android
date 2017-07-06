@@ -11,7 +11,6 @@ android {
         consumerProguardFiles 'proguard-rules-retrofit2.pro'
 
         buildConfigField "String", "MOBILE_CONTENT_SYSTEM", "\"GodTools\""
-        buildConfigField "String", "GROWTH_SPACES_URL", "\"https://www.growthspaces.org/api/v1/\""
     }
 
     flavorDimensions "env"
@@ -19,13 +18,11 @@ android {
         stage {
             dimension "env"
 
-            buildConfigField "String", "BASE_URL", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/\""
             buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api-stage.cru.org/\""
         }
         production {
             dimension "env"
 
-            buildConfigField "String", "BASE_URL", "\"https://api.godtoolsapp.com/godtools-api/rest/\""
             buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api.cru.org/\""
         }
     }
@@ -39,11 +36,4 @@ dependencies {
     api "org.ccci.gto.android:gto-support-jsonapi-retrofit2:${deps.gtoSupport}"
 
     api "com.squareup.retrofit2:retrofit:${deps.retrofit2}"
-
-    // include these temporarily to support migration of deprecated APIs
-    implementation("com.squareup.retrofit2:converter-simplexml:${deps.retrofit2}") {
-        exclude module: 'stax'
-        exclude module: 'stax-api'
-        exclude module: 'xpp3'
-    }
 }
