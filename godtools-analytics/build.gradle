@@ -1,0 +1,21 @@
+apply plugin: 'com.android.library'
+
+android {
+    buildToolsVersion buildTools
+    compileSdkVersion compileSdk
+
+    defaultConfig {
+        minSdkVersion minSdk
+        targetSdkVersion targetSdk
+
+        buildConfigField "String", "GOOGLE_ANALYTICS_CLIENT_ID", "\"UA-325725-50\""
+    }
+}
+
+dependencies {
+    implementation project(':godtools-base')
+
+    implementation "com.google.android.gms:play-services-analytics:${deps.playServices}"
+
+    implementation "org.greenrobot:eventbus:${deps.eventbus}"
+}

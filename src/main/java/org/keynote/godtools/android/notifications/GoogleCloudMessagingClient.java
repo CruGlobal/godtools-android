@@ -11,7 +11,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import org.keynote.godtools.android.googleAnalytics.EventTracker;
+import org.cru.godtools.analytics.AnalyticsService;
 import org.keynote.godtools.android.service.BackgroundService;
 import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
@@ -60,7 +60,7 @@ public class GoogleCloudMessagingClient
                 registerInBackground();
                 // since when an app is first registered notifications are probably on,
                 // send first state to Google Analytics
-                EventTracker.getInstance(context).settingChanged("Notification State", "Turned ON");
+                AnalyticsService.getInstance(context).settingChanged("Notification State", "Turned ON");
             }
         }
         else

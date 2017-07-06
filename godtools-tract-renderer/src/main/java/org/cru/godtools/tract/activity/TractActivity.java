@@ -357,6 +357,7 @@ public class TractActivity extends ImmersiveActivity
             mPagerAdapter.setCallbacks(this);
             mPager.setAdapter(mPagerAdapter);
             getLifecycle().addObserver(mPagerAdapter);
+            mPager.addOnPageChangeListener(new AnalyticsPageChangeListener());
             updatePager();
         }
     }
@@ -391,6 +392,16 @@ public class TractActivity extends ImmersiveActivity
         final ManifestLoaderCallbacks manifestCallbacks = new ManifestLoaderCallbacks();
         for (int i = 0; i < mLanguages.length; i++) {
             manager.initLoader(LOADER_MANIFEST_BASE + i, null, manifestCallbacks);
+        }
+    }
+
+    class AnalyticsPageChangeListener extends ViewPager.SimpleOnPageChangeListener {
+        @Override
+        public void onPageSelected(final int position) {
+            final Manifest manifest = getActiveManifest();
+            if (manifest != null) {
+                mAnalytics.trackScreen(manifest.getCode() + "-" + position);
+            }
         }
     }
 

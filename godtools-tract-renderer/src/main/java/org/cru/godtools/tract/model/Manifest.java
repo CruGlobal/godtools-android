@@ -113,7 +113,7 @@ public final class Manifest extends Base implements Styles {
     }
 
     @NonNull
-    String getCode() {
+    public String getCode() {
         return mCode;
     }
 

@@ -24,6 +24,8 @@ import org.keynote.godtools.android.model.Tool;
 
 import java.util.Locale;
 
+import static org.cru.godtools.analytics.AnalyticsService.SCREEN_HOME;
+
 public class MainActivity extends BaseActivity implements ToolsFragment.Callbacks {
     private static final String EXTRA_TOUR_LAUNCHED = MainActivity.class.getName() + ".TOUR_LAUNCHED";
 
@@ -62,6 +64,12 @@ public class MainActivity extends BaseActivity implements ToolsFragment.Callback
         super.onStart();
         loadInitialFragmentIfNeeded();
         showTourIfNeeded();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAnalytics.trackScreen(SCREEN_HOME);
     }
 
     @Override

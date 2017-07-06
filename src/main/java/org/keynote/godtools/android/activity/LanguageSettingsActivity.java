@@ -12,6 +12,8 @@ import android.support.v4.app.FragmentManager;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.fragment.LanguageSettingsFragment;
 
+import static org.cru.godtools.analytics.AnalyticsService.SCREEN_LANGUAGE_SETTINGS;
+
 public class LanguageSettingsActivity extends BaseActivity {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
@@ -31,6 +33,12 @@ public class LanguageSettingsActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         loadInitialFragmentIfNeeded();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAnalytics.trackScreen(SCREEN_LANGUAGE_SETTINGS);
     }
 
     /* END lifecycle */

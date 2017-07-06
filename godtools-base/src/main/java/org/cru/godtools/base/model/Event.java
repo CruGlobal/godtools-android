@@ -39,25 +39,25 @@ public final class Event {
         public static final Id FOLLOWUP_EVENT = new Id("followup", "send");
 
         @NonNull
-        private final String mNamespace;
+        public final String namespace;
         @NonNull
-        private final String mName;
+        public final String name;
 
         Id(@NonNull final String namespace, @NonNull final String name) {
-            mNamespace = namespace;
-            mName = name;
+            this.namespace = namespace;
+            this.name = name;
         }
 
         @Override
         public boolean equals(@Nullable final Object obj) {
             return obj instanceof Id &&
-                    mNamespace.equalsIgnoreCase(((Id) obj).mNamespace) &&
-                    mName.equalsIgnoreCase(((Id) obj).mName);
+                    namespace.equalsIgnoreCase(((Id) obj).namespace) &&
+                    name.equalsIgnoreCase(((Id) obj).name);
         }
 
         @Override
         public int hashCode() {
-            return Arrays.hashCode(new String[] {mNamespace.toLowerCase(), mName.toLowerCase()});
+            return Arrays.hashCode(new String[] {namespace.toLowerCase(), name.toLowerCase()});
         }
 
         public static Set<Id> parse(@NonNull final String defaultNamespace, @Nullable final String raw) {
