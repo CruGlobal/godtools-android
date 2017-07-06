@@ -16,6 +16,8 @@ import org.keynote.godtools.android.model.Tool;
 
 import java.util.Locale;
 
+import static org.cru.godtools.analytics.AnalyticsService.SCREEN_ADD_TOOLS;
+
 public class AddToolsActivity extends BaseActivity implements ToolsFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
@@ -41,6 +43,12 @@ public class AddToolsActivity extends BaseActivity implements ToolsFragment.Call
     protected void onStart() {
         super.onStart();
         loadInitialFragmentIfNeeded();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAnalytics.trackScreen(SCREEN_ADD_TOOLS);
     }
 
     @Override
