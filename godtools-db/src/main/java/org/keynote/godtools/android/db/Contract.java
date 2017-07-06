@@ -23,6 +23,8 @@ public final class Contract extends BaseContract {
 
     static class LegacyTables {
         static final String SQL_DELETE_GSSUBSCRIBERS = drop("gssubscribers");
+        static final String SQL_DELETE_GTLANGUAGES = drop("gtlanguages");
+        static final String SQL_DELETE_GTLANGUAGES_OLD = drop("gtlanguages_old");
     }
 
     @SuppressWarnings("checkstyle:InterfaceIsType")

@@ -5,9 +5,7 @@ import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.async.AbstractAsyncDao;
-import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
-import org.keynote.godtools.android.dao.DBContract.GTLanguageTable;
 import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
 
 @Deprecated
@@ -17,8 +15,6 @@ public class DBAdapter extends AbstractAsyncDao {
 
         registerType(GTPackage.class, GTPackageTable.TABLE_NAME, GTPackageTable.PROJECTION_ALL, new GTPackageMapper(),
                      GTPackageTable.SQL_WHERE_PRIMARY_KEY);
-        registerType(GTLanguage.class, GTLanguageTable.TABLE_NAME, GTLanguageTable.PROJECTION_ALL,
-                     new GTLanguageMapper(), GTLanguageTable.SQL_WHERE_PRIMARY_KEY);
     }
 
     @NonNull
@@ -28,8 +24,6 @@ public class DBAdapter extends AbstractAsyncDao {
             final GTPackage gtPackage = (GTPackage) obj;
             return getPrimaryKeyWhere(GTPackage.class, gtPackage.getLanguage(), gtPackage.getStatus(),
                                       gtPackage.getCode());
-        } else if (obj instanceof GTLanguage) {
-            return getPrimaryKeyWhere(GTLanguage.class, ((GTLanguage) obj).getLanguageCode());
         }
 
         return super.getPrimaryKeyWhere(obj);
