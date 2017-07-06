@@ -40,6 +40,7 @@ ext.deps = [
         butterknife          : '8.6.0',
         crashlytics          : '2.6.8',
         eventbus             : '3.0.0',
+        eventbusAnnotations  : '3.0.1',
         facebookStetho       : '1.5.0',
         gtoSupport           : '1.1.2-SNAPSHOT',
         guava                : '22.0-android',
@@ -97,6 +98,7 @@ dependencies {
     debugCompile "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
 
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
+    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
 
     // fix conflicts in transitive dependencies
     androidTestCompile 'com.google.code.findbugs:jsr305:2.0.1'
@@ -122,6 +124,12 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [eventBusIndex: 'org.cru.godtools.AppEventBusIndex']
+            }
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
