@@ -13,6 +13,8 @@ android {
 }
 
 dependencies {
+    implementation project(':godtools-base')
+
     implementation "com.google.android.gms:play-services-analytics:${deps.playServices}"
 
     implementation "org.greenrobot:eventbus:${deps.eventbus}"

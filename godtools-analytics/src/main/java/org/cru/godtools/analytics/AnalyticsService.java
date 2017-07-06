@@ -1,18 +1,18 @@
-package org.keynote.godtools.android.googleAnalytics;
+package org.cru.godtools.analytics;
 
 import android.content.Context;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import org.cru.godtools.analytics.GoogleAnalytics;
 import org.cru.godtools.base.model.Event;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-public class EventTracker {
+public class AnalyticsService {
     public static final String SCREEN_EVERYSTUDENT = "EveryStudent";
     public static final String SCREEN_SETTINGS = "Settings";
     public static final String CATEGORY_MENU = "Menu Event";
@@ -20,10 +20,10 @@ public class EventTracker {
     private static final String TAG = "EventTracker";
     private static final int DIMENSION_SCREEN_NAME = 1;
     private static final int DIMENSION_LANGUAGE = 2;
-    private static EventTracker instance;
+    private static AnalyticsService instance;
     private Tracker mTracker = null;
 
-    private EventTracker(@NonNull final Context context) {
+    private AnalyticsService(@NonNull final Context context) {
 
         mTracker = GoogleAnalytics.getTracker(context);
 
@@ -31,11 +31,11 @@ public class EventTracker {
     }
 
     @NonNull
-    public static EventTracker getInstance(@NonNull final Context context) {
-        synchronized (EventTracker.class) {
+    public static AnalyticsService getInstance(@NonNull final Context context) {
+        synchronized (AnalyticsService.class) {
 
             if (instance == null) {
-                instance = new EventTracker(context.getApplicationContext());
+                instance = new AnalyticsService(context.getApplicationContext());
             }
 
             return instance;
@@ -77,6 +77,7 @@ public class EventTracker {
 
     }
 
+    @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void trackContentEvent(@NonNull final Event event) {
         mTracker.send(new HitBuilders.EventBuilder()

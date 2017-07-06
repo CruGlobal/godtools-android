@@ -23,15 +23,15 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.SimpleExpandableListAdapter;
 
+import org.cru.godtools.analytics.AnalyticsService;
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.googleAnalytics.EventTracker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.keynote.godtools.android.googleAnalytics.EventTracker.SCREEN_EVERYSTUDENT;
+import static org.cru.godtools.analytics.AnalyticsService.SCREEN_EVERYSTUDENT;
 
 @SuppressWarnings("deprecation")
 public class EveryStudent extends ExpandableListActivity
@@ -46,7 +46,7 @@ public class EveryStudent extends ExpandableListActivity
     private static ExpandableListAdapter mAdapter;
     private static ParserThread mParserThread;
     @NonNull
-    private EventTracker mTracker;
+    private AnalyticsService mTracker;
 
     private List<List<Map<String, String>>> mTopics;
     private List<Map<String, String>> mCategories;
@@ -62,7 +62,7 @@ public class EveryStudent extends ExpandableListActivity
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
-        mTracker = EventTracker.getInstance(this);
+        mTracker = AnalyticsService.getInstance(this);
 
         EveryStudentPersistance esp = (EveryStudentPersistance) getLastNonConfigurationInstance();
 
