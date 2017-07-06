@@ -16,6 +16,7 @@ import com.annimon.stream.Stream;
 
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
+import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.sync.service.GodToolsDownloadManager;
@@ -40,6 +41,12 @@ import static org.keynote.godtools.android.Constants.EXTRA_TOOL;
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
 public class ToolDetailsFragment extends BaseFragment {
+    public interface Callbacks {
+        void onToolAdded();
+
+        void onToolRemoved();
+    }
+
     private static final int LOADER_TOOL = 101;
     private static final int LOADER_BANNER = 102;
     private static final int LOADER_LATEST_TRANSLATION = 103;
@@ -188,14 +195,22 @@ public class ToolDetailsFragment extends BaseFragment {
 
     @Optional
     @OnClick(R.id.action_add)
-    void addResource() {
+    void addTool() {
         GodToolsDownloadManager.getInstance(getContext()).addTool(mToolId);
+        final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
+        if (callbacks != null) {
+            callbacks.onToolAdded();
+        }
     }
 
     @Optional
     @OnClick(R.id.action_remove)
-    void removeResource() {
+    void removeTool() {
         GodToolsDownloadManager.getInstance(getContext()).removeTool(mToolId);
+        final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
+        if (callbacks != null) {
+            callbacks.onToolRemoved();
+        }
     }
 
     private void startLoaders() {

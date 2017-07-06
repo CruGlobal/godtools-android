@@ -16,7 +16,7 @@ import org.keynote.godtools.android.model.Tool;
 
 import static org.keynote.godtools.android.Constants.EXTRA_TOOL;
 
-public class ToolDetailsActivity extends BaseActivity {
+public class ToolDetailsActivity extends BaseActivity implements ToolDetailsFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
     private long mTool = Tool.INVALID_ID;
@@ -50,6 +50,16 @@ public class ToolDetailsActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         loadInitialFragmentIfNeeded();
+    }
+
+    @Override
+    public void onToolAdded() {
+        finish();
+    }
+
+    @Override
+    public void onToolRemoved() {
+        finish();
     }
 
     /* END lifecycle */
