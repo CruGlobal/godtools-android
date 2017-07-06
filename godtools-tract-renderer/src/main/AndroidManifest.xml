@@ -5,10 +5,12 @@
     <application>
         <activity
             android:name=".activity.TractActivity"
+            android:screenOrientation="userPortrait"
             android:theme="@style/Theme.GodTools.Tract.Activity.Tract" />
 
         <activity
             android:name=".activity.ModalActivity"
+            android:screenOrientation="userPortrait"
             android:theme="@style/Theme.GodTools.Tract.Activity.Modal" />
     </application>
 </manifest>
