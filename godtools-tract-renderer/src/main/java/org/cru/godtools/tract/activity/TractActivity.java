@@ -312,13 +312,17 @@ public class TractActivity extends ImmersiveActivity
             }
 
             // update colors for tab text, and background
-            ViewUtils.setBackgroundTint(mLanguageTabs, controlColor);
             mLanguageTabs.setTabTextColors(controlColor, selectedColor);
-            for (int i = 0; i < mLanguageTabs.getTabCount(); i++) {
-                final TabLayout.Tab tab = mLanguageTabs.getTabAt(i);
+            ViewUtils.setBackgroundTint(mLanguageTabs, controlColor);
 
+            // update visible tabs
+            for (int i = 0; i < mLanguages.length; i++) {
+                final TabLayout.Tab tab = mLanguageTabs.getTabAt(i);
                 if (tab != null) {
-                    // set the tab background
+                    // update tab visibility
+                    TabLayoutUtils.setVisibility(tab, mManifests.get(i) != null ? View.VISIBLE : View.GONE);
+
+                    // update tab background
                     Drawable bkg = AppCompatResources.getDrawable(mLanguageTabs.getContext(), R.drawable.bkg_tab_label);
                     if (bkg != null) {
                         bkg = DrawableCompat.wrap(bkg).mutate();
