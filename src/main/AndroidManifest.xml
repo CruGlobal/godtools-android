@@ -133,10 +133,6 @@
             android:theme="@android:style/Theme.Dialog" />
 
         <activity
-            android:name=".SnuffyPWActivity"
-            android:screenOrientation="userPortrait"
-            android:theme="@style/Theme.GodTools.Activity.Content"/>
-        <activity
             android:name=".SnuffyPageMenuPWActivity"
             android:screenOrientation="userPortrait"
             android:theme="@android:style/Theme.Light" />
