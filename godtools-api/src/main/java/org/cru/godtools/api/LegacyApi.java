@@ -1,6 +1,5 @@
 package org.cru.godtools.api;
 
-import org.cru.godtools.api.model.GTLanguages;
 import org.cru.godtools.api.model.GTNotificationRegister;
 
 import okhttp3.ResponseBody;
@@ -45,18 +44,6 @@ public interface LegacyApi {
     @POST(NOTIFICATION_UPDATE)
     Call<ResponseBody> updateNotification(@Header(AUTHORIZATION) String token,
                                           @Body GTNotificationRegister notificationRegister);
-
-    @Headers(HEADER_INTERPRETER)
-    @GET(META)
-    Call<GTLanguages> getListOfPackages();
-
-    @Headers(HEADER_INTERPRETER)
-    @GET(META + "/{langCode}")
-    Call<GTLanguages> getListOfDrafts(@Header(AUTHORIZATION) String token, @Path("langCode") String langCode);
-
-    @Headers(HEADER_INTERPRETER)
-    @GET(ENDPOINT_PACKAGES + "/{langCode}")
-    Call<ResponseBody> downloadPackages(@Header(AUTHORIZATION) String token, @Path("langCode") String langCode);
 
     @Headers({
             HEADER_INTERPRETER,
