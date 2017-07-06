@@ -5,6 +5,7 @@ import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
@@ -41,8 +42,7 @@ public class AnalyticsService {
     private Tracker mTracker = null;
 
     private AnalyticsService(@NonNull final Context context) {
-        mTracker = GoogleAnalytics.getTracker(context);
-
+        mTracker = GoogleAnalytics.getInstance(context).newTracker(BuildConfig.GOOGLE_ANALYTICS_CLIENT_ID);
         EventBus.getDefault().register(this);
     }
 
