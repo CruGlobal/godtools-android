@@ -20,6 +20,7 @@ public class AnalyticsService {
     public static final String SCREEN_TOOL_DETAILS = "Tool Info";
     public static final String SCREEN_LANGUAGE_SETTINGS = "Language Settings";
     public static final String SCREEN_LANGUAGE_SELECTION = "Select Language";
+    public static final String SCREEN_MENU = "Menu";
     public static final String SCREEN_ABOUT = "About";
     public static final String SCREEN_HELP = "Help";
     public static final String SCREEN_CONTACT_US = "Contact Us";
