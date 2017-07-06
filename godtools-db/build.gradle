@@ -20,14 +20,4 @@ dependencies {
     api "org.ccci.gto.android:gto-support-db-stream:${deps.gtoSupport}"
 
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
-
-    testImplementation "junit:junit:${deps.junit}"
-    testImplementation "org.hamcrest:hamcrest-library:${deps.hamcrest}"
-
-    // XXX: supporting legacy objects, we may be able to get rid of this at some point
-    implementation("org.simpleframework:simple-xml:${deps.simplexml}") {
-        exclude module: 'stax'
-        exclude module: 'stax-api'
-        exclude module: 'xpp3'
-    }
 }
