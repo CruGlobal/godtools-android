@@ -20,6 +20,14 @@ public class AnalyticsService {
     public static final String SCREEN_TOOL_DETAILS = "Tool Info";
     public static final String SCREEN_LANGUAGE_SETTINGS = "Language Settings";
     public static final String SCREEN_LANGUAGE_SELECTION = "Select Language";
+    public static final String SCREEN_ABOUT = "About";
+    public static final String SCREEN_HELP = "Help";
+    public static final String SCREEN_CONTACT_US = "Contact Us";
+    public static final String SCREEN_SHARE_GODTOOLS = "Share App";
+    public static final String SCREEN_SHARE_STORY = "Share Story";
+    public static final String SCREEN_TERMS_OF_USE = "Terms of Use";
+    public static final String SCREEN_PRIVACY_POLICY = "Privacy Policy";
+    public static final String SCREEN_COPYRIGHT = "Copyright Info";
 
     /* Custom dimensions */
     private static final int DIMENSION_TOOL = 1;

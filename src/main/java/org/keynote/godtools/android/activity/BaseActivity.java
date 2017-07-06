@@ -30,6 +30,12 @@ import java.util.Locale;
 import butterknife.BindView;
 
 import static org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES;
+import static org.cru.godtools.analytics.AnalyticsService.SCREEN_CONTACT_US;
+import static org.cru.godtools.analytics.AnalyticsService.SCREEN_HELP;
+import static org.cru.godtools.analytics.AnalyticsService.SCREEN_PRIVACY_POLICY;
+import static org.cru.godtools.analytics.AnalyticsService.SCREEN_SHARE_GODTOOLS;
+import static org.cru.godtools.analytics.AnalyticsService.SCREEN_SHARE_STORY;
+import static org.cru.godtools.analytics.AnalyticsService.SCREEN_TERMS_OF_USE;
 import static org.keynote.godtools.android.Constants.MAILTO_SUPPORT;
 import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
 import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
@@ -131,6 +137,7 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
     public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_help:
+                mAnalytics.trackScreen(SCREEN_HELP);
                 WebUrlLauncher.openUrl(this, URI_HELP);
                 return true;
             case R.id.action_rate:
@@ -146,9 +153,11 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
                 launchContactUs();
                 return true;
             case R.id.action_terms_of_use:
+                mAnalytics.trackScreen(SCREEN_TERMS_OF_USE);
                 WebUrlLauncher.openUrl(this, URI_TERMS_OF_USE);
                 return true;
             case R.id.action_privacy_policy:
+                mAnalytics.trackScreen(SCREEN_PRIVACY_POLICY);
                 WebUrlLauncher.openUrl(this, URI_PRIVACY);
                 return true;
         }
@@ -264,11 +273,13 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
     }
 
     private void launchContactUs() {
+        mAnalytics.trackScreen(SCREEN_CONTACT_US);
         final Intent intent = new Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT);
         startActivity(intent);
     }
 
     private void launchShare() {
+        mAnalytics.trackScreen(SCREEN_SHARE_GODTOOLS);
         final String text = getString(R.string.share_general_message)
                 .replace(SHARE_LINK, URI_SHARE_BASE + prefs().getPrimaryLanguage());
 
@@ -280,6 +291,7 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
     }
 
     private void launchShareStory() {
+        mAnalytics.trackScreen(SCREEN_SHARE_STORY);
         final Intent intent = new Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT);
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_story_subject));
         startActivity(intent);
