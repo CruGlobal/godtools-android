@@ -1,0 +1,17 @@
+apply plugin: 'com.android.library'
+
+android {
+    buildToolsVersion buildTools
+    compileSdkVersion compileSdk
+
+    defaultConfig {
+        minSdkVersion minSdk
+        targetSdkVersion targetSdk
+    }
+}
+
+dependencies {
+    implementation "com.google.android.gms:play-services-analytics:${deps.playServices}"
+
+    implementation "org.greenrobot:eventbus:${deps.eventbus}"
+}
