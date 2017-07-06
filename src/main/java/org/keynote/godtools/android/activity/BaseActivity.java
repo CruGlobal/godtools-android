@@ -29,7 +29,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 
-import static org.ccci.gto.android.common.Constants.INVALID_STRING_RES;
+import static org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES;
 import static org.keynote.godtools.android.Constants.MAILTO_SUPPORT;
 import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
 import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
