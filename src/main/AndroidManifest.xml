@@ -7,28 +7,31 @@
         android:resizeable="false"/>
 
     <!-- These permissions should be obvious -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- might be needed for Notifications -->
-    <uses-permission android:name="android.permission.VIBRATE"/>
-
-    <!-- used by GcmBroadcastReceiver -->
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
-    <uses-permission android:name="android.permission.GET_TASKS"/>
-
-    <!-- keep this permission for potential future usage of capturing user location within GrowthSpaces.
-
-         Matt Watts: one question from the Philippines staff asked "how can i know English speaking Filipinos who sign
-                     up". This is one possible reason to collect location." -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-
+    <!-- Unused permissions, kept around for older android in case we want to start using them again -->
+    <uses-permission
+        android:name="android.permission.GET_TASKS"
+        android:maxSdkVersion="22" />
+    <uses-permission
+        android:name="android.permission.VIBRATE"
+        android:maxSdkVersion="22" />
+    <uses-permission
+        android:name="android.permission.WAKE_LOCK"
+        android:maxSdkVersion="22" />
+    <uses-permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:maxSdkVersion="22" />
+    <uses-permission
+        android:name="com.google.android.c2dm.permission.RECEIVE"
+        android:maxSdkVersion="22" />
     <permission
         android:name="${applicationId}.permission.C2D_MESSAGE"
-        android:protectionLevel="signature"/>
-    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE"/>
+        android:protectionLevel="signature" />
+    <uses-permission
+        android:name="${applicationId}.permission.C2D_MESSAGE"
+        android:maxSdkVersion="22" />
+
 
     <application
         android:name=".snuffy.SnuffyApplication"
@@ -122,16 +125,6 @@
         <meta-data
             android:name="android.app.default_searchable"
             android:value=".everystudent.EveryStudentSearchResults" />
-
-        <receiver android:name=".notifications.GcmBroadcastReceiver"
-                  android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="org.keynote.godtools.android" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name=".notifications.GcmIntentService" />
 
         <meta-data android:name="com.google.android.gms.version"
                    android:value="@integer/google_play_services_version" />

@@ -73,7 +73,6 @@ dependencies {
     implementation "com.android.support:percent:${deps.androidSupport}"
 
     compile "com.google.android.gms:play-services-analytics:${deps.playServices}"
-    compile 'com.google.android.gms:play-services-gcm:' + deps.playServices
 
     implementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
     compile "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
