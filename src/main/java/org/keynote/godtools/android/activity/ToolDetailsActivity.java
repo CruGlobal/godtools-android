@@ -79,4 +79,9 @@ public class ToolDetailsActivity extends BaseActivity implements ToolDetailsFrag
                 .replace(R.id.frame, ToolDetailsFragment.newInstance(mTool), TAG_MAIN_FRAGMENT)
                 .commit();
     }
+
+    @Override
+    public void supportNavigateUpTo(@NonNull final Intent upIntent) {
+        finish();
+    }
 }
