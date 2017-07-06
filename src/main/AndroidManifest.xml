@@ -36,16 +36,6 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.GodTools">
         <activity
-            android:name=".MainPW"
-            android:launchMode="singleTop"
-            android:screenOrientation="userPortrait"/>
-        
-        <activity 
-            android:name=".PreviewModeMainPW"
-            android:launchMode="singleTop"
-            android:screenOrientation="userPortrait"/>
-
-        <activity
             android:name=".everystudent.EveryStudent"
             android:label="@string/app_name_everystudent"
             android:theme="@android:style/Theme.Light" />
@@ -132,24 +122,6 @@
         <meta-data
             android:name="android.app.default_searchable"
             android:value=".everystudent.EveryStudentSearchResults" />
-
-        <activity
-            android:name=".snuffy.SnuffyAboutActivity"
-            android:screenOrientation="userPortrait"/>
-
-        <activity
-            android:name=".snuffy.SnuffyHelpActivity"
-            android:screenOrientation="userPortrait"
-            android:theme="@android:style/Theme.Dialog" />
-
-        <activity
-            android:name=".SnuffyPWActivity"
-            android:screenOrientation="userPortrait"
-            android:theme="@style/Theme.GodTools.Activity.Content"/>
-        <activity
-            android:name=".SnuffyPageMenuPWActivity"
-            android:screenOrientation="userPortrait"
-            android:theme="@android:style/Theme.Light" />
 
         <receiver android:name=".notifications.GcmBroadcastReceiver"
                   android:permission="com.google.android.c2dm.permission.SEND" >

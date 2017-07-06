@@ -6,7 +6,6 @@ import org.ccci.gto.android.common.db.BaseContract;
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Expression.Field;
 import org.ccci.gto.android.common.db.Table;
-import org.keynote.godtools.android.business.GTLanguage;
 import org.keynote.godtools.android.business.GTPackage;
 
 import static org.ccci.gto.android.common.db.Expression.bind;
@@ -14,9 +13,6 @@ import static org.ccci.gto.android.common.db.Expression.field;
 
 public class DBContract extends BaseContract {
     private static final String TEXT_TYPE = " TEXT";
-    private static final String INTEGER_TYPE = " INTEGER";
-    private static final String PRIMARY_KEY = " PRIMARY KEY";
-    private static final String COMMA_SEP = ",";
 
     public static abstract class GTPackageTable implements Base {
         public static final String TABLE_NAME = "gtpackages";
@@ -49,8 +45,6 @@ public class DBContract extends BaseContract {
 
         static final Expression SQL_WHERE_PRIMARY_KEY =
                 FIELD_LANGUAGE.eq(bind()).and(FIELD_STATUS.eq(bind())).and(FIELD_CODE.eq(bind()));
-        public static final Expression SQL_WHERE_DRAFT_BY_LANGUAGE =
-                FIELD_LANGUAGE.eq(bind()).and(FIELD_STATUS.eq(GTPackage.STATUS_DRAFT));
 
         public static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_NAME, SQL_COLUMN_LANGUAGE,
@@ -73,54 +67,5 @@ public class DBContract extends BaseContract {
         public static final String SQL_V3_MIGRATE_DATA =
                 "INSERT OR IGNORE INTO " + TABLE_NAME + " (" + SQL_V3_MIGRATE_COLUMNS + ") SELECT " +
                         SQL_V3_MIGRATE_COLUMNS + " FROM " + OLD_TABLE_NAME;
-    }
-
-    public static abstract class GTLanguageTable implements Base {
-        public static final String TABLE_NAME = "gtlanguages";
-        public static final Table<GTLanguage> TABLE = Table.forClass(GTLanguage.class);
-
-        public static final String COL_CODE = "code";
-        public static final String COL_NAME = "name";
-        public static final String COL_DOWNLOADED = "is_downloaded";
-        public static final String COL_DRAFT = "is_draft";
-
-        static final String[] PROJECTION_ALL = {COL_CODE, COL_NAME, COL_DOWNLOADED, COL_DRAFT};
-
-        private static final String SQL_COLUMN_CODE = COL_CODE + " TEXT NOT NULL";
-        private static final String SQL_COLUMN_NAME = COL_NAME + " TEXT";
-        private static final String SQL_COLUMN_DOWNLOADED = COL_DOWNLOADED + " INTEGER";
-        private static final String SQL_COLUMN_DRAFT = COL_DRAFT + " INTEGER";
-        private static final String SQL_PRIMARY_KEY = uniqueIndex(COL_CODE);
-
-        static final Expression SQL_WHERE_PRIMARY_KEY = TABLE.field(COL_CODE).eq(bind());
-
-        public static final String SQL_CREATE_TABLE =
-                create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_DOWNLOADED, SQL_COLUMN_DRAFT,
-                       SQL_COLUMN_NAME, SQL_PRIMARY_KEY);
-        public static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
-
-        // migration db queries
-        public static final String OLD_TABLE_NAME = "gtlanguages_old";
-        public static final String SQL_RENAME_TABLE = "ALTER TABLE " + TABLE_NAME + " RENAME TO " + OLD_TABLE_NAME;
-        public static final String SQL_DELETE_OLD_TABLE = drop(OLD_TABLE_NAME);
-
-        @Deprecated
-        public static final String SQL_V1_MIGRATE_DATA = "INSERT INTO " + TABLE_NAME
-                + " (" + GTLanguageTable._ID + COMMA_SEP
-                + GTLanguageTable.COL_CODE + COMMA_SEP
-                + GTLanguageTable.COL_DOWNLOADED + COMMA_SEP
-                + GTLanguageTable.COL_DRAFT + ")" +
-                " SELECT * FROM " + OLD_TABLE_NAME;
-        @Deprecated
-        public static final String SQL_V2_CREATE_TABLE =
-                create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_DOWNLOADED, SQL_COLUMN_DRAFT,
-                       SQL_COLUMN_NAME);
-        @Deprecated
-        private static final String SQL_V6_MIGRATE_COLUMNS = TextUtils.join(",", new Object[] {COL_CODE, COL_DOWNLOADED,
-                COL_DRAFT, COL_DOWNLOADED});
-        @Deprecated
-        public static final String SQL_V6_MIGRATE_DATA =
-                "INSERT OR IGNORE INTO " + TABLE_NAME + " (" + SQL_V6_MIGRATE_COLUMNS + ") SELECT " +
-                        SQL_V6_MIGRATE_COLUMNS + " FROM " + OLD_TABLE_NAME;
     }
 }

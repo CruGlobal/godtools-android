@@ -16,16 +16,6 @@ public class RenderAppConfig extends BaseAppConfig {
     }
 
     @Override
-    public String getCannotDialString() {
-        return get(R.string.cannot_dial);
-    }
-
-    @Override
-    public String getCannotEmailString() {
-        return get(R.string.cannot_email);
-    }
-
-    @Override
     public String getAllWebsitesString() {
         return get(R.string.all_websites);
     }
@@ -33,11 +23,6 @@ public class RenderAppConfig extends BaseAppConfig {
     @Override
     public String getOpenString() {
         return get(R.string.open);
-    }
-
-    @Override
-    public String getCannotLaunchBrowserString() {
-        return get(R.string.cannot_launch_browser);
     }
 
     @Override
@@ -61,11 +46,6 @@ public class RenderAppConfig extends BaseAppConfig {
     }
 
     @Override
-    public String getOK() {
-        return get(R.string.ok);
-    }
-
-    @Override
     public String getCopy() {
         return get(R.string.copy);
     }
@@ -73,11 +53,6 @@ public class RenderAppConfig extends BaseAppConfig {
     @Override
     public String getFollowupModalInputValidGeneric() {
         return get(R.string.tract_content_input_error_invalid_generic);
-    }
-
-    @Override
-    public String getFollowupModalInputInvalidEmail() {
-        return get(R.string.tract_content_input_error_invalid_email);
     }
 
     @Override
