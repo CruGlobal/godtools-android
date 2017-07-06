@@ -10,7 +10,6 @@ import android.support.design.widget.TabLayout.OnTabSelectedListener;
 import android.support.design.widget.TabLayoutUtils;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.util.Pools;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.content.res.AppCompatResources;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -22,6 +21,7 @@ import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.model.Tab.TabViewHolder;
+import org.cru.godtools.tract.util.ViewUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -147,12 +147,7 @@ final class Tabs extends Content {
             mTabs.setTabTextColors(primaryColor, Styles.getPrimaryTextColor(styles));
 
             // update background tint
-            Drawable bkg = mTabs.getBackground();
-            if (bkg != null) {
-                bkg = DrawableCompat.wrap(bkg).mutate();
-                DrawableCompat.setTint(bkg, primaryColor);
-                ViewCompat.setBackground(mTabs, bkg);
-            }
+            ViewUtils.setBackgroundTint(mTabs, primaryColor);
 
             // add all the current tabs
             if (mModel != null) {
@@ -168,7 +163,7 @@ final class Tabs extends Content {
                             .setText(Text.getText(label));
 
                     // set the tab background
-                    bkg = AppCompatResources.getDrawable(mTabs.getContext(), R.drawable.bkg_content_tab_label);
+                    Drawable bkg = AppCompatResources.getDrawable(mTabs.getContext(), R.drawable.bkg_tab_label);
                     if (bkg != null) {
                         bkg = DrawableCompat.wrap(bkg).mutate();
                         DrawableCompat.setTint(bkg, primaryColor);

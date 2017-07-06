@@ -2,12 +2,9 @@
 <resources>
     <dimen name="tabs_corner_radius">0dp</dimen>
 
-    <style name="Base.Widget.GodTools.Tract.Content.Tabs" parent="Widget.Design.TabLayout">
+    <style name="Widget.GodTools.Tract.TabLayout" parent="Widget.Design.TabLayout">
+        <item name="android:background">@drawable/bkg_tabs</item>
         <item name="tabGravity">fill</item>
-    </style>
-
-    <style name="Widget.GodTools.Tract.Content.Tabs" parent="Base.Widget.GodTools.Tract.Content.Tabs">
-        <item name="android:layout_width">match_parent</item>
-        <item name="tabMinWidth">0dp</item>
+        <item name="tabIndicatorHeight">0dp</item>
     </style>
 </resources>

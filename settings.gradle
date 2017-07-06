@@ -1,4 +1,14 @@
 rootProject.name='godtools'
-include ':godtools-api', ':godtools-base', ':godtools-base-ui', ':godtools-db', ':godtools-initial-content',
-        ':godtools-model', ':godtools-model-events', ':godtools-renderer', ':godtools-sync', ':godtools-tract-renderer',
-        ':optroundcardview'
+include 'godtools-api'
+include 'godtools-base'
+include 'godtools-base-ui'
+include 'godtools-db'
+include 'godtools-initial-content'
+include 'godtools-model'
+include 'godtools-model-events'
+include 'godtools-sync'
+include 'godtools-tract-renderer'
+
+// deprecated
+include 'godtools-renderer'
+include 'optroundcardview'
