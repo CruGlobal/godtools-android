@@ -2,16 +2,15 @@ package org.keynote.godtools.android.googleAnalytics;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import org.cru.godtools.analytics.GoogleAnalytics;
+import org.cru.godtools.base.model.Event;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.keynote.godtools.renderer.crureader.bo.GPage.Event.GodToolsEvent;
 
 public class EventTracker {
     public static final String SCREEN_EVERYSTUDENT = "EveryStudent";
@@ -79,15 +78,10 @@ public class EventTracker {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void trackContentEvent(@NonNull final GodToolsEvent event) {
-        Log.i(TAG, "EventBus: trackerContentEvent " + event.toString());
-
-        final GodToolsEvent.EventID eventID = event.getEventID();
+    public void trackContentEvent(@NonNull final Event event) {
         mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory(CATEGORY_CONTENT_EVENT)
-                .setAction(eventID.getNamespace() + ":" + eventID.getId())
-                .build());
-
+                              .setCategory(CATEGORY_CONTENT_EVENT)
+                              .setAction(event.id.namespace + ":" + event.id.name)
+                              .build());
     }
-
 }
