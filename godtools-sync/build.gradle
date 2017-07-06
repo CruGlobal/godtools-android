@@ -7,6 +7,12 @@ android {
     defaultConfig {
         minSdkVersion minSdk
         targetSdkVersion targetSdk
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [eventBusIndex: 'org.cru.godtools.sync.SyncEventBusIndex']
+            }
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -35,4 +41,6 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
+
+    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
 }

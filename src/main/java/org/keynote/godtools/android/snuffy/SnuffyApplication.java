@@ -9,6 +9,8 @@ import com.squareup.picasso.Picasso;
 
 import org.ccci.gto.android.common.api.okhttp3.util.OkHttpClientUtil;
 import org.cru.godtools.AppEventBusIndex;
+import org.cru.godtools.model.events.ModelEventsEventBusIndex;
+import org.cru.godtools.sync.SyncEventBusIndex;
 import org.cru.godtools.sync.service.FollowupService;
 import org.cru.godtools.sync.service.GodToolsDownloadManager;
 import org.cru.godtools.tract.TractEventBusIndex;
@@ -63,6 +65,8 @@ public class SnuffyApplication extends RenderApp {
     private void configureEventbus() {
         EventBus.builder()
                 .addIndex(new AppEventBusIndex())
+                .addIndex(new ModelEventsEventBusIndex())
+                .addIndex(new SyncEventBusIndex())
                 .addIndex(new TractEventBusIndex())
                 .installDefaultEventBus();
     }
