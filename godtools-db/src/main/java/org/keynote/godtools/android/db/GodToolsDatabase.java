@@ -12,7 +12,6 @@ import com.crashlytics.android.Crashlytics;
 import org.ccci.gto.android.common.app.ApplicationUtils;
 import org.ccci.gto.android.common.db.CommonTables.LastSyncTable;
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper;
-import org.keynote.godtools.android.dao.DBContract.GTPackageTable;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.FollowupTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
@@ -26,7 +25,7 @@ import io.fabric.sdk.android.Fabric;
 
 public final class GodToolsDatabase extends WalSQLiteOpenHelper {
     private static final String DATABASE_NAME = "resource.db";
-    private static final int DATABASE_VERSION = 32;
+    private static final int DATABASE_VERSION = 33;
 
     /*
      * Version history
@@ -66,6 +65,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
      * 30: 2017-06-29
      * 31: 2017-06-30
      * 32: 2017-07-06
+     * 33: 2017-07-06
      */
 
     @NonNull
@@ -94,7 +94,6 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
         try {
             db.beginTransaction();
 
-            db.execSQL(GTPackageTable.SQL_CREATE_TABLE);
             db.execSQL(LastSyncTable.SQL_CREATE_TABLE);
             db.execSQL(FollowupTable.SQL_CREATE_TABLE);
             db.execSQL(LanguageTable.SQL_CREATE_TABLE);
@@ -118,24 +117,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             while (upgradeTo <= newVersion) {
                 switch (upgradeTo) {
                     case 2:
-                        // create tables
-                        db.execSQL(GTPackageTable.SQL_V2_CREATE_TABLE);
-                        break;
                     case 3:
-                        // rename old packages table
-                        db.execSQL(GTPackageTable.SQL_DELETE_OLD_TABLE);
-                        db.execSQL(GTPackageTable.SQL_RENAME_TABLE);
-
-                        // create new table
-                        db.execSQL(GTPackageTable.SQL_CREATE_TABLE);
-
-                        // migrate data
-                        db.execSQL(GTPackageTable.SQL_V3_MIGRATE_DATA);
-
-                        // delete old table
-                        db.execSQL(GTPackageTable.SQL_DELETE_OLD_TABLE);
-
-                        break;
                     case 4:
                     case 5:
                     case 6:
@@ -207,6 +189,10 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
                         db.execSQL(LegacyTables.SQL_DELETE_GTLANGUAGES);
                         db.execSQL(LegacyTables.SQL_DELETE_GTLANGUAGES_OLD);
                         break;
+                    case 33:
+                        db.execSQL(LegacyTables.SQL_DELETE_GTPACKAGES);
+                        db.execSQL(LegacyTables.SQL_DELETE_GTPACKAGES_OLD);
+                        break;
                     default:
                         // unrecognized version
                         throw new SQLiteException("Unrecognized database version");
@@ -239,8 +225,6 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.beginTransaction();
 
             // delete any existing tables
-            db.execSQL(GTPackageTable.SQL_DELETE_TABLE);
-            db.execSQL(GTPackageTable.SQL_DELETE_OLD_TABLE);
             db.execSQL(FollowupTable.SQL_DELETE_TABLE);
             db.execSQL(TranslationTable.SQL_DELETE_TABLE);
             db.execSQL(ToolTable.SQL_DELETE_TABLE);
@@ -254,6 +238,8 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             db.execSQL(LegacyTables.SQL_DELETE_GSSUBSCRIBERS);
             db.execSQL(LegacyTables.SQL_DELETE_GTLANGUAGES);
             db.execSQL(LegacyTables.SQL_DELETE_GTLANGUAGES_OLD);
+            db.execSQL(LegacyTables.SQL_DELETE_GTPACKAGES);
+            db.execSQL(LegacyTables.SQL_DELETE_GTPACKAGES_OLD);
 
             onCreate(db);
 

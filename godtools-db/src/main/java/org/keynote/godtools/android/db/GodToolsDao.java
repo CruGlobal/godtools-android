@@ -13,6 +13,7 @@ import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.db.StreamDao;
 import org.ccci.gto.android.common.db.Transaction;
+import org.ccci.gto.android.common.db.async.AbstractAsyncDao;
 import org.ccci.gto.android.common.util.ArrayUtils;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Base;
@@ -21,7 +22,6 @@ import org.cru.godtools.model.Language;
 import org.cru.godtools.model.LocalFile;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.TranslationFile;
-import org.keynote.godtools.android.dao.DBAdapter;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.FollowupTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
@@ -31,7 +31,7 @@ import org.keynote.godtools.android.db.Contract.TranslationFileTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.model.Tool;
 
-public class GodToolsDao extends DBAdapter implements StreamDao {
+public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
     private GodToolsDao(@NonNull final Context context) {
         super(GodToolsDatabase.getInstance(context));
 
