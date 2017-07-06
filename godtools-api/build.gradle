@@ -39,7 +39,6 @@ dependencies {
     api "com.squareup.retrofit2:retrofit:${deps.retrofit2}"
 
     // include these temporarily to support migration of deprecated APIs
-    implementation project(':godtools-db')
     implementation("com.squareup.retrofit2:converter-simplexml:${deps.retrofit2}") {
         exclude module: 'stax'
         exclude module: 'stax-api'
