@@ -127,11 +127,6 @@
             android:name=".snuffy.SnuffyAboutActivity"
             android:screenOrientation="userPortrait"/>
 
-        <activity
-            android:name=".SnuffyPageMenuPWActivity"
-            android:screenOrientation="userPortrait"
-            android:theme="@android:style/Theme.Light" />
-
         <receiver android:name=".notifications.GcmBroadcastReceiver"
                   android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
