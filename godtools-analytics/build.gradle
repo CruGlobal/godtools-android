@@ -8,6 +8,12 @@ android {
         minSdkVersion minSdk
         targetSdkVersion targetSdk
 
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [eventBusIndex: 'org.cru.godtools.analytics.AnalyticsEventBusIndex']
+            }
+        }
+
         buildConfigField "String", "GOOGLE_ANALYTICS_CLIENT_ID", "\"UA-325725-50\""
     }
 }
@@ -18,4 +24,6 @@ dependencies {
     implementation "com.google.android.gms:play-services-analytics:${deps.playServices}"
 
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
+
+    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
 }
