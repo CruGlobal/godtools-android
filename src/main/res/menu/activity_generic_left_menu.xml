@@ -51,6 +51,10 @@
                 android:id="@+id/action_privacy_policy"
                 android:orderInCategory="200"
                 android:title="@string/menu_privacy_policy" />
+            <item
+                android:id="@+id/action_copyright"
+                android:orderInCategory="300"
+                android:title="@string/menu_copyright" />
         </menu>
     </item>
 </menu>

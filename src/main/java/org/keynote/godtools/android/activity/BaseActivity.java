@@ -30,6 +30,7 @@ import butterknife.BindView;
 
 import static org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES;
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_CONTACT_US;
+import static org.cru.godtools.analytics.AnalyticsService.SCREEN_COPYRIGHT;
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_HELP;
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_PRIVACY_POLICY;
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_SHARE_GODTOOLS;
@@ -38,6 +39,7 @@ import static org.cru.godtools.analytics.AnalyticsService.SCREEN_TERMS_OF_USE;
 import static org.keynote.godtools.android.Constants.MAILTO_SUPPORT;
 import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
 import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
+import static org.keynote.godtools.android.Constants.URI_COPYRIGHT;
 import static org.keynote.godtools.android.Constants.URI_HELP;
 import static org.keynote.godtools.android.Constants.URI_PRIVACY;
 import static org.keynote.godtools.android.Constants.URI_SHARE_BASE;
@@ -154,6 +156,10 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
             case R.id.action_privacy_policy:
                 mAnalytics.trackScreen(SCREEN_PRIVACY_POLICY);
                 WebUrlLauncher.openUrl(this, URI_PRIVACY);
+                return true;
+            case R.id.action_copyright:
+                mAnalytics.trackScreen(SCREEN_COPYRIGHT);
+                WebUrlLauncher.openUrl(this, URI_COPYRIGHT);
                 return true;
         }
 
