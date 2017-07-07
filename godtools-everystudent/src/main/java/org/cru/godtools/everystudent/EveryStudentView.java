@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.everystudent;
+package org.cru.godtools.everystudent;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -20,15 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.cru.godtools.analytics.AnalyticsService;
-import org.cru.godtools.everystudent.R;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.keynote.godtools.android.everystudent.Constants.PREFS_SETTINGS;
 
 @SuppressWarnings("deprecation")
 public class EveryStudentView extends Activity
@@ -47,7 +44,7 @@ public class EveryStudentView extends Activity
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
 
-        SharedPreferences settings = getSharedPreferences(PREFS_SETTINGS, 0);
+        SharedPreferences settings = getSharedPreferences(Constants.PREFS_SETTINGS, 0);
         if (settings.getBoolean("wakelock", true))
         {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);

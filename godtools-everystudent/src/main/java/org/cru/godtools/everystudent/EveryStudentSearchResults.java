@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.everystudent;
+package org.cru.godtools.everystudent;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -28,8 +28,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-
-import org.cru.godtools.everystudent.R;
 
 import java.util.Arrays;
 import java.util.Iterator;

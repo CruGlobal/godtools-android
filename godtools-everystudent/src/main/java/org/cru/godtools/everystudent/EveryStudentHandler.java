@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.everystudent;
+package org.cru.godtools.everystudent;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;

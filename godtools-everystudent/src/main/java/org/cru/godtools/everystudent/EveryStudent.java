@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.everystudent;
+package org.cru.godtools.everystudent;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -24,7 +24,6 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.SimpleExpandableListAdapter;
 
 import org.cru.godtools.analytics.AnalyticsService;
-import org.cru.godtools.everystudent.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

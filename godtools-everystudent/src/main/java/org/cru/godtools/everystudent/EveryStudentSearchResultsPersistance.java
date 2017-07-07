@@ -1,18 +1,16 @@
-package org.keynote.godtools.android.everystudent;
+package org.cru.godtools.everystudent;
 
 import android.database.Cursor;
-
-import org.keynote.godtools.android.everystudent.EveryStudentSearchResults.MySimpleCursorAdapter;
 
 class EveryStudentSearchResultsPersistance
 {
     private final Cursor mCursor;
     private final String mCount;
-    private MySimpleCursorAdapter mAdapter = null;
+    private EveryStudentSearchResults.MySimpleCursorAdapter mAdapter = null;
     private String mQuery;
 
 
-    public EveryStudentSearchResultsPersistance(MySimpleCursorAdapter adapter, Cursor cursor, String query, String count)
+    public EveryStudentSearchResultsPersistance(EveryStudentSearchResults.MySimpleCursorAdapter adapter, Cursor cursor, String query, String count)
     {
         mCount = count;
         mAdapter = adapter;
@@ -20,7 +18,7 @@ class EveryStudentSearchResultsPersistance
         mQuery = query;
     }
 
-    public MySimpleCursorAdapter getmAdapter()
+    public EveryStudentSearchResults.MySimpleCursorAdapter getmAdapter()
     {
         return mAdapter;
     }
