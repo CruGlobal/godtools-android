@@ -59,6 +59,7 @@ dependencies {
     implementation project(':godtools-base')
     implementation project(':godtools-base-ui')
     implementation project(':godtools-db')
+    implementation project(':godtools-everystudent')
     implementation project(':godtools-initial-content')
     implementation project(':godtools-model')
     implementation project(':godtools-model-events')
@@ -176,10 +177,6 @@ android {
             buildConfigField "String", "BASE_URL_V2", "\"https://api.godtoolsapp.com/godtools-api/rest/v2/\""
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AAcaf7bbfe3ffda5dcb1455d3bc16b0c5da1cd71e9\""
         }
-    }
-    applicationVariants.all {
-        buildConfigField "String", "EVERY_STUDENT_AUTHORITY", '"' + applicationId + '.everystudent.EveryStudentProvider"'
-        resValue "string", "every_student_authority", applicationId + ".everystudent.EveryStudentProvider"
     }
 }
 

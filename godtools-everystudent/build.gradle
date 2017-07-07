@@ -1,0 +1,29 @@
+apply plugin: 'com.android.library'
+
+android {
+    buildToolsVersion buildTools
+    compileSdkVersion compileSdk
+
+    defaultConfig {
+        minSdkVersion minSdk
+        targetSdkVersion targetSdk
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "String", "EVERY_STUDENT_AUTHORITY", '"org.cru.godtools.everystudent.debug.EveryStudentProvider"'
+            resValue "string", "every_student_authority", "org.cru.godtools.everystudent.debug.EveryStudentProvider"
+        }
+
+        release {
+            buildConfigField "String", "EVERY_STUDENT_AUTHORITY", '"org.cru.godtools.everystudent.EveryStudentProvider"'
+            resValue "string", "every_student_authority", "org.cru.godtools.everystudent.EveryStudentProvider"
+        }
+    }
+}
+
+dependencies {
+    implementation project(':godtools-analytics')
+
+    implementation "com.android.support:support-annotations:${deps.androidSupport}"
+}

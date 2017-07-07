@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.everystudent;
+package org.cru.godtools.everystudent;
 
 import android.app.SearchManager;
 import android.content.ContentProvider;
@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import org.cru.godtools.analytics.AnalyticsService;
-import org.keynote.godtools.android.BuildConfig;
 
 /**
  * Provides access to the EveryStudent database.

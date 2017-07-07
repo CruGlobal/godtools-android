@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.everystudent;
+package org.cru.godtools.everystudent;
 
 import android.widget.ExpandableListAdapter;
 

@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.everystudent;
+package org.cru.godtools.everystudent;
 
 import android.app.SearchManager;
 import android.content.ContentValues;
@@ -12,7 +12,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import org.keynote.godtools.android.R;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -263,11 +262,11 @@ class EveryStudentDatabase
 
             for (int i = 0; i < categories.size(); i++)
             {
-                String catName = categories.get(i).get(EveryStudent.NAME);
+                String catName = categories.get(i).get(Constants.NAME);
                 List<Map<String, String>> catTopics = topics.get(i);
                 for (int j = 0; j < catTopics.size(); j++)
                 {
-                    insertArticle(catName, catTopics.get(j).get(EveryStudent.NAME), catTopics.get(j).get(EveryStudent.CONTENT));
+                    insertArticle(catName, catTopics.get(j).get(Constants.NAME), catTopics.get(j).get(Constants.CONTENT));
                 }
             }
         }

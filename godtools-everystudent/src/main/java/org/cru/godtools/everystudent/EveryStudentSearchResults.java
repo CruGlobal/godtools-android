@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.everystudent;
+package org.cru.godtools.everystudent;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -28,8 +28,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-
-import org.keynote.godtools.android.R;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -171,14 +169,11 @@ public class EveryStudentSearchResults extends ListActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        switch (item.getItemId())
-        {
-            case R.id.search:
-                onSearchRequested();
-                return true;
-            default:
-                return false;
+        if (item.getItemId() == R.id.search) {
+            onSearchRequested();
+            return true;
         }
+        return false;
     }
 
     @SuppressLint("HandlerLeak")

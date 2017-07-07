@@ -7,15 +7,9 @@
     <string name="menu_item_help">帮助</string>
     <string name="menu_switch_language">切换的语言</string>
     <string name="menu_update_page">更新页面(草稿)</string>
-    <string name="app_name_everystudent">有关生命和上帝的疑问</string>
     <string name="quit_dialog_message">你确认你要退出God Tools吗？</string>
     <string name="quit_dialog_confirm">退出</string>
     <string name="quit_dialog_cancel">取消</string>
-    <string name="search_label">EveryStudent.com</string>
-    <string name="search_hint">搜索EveryStudent.com</string>
-    <string name="search_no_results">搜索结果中无法找到\"{{search_term}}\"</string>
-    <string name="settings_description">探索关于生活和上帝的问题</string>
-    <string name="menu_search">搜索</string>
     <string name="menu_about">关于</string>
     <string name="snuffy_help">进入下一个页面，仅需要向左滑动。回到上一个页面，向右滑动。查看菜单你可以点击页面任何非按钮的部分</string>
     <string name="snuffy_help_title" formatted="false">{{package_name}} 帮助</string>
@@ -67,8 +61,6 @@
     <string name="single_website_assist">一个可以帮助你的网站</string>
     <string name="cannot_dial">无法启动拨号键盘</string>
     <string name="cannot_email">无法启动邮件应用</string>
-    <!-- Every Student-->
-    <string name="could_not_load_content">无法加载内容</string>
     <!-- Shared Strings -->
     <string name="ok">是的</string>
     <string name="cancel">取消</string>

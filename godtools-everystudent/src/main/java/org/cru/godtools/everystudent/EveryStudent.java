@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.everystudent;
+package org.cru.godtools.everystudent;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -24,7 +24,6 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.SimpleExpandableListAdapter;
 
 import org.cru.godtools.analytics.AnalyticsService;
-import org.keynote.godtools.android.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,8 +36,6 @@ import static org.cru.godtools.analytics.AnalyticsService.SCREEN_EVERYSTUDENT;
 public class EveryStudent extends ExpandableListActivity
 {
     public static final String GA_LANGUAGE_EVERYSTUDENT = "en_classic";
-    public static final String NAME = "NAME";
-    public static final String CONTENT = "CONTENT";
     private static final String ROWID = "ROWID";
 
     private static final int DIALOG_LOADING = 0;
@@ -134,14 +131,11 @@ public class EveryStudent extends ExpandableListActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        switch (item.getItemId())
-        {
-            case R.id.search:
-                onSearchRequested();
-                return true;
-            default:
-                return false;
+        if (item.getItemId() == R.id.search) {
+            onSearchRequested();
+            return true;
         }
+        return false;
     }
 
     @SuppressLint("HandlerLeak")
@@ -214,7 +208,7 @@ public class EveryStudent extends ExpandableListActivity
                         tempmap.put(category, new ArrayList<Map<String, String>>());
                     }
                     HashMap<String, String> map = new HashMap<String, String>();
-                    map.put(NAME, title);
+                    map.put(Constants.NAME, title);
                     map.put(ROWID, String.valueOf(rowid));
                     tempmap.get(category).add(map);
                 } while (cur.moveToNext());
@@ -223,17 +217,17 @@ public class EveryStudent extends ExpandableListActivity
             for (String cat : cats)
             {
                 HashMap<String, String> map = new HashMap<String, String>();
-                map.put(NAME, cat);
+                map.put(Constants.NAME, cat);
                 categories.add(map);
                 topics.add(tempmap.get(cat));
             }
 
             adapter = new SimpleExpandableListAdapter(EveryStudent.this,
-                    categories,
-                    R.layout.simple_expandable_list_item_1,
-                    new String[]{NAME}, new int[]{android.R.id.text1},
-                    topics, R.layout.simple_expandable_list_item_2,
-                    new String[]{NAME}, new int[]{android.R.id.text1});
+                                                      categories,
+                                                      R.layout.simple_expandable_list_item_1,
+                                                      new String[]{Constants.NAME}, new int[]{android.R.id.text1},
+                                                      topics, R.layout.simple_expandable_list_item_2,
+                                                      new String[]{Constants.NAME}, new int[]{android.R.id.text1});
 
             mHandler.sendEmptyMessage(0);
         }
