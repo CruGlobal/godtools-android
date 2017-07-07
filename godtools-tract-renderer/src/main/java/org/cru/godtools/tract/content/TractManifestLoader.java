@@ -13,14 +13,16 @@ import java.util.Locale;
 public class TractManifestLoader extends CachingAsyncTaskEventBusLoader<Manifest> {
     private final TractManager mTractManager;
 
-    private final long mToolId;
+    @NonNull
+    private final String mTool;
     @NonNull
     private final Locale mLocale;
 
-    public TractManifestLoader(@NonNull final Context context, final long toolId, @NonNull final Locale locale) {
+    public TractManifestLoader(@NonNull final Context context, @NonNull final String toolCode,
+                               @NonNull final Locale locale) {
         super(context);
         mTractManager = TractManager.getInstance(context);
-        mToolId = toolId;
+        mTool = toolCode;
         mLocale = locale;
 
         addEventBusSubscriber(new TranslationEventBusSubscriber(this));
@@ -34,7 +36,7 @@ public class TractManifestLoader extends CachingAsyncTaskEventBusLoader<Manifest
     @Override
     public Manifest loadInBackground() {
         try {
-            return mTractManager.getLatestPublishedManifest(mToolId, mLocale).get();
+            return mTractManager.getLatestPublishedManifest(mTool, mLocale).get();
         } catch (final Exception ignored) {
             return null;
         }
