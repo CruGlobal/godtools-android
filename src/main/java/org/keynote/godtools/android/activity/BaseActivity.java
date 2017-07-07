@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 
+import org.cru.godtools.activity.AboutActivity;
 import org.cru.godtools.base.Settings;
 import org.keynote.godtools.android.BuildConfig;
 import org.keynote.godtools.android.R;
@@ -133,6 +134,9 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
     @CallSuper
     public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_about:
+                AboutActivity.start(this);
+                return true;
             case R.id.action_help:
                 mAnalytics.trackScreen(SCREEN_HELP);
                 WebUrlLauncher.openUrl(this, URI_HELP);
