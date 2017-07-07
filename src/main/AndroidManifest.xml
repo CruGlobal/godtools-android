@@ -2,10 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.keynote.godtools.android">
 
-    <supports-screens
-        android:smallScreens="false"
-        android:resizeable="false"/>
-
     <!-- These permissions should be obvious -->
     <uses-permission android:name="android.permission.INTERNET" />
 
