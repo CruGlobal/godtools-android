@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_search">Szukaj</string>
+    <string name="search_label">kazdystudent.pl</string>
+    <string name="search_hint">Przeszukaj stronę kazdystudent.pl</string>
+    <string name="search_no_results">Nie znaleziono \"{{search_term}}\"</string>
+    <string name="settings_description">Pytania na temat życia i Boga</string>
 </resources>

@@ -11,10 +11,6 @@
     <string name="quit_dialog_message">Қызмет құралдарынан шыққыңыз келе ме?</string>
     <string name="quit_dialog_confirm">Шығу</string>
     <string name="quit_dialog_cancel">Жою</string>
-    <string name="search_label">EveryStudent.com</string>
-    <string name="search_hint">Іздеу EveryStudent.com</string>
-    <string name="search_no_results">{{search_term}} үшін нәтиже табылмады</string>
-    <string name="settings_description">Құдай және өмір жайында сұрақтарды зерттеңіз</string>
     <string name="menu_about">туралы</string>
     <string name="snuffy_help">Келесі бетке өту үшін, сол жаққа жүргізіңіз. Бастапқы бетке өту үшін оң жаққа жүргізіңіз. Мәзірді көрсету үшін парақшаның кез келген жерін іске қосуға болады. Тек батырмаға баспаңыз.</string>
     <string name="snuffy_help_title" formatted="false">{{package_name}} Көмек</string>

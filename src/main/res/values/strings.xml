@@ -10,14 +10,6 @@
     <string name="quit_dialog_message">Are you sure you want to exit God Tools?</string>
     <string name="quit_dialog_confirm">Exit</string>
     <string name="quit_dialog_cancel">Cancel</string>
-    <string name="search_label">EveryStudent.com</string>
-    <string name="search_hint">Search EveryStudent.com</string>
-    <plurals name="search_results">
-        <item quantity="one">1 result for \"{{search_term}}\":</item>
-        <item quantity="other">{{number_or_results}} results for \"{{search_term}}\":</item>
-    </plurals>
-    <string name="search_no_results">No results found for \"{{search_term}}\"</string>
-    <string name="settings_description">Explore questions about life and God</string>
     <string name="menu_about">About</string>
     <string name="snuffy_help">To advance to the next page, simply swipe to the left. To return to the previous page, swipe to the right. To show the menu you can tap in any area of the page other than on a button.</string>
     <string name="snuffy_help_title" formatted="false">{{package_name}} Help</string>

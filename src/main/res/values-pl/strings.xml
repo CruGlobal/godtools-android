@@ -11,10 +11,6 @@
     <string name="quit_dialog_message">Na pewno chcesz zamknąć God Tools?</string>
     <string name="quit_dialog_confirm">Wyjście</string>
     <string name="quit_dialog_cancel">Anuluj</string>
-    <string name="search_label">kazdystudent.pl</string>
-    <string name="search_hint">Przeszukaj stronę kazdystudent.pl</string>
-    <string name="search_no_results">Nie znaleziono \"{{search_term}}\"</string>
-    <string name="settings_description">Pytania na temat życia i Boga</string>
     <string name="menu_about">O aplikacji</string>
     <string name="snuffy_help">Aby przejść do następnej strony przesuń palcem w lewą stronę. Aby wrócić do poprzedniej strony przesuń palcem w prawo. Aby zobaczyć menu dotknij dowolnego miejsca na ekranie (innego niż aktywny link/przycisk)</string>
     <string name="snuffy_help_title" formatted="false">Pomoc na temat: {{package_name}}</string>
