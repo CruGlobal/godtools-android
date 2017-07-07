@@ -27,15 +27,15 @@ class EveryStudentHandler extends DefaultHandler
         if (name.equalsIgnoreCase(xmlCategory))
         {
             currentElement = xmlCategory;
-            curCatMap = new HashMap<String, String>();
-            curCatMap.put(EveryStudent.NAME, atts.getValue("name"));
-            curTopics = new ArrayList<Map<String, String>>();
+            curCatMap = new HashMap<>();
+            curCatMap.put(Constants.NAME, atts.getValue("name"));
+            curTopics = new ArrayList<>();
         }
         else if (name.equalsIgnoreCase(xmlTopic))
         {
             currentElement = xmlTopic;
-            curTopicMap = new HashMap<String, String>();
-            curTopicMap.put(EveryStudent.NAME, atts.getValue("name"));
+            curTopicMap = new HashMap<>();
+            curTopicMap.put(Constants.NAME, atts.getValue("name"));
             curContent = new StringBuffer();
         }
     }
@@ -50,7 +50,7 @@ class EveryStudentHandler extends DefaultHandler
         }
         if (name.equalsIgnoreCase(xmlTopic))
         {
-            curTopicMap.put(EveryStudent.CONTENT, curContent.toString());
+            curTopicMap.put(Constants.CONTENT, curContent.toString());
             curTopics.add(curTopicMap);
         }
     }

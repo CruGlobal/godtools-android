@@ -263,11 +263,11 @@ class EveryStudentDatabase
 
             for (int i = 0; i < categories.size(); i++)
             {
-                String catName = categories.get(i).get(EveryStudent.NAME);
+                String catName = categories.get(i).get(Constants.NAME);
                 List<Map<String, String>> catTopics = topics.get(i);
                 for (int j = 0; j < catTopics.size(); j++)
                 {
-                    insertArticle(catName, catTopics.get(j).get(EveryStudent.NAME), catTopics.get(j).get(EveryStudent.CONTENT));
+                    insertArticle(catName, catTopics.get(j).get(Constants.NAME), catTopics.get(j).get(Constants.CONTENT));
                 }
             }
         }

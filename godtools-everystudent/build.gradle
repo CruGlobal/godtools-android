@@ -11,4 +11,5 @@ android {
 }
 
 dependencies {
+    implementation project(':godtools-analytics')
 }
