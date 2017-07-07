@@ -21,7 +21,7 @@ apply plugin: 'io.fabric'
 apply plugin: 'newrelic'
 
 group 'org.cru.android'
-version '4.3.4-SNAPSHOT'
+version '5.0.0-SNAPSHOT'
 
 apply plugin: 'org.ajoberstar.grgit'
 ext.grgit = org.ajoberstar.grgit.Grgit.open()
