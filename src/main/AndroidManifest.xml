@@ -42,6 +42,15 @@
         </activity>
 
         <activity
+            android:name="org.cru.godtools.activity.AboutActivity"
+            android:label="@string/title_about"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.keynote.godtools.android.activity.MainActivity" />
+        </activity>
+
+        <activity
             android:name=".activity.AddToolsActivity"
             android:label="@string/title_tools_add"
             android:parentActivityName=".activity.MainActivity">
