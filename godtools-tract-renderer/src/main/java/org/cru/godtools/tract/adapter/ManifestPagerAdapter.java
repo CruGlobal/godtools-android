@@ -205,7 +205,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
             final Manifest manifest = mPage.getManifest();
             for (final Modal modal : mPage.getModals()) {
                 if (modal.getListeners().contains(event.id)) {
-                    ModalActivity.start(mPageView.getContext(), manifest.getManifestName(), manifest.getToolId(),
+                    ModalActivity.start(mPageView.getContext(), manifest.getManifestName(), manifest.getCode(),
                                         manifest.getLocale(), mPage.getId(), modal.getId());
                 }
             }

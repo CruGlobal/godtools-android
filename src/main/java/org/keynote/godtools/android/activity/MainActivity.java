@@ -94,30 +94,32 @@ public class MainActivity extends BaseActivity implements ToolsFragment.Callback
     }
 
     @Override
-    public void onResourceSelect(final long id, @NonNull final Tool.Type type, Locale... languages) {
-        switch (type) {
-            case TRACT:
-                if (languages != null) {
-                    languages = Stream.of(languages).withoutNulls().toArray(Locale[]::new);
-                    if (languages.length > 0) {
-                        // start preloading the tract in the first language
-                        TractManager.getInstance(this).getLatestPublishedManifest(id, languages[0]);
+    public void onToolSelect(@Nullable final String code, @NonNull final Tool.Type type, Locale... languages) {
+        if (code != null) {
+            switch (type) {
+                case TRACT:
+                    if (languages != null) {
+                        languages = Stream.of(languages).withoutNulls().toArray(Locale[]::new);
+                        if (languages.length > 0) {
+                            // start preloading the tract in the first language
+                            TractManager.getInstance(this).getLatestPublishedManifest(code, languages[0]);
 
-                        TractActivity.start(this, id, languages);
+                            TractActivity.start(this, code, languages);
+                        }
                     }
-                }
-                break;
-            case ARTICLE:
-                // hardcode everystudent content for now
-                if (id == 5) {
-                    EveryStudent.start(this);
-                }
+                    break;
+                case ARTICLE:
+                    // hardcode everystudent content for now
+                    if ("es".equals(code)) {
+                        EveryStudent.start(this);
+                    }
+            }
         }
     }
 
     @Override
-    public void onResourceInfo(final long id) {
-        ToolDetailsActivity.start(this, id);
+    public void onToolInfo(@Nullable final String code) {
+        ToolDetailsActivity.start(this, code);
     }
 
     @Override

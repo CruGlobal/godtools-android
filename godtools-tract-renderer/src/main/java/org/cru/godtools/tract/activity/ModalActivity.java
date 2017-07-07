@@ -51,7 +51,8 @@ public class ModalActivity extends ImmersiveActivity {
 
     @Nullable
     private /*final*/ String mManifestFileName = null;
-    /*final*/ long mToolId = Tool.INVALID_ID;
+    @Nullable
+    /*final*/ String mTool = Tool.INVALID_CODE;
     @NonNull
     /*final*/ Locale mLocale = Language.INVALID_CODE;
     @Nullable
@@ -64,11 +65,12 @@ public class ModalActivity extends ImmersiveActivity {
     @Nullable
     private ModalViewHolder mModalViewHolder;
 
-    public static void start(@NonNull final Context context, @NonNull final String manifestFileName, final long toolId,
-                             @NonNull final Locale locale, @NonNull final String page, @NonNull final String modal) {
+    public static void start(@NonNull final Context context, @NonNull final String manifestFileName,
+                             @NonNull final String toolCode, @NonNull final Locale locale, @NonNull final String page,
+                             @NonNull final String modal) {
         final Bundle extras = new Bundle(4);
         extras.putString(EXTRA_MANIFEST_FILE_NAME, manifestFileName);
-        extras.putLong(EXTRA_TOOL, toolId);
+        extras.putString(EXTRA_TOOL, toolCode);
         BundleUtils.putLocale(extras, EXTRA_LANGUAGE, locale);
         extras.putString(EXTRA_PAGE, page);
         extras.putString(EXTRA_MODAL, modal);
@@ -83,18 +85,24 @@ public class ModalActivity extends ImmersiveActivity {
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_modal);
 
         final Intent intent = getIntent();
         final Bundle extras = intent != null ? intent.getExtras() : null;
         if (extras != null) {
             mManifestFileName = extras.getString(EXTRA_MANIFEST_FILE_NAME, mManifestFileName);
-            mToolId = extras.getLong(EXTRA_TOOL, mToolId);
+            mTool = extras.getString(EXTRA_TOOL, mTool);
             mLocale = BundleUtils.getLocale(extras, EXTRA_LANGUAGE, mLocale);
             mPageId = extras.getString(EXTRA_PAGE, mPageId);
             mModalId = extras.getString(EXTRA_MODAL, mModalId);
         }
 
+        // finish now if this activity is in an invalid state
+        if (!validStartState()) {
+            finish();
+            return;
+        }
+
+        setContentView(R.layout.activity_modal);
         checkForAlreadyLoadedManifest();
         startLoaders();
     }
@@ -125,10 +133,14 @@ public class ModalActivity extends ImmersiveActivity {
 
     /* END lifecycle */
 
+    private boolean validStartState() {
+        return mTool != null;
+    }
+
     private void checkForAlreadyLoadedManifest() {
         if (mManifestFileName != null) {
             final ListenableFuture<Manifest> manifest =
-                    TractManager.getInstance(this).getManifest(mManifestFileName, mToolId, mLocale);
+                    TractManager.getInstance(this).getManifest(mManifestFileName, mTool, mLocale);
             if (manifest.isDone()) {
                 try {
                     updateModal(Futures.getDone(manifest));
@@ -181,10 +193,13 @@ public class ModalActivity extends ImmersiveActivity {
         public Loader<Manifest> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_MANIFEST:
-                    return new TractManifestLoader(ModalActivity.this, mToolId, mLocale);
-                default:
-                    return null;
+                    if (mTool != null) {
+                        return new TractManifestLoader(ModalActivity.this, mTool, mLocale);
+                    }
+                    break;
             }
+
+            return null;
         }
 
         @Override

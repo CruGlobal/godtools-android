@@ -11,17 +11,18 @@ import org.keynote.godtools.android.model.Tool;
 public final class ToolLoader extends CachingAsyncTaskEventBusLoader<Tool> {
     @NonNull
     private final GodToolsDao mDao;
-    private final long mId;
+    @NonNull
+    private final String mCode;
 
-    public ToolLoader(@NonNull final Context context, final long id) {
+    public ToolLoader(@NonNull final Context context, @NonNull final String code) {
         super(context);
         mDao = GodToolsDao.getInstance(context);
-        mId = id;
+        mCode = code;
         addEventBusSubscriber(new ToolEventBusSubscriber(this));
     }
 
     @Override
     public Tool loadInBackground() {
-        return mDao.find(Tool.class, mId);
+        return mDao.find(Tool.class, mCode);
     }
 }

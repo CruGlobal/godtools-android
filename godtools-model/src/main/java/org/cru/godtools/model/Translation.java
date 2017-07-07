@@ -28,7 +28,7 @@ public class Translation extends Base {
 
     @Nullable
     @JsonApiIgnore
-    private Long mToolId;
+    private String mToolCode;
     @Nullable
     @JsonApiAttribute(name = JSON_RESOURCE)
     private Tool mTool;
@@ -58,13 +58,14 @@ public class Translation extends Base {
     @JsonApiIgnore
     private boolean mDownloaded = false;
 
-    public long getToolId() {
-        return mToolId != null && mToolId != Tool.INVALID_ID ? mToolId :
-                mTool != null ? mTool.getId() : Tool.INVALID_ID;
+    @Nullable
+    public String getToolCode() {
+        return mToolCode != null ? mToolCode :
+                mTool != null ? mTool.getCode() : Tool.INVALID_CODE;
     }
 
-    public void setToolId(@Nullable final Long id) {
-        mToolId = id;
+    public void setToolCode(@Nullable final String code) {
+        mToolCode = code;
     }
 
     @NonNull

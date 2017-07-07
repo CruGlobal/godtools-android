@@ -73,12 +73,13 @@ public class TractManager {
 
     @NonNull
     @AnyThread
-    public ListenableFuture<Manifest> getLatestPublishedManifest(final long toolId, @NonNull final Locale locale) {
+    public ListenableFuture<Manifest> getLatestPublishedManifest(@NonNull final String toolCode,
+                                                                 @NonNull final Locale locale) {
         final SettableFuture<Translation> latestTranslation = SettableFuture.create();
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> latestTranslation.set(
                 mDao.streamCompat(
                         Query.select(Translation.class)
-                                .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(toolId, locale)
+                                .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(toolCode, locale)
                                                .and(TranslationTable.SQL_WHERE_PUBLISHED)
                                                .and(TranslationTable.SQL_WHERE_DOWNLOADED))
                                 .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
@@ -104,19 +105,19 @@ public class TractManager {
         }
 
         // return the actual manifest
-        return getManifest(manifestName, translation.getToolId(), translation.getLanguageCode(), false);
+        return getManifest(manifestName, translation.getToolCode(), translation.getLanguageCode(), false);
     }
 
     @NonNull
     @AnyThread
-    public ListenableFuture<Manifest> getManifest(@NonNull final String manifestName, final long toolId,
+    public ListenableFuture<Manifest> getManifest(@NonNull final String manifestName, @Nullable final String toolCode,
                                                   @NonNull final Locale locale) {
-        return getManifest(manifestName, toolId, locale, false);
+        return getManifest(manifestName, toolCode, locale, false);
     }
 
     @NonNull
     @AnyThread
-    private ListenableFuture<Manifest> getManifest(@NonNull final String manifestName, final long toolId,
+    private ListenableFuture<Manifest> getManifest(@NonNull final String manifestName, @Nullable final String toolCode,
                                                    @NonNull final Locale locale, final boolean forceReload) {
         synchronized (mCache) {
             if (!forceReload) {
@@ -127,8 +128,13 @@ public class TractManager {
                 }
             }
 
+            // short-circuit if we don't have a valid tool code
+            if (toolCode == null) {
+                return Futures.immediateFuture(null);
+            }
+
             // trigger a background load of this manifest
-            final ListenableFuture<Manifest> manifest = loadManifest(manifestName, toolId, locale);
+            final ListenableFuture<Manifest> manifest = loadManifest(manifestName, toolCode, locale);
             mCache.put(manifestName, manifest);
             return manifest;
         }
@@ -136,7 +142,7 @@ public class TractManager {
 
     @NonNull
     @AnyThread
-    private ListenableFuture<Manifest> loadManifest(@NonNull final String manifestName, final long toolId,
+    private ListenableFuture<Manifest> loadManifest(@NonNull final String manifestName, @NonNull final String toolCode,
                                                     @NonNull final Locale locale) {
         // load the manifest
         final SettableFuture<Manifest> manifestTask = SettableFuture.create();
@@ -154,7 +160,7 @@ public class TractManager {
                     parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
                     parser.setInput(in, "UTF-8");
                     parser.nextTag();
-                    manifest = Manifest.fromXml(parser, manifestName, toolId, locale);
+                    manifest = Manifest.fromXml(parser, manifestName, toolCode, locale);
                 } catch (final FileNotFoundException e) {
                     brokenManifest(manifestName);
                     throw closer.rethrow(e);

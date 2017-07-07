@@ -37,7 +37,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
 
-import static org.keynote.godtools.android.Constants.EXTRA_TOOL;
+import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
 public class ToolDetailsFragment extends BaseFragment {
@@ -53,7 +53,8 @@ public class ToolDetailsFragment extends BaseFragment {
     private static final int LOADER_AVAILABLE_LANGUAGES = 104;
 
     // these properties should be treated as final and only set/modified in onCreate()
-    /*final*/ long mToolId = Tool.INVALID_ID;
+    @Nullable
+    /*final*/ String mToolCode = Tool.INVALID_CODE;
 
     @Nullable
     @BindView(R.id.banner)
@@ -92,10 +93,10 @@ public class ToolDetailsFragment extends BaseFragment {
     @NonNull
     private List<Locale> mLanguages = Collections.emptyList();
 
-    public static Fragment newInstance(final long id) {
+    public static Fragment newInstance(@Nullable final String code) {
         final ToolDetailsFragment fragment = new ToolDetailsFragment();
         final Bundle args = new Bundle(1);
-        args.putLong(EXTRA_TOOL, id);
+        args.putString(EXTRA_TOOL, code);
         fragment.setArguments(args);
         return fragment;
     }
@@ -103,12 +104,12 @@ public class ToolDetailsFragment extends BaseFragment {
     /* BEGIN lifecycle */
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         final Bundle args = getArguments();
         if (args != null) {
-            mToolId = args.getLong(EXTRA_TOOL, mToolId);
+            mToolCode = args.getString(EXTRA_TOOL, mToolCode);
         }
 
         startLoaders();
@@ -196,20 +197,24 @@ public class ToolDetailsFragment extends BaseFragment {
     @Optional
     @OnClick(R.id.action_add)
     void addTool() {
-        GodToolsDownloadManager.getInstance(getContext()).addTool(mToolId);
-        final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
-        if (callbacks != null) {
-            callbacks.onToolAdded();
+        if (mToolCode != null) {
+            GodToolsDownloadManager.getInstance(getContext()).addTool(mToolCode);
+            final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
+            if (callbacks != null) {
+                callbacks.onToolAdded();
+            }
         }
     }
 
     @Optional
     @OnClick(R.id.action_remove)
     void removeTool() {
-        GodToolsDownloadManager.getInstance(getContext()).removeTool(mToolId);
-        final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
-        if (callbacks != null) {
-            callbacks.onToolRemoved();
+        if (mToolCode != null) {
+            GodToolsDownloadManager.getInstance(getContext()).removeTool(mToolCode);
+            final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
+            if (callbacks != null) {
+                callbacks.onToolRemoved();
+            }
         }
     }
 
@@ -243,10 +248,13 @@ public class ToolDetailsFragment extends BaseFragment {
         public Loader<Tool> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_TOOL:
-                    return new ToolLoader(getContext(), mToolId);
-                default:
-                    return null;
+                    if (mToolCode != null) {
+                        return new ToolLoader(getContext(), mToolCode);
+                    }
+                    break;
             }
+
+            return null;
         }
 
         @Override
@@ -287,10 +295,13 @@ public class ToolDetailsFragment extends BaseFragment {
         public Loader<Translation> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_LATEST_TRANSLATION:
-                    return new LatestTranslationLoader(getContext(), mToolId, mPrimaryLanguage);
-                default:
-                    return null;
+                    if (mToolCode != null) {
+                        return new LatestTranslationLoader(getContext(), mToolCode, mPrimaryLanguage);
+                    }
+                    break;
             }
+
+            return null;
         }
 
         @Override
@@ -309,10 +320,13 @@ public class ToolDetailsFragment extends BaseFragment {
         public Loader<List<Locale>> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_AVAILABLE_LANGUAGES:
-                    return new AvailableLanguagesLoader(getContext(), mToolId);
-                default:
-                    return null;
+                    if (mToolCode != null) {
+                        return new AvailableLanguagesLoader(getContext(), mToolCode);
+                    }
+                    break;
             }
+
+            return null;
         }
 
         @Override

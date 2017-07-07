@@ -168,18 +168,26 @@ public class InitialContentTasks implements Runnable {
             for (final Tool tool : tools.getData()) {
                 if (mDao.refresh(tool) == null) {
                     if (mDao.insert(tool, CONFLICT_IGNORE) > 0) {
-                        mDownloadManager.addTool(tool.getId());
                         toolsChanged = true;
+                        if (tool.getCode() != null) {
+                            mDownloadManager.addTool(tool.getCode());
+                        }
 
                         // import all bundled translations
-                        translationsChanged = Stream.of(tool.getLatestTranslations())
-                                .mapToLong(t -> mDao.insert(t, CONFLICT_IGNORE))
-                                .sum() > 0 || translationsChanged;
+                        final List<Translation> translations = tool.getLatestTranslations();
+                        if (translations != null) {
+                            translationsChanged = Stream.of(tool.getLatestTranslations())
+                                    .mapToLong(t -> mDao.insert(t, CONFLICT_IGNORE))
+                                    .sum() > 0 || translationsChanged;
+                        }
 
                         // import all bundled attachments
-                        attachmentsChanged = Stream.of(tool.getAttachments())
-                                .mapToLong(a -> mDao.insert(a, CONFLICT_IGNORE))
-                                .sum() > 0 || attachmentsChanged;
+                        final List<Attachment> attachments = tool.getAttachments();
+                        if (attachments != null) {
+                            attachmentsChanged = Stream.of(tool.getAttachments())
+                                    .mapToLong(a -> mDao.insert(a, CONFLICT_IGNORE))
+                                    .sum() > 0 || attachmentsChanged;
+                        }
                     }
                 }
             }

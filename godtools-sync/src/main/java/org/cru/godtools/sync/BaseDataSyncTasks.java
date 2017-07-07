@@ -78,8 +78,13 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
         if (includes.include(Tool.JSON_LATEST_TRANSLATIONS)) {
             final List<Translation> translations = tool.getLatestTranslations();
             if (translations != null) {
-                final LongSparseArray<Translation> existing = index(mDao.get(
-                        Query.select(Translation.class).where(TranslationTable.FIELD_TOOL.eq(tool.getId()))));
+                final LongSparseArray<Translation> existing;
+                if (tool.getCode() != null) {
+                    existing = index(mDao.get(
+                            Query.select(Translation.class).where(TranslationTable.FIELD_TOOL.eq(tool.getCode()))));
+                } else {
+                    existing = null;
+                }
                 storeTranslations(events, translations, existing, includes.descendant(Tool.JSON_LATEST_TRANSLATIONS));
             }
         }
