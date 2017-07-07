@@ -74,6 +74,8 @@ public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
             return getPrimaryKeyWhere(TranslationFile.class, file.getTranslationId(), file.getFileName());
         } else if (obj instanceof Language) {
             return getPrimaryKeyWhere(Language.class, ((Language) obj).getCode());
+        } else if (obj instanceof Tool) {
+            return getPrimaryKeyWhere(Tool.class, ((Tool) obj).getCode());
         } else if (obj instanceof Base) {
             return getPrimaryKeyWhere(obj.getClass(), ((Base) obj).getId());
         }
@@ -116,7 +118,7 @@ public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
         }
 
         // build update query
-        final Pair<String, String[]> where = compileExpression(ToolTable.FIELD_CODE.eq(toolCode));
+        final Pair<String, String[]> where = compileExpression(getPrimaryKeyWhere(Tool.class, toolCode));
         final StringBuilder sql = new StringBuilder();
         sql.append("UPDATE ").append(getTable(Tool.class))
                 .append(" SET " + ToolTable.COLUMN_PENDING_SHARES +

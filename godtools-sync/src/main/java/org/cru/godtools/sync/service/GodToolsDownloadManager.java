@@ -197,10 +197,7 @@ public final class GodToolsDownloadManager {
         final Tool tool = new Tool();
         tool.setCode(code);
         tool.setAdded(true);
-        final ListenableFuture<Integer> update =
-                mDao.updateAsync(tool, ToolTable.FIELD_CODE.eq(code), ToolTable.COLUMN_ADDED);
-        // TODO: switch back to normal update once code is PK for Tools
-//        final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
+        final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
         update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
     }
 
@@ -208,10 +205,7 @@ public final class GodToolsDownloadManager {
         final Tool tool = new Tool();
         tool.setCode(code);
         tool.setAdded(false);
-        final ListenableFuture<Integer> update =
-                mDao.updateAsync(tool, ToolTable.FIELD_CODE.eq(code), ToolTable.COLUMN_ADDED);
-        // TODO: switch back to normal update once code is PK for Tools
-//        final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
+        final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
         update.addListener(this::pruneStaleTranslations, directExecutor());
         update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
     }
