@@ -1,7 +1,5 @@
 package org.keynote.godtools.android.utils;
 
-import static org.keynote.godtools.android.Constants.PREFS_SETTINGS;
-
 /**
  * Constants class used for all of application
  */
@@ -11,11 +9,6 @@ public class Constants
      * Used as the key to type of background service for intent extras
      */
     public static final String TYPE = "TYPE";
-
-    /**
-     * App preferences name
-     */
-    public static final String PREFS_NAME = PREFS_SETTINGS;
 
     public static final String AUTH_CODE = "Authorization_Generic";
 
