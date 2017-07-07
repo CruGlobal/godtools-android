@@ -78,22 +78,24 @@ public class TractActivity extends ImmersiveActivity
     @Nullable
     ManifestPagerAdapter mPagerAdapter;
 
-    /*final*/ long mTool = Tool.INVALID_ID;
+    @Nullable
+    /*final*/ String mTool = Tool.INVALID_CODE;
     @NonNull
     /*final*/ Locale[] mLanguages = new Locale[0];
 
     private final SparseArray<Manifest> mManifests = new SparseArray<>();
     private int mActiveLanguage = 0;
 
-    protected static void populateExtras(@NonNull final Bundle extras, final long toolId,
+    protected static void populateExtras(@NonNull final Bundle extras, @NonNull final String toolCode,
                                          @NonNull final Locale... languages) {
-        extras.putLong(EXTRA_TOOL, toolId);
+        extras.putString(EXTRA_TOOL, toolCode);
         BundleUtils.putLocaleArray(extras, EXTRA_LANGUAGES, Stream.of(languages).withoutNulls().toArray(Locale[]::new));
     }
 
-    public static void start(@NonNull final Context context, final long toolId, @NonNull final Locale... languages) {
+    public static void start(@NonNull final Context context, @NonNull final String toolCode,
+                             @NonNull final Locale... languages) {
         final Bundle extras = new Bundle();
-        populateExtras(extras, toolId, languages);
+        populateExtras(extras, toolCode, languages);
         context.startActivity(new Intent(context, TractActivity.class).putExtras(extras));
     }
 
@@ -106,7 +108,7 @@ public class TractActivity extends ImmersiveActivity
         final Intent intent = getIntent();
         final Bundle extras = intent != null ? intent.getExtras() : null;
         if (extras != null) {
-            mTool = extras.getLong(EXTRA_TOOL, mTool);
+            mTool = extras.getString(EXTRA_TOOL, mTool);
             final Locale[] languages = BundleUtils.getLocaleArray(extras, EXTRA_LANGUAGES);
             mLanguages = languages != null ? languages : new Locale[0];
         }
@@ -213,7 +215,7 @@ public class TractActivity extends ImmersiveActivity
     /* END lifecycle */
 
     private boolean validStartState() {
-        return mTool != Tool.INVALID_ID && mLanguages.length > 0;
+        return mTool != null && mLanguages.length > 0;
     }
 
     private void setupToolbar() {
@@ -410,7 +412,7 @@ public class TractActivity extends ImmersiveActivity
         @Override
         public Loader<Manifest> onCreateLoader(final int id, @Nullable final Bundle args) {
             final int langId = id - LOADER_MANIFEST_BASE;
-            if (langId >= 0 && langId < mLanguages.length) {
+            if (mTool != null && langId >= 0 && langId < mLanguages.length) {
                 return new TractManifestLoader(TractActivity.this, mTool, mLanguages[id - LOADER_MANIFEST_BASE]);
             }
 
