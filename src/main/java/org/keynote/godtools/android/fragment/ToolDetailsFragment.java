@@ -38,7 +38,6 @@ import butterknife.OnClick;
 import butterknife.Optional;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
-import static org.cru.godtools.base.Constants.EXTRA_TOOL_ID;
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
 public class ToolDetailsFragment extends BaseFragment {
@@ -54,8 +53,6 @@ public class ToolDetailsFragment extends BaseFragment {
     private static final int LOADER_AVAILABLE_LANGUAGES = 104;
 
     // these properties should be treated as final and only set/modified in onCreate()
-    @Deprecated
-    /*final*/ long mToolId = Tool.INVALID_ID;
     @Nullable
     /*final*/ String mToolCode = Tool.INVALID_CODE;
 
@@ -96,10 +93,9 @@ public class ToolDetailsFragment extends BaseFragment {
     @NonNull
     private List<Locale> mLanguages = Collections.emptyList();
 
-    public static Fragment newInstance(final long id, @Nullable final String code) {
+    public static Fragment newInstance(@Nullable final String code) {
         final ToolDetailsFragment fragment = new ToolDetailsFragment();
         final Bundle args = new Bundle(1);
-        args.putLong(EXTRA_TOOL_ID, id);
         args.putString(EXTRA_TOOL, code);
         fragment.setArguments(args);
         return fragment;
@@ -113,7 +109,6 @@ public class ToolDetailsFragment extends BaseFragment {
 
         final Bundle args = getArguments();
         if (args != null) {
-            mToolId = args.getLong(EXTRA_TOOL_ID, mToolId);
             mToolCode = args.getString(EXTRA_TOOL, mToolCode);
         }
 
@@ -301,7 +296,7 @@ public class ToolDetailsFragment extends BaseFragment {
             switch (id) {
                 case LOADER_LATEST_TRANSLATION:
                     if (mToolCode != null) {
-                        return new LatestTranslationLoader(getContext(), mToolId, mToolCode, mPrimaryLanguage);
+                        return new LatestTranslationLoader(getContext(), mToolCode, mPrimaryLanguage);
                     }
                     break;
             }
@@ -326,7 +321,7 @@ public class ToolDetailsFragment extends BaseFragment {
             switch (id) {
                 case LOADER_AVAILABLE_LANGUAGES:
                     if (mToolCode != null) {
-                        return new AvailableLanguagesLoader(getContext(), mToolId, mToolCode);
+                        return new AvailableLanguagesLoader(getContext(), mToolCode);
                     }
                     break;
             }

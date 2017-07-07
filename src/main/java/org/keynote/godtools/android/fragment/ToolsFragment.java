@@ -41,9 +41,9 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
     private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
 
     public interface Callbacks {
-        void onToolInfo(long id, @Nullable String code);
+        void onToolInfo(@Nullable String code);
 
-        void onToolSelect(long id, @Nullable String code, @NonNull Tool.Type type, Locale... languages);
+        void onToolSelect(@Nullable String code, @NonNull Tool.Type type, Locale... languages);
     }
 
     private static final int MODE_ADDED = 1;
@@ -125,24 +125,23 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
     }
 
     @Override
-    public void onToolSelect(final long id, @Nullable final String code, @NonNull final Tool.Type type,
-                             final Locale... languages) {
+    public void onToolSelect(@Nullable final String code, @NonNull final Tool.Type type, final Locale... languages) {
         final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
         if (listener != null) {
-            listener.onToolSelect(id, code, type, languages);
+            listener.onToolSelect(code, type, languages);
         }
     }
 
     @Override
-    public void onToolInfo(final long id, @Nullable final String code) {
+    public void onToolInfo(@Nullable final String code) {
         final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
         if (listener != null) {
-            listener.onToolInfo(id, code);
+            listener.onToolInfo(code);
         }
     }
 
     @Override
-    public void onToolAdd(final long id, @Nullable final String code) {
+    public void onToolAdd(@Nullable final String code) {
         if (code != null) {
             GodToolsDownloadManager.getInstance(getContext()).addTool(code);
         }
@@ -217,7 +216,7 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
             TRANS_FIELD_LANG[i] = TRANS_TABLE[i].field(TranslationTable.COLUMN_LANGUAGE);
             //noinspection unchecked
             TRANS_JOIN[i] = Join.create(TRANS_TABLE[i]).type("LEFT")
-                    .on(TRANS_TABLE[i].field(TranslationTable.COLUMN_TOOL).eq(ToolTable.FIELD_ID))
+                    .on(TRANS_TABLE[i].field(TranslationTable.COLUMN_TOOL).eq(ToolTable.FIELD_CODE))
                     .andOn(TRANS_TABLE[i].field(TranslationTable.COLUMN_PUBLISHED).eq(true));
         }
     }
@@ -266,7 +265,7 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
                     );
                     final Expression where = ToolTable.FIELD_ADDED.eq(mMode == MODE_ADDED);
                     loader.setWhere(where);
-                    loader.setGroupBy(ToolTable.FIELD_ID);
+                    loader.setGroupBy(ToolTable.FIELD_CODE);
                     return loader;
                 default:
                     return null;
