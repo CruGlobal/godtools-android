@@ -35,11 +35,11 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
     public static final String COL_PARALLEL_LANGUAGE = "parallel_language";
     public static final String COL_DEFAULT_LANGUAGE = "default_language";
     public interface Callbacks {
-        void onToolInfo(long id);
+        void onToolInfo(long id, @Nullable String code);
 
-        void onToolSelect(long id, @NonNull Tool.Type type, Locale... languages);
+        void onToolSelect(long id, @Nullable String code, @NonNull Tool.Type type, Locale... languages);
 
-        void onToolAdd(long id);
+        void onToolAdd(long id, @Nullable String code);
     }
 
     final boolean mHideAddAction;
@@ -173,14 +173,14 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         void select() {
             if (mCallbacks != null) {
                 if (mPrimaryLanguage != null) {
-                    mCallbacks.onToolSelect(mId, mType, mPrimaryLanguage, mParallelLanguage);
+                    mCallbacks.onToolSelect(mId, mCode, mType, mPrimaryLanguage, mParallelLanguage);
                 } else if (mDefaultLanguage != null) {
-                    mCallbacks.onToolSelect(mId, mType, mDefaultLanguage, mParallelLanguage);
+                    mCallbacks.onToolSelect(mId, mCode, mType, mDefaultLanguage, mParallelLanguage);
                 } else if (mParallelLanguage != null) {
-                    mCallbacks.onToolSelect(mId, mType, mParallelLanguage);
+                    mCallbacks.onToolSelect(mId, mCode, mType, mParallelLanguage);
                 } else if (mType == Tool.Type.ARTICLE && mId == 5) {
                     // everystudent content for now
-                    mCallbacks.onToolSelect(mId, mType);
+                    mCallbacks.onToolSelect(mId, mCode, mType);
                 } else {
                     // do nothing
                 }
@@ -191,7 +191,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         @OnClick(R.id.action_add)
         void add() {
             if (mCallbacks != null) {
-                mCallbacks.onToolAdd(mId);
+                mCallbacks.onToolAdd(mId, mCode);
             }
         }
 
@@ -199,7 +199,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         @OnClick(R.id.action_info)
         void info() {
             if (mCallbacks != null) {
-                mCallbacks.onToolInfo(mId);
+                mCallbacks.onToolInfo(mId, mCode);
             }
         }
     }

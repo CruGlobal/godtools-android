@@ -125,7 +125,8 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
     }
 
     @Override
-    public void onToolSelect(final long id, @NonNull final Tool.Type type, final Locale... languages) {
+    public void onToolSelect(final long id, @Nullable final String code, @NonNull final Tool.Type type,
+                             final Locale... languages) {
         final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
         if (listener != null) {
             listener.onResourceSelect(id, type, languages);
@@ -133,7 +134,7 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
     }
 
     @Override
-    public void onToolInfo(final long id) {
+    public void onToolInfo(final long id, @Nullable final String code) {
         final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
         if (listener != null) {
             listener.onResourceInfo(id);
@@ -141,7 +142,7 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
     }
 
     @Override
-    public void onToolAdd(final long id) {
+    public void onToolAdd(final long id, @Nullable final String code) {
         GodToolsDownloadManager.getInstance(getContext()).addTool(id);
     }
 
