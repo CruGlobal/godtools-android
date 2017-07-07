@@ -217,7 +217,7 @@ allprojects {
         configFile rootProject.file('checkstyle.xml')
         source 'src'
         include '*/java/**/*.java'
-        ignoreFailures true
+        ignoreFailures false
         showViolations true
 
         classpath = files()
