@@ -53,9 +53,7 @@ public final class Manifest extends Base implements Styles {
 
     // XXX: for now we will make this fixed
     @NonNull
-    private final String mCode = "kgp";
-    @Deprecated
-    private final long mToolId;
+    private final String mCode;
     @NonNull
     private final Locale mLocale;
 
@@ -89,10 +87,10 @@ public final class Manifest extends Base implements Styles {
     final SimpleArrayMap<String, Resource> mResources = new SimpleArrayMap<>();
 
     @VisibleForTesting
-    Manifest(@NonNull final String manifestName, final long toolId, @NonNull final Locale locale) {
+    Manifest(@NonNull final String manifestName, @NonNull final String toolCode, @NonNull final Locale locale) {
         super();
         mManifestName = manifestName;
-        mToolId = toolId;
+        mCode = toolCode;
         mLocale = locale;
     }
 
@@ -105,11 +103,6 @@ public final class Manifest extends Base implements Styles {
     @NonNull
     public String getManifestName() {
         return mManifestName;
-    }
-
-    @Deprecated
-    public long getToolId() {
-        return mToolId;
     }
 
     @NonNull
@@ -225,9 +218,9 @@ public final class Manifest extends Base implements Styles {
     @NonNull
     @WorkerThread
     public static Manifest fromXml(@NonNull final XmlPullParser parser, @NonNull final String manifestName,
-                                   final long toolId, @NonNull final Locale locale)
+                                   @NonNull  final String toolCode, @NonNull final Locale locale)
             throws XmlPullParserException, IOException {
-        return new Manifest(manifestName, toolId, locale).parse(parser);
+        return new Manifest(manifestName, toolCode, locale).parse(parser);
     }
 
     @NonNull
