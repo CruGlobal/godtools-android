@@ -71,7 +71,7 @@ final class ToolMapper extends BaseMapper<Tool> {
     public Tool toObject(@NonNull final Cursor c) {
         final Tool tool = super.toObject(c);
 
-        tool.setCode(getString(c, COLUMN_CODE, null));
+        tool.setCode(getString(c, COLUMN_CODE, Tool.INVALID_CODE));
         tool.setType(getEnum(c, COLUMN_TYPE, Type.class, null));
         tool.setName(getString(c, COLUMN_NAME, null));
         tool.setDescription(getString(c, COLUMN_DESCRIPTION, null));

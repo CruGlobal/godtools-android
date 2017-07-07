@@ -75,6 +75,7 @@ public final class Contract extends BaseContract {
         public static final String COLUMN_ADDED = "added";
 
         public static final Field FIELD_ID = TABLE.field(COLUMN_ID);
+        public static final Field FIELD_CODE = TABLE.field(COLUMN_CODE);
         public static final Field FIELD_BANNER = TABLE.field(COLUMN_BANNER);
         public static final Field FIELD_DETAILS_BANNER = TABLE.field(COLUMN_DETAILS_BANNER);
         public static final Field FIELD_ADDED = TABLE.field(COLUMN_ADDED);

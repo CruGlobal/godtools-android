@@ -202,20 +202,24 @@ public class ToolDetailsFragment extends BaseFragment {
     @Optional
     @OnClick(R.id.action_add)
     void addTool() {
-        GodToolsDownloadManager.getInstance(getContext()).addTool(mToolId);
-        final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
-        if (callbacks != null) {
-            callbacks.onToolAdded();
+        if (mToolCode != null) {
+            GodToolsDownloadManager.getInstance(getContext()).addTool(mToolCode);
+            final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
+            if (callbacks != null) {
+                callbacks.onToolAdded();
+            }
         }
     }
 
     @Optional
     @OnClick(R.id.action_remove)
     void removeTool() {
-        GodToolsDownloadManager.getInstance(getContext()).removeTool(mToolId);
-        final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
-        if (callbacks != null) {
-            callbacks.onToolRemoved();
+        if (mToolCode != null) {
+            GodToolsDownloadManager.getInstance(getContext()).removeTool(mToolCode);
+            final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
+            if (callbacks != null) {
+                callbacks.onToolRemoved();
+            }
         }
     }
 

@@ -143,7 +143,9 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
 
     @Override
     public void onToolAdd(final long id, @Nullable final String code) {
-        GodToolsDownloadManager.getInstance(getContext()).addTool(id);
+        if (code != null) {
+            GodToolsDownloadManager.getInstance(getContext()).addTool(code);
+        }
     }
 
     @Override
