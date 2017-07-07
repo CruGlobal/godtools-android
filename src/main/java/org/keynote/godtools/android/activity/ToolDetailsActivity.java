@@ -15,16 +15,22 @@ import org.keynote.godtools.android.fragment.ToolDetailsFragment;
 import org.keynote.godtools.android.model.Tool;
 
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_TOOL_DETAILS;
-import static org.keynote.godtools.android.Constants.EXTRA_TOOL;
+import static org.cru.godtools.base.Constants.EXTRA_TOOL;
+import static org.cru.godtools.base.Constants.EXTRA_TOOL_ID;
 
 public class ToolDetailsActivity extends BaseActivity implements ToolDetailsFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
-    private long mTool = Tool.INVALID_ID;
+    @Nullable
+    private /*final*/ String mTool = Tool.INVALID_CODE;
+    // TODO
+    @Deprecated
+    private long mToolId = Tool.INVALID_ID;
 
-    public static void start(@NonNull final Context context, final long toolId) {
+    public static void start(@NonNull final Context context, final long toolId, @Nullable final String toolCode) {
         final Intent intent = new Intent(context, ToolDetailsActivity.class);
-        intent.putExtra(EXTRA_TOOL, toolId);
+        intent.putExtra(EXTRA_TOOL, toolCode);
+        intent.putExtra(EXTRA_TOOL_ID, toolId);
         context.startActivity(intent);
     }
 
@@ -33,12 +39,21 @@ public class ToolDetailsActivity extends BaseActivity implements ToolDetailsFrag
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_generic_fragment);
 
         final Intent intent = getIntent();
-        if (intent != null) {
-            mTool = intent.getLongExtra(EXTRA_TOOL, mTool);
+        final Bundle extras = intent != null ? intent.getExtras() : null;
+        if (extras != null) {
+            mTool = extras.getString(EXTRA_TOOL, mTool);
+            mToolId = extras.getLong(EXTRA_TOOL_ID, mToolId);
         }
+
+        // finish now if this activity is in an invalid state
+        if (!validStartState()) {
+            finish();
+            return;
+        }
+
+        setContentView(R.layout.activity_generic_fragment);
     }
 
     @Override
@@ -71,6 +86,10 @@ public class ToolDetailsActivity extends BaseActivity implements ToolDetailsFrag
 
     /* END lifecycle */
 
+    private boolean validStartState() {
+        return mTool != null;
+    }
+
     @MainThread
     private void loadInitialFragmentIfNeeded() {
         final FragmentManager fm = getSupportFragmentManager();
@@ -83,7 +102,7 @@ public class ToolDetailsActivity extends BaseActivity implements ToolDetailsFrag
 
         // update the displayed fragment
         fm.beginTransaction()
-                .replace(R.id.frame, ToolDetailsFragment.newInstance(mTool), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, ToolDetailsFragment.newInstance(mToolId), TAG_MAIN_FRAGMENT)
                 .commit();
     }
 

@@ -118,7 +118,7 @@ public class MainActivity extends BaseActivity implements ToolsFragment.Callback
 
     @Override
     public void onToolInfo(final long id, @Nullable final String code) {
-        ToolDetailsActivity.start(this, id);
+        ToolDetailsActivity.start(this, id, code);
     }
 
     @Override
