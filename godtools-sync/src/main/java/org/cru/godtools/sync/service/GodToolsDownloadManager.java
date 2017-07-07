@@ -223,7 +223,8 @@ public final class GodToolsDownloadManager {
             // load the tools and languages that are added to this device
             final Object[] tools = mDao
                     .streamCompat(Query.select(Tool.class).where(ToolTable.FIELD_ADDED.eq(true)))
-                    .map(Tool::getId)
+                    .map(Tool::getCode)
+                    .withoutNulls()
                     .toArray();
             final Object[] languages = mDao
                     .streamCompat(Query.select(Language.class).where(LanguageTable.SQL_WHERE_ADDED))
@@ -413,7 +414,7 @@ public final class GodToolsDownloadManager {
         synchronized (getLock(LOCKS_TRANSLATION_DOWNLOADS, key)) {
             // process the most recent published version
             final Query<Translation> query = Query.select(Translation.class)
-                    .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(key.mToolId, key.mLocale)
+                    .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(key.mTool, key.mLocale)
                                    .and(TranslationTable.SQL_WHERE_PUBLISHED))
                     .orderBy(TranslationTable.COLUMN_VERSION + " DESC")
                     .limit(1);
@@ -655,12 +656,13 @@ public final class GodToolsDownloadManager {
     }
 
     static final class TranslationKey {
-        final long mToolId;
+        @Nullable
+        final String mTool;
         @NonNull
         final Locale mLocale;
 
         TranslationKey(@NonNull final Translation translation) {
-            mToolId = translation.getToolId();
+            mTool = translation.getToolCode();
             mLocale = translation.getLanguageCode();
         }
 
@@ -673,13 +675,13 @@ public final class GodToolsDownloadManager {
                 return false;
             }
             TranslationKey that = (TranslationKey) o;
-            return mToolId == that.mToolId &&
+            return Objects.equal(mTool, that.mTool) &&
                     Objects.equal(mLocale, that.mLocale);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hashCode(mToolId, mLocale);
+            return Objects.hashCode(mTool, mLocale);
         }
     }
 
