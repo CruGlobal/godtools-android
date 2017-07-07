@@ -1,1 +1,5 @@
-<manifest package="org.cru.godtools.api" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.cru.godtools.api">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+</manifest>

@@ -25,6 +25,8 @@ public final class Contract extends BaseContract {
         static final String SQL_DELETE_GSSUBSCRIBERS = drop("gssubscribers");
         static final String SQL_DELETE_GTLANGUAGES = drop("gtlanguages");
         static final String SQL_DELETE_GTLANGUAGES_OLD = drop("gtlanguages_old");
+        static final String SQL_DELETE_GTPACKAGES = drop("gtpackages");
+        static final String SQL_DELETE_GTPACKAGES_OLD = drop("gtpackages_old");
     }
 
     @SuppressWarnings("checkstyle:InterfaceIsType")

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">God Tools</string>
-    <string name="menu_item_kgp">Knowing God Personally</string>
-    <string name="menu_item_satisfied">Satisfied?</string>
     <string name="menu_item_4laws">The Four Spiritual Laws</string>
     <string name="menu_item_share">Share</string>
     <string name="menu_item_contents">Contents</string>
