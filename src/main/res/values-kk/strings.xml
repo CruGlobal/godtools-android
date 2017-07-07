@@ -27,16 +27,6 @@
     <!-- Translator Mode Dialog -->
     <string name="dialog_translator_mode_title">Алдын ала қарап шығу режимінен шығу</string>
     <string name="dialog_translator_mode_body">Жобалар экранға шығарылмайды</string>
-    <string name="translator_enabled">Аударманы алдын ала қарап шығу режимі қосулы</string>
-    <string name="translator_disabled">Аударманы алдын ала қарап шығу режимі өшірулі</string>
-    <string name="draft_published">Жоба жарияланды</string>
-    <string name="draft_publish_fail">Жобаны жариялау мүмкін емес</string>
-    <string name="draft_publish_message">Сіз осы жобаны жариялағыңыз келеді ме?</string>
-    <string name="draft_publish_confirm">Иә, дайын!</string>
-    <string name="draft_publish_negative">Жоқ, мен шешімімді өзгерттім.</string>
-    <string name="draft_created">Жоба құрылды</string>
-    <string name="draft_create_failed">Жаңа жоба құру мүмкін болмады</string>
-    <string name="draft_start_message">Жаңа жоба құру?</string>
     <!-- Access Code Dialog -->
     <string name="dialog_access_code_title">Кодқа кіруді енгізу</string>
     <string name="invalid_code">Дұрыс емес код</string>
@@ -59,10 +49,6 @@
     <string name="no">Жоқ</string>
     <string name="none">ешбірі</string>
     <string name="send">жіберу</string>
-    <string name="drafts_updated">Жобалар жаңартылды</string>
-    <string name="failed_update_draft">Жобаларды жаңарту іске аспады</string>
-    <string name="failed_download_draft">"Жобаларды жүктеу іске аспады "</string>
-    <string name="failed_download_resources">Қоларды жүктеу іске аспады</string>
     <string name="internet_needed">Интернет байланысы осы сұранысты аяқтау үшін қажет</string>
     <string name="alternate_language">Қатарлас Тілдер</string>
     <string name="alternate_language_message">Таңдалған қатарлас тіл осы құралы үшін қол жетімді емес.</string>

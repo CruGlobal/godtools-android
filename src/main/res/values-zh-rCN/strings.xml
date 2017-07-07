@@ -27,16 +27,6 @@
     <!-- Translator Mode Dialog -->
     <string name="dialog_translator_mode_title">退出预览模式</string>
     <string name="dialog_translator_mode_body">草稿将无法显示</string>
-    <string name="translator_enabled">翻译预览模式启动</string>
-    <string name="translator_disabled">翻译预览模式关闭</string>
-    <string name="draft_published">草稿已经被发布</string>
-    <string name="draft_publish_fail">草稿发布失败</string>
-    <string name="draft_publish_message">你想要发布你的草稿吗？</string>
-    <string name="draft_publish_confirm">是的，准备好了</string>
-    <string name="draft_publish_negative">不，我改变了想法</string>
-    <string name="draft_created">草稿被新建</string>
-    <string name="draft_create_failed">新建草稿失败</string>
-    <string name="draft_start_message">新建草稿</string>
     <!-- Access Code Dialog -->
     <string name="dialog_access_code_title">输入访问码</string>
     <string name="invalid_code">无效访问码</string>
@@ -59,10 +49,6 @@
     <string name="no">不</string>
     <string name="none">没有</string>
     <string name="send">发送</string>
-    <string name="drafts_updated">草稿被更新</string>
-    <string name="failed_update_draft">无法更新草稿</string>
-    <string name="failed_download_draft">无法下载草稿</string>
-    <string name="failed_download_resources">无法下载资源</string>
     <string name="internet_needed">完成这个请求需要网络访问</string>
     <string name="alternate_language">同步语言</string>
     <string name="alternate_language_message">你无法获得所选择的同步语言</string>
