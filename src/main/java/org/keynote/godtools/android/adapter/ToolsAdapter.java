@@ -91,6 +91,8 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         List<View> mAddViews;
 
         long mId;
+        @Nullable
+        String mCode;
         @NonNull
         Tool.Type mType = Tool.Type.DEFAULT;
         @Nullable
@@ -120,6 +122,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
             // update data from Cursor
             if (cursor != null) {
                 mId = CursorUtils.getLong(cursor, ToolTable.COLUMN_ID, Tool.INVALID_ID);
+                mCode = CursorUtils.getString(cursor, ToolTable.COLUMN_CODE, Tool.INVALID_CODE);
                 mType = CursorUtils.getEnum(cursor, ToolTable.COLUMN_TYPE, Tool.Type.class, Tool.Type.DEFAULT);
                 mTitle = CursorUtils.getString(cursor, COL_TITLE, null);
                 mBannerFile = CursorUtils.getString(cursor, COL_BANNER, null);
@@ -131,6 +134,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
                         CursorUtils.getInt(cursor, ToolTable.COLUMN_PENDING_SHARES, 0);
             } else {
                 mId = Tool.INVALID_ID;
+                mCode = Tool.INVALID_CODE;
                 mType = Tool.Type.DEFAULT;
                 mTitle = null;
                 mBannerFile = null;

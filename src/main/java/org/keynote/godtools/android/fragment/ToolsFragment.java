@@ -221,6 +221,7 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
 
     static final String[] TOOLS_PROJECTION = {
             ToolTable.COLUMN_ID,
+            ToolTable.COLUMN_CODE,
             ToolTable.COLUMN_TYPE,
             "coalesce(" +
                     TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_NAME + "," +
