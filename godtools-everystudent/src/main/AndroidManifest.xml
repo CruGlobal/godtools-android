@@ -4,6 +4,10 @@
 
     <application>
         <activity
+            android:name="org.keynote.godtools.android.everystudent.EveryStudent"
+            android:label="@string/app_name_everystudent"
+            android:theme="@android:style/Theme.Light" />
+        <activity
             android:name="org.keynote.godtools.android.everystudent.EveryStudentSearchResults"
             android:label="@string/app_name_everystudent"
             android:theme="@android:style/Theme.Light">

@@ -24,7 +24,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.SimpleExpandableListAdapter;
 
 import org.cru.godtools.analytics.AnalyticsService;
-import org.keynote.godtools.android.R;
+import org.cru.godtools.everystudent.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -132,14 +132,11 @@ public class EveryStudent extends ExpandableListActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        switch (item.getItemId())
-        {
-            case R.id.search:
-                onSearchRequested();
-                return true;
-            default:
-                return false;
+        if (item.getItemId() == R.id.search) {
+            onSearchRequested();
+            return true;
         }
+        return false;
     }
 
     @SuppressLint("HandlerLeak")
