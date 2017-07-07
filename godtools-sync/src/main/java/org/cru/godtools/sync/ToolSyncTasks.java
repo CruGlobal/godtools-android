@@ -88,7 +88,7 @@ final class ToolSyncTasks extends BaseDataSyncTasks {
                 try {
                     final Response<JsonApiObject<ToolViews>> response = mApi.views.submitViews(views).execute();
                     if (response.isSuccessful()) {
-                        mDao.updateSharesDelta(views.getToolId(), 0 - views.getQuantity());
+                        mDao.updateSharesDelta(views.getToolCode(), 0 - views.getQuantity());
                     }
                 } catch (final IOException ignored) {
                 }

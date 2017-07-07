@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute;
+import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
 import org.keynote.godtools.android.model.Tool;
 
@@ -18,16 +19,21 @@ public final class ToolViews {
     @Nullable
     @JsonApiAttribute(name = JSON_TOOL_ID)
     private Long mToolId;
+    @Nullable
+    @JsonApiIgnore
+    private String mToolCode;
     @JsonApiAttribute(name = JSON_QUANTITY)
     private int mQuantity = 0;
 
     public ToolViews(@NonNull final Tool tool) {
         mToolId = tool.getId();
+        mToolCode = tool.getCode();
         mQuantity = tool.getPendingShares();
     }
 
-    public long getToolId() {
-        return mToolId != null ? mToolId : Tool.INVALID_ID;
+    @Nullable
+    public String getToolCode() {
+        return mToolCode;
     }
 
     public int getQuantity() {

@@ -104,18 +104,23 @@ public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
         }
     }
 
-    public void updateSharesDelta(final long toolId, final int shares) {
+    public void updateSharesDelta(@Nullable final String toolCode, final int shares) {
+        // short-circuit if this is a valid tool
+        if (toolCode == null) {
+            return;
+        }
+
         // short-circuit if the delta isn't actually changing
         if (shares == 0) {
             return;
         }
 
         // build update query
-        final Pair<String, String[]> where = compileExpression(getPrimaryKeyWhere(Tool.class, toolId));
+        final Pair<String, String[]> where = compileExpression(ToolTable.FIELD_CODE.eq(toolCode));
         final StringBuilder sql = new StringBuilder();
         sql.append("UPDATE ").append(getTable(Tool.class))
                 .append(" SET " + ToolTable.COLUMN_PENDING_SHARES +
-                                " = max(0, coalesce(" + ToolTable.COLUMN_PENDING_SHARES + ", 0) + ?)")
+                                " = coalesce(" + ToolTable.COLUMN_PENDING_SHARES + ", 0) + ?")
                 .append(" WHERE ").append(where.first);
         final String[] args = ArrayUtils.merge(String.class, bindValues(shares), where.second);
 
