@@ -137,7 +137,7 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
     public void onToolInfo(final long id, @Nullable final String code) {
         final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
         if (listener != null) {
-            listener.onResourceInfo(id);
+            listener.onToolInfo(id, code);
         }
     }
 
