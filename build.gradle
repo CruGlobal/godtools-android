@@ -59,6 +59,7 @@ dependencies {
     implementation project(':godtools-base')
     implementation project(':godtools-base-ui')
     implementation project(':godtools-db')
+    implementation project(':godtools-everystudent')
     implementation project(':godtools-initial-content')
     implementation project(':godtools-model')
     implementation project(':godtools-model-events')
