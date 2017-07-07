@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">God Tools</string>
-    <string name="menu_item_4laws">4个属灵的原则</string>
-    <string name="menu_item_share">分享</string>
-    <string name="menu_item_contents">内容</string>
-    <string name="menu_item_help">帮助</string>
     <string name="menu_switch_language">切换的语言</string>
     <string name="menu_update_page">更新页面(草稿)</string>
     <string name="quit_dialog_message">你确认你要退出God Tools吗？</string>
     <string name="quit_dialog_confirm">退出</string>
     <string name="quit_dialog_cancel">取消</string>
     <string name="menu_about">关于</string>
-    <string name="snuffy_help">进入下一个页面，仅需要向左滑动。回到上一个页面，向右滑动。查看菜单你可以点击页面任何非按钮的部分</string>
-    <string name="snuffy_help_title" formatted="false">{{package_name}} 帮助</string>
     <string name="choose_your_email_provider">选择您的邮件提供商</string>
     <string name="unable_to_send_the_email">无法发送邮件</string>
     <string name="email">Email</string>
     <string name="copy">复制</string>
-    <string name="all_websites">所有网站</string>
     <!-- Renderer Activity -->
     <!-- Splash Activity -->
     <!-- Settings Activity -->
@@ -27,8 +20,6 @@
     <string name="settings_parallel_info">在福音介绍的时候轻按屏幕用\"切换语言\"来选择语言“选项。如果没有福音册子将不会显示选项。</string>
     <string name="settings_translator_mode">预览模式</string>
     <string name="settings_notification">所有通知</string>
-    <string name="wrong_passcode">请重新尝试</string>
-    <string name="expired_passcode">预览会话过期</string>
     <string name="authenticate_code">认证验证码</string>
     <!-- Main Activity-->
     <string name="share_prompt">选择你想如何分享</string>

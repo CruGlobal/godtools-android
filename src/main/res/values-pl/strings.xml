@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">God Tools</string>
-    <string name="menu_item_4laws">Cztery prawa duchowego życia</string>
-    <string name="menu_item_share">Podziel się</string>
-    <string name="menu_item_contents">Treść</string>
-    <string name="menu_item_help">Pomoc</string>
     <string name="menu_switch_language">Zamień język</string>
     <string name="menu_update_page">Aktualizuj stronę (wersja robocza)</string>
     <string name="quit_dialog_message">Na pewno chcesz zamknąć God Tools?</string>
     <string name="quit_dialog_confirm">Wyjście</string>
     <string name="quit_dialog_cancel">Anuluj</string>
     <string name="menu_about">O aplikacji</string>
-    <string name="snuffy_help">Aby przejść do następnej strony przesuń palcem w lewą stronę. Aby wrócić do poprzedniej strony przesuń palcem w prawo. Aby zobaczyć menu dotknij dowolnego miejsca na ekranie (innego niż aktywny link/przycisk)</string>
-    <string name="snuffy_help_title" formatted="false">Pomoc na temat: {{package_name}}</string>
     <string name="choose_your_email_provider">Wybierz dostawcę poczty elektronicznej</string>
     <string name="unable_to_send_the_email">Nie można wysłać emaila</string>
     <string name="email">Email</string>
     <string name="copy">Kopiuj</string>
-    <string name="all_websites">Wszystkie strony WWW</string>
     <!-- Renderer Activity -->
     <!-- Splash Activity -->
     <!-- Settings Activity -->
@@ -27,8 +20,6 @@
     <string name="settings_parallel_info">"Dotknij ekranu i wybierz komendę \"Zamień język\" aby zobaczyć treść prezentacji w innym języku. Ta opcja nie działa jeśli tłumaczenie danej prezentacji nie jest dostępne.  "</string>
     <string name="settings_translator_mode">Tryb podglądu (dla tłumaczy)</string>
     <string name="settings_notification">Pozwól na zawiadomienia</string>
-    <string name="wrong_passcode">Proszę spróbować ponownie</string>
-    <string name="expired_passcode">Sesja trybu podglądu wersji roboczej wygasła</string>
     <string name="authenticate_code">Sprawdzanie kodu dostępu</string>
     <!-- Main Activity-->
     <string name="share_prompt">Wybierz sposób podzielenia się</string>

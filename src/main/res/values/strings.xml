@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">God Tools</string>
-    <string name="menu_item_4laws">The Four Spiritual Laws</string>
-    <string name="menu_item_share">Share</string>
-    <string name="menu_item_contents">Contents</string>
-    <string name="menu_item_help">Help</string>
     <string name="menu_update_page">Update Page (draft)</string>
     <string name="quit_dialog_message">Are you sure you want to exit God Tools?</string>
     <string name="quit_dialog_confirm">Exit</string>
     <string name="quit_dialog_cancel">Cancel</string>
-    <string name="snuffy_help">To advance to the next page, simply swipe to the left. To return to the previous page, swipe to the right. To show the menu you can tap in any area of the page other than on a button.</string>
-    <string name="snuffy_help_title" formatted="false">{{package_name}} Help</string>
     <string name="choose_your_email_provider">Choose your email provider</string>
     <string name="unable_to_send_the_email">Unable to send the email</string>
     <string name="email">Email</string>
     <string name="copy">Copy</string>
-    <string name="all_websites">All Websites</string>
 
     <!-- Settings Activity -->
     <string name="settings_title">Settings</string>
@@ -24,8 +17,6 @@
     <string name="settings_parallel_info">Tap screen during presentation and use \"Switch Language\" to toggle language. Option is not shown if booklet is not available.</string>
     <string name="settings_translator_mode">Preview Mode (Translators)</string>
     <string name="settings_notification">Allow Notifications</string>
-    <string name="wrong_passcode">Please try again</string>
-    <string name="expired_passcode">Preview mode session expired</string>
     <string name="authenticate_code">Authenticating access code</string>
 
     <!-- Main Activity-->
