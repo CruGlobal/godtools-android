@@ -1,6 +1,7 @@
 package org.cru.godtools.tract.model;
 
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -78,6 +79,21 @@ final class Utils {
                 }
             } catch (final Exception ignored) {
             }
+        }
+        return defValue;
+    }
+
+    @Nullable
+    static Uri parseUrl(@NonNull final XmlPullParser parser, @NonNull final String attribute,
+                        @Nullable final Uri defValue) {
+        return parseUrl(parser.getAttributeValue(null, attribute), defValue);
+    }
+
+    @Nullable
+    static Uri parseUrl(@Nullable final String raw, @Nullable final Uri defValue) {
+        if (raw != null) {
+            final Uri uri = Uri.parse(raw);
+            return uri.isAbsolute() ? uri : Uri.parse("http://" + raw);
         }
         return defValue;
     }

@@ -113,8 +113,7 @@ public final class Button extends Content implements Styles {
         mColor = Utils.parseColor(parser, XML_COLOR, mColor);
         mType = Type.parse(parser.getAttributeValue(null, XML_TYPE), mType);
         mEvents = parseEvents(parser, XML_EVENTS);
-        final String rawUrl = parser.getAttributeValue(null, XML_URL);
-        mUrl = rawUrl != null ? Uri.parse(rawUrl) : null;
+        mUrl = Utils.parseUrl(parser, XML_URL, null);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
