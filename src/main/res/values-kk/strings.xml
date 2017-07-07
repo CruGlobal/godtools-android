@@ -61,8 +61,6 @@
     <string name="single_website_assist">- сізге көмектесетін сайт</string>
     <string name="cannot_dial">Теру дискін іске қоса алмады</string>
     <string name="cannot_email">электрондық пошта құралын қосу мүмкін емес</string>
-    <!-- Every Student-->
-    <string name="could_not_load_content">Мазмұнды жүктеу іске аспады</string>
     <!-- Shared Strings -->
     <string name="ok">Жақсы</string>
     <string name="cancel">күшін жою</string>

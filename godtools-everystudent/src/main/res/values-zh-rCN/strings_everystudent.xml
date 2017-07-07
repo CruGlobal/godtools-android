@@ -6,4 +6,5 @@
     <string name="search_hint">搜索EveryStudent.com</string>
     <string name="search_no_results">搜索结果中无法找到\"{{search_term}}\"</string>
     <string name="settings_description">探索关于生活和上帝的问题</string>
+    <string name="could_not_load_content">无法加载内容</string>
 </resources>

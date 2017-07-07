@@ -10,4 +10,5 @@
     </plurals>
     <string name="search_no_results">No results found for \"{{search_term}}\"</string>
     <string name="settings_description">Explore questions about life and God</string>
+    <string name="could_not_load_content">Could not load the content</string>
 </resources>

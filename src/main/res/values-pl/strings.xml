@@ -61,8 +61,6 @@
     <string name="single_website_assist">- pomocna strona WWW</string>
     <string name="cannot_dial">Błąd uruchomienia diallera</string>
     <string name="cannot_email">Błąd uruchomienia aplikacji poczty elektronicznej</string>
-    <!-- Every Student-->
-    <string name="could_not_load_content">Nie można załadować zawartości</string>
     <!-- Shared Strings -->
     <string name="ok">OK</string>
     <string name="cancel">Anuluj</string>

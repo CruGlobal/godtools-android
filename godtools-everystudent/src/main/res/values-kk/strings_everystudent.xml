@@ -6,4 +6,5 @@
     <string name="search_hint">Іздеу EveryStudent.com</string>
     <string name="search_no_results">{{search_term}} үшін нәтиже табылмады</string>
     <string name="settings_description">Құдай және өмір жайында сұрақтарды зерттеңіз</string>
+    <string name="could_not_load_content">Мазмұнды жүктеу іске аспады</string>
 </resources>

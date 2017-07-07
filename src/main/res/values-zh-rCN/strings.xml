@@ -61,8 +61,6 @@
     <string name="single_website_assist">一个可以帮助你的网站</string>
     <string name="cannot_dial">无法启动拨号键盘</string>
     <string name="cannot_email">无法启动邮件应用</string>
-    <!-- Every Student-->
-    <string name="could_not_load_content">无法加载内容</string>
     <!-- Shared Strings -->
     <string name="ok">是的</string>
     <string name="cancel">取消</string>

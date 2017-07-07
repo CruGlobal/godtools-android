@@ -112,9 +112,6 @@
     <string name="cannot_dial">Cannot launch dialler</string>
     <string name="cannot_email">Cannot launch email app</string>
 
-    <!-- Every Student-->
-    <string name="could_not_load_content">Could not load the content</string>
-
     <!-- Shared Strings -->
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
