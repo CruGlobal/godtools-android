@@ -102,7 +102,7 @@ public class ToolDetailsActivity extends BaseActivity implements ToolDetailsFrag
 
         // update the displayed fragment
         fm.beginTransaction()
-                .replace(R.id.frame, ToolDetailsFragment.newInstance(mToolId), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, ToolDetailsFragment.newInstance(mToolId, mTool), TAG_MAIN_FRAGMENT)
                 .commit();
     }
 

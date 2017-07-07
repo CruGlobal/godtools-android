@@ -37,7 +37,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
 
-import static org.keynote.godtools.android.Constants.EXTRA_TOOL;
+import static org.cru.godtools.base.Constants.EXTRA_TOOL;
+import static org.cru.godtools.base.Constants.EXTRA_TOOL_ID;
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
 public class ToolDetailsFragment extends BaseFragment {
@@ -53,7 +54,10 @@ public class ToolDetailsFragment extends BaseFragment {
     private static final int LOADER_AVAILABLE_LANGUAGES = 104;
 
     // these properties should be treated as final and only set/modified in onCreate()
+    @Deprecated
     /*final*/ long mToolId = Tool.INVALID_ID;
+    @Nullable
+    /*final*/ String mToolCode = Tool.INVALID_CODE;
 
     @Nullable
     @BindView(R.id.banner)
@@ -92,10 +96,11 @@ public class ToolDetailsFragment extends BaseFragment {
     @NonNull
     private List<Locale> mLanguages = Collections.emptyList();
 
-    public static Fragment newInstance(final long id) {
+    public static Fragment newInstance(final long id, @Nullable final String code) {
         final ToolDetailsFragment fragment = new ToolDetailsFragment();
         final Bundle args = new Bundle(1);
-        args.putLong(EXTRA_TOOL, id);
+        args.putLong(EXTRA_TOOL_ID, id);
+        args.putString(EXTRA_TOOL, code);
         fragment.setArguments(args);
         return fragment;
     }
@@ -103,12 +108,13 @@ public class ToolDetailsFragment extends BaseFragment {
     /* BEGIN lifecycle */
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         final Bundle args = getArguments();
         if (args != null) {
-            mToolId = args.getLong(EXTRA_TOOL, mToolId);
+            mToolId = args.getLong(EXTRA_TOOL_ID, mToolId);
+            mToolCode = args.getString(EXTRA_TOOL, mToolCode);
         }
 
         startLoaders();
