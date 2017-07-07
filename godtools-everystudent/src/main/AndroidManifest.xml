@@ -1,1 +1,10 @@
-<manifest package="org.cru.godtools.everystudent" />
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.cru.godtools.everystudent">
+
+    <application>
+        <provider
+            android:name="org.keynote.godtools.android.everystudent.EveryStudentProvider"
+            android:authorities="@string/every_student_authority" />
+    </application>
+</manifest>

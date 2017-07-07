@@ -108,10 +108,6 @@
                 android:value="org.keynote.godtools.android.activity.MainActivity" />
         </activity>
 
-        <provider
-            android:name=".everystudent.EveryStudentProvider"
-            android:authorities="@string/every_student_authority" />
-
         <meta-data
             android:name="android.app.default_searchable"
             android:value=".everystudent.EveryStudentSearchResults" />
