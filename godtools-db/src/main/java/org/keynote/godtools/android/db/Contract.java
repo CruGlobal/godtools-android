@@ -84,7 +84,7 @@ public final class Contract extends BaseContract {
                 {COLUMN_ID, COLUMN_CODE, COLUMN_TYPE, COLUMN_NAME, COLUMN_DESCRIPTION, COLUMN_SHARES,
                         COLUMN_PENDING_SHARES, COLUMN_BANNER, COLUMN_DETAILS_BANNER, COLUMN_COPYRIGHT, COLUMN_ADDED};
 
-        private static final String SQL_COLUMN_CODE = COLUMN_CODE + " TEXT";
+        private static final String SQL_COLUMN_CODE = COLUMN_CODE + " TEXT NOT NULL";
         private static final String SQL_COLUMN_TYPE = COLUMN_TYPE + " TEXT";
         private static final String SQL_COLUMN_NAME = COLUMN_NAME + " TEXT";
         private static final String SQL_COLUMN_DESCRIPTION = COLUMN_DESCRIPTION + " TEXT";
