@@ -25,7 +25,7 @@ final class TranslationMapper extends BaseMapper<Translation> {
                             @NonNull final Translation translation) {
         switch (field) {
             case COLUMN_TOOL:
-                values.put(field, translation.getToolId());
+                values.put(field, translation.getToolCode());
                 break;
             case COLUMN_LANGUAGE:
                 values.put(field, serialize(translation.getLanguageCode()));
@@ -65,7 +65,7 @@ final class TranslationMapper extends BaseMapper<Translation> {
     public Translation toObject(@NonNull final Cursor c) {
         final Translation translation = super.toObject(c);
 
-        translation.setToolId(getLong(c, COLUMN_TOOL, Tool.INVALID_ID));
+        translation.setToolCode(getString(c, COLUMN_TOOL, Tool.INVALID_CODE));
         translation.setLanguageCode(getLocale(c, COLUMN_LANGUAGE, Language.INVALID_CODE));
         translation.setVersion(getInt(c, COLUMN_VERSION, DEFAULT_VERSION));
         translation.setName(getString(c, COLUMN_NAME, null));

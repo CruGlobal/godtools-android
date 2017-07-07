@@ -35,6 +35,12 @@ public final class Contract extends BaseContract {
         String SQL_COLUMN_TOOL = COLUMN_TOOL + " INTEGER";
     }
 
+    @SuppressWarnings("checkstyle:InterfaceIsType")
+    interface ToolCode {
+        String COLUMN_TOOL = "tool";
+        String SQL_COLUMN_TOOL = COLUMN_TOOL + " TEXT";
+    }
+
     public static class LanguageTable extends BaseTable {
         static final String TABLE_NAME = "languages";
         static final Table<Language> TABLE = Table.forClass(Language.class);
@@ -85,7 +91,7 @@ public final class Contract extends BaseContract {
                 {COLUMN_ID, COLUMN_CODE, COLUMN_TYPE, COLUMN_NAME, COLUMN_DESCRIPTION, COLUMN_SHARES,
                         COLUMN_PENDING_SHARES, COLUMN_BANNER, COLUMN_DETAILS_BANNER, COLUMN_COPYRIGHT, COLUMN_ADDED};
 
-        private static final String SQL_COLUMN_CODE = COLUMN_CODE + " TEXT NOT NULL";
+        private static final String SQL_COLUMN_CODE = COLUMN_CODE + " TEXT";
         private static final String SQL_COLUMN_TYPE = COLUMN_TYPE + " TEXT";
         private static final String SQL_COLUMN_NAME = COLUMN_NAME + " TEXT";
         private static final String SQL_COLUMN_DESCRIPTION = COLUMN_DESCRIPTION + " TEXT";
@@ -124,7 +130,7 @@ public final class Contract extends BaseContract {
                 "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_TYPE;
     }
 
-    public static class TranslationTable extends BaseTable implements ToolId {
+    public static class TranslationTable extends BaseTable implements ToolCode {
         static final String TABLE_NAME = "translations";
         public static final Table<Translation> TABLE = Table.forClass(Translation.class);
 
@@ -158,7 +164,7 @@ public final class Contract extends BaseContract {
         public static final Join<Translation, Language> SQL_JOIN_LANGUAGE =
                 Join.create(TABLE, LanguageTable.TABLE).on(FIELD_LANGUAGE.eq(LanguageTable.FIELD_CODE));
         public static final Join<Translation, Tool> SQL_JOIN_TOOL =
-                Join.create(TABLE, ToolTable.TABLE).on(FIELD_TOOL.eq(ToolTable.FIELD_ID));
+                Join.create(TABLE, ToolTable.TABLE).on(FIELD_TOOL.eq(ToolTable.FIELD_CODE));
 
         static final Expression SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind());
         public static final Expression SQL_WHERE_TOOL_LANGUAGE = FIELD_TOOL.eq(bind()).and(FIELD_LANGUAGE.eq(bind()));
@@ -172,12 +178,6 @@ public final class Contract extends BaseContract {
                        SQL_COLUMN_NAME, SQL_COLUMN_DESCRIPTION, SQL_COLUMN_MANIFEST, SQL_COLUMN_PUBLISHED,
                        SQL_COLUMN_DOWNLOADED);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
-
-        /* DB migrations */
-        static final String SQL_V19_CREATE_TABLE =
-                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_TOOL, SQL_COLUMN_LANGUAGE, SQL_COLUMN_VERSION,
-                       SQL_COLUMN_NAME, SQL_COLUMN_DESCRIPTION, SQL_COLUMN_PUBLISHED, SQL_COLUMN_DOWNLOADED);
-        static final String SQL_V22_ALTER_MANIFEST = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_MANIFEST;
     }
 
     public static class LocalFileTable implements Base {
