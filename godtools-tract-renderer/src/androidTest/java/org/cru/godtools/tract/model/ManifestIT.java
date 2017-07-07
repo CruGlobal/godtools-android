@@ -24,6 +24,6 @@ public class ManifestIT {
 
     @NonNull
     private Manifest parseManifestXml(@NonNull final String file) throws Exception {
-        return Manifest.fromXml(getParserForTestAsset(file), file, 1, Locale.ENGLISH);
+        return Manifest.fromXml(getParserForTestAsset(file), file, "kgp", Locale.ENGLISH);
     }
 }
