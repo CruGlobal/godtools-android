@@ -5,7 +5,7 @@ import android.view.View;
 
 import org.cru.godtools.base.ui.activity.BaseActivity;
 
-class ImmersiveActivity extends BaseActivity {
+public abstract class ImmersiveActivity extends BaseActivity {
     /* BEGIN lifecycle */
 
     @Override
