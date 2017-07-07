@@ -6,48 +6,20 @@
     <!-- Renderer Activity -->
     <!-- Splash Activity -->
     <!-- Settings Activity -->
-    <string name="authenticate_code">认证验证码</string>
     <!-- Main Activity-->
     <string name="share_prompt">选择你想如何分享</string>
     <!-- Language List -->
     <!-- Translator Mode Dialog -->
     <!-- Access Code Dialog -->
-    <string name="invalid_code">无效访问码</string>
     <!-- Preview Mode -->
-    <string name="pull_down_info">下拉刷新草稿</string>
-    <string name="preview_mode_title">预览模式</string>
-    <string name="package_not_created">包还没有被创建</string>
-    <string name="connecting">连接服务器</string>
     <!-- Package Reader -->
-    <string name="open">打开</string>
-    <string name="cannot_launch_browser">无法启动浏览器</string>
-    <string name="multi_website_assist">可以帮助你的一些网站</string>
-    <string name="single_website_assist">一个可以帮助你的网站</string>
-    <string name="cannot_dial">无法启动拨号键盘</string>
-    <string name="cannot_email">无法启动邮件应用</string>
     <!-- Shared Strings -->
-    <string name="ok">是的</string>
-    <string name="cancel">取消</string>
-    <string name="yes">是的</string>
-    <string name="no">不</string>
-    <string name="none">没有</string>
     <string name="send">发送</string>
-    <string name="internet_needed">完成这个请求需要网络访问</string>
-    <string name="alternate_language">同步语言</string>
-    <string name="alternate_language_message">你无法获得所选择的同步语言</string>
     <!-- Sharing -->
-    <string name="share_general_subject">{{app_name}}</string>
     <string name="share_general_message">这里有一个下载我们今天看到的应用：http://godtoolsapp.com
 
 这里我们可以看到一个网页版的应用{{share_link}}
 
 我们可以聊更多</string>
-    <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
-    <string name="share_from_page_message" formatted="false">这里是我们今天看的小册子，这个链接会带你去到一个网页版。
-
-{{share_link}}
-
-我们可以聊更多</string>
-    <string name="satisfied_share" formatted="false">今天很开心能够和你一起聊如何在我们生命中经历圣灵的大能。我希望能够很快有机会探讨更多。于此同时，你可以看我们今天聊的内容{{share_link}}</string>
     <!-- iOS -->
 </resources>

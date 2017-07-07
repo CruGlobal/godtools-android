@@ -6,44 +6,18 @@
     <!-- Renderer Activity -->
     <!-- Splash Activity -->
     <!-- Settings Activity -->
-    <string name="authenticate_code">Кодқа кіруді сәйкестендіру</string>
     <!-- Main Activity-->
     <string name="share_prompt">Қалай бөліскіңіз келетінін таңдаңыз</string>
     <!-- Language List -->
     <!-- Translator Mode Dialog -->
     <!-- Access Code Dialog -->
-    <string name="invalid_code">Дұрыс емес код</string>
     <!-- Preview Mode -->
-    <string name="pull_down_info">жобаны жаңарту үшін тартыңыз</string>
-    <string name="preview_mode_title">Қарап шығу режимі</string>
-    <string name="package_not_created">Пакет әлі құрылмаған</string>
-    <string name="connecting">Серверге қосылу</string>
     <!-- Package Reader -->
-    <string name="open">Ашу</string>
-    <string name="cannot_launch_browser">Браузерді іске қоса алмады</string>
-    <string name="multi_website_assist">- сізге көмек бере алатын сайттар</string>
-    <string name="single_website_assist">- сізге көмектесетін сайт</string>
-    <string name="cannot_dial">Теру дискін іске қоса алмады</string>
-    <string name="cannot_email">электрондық пошта құралын қосу мүмкін емес</string>
     <!-- Shared Strings -->
-    <string name="ok">Жақсы</string>
-    <string name="cancel">күшін жою</string>
-    <string name="yes">Иә</string>
-    <string name="no">Жоқ</string>
-    <string name="none">ешбірі</string>
     <string name="send">жіберу</string>
-    <string name="internet_needed">Интернет байланысы осы сұранысты аяқтау үшін қажет</string>
-    <string name="alternate_language">Қатарлас Тілдер</string>
-    <string name="alternate_language_message">Таңдалған қатарлас тіл осы құралы үшін қол жетімді емес.</string>
     <!-- Sharing -->
-    <string name="share_general_subject">{{app_name}}</string>
     <string name="share_general_message">Мұнда бүгін қарайтын бағдарламаны жүктеу үшін сілтеме: http://godtoolsapp.com
 Мұнда бағдарламаның {{share_link}} веб нұсқасына сілтеме
 Көбірек әңгімелесейік!</string>
-    <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
-    <string name="share_from_page_message" formatted="false">Бүгінгі таңда біз көретін буклет осы. Бұл сілтеме сіздермен соңғы рет көрген беттің веб-нұсқасы:
-{{share_link}}
-Қане, көбірек сөйлесейік!</string>
-    <string name="satisfied_share" formatted="false">Өмірімізде Киелі Рухтың күшін көріп жатқанымызды айтудың өзі керемет. Жақын арада осы жайында көбірек айтатын боламыз деп үміттенемін. Сондай-ақ, бүгін таңда біз {{share_link}} қарағанымызды тексере аласыз.</string>
     <!-- iOS -->
 </resources>

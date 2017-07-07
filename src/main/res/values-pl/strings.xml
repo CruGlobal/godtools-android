@@ -6,44 +6,19 @@
     <!-- Renderer Activity -->
     <!-- Splash Activity -->
     <!-- Settings Activity -->
-    <string name="authenticate_code">Sprawdzanie kodu dostępu</string>
     <!-- Main Activity-->
     <string name="share_prompt">Wybierz sposób podzielenia się</string>
     <!-- Language List -->
     <!-- Translator Mode Dialog -->
     <!-- Access Code Dialog -->
-    <string name="invalid_code">Niewłaściwy kod dostępu</string>
     <!-- Preview Mode -->
-    <string name="pull_down_info">Przesuń, aby zaktualizować wersje robocze tłumaczenia</string>
-    <string name="preview_mode_title">Tryb podglądu</string>
-    <string name="package_not_created">Pakiet nie jest jeszcze utworzony</string>
-    <string name="connecting">Trwa łączenie sie z serwerem</string>
     <!-- Package Reader -->
-    <string name="open">Otwórz</string>
-    <string name="cannot_launch_browser">Błąd uruchomienia przeglądarki</string>
-    <string name="multi_website_assist">- pomocne strony WWW</string>
-    <string name="single_website_assist">- pomocna strona WWW</string>
-    <string name="cannot_dial">Błąd uruchomienia diallera</string>
-    <string name="cannot_email">Błąd uruchomienia aplikacji poczty elektronicznej</string>
     <!-- Shared Strings -->
-    <string name="ok">OK</string>
-    <string name="cancel">Anuluj</string>
-    <string name="yes">Tak</string>
-    <string name="no">Nie</string>
-    <string name="none">Żaden</string>
     <string name="send">Wyślij</string>
-    <string name="internet_needed">Do wykonania polecenia niezbędne jest połączenie z internetem</string>
-    <string name="alternate_language">Język równoległy</string>
-    <string name="alternate_language_message">Tłumaczenie w wybrany języku nie jest jeszcze dostępne.</string>
     <!-- Sharing -->
-    <string name="share_general_subject">{{app_name}}</string>
     <string name="share_general_message">Tutaj jest link do ściągnięcia aplikacja o której dzisiaj rozmawialiśmy:
 http://godtoolsapp.com
 A tutaj możesz zobaczyć te treści na stronie internetowej {{share_link}}
 Bądźmy w kontakcie!</string>
-    <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
-    <string name="share_from_page_message" formatted="false">Przesyłam link do prezentacji, o której rozmawialiśmy dzisiaj. Ten link kieruje do ostatniej strony prezentacji, którą razem omawialiśmy: {{share_link}}
-Bądźmy w kontakcie!</string>
-    <string name="satisfied_share" formatted="false">Bardzo się cieszę, że mogliśmy porozmawiać dzisiaj jak możemy doświadczać mocy Ducha Świętego w naszym życiu. Mam nadzięję, że będziemy mogli o tym jeszcze wkrótce porozmawiać. A póki co przesyłam link do prezentacji, którą omawialiśmy:  {{share_link}}</string>
     <!-- iOS -->
 </resources>
