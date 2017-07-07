@@ -178,10 +178,6 @@ android {
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AAcaf7bbfe3ffda5dcb1455d3bc16b0c5da1cd71e9\""
         }
     }
-    applicationVariants.all {
-        buildConfigField "String", "EVERY_STUDENT_AUTHORITY", '"' + applicationId + '.everystudent.EveryStudentProvider"'
-        resValue "string", "every_student_authority", applicationId + ".everystudent.EveryStudentProvider"
-    }
 }
 
 apply from: "maven_publish.gradle"

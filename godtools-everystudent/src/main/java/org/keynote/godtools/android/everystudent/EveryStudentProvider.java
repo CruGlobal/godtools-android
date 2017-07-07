@@ -11,7 +11,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import org.cru.godtools.analytics.AnalyticsService;
-import org.keynote.godtools.android.BuildConfig;
+import org.cru.godtools.everystudent.BuildConfig;
 
 /**
  * Provides access to the EveryStudent database.
