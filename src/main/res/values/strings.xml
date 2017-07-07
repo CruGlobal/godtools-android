@@ -1,22 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">God Tools</string>
-    <string name="menu_update_page">Update Page (draft)</string>
-    <string name="quit_dialog_message">Are you sure you want to exit God Tools?</string>
-    <string name="quit_dialog_confirm">Exit</string>
-    <string name="quit_dialog_cancel">Cancel</string>
-    <string name="choose_your_email_provider">Choose your email provider</string>
-    <string name="unable_to_send_the_email">Unable to send the email</string>
-    <string name="email">Email</string>
-    <string name="copy">Copy</string>
 
     <!-- Settings Activity -->
-    <string name="settings_title">Settings</string>
-    <string name="settings_main_language">Main Language:</string>
-    <string name="settings_parallel_language">Parallel Language:</string>
-    <string name="settings_parallel_info">Tap screen during presentation and use \"Switch Language\" to toggle language. Option is not shown if booklet is not available.</string>
-    <string name="settings_translator_mode">Preview Mode (Translators)</string>
-    <string name="settings_notification">Allow Notifications</string>
     <string name="authenticate_code">Authenticating access code</string>
 
     <!-- Main Activity-->
@@ -72,12 +58,7 @@
     <string name="text_language_warning">Not every tool is available in every language.</string>
     <string name="label_language_none">None</string>
 
-    <!-- Translator Mode Dialog -->
-    <string name="dialog_translator_mode_title">Exit Preview Mode?</string>
-    <string name="dialog_translator_mode_body">Drafts will not be displayed</string>
-
     <!-- Access Code Dialog -->
-    <string name="dialog_access_code_title">Enter Access Code:</string>
     <string name="invalid_code">Invalid Access Code</string>
 
     <!-- Preview Mode -->

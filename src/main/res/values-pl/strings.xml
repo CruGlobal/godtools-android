@@ -2,33 +2,16 @@
 <resources>
     <string name="app_name">God Tools</string>
     <string name="menu_switch_language">Zamień język</string>
-    <string name="menu_update_page">Aktualizuj stronę (wersja robocza)</string>
-    <string name="quit_dialog_message">Na pewno chcesz zamknąć God Tools?</string>
-    <string name="quit_dialog_confirm">Wyjście</string>
-    <string name="quit_dialog_cancel">Anuluj</string>
     <string name="menu_about">O aplikacji</string>
-    <string name="choose_your_email_provider">Wybierz dostawcę poczty elektronicznej</string>
-    <string name="unable_to_send_the_email">Nie można wysłać emaila</string>
-    <string name="email">Email</string>
-    <string name="copy">Kopiuj</string>
     <!-- Renderer Activity -->
     <!-- Splash Activity -->
     <!-- Settings Activity -->
-    <string name="settings_title">Ustawienia</string>
-    <string name="settings_main_language">Język główny</string>
-    <string name="settings_parallel_language">Język równoległy:</string>
-    <string name="settings_parallel_info">"Dotknij ekranu i wybierz komendę \"Zamień język\" aby zobaczyć treść prezentacji w innym języku. Ta opcja nie działa jeśli tłumaczenie danej prezentacji nie jest dostępne.  "</string>
-    <string name="settings_translator_mode">Tryb podglądu (dla tłumaczy)</string>
-    <string name="settings_notification">Pozwól na zawiadomienia</string>
     <string name="authenticate_code">Sprawdzanie kodu dostępu</string>
     <!-- Main Activity-->
     <string name="share_prompt">Wybierz sposób podzielenia się</string>
     <!-- Language List -->
     <!-- Translator Mode Dialog -->
-    <string name="dialog_translator_mode_title">Zakończyć tryb podglądu wersji roboczej?</string>
-    <string name="dialog_translator_mode_body">Wersja robocza nie może być wyświetlona</string>
     <!-- Access Code Dialog -->
-    <string name="dialog_access_code_title">Wprowadź kod dostępu:</string>
     <string name="invalid_code">Niewłaściwy kod dostępu</string>
     <!-- Preview Mode -->
     <string name="pull_down_info">Przesuń, aby zaktualizować wersje robocze tłumaczenia</string>

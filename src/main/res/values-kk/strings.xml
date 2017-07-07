@@ -2,33 +2,16 @@
 <resources>
     <string name="app_name">Қызмет құралдары</string>
     <string name="menu_switch_language">Тілді ауыстыру</string>
-    <string name="menu_update_page">Парақшаны жаңарту (жоба)</string>
-    <string name="quit_dialog_message">Қызмет құралдарынан шыққыңыз келе ме?</string>
-    <string name="quit_dialog_confirm">Шығу</string>
-    <string name="quit_dialog_cancel">Жою</string>
     <string name="menu_about">туралы</string>
-    <string name="choose_your_email_provider">Электрондық поштаңыздың қызмет жеткізушісін таңдаңыз</string>
-    <string name="unable_to_send_the_email">Хатты жіберу іске аспады</string>
-    <string name="email">Электрондық пошта</string>
-    <string name="copy">Көшірме</string>
     <!-- Renderer Activity -->
     <!-- Splash Activity -->
     <!-- Settings Activity -->
-    <string name="settings_title">Баптаулар</string>
-    <string name="settings_main_language">Негізгі тіл:</string>
-    <string name="settings_parallel_language">Қатарлас тіл:</string>
-    <string name="settings_parallel_info">Көрсетілім кезінде басқа тілге ауысу үшін, экранда \"басқа тілге ауысу\" батырмасын басыңыз.</string>
-    <string name="settings_translator_mode">Алдын ала қарап шығу тәртібі (аударма)</string>
-    <string name="settings_notification">Хабарламаға рұқсат</string>
     <string name="authenticate_code">Кодқа кіруді сәйкестендіру</string>
     <!-- Main Activity-->
     <string name="share_prompt">Қалай бөліскіңіз келетінін таңдаңыз</string>
     <!-- Language List -->
     <!-- Translator Mode Dialog -->
-    <string name="dialog_translator_mode_title">Алдын ала қарап шығу режимінен шығу</string>
-    <string name="dialog_translator_mode_body">Жобалар экранға шығарылмайды</string>
     <!-- Access Code Dialog -->
-    <string name="dialog_access_code_title">Кодқа кіруді енгізу</string>
     <string name="invalid_code">Дұрыс емес код</string>
     <!-- Preview Mode -->
     <string name="pull_down_info">жобаны жаңарту үшін тартыңыз</string>
