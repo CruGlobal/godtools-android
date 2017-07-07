@@ -41,9 +41,9 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
     private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
 
     public interface Callbacks {
-        void onResourceInfo(long id);
+        void onToolInfo(long id, @Nullable String code);
 
-        void onResourceSelect(long id, @NonNull Tool.Type type, Locale... languages);
+        void onToolSelect(long id, @Nullable String code, @NonNull Tool.Type type, Locale... languages);
     }
 
     private static final int MODE_ADDED = 1;
@@ -129,7 +129,7 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
                              final Locale... languages) {
         final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
         if (listener != null) {
-            listener.onResourceSelect(id, type, languages);
+            listener.onToolSelect(id, code, type, languages);
         }
     }
 

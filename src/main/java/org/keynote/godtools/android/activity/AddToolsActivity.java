@@ -52,12 +52,13 @@ public class AddToolsActivity extends BaseActivity implements ToolsFragment.Call
     }
 
     @Override
-    public void onResourceSelect(final long id, @NonNull final Tool.Type type, final Locale... languages) {
+    public void onToolSelect(final long id, @Nullable final String code, @NonNull final Tool.Type type,
+                             final Locale... languages) {
         ToolDetailsActivity.start(this, id);
     }
 
     @Override
-    public void onResourceInfo(final long id) {
+    public void onToolInfo(final long id, @Nullable final String code) {
         ToolDetailsActivity.start(this, id);
     }
 
