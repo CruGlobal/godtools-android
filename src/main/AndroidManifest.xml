@@ -37,7 +37,7 @@
         android:name=".snuffy.SnuffyApplication"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:theme="@style/Theme.GodTools">
+        android:theme="@style/Theme.GodTools2.AppBar">
         <activity
             android:name=".everystudent.EveryStudent"
             android:label="@string/app_name_everystudent"
@@ -59,9 +59,7 @@
                 android:resource="@xml/searchable" />
         </activity>
 
-        <activity
-            android:name=".activity.MainActivity"
-            android:theme="@style/Theme.GodTools2.AppBar">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -71,8 +69,7 @@
         <activity
             android:name=".activity.AddToolsActivity"
             android:label="@string/title_tools_add"
-            android:parentActivityName=".activity.MainActivity"
-            android:theme="@style/Theme.GodTools2.AppBar">
+            android:parentActivityName=".activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.keynote.godtools.android.activity.MainActivity" />
@@ -80,8 +77,7 @@
 
         <activity
             android:name=".activity.ToolDetailsActivity"
-            android:parentActivityName=".activity.MainActivity"
-            android:theme="@style/Theme.GodTools2.AppBar">
+            android:parentActivityName=".activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.keynote.godtools.android.activity.MainActivity" />
@@ -90,8 +86,7 @@
         <activity
             android:name=".activity.LanguageSettingsActivity"
             android:label="@string/title_language_settings"
-            android:parentActivityName=".activity.MainActivity"
-            android:theme="@style/Theme.GodTools2.AppBar">
+            android:parentActivityName=".activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.keynote.godtools.android.activity.MainActivity" />
@@ -99,8 +94,7 @@
 
         <activity
             android:name=".activity.LanguageSelectionActivity"
-            android:parentActivityName=".activity.LanguageSettingsActivity"
-            android:theme="@style/Theme.GodTools2.AppBar">
+            android:parentActivityName=".activity.LanguageSettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.keynote.godtools.android.activity.LanguageSettingsActivity" />
