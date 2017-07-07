@@ -14,9 +14,8 @@ import org.ccci.gto.android.common.api.okhttp3.util.OkHttpClientUtil;
 import org.ccci.gto.android.common.leakcanary.CrashlyticsLeakService;
 import org.ccci.gto.android.common.stetho.db.SQLiteOpenHelperStethoDatabaseProvider;
 import org.keynote.godtools.android.db.GodToolsDatabase;
-import org.keynote.godtools.android.snuffy.SnuffyApplication;
 
-public class DebugGodToolsApplication extends SnuffyApplication {
+public class DebugGodToolsApplication extends GodToolsApplication {
     @Override
     public void onCreate() {
         if (LeakCanary.isInAnalyzerProcess(this)) {

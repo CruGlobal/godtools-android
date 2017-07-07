@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.snuffy;
+package org.cru.godtools;
 
 import android.app.Application;
 import android.support.annotation.NonNull;
@@ -9,7 +9,6 @@ import com.newrelic.agent.android.NewRelic;
 import com.squareup.picasso.Picasso;
 
 import org.ccci.gto.android.common.api.okhttp3.util.OkHttpClientUtil;
-import org.cru.godtools.AppEventBusIndex;
 import org.cru.godtools.analytics.AnalyticsEventBusIndex;
 import org.cru.godtools.model.events.ModelEventsEventBusIndex;
 import org.cru.godtools.sync.SyncEventBusIndex;
@@ -22,7 +21,7 @@ import org.keynote.godtools.android.BuildConfig;
 import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
 
-public class SnuffyApplication extends Application {
+public class GodToolsApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
