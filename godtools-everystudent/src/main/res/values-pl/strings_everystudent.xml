@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name_everystudent">Pytania na temat Boga?</string>
     <string name="menu_search">Szukaj</string>
     <string name="search_label">kazdystudent.pl</string>
     <string name="search_hint">Przeszukaj stronę kazdystudent.pl</string>

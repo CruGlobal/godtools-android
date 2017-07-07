@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name_everystudent">Questions About God?</string>
     <string name="menu_search">Search</string>
     <string name="search_label">EveryStudent.com</string>
     <string name="search_hint">Search EveryStudent.com</string>

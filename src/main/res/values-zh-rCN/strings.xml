@@ -7,7 +7,6 @@
     <string name="menu_item_help">帮助</string>
     <string name="menu_switch_language">切换的语言</string>
     <string name="menu_update_page">更新页面(草稿)</string>
-    <string name="app_name_everystudent">有关生命和上帝的疑问</string>
     <string name="quit_dialog_message">你确认你要退出God Tools吗？</string>
     <string name="quit_dialog_confirm">退出</string>
     <string name="quit_dialog_cancel">取消</string>

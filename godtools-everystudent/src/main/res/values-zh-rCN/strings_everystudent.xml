@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name_everystudent">有关生命和上帝的疑问</string>
     <string name="menu_search">搜索</string>
     <string name="search_label">EveryStudent.com</string>
     <string name="search_hint">搜索EveryStudent.com</string>

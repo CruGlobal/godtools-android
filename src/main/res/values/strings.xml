@@ -6,7 +6,6 @@
     <string name="menu_item_contents">Contents</string>
     <string name="menu_item_help">Help</string>
     <string name="menu_update_page">Update Page (draft)</string>
-    <string name="app_name_everystudent">Questions About God?</string>
     <string name="quit_dialog_message">Are you sure you want to exit God Tools?</string>
     <string name="quit_dialog_confirm">Exit</string>
     <string name="quit_dialog_cancel">Cancel</string>
