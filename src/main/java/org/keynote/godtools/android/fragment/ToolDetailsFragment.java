@@ -253,10 +253,13 @@ public class ToolDetailsFragment extends BaseFragment {
         public Loader<Tool> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_TOOL:
-                    return new ToolLoader(getContext(), mToolId);
-                default:
-                    return null;
+                    if (mToolCode != null) {
+                        return new ToolLoader(getContext(), mToolCode);
+                    }
+                    break;
             }
+
+            return null;
         }
 
         @Override
