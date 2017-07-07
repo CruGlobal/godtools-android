@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">God Tools</string>
-    <string name="menu_item_kgp">Przyjaźń z Bogiem</string>
-    <string name="menu_item_satisfied">Zadowolony?</string>
     <string name="menu_item_4laws">Cztery prawa duchowego życia</string>
     <string name="menu_item_share">Podziel się</string>
     <string name="menu_item_contents">Treść</string>

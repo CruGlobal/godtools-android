@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Қызмет құралдары</string>
-    <string name="menu_item_kgp">Құдайды жеке танып білу</string>
-    <string name="menu_item_satisfied">Қанағаттанасыз ба?</string>
     <string name="menu_item_4laws">Төрт Рухани Ақиқат</string>
     <string name="menu_item_share">Бөлісу</string>
     <string name="menu_item_contents">Мазмұны</string>
