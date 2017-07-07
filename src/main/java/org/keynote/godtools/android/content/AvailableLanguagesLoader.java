@@ -17,10 +17,13 @@ public final class AvailableLanguagesLoader extends CachingAsyncTaskEventBusLoad
     @NonNull
     private final GodToolsDao mDao;
     private final long mToolId;
+    @NonNull
+    private final String mTool;
 
-    public AvailableLanguagesLoader(@NonNull final Context context, final long toolId) {
+    public AvailableLanguagesLoader(@NonNull final Context context, final long toolId, @NonNull final String toolCode) {
         super(context);
         mDao = GodToolsDao.getInstance(context);
+        mTool = toolCode;
         mToolId = toolId;
         addEventBusSubscriber(new TranslationEventBusSubscriber(this));
     }

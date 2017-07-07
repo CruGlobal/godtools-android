@@ -300,10 +300,13 @@ public class ToolDetailsFragment extends BaseFragment {
         public Loader<Translation> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_LATEST_TRANSLATION:
-                    return new LatestTranslationLoader(getContext(), mToolId, mPrimaryLanguage);
-                default:
-                    return null;
+                    if (mToolCode != null) {
+                        return new LatestTranslationLoader(getContext(), mToolId, mToolCode, mPrimaryLanguage);
+                    }
+                    break;
             }
+
+            return null;
         }
 
         @Override
@@ -322,10 +325,13 @@ public class ToolDetailsFragment extends BaseFragment {
         public Loader<List<Locale>> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_AVAILABLE_LANGUAGES:
-                    return new AvailableLanguagesLoader(getContext(), mToolId);
-                default:
-                    return null;
+                    if (mToolCode != null) {
+                        return new AvailableLanguagesLoader(getContext(), mToolId, mToolCode);
+                    }
+                    break;
             }
+
+            return null;
         }
 
         @Override
