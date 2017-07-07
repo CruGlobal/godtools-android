@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="about_text">#000</color>
-    <color name="about_background">#fff</color>
-
     <color name="es_article_background">#fff</color>
     <color name="es_article_foreground">#000</color>
 
-    <!-- This is "Cru Bright Blue" used in the Cru Logo-->
-    <color name="cru_bright_blue">#3eb1c8</color>
-    <color name="cru_gold">#f9b625</color>
-
-    <color name="settings_listitem_item">#ff2a6cff</color>
     <color name="settings_language_item">#460099ff</color>
     
     <color name="smokey">#64CDCDCD</color>
