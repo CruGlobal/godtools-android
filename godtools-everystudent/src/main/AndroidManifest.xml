@@ -26,5 +26,9 @@
         <provider
             android:name=".EveryStudentProvider"
             android:authorities="@string/every_student_authority" />
+
+        <meta-data
+            android:name="android.app.default_searchable"
+            android:value="org.cru.godtools.everystudent.EveryStudentSearchResults" />
     </application>
 </manifest>
