@@ -116,8 +116,13 @@ public final class Manifest extends Base implements Styles {
     }
 
     @Nullable
+    public String getTitle() {
+        return mTitle != null ? mTitle.getText() : null;
+    }
+
+    @Nullable
     public static String getTitle(@Nullable final Manifest manifest) {
-        return manifest != null && manifest.mTitle != null ? manifest.mTitle.getText() : null;
+        return manifest != null ? manifest.getTitle() : null;
     }
 
     @NonNull
