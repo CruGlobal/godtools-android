@@ -1,89 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Қызмет құралдары</string>
-    <string name="menu_item_4laws">Төрт Рухани Ақиқат</string>
-    <string name="menu_item_share">Бөлісу</string>
-    <string name="menu_item_contents">Мазмұны</string>
-    <string name="menu_item_help">Көмек</string>
     <string name="menu_switch_language">Тілді ауыстыру</string>
-    <string name="menu_update_page">Парақшаны жаңарту (жоба)</string>
-    <string name="quit_dialog_message">Қызмет құралдарынан шыққыңыз келе ме?</string>
-    <string name="quit_dialog_confirm">Шығу</string>
-    <string name="quit_dialog_cancel">Жою</string>
     <string name="menu_about">туралы</string>
-    <string name="snuffy_help">Келесі бетке өту үшін, сол жаққа жүргізіңіз. Бастапқы бетке өту үшін оң жаққа жүргізіңіз. Мәзірді көрсету үшін парақшаның кез келген жерін іске қосуға болады. Тек батырмаға баспаңыз.</string>
-    <string name="snuffy_help_title" formatted="false">{{package_name}} Көмек</string>
-    <string name="choose_your_email_provider">Электрондық поштаңыздың қызмет жеткізушісін таңдаңыз</string>
-    <string name="unable_to_send_the_email">Хатты жіберу іске аспады</string>
-    <string name="email">Электрондық пошта</string>
-    <string name="copy">Көшірме</string>
-    <string name="all_websites">Барлық сайттар</string>
     <!-- Renderer Activity -->
     <!-- Splash Activity -->
     <!-- Settings Activity -->
-    <string name="settings_title">Баптаулар</string>
-    <string name="settings_main_language">Негізгі тіл:</string>
-    <string name="settings_parallel_language">Қатарлас тіл:</string>
-    <string name="settings_parallel_info">Көрсетілім кезінде басқа тілге ауысу үшін, экранда \"басқа тілге ауысу\" батырмасын басыңыз.</string>
-    <string name="settings_translator_mode">Алдын ала қарап шығу тәртібі (аударма)</string>
-    <string name="settings_notification">Хабарламаға рұқсат</string>
-    <string name="wrong_passcode">Өтініш тағы бір рет байқап көріңіз</string>
-    <string name="expired_passcode">Алдын ала қарап шығу сеансының мезгілі өтті</string>
-    <string name="authenticate_code">Кодқа кіруді сәйкестендіру</string>
     <!-- Main Activity-->
     <string name="share_prompt">Қалай бөліскіңіз келетінін таңдаңыз</string>
     <!-- Language List -->
     <!-- Translator Mode Dialog -->
-    <string name="dialog_translator_mode_title">Алдын ала қарап шығу режимінен шығу</string>
-    <string name="dialog_translator_mode_body">Жобалар экранға шығарылмайды</string>
-    <string name="translator_enabled">Аударманы алдын ала қарап шығу режимі қосулы</string>
-    <string name="translator_disabled">Аударманы алдын ала қарап шығу режимі өшірулі</string>
-    <string name="draft_published">Жоба жарияланды</string>
-    <string name="draft_publish_fail">Жобаны жариялау мүмкін емес</string>
-    <string name="draft_publish_message">Сіз осы жобаны жариялағыңыз келеді ме?</string>
-    <string name="draft_publish_confirm">Иә, дайын!</string>
-    <string name="draft_publish_negative">Жоқ, мен шешімімді өзгерттім.</string>
-    <string name="draft_created">Жоба құрылды</string>
-    <string name="draft_create_failed">Жаңа жоба құру мүмкін болмады</string>
-    <string name="draft_start_message">Жаңа жоба құру?</string>
     <!-- Access Code Dialog -->
-    <string name="dialog_access_code_title">Кодқа кіруді енгізу</string>
-    <string name="invalid_code">Дұрыс емес код</string>
     <!-- Preview Mode -->
-    <string name="pull_down_info">жобаны жаңарту үшін тартыңыз</string>
-    <string name="preview_mode_title">Қарап шығу режимі</string>
-    <string name="package_not_created">Пакет әлі құрылмаған</string>
-    <string name="connecting">Серверге қосылу</string>
     <!-- Package Reader -->
-    <string name="open">Ашу</string>
-    <string name="cannot_launch_browser">Браузерді іске қоса алмады</string>
-    <string name="multi_website_assist">- сізге көмек бере алатын сайттар</string>
-    <string name="single_website_assist">- сізге көмектесетін сайт</string>
-    <string name="cannot_dial">Теру дискін іске қоса алмады</string>
-    <string name="cannot_email">электрондық пошта құралын қосу мүмкін емес</string>
     <!-- Shared Strings -->
-    <string name="ok">Жақсы</string>
-    <string name="cancel">күшін жою</string>
-    <string name="yes">Иә</string>
-    <string name="no">Жоқ</string>
-    <string name="none">ешбірі</string>
-    <string name="send">жіберу</string>
-    <string name="drafts_updated">Жобалар жаңартылды</string>
-    <string name="failed_update_draft">Жобаларды жаңарту іске аспады</string>
-    <string name="failed_download_draft">"Жобаларды жүктеу іске аспады "</string>
-    <string name="failed_download_resources">Қоларды жүктеу іске аспады</string>
-    <string name="internet_needed">Интернет байланысы осы сұранысты аяқтау үшін қажет</string>
-    <string name="alternate_language">Қатарлас Тілдер</string>
-    <string name="alternate_language_message">Таңдалған қатарлас тіл осы құралы үшін қол жетімді емес.</string>
     <!-- Sharing -->
-    <string name="share_general_subject">{{app_name}}</string>
     <string name="share_general_message">Мұнда бүгін қарайтын бағдарламаны жүктеу үшін сілтеме: http://godtoolsapp.com
 Мұнда бағдарламаның {{share_link}} веб нұсқасына сілтеме
 Көбірек әңгімелесейік!</string>
-    <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
-    <string name="share_from_page_message" formatted="false">Бүгінгі таңда біз көретін буклет осы. Бұл сілтеме сіздермен соңғы рет көрген беттің веб-нұсқасы:
-{{share_link}}
-Қане, көбірек сөйлесейік!</string>
-    <string name="satisfied_share" formatted="false">Өмірімізде Киелі Рухтың күшін көріп жатқанымызды айтудың өзі керемет. Жақын арада осы жайында көбірек айтатын боламыз деп үміттенемін. Сондай-ақ, бүгін таңда біз {{share_link}} қарағанымызды тексере аласыз.</string>
     <!-- iOS -->
 </resources>

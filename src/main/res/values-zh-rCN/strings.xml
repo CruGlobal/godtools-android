@@ -1,93 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">God Tools</string>
-    <string name="menu_item_4laws">4个属灵的原则</string>
-    <string name="menu_item_share">分享</string>
-    <string name="menu_item_contents">内容</string>
-    <string name="menu_item_help">帮助</string>
     <string name="menu_switch_language">切换的语言</string>
-    <string name="menu_update_page">更新页面(草稿)</string>
-    <string name="quit_dialog_message">你确认你要退出God Tools吗？</string>
-    <string name="quit_dialog_confirm">退出</string>
-    <string name="quit_dialog_cancel">取消</string>
     <string name="menu_about">关于</string>
-    <string name="snuffy_help">进入下一个页面，仅需要向左滑动。回到上一个页面，向右滑动。查看菜单你可以点击页面任何非按钮的部分</string>
-    <string name="snuffy_help_title" formatted="false">{{package_name}} 帮助</string>
-    <string name="choose_your_email_provider">选择您的邮件提供商</string>
-    <string name="unable_to_send_the_email">无法发送邮件</string>
-    <string name="email">Email</string>
-    <string name="copy">复制</string>
-    <string name="all_websites">所有网站</string>
     <!-- Renderer Activity -->
     <!-- Splash Activity -->
     <!-- Settings Activity -->
-    <string name="settings_title">设置</string>
-    <string name="settings_main_language">主要语言</string>
-    <string name="settings_parallel_language">同步语言</string>
-    <string name="settings_parallel_info">在福音介绍的时候轻按屏幕用\"切换语言\"来选择语言“选项。如果没有福音册子将不会显示选项。</string>
-    <string name="settings_translator_mode">预览模式</string>
-    <string name="settings_notification">所有通知</string>
-    <string name="wrong_passcode">请重新尝试</string>
-    <string name="expired_passcode">预览会话过期</string>
-    <string name="authenticate_code">认证验证码</string>
     <!-- Main Activity-->
     <string name="share_prompt">选择你想如何分享</string>
     <!-- Language List -->
     <!-- Translator Mode Dialog -->
-    <string name="dialog_translator_mode_title">退出预览模式</string>
-    <string name="dialog_translator_mode_body">草稿将无法显示</string>
-    <string name="translator_enabled">翻译预览模式启动</string>
-    <string name="translator_disabled">翻译预览模式关闭</string>
-    <string name="draft_published">草稿已经被发布</string>
-    <string name="draft_publish_fail">草稿发布失败</string>
-    <string name="draft_publish_message">你想要发布你的草稿吗？</string>
-    <string name="draft_publish_confirm">是的，准备好了</string>
-    <string name="draft_publish_negative">不，我改变了想法</string>
-    <string name="draft_created">草稿被新建</string>
-    <string name="draft_create_failed">新建草稿失败</string>
-    <string name="draft_start_message">新建草稿</string>
     <!-- Access Code Dialog -->
-    <string name="dialog_access_code_title">输入访问码</string>
-    <string name="invalid_code">无效访问码</string>
     <!-- Preview Mode -->
-    <string name="pull_down_info">下拉刷新草稿</string>
-    <string name="preview_mode_title">预览模式</string>
-    <string name="package_not_created">包还没有被创建</string>
-    <string name="connecting">连接服务器</string>
     <!-- Package Reader -->
-    <string name="open">打开</string>
-    <string name="cannot_launch_browser">无法启动浏览器</string>
-    <string name="multi_website_assist">可以帮助你的一些网站</string>
-    <string name="single_website_assist">一个可以帮助你的网站</string>
-    <string name="cannot_dial">无法启动拨号键盘</string>
-    <string name="cannot_email">无法启动邮件应用</string>
     <!-- Shared Strings -->
-    <string name="ok">是的</string>
-    <string name="cancel">取消</string>
-    <string name="yes">是的</string>
-    <string name="no">不</string>
-    <string name="none">没有</string>
-    <string name="send">发送</string>
-    <string name="drafts_updated">草稿被更新</string>
-    <string name="failed_update_draft">无法更新草稿</string>
-    <string name="failed_download_draft">无法下载草稿</string>
-    <string name="failed_download_resources">无法下载资源</string>
-    <string name="internet_needed">完成这个请求需要网络访问</string>
-    <string name="alternate_language">同步语言</string>
-    <string name="alternate_language_message">你无法获得所选择的同步语言</string>
     <!-- Sharing -->
-    <string name="share_general_subject">{{app_name}}</string>
     <string name="share_general_message">这里有一个下载我们今天看到的应用：http://godtoolsapp.com
 
 这里我们可以看到一个网页版的应用{{share_link}}
 
 我们可以聊更多</string>
-    <string name="app_share_link_base_link" formatted="false">http://www.knowgod.com</string>
-    <string name="share_from_page_message" formatted="false">这里是我们今天看的小册子，这个链接会带你去到一个网页版。
-
-{{share_link}}
-
-我们可以聊更多</string>
-    <string name="satisfied_share" formatted="false">今天很开心能够和你一起聊如何在我们生命中经历圣灵的大能。我希望能够很快有机会探讨更多。于此同时，你可以看我们今天聊的内容{{share_link}}</string>
     <!-- iOS -->
 </resources>
