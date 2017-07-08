@@ -26,6 +26,7 @@ import android.view.View;
 
 import com.annimon.stream.Stream;
 
+import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.BundleUtils;
 import org.cru.godtools.base.model.Event;
@@ -49,6 +50,7 @@ import java.util.Locale;
 import butterknife.BindView;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
+import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
 
 public class TractActivity extends ImmersiveActivity
         implements ManifestPagerAdapter.Callbacks, TabLayout.OnTabSelectedListener {
@@ -170,6 +172,8 @@ public class TractActivity extends ImmersiveActivity
     public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
         final int id = item.getItemId();
         if (id == R.id.action_share) {
+            shareCurrentTract();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -394,6 +398,20 @@ public class TractActivity extends ImmersiveActivity
         final ManifestLoaderCallbacks manifestCallbacks = new ManifestLoaderCallbacks();
         for (int i = 0; i < mLanguages.length; i++) {
             manager.initLoader(LOADER_MANIFEST_BASE + i, null, manifestCallbacks);
+        }
+    }
+
+    private void shareCurrentTract() {
+        final Manifest manifest = getActiveManifest();
+        if (manifest != null) {
+            final Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_tract_subject, manifest.getTitle()));
+            intent.putExtra(Intent.EXTRA_TEXT, URI_SHARE_BASE.buildUpon()
+                    .appendPath(LocaleCompat.toLanguageTag(manifest.getLocale()))
+                    .appendPath(manifest.getCode())
+                    .build().toString());
+            startActivity(Intent.createChooser(intent, getString(R.string.share_tract_title, manifest.getTitle())));
         }
     }
 
