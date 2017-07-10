@@ -34,6 +34,7 @@ ext {
     targetSdk  = 25
 }
 ext.deps = [
+        advrecyclerview      : '0.10.6',
         androidLifecycle     : '1.0.0-alpha3',
         androidSupport       : '25.4.0',
         androidTestingSupport: '0.5',
@@ -84,6 +85,7 @@ dependencies {
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
 
     implementation "com.google.guava:guava:${deps.guava}"
+    implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0"
 
