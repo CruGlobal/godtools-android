@@ -22,6 +22,8 @@ import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.model.Tool;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import static android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE;
 
@@ -43,18 +45,17 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
     }
 
     void storeLanguages(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final List<Language> languages,
-                        @Nullable final LongSparseArray<Language> existing) {
+                        @Nullable final Map<Locale, Language> existing) {
         for (final Language language : languages) {
             if (existing != null) {
-                existing.remove(language.getId());
+                existing.remove(language.getCode());
             }
             storeLanguage(events, language);
         }
 
         // prune any existing languages that weren't synced and aren't already added to the device
         if (existing != null) {
-            for (int i = 0; i < existing.size(); i++) {
-                final Language language = mDao.refresh(existing.valueAt(i));
+            for (final Language language : existing.values()) {
                 if (language != null && !language.isAdded()) {
                     mDao.delete(language);
                     coalesceEvent(events, new LanguageUpdateEvent());
