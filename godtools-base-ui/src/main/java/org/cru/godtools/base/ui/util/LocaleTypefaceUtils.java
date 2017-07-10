@@ -25,6 +25,13 @@ public final class LocaleTypefaceUtils {
             typefaceBuilder.put(new Locale("si"), "fonts/NotoSansSinhala-Regular.ttf");
         }
 
+        // Tibetan, added in Marshmallow
+        //
+        // http://digitaltibetan.org/index.php/Tibetan_support_in_Android_6_Marshmallow
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            typefaceBuilder.put(new Locale("bo"), "fonts/NotoSansTibetan-Regular.ttf");
+        }
+
         TYPEFACES = typefaceBuilder.build();
     }
 
