@@ -22,6 +22,10 @@ import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.model.Tool;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import static android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE;
 
 abstract class BaseDataSyncTasks extends BaseSyncTasks {
     private static final String[] API_FIELDS_LANGUAGE = {LanguageTable.COLUMN_ID};
@@ -40,8 +44,28 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
         super(context);
     }
 
+    void storeLanguages(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final List<Language> languages,
+                        @Nullable final Map<Locale, Language> existing) {
+        for (final Language language : languages) {
+            if (existing != null) {
+                existing.remove(language.getCode());
+            }
+            storeLanguage(events, language);
+        }
+
+        // prune any existing languages that weren't synced and aren't already added to the device
+        if (existing != null) {
+            for (final Language language : existing.values()) {
+                if (language != null && !language.isAdded()) {
+                    mDao.delete(language);
+                    coalesceEvent(events, new LanguageUpdateEvent());
+                }
+            }
+        }
+    }
+
     void storeLanguage(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final Language language) {
-        mDao.updateOrInsert(language, API_FIELDS_LANGUAGE);
+        mDao.updateOrInsert(language, CONFLICT_REPLACE, API_FIELDS_LANGUAGE);
         coalesceEvent(events, new LanguageUpdateEvent());
     }
 
@@ -71,7 +95,7 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
 
     private void storeTool(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final Tool tool,
                            @NonNull final Includes includes) {
-        mDao.updateOrInsert(tool, API_FIELDS_TOOL);
+        mDao.updateOrInsert(tool, CONFLICT_REPLACE, API_FIELDS_TOOL);
         coalesceEvent(events, new ToolUpdateEvent());
 
         // persist any related included objects

@@ -5,11 +5,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.util.SimpleArrayMap;
 
+import com.annimon.stream.Collectors;
+
+import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams;
 import org.cru.godtools.model.Language;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.Map;
 
 import retrofit2.Response;
 
@@ -45,8 +50,10 @@ final class LanguagesSyncTasks extends BaseDataSyncTasks {
 
             // store languages
             final JsonApiObject<Language> json = response.body();
-            for (final Language language : json.getData()) {
-                storeLanguage(events, language);
+            if (json != null) {
+                final Map<Locale, Language> existing = mDao.streamCompat(Query.select(Language.class))
+                        .collect(Collectors.toMap(Language::getCode, l -> l));
+                storeLanguages(events, json.getData(), existing);
             }
 
             // send any pending events
