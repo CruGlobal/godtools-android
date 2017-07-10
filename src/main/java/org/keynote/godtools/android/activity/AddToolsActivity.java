@@ -61,6 +61,11 @@ public class AddToolsActivity extends BaseActivity implements ToolsFragment.Call
         ToolDetailsActivity.start(this, code);
     }
 
+    @Override
+    public void onNoToolsAvailableAction() {
+        finish();
+    }
+
     /* END lifecycle */
 
     @MainThread

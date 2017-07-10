@@ -20,13 +20,15 @@ import org.ccci.gto.android.common.db.Table;
 import org.ccci.gto.android.common.eventbus.content.DaoCursorEventBusLoader;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
+import org.cru.godtools.adapter.BaseHeaderFooterAdapter;
+import org.cru.godtools.adapter.ToolsAdapter;
+import org.cru.godtools.adapter.ToolsHeaderFooterAdapter;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.event.content.AttachmentEventBusSubscriber;
 import org.cru.godtools.sync.GodToolsSyncService;
 import org.cru.godtools.sync.service.GodToolsDownloadManager;
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.adapter.ToolsAdapter;
 import org.keynote.godtools.android.content.ToolsCursorLoader;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
@@ -37,13 +39,16 @@ import java.util.Locale;
 
 import butterknife.BindView;
 
-public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callbacks {
+public class ToolsFragment extends BaseFragment
+        implements ToolsAdapter.Callbacks, BaseHeaderFooterAdapter.EmptyCallbacks {
     private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
 
     public interface Callbacks {
         void onToolInfo(@Nullable String code);
 
         void onToolSelect(@Nullable String code, @NonNull Tool.Type type, Locale... languages);
+
+        void onNoToolsAvailableAction();
     }
 
     private static final int MODE_ADDED = 1;
@@ -59,6 +64,8 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
     @Nullable
     @BindView(R.id.resources)
     RecyclerView mResourcesView;
+    @Nullable
+    private ToolsHeaderFooterAdapter mToolsHeaderAdapter;
     @Nullable
     private ToolsAdapter mToolsAdapter;
 
@@ -148,6 +155,14 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
     }
 
     @Override
+    public void onEmptyActionClick() {
+        final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
+        if (listener != null) {
+            listener.onNoToolsAvailableAction();
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         cleanupToolsList();
         super.onDestroyView();
@@ -180,22 +195,38 @@ public class ToolsFragment extends BaseFragment implements ToolsAdapter.Callback
 
             mToolsAdapter = new ToolsAdapter(mMode == MODE_ADDED);
             mToolsAdapter.setCallbacks(this);
-            mResourcesView.setAdapter(mToolsAdapter);
+
+            // provide an empty list view if we are displaying added tools
+            if (mMode == MODE_ADDED) {
+                mToolsHeaderAdapter = new ToolsHeaderFooterAdapter();
+                mToolsHeaderAdapter.setEmptyCallbacks(this);
+                mToolsHeaderAdapter.setAdapter(mToolsAdapter);
+                mResourcesView.setAdapter(mToolsHeaderAdapter);
+            } else {
+                mResourcesView.setAdapter(mToolsAdapter);
+            }
 
             updateToolsList();
         }
     }
 
     private void updateToolsList() {
+        if (mToolsHeaderAdapter != null) {
+            mToolsHeaderAdapter.setShowEmptyFooter(mResources != null && mResources.getCount() == 0);
+        }
         if (mToolsAdapter != null) {
             mToolsAdapter.swapCursor(mResources);
         }
     }
 
     private void cleanupToolsList() {
+        if (mToolsHeaderAdapter != null) {
+            mToolsHeaderAdapter.setEmptyCallbacks(null);
+        }
         if (mToolsAdapter != null) {
             mToolsAdapter.setCallbacks(null);
         }
+        mToolsHeaderAdapter = null;
         mToolsAdapter = null;
     }
 

@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.adapter;
+package org.cru.godtools.adapter;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -16,10 +16,10 @@ import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.google.common.base.Objects;
 
+import org.cru.godtools.adapter.LanguagesAdapter.LanguageViewHolder;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.sync.service.GodToolsDownloadManager;
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.adapter.LanguagesAdapter.LanguageViewHolder;
 import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.util.Collections;

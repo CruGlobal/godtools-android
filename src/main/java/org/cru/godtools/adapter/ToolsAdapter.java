@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.adapter;
+package org.cru.godtools.adapter;
 
 import android.database.Cursor;
 import android.support.annotation.NonNull;
