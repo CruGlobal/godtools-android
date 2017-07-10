@@ -47,6 +47,7 @@ dependencies {
     compile "com.google.guava:guava:${deps.guava}"
     compile "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "jp.wasabeef:picasso-transformations:2.1.2"
+    implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
 
     compileOnly 'org.jetbrains:annotations:15.0'
 
