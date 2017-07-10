@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GodTools</string>
+    <!-- Main Activity-->
+    <string name="share_prompt">Vyberte, ako chcete zdieľať</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Všeobecné</string>
+    <string name="menu_heading_share">Zdieľanie</string>
+    <string name="menu_heading_legal">Právne informácie</string>
+    <string name="menu_about">O nás</string>
+    <string name="menu_help">Pomoc</string>
+    <string name="menu_contact_us">Kontaktujte nás</string>
+    <string name="menu_share_godtools">Zdieľanie aplikácie GodTools</string>
+    <string name="menu_share_story">Podeľte sa s nami o príbeh</string>
+    <string name="menu_rate">Ohodnotiť aplikáciu GodTools</string>
+    <string name="menu_terms_of_use">Zmluvné podmienky</string>
+    <string name="menu_privacy_policy">Pravidlá ochrany súkromia</string>
+    <string name="menu_copyright">Autorské právo</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">Vypočujte si, aký je boh pôsobivý!</string>
+    <!-- Tour UI -->
+    <string name="title_tour_tools">Pridať nové nástroje</string>
+    <string name="title_tour_language">Nastavte si jazyky</string>
+    <string name="action_tour_ok">OK</string>
+    <string name="action_tour_now">Teraz</string>
+    <string name="action_tour_later">Neskôr</string>
+    <!-- Tools UI -->
+    <string name="title_tools_add">Pridať nástroje</string>
+    <string name="menu_add_tool">Pridať nástroj</string>
+    <string name="menu_switch_language">Prepnúť jazyk</string>
+    <string name="action_tools_download">Stiahnuť</string>
+    <string name="action_tools_remove">Odstrániť</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d zobrazenie</item>
+        <item quantity="other">%1$,d zobrazení</item>
+        <item quantity="few">%1$,d zobrazenia</item>
+        <item quantity="many">%1$,d zobrazenia</item>
+    </plurals>
+    <string name="label_tools_about">O nás</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d jazyk</item>
+        <item quantity="other">%1$,d jazykov</item>
+        <item quantity="few">%1$,d jazyky</item>
+        <item quantity="many">%1$,d jazyka</item>
+    </plurals>
+    <!-- Language Selection UI -->
+    <string name="menu_language_settings">Nastavenia jazyka</string>
+    <string name="title_language_settings">Nastavenia jazyka</string>
+    <string name="title_language_primary">Hlavný jazyk</string>
+    <string name="title_language_parallel">Vedľajší jazyk</string>
+    <string name="action_language_parallel_select">Vyberte si vedľajší jazyk</string>
+    <string name="text_language_parallel_description">Podeľte sa o aplikáciu GodTools s niekým v jeho rodnom jazyku.</string>
+    <string name="text_language_warning">Nie všetky nástroje sú dostupné vo všetkých jazykoch.</string>
+    <string name="label_language_none">Žiadne</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Tu je odkaz na stiahnutie aplikácie, na ktorú sme sa dnes pozerali: http://godtoolsapp.com \n\n
+
+		Tu je odkaz na webovú verziu aplikácie {{share_link}} \n\n
+
+		Porozprávajme sa viac!</string>
+</resources>

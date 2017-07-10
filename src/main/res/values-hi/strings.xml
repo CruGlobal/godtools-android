@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GodTools</string>
+    <!-- Main Activity-->
+    <string name="share_prompt">अपने शेयर करने का तरीका चुनें</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">सामान्य</string>
+    <string name="menu_heading_share">शेयर करें</string>
+    <string name="menu_heading_legal">कानूनी</string>
+    <string name="menu_about">परिचय</string>
+    <string name="menu_help">मदद</string>
+    <string name="menu_contact_us">हमसे संपर्क करें</string>
+    <string name="menu_share_godtools">GodTools शेयर करें</string>
+    <string name="menu_share_story">हमसे कोई कहानी शेयर करें</string>
+    <string name="menu_rate">GodTools को आंकें</string>
+    <string name="menu_terms_of_use">प्रयोग की शर्तें</string>
+    <string name="menu_privacy_policy">निजता नीति</string>
+    <string name="menu_copyright">कॉपीराइट</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">गॉड का चलना सुनें!</string>
+    <!-- Tour UI -->
+    <string name="title_tour_tools">नए टूल जोड़ें</string>
+    <string name="title_tour_language">अपनी भाषा निर्धारित करें</string>
+    <string name="action_tour_ok">ठीक</string>
+    <string name="action_tour_now">अभी</string>
+    <string name="action_tour_later">बाद में</string>
+    <!-- Tools UI -->
+    <string name="title_tools_add">टूल्स जोड़ें</string>
+    <string name="menu_add_tool">टूल जोड़ें</string>
+    <string name="menu_switch_language">भाषा बदलें</string>
+    <string name="action_tools_download">डाउनलोड</string>
+    <string name="action_tools_remove">हटाएं</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d दृश्य</item>
+        <item quantity="other">%1$,d दृश्य</item>
+    </plurals>
+    <string name="label_tools_about">परिचय</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d भाषा</item>
+        <item quantity="other">%1$,d भाषाएं</item>
+    </plurals>
+    <!-- Language Selection UI -->
+    <string name="menu_language_settings">भाषा सेटिंग्स</string>
+    <string name="title_language_settings">भाषा सेटिंग्स</string>
+    <string name="title_language_primary">प्राथमिक भाषा</string>
+    <string name="title_language_parallel">समानांतर भाषा</string>
+    <string name="action_language_parallel_select">एक समानांतर भाषा चुनें</string>
+    <string name="text_language_parallel_description">किसी के साथ GodTools उनकी मातृभाषा में शेयर करें।</string>
+    <string name="text_language_warning">सभी टूल सभी भाषा में उपलब्ध नहीं होते।</string>
+    <string name="label_language_none">कोई नहीं</string>
+    <!-- Sharing -->
+    <string name="share_general_message">ये रह उस ऐप का लिंक जिसे हम आज देख रहे हैं: http://godtoolsapp.com \n\n
+
+		यह है उस ऐप के वेब संस्करण का {{share_link}} \n\n
+
+		कुछ और बात करते हैं!</string>
+</resources>

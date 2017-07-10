@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="title_about">Perihal</string>
     <string name="general_about_1">GodTools membantu anda berkongsi kepercayaan anda dengan cara yang mudah dan jelas.</string>
     <string name="general_about_2">Alat ini membantu anda untuk menjelaskan kepada seseorang dengan yakin tentang cara mereka boleh memulakan perhubungan dengan Tuhan melalui Jesus Christ, walaupun anda tidak pernah berkongsi kepercayaan anda sebelum ini atau mereka bercakap bahasa yang berbeza.</string>
     <string name="general_about_3">Pilih daripada pelbagai alat berdasarkan keutamaan dan penonton anda. Tidak semua alat tersedia dalam setiap bahasa.</string>

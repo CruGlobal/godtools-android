@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GodTools</string>
+    <!-- Main Activity-->
+    <string name="share_prompt">選擇您想要的分享方式</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">一般</string>
+    <string name="menu_heading_share">分享</string>
+    <string name="menu_heading_legal">法律條款</string>
+    <string name="menu_about">關於</string>
+    <string name="menu_help">協助</string>
+    <string name="menu_contact_us">聯絡我們</string>
+    <string name="menu_share_godtools">分享GodTools</string>
+    <string name="menu_share_story">與我們分享故事</string>
+    <string name="menu_rate">評價GodTools</string>
+    <string name="menu_terms_of_use">使用條款</string>
+    <string name="menu_privacy_policy">隱私政策</string>
+    <string name="menu_copyright">著作權</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">聆聽上帝的故事！</string>
+    <!-- Tour UI -->
+    <string name="title_tour_tools">添加新工具</string>
+    <string name="title_tour_language">設定語言</string>
+    <string name="action_tour_ok">好</string>
+    <string name="action_tour_now">現在</string>
+    <string name="action_tour_later">待會</string>
+    <!-- Tools UI -->
+    <string name="title_tools_add">添加工具</string>
+    <string name="menu_add_tool">添加工具</string>
+    <string name="menu_switch_language">切換語言</string>
+    <string name="action_tools_download">下載</string>
+    <string name="action_tools_remove">移除</string>
+    <plurals name="label_tools_shares">
+        <item quantity="other">%1$,d 個瀏覽次數</item>
+    </plurals>
+    <string name="label_tools_about">關於</string>
+    <plurals name="label_tools_languages">
+        <item quantity="other">%1,d 種語言</item>
+    </plurals>
+    <!-- Language Selection UI -->
+    <string name="menu_language_settings">語言選項</string>
+    <string name="title_language_settings">語言選項</string>
+    <string name="title_language_primary">主要語言</string>
+    <string name="title_language_parallel">平行語言</string>
+    <string name="action_language_parallel_select">選擇平行語言</string>
+    <string name="text_language_parallel_description">以他人的母語與他人分享God Tools。</string>
+    <string name="text_language_warning">並非所有工具都包含所有語言的版本。</string>
+    <string name="label_language_none">無</string>
+    <!-- Sharing -->
+    <string name="share_general_message">我今天與您分享的應用程式下載連結為：http://godtoolsapp.com \n\n
+
+這是通往應用程式網頁版的連結：{{share_link}}\n\n
+
+看完後我們可以再聊更多內容！</string>
+</resources>

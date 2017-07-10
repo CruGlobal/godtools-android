@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="title_about">关于</string>
     <string name="general_about_1">GodTools帮助您以简单明了的方式分享您的信仰。</string>
     <string name="general_about_2">从未分享过福音？对方的母语与您不同？没关系，这些工具仍然能帮助您清楚地向他人解释如何通过耶稣基督与神建立关系。</string>
     <string name="general_about_3">根据您的偏好和受众选择需用的工具。有些工具不能涵盖所有语种。</string>

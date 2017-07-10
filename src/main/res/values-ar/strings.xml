@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GodTools</string>
+    <!-- Main Activity-->
+    <string name="share_prompt">تحديد طريقة المشاركة</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">عام</string>
+    <string name="menu_heading_share">شارك</string>
+    <string name="menu_heading_legal">قانوني</string>
+    <string name="menu_about">حول</string>
+    <string name="menu_help">مساعدة</string>
+    <string name="menu_contact_us">اتصل بنا</string>
+    <string name="menu_share_godtools">شارك GodTools</string>
+    <string name="menu_share_story">شارك قصة معنا</string>
+    <string name="menu_rate">قيم GodTools</string>
+    <string name="menu_terms_of_use">شروط الاستخدام</string>
+    <string name="menu_privacy_policy">سياسة الخصوصية</string>
+    <string name="menu_copyright">حق النشر والتأليف</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">استمع لكيفية تحرك الرب!</string>
+    <!-- Tour UI -->
+    <string name="title_tour_tools">إضافة أدوات جديدة</string>
+    <string name="title_tour_language">حدد لغاتك</string>
+    <string name="action_tour_ok">حسناً</string>
+    <string name="action_tour_now">الآن</string>
+    <string name="action_tour_later">لاحقاً</string>
+    <!-- Tools UI -->
+    <string name="title_tools_add">إضافة أدوات</string>
+    <string name="menu_add_tool">إضافة أداة</string>
+    <string name="menu_switch_language">تبديل اللغة</string>
+    <string name="action_tools_download">تحميل</string>
+    <string name="action_tools_remove">إزالة</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d مشاهدة</item>
+        <item quantity="other">%1$,d مشاهدات</item>
+        <item quantity="few">%1$,d مشاهدات</item>
+        <item quantity="many">%1$,d مشاهدات</item>
+        <item quantity="two">%1$,d مشاهدتين</item>
+        <item quantity="zero">%1$,d مشاهدة</item>
+    </plurals>
+    <string name="label_tools_about">حول</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d لغة</item>
+        <item quantity="other">%1$,d لغات</item>
+        <item quantity="few">%1$,d لغات</item>
+        <item quantity="many">%1$,d لغات</item>
+        <item quantity="two">%1$,d لغتين</item>
+        <item quantity="zero">%1$,d لغة</item>
+    </plurals>
+    <!-- Language Selection UI -->
+    <string name="menu_language_settings">إعدادات اللغة</string>
+    <string name="title_language_settings">إعدادات اللغات</string>
+    <string name="title_language_primary">اللغة الرئيسية</string>
+    <string name="title_language_parallel">اللغة الموازية</string>
+    <string name="action_language_parallel_select">حدد لغة موازية</string>
+    <string name="text_language_parallel_description">شارك GodTools مع شخص بلغته الأم.</string>
+    <string name="text_language_warning">ليس كل أداة متوفرة في كل لغة.</string>
+    <string name="label_language_none">لا شيء</string>
+    <!-- Sharing -->
+    <string name="share_general_message">إليك الرابط لتحميل التطبيق الذي نبحث عنه اليوم:
+http://godtoolsapp.com \n\n
+
+إليك رابط إلى نسخة الويب للتطبيق {{share_link}} \n\n
+
+لنتحدث أكثر!</string>
+</resources>
