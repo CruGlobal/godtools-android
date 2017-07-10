@@ -164,13 +164,11 @@ public class ToolDetailsFragment extends BaseFragment {
     private void updateViews() {
         ViewUtils.bindLocalImage(mBanner, mBannerAttachment);
         if (mTitle != null) {
-            mTitle.setText(ModelUtils.getTranslationName(mLatestTranslation, mTool));
-            mTitle.setTypeface(ModelUtils.getTranslationNameTypeface(getContext(), mLatestTranslation));
+            mTitle.setText(ModelUtils.getTranslationName(getContext(), mLatestTranslation, mTool));
         }
         bindShares(mShares, mTool);
         if (mDescription != null) {
-            mDescription.setText(ModelUtils.getTranslationDescription(mLatestTranslation, mTool));
-            mDescription.setTypeface(ModelUtils.getTranslationDescriptionTypeface(getContext(), mLatestTranslation));
+            mDescription.setText(ModelUtils.getTranslationDescription(getContext(), mLatestTranslation, mTool));
         }
         if (mLanguagesHeader != null) {
             final int count = mLanguages.size();

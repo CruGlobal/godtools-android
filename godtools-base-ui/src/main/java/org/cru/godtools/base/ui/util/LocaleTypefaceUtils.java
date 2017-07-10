@@ -3,7 +3,6 @@ package org.cru.godtools.base.ui.util;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.common.collect.ImmutableMap;
@@ -30,8 +29,8 @@ public final class LocaleTypefaceUtils {
     }
 
     @Nullable
-    public static Typeface getTypeface(@NonNull final Context context, @Nullable final Locale locale) {
-        if (TYPEFACES.containsKey(locale)) {
+    public static Typeface getTypeface(@Nullable final Context context, @Nullable final Locale locale) {
+        if (context != null && TYPEFACES.containsKey(locale)) {
             return TypefaceUtils.load(context.getAssets(), TYPEFACES.get(locale));
         }
         return null;

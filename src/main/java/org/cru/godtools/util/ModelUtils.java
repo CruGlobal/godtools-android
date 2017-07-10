@@ -5,48 +5,49 @@ import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 
 import org.cru.godtools.base.ui.util.LocaleTypefaceUtils;
 import org.cru.godtools.model.Translation;
 import org.keynote.godtools.android.model.Tool;
 
-public final class ModelUtils {
-    @Nullable
-    public static Typeface getTranslationNameTypeface(@NonNull final Context context,
-                                                      @Nullable final Translation translation) {
-        return translation != null && translation.getName() != null ?
-                LocaleTypefaceUtils.getTypeface(context, translation.getLanguageCode()) : null;
-    }
+import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
 
+import static com.google.common.base.MoreObjects.firstNonNull;
+
+public final class ModelUtils {
     @NonNull
-    public static String getTranslationName(@Nullable final Translation translation, @Nullable final Tool tool) {
-        return getTranslationName(translation != null ? translation.getName() : null,
+    public static CharSequence getTranslationName(@Nullable final Context context,
+                                                  @Nullable final Translation translation, @Nullable final Tool tool) {
+        return getTranslationName(translation != null ? CalligraphyUtils.applyTypefaceSpan(
+                translation.getName(), getTranslationTypeface(context, translation)) : null,
                                   tool != null ? tool.getName() : null);
     }
 
     @NonNull
-    public static String getTranslationName(@Nullable final String translationName, @Nullable final String toolName) {
-        return MoreObjects.firstNonNull(translationName, Strings.nullToEmpty(toolName));
-    }
-
-    @Nullable
-    public static Typeface getTranslationDescriptionTypeface(@NonNull final Context context,
-                                                             @Nullable final Translation translation) {
-        return translation != null && translation.getDescription() != null ?
-                LocaleTypefaceUtils.getTypeface(context, translation.getLanguageCode()) : null;
+    public static CharSequence getTranslationName(@Nullable final CharSequence translationName,
+                                                  @Nullable final String toolName) {
+        return firstNonNull(translationName, Strings.nullToEmpty(toolName));
     }
 
     @NonNull
-    public static String getTranslationDescription(@Nullable final Translation translation, @Nullable final Tool tool) {
-        return getTranslationDescription(translation != null ? translation.getDescription() : null,
+    public static CharSequence getTranslationDescription(@Nullable final Context context,
+                                                         @Nullable final Translation translation,
+                                                         @Nullable final Tool tool) {
+        return getTranslationDescription(translation != null ? CalligraphyUtils.applyTypefaceSpan(
+                translation.getDescription(), getTranslationTypeface(context, translation)) : null,
                                          tool != null ? tool.getDescription() : null);
     }
 
     @NonNull
-    public static String getTranslationDescription(@Nullable final String translationDescription,
-                                                   @Nullable final String toolDescription) {
-        return MoreObjects.firstNonNull(translationDescription, Strings.nullToEmpty(toolDescription));
+    public static CharSequence getTranslationDescription(@Nullable final CharSequence translationDescription,
+                                                         @Nullable final String toolDescription) {
+        return firstNonNull(translationDescription, Strings.nullToEmpty(toolDescription));
+    }
+
+    @Nullable
+    private static Typeface getTranslationTypeface(@Nullable final Context context,
+                                                   @NonNull final Translation translation) {
+        return LocaleTypefaceUtils.getTypeface(context, translation.getLanguageCode());
     }
 }
