@@ -42,6 +42,27 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
         super(context);
     }
 
+    void storeLanguages(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final List<Language> languages,
+                        @Nullable final LongSparseArray<Language> existing) {
+        for (final Language language : languages) {
+            if (existing != null) {
+                existing.remove(language.getId());
+            }
+            storeLanguage(events, language);
+        }
+
+        // prune any existing languages that weren't synced and aren't already added to the device
+        if (existing != null) {
+            for (int i = 0; i < existing.size(); i++) {
+                final Language language = mDao.refresh(existing.valueAt(i));
+                if (language != null && !language.isAdded()) {
+                    mDao.delete(language);
+                    coalesceEvent(events, new LanguageUpdateEvent());
+                }
+            }
+        }
+    }
+
     void storeLanguage(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final Language language) {
         mDao.updateOrInsert(language, CONFLICT_REPLACE, API_FIELDS_LANGUAGE);
         coalesceEvent(events, new LanguageUpdateEvent());

@@ -45,8 +45,8 @@ final class LanguagesSyncTasks extends BaseDataSyncTasks {
 
             // store languages
             final JsonApiObject<Language> json = response.body();
-            for (final Language language : json.getData()) {
-                storeLanguage(events, language);
+            if (json != null) {
+                storeLanguages(events, json.getData(), null);
             }
 
             // send any pending events
