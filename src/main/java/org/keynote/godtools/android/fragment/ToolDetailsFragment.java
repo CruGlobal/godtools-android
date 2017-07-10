@@ -20,13 +20,13 @@ import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.sync.service.GodToolsDownloadManager;
+import org.cru.godtools.util.ModelUtils;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.content.AttachmentLoader;
 import org.keynote.godtools.android.content.AvailableLanguagesLoader;
 import org.keynote.godtools.android.content.LatestTranslationLoader;
 import org.keynote.godtools.android.content.ToolLoader;
 import org.keynote.godtools.android.model.Tool;
-import org.keynote.godtools.android.util.ModelUtils;
 import org.keynote.godtools.android.util.ViewUtils;
 
 import java.util.Collections;

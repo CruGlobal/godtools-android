@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.util;
+package org.cru.godtools.util;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,8 +11,7 @@ import org.keynote.godtools.android.model.Tool;
 
 public final class ModelUtils {
     @NonNull
-    public static String getTranslationName(@Nullable final Translation translation,
-                                            @Nullable final Tool tool) {
+    public static String getTranslationName(@Nullable final Translation translation, @Nullable final Tool tool) {
         return getTranslationName(translation != null ? translation.getName() : null,
                                   tool != null ? tool.getName() : null);
     }
