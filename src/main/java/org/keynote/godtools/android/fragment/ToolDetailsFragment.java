@@ -168,7 +168,7 @@ public class ToolDetailsFragment extends BaseFragment {
         }
         bindShares(mShares, mTool);
         if (mDescription != null) {
-            mDescription.setText(mLatestTranslation != null ? mLatestTranslation.getDescription() : "");
+            mDescription.setText(ModelUtils.getTranslationDescription(mLatestTranslation, mTool));
         }
         if (mLanguagesHeader != null) {
             final int count = mLanguages.size();
