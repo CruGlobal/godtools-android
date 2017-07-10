@@ -261,6 +261,12 @@ public class ToolsFragment extends BaseFragment
                     TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_NAME + "," +
                     ToolTable.TABLE_NAME + "." + ToolTable.COLUMN_NAME + ") " +
                     "AS " + ToolsAdapter.COL_TITLE,
+            "CASE " +
+                    "WHEN " + TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_NAME + " IS NOT NULL THEN " +
+                    TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
+                    "WHEN " + TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_NAME + " IS NOT NULL THEN " +
+                    TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
+                    "ELSE NULL END AS " + ToolsAdapter.COL_TITLE_LANGUAGE,
             ToolTable.COLUMN_SHARES,
             ToolTable.COLUMN_PENDING_SHARES,
             ToolTable.COLUMN_ADDED,
