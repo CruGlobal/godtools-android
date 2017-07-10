@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_share_tract">Shikisha</string>
+    <string name="share_tract_subject">Kwa asilimia dola moja (%1$s)</string>
+    <string name="share_tract_title">Gawa/Shirikisha \"Kwa asilimia dola moja\" ukitumia
+\"%1$s)</string>
+    <string name="tract_content_input_error_required">Asilimia ya dola moja (%1$s) inahitajika</string>
+    <string name="tract_content_input_error_invalid_email">Tafadhali weka anwani ya barua pepe halali</string>
+</resources>

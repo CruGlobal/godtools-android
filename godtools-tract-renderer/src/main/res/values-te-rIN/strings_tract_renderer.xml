@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_share_tract">పంచుకోండి</string>
+    <string name="share_tract_subject">%1$s</string>
+    <string name="share_tract_title">ను ఉపయోగిస్తూ “%1$s” ను పంచుకోండి</string>
+    <string name="tract_content_input_error_required">%1$s అవసరం</string>
+    <string name="tract_content_input_error_invalid_email">చెల్లుబాటయ్యే ఈమెయిల్ చిరునామాను దయచేసి ఎంటర్ చేయండి</string>
+</resources>

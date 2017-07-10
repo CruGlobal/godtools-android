@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_share_tract">分享</string>
+    <string name="share_tract_subject">%1$s</string>
+    <string name="share_tract_title">使用以下管道分享「%1$s」：</string>
+    <string name="tract_content_input_error_required">必須輸入%1$s</string>
+    <string name="tract_content_input_error_invalid_email">請輸入正確的電子郵件地址</string>
+</resources>
