@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GodTools</string>
+    <!-- Main Activity-->
+    <string name="share_prompt">Изаберите како бисте желели да делите</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Опште</string>
+    <string name="menu_heading_share">Подели</string>
+    <string name="menu_heading_legal">Правно</string>
+    <string name="menu_about">О</string>
+    <string name="menu_help">Помоћ</string>
+    <string name="menu_contact_us">Контактирајте нас</string>
+    <string name="menu_share_godtools">Поделите апликацију GodTools</string>
+    <string name="menu_share_story">Поделите причу са нама</string>
+    <string name="menu_rate">Оцените GodTools</string>
+    <string name="menu_terms_of_use">Услови коришћења</string>
+    <string name="menu_privacy_policy">Политика приватности</string>
+    <string name="menu_copyright">Ауторско право</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">Чујте како се Бог креће!</string>
+    <!-- Tour UI -->
+    <string name="title_tour_tools">Додај нове алате</string>
+    <string name="title_tour_language">Подесите своје језике</string>
+    <string name="action_tour_ok">У реду</string>
+    <string name="action_tour_now">Сад</string>
+    <string name="action_tour_later">Касније</string>
+    <!-- Tools UI -->
+    <string name="title_tools_add">Додај алате</string>
+    <string name="menu_add_tool">Додај алат</string>
+    <string name="menu_switch_language">Пребаците језик</string>
+    <string name="action_tools_download">Преузми</string>
+    <string name="action_tools_remove">Уклони</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d преглед</item>
+        <item quantity="other">%1$,d прегледа</item>
+        <item quantity="few">%1$,d прегледа</item>
+    </plurals>
+    <string name="label_tools_about">О</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d језик</item>
+        <item quantity="other">%1$,d језика</item>
+        <item quantity="few">%1$,d језика</item>
+    </plurals>
+    <!-- Language Selection UI -->
+    <string name="menu_language_settings">Подешавање језика</string>
+    <string name="title_language_settings">Подешавање језика</string>
+    <string name="title_language_primary">Примарни језик</string>
+    <string name="title_language_parallel">Паралелни језик</string>
+    <string name="action_language_parallel_select">Изаберите паралелни језик</string>
+    <string name="text_language_parallel_description">Поделите апликацију GodTools са неким на њиховом матерњем језику.</string>
+    <string name="text_language_warning">Сви алати нису доступни на сваком језику.</string>
+    <string name="label_language_none">Ниједно</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Ево везе за преузимање апликације коју смо гледали данас: http://godtoolsapp.com \n\n
+
+		Ево везе за веб верзију апликације {{share_link}} \n\n
+
+		Хајде да разговарамо више!</string>
+</resources>

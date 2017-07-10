@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Θεϊκά Εργαλεία</string>
+    <!-- Main Activity-->
+    <string name="share_prompt">Επιλέξτε πώς θα θέλατε να μοιραστείτε</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Γενικά</string>
+    <string name="menu_heading_share">Κοινοποίηση</string>
+    <string name="menu_heading_legal">Νομικά</string>
+    <string name="menu_about">Σχετικά</string>
+    <string name="menu_help">Βοήθεια</string>
+    <string name="menu_contact_us">Επικοινωνήστε μαζί μας</string>
+    <string name="menu_share_godtools">Κοινοποίηση Θεϊκών Εργαλείων</string>
+    <string name="menu_share_story">Μοιραστείτε μια ιστορία μαζί μας</string>
+    <string name="menu_rate">Βαθμολογήστε τα Θεϊκά Εργαλεία</string>
+    <string name="menu_terms_of_use">Όροι χρήσης</string>
+    <string name="menu_privacy_policy">Πολιτική Απορρήτου</string>
+    <string name="menu_copyright">Πνευματικά δικαιώματα</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">Ακούστε πώς κινείται ο Θεός!</string>
+    <!-- Tour UI -->
+    <string name="title_tour_tools">Προσθήκη Νέων Εργαλείων</string>
+    <string name="title_tour_language">Ορίστε τις γλώσσες σας</string>
+    <string name="action_tour_ok">Εντάξει</string>
+    <string name="action_tour_now">Τώρα</string>
+    <string name="action_tour_later">Αργότερα</string>
+    <!-- Tools UI -->
+    <string name="title_tools_add">Προσθέστε Εργαλεία</string>
+    <string name="menu_add_tool">Προσθήκη Εργαλείου</string>
+    <string name="menu_switch_language">Αλλάξτε Γλώσσα</string>
+    <string name="action_tools_download">Λήψη</string>
+    <string name="action_tools_remove">Αφαίρεση</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d Προβολή</item>
+        <item quantity="other">%1$,d Προβολές</item>
+    </plurals>
+    <string name="label_tools_about">Σχετικά</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d Γλώσσα</item>
+        <item quantity="other">%1$,d Γλώσσες</item>
+    </plurals>
+    <!-- Language Selection UI -->
+    <string name="menu_language_settings">Ρυθμίσεις Γλώσσας</string>
+    <string name="title_language_settings">Ρυθμίσεις Γλώσσας</string>
+    <string name="title_language_primary">Κύρια Γλώσσα</string>
+    <string name="title_language_parallel">Παράλληλη Γλώσσα</string>
+    <string name="action_language_parallel_select">Επιλέξτε μία Παράλληλη Γλώσσα</string>
+    <string name="text_language_parallel_description">Μοιραστείτε τα Θεϊκά Εργαλεία με κάποιον στη μητρική του γλώσσα.</string>
+    <string name="text_language_warning">Δεν είναι διαθέσιμο κάθε εργαλείο σε κάθε γλώσσα.</string>
+    <string name="label_language_none">Κανένα</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Να ο σύνδεσμος για να κατεβάσετε την εφαρμογή που εξετάσαμε σήμερα: http://godtoolsapp.com \n\n
+
+Να ένας σύνδεσμος σε μια διαδικτυακή έκδοση εφαρμογής {{share_link}} \n\n
+
+Ας μιλήσουμε περισσότερο!</string>
+</resources>

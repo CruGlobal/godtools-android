@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GodTools</string>
+    <!-- Main Activity-->
+    <string name="share_prompt">Selectează cum vrei să distribui</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">General</string>
+    <string name="menu_heading_share">Distribuie</string>
+    <string name="menu_heading_legal">Juridic</string>
+    <string name="menu_about">Despre</string>
+    <string name="menu_help">Ajutor</string>
+    <string name="menu_contact_us">Contactează-ne</string>
+    <string name="menu_share_godtools">Distribuie GodTools</string>
+    <string name="menu_share_story">Împărtășește o poveste cu noi</string>
+    <string name="menu_rate">Evaluează GodTools</string>
+    <string name="menu_terms_of_use">Condiții de utilizare</string>
+    <string name="menu_privacy_policy">Politica de confidențialitate</string>
+    <string name="menu_copyright">Copyright</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">Află cum lucrează Dumnezeu!</string>
+    <!-- Tour UI -->
+    <string name="title_tour_tools">Adaugă instrumente noi</string>
+    <string name="title_tour_language">Setează limbile</string>
+    <string name="action_tour_ok">Ok</string>
+    <string name="action_tour_now">Acum</string>
+    <string name="action_tour_later">Mai târziu</string>
+    <!-- Tools UI -->
+    <string name="title_tools_add">Adaugă instrumente</string>
+    <string name="menu_add_tool">Adaugă instrument</string>
+    <string name="menu_switch_language">Schimbă limba</string>
+    <string name="action_tools_download">Descarcă</string>
+    <string name="action_tools_remove">Elimină</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d vizualizare</item>
+        <item quantity="other">%1$,d vizualizări</item>
+        <item quantity="few">%1$,d vizualizări</item>
+    </plurals>
+    <string name="label_tools_about">Despre</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d limbă</item>
+        <item quantity="other">%1$,d limbi</item>
+        <item quantity="few">%1$,d limbi</item>
+    </plurals>
+    <!-- Language Selection UI -->
+    <string name="menu_language_settings">Setări de limbă</string>
+    <string name="title_language_settings">Setări de limbă</string>
+    <string name="title_language_primary">Limba principală</string>
+    <string name="title_language_parallel">Limbă secundară</string>
+    <string name="action_language_parallel_select">Selectează o limbă secundară</string>
+    <string name="text_language_parallel_description">Distribuie God Tools unei persoane în limba nativă a acesteia.</string>
+    <string name="text_language_warning">Nu toate instrumentele sunt disponibile în toate limbile.</string>
+    <string name="label_language_none">Niciunul</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Iată linkul de descărcare a aplicației pe care am analizat-o azi: http://godtoolsapp.com \n\n
+
+		Iată linkul către versiunea web a aplicației {{share_link}} \n\n
+
+		Să discutăm mai multe!</string>
+</resources>

@@ -1,24 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">God Tools</string>
-    <string name="menu_switch_language">切换的语言</string>
-    <string name="menu_about">关于</string>
-    <!-- Renderer Activity -->
-    <!-- Splash Activity -->
-    <!-- Settings Activity -->
+    <string name="app_name">GodTools</string>
     <!-- Main Activity-->
-    <string name="share_prompt">选择你想如何分享</string>
-    <!-- Language List -->
-    <!-- Translator Mode Dialog -->
-    <!-- Access Code Dialog -->
-    <!-- Preview Mode -->
-    <!-- Package Reader -->
-    <!-- Shared Strings -->
+    <string name="share_prompt">选择您希望的分享方式</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">通用</string>
+    <string name="menu_heading_share">分享</string>
+    <string name="menu_heading_legal">法律</string>
+    <string name="menu_about">关于</string>
+    <string name="menu_help">帮助</string>
+    <string name="menu_contact_us">联系我们</string>
+    <string name="menu_share_godtools">分享GodTools</string>
+    <string name="menu_share_story">与我们分享故事</string>
+    <string name="menu_rate">为GodTools评分</string>
+    <string name="menu_terms_of_use">使用条款</string>
+    <string name="menu_privacy_policy">隐私政策</string>
+    <string name="menu_copyright">版权</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">聆听神是如何作工的！</string>
+    <!-- Tour UI -->
+    <string name="title_tour_tools">添加新工具</string>
+    <string name="title_tour_language">设置您的语言</string>
+    <string name="action_tour_ok">确定</string>
+    <string name="action_tour_now">现在</string>
+    <string name="action_tour_later">稍后</string>
+    <!-- Tools UI -->
+    <string name="title_tools_add">添加工具</string>
+    <string name="menu_add_tool">添加工具</string>
+    <string name="menu_switch_language">切换语言</string>
+    <string name="action_tools_download">下载</string>
+    <string name="action_tools_remove">删除</string>
+    <plurals name="label_tools_shares">
+        <item quantity="other">%1$,d次浏览</item>
+    </plurals>
+    <string name="label_tools_about">关于</string>
+    <plurals name="label_tools_languages">
+        <item quantity="other">%1$,d种语言</item>
+    </plurals>
+    <!-- Language Selection UI -->
+    <string name="menu_language_settings">语言设置</string>
+    <string name="title_language_settings">语言设置</string>
+    <string name="title_language_primary">主要语言</string>
+    <string name="title_language_parallel">同步语言</string>
+    <string name="action_language_parallel_select">选择同步语言</string>
+    <string name="text_language_parallel_description">用他人的母语与他们分享GodTools。</string>
+    <string name="text_language_warning">有些工具不能涵盖所有语种。</string>
+    <string name="label_language_none">无</string>
     <!-- Sharing -->
-    <string name="share_general_message">这里有一个下载我们今天看到的应用：http://godtoolsapp.com
+    <string name="share_general_message">以下链接可以下载我们今天看到的应用：
+http://godtoolsapp.com \n\n
 
-这里我们可以看到一个网页版的应用{{share_link}}
+以下链接可以进入应用的网页版 {{share_link}} \n\n
 
-我们可以聊更多</string>
-    <!-- iOS -->
+让我们详谈吧！</string>
 </resources>

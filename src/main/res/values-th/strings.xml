@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GodTools</string>
+    <!-- Main Activity-->
+    <string name="share_prompt">เลือกวิธีที่ต้องการแชร์</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">ทั่วไป</string>
+    <string name="menu_heading_share">แชร์</string>
+    <string name="menu_heading_legal">กฎหมาย</string>
+    <string name="menu_about">เกี่ยวกับ</string>
+    <string name="menu_help">ช่วยเหลือ</string>
+    <string name="menu_contact_us">ติดต่อเรา</string>
+    <string name="menu_share_godtools">แชร์ GodTools</string>
+    <string name="menu_share_story">แชร์เรื่องราวกับเรา</string>
+    <string name="menu_rate">ให้คะแนน GodTools</string>
+    <string name="menu_terms_of_use">เงื่อนไขการใช้งาน</string>
+    <string name="menu_privacy_policy">นโยบายความเป็นส่วนตัว</string>
+    <string name="menu_copyright">ลิขสิทธิ์</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">มาฟังกันว่าพระผู้เป็นเจ้าทรงนำเราได้อย่างไร!</string>
+    <!-- Tour UI -->
+    <string name="title_tour_tools">เพิ่มเครื่องมือใหม่</string>
+    <string name="title_tour_language">ตั้งค่าภาษา</string>
+    <string name="action_tour_ok">โอเค</string>
+    <string name="action_tour_now">ตอนนี้</string>
+    <string name="action_tour_later">ภายหลัง</string>
+    <!-- Tools UI -->
+    <string name="title_tools_add">เพิ่มเครื่องมือ</string>
+    <string name="menu_add_tool">เพิ่มเครื่องมือ</string>
+    <string name="menu_switch_language">เปลี่ยนภาษา</string>
+    <string name="action_tools_download">ดาวน์โหลด</string>
+    <string name="action_tools_remove">ลบออก</string>
+    <plurals name="label_tools_shares">
+        <item quantity="other">ดู %1$,d ครั้ง</item>
+    </plurals>
+    <string name="label_tools_about">เกี่ยวกับ</string>
+    <plurals name="label_tools_languages">
+        <item quantity="other">%1$,d ภาษา</item>
+    </plurals>
+    <!-- Language Selection UI -->
+    <string name="menu_language_settings">การตั้งค่าภาษา</string>
+    <string name="title_language_settings">การตั้งค่าภาษา</string>
+    <string name="title_language_primary">ภาษาหลัก</string>
+    <string name="title_language_parallel">ภาษาพาราเลล</string>
+    <string name="action_language_parallel_select">เลือกภาษาพาราเลล</string>
+    <string name="text_language_parallel_description">แชร์ God Tools เป็นภาษาของผู้รับ</string>
+    <string name="text_language_warning">มีเครื่องมือไม่ครบทุกภาษา</string>
+    <string name="label_language_none">ไม่มี</string>
+    <!-- Sharing -->
+    <string name="share_general_message">ดาวน์โหลดแอปที่เราดูไปเมื่อวันนี้ได้จาก: http://godtoolsapp.com \n\n
+
+		และใช้งานแอปในรูปแบบเว็บได้จากลิงก์นี้  {{share_link}} \n\n
+
+		มาคุยกันอีก!</string>
+</resources>

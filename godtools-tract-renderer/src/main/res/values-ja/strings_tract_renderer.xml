@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_share_tract">シェア</string>
+    <string name="share_tract_subject">%1$s</string>
+    <string name="share_tract_title">次を使って“%1$s”をシェア</string>
+    <string name="tract_content_input_error_required">%1$sが必要です</string>
+    <string name="tract_content_input_error_invalid_email">有効なメールアドレスを入力してください</string>
+</resources>

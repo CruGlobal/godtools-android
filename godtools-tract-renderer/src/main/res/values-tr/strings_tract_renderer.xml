@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_share_tract">Paylaş</string>
+    <string name="share_tract_subject">%1$s</string>
+    <string name="share_tract_title">Şunu kullanarak \"%1$s\" paylaşın:</string>
+    <string name="tract_content_input_error_required">%1$s gereklidir</string>
+    <string name="tract_content_input_error_invalid_email">Lütfen geçerli bir e-posta adresi girin</string>
+</resources>
