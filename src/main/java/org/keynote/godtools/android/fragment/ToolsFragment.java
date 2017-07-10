@@ -47,6 +47,8 @@ public class ToolsFragment extends BaseFragment
         void onToolInfo(@Nullable String code);
 
         void onToolSelect(@Nullable String code, @NonNull Tool.Type type, Locale... languages);
+
+        void onNoToolsAvailableAction();
     }
 
     private static final int MODE_ADDED = 1;
@@ -154,6 +156,10 @@ public class ToolsFragment extends BaseFragment
 
     @Override
     public void onEmptyActionClick() {
+        final Callbacks listener = FragmentUtils.getListener(this, Callbacks.class);
+        if (listener != null) {
+            listener.onNoToolsAvailableAction();
+        }
     }
 
     @Override

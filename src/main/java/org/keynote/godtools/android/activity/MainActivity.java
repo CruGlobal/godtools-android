@@ -87,7 +87,7 @@ public class MainActivity extends BaseActivity implements ToolsFragment.Callback
     public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                AddToolsActivity.start(this);
+                showAddTools();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -123,12 +123,21 @@ public class MainActivity extends BaseActivity implements ToolsFragment.Callback
     }
 
     @Override
+    public void onNoToolsAvailableAction() {
+        showAddTools();
+    }
+
+    @Override
     protected void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(EXTRA_TOUR_LAUNCHED, mTourLaunched);
     }
 
     /* END lifecycle */
+
+    private void showAddTools() {
+        AddToolsActivity.start(this);
+    }
 
     private void syncData() {
         GodToolsSyncService.syncFollowups(this).sync();
