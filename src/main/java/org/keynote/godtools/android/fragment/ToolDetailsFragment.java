@@ -180,7 +180,7 @@ public class ToolDetailsFragment extends BaseFragment {
         if (mLanguagesView != null) {
             mLanguagesView.setVisibility(mLanguages.isEmpty() ? View.GONE : View.VISIBLE);
             mLanguagesView.setText(Stream.of(mLanguages)
-                                           .map(Locale::getDisplayLanguage)
+                                           .map(Locale::getDisplayName)
                                            .withoutNulls()
                                            .sorted(String.CASE_INSENSITIVE_ORDER)
                                            .reduce((l1, l2) -> l1 + ", " + l2)
