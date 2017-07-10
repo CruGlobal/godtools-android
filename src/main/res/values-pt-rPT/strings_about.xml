@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="title_about">Sobre</string>
     <string name="general_about_1">A aplicação GodTools ajuda-te a partilhar a tua fé de uma forma fácil e clara.</string>
     <string name="general_about_2">Estas ferramentas ajudam-te a explicar com segurança a outra pessoa como pode iniciar uma relação com Deus através de Jesus Cristo, mesmo que nunca tenhas partilhado a tua fé ou que a outra pessoa fale num idioma diferente.</string>
     <string name="general_about_3">Escolhe entre várias ferramentas com base na tua preferência e destinatário. Nem todas as ferramentas estão disponíveis em todos os idiomas.</string>

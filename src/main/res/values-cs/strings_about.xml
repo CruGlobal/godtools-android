@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="title_about">O nás</string>
     <string name="general_about_1">GodTools vám pomohou jednoduše a jasně sdílet svoji víru.</string>
     <string name="general_about_2">Tyto nástroje vám napomohou někomu sebejistě vysvětlit, jak si mohou vytvořit vztah k Bohu prostřednictvím Ježíše Krista, i když jste se nikdy předtím o své víře nebavili nebo mluví-li jiným jazykem.</string>
     <string name="general_about_3">Vyberte si z široké palety nástrojů dle vašich preferencí a publika. Ne všechny nástroje jsou dostupné ve všech jazycích.</string>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GodTools</string>
+    <!-- Main Activity-->
+    <string name="share_prompt">نحوه اشتراک‌گذاری مورد نظر خود را انتخاب کنید</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">عمومی</string>
+    <string name="menu_heading_share">اشتراک‌گذاری</string>
+    <string name="menu_heading_legal">قانونی</string>
+    <string name="menu_about">درباره</string>
+    <string name="menu_help">راهنمایی</string>
+    <string name="menu_contact_us">تماس با ما</string>
+    <string name="menu_share_godtools">اشتراگ‌گذاری GodTools</string>
+    <string name="menu_share_story">یک داستان با ما به اشتراک بگذارید</string>
+    <string name="menu_rate">امتیازدهی به GodTools</string>
+    <string name="menu_terms_of_use">شرایط استفاده</string>
+    <string name="menu_privacy_policy">خط‌مشی حریم خصوصی</string>
+    <string name="menu_copyright">حق نسخه‌برداری</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">صدای حرکت خداوند را بشنوید!</string>
+    <!-- Tour UI -->
+    <string name="title_tour_tools">افزودن ابزار جدید</string>
+    <string name="title_tour_language">زبان خود را تنظیم کنید</string>
+    <string name="action_tour_ok">تأیید</string>
+    <string name="action_tour_now">اکنون</string>
+    <string name="action_tour_later">بعداً</string>
+    <!-- Tools UI -->
+    <string name="title_tools_add">افزودن ابزار</string>
+    <string name="menu_add_tool">افزودن ابزار</string>
+    <string name="menu_switch_language">تغییر زبان</string>
+    <string name="action_tools_download">دانلود</string>
+    <string name="action_tools_remove">حذف</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d مشاهده</item>
+        <item quantity="other">%1$,d مشاهده</item>
+    </plurals>
+    <string name="label_tools_about">درباره</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d زبان</item>
+        <item quantity="other">%1$,d زبان</item>
+    </plurals>
+    <!-- Language Selection UI -->
+    <string name="menu_language_settings">تنظیمات زبان</string>
+    <string name="title_language_settings">تنظیمات زبان</string>
+    <string name="title_language_primary">زبان اصلی</string>
+    <string name="title_language_parallel">زبان موازی</string>
+    <string name="action_language_parallel_select">یک زبان موازی انتخاب کنید</string>
+    <string name="text_language_parallel_description">GodTools را با دیگران به زبان اصلی آن‌ها به اشتراک بگذارید.</string>
+    <string name="text_language_warning">تمام ابزار به تمام زبان‌ها در دسترس نیستند.</string>
+    <string name="label_language_none">هیچکدام</string>
+    <!-- Sharing -->
+    <string name="share_general_message">لینک دانلود برنامه‌ای که امروز مشاهده می‌کردیم اینجا قرار دارد:
+GodTools
+
+یک لینک برای نسخه اینترنتی برنامه اینجا قرار دارد {{share_link}} \n\n
+
+بیایید بیشتر صحبت کنیم!</string>
+</resources>

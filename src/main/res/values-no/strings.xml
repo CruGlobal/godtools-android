@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GodTools</string>
+    <!-- Main Activity-->
+    <string name="share_prompt">Velg hvordan du vil dele</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Generelt</string>
+    <string name="menu_heading_share">Del</string>
+    <string name="menu_heading_legal">Juridisk</string>
+    <string name="menu_about">Om</string>
+    <string name="menu_help">Hjelp</string>
+    <string name="menu_contact_us">Kontakt oss</string>
+    <string name="menu_share_godtools">Del GodTools</string>
+    <string name="menu_share_story">Del en historie med oss</string>
+    <string name="menu_rate">Vurder GodTools</string>
+    <string name="menu_terms_of_use">Betingelser for bruk</string>
+    <string name="menu_privacy_policy">Personvern</string>
+    <string name="menu_copyright">Copyright</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">Hør hvordan Gud rører!</string>
+    <!-- Tour UI -->
+    <string name="title_tour_tools">Legg til nye verktøy</string>
+    <string name="title_tour_language">Angi språk</string>
+    <string name="action_tour_ok">OK</string>
+    <string name="action_tour_now">Nå</string>
+    <string name="action_tour_later">Senere</string>
+    <!-- Tools UI -->
+    <string name="title_tools_add">Legg til verktøy</string>
+    <string name="menu_add_tool">Legg til verktøy</string>
+    <string name="menu_switch_language">Bytt språk</string>
+    <string name="action_tools_download">Last ned</string>
+    <string name="action_tools_remove">Fjern</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d visning</item>
+        <item quantity="other">%1$,d visninger</item>
+    </plurals>
+    <string name="label_tools_about">Om</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d språk</item>
+        <item quantity="other">%1$,d språk</item>
+    </plurals>
+    <!-- Language Selection UI -->
+    <string name="menu_language_settings">Språkinnstillinger</string>
+    <string name="title_language_settings">Språkinnstillinger</string>
+    <string name="title_language_primary">Hovedspråk</string>
+    <string name="title_language_parallel">Parallellspråk</string>
+    <string name="action_language_parallel_select">Velg parallellspråk</string>
+    <string name="text_language_parallel_description">Del GodTools med noen på morsmålet deres.</string>
+    <string name="text_language_warning">Ikke alle verktøy er tilgjengelig på alle språk.</string>
+    <string name="label_language_none">Ingen</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Her er koblingen for å laste ned appen vi så på i dag: http://godtoolsapp.com \n\n
+
+		Her er en kobling til en nettversjon av appen {{share_link}} \n\n
+
+		La oss snakke mer!</string>
+</resources>

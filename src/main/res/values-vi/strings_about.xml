@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="title_about">Giới thiệu về</string>
     <string name="general_about_1">GodTools giúp bạn chia sẻ niềm tin của mình theo một cách dễ hiểu và dễ dàng.</string>
     <string name="general_about_2">Những công cụ này giúp bạn giải thích một cách tự tin với một ai đó cách thức họ bắt đầu một mối quan hệ với Chúa qua Jesus Christ, ngay cả khi bạn chưa từng chia sẻ niềm tin của mình trước đó hoặc họ nói một thứ ngôn ngữ khác</string>
     <string name="general_about_3">Chọn từ vô số các công cụ dựa trên ưu tiên và khán giả của bạn. Không phải tất cả các công cụ đều sẵn có trong mọi ngôn ngữ.</string>

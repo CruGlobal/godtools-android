@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="title_about">Kuhusu</string>
     <string name="general_about_1">GodTools inakusaidia kueneza imani yako kwa njia rahisi na ya wazi.</string>
     <string name="general_about_2">Vifaa hivi vinasaidia kumwambia mtu kwa ujasiri jinsi wanaweza kuanzisha uhusiano na Mungu kupitia Yesu Kristo, hata kama hujawahi kushiriki imani yako kabla au wanasema ama wanaongea lugha tofauti.</string>
     <string name="general_about_3">Chagua kutoka kwa aina mbalimbali za zana kulingana na upendeleo wako na watumiaji wako. Sio zana zote zinazopatikana kwa kila lugha.</string>

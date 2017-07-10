@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="title_about">O nama</string>
     <string name="general_about_1">GodTools vam pomaže podijeliti vašu vjeri na jednostavan i jasan način.</string>
     <string name="general_about_2">OVi alati vam pomažu pouzdano nekome objasniti kako može započeti odnos s Bogom po Isusu Kristu, čak i ako nikada prije niste dijelili svoju vjeru ili ako te osobe govore drugi jezik.</string>
     <string name="general_about_3">Izaberite između različitih alata prema vašoj želji i željenoj publici. Svi alati nisu dostupni na svim jezicima.</string>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GodTools</string>
+    <!-- Main Activity-->
+    <string name="share_prompt">Nasıl paylaşmak istediğinizi seçin</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Genel</string>
+    <string name="menu_heading_share">Paylaş</string>
+    <string name="menu_heading_legal">Yasal</string>
+    <string name="menu_about">Hakkında</string>
+    <string name="menu_help">Yardım</string>
+    <string name="menu_contact_us">Bize Ulaşın</string>
+    <string name="menu_share_godtools">GodTools\'u Paylaş</string>
+    <string name="menu_share_story">Bizimle bir Hikâye Paylaşın</string>
+    <string name="menu_rate">GodTools\'a Puan Verin</string>
+    <string name="menu_terms_of_use">Kullanım Koşulları</string>
+    <string name="menu_privacy_policy">Gizlilik Politikası</string>
+    <string name="menu_copyright">Telif Hakkı</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">Tanrı\'nın nasıl hareket ettiğini duyun!</string>
+    <!-- Tour UI -->
+    <string name="title_tour_tools">Yeni Araçlar Ekle</string>
+    <string name="title_tour_language">Dillerinizi Ayarlayın</string>
+    <string name="action_tour_ok">Tamam</string>
+    <string name="action_tour_now">Şimdi</string>
+    <string name="action_tour_later">Daha Sonra</string>
+    <!-- Tools UI -->
+    <string name="title_tools_add">Araçlar Ekle</string>
+    <string name="menu_add_tool">Araç Ekle</string>
+    <string name="menu_switch_language">Dil Değiştir</string>
+    <string name="action_tools_download">İndir</string>
+    <string name="action_tools_remove">Kaldır</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d Görüntüleme</item>
+        <item quantity="other">%1$,d Görüntüleme</item>
+    </plurals>
+    <string name="label_tools_about">Hakkında</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d Dil</item>
+        <item quantity="other">%1$,d Dil</item>
+    </plurals>
+    <!-- Language Selection UI -->
+    <string name="menu_language_settings">Dil Ayarları</string>
+    <string name="title_language_settings">Dil Ayarları</string>
+    <string name="title_language_primary">Birincil Dil</string>
+    <string name="title_language_parallel">Paralel Dil</string>
+    <string name="action_language_parallel_select">Paralel bir Dil Seçin</string>
+    <string name="text_language_parallel_description">God Tools\'u birisiyle kendi ana dilinde paylaşın.</string>
+    <string name="text_language_warning">Her araç her dilde kullanıma hazır değildir.</string>
+    <string name="label_language_none">Hiçbiri</string>
+    <!-- Sharing -->
+    <string name="share_general_message">İşte bugün baktığımız uygulamanın indirme bağlantısı: http://godtoolsapp.com \n\n
+
+İşte uygulamanın web sürümünün bir bağlantısı {{share_link}} \n\n
+
+Daha çok konuşalım!</string>
+</resources>

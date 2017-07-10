@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="title_about">À propos</string>
     <string name="general_about_1">GodTools vous aide à partager votre foi facilement et de façon claire.</string>
     <string name="general_about_2">Ces outils vous aident à expliquer avec confiance à quelqu\'un comment il peut commencer une relation avec Dieu à travers Jésus-Christ, même si vous n\'avez jamais partagé votre foi par le passé ou que votre interlocuteur parle une autre langue.</string>
     <string name="general_about_3">Choisissez parmi une variété d\'outils selon votre préférence et votre public. Les outils ne sont pas tous disponibles dans chaque langue.</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="title_about">O nás</string>
     <string name="general_about_1">Aplikácia GodTools vám pomáha zdieľať vieru jednoducho a jasne.</string>
     <string name="general_about_2">Tieto nástroje vám pomôžu sebavedomo vysvetliť človeku, ako môže začať vzťah s bohom prostredníctvom Ježiša Krista, a to aj v prípade, že ste sa predtým o svoju vieru nikdy nedelili alebo táto osoba hovorí iným jazykom.</string>
     <string name="general_about_3">Vyberte si zo širokej ponuky nástrojov na základe svojich predstáv a svojho publika. Nie všetky nástroje sú dostupné v každom jazyku.</string>

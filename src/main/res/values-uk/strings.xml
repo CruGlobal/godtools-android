@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GodTools</string>
+    <!-- Main Activity-->
+    <string name="share_prompt">Оберіть, як переслати</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Основне</string>
+    <string name="menu_heading_share">Переслати</string>
+    <string name="menu_heading_legal">Правові відомості</string>
+    <string name="menu_about">Про програму</string>
+    <string name="menu_help">Підтримка</string>
+    <string name="menu_contact_us">Зв\'язок з нами</string>
+    <string name="menu_share_godtools">Поширити GodTools</string>
+    <string name="menu_share_story">Розкажіть нам історію</string>
+    <string name="menu_rate">Оцінити GodTools</string>
+    <string name="menu_terms_of_use">Умови користування</string>
+    <string name="menu_privacy_policy">Політика конфіденційності</string>
+    <string name="menu_copyright">Авторське право</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">Почуйте, як Бог пробуджує сердце!</string>
+    <!-- Tour UI -->
+    <string name="title_tour_tools">Додати інструменти</string>
+    <string name="title_tour_language">Встановіть мови</string>
+    <string name="action_tour_ok">Добре</string>
+    <string name="action_tour_now">Зараз</string>
+    <string name="action_tour_later">Потім</string>
+    <!-- Tools UI -->
+    <string name="title_tools_add">Додати інструменти</string>
+    <string name="menu_add_tool">Додати інструмент</string>
+    <string name="menu_switch_language">Змінити мову</string>
+    <string name="action_tools_download">Завантажити</string>
+    <string name="action_tools_remove">Видалити</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d перегляд</item>
+        <item quantity="other">%1$,d переглядів</item>
+        <item quantity="few">%1$,d перегляди</item>
+        <item quantity="many">%1$,d переглядів</item>
+    </plurals>
+    <string name="label_tools_about">Про програму</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d мова</item>
+        <item quantity="other">%1$,d мов</item>
+        <item quantity="few">%1$,d мови</item>
+        <item quantity="many">%1$,d мов</item>
+    </plurals>
+    <!-- Language Selection UI -->
+    <string name="menu_language_settings">Налаштування мови</string>
+    <string name="title_language_settings">Налаштування мови</string>
+    <string name="title_language_primary">Основна мова</string>
+    <string name="title_language_parallel">Додаткова мова</string>
+    <string name="action_language_parallel_select">Оберіть додаткову мову</string>
+    <string name="text_language_parallel_description">Перешліть God Tools знайомим (програма на їх рідній мові)</string>
+    <string name="text_language_warning">Деякі інструменти недоступні на усіх мовах</string>
+    <string name="label_language_none">Нічого</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Ось посилання, з якого можна завантажити програму, яку ми сьогодні дивилися: http://godtoolsapp.com \n\n
+
+Ось посилання на онлайн версію програми: {{share_link}} \n\n
+
+Поговоримо іще :-)</string>
+</resources>

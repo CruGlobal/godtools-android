@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="title_about">Despre</string>
     <string name="general_about_1">GodTools te ajută să-ți împărtășești credința în mod ușor și simplu.</string>
     <string name="general_about_2">Aceste instrumente te ajută să explici celorlalți cum pot pune bazele unei relații cu Dumnezeu prin Iisus Hristos, chiar dacă nu ți-ai împărtășit credința până acum sau persoanele vorbesc o altă limbă.</string>
     <string name="general_about_3">Alege din varietatea de instrumente pe baza preferințelor tale și a audienței. Nu toate instrumentele sunt disponibile în toate limbile.</string>
