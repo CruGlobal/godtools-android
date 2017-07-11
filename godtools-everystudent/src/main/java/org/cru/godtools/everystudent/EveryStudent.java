@@ -33,8 +33,7 @@ import java.util.Map;
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_EVERYSTUDENT;
 
 @SuppressWarnings("deprecation")
-public class EveryStudent extends ExpandableListActivity
-{
+public class EveryStudent extends ExpandableListActivity {
     public static final String GA_LANGUAGE_EVERYSTUDENT = "en_classic";
     private static final String ROWID = "ROWID";
 
@@ -53,8 +52,7 @@ public class EveryStudent extends ExpandableListActivity
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -63,19 +61,14 @@ public class EveryStudent extends ExpandableListActivity
 
         EveryStudentPersistance esp = (EveryStudentPersistance) getLastNonConfigurationInstance();
 
-        if (esp != null && esp.getmAdapter() != null && esp.getmTopics() != null && esp.getmCategories() != null)
-        {
+        if (esp != null && esp.getmAdapter() != null && esp.getmTopics() != null && esp.getmCategories() != null) {
             mAdapter = esp.getmAdapter();
             mTopics = esp.getmTopics();
             mCategories = esp.getmCategories();
             setListAdapter(mAdapter);
-        }
-        else if (mParserThread != null && mParserThread.isAlive())
-        {
+        } else if (mParserThread != null && mParserThread.isAlive()) {
             mParserThread.setHandler(new ParserHandler());
-        }
-        else
-        {
+        } else {
             mParserThread = new ParserThread();
             mParserThread.start();
             showDialog(DIALOG_LOADING);
@@ -84,10 +77,9 @@ public class EveryStudent extends ExpandableListActivity
         Drawable groupIndicator = getResources().getDrawable(R.drawable.expander_group);
         ExpandableListView view = getExpandableListView();
         view.setGroupIndicator(groupIndicator);
-        view.setOnChildClickListener(new OnChildClickListener()
-        {
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
-            {
+        view.setOnChildClickListener(new OnChildClickListener() {
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition,
+                                        long id) {
                 Intent intent = new Intent(EveryStudent.this, EveryStudentView.class);
                 Uri contentUri = Uri.withAppendedPath(EveryStudentProvider.CONTENT_URI, "content");
                 Uri contentUriRow = Uri.withAppendedPath(contentUri, mTopics.get(groupPosition).get(childPosition).get(ROWID));
@@ -101,10 +93,8 @@ public class EveryStudent extends ExpandableListActivity
     }
 
     @Override
-    protected Dialog onCreateDialog(int id)
-    {
-        switch (id)
-        {
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
             case DIALOG_LOADING:
                 ProgressDialog pdlg = new ProgressDialog(this);
                 pdlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -115,22 +105,19 @@ public class EveryStudent extends ExpandableListActivity
         return null;
     }
 
-    public Object onRetainNonConfigurationInstance()
-    {
+    public Object onRetainNonConfigurationInstance() {
         return new EveryStudentPersistance(mAdapter, mTopics, mCategories);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.everystudent, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.search) {
             onSearchRequested();
             return true;
@@ -139,11 +126,9 @@ public class EveryStudent extends ExpandableListActivity
     }
 
     @SuppressLint("HandlerLeak")
-    private class ParserHandler extends Handler
-    {
+    private class ParserHandler extends Handler {
         @Override
-        public void handleMessage(Message msg)
-        {
+        public void handleMessage(Message msg) {
             mAdapter = mParserThread.getAdapter();
             mCategories = mParserThread.getCategories();
             mTopics = mParserThread.getTopics();
@@ -152,10 +137,9 @@ public class EveryStudent extends ExpandableListActivity
         }
     }
 
-    class ParserThread extends Thread
-    {
-        final List<List<Map<String, String>>> topics = new ArrayList<List<Map<String, String>>>();
-        final List<Map<String, String>> categories = new ArrayList<Map<String, String>>();
+    class ParserThread extends Thread {
+        final List<List<Map<String, String>>> topics = new ArrayList<>();
+        final List<Map<String, String>> categories = new ArrayList<>();
         Handler mHandler = new ParserHandler();
         ExpandableListAdapter adapter;
 
@@ -179,44 +163,38 @@ public class EveryStudent extends ExpandableListActivity
             return categories;
         }
 
-        public void run()
-        {
+        public void run() {
             Uri base = Uri.withAppendedPath(EveryStudentProvider.CONTENT_URI, "base");
             Cursor cur = managedQuery(base, null, null, null, null);
 
-            HashMap<String, List<Map<String, String>>> tempmap = new HashMap<String, List<Map<String, String>>>();
-            ArrayList<String> cats = new ArrayList<String>();
+            HashMap<String, List<Map<String, String>>> tempmap = new HashMap<>();
+            ArrayList<String> cats = new ArrayList<>();
 
-            if (cur.moveToFirst())
-            {
+            if (cur.moveToFirst()) {
                 int rowid;
                 String category;
                 String title;
-                do
-                {
+                do {
                     rowid = cur.getInt(0);
                     category = cur.getString(1);
                     title = cur.getString(2);
 
-                    if (!cats.contains(category))
-                    {
+                    if (!cats.contains(category)) {
                         cats.add(category);
                     }
 
-                    if (!tempmap.containsKey(category))
-                    {
+                    if (!tempmap.containsKey(category)) {
                         tempmap.put(category, new ArrayList<Map<String, String>>());
                     }
-                    HashMap<String, String> map = new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap<>();
                     map.put(Constants.NAME, title);
                     map.put(ROWID, String.valueOf(rowid));
                     tempmap.get(category).add(map);
                 } while (cur.moveToNext());
             }
 
-            for (String cat : cats)
-            {
-                HashMap<String, String> map = new HashMap<String, String>();
+            for (String cat : cats) {
+                HashMap<String, String> map = new HashMap<>();
                 map.put(Constants.NAME, cat);
                 categories.add(map);
                 topics.add(tempmap.get(cat));
