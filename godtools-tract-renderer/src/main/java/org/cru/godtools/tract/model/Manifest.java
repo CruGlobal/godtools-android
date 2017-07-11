@@ -236,7 +236,7 @@ public final class Manifest extends Base implements Styles {
     @NonNull
     @WorkerThread
     public static Manifest fromXml(@NonNull final XmlPullParser parser, @NonNull final String manifestName,
-                                   @NonNull  final String toolCode, @NonNull final Locale locale)
+                                   @NonNull final String toolCode, @NonNull final Locale locale)
             throws XmlPullParserException, IOException {
         return new Manifest(manifestName, toolCode, locale).parse(parser);
     }
