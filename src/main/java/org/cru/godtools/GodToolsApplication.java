@@ -4,6 +4,7 @@ import android.app.Application;
 import android.support.annotation.NonNull;
 
 import com.crashlytics.android.Crashlytics;
+import com.evernote.android.job.JobManager;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.newrelic.agent.android.NewRelic;
 import com.squareup.picasso.Picasso;
@@ -12,6 +13,7 @@ import org.ccci.gto.android.common.api.okhttp3.util.OkHttpClientUtil;
 import org.cru.godtools.analytics.AnalyticsEventBusIndex;
 import org.cru.godtools.model.events.ModelEventsEventBusIndex;
 import org.cru.godtools.sync.SyncEventBusIndex;
+import org.cru.godtools.sync.job.SyncJobCreator;
 import org.cru.godtools.sync.service.FollowupService;
 import org.cru.godtools.sync.service.GodToolsDownloadManager;
 import org.cru.godtools.tract.TractEventBusIndex;
@@ -35,6 +37,9 @@ public class GodToolsApplication extends Application {
 
         // initialize several support libraries
         Picasso.setSingletonInstance(picassoBuilder().build());
+
+        // start the Job Manager
+        JobManager.create(this).addJobCreator(new SyncJobCreator());
 
         // Initialize tool manager
         GodToolsDownloadManager.getInstance(this);

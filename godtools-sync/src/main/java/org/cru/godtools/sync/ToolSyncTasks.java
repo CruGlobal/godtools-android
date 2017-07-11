@@ -3,6 +3,7 @@ package org.cru.godtools.sync;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RestrictTo;
 import android.support.v4.util.LongSparseArray;
 import android.support.v4.util.SimpleArrayMap;
 
@@ -22,7 +23,8 @@ import retrofit2.Response;
 
 import static org.ccci.gto.android.common.TimeConstants.DAY_IN_MS;
 
-final class ToolSyncTasks extends BaseDataSyncTasks {
+@RestrictTo(RestrictTo.Scope.LIBRARY)
+public final class ToolSyncTasks extends BaseDataSyncTasks {
     private static final Object LOCK_SYNC_TOOLS = new Object();
     private static final Object LOCK_SYNC_SHARES = new Object();
 
@@ -35,7 +37,7 @@ final class ToolSyncTasks extends BaseDataSyncTasks {
 
     private static final String[] API_GET_INCLUDES = {INCLUDE_ATTACHMENTS, INCLUDE_LATEST_TRANSLATIONS};
 
-    ToolSyncTasks(@NonNull final Context context) {
+    public ToolSyncTasks(@NonNull final Context context) {
         super(context);
     }
 
@@ -80,7 +82,7 @@ final class ToolSyncTasks extends BaseDataSyncTasks {
     /**
      * @return true if all pending share counts were successfully synced. false if any failed to sync.
      */
-    boolean syncShares() {
+    public boolean syncShares() {
         boolean successful = true;
         synchronized (LOCK_SYNC_SHARES) {
             final List<ToolViews> viewsList =
