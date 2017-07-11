@@ -44,6 +44,9 @@ import static android.database.sqlite.SQLiteDatabase.CONFLICT_IGNORE;
 
 public class InitialContentTasks implements Runnable {
     private static final ImmutableMap<Long, String> BUNDLED_TRANSLATIONS = ImmutableMap.of(
+            388L, "fourlaws-en-38.zip",
+            428L, "satisfied-en-50.zip",
+            523L, "kgp-en-111.zip"
     );
 
     private final AssetManager mAssets;
