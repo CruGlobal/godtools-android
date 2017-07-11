@@ -77,7 +77,11 @@ final class ToolSyncTasks extends BaseDataSyncTasks {
         return true;
     }
 
+    /**
+     * @return true if all pending share counts were successfully synced. false if any failed to sync.
+     */
     boolean syncShares() {
+        boolean successful = true;
         synchronized (LOCK_SYNC_SHARES) {
             final List<ToolViews> viewsList =
                     mDao.streamCompat(Query.select(Tool.class).where(ToolTable.SQL_WHERE_HAS_PENDING_SHARES))
@@ -89,11 +93,14 @@ final class ToolSyncTasks extends BaseDataSyncTasks {
                     final Response<JsonApiObject<ToolViews>> response = mApi.views.submitViews(views).execute();
                     if (response.isSuccessful()) {
                         mDao.updateSharesDelta(views.getToolCode(), 0 - views.getQuantity());
+                    } else {
+                        successful = false;
                     }
                 } catch (final IOException ignored) {
+                    successful = false;
                 }
             }
         }
-        return true;
+        return successful;
     }
 }
