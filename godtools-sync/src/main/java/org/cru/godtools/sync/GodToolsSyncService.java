@@ -7,7 +7,8 @@ import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.sync.ThreadedSyncIntentService;
 import org.ccci.gto.android.sync.event.SyncFinishedEvent;
-import org.cru.godtools.sync.job.SyncJobCreator;
+import org.cru.godtools.sync.job.SyncFollowupJob;
+import org.cru.godtools.sync.job.SyncSharesJob;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
@@ -86,14 +87,14 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
                     try {
                         mFollowupSyncTasks.syncFollowups();
                     } catch (final IOException e) {
-                        SyncJobCreator.SyncFollowupJob.scheduleJob();
+                        SyncFollowupJob.scheduleFollowupJob();
                         throw e;
                     }
                     break;
                 case SYNCTYPE_TOOL_SHARES:
                     final boolean result = mToolSyncTasks.syncShares();
                     if (!result) {
-                        SyncJobCreator.SyncSharesJob.scheduleJob();
+                        SyncSharesJob.scheduleSharesJob();
                     }
                     break;
             }
