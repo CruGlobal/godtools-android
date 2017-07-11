@@ -144,7 +144,9 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
                 mTitle = null;
                 mTitleLanguage = null;
                 mBannerFile = null;
-                mPrimaryLanguage = mDefaultLanguage = mParallelLanguage = null;
+                mPrimaryLanguage = null;
+                mDefaultLanguage = null;
+                mParallelLanguage = null;
                 mShares = 0;
                 mAdded = false;
                 mDownloaded = false;
