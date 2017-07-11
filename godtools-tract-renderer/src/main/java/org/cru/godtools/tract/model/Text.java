@@ -1,5 +1,7 @@
 package org.cru.godtools.tract.model;
 
+import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
@@ -77,6 +79,11 @@ public final class Text extends Content {
 
     private Text(@NonNull final Base parent) {
         super(parent);
+    }
+
+    @Nullable
+    private static Typeface getTypeface(@Nullable final Text text, @NonNull final Context context) {
+        return text != null ? text.getManifest().getTypeface(context) : null;
     }
 
     @NonNull
@@ -196,6 +203,7 @@ public final class Text extends Content {
             }
 
             view.setText(Text.getText(text));
+            view.setTypeface(Text.getTypeface(text, view.getContext()));
 
             final float size = view.getContext().getResources().getDimension(textSize);
             view.setTextSize(COMPLEX_UNIT_PX, (float) (size * Text.getTextScale(text)));

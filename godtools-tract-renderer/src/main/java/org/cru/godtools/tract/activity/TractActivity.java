@@ -48,6 +48,7 @@ import org.keynote.godtools.android.model.Tool;
 import java.util.Locale;
 
 import butterknife.BindView;
+import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
@@ -280,7 +281,7 @@ public class TractActivity extends ImmersiveActivity
 
     private void updateToolbar() {
         final Manifest manifest = getActiveManifest();
-        setTitle(Manifest.getTitle(manifest));
+        setTitle(CalligraphyUtils.applyTypefaceSpan(Manifest.getTitle(manifest), Manifest.getTypeface(manifest, this)));
 
         // set toolbar background color
         mToolbar.setBackgroundColor(Manifest.getNavBarColor(manifest));

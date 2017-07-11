@@ -39,6 +39,7 @@ ext.deps = [
         androidSupport       : '25.4.0',
         androidTestingSupport: '0.5',
         butterknife          : '8.6.0',
+        calligraphy          : '2.3.0',
         crashlytics          : '2.6.8',
         eventbus             : '3.0.0',
         eventbusAnnotations  : '3.0.1',
@@ -88,6 +89,7 @@ dependencies {
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0"
+    implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
 
     debugCompile 'com.android.support:multidex:1.0.1'
     debugCompile 'org.ccci.gto.android:gto-support-leakcanary:' + deps.gtoSupport

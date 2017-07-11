@@ -1,6 +1,8 @@
 package org.cru.godtools.tract.model;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
@@ -13,6 +15,7 @@ import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableList;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.cru.godtools.base.ui.util.LocaleTypefaceUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.model.Text.Align;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
@@ -113,6 +116,16 @@ public final class Manifest extends Base implements Styles {
     @NonNull
     public Locale getLocale() {
         return mLocale;
+    }
+
+    @Nullable
+    public Typeface getTypeface(@NonNull final Context context) {
+        return LocaleTypefaceUtils.getTypeface(context, mLocale);
+    }
+
+    @Nullable
+    public static Typeface getTypeface(@Nullable final Manifest manifest, @NonNull final Context context) {
+        return manifest != null ? manifest.getTypeface(context) : null;
     }
 
     @Nullable

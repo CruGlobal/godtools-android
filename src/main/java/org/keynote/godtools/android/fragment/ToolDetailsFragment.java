@@ -164,11 +164,11 @@ public class ToolDetailsFragment extends BaseFragment {
     private void updateViews() {
         ViewUtils.bindLocalImage(mBanner, mBannerAttachment);
         if (mTitle != null) {
-            mTitle.setText(ModelUtils.getTranslationName(mLatestTranslation, mTool));
+            mTitle.setText(ModelUtils.getTranslationName(getContext(), mLatestTranslation, mTool));
         }
         bindShares(mShares, mTool);
         if (mDescription != null) {
-            mDescription.setText(ModelUtils.getTranslationDescription(mLatestTranslation, mTool));
+            mDescription.setText(ModelUtils.getTranslationDescription(getContext(), mLatestTranslation, mTool));
         }
         if (mLanguagesHeader != null) {
             final int count = mLanguages.size();
@@ -178,7 +178,7 @@ public class ToolDetailsFragment extends BaseFragment {
         if (mLanguagesView != null) {
             mLanguagesView.setVisibility(mLanguages.isEmpty() ? View.GONE : View.VISIBLE);
             mLanguagesView.setText(Stream.of(mLanguages)
-                                           .map(Locale::getDisplayLanguage)
+                                           .map(Locale::getDisplayName)
                                            .withoutNulls()
                                            .sorted(String.CASE_INSENSITIVE_ORDER)
                                            .reduce((l1, l2) -> l1 + ", " + l2)
