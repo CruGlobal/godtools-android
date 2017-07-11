@@ -50,7 +50,7 @@ ext.deps = [
         junit                : '4.12',
         leakcanary           : '1.5.1',
         lightweightStream    : '1.1.8',
-        playServices         : '9.0.2',
+        playServices         : '10.2.6',
         retrofit2            : '2.3.0',
         simplexml            : '2.7.1'
 ]
