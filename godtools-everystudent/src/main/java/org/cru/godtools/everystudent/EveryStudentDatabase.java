@@ -44,7 +44,7 @@ class EveryStudentDatabase {
     private static final HashMap<String, String> COLUMN_MAP = buildColumnMap();
     private final EveryStudentOpenHelper mDatabaseOpenHelper;
 
-    public EveryStudentDatabase(Context context) {
+    EveryStudentDatabase(Context context) {
         mDatabaseOpenHelper = new EveryStudentOpenHelper(context);
     }
 
@@ -116,9 +116,10 @@ class EveryStudentDatabase {
     }
 
     private Cursor getRawResults(String query) {
-        String sql = "SELECT " + ROWID + ", offsets(" + TABLE_NAME + "), snippet(" + TABLE_NAME + ",\"\",\"\",\"...\"), " + TITLE + " FROM " + TABLE_NAME +
-                " WHERE " + TABLE_NAME + " MATCH ?";
-        String[] selectionArgs = new String[]{query.trim().replace(" ", "* ") + "*"};
+        String sql =
+                "SELECT " + ROWID + ", offsets(" + TABLE_NAME + "), snippet(" + TABLE_NAME + ",\"\",\"\",\"...\"), " +
+                        TITLE + " FROM " + TABLE_NAME + " WHERE " + TABLE_NAME + " MATCH ?";
+        String[] selectionArgs = new String[] {query.trim().replace(" ", "* ") + "*"};
         return rawQuery(sql, selectionArgs);
     }
 
@@ -140,11 +141,11 @@ class EveryStudentDatabase {
     }
 
     private Cursor buildSuggestionCursor(ArrayList<Result> s, int num) {
-        MatrixCursor suggestions = new MatrixCursor(new String[]{BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, SearchManager.SUGGEST_COLUMN_INTENT_DATA});
-        Collections.sort(s, new Comparator<Object>()
-        {
-            public int compare(Object o1, Object o2)
-            {
+        MatrixCursor suggestions = new MatrixCursor(
+                new String[] {BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2,
+                        SearchManager.SUGGEST_COLUMN_INTENT_DATA});
+        Collections.sort(s, new Comparator<Object>() {
+            public int compare(Object o1, Object o2) {
                 Result s1 = (Result) o1;
                 Result s2 = (Result) o2;
                 return s2.rank.compareTo(s1.rank);
@@ -185,8 +186,8 @@ class EveryStudentDatabase {
      * EveryStudent DB OpenHelper
      */
     private static class EveryStudentOpenHelper extends SQLiteOpenHelper {
-
-        private static final String CREATE_STMT = "CREATE VIRTUAL TABLE " + TABLE_NAME + " USING fts3(" + CATEGORY + ", " + TITLE + ", " + CONTENT + ");";
+        private static final String CREATE_STMT =
+                "CREATE VIRTUAL TABLE " + TABLE_NAME + " USING fts3(" + CATEGORY + ", " + TITLE + ", " + CONTENT + ");";
         private final Context mHelperContext;
         private SQLiteDatabase mDatabase;
         private EveryStudentHandler handler = null;
@@ -214,8 +215,7 @@ class EveryStudentDatabase {
             onCreate(db);
         }
 
-        public void loadXMLContent() throws IOException, ParserConfigurationException, SAXException
-        {
+        public void loadXMLContent() throws IOException, ParserConfigurationException, SAXException {
             Resources resources = mHelperContext.getResources();
             InputStream inputStream = resources.openRawResource(R.raw.everystudent);
             Reader reader = new InputStreamReader(inputStream, "UTF-8");
@@ -236,7 +236,8 @@ class EveryStudentDatabase {
                 String catName = categories.get(i).get(Constants.NAME);
                 List<Map<String, String>> catTopics = topics.get(i);
                 for (int j = 0; j < catTopics.size(); j++) {
-                    insertArticle(catName, catTopics.get(j).get(Constants.NAME), catTopics.get(j).get(Constants.CONTENT));
+                    insertArticle(catName, catTopics.get(j).get(Constants.NAME),
+                                  catTopics.get(j).get(Constants.CONTENT));
                 }
             }
         }
@@ -253,13 +254,13 @@ class EveryStudentDatabase {
     /**
      * Result Item
      */
-    private class Result {
-        public final int rowid;
-        public final String row1;
-        public final String row2;
-        public final Double rank;
+    private static class Result {
+        final int rowid;
+        final String row1;
+        final String row2;
+        final Double rank;
 
-        public Result(int rowid, String row1, String row2, double rank) {
+        Result(int rowid, String row1, String row2, double rank) {
             this.rowid = rowid;
             this.row1 = row1;
             this.row2 = row2;
