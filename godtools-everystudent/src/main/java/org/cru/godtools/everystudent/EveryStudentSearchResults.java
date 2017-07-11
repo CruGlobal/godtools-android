@@ -36,8 +36,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("deprecation")
-public class EveryStudentSearchResults extends ListActivity
-{
+public class EveryStudentSearchResults extends ListActivity {
     private static final int DIALOG_LOADING = 0;
     private static SearcherThread mSearcherThread;
     private static MySimpleCursorAdapter mAdapter;
@@ -47,8 +46,7 @@ public class EveryStudentSearchResults extends ListActivity
     private Pattern mPattern;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -58,25 +56,22 @@ public class EveryStudentSearchResults extends ListActivity
         Intent intent = getIntent();
         mQuery = intent.getStringExtra(SearchManager.QUERY);
 
-
-        if (Intent.ACTION_VIEW.equals(intent.getAction()))
-        {
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             // handles a click on a search suggestion; launches activity to show
             // word
             Intent wordIntent = new Intent(this, EveryStudentView.class);
             wordIntent.setData(intent.getData());
             wordIntent.putExtra(SearchManager.QUERY,
-                    intent.getStringExtra(SearchManager.USER_QUERY));
+                                intent.getStringExtra(SearchManager.USER_QUERY));
             startActivity(wordIntent);
             finish();
-        }
-        else if (Intent.ACTION_SEARCH.equals(intent.getAction()))
-        {
+        } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 
-            EveryStudentSearchResultsPersistance essrp = (EveryStudentSearchResultsPersistance) getLastNonConfigurationInstance();
+            EveryStudentSearchResultsPersistance essrp =
+                    (EveryStudentSearchResultsPersistance) getLastNonConfigurationInstance();
 
-            if (essrp != null && essrp.getmAdapter() != null && essrp.getCursor() != null && essrp.getQuery() != null && essrp.getCount() != null)
-            {
+            if (essrp != null && essrp.getmAdapter() != null && essrp.getCursor() != null && essrp.getQuery() != null &&
+                    essrp.getCount() != null) {
                 mCount = essrp.getCount();
                 mQuery = essrp.getQuery();
                 mCursor = essrp.getCursor();
@@ -84,23 +79,17 @@ public class EveryStudentSearchResults extends ListActivity
                 TextView text = (TextView) findViewById(R.id.text);
                 text.setText(mCount);
                 setListAdapter(mAdapter);
-            }
-            else if (mSearcherThread != null && mSearcherThread.isAlive())
-            {
+            } else if (mSearcherThread != null && mSearcherThread.isAlive()) {
                 mSearcherThread.setHandler(new SearcherHandler());
-            }
-            else
-            {
+            } else {
                 mSearcherThread = new SearcherThread();
                 mSearcherThread.start();
                 showDialog(DIALOG_LOADING);
             }
 
-            this.getListView().setOnItemClickListener(new OnItemClickListener()
-            {
+            this.getListView().setOnItemClickListener(new OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id)
-                {
+                                        int position, long id) {
                     Intent intent = new Intent(EveryStudentSearchResults.this, EveryStudentView.class);
                     Uri contentUri = Uri.withAppendedPath(EveryStudentProvider.CONTENT_URI, "content");
                     Uri contentUriRow = Uri.withAppendedPath(contentUri, String.valueOf(id));
@@ -113,28 +102,23 @@ public class EveryStudentSearchResults extends ListActivity
     }
 
     @Override
-    public Object onRetainNonConfigurationInstance()
-    {
+    public Object onRetainNonConfigurationInstance() {
         return new EveryStudentSearchResultsPersistance(mAdapter, mCursor, mQuery, mCount);
     }
 
     @Override
-    public void onStart()
-    {
+    public void onStart() {
         super.onStart();
     }
 
     @Override
-    public void onStop()
-    {
+    public void onStop() {
         super.onStop();
     }
 
     @Override
-    protected Dialog onCreateDialog(int id)
-    {
-        switch (id)
-        {
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
             case DIALOG_LOADING:
                 ProgressDialog pdlg = new ProgressDialog(this);
                 pdlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -145,30 +129,27 @@ public class EveryStudentSearchResults extends ListActivity
         return null;
     }
 
-    private MySimpleCursorAdapter createAdapter()
-    {
+    private MySimpleCursorAdapter createAdapter() {
         // Specify the columns we want to display in the result
-        String[] from = new String[]{SearchManager.SUGGEST_COLUMN_TEXT_1,
+        String[] from = new String[] {SearchManager.SUGGEST_COLUMN_TEXT_1,
                 SearchManager.SUGGEST_COLUMN_TEXT_2};
 
         // Specify the corresponding layout elements where we want the
         // columns to go
-        int[] to = new int[]{R.id.title, R.id.snippet};
+        int[] to = new int[] {R.id.title, R.id.snippet};
         return new MySimpleCursorAdapter(EveryStudentSearchResults.this,
-                R.layout.search_result, mCursor, from, to);
+                                         R.layout.search_result, mCursor, from, to);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.everystudent, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.search) {
             onSearchRequested();
             return true;
@@ -177,11 +158,9 @@ public class EveryStudentSearchResults extends ListActivity
     }
 
     @SuppressLint("HandlerLeak")
-    private class SearcherHandler extends Handler
-    {
+    private class SearcherHandler extends Handler {
         @Override
-        public void handleMessage(Message msg)
-        {
+        public void handleMessage(Message msg) {
             TextView text = (TextView) findViewById(R.id.text);
             mCount = mSearcherThread.getCount();
             text.setText(mCount);
@@ -191,41 +170,33 @@ public class EveryStudentSearchResults extends ListActivity
         }
     }
 
-    class SearcherThread extends Thread
-    {
+    class SearcherThread extends Thread {
         Handler mHandler = new SearcherHandler();
         MySimpleCursorAdapter adapter;
         String myCount;
 
-        public String getCount()
-        {
+        public String getCount() {
             return myCount;
         }
 
-        public void setHandler(Handler h)
-        {
+        public void setHandler(Handler h) {
             mHandler = h;
         }
 
-        public MySimpleCursorAdapter getAdapter()
-        {
+        public MySimpleCursorAdapter getAdapter() {
             return adapter;
         }
 
-        public void run()
-        {
+        public void run() {
             Looper.prepare();
 
             mCursor = managedQuery(EveryStudentProvider.CONTENT_URI, null,
-                    null, new String[]{mQuery}, null);
+                                   null, new String[] {mQuery}, null);
 
-            if (mCursor == null)
-            {
+            if (mCursor == null) {
                 myCount = getString(R.string.search_no_results);
                 myCount.replace("{{search_term}}", mQuery);
-            }
-            else
-            {
+            } else {
                 // Display the number of results
                 int count = mCursor.getCount();
                 myCount = getResources().getQuantityString(
@@ -238,44 +209,36 @@ public class EveryStudentSearchResults extends ListActivity
         }
     }
 
-    public class MySimpleCursorAdapter extends SimpleCursorAdapter
-    {
+    public class MySimpleCursorAdapter extends SimpleCursorAdapter {
 
         private final Cursor c;
         private final Context context;
+
         public MySimpleCursorAdapter(Context context, @SuppressWarnings("SameParameterValue") int layout, Cursor c,
-                                     String[] from, int[] to)
-        {
+                                     String[] from, int[] to) {
             super(context, layout, c, from, to);
             this.c = c;
             this.context = context;
-
 
             String[] terms = mQuery.split("[\\s]");
             List<String> termsList = Arrays.asList(terms);
             String pattern = "";
 
             Iterator<String> itr = termsList.iterator();
-            while (itr.hasNext())
-            {
+            while (itr.hasNext()) {
                 pattern += itr.next().trim() + "[^\\s,\\.\\?:;]*";
-                if (itr.hasNext())
-                {
+                if (itr.hasNext()) {
                     pattern += "|";
                 }
             }
-            mPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE
-                    | Pattern.MULTILINE);
-
+            mPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
         }
 
         @SuppressLint("InflateParams")
         @Override
-        public View getView(int pos, View inView, ViewGroup parent)
-        {
+        public View getView(int pos, View inView, ViewGroup parent) {
             View v = inView;
-            if (v == null)
-            {
+            if (v == null) {
                 LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 v = inflater.inflate(R.layout.search_result, null);
@@ -284,9 +247,9 @@ public class EveryStudentSearchResults extends ListActivity
             TextView vTitle = (TextView) v.findViewById(R.id.title);
             TextView vSnippet = (TextView) v.findViewById(R.id.snippet);
             String title = this.c.getString(this.c
-                    .getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1));
+                                                    .getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1));
             String snippet = this.c.getString(this.c
-                    .getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_2));
+                                                      .getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_2));
 
             vTitle.setText(title, TextView.BufferType.SPANNABLE);
             vSnippet.setText(snippet, TextView.BufferType.SPANNABLE);
@@ -295,8 +258,7 @@ public class EveryStudentSearchResults extends ListActivity
             Spannable snippetSpan = (Spannable) vSnippet.getText();
 
             Matcher titleMatcher = mPattern.matcher(title);
-            while (titleMatcher.find())
-            {
+            while (titleMatcher.find()) {
                 titleSpan.setSpan(
                         new StyleSpan(android.graphics.Typeface.BOLD),
                         titleMatcher.start(), titleMatcher.end(),
@@ -304,16 +266,15 @@ public class EveryStudentSearchResults extends ListActivity
             }
 
             Matcher snippetMatcher = mPattern.matcher(snippet);
-            while (snippetMatcher.find())
-            {
+            while (snippetMatcher.find()) {
                 snippetSpan.setSpan(new BackgroundColorSpan(
-                                android.graphics.Color.YELLOW), snippetMatcher.start(),
-                        snippetMatcher.end(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                            android.graphics.Color.YELLOW), snippetMatcher.start(),
+                                    snippetMatcher.end(),
+                                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 snippetSpan.setSpan(new ForegroundColorSpan(
-                                android.graphics.Color.BLACK), snippetMatcher.start(),
-                        snippetMatcher.end(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                            android.graphics.Color.BLACK), snippetMatcher.start(),
+                                    snippetMatcher.end(),
+                                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
             return (v);
