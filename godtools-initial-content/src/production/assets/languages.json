@@ -36,13 +36,6 @@
       }
     },
     {
-      "id": "6",
-      "type": "language",
-      "attributes": {
-        "code": "bs-BA"
-      }
-    },
-    {
       "id": "7",
       "type": "language",
       "attributes": {
@@ -78,31 +71,10 @@
       }
     },
     {
-      "id": "12",
-      "type": "language",
-      "attributes": {
-        "code": "zh-CN"
-      }
-    },
-    {
-      "id": "13",
-      "type": "language",
-      "attributes": {
-        "code": "sl-SI"
-      }
-    },
-    {
       "id": "14",
       "type": "language",
       "attributes": {
         "code": "sq"
-      }
-    },
-    {
-      "id": "15",
-      "type": "language",
-      "attributes": {
-        "code": "mk-MK"
       }
     },
     {
@@ -197,13 +169,6 @@
       }
     },
     {
-      "id": "29",
-      "type": "language",
-      "attributes": {
-        "code": "zh-TW"
-      }
-    },
-    {
       "id": "30",
       "type": "language",
       "attributes": {
@@ -260,13 +225,6 @@
       }
     },
     {
-      "id": "38",
-      "type": "language",
-      "attributes": {
-        "code": "zn-Hans-CN"
-      }
-    },
-    {
       "id": "39",
       "type": "language",
       "attributes": {
@@ -295,13 +253,6 @@
       }
     },
     {
-      "id": "43",
-      "type": "language",
-      "attributes": {
-        "code": "et-EE"
-      }
-    },
-    {
       "id": "44",
       "type": "language",
       "attributes": {
@@ -327,6 +278,111 @@
       "type": "language",
       "attributes": {
         "code": "ko"
+      }
+    },
+    {
+      "id": "6",
+      "type": "language",
+      "attributes": {
+        "code": "bs-BA"
+      }
+    },
+    {
+      "id": "48",
+      "type": "language",
+      "attributes": {
+        "code": "mn-MN"
+      }
+    },
+    {
+      "id": "49",
+      "type": "language",
+      "attributes": {
+        "code": "ar"
+      }
+    },
+    {
+      "id": "50",
+      "type": "language",
+      "attributes": {
+        "code": "lt-LT"
+      }
+    },
+    {
+      "id": "51",
+      "type": "language",
+      "attributes": {
+        "code": "sw"
+      }
+    },
+    {
+      "id": "13",
+      "type": "language",
+      "attributes": {
+        "code": "sl"
+      }
+    },
+    {
+      "id": "52",
+      "type": "language",
+      "attributes": {
+        "code": "tr"
+      }
+    },
+    {
+      "id": "15",
+      "type": "language",
+      "attributes": {
+        "code": "mk"
+      }
+    },
+    {
+      "id": "54",
+      "type": "language",
+      "attributes": {
+        "code": "ln"
+      }
+    },
+    {
+      "id": "55",
+      "type": "language",
+      "attributes": {
+        "code": "nl"
+      }
+    },
+    {
+      "id": "43",
+      "type": "language",
+      "attributes": {
+        "code": "et"
+      }
+    },
+    {
+      "id": "56",
+      "type": "language",
+      "attributes": {
+        "code": "bo"
+      }
+    },
+    {
+      "id": "57",
+      "type": "language",
+      "attributes": {
+        "code": "tpi"
+      }
+    },
+    {
+      "id": "29",
+      "type": "language",
+      "attributes": {
+        "code": "zh-hant"
+      }
+    },
+    {
+      "id": "12",
+      "type": "language",
+      "attributes": {
+        "code": "zh-hans"
       }
     }
   ]
