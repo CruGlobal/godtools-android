@@ -35,7 +35,7 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
     private static final int LOADER_LANGUAGES = 101;
 
     public interface Callbacks {
-        void onLocaleSelected(@Nullable final Locale locale);
+        void onLocaleSelected(@Nullable Locale locale);
     }
 
     @Nullable

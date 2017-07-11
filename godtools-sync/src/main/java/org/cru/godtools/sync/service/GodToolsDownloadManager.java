@@ -260,6 +260,7 @@ public final class GodToolsDownloadManager {
     }
 
     @WorkerThread
+    @SuppressWarnings("checkstyle:RightCurly")
     void downloadAttachment(final long attachmentId) {
         // short-circuit if the resources directory isn't valid
         if (!FileUtils.createResourcesDir(mContext)) {

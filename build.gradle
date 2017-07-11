@@ -6,7 +6,7 @@ buildscript {
         maven { url 'https://maven.google.com' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha5'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha6'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         //noinspection GradleDependency
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
@@ -206,5 +206,25 @@ allprojects {
         maven { url 'https://maven.google.com' }
         maven { url 'https://maven.fabric.io/public' }
         maven { url "https://oss.sonatype.org/content/repositories/releases" }
+    }
+
+    // configure checkstyle
+    apply plugin: 'checkstyle'
+    checkstyle {
+        toolVersion '8.0'
+    }
+    task checkstyle(type: Checkstyle) {
+        configFile rootProject.file('checkstyle.xml')
+        source 'src'
+        include '*/java/**/*.java'
+        ignoreFailures false
+        showViolations true
+
+        classpath = files()
+    }
+    afterEvaluate {
+        if (project.tasks.findByName('check')) {
+            check.dependsOn('checkstyle')
+        }
     }
 }

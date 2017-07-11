@@ -191,9 +191,9 @@ public final class Card extends Base implements Styles, Parent {
     @UiThread
     public static final class CardViewHolder extends ParentViewHolder<Card> {
         public interface Callbacks {
-            void onToggleCard(@NonNull final CardViewHolder holder);
+            void onToggleCard(@NonNull CardViewHolder holder);
 
-            void onDismissCard(@NonNull final CardViewHolder holder);
+            void onDismissCard(@NonNull CardViewHolder holder);
         }
 
         @BindView(R2.id.background_image)
