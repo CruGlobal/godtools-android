@@ -82,7 +82,8 @@ public class EveryStudent extends ExpandableListActivity {
                                         long id) {
                 Intent intent = new Intent(EveryStudent.this, EveryStudentView.class);
                 Uri contentUri = Uri.withAppendedPath(EveryStudentProvider.CONTENT_URI, "content");
-                Uri contentUriRow = Uri.withAppendedPath(contentUri, mTopics.get(groupPosition).get(childPosition).get(ROWID));
+                Uri contentUriRow =
+                        Uri.withAppendedPath(contentUri, mTopics.get(groupPosition).get(childPosition).get(ROWID));
                 intent.setData(contentUriRow);
                 startActivity(intent);
                 return false;
@@ -143,23 +144,19 @@ public class EveryStudent extends ExpandableListActivity {
         Handler mHandler = new ParserHandler();
         ExpandableListAdapter adapter;
 
-        public void setHandler(Handler h)
-        {
+        public void setHandler(Handler h) {
             mHandler = h;
         }
 
-        public ExpandableListAdapter getAdapter()
-        {
+        public ExpandableListAdapter getAdapter() {
             return adapter;
         }
 
-        public List<List<Map<String, String>>> getTopics()
-        {
+        public List<List<Map<String, String>>> getTopics() {
             return topics;
         }
 
-        public List<Map<String, String>> getCategories()
-        {
+        public List<Map<String, String>> getCategories() {
             return categories;
         }
 
