@@ -45,7 +45,7 @@ import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD
 
 public class PageContentLayout extends FrameLayout implements NestedScrollingParent,
         ViewTreeObserver.OnGlobalLayoutListener {
-    private final int FLING_SCALE_FACTOR = 10;
+    private static final int FLING_SCALE_FACTOR = 10;
 
     public interface OnActiveCardListener {
         void onActiveCardChanged(@Nullable View activeCard);
@@ -571,6 +571,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         child.layout(childLeft, childTop, childLeft + width, childTop + height);
     }
 
+    @SuppressWarnings("checkstyle:RightCurly")
     private int getChildTargetY(final int position) {
         final int parentTop = getPaddingTop();
         final int parentBottom = getMeasuredHeight() - getPaddingBottom();
