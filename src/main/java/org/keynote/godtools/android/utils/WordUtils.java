@@ -98,7 +98,7 @@ public class WordUtils {
      */
     public static String capitalize(final String str, final char... delimiters) {
         final int delimLen = delimiters == null ? -1 : delimiters.length;
-        if (str.equalsIgnoreCase("") || delimLen == 0) {
+        if ("".equalsIgnoreCase(str) || delimLen == 0) {
             return str;
         }
         final char[] buffer = str.toCharArray();
@@ -135,5 +135,4 @@ public class WordUtils {
         }
         return false;
     }
-
 }
