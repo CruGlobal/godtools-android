@@ -41,7 +41,7 @@ class EveryStudentDatabase {
     private static final String TABLE_NAME = "everystudent";
     private static final String ROWID = "rowid";
     private static final String CATEGORY = "category";
-    private static final HashMap<String, String> mColumnMap = buildColumnMap();
+    private static final HashMap<String, String> COLUMN_MAP = buildColumnMap();
     private final EveryStudentOpenHelper mDatabaseOpenHelper;
 
     public EveryStudentDatabase(Context context) {
@@ -65,7 +65,7 @@ class EveryStudentDatabase {
     private Cursor query(String selection, String[] selectionArgs, String[] columns) {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(TABLE_NAME);
-        builder.setProjectionMap(mColumnMap);
+        builder.setProjectionMap(COLUMN_MAP);
 
         Cursor cursor = builder.query(mDatabaseOpenHelper.getReadableDatabase(),
                 columns, selection, selectionArgs, null, null, null);
