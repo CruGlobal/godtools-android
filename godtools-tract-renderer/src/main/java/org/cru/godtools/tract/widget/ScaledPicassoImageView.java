@@ -22,7 +22,9 @@ import static org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType.FIL
 import static org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType.FILL_Y;
 
 public interface ScaledPicassoImageView extends PicassoImageView {
-    enum ScaleType {FIT, FILL, FILL_X, FILL_Y}
+    enum ScaleType {
+        FIT, FILL, FILL_X, FILL_Y
+    }
 
     class ScaleHelper extends Helper {
         @NonNull
