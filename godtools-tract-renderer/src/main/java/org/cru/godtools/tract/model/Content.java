@@ -58,8 +58,7 @@ public abstract class Content extends Base {
     }
 
     @NonNull
-    abstract BaseViewHolder createViewHolder(@NonNull final ViewGroup parent,
-                                             @Nullable final BaseViewHolder parentViewHolder);
+    abstract BaseViewHolder createViewHolder(@NonNull ViewGroup parent, @Nullable BaseViewHolder parentViewHolder);
 
     static void renderAll(@NonNull final ViewGroup parent, @NonNull final List<? extends Content> content) {
         Stream.of(content)

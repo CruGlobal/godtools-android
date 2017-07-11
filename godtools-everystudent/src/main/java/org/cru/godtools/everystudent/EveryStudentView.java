@@ -28,8 +28,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("deprecation")
-public class EveryStudentView extends Activity
-{
+public class EveryStudentView extends Activity {
 
     private String title = "";
 
@@ -37,16 +36,14 @@ public class EveryStudentView extends Activity
 
     @Override
     @SuppressLint("ResourceType")
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
 
         SharedPreferences settings = getSharedPreferences(Constants.PREFS_SETTINGS, 0);
-        if (settings.getBoolean("wakelock", true))
-        {
+        if (settings.getBoolean("wakelock", true)) {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");
         }
@@ -59,13 +56,11 @@ public class EveryStudentView extends Activity
         Uri uri = getIntent().getData();
         Cursor cur = managedQuery(uri, null, null, null, null);
 
-        if (cur.moveToFirst())
-        {
+        if (cur.moveToFirst()) {
             title = cur.getString(cur.getColumnIndex(EveryStudentDatabase.TITLE));
             setTitle(title);
             String text = cur.getString(cur.getColumnIndex(EveryStudentDatabase.CONTENT)).replaceFirst("\n", "").trim();
-            if (getIntent().getStringExtra(SearchManager.QUERY) != null)
-            {
+            if (getIntent().getStringExtra(SearchManager.QUERY) != null) {
                 content.setText(text, TextView.BufferType.SPANNABLE);
                 Spannable str = (Spannable) content.getText();
 
@@ -75,32 +70,27 @@ public class EveryStudentView extends Activity
                 String pattern = "";
 
                 Iterator<String> itr = termsList.iterator();
-                while (itr.hasNext())
-                {
+                while (itr.hasNext()) {
                     pattern += itr.next().trim() + "[^\\s,\\.\\?:;]*";
-                    if (itr.hasNext())
-                    {
+                    if (itr.hasNext()) {
                         pattern += "|";
                     }
                 }
 
                 Pattern myPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
                 Matcher myMatcher = myPattern.matcher(text);
-                while (myMatcher.find())
-                {
-                    str.setSpan(new BackgroundColorSpan(android.graphics.Color.YELLOW), myMatcher.start(), myMatcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    str.setSpan(new ForegroundColorSpan(android.graphics.Color.BLACK), myMatcher.start(), myMatcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                while (myMatcher.find()) {
+                    str.setSpan(new BackgroundColorSpan(android.graphics.Color.YELLOW), myMatcher.start(),
+                                myMatcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    str.setSpan(new ForegroundColorSpan(android.graphics.Color.BLACK), myMatcher.start(),
+                                myMatcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
-            }
-            else
-            {
+            } else {
                 content.setText(text);
             }
 
             recordScreenView();
-        }
-        else
-        {
+        } else {
             Toast.makeText(getBaseContext(), getString(R.string.could_not_load_content), Toast.LENGTH_LONG).show();
             this.finish();
         }
@@ -110,50 +100,45 @@ public class EveryStudentView extends Activity
         AnalyticsService.getInstance(this).trackScreen("everystudent-" + massageTitleToTrainCase());
     }
 
-    private String massageTitleToTrainCase()
-    {
+    private String massageTitleToTrainCase() {
         return title.replaceAll("\\p{Punct}]", "").toLowerCase().replaceAll("\\s", "-");
     }
 
     @Override
-    public void onStart()
-    {
+    public void onStart() {
         super.onStart();
     }
 
     @Override
-    public void onStop()
-    {
+    public void onStop() {
         super.onStop();
     }
 
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
-        if (wl != null)
+        if (wl != null) {
             wl.release();
+        }
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        if (wl != null)
+        if (wl != null) {
             wl.acquire();
+        }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.everystudent, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.search) {
             onSearchRequested();
             return true;

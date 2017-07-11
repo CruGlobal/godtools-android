@@ -131,7 +131,7 @@ abstract class Base {
     }
 
     @UiThread
-    static abstract class BaseViewHolder<T extends Base> {
+    abstract static class BaseViewHolder<T extends Base> {
         @Nullable
         final BaseViewHolder mParentViewHolder;
 
