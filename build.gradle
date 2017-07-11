@@ -29,9 +29,9 @@ ext.grgit = org.ajoberstar.grgit.Grgit.open()
 // define dependency versions for this project
 ext {
     buildTools = "26.0.0"
-    compileSdk = 25
+    compileSdk = 26
     minSdk     = 15
-    targetSdk  = 25
+    targetSdk  = 26
 }
 ext.deps = [
         advrecyclerview      : '0.10.6',
