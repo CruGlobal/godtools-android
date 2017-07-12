@@ -13,6 +13,8 @@ import org.ccci.gto.android.common.db.util.CursorUtils;
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.ccci.gto.android.common.recyclerview.adapter.CursorAdapter;
 import org.cru.godtools.base.ui.util.LocaleTypefaceUtils;
+import org.cru.godtools.sync.service.GodToolsDownloadManager;
+import org.cru.godtools.sync.service.GodToolsDownloadManager.DownloadProgress;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.model.Tool;
@@ -27,6 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
 
+import static org.keynote.godtools.android.util.ViewUtils.bindDownloadProgress;
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
 public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
@@ -57,6 +60,8 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         mCallbacks = callbacks;
     }
 
+    /* BEGIN lifecycle */
+
     @Override
     public ToolViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
         return new ToolViewHolder(LayoutInflater.from(parent.getContext())
@@ -69,7 +74,24 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         holder.bind(cursor);
     }
 
-    class ToolViewHolder extends BaseViewHolder {
+    @Override
+    public void onViewAttachedToWindow(final ToolViewHolder holder) {
+        holder.startDownloadProgressListener();
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(final ToolViewHolder holder) {
+        holder.stopDownloadProgressListener();
+    }
+
+    @Override
+    public void onViewRecycled(final ToolViewHolder holder) {
+        holder.bind(null);
+    }
+
+    /* END lifecycle */
+
+    class ToolViewHolder extends BaseViewHolder implements GodToolsDownloadManager.OnDownloadProgressUpdateListener {
         @Nullable
         @BindView(R.id.banner)
         PicassoImageView mBanner;
@@ -84,7 +106,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         TextView mParallelLanguageView;
         @Nullable
         @BindView(R.id.download_progress)
-        ProgressBar mDownloadProgress;
+        ProgressBar mDownloadProgressBar;
         @Nullable
         @BindView(R.id.action_add)
         View mActionAdd;
@@ -111,8 +133,8 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         Locale mDefaultLanguage;
         int mShares = 0;
         boolean mAdded = false;
-        boolean mDownloading = false;
-        boolean mDownloaded = true;
+        @Nullable
+        private DownloadProgress mDownloadProgress;
 
         ToolViewHolder(@NonNull final View view) {
             super(view);
@@ -149,8 +171,6 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
                 mParallelLanguage = null;
                 mShares = 0;
                 mAdded = false;
-                mDownloaded = false;
-                mDownloading = false;
             }
 
             // update any bound views
@@ -172,9 +192,30 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
             if (mActionAdd != null) {
                 mActionAdd.setEnabled(!mAdded);
             }
-            if (mDownloadProgress != null) {
-                mDownloadProgress.setVisibility(mAdded && (mDownloading || !mDownloaded) ? View.VISIBLE : View.GONE);
+        }
+
+        void startDownloadProgressListener() {
+            // start listening for new state
+            if (mCode != null && mPrimaryLanguage != null) {
+                final GodToolsDownloadManager downloadManager =
+                        GodToolsDownloadManager.getInstance(itemView.getContext());
+                downloadManager.addOnDownloadProgressUpdateListener(mCode, mPrimaryLanguage, this);
+                onDownloadProgressUpdated(downloadManager.getDownloadProgress(mCode, mPrimaryLanguage));
             }
+        }
+
+        void stopDownloadProgressListener() {
+            final GodToolsDownloadManager downloadManager = GodToolsDownloadManager.getInstance(itemView.getContext());
+
+            // clear any previous download state
+            downloadManager.removeOnDownloadProgressUpdateListener(this);
+            mDownloadProgress = null;
+        }
+
+        @Override
+        public void onDownloadProgressUpdated(@Nullable final DownloadProgress progress) {
+            mDownloadProgress = progress;
+            bindDownloadProgress(mDownloadProgressBar, mDownloadProgress);
         }
 
         @Optional
