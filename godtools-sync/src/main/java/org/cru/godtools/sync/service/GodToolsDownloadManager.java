@@ -427,7 +427,7 @@ public final class GodToolsDownloadManager {
             // only process this translation if it's not already downloaded
             if (translation != null && !translation.isDownloaded()) {
                 // track the start of this download
-                updateProgress(key, 0, DownloadProgress.INDETERMINATE);
+                startProgress(key);
 
                 try {
                     final Response<ResponseBody> response = mApi.translations.download(translation.getId()).execute();
@@ -461,7 +461,7 @@ public final class GodToolsDownloadManager {
         final TranslationKey key = new TranslationKey(translation);
         synchronized (getLock(LOCKS_TRANSLATION_DOWNLOADS, key)) {
             // track the start of this download
-            updateProgress(key, 0, DownloadProgress.INDETERMINATE);
+            startProgress(key);
 
             final Lock lock = LOCK_FILESYSTEM.readLock();
             try {
@@ -613,6 +613,15 @@ public final class GodToolsDownloadManager {
 
     /* BEGIN download progress methods */
 
+    private void startProgress(@NonNull final TranslationKey translation) {
+        synchronized (mDownloadingTranslations) {
+            if (!mDownloadingTranslations.containsKey(translation)) {
+                mDownloadingTranslations.put(translation, DownloadProgress.INDETERMINATE);
+                scheduleProgressUpdate(translation);
+            }
+        }
+    }
+
     @AnyThread
     private void updateProgress(@NonNull final TranslationKey translation, final long progress, final long max) {
         final DownloadProgress old;
@@ -733,7 +742,7 @@ public final class GodToolsDownloadManager {
                 .distinctBy(TranslationKey::new)
                 .filterNot(Translation::isDownloaded)
                 .map(TranslationKey::new)
-                .peek(k -> updateProgress(k, 0, 0))
+                .peek(this::startProgress)
                 .map(DownloadTranslationRunnable::new)
                 .forEach(mExecutor::execute);
     }
@@ -821,14 +830,16 @@ public final class GodToolsDownloadManager {
     }
 
     public static final class DownloadProgress {
-        static final int INDETERMINATE = 0;
+        private static final int INDETERMINATE_VAL = 0;
+        static final DownloadProgress INDETERMINATE = new DownloadProgress(INDETERMINATE_VAL, INDETERMINATE_VAL);
 
         private final int mProgress;
         private final int mMax;
 
         DownloadProgress(final int progress, final int max) {
-            mMax = max <= 0 ? INDETERMINATE : max;
-            mProgress = mMax == INDETERMINATE ? INDETERMINATE : progress < 0 ? 0 : progress > mMax ? mMax : progress;
+            mMax = max <= 0 ? INDETERMINATE_VAL : max;
+            mProgress = mMax == INDETERMINATE_VAL ? INDETERMINATE_VAL :
+                    progress < 0 ? 0 : progress > mMax ? mMax : progress;
         }
 
         DownloadProgress(final long progress, final long max) {
@@ -836,7 +847,7 @@ public final class GodToolsDownloadManager {
         }
 
         public boolean isIndeterminate() {
-            return mMax == INDETERMINATE;
+            return mMax == INDETERMINATE_VAL;
         }
 
         public int getProgress() {
