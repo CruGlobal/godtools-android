@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.jetbrains.annotations.Contract;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.model.Tool;
 
@@ -108,12 +110,18 @@ public class TractActivity extends ImmersiveActivity
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // read requested tract from the provided intent
         final Intent intent = getIntent();
+        final String action = intent != null ? intent.getAction() : null;
+        final Uri data = intent != null ? intent.getData() : null;
         final Bundle extras = intent != null ? intent.getExtras() : null;
-        if (extras != null) {
+        if (Intent.ACTION_VIEW.equals(action) && isDeepLinkValid(data)) {
+            mTool = getToolFromDeepLink(data);
+            mLanguages = new Locale[] {getLanguageFromDeepLink(data)};
+        } else if (extras != null) {
             mTool = extras.getString(EXTRA_TOOL, mTool);
             final Locale[] languages = BundleUtils.getLocaleArray(extras, EXTRA_LANGUAGES);
-            mLanguages = languages != null ? languages : new Locale[0];
+            mLanguages = languages != null ? languages : mLanguages;
         }
 
         // finish now if this activity is in an invalid state
@@ -218,6 +226,30 @@ public class TractActivity extends ImmersiveActivity
     }
 
     /* END lifecycle */
+
+    @Contract("null -> false")
+    private boolean isDeepLinkValid(@Nullable final Uri data) {
+        if (data != null) {
+            if ("http".equalsIgnoreCase(data.getScheme()) || "https".equalsIgnoreCase(data.getScheme())) {
+                final String host1 = getString(R.string.tract_deeplink_host_1);
+                final String host2 = getString(R.string.tract_deeplink_host_2);
+                if (host1.equalsIgnoreCase(data.getHost()) || host2.equalsIgnoreCase(data.getHost())) {
+                    return data.getPathSegments().size() >= 2;
+                }
+            }
+        }
+        return false;
+    }
+
+    @NonNull
+    private Locale getLanguageFromDeepLink(@NonNull final Uri data) {
+        return LocaleCompat.forLanguageTag(data.getPathSegments().get(0));
+    }
+
+    @Nullable
+    private String getToolFromDeepLink(@NonNull final Uri data) {
+        return data.getPathSegments().get(1);
+    }
 
     private boolean validStartState() {
         return mTool != null && mLanguages.length > 0;
