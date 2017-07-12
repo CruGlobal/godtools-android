@@ -1,4 +1,4 @@
-package org.cru.godtools.sync.service;
+package org.cru.godtools.download.manager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

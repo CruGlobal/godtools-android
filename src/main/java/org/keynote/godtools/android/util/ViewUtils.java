@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.cru.godtools.base.util.FileUtils;
+import org.cru.godtools.download.manager.GodToolsDownloadManager.DownloadProgress;
 import org.cru.godtools.model.Attachment;
-import org.cru.godtools.sync.service.GodToolsDownloadManager.DownloadProgress;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.model.Tool;
 
