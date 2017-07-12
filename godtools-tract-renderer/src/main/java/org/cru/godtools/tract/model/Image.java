@@ -59,7 +59,7 @@ public final class Image extends Content {
 
     @UiThread
     static final class ImageViewHolder extends BaseViewHolder<Image> {
-        @BindView(R2.id.content)
+        @BindView(R2.id.image)
         PicassoImageView mImage;
 
         ImageViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
