@@ -681,6 +681,10 @@ public final class GodToolsDownloadManager {
     }
 
     abstract static class PriorityRunnable implements Comparable<PriorityRunnable>, Runnable {
+        static final int PRIORITY_PRIMARY = -10;
+        static final int PRIORITY_ATTACHMENT = 0;
+        static final int PRIORITY_PARALLEL = 10;
+        static final int PRIORITY_OTHER = 20;
         static final int PRIMARY_PRUNE_FILESYSTEM = Integer.MAX_VALUE;
 
         protected int getPriority() {
@@ -694,10 +698,6 @@ public final class GodToolsDownloadManager {
     }
 
     final class DownloadTranslationRunnable extends PriorityRunnable {
-        private static final int PRIORITY_PRIMARY = -10;
-        private static final int PRIORITY_PARALLEL = 10;
-        private static final int PRIORITY_OTHER = 20;
-
         @NonNull
         final TranslationKey mKey;
         final int mPriority;
@@ -722,8 +722,6 @@ public final class GodToolsDownloadManager {
     }
 
     final class DownloadAttachmentRunnable extends PriorityRunnable {
-        private static final int PRIORITY_ATTACHMENT = 0;
-
         private final long mAttachmentId;
 
         DownloadAttachmentRunnable(final long attachmentId) {
