@@ -6,6 +6,8 @@
     <dimen name="tools_card_margin_vert">2dp</dimen>
     <dimen name="tools_details_margin_horiz">56dp</dimen>
 
+    <color name="tools_download_progress_bg">#7F000000</color>
+
     <style name="Widget.GodTools2.Tools.CardView" parent="Widget.GodTools2.CardView">
         <item name="android:layout_marginBottom">@dimen/tools_card_margin_vert</item>
         <item name="android:layout_marginLeft">@dimen/tools_card_margin_horiz</item>
@@ -17,7 +19,7 @@
     </style>
 
     <style name="Widget.GodTools2.Tools.Download.ProgressBar" parent="Widget.GodTools2.ProgressBar">
-        <item name="android:indeterminate">false</item>
+        <item name="android:progressDrawable">@drawable/progress_download</item>
     </style>
 
     <style name="TextAppearance.GodTools2.Tools.Card.Title" parent="TextAppearance.GodTools2">

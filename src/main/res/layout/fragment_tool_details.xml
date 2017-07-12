@@ -30,8 +30,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_alignBottom="@id/banner"
-                android:max="100"
-                android:progress="39"
                 android:visibility="gone"
                 tools:visibility="visible" />
         </android.support.percent.PercentRelativeLayout>

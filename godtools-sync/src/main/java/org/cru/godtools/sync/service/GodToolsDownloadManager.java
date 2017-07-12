@@ -13,6 +13,7 @@ import android.support.annotation.WorkerThread;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.util.ArraySet;
 import android.support.v4.util.LongSparseArray;
+import android.support.v4.util.SimpleArrayMap;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Optional;
@@ -60,6 +61,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -87,6 +91,7 @@ public final class GodToolsDownloadManager {
     private static final long CLEANER_INTERVAL_IN_MS = HOUR_IN_MS;
 
     private static final int MSG_CLEAN = 1;
+    private static final int MSG_PROGRESS_UPDATE = 2;
 
     private static final ReadWriteLock LOCK_FILESYSTEM = new ReentrantReadWriteLock();
     private static final LongSparseArray<Object> LOCKS_ATTACHMENTS = new LongSparseArray<>();
@@ -100,6 +105,10 @@ public final class GodToolsDownloadManager {
     final Settings mPrefs;
     private final ThreadPoolExecutor mExecutor;
     final Handler mHandler;
+
+    private final SimpleArrayMap<TranslationKey, DownloadProgress> mDownloadingTranslations = new SimpleArrayMap<>();
+    private final SimpleArrayMap<TranslationKey, List<OnDownloadProgressUpdateListener>> mDownloadProgressListeners =
+            new SimpleArrayMap<>();
 
     final LongSparseArray<Boolean> mDownloadingAttachments = new LongSparseArray<>();
 
@@ -417,6 +426,9 @@ public final class GodToolsDownloadManager {
 
             // only process this translation if it's not already downloaded
             if (translation != null && !translation.isDownloaded()) {
+                // track the start of this download
+                startProgress(key);
+
                 try {
                     final Response<ResponseBody> response = mApi.translations.download(translation.getId()).execute();
                     if (response.isSuccessful()) {
@@ -430,6 +442,9 @@ public final class GodToolsDownloadManager {
                     }
                 } catch (final IOException ignored) {
                 }
+
+                // finish the download
+                finishDownload(key);
             }
         }
     }
@@ -443,7 +458,11 @@ public final class GodToolsDownloadManager {
         }
 
         // lock translation
-        synchronized (getLock(LOCKS_TRANSLATION_DOWNLOADS, new TranslationKey(translation))) {
+        final TranslationKey key = new TranslationKey(translation);
+        synchronized (getLock(LOCKS_TRANSLATION_DOWNLOADS, key)) {
+            // track the start of this download
+            startProgress(key);
+
             final Lock lock = LOCK_FILESYSTEM.readLock();
             try {
                 lock.lock();
@@ -457,6 +476,9 @@ public final class GodToolsDownloadManager {
                 mEventBus.post(new TranslationUpdateEvent());
             } finally {
                 lock.unlock();
+
+                // finish the download
+                finishDownload(key);
             }
         }
     }
@@ -468,11 +490,13 @@ public final class GodToolsDownloadManager {
     @GuardedBy("LOCK_FILESYSTEM")
     private void processZipStream(@NonNull final Translation translation, @NonNull final InputStream zipStream,
                                   final long size) throws IOException {
+        final TranslationKey translationKey = new TranslationKey(translation);
+
         final Closer closer = Closer.create();
         try {
             final CountingInputStream count = closer.register(new CountingInputStream(zipStream));
             final ZipInputStream zin = closer.register(new ZipInputStream(new BufferedInputStream(count)));
-            final ProgressCallback progressCallback = (s) -> updateProgress(translation, count.getCount(), size);
+            final ProgressCallback progressCallback = (s) -> updateProgress(translationKey, count.getCount(), size);
 
             ZipEntry ze;
             while ((ze = zin.getNextEntry()) != null) {
@@ -508,7 +532,7 @@ public final class GodToolsDownloadManager {
                     mDao.updateOrInsert(translationFile);
                 }
 
-                updateProgress(translation, count.getCount(), size);
+                updateProgress(translationKey, count.getCount(), size);
             }
         } catch (final Throwable e) {
             throw closer.rethrow(e);
@@ -587,9 +611,124 @@ public final class GodToolsDownloadManager {
         }
     }
 
-    private void updateProgress(@NonNull final Translation translation, final long progress, final long total) {
-        // TODO
+    /* BEGIN download progress methods */
+
+    private void startProgress(@NonNull final TranslationKey translation) {
+        synchronized (mDownloadingTranslations) {
+            if (!mDownloadingTranslations.containsKey(translation)) {
+                mDownloadingTranslations.put(translation, DownloadProgress.INDETERMINATE);
+                scheduleProgressUpdate(translation);
+            }
+        }
     }
+
+    @AnyThread
+    private void updateProgress(@NonNull final TranslationKey translation, final long progress, final long max) {
+        final DownloadProgress old;
+        final DownloadProgress current = new DownloadProgress(progress, max);
+        synchronized (mDownloadingTranslations) {
+            old = mDownloadingTranslations.put(translation, current);
+        }
+        if (!current.equals(old)) {
+            scheduleProgressUpdate(translation);
+        }
+    }
+
+    @AnyThread
+    private void finishDownload(@NonNull final TranslationKey translation) {
+        final DownloadProgress old;
+        synchronized (mDownloadingTranslations) {
+            old = mDownloadingTranslations.remove(translation);
+        }
+        if (old != null) {
+            scheduleProgressUpdate(translation);
+        }
+    }
+
+    @Nullable
+    @AnyThread
+    public DownloadProgress getDownloadProgress(@NonNull final String tool, @NonNull final Locale locale) {
+        final TranslationKey key = new TranslationKey(tool, locale);
+        synchronized (mDownloadingTranslations) {
+            return mDownloadingTranslations.get(key);
+        }
+    }
+
+    @AnyThread
+    void scheduleProgressUpdate(@NonNull final TranslationKey translation) {
+        // remove any pending executions
+        mHandler.removeMessages(MSG_PROGRESS_UPDATE, translation);
+
+        // schedule another execution
+        final Message m = Message.obtain(mHandler, () -> dispatchOnProgressUpdateCallbacks(translation));
+        m.what = MSG_PROGRESS_UPDATE;
+        m.obj = translation;
+        mHandler.sendMessage(m);
+    }
+
+    @MainThread
+    void dispatchOnProgressUpdateCallbacks(@NonNull final TranslationKey translation) {
+        // get any listeners
+        final List<OnDownloadProgressUpdateListener> listeners = mDownloadProgressListeners.get(translation);
+
+        // dispatch any listeners we have
+        if (listeners != null && !listeners.isEmpty()) {
+            final DownloadProgress progress;
+            synchronized (mDownloadingTranslations) {
+                progress = mDownloadingTranslations.get(translation);
+            }
+
+            for (final OnDownloadProgressUpdateListener listener : listeners) {
+                listener.onDownloadProgressUpdated(progress);
+            }
+        }
+    }
+
+    @MainThread
+    public void addOnDownloadProgressUpdateListener(@NonNull final String tool, @NonNull final Locale locale,
+                                                    @NonNull final OnDownloadProgressUpdateListener listener) {
+        final TranslationKey key = new TranslationKey(tool, locale);
+        List<OnDownloadProgressUpdateListener> listeners = mDownloadProgressListeners.get(key);
+        if (listeners == null) {
+            listeners = new ArrayList<>();
+            mDownloadProgressListeners.put(key, listeners);
+        }
+        listeners.add(listener);
+    }
+
+    @MainThread
+    public void removeOnDownloadProgressUpdateListener(@NonNull final String tool, @NonNull final Locale locale,
+                                                       @NonNull final OnDownloadProgressUpdateListener listener) {
+        final TranslationKey key = new TranslationKey(tool, locale);
+        final List<OnDownloadProgressUpdateListener> listeners = mDownloadProgressListeners.get(key);
+        if (listeners != null) {
+            listeners.remove(listener);
+            if (listeners.isEmpty()) {
+                mDownloadProgressListeners.remove(key);
+            }
+        }
+        if (listeners == null || listeners.isEmpty()) {
+            mDownloadProgressListeners.remove(key);
+        }
+    }
+
+    @MainThread
+    public void removeOnDownloadProgressUpdateListener(@NonNull final OnDownloadProgressUpdateListener listener) {
+        for (int i = 0; i < mDownloadProgressListeners.size(); i++) {
+            final List<OnDownloadProgressUpdateListener> listeners = mDownloadProgressListeners.valueAt(i);
+            if (listeners != null) {
+                listeners.remove(listener);
+            }
+            if (listeners == null || listeners.isEmpty()) {
+                mDownloadProgressListeners.removeAt(i);
+                i--;
+            }
+        }
+    }
+
+    /* END download progress methods */
+
+    /* BEGIN download & cleaning scheduling methods */
 
     @WorkerThread
     private void enqueuePendingPublishedTranslations() {
@@ -598,8 +737,12 @@ public final class GodToolsDownloadManager {
                                   .where(LanguageTable.SQL_WHERE_ADDED
                                                  .and(ToolTable.FIELD_ADDED.eq(true))
                                                  .and(TranslationTable.SQL_WHERE_PUBLISHED)
-                                                 .and(TranslationTable.FIELD_DOWNLOADED.eq(false))))
+                                                 .and(TranslationTable.FIELD_DOWNLOADED.eq(false)))
+                                  .orderBy(TranslationTable.COLUMN_VERSION + " DESC"))
+                .distinctBy(TranslationKey::new)
+                .filterNot(Translation::isDownloaded)
                 .map(TranslationKey::new)
+                .peek(this::startProgress)
                 .map(DownloadTranslationRunnable::new)
                 .forEach(mExecutor::execute);
     }
@@ -650,6 +793,8 @@ public final class GodToolsDownloadManager {
         mHandler.sendMessageDelayed(m, CLEANER_INTERVAL_IN_MS);
     }
 
+    /* END download & cleaning scheduling methods */
+
     static final class TranslationKey {
         @Nullable
         final String mTool;
@@ -657,8 +802,12 @@ public final class GodToolsDownloadManager {
         final Locale mLocale;
 
         TranslationKey(@NonNull final Translation translation) {
-            mTool = translation.getToolCode();
-            mLocale = translation.getLanguageCode();
+            this(translation.getToolCode(), translation.getLanguageCode());
+        }
+
+        TranslationKey(@Nullable final String tool, @NonNull final Locale locale) {
+            mTool = tool;
+            mLocale = locale;
         }
 
         @Override
@@ -680,7 +829,66 @@ public final class GodToolsDownloadManager {
         }
     }
 
+    public static final class DownloadProgress {
+        private static final int INDETERMINATE_VAL = 0;
+        static final DownloadProgress INDETERMINATE = new DownloadProgress(INDETERMINATE_VAL, INDETERMINATE_VAL);
+
+        private final int mProgress;
+        private final int mMax;
+
+        DownloadProgress(final int progress, final int max) {
+            mMax = max <= 0 ? INDETERMINATE_VAL : max;
+            mProgress = mMax == INDETERMINATE_VAL ? INDETERMINATE_VAL :
+                    progress < 0 ? 0 : progress > mMax ? mMax : progress;
+        }
+
+        DownloadProgress(final long progress, final long max) {
+            this((int) progress, (int) max);
+        }
+
+        public boolean isIndeterminate() {
+            return mMax == INDETERMINATE_VAL;
+        }
+
+        public int getProgress() {
+            return mProgress;
+        }
+
+        public int getMax() {
+            return mMax;
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+
+            DownloadProgress that = (DownloadProgress) o;
+            return mProgress == that.mProgress && mMax == that.mMax;
+        }
+
+        @Override
+        public int hashCode() {
+            return Arrays.hashCode(new int[] {mProgress, mMax});
+        }
+    }
+
+    public interface OnDownloadProgressUpdateListener {
+        /**
+         * @param progress The current download progress. If this is null there is no download running.
+         */
+        void onDownloadProgressUpdated(@Nullable DownloadProgress progress);
+    }
+
     abstract static class PriorityRunnable implements Comparable<PriorityRunnable>, Runnable {
+        static final int PRIORITY_PRIMARY = -10;
+        static final int PRIORITY_ATTACHMENT = 0;
+        static final int PRIORITY_PARALLEL = 10;
+        static final int PRIORITY_OTHER = 20;
         static final int PRIMARY_PRUNE_FILESYSTEM = Integer.MAX_VALUE;
 
         protected int getPriority() {
@@ -689,15 +897,11 @@ public final class GodToolsDownloadManager {
 
         @Override
         public final int compareTo(@NonNull final PriorityRunnable o) {
-            return ((Integer) o.getPriority()).compareTo(getPriority());
+            return ((Integer) getPriority()).compareTo(o.getPriority());
         }
     }
 
     final class DownloadTranslationRunnable extends PriorityRunnable {
-        private static final int PRIORITY_PRIMARY = -10;
-        private static final int PRIORITY_PARALLEL = 10;
-        private static final int PRIORITY_OTHER = 20;
-
         @NonNull
         final TranslationKey mKey;
         final int mPriority;
@@ -722,8 +926,6 @@ public final class GodToolsDownloadManager {
     }
 
     final class DownloadAttachmentRunnable extends PriorityRunnable {
-        private static final int PRIORITY_ATTACHMENT = 0;
-
         private final long mAttachmentId;
 
         DownloadAttachmentRunnable(final long attachmentId) {

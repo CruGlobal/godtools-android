@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.sync.service.GodToolsDownloadManager;
+import org.cru.godtools.sync.service.GodToolsDownloadManager.DownloadProgress;
 import org.cru.godtools.util.ModelUtils;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.content.AttachmentLoader;
@@ -38,9 +40,11 @@ import butterknife.OnClick;
 import butterknife.Optional;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
+import static org.keynote.godtools.android.util.ViewUtils.bindDownloadProgress;
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
-public class ToolDetailsFragment extends BaseFragment {
+public class ToolDetailsFragment extends BaseFragment
+        implements GodToolsDownloadManager.OnDownloadProgressUpdateListener {
     public interface Callbacks {
         void onToolAdded();
 
@@ -51,6 +55,9 @@ public class ToolDetailsFragment extends BaseFragment {
     private static final int LOADER_BANNER = 102;
     private static final int LOADER_LATEST_TRANSLATION = 103;
     private static final int LOADER_AVAILABLE_LANGUAGES = 104;
+
+    @Nullable
+    private GodToolsDownloadManager mDownloadManager;
 
     // these properties should be treated as final and only set/modified in onCreate()
     @Nullable
@@ -76,7 +83,7 @@ public class ToolDetailsFragment extends BaseFragment {
     TextView mLanguagesView;
     @Nullable
     @BindView(R.id.download_progress)
-    ProgressBar mProgressBar;
+    ProgressBar mDownloadProgressBar;
     @Nullable
     @BindView(R.id.action_add)
     View mActionAdd;
@@ -90,6 +97,8 @@ public class ToolDetailsFragment extends BaseFragment {
     private Attachment mBannerAttachment;
     @Nullable
     private Translation mLatestTranslation;
+    @Nullable
+    private DownloadProgress mDownloadProgress;
     @NonNull
     private List<Locale> mLanguages = Collections.emptyList();
 
@@ -102,6 +111,14 @@ public class ToolDetailsFragment extends BaseFragment {
     }
 
     /* BEGIN lifecycle */
+
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (mDownloadManager == null && context != null) {
+            mDownloadManager = GodToolsDownloadManager.getInstance(context);
+        }
+    }
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -125,17 +142,23 @@ public class ToolDetailsFragment extends BaseFragment {
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         updateViews();
+        updateDownloadProgress();
     }
 
     @Override
     public void onStart() {
         super.onStart();
         updateLatestTranslationLoader();
+        startProgressListener();
     }
 
     @Override
     protected void onUpdatePrimaryLanguage() {
         updateLatestTranslationLoader();
+
+        // restart the progress listener
+        stopProgressListener();
+        startProgressListener();
     }
 
     void onLoadTool(@Nullable final Tool tool) {
@@ -159,7 +182,38 @@ public class ToolDetailsFragment extends BaseFragment {
         updateViews();
     }
 
+    @Override
+    public void onDownloadProgressUpdated(@Nullable final DownloadProgress progress) {
+        mDownloadProgress = progress;
+        updateDownloadProgress();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stopProgressListener();
+    }
+
     /* END lifecycle */
+
+    private void startProgressListener() {
+        if (mDownloadManager != null && mToolCode != null) {
+            mDownloadManager.addOnDownloadProgressUpdateListener(mToolCode, mPrimaryLanguage, this);
+
+            // get the initial progress
+            onDownloadProgressUpdated(mDownloadManager.getDownloadProgress(mToolCode, mPrimaryLanguage));
+        }
+    }
+
+    private void updateDownloadProgress() {
+        bindDownloadProgress(mDownloadProgressBar, mDownloadProgress);
+    }
+
+    private void stopProgressListener() {
+        if (mDownloadManager != null) {
+            mDownloadManager.removeOnDownloadProgressUpdateListener(this);
+        }
+    }
 
     private void updateViews() {
         ViewUtils.bindLocalImage(mBanner, mBannerAttachment);
