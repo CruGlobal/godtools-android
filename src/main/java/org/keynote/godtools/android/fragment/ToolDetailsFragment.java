@@ -1,7 +1,6 @@
 package org.keynote.godtools.android.fragment;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -41,6 +40,7 @@ import butterknife.OnClick;
 import butterknife.Optional;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
+import static org.keynote.godtools.android.util.ViewUtils.bindDownloadProgress;
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
 public class ToolDetailsFragment extends BaseFragment
@@ -206,23 +206,7 @@ public class ToolDetailsFragment extends BaseFragment
     }
 
     private void updateDownloadProgress() {
-        if (mDownloadProgressBar != null) {
-            // update visibility
-            final int visibility = mDownloadProgress != null ? View.VISIBLE : View.GONE;
-            boolean animate = visibility == mDownloadProgressBar.getVisibility();
-            mDownloadProgressBar.setVisibility(visibility);
-
-            // update progress
-            if (mDownloadProgress != null) {
-                mDownloadProgressBar.setIndeterminate(mDownloadProgress.isIndeterminate());
-                mDownloadProgressBar.setMax(mDownloadProgress.getMax());
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    mDownloadProgressBar.setProgress(mDownloadProgress.getProgress(), animate);
-                } else {
-                    mDownloadProgressBar.setProgress(mDownloadProgress.getProgress());
-                }
-            }
-        }
+        bindDownloadProgress(mDownloadProgressBar, mDownloadProgress);
     }
 
     private void stopProgressListener() {
