@@ -591,6 +591,8 @@ public final class GodToolsDownloadManager {
         // TODO
     }
 
+    /* BEGIN download & cleaning scheduling methods */
+
     @WorkerThread
     private void enqueuePendingPublishedTranslations() {
         mDao.streamCompat(Query.select(Translation.class)
@@ -598,7 +600,10 @@ public final class GodToolsDownloadManager {
                                   .where(LanguageTable.SQL_WHERE_ADDED
                                                  .and(ToolTable.FIELD_ADDED.eq(true))
                                                  .and(TranslationTable.SQL_WHERE_PUBLISHED)
-                                                 .and(TranslationTable.FIELD_DOWNLOADED.eq(false))))
+                                                 .and(TranslationTable.FIELD_DOWNLOADED.eq(false)))
+                                  .orderBy(TranslationTable.COLUMN_VERSION + " DESC"))
+                .distinctBy(TranslationKey::new)
+                .filterNot(Translation::isDownloaded)
                 .map(TranslationKey::new)
                 .map(DownloadTranslationRunnable::new)
                 .forEach(mExecutor::execute);
@@ -649,6 +654,8 @@ public final class GodToolsDownloadManager {
         m.what = MSG_CLEAN;
         mHandler.sendMessageDelayed(m, CLEANER_INTERVAL_IN_MS);
     }
+
+    /* END download & cleaning scheduling methods */
 
     static final class TranslationKey {
         @Nullable
