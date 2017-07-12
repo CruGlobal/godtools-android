@@ -226,6 +226,9 @@ public class ToolsFragment extends BaseFragment
         if (mToolsAdapter != null) {
             mToolsAdapter.setCallbacks(null);
         }
+        if (mResourcesView != null) {
+            mResourcesView.setAdapter(null);
+        }
         mToolsHeaderAdapter = null;
         mToolsAdapter = null;
     }
