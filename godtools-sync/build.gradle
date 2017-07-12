@@ -40,6 +40,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
+    implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"

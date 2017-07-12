@@ -2,6 +2,7 @@ package org.cru.godtools.sync;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.RestrictTo;
 
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
@@ -13,14 +14,15 @@ import java.util.List;
 
 import retrofit2.Response;
 
-final class FollowupSyncTasks extends BaseSyncTasks {
+@RestrictTo(RestrictTo.Scope.LIBRARY)
+public final class FollowupSyncTasks extends BaseSyncTasks {
     private static final Object LOCK_FOLLOWUPS = new Object();
 
-    FollowupSyncTasks(@NonNull final Context context) {
+    public FollowupSyncTasks(@NonNull final Context context) {
         super(context);
     }
 
-    void syncFollowups() throws IOException {
+    public void syncFollowups() throws IOException {
         synchronized (LOCK_FOLLOWUPS) {
             final List<Followup> followups = mDao.get(Query.select(Followup.class));
             for (final Followup followup : followups) {

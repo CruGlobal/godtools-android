@@ -43,6 +43,7 @@ ext.deps = [
         crashlytics          : '2.6.8',
         eventbus             : '3.0.0',
         eventbusAnnotations  : '3.0.1',
+        evernoteAndroidJob   : '1.1.11',
         facebookStetho       : '1.5.0',
         gtoSupport           : '1.1.2-SNAPSHOT',
         guava                : '22.0-android',
@@ -85,6 +86,7 @@ dependencies {
     implementation "com.newrelic.agent.android:android-agent:5.14.0"
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
 
+    implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
