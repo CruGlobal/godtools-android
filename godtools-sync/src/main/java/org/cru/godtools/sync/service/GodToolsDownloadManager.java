@@ -693,7 +693,7 @@ public final class GodToolsDownloadManager {
 
         @Override
         public final int compareTo(@NonNull final PriorityRunnable o) {
-            return ((Integer) o.getPriority()).compareTo(getPriority());
+            return ((Integer) getPriority()).compareTo(o.getPriority());
         }
     }
 
