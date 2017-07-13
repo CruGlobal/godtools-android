@@ -8,11 +8,13 @@ import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Translation;
 import org.keynote.godtools.android.model.Tool;
 
+import static org.cru.godtools.model.Translation.DEFAULT_LAST_ACCESSED;
 import static org.cru.godtools.model.Translation.DEFAULT_PUBLISHED;
 import static org.cru.godtools.model.Translation.DEFAULT_VERSION;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DESCRIPTION;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DOWNLOADED;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_LANGUAGE;
+import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_LAST_ACCESSED;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_MANIFEST;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_NAME;
 import static org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_PUBLISHED;
@@ -48,6 +50,9 @@ final class TranslationMapper extends BaseMapper<Translation> {
             case COLUMN_DOWNLOADED:
                 values.put(field, translation.isDownloaded());
                 break;
+            case COLUMN_LAST_ACCESSED:
+                values.put(field, serialize(translation.getLastAccessed()));
+                break;
             default:
                 super.mapField(values, field, translation);
                 break;
@@ -73,6 +78,7 @@ final class TranslationMapper extends BaseMapper<Translation> {
         translation.setManifestFileName(getString(c, COLUMN_MANIFEST, null));
         translation.setPublished(getBool(c, COLUMN_PUBLISHED, DEFAULT_PUBLISHED));
         translation.setDownloaded(getBool(c, COLUMN_DOWNLOADED, false));
+        translation.setLastAccessed(getDate(c, COLUMN_LAST_ACCESSED, DEFAULT_LAST_ACCESSED));
 
         return translation;
     }

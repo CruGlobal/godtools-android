@@ -145,6 +145,7 @@ public final class Contract extends BaseContract {
         public static final String COLUMN_MANIFEST = "manifest";
         public static final String COLUMN_PUBLISHED = "published";
         public static final String COLUMN_DOWNLOADED = "downloaded";
+        public static final String COLUMN_LAST_ACCESSED = "last_accessed";
 
         public static final Field FIELD_ID = TABLE.field(COLUMN_ID);
         public static final Field FIELD_TOOL = TABLE.field(COLUMN_TOOL);
@@ -152,10 +153,11 @@ public final class Contract extends BaseContract {
         public static final Field FIELD_MANIFEST = TABLE.field(COLUMN_MANIFEST);
         private static final Field FIELD_PUBLISHED = TABLE.field(COLUMN_PUBLISHED);
         public static final Field FIELD_DOWNLOADED = TABLE.field(COLUMN_DOWNLOADED);
+        public static final Field FIELD_LAST_ACCESSED = TABLE.field(COLUMN_LAST_ACCESSED);
 
         static final String[] PROJECTION_ALL =
                 {COLUMN_ID, COLUMN_TOOL, COLUMN_LANGUAGE, COLUMN_VERSION, COLUMN_NAME, COLUMN_DESCRIPTION,
-                        COLUMN_MANIFEST, COLUMN_PUBLISHED, COLUMN_DOWNLOADED};
+                        COLUMN_MANIFEST, COLUMN_PUBLISHED, COLUMN_DOWNLOADED, COLUMN_LAST_ACCESSED};
 
         private static final String SQL_COLUMN_LANGUAGE = COLUMN_LANGUAGE + " TEXT NOT NULL";
         private static final String SQL_COLUMN_VERSION = COLUMN_VERSION + " INTEGER";
@@ -164,6 +166,7 @@ public final class Contract extends BaseContract {
         private static final String SQL_COLUMN_MANIFEST = COLUMN_MANIFEST + " TEXT";
         private static final String SQL_COLUMN_PUBLISHED = COLUMN_PUBLISHED + " INTEGER";
         private static final String SQL_COLUMN_DOWNLOADED = COLUMN_DOWNLOADED + " INTEGER";
+        private static final String SQL_COLUMN_LAST_ACCESSED = COLUMN_LAST_ACCESSED + " INTEGER";
 
         public static final Join<Translation, Language> SQL_JOIN_LANGUAGE =
                 Join.create(TABLE, LanguageTable.TABLE).on(FIELD_LANGUAGE.eq(LanguageTable.FIELD_CODE));
@@ -180,8 +183,18 @@ public final class Contract extends BaseContract {
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_TOOL, SQL_COLUMN_LANGUAGE, SQL_COLUMN_VERSION,
                        SQL_COLUMN_NAME, SQL_COLUMN_DESCRIPTION, SQL_COLUMN_MANIFEST, SQL_COLUMN_PUBLISHED,
-                       SQL_COLUMN_DOWNLOADED);
+                       SQL_COLUMN_DOWNLOADED, SQL_COLUMN_LAST_ACCESSED);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
+
+        /* DB migrations */
+        static final String SQL_V34_CREATE_TABLE =
+                create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_TOOL, SQL_COLUMN_LANGUAGE, SQL_COLUMN_VERSION,
+                       SQL_COLUMN_NAME, SQL_COLUMN_DESCRIPTION, SQL_COLUMN_MANIFEST, SQL_COLUMN_PUBLISHED,
+                       SQL_COLUMN_DOWNLOADED);
+        static final String SQL_V36_ALTER_LAST_ACCESSED =
+                "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_LAST_ACCESSED;
+        static final String SQL_V36_POPULATE_LAST_ACCESSED =
+                "UPDATE " + TABLE_NAME + " SET " + COLUMN_LAST_ACCESSED + " = 0";
     }
 
     public static class LocalFileTable implements Base {
