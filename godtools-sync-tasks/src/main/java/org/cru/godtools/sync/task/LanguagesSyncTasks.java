@@ -26,7 +26,7 @@ public final class LanguagesSyncTasks extends BaseDataSyncTasks {
     private static final String SYNC_TIME_LANGUAGES = "last_synced.languages";
     private static final long STALE_DURATION_LANGUAGES = WEEK_IN_MS;
 
-    LanguagesSyncTasks(@NonNull final Context context) {
+    public LanguagesSyncTasks(@NonNull final Context context) {
         super(context);
     }
 
