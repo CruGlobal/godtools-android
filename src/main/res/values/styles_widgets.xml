@@ -3,9 +3,6 @@
     <!-- CardView Widgets -->
     <style name="Widget.GodTools2.CardView" parent="CardView.Light" />
 
-    <!-- ProgressBar -->
-    <style name="Widget.GodTools2.ProgressBar" parent="Widget.AppCompat.ProgressBar.Horizontal" />
-
     <!-- LinearLayout Spacer -->
     <style name="Widget.GodTools2.Spacer" parent="Base">
         <item name="android:layout_width">match_parent</item>
