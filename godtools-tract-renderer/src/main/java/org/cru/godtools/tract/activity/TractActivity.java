@@ -120,11 +120,6 @@ public class TractActivity extends ImmersiveActivity
             mTool = getToolFromDeepLink(data);
             final Locale language = getLanguageFromDeepLink(data);
             mLanguages = new Locale[] {language};
-
-            // cache the translation for this tool
-            if (mTool != null) {
-                GodToolsDownloadManager.getInstance(this).cacheTranslation(mTool, mLanguages[0]);
-            }
         } else if (extras != null) {
             mTool = extras.getString(EXTRA_TOOL, mTool);
             final Locale[] languages = BundleUtils.getLocaleArray(extras, EXTRA_LANGUAGES);
@@ -147,6 +142,10 @@ public class TractActivity extends ImmersiveActivity
                 }
             }
         }
+
+        // cache the translation for the active language of this tool
+        assert mTool != null;
+        GodToolsDownloadManager.getInstance(this).cacheTranslation(mTool, mLanguages[mActiveLanguage]);
 
         // track this share
         if (savedInstanceState == null) {
