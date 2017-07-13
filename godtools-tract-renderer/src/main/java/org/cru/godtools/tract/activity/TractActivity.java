@@ -74,10 +74,10 @@ public class TractActivity extends ImmersiveActivity
     @Nullable
     @BindView(R2.id.language_toggle)
     TabLayout mLanguageTabs;
-    @BindView(R2.id.background_image)
-    ScaledPicassoImageView mBackgroundImage;
 
     // Manifest page pager
+    @BindView(R2.id.background_image)
+    ScaledPicassoImageView mBackgroundImage;
     @Nullable
     @BindView(R2.id.pages)
     ViewPager mPager;
