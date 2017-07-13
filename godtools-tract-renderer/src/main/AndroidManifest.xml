@@ -17,7 +17,10 @@
                 <data android:scheme="https" />
                 <data android:host="@string/tract_deeplink_host_1" />
                 <data android:host="@string/tract_deeplink_host_2" />
-                <data android:pathPattern="/.*/.*" />
+                <data android:pathPattern="/.*/kgp/.*" />
+                <data android:pathPattern="/.*/fourlaws/.*" />
+                <data android:pathPattern="/.*/satisfied/.*" />
+                <data android:pathPattern="/.*/kgp-us/.*" />
             </intent-filter>
         </activity>
 
