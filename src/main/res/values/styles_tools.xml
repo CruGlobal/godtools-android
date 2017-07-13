@@ -22,17 +22,17 @@
         <item name="android:progressDrawable">@drawable/progress_download</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.Tools.Card.Title" parent="TextAppearance.GodTools2">
+    <style name="TextAppearance.GodTools2.Tools.Card.Title" parent="TextAppearance.GodTools">
         <item name="android:textColor">@color/gray_5A</item>
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.Tools.Card.Shares" parent="TextAppearance.GodTools2.Small">
+    <style name="TextAppearance.GodTools2.Tools.Card.Shares" parent="TextAppearance.GodTools.Small">
         <item name="android:textColor">@color/gray_BE</item>
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.Tools.Card.ParallelLanguage" parent="TextAppearance.GodTools2.Small">
+    <style name="TextAppearance.GodTools2.Tools.Card.ParallelLanguage" parent="TextAppearance.GodTools.Small">
         <item name="android:textColor">@color/gray_5A</item>
         <item name="android:textSize">12sp</item>
     </style>
@@ -53,20 +53,20 @@
         <item name="android:textAppearance">@style/TextAppearance.GodTools2.Tools.Details.Content</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.Tools.Details.Title" parent="TextAppearance.GodTools2.Headline">
+    <style name="TextAppearance.GodTools2.Tools.Details.Title" parent="TextAppearance.GodTools.Headline">
         <item name="android:textColor">@color/gray_5A</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.Tools.Details.Shares" parent="TextAppearance.GodTools2">
+    <style name="TextAppearance.GodTools2.Tools.Details.Shares" parent="TextAppearance.GodTools">
         <item name="android:textColor">@color/gray_5A</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.Tools.Details.Subhead" parent="TextAppearance.GodTools2.Subhead">
+    <style name="TextAppearance.GodTools2.Tools.Details.Subhead" parent="TextAppearance.GodTools.Subhead">
         <item name="android:textColor">@color/gray_BE</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.Tools.Details.Content" parent="TextAppearance.GodTools2">
+    <style name="TextAppearance.GodTools2.Tools.Details.Content" parent="TextAppearance.GodTools">
         <item name="android:textColor">@color/gray_5A</item>
     </style>
 </resources>

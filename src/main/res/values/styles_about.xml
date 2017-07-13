@@ -8,5 +8,5 @@
         <item name="android:textAppearance">@style/TextAppearance.GodTools2.About.Text</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.About.Text" parent="TextAppearance.GodTools2" />
+    <style name="TextAppearance.GodTools2.About.Text" parent="TextAppearance.GodTools" />
 </resources>

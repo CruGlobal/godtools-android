@@ -27,7 +27,7 @@
             android:layout_below="@id/icon"
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
-            android:textAppearance="@style/TextAppearance.GodTools2.Headline"
+            android:textAppearance="@style/TextAppearance.GodTools.Headline"
             android:textColor="@color/gt_blue"
             tools:text="@string/title_add_new_tools" />
 
