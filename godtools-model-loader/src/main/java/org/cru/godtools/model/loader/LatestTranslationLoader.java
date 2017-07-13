@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.content;
+package org.cru.godtools.model.loader;
 
 import android.content.Context;
 import android.support.annotation.MainThread;
