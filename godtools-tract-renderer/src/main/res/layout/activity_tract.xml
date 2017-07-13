@@ -6,22 +6,11 @@
     android:layout_height="match_parent"
     tools:theme="@style/Theme.GodTools.Tract">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <include layout="@layout/activity_tract_missing" />
 
-        <org.cru.godtools.tract.widget.TractPicassoImageView
-            android:id="@+id/background_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:cropToPadding="false" />
-    </RelativeLayout>
+    <include layout="@layout/activity_tract_loading" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pages"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <include layout="@layout/activity_tract_content" />
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

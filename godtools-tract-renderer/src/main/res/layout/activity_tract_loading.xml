@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/contentLoading"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:breakStrategy="balanced"
+        android:gravity="center_horizontal"
+        android:text="@string/tract_loading"
+        android:textAppearance="@style/TextAppearance.GodTools.Headline"
+        android:textColor="@color/gt_blue" />
+</RelativeLayout>

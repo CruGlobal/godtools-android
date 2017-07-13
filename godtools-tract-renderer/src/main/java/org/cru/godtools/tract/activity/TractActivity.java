@@ -69,6 +69,10 @@ public class TractActivity extends ImmersiveActivity
     private static final int LOADER_TYPE_MANIFEST = 1 << LOADER_ID_BITS;
     private static final int LOADER_TYPE_TRANSLATION = 2 << LOADER_ID_BITS;
 
+    private static final int STATE_LOADING = 0;
+    private static final int STATE_ACTIVE = 1;
+    private static final int STATE_NOT_FOUND = 2;
+
     // App/Action Bar
     @BindView(R2.id.appBar)
     Toolbar mToolbar;
@@ -80,6 +84,17 @@ public class TractActivity extends ImmersiveActivity
     @Nullable
     @BindView(R2.id.language_toggle)
     TabLayout mLanguageTabs;
+
+    // Visibility sections
+    @Nullable
+    @BindView(R2.id.contentLoading)
+    View mLoadingContent;
+    @Nullable
+    @BindView(R2.id.noContent)
+    View mMissingContent;
+    @Nullable
+    @BindView(R2.id.mainContent)
+    View mMainContent;
 
     // Manifest page pager
     @BindView(R2.id.background_image)
@@ -150,6 +165,7 @@ public class TractActivity extends ImmersiveActivity
 
         setContentView(R.layout.activity_tract);
         startLoaders();
+        updateVisibilityState();
     }
 
     @Override
@@ -270,6 +286,27 @@ public class TractActivity extends ImmersiveActivity
         return mTool != null && mLanguages.length > 0;
     }
 
+    private void updateVisibilityState() {
+        final int visibilityState;
+        if (getActiveManifest() != null) {
+            visibilityState = STATE_ACTIVE;
+        } else if (mTranslations.indexOfKey(mActiveLanguage) >= 0 && mTranslations.get(mActiveLanguage) == null) {
+            visibilityState = STATE_NOT_FOUND;
+        } else {
+            visibilityState = STATE_LOADING;
+        }
+
+        if (mLoadingContent != null) {
+            mLoadingContent.setVisibility(visibilityState == STATE_LOADING ? View.VISIBLE : View.GONE);
+        }
+        if (mMainContent != null) {
+            mMainContent.setVisibility(visibilityState == STATE_ACTIVE ? View.VISIBLE : View.GONE);
+        }
+        if (mMissingContent != null) {
+            mMissingContent.setVisibility(visibilityState == STATE_NOT_FOUND ? View.VISIBLE : View.GONE);
+        }
+    }
+
     private void setupToolbar() {
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
@@ -303,6 +340,7 @@ public class TractActivity extends ImmersiveActivity
                 mTranslations.put(i, translation);
 
                 if (i == mActiveLanguage) {
+                    updateVisibilityState();
                 }
                 break;
             }
@@ -320,6 +358,7 @@ public class TractActivity extends ImmersiveActivity
 
                 if (i == mActiveLanguage) {
                     updateActiveManifest();
+                    updateVisibilityState();
                 }
                 updateLanguageToggle();
                 break;
