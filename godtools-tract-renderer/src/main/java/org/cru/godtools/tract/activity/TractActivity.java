@@ -443,6 +443,7 @@ public class TractActivity extends ImmersiveActivity
             intent.putExtra(Intent.EXTRA_TEXT, URI_SHARE_BASE.buildUpon()
                     .appendPath(LocaleCompat.toLanguageTag(manifest.getLocale()))
                     .appendPath(manifest.getCode())
+                    .appendPath("")
                     .build().toString());
             startActivity(Intent.createChooser(intent, getString(R.string.share_tract_title, manifest.getTitle())));
         }
