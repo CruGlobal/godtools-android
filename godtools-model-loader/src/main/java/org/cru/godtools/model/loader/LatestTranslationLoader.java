@@ -40,6 +40,11 @@ public final class LatestTranslationLoader extends CachingAsyncTaskEventBusLoade
         onContentChanged();
     }
 
+    @NonNull
+    public Locale getLocale() {
+        return mLocale;
+    }
+
     @Override
     public Translation loadInBackground() {
         final List<Translation> translations =

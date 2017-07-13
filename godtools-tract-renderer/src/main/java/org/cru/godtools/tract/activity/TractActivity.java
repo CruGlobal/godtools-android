@@ -32,6 +32,8 @@ import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.BundleUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
+import org.cru.godtools.model.Translation;
+import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
@@ -61,7 +63,11 @@ public class TractActivity extends ImmersiveActivity
     private static final String EXTRA_LANGUAGES = TractActivity.class.getName() + ".LANGUAGES";
     private static final String EXTRA_ACTIVE_LANGUAGE = TractActivity.class.getName() + ".ACTIVE_LANGUAGE";
 
-    private static final int LOADER_MANIFEST_BASE = 1 << 15;
+    private static final int LOADER_ID_BITS = 8;
+    private static final int LOADER_ID_MASK = (1 << LOADER_ID_BITS) - 1;
+    private static final int LOADER_TYPE_MASK = ~LOADER_ID_MASK;
+    private static final int LOADER_TYPE_MANIFEST = 1 << LOADER_ID_BITS;
+    private static final int LOADER_TYPE_TRANSLATION = 2 << LOADER_ID_BITS;
 
     // App/Action Bar
     @BindView(R2.id.appBar)
@@ -89,6 +95,7 @@ public class TractActivity extends ImmersiveActivity
     @NonNull
     /*final*/ Locale[] mLanguages = new Locale[0];
 
+    private final SparseArray<Translation> mTranslations = new SparseArray<>();
     private final SparseArray<Manifest> mManifests = new SparseArray<>();
     private int mActiveLanguage = 0;
 
@@ -290,6 +297,18 @@ public class TractActivity extends ImmersiveActivity
         }
     }
 
+    void setTranslation(@NonNull final Locale locale, @Nullable final Translation translation) {
+        for (int i = 0; i < mLanguages.length; i++) {
+            if (locale.equals(mLanguages[i])) {
+                mTranslations.put(i, translation);
+
+                if (i == mActiveLanguage) {
+                }
+                break;
+            }
+        }
+    }
+
     void setManifest(@NonNull final Locale locale, @Nullable final Manifest manifest) {
         for (int i = 0; i < mLanguages.length; i++) {
             if (locale.equals(mLanguages[i])) {
@@ -437,8 +456,10 @@ public class TractActivity extends ImmersiveActivity
         final LoaderManager manager = getSupportLoaderManager();
 
         final ManifestLoaderCallbacks manifestCallbacks = new ManifestLoaderCallbacks();
+        final TranslationLoaderCallbacks translationLoaderCallbacks = new TranslationLoaderCallbacks();
         for (int i = 0; i < mLanguages.length; i++) {
-            manager.initLoader(LOADER_MANIFEST_BASE + i, null, manifestCallbacks);
+            manager.initLoader(LOADER_TYPE_MANIFEST + i, null, manifestCallbacks);
+            manager.initLoader(LOADER_TYPE_TRANSLATION + i, null, translationLoaderCallbacks);
         }
     }
 
@@ -467,13 +488,50 @@ public class TractActivity extends ImmersiveActivity
         }
     }
 
+    class TranslationLoaderCallbacks implements LoaderManager.LoaderCallbacks<Translation> {
+        @Nullable
+        @Override
+        public Loader<Translation> onCreateLoader(final int id, @Nullable final Bundle args) {
+            switch (id & LOADER_TYPE_MASK) {
+                case LOADER_TYPE_TRANSLATION:
+                    final int langId = id & LOADER_ID_MASK;
+                    if (mTool != null && langId >= 0 && langId < mLanguages.length) {
+                        return new LatestTranslationLoader(TractActivity.this, mTool, mLanguages[langId]);
+                    }
+                    break;
+            }
+
+            return null;
+        }
+
+        @Override
+        public void onLoadFinished(@NonNull final Loader<Translation> loader, @Nullable final Translation translation) {
+            switch (loader.getId() & LOADER_TYPE_MASK) {
+                case LOADER_TYPE_TRANSLATION:
+                    if (loader instanceof LatestTranslationLoader) {
+                        setTranslation(((LatestTranslationLoader) loader).getLocale(), translation);
+                    }
+                    break;
+            }
+        }
+
+        @Override
+        public void onLoaderReset(@NonNull final Loader<Translation> loader) {
+            // noop
+        }
+    }
+
     class ManifestLoaderCallbacks extends SimpleLoaderCallbacks<Manifest> {
         @Nullable
         @Override
         public Loader<Manifest> onCreateLoader(final int id, @Nullable final Bundle args) {
-            final int langId = id - LOADER_MANIFEST_BASE;
-            if (mTool != null && langId >= 0 && langId < mLanguages.length) {
-                return new TractManifestLoader(TractActivity.this, mTool, mLanguages[id - LOADER_MANIFEST_BASE]);
+            switch (id & LOADER_TYPE_MASK) {
+                case LOADER_TYPE_MANIFEST:
+                    final int langId = id & LOADER_ID_MASK;
+                    if (mTool != null && langId >= 0 && langId < mLanguages.length) {
+                        return new TractManifestLoader(TractActivity.this, mTool, mLanguages[langId]);
+                    }
+                    break;
             }
 
             return null;
@@ -481,8 +539,12 @@ public class TractActivity extends ImmersiveActivity
 
         @Override
         public void onLoadFinished(@NonNull final Loader<Manifest> loader, @Nullable final Manifest manifest) {
-            if (loader instanceof TractManifestLoader) {
-                setManifest(((TractManifestLoader) loader).getLocale(), manifest);
+            switch (loader.getId() & LOADER_TYPE_MASK) {
+                case LOADER_TYPE_MANIFEST:
+                    if (loader instanceof TractManifestLoader) {
+                        setManifest(((TractManifestLoader) loader).getLocale(), manifest);
+                    }
+                    break;
             }
         }
     }
