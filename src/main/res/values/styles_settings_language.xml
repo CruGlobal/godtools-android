@@ -11,7 +11,7 @@
         <item name="android:breakStrategy" tools:targetApi="m">balanced</item>
     </style>
 
-    <style name="Widget.GodTools2.Settings.Language.Button" parent="Widget.GodTools2.Button.Colored.Blue">
+    <style name="Widget.GodTools2.Settings.Language.Button" parent="Widget.GodTools.Button.Colored.Blue">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">56dp</item>
         <item name="android:maxWidth">260dp</item>

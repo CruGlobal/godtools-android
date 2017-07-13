@@ -25,6 +25,13 @@
         <item name="android:textAppearance">@style/TextAppearance.GodTools.Static.Label</item>
     </style>
 
+    <style name="Widget.GodTools.Static.Action" parent="Widget.GodTools.Button.Colored.Blue">
+        <item name="android:layout_width">260dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_marginTop">32dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
     <style name="TextAppearance.GodTools.Static.Label" parent="TextAppearance.GodTools.Headline">
         <item name="android:textColor">@color/gt_blue</item>
     </style>

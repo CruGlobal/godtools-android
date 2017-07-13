@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Button Widgets -->
+    <style name="Widget.GodTools.Button.Colored" parent="Widget.AppCompat.Button.Colored" />
+
+    <style name="Widget.GodTools.Button.Colored.Blue">
+        <item name="backgroundTint">@color/gt_blue</item>
+    </style>
+
+    <style name="Widget.GodTools.Button.Colored.Green">
+        <item name="backgroundTint">@color/gt_green</item>
+    </style>
+
+    <style name="Widget.GodTools.Button.Colored.Red">
+        <item name="backgroundTint">@color/gt_red</item>
+    </style>
+
     <style name="Widget.GodTools.Button.Outline" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:background">@drawable/btn_outline</item>
         <item name="backgroundTint">?attr/colorButtonNormal</item>

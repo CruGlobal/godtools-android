@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout style="@style/Widget.GodTools.Static.Layout">
+
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/icon"
             style="@style/Widget.GodTools.Static.Icon"
@@ -18,12 +19,8 @@
 
         <Button
             android:id="@+id/action"
-            style="@style/Widget.GodTools2.Button.Colored.Blue"
-            android:layout_width="260dp"
-            android:layout_height="56dp"
+            style="@style/Widget.GodTools.Static.Action"
             android:layout_below="@id/label"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="32dp"
             tools:text="@string/title_add_new_tools" />
     </RelativeLayout>
 </RelativeLayout>

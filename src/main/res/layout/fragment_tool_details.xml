@@ -56,7 +56,7 @@
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/action_add"
-            style="@style/Widget.GodTools2.Button.Colored.Green"
+            style="@style/Widget.GodTools.Button.Colored.Green"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -68,7 +68,7 @@
 
         <android.support.v7.widget.AppCompatButtonImpl
             android:id="@+id/action_remove"
-            style="@style/Widget.GodTools2.Button.Colored.Red"
+            style="@style/Widget.GodTools.Button.Colored.Red"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
