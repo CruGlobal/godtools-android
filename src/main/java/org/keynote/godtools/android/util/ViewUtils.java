@@ -1,14 +1,10 @@
 package org.keynote.godtools.android.util;
 
-import android.os.Build;
 import android.support.annotation.Nullable;
-import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.cru.godtools.base.util.FileUtils;
-import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.model.Attachment;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.model.Tool;
@@ -31,27 +27,6 @@ public final class ViewUtils {
     public static void bindLocalImage(@Nullable final PicassoImageView view, @Nullable final String filename) {
         if (view != null) {
             view.setPicassoFile(FileUtils.getFile(view.getContext(), filename));
-        }
-    }
-
-    public static void bindDownloadProgress(@Nullable final ProgressBar progressBar,
-                                            @Nullable final DownloadProgress progress) {
-        if (progressBar != null) {
-            // update visibility
-            final int visibility = progress != null ? View.VISIBLE : View.GONE;
-            boolean animate = visibility == progressBar.getVisibility();
-            progressBar.setVisibility(visibility);
-
-            // update progress
-            if (progress != null) {
-                progressBar.setIndeterminate(progress.isIndeterminate());
-                progressBar.setMax(progress.getMax());
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    progressBar.setProgress(progress.getProgress(), animate);
-                } else {
-                    progressBar.setProgress(progress.getProgress());
-                }
-            }
         }
     }
 }

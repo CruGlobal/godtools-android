@@ -40,7 +40,7 @@ import butterknife.OnClick;
 import butterknife.Optional;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
-import static org.keynote.godtools.android.util.ViewUtils.bindDownloadProgress;
+import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
 public class ToolDetailsFragment extends BaseFragment
