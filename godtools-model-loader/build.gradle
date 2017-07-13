@@ -7,6 +7,12 @@ android {
     defaultConfig {
         minSdkVersion minSdk
         targetSdkVersion targetSdk
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [eventBusIndex: 'org.cru.godtools.model.loader.ModelLoaderEventBusIndex']
+            }
+        }
     }
 }
 
@@ -18,4 +24,8 @@ dependencies {
     implementation "com.android.support:support-annotations:${deps.androidSupport}"
 
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
+
+    api "org.greenrobot:eventbus:${deps.eventbus}"
+
+    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
 }

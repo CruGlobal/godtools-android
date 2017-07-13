@@ -10,7 +10,7 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [eventBusIndex: 'org.cru.godtools.model.events.ModelEventsEventBusIndex']
+                arguments = [eventBusIndex: 'org.cru.godtools.model.event.ModelEventEventBusIndex']
             }
         }
     }

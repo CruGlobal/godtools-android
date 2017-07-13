@@ -41,6 +41,7 @@ dependencies {
     implementation project(':godtools-base-ui')
     implementation project(':godtools-model')
     implementation project(':godtools-model-events')
+    implementation project(':godtools-model-loader')
     implementation project(':godtools-db')
     implementation project(':godtools-download-manager')
 

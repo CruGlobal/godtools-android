@@ -1,4 +1,4 @@
-package org.cru.godtools.model.event.content;
+package org.cru.godtools.model.loader;
 
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
