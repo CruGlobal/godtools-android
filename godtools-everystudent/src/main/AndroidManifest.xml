@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.cru.godtools.everystudent">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application>
         <activity
             android:name=".EveryStudent"
