@@ -54,12 +54,11 @@ before_script:
 #  -PdisablePreDex : disable library pre-dex to improve build server performance
 script:
   - ./gradlew --stop
-  - ./gradlew lint -PdisablePreDex --continue --stacktrace --max-workers 2 --no-daemon
-  - ./gradlew build -PdisablePreDex --continue --stacktrace --max-workers 2 --no-daemon -x lint
+  - ./gradlew build -PdisablePreDex --continue --stacktrace --max-workers 2 --no-daemon --parallel
   - android-wait-for-emulator
   - adb devices
   - adb shell input keyevent 82 &
-  - ./gradlew connectedAndroidTest -PdisablePreDex --continue --stacktrace --max-workers 2 --no-daemon
+  - ./gradlew connectedAndroidTest -PdisablePreDex --continue --stacktrace --max-workers 2 --no-daemon --parallel
 
 after_failure:
   - cat /home/travis/build/CruGlobal/godtools-android/build/reports/lint-results*.xml
