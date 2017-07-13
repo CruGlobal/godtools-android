@@ -37,7 +37,6 @@ dependencies {
     implementation project(':godtools-model')
     implementation project(':godtools-model-events')
 
-    implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
     implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"
