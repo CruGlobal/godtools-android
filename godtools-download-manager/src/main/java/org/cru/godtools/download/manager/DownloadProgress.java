@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public final class DownloadProgress {
     private static final int INDETERMINATE_VAL = 0;
-    static final DownloadProgress INDETERMINATE = new DownloadProgress(INDETERMINATE_VAL, INDETERMINATE_VAL);
+    public static final DownloadProgress INDETERMINATE = new DownloadProgress(INDETERMINATE_VAL, INDETERMINATE_VAL);
 
     private final int mProgress;
     private final int mMax;

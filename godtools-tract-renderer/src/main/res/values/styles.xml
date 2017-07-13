@@ -44,4 +44,12 @@
     <style name="Widget.GodTools.Tract.Toolbar.AppBar" parent="@style/Widget.AppCompat.Toolbar" />
 
     <style name="ThemeOverlay.GodTools.Tract.Toolbar.AppBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Widget.GodTools.Tract.Static.ProgressBar" parent="Widget.GodTools.ProgressBar">
+        <item name="android:progressDrawable">@drawable/progress_loading</item>
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">10dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
 </resources>

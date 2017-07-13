@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.activity;
 
+import android.arch.lifecycle.Lifecycle;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -24,6 +25,7 @@ import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.annimon.stream.Stream;
 import com.google.common.util.concurrent.SettableFuture;
@@ -32,6 +34,7 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.BundleUtils;
 import org.cru.godtools.base.model.Event;
+import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.loader.LatestTranslationLoader;
@@ -60,9 +63,11 @@ import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
+import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
 
 public class TractActivity extends ImmersiveActivity
-        implements ManifestPagerAdapter.Callbacks, TabLayout.OnTabSelectedListener {
+        implements ManifestPagerAdapter.Callbacks, TabLayout.OnTabSelectedListener,
+        GodToolsDownloadManager.OnDownloadProgressUpdateListener {
     private static final String EXTRA_LANGUAGES = TractActivity.class.getName() + ".LANGUAGES";
     private static final String EXTRA_ACTIVE_LANGUAGE = TractActivity.class.getName() + ".ACTIVE_LANGUAGE";
 
@@ -99,6 +104,10 @@ public class TractActivity extends ImmersiveActivity
     @BindView(R2.id.mainContent)
     View mMainContent;
 
+    @Nullable
+    @BindView(R2.id.loading_progress)
+    ProgressBar mLoadingProgress;
+
     // Manifest page pager
     @BindView(R2.id.background_image)
     ScaledPicassoImageView mBackgroundImage;
@@ -114,7 +123,11 @@ public class TractActivity extends ImmersiveActivity
     /*final*/ Locale[] mLanguages = new Locale[0];
 
     @Nullable
+    private GodToolsDownloadManager mDownloadManager;
+    @Nullable
     private SettableFuture<?> mDownloadTask;
+    @NonNull
+    private DownloadProgress mDownloadProgress = DownloadProgress.INDETERMINATE;
 
     private final SparseArray<Translation> mTranslations = new SparseArray<>();
     private final SparseArray<Manifest> mManifests = new SparseArray<>();
@@ -138,6 +151,7 @@ public class TractActivity extends ImmersiveActivity
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDownloadManager = GodToolsDownloadManager.getInstance(this);
 
         // read requested tract from the provided intent
         processIntent(getIntent());
@@ -197,6 +211,7 @@ public class TractActivity extends ImmersiveActivity
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        startDownloadProgressListener();
     }
 
     @Override
@@ -210,11 +225,18 @@ public class TractActivity extends ImmersiveActivity
     }
 
     @Override
+    public void onDownloadProgressUpdated(@Nullable final DownloadProgress progress) {
+        mDownloadProgress = progress != null ? progress : DownloadProgress.INDETERMINATE;
+        bindDownloadProgress(mLoadingProgress, mDownloadProgress);
+    }
+
+    @Override
     public void onTabSelected(final TabLayout.Tab tab) {
         final Locale locale = (Locale) tab.getTag();
         for (int i = 0; i < mLanguages.length; i++) {
             if (mLanguages[i].equals(locale)) {
                 mActiveLanguage = i;
+                restartDownloadProgressListener();
                 updateActiveManifest();
                 return;
             }
@@ -237,6 +259,7 @@ public class TractActivity extends ImmersiveActivity
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+        stopDownloadProgressListener();
     }
 
     @Override
@@ -248,6 +271,8 @@ public class TractActivity extends ImmersiveActivity
     }
 
     /* END lifecycle */
+
+    /* BEGIN creation methods */
 
     private void processIntent(@Nullable final Intent intent) {
         final String action = intent != null ? intent.getAction() : null;
@@ -291,9 +316,11 @@ public class TractActivity extends ImmersiveActivity
         return mTool != null && mLanguages.length > 0;
     }
 
+    /* END creation methods */
+
     private void downloadTranslation() {
-        if (mTool != null) {
-            GodToolsDownloadManager.getInstance(this).cacheTranslation(mTool, mLanguages[mActiveLanguage]);
+        if (mTool != null && mDownloadManager != null) {
+            mDownloadManager.cacheTranslation(mTool, mLanguages[mActiveLanguage]);
             mDownloadTask = SettableFuture.create();
             AsyncTask.THREAD_POOL_EXECUTOR
                     .execute(new DownloadTranslationRunnable(this, mTool, mLanguages[mActiveLanguage], mDownloadTask));
@@ -471,6 +498,8 @@ public class TractActivity extends ImmersiveActivity
         Manifest.bindBackgroundImage(manifest, mBackgroundImage);
     }
 
+    /* BEGIN Tool Pager methods */
+
     private void setupPager() {
         if (mPager != null) {
             mPagerAdapter = new ManifestPagerAdapter();
@@ -506,6 +535,8 @@ public class TractActivity extends ImmersiveActivity
         }
     }
 
+    /* END Tool Pager methods */
+
     private void startLoaders() {
         final LoaderManager manager = getSupportLoaderManager();
 
@@ -514,6 +545,26 @@ public class TractActivity extends ImmersiveActivity
         for (int i = 0; i < mLanguages.length; i++) {
             manager.initLoader(LOADER_TYPE_MANIFEST + i, null, manifestCallbacks);
             manager.initLoader(LOADER_TYPE_TRANSLATION + i, null, translationLoaderCallbacks);
+        }
+    }
+
+    private void startDownloadProgressListener() {
+        if (mDownloadManager != null && mTool != null) {
+            mDownloadManager.addOnDownloadProgressUpdateListener(mTool, mLanguages[mActiveLanguage], this);
+            onDownloadProgressUpdated(mDownloadManager.getDownloadProgress(mTool, mLanguages[mActiveLanguage]));
+        }
+    }
+
+    private void restartDownloadProgressListener() {
+        stopDownloadProgressListener();
+        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+            startDownloadProgressListener();
+        }
+    }
+
+    private void stopDownloadProgressListener() {
+        if (mDownloadManager != null) {
+            mDownloadManager.removeOnDownloadProgressUpdateListener(this);
         }
     }
 
