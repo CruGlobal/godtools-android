@@ -31,6 +31,7 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.BundleUtils;
 import org.cru.godtools.base.model.Event;
+import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
@@ -117,7 +118,13 @@ public class TractActivity extends ImmersiveActivity
         final Bundle extras = intent != null ? intent.getExtras() : null;
         if (Intent.ACTION_VIEW.equals(action) && isDeepLinkValid(data)) {
             mTool = getToolFromDeepLink(data);
-            mLanguages = new Locale[] {getLanguageFromDeepLink(data)};
+            final Locale language = getLanguageFromDeepLink(data);
+            mLanguages = new Locale[] {language};
+
+            // cache the translation for this tool
+            if (mTool != null) {
+                GodToolsDownloadManager.getInstance(this).cacheTranslation(mTool, mLanguages[0]);
+            }
         } else if (extras != null) {
             mTool = extras.getString(EXTRA_TOOL, mTool);
             final Locale[] languages = BundleUtils.getLocaleArray(extras, EXTRA_LANGUAGES);

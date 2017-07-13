@@ -24,6 +24,16 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    flavorDimensions "env"
+    productFlavors {
+        stage {
+            dimension "env"
+        }
+        production {
+            dimension "env"
+        }
+    }
 }
 
 dependencies {
@@ -32,6 +42,7 @@ dependencies {
     implementation project(':godtools-model')
     implementation project(':godtools-model-events')
     implementation project(':godtools-db')
+    implementation project(':godtools-download-manager')
 
     compile "com.android.support:cardview-v7:${deps.androidSupport}"
     compile "com.android.support:design:${deps.androidSupport}"
