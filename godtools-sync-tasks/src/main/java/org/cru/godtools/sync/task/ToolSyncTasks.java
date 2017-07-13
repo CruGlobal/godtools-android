@@ -1,4 +1,4 @@
-package org.cru.godtools.sync;
+package org.cru.godtools.sync.task;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -41,7 +41,7 @@ public final class ToolSyncTasks extends BaseDataSyncTasks {
         super(context);
     }
 
-    boolean syncResources(@NonNull final Bundle args) throws IOException {
+    public boolean syncTools(@NonNull final Bundle args) throws IOException {
         final SimpleArrayMap<Class<?>, Object> events = new SimpleArrayMap<>();
 
         synchronized (LOCK_SYNC_TOOLS) {

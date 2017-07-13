@@ -1,4 +1,4 @@
-package org.cru.godtools.sync;
+package org.cru.godtools.sync.task;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -18,15 +18,13 @@ import static android.content.ContentResolver.SYNC_EXTRAS_MANUAL;
 
 @WorkerThread
 abstract class BaseSyncTasks {
-    private final Context mContext;
     final GodToolsApi mApi;
     final GodToolsDao mDao;
     private final EventBus mEventBus;
 
     BaseSyncTasks(@NonNull final Context context) {
-        mContext = context;
-        mApi = GodToolsApi.getInstance(mContext);
-        mDao = GodToolsDao.getInstance(mContext);
+        mApi = GodToolsApi.getInstance(context);
+        mDao = GodToolsDao.getInstance(context);
         mEventBus = EventBus.getDefault();
     }
 
