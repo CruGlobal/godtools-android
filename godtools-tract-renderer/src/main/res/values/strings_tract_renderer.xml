@@ -4,7 +4,7 @@
     <string name="share_tract_subject">%1$s</string>
     <string name="share_tract_title">Share “%1$s” using</string>
 
-    <string name="tract_not_found">The requested tool could not be found</string>
+    <string name="tract_not_found">The tool you requested cannot be found</string>
     <string name="tract_loading">Loading…</string>
 
     <string name="tract_content_input_error_required">%1$s is required</string>

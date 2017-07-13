@@ -4,31 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:clipToPadding="false"
-        android:paddingBottom="32dp"
-        android:paddingTop="32dp">
-
+    <RelativeLayout style="@style/Widget.GodTools.Static.Layout">
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/icon"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:layout_centerHorizontal="true"
-            android:tint="@color/gt_blue"
+            style="@style/Widget.GodTools.Static.Icon"
             tools:src="@drawable/ic_add" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/Widget.GodTools.Static.Label"
             android:layout_below="@id/icon"
-            android:layout_marginTop="20dp"
-            android:gravity="center_horizontal"
-            android:textAppearance="@style/TextAppearance.GodTools.Headline"
-            android:textColor="@color/gt_blue"
             tools:text="@string/title_add_new_tools" />
 
         <Button

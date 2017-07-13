@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/noContent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="visible">
 
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:breakStrategy="balanced"
-        android:gravity="center_horizontal"
-        android:text="@string/tract_not_found"
-        android:textAppearance="@style/TextAppearance.GodTools.Headline"
-        android:textColor="@color/gt_blue" />
+    <RelativeLayout style="@style/Widget.GodTools.Static.Layout">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/icon"
+            style="@style/Widget.GodTools.Static.Icon"
+            app:srcCompat="@drawable/ic_frowny" />
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/Widget.GodTools.Static.Label"
+            android:layout_below="@id/icon"
+            android:text="@string/tract_not_found" />
+    </RelativeLayout>
 </RelativeLayout>
