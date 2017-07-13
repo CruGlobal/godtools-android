@@ -1,9 +1,11 @@
 package org.cru.godtools.tract.activity;
 
+import android.arch.lifecycle.Lifecycle;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,13 +25,20 @@ import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.annimon.stream.Stream;
+import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.BundleUtils;
 import org.cru.godtools.base.model.Event;
+import org.cru.godtools.download.manager.DownloadProgress;
+import org.cru.godtools.download.manager.GodToolsDownloadManager;
+import org.cru.godtools.model.Translation;
+import org.cru.godtools.model.loader.LatestTranslationLoader;
+import org.cru.godtools.sync.task.ToolSyncTasks;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
@@ -42,9 +51,11 @@ import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.jetbrains.annotations.Contract;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.model.Tool;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -52,13 +63,23 @@ import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
+import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
 
 public class TractActivity extends ImmersiveActivity
-        implements ManifestPagerAdapter.Callbacks, TabLayout.OnTabSelectedListener {
+        implements ManifestPagerAdapter.Callbacks, TabLayout.OnTabSelectedListener,
+        GodToolsDownloadManager.OnDownloadProgressUpdateListener {
     private static final String EXTRA_LANGUAGES = TractActivity.class.getName() + ".LANGUAGES";
     private static final String EXTRA_ACTIVE_LANGUAGE = TractActivity.class.getName() + ".ACTIVE_LANGUAGE";
 
-    private static final int LOADER_MANIFEST_BASE = 1 << 15;
+    private static final int LOADER_ID_BITS = 8;
+    private static final int LOADER_ID_MASK = (1 << LOADER_ID_BITS) - 1;
+    private static final int LOADER_TYPE_MASK = ~LOADER_ID_MASK;
+    private static final int LOADER_TYPE_MANIFEST = 1 << LOADER_ID_BITS;
+    private static final int LOADER_TYPE_TRANSLATION = 2 << LOADER_ID_BITS;
+
+    private static final int STATE_LOADING = 0;
+    private static final int STATE_ACTIVE = 1;
+    private static final int STATE_NOT_FOUND = 2;
 
     // App/Action Bar
     @BindView(R2.id.appBar)
@@ -71,10 +92,25 @@ public class TractActivity extends ImmersiveActivity
     @Nullable
     @BindView(R2.id.language_toggle)
     TabLayout mLanguageTabs;
-    @BindView(R2.id.background_image)
-    ScaledPicassoImageView mBackgroundImage;
+
+    // Visibility sections
+    @Nullable
+    @BindView(R2.id.contentLoading)
+    View mLoadingContent;
+    @Nullable
+    @BindView(R2.id.noContent)
+    View mMissingContent;
+    @Nullable
+    @BindView(R2.id.mainContent)
+    View mMainContent;
+
+    @Nullable
+    @BindView(R2.id.loading_progress)
+    ProgressBar mLoadingProgress;
 
     // Manifest page pager
+    @BindView(R2.id.background_image)
+    ScaledPicassoImageView mBackgroundImage;
     @Nullable
     @BindView(R2.id.pages)
     ViewPager mPager;
@@ -86,6 +122,14 @@ public class TractActivity extends ImmersiveActivity
     @NonNull
     /*final*/ Locale[] mLanguages = new Locale[0];
 
+    @Nullable
+    private GodToolsDownloadManager mDownloadManager;
+    @Nullable
+    private SettableFuture<?> mDownloadTask;
+    @NonNull
+    private DownloadProgress mDownloadProgress = DownloadProgress.INDETERMINATE;
+
+    private final SparseArray<Translation> mTranslations = new SparseArray<>();
     private final SparseArray<Manifest> mManifests = new SparseArray<>();
     private int mActiveLanguage = 0;
 
@@ -107,20 +151,10 @@ public class TractActivity extends ImmersiveActivity
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDownloadManager = GodToolsDownloadManager.getInstance(this);
 
-        final Intent intent = getIntent();
-        final Bundle extras = intent != null ? intent.getExtras() : null;
-        if (extras != null) {
-            mTool = extras.getString(EXTRA_TOOL, mTool);
-            final Locale[] languages = BundleUtils.getLocaleArray(extras, EXTRA_LANGUAGES);
-            mLanguages = languages != null ? languages : new Locale[0];
-        }
-
-        // finish now if this activity is in an invalid state
-        if (!validStartState()) {
-            finish();
-            return;
-        }
+        // read requested tract from the provided intent
+        processIntent(getIntent());
 
         // restore any persisted state
         if (savedInstanceState != null) {
@@ -133,6 +167,15 @@ public class TractActivity extends ImmersiveActivity
             }
         }
 
+        // finish now if this activity is in an invalid state
+        if (!validStartState()) {
+            finish();
+            return;
+        }
+
+        // download the translation for the active language of this tool
+        downloadTranslation();
+
         // track this share
         if (savedInstanceState == null) {
             final GodToolsDao dao = GodToolsDao.getInstance(this);
@@ -141,6 +184,7 @@ public class TractActivity extends ImmersiveActivity
 
         setContentView(R.layout.activity_tract);
         startLoaders();
+        updateVisibilityState();
     }
 
     @Override
@@ -167,6 +211,7 @@ public class TractActivity extends ImmersiveActivity
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        startDownloadProgressListener();
     }
 
     @Override
@@ -180,11 +225,18 @@ public class TractActivity extends ImmersiveActivity
     }
 
     @Override
+    public void onDownloadProgressUpdated(@Nullable final DownloadProgress progress) {
+        mDownloadProgress = progress != null ? progress : DownloadProgress.INDETERMINATE;
+        bindDownloadProgress(mLoadingProgress, mDownloadProgress);
+    }
+
+    @Override
     public void onTabSelected(final TabLayout.Tab tab) {
         final Locale locale = (Locale) tab.getTag();
         for (int i = 0; i < mLanguages.length; i++) {
             if (mLanguages[i].equals(locale)) {
                 mActiveLanguage = i;
+                restartDownloadProgressListener();
                 updateActiveManifest();
                 return;
             }
@@ -207,6 +259,7 @@ public class TractActivity extends ImmersiveActivity
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+        stopDownloadProgressListener();
     }
 
     @Override
@@ -219,8 +272,81 @@ public class TractActivity extends ImmersiveActivity
 
     /* END lifecycle */
 
+    /* BEGIN creation methods */
+
+    private void processIntent(@Nullable final Intent intent) {
+        final String action = intent != null ? intent.getAction() : null;
+        final Uri data = intent != null ? intent.getData() : null;
+        final Bundle extras = intent != null ? intent.getExtras() : null;
+        if (Intent.ACTION_VIEW.equals(action) && isDeepLinkValid(data)) {
+            mTool = getToolFromDeepLink(data);
+            mLanguages = new Locale[] {getLanguageFromDeepLink(data)};
+        } else if (extras != null) {
+            mTool = extras.getString(EXTRA_TOOL, mTool);
+            final Locale[] languages = BundleUtils.getLocaleArray(extras, EXTRA_LANGUAGES);
+            mLanguages = languages != null ? languages : mLanguages;
+        }
+    }
+
+    @Contract("null -> false")
+    private boolean isDeepLinkValid(@Nullable final Uri data) {
+        if (data != null) {
+            if ("http".equalsIgnoreCase(data.getScheme()) || "https".equalsIgnoreCase(data.getScheme())) {
+                final String host1 = getString(R.string.tract_deeplink_host_1);
+                final String host2 = getString(R.string.tract_deeplink_host_2);
+                if (host1.equalsIgnoreCase(data.getHost()) || host2.equalsIgnoreCase(data.getHost())) {
+                    return data.getPathSegments().size() >= 2;
+                }
+            }
+        }
+        return false;
+    }
+
+    @NonNull
+    private Locale getLanguageFromDeepLink(@NonNull final Uri data) {
+        return LocaleCompat.forLanguageTag(data.getPathSegments().get(0));
+    }
+
+    @Nullable
+    private String getToolFromDeepLink(@NonNull final Uri data) {
+        return data.getPathSegments().get(1);
+    }
+
     private boolean validStartState() {
         return mTool != null && mLanguages.length > 0;
+    }
+
+    /* END creation methods */
+
+    private void downloadTranslation() {
+        if (mTool != null && mDownloadManager != null) {
+            mDownloadManager.cacheTranslation(mTool, mLanguages[mActiveLanguage]);
+            mDownloadTask = SettableFuture.create();
+            AsyncTask.THREAD_POOL_EXECUTOR
+                    .execute(new DownloadTranslationRunnable(this, mTool, mLanguages[mActiveLanguage], mDownloadTask));
+        }
+    }
+
+    private void updateVisibilityState() {
+        final int visibilityState;
+        if (getActiveManifest() != null) {
+            visibilityState = STATE_ACTIVE;
+        } else if (mDownloadTask != null && mDownloadTask.isDone() &&
+                mTranslations.indexOfKey(mActiveLanguage) >= 0 && mTranslations.get(mActiveLanguage) == null) {
+            visibilityState = STATE_NOT_FOUND;
+        } else {
+            visibilityState = STATE_LOADING;
+        }
+
+        if (mLoadingContent != null) {
+            mLoadingContent.setVisibility(visibilityState == STATE_LOADING ? View.VISIBLE : View.GONE);
+        }
+        if (mMainContent != null) {
+            mMainContent.setVisibility(visibilityState == STATE_ACTIVE ? View.VISIBLE : View.GONE);
+        }
+        if (mMissingContent != null) {
+            mMissingContent.setVisibility(visibilityState == STATE_NOT_FOUND ? View.VISIBLE : View.GONE);
+        }
     }
 
     private void setupToolbar() {
@@ -250,6 +376,19 @@ public class TractActivity extends ImmersiveActivity
         }
     }
 
+    void setTranslation(@NonNull final Locale locale, @Nullable final Translation translation) {
+        for (int i = 0; i < mLanguages.length; i++) {
+            if (locale.equals(mLanguages[i])) {
+                mTranslations.put(i, translation);
+
+                if (i == mActiveLanguage) {
+                    updateVisibilityState();
+                }
+                break;
+            }
+        }
+    }
+
     void setManifest(@NonNull final Locale locale, @Nullable final Manifest manifest) {
         for (int i = 0; i < mLanguages.length; i++) {
             if (locale.equals(mLanguages[i])) {
@@ -261,6 +400,7 @@ public class TractActivity extends ImmersiveActivity
 
                 if (i == mActiveLanguage) {
                     updateActiveManifest();
+                    updateVisibilityState();
                 }
                 updateLanguageToggle();
                 break;
@@ -358,6 +498,8 @@ public class TractActivity extends ImmersiveActivity
         Manifest.bindBackgroundImage(manifest, mBackgroundImage);
     }
 
+    /* BEGIN Tool Pager methods */
+
     private void setupPager() {
         if (mPager != null) {
             mPagerAdapter = new ManifestPagerAdapter();
@@ -393,12 +535,36 @@ public class TractActivity extends ImmersiveActivity
         }
     }
 
+    /* END Tool Pager methods */
+
     private void startLoaders() {
         final LoaderManager manager = getSupportLoaderManager();
 
         final ManifestLoaderCallbacks manifestCallbacks = new ManifestLoaderCallbacks();
+        final TranslationLoaderCallbacks translationLoaderCallbacks = new TranslationLoaderCallbacks();
         for (int i = 0; i < mLanguages.length; i++) {
-            manager.initLoader(LOADER_MANIFEST_BASE + i, null, manifestCallbacks);
+            manager.initLoader(LOADER_TYPE_MANIFEST + i, null, manifestCallbacks);
+            manager.initLoader(LOADER_TYPE_TRANSLATION + i, null, translationLoaderCallbacks);
+        }
+    }
+
+    private void startDownloadProgressListener() {
+        if (mDownloadManager != null && mTool != null) {
+            mDownloadManager.addOnDownloadProgressUpdateListener(mTool, mLanguages[mActiveLanguage], this);
+            onDownloadProgressUpdated(mDownloadManager.getDownloadProgress(mTool, mLanguages[mActiveLanguage]));
+        }
+    }
+
+    private void restartDownloadProgressListener() {
+        stopDownloadProgressListener();
+        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+            startDownloadProgressListener();
+        }
+    }
+
+    private void stopDownloadProgressListener() {
+        if (mDownloadManager != null) {
+            mDownloadManager.removeOnDownloadProgressUpdateListener(this);
         }
     }
 
@@ -411,6 +577,7 @@ public class TractActivity extends ImmersiveActivity
             intent.putExtra(Intent.EXTRA_TEXT, URI_SHARE_BASE.buildUpon()
                     .appendPath(LocaleCompat.toLanguageTag(manifest.getLocale()))
                     .appendPath(manifest.getCode())
+                    .appendPath("")
                     .build().toString());
             startActivity(Intent.createChooser(intent, getString(R.string.share_tract_title, manifest.getTitle())));
         }
@@ -426,13 +593,50 @@ public class TractActivity extends ImmersiveActivity
         }
     }
 
+    class TranslationLoaderCallbacks implements LoaderManager.LoaderCallbacks<Translation> {
+        @Nullable
+        @Override
+        public Loader<Translation> onCreateLoader(final int id, @Nullable final Bundle args) {
+            switch (id & LOADER_TYPE_MASK) {
+                case LOADER_TYPE_TRANSLATION:
+                    final int langId = id & LOADER_ID_MASK;
+                    if (mTool != null && langId >= 0 && langId < mLanguages.length) {
+                        return new LatestTranslationLoader(TractActivity.this, mTool, mLanguages[langId]);
+                    }
+                    break;
+            }
+
+            return null;
+        }
+
+        @Override
+        public void onLoadFinished(@NonNull final Loader<Translation> loader, @Nullable final Translation translation) {
+            switch (loader.getId() & LOADER_TYPE_MASK) {
+                case LOADER_TYPE_TRANSLATION:
+                    if (loader instanceof LatestTranslationLoader) {
+                        setTranslation(((LatestTranslationLoader) loader).getLocale(), translation);
+                    }
+                    break;
+            }
+        }
+
+        @Override
+        public void onLoaderReset(@NonNull final Loader<Translation> loader) {
+            // noop
+        }
+    }
+
     class ManifestLoaderCallbacks extends SimpleLoaderCallbacks<Manifest> {
         @Nullable
         @Override
         public Loader<Manifest> onCreateLoader(final int id, @Nullable final Bundle args) {
-            final int langId = id - LOADER_MANIFEST_BASE;
-            if (mTool != null && langId >= 0 && langId < mLanguages.length) {
-                return new TractManifestLoader(TractActivity.this, mTool, mLanguages[id - LOADER_MANIFEST_BASE]);
+            switch (id & LOADER_TYPE_MASK) {
+                case LOADER_TYPE_MANIFEST:
+                    final int langId = id & LOADER_ID_MASK;
+                    if (mTool != null && langId >= 0 && langId < mLanguages.length) {
+                        return new TractManifestLoader(TractActivity.this, mTool, mLanguages[langId]);
+                    }
+                    break;
             }
 
             return null;
@@ -440,9 +644,38 @@ public class TractActivity extends ImmersiveActivity
 
         @Override
         public void onLoadFinished(@NonNull final Loader<Manifest> loader, @Nullable final Manifest manifest) {
-            if (loader instanceof TractManifestLoader) {
-                setManifest(((TractManifestLoader) loader).getLocale(), manifest);
+            switch (loader.getId() & LOADER_TYPE_MASK) {
+                case LOADER_TYPE_MANIFEST:
+                    if (loader instanceof TractManifestLoader) {
+                        setManifest(((TractManifestLoader) loader).getLocale(), manifest);
+                    }
+                    break;
             }
+        }
+    }
+
+    static class DownloadTranslationRunnable implements Runnable {
+        private final Context mContext;
+        private final String mTool;
+        private final Locale mLocale;
+        private final SettableFuture<?> mFuture;
+
+        DownloadTranslationRunnable(@NonNull final Context context, @NonNull final String tool,
+                                    @NonNull final Locale locale, @NonNull final SettableFuture<?> future) {
+            mContext = context.getApplicationContext();
+            mTool = tool;
+            mLocale = locale;
+            mFuture = future;
+        }
+
+        @Override
+        public void run() {
+            try {
+                new ToolSyncTasks(mContext).syncTools(Bundle.EMPTY);
+            } catch (final IOException ignored) {
+            }
+            GodToolsDownloadManager.getInstance(mContext).cacheTranslation(mTool, mLocale);
+            mFuture.set(null);
         }
     }
 }

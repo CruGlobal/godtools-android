@@ -6,7 +6,23 @@
         <activity
             android:name=".activity.TractActivity"
             android:screenOrientation="userPortrait"
-            android:theme="@style/Theme.GodTools.Tract.Activity.Tract" />
+            android:theme="@style/Theme.GodTools.Tract.Activity.Tract">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="@string/tract_deeplink_host_1" />
+                <data android:host="@string/tract_deeplink_host_2" />
+                <data android:pathPattern="/.*/kgp/.*" />
+                <data android:pathPattern="/.*/fourlaws/.*" />
+                <data android:pathPattern="/.*/satisfied/.*" />
+                <data android:pathPattern="/.*/kgp-us/.*" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".activity.ModalActivity"

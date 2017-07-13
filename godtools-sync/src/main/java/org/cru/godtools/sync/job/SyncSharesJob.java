@@ -2,7 +2,7 @@ package org.cru.godtools.sync.job;
 
 import android.support.annotation.NonNull;
 
-import org.cru.godtools.sync.ToolSyncTasks;
+import org.cru.godtools.sync.task.ToolSyncTasks;
 
 public final class SyncSharesJob extends BaseSyncJob {
     static final String TAG = "sync_shares";

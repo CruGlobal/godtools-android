@@ -1,41 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Button Widgets -->
-    <style name="Widget.GodTools2.Button.Colored" parent="Widget.AppCompat.Button.Colored" />
-
-    <style name="Widget.GodTools2.Button.Colored.Blue">
-        <item name="android:theme">@style/Theme.GodTools2.Button.Blue</item>
-    </style>
-
-    <style name="Widget.GodTools2.Button.Colored.Green">
-        <item name="android:theme">@style/Theme.GodTools2.Button.Green</item>
-    </style>
-
-    <style name="Widget.GodTools2.Button.Colored.Red">
-        <item name="android:theme">@style/Theme.GodTools2.Button.Red</item>
-    </style>
-
-    <style name="Theme.GodTools2.Button">
-        <item name="colorButtonNormal">@color/gray_BE</item>
-    </style>
-
-    <style name="Theme.GodTools2.Button.Blue">
-        <item name="colorAccent">@color/gt_blue</item>
-    </style>
-
-    <style name="Theme.GodTools2.Button.Green">
-        <item name="colorAccent">@color/gt_green</item>
-    </style>
-
-    <style name="Theme.GodTools2.Button.Red">
-        <item name="colorAccent">@color/gt_red</item>
-    </style>
-
     <!-- CardView Widgets -->
     <style name="Widget.GodTools2.CardView" parent="CardView.Light" />
-
-    <!-- ProgressBar -->
-    <style name="Widget.GodTools2.ProgressBar" parent="Widget.AppCompat.ProgressBar.Horizontal" />
 
     <!-- LinearLayout Spacer -->
     <style name="Widget.GodTools2.Spacer" parent="Base">

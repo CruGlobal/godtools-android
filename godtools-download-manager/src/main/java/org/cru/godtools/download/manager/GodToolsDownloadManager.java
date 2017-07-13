@@ -1,7 +1,8 @@
-package org.cru.godtools.sync.service;
+package org.cru.godtools.download.manager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -62,7 +63,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -82,6 +83,7 @@ import retrofit2.Response;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 import static org.ccci.gto.android.common.TimeConstants.HOUR_IN_MS;
+import static org.ccci.gto.android.common.TimeConstants.WEEK_IN_MS;
 import static org.ccci.gto.android.common.db.Expression.NULL;
 import static org.ccci.gto.android.common.db.Expression.constants;
 import static org.ccci.gto.android.common.util.ThreadUtils.getLock;
@@ -173,6 +175,7 @@ public final class GodToolsDownloadManager {
 
     /* END lifecycle */
 
+    @AnyThread
     public void addLanguage(@Nullable final Locale locale) {
         if (locale != null) {
             final Language language = new Language();
@@ -184,6 +187,7 @@ public final class GodToolsDownloadManager {
         }
     }
 
+    @AnyThread
     public void removeLanguage(@Nullable final Locale locale) {
         if (locale != null && !mPrefs.isLanguageProtected(locale)) {
             // clear the parallel language if it is the language being removed
@@ -202,6 +206,7 @@ public final class GodToolsDownloadManager {
         }
     }
 
+    @AnyThread
     public void addTool(@NonNull final String code) {
         final Tool tool = new Tool();
         tool.setCode(code);
@@ -210,6 +215,7 @@ public final class GodToolsDownloadManager {
         update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
     }
 
+    @AnyThread
     public void removeTool(@NonNull final String code) {
         final Tool tool = new Tool();
         tool.setCode(code);
@@ -217,6 +223,23 @@ public final class GodToolsDownloadManager {
         final ListenableFuture<Integer> update = mDao.updateAsync(tool, ToolTable.COLUMN_ADDED);
         update.addListener(this::pruneStaleTranslations, directExecutor());
         update.addListener(new EventBusDelayedPost(EventBus.getDefault(), new ToolUpdateEvent()), directExecutor());
+    }
+
+    @AnyThread
+    public void cacheTranslation(@NonNull final String code, @NonNull final Locale locale) {
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> mDao.streamCompat(
+                Query.select(Translation.class)
+                        .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale)
+                                       .and(TranslationTable.SQL_WHERE_PUBLISHED))
+                        .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC))
+                .findFirst()
+                .executeIfPresent(t -> {
+                    t.setLastAccessed();
+                    mDao.update(t, TranslationTable.COLUMN_LAST_ACCESSED);
+                })
+                .map(TranslationKey::new)
+                .map(DownloadTranslationRunnable::new)
+                .ifPresent(mExecutor::execute));
     }
 
     @WorkerThread
@@ -234,11 +257,13 @@ public final class GodToolsDownloadManager {
                     .map(Language::getCode)
                     .toArray();
 
-            // remove any translation that is no longer added to this device
+            // remove any translation that is no longer added to this device and hasn't been accessed within the past
+            // week
             final Translation translation = new Translation();
             translation.setDownloaded(false);
             int changes = mDao.update(translation, TranslationTable.FIELD_TOOL.notIn(constants(tools))
                     .or(TranslationTable.FIELD_LANGUAGE.notIn(constants(languages)))
+                    .and(TranslationTable.FIELD_LAST_ACCESSED.lt(new Date(System.currentTimeMillis() - WEEK_IN_MS)))
                     .and(TranslationTable.SQL_WHERE_DOWNLOADED), TranslationTable.COLUMN_DOWNLOADED);
 
             // remove any translation we have a newer version of
@@ -826,54 +851,6 @@ public final class GodToolsDownloadManager {
         @Override
         public int hashCode() {
             return Objects.hashCode(mTool, mLocale);
-        }
-    }
-
-    public static final class DownloadProgress {
-        private static final int INDETERMINATE_VAL = 0;
-        static final DownloadProgress INDETERMINATE = new DownloadProgress(INDETERMINATE_VAL, INDETERMINATE_VAL);
-
-        private final int mProgress;
-        private final int mMax;
-
-        DownloadProgress(final int progress, final int max) {
-            mMax = max <= 0 ? INDETERMINATE_VAL : max;
-            mProgress = mMax == INDETERMINATE_VAL ? INDETERMINATE_VAL :
-                    progress < 0 ? 0 : progress > mMax ? mMax : progress;
-        }
-
-        DownloadProgress(final long progress, final long max) {
-            this((int) progress, (int) max);
-        }
-
-        public boolean isIndeterminate() {
-            return mMax == INDETERMINATE_VAL;
-        }
-
-        public int getProgress() {
-            return mProgress;
-        }
-
-        public int getMax() {
-            return mMax;
-        }
-
-        @Override
-        public boolean equals(final Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-
-            DownloadProgress that = (DownloadProgress) o;
-            return mProgress == that.mProgress && mMax == that.mMax;
-        }
-
-        @Override
-        public int hashCode() {
-            return Arrays.hashCode(new int[] {mProgress, mMax});
         }
     }
 

@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.content;
+package org.cru.godtools.model.loader;
 
 import android.content.Context;
 import android.support.annotation.MainThread;
@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.eventbus.content.CachingAsyncTaskEventBusLoader;
 import org.cru.godtools.model.Translation;
-import org.cru.godtools.model.event.content.TranslationEventBusSubscriber;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 
@@ -39,6 +38,11 @@ public final class LatestTranslationLoader extends CachingAsyncTaskEventBusLoade
     public void setLocale(@NonNull final Locale locale) {
         mLocale = locale;
         onContentChanged();
+    }
+
+    @NonNull
+    public Locale getLocale() {
+        return mLocale;
     }
 
     @Override

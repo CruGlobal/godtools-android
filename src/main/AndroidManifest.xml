@@ -13,9 +13,6 @@
         android:name="android.permission.VIBRATE"
         android:maxSdkVersion="22" />
     <uses-permission
-        android:name="android.permission.WAKE_LOCK"
-        android:maxSdkVersion="22" />
-    <uses-permission
         android:name="android.permission.ACCESS_COARSE_LOCATION"
         android:maxSdkVersion="22" />
     <uses-permission

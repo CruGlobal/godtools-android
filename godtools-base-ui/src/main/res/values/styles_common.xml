@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextAppearance.GodTools" parent="TextAppearance.AppCompat" />
+
+    <style name="TextAppearance.GodTools.Small" parent="TextAppearance.AppCompat.Small" />
+
+    <style name="TextAppearance.GodTools.Medium" parent="TextAppearance.AppCompat.Medium" />
+
+    <style name="TextAppearance.GodTools.Large" parent="TextAppearance.AppCompat.Large" />
+
+    <style name="TextAppearance.GodTools.Headline" parent="TextAppearance.AppCompat.Headline" />
+
+    <style name="TextAppearance.GodTools.Subhead" parent="TextAppearance.AppCompat.Subhead" />
+</resources>

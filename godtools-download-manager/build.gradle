@@ -1,0 +1,45 @@
+apply plugin: 'com.android.library'
+
+android {
+    buildToolsVersion buildTools
+    compileSdkVersion compileSdk
+
+    defaultConfig {
+        minSdkVersion minSdk
+        targetSdkVersion targetSdk
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [eventBusIndex: 'org.cru.godtools.download.manager.DownloadManagerEventBusIndex']
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    flavorDimensions "env"
+    productFlavors {
+        stage {
+            dimension "env"
+        }
+        production {
+            dimension "env"
+        }
+    }
+}
+
+dependencies {
+    implementation project(':godtools-api')
+    implementation project(':godtools-base')
+    implementation project(':godtools-db')
+    implementation project(':godtools-model')
+    implementation project(':godtools-model-events')
+
+    implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
+
+    implementation "org.greenrobot:eventbus:${deps.eventbus}"
+
+    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
+}

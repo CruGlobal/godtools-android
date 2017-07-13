@@ -1,4 +1,4 @@
-package org.cru.godtools.sync;
+package org.cru.godtools.sync.task;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -20,17 +20,17 @@ import retrofit2.Response;
 
 import static org.ccci.gto.android.common.TimeConstants.WEEK_IN_MS;
 
-final class LanguagesSyncTasks extends BaseDataSyncTasks {
+public final class LanguagesSyncTasks extends BaseDataSyncTasks {
     private static final Object LOCK_SYNC_LANGUAGES = new Object();
 
     private static final String SYNC_TIME_LANGUAGES = "last_synced.languages";
     private static final long STALE_DURATION_LANGUAGES = WEEK_IN_MS;
 
-    LanguagesSyncTasks(@NonNull final Context context) {
+    public LanguagesSyncTasks(@NonNull final Context context) {
         super(context);
     }
 
-    boolean syncLanguages(@NonNull final Bundle args) throws IOException {
+    public boolean syncLanguages(@NonNull final Bundle args) throws IOException {
         final SimpleArrayMap<Class<?>, Object> events = new SimpleArrayMap<>();
 
         synchronized (LOCK_SYNC_LANGUAGES) {

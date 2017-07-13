@@ -1,4 +1,4 @@
-package org.cru.godtools.sync;
+package org.cru.godtools.sync.task;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

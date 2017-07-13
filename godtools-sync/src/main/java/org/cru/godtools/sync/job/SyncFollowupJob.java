@@ -2,7 +2,7 @@ package org.cru.godtools.sync.job;
 
 import android.support.annotation.NonNull;
 
-import org.cru.godtools.sync.FollowupSyncTasks;
+import org.cru.godtools.sync.task.FollowupSyncTasks;
 
 import java.io.IOException;
 

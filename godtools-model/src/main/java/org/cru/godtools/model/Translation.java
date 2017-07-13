@@ -8,6 +8,7 @@ import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
 import org.keynote.godtools.android.model.Tool;
 
+import java.util.Date;
 import java.util.Locale;
 
 import static org.cru.godtools.model.Translation.JSON_API_TYPE;
@@ -25,6 +26,7 @@ public class Translation extends Base {
 
     public static final boolean DEFAULT_PUBLISHED = false;
     public static final int DEFAULT_VERSION = 0;
+    public static final Date DEFAULT_LAST_ACCESSED = new Date(0);
 
     @Nullable
     @JsonApiIgnore
@@ -57,6 +59,9 @@ public class Translation extends Base {
 
     @JsonApiIgnore
     private boolean mDownloaded = false;
+    @NonNull
+    @JsonApiIgnore
+    private Date mLastAccessed = DEFAULT_LAST_ACCESSED;
 
     @Nullable
     public String getToolCode() {
@@ -132,5 +137,18 @@ public class Translation extends Base {
 
     public void setDownloaded(final boolean state) {
         mDownloaded = state;
+    }
+
+    @NonNull
+    public Date getLastAccessed() {
+        return mLastAccessed;
+    }
+
+    public void setLastAccessed() {
+        setLastAccessed(new Date());
+    }
+
+    public void setLastAccessed(@NonNull final Date lastAccessed) {
+        mLastAccessed = lastAccessed;
     }
 }

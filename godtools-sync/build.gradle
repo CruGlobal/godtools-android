@@ -31,13 +31,11 @@ android {
 }
 
 dependencies {
-    implementation project(':godtools-api')
     implementation project(':godtools-base')
     implementation project(':godtools-db')
     implementation project(':godtools-model')
-    implementation project(':godtools-model-events')
+    implementation project(':godtools-sync-tasks')
 
-    implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
     implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"

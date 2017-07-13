@@ -13,8 +13,8 @@ import org.ccci.gto.android.common.db.util.CursorUtils;
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.ccci.gto.android.common.recyclerview.adapter.CursorAdapter;
 import org.cru.godtools.base.ui.util.LocaleTypefaceUtils;
-import org.cru.godtools.sync.service.GodToolsDownloadManager;
-import org.cru.godtools.sync.service.GodToolsDownloadManager.DownloadProgress;
+import org.cru.godtools.download.manager.DownloadProgress;
+import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.model.Tool;
@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
 
-import static org.keynote.godtools.android.util.ViewUtils.bindDownloadProgress;
+import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
 public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {

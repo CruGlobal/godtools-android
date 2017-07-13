@@ -85,6 +85,11 @@ public class TractManager {
                                 .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
                                 .limit(1))
                         .findFirst()
+                        // update the last accessed time
+                        .executeIfPresent(t -> {
+                            t.setLastAccessed();
+                            mDao.update(t, TranslationTable.COLUMN_LAST_ACCESSED);
+                        })
                         .orElse(null)));
 
         return Futures.transformAsync(latestTranslation, this::getManifest, directExecutor());

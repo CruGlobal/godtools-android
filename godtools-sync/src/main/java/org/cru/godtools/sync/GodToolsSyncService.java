@@ -9,6 +9,9 @@ import org.ccci.gto.android.sync.ThreadedSyncIntentService;
 import org.ccci.gto.android.sync.event.SyncFinishedEvent;
 import org.cru.godtools.sync.job.SyncFollowupJob;
 import org.cru.godtools.sync.job.SyncSharesJob;
+import org.cru.godtools.sync.task.FollowupSyncTasks;
+import org.cru.godtools.sync.task.LanguagesSyncTasks;
+import org.cru.godtools.sync.task.ToolSyncTasks;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
@@ -81,7 +84,7 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
                     mLanguagesSyncTasks.syncLanguages(args);
                     break;
                 case SYNCTYPE_TOOLS:
-                    mToolSyncTasks.syncResources(args);
+                    mToolSyncTasks.syncTools(args);
                     break;
                 case SYNCTYPE_FOLLOWUPS:
                     try {
