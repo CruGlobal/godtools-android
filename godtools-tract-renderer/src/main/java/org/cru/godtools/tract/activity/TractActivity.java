@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.annimon.stream.Stream;
+import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
@@ -34,6 +35,7 @@ import org.cru.godtools.base.model.Event;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.loader.LatestTranslationLoader;
+import org.cru.godtools.sync.task.ToolSyncTasks;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
@@ -50,6 +52,7 @@ import org.jetbrains.annotations.Contract;
 import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.model.Tool;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -110,6 +113,9 @@ public class TractActivity extends ImmersiveActivity
     @NonNull
     /*final*/ Locale[] mLanguages = new Locale[0];
 
+    @Nullable
+    private SettableFuture<?> mDownloadTask;
+
     private final SparseArray<Translation> mTranslations = new SparseArray<>();
     private final SparseArray<Manifest> mManifests = new SparseArray<>();
     private int mActiveLanguage = 0;
@@ -153,9 +159,8 @@ public class TractActivity extends ImmersiveActivity
             return;
         }
 
-        // cache the translation for the active language of this tool
-        assert mTool != null;
-        GodToolsDownloadManager.getInstance(this).cacheTranslation(mTool, mLanguages[mActiveLanguage]);
+        // download the translation for the active language of this tool
+        downloadTranslation();
 
         // track this share
         if (savedInstanceState == null) {
@@ -286,11 +291,21 @@ public class TractActivity extends ImmersiveActivity
         return mTool != null && mLanguages.length > 0;
     }
 
+    private void downloadTranslation() {
+        if (mTool != null) {
+            GodToolsDownloadManager.getInstance(this).cacheTranslation(mTool, mLanguages[mActiveLanguage]);
+            mDownloadTask = SettableFuture.create();
+            AsyncTask.THREAD_POOL_EXECUTOR
+                    .execute(new DownloadTranslationRunnable(this, mTool, mLanguages[mActiveLanguage], mDownloadTask));
+        }
+    }
+
     private void updateVisibilityState() {
         final int visibilityState;
         if (getActiveManifest() != null) {
             visibilityState = STATE_ACTIVE;
-        } else if (mTranslations.indexOfKey(mActiveLanguage) >= 0 && mTranslations.get(mActiveLanguage) == null) {
+        } else if (mDownloadTask != null && mDownloadTask.isDone() &&
+                mTranslations.indexOfKey(mActiveLanguage) >= 0 && mTranslations.get(mActiveLanguage) == null) {
             visibilityState = STATE_NOT_FOUND;
         } else {
             visibilityState = STATE_LOADING;
@@ -585,6 +600,31 @@ public class TractActivity extends ImmersiveActivity
                     }
                     break;
             }
+        }
+    }
+
+    static class DownloadTranslationRunnable implements Runnable {
+        private final Context mContext;
+        private final String mTool;
+        private final Locale mLocale;
+        private final SettableFuture<?> mFuture;
+
+        DownloadTranslationRunnable(@NonNull final Context context, @NonNull final String tool,
+                                    @NonNull final Locale locale, @NonNull final SettableFuture<?> future) {
+            mContext = context.getApplicationContext();
+            mTool = tool;
+            mLocale = locale;
+            mFuture = future;
+        }
+
+        @Override
+        public void run() {
+            try {
+                new ToolSyncTasks(mContext).syncTools(Bundle.EMPTY);
+            } catch (final IOException ignored) {
+            }
+            GodToolsDownloadManager.getInstance(mContext).cacheTranslation(mTool, mLocale);
+            mFuture.set(null);
         }
     }
 }
