@@ -112,25 +112,7 @@ public class TractActivity extends ImmersiveActivity
         super.onCreate(savedInstanceState);
 
         // read requested tract from the provided intent
-        final Intent intent = getIntent();
-        final String action = intent != null ? intent.getAction() : null;
-        final Uri data = intent != null ? intent.getData() : null;
-        final Bundle extras = intent != null ? intent.getExtras() : null;
-        if (Intent.ACTION_VIEW.equals(action) && isDeepLinkValid(data)) {
-            mTool = getToolFromDeepLink(data);
-            final Locale language = getLanguageFromDeepLink(data);
-            mLanguages = new Locale[] {language};
-        } else if (extras != null) {
-            mTool = extras.getString(EXTRA_TOOL, mTool);
-            final Locale[] languages = BundleUtils.getLocaleArray(extras, EXTRA_LANGUAGES);
-            mLanguages = languages != null ? languages : mLanguages;
-        }
-
-        // finish now if this activity is in an invalid state
-        if (!validStartState()) {
-            finish();
-            return;
-        }
+        processIntent(getIntent());
 
         // restore any persisted state
         if (savedInstanceState != null) {
@@ -141,6 +123,12 @@ public class TractActivity extends ImmersiveActivity
                     break;
                 }
             }
+        }
+
+        // finish now if this activity is in an invalid state
+        if (!validStartState()) {
+            finish();
+            return;
         }
 
         // cache the translation for the active language of this tool
@@ -232,6 +220,20 @@ public class TractActivity extends ImmersiveActivity
     }
 
     /* END lifecycle */
+
+    private void processIntent(@Nullable final Intent intent) {
+        final String action = intent != null ? intent.getAction() : null;
+        final Uri data = intent != null ? intent.getData() : null;
+        final Bundle extras = intent != null ? intent.getExtras() : null;
+        if (Intent.ACTION_VIEW.equals(action) && isDeepLinkValid(data)) {
+            mTool = getToolFromDeepLink(data);
+            mLanguages = new Locale[] {getLanguageFromDeepLink(data)};
+        } else if (extras != null) {
+            mTool = extras.getString(EXTRA_TOOL, mTool);
+            final Locale[] languages = BundleUtils.getLocaleArray(extras, EXTRA_LANGUAGES);
+            mLanguages = languages != null ? languages : mLanguages;
+        }
+    }
 
     @Contract("null -> false")
     private boolean isDeepLinkValid(@Nullable final Uri data) {
