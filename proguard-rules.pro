@@ -38,41 +38,6 @@
 -dontwarn com.squareup.okhttp.**
 
 
-
-
-
-
-
-#Android
-
-
--dontwarn org.codehaus.mojo.**
--keepattributes *Annotation*
-
--keepattributes RuntimeVisibleAnnotations
--keepattributes RuntimeInvisibleAnnotations
--keepattributes RuntimeVisibleParameterAnnotations
--keepattributes RuntimeInvisibleParameterAnnotations
-
--keepattributes EnclosingMethod
-
--keepclasseswithmembers interface * {
-    @retrofit2.* <methods>;
-}
-
--keepclasseswithmembers class * {
-    @retrofit2.http.* <methods>;
-}
-
--keepclassmembers class * implements java.io.Serializable {
-    static final long serialVersionUID;
-    static final java.io.ObjectStreamField[] serialPersistentFields;
-    private void writeObject(java.io.ObjectOutputStream);
-    private void readObject(java.io.ObjectInputStream);
-    java.lang.Object writeReplace();
-    java.lang.Object readResolve();
-}
-
 #GooglePlay
 
 -keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
