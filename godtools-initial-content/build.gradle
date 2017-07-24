@@ -26,7 +26,7 @@ android {
 
 dependencies {
     implementation project(':library:godtools-base')
-    implementation project(':godtools-db')
+    implementation project(':library:godtools-db')
     implementation project(':godtools-download-manager')
     implementation project(':godtools-model')
     implementation project(':godtools-model-events')
