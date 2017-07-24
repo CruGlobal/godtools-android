@@ -36,7 +36,7 @@ android {
         preDexLibraries !project.hasProperty('disablePreDex')
     }
     lintOptions {
-        lintConfig file("${rootProject.projectDir}/analysis/lint/lint.xml")
+        lintConfig rootProject.file("analysis/lint/lint.xml")
     }
     packagingOptions {
         pickFirst 'META-INF/NOTICE.txt'
