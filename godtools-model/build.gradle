@@ -11,7 +11,7 @@ android {
 }
 
 dependencies {
-    implementation project(':godtools-base')
+    implementation project(':library:godtools-base')
 
     implementation "com.android.support:support-annotations:${deps.androidSupport}"
 
