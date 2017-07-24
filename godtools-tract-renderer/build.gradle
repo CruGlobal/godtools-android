@@ -25,7 +25,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     lintOptions {
-        lintConfig file("${rootProject.projectDir}/analysis/lint/lint.xml")
+        lintConfig rootProject.file("analysis/lint/lint.xml")
     }
 
     flavorDimensions "env"
