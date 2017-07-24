@@ -53,8 +53,7 @@ ext.deps = [
         lightweightStream    : '1.1.8',
         multidex             : '1.0.2',
         playServices         : '10.2.6',
-        retrofit2            : '2.3.0',
-        simplexml            : '2.7.1'
+        retrofit2            : '2.3.0'
 ]
 
 dependencies {
