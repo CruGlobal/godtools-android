@@ -1,7 +1,7 @@
 rootProject.name='godtools'
 include 'app'
 include 'godtools-analytics'
-include 'godtools-api'
+include 'library:godtools-api'
 include 'library:godtools-base'
 include 'godtools-base-ui'
 include 'godtools-db'

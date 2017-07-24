@@ -31,7 +31,7 @@ android {
 }
 
 dependencies {
-    implementation project(':godtools-api')
+    implementation project(':library:godtools-api')
     implementation project(':library:godtools-base')
     implementation project(':godtools-db')
     implementation project(':godtools-model')

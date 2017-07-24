@@ -1,13 +1,5 @@
-apply plugin: 'com.android.library'
-
 android {
-    buildToolsVersion buildTools
-    compileSdkVersion compileSdk
-
     defaultConfig {
-        minSdkVersion minSdk
-        targetSdkVersion targetSdk
-
         consumerProguardFiles 'proguard-rules-retrofit2.pro'
 
         buildConfigField "String", "MOBILE_CONTENT_SYSTEM", "\"GodTools\""

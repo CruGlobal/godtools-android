@@ -79,7 +79,6 @@ android {
 
 dependencies {
     implementation project(':godtools-analytics')
-    implementation project(':godtools-api')
     implementation project(':library:godtools-base')
     implementation project(':godtools-base-ui')
     implementation project(':godtools-db')
