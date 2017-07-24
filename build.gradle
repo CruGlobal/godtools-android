@@ -38,7 +38,7 @@ ext.deps = [
         androidLifecycle     : '1.0.0-alpha5',
         androidSupport       : '26.0.0',
         androidTestingSupport: '0.5',
-        butterknife          : '8.6.0',
+        butterknife          : '8.7.0',
         calligraphy          : '2.3.0',
         crashlytics          : '2.6.8',
         eventbus             : '3.0.0',
