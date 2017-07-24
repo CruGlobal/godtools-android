@@ -68,14 +68,16 @@ subprojects {
         maven { url 'https://maven.fabric.io/public' }
         maven { url "https://oss.sonatype.org/content/repositories/releases" }
     }
+}
 
-    // configure checkstyle
+// configure checkstyle
+subprojects {
     apply plugin: 'checkstyle'
     checkstyle {
         toolVersion '8.0'
     }
     task checkstyle(type: Checkstyle) {
-        configFile rootProject.file('checkstyle.xml')
+        configFile rootProject.file('analysis/checkstyle/checkstyle.xml')
         source 'src'
         include '*/java/**/*.java'
         ignoreFailures false
