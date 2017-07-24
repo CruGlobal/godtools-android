@@ -19,8 +19,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.Set;
 
-import butterknife.ButterKnife;
-
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 import static org.cru.godtools.tract.model.Text.XML_TEXT;
@@ -87,8 +85,8 @@ public final class CallToAction extends Base {
     public static void bind(@Nullable final CallToAction callToAction, @Nullable final View view,
                             @Nullable final Callbacks callbacks) {
         if (view != null) {
-            bindLabel(callToAction, ButterKnife.findById(view, R.id.call_to_action_label));
-            bindArrow(callToAction, ButterKnife.findById(view, R.id.call_to_action_arrow), callbacks);
+            bindLabel(callToAction, view.findViewById(R.id.call_to_action_label));
+            bindArrow(callToAction, view.findViewById(R.id.call_to_action_arrow), callbacks);
         }
     }
 

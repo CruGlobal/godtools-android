@@ -16,8 +16,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
-
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 
 public final class Hero extends Base implements Styles {
@@ -91,8 +89,8 @@ public final class Hero extends Base implements Styles {
                 view.setVisibility(View.GONE);
                 heading = null;
             }
-            bindHeading(heading, ButterKnife.findById(view, R.id.hero_heading));
-            bindContent(hero, ButterKnife.findById(view, R.id.hero_content));
+            bindHeading(heading, view.findViewById(R.id.hero_heading));
+            bindContent(hero, view.findViewById(R.id.hero_content));
         }
     }
 
