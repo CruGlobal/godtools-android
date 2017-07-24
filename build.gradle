@@ -6,7 +6,7 @@ buildscript {
         maven { url 'https://maven.google.com' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha5'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha7'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         //noinspection GradleDependency
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
@@ -35,8 +35,8 @@ ext {
 }
 ext.deps = [
         advrecyclerview      : '0.10.6',
-        androidLifecycle     : '1.0.0-alpha3',
-        androidSupport       : '25.4.0',
+        androidLifecycle     : '1.0.0-alpha5',
+        androidSupport       : '26.0.0',
         androidTestingSupport: '0.5',
         butterknife          : '8.6.0',
         calligraphy          : '2.3.0',
@@ -51,6 +51,7 @@ ext.deps = [
         junit                : '4.12',
         leakcanary           : '1.5.1',
         lightweightStream    : '1.1.8',
+        multidex             : '1.0.2',
         playServices         : '10.2.6',
         retrofit2            : '2.3.0',
         simplexml            : '2.7.1'
@@ -95,8 +96,8 @@ dependencies {
     implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0"
     implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
 
-    debugCompile 'com.android.support:multidex:1.0.1'
-    debugCompile 'org.ccci.gto.android:gto-support-leakcanary:' + deps.gtoSupport
+    debugImplementation "com.android.support:multidex:${deps.multidex}"
+    debugImplementation "org.ccci.gto.android:gto-support-leakcanary:${deps.gtoSupport}"
     debugCompile "org.ccci.gto.android:gto-support-stetho:${deps.gtoSupport}"
     debugCompile 'com.facebook.stetho:stetho:' + deps.facebookStetho
     debugCompile 'com.facebook.stetho:stetho-okhttp3:' + deps.facebookStetho
@@ -107,7 +108,8 @@ dependencies {
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
 
     // fix conflicts in transitive dependencies
-    androidTestCompile 'com.google.code.findbugs:jsr305:2.0.1'
+    androidTestImplementation "com.android.support:multidex:${deps.multidex}"
+    androidTestImplementation "com.google.code.findbugs:jsr305:2.0.1"
 }
 
 android {
