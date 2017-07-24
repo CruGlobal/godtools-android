@@ -1,13 +1,5 @@
-apply plugin: 'com.android.library'
-
 android {
-    buildToolsVersion buildTools
-    compileSdkVersion compileSdk
-
     defaultConfig {
-        minSdkVersion minSdk
-        targetSdkVersion targetSdk
-
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [eventBusIndex: 'org.cru.godtools.analytics.AnalyticsEventBusIndex']
