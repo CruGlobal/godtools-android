@@ -2,16 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'newrelic'
 
-group 'org.cru.android'
-version '5.0.0'
-
 android {
     buildToolsVersion buildTools
     compileSdkVersion compileSdk
 
     defaultConfig {
         applicationId 'org.keynote.godtools.android'
-        versionName project.version
+        versionName rootProject.version
         versionCode grgit.log(includes:['HEAD']).size() + 4029047
 
         minSdkVersion minSdk
