@@ -5,8 +5,6 @@ apply plugin: 'newrelic'
 group 'org.cru.android'
 version '5.0.0'
 
-apply plugin: 'org.ajoberstar.grgit'
-
 android {
     buildToolsVersion buildTools
     compileSdkVersion compileSdk

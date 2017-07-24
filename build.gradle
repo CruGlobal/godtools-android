@@ -12,15 +12,15 @@ buildscript {
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
         classpath 'com.newrelic.agent.android:agent-gradle-plugin:5.14.0'
         classpath 'io.fabric.tools:gradle:1.23.0'
-        classpath 'org.ajoberstar:gradle-git:1.7.2'
     }
+}
+
+plugins {
+    id "org.ajoberstar.grgit" version "1.7.2"
 }
 
 group 'org.cru.android'
 version '5.0.0'
-
-apply plugin: 'org.ajoberstar.grgit'
-ext.grgit = org.ajoberstar.grgit.Grgit.open()
 
 // define dependency versions for this project
 ext {
@@ -52,7 +52,7 @@ ext.deps = [
         retrofit2            : '2.3.0'
 ]
 
-allprojects {
+subprojects {
     repositories {
         mavenLocal()
         jcenter()
