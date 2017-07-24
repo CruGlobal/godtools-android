@@ -1,26 +1,14 @@
-apply plugin: 'com.android.library'
-
 android {
-    buildToolsVersion buildTools
-    compileSdkVersion compileSdk
-
     defaultConfig {
-        minSdkVersion minSdk
-        targetSdkVersion targetSdk
-
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [eventBusIndex: 'org.cru.godtools.model.loader.ModelLoaderEventBusIndex']
+                arguments = [eventBusIndex: 'org.cru.godtools.model.event.ModelEventEventBusIndex']
             }
         }
     }
 }
 
 dependencies {
-    implementation project(':library:godtools-db')
-    implementation project(':godtools-model')
-    implementation project(':godtools-model-events')
-
     implementation "com.android.support:support-annotations:${deps.androidSupport}"
 
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"

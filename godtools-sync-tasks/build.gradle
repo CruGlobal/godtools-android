@@ -34,8 +34,8 @@ dependencies {
     implementation project(':library:godtools-api')
     implementation project(':library:godtools-base')
     implementation project(':library:godtools-db')
-    implementation project(':godtools-model')
-    implementation project(':godtools-model-events')
+    implementation project(':library:godtools-model')
+    implementation project(':library:godtools-model-events')
 
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 

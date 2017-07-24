@@ -44,9 +44,9 @@ dependencies {
     implementation project(':library:godtools-base-ui')
     implementation project(':library:godtools-db')
     implementation project(':godtools-download-manager')
-    implementation project(':godtools-model')
-    implementation project(':godtools-model-events')
-    implementation project(':godtools-model-loader')
+    implementation project(':library:godtools-model')
+    implementation project(':library:godtools-model-events')
+    implementation project(':library:godtools-model-loader')
     implementation project(':godtools-sync-tasks')
 
     compile "com.android.support:cardview-v7:${deps.androidSupport}"

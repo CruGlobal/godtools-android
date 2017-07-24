@@ -1,5 +1,5 @@
 dependencies {
-    implementation project(':godtools-model')
+    implementation project(':library:godtools-model')
 
     implementation "com.android.support:support-annotations:${deps.androidSupport}"
 
