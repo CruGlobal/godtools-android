@@ -6,29 +6,25 @@ buildscript {
         maven { url 'https://maven.google.com' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha7'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha8'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         //noinspection GradleDependency
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
         classpath 'com.newrelic.agent.android:agent-gradle-plugin:5.14.0'
         classpath 'io.fabric.tools:gradle:1.23.0'
-        classpath 'org.ajoberstar:gradle-git:1.7.2'
     }
 }
 
-apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
-apply plugin: 'newrelic'
+plugins {
+    id "org.ajoberstar.grgit" version "1.7.2" apply false
+}
 
 group 'org.cru.android'
 version '5.0.0'
 
-apply plugin: 'org.ajoberstar.grgit'
-ext.grgit = org.ajoberstar.grgit.Grgit.open()
-
 // define dependency versions for this project
 ext {
-    buildTools = "26.0.0"
+    buildTools = "26.0.1"
     compileSdk = 26
     minSdk     = 15
     targetSdk  = 26
@@ -56,146 +52,7 @@ ext.deps = [
         retrofit2            : '2.3.0'
 ]
 
-dependencies {
-    implementation project(':godtools-analytics')
-    implementation project(':godtools-api')
-    implementation project(':godtools-base')
-    implementation project(':godtools-base-ui')
-    implementation project(':godtools-db')
-    implementation project(':godtools-download-manager')
-    implementation project(':godtools-everystudent')
-    implementation project(':godtools-initial-content')
-    implementation project(':godtools-model')
-    implementation project(':godtools-model-events')
-    implementation project(':godtools-model-loader')
-    implementation project(':godtools-sync')
-    implementation project(':godtools-tract-renderer')
-
-    implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
-    implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
-    implementation "com.android.support:cardview-v7:${deps.androidSupport}"
-    implementation "com.android.support:customtabs:${deps.androidSupport}"
-    implementation "com.android.support:design:${deps.androidSupport}"
-    implementation "com.android.support:percent:${deps.androidSupport}"
-
-    implementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
-
-    implementation "com.newrelic.agent.android:android-agent:5.14.0"
-    implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
-
-    implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"
-    implementation "com.google.guava:guava:${deps.guava}"
-    implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
-    implementation "com.jakewharton:butterknife:${deps.butterknife}"
-    implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0"
-    implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
-
-    debugImplementation "com.android.support:multidex:${deps.multidex}"
-    debugImplementation "org.ccci.gto.android:gto-support-leakcanary:${deps.gtoSupport}"
-    debugCompile "org.ccci.gto.android:gto-support-stetho:${deps.gtoSupport}"
-    debugCompile 'com.facebook.stetho:stetho:' + deps.facebookStetho
-    debugCompile 'com.facebook.stetho:stetho-okhttp3:' + deps.facebookStetho
-    debugCompile 'com.facebook.stetho:stetho-urlconnection:' + deps.facebookStetho
-    debugCompile "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
-
-    annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
-    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
-
-    // fix conflicts in transitive dependencies
-    androidTestImplementation "com.android.support:multidex:${deps.multidex}"
-    androidTestImplementation "com.google.code.findbugs:jsr305:2.0.1"
-}
-
-android {
-    buildToolsVersion buildTools
-    compileSdkVersion compileSdk
-
-    defaultConfig {
-        applicationId 'org.keynote.godtools.android'
-        versionName project.version
-        versionCode grgit.log(includes:['HEAD']).size() + 4029047
-
-        minSdkVersion minSdk
-        targetSdkVersion targetSdk
-
-        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
-        proguardFiles 'proguard-rules.pro'
-        proguardFiles 'proguard-rules-eventbus.pro'
-
-        vectorDrawables.useSupportLibrary = true
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [eventBusIndex: 'org.cru.godtools.AppEventBusIndex']
-            }
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    dexOptions {
-        preDexLibraries !project.hasProperty('disablePreDex')
-    }
-    lintOptions {
-        lintConfig file("${rootProject.projectDir}/analysis/lint/lint.xml")
-    }
-    packagingOptions {
-        pickFirst 'META-INF/NOTICE.txt'
-        pickFirst 'META-INF/LICENSE.txt'
-    }
-    signingConfigs {
-        release {
-            storeFile file(androidKeystorePath)
-            storePassword androidKeystoreStorePassword
-            keyAlias androidKeystoreKeyAlias
-            keyPassword androidKeystoreKeyPassword
-        }
-    }
-
-    buildTypes {
-        debug {
-            applicationIdSuffix ".debug"
-            versionNameSuffix "-debug"
-            multiDexEnabled true
-
-            flavorSelection 'env', 'production'
-
-            buildConfigField "String", "BASE_URL_V2", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/v2/\""
-            buildConfigField "String", "NEW_RELIC_API_KEY", "\"AA2f0cb2d41f6ac7dcc256eaa9ca7e0f640859fd52\""
-        }
-        release {
-            shrinkResources true
-            minifyEnabled true
-            if (signingConfigs.release.storeFile.exists()) {
-                signingConfig signingConfigs.release
-            }
-
-            flavorSelection 'env', 'production'
-
-            buildConfigField "String", "BASE_URL_V2", "\"https://api.godtoolsapp.com/godtools-api/rest/v2/\""
-            buildConfigField "String", "NEW_RELIC_API_KEY", "\"AAcaf7bbfe3ffda5dcb1455d3bc16b0c5da1cd71e9\""
-        }
-    }
-}
-
-apply from: "maven_publish.gradle"
-afterEvaluate { project ->
-    artifacts {
-        archives artifactSourcesJar
-        archives artifactJavadocJar
-    }
-}
-
-
-allprojects {
+subprojects {
     repositories {
         mavenLocal()
         jcenter()
@@ -209,16 +66,17 @@ allprojects {
         }
         maven { url 'https://maven.google.com' }
         maven { url 'https://maven.fabric.io/public' }
-        maven { url "https://oss.sonatype.org/content/repositories/releases" }
     }
+}
 
-    // configure checkstyle
+// configure checkstyle
+subprojects {
     apply plugin: 'checkstyle'
     checkstyle {
         toolVersion '8.0'
     }
     task checkstyle(type: Checkstyle) {
-        configFile rootProject.file('checkstyle.xml')
+        configFile rootProject.file('analysis/checkstyle/checkstyle.xml')
         source 'src'
         include '*/java/**/*.java'
         ignoreFailures false
@@ -229,6 +87,31 @@ allprojects {
     afterEvaluate {
         if (project.tasks.findByName('check')) {
             check.dependsOn('checkstyle')
+        }
+    }
+}
+
+// base library config
+configure(subprojects.findAll { it.path.startsWith(":library:") }) {
+    apply plugin: 'com.android.library'
+
+    beforeEvaluate {
+        android {
+            buildToolsVersion buildTools
+            compileSdkVersion compileSdk
+
+            defaultConfig {
+                minSdkVersion minSdk
+                targetSdkVersion targetSdk
+            }
+
+            compileOptions {
+                sourceCompatibility JavaVersion.VERSION_1_8
+                targetCompatibility JavaVersion.VERSION_1_8
+            }
+            lintOptions {
+                lintConfig rootProject.file("analysis/lint/lint.xml")
+            }
         }
     }
 }

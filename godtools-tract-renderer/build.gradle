@@ -25,7 +25,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     lintOptions {
-        lintConfig file("${rootProject.projectDir}/analysis/lint/lint.xml")
+        lintConfig rootProject.file("analysis/lint/lint.xml")
     }
 
     flavorDimensions "env"
@@ -40,14 +40,14 @@ android {
 }
 
 dependencies {
-    implementation project(':godtools-base')
-    implementation project(':godtools-base-ui')
-    implementation project(':godtools-db')
+    implementation project(':library:godtools-base')
+    implementation project(':library:godtools-base-ui')
+    implementation project(':library:godtools-db')
     implementation project(':godtools-download-manager')
-    implementation project(':godtools-model')
-    implementation project(':godtools-model-events')
-    implementation project(':godtools-model-loader')
-    implementation project(':godtools-sync-tasks')
+    implementation project(':library:godtools-model')
+    implementation project(':library:godtools-model-events')
+    implementation project(':library:godtools-model-loader')
+    implementation project(':library:godtools-sync-tasks')
 
     compile "com.android.support:cardview-v7:${deps.androidSupport}"
     compile "com.android.support:design:${deps.androidSupport}"

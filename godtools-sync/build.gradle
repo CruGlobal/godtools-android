@@ -31,10 +31,10 @@ android {
 }
 
 dependencies {
-    implementation project(':godtools-base')
-    implementation project(':godtools-db')
-    implementation project(':godtools-model')
-    implementation project(':godtools-sync-tasks')
+    implementation project(':library:godtools-base')
+    implementation project(':library:godtools-db')
+    implementation project(':library:godtools-model')
+    implementation project(':library:godtools-sync-tasks')
 
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 

@@ -1,13 +1,5 @@
-apply plugin: 'com.android.library'
-
 android {
-    buildToolsVersion buildTools
-    compileSdkVersion compileSdk
-
     defaultConfig {
-        minSdkVersion minSdk
-        targetSdkVersion targetSdk
-
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [eventBusIndex: 'org.cru.godtools.analytics.AnalyticsEventBusIndex']
@@ -19,7 +11,7 @@ android {
 }
 
 dependencies {
-    implementation project(':godtools-base')
+    implementation project(':library:godtools-base')
 
     implementation "com.google.android.gms:play-services-analytics:${deps.playServices}"
 

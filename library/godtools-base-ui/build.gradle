@@ -1,17 +1,5 @@
-apply plugin: 'com.android.library'
-
-android {
-    buildToolsVersion buildTools
-    compileSdkVersion compileSdk
-
-    defaultConfig {
-        minSdkVersion minSdk
-        targetSdkVersion targetSdk
-    }
-}
-
 dependencies {
-    api project(':godtools-analytics')
+    api project(':library:godtools-analytics')
 
     api "android.arch.lifecycle:runtime:${deps.androidLifecycle}"
     api "com.android.support:appcompat-v7:${deps.androidSupport}"

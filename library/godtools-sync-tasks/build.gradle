@@ -1,22 +1,10 @@
-apply plugin: 'com.android.library'
-
 android {
-    buildToolsVersion buildTools
-    compileSdkVersion compileSdk
-
     defaultConfig {
-        minSdkVersion minSdk
-        targetSdkVersion targetSdk
-
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [eventBusIndex: 'org.cru.godtools.sync.SyncEventBusIndex']
             }
         }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     flavorDimensions "env"
@@ -31,11 +19,11 @@ android {
 }
 
 dependencies {
-    implementation project(':godtools-api')
-    implementation project(':godtools-base')
-    implementation project(':godtools-db')
-    implementation project(':godtools-model')
-    implementation project(':godtools-model-events')
+    implementation project(':library:godtools-api')
+    implementation project(':library:godtools-base')
+    implementation project(':library:godtools-db')
+    implementation project(':library:godtools-model')
+    implementation project(':library:godtools-model-events')
 
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
