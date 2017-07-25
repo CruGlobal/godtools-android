@@ -16,3 +16,5 @@ include 'library:sync-tasks'
 include 'library:tract-renderer'
 
 include 'app'
+
+include 'feature:base'

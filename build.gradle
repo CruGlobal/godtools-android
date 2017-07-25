@@ -115,3 +115,28 @@ configure(subprojects.findAll { it.path.startsWith(":library:") }) {
         }
     }
 }
+
+// base feature config
+configure(subprojects.findAll { it.path.startsWith(":feature:") }) {
+    apply plugin: 'com.android.feature'
+
+    beforeEvaluate {
+        android {
+            buildToolsVersion buildTools
+            compileSdkVersion compileSdk
+
+            defaultConfig {
+                minSdkVersion minSdk
+                targetSdkVersion targetSdk
+            }
+
+            compileOptions {
+                sourceCompatibility JavaVersion.VERSION_1_8
+                targetCompatibility JavaVersion.VERSION_1_8
+            }
+            lintOptions {
+                lintConfig rootProject.file("analysis/lint/lint.xml")
+            }
+        }
+    }
+}
