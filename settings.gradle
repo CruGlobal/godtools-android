@@ -17,4 +17,4 @@ include 'library:tract-renderer'
 
 include 'app'
 
-include 'feature:base'
+include 'feature:tract'

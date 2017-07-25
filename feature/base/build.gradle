@@ -1,7 +1,0 @@
-android {
-    baseFeature true
-}
-
-dependencies {
-    application project(':app')
-}

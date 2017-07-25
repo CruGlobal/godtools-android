@@ -1,0 +1,19 @@
+android {
+    baseFeature true
+
+    flavorDimensions "env"
+    productFlavors {
+        stage {
+            dimension "env"
+        }
+        production {
+            dimension "env"
+        }
+    }
+}
+
+dependencies {
+    application project(':app')
+
+    api project(':godtools-tract-renderer')
+}
