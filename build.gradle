@@ -16,7 +16,7 @@ buildscript {
 }
 
 plugins {
-    id "org.ajoberstar.grgit" version "1.7.2"
+    id "org.ajoberstar.grgit" version "1.7.2" apply false
 }
 
 group 'org.cru.android'
