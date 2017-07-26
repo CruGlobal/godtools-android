@@ -10,6 +10,10 @@ android {
 
         flavorSelection 'env', 'production'
     }
+
+    lintOptions {
+        tasks.lint.enabled = false
+    }
 }
 
 dependencies {
