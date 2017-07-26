@@ -8,3 +8,7 @@ android {
         consumerProguardFiles 'proguard-rules-picasso.pro'
     }
 }
+
+dependencies {
+    implementation project(":library:base-ui")
+}
