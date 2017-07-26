@@ -114,9 +114,8 @@ dependencies {
     debugImplementation "com.android.support:multidex:${deps.multidex}"
     debugImplementation "org.ccci.gto.android:gto-support-leakcanary:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-stetho:${deps.gtoSupport}"
-    debugImplementation 'com.facebook.stetho:stetho:' + deps.facebookStetho
-    debugImplementation 'com.facebook.stetho:stetho-okhttp3:' + deps.facebookStetho
-    debugImplementation 'com.facebook.stetho:stetho-urlconnection:' + deps.facebookStetho
+    debugImplementation "com.facebook.stetho:stetho:${deps.facebookStetho}"
+    debugImplementation "com.facebook.stetho:stetho-okhttp3:${deps.facebookStetho}"
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
 
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
