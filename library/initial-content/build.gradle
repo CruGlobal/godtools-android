@@ -1,0 +1,23 @@
+android {
+    flavorDimensions "env"
+    productFlavors {
+        stage {
+            dimension "env"
+        }
+        production {
+            dimension "env"
+        }
+    }
+}
+
+dependencies {
+    implementation project(':library:base')
+    implementation project(':library:db')
+    implementation project(':library:download-manager')
+    implementation project(':library:model')
+    implementation project(':library:model-events')
+
+    implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
+
+    implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
+}

@@ -1,5 +1,5 @@
 dependencies {
-    api project(':library:godtools-analytics')
+    api project(':library:analytics')
 
     api "android.arch.lifecycle:runtime:${deps.androidLifecycle}"
     api "com.android.support:appcompat-v7:${deps.androidSupport}"

@@ -21,7 +21,7 @@ android {
 }
 
 dependencies {
-    api project(':library:godtools-model')
+    api project(':library:model')
 
     implementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-api-retrofit2:${deps.gtoSupport}"

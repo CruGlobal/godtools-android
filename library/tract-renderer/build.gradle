@@ -1,14 +1,7 @@
-apply plugin: 'com.android.library'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
-    buildToolsVersion buildTools
-    compileSdkVersion compileSdk
-
     defaultConfig {
-        minSdkVersion minSdk
-        targetSdkVersion targetSdk
-
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -18,14 +11,6 @@ android {
                 arguments = [eventBusIndex: 'org.cru.godtools.tract.TractEventBusIndex']
             }
         }
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    lintOptions {
-        lintConfig rootProject.file("analysis/lint/lint.xml")
     }
 
     flavorDimensions "env"
@@ -40,14 +25,14 @@ android {
 }
 
 dependencies {
-    implementation project(':library:godtools-base')
-    implementation project(':library:godtools-base-ui')
-    implementation project(':library:godtools-db')
-    implementation project(':godtools-download-manager')
-    implementation project(':library:godtools-model')
-    implementation project(':library:godtools-model-events')
-    implementation project(':library:godtools-model-loader')
-    implementation project(':library:godtools-sync-tasks')
+    implementation project(':library:base')
+    implementation project(':library:base-ui')
+    implementation project(':library:db')
+    implementation project(':library:download-manager')
+    implementation project(':library:model')
+    implementation project(':library:model-events')
+    implementation project(':library:model-loader')
+    implementation project(':library:sync-tasks')
 
     compile "com.android.support:cardview-v7:${deps.androidSupport}"
     compile "com.android.support:design:${deps.androidSupport}"
