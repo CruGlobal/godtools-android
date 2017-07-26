@@ -89,7 +89,7 @@ dependencies {
     implementation project(':library:model-events')
     implementation project(':library:model-loader')
     implementation project(':library:sync')
-    implementation project(':godtools-tract-renderer')
+    implementation project(':library:tract-renderer')
 
     implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
     implementation "com.android.support:appcompat-v7:${deps.androidSupport}"

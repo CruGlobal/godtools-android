@@ -1,14 +1,7 @@
-apply plugin: 'com.android.library'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
-    buildToolsVersion buildTools
-    compileSdkVersion compileSdk
-
     defaultConfig {
-        minSdkVersion minSdk
-        targetSdkVersion targetSdk
-
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -18,14 +11,6 @@ android {
                 arguments = [eventBusIndex: 'org.cru.godtools.tract.TractEventBusIndex']
             }
         }
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    lintOptions {
-        lintConfig rootProject.file("analysis/lint/lint.xml")
     }
 
     flavorDimensions "env"
