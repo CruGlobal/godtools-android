@@ -11,16 +11,7 @@
 }
 
 
-# Okio
--dontwarn okio.**
-
-
-## Picasso
--dontwarn com.squareup.okhttp.**
-
-
 #GooglePlay
-
 -keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
     public static final *** NULL;
 }
