@@ -107,7 +107,6 @@ dependencies {
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
-    implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0"
     implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
 
     debugImplementation "com.android.support:multidex:${deps.multidex}"
