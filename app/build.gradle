@@ -16,8 +16,6 @@ android {
         targetSdkVersion targetSdk
 
         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
-        proguardFiles 'proguard-rules.pro'
-        proguardFiles 'proguard-rules-eventbus.pro'
 
         vectorDrawables.useSupportLibrary = true
 
