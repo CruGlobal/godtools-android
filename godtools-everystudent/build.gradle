@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-    implementation project(':library:godtools-analytics')
+    implementation project(':library:analytics')
 
     implementation "com.android.support:support-annotations:${deps.androidSupport}"
 }

@@ -9,9 +9,9 @@ android {
 }
 
 dependencies {
-    implementation project(':library:godtools-db')
-    implementation project(':library:godtools-model')
-    implementation project(':library:godtools-model-events')
+    implementation project(':library:db')
+    implementation project(':library:model')
+    implementation project(':library:model-events')
 
     implementation "com.android.support:support-annotations:${deps.androidSupport}"
 
