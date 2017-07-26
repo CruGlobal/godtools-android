@@ -80,6 +80,7 @@ android {
 
 dependencies {
     implementation project(':library:base')
+    implementation project(':library:base-app')
     implementation project(':library:base-ui')
     implementation project(':library:db')
     implementation project(':library:download-manager')
