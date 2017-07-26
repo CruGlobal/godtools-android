@@ -1,5 +1,7 @@
 android {
     defaultConfig {
+        consumerProguardFiles 'proguard-rules-crashlytics.pro'
         consumerProguardFiles 'proguard-rules-guava.pro'
+        consumerProguardFiles 'proguard-rules-newrelic.pro'
     }
 }

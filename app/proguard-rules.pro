@@ -11,16 +11,6 @@
 }
 
 
-# Crashlytics
--keepattributes SourceFile,LineNumberTable
-
-
-# newrelic settings
--keep class com.newrelic.** { *; }
--dontwarn com.newrelic.**
--keepattributes Exceptions, Signature, InnerClasses, LineNumberTable
-
-
 # Okio
 -dontwarn okio.**
 
