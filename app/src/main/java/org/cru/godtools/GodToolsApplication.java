@@ -19,10 +19,11 @@ import org.cru.godtools.sync.job.SyncJobCreator;
 import org.cru.godtools.tract.TractEventBusIndex;
 import org.cru.godtools.tract.service.FollowupService;
 import org.greenrobot.eventbus.EventBus;
-import org.keynote.godtools.android.BuildConfig;
 
 import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
+
+import static org.keynote.godtools.android.BuildConfig.NEW_RELIC_API_KEY;
 
 public class GodToolsApplication extends Application {
     @Override
@@ -31,7 +32,7 @@ public class GodToolsApplication extends Application {
 
         // Enable crash reporting
         Fabric.with(this, new Crashlytics());
-        NewRelic.withApplicationToken(BuildConfig.NEW_RELIC_API_KEY).start(this);
+        NewRelic.withApplicationToken(NEW_RELIC_API_KEY).start(this);
 
         // configure eventbus
         configureEventbus();
