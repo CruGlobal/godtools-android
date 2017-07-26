@@ -1,12 +1,4 @@
 android {
-    defaultConfig {
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [eventBusIndex: 'org.cru.godtools.sync.SyncEventBusIndex']
-            }
-        }
-    }
-
     flavorDimensions "env"
     productFlavors {
         stage {
@@ -20,14 +12,11 @@ android {
 
 dependencies {
     implementation project(':library:base')
-    implementation project(':library:db')
-    implementation project(':library:model')
     implementation project(':library:sync-tasks')
 
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
     implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"
+    implementation "com.google.guava:guava:${deps.guava}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
-
-    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
 }

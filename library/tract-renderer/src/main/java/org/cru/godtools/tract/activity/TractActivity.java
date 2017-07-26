@@ -45,6 +45,7 @@ import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
 import org.cru.godtools.tract.content.TractManifestLoader;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Page;
+import org.cru.godtools.tract.service.FollowupService;
 import org.cru.godtools.tract.util.DrawableUtils;
 import org.cru.godtools.tract.util.ViewUtils;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
@@ -152,6 +153,7 @@ public class TractActivity extends ImmersiveActivity
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDownloadManager = GodToolsDownloadManager.getInstance(this);
+        FollowupService.start(this);
 
         // read requested tract from the provided intent
         processIntent(getIntent());

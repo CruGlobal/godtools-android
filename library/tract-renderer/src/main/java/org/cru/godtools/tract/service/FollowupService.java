@@ -1,7 +1,8 @@
-package org.cru.godtools.sync.service;
+package org.cru.godtools.tract.service;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,11 +11,13 @@ import android.support.annotation.WorkerThread;
 import org.ccci.gto.android.common.util.NumberUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.model.Followup;
-import org.cru.godtools.sync.GodToolsSyncService;
+import org.cru.godtools.sync.task.FollowupSyncTasks;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.keynote.godtools.android.db.GodToolsDao;
+
+import java.io.IOException;
 
 import static org.cru.godtools.base.model.Event.Id.FOLLOWUP_EVENT;
 
@@ -30,6 +33,9 @@ public final class FollowupService {
         mContext = context;
         mDao = GodToolsDao.getInstance(context);
         EventBus.getDefault().register(this);
+
+        // sync any currently pending followups
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(this::syncPendingFollowups);
     }
 
     @Nullable
@@ -60,8 +66,16 @@ public final class FollowupService {
             // only store this followup if it's valid
             if (followup.isValid()) {
                 mDao.insertNew(followup);
-                GodToolsSyncService.syncFollowups(mContext).run();
+                syncPendingFollowups();
             }
+        }
+    }
+
+    @WorkerThread
+    private void syncPendingFollowups() {
+        try {
+            new FollowupSyncTasks(mContext).syncFollowups();
+        } catch (final IOException ignored) {
         }
     }
 }
