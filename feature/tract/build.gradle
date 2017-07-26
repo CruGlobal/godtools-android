@@ -15,5 +15,6 @@ android {
 dependencies {
     application project(':app')
 
-    api project(':godtools-tract-renderer')
+    implementation project(':library:base-app')
+    implementation project(':library:tract-renderer')
 }

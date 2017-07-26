@@ -133,6 +133,8 @@ configure(subprojects.findAll { it.path.startsWith(":feature:") }) {
 
                 versionName rootProject.version
                 versionCode grgit.log(includes: ['HEAD']).size() + 4029047
+
+                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
             }
 
             compileOptions {
@@ -154,6 +156,9 @@ configure(subprojects.findAll { it.path.startsWith(":feature:") }) {
 
             buildTypes {
                 release {
+                    minifyEnabled true
+                    // XXX: currently not working for feature modules
+//                    shrinkResources true
                     if (signingConfigs.release.storeFile.exists()) {
                         signingConfig signingConfigs.release
                     }
