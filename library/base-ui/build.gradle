@@ -2,6 +2,7 @@ dependencies {
     api project(':library:analytics')
 
     api "android.arch.lifecycle:runtime:${deps.androidLifecycle}"
+    implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
     api "com.android.support:appcompat-v7:${deps.androidSupport}"
 
     implementation "com.google.guava:guava:${deps.guava}"
