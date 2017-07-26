@@ -1,5 +1,4 @@
 rootProject.name='godtools'
-include 'godtools-everystudent'
 include 'godtools-tract-renderer'
 
 include 'library:analytics'
@@ -8,6 +7,7 @@ include 'library:base'
 include 'library:base-ui'
 include 'library:db'
 include 'library:download-manager'
+include 'library:everystudent'
 include 'library:initial-content'
 include 'library:model'
 include 'library:model-events'
