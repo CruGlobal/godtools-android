@@ -119,6 +119,7 @@ configure(subprojects.findAll { it.path.startsWith(":library:") }) {
 // base feature config
 configure(subprojects.findAll { it.path.startsWith(":feature:") }) {
     apply plugin: 'com.android.feature'
+    apply plugin: 'org.ajoberstar.grgit'
 
     beforeEvaluate {
         android {
@@ -126,8 +127,11 @@ configure(subprojects.findAll { it.path.startsWith(":feature:") }) {
             compileSdkVersion compileSdk
 
             defaultConfig {
-                minSdkVersion minSdk
+                minSdkVersion 19
                 targetSdkVersion targetSdk
+
+                versionName rootProject.version
+                versionCode grgit.log(includes: ['HEAD']).size() + 4029047
             }
 
             compileOptions {
@@ -136,6 +140,23 @@ configure(subprojects.findAll { it.path.startsWith(":feature:") }) {
             }
             lintOptions {
                 lintConfig rootProject.file("analysis/lint/lint.xml")
+            }
+
+            signingConfigs {
+                release {
+                    storeFile file(androidKeystorePath)
+                    storePassword androidKeystoreStorePassword
+                    keyAlias androidKeystoreKeyAlias
+                    keyPassword androidKeystoreKeyPassword
+                }
+            }
+
+            buildTypes {
+                release {
+                    if (signingConfigs.release.storeFile.exists()) {
+                        signingConfig signingConfigs.release
+                    }
+                }
             }
         }
     }
