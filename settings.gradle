@@ -16,6 +16,7 @@ include 'library:sync'
 include 'library:sync-tasks'
 include 'library:tract-renderer'
 
-include 'app'
-
 include 'feature:tract'
+
+include 'app'
+include 'instantapp'
