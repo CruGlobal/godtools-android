@@ -1,2 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="org.cru.godtools.base.app" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.cru.godtools.base.app">
+
+    <application
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round" />
+</manifest>
