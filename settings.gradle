@@ -1,7 +1,6 @@
 rootProject.name='godtools'
 include 'godtools-everystudent'
 include 'godtools-initial-content'
-include 'godtools-sync'
 include 'godtools-tract-renderer'
 
 include 'library:analytics'
@@ -13,6 +12,7 @@ include 'library:download-manager'
 include 'library:model'
 include 'library:model-events'
 include 'library:model-loader'
+include 'library:sync'
 include 'library:sync-tasks'
 
 include 'app'
