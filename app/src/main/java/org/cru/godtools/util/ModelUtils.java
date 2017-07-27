@@ -11,15 +11,13 @@ import org.cru.godtools.base.ui.util.LocaleTypefaceUtils;
 import org.cru.godtools.model.Translation;
 import org.keynote.godtools.android.model.Tool;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
-
 import static com.google.common.base.MoreObjects.firstNonNull;
 
 public final class ModelUtils {
     @NonNull
     public static CharSequence getTranslationName(@Nullable final Context context,
                                                   @Nullable final Translation translation, @Nullable final Tool tool) {
-        return getTranslationName(translation != null ? CalligraphyUtils.applyTypefaceSpan(
+        return getTranslationName(translation != null ? LocaleTypefaceUtils.safeApplyTypefaceSpan(
                 translation.getName(), getTranslationTypeface(context, translation)) : null,
                                   tool != null ? tool.getName() : null);
     }
@@ -34,7 +32,7 @@ public final class ModelUtils {
     public static CharSequence getTranslationDescription(@Nullable final Context context,
                                                          @Nullable final Translation translation,
                                                          @Nullable final Tool tool) {
-        return getTranslationDescription(translation != null ? CalligraphyUtils.applyTypefaceSpan(
+        return getTranslationDescription(translation != null ? LocaleTypefaceUtils.safeApplyTypefaceSpan(
                 translation.getDescription(), getTranslationTypeface(context, translation)) : null,
                                          tool != null ? tool.getDescription() : null);
     }

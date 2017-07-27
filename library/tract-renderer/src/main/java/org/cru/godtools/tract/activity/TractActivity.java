@@ -60,10 +60,10 @@ import java.io.IOException;
 import java.util.Locale;
 
 import butterknife.BindView;
-import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
+import static org.cru.godtools.base.ui.util.LocaleTypefaceUtils.safeApplyTypefaceSpan;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
 
 public class TractActivity extends ImmersiveActivity
@@ -423,7 +423,7 @@ public class TractActivity extends ImmersiveActivity
 
     private void updateToolbar() {
         final Manifest manifest = getActiveManifest();
-        setTitle(CalligraphyUtils.applyTypefaceSpan(Manifest.getTitle(manifest), Manifest.getTypeface(manifest, this)));
+        setTitle(safeApplyTypefaceSpan(Manifest.getTitle(manifest), Manifest.getTypeface(manifest, this)));
 
         // set toolbar background color
         mToolbar.setBackgroundColor(Manifest.getNavBarColor(manifest));
