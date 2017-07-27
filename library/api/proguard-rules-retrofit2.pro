@@ -7,3 +7,8 @@
 -keepattributes Signature
 # Retain declared checked exceptions for use by a Proxy instance.
 -keepattributes Exceptions
+
+# Keep any api interfaces
+-keepclasseswithmembers interface * {
+    @retrofit2.http.* <methods>;
+}
