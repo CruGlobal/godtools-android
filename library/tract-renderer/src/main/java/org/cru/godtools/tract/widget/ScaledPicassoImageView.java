@@ -13,8 +13,8 @@ import org.ccci.gto.android.common.base.model.Dimension;
 import org.ccci.gto.android.common.picasso.transformation.ScaleTransformation;
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.cru.godtools.tract.R;
+import org.cru.godtools.tract.picasso.transformation.ScaledCropTransformation;
 
-import jp.wasabeef.picasso.transformations.CropTransformation;
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal;
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical;
 
@@ -82,15 +82,18 @@ public interface ScaledPicassoImageView extends PicassoImageView {
                 case FILL_Y:
                     if (size.width > 0 && mScaleType == FILL_X) {
                         update.resize(size.width, 0);
+                        update.onlyScaleDown();
                     } else if (size.height > 0 && mScaleType == FILL_Y) {
                         update.resize(0, size.height);
+                        update.onlyScaleDown();
                     } else {
-                        update.transform(new ScaleTransformation(size.width, size.height, false));
+                        update.transform(new ScaleTransformation(size.width, size.height, true));
                     }
 
                     // crop with gravity
                     update.transform(
-                            new CropTransformation(size.width, size.height, mGravityHorizontal, mGravityVertical));
+                            new ScaledCropTransformation(size.width, size.height, mScaleType, mGravityHorizontal,
+                                                         mGravityVertical));
                     break;
                 case FIT:
                     update.resize(size.width, size.height);
