@@ -7,8 +7,6 @@ android {
     defaultConfig {
         minSdkVersion minSdk
         targetSdkVersion targetSdk
-
-        flavorSelection 'env', 'production'
     }
 
     lintOptions {

@@ -1,14 +1,8 @@
 android {
     baseFeature true
 
-    flavorDimensions "env"
-    productFlavors {
-        stage {
-            dimension "env"
-        }
-        production {
-            dimension "env"
-        }
+    defaultConfig {
+        flavorSelection 'env', 'production'
     }
 }
 
