@@ -1,0 +1,19 @@
+apply plugin: 'com.android.instantapp'
+
+android {
+    buildToolsVersion buildTools
+    compileSdkVersion compileSdk
+
+    defaultConfig {
+        minSdkVersion minSdk
+        targetSdkVersion targetSdk
+    }
+
+    lintOptions {
+        tasks.lint.enabled = false
+    }
+}
+
+dependencies {
+    implementation project(':feature:tract')
+}

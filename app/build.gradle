@@ -16,8 +16,6 @@ android {
         targetSdkVersion targetSdk
 
         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
-        proguardFiles 'proguard-rules.pro'
-        proguardFiles 'proguard-rules-eventbus.pro'
 
         vectorDrawables.useSupportLibrary = true
 
@@ -60,7 +58,6 @@ android {
 
             flavorSelection 'env', 'production'
 
-            buildConfigField "String", "BASE_URL_V2", "\"https://api.stage.godtoolsapp.com/godtools-api/rest/v2/\""
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AA2f0cb2d41f6ac7dcc256eaa9ca7e0f640859fd52\""
         }
         release {
@@ -72,7 +69,6 @@ android {
 
             flavorSelection 'env', 'production'
 
-            buildConfigField "String", "BASE_URL_V2", "\"https://api.godtoolsapp.com/godtools-api/rest/v2/\""
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AAcaf7bbfe3ffda5dcb1455d3bc16b0c5da1cd71e9\""
         }
     }
@@ -80,6 +76,7 @@ android {
 
 dependencies {
     implementation project(':library:base')
+    implementation project(':library:base-app')
     implementation project(':library:base-ui')
     implementation project(':library:db')
     implementation project(':library:download-manager')
@@ -91,36 +88,33 @@ dependencies {
     implementation project(':library:sync')
     implementation project(':library:tract-renderer')
 
-    implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
     implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
     implementation "com.android.support:cardview-v7:${deps.androidSupport}"
     implementation "com.android.support:customtabs:${deps.androidSupport}"
     implementation "com.android.support:design:${deps.androidSupport}"
     implementation "com.android.support:percent:${deps.androidSupport}"
 
-    implementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
-    implementation "com.newrelic.agent.android:android-agent:5.14.0"
+    implementation "com.newrelic.agent.android:android-agent:${deps.newrelic}"
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
 
     implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
-    implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0"
     implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
 
     debugImplementation "com.android.support:multidex:${deps.multidex}"
+    debugImplementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-leakcanary:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-stetho:${deps.gtoSupport}"
-    debugImplementation 'com.facebook.stetho:stetho:' + deps.facebookStetho
-    debugImplementation 'com.facebook.stetho:stetho-okhttp3:' + deps.facebookStetho
-    debugImplementation 'com.facebook.stetho:stetho-urlconnection:' + deps.facebookStetho
+    debugImplementation "com.facebook.stetho:stetho:${deps.facebookStetho}"
+    debugImplementation "com.facebook.stetho:stetho-okhttp3:${deps.facebookStetho}"
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
 
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"

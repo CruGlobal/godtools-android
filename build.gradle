@@ -48,6 +48,7 @@ ext.deps = [
         leakcanary           : '1.5.1',
         lightweightStream    : '1.1.8',
         multidex             : '1.0.2',
+        newrelic             : '5.14.0',
         playServices         : '10.2.6',
         retrofit2            : '2.3.0'
 ]
@@ -111,6 +112,57 @@ configure(subprojects.findAll { it.path.startsWith(":library:") }) {
             }
             lintOptions {
                 lintConfig rootProject.file("analysis/lint/lint.xml")
+            }
+        }
+    }
+}
+
+// base feature config
+configure(subprojects.findAll { it.path.startsWith(":feature:") }) {
+    apply plugin: 'com.android.feature'
+    apply plugin: 'org.ajoberstar.grgit'
+
+    beforeEvaluate {
+        android {
+            buildToolsVersion buildTools
+            compileSdkVersion compileSdk
+
+            defaultConfig {
+                minSdkVersion 19
+                targetSdkVersion targetSdk
+
+                versionName rootProject.version
+                versionCode grgit.log(includes: ['HEAD']).size() + 4029047
+
+                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+            }
+
+            compileOptions {
+                sourceCompatibility JavaVersion.VERSION_1_8
+                targetCompatibility JavaVersion.VERSION_1_8
+            }
+            lintOptions {
+                lintConfig rootProject.file("analysis/lint/lint.xml")
+            }
+
+            signingConfigs {
+                release {
+                    storeFile file(androidKeystorePath)
+                    storePassword androidKeystoreStorePassword
+                    keyAlias androidKeystoreKeyAlias
+                    keyPassword androidKeystoreKeyPassword
+                }
+            }
+
+            buildTypes {
+                release {
+                    minifyEnabled true
+                    // XXX: currently not working for feature modules
+//                    shrinkResources true
+                    if (signingConfigs.release.storeFile.exists()) {
+                        signingConfig signingConfigs.release
+                    }
+                }
             }
         }
     }

@@ -1,0 +1,14 @@
+android {
+    baseFeature true
+
+    defaultConfig {
+        flavorSelection 'env', 'production'
+    }
+}
+
+dependencies {
+    application project(':app')
+
+    implementation project(':library:base-app')
+    implementation project(':library:tract-renderer')
+}

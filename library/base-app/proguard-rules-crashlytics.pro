@@ -1,0 +1,2 @@
+# Crashlytics
+-keepattributes SourceFile,LineNumberTable
