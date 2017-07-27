@@ -21,6 +21,8 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        flavorSelection 'env', 'production'
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [eventBusIndex: 'org.cru.godtools.AppEventBusIndex']
@@ -56,7 +58,8 @@ android {
             versionNameSuffix "-debug"
             multiDexEnabled true
 
-            flavorSelection 'env', 'production'
+            minifyEnabled false
+            shrinkResources false
 
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AA2f0cb2d41f6ac7dcc256eaa9ca7e0f640859fd52\""
         }
@@ -66,8 +69,6 @@ android {
             if (signingConfigs.release.storeFile.exists()) {
                 signingConfig signingConfigs.release
             }
-
-            flavorSelection 'env', 'production'
 
             buildConfigField "String", "NEW_RELIC_API_KEY", "\"AAcaf7bbfe3ffda5dcb1455d3bc16b0c5da1cd71e9\""
         }
