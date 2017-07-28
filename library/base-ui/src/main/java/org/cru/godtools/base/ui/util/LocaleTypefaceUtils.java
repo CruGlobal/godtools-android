@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableMap;
 import java.util.Locale;
 import java.util.Map;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
 import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 public final class LocaleTypefaceUtils {
@@ -41,5 +42,18 @@ public final class LocaleTypefaceUtils {
             return TypefaceUtils.load(context.getAssets(), TYPEFACES.get(locale));
         }
         return null;
+    }
+
+    /**
+     * This method works around a crash caused by setting a null Typeface span within Calligraphy.
+     */
+    @Nullable
+    public static CharSequence safeApplyTypefaceSpan(@Nullable final CharSequence s,
+                                                     @Nullable final Typeface typeface) {
+        if (typeface != null) {
+            return CalligraphyUtils.applyTypefaceSpan(s, typeface);
+        } else {
+            return s;
+        }
     }
 }
