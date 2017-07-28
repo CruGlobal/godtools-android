@@ -9,6 +9,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.cru.godtools.base.model.Event;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -102,9 +103,13 @@ public class AnalyticsService {
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void trackContentEvent(@NonNull final Event event) {
-        mTracker.send(new HitBuilders.EventBuilder()
-                              .setCategory(CATEGORY_CONTENT_EVENT)
-                              .setAction(event.id.namespace + ":" + event.id.name)
-                              .build());
+        final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                .setCategory(CATEGORY_CONTENT_EVENT)
+                .setAction(event.id.namespace + ":" + event.id.name);
+        if (event.locale != null) {
+            eventBuilder.setCustomDimension(DIMENSION_LANGUAGE, LocaleCompat.toLanguageTag(event.locale));
+        }
+
+        mTracker.send(eventBuilder.build());
     }
 }
