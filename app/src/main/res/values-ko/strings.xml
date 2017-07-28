@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GodTools</string>
     <!-- Main Activity-->
     <string name="share_prompt">공유하려는 방법을 선택하세요</string>
     <!-- Navigation Menu -->

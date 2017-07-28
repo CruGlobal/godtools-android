@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GodTools</string>
     <!-- Main Activity-->
     <string name="share_prompt">نحوه اشتراک‌گذاری مورد نظر خود را انتخاب کنید</string>
     <!-- Navigation Menu -->

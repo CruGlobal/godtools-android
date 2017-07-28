@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Jumala Tööriistad</string>
     <!-- Main Activity-->
     <string name="share_prompt">Vali jagamise viis</string>
     <!-- Navigation Menu -->

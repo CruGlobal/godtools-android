@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Zana za Mungu</string>
     <!-- Main Activity-->
     <string name="share_prompt">Chagua jinsi ungependa kushiriki</string>
     <!-- Navigation Menu -->
@@ -31,13 +30,13 @@
     <string name="action_tools_download">Pakua</string>
     <string name="action_tools_remove">Ondoa</string>
     <plurals name="label_tools_shares">
-        <item quantity="one">Kwa asilimia dola moja (%1$) ya Oni</item>
-        <item quantity="other">Kwa asilimia dola moja, ya Maoni</item>
+        <item quantity="one">Maoni %1$,d</item>
+        <item quantity="other">Maoni %1$,d</item>
     </plurals>
     <string name="label_tools_about">Kuhusu</string>
     <plurals name="label_tools_languages">
-        <item quantity="one">Kwa asilimia dola moja (%1$) , ya Lugha</item>
-        <item quantity="other">Kwa asilimia dola moja, ya Lugha</item>
+        <item quantity="one">Lugha %1$,d</item>
+        <item quantity="other">Lugha %1$,d</item>
     </plurals>
     <!-- Language Selection UI -->
     <string name="menu_language_settings">Mipangilio ya Lugha</string>
