@@ -1,12 +1,10 @@
 package org.cru.godtools;
 
-import android.app.Application;
-
 import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
-import com.newrelic.agent.android.NewRelic;
 
 import org.cru.godtools.analytics.AnalyticsEventBusIndex;
+import org.cru.godtools.base.app.BaseGodToolsApplication;
 import org.cru.godtools.download.manager.DownloadManagerEventBusIndex;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.event.ModelEventEventBusIndex;
@@ -18,16 +16,13 @@ import org.greenrobot.eventbus.EventBus;
 
 import io.fabric.sdk.android.Fabric;
 
-import static org.keynote.godtools.android.BuildConfig.NEW_RELIC_API_KEY;
-
-public class GodToolsApplication extends Application {
+public class GodToolsApplication extends BaseGodToolsApplication {
     @Override
     public void onCreate() {
         super.onCreate();
 
         // Enable crash reporting
         Fabric.with(this, new Crashlytics());
-        NewRelic.withApplicationToken(NEW_RELIC_API_KEY).start(this);
 
         // configure eventbus
         configureEventbus();
