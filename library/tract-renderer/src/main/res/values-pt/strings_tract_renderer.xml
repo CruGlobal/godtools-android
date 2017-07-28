@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tract">Partilhar</string>
-    <string name="share_tract_subject">%1$s</string>
     <string name="share_tract_title">Partilhar \"%1$s\" com</string>
     <string name="tract_content_input_error_required">%1$s é necessário</string>
     <string name="tract_content_input_error_invalid_email">Introduza um endereço de e-mail válido</string>
