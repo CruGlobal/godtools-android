@@ -15,6 +15,8 @@ dependencies {
 
     implementation "com.google.android.gms:play-services-analytics:${deps.playServices}"
 
+    implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
+
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
