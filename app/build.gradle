@@ -60,8 +60,6 @@ android {
 
             minifyEnabled false
             shrinkResources false
-
-            buildConfigField "String", "NEW_RELIC_API_KEY", "\"AA2f0cb2d41f6ac7dcc256eaa9ca7e0f640859fd52\""
         }
         release {
             shrinkResources true
@@ -69,8 +67,6 @@ android {
             if (signingConfigs.release.storeFile.exists()) {
                 signingConfig signingConfigs.release
             }
-
-            buildConfigField "String", "NEW_RELIC_API_KEY", "\"AAcaf7bbfe3ffda5dcb1455d3bc16b0c5da1cd71e9\""
         }
     }
 }
@@ -101,7 +97,6 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
-    implementation "com.newrelic.agent.android:android-agent:${deps.newrelic}"
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
 
     implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"
