@@ -27,6 +27,7 @@
     <string name="title_tools_add">Agrega herramientas</string>
     <string name="menu_add_tool">Agregar herramienta</string>
     <string name="menu_switch_language">Cambiar idioma</string>
+    <string name="title_add_new_tools">Agrega nuevas herramientas</string>
     <string name="action_tools_download">Descargar</string>
     <string name="action_tools_remove">Quitar</string>
     <plurals name="label_tools_shares">

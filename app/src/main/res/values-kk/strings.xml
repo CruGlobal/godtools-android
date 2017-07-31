@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Қызмет құралдары</string>
     <string name="menu_switch_language">Тілді ауыстыру</string>
     <string name="menu_about">туралы</string>
     <!-- Renderer Activity -->

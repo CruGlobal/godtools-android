@@ -27,6 +27,7 @@
     <string name="title_tools_add">Legg til verktøy</string>
     <string name="menu_add_tool">Legg til verktøy</string>
     <string name="menu_switch_language">Bytt språk</string>
+    <string name="title_add_new_tools">Legg til nye verktøy</string>
     <string name="action_tools_download">Last ned</string>
     <string name="action_tools_remove">Fjern</string>
     <plurals name="label_tools_shares">

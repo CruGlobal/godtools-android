@@ -27,6 +27,7 @@
     <string name="title_tools_add">Ongeza Vifaa</string>
     <string name="menu_add_tool">Ongeza Kifaa</string>
     <string name="menu_switch_language">Badilisha lugha</string>
+    <string name="title_add_new_tools">Ongeza Vifaa Vipya</string>
     <string name="action_tools_download">Pakua</string>
     <string name="action_tools_remove">Ondoa</string>
     <plurals name="label_tools_shares">

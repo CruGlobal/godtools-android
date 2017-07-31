@@ -2,6 +2,8 @@
 <resources>
     <string name="menu_share_tract">شارك</string>
     <string name="share_tract_title">شارك \"%1$s\" باستعمال</string>
+    <string name="tract_not_found">لا يمكن إيجاد الأداة التي طلبتها</string>
+    <string name="tract_loading">جاري تحميل الأداة التي طلبتها...</string>
     <string name="tract_content_input_error_required">%1$s مطلوب</string>
     <string name="tract_content_input_error_invalid_email">يرجى إدخال عنوان إلكتروني صالح</string>
 </resources>

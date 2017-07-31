@@ -2,6 +2,8 @@
 <resources>
     <string name="menu_share_tract">Kongsi</string>
     <string name="share_tract_title">Kongsikan “%1$s” menggunakan</string>
+    <string name="tract_not_found">Alat yang anda minta tidak ditemui</string>
+    <string name="tract_loading">Alat yang anda minta sedang dimuatkan...</string>
     <string name="tract_content_input_error_required">%1$s diperlukan</string>
     <string name="tract_content_input_error_invalid_email">Sila masukkan alamat e-mel yang sah</string>
 </resources>

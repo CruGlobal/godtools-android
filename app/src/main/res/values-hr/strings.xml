@@ -27,6 +27,7 @@
     <string name="title_tools_add">Dodaj alate</string>
     <string name="menu_add_tool">Dodaj alat</string>
     <string name="menu_switch_language">Promijeni jezik</string>
+    <string name="title_add_new_tools">Dodajte nove alate</string>
     <string name="action_tools_download">Preuzmi</string>
     <string name="action_tools_remove">Ukloni</string>
     <plurals name="label_tools_shares">

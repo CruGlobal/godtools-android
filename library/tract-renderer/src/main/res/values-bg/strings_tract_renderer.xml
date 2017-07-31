@@ -2,6 +2,8 @@
 <resources>
     <string name="menu_share_tract">Споделете</string>
     <string name="share_tract_title">Споделете “%1$s” чрез</string>
+    <string name="tract_not_found">Изискваният от Вас инструмент не е намерен</string>
+    <string name="tract_loading">Изискваният от Вас инструмент се зарежда</string>
     <string name="tract_content_input_error_required">%1$s се изисква</string>
     <string name="tract_content_input_error_invalid_email">Моля, въведете валиден имейл адрес</string>
 </resources>

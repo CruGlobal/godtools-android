@@ -2,6 +2,8 @@
 <resources>
     <string name="menu_share_tract">Shikisha</string>
     <string name="share_tract_title">Shiriki “%1$s” kutumia</string>
+    <string name="tract_not_found">Kifaa ulichoagiza hakipatikani</string>
+    <string name="tract_loading">Kifaa ulichoagiza kinapakia</string>
     <string name="tract_content_input_error_required">%1$s inahitajika</string>
     <string name="tract_content_input_error_invalid_email">Tafadhali weka anwani ya barua pepe halali</string>
 </resources>
