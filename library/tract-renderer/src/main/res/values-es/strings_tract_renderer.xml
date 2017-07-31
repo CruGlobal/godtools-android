@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tract">Compartir</string>
-    <string name="share_tract_subject">%1$s</string>
     <string name="share_tract_title">Comparte “%1$s” mediante</string>
+    <string name="tract_not_found">No se puede encontrar la herramienta que has solicitado</string>
+    <string name="tract_loading">Se está cargando la herramienta que has solicitado...</string>
     <string name="tract_content_input_error_required">Se requiere %1$s</string>
     <string name="tract_content_input_error_invalid_email">Ingresa una dirección de correo electrónico válida</string>
 </resources>

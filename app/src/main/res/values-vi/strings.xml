@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GodTools</string>
     <!-- Main Activity-->
     <string name="share_prompt">Chọn cách bạn muốn chia sẻ</string>
     <!-- Navigation Menu -->
@@ -28,6 +27,7 @@
     <string name="title_tools_add">Thêm Công cụ</string>
     <string name="menu_add_tool">Thêm Công cụ</string>
     <string name="menu_switch_language">Chuyển Ngôn ngữ</string>
+    <string name="title_add_new_tools">Thêm các Công cụ Mới</string>
     <string name="action_tools_download">Tải về</string>
     <string name="action_tools_remove">Loại bỏ</string>
     <plurals name="label_tools_shares">

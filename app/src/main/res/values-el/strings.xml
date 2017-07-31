@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Θεϊκά Εργαλεία</string>
     <!-- Main Activity-->
     <string name="share_prompt">Επιλέξτε πώς θα θέλατε να μοιραστείτε</string>
     <!-- Navigation Menu -->
@@ -28,6 +27,7 @@
     <string name="title_tools_add">Προσθέστε Εργαλεία</string>
     <string name="menu_add_tool">Προσθήκη Εργαλείου</string>
     <string name="menu_switch_language">Αλλάξτε Γλώσσα</string>
+    <string name="title_add_new_tools">Προσθήκη Νέων Εργαλείων</string>
     <string name="action_tools_download">Λήψη</string>
     <string name="action_tools_remove">Αφαίρεση</string>
     <plurals name="label_tools_shares">

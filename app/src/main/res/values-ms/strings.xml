@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GodTools</string>
     <!-- Main Activity-->
     <string name="share_prompt">Pilih cara anda mahu berkongsi</string>
     <!-- Navigation Menu -->
@@ -28,6 +27,7 @@
     <string name="title_tools_add">Tambah Alat</string>
     <string name="menu_add_tool">Tambah Alat</string>
     <string name="menu_switch_language">Tukar Bahasa</string>
+    <string name="title_add_new_tools">Tambah Alat Baharu</string>
     <string name="action_tools_download">Muat Turun</string>
     <string name="action_tools_remove">Alih Keluar</string>
     <plurals name="label_tools_shares">

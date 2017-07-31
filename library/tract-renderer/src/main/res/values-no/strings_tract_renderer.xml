@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tract">Del</string>
-    <string name="share_tract_subject">%1$s</string>
     <string name="share_tract_title">Del «%1$s» med</string>
+    <string name="tract_not_found">Vi kunne ikke finne det forespurte verktøyet</string>
+    <string name="tract_loading">Verktøyet du forespurte lastes inn …</string>
     <string name="tract_content_input_error_required">%1$s kreves</string>
     <string name="tract_content_input_error_invalid_email">Oppgi en gyldig e-postadresse</string>
 </resources>

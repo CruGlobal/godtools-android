@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GodTools</string>
     <!-- Main Activity-->
     <string name="share_prompt">Wybierz sposób podzielenia się</string>
     <!-- Navigation Menu -->
@@ -28,6 +27,7 @@
     <string name="title_tools_add">Dodaj Narzędzia</string>
     <string name="menu_add_tool">Dodaj Narzędzie</string>
     <string name="menu_switch_language">Zmień język</string>
+    <string name="title_add_new_tools">Dodaj Nowe Narzędzia</string>
     <string name="action_tools_download">Pobierz</string>
     <string name="action_tools_remove">Usuń</string>
     <plurals name="label_tools_shares">

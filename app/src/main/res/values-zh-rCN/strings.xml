@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GodTools</string>
     <!-- Main Activity-->
     <string name="share_prompt">选择您希望的分享方式</string>
     <!-- Navigation Menu -->
@@ -28,14 +27,15 @@
     <string name="title_tools_add">添加工具</string>
     <string name="menu_add_tool">添加工具</string>
     <string name="menu_switch_language">切换语言</string>
+    <string name="title_add_new_tools">添加新工具</string>
     <string name="action_tools_download">下载</string>
     <string name="action_tools_remove">删除</string>
     <plurals name="label_tools_shares">
-        <item quantity="other">%1$,d次浏览</item>
+        <item quantity="other">%1$,d 次浏览</item>
     </plurals>
     <string name="label_tools_about">关于</string>
     <plurals name="label_tools_languages">
-        <item quantity="other">%1$,d种语言</item>
+        <item quantity="other">%1$,d 种语言</item>
     </plurals>
     <!-- Language Selection UI -->
     <string name="menu_language_settings">语言设置</string>

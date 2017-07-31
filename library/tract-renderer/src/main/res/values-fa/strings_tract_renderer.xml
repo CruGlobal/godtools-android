@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tract">اشتراک‌گذاری</string>
-    <string name="share_tract_subject">%1$s</string>
     <string name="share_tract_title">اشتراک‌گذاری «%1$s» با استفاده</string>
+    <string name="tract_not_found">ابزاری را که درخواست کردید نتوانستیم پیدا کنیم</string>
+    <string name="tract_loading">ابزاری که درخواست کردید در حال بارگیری است...</string>
     <string name="tract_content_input_error_required">به %1$s نیاز است</string>
     <string name="tract_content_input_error_invalid_email">لطفاً یک آدرس ایمیل معتبر وارد کنید</string>
 </resources>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main Activity-->
+    <string name="share_prompt">Piliin kung paano mo gustong magbahagi</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Pangkalahatan</string>
+    <string name="menu_heading_share">Magbahagi</string>
+    <string name="menu_heading_legal">Ayon sa Batas</string>
+    <string name="menu_about">Tungkol dito</string>
+    <string name="menu_help">Tulong</string>
+    <string name="menu_contact_us">Kontakin Kami</string>
+    <string name="menu_share_godtools">Ibahagi ang GodTools</string>
+    <string name="menu_share_story">Magbahagi ng Kuwento sa Amin</string>
+    <string name="menu_rate">I-rate ang GodTools</string>
+    <string name="menu_terms_of_use">Mga Tuntunin ng Paggamit</string>
+    <string name="menu_privacy_policy">Patakaran sa Pagkapribado</string>
+    <string name="menu_copyright">Copyright</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">Pakinggan kung paano nakakabagabag ng puso ang Diyos!</string>
+    <!-- Tour UI -->
+    <string name="title_tour_tools">Magdagdag ng Mga Bagong Tool</string>
+    <string name="title_tour_language">I-set ang Iyong Mga Wika</string>
+    <string name="action_tour_ok">Okay</string>
+    <string name="action_tour_now">Ngayon</string>
+    <string name="action_tour_later">Sa Ibang Pagkakataon</string>
+    <!-- Tools UI -->
+    <string name="title_tools_add">Magdagdag ng Mga Tool</string>
+    <string name="menu_add_tool">Magdagdag ng Tool</string>
+    <string name="menu_switch_language">Magpalit ng Wika</string>
+    <string name="title_add_new_tools">Magdagdag ng Mga Bagong Tool</string>
+    <string name="action_tools_download">I-download</string>
+    <string name="action_tools_remove">Alisin</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d Pagtingin</item>
+        <item quantity="other">%1$,d (na) Pagtingin</item>
+    </plurals>
+    <string name="label_tools_about">Tungkol dito</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d Wika</item>
+        <item quantity="other">%1$,d (na) Wika</item>
+    </plurals>
+    <!-- Language Selection UI -->
+    <string name="menu_language_settings">Mga Setting ng Wika</string>
+    <string name="title_language_settings">Mga Setting ng Wika</string>
+    <string name="title_language_primary">Pangunahing Wika</string>
+    <string name="title_language_parallel">Parallel na Wika</string>
+    <string name="action_language_parallel_select">Pumili ng Parallel na Wika</string>
+    <string name="text_language_parallel_description">Ibahagi ang GodTools sa isang tao sa kanilang katutubong wika.</string>
+    <string name="text_language_warning">Ang bawat tool ay hindi available sa bawat wika.</string>
+    <string name="label_language_none">Wala</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Narito ang link para i-download ang app na tinitingnan namin ngayon: http://godtoolsapp.com \n\n
+
+		Narito ang isang link sa web na bersyon ng app {{share_link}} \n\n
+
+		Mag-usap pa tayo!</string>
+</resources>

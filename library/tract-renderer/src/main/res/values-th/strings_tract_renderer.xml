@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_share_tract">แชร์</string>
-    <string name="share_tract_subject">%1$s</string>
     <string name="share_tract_title">แชร์การใช้ “%1$s”</string>
+    <string name="tract_not_found">ไม่พบเครื่องมือที่คุณร้องขอ</string>
+    <string name="tract_loading">กำลังโหลดเครื่องมือที่คุณร้องขอ…</string>
     <string name="tract_content_input_error_required">ต้องใส่ %1$s</string>
     <string name="tract_content_input_error_invalid_email">โปรดป้อนที่อยู่อีเมลที่ถูกต้อง</string>
 </resources>
