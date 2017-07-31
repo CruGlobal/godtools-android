@@ -44,6 +44,7 @@ import static org.keynote.godtools.android.Constants.URI_COPYRIGHT;
 import static org.keynote.godtools.android.Constants.URI_HELP;
 import static org.keynote.godtools.android.Constants.URI_PRIVACY;
 import static org.keynote.godtools.android.Constants.URI_SHARE_BASE;
+import static org.keynote.godtools.android.Constants.URI_SUPPORT;
 import static org.keynote.godtools.android.Constants.URI_TERMS_OF_USE;
 import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 
@@ -280,7 +281,11 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
     private void launchContactUs() {
         mAnalytics.trackScreen(SCREEN_CONTACT_US);
         final Intent intent = new Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT);
-        startActivity(intent);
+        try {
+            startActivity(intent);
+        } catch (@NonNull final ActivityNotFoundException e) {
+            WebUrlLauncher.openUrl(this, URI_SUPPORT);
+        }
     }
 
     private void launchShare() {
@@ -299,7 +304,11 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
         mAnalytics.trackScreen(SCREEN_SHARE_STORY);
         final Intent intent = new Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT);
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_story_subject));
-        startActivity(intent);
+        try {
+            startActivity(intent);
+        } catch (@NonNull final ActivityNotFoundException e) {
+            WebUrlLauncher.openUrl(this, URI_SUPPORT);
+        }
     }
 
     class ChangeListener implements SharedPreferences.OnSharedPreferenceChangeListener {
