@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 
@@ -55,6 +56,7 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onAttach(final Context context) {
+        Crashlytics.log(toString() + " onAttach()");
         super.onAttach(context);
         if (context != null) {
             mSettings = Settings.getInstance(context);
@@ -83,6 +85,7 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onStart() {
+        Crashlytics.log(toString() + " onStart()");
         super.onStart();
         EventBus.getDefault().register(this);
         startLanguagesChangeListener();
@@ -102,6 +105,7 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onStop() {
+        Crashlytics.log(toString() + " onStop()");
         super.onStop();
         stopLanguagesChangeListener();
         EventBus.getDefault().unregister(this);
@@ -121,6 +125,12 @@ public abstract class BaseFragment extends Fragment {
             mButterKnife.unbind();
         }
         mButterKnife = null;
+    }
+
+    @Override
+    public void onDetach() {
+        Crashlytics.log(toString() + " onDetach()");
+        super.onDetach();
     }
 
     /* END lifecycle */
