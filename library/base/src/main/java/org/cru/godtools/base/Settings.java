@@ -28,6 +28,7 @@ public final class Settings {
 
     @Nullable
     private static Settings sInstance;
+    @NonNull
     public static Settings getInstance(@NonNull final Context context) {
         synchronized (Settings.class) {
             if (sInstance == null) {
