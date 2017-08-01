@@ -35,7 +35,7 @@
     </plurals>
     <string name="label_tools_about">關於</string>
     <plurals name="label_tools_languages">
-        <item quantity="other">%1,d 種語言</item>
+        <item quantity="other">%1$,d 種語言</item>
     </plurals>
     <!-- Language Selection UI -->
     <string name="menu_language_settings">語言選項</string>
