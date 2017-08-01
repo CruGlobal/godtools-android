@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.keynote.godtools.android">
 
-    <!-- These permissions should be obvious -->
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <!-- Unused permissions, kept around for older android in case we want to start using them again -->
     <uses-permission
         android:name="android.permission.GET_TASKS"
@@ -95,8 +92,5 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="4c6c9eb55214633c5eca4176c06b20bb8fd07a72" />
     </application>
 </manifest>
