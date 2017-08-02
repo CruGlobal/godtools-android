@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.annimon.stream.Stream;
+import com.google.android.instantapps.InstantApps;
 import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
@@ -222,6 +223,12 @@ public class TractActivity extends ImmersiveActivity
         if (id == R.id.action_share) {
             shareCurrentTract();
             return true;
+        } else if (id == android.R.id.home) {
+            // handle close button if this is an instant app
+            if (InstantApps.isInstantApp(this)) {
+                finish();
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -357,6 +364,9 @@ public class TractActivity extends ImmersiveActivity
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
+        if (InstantApps.isInstantApp(this)) {
+            mToolbar.setNavigationIcon(R.drawable.ic_close);
+        }
         setupLanguageToggle();
         updateToolbar();
         updateLanguageToggle();
@@ -430,9 +440,9 @@ public class TractActivity extends ImmersiveActivity
 
         // set text & controls color
         final int controlColor = Manifest.getNavBarControlColor(manifest);
+        mToolbar.setNavigationIcon(DrawableUtils.tint(mToolbar.getNavigationIcon(), controlColor));
         mToolbar.setTitleTextColor(controlColor);
         mToolbar.setSubtitleTextColor(controlColor);
-        mToolbar.setNavigationIcon(DrawableUtils.tint(mToolbar.getNavigationIcon(), controlColor));
 
         updateToolbarMenu();
         updateLanguageToggle();

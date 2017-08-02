@@ -2,11 +2,11 @@ buildscript {
     repositories {
         mavenLocal()
         jcenter()
+        google()
         maven { url 'https://maven.fabric.io/public' }
-        maven { url 'https://maven.google.com' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha8'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha9'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         //noinspection GradleDependency
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
@@ -20,7 +20,7 @@ plugins {
 }
 
 group 'org.cru.android'
-version '5.0.1'
+version '5.0.2-SNAPSHOT'
 
 // define dependency versions for this project
 ext {
@@ -31,7 +31,8 @@ ext {
 }
 ext.deps = [
         advrecyclerview      : '0.10.6',
-        androidLifecycle     : '1.0.0-alpha5',
+        androidInstantApps   : '1.0.0',
+        androidLifecycle     : '1.0.0-alpha8',
         androidSupport       : '26.0.0',
         androidTestingSupport: '1.0.0',
         butterknife          : '8.7.0',
@@ -57,6 +58,7 @@ subprojects {
     repositories {
         mavenLocal()
         jcenter()
+        google()
         maven {
             name "maven.gcx.org"
             url "https://maven.gcx.org/"
@@ -65,7 +67,6 @@ subprojects {
                 password gcxMavenRepositoryPassword
             }
         }
-        maven { url 'https://maven.google.com' }
         maven { url 'https://maven.fabric.io/public' }
     }
 }

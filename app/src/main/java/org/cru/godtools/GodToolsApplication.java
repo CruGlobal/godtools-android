@@ -1,6 +1,5 @@
 package org.cru.godtools;
 
-import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 
 import org.cru.godtools.analytics.AnalyticsEventBusIndex;
@@ -14,15 +13,10 @@ import org.cru.godtools.tract.TractEventBusIndex;
 import org.cru.godtools.tract.service.FollowupService;
 import org.greenrobot.eventbus.EventBus;
 
-import io.fabric.sdk.android.Fabric;
-
 public class GodToolsApplication extends BaseGodToolsApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        // Enable crash reporting
-        Fabric.with(this, new Crashlytics());
 
         // configure eventbus
         configureEventbus();
