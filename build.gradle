@@ -31,7 +31,7 @@ ext {
 }
 ext.deps = [
         advrecyclerview      : '0.10.6',
-        androidLifecycle     : '1.0.0-alpha5',
+        androidLifecycle     : '1.0.0-alpha8',
         androidSupport       : '26.0.0',
         androidTestingSupport: '1.0.0',
         butterknife          : '8.7.0',
