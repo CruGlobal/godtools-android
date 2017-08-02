@@ -1,4 +1,5 @@
 apply plugin: 'newrelic'
+apply plugin: 'io.fabric'
 
 android {
     baseFeature true
@@ -6,6 +7,28 @@ android {
     defaultConfig {
         flavorSelection 'env', 'production'
     }
+
+    // XXX: add generated fabric dirs to source sets to work around fabric feature support issues
+    sourceSets {
+        debug.res.srcDirs += 'build/generated/fabric/res/debug'
+        release.res.srcDirs += 'build/generated/fabric/res/release'
+    }
+
+    // XXX: reduce severity of DuplicateDefinition in the feature module to work around the fabric build id being
+    // XXX: included twice for non-feature variants
+    lintOptions {
+        warning 'DuplicateDefinition'
+    }
+}
+
+afterEvaluate {
+    // XXX: add dependency to fabricGenerateResources tasks to work around fabric feature support issues
+    generateDebugFeatureResources.dependsOn fabricGenerateResourcesDebug
+    generateReleaseFeatureResources.dependsOn fabricGenerateResourcesRelease
+}
+
+crashlytics {
+    instantAppSupport true
 }
 
 dependencies {
