@@ -2,8 +2,8 @@ buildscript {
     repositories {
         mavenLocal()
         jcenter()
+        google()
         maven { url 'https://maven.fabric.io/public' }
-        maven { url 'https://maven.google.com' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.0-alpha9'
@@ -57,6 +57,7 @@ subprojects {
     repositories {
         mavenLocal()
         jcenter()
+        google()
         maven {
             name "maven.gcx.org"
             url "https://maven.gcx.org/"
@@ -65,7 +66,6 @@ subprojects {
                 password gcxMavenRepositoryPassword
             }
         }
-        maven { url 'https://maven.google.com' }
         maven { url 'https://maven.fabric.io/public' }
     }
 }
