@@ -13,6 +13,12 @@ android {
         debug.res.srcDirs += 'build/generated/fabric/res/debug'
         release.res.srcDirs += 'build/generated/fabric/res/release'
     }
+
+    // XXX: reduce severity of DuplicateDefinition in the feature module to work around the fabric build id being
+    // XXX: included twice for non-feature variants
+    lintOptions {
+        warning 'DuplicateDefinition'
+    }
 }
 
 afterEvaluate {
