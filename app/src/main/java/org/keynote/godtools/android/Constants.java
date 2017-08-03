@@ -14,5 +14,4 @@ public final class Constants {
     public static final Uri URI_PRIVACY = Uri.parse("https://www.cru.org/about/privacy.html");
     public static final Uri URI_TERMS_OF_USE = Uri.parse("http://www.godtoolsapp.com/user-agreement/");
     public static final Uri URI_COPYRIGHT = Uri.parse("http://www.godtoolsapp.com/copyright/");
-    public static final String URI_SHARE_BASE = "http://knowgod.com/";
 }

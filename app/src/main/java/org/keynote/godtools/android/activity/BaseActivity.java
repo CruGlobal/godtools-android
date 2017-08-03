@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 
+import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.cru.godtools.activity.AboutActivity;
 import org.cru.godtools.base.Settings;
 import org.keynote.godtools.android.BuildConfig;
@@ -37,13 +38,13 @@ import static org.cru.godtools.analytics.AnalyticsService.SCREEN_PRIVACY_POLICY;
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_SHARE_GODTOOLS;
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_SHARE_STORY;
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_TERMS_OF_USE;
+import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
 import static org.keynote.godtools.android.Constants.MAILTO_SUPPORT;
 import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
 import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
 import static org.keynote.godtools.android.Constants.URI_COPYRIGHT;
 import static org.keynote.godtools.android.Constants.URI_HELP;
 import static org.keynote.godtools.android.Constants.URI_PRIVACY;
-import static org.keynote.godtools.android.Constants.URI_SHARE_BASE;
 import static org.keynote.godtools.android.Constants.URI_SUPPORT;
 import static org.keynote.godtools.android.Constants.URI_TERMS_OF_USE;
 import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
@@ -290,8 +291,13 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
 
     private void launchShare() {
         mAnalytics.trackScreen(SCREEN_SHARE_GODTOOLS);
+        final String shareLink = URI_SHARE_BASE.buildUpon()
+                .appendPath(LocaleCompat.toLanguageTag(prefs().getPrimaryLanguage()).toLowerCase())
+                .appendPath("")
+                .build().toString();
+
         final String text = getString(R.string.share_general_message)
-                .replace(SHARE_LINK, URI_SHARE_BASE + prefs().getPrimaryLanguage());
+                .replace(SHARE_LINK, shareLink);
 
         final Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");

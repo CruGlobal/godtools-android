@@ -7,5 +7,5 @@ public final class Constants {
     public static final String EXTRA_TOOL = "tool";
     public static final String EXTRA_LANGUAGE = "language";
 
-    public static final Uri URI_SHARE_BASE = Uri.parse("http://knowgod.com/");
+    public static final Uri URI_SHARE_BASE = Uri.parse("https://knowgod.com/");
 }
