@@ -3,4 +3,5 @@
     android:id="@+id/content_text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:saveEnabled="false"
     android:textIsSelectable="true" />
