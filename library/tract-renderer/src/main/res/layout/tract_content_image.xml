@@ -6,4 +6,5 @@
     android:layout_height="wrap_content"
     android:adjustViewBounds="true"
     android:cropToPadding="false"
+    android:saveEnabled="false"
     app:scaleType="fill_x" />
