@@ -23,23 +23,6 @@
         android:tint="@color/gt_green"
         app:srcCompat="@drawable/ic_download" />
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/action_remove"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="-8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="-8dp"
-        android:layout_toLeftOf="@id/action_add"
-        android:layout_toStartOf="@id/action_add"
-        android:padding="8dp"
-        android:visibility="gone"
-        app:srcCompat="@drawable/ic_remove" />
-
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
@@ -49,8 +32,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
-        android:layout_toLeftOf="@id/action_remove"
-        android:layout_toStartOf="@id/action_remove"
+        android:layout_toLeftOf="@id/action_add"
+        android:layout_toStartOf="@id/action_add"
         android:gravity="start|center_vertical"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textIsSelectable="false"
