@@ -1,6 +1,6 @@
 rootProject.name='godtools'
 
-include 'library:analytics'
+include 'library:analytics', ':adobeMobileLibrary-4.13.7'
 include 'library:api'
 include 'library:base'
 include 'library:base-app'
