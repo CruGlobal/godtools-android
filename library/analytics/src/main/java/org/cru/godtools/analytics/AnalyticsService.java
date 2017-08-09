@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.adobe.mobile.Config;
+import com.adobe.mobile.Visitor;
+import com.adobe.mobile.VisitorID;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -111,7 +113,7 @@ public class AnalyticsService {
         contextData.put(ADOBE_SCREEN_NAME, screen);
         contextData.put(ADOBE_PREVIOUS_SCREEN_NAME, previousScreenName);
         contextData.put(ADOBE_APP_NAME, ADOBE_GODTOOLS);
-        contextData.put(ADOBE_MARKETING_CLOUD_ID, "");
+        contextData.put(ADOBE_MARKETING_CLOUD_ID, Visitor.getMarketingCloudId());
         contextData.put(ADOBE_LOGGED_IN_STATUS, ADOBE_NOT_LOGGED_IN);
 
         return contextData;
