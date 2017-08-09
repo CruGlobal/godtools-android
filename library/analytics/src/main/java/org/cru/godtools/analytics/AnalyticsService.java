@@ -100,7 +100,6 @@ public class AnalyticsService {
             return;
         }
 
-        if (Config.collectLifecycleData();)
         Config.collectLifecycleData(activity.get(), adobeContextData(screen));
 
         previousScreenName = screen;
