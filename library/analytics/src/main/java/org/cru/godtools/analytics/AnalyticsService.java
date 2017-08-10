@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 
 import com.adobe.mobile.Config;
 import com.adobe.mobile.Visitor;
-import com.adobe.mobile.VisitorID;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -61,8 +60,8 @@ public class AnalyticsService {
     public static final String CATEGORY_CONTENT_EVENT = "Content Event";
     private Tracker mTracker = null;
 
-    private WeakReference<Activity> activity;
-    private String previousScreenName;
+    private WeakReference<Activity> mActivity;
+    private String mPreviousScreenName;
 
     private AnalyticsService(@NonNull final Context context) {
         mTracker = GoogleAnalytics.getInstance(context).newTracker(BuildConfig.GOOGLE_ANALYTICS_CLIENT_ID);
@@ -98,20 +97,20 @@ public class AnalyticsService {
     }
 
     private void trackScreenViewInAdobe(@NonNull final String screen) {
-        if (activity == null || activity.get() == null) {
+        if (mActivity == null || mActivity.get() == null) {
             return;
         }
 
-        Config.collectLifecycleData(activity.get(), adobeContextData(screen));
+        Config.collectLifecycleData(mActivity.get(), adobeContextData(screen));
 
-        previousScreenName = screen;
+        mPreviousScreenName = screen;
     }
 
     private Map<String,Object> adobeContextData(final String screen) {
         Map<String,Object> contextData = new HashMap<>();
 
         contextData.put(ADOBE_SCREEN_NAME, screen);
-        contextData.put(ADOBE_PREVIOUS_SCREEN_NAME, previousScreenName);
+        contextData.put(ADOBE_PREVIOUS_SCREEN_NAME, mPreviousScreenName);
         contextData.put(ADOBE_APP_NAME, ADOBE_GODTOOLS);
         contextData.put(ADOBE_MARKETING_CLOUD_ID, Visitor.getMarketingCloudId());
         contextData.put(ADOBE_LOGGED_IN_STATUS, ADOBE_NOT_LOGGED_IN);
@@ -162,7 +161,7 @@ public class AnalyticsService {
     }
 
     public void startAdobeLifecycleTracking(@NonNull final Activity activity) {
-        this.activity = new WeakReference<>(activity);
+        this.mActivity = new WeakReference<>(activity);
     }
 
     public void stopAdobeLifecycleTracking() {
