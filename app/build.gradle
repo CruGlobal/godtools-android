@@ -58,7 +58,7 @@ android {
             versionNameSuffix "-debug"
             multiDexEnabled true
 
-            minifyEnabled false
+            minifyEnabled true
             shrinkResources false
         }
         release {
