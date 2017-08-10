@@ -106,8 +106,8 @@ public class AnalyticsService {
         mPreviousScreenName = screen;
     }
 
-    private Map<String,Object> adobeContextData(final String screen) {
-        Map<String,Object> contextData = new HashMap<>();
+    private Map<String, Object> adobeContextData(final String screen) {
+        Map<String, Object> contextData = new HashMap<>();
 
         contextData.put(ADOBE_SCREEN_NAME, screen);
         contextData.put(ADOBE_PREVIOUS_SCREEN_NAME, mPreviousScreenName);
