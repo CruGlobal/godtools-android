@@ -7,17 +7,15 @@ android {
         }
 
         buildConfigField "String", "GOOGLE_ANALYTICS_CLIENT_ID", "\"UA-325725-50\""
+        consumerProguardFiles 'proguard-rules-adobe.pro'
     }
 }
 
 dependencies {
     implementation project(':library:base')
-
     implementation "com.google.android.gms:play-services-analytics:${deps.playServices}"
-
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
-
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
-
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
+    implementation project(':adobeMobileLibrary-4.13.7')
 }

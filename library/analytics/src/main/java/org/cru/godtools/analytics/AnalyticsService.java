@@ -1,10 +1,13 @@
 package org.cru.godtools.analytics;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.adobe.mobile.Config;
+import com.adobe.mobile.Visitor;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -14,6 +17,10 @@ import org.cru.godtools.base.model.Event;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AnalyticsService {
     /* Screen event names */
@@ -32,6 +39,17 @@ public class AnalyticsService {
     public static final String SCREEN_PRIVACY_POLICY = "Privacy Policy";
     public static final String SCREEN_COPYRIGHT = "Copyright Info";
 
+    /* Adobe analytics key constants */
+    private static final String ADOBE_APP_NAME = "cru.appname";
+    private static final String ADOBE_LOGGED_IN_STATUS = "cru.loggedinstatus";
+    private static final String ADOBE_MARKETING_CLOUD_ID = "cru.mcid";
+    private static final String ADOBE_SCREEN_NAME = "cru.screenname";
+    private static final String ADOBE_PREVIOUS_SCREEN_NAME = "cru.previousscreenname";
+
+    /* Adobe analytics value constants */
+    private static final String ADOBE_NOT_LOGGED_IN = "not logged in";
+    private static final String ADOBE_GODTOOLS = "GodTools";
+
     /* Custom dimensions */
     private static final int DIMENSION_TOOL = 1;
     private static final int DIMENSION_LANGUAGE = 2;
@@ -42,8 +60,12 @@ public class AnalyticsService {
     public static final String CATEGORY_CONTENT_EVENT = "Content Event";
     private Tracker mTracker = null;
 
+    private WeakReference<Activity> mActivity;
+    private String mPreviousScreenName;
+
     private AnalyticsService(@NonNull final Context context) {
         mTracker = GoogleAnalytics.getInstance(context).newTracker(BuildConfig.GOOGLE_ANALYTICS_CLIENT_ID);
+        Config.setContext(context);
         EventBus.getDefault().register(this);
     }
 
@@ -61,6 +83,8 @@ public class AnalyticsService {
     public void trackScreen(@NonNull final String screen) {
         mTracker.setScreenName(screen);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+        trackScreenViewInAdobe(screen);
     }
 
     public void screenView(@NonNull final String name, @NonNull final String language) {
@@ -69,6 +93,29 @@ public class AnalyticsService {
                 .setCustomDimension(DIMENSION_LANGUAGE, language)
                 .build());
 
+        trackScreenViewInAdobe(name);
+    }
+
+    private void trackScreenViewInAdobe(@NonNull final String screen) {
+        if (mActivity == null || mActivity.get() == null) {
+            return;
+        }
+
+        Config.collectLifecycleData(mActivity.get(), adobeContextData(screen));
+
+        mPreviousScreenName = screen;
+    }
+
+    private Map<String, Object> adobeContextData(final String screen) {
+        Map<String, Object> contextData = new HashMap<>();
+
+        contextData.put(ADOBE_SCREEN_NAME, screen);
+        contextData.put(ADOBE_PREVIOUS_SCREEN_NAME, mPreviousScreenName);
+        contextData.put(ADOBE_APP_NAME, ADOBE_GODTOOLS);
+        contextData.put(ADOBE_MARKETING_CLOUD_ID, Visitor.getMarketingCloudId());
+        contextData.put(ADOBE_LOGGED_IN_STATUS, ADOBE_NOT_LOGGED_IN);
+
+        return contextData;
     }
 
     public void settingChanged(@NonNull final String category, @NonNull final String event) {
@@ -111,5 +158,13 @@ public class AnalyticsService {
         }
 
         mTracker.send(eventBuilder.build());
+    }
+
+    public void startAdobeLifecycleTracking(@NonNull final Activity activity) {
+        this.mActivity = new WeakReference<>(activity);
+    }
+
+    public void stopAdobeLifecycleTracking() {
+        Config.pauseCollectingLifecycleData();
     }
 }

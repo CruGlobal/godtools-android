@@ -31,6 +31,18 @@ public abstract class BaseActivity extends AppCompatActivity implements Lifecycl
         ButterKnife.bind(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAnalytics.startAdobeLifecycleTracking(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAnalytics.stopAdobeLifecycleTracking();
+    }
+
     /* END lifecycle */
 
     @Override
