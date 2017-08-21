@@ -598,11 +598,11 @@ public class TractActivity extends ImmersiveActivity
     private String getCodeForShareActivity() {
         String resourceCode = getActiveManifest().getCode();
 
-        return resourceCode.equals("kgp-us") ? "kgp" : resourceCode;
+        return "kgp-us".equals(resourceCode) ? "kgp" : resourceCode;
     }
 
     private String getPagePathPartForSharing() {
-        if (getActiveManifest().getCode().equals("kgp-us")) {
+        if ("kgp-us".equals(getActiveManifest().getCode())) {
             return "";
         }
 
