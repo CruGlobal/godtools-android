@@ -2,9 +2,11 @@ package org.cru.godtools.analytics;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.AnyThread;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.WorkerThread;
 
 import com.adobe.mobile.Config;
 import com.adobe.mobile.Visitor;
@@ -21,6 +23,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class AnalyticsService {
     /* Screen event names */
@@ -58,9 +62,13 @@ public class AnalyticsService {
     public static final String SCREEN_EVERYSTUDENT = "EveryStudent";
     public static final String CATEGORY_MENU = "Menu Event";
     public static final String CATEGORY_CONTENT_EVENT = "Content Event";
+
     private Tracker mTracker = null;
 
-    private WeakReference<Activity> mActivity;
+    /* Adobe Analytics */
+    private final Executor mAdobeAnalyticsExecutor = Executors.newSingleThreadExecutor();
+    @Nullable
+    private WeakReference<Activity> mActiveActivity;
     private String mPreviousScreenName;
 
     private AnalyticsService(@NonNull final Context context) {
@@ -96,16 +104,21 @@ public class AnalyticsService {
         trackScreenViewInAdobe(name);
     }
 
+    @AnyThread
     private void trackScreenViewInAdobe(@NonNull final String screen) {
-        if (mActivity == null || mActivity.get() == null) {
-            return;
+        final Activity activity = mActiveActivity != null ? mActiveActivity.get() : null;
+        if (activity != null) {
+            mAdobeAnalyticsExecutor.execute(() -> {
+                Config.collectLifecycleData(activity, adobeContextData(screen));
+                mPreviousScreenName = screen;
+            });
         }
-
-        Config.collectLifecycleData(mActivity.get(), adobeContextData(screen));
-
-        mPreviousScreenName = screen;
     }
 
+    /**
+     * Visitor.getMarketingCloudId() may be blocking. So, we need to call it on a worker thread.
+     */
+    @WorkerThread
     private Map<String, Object> adobeContextData(final String screen) {
         Map<String, Object> contextData = new HashMap<>();
 
@@ -119,7 +132,6 @@ public class AnalyticsService {
     }
 
     public void settingChanged(@NonNull final String category, @NonNull final String event) {
-
         mTracker.send(new HitBuilders.EventBuilder()
                 .setCategory(category)
                 .setAction(event)
@@ -161,10 +173,10 @@ public class AnalyticsService {
     }
 
     public void startAdobeLifecycleTracking(@NonNull final Activity activity) {
-        this.mActivity = new WeakReference<>(activity);
+        mActiveActivity = new WeakReference<>(activity);
     }
 
     public void stopAdobeLifecycleTracking() {
-        Config.pauseCollectingLifecycleData();
+        mAdobeAnalyticsExecutor.execute(Config::pauseCollectingLifecycleData);
     }
 }
