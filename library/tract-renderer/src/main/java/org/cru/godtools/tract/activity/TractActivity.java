@@ -588,11 +588,26 @@ public class TractActivity extends ImmersiveActivity
             intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_tract_subject, manifest.getTitle()));
             intent.putExtra(Intent.EXTRA_TEXT, URI_SHARE_BASE.buildUpon()
                     .appendPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
-                    .appendPath(manifest.getCode())
-                    .appendPath("")
+                    .appendPath(getCodeForShareActivity())
+                    .appendPath(getPagePathPartForSharing())
                     .build().toString());
             startActivity(Intent.createChooser(intent, getString(R.string.share_tract_title, manifest.getTitle())));
         }
+    }
+
+    private String getCodeForShareActivity() {
+        String resourceCode = getActiveManifest().getCode();
+
+        return "kgp-us".equals(resourceCode) ? "kgp" : resourceCode;
+    }
+
+    private String getPagePathPartForSharing() {
+        if ("kgp-us".equals(getActiveManifest().getCode())) {
+            return "";
+        }
+
+        int currentPageNumber = mPager.getCurrentItem();
+        return currentPageNumber > 0 ? String.valueOf(currentPageNumber) : "";
     }
 
     class AnalyticsPageChangeListener extends ViewPager.SimpleOnPageChangeListener {
