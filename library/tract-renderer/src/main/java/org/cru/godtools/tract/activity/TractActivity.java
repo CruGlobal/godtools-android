@@ -596,6 +596,10 @@ public class TractActivity extends ImmersiveActivity
     }
 
     private String getPagePathPartForSharing() {
+        if (getActiveManifest().getCode().equals("kgp-us")) {
+            return "";
+        }
+        
         int currentPageNumber = mPager.getCurrentItem();
         return currentPageNumber > 0 ? String.valueOf(currentPageNumber) : "";
     }
