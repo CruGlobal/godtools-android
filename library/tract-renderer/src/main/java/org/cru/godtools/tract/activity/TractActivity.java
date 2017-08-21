@@ -589,10 +589,15 @@ public class TractActivity extends ImmersiveActivity
             intent.putExtra(Intent.EXTRA_TEXT, URI_SHARE_BASE.buildUpon()
                     .appendPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
                     .appendPath(manifest.getCodeForShareActivity())
-                    .appendPath("")
+                    .appendPath(getPagePathPartForSharing())
                     .build().toString());
             startActivity(Intent.createChooser(intent, getString(R.string.share_tract_title, manifest.getTitle())));
         }
+    }
+
+    private String getPagePathPartForSharing() {
+        int currentPageNumber = mPager.getCurrentItem();
+        return currentPageNumber > 0 ? String.valueOf(currentPageNumber) : "";
     }
 
     class AnalyticsPageChangeListener extends ViewPager.SimpleOnPageChangeListener {
