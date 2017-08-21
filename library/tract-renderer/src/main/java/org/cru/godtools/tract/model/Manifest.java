@@ -114,6 +114,11 @@ public final class Manifest extends Base implements Styles {
     }
 
     @NonNull
+    public String getCodeForShareActivity() {
+        return mCode.equals("kgp-us") ? "kgp" : mCode;
+    }
+
+    @NonNull
     public Locale getLocale() {
         return mLocale;
     }

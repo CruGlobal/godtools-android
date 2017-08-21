@@ -588,7 +588,7 @@ public class TractActivity extends ImmersiveActivity
             intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_tract_subject, manifest.getTitle()));
             intent.putExtra(Intent.EXTRA_TEXT, URI_SHARE_BASE.buildUpon()
                     .appendPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
-                    .appendPath(manifest.getCode())
+                    .appendPath(manifest.getCodeForShareActivity())
                     .appendPath("")
                     .build().toString());
             startActivity(Intent.createChooser(intent, getString(R.string.share_tract_title, manifest.getTitle())));
