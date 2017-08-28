@@ -20,7 +20,7 @@ plugins {
 }
 
 group 'org.cru.android'
-version '5.0.5'
+version '5.0.6-SNAPSHOT'
 
 // define dependency versions for this project
 ext {
