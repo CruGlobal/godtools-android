@@ -5,7 +5,7 @@ android {
     baseFeature true
 
     defaultConfig {
-        flavorSelection 'env', 'production'
+        missingDimensionStrategy 'env', 'production'
     }
 
     // XXX: add generated fabric dirs to source sets to work around fabric feature support issues
