@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
+import com.adobe.mobile.Analytics;
 import com.adobe.mobile.Config;
 import com.adobe.mobile.Visitor;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -109,7 +110,9 @@ public class AnalyticsService {
         final Activity activity = mActiveActivity != null ? mActiveActivity.get() : null;
         if (activity != null) {
             mAdobeAnalyticsExecutor.execute(() -> {
-                Config.collectLifecycleData(activity, adobeContextData(screen));
+                final Map<String, Object> adobeContextData = adobeContextData(screen);
+                Analytics.trackState(screen, adobeContextData);
+                Config.collectLifecycleData(activity, adobeContextData);
                 mPreviousScreenName = screen;
             });
         }
