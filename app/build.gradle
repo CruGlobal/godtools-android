@@ -21,7 +21,7 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        flavorSelection 'env', 'production'
+        missingDimensionStrategy 'env', 'production'
 
         javaCompileOptions {
             annotationProcessorOptions {

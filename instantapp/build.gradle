@@ -8,10 +8,6 @@ android {
         minSdkVersion minSdk
         targetSdkVersion targetSdk
     }
-
-    lintOptions {
-        tasks.lint.enabled = false
-    }
 }
 
 dependencies {
