@@ -58,4 +58,9 @@ public class LanguageSettingsActivity extends BaseActivity {
                 .replace(R.id.frame, LanguageSettingsFragment.newInstance(), TAG_MAIN_FRAGMENT)
                 .commit();
     }
+
+    @Override
+    public void supportNavigateUpTo(@NonNull final Intent upIntent) {
+        finish();
+    }
 }
