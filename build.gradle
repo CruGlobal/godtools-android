@@ -6,7 +6,7 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-rc2'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         //noinspection GradleDependency
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
@@ -42,7 +42,7 @@ ext.deps = [
         eventbusAnnotations  : '3.0.1',
         evernoteAndroidJob   : '1.1.11',
         facebookStetho       : '1.5.0',
-        gtoSupport           : '1.1.2',
+        gtoSupport           : '1.1.3-SNAPSHOT',
         guava                : '22.0-android',
         hamcrest             : '1.3',
         junit                : '4.12',
