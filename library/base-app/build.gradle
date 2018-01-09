@@ -21,7 +21,7 @@ android {
 dependencies {
     implementation project(":library:base-ui")
 
-    implementation 'com.google.android.instantapps:instantapps:1.0.0'
+    implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
 
