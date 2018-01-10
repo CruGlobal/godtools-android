@@ -115,6 +115,11 @@ configure(subprojects.findAll { it.path.startsWith(":library:") }) {
                 lintConfig rootProject.file("analysis/lint/lint.xml")
             }
         }
+
+        dependencies {
+            // HACK: this works around a dependency issue with adobe analytics when running android tests
+            androidTestImplementation "com.google.android.gms:play-services-wearable:${deps.playServices}"
+        }
     }
 }
 
