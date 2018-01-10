@@ -1,2 +1,0 @@
-configurations.maybeCreate("default")
-artifacts.add("default", file('adobeMobileLibrary-4.13.7.jar'))
