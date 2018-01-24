@@ -22,4 +22,7 @@ dependencies {
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
+
+    // Snowplow Android Tracker
+    compile 'com.snowplowanalytics:snowplow-android-tracker:0.6.2@aar'
 }
