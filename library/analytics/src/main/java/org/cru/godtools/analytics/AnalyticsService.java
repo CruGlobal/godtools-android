@@ -14,6 +14,10 @@ import com.adobe.mobile.Visitor;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.snowplowanalytics.snowplow.tracker.DevicePlatforms;
+import com.snowplowanalytics.snowplow.tracker.Emitter;
+import com.snowplowanalytics.snowplow.tracker.emitter.RequestCallback;
+import com.snowplowanalytics.snowplow.tracker.utils.LogLevel;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.cru.godtools.base.model.Event;
@@ -55,6 +59,11 @@ public class AnalyticsService {
     private static final String ADOBE_NOT_LOGGED_IN = "not logged in";
     private static final String ADOBE_GODTOOLS = "GodTools";
 
+    /* SnowPlow value constants */
+    private static final String SNOWPLOW_APP_ID = "GodTools";
+    private static final String SNOWPLOW_NAMESPACE = "GodToolsSnowPlowAndroidTracker";
+    private static final String SNOWPLOW_ENDPOINT = "snowplow.cru.org";
+
     /* Custom dimensions */
     private static final int DIMENSION_TOOL = 1;
     private static final int DIMENSION_LANGUAGE = 2;
@@ -65,6 +74,7 @@ public class AnalyticsService {
     public static final String CATEGORY_CONTENT_EVENT = "Content Event";
 
     private Tracker mTracker = null;
+    private com.snowplowanalytics.snowplow.tracker.Tracker mSnowPlowTracker = null;
 
     /* Adobe Analytics */
     private final Executor mAdobeAnalyticsExecutor = Executors.newSingleThreadExecutor();
@@ -76,6 +86,7 @@ public class AnalyticsService {
         mTracker = GoogleAnalytics.getInstance(context).newTracker(BuildConfig.GOOGLE_ANALYTICS_CLIENT_ID);
         Config.setContext(context);
         EventBus.getDefault().register(this);
+        initSnowPlowTracker(context);
     }
 
     @Nullable
@@ -181,5 +192,50 @@ public class AnalyticsService {
 
     public void stopAdobeLifecycleTracking() {
         mAdobeAnalyticsExecutor.execute(Config::pauseCollectingLifecycleData);
+    }
+
+    private void initSnowPlowTracker(@NonNull final Context context) {
+        com.snowplowanalytics.snowplow.tracker.Tracker.close();
+
+        //The Context is used for caching events in a SQLite database in order to avoid losing events to network related issues.
+        Emitter emitter = new Emitter.EmitterBuilder(SNOWPLOW_ENDPOINT, context)
+                .callback(getCallback())
+                .tick(5) // The interval at which the emitter will check for more events. (seconds)
+                .build();
+
+        com.snowplowanalytics.snowplow.tracker.Tracker.init(
+                new com.snowplowanalytics.snowplow.tracker.Tracker.TrackerBuilder(
+                        emitter,
+                        SNOWPLOW_NAMESPACE,
+                        SNOWPLOW_APP_ID,
+                        context)
+                        .level(LogLevel.DEBUG)
+                        .base64(false)
+                        .platform(DevicePlatforms.Mobile)
+                        .threadCount(10)
+                        .mobileContext(true)
+                        .geoLocationContext(false)
+                        .applicationCrash(true)
+                        .lifecycleEvents(true)
+                        .build());
+
+        mSnowPlowTracker = com.snowplowanalytics.snowplow.tracker.Tracker.instance();
+    }
+
+    /**
+     * Returns the Emitter Request Callback.
+     */
+    private RequestCallback getCallback() {
+        return new RequestCallback() {
+            @Override
+            public void onSuccess(final int successCount) {
+                // Do something useful
+            }
+
+            @Override
+            public void onFailure(final int successCount, final int failureCount) {
+                // Do something useful
+            }
+        };
     }
 }
