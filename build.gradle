@@ -68,6 +68,7 @@ subprojects {
             }
         }
         maven { url 'https://maven.fabric.io/public' }
+        maven { url 'http://maven.snplow.com/releases' }
     }
 }
 
