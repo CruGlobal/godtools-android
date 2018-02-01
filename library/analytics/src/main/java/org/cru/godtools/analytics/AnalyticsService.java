@@ -17,6 +17,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.snowplowanalytics.snowplow.tracker.DevicePlatforms;
 import com.snowplowanalytics.snowplow.tracker.Emitter;
 import com.snowplowanalytics.snowplow.tracker.emitter.RequestCallback;
+import com.snowplowanalytics.snowplow.tracker.events.ScreenView;
 import com.snowplowanalytics.snowplow.tracker.utils.LogLevel;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
@@ -78,6 +79,9 @@ public class AnalyticsService {
 
     /* Adobe Analytics */
     private final Executor mAdobeAnalyticsExecutor = Executors.newSingleThreadExecutor();
+    /* SnowPlow */
+    private final Executor mSnowPlowExecutor = Executors.newSingleThreadExecutor();
+
     @Nullable
     private WeakReference<Activity> mActiveActivity;
     private String mPreviousScreenName;
@@ -105,6 +109,7 @@ public class AnalyticsService {
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         trackScreenViewInAdobe(screen);
+        trackScreenViewInSnowPlow(screen);
     }
 
     public void screenView(@NonNull final String name, @NonNull final String language) {
@@ -114,6 +119,7 @@ public class AnalyticsService {
                 .build());
 
         trackScreenViewInAdobe(name);
+        trackScreenViewInSnowPlow(name);
     }
 
     @AnyThread
@@ -124,6 +130,18 @@ public class AnalyticsService {
                 final Map<String, Object> adobeContextData = adobeContextData(screen);
                 Analytics.trackState(screen, adobeContextData);
                 Config.collectLifecycleData(activity, adobeContextData);
+                mPreviousScreenName = screen;
+            });
+        }
+    }
+
+    @AnyThread
+    private void trackScreenViewInSnowPlow(@NonNull final String screen)
+    {
+        final Activity activity = mActiveActivity != null ? mActiveActivity.get() : null;
+        if (activity != null) {
+            mSnowPlowExecutor.execute(() -> {
+                mSnowPlowTracker.track(ScreenView.builder().name(screen).build());
                 mPreviousScreenName = screen;
             });
         }
