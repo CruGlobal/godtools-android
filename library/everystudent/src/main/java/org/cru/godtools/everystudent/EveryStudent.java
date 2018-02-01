@@ -126,6 +126,12 @@ public class EveryStudent extends ExpandableListActivity {
         return false;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mTracker.setActiveActivity(this);
+    }
+
     @SuppressLint("HandlerLeak")
     private class ParserHandler extends Handler {
         @Override
