@@ -18,6 +18,7 @@ import com.snowplowanalytics.snowplow.tracker.DevicePlatforms;
 import com.snowplowanalytics.snowplow.tracker.Emitter;
 import com.snowplowanalytics.snowplow.tracker.emitter.RequestCallback;
 import com.snowplowanalytics.snowplow.tracker.events.ScreenView;
+import com.snowplowanalytics.snowplow.tracker.events.Structured;
 import com.snowplowanalytics.snowplow.tracker.utils.LogLevel;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
@@ -174,11 +175,29 @@ public class AnalyticsService {
 
     public void trackEveryStudentSearch(@NonNull final String query) {
         mTracker.setScreenName("everystudent-search");
+
+        final String category = "searchbar";
+        final String action = "tap";
         mTracker.send(new HitBuilders.EventBuilder()
-                              .setCategory("searchbar")
-                              .setAction("tap")
+                              .setCategory(category)
+                              .setAction(action)
                               .setLabel(query)
                               .build());
+
+        trackCustomStructuredEventInSnowPlow(category, action, query);
+    }
+
+    @AnyThread
+    private void trackCustomStructuredEventInSnowPlow(
+        @NonNull final String category,
+        @NonNull final String action,
+        @NonNull final String label) {
+
+        mSnowPlowExecutor.execute(() -> mSnowPlowTracker.track(Structured.builder()
+                .category(category)
+                .action(action)
+                .label(label)
+                .build()));
     }
 
     public void menuEvent(@NonNull final String item) {
