@@ -223,7 +223,7 @@ public class AnalyticsService {
         mTracker.send(eventBuilder.build());
     }
 
-    public void startAdobeLifecycleTracking(@NonNull final Activity activity) {
+    public void setActiveActivity(@NonNull final Activity activity) {
         mActiveActivity = new WeakReference<>(activity);
     }
 
