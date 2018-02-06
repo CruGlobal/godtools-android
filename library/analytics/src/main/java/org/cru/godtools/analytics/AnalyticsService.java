@@ -136,9 +136,8 @@ public class AnalyticsService {
     @AnyThread
     private void trackScreenViewInSnowPlow(@NonNull final String screen)
     {
-        mAnalyticsExecutor.execute(() -> {
-            mSnowPlowTracker.track(ScreenView.builder().name(screen).build());
-        });
+        mAnalyticsExecutor.execute(() ->
+                mSnowPlowTracker.track(ScreenView.builder().name(screen).build()));
     }
 
     /**
