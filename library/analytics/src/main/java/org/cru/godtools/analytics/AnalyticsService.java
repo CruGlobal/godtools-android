@@ -78,10 +78,8 @@ public class AnalyticsService {
     private Tracker mTracker = null;
     private com.snowplowanalytics.snowplow.tracker.Tracker mSnowPlowTracker = null;
 
-    /* Adobe Analytics */
-    private final Executor mAdobeAnalyticsExecutor = Executors.newSingleThreadExecutor();
-    /* SnowPlow */
-    private final Executor mSnowPlowExecutor = Executors.newSingleThreadExecutor();
+    /* Adobe and SnowPlow Analytics */
+    private final Executor mAnalyticsExecutor = Executors.newSingleThreadExecutor();
 
     @Nullable
     private WeakReference<Activity> mActiveActivity;
@@ -127,7 +125,7 @@ public class AnalyticsService {
     private void trackScreenViewInAdobe(@NonNull final String screen) {
         final Activity activity = mActiveActivity != null ? mActiveActivity.get() : null;
         if (activity != null) {
-            mAdobeAnalyticsExecutor.execute(() -> {
+            mAnalyticsExecutor.execute(() -> {
                 final Map<String, Object> adobeContextData = adobeContextData(screen);
                 Analytics.trackState(screen, adobeContextData);
                 Config.collectLifecycleData(activity, adobeContextData);
@@ -141,7 +139,7 @@ public class AnalyticsService {
     {
         final Activity activity = mActiveActivity != null ? mActiveActivity.get() : null;
         if (activity != null) {
-            mSnowPlowExecutor.execute(() -> {
+            mAnalyticsExecutor.execute(() -> {
                 mSnowPlowTracker.track(ScreenView.builder().name(screen).build());
                 mPreviousScreenName = screen;
             });
@@ -193,7 +191,7 @@ public class AnalyticsService {
         @NonNull final String action,
         @NonNull final String label) {
 
-        mSnowPlowExecutor.execute(() -> mSnowPlowTracker.track(Structured.builder()
+        mAnalyticsExecutor.execute(() -> mSnowPlowTracker.track(Structured.builder()
                 .category(category)
                 .action(action)
                 .label(label)
@@ -228,7 +226,7 @@ public class AnalyticsService {
     }
 
     public void stopAdobeLifecycleTracking() {
-        mAdobeAnalyticsExecutor.execute(Config::pauseCollectingLifecycleData);
+        mAnalyticsExecutor.execute(Config::pauseCollectingLifecycleData);
     }
 
     private void initSnowPlowTracker(@NonNull final Context context) {
