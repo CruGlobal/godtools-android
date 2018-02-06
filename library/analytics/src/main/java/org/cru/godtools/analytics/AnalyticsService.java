@@ -14,6 +14,12 @@ import com.adobe.mobile.Visitor;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.snowplowanalytics.snowplow.tracker.DevicePlatforms;
+import com.snowplowanalytics.snowplow.tracker.Emitter;
+import com.snowplowanalytics.snowplow.tracker.emitter.RequestCallback;
+import com.snowplowanalytics.snowplow.tracker.events.ScreenView;
+import com.snowplowanalytics.snowplow.tracker.events.Structured;
+import com.snowplowanalytics.snowplow.tracker.utils.LogLevel;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.cru.godtools.base.model.Event;
@@ -55,6 +61,10 @@ public class AnalyticsService {
     private static final String ADOBE_NOT_LOGGED_IN = "not logged in";
     private static final String ADOBE_GODTOOLS = "GodTools";
 
+    /* SnowPlow value constants */
+    private static final String SNOWPLOW_APP_ID = "GodTools";
+    private static final String SNOWPLOW_NAMESPACE = "GodToolsSnowPlowAndroidTracker";
+
     /* Custom dimensions */
     private static final int DIMENSION_TOOL = 1;
     private static final int DIMENSION_LANGUAGE = 2;
@@ -65,9 +75,11 @@ public class AnalyticsService {
     public static final String CATEGORY_CONTENT_EVENT = "Content Event";
 
     private Tracker mTracker = null;
+    private com.snowplowanalytics.snowplow.tracker.Tracker mSnowPlowTracker = null;
 
-    /* Adobe Analytics */
-    private final Executor mAdobeAnalyticsExecutor = Executors.newSingleThreadExecutor();
+    /* Adobe and SnowPlow Analytics */
+    private final Executor mAnalyticsExecutor = Executors.newSingleThreadExecutor();
+
     @Nullable
     private WeakReference<Activity> mActiveActivity;
     private String mPreviousScreenName;
@@ -76,6 +88,7 @@ public class AnalyticsService {
         mTracker = GoogleAnalytics.getInstance(context).newTracker(BuildConfig.GOOGLE_ANALYTICS_CLIENT_ID);
         Config.setContext(context);
         EventBus.getDefault().register(this);
+        initSnowPlowTracker(context);
     }
 
     @Nullable
@@ -94,6 +107,7 @@ public class AnalyticsService {
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         trackScreenViewInAdobe(screen);
+        trackScreenViewInSnowPlow(screen);
     }
 
     public void screenView(@NonNull final String name, @NonNull final String language) {
@@ -103,19 +117,26 @@ public class AnalyticsService {
                 .build());
 
         trackScreenViewInAdobe(name);
+        trackScreenViewInSnowPlow(name);
     }
 
     @AnyThread
     private void trackScreenViewInAdobe(@NonNull final String screen) {
         final Activity activity = mActiveActivity != null ? mActiveActivity.get() : null;
         if (activity != null) {
-            mAdobeAnalyticsExecutor.execute(() -> {
+            mAnalyticsExecutor.execute(() -> {
                 final Map<String, Object> adobeContextData = adobeContextData(screen);
                 Analytics.trackState(screen, adobeContextData);
                 Config.collectLifecycleData(activity, adobeContextData);
                 mPreviousScreenName = screen;
             });
         }
+    }
+
+    @AnyThread
+    private void trackScreenViewInSnowPlow(@NonNull final String screen) {
+        mAnalyticsExecutor.execute(() ->
+                mSnowPlowTracker.track(ScreenView.builder().name(screen).build()));
     }
 
     /**
@@ -145,11 +166,29 @@ public class AnalyticsService {
 
     public void trackEveryStudentSearch(@NonNull final String query) {
         mTracker.setScreenName("everystudent-search");
+
+        final String category = "searchbar";
+        final String action = "tap";
         mTracker.send(new HitBuilders.EventBuilder()
-                              .setCategory("searchbar")
-                              .setAction("tap")
+                              .setCategory(category)
+                              .setAction(action)
                               .setLabel(query)
                               .build());
+
+        trackCustomStructuredEventInSnowPlow(category, action, query);
+    }
+
+    @AnyThread
+    private void trackCustomStructuredEventInSnowPlow(
+        @NonNull final String category,
+        @NonNull final String action,
+        @NonNull final String label) {
+
+        mAnalyticsExecutor.execute(() -> mSnowPlowTracker.track(Structured.builder()
+                .category(category)
+                .action(action)
+                .label(label)
+                .build()));
     }
 
     public void menuEvent(@NonNull final String item) {
@@ -175,11 +214,57 @@ public class AnalyticsService {
         mTracker.send(eventBuilder.build());
     }
 
-    public void startAdobeLifecycleTracking(@NonNull final Activity activity) {
+    public void setActiveActivity(@NonNull final Activity activity) {
         mActiveActivity = new WeakReference<>(activity);
     }
 
     public void stopAdobeLifecycleTracking() {
-        mAdobeAnalyticsExecutor.execute(Config::pauseCollectingLifecycleData);
+        mAnalyticsExecutor.execute(Config::pauseCollectingLifecycleData);
+    }
+
+    private void initSnowPlowTracker(@NonNull final Context context) {
+        com.snowplowanalytics.snowplow.tracker.Tracker.close();
+
+        // The Context is used for caching events in a SQLite database in order
+        // to avoid losing events to network related issues.
+        Emitter emitter = new Emitter.EmitterBuilder(BuildConfig.SNOWPLOW_ENDPOINT, context)
+                .callback(getCallback())
+                .tick(5) // The interval at which the emitter will check for more events. (seconds)
+                .build();
+
+        com.snowplowanalytics.snowplow.tracker.Tracker.init(
+                new com.snowplowanalytics.snowplow.tracker.Tracker.TrackerBuilder(
+                        emitter,
+                        SNOWPLOW_NAMESPACE,
+                        SNOWPLOW_APP_ID,
+                        context)
+                        .level(LogLevel.DEBUG)
+                        .base64(false)
+                        .platform(DevicePlatforms.Mobile)
+                        .threadCount(10)
+                        .mobileContext(true)
+                        .geoLocationContext(false)
+                        .applicationCrash(true)
+                        .lifecycleEvents(true)
+                        .build());
+
+        mSnowPlowTracker = com.snowplowanalytics.snowplow.tracker.Tracker.instance();
+    }
+
+    /**
+     * Returns the Emitter Request Callback.
+     */
+    private RequestCallback getCallback() {
+        return new RequestCallback() {
+            @Override
+            public void onSuccess(final int successCount) {
+                // Do something useful
+            }
+
+            @Override
+            public void onFailure(final int successCount, final int failureCount) {
+                // Do something useful
+            }
+        };
     }
 }

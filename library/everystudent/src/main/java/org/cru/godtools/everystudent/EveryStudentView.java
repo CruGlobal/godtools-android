@@ -128,6 +128,7 @@ public class EveryStudentView extends Activity {
         if (wl != null) {
             wl.acquire();
         }
+        AnalyticsService.getInstance(this).setActiveActivity(this);
     }
 
     @Override

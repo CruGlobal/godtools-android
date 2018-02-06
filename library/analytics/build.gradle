@@ -7,7 +7,9 @@ android {
         }
 
         buildConfigField "String", "GOOGLE_ANALYTICS_CLIENT_ID", "\"UA-325725-50\""
+        buildConfigField "String", "SNOWPLOW_ENDPOINT", "\"snowplow.cru.org\""
         consumerProguardFiles 'proguard-rules-adobe.pro'
+        consumerProguardFiles 'proguard-rules-snowplow.pro'
     }
 }
 
@@ -22,4 +24,7 @@ dependencies {
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
+
+    // Snowplow Android Tracker
+    compile 'com.snowplowanalytics:snowplow-android-tracker:0.6.2@aar'
 }
