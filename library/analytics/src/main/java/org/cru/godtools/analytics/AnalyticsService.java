@@ -134,8 +134,7 @@ public class AnalyticsService {
     }
 
     @AnyThread
-    private void trackScreenViewInSnowPlow(@NonNull final String screen)
-    {
+    private void trackScreenViewInSnowPlow(@NonNull final String screen) {
         mAnalyticsExecutor.execute(() ->
                 mSnowPlowTracker.track(ScreenView.builder().name(screen).build()));
     }
@@ -226,7 +225,8 @@ public class AnalyticsService {
     private void initSnowPlowTracker(@NonNull final Context context) {
         com.snowplowanalytics.snowplow.tracker.Tracker.close();
 
-        //The Context is used for caching events in a SQLite database in order to avoid losing events to network related issues.
+        // The Context is used for caching events in a SQLite database in order
+        // to avoid losing events to network related issues.
         Emitter emitter = new Emitter.EmitterBuilder(BuildConfig.SNOWPLOW_ENDPOINT, context)
                 .callback(getCallback())
                 .tick(5) // The interval at which the emitter will check for more events. (seconds)
