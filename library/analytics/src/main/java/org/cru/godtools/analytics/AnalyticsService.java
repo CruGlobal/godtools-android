@@ -141,7 +141,6 @@ public class AnalyticsService {
         if (activity != null) {
             mAnalyticsExecutor.execute(() -> {
                 mSnowPlowTracker.track(ScreenView.builder().name(screen).build());
-                mPreviousScreenName = screen;
             });
         }
     }
