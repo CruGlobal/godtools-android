@@ -64,7 +64,6 @@ public class AnalyticsService {
     /* SnowPlow value constants */
     private static final String SNOWPLOW_APP_ID = "GodTools";
     private static final String SNOWPLOW_NAMESPACE = "GodToolsSnowPlowAndroidTracker";
-    private static final String SNOWPLOW_ENDPOINT = "snowplow.cru.org";
 
     /* Custom dimensions */
     private static final int DIMENSION_TOOL = 1;
@@ -232,7 +231,7 @@ public class AnalyticsService {
         com.snowplowanalytics.snowplow.tracker.Tracker.close();
 
         //The Context is used for caching events in a SQLite database in order to avoid losing events to network related issues.
-        Emitter emitter = new Emitter.EmitterBuilder(SNOWPLOW_ENDPOINT, context)
+        Emitter emitter = new Emitter.EmitterBuilder(BuildConfig.SNOWPLOW_ENDPOINT, context)
                 .callback(getCallback())
                 .tick(5) // The interval at which the emitter will check for more events. (seconds)
                 .build();
