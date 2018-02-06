@@ -136,12 +136,9 @@ public class AnalyticsService {
     @AnyThread
     private void trackScreenViewInSnowPlow(@NonNull final String screen)
     {
-        final Activity activity = mActiveActivity != null ? mActiveActivity.get() : null;
-        if (activity != null) {
-            mAnalyticsExecutor.execute(() -> {
-                mSnowPlowTracker.track(ScreenView.builder().name(screen).build());
-            });
-        }
+        mAnalyticsExecutor.execute(() -> {
+            mSnowPlowTracker.track(ScreenView.builder().name(screen).build());
+        });
     }
 
     /**
