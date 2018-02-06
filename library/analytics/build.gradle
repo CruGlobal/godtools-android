@@ -8,6 +8,7 @@ android {
 
         buildConfigField "String", "GOOGLE_ANALYTICS_CLIENT_ID", "\"UA-325725-50\""
         consumerProguardFiles 'proguard-rules-adobe.pro'
+        consumerProguardFiles 'proguard-rules-snowplow.pro'
     }
 }
 
