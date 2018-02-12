@@ -26,6 +26,7 @@ import static org.cru.godtools.tract.model.Text.XML_TEXT;
 public final class CallToAction extends Base {
     static final String XML_CALL_TO_ACTION = "call-to-action";
     private static final String XML_EVENTS = "events";
+    private static final String XML_CONTROL_COLOR = "control-color";
 
     public interface Callbacks {
         void goToNextPage();
@@ -33,6 +34,9 @@ public final class CallToAction extends Base {
 
     @Nullable
     private Text mLabel;
+
+    @Nullable
+    private String mControlColor;
 
     @NonNull
     private Set<Event.Id> mEvents = ImmutableSet.of();
@@ -43,6 +47,9 @@ public final class CallToAction extends Base {
 
     @ColorInt
     private static int getArrowColor(@Nullable final CallToAction callToAction) {
+        if (callToAction != null && callToAction.mControlColor != null) {
+            return Utils.parseColor(callToAction.mControlColor, null);
+        }
         return Styles.getPrimaryColor(callToAction != null ? callToAction.getPage() : null);
     }
 
@@ -57,6 +64,8 @@ public final class CallToAction extends Base {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CALL_TO_ACTION);
 
         mEvents = parseEvents(parser, XML_EVENTS);
+
+        mControlColor = parser.getAttributeValue(null, XML_CONTROL_COLOR);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
