@@ -47,11 +47,13 @@ public final class CallToAction extends Base {
     }
 
     @ColorInt
-    private static int getArrowColor(@Nullable final CallToAction callToAction) {
-        if (callToAction != null && callToAction.mControlColor != null) {
-            return callToAction.mControlColor;
-        }
-        return Styles.getPrimaryColor(callToAction != null ? callToAction.getPage() : null);
+    private static int getControlColor(@Nullable final CallToAction callToAction) {
+        return callToAction != null ? callToAction.getControlColor() : Styles.getPrimaryColor(null);
+    }
+
+    @ColorInt
+    private int getControlColor() {
+        return mControlColor != null ? mControlColor : Styles.getPrimaryColor(getPage());
     }
 
     @NonNull
@@ -112,7 +114,7 @@ public final class CallToAction extends Base {
             final boolean visible =
                     callToAction == null || !callToAction.getPage().isLastPage() || !callToAction.mEvents.isEmpty();
             arrow.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
-            arrow.setImageDrawable(DrawableUtils.tint(arrow.getDrawable(), CallToAction.getArrowColor(callToAction)));
+            arrow.setImageDrawable(DrawableUtils.tint(arrow.getDrawable(), CallToAction.getControlColor(callToAction)));
             arrow.setOnClickListener((v) -> CallToAction.trigger(callToAction, callbacks));
         }
     }
