@@ -22,10 +22,12 @@ import java.util.Set;
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 import static org.cru.godtools.tract.model.Text.XML_TEXT;
+import static org.cru.godtools.tract.model.Utils.parseColor;
 
 public final class CallToAction extends Base {
     static final String XML_CALL_TO_ACTION = "call-to-action";
     private static final String XML_EVENTS = "events";
+    private static final String XML_CONTROL_COLOR = "control-color";
 
     public interface Callbacks {
         void goToNextPage();
@@ -33,6 +35,9 @@ public final class CallToAction extends Base {
 
     @Nullable
     private Text mLabel;
+
+    @Nullable @ColorInt
+    private Integer mControlColor;
 
     @NonNull
     private Set<Event.Id> mEvents = ImmutableSet.of();
@@ -42,8 +47,13 @@ public final class CallToAction extends Base {
     }
 
     @ColorInt
-    private static int getArrowColor(@Nullable final CallToAction callToAction) {
-        return Styles.getPrimaryColor(callToAction != null ? callToAction.getPage() : null);
+    private static int getControlColor(@Nullable final CallToAction callToAction) {
+        return callToAction != null ? callToAction.getControlColor() : Styles.getPrimaryColor(null);
+    }
+
+    @ColorInt
+    private int getControlColor() {
+        return mControlColor != null ? mControlColor : Styles.getPrimaryColor(getPage());
     }
 
     @NonNull
@@ -57,6 +67,8 @@ public final class CallToAction extends Base {
         parser.require(XmlPullParser.START_TAG, XMLNS_TRACT, XML_CALL_TO_ACTION);
 
         mEvents = parseEvents(parser, XML_EVENTS);
+
+        mControlColor = parseColor(parser, XML_CONTROL_COLOR, null);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -102,7 +114,7 @@ public final class CallToAction extends Base {
             final boolean visible =
                     callToAction == null || !callToAction.getPage().isLastPage() || !callToAction.mEvents.isEmpty();
             arrow.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
-            arrow.setImageDrawable(DrawableUtils.tint(arrow.getDrawable(), CallToAction.getArrowColor(callToAction)));
+            arrow.setImageDrawable(DrawableUtils.tint(arrow.getDrawable(), CallToAction.getControlColor(callToAction)));
             arrow.setOnClickListener((v) -> CallToAction.trigger(callToAction, callbacks));
         }
     }
