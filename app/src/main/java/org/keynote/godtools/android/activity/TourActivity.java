@@ -157,16 +157,6 @@ public class TourActivity extends AppCompatActivity {
         }
 
         @Optional
-        @OnClick(R.id.action_switch_language)
-        void showLanguageSettings() {
-            final TourActivity activity = FragmentUtils.getListener(this, TourActivity.class);
-            if (activity != null) {
-                LanguageSettingsActivity.start(activity);
-                activity.finish();
-            }
-        }
-
-        @Optional
         @OnClick(R.id.action_tour_close)
         void closeTour() {
             final TourActivity activity = FragmentUtils.getListener(this, TourActivity.class);

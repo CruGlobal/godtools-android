@@ -33,26 +33,11 @@
 
         <View style="@style/Widget.GodTools2.Tour.Spacer" />
 
-        <RelativeLayout
+        <Button
+            android:id="@+id/action_tour_close"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/action_switch_language"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/action_tour_now" />
-
-            <Button
-                android:id="@+id/action_tour_close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_toEndOf="@id/action_switch_language"
-                android:layout_toRightOf="@id/action_switch_language"
-                android:text="@string/action_tour_later" />
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:text="@string/action_tour_ok" />
 
         <View style="@style/Widget.GodTools2.Tour.Spacer" />
 
