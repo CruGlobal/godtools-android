@@ -36,7 +36,7 @@ public final class CallToAction extends Base {
     @Nullable
     private Text mLabel;
 
-    @Nullable
+    @Nullable @ColorInt
     private Integer mControlColor;
 
     @NonNull
