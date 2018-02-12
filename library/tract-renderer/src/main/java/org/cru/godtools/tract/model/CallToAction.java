@@ -22,6 +22,7 @@ import java.util.Set;
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 import static org.cru.godtools.tract.model.Text.XML_TEXT;
+import static org.cru.godtools.tract.model.Utils.parseColor;
 
 public final class CallToAction extends Base {
     static final String XML_CALL_TO_ACTION = "call-to-action";
@@ -36,7 +37,7 @@ public final class CallToAction extends Base {
     private Text mLabel;
 
     @Nullable
-    private String mControlColor;
+    private Integer mControlColor;
 
     @NonNull
     private Set<Event.Id> mEvents = ImmutableSet.of();
@@ -48,7 +49,7 @@ public final class CallToAction extends Base {
     @ColorInt
     private static int getArrowColor(@Nullable final CallToAction callToAction) {
         if (callToAction != null && callToAction.mControlColor != null) {
-            return Utils.parseColor(callToAction.mControlColor, null);
+            return callToAction.mControlColor;
         }
         return Styles.getPrimaryColor(callToAction != null ? callToAction.getPage() : null);
     }
@@ -65,7 +66,7 @@ public final class CallToAction extends Base {
 
         mEvents = parseEvents(parser, XML_EVENTS);
 
-        mControlColor = parser.getAttributeValue(null, XML_CONTROL_COLOR);
+        mControlColor = parseColor(parser, XML_CONTROL_COLOR, null);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
