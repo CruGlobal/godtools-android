@@ -586,15 +586,32 @@ public class TractActivity extends ImmersiveActivity
             final Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_tract_subject, manifest.getTitle()));
-            intent.putExtra(Intent.EXTRA_TEXT, URI_SHARE_BASE.buildUpon()
-                    .appendPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
-                    .appendPath(getCodeForShareActivity())
-                    .appendPath(getPagePathPartForSharing())
-                    .build().toString());
+            intent.putExtra(Intent.EXTRA_TEXT, buildSharingURL(manifest));
             startActivity(Intent.createChooser(intent, getString(R.string.share_tract_title, manifest.getTitle())));
         }
     }
 
+    private String buildSharingURL(Manifest manifest) {
+        final String resourceCode = manifest.getCode();
+
+        // temporary statement until knowgod.com is rebuilt
+        if ("honorrestored".equals(resourceCode)) {
+            return "https://godtoolsapp.com";
+        }
+
+        // temporary statement until knowgod.com is rebuilt
+        if ("thefour".equals(resourceCode)) {
+            return "https://thefour.com";
+        }
+
+        return URI_SHARE_BASE.buildUpon()
+                .appendPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
+                .appendPath(getCodeForShareActivity())
+                .appendPath(getPagePathPartForSharing())
+                .build().toString();
+    }
+
+    // temporary method until knowgod.com is rebuilt
     private String getCodeForShareActivity() {
         String resourceCode = getActiveManifest().getCode();
 
@@ -602,6 +619,7 @@ public class TractActivity extends ImmersiveActivity
     }
 
     private String getPagePathPartForSharing() {
+        // temporary statement until knowgod.com is rebuilt
         if ("kgp-us".equals(getActiveManifest().getCode())) {
             return "";
         }
