@@ -194,17 +194,6 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         }
 
         @Optional
-        @UiThread
-        @OnClick(R.id.action_add)
-        void onAddLanguage() {
-            if (mCallbacks != null) {
-                mCallbacks.onLanguageSelected(mLocale);
-            } else {
-                mTools.addLanguage(mLocale);
-            }
-        }
-
-        @Optional
         @OnClick(R.id.action_remove)
         void onRemoveLanguage() {
             if (!mProtected.contains(mLocale)) {
