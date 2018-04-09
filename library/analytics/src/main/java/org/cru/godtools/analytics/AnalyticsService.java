@@ -74,7 +74,7 @@ public class AnalyticsService {
     public static final String CATEGORY_MENU = "Menu Event";
     public static final String CATEGORY_CONTENT_EVENT = "Content Event";
 
-    private Tracker mTracker = null;
+    private final Tracker mTracker;
     private com.snowplowanalytics.snowplow.tracker.Tracker mSnowPlowTracker = null;
 
     /* Adobe and SnowPlow Analytics */
@@ -102,23 +102,52 @@ public class AnalyticsService {
         return sInstance;
     }
 
+    /* BEGIN tracking methods */
+
     public void trackScreen(@NonNull final String screen) {
+        trackScreen(screen, null);
+    }
+
+    public void trackScreen(@NonNull final String screen, @Nullable final String language) {
         mTracker.setScreenName(screen);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        HitBuilders.ScreenViewBuilder event = new HitBuilders.ScreenViewBuilder();
+        if (language != null) {
+            event.setCustomDimension(DIMENSION_LANGUAGE, language);
+        }
+        mTracker.send(event.build());
 
         trackScreenViewInAdobe(screen);
-        trackScreenViewInSnowPlow(screen);
+        mSnowPlowTracker.track(ScreenView.builder().name(screen).build());
     }
 
-    public void screenView(@NonNull final String name, @NonNull final String language) {
-        mTracker.setScreenName(name);
-        mTracker.send(new HitBuilders.ScreenViewBuilder()
-                .setCustomDimension(DIMENSION_LANGUAGE, language)
-                .build());
+    @MainThread
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void trackContentEvent(@NonNull final Event event) {
+        final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                .setCategory(CATEGORY_CONTENT_EVENT)
+                .setAction(event.id.namespace + ":" + event.id.name);
+        if (event.locale != null) {
+            eventBuilder.setCustomDimension(DIMENSION_LANGUAGE, LocaleCompat.toLanguageTag(event.locale));
+        }
 
-        trackScreenViewInAdobe(name);
-        trackScreenViewInSnowPlow(name);
+        mTracker.send(eventBuilder.build());
     }
+
+    public void trackEveryStudentSearch(@NonNull final String query) {
+        mTracker.setScreenName("everystudent-search");
+
+        final String category = "searchbar";
+        final String action = "tap";
+        mTracker.send(new HitBuilders.EventBuilder()
+                              .setCategory(category)
+                              .setAction(action)
+                              .setLabel(query)
+                              .build());
+
+        trackCustomStructuredEventInSnowPlow(category, action, query);
+    }
+
+    /* END tracking methods */
 
     @AnyThread
     private void trackScreenViewInAdobe(@NonNull final String screen) {
@@ -131,12 +160,6 @@ public class AnalyticsService {
                 mPreviousScreenName = screen;
             });
         }
-    }
-
-    @AnyThread
-    private void trackScreenViewInSnowPlow(@NonNull final String screen) {
-        mAnalyticsExecutor.execute(() ->
-                mSnowPlowTracker.track(ScreenView.builder().name(screen).build()));
     }
 
     /**
@@ -164,20 +187,6 @@ public class AnalyticsService {
 
     }
 
-    public void trackEveryStudentSearch(@NonNull final String query) {
-        mTracker.setScreenName("everystudent-search");
-
-        final String category = "searchbar";
-        final String action = "tap";
-        mTracker.send(new HitBuilders.EventBuilder()
-                              .setCategory(category)
-                              .setAction(action)
-                              .setLabel(query)
-                              .build());
-
-        trackCustomStructuredEventInSnowPlow(category, action, query);
-    }
-
     @AnyThread
     private void trackCustomStructuredEventInSnowPlow(
         @NonNull final String category,
@@ -199,19 +208,6 @@ public class AnalyticsService {
                 .setLabel(item)
                 .build());
 
-    }
-
-    @MainThread
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void trackContentEvent(@NonNull final Event event) {
-        final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                .setCategory(CATEGORY_CONTENT_EVENT)
-                .setAction(event.id.namespace + ":" + event.id.name);
-        if (event.locale != null) {
-            eventBuilder.setCustomDimension(DIMENSION_LANGUAGE, LocaleCompat.toLanguageTag(event.locale));
-        }
-
-        mTracker.send(eventBuilder.build());
     }
 
     public void setActiveActivity(@NonNull final Activity activity) {

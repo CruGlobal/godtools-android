@@ -90,7 +90,7 @@ public class EveryStudent extends ExpandableListActivity {
             }
         });
 
-        mTracker.screenView(SCREEN_EVERYSTUDENT, GA_LANGUAGE_EVERYSTUDENT);
+        mTracker.trackScreen(SCREEN_EVERYSTUDENT, GA_LANGUAGE_EVERYSTUDENT);
     }
 
     @Override
