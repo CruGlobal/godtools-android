@@ -591,41 +591,44 @@ public class TractActivity extends ImmersiveActivity
         }
     }
 
-    private String buildSharingURL(Manifest manifest) {
-        final String resourceCode = manifest.getCode();
-
-        // temporary statement until knowgod.com is rebuilt
-        if ("honorrestored".equals(resourceCode)) {
-            return "https://godtoolsapp.com";
-        }
-
-        // temporary statement until knowgod.com is rebuilt
-        if ("thefour".equals(resourceCode)) {
-            return "https://thefour.com";
+    private String buildSharingURL(@NonNull final Manifest manifest) {
+        // temporary until knowgod.com is rebuilt
+        switch (manifest.getCode()) {
+            case "honorrestored":
+                return "https://godtoolsapp.com";
+            case "thefour":
+                return "https://thefour.com";
         }
 
         return URI_SHARE_BASE.buildUpon()
                 .appendPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
-                .appendPath(getCodeForShareActivity())
-                .appendPath(getPagePathPartForSharing())
+                .appendPath(getCodeForShareActivity(manifest))
+                .appendPath(getPagePathPartForSharing(manifest))
                 .build().toString();
     }
 
-    // temporary method until knowgod.com is rebuilt
-    private String getCodeForShareActivity() {
-        String resourceCode = getActiveManifest().getCode();
-
-        return "kgp-us".equals(resourceCode) ? "kgp" : resourceCode;
-    }
-
-    private String getPagePathPartForSharing() {
-        // temporary statement until knowgod.com is rebuilt
-        if ("kgp-us".equals(getActiveManifest().getCode())) {
-            return "";
+    private String getCodeForShareActivity(@NonNull final Manifest manifest) {
+        switch (manifest.getCode()) {
+            // temporary until knowgod.com is rebuilt
+            case "kgp-us":
+                return "kgp";
         }
 
-        int currentPageNumber = mPager.getCurrentItem();
-        return currentPageNumber > 0 ? String.valueOf(currentPageNumber) : "";
+        return manifest.getCode();
+    }
+
+    private String getPagePathPartForSharing(@NonNull final Manifest manifest) {
+        switch (manifest.getCode()) {
+            // temporary until knowgod.com is rebuilt
+            case "kgp-us":
+                return "";
+        }
+
+        if (mPager != null && mPager.getCurrentItem() > 0) {
+            return String.valueOf(mPager.getCurrentItem());
+        }
+
+        return "";
     }
 
     class AnalyticsPageChangeListener extends ViewPager.SimpleOnPageChangeListener {
