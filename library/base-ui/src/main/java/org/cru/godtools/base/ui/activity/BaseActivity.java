@@ -34,13 +34,13 @@ public abstract class BaseActivity extends AppCompatActivity implements Lifecycl
     @Override
     protected void onResume() {
         super.onResume();
-        mAnalytics.setActiveActivity(this);
+        mAnalytics.onActivityResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mAnalytics.stopAdobeLifecycleTracking();
+        mAnalytics.onActivityPause(this);
     }
 
     /* END lifecycle */

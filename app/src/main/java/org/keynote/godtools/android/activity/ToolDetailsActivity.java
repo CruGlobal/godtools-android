@@ -65,7 +65,7 @@ public class ToolDetailsActivity extends BaseActivity implements ToolDetailsFrag
     @Override
     protected void onResume() {
         super.onResume();
-        mAnalytics.trackScreen(SCREEN_TOOL_DETAILS);
+        mAnalytics.onTrackScreen(SCREEN_TOOL_DETAILS);
     }
 
     @Override

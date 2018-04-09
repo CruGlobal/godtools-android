@@ -61,7 +61,7 @@ public class LanguageSelectionActivity extends BaseActivity implements Languages
     @Override
     protected void onResume() {
         super.onResume();
-        mAnalytics.trackScreen(SCREEN_LANGUAGE_SELECTION);
+        mAnalytics.onTrackScreen(SCREEN_LANGUAGE_SELECTION);
     }
 
     @Override

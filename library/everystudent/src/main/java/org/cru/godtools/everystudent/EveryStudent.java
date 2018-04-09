@@ -90,7 +90,7 @@ public class EveryStudent extends ExpandableListActivity {
             }
         });
 
-        mTracker.trackScreen(SCREEN_EVERYSTUDENT, GA_LANGUAGE_EVERYSTUDENT);
+        mTracker.onTrackScreen(SCREEN_EVERYSTUDENT, GA_LANGUAGE_EVERYSTUDENT);
     }
 
     @Override
@@ -129,7 +129,13 @@ public class EveryStudent extends ExpandableListActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mTracker.setActiveActivity(this);
+        mTracker.onActivityResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mTracker.onActivityPause(this);
     }
 
     @SuppressLint("HandlerLeak")

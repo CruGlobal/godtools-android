@@ -30,7 +30,7 @@ class GoogleAnalyticsService implements AnalyticsService {
     }
 
     @Override
-    public void trackScreen(@NonNull final String screen, @Nullable final String language) {
+    public void onTrackScreen(@NonNull final String screen, @Nullable final String language) {
         mTracker.setScreenName(screen);
         HitBuilders.ScreenViewBuilder event = new HitBuilders.ScreenViewBuilder();
         if (language != null) {
@@ -52,7 +52,7 @@ class GoogleAnalyticsService implements AnalyticsService {
     }
 
     @Override
-    public void trackEveryStudentSearch(@NonNull final String query) {
+    public void onTrackEveryStudentSearch(@NonNull final String query) {
         mTracker.setScreenName(SCREEN_EVERYSTUDENT_SEARCH);
         mTracker.send(new HitBuilders.EventBuilder()
                               .setCategory(CATEGORY_EVERYSTUDENT_SEARCH)

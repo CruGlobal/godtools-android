@@ -38,7 +38,7 @@ public class LanguageSettingsActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mAnalytics.trackScreen(SCREEN_LANGUAGE_SETTINGS);
+        mAnalytics.onTrackScreen(SCREEN_LANGUAGE_SETTINGS);
     }
 
     /* END lifecycle */

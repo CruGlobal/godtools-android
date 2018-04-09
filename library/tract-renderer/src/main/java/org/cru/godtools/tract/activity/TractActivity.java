@@ -633,7 +633,7 @@ public class TractActivity extends ImmersiveActivity
         public void onPageSelected(final int position) {
             final Manifest manifest = getActiveManifest();
             if (manifest != null) {
-                mAnalytics.trackScreen(manifest.getCode() + "-" + position);
+                mAnalytics.onTrackScreen(manifest.getCode() + "-" + position);
             }
         }
     }

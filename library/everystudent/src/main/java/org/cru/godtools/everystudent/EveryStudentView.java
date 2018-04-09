@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.annotation.NonNull;
 import android.text.Spannable;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
@@ -29,6 +30,8 @@ import java.util.regex.Pattern;
 
 @SuppressWarnings("deprecation")
 public class EveryStudentView extends Activity {
+    @NonNull
+    private /*final*/ AnalyticsService mAnalytics;
 
     private String title = "";
 
@@ -41,6 +44,7 @@ public class EveryStudentView extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
+        mAnalytics = AnalyticsService.getInstance(this);
 
         SharedPreferences settings = getSharedPreferences(Constants.PREFS_SETTINGS, 0);
         if (settings.getBoolean("wakelock", true)) {
@@ -97,7 +101,7 @@ public class EveryStudentView extends Activity {
     }
 
     private void recordScreenView() {
-        AnalyticsService.getInstance(this).trackScreen("everystudent-" + massageTitleToTrainCase());
+        mAnalytics.onTrackScreen("everystudent-" + massageTitleToTrainCase());
     }
 
     private String massageTitleToTrainCase() {
@@ -117,6 +121,7 @@ public class EveryStudentView extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+        mAnalytics.onActivityPause(this);
         if (wl != null) {
             wl.release();
         }
@@ -128,7 +133,7 @@ public class EveryStudentView extends Activity {
         if (wl != null) {
             wl.acquire();
         }
-        AnalyticsService.getInstance(this).setActiveActivity(this);
+        mAnalytics.onActivityResume(this);
     }
 
     @Override

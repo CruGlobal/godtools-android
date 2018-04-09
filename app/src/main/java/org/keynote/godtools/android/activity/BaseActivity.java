@@ -140,7 +140,7 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
                 AboutActivity.start(this);
                 return true;
             case R.id.action_help:
-                mAnalytics.trackScreen(SCREEN_HELP);
+                mAnalytics.onTrackScreen(SCREEN_HELP);
                 WebUrlLauncher.openUrl(this, URI_HELP);
                 return true;
             case R.id.action_rate:
@@ -156,15 +156,15 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
                 launchContactUs();
                 return true;
             case R.id.action_terms_of_use:
-                mAnalytics.trackScreen(SCREEN_TERMS_OF_USE);
+                mAnalytics.onTrackScreen(SCREEN_TERMS_OF_USE);
                 WebUrlLauncher.openUrl(this, URI_TERMS_OF_USE);
                 return true;
             case R.id.action_privacy_policy:
-                mAnalytics.trackScreen(SCREEN_PRIVACY_POLICY);
+                mAnalytics.onTrackScreen(SCREEN_PRIVACY_POLICY);
                 WebUrlLauncher.openUrl(this, URI_PRIVACY);
                 return true;
             case R.id.action_copyright:
-                mAnalytics.trackScreen(SCREEN_COPYRIGHT);
+                mAnalytics.onTrackScreen(SCREEN_COPYRIGHT);
                 WebUrlLauncher.openUrl(this, URI_COPYRIGHT);
                 return true;
         }
@@ -280,7 +280,7 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
     }
 
     private void launchContactUs() {
-        mAnalytics.trackScreen(SCREEN_CONTACT_US);
+        mAnalytics.onTrackScreen(SCREEN_CONTACT_US);
         final Intent intent = new Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT);
         try {
             startActivity(intent);
@@ -290,7 +290,7 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
     }
 
     private void launchShare() {
-        mAnalytics.trackScreen(SCREEN_SHARE_GODTOOLS);
+        mAnalytics.onTrackScreen(SCREEN_SHARE_GODTOOLS);
         final String shareLink = URI_SHARE_BASE.buildUpon()
                 .appendPath(LocaleCompat.toLanguageTag(prefs().getPrimaryLanguage()).toLowerCase())
                 .appendPath("")
@@ -307,7 +307,7 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
     }
 
     private void launchShareStory() {
-        mAnalytics.trackScreen(SCREEN_SHARE_STORY);
+        mAnalytics.onTrackScreen(SCREEN_SHARE_STORY);
         final Intent intent = new Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT);
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_story_subject));
         try {

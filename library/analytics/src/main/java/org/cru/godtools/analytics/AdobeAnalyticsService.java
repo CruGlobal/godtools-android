@@ -57,7 +57,7 @@ class AdobeAnalyticsService implements AnalyticsService {
     }
 
     @Override
-    public void trackScreen(@NonNull final String screen, @Nullable final String language) {
+    public void onTrackScreen(@NonNull final String screen, @Nullable final String language) {
         final Activity activity = mActiveActivity.get();
         if (activity != null) {
             mAnalyticsExecutor.execute(() -> {

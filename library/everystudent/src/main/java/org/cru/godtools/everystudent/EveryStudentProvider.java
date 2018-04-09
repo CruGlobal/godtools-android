@@ -109,7 +109,7 @@ public class EveryStudentProvider extends ContentProvider {
         if (!"search_suggest_query".equalsIgnoreCase(query)) {
             final Context context = getContext();
             if (context != null) {
-                AnalyticsService.getInstance(context).trackEveryStudentSearch(query);
+                AnalyticsService.getInstance(context).onTrackEveryStudentSearch(query);
             }
         }
 

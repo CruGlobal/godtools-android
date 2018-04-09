@@ -53,16 +53,16 @@ public final class DefaultAnalyticsService implements AnalyticsService {
     }
 
     @Override
-    public void trackScreen(@NonNull final String screen) {
+    public void onTrackScreen(@NonNull final String screen) {
         for (final AnalyticsService service : mServices) {
-            service.trackScreen(screen);
+            service.onTrackScreen(screen);
         }
     }
 
     @Override
-    public void trackScreen(@NonNull final String screen, @Nullable final String language) {
+    public void onTrackScreen(@NonNull final String screen, @Nullable final String language) {
         for (final AnalyticsService service : mServices) {
-            service.trackScreen(screen, language);
+            service.onTrackScreen(screen, language);
         }
     }
 
@@ -76,9 +76,9 @@ public final class DefaultAnalyticsService implements AnalyticsService {
     }
 
     @Override
-    public void trackEveryStudentSearch(@NonNull final String query) {
+    public void onTrackEveryStudentSearch(@NonNull final String query) {
         for (final AnalyticsService service : mServices) {
-            service.trackEveryStudentSearch(query);
+            service.onTrackEveryStudentSearch(query);
         }
     }
 

@@ -69,7 +69,7 @@ public class MainActivity extends BaseActivity implements ToolsFragment.Callback
     @Override
     protected void onResume() {
         super.onResume();
-        mAnalytics.trackScreen(SCREEN_HOME);
+        mAnalytics.onTrackScreen(SCREEN_HOME);
     }
 
     @Override

@@ -46,12 +46,12 @@ class SnowplowAnalyticsService implements AnalyticsService {
     /* BEGIN tracking methods */
 
     @Override
-    public void trackScreen(@NonNull final String screen, @Nullable final String language) {
+    public void onTrackScreen(@NonNull final String screen, @Nullable final String language) {
         mSnowPlowTracker.track(ScreenView.builder().name(screen).build());
     }
 
     @Override
-    public void trackEveryStudentSearch(@NonNull final String query) {
+    public void onTrackEveryStudentSearch(@NonNull final String query) {
         mSnowPlowTracker.track(Structured.builder()
                                        .category(CATEGORY_EVERYSTUDENT_SEARCH)
                                        .action(ACTION_EVERYSTUDENT_SEARCH)

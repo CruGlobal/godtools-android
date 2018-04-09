@@ -54,16 +54,16 @@ public interface AnalyticsService {
     default void onActivityPause(@NonNull Activity activity) {}
 
     @AnyThread
-    default void trackScreen(@NonNull String screen) {
-        trackScreen(screen, null);
+    default void onTrackScreen(@NonNull String screen) {
+        onTrackScreen(screen, null);
     }
 
     @AnyThread
-    default void trackScreen(@NonNull String screen, @Nullable String language) {}
-
-    @AnyThread
-    default void trackEveryStudentSearch(@NonNull String query) {}
+    default void onTrackScreen(@NonNull String screen, @Nullable String language) {}
 
     @AnyThread
     default void onTrackContentEvent(@NonNull Event event) {}
+
+    @AnyThread
+    default void onTrackEveryStudentSearch(@NonNull String query) {}
 }
