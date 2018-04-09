@@ -17,6 +17,14 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 class AdobeAnalyticsService implements AnalyticsService {
+    /* Property Keys */
+    private static final String ADOBE_APP_NAME = "cru.appname";
+    private static final String ADOBE_LOGGED_IN_STATUS = "cru.loggedinstatus";
+    private static final String ADOBE_MARKETING_CLOUD_ID = "cru.mcid";
+    private static final String ADOBE_SCREEN_NAME = "cru.screenname";
+    private static final String ADOBE_PREVIOUS_SCREEN_NAME = "cru.previousscreenname";
+
+    /* Value constants */
     private static final String ADOBE_NOT_LOGGED_IN = "not logged in";
     private static final String ADOBE_GODTOOLS = "GodTools";
 

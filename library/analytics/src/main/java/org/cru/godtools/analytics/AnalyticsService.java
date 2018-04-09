@@ -25,13 +25,6 @@ public interface AnalyticsService {
     String SCREEN_PRIVACY_POLICY = "Privacy Policy";
     String SCREEN_COPYRIGHT = "Copyright Info";
 
-    /* Adobe analytics key constants */
-    String ADOBE_APP_NAME = "cru.appname";
-    String ADOBE_LOGGED_IN_STATUS = "cru.loggedinstatus";
-    String ADOBE_MARKETING_CLOUD_ID = "cru.mcid";
-    String ADOBE_SCREEN_NAME = "cru.screenname";
-    String ADOBE_PREVIOUS_SCREEN_NAME = "cru.previousscreenname";
-
     /* Custom dimensions */
     int DIMENSION_TOOL = 1;
     int DIMENSION_LANGUAGE = 2;
