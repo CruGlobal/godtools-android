@@ -24,8 +24,6 @@ import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
-import static org.cru.godtools.api.BuildConfig.MOBILE_CONTENT_API;
-
 public class GodToolsApi {
     @NonNull
     private final Context mContext;
@@ -43,12 +41,12 @@ public class GodToolsApi {
     @NonNull
     public final ViewsApi views;
 
-    private GodToolsApi(@NonNull final Context context) {
+    private GodToolsApi(@NonNull final Context context, @NonNull final String apiUri) {
         mContext = context;
 
         // create Retrofit APIs
         final Call.Factory okhttp = okhttp();
-        final Retrofit retrofit = mobileContentRetrofit()
+        final Retrofit retrofit = mobileContentRetrofit(apiUri)
                 .callFactory(okhttp)
                 .build();
         languages = retrofit.create(LanguagesApi.class);
@@ -62,18 +60,27 @@ public class GodToolsApi {
     @Nullable
     @SuppressLint("StaticFieldLeak")
     private static GodToolsApi sInstance;
+    public static synchronized void configure(@NonNull final Context context, @NonNull final String apiUri) {
+        if (sInstance != null) {
+            throw new IllegalStateException("Attempted to configure GodToolsApi multiple times");
+        }
+
+        sInstance = new GodToolsApi(context.getApplicationContext(), apiUri);
+    }
+
+
     @NonNull
     public static synchronized GodToolsApi getInstance(@NonNull final Context context) {
         if (sInstance == null) {
-            sInstance = new GodToolsApi(context.getApplicationContext());
+            throw new IllegalStateException("Attempted to use GodTools API before it was configured");
         }
         return sInstance;
     }
 
     @NonNull
-    private Retrofit.Builder mobileContentRetrofit() {
+    private Retrofit.Builder mobileContentRetrofit(@NonNull final String apiUri) {
         return new Retrofit.Builder()
-                .baseUrl(MOBILE_CONTENT_API)
+                .baseUrl(apiUri)
                 // attach the various converter factories
                 .addConverterFactory(new LocaleConverterFactory())
                 .addConverterFactory(JsonApiConverterFactory.create(jsonApiConverter()));

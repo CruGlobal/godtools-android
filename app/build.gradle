@@ -20,8 +20,6 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        missingDimensionStrategy 'env', 'production'
-
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [eventBusIndex: 'org.cru.godtools.AppEventBusIndex']
@@ -51,6 +49,20 @@ android {
         }
     }
 
+    flavorDimensions "env"
+    productFlavors {
+        stage {
+            dimension "env"
+
+            buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api-stage.cru.org/\""
+        }
+        production {
+            dimension "env"
+
+            buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api.cru.org/\""
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
@@ -68,9 +80,20 @@ android {
             }
         }
     }
+
+    variantFilter { variant ->
+        // stage product flavors
+        if (variant.flavors*.name.contains("stage")) {
+            // ignore for non-debug build types
+            if (!variant.buildType.name.equals("debug")) {
+                setIgnore(true)
+            }
+        }
+    }
 }
 
 dependencies {
+    implementation project(':library:api')
     implementation project(':library:base')
     implementation project(':library:base-app')
     implementation project(':library:base-ui')
