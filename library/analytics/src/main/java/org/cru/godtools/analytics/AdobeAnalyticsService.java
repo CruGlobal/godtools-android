@@ -18,15 +18,15 @@ import java.util.concurrent.Executors;
 
 class AdobeAnalyticsService implements AnalyticsService {
     /* Property Keys */
-    private static final String ADOBE_APP_NAME = "cru.appname";
-    private static final String ADOBE_LOGGED_IN_STATUS = "cru.loggedinstatus";
-    private static final String ADOBE_MARKETING_CLOUD_ID = "cru.mcid";
-    private static final String ADOBE_SCREEN_NAME = "cru.screenname";
-    private static final String ADOBE_PREVIOUS_SCREEN_NAME = "cru.previousscreenname";
+    private static final String KEY_APP_NAME = "cru.appname";
+    private static final String KEY_MARKETING_CLOUD_ID = "cru.mcid";
+    private static final String KEY_LOGGED_IN_STATUS = "cru.loggedinstatus";
+    private static final String KEY_SCREEN_NAME = "cru.screenname";
+    private static final String KEY_SCREEN_NAME_PREVIOUS = "cru.previousscreenname";
 
     /* Value constants */
-    private static final String ADOBE_NOT_LOGGED_IN = "not logged in";
-    private static final String ADOBE_GODTOOLS = "GodTools";
+    private static final String VALUE_GODTOOLS = "GodTools";
+    private static final String VALUE_NOT_LOGGED_IN = "not logged in";
 
     /**
      * Single thread executor to serialize events on a background thread.
@@ -86,11 +86,11 @@ class AdobeAnalyticsService implements AnalyticsService {
     private Map<String, Object> adobeContextData(final String screen) {
         Map<String, Object> contextData = new HashMap<>();
 
-        contextData.put(ADOBE_SCREEN_NAME, screen);
-        contextData.put(ADOBE_PREVIOUS_SCREEN_NAME, mPreviousScreenName);
-        contextData.put(ADOBE_APP_NAME, ADOBE_GODTOOLS);
-        contextData.put(ADOBE_MARKETING_CLOUD_ID, Visitor.getMarketingCloudId());
-        contextData.put(ADOBE_LOGGED_IN_STATUS, ADOBE_NOT_LOGGED_IN);
+        contextData.put(KEY_APP_NAME, VALUE_GODTOOLS);
+        contextData.put(KEY_MARKETING_CLOUD_ID, Visitor.getMarketingCloudId());
+        contextData.put(KEY_LOGGED_IN_STATUS, VALUE_NOT_LOGGED_IN);
+        contextData.put(KEY_SCREEN_NAME_PREVIOUS, mPreviousScreenName);
+        contextData.put(KEY_SCREEN_NAME, screen);
 
         return contextData;
     }
