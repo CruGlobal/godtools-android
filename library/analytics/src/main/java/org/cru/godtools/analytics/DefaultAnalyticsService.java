@@ -13,6 +13,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public final class DefaultAnalyticsService implements AnalyticsService {
     private final List<AnalyticsService> mServices = new ArrayList<>();
@@ -63,6 +64,13 @@ public final class DefaultAnalyticsService implements AnalyticsService {
     public void onTrackScreen(@NonNull final String screen, @Nullable final String language) {
         for (final AnalyticsService service : mServices) {
             service.onTrackScreen(screen, language);
+        }
+    }
+
+    @Override
+    public void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page) {
+        for (final AnalyticsService service : mServices) {
+            service.onTrackTractPage(tract, locale, page);
         }
     }
 
