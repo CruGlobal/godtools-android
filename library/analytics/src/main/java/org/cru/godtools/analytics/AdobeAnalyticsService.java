@@ -12,9 +12,13 @@ import com.adobe.mobile.Visitor;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import static org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag;
+import static org.cru.godtools.analytics.AnalyticsService.tractPageToScreenName;
 
 class AdobeAnalyticsService implements AnalyticsService {
     /* Property Keys */
@@ -23,6 +27,7 @@ class AdobeAnalyticsService implements AnalyticsService {
     private static final String KEY_LOGGED_IN_STATUS = "cru.loggedinstatus";
     private static final String KEY_SCREEN_NAME = "cru.screenname";
     private static final String KEY_SCREEN_NAME_PREVIOUS = "cru.previousscreenname";
+    private static final String KEY_CONTENT_LANGUAGE = "cru.contentlanguage";
 
     /* Value constants */
     private static final String VALUE_GODTOOLS = "GodTools";
@@ -66,10 +71,21 @@ class AdobeAnalyticsService implements AnalyticsService {
 
     @Override
     public void onTrackScreen(@NonNull final String screen, @Nullable final String language) {
+        trackEvent(screen, null);
+    }
+
+    @Override
+    public void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page) {
+        trackEvent(tractPageToScreenName(tract, page), locale);
+    }
+
+    /* END tracking methods */
+
+    private void trackEvent(@NonNull final String screen, @Nullable final Locale contentLocale) {
         final Activity activity = mActiveActivity.get();
         if (activity != null) {
             mAnalyticsExecutor.execute(() -> {
-                final Map<String, Object> adobeContextData = adobeContextData(screen);
+                final Map<String, Object> adobeContextData = adobeContextData(screen, contentLocale);
                 Analytics.trackState(screen, adobeContextData);
                 Config.collectLifecycleData(activity, adobeContextData);
                 mPreviousScreenName = screen;
@@ -77,13 +93,11 @@ class AdobeAnalyticsService implements AnalyticsService {
         }
     }
 
-    /* END tracking methods */
-
     /**
      * Visitor.getMarketingCloudId() may be blocking. So, we need to call it on a worker thread.
      */
     @WorkerThread
-    private Map<String, Object> adobeContextData(final String screen) {
+    private Map<String, Object> adobeContextData(final String screen, @Nullable final Locale contentLocale) {
         Map<String, Object> contextData = new HashMap<>();
 
         contextData.put(KEY_APP_NAME, VALUE_GODTOOLS);
@@ -91,6 +105,9 @@ class AdobeAnalyticsService implements AnalyticsService {
         contextData.put(KEY_LOGGED_IN_STATUS, VALUE_NOT_LOGGED_IN);
         contextData.put(KEY_SCREEN_NAME_PREVIOUS, mPreviousScreenName);
         contextData.put(KEY_SCREEN_NAME, screen);
+        if (contentLocale != null) {
+            contextData.put(KEY_CONTENT_LANGUAGE, toLanguageTag(contentLocale));
+        }
 
         return contextData;
     }

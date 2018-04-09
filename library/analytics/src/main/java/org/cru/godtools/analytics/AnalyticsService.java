@@ -39,6 +39,7 @@ public interface AnalyticsService {
     String CATEGORY_EVERYSTUDENT_SEARCH = "searchbar";
     String ACTION_EVERYSTUDENT_SEARCH = "tap";
 
+    @NonNull
     static AnalyticsService getInstance(@NonNull final Context context) {
         return DefaultAnalyticsService.getInstance(context.getApplicationContext());
     }
@@ -59,7 +60,7 @@ public interface AnalyticsService {
 
     @AnyThread
     default void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page) {
-        onTrackScreen(tract + "-" + page, LocaleCompat.toLanguageTag(locale));
+        onTrackScreen(tractPageToScreenName(tract, page), LocaleCompat.toLanguageTag(locale));
     }
 
     @AnyThread
@@ -67,4 +68,9 @@ public interface AnalyticsService {
 
     @AnyThread
     default void onTrackEveryStudentSearch(@NonNull String query) {}
+
+    @NonNull
+    static String tractPageToScreenName(@NonNull final String tract, final int page) {
+        return tract + "-" + page;
+    }
 }

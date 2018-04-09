@@ -636,7 +636,7 @@ public class TractActivity extends ImmersiveActivity
         public void onPageSelected(final int position) {
             final Manifest manifest = getActiveManifest();
             if (manifest != null) {
-                mAnalytics.onTrackTractPage(manifest.getCode(), position);
+                mAnalytics.onTrackTractPage(manifest.getCode(), manifest.getLocale(), position);
             }
         }
     }
