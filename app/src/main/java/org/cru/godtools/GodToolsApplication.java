@@ -3,6 +3,7 @@ package org.cru.godtools;
 import com.evernote.android.job.JobManager;
 
 import org.cru.godtools.analytics.AnalyticsEventBusIndex;
+import org.cru.godtools.api.GodToolsApi;
 import org.cru.godtools.base.app.BaseGodToolsApplication;
 import org.cru.godtools.download.manager.DownloadManagerEventBusIndex;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
@@ -13,10 +14,15 @@ import org.cru.godtools.tract.TractEventBusIndex;
 import org.cru.godtools.tract.service.FollowupService;
 import org.greenrobot.eventbus.EventBus;
 
+import static org.cru.godtools.config.BuildConfig.MOBILE_CONTENT_API;
+
 public class GodToolsApplication extends BaseGodToolsApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // configure the API
+        GodToolsApi.configure(this, MOBILE_CONTENT_API);
 
         // configure eventbus
         configureEventbus();
