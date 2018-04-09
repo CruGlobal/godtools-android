@@ -34,6 +34,8 @@ crashlytics {
 dependencies {
     application project(':app')
 
+    implementation project(':library:api')
     implementation project(':library:base-app')
+    implementation project(':library:config')
     implementation project(':library:tract-renderer')
 }

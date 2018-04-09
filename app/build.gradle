@@ -53,13 +53,9 @@ android {
     productFlavors {
         stage {
             dimension "env"
-
-            buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api-stage.cru.org/\""
         }
         production {
             dimension "env"
-
-            buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api.cru.org/\""
         }
     }
 
@@ -97,6 +93,7 @@ dependencies {
     implementation project(':library:base')
     implementation project(':library:base-app')
     implementation project(':library:base-ui')
+    implementation project(':library:config')
     implementation project(':library:db')
     implementation project(':library:download-manager')
     implementation project(':library:everystudent')

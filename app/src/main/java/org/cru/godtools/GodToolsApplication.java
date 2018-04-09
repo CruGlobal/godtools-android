@@ -14,7 +14,7 @@ import org.cru.godtools.tract.TractEventBusIndex;
 import org.cru.godtools.tract.service.FollowupService;
 import org.greenrobot.eventbus.EventBus;
 
-import static org.keynote.godtools.android.BuildConfig.MOBILE_CONTENT_API;
+import static org.cru.godtools.config.BuildConfig.MOBILE_CONTENT_API;
 
 public class GodToolsApplication extends BaseGodToolsApplication {
     @Override
