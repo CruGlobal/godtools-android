@@ -31,16 +31,20 @@ class GoogleAnalyticsService implements AnalyticsService {
 
     @Override
     public void onTrackScreen(@NonNull final String screen, @Nullable final String language) {
-        mTracker.setScreenName(screen);
-        HitBuilders.ScreenViewBuilder event = new HitBuilders.ScreenViewBuilder();
+        // build event
+        final HitBuilders.ScreenViewBuilder event = new HitBuilders.ScreenViewBuilder();
         if (language != null) {
             event.setCustomDimension(DIMENSION_LANGUAGE, language);
         }
+
+        // send event
+        mTracker.setScreenName(screen);
         mTracker.send(event.build());
     }
 
     @Override
     public void onTrackContentEvent(@NonNull final Event event) {
+        // build event
         final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
                 .setCategory(CATEGORY_CONTENT_EVENT)
                 .setAction(event.id.namespace + ":" + event.id.name);
@@ -48,6 +52,7 @@ class GoogleAnalyticsService implements AnalyticsService {
             eventBuilder.setCustomDimension(DIMENSION_LANGUAGE, LocaleCompat.toLanguageTag(event.locale));
         }
 
+        // send event
         mTracker.send(eventBuilder.build());
     }
 
