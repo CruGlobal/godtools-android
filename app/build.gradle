@@ -137,5 +137,5 @@ dependencies {
 
     // fix conflicts in transitive dependencies
     androidTestImplementation "com.android.support:multidex:${deps.multidex}"
-    androidTestImplementation "com.google.code.findbugs:jsr305:2.0.1"
+    androidTestImplementation "com.google.code.findbugs:jsr305:3.0.2"
 }
