@@ -39,7 +39,7 @@ public final class AboutActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mAnalytics.trackScreen(SCREEN_ABOUT);
+        mAnalytics.onTrackScreen(SCREEN_ABOUT);
     }
 
     /* END lifecycle */

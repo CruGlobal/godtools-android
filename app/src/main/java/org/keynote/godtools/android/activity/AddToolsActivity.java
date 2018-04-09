@@ -48,7 +48,7 @@ public class AddToolsActivity extends BaseActivity implements ToolsFragment.Call
     @Override
     protected void onResume() {
         super.onResume();
-        mAnalytics.trackScreen(SCREEN_ADD_TOOLS);
+        mAnalytics.onTrackScreen(SCREEN_ADD_TOOLS);
     }
 
     @Override
