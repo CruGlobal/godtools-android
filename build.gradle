@@ -50,7 +50,8 @@ ext.deps = [
         multidex             : '1.0.2',
         newrelic             : '5.14.0',
         playServices         : '10.2.6',
-        retrofit2            : '2.3.0'
+        retrofit2            : '2.3.0',
+        snowplow             : '0.6.2',
 ]
 
 subprojects {
