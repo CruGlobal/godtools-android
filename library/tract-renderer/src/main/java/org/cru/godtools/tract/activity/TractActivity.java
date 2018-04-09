@@ -247,6 +247,7 @@ public class TractActivity extends ImmersiveActivity
                 mActiveLanguage = i;
                 restartDownloadProgressListener();
                 updateActiveManifest();
+                trackCurrentTractPage();
                 return;
             }
         }
@@ -520,6 +521,7 @@ public class TractActivity extends ImmersiveActivity
             getLifecycle().addObserver(mPagerAdapter);
             mPager.addOnPageChangeListener(new AnalyticsPageChangeListener());
             updatePager();
+            trackCurrentTractPage();
         }
     }
 
@@ -629,6 +631,14 @@ public class TractActivity extends ImmersiveActivity
         }
 
         return "";
+    }
+
+    private void trackCurrentTractPage() {
+        if (mPager != null) {
+            // track the currently active page in analytics
+            assert mTool != null : "if mTool was null this activity would have finished from invalid state";
+            mAnalytics.onTrackTractPage(mTool, mLanguages[mActiveLanguage], mPager.getCurrentItem());
+        }
     }
 
     class AnalyticsPageChangeListener extends ViewPager.SimpleOnPageChangeListener {
