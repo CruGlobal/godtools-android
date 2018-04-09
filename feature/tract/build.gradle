@@ -4,10 +4,6 @@ apply plugin: 'io.fabric'
 android {
     baseFeature true
 
-    defaultConfig {
-        missingDimensionStrategy 'env', 'production'
-    }
-
     // XXX: add generated fabric dirs to source sets to work around fabric feature support issues
 //    sourceSets {
 //        debug.res.srcDirs += 'build/generated/fabric/res/debug'

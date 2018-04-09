@@ -6,16 +6,6 @@ android {
             }
         }
     }
-
-    flavorDimensions "env"
-    productFlavors {
-        stage {
-            dimension "env"
-        }
-        production {
-            dimension "env"
-        }
-    }
 }
 
 dependencies {

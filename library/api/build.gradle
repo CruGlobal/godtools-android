@@ -4,20 +4,6 @@ android {
 
         buildConfigField "String", "MOBILE_CONTENT_SYSTEM", "\"GodTools\""
     }
-
-    flavorDimensions "env"
-    productFlavors {
-        stage {
-            dimension "env"
-
-            buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api-stage.cru.org/\""
-        }
-        production {
-            dimension "env"
-
-            buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api.cru.org/\""
-        }
-    }
 }
 
 dependencies {
