@@ -6,7 +6,7 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.0'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         //noinspection GradleDependency
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
@@ -24,7 +24,6 @@ version '5.0.11-SNAPSHOT'
 
 // define dependency versions for this project
 ext {
-    buildTools = "26.0.2"
     compileSdk = 26
     minSdk     = 15
     targetSdk  = 26
@@ -51,7 +50,8 @@ ext.deps = [
         multidex             : '1.0.2',
         newrelic             : '5.14.0',
         playServices         : '10.2.6',
-        retrofit2            : '2.3.0'
+        retrofit2            : '2.3.0',
+        snowplow             : '0.6.2',
 ]
 
 subprojects {
@@ -100,7 +100,6 @@ configure(subprojects.findAll { it.path.startsWith(":library:") }) {
 
     beforeEvaluate {
         android {
-            buildToolsVersion buildTools
             compileSdkVersion compileSdk
 
             defaultConfig {
@@ -131,7 +130,6 @@ configure(subprojects.findAll { it.path.startsWith(":feature:") }) {
 
     beforeEvaluate {
         android {
-            buildToolsVersion buildTools
             compileSdkVersion compileSdk
 
             defaultConfig {

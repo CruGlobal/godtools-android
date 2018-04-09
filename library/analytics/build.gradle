@@ -17,14 +17,12 @@ dependencies {
     implementation project(':library:base')
 
     implementation "com.google.android.gms:play-services-analytics:${deps.playServices}"
-    implementation 'com.adobe.mobile:adobeMobileLibrary:4.13.7'
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
 
+    implementation 'com.adobe.mobile:adobeMobileLibrary:4.13.7'
+    implementation "com.snowplowanalytics:snowplow-android-tracker:${deps.snowplow}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
-
-    // Snowplow Android Tracker
-    compile 'com.snowplowanalytics:snowplow-android-tracker:0.6.2@aar'
 }
