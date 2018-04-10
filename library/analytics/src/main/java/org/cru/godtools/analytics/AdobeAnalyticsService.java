@@ -70,8 +70,8 @@ class AdobeAnalyticsService implements AnalyticsService {
     }
 
     @Override
-    public void onTrackScreen(@NonNull final String screen, @Nullable final String language) {
-        trackEvent(screen, null);
+    public void onTrackScreen(@NonNull final String screen, @Nullable final Locale locale) {
+        trackEvent(screen, locale);
     }
 
     @Override

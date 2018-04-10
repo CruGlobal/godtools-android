@@ -6,7 +6,6 @@ import android.support.annotation.AnyThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.cru.godtools.base.model.Event;
 
 import java.util.Locale;
@@ -56,11 +55,11 @@ public interface AnalyticsService {
     }
 
     @AnyThread
-    default void onTrackScreen(@NonNull String screen, @Nullable String language) {}
+    default void onTrackScreen(@NonNull String screen, @Nullable Locale locale) {}
 
     @AnyThread
     default void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page) {
-        onTrackScreen(tractPageToScreenName(tract, page), LocaleCompat.toLanguageTag(locale));
+        onTrackScreen(tractPageToScreenName(tract, page), locale);
     }
 
     @AnyThread

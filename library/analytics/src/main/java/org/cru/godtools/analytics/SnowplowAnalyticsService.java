@@ -11,6 +11,8 @@ import com.snowplowanalytics.snowplow.tracker.Tracker.TrackerBuilder;
 import com.snowplowanalytics.snowplow.tracker.events.ScreenView;
 import com.snowplowanalytics.snowplow.tracker.events.Structured;
 
+import java.util.Locale;
+
 import static org.cru.godtools.analytics.BuildConfig.SNOWPLOW_ENDPOINT;
 
 class SnowplowAnalyticsService implements AnalyticsService {
@@ -46,7 +48,7 @@ class SnowplowAnalyticsService implements AnalyticsService {
     /* BEGIN tracking methods */
 
     @Override
-    public void onTrackScreen(@NonNull final String screen, @Nullable final String language) {
+    public void onTrackScreen(@NonNull final String screen, @Nullable final Locale locale) {
         mSnowPlowTracker.track(ScreenView.builder().name(screen).build());
     }
 

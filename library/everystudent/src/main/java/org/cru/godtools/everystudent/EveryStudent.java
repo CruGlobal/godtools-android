@@ -28,13 +28,14 @@ import org.cru.godtools.analytics.AnalyticsService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_EVERYSTUDENT;
 
 @SuppressWarnings("deprecation")
 public class EveryStudent extends ExpandableListActivity {
-    public static final String GA_LANGUAGE_EVERYSTUDENT = "en_classic";
+    public static final Locale GA_LANGUAGE_EVERYSTUDENT = Locale.ENGLISH;
     private static final String ROWID = "ROWID";
 
     private static final int DIALOG_LOADING = 0;

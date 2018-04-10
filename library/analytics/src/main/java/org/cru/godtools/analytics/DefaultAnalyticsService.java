@@ -61,9 +61,9 @@ public final class DefaultAnalyticsService implements AnalyticsService {
     }
 
     @Override
-    public void onTrackScreen(@NonNull final String screen, @Nullable final String language) {
+    public void onTrackScreen(@NonNull final String screen, @Nullable final Locale locale) {
         for (final AnalyticsService service : mServices) {
-            service.onTrackScreen(screen, language);
+            service.onTrackScreen(screen, locale);
         }
     }
 
