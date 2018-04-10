@@ -23,6 +23,7 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.activity.ModalActivity;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter.PageViewHolder;
 import org.cru.godtools.tract.model.CallToAction;
+import org.cru.godtools.tract.model.Card;
 import org.cru.godtools.tract.model.Header;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Modal;
@@ -40,6 +41,8 @@ import butterknife.ButterKnife;
 public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewHolder> implements LifecycleObserver {
     public interface Callbacks {
         void goToPage(int position);
+
+        void onUpdateActiveCard(@NonNull Page page, @Nullable Card card);
     }
 
     @Nullable
@@ -84,6 +87,12 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
             }
         }
         return POSITION_NONE;
+    }
+
+    void dispatchUpdateActiveCard(@NonNull final Page page, @Nullable final Card card) {
+        if (mCallbacks != null) {
+            mCallbacks.onUpdateActiveCard(page, card);
+        }
     }
 
     /* BEGIN lifecycle */

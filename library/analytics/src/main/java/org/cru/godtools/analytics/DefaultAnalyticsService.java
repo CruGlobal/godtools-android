@@ -68,9 +68,10 @@ public final class DefaultAnalyticsService implements AnalyticsService {
     }
 
     @Override
-    public void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page) {
+    public void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page,
+                                 @Nullable final Integer card) {
         for (final AnalyticsService service : mServices) {
-            service.onTrackTractPage(tract, locale, page);
+            service.onTrackTractPage(tract, locale, page, card);
         }
     }
 

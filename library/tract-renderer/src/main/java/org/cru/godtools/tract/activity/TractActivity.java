@@ -44,6 +44,7 @@ import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
 import org.cru.godtools.tract.content.TractManifestLoader;
+import org.cru.godtools.tract.model.Card;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Page;
 import org.cru.godtools.tract.service.FollowupService;
@@ -247,7 +248,6 @@ public class TractActivity extends ImmersiveActivity
                 mActiveLanguage = i;
                 restartDownloadProgressListener();
                 updateActiveManifest();
-                trackCurrentTractPage();
                 return;
             }
         }
@@ -258,6 +258,12 @@ public class TractActivity extends ImmersiveActivity
 
     @Override
     public void onTabReselected(final TabLayout.Tab tab) {}
+
+    @Override
+    public void onUpdateActiveCard(@NonNull final Page page,
+                                   @Nullable final Card card) {
+        trackTractPage(page, card);
+    }
 
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -519,9 +525,7 @@ public class TractActivity extends ImmersiveActivity
             mPagerAdapter.setCallbacks(this);
             mPager.setAdapter(mPagerAdapter);
             getLifecycle().addObserver(mPagerAdapter);
-            mPager.addOnPageChangeListener(new AnalyticsPageChangeListener());
             updatePager();
-            trackCurrentTractPage();
         }
     }
 
@@ -633,22 +637,10 @@ public class TractActivity extends ImmersiveActivity
         return "";
     }
 
-    private void trackCurrentTractPage() {
-        if (mPager != null) {
-            // track the currently active page in analytics
-            assert mTool != null : "if mTool was null this activity would have finished from invalid state";
-            mAnalytics.onTrackTractPage(mTool, mLanguages[mActiveLanguage], mPager.getCurrentItem());
-        }
-    }
-
-    class AnalyticsPageChangeListener extends ViewPager.SimpleOnPageChangeListener {
-        @Override
-        public void onPageSelected(final int position) {
-            final Manifest manifest = getActiveManifest();
-            if (manifest != null) {
-                mAnalytics.onTrackTractPage(manifest.getCode(), manifest.getLocale(), position);
-            }
-        }
+    void trackTractPage(@NonNull final Page page, @Nullable final Card card) {
+        final Manifest manifest = page.getManifest();
+        mAnalytics.onTrackTractPage(manifest.getCode(), manifest.getLocale(), page.getPosition(),
+                                    card != null ? card.getPosition() : null);
     }
 
     class TranslationLoaderCallbacks implements LoaderManager.LoaderCallbacks<Translation> {
