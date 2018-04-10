@@ -55,7 +55,9 @@ public interface AnalyticsService {
     }
 
     @AnyThread
-    default void onTrackScreen(@NonNull String screen, @Nullable Locale locale) {}
+    default void onTrackScreen(@NonNull String screen, @Nullable Locale locale) {
+        onTrackScreen(screen);
+    }
 
     @AnyThread
     default void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page) {
