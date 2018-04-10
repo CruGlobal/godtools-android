@@ -146,7 +146,8 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
 
     /* END lifecycle */
 
-    class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements CallToAction.Callbacks {
+    class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder
+            implements Page.PageViewHolder.Callbacks, CallToAction.Callbacks {
         private final Page.PageViewHolder mModelViewHolder;
 
         @BindView(R2.id.page)
@@ -176,6 +177,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
             super(view);
             ButterKnife.bind(this, view);
             mModelViewHolder = Page.getViewHolder(view);
+            mModelViewHolder.setCallbacks(this);
         }
 
         /* BEGIN lifecycle */
@@ -196,6 +198,15 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
             mModelViewHolder.onContentEvent(event);
             if (mPage != null) {
                 checkForModalEvent(event);
+            }
+        }
+
+        @Override
+        public void onUpdateActiveCard(@Nullable final Card card) {
+            if (getPrimaryItem() == this) {
+                if (mPage != null) {
+                    dispatchUpdateActiveCard(mPage, card);
+                }
             }
         }
 
