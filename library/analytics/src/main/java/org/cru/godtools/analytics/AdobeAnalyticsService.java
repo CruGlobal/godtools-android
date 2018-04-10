@@ -2,8 +2,10 @@ package org.cru.godtools.analytics;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.AnyThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 
 import com.adobe.mobile.Analytics;
@@ -59,14 +61,20 @@ class AdobeAnalyticsService implements AnalyticsService {
 
     /* BEGIN tracking methods */
 
+    @UiThread
     @Override
     public void onActivityResume(@NonNull final Activity activity) {
         mActiveActivity = new WeakReference<>(activity);
+        mAnalyticsExecutor.execute(() -> Config.collectLifecycleData(activity, baseContextData()));
     }
 
+    @UiThread
     @Override
     public void onActivityPause(@NonNull final Activity activity) {
-        mAnalyticsExecutor.execute(Config::pauseCollectingLifecycleData);
+        if (mActiveActivity.get() == activity) {
+            mActiveActivity = new WeakReference<>(null);
+            mAnalyticsExecutor.execute(Config::pauseCollectingLifecycleData);
+        }
     }
 
     @Override
@@ -82,34 +90,35 @@ class AdobeAnalyticsService implements AnalyticsService {
 
     /* END tracking methods */
 
+    @AnyThread
     private void trackState(@NonNull final String screen, @Nullable final Locale contentLocale) {
-        final Activity activity = mActiveActivity.get();
-        if (activity != null) {
-            mAnalyticsExecutor.execute(() -> {
-                final Map<String, Object> adobeContextData = adobeContextData(screen, contentLocale);
-                Analytics.trackState(screen, adobeContextData);
-                Config.collectLifecycleData(activity, adobeContextData);
-                mPreviousScreenName = screen;
-            });
-        }
+        mAnalyticsExecutor.execute(() -> {
+            final Map<String, Object> adobeContextData = stateContextData(screen, contentLocale);
+            Analytics.trackState(screen, adobeContextData);
+            mPreviousScreenName = screen;
+        });
     }
 
     /**
      * Visitor.getMarketingCloudId() may be blocking. So, we need to call it on a worker thread.
      */
     @WorkerThread
-    private Map<String, Object> adobeContextData(final String screen, @Nullable final Locale contentLocale) {
-        Map<String, Object> contextData = new HashMap<>();
+    private Map<String, Object> baseContextData() {
+        final Map<String, Object> data = new HashMap<>();
+        data.put(KEY_APP_NAME, VALUE_GODTOOLS);
+        data.put(KEY_MARKETING_CLOUD_ID, Visitor.getMarketingCloudId());
+        data.put(KEY_LOGGED_IN_STATUS, VALUE_NOT_LOGGED_IN);
+        return data;
+    }
 
-        contextData.put(KEY_APP_NAME, VALUE_GODTOOLS);
-        contextData.put(KEY_MARKETING_CLOUD_ID, Visitor.getMarketingCloudId());
-        contextData.put(KEY_LOGGED_IN_STATUS, VALUE_NOT_LOGGED_IN);
-        contextData.put(KEY_SCREEN_NAME_PREVIOUS, mPreviousScreenName);
-        contextData.put(KEY_SCREEN_NAME, screen);
+    @WorkerThread
+    private Map<String, Object> stateContextData(final String screen, @Nullable final Locale contentLocale) {
+        final Map<String, Object> data = baseContextData();
+        data.put(KEY_SCREEN_NAME_PREVIOUS, mPreviousScreenName);
+        data.put(KEY_SCREEN_NAME, screen);
         if (contentLocale != null) {
-            contextData.put(KEY_CONTENT_LANGUAGE, toLanguageTag(contentLocale));
+            data.put(KEY_CONTENT_LANGUAGE, toLanguageTag(contentLocale));
         }
-
-        return contextData;
+        return data;
     }
 }
