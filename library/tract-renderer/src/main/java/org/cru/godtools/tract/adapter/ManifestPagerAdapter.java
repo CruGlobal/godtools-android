@@ -116,6 +116,13 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         holder.onBind(mManifest.getPages().get(position));
     }
 
+    @Override
+    protected void onUpdatePrimaryItem(@Nullable final PageViewHolder old, @Nullable final PageViewHolder current) {
+        if (current != null && current.mPage != null) {
+            dispatchUpdateActiveCard(current.mPage, current.getActiveCard());
+        }
+    }
+
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onContentEvent(@NonNull final Event event) {
@@ -218,6 +225,11 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
                                         manifest.getLocale(), mPage.getId(), modal.getId());
                 }
             }
+        }
+
+        @Nullable
+        Card getActiveCard() {
+            return mModelViewHolder.getActiveCard();
         }
 
         @Override

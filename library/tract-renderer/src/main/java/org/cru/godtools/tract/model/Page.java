@@ -451,6 +451,15 @@ public final class Page extends Base implements Styles, Parent {
             mCallbacks = callbacks;
         }
 
+        @Nullable
+        public Card getActiveCard() {
+            final CardViewHolder holder = forView(mPageContentLayout.getActiveCard(), CardViewHolder.class);
+            if (holder == null) {
+                return null;
+            }
+            return holder.mModel;
+        }
+
         private boolean isCardVisible(@NonNull final Card card) {
             return !card.isHidden() || mVisibleCards.contains(card.getId());
         }
