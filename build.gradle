@@ -24,24 +24,24 @@ version '5.0.11-SNAPSHOT'
 
 // define dependency versions for this project
 ext {
-    compileSdk = 26
+    compileSdk = 27
     minSdk     = 15
-    targetSdk  = 26
+    targetSdk  = 27
 }
 ext.deps = [
         advrecyclerview      : '0.10.6',
         androidInstantApps   : '1.1.0',
-        androidLifecycle     : '1.0.0-alpha8',
-        androidSupport       : '26.0.0',
+        androidLifecycle     : '1.1.0',
+        androidSupport       : '27.1.1',
         androidTestingSupport: '1.0.0',
         butterknife          : '8.7.0',
         calligraphy          : '2.3.0',
         crashlytics          : '2.9.1',
         eventbus             : '3.0.0',
         eventbusAnnotations  : '3.0.1',
-        evernoteAndroidJob   : '1.1.11',
+        evernoteAndroidJob   : '1.2.5',
         facebookStetho       : '1.5.0',
-        gtoSupport           : '1.1.4',
+        gtoSupport           : '1.2.0-SNAPSHOT',
         guava                : '22.0-android',
         hamcrest             : '1.3',
         junit                : '4.12',
@@ -59,6 +59,7 @@ subprojects {
         mavenLocal()
         jcenter()
         google()
+        maven { url 'https://cruglobal.jfrog.io/cruglobal/list/maven-locals/' }
         maven {
             name "maven.gcx.org"
             url "https://maven.gcx.org/"

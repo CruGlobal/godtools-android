@@ -1,7 +1,5 @@
 package org.cru.godtools.sync.job;
 
-import android.os.Build;
-
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
 
@@ -15,7 +13,6 @@ abstract class BaseSyncJob extends Job {
                 .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
                 .setRequirementsEnforced(true)
                 .setUpdateCurrent(true)
-                .setPersisted(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 .build()
                 .schedule();
     }
