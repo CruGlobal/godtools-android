@@ -40,7 +40,7 @@ public interface AnalyticsService {
 
     @NonNull
     static AnalyticsService getInstance(@NonNull final Context context) {
-        return DefaultAnalyticsService.getInstance(context.getApplicationContext());
+        return AnalyticsDispatcher.getAnalyticsService(context.getApplicationContext());
     }
 
     @AnyThread

@@ -7,34 +7,43 @@ import android.support.annotation.Nullable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-final class DefaultAnalyticsService implements InvocationHandler {
-    private final List<AnalyticsService> mServices = new ArrayList<>();
+public final class AnalyticsDispatcher implements InvocationHandler {
+    private final Set<AnalyticsService> mServices = new HashSet<>();
 
     private final AnalyticsService mProxy;
     private final EventBusAnalyticsHelper mEventBusHelper;
 
-    private DefaultAnalyticsService(@NonNull final Context context) {
+    private AnalyticsDispatcher(@NonNull final Context context) {
         mProxy = (AnalyticsService) Proxy.newProxyInstance(getClass().getClassLoader(),
                                                            new Class<?>[] {AnalyticsService.class}, this);
         mEventBusHelper = new EventBusAnalyticsHelper(mProxy);
 
-        mServices.add(GoogleAnalyticsService.getInstance(context));
-        mServices.add(AdobeAnalyticsService.getInstance(context));
-        mServices.add(SnowplowAnalyticsService.getInstance(context));
+        addAnalyticsService(GoogleAnalyticsService.getInstance(context));
+        addAnalyticsService(AdobeAnalyticsService.getInstance(context));
+        addAnalyticsService(SnowplowAnalyticsService.getInstance(context));
     }
 
     @Nullable
-    private static DefaultAnalyticsService sInstance;
+    private static AnalyticsDispatcher sInstance;
     @NonNull
-    static synchronized AnalyticsService getInstance(@NonNull final Context context) {
+    public static synchronized AnalyticsDispatcher getInstance(@NonNull final Context context) {
         if (sInstance == null) {
-            sInstance = new DefaultAnalyticsService(context.getApplicationContext());
+            sInstance = new AnalyticsDispatcher(context.getApplicationContext());
         }
 
-        return sInstance.mProxy;
+        return sInstance;
+    }
+
+    @NonNull
+    static synchronized AnalyticsService getAnalyticsService(@NonNull final Context context) {
+        return getInstance(context).mProxy;
+    }
+
+    public void addAnalyticsService(@NonNull final AnalyticsService service) {
+        mServices.add(service);
     }
 
     @Override
