@@ -1,17 +1,16 @@
 package org.cru.godtools.analytics;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.cru.godtools.base.model.Event;
-
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-public final class DefaultAnalyticsService implements AnalyticsService {
+final class DefaultAnalyticsService implements InvocationHandler {
     private final List<AnalyticsService> mServices = new ArrayList<>();
 
     private DefaultAnalyticsService(@NonNull final Context context) {
@@ -21,67 +20,25 @@ public final class DefaultAnalyticsService implements AnalyticsService {
     }
 
     @Nullable
-    private static DefaultAnalyticsService sInstance;
+    private static AnalyticsService sInstance;
     @NonNull
-    static synchronized DefaultAnalyticsService getInstance(@NonNull final Context context) {
+    static synchronized AnalyticsService getInstance(@NonNull final Context context) {
         if (sInstance == null) {
-            sInstance = new DefaultAnalyticsService(context.getApplicationContext());
+            final InvocationHandler handler = new DefaultAnalyticsService(context.getApplicationContext());
+            sInstance = (AnalyticsService) Proxy.newProxyInstance(DefaultAnalyticsService.class.getClassLoader(),
+                                                                  new Class<?>[] {AnalyticsService.class}, handler);
         }
 
         return sInstance;
     }
 
-    /* BEGIN tracking methods */
-
     @Override
-    public void onActivityResume(@NonNull final Activity activity) {
+    public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
+        // invoke this method for each service
         for (final AnalyticsService service : mServices) {
-            service.onActivityResume(activity);
+            method.invoke(service, args);
         }
-    }
 
-    @Override
-    public void onActivityPause(@NonNull final Activity activity) {
-        for (final AnalyticsService service : mServices) {
-            service.onActivityPause(activity);
-        }
+        return null;
     }
-
-    @Override
-    public void onTrackScreen(@NonNull final String screen) {
-        for (final AnalyticsService service : mServices) {
-            service.onTrackScreen(screen);
-        }
-    }
-
-    @Override
-    public void onTrackScreen(@NonNull final String screen, @Nullable final Locale locale) {
-        for (final AnalyticsService service : mServices) {
-            service.onTrackScreen(screen, locale);
-        }
-    }
-
-    @Override
-    public void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page,
-                                 @Nullable final Integer card) {
-        for (final AnalyticsService service : mServices) {
-            service.onTrackTractPage(tract, locale, page, card);
-        }
-    }
-
-    @Override
-    public void onTrackContentEvent(@NonNull final Event event) {
-        for (final AnalyticsService service : mServices) {
-            service.onTrackContentEvent(event);
-        }
-    }
-
-    @Override
-    public void onTrackEveryStudentSearch(@NonNull final String query) {
-        for (final AnalyticsService service : mServices) {
-            service.onTrackEveryStudentSearch(query);
-        }
-    }
-
-    /* END tracking methods */
 }
