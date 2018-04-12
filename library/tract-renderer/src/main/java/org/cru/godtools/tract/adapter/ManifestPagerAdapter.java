@@ -15,8 +15,8 @@ import android.widget.TextView;
 
 import com.google.common.collect.ImmutableList;
 
-import org.ccci.gto.android.common.support.v4.adapter.ViewHolderPagerAdapter;
 import org.ccci.gto.android.common.support.v4.util.IdUtils;
+import org.ccci.gto.android.common.viewpager.adapter.ViewHolderPagerAdapter;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
