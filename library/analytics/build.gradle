@@ -24,5 +24,7 @@ dependencies {
     implementation "com.snowplowanalytics:snowplow-android-tracker:${deps.snowplow}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
+    debugImplementation "com.jakewharton.timber:timber:${deps.timber}"
+
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
 }
