@@ -68,6 +68,8 @@ after_failure:
   - cat /home/travis/build/CruGlobal/godtools-android/*/build/reports/lint-results*.xml
 
 before_deploy:
+  - echo crashlyticsBetaKeystoreStorePassword=$BETA_KEYSTORE_PASSWORD >> .gradle/gradle.properties
+  - echo crashlyticsBetaKeystoreKeyPassword=$BETA_KEYSTORE_PASSWORD >> .gradle/gradle.properties
   - echo apiSecret=$FABRIC_API_SECRET >> app/fabric.properties
 
 deploy:
