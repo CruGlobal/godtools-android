@@ -25,6 +25,10 @@ android {
                 arguments = [eventBusIndex: 'org.cru.godtools.AppEventBusIndex']
             }
         }
+
+        // Crashlytics config
+        ext.betaDistributionGroupAliasesFilePath = "crashlytics/beta_groups.txt"
+        ext.betaDistributionNotifications = false
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
