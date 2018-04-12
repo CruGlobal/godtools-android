@@ -17,7 +17,8 @@ final class DefaultAnalyticsService implements InvocationHandler {
     private final EventBusAnalyticsHelper mEventBusHelper;
 
     private DefaultAnalyticsService(@NonNull final Context context) {
-        mProxy = (AnalyticsService) Proxy.newProxyInstance(getClass().getClassLoader(), new Class<?>[] {AnalyticsService.class}, this);
+        mProxy = (AnalyticsService) Proxy.newProxyInstance(getClass().getClassLoader(),
+                                                           new Class<?>[] {AnalyticsService.class}, this);
         mEventBusHelper = new EventBusAnalyticsHelper(mProxy);
 
         mServices.add(GoogleAnalyticsService.getInstance(context));
@@ -38,7 +39,7 @@ final class DefaultAnalyticsService implements InvocationHandler {
 
     @Override
     public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
-        // invoke this method for each service
+        // invoke this method for each configured service
         for (final AnalyticsService service : mServices) {
             method.invoke(service, args);
         }
