@@ -7,11 +7,15 @@ env:
     - GRADLE_OPTS="-Xmx2048m"
     # wait up to 10 minutes for adb to connect to emulator
     - ADB_INSTALL_TIMEOUT=10
+    # FABRIC_API_SECRET={API Key}
+    - secure: QmSJoNcdg6djHWmtACAjWcANnvibicZFwu8EDYw6d3BTV9s5q8IFOh4ay6jFYjBKWKUNbdMwqn43Z9MBZTB+G4z0hCuemxdETX5yXKNsoQRORzeNZCzWmcWjAEy2ZfvccDoTINai+Gz1ckFiWUV++ONK7NPzPE5zeuQA4kPKb9w=
+    # BETA_KEYSTORE_PASSWORD={password}
+    - secure: ZZREqPHD1TMUgfHUMws3EVy1f0q/qSkdcowSEXb4S//EGolDgkDCL0oWAz9TzKe6RGjj+PQBzY66JgCC5UJ7gT+RxOgSetQwuR+thQ/bW6P1zH5PmiAxfB28jBXC2OpTX7Ad7G2iOjMMFj4WwmfKX/dPP8/WUGhWtGPaF/oEfms=
   matrix:
     - ANDROID_TARGET=android-15 ANDROID_ABI=armeabi-v7a
 #    - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
 #    - ANDROID_TARGET=android-23 ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-24 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-24 ANDROID_ABI=armeabi-v7a DEPLOY_BETA=true
 branches:
   only:
     - develop
@@ -62,6 +66,21 @@ script:
 after_failure:
   - cat /home/travis/build/CruGlobal/godtools-android/build/reports/lint-results*.xml
   - cat /home/travis/build/CruGlobal/godtools-android/*/build/reports/lint-results*.xml
+
+before_deploy:
+  - echo crashlyticsBetaKeystoreStorePassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
+  - echo crashlyticsBetaKeystoreKeyPassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
+  - echo apiSecret=$FABRIC_API_SECRET >> app/fabric.properties
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: ./gradlew crashlyticsUploadDistributionProductionDebug -PcrashlyticsBetaBuild --parallel
+  on:
+    repo: CruGlobal/godtools-android
+    branch: develop
+    jdk: oraclejdk8
+    condition: $DEPLOY_BETA = true
 
 notifications:
   email: false
