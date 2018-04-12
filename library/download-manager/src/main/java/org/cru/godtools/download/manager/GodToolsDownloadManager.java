@@ -467,10 +467,16 @@ public final class GodToolsDownloadManager {
                     }
                 } catch (final IOException ignored) {
                 }
-
-                // finish the download
-                finishDownload(key);
             }
+
+            // We always finish the download (even if we didn't start it) because of the following race condition:
+            //
+            // [1] enqueuePendingPublishedTranslations() loads the list of pending downloads from the database
+            // [2] downloadLatestPublishedTranslation() finishes downloading one of the translations loaded by [1]
+            // [1] enqueuePendingPublishedTranslations() triggers startProgress() on already downloaded translation
+            // [1] downloadLatestPublishedTranslation() short-circuits on the actual download logic
+            // [1] we still need to call finishDownload()
+            finishDownload(key);
         }
     }
 
