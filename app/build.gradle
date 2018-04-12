@@ -45,8 +45,14 @@ android {
         pickFirst 'META-INF/LICENSE.txt'
     }
     signingConfigs {
+        crashlyticsBeta {
+            storeFile rootProject.file(crashlyticsBetaKeystorePath)
+            storePassword crashlyticsBetaKeystoreStorePassword
+            keyAlias crashlyticsBetaKeystoreKeyAlias
+            keyPassword crashlyticsBetaKeystoreKeyPassword
+        }
         release {
-            storeFile file(androidKeystorePath)
+            storeFile rootProject.file(androidKeystorePath)
             storePassword androidKeystoreStorePassword
             keyAlias androidKeystoreKeyAlias
             keyPassword androidKeystoreKeyPassword
@@ -71,6 +77,10 @@ android {
 
             minifyEnabled false
             shrinkResources false
+
+            if (project.hasProperty('crashlyticsBetaBuild')) {
+                signingConfig signingConfigs.crashlyticsBeta
+            }
         }
         release {
             shrinkResources true
@@ -142,4 +152,9 @@ dependencies {
     // fix conflicts in transitive dependencies
     androidTestImplementation "com.android.support:multidex:${deps.multidex}"
     androidTestImplementation "com.google.code.findbugs:jsr305:2.0.1"
+}
+
+// make crashlytics upload task dependent on assembling the apk
+afterEvaluate {
+    crashlyticsUploadDistributionProductionDebug.dependsOn assembleProductionDebug
 }
