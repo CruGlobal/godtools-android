@@ -354,6 +354,10 @@ public final class Page extends Base implements Styles, Parent {
 
     public static class PageViewHolder extends Parent.ParentViewHolder<Page>
             implements CardViewHolder.Callbacks, PageContentLayout.OnActiveCardListener {
+        public interface Callbacks {
+            void onUpdateActiveCard(@Nullable Card card);
+        }
+
         @BindView(R2.id.page)
         View mPageView;
         @BindView(R2.id.background_image)
@@ -377,6 +381,9 @@ public final class Page extends Base implements Styles, Parent {
         @NonNull
         private CardViewHolder[] mCardViewHolders = new CardViewHolder[0];
 
+        @Nullable
+        private Callbacks mCallbacks;
+
         PageViewHolder(@NonNull final View root) {
             super(Page.class, root, null);
             mPageContentLayout.setActiveCardListener(this);
@@ -398,20 +405,29 @@ public final class Page extends Base implements Styles, Parent {
 
         @Override
         public void onActiveCardChanged(@Nullable final View activeCard) {
-            // only process if we have explicitly visible cards
-            if (!mBindingCards && mVisibleCards.size() > 0) {
-                // generate a set containing the id of the current active card
-                final Set<String> id = Optional.ofNullable(BaseViewHolder.forView(activeCard, CardViewHolder.class))
-                        .map(BaseViewHolder::getModel)
-                        .map(Card::getId)
-                        .map(ImmutableSet::of)
-                        .orElseGet(ImmutableSet::of);
+            if (!mBindingCards) {
+                final Optional<Card> card =
+                        Optional.ofNullable(BaseViewHolder.forView(activeCard, CardViewHolder.class))
+                                .map(BaseViewHolder::getModel);
 
-                // remove any non-matching ids from the visible cards set
-                final Set<String> diff = Sets.difference(mVisibleCards, id);
-                if (diff.size() > 0) {
-                    mVisibleCards.removeAll(diff);
-                    updateDisplayedCards();
+                // only process if we have explicitly visible cards
+                if (mVisibleCards.size() > 0) {
+                    // generate a set containing the id of the current active card
+                    final Set<String> id = card
+                            .map(Card::getId)
+                            .map(ImmutableSet::of)
+                            .orElseGet(ImmutableSet::of);
+
+                    // remove any non-matching ids from the visible cards set
+                    final Set<String> diff = Sets.difference(mVisibleCards, id);
+                    if (diff.size() > 0) {
+                        mVisibleCards.removeAll(diff);
+                        updateDisplayedCards();
+                    }
+                }
+
+                if (mCallbacks != null) {
+                    mCallbacks.onUpdateActiveCard(card.orElse(null));
                 }
             }
         }
@@ -430,6 +446,19 @@ public final class Page extends Base implements Styles, Parent {
         }
 
         /* END lifecycle */
+
+        public void setCallbacks(@Nullable final Callbacks callbacks) {
+            mCallbacks = callbacks;
+        }
+
+        @Nullable
+        public Card getActiveCard() {
+            final CardViewHolder holder = forView(mPageContentLayout.getActiveCard(), CardViewHolder.class);
+            if (holder == null) {
+                return null;
+            }
+            return holder.mModel;
+        }
 
         private boolean isCardVisible(@NonNull final Card card) {
             return !card.isHidden() || mVisibleCards.contains(card.getId());

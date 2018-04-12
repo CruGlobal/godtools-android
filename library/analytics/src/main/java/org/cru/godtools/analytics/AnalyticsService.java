@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 
 import org.cru.godtools.base.model.Event;
 
+import java.util.Locale;
+
 public interface AnalyticsService {
     /* Screen event names */
     String SCREEN_HOME = "Home";
@@ -36,6 +38,7 @@ public interface AnalyticsService {
     String CATEGORY_EVERYSTUDENT_SEARCH = "searchbar";
     String ACTION_EVERYSTUDENT_SEARCH = "tap";
 
+    @NonNull
     static AnalyticsService getInstance(@NonNull final Context context) {
         return DefaultAnalyticsService.getInstance(context.getApplicationContext());
     }
@@ -52,11 +55,33 @@ public interface AnalyticsService {
     }
 
     @AnyThread
-    default void onTrackScreen(@NonNull String screen, @Nullable String language) {}
+    default void onTrackScreen(@NonNull String screen, @Nullable Locale locale) {
+        onTrackScreen(screen);
+    }
+
+    @AnyThread
+    default void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page,
+                                  @Nullable final Integer card) {
+        onTrackScreen(tractPageToScreenName(tract, page, card), locale);
+    }
 
     @AnyThread
     default void onTrackContentEvent(@NonNull Event event) {}
 
     @AnyThread
     default void onTrackEveryStudentSearch(@NonNull String query) {}
+
+    @NonNull
+    static String tractPageToScreenName(@NonNull final String tract, final int page, @Nullable final Integer card) {
+        final StringBuilder name = new StringBuilder(tract).append('-').append(page);
+        if (card != null) {
+            if (card >= 0 && card < 26) {
+                // convert card index to letter 'a'-'z'
+                name.append((char) 97 + card);
+            } else {
+                name.append('-').append(card);
+            }
+        }
+        return name.toString();
+    }
 }

@@ -23,6 +23,7 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.activity.ModalActivity;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter.PageViewHolder;
 import org.cru.godtools.tract.model.CallToAction;
+import org.cru.godtools.tract.model.Card;
 import org.cru.godtools.tract.model.Header;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Modal;
@@ -40,6 +41,8 @@ import butterknife.ButterKnife;
 public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewHolder> implements LifecycleObserver {
     public interface Callbacks {
         void goToPage(int position);
+
+        void onUpdateActiveCard(@NonNull Page page, @Nullable Card card);
     }
 
     @Nullable
@@ -86,6 +89,12 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         return POSITION_NONE;
     }
 
+    void dispatchUpdateActiveCard(@NonNull final Page page, @Nullable final Card card) {
+        if (mCallbacks != null) {
+            mCallbacks.onUpdateActiveCard(page, card);
+        }
+    }
+
     /* BEGIN lifecycle */
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -105,6 +114,13 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         super.onBindViewHolder(holder, position);
         assert mManifest != null;
         holder.onBind(mManifest.getPages().get(position));
+    }
+
+    @Override
+    protected void onUpdatePrimaryItem(@Nullable final PageViewHolder old, @Nullable final PageViewHolder current) {
+        if (current != null && current.mPage != null) {
+            dispatchUpdateActiveCard(current.mPage, current.getActiveCard());
+        }
     }
 
     @MainThread
@@ -130,7 +146,8 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
 
     /* END lifecycle */
 
-    class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements CallToAction.Callbacks {
+    class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder
+            implements Page.PageViewHolder.Callbacks, CallToAction.Callbacks {
         private final Page.PageViewHolder mModelViewHolder;
 
         @BindView(R2.id.page)
@@ -160,6 +177,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
             super(view);
             ButterKnife.bind(this, view);
             mModelViewHolder = Page.getViewHolder(view);
+            mModelViewHolder.setCallbacks(this);
         }
 
         /* BEGIN lifecycle */
@@ -180,6 +198,15 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
             mModelViewHolder.onContentEvent(event);
             if (mPage != null) {
                 checkForModalEvent(event);
+            }
+        }
+
+        @Override
+        public void onUpdateActiveCard(@Nullable final Card card) {
+            if (getPrimaryItem() == this) {
+                if (mPage != null) {
+                    dispatchUpdateActiveCard(mPage, card);
+                }
             }
         }
 
@@ -209,6 +236,11 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
                                         manifest.getLocale(), mPage.getId(), modal.getId());
                 }
             }
+        }
+
+        @Nullable
+        Card getActiveCard() {
+            return mModelViewHolder.getActiveCard();
         }
 
         @Override

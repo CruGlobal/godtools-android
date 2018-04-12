@@ -81,6 +81,10 @@ public final class Card extends Base implements Styles, Parent {
         return getPage().getId() + "-" + mPosition;
     }
 
+    public int getPosition() {
+        return mPosition;
+    }
+
     boolean isHidden() {
         return mHidden;
     }

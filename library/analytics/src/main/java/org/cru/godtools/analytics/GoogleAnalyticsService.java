@@ -11,6 +11,8 @@ import com.google.android.gms.analytics.Tracker;
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.cru.godtools.base.model.Event;
 
+import java.util.Locale;
+
 class GoogleAnalyticsService implements AnalyticsService {
     private final Tracker mTracker;
 
@@ -30,11 +32,11 @@ class GoogleAnalyticsService implements AnalyticsService {
     }
 
     @Override
-    public void onTrackScreen(@NonNull final String screen, @Nullable final String language) {
+    public void onTrackScreen(@NonNull final String screen, @Nullable final Locale locale) {
         // build event
         final HitBuilders.ScreenViewBuilder event = new HitBuilders.ScreenViewBuilder();
-        if (language != null) {
-            event.setCustomDimension(DIMENSION_LANGUAGE, language);
+        if (locale != null) {
+            event.setCustomDimension(DIMENSION_LANGUAGE, LocaleCompat.toLanguageTag(locale));
         }
 
         // send event
