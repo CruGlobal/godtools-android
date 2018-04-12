@@ -7,8 +7,8 @@ env:
     - GRADLE_OPTS="-Xmx2048m"
     # wait up to 10 minutes for adb to connect to emulator
     - ADB_INSTALL_TIMEOUT=10
-    # FABRIC_API_SECRET={API Key}
-    - secure: QmSJoNcdg6djHWmtACAjWcANnvibicZFwu8EDYw6d3BTV9s5q8IFOh4ay6jFYjBKWKUNbdMwqn43Z9MBZTB+G4z0hCuemxdETX5yXKNsoQRORzeNZCzWmcWjAEy2ZfvccDoTINai+Gz1ckFiWUV++ONK7NPzPE5zeuQA4kPKb9w=
+    # FABRIC_BUILD_SECRET={Build Secret}
+    - secure: nfuUV6H+kpR21OxyyFMGzjyItoE/bQIzxeWLKSFiisuVc4uG9unyk7XPHnKYV1u6d0FJ9ieV7bmri39igYANmGtzEzO2KbZhW4/xGQwcEbc0cxtPfwkXRP1bwoBMSqEYEHYwyLImFrtHNpP9rSVbR0L09f/kfWKUUOr9J/hRkNQ=
     # BETA_KEYSTORE_PASSWORD={password}
     - secure: ZZREqPHD1TMUgfHUMws3EVy1f0q/qSkdcowSEXb4S//EGolDgkDCL0oWAz9TzKe6RGjj+PQBzY66JgCC5UJ7gT+RxOgSetQwuR+thQ/bW6P1zH5PmiAxfB28jBXC2OpTX7Ad7G2iOjMMFj4WwmfKX/dPP8/WUGhWtGPaF/oEfms=
   matrix:
@@ -40,9 +40,13 @@ before_install:
   - sdkmanager tools
   # Install the system image
   - sdkmanager "system-images;$ANDROID_TARGET;default;$ANDROID_ABI"
+
   # Create and start emulator for the script. Meant to race the install task.
   - echo no | avdmanager create avd --force -n test -k "system-images;$ANDROID_TARGET;default;$ANDROID_ABI"
   - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
+
+  # set Fabric apiSecret so fabric is correctly configured in the build
+  - echo apiSecret=$FABRIC_BUILD_SECRET >> app/fabric.properties
 
 # gradle options
 #  --parallel      : build/test multiple subprojects simultaneously
@@ -70,7 +74,6 @@ after_failure:
 before_deploy:
   - echo crashlyticsBetaKeystoreStorePassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
   - echo crashlyticsBetaKeystoreKeyPassword=$BETA_KEYSTORE_PASSWORD >> ~/.gradle/gradle.properties
-  - echo apiSecret=$FABRIC_API_SECRET >> app/fabric.properties
 
 deploy:
   provider: script
