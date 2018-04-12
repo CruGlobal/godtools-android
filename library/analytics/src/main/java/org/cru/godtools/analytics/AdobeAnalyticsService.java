@@ -2,6 +2,7 @@ package org.cru.godtools.analytics;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.AnyThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,6 +32,7 @@ class AdobeAnalyticsService implements AnalyticsService {
     private static final String KEY_SCREEN_NAME = "cru.screenname";
     private static final String KEY_SCREEN_NAME_PREVIOUS = "cru.previousscreenname";
     private static final String KEY_CONTENT_LANGUAGE = "cru.contentlanguage";
+    private static final String KEY_EXIT_LINK = "cru.mobileexitlink";
     private static final String KEY_SHARE_CONTENT = "cru.shareiconengaged";
 
     /* Value constants */
@@ -93,6 +95,11 @@ class AdobeAnalyticsService implements AnalyticsService {
     @Override
     public void onTrackShareAction() {
         trackAction(ACTION_SHARE, Collections.singletonMap(KEY_SHARE_CONTENT, null));
+    }
+
+    @Override
+    public void onTrackExitUrl(@NonNull final Uri url) {
+        trackAction(ACTION_EXIT_LINK, Collections.singletonMap(KEY_EXIT_LINK, url.toString()));
     }
 
     /* END tracking methods */
