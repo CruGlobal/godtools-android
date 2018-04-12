@@ -52,6 +52,7 @@ ext.deps = [
         playServices         : '10.2.6',
         retrofit2            : '2.3.0',
         snowplow             : '0.6.2',
+        timber               : '4.7.0'
 ]
 
 subprojects {
