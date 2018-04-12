@@ -28,6 +28,9 @@ public interface AnalyticsService {
     String SCREEN_PRIVACY_POLICY = "Privacy Policy";
     String SCREEN_COPYRIGHT = "Copyright Info";
 
+    /* Action event names */
+    String ACTION_SHARE = "Share Icon Engaged";
+
     /* Legacy constants */
     String SCREEN_EVERYSTUDENT = "EveryStudent";
     String SCREEN_EVERYSTUDENT_SEARCH = "everystudent-search";
@@ -61,6 +64,9 @@ public interface AnalyticsService {
                                   @Nullable final Integer card) {
         onTrackScreen(tractPageToScreenName(tract, page, card), locale);
     }
+
+    @AnyThread
+    default void onTrackShareAction() {}
 
     @AnyThread
     default void onTrackContentEvent(@NonNull Event event) {}

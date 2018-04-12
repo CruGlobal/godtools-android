@@ -589,6 +589,8 @@ public class TractActivity extends ImmersiveActivity
     private void shareCurrentTract() {
         final Manifest manifest = getActiveManifest();
         if (manifest != null) {
+            mAnalytics.onTrackShareAction();
+
             final Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_tract_subject, manifest.getTitle()));

@@ -13,6 +13,7 @@ import com.adobe.mobile.Config;
 import com.adobe.mobile.Visitor;
 
 import java.lang.ref.WeakReference;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -30,6 +31,7 @@ class AdobeAnalyticsService implements AnalyticsService {
     private static final String KEY_SCREEN_NAME = "cru.screenname";
     private static final String KEY_SCREEN_NAME_PREVIOUS = "cru.previousscreenname";
     private static final String KEY_CONTENT_LANGUAGE = "cru.contentlanguage";
+    private static final String KEY_SHARE_CONTENT = "cru.shareiconengaged";
 
     /* Value constants */
     private static final String VALUE_GODTOOLS = "GodTools";
@@ -88,7 +90,26 @@ class AdobeAnalyticsService implements AnalyticsService {
         trackState(tractPageToScreenName(tract, page, card), locale);
     }
 
+    @Override
+    public void onTrackShareAction() {
+        trackAction(ACTION_SHARE, Collections.singletonMap(KEY_SHARE_CONTENT, null));
+    }
+
     /* END tracking methods */
+
+    @AnyThread
+    private void trackAction(@NonNull final String action, @Nullable final Map<String, Object> attributes) {
+        mAnalyticsExecutor.execute(() -> {
+            final Map<String, Object> data = baseContextData();
+            if (mPreviousScreenName != null) {
+                data.put(KEY_SCREEN_NAME, mPreviousScreenName);
+            }
+            if (attributes != null) {
+                data.putAll(attributes);
+            }
+            Analytics.trackAction(action, baseContextData());
+        });
+    }
 
     @AnyThread
     private void trackState(@NonNull final String screen, @Nullable final Locale contentLocale) {
