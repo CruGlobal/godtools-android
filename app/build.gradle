@@ -143,6 +143,8 @@ dependencies {
     debugImplementation "org.ccci.gto.android:gto-support-leakcanary:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-stetho:${deps.gtoSupport}"
     debugImplementation "com.facebook.stetho:stetho:${deps.facebookStetho}"
+    debugImplementation "com.facebook.stetho:stetho-timber:${deps.facebookStetho}"
+    debugImplementation "com.jakewharton.timber:timber:${deps.timber}"
     debugImplementation "com.facebook.stetho:stetho-okhttp3:${deps.facebookStetho}"
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
 

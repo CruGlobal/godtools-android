@@ -7,6 +7,7 @@ import android.support.multidex.MultiDex;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.inspector.database.SqliteDatabaseDriver;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.facebook.stetho.timber.StethoTree;
 import com.squareup.leakcanary.AndroidExcludedRefs;
 import com.squareup.leakcanary.LeakCanary;
 
@@ -14,6 +15,8 @@ import org.ccci.gto.android.common.api.okhttp3.util.OkHttpClientUtil;
 import org.ccci.gto.android.common.leakcanary.CrashlyticsLeakService;
 import org.ccci.gto.android.common.stetho.db.SQLiteOpenHelperStethoDatabaseProvider;
 import org.keynote.godtools.android.db.GodToolsDatabase;
+
+import timber.log.Timber;
 
 public class DebugGodToolsApplication extends GodToolsApplication {
     @Override
@@ -25,6 +28,7 @@ public class DebugGodToolsApplication extends GodToolsApplication {
         }
         initLeakCanary();
 
+        Timber.plant(new Timber.DebugTree());
         initStetho();
         super.onCreate();
     }
@@ -54,5 +58,7 @@ public class DebugGodToolsApplication extends GodToolsApplication {
                         .finish());
         Stetho.initialize(stethoBuilder.build());
         OkHttpClientUtil.addGlobalNetworkInterceptor(new StethoInterceptor());
+
+        Timber.plant(new StethoTree());
     }
 }
