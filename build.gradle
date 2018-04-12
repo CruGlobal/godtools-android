@@ -39,7 +39,7 @@ ext.deps = [
         crashlytics          : '2.9.1',
         eventbus             : '3.0.0',
         eventbusAnnotations  : '3.0.1',
-        evernoteAndroidJob   : '1.1.11',
+        evernoteAndroidJob   : '1.2.5',
         facebookStetho       : '1.5.0',
         gtoSupport           : '1.2.0-SNAPSHOT',
         guava                : '22.0-android',
