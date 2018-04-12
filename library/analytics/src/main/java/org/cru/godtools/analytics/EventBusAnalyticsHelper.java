@@ -1,9 +1,7 @@
 package org.cru.godtools.analytics;
 
-import android.content.Context;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import org.cru.godtools.base.model.Event;
 import org.greenrobot.eventbus.EventBus;
@@ -14,22 +12,9 @@ public class EventBusAnalyticsHelper {
     @NonNull
     private final AnalyticsService mAnalyticsService;
 
-    private EventBusAnalyticsHelper(@NonNull final Context context) {
-        mAnalyticsService = AnalyticsService.getInstance(context);
-
+    EventBusAnalyticsHelper(@NonNull final AnalyticsService service) {
+        mAnalyticsService = service;
         EventBus.getDefault().register(this);
-    }
-
-    @Nullable
-    private static EventBusAnalyticsHelper sInstance;
-
-    @NonNull
-    public static synchronized EventBusAnalyticsHelper getInstance(@NonNull final Context context) {
-        if (sInstance == null) {
-            sInstance = new EventBusAnalyticsHelper(context.getApplicationContext());
-        }
-
-        return sInstance;
     }
 
     @MainThread
