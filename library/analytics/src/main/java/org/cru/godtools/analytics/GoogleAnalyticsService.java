@@ -14,6 +14,10 @@ import org.cru.godtools.base.model.Event;
 import java.util.Locale;
 
 class GoogleAnalyticsService implements AnalyticsService {
+    /* Custom dimensions */
+    private static final int DIMENSION_TOOL = 1;
+    private static final int DIMENSION_LANGUAGE = 2;
+
     private final Tracker mTracker;
 
     private GoogleAnalyticsService(@NonNull final Context context) {
