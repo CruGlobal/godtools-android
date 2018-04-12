@@ -248,6 +248,7 @@ public class TractActivity extends ImmersiveActivity
                 mActiveLanguage = i;
                 restartDownloadProgressListener();
                 updateActiveManifest();
+                mAnalytics.onTrackToggleLanguage(locale);
                 return;
             }
         }

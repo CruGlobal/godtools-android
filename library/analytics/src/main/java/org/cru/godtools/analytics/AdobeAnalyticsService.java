@@ -13,6 +13,8 @@ import com.adobe.mobile.Analytics;
 import com.adobe.mobile.Config;
 import com.adobe.mobile.Visitor;
 
+import org.ccci.gto.android.common.compat.util.LocaleCompat;
+
 import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,8 +34,10 @@ class AdobeAnalyticsService implements AnalyticsService {
     private static final String KEY_SCREEN_NAME = "cru.screenname";
     private static final String KEY_SCREEN_NAME_PREVIOUS = "cru.previousscreenname";
     private static final String KEY_CONTENT_LANGUAGE = "cru.contentlanguage";
+    private static final String KEY_CONTENT_LANGUAGE_SECONDARY = "cru.contentlanguagesecondary";
     private static final String KEY_EXIT_LINK = "cru.mobileexitlink";
     private static final String KEY_SHARE_CONTENT = "cru.shareiconengaged";
+    private static final String KEY_TOGGLE_LANGUAGE = "cru.parallellanguagetoggle";
 
     /* Value constants */
     private static final String VALUE_GODTOOLS = "GodTools";
@@ -100,6 +104,14 @@ class AdobeAnalyticsService implements AnalyticsService {
     @Override
     public void onTrackExitUrl(@NonNull final Uri url) {
         trackAction(ACTION_EXIT_LINK, Collections.singletonMap(KEY_EXIT_LINK, url.toString()));
+    }
+
+    @Override
+    public void onTrackToggleLanguage(@NonNull final Locale newLocale) {
+        final Map<String, Object> attrs = new HashMap<>();
+        attrs.put(KEY_TOGGLE_LANGUAGE, null);
+        attrs.put(KEY_CONTENT_LANGUAGE_SECONDARY, LocaleCompat.toLanguageTag(newLocale));
+        trackAction(ACTION_TOGGLE_LANGUAGE, attrs);
     }
 
     /* END tracking methods */
