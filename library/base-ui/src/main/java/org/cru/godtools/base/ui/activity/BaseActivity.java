@@ -1,5 +1,7 @@
 package org.cru.godtools.base.ui.activity;
 
+import android.annotation.SuppressLint;
+import android.arch.lifecycle.Lifecycle;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -40,4 +42,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /* END lifecycle */
+
+    // HACK: workaround this bug: https://issuetracker.google.com/issues/64039135
+    @Override
+    @SuppressLint("RestrictedApi")
+    public Lifecycle getLifecycle() {
+        return super.getLifecycle();
+    }
 }
