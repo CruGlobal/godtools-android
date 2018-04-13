@@ -2,9 +2,11 @@ package org.cru.godtools.analytics;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.AnyThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 
 import org.cru.godtools.base.model.Event;
 
@@ -27,9 +29,10 @@ public interface AnalyticsService {
     String SCREEN_PRIVACY_POLICY = "Privacy Policy";
     String SCREEN_COPYRIGHT = "Copyright Info";
 
-    /* Custom dimensions */
-    int DIMENSION_TOOL = 1;
-    int DIMENSION_LANGUAGE = 2;
+    /* Action event names */
+    String ACTION_SHARE = "Share Icon Engaged";
+    String ACTION_EXIT_LINK = "Exit Link Engaged";
+    String ACTION_TOGGLE_LANGUAGE = "Parallel Language Toggled";
 
     /* Legacy constants */
     String SCREEN_EVERYSTUDENT = "EveryStudent";
@@ -43,10 +46,10 @@ public interface AnalyticsService {
         return AnalyticsDispatcher.getAnalyticsService(context.getApplicationContext());
     }
 
-    @AnyThread
+    @UiThread
     default void onActivityResume(@NonNull Activity activity) {}
 
-    @AnyThread
+    @UiThread
     default void onActivityPause(@NonNull Activity activity) {}
 
     @AnyThread
@@ -64,6 +67,15 @@ public interface AnalyticsService {
                                   @Nullable final Integer card) {
         onTrackScreen(tractPageToScreenName(tract, page, card), locale);
     }
+
+    @AnyThread
+    default void onTrackShareAction() {}
+
+    @AnyThread
+    default void onTrackExitUrl(@NonNull final Uri url) {}
+
+    @AnyThread
+    default void onTrackToggleLanguage(@NonNull final Locale newLocale) {}
 
     @AnyThread
     default void onTrackContentEvent(@NonNull Event event) {}
