@@ -763,13 +763,15 @@ public final class GodToolsDownloadManager {
 
     @WorkerThread
     private void enqueuePendingPublishedTranslations() {
-        mDao.streamCompat(Query.select(Translation.class)
-                                  .joins(TranslationTable.SQL_JOIN_LANGUAGE, TranslationTable.SQL_JOIN_TOOL)
-                                  .where(LanguageTable.SQL_WHERE_ADDED
-                                                 .and(ToolTable.FIELD_ADDED.eq(true))
-                                                 .and(TranslationTable.SQL_WHERE_PUBLISHED)
-                                                 .and(TranslationTable.FIELD_DOWNLOADED.eq(false)))
-                                  .orderBy(TranslationTable.COLUMN_VERSION + " DESC"))
+        final Query<Translation> query = Query.select(Translation.class)
+                .joins(TranslationTable.SQL_JOIN_LANGUAGE, TranslationTable.SQL_JOIN_TOOL)
+                .where(LanguageTable.SQL_WHERE_ADDED
+                               .and(ToolTable.FIELD_ADDED.eq(true))
+                               .and(TranslationTable.SQL_WHERE_PUBLISHED)
+                               .and(TranslationTable.FIELD_DOWNLOADED.eq(false)))
+                .orderBy(TranslationTable.COLUMN_VERSION + " DESC");
+
+        mDao.streamCompat(query)
                 .distinctBy(TranslationKey::new)
                 .filterNot(Translation::isDownloaded)
                 .map(TranslationKey::new)
