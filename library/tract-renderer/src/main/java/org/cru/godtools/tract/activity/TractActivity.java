@@ -243,14 +243,9 @@ public class TractActivity extends ImmersiveActivity
     @Override
     public void onTabSelected(final TabLayout.Tab tab) {
         final Locale locale = (Locale) tab.getTag();
-        for (int i = 0; i < mLanguages.length; i++) {
-            if (mLanguages[i].equals(locale)) {
-                mActiveLanguage = i;
-                restartDownloadProgressListener();
-                updateActiveManifest();
-                mAnalytics.onTrackToggleLanguage(locale);
-                return;
-            }
+        if (locale != null) {
+            updateActiveLanguage(locale);
+            mAnalytics.onTrackToggleLanguage(locale);
         }
     }
 
@@ -428,6 +423,19 @@ public class TractActivity extends ImmersiveActivity
                 }
                 updateLanguageToggle();
                 break;
+            }
+        }
+    }
+
+    private void updateActiveLanguage(@NonNull final Locale locale) {
+        for (int i = 0; i < mLanguages.length; i++) {
+            if (mLanguages[i].equals(locale)) {
+                if (i != mActiveLanguage) {
+                    mActiveLanguage = i;
+                    restartDownloadProgressListener();
+                    updateActiveManifest();
+                }
+                return;
             }
         }
     }
