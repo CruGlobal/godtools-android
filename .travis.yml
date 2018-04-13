@@ -10,7 +10,7 @@ env:
     # FABRIC_BUILD_SECRET={Build Secret}
     - secure: nfuUV6H+kpR21OxyyFMGzjyItoE/bQIzxeWLKSFiisuVc4uG9unyk7XPHnKYV1u6d0FJ9ieV7bmri39igYANmGtzEzO2KbZhW4/xGQwcEbc0cxtPfwkXRP1bwoBMSqEYEHYwyLImFrtHNpP9rSVbR0L09f/kfWKUUOr9J/hRkNQ=
     # BETA_KEYSTORE_PASSWORD={password}
-    - secure: ZZREqPHD1TMUgfHUMws3EVy1f0q/qSkdcowSEXb4S//EGolDgkDCL0oWAz9TzKe6RGjj+PQBzY66JgCC5UJ7gT+RxOgSetQwuR+thQ/bW6P1zH5PmiAxfB28jBXC2OpTX7Ad7G2iOjMMFj4WwmfKX/dPP8/WUGhWtGPaF/oEfms=
+    - secure: jBb7ri2he+o7e17rtiNt6tnPb5gKpjP6Wuh5wTHi6ftdAC5cAGKPqSTGuCnyK/bSZqLdKDoLzgjXEwxY3L4qetrILcAJZKQWY4sb+OVk51/FY8VQx32LpwGtxtZn7XGdHNxTYxGFsDc/BW+Eo7vdRbvUBh2nCJisVYCWSlHdVB4=
   matrix:
     - ANDROID_TARGET=android-15 ANDROID_ABI=armeabi-v7a
 #    - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
