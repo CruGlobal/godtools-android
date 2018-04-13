@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.annimon.stream.IntPair;
 import com.annimon.stream.Stream;
 import com.google.android.instantapps.InstantApps;
 import com.google.common.util.concurrent.SettableFuture;
@@ -81,7 +82,7 @@ public class TractActivity extends ImmersiveActivity
     private static final int LOADER_TYPE_TRANSLATION = 2 << LOADER_ID_BITS;
 
     private static final int STATE_LOADING = 0;
-    private static final int STATE_ACTIVE = 1;
+    private static final int STATE_LOADED = 1;
     private static final int STATE_NOT_FOUND = 2;
 
     // App/Action Bar
@@ -343,25 +344,29 @@ public class TractActivity extends ImmersiveActivity
         }
     }
 
-    private void updateVisibilityState() {
-        final int visibilityState;
-        if (getActiveManifest() != null) {
-            visibilityState = STATE_ACTIVE;
-        } else if (mDownloadTasks[mActiveLanguage] != null && mDownloadTasks[mActiveLanguage].isDone() &&
-                mTranslations.indexOfKey(mActiveLanguage) >= 0 && mTranslations.get(mActiveLanguage) == null) {
-            visibilityState = STATE_NOT_FOUND;
+    private int determineLanguageState(final int languageIndex) {
+        if (mManifests.get(languageIndex) != null) {
+            return STATE_LOADED;
+        } else if (mDownloadTasks[languageIndex] != null && mDownloadTasks[languageIndex].isDone() &&
+                mTranslations.indexOfKey(languageIndex) >= 0 && mTranslations.get(languageIndex) == null) {
+            return STATE_NOT_FOUND;
         } else {
-            visibilityState = STATE_LOADING;
+            return STATE_LOADING;
         }
+    }
+
+    private void updateVisibilityState() {
+        updateActiveLanguageToPotentiallyAvailableLanguageIfNecessary();
+        final int state = determineLanguageState(mActiveLanguage);
 
         if (mLoadingContent != null) {
-            mLoadingContent.setVisibility(visibilityState == STATE_LOADING ? View.VISIBLE : View.GONE);
+            mLoadingContent.setVisibility(state == STATE_LOADING ? View.VISIBLE : View.GONE);
         }
         if (mMainContent != null) {
-            mMainContent.setVisibility(visibilityState == STATE_ACTIVE ? View.VISIBLE : View.GONE);
+            mMainContent.setVisibility(state == STATE_LOADED ? View.VISIBLE : View.GONE);
         }
         if (mMissingContent != null) {
-            mMissingContent.setVisibility(visibilityState == STATE_NOT_FOUND ? View.VISIBLE : View.GONE);
+            mMissingContent.setVisibility(state == STATE_NOT_FOUND ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -434,9 +439,21 @@ public class TractActivity extends ImmersiveActivity
                     mActiveLanguage = i;
                     restartDownloadProgressListener();
                     updateActiveManifest();
+                    updateLanguageToggle();
                 }
                 return;
             }
+        }
+    }
+
+    private void updateActiveLanguageToPotentiallyAvailableLanguageIfNecessary() {
+        // only process if the active language is not found
+        if (determineLanguageState(mActiveLanguage) == STATE_NOT_FOUND) {
+            Stream.of(mLanguages).indexed()
+                    .filter(l -> determineLanguageState(l.getFirst()) != STATE_NOT_FOUND)
+                    .map(IntPair::getSecond)
+                    .findFirst()
+                    .ifPresent(this::updateActiveLanguage);
         }
     }
 
@@ -508,6 +525,11 @@ public class TractActivity extends ImmersiveActivity
                         DrawableCompat.setTint(bkg, controlColor);
                     }
                     TabLayoutUtils.setBackground(tab, bkg);
+
+                    // ensure tab is selected if it is active
+                    if (i == mActiveLanguage && !tab.isSelected()) {
+                        tab.select();
+                    }
                 }
             }
         }
