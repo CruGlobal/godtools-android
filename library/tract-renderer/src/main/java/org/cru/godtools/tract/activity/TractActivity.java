@@ -127,8 +127,8 @@ public class TractActivity extends ImmersiveActivity
 
     @Nullable
     private GodToolsDownloadManager mDownloadManager;
-    @Nullable
-    private SettableFuture<?> mDownloadTask;
+    @NonNull
+    private SettableFuture[] mDownloadTasks = new SettableFuture[0];
     @NonNull
     private DownloadProgress mDownloadProgress = DownloadProgress.INDETERMINATE;
 
@@ -177,8 +177,8 @@ public class TractActivity extends ImmersiveActivity
             return;
         }
 
-        // download the translation for the active language of this tool
-        downloadTranslation();
+        // download the translations for the requested languages of this tool
+        downloadTranslations();
 
         // track this share
         if (savedInstanceState == null) {
@@ -303,6 +303,8 @@ public class TractActivity extends ImmersiveActivity
             final Locale[] languages = BundleUtils.getLocaleArray(extras, EXTRA_LANGUAGES);
             mLanguages = languages != null ? languages : mLanguages;
         }
+
+        mDownloadTasks = new SettableFuture[mLanguages.length];
     }
 
     @Contract("null -> false")
@@ -335,12 +337,14 @@ public class TractActivity extends ImmersiveActivity
 
     /* END creation methods */
 
-    private void downloadTranslation() {
-        if (mTool != null && mDownloadManager != null) {
-            mDownloadManager.cacheTranslation(mTool, mLanguages[mActiveLanguage]);
-            mDownloadTask = SettableFuture.create();
-            AsyncTask.THREAD_POOL_EXECUTOR
-                    .execute(new DownloadTranslationRunnable(this, mTool, mLanguages[mActiveLanguage], mDownloadTask));
+    private void downloadTranslations() {
+        if (mDownloadManager != null && mTool != null) {
+            for (int language = 0; language < mLanguages.length; language++) {
+                mDownloadManager.cacheTranslation(mTool, mLanguages[language]);
+                mDownloadTasks[language] = SettableFuture.create();
+                AsyncTask.THREAD_POOL_EXECUTOR.execute(
+                        new DownloadTranslationRunnable(this, mTool, mLanguages[language], mDownloadTasks[language]));
+            }
         }
     }
 
@@ -348,7 +352,7 @@ public class TractActivity extends ImmersiveActivity
         final int visibilityState;
         if (getActiveManifest() != null) {
             visibilityState = STATE_ACTIVE;
-        } else if (mDownloadTask != null && mDownloadTask.isDone() &&
+        } else if (mDownloadTasks[mActiveLanguage] != null && mDownloadTasks[mActiveLanguage].isDone() &&
                 mTranslations.indexOfKey(mActiveLanguage) >= 0 && mTranslations.get(mActiveLanguage) == null) {
             visibilityState = STATE_NOT_FOUND;
         } else {
