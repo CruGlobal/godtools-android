@@ -21,6 +21,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,6 +61,7 @@ import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.model.Tool;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -68,6 +70,7 @@ import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
 import static org.cru.godtools.base.ui.util.LocaleTypefaceUtils.safeApplyTypefaceSpan;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
+import static org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE;
 
 public class TractActivity extends ImmersiveActivity
         implements ManifestPagerAdapter.Callbacks, TabLayout.OnTabSelectedListener,
@@ -293,7 +296,7 @@ public class TractActivity extends ImmersiveActivity
         final Bundle extras = intent != null ? intent.getExtras() : null;
         if (Intent.ACTION_VIEW.equals(action) && isDeepLinkValid(data)) {
             mTool = getToolFromDeepLink(data);
-            mLanguages = new Locale[] {getLanguageFromDeepLink(data)};
+            mLanguages = processDeepLinkLanguages(data);
         } else if (extras != null) {
             mTool = extras.getString(EXTRA_TOOL, mTool);
             final Locale[] languages = BundleUtils.getLocaleArray(extras, EXTRA_LANGUAGES);
@@ -318,8 +321,25 @@ public class TractActivity extends ImmersiveActivity
     }
 
     @NonNull
-    private Locale getLanguageFromDeepLink(@NonNull final Uri data) {
-        return LocaleCompat.forLanguageTag(data.getPathSegments().get(0));
+    private Locale[] processDeepLinkLanguages(@NonNull final Uri data) {
+        // extract raw locales from the uri
+        final Locale uriLocale = LocaleCompat.forLanguageTag(data.getPathSegments().get(0));
+        final List<Locale> rawPrimaryLanguages = Stream.of(data.getQueryParameters(PARAM_PRIMARY_LANGUAGE))
+                .flatMap(lang -> Stream.of(TextUtils.split(lang, ",")))
+                .map(String::trim)
+                .filterNot(TextUtils::isEmpty)
+                .map(LocaleCompat::forLanguageTag)
+                .toList();
+
+        // process the primary languages specified in the uri
+        if (!rawPrimaryLanguages.isEmpty()) {
+            rawPrimaryLanguages.add(uriLocale);
+            final Locale[] primaryLanguages = LocaleCompat.getFallbacks(rawPrimaryLanguages.toArray(new Locale[0]));
+            return primaryLanguages;
+        }
+
+        // default to the uri locale
+        return new Locale[] {uriLocale};
     }
 
     @Nullable
