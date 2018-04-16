@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.activity;
+package org.cru.godtools.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,17 +8,21 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.Menu;
 
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.fragment.LanguageSettingsFragment;
+import org.keynote.godtools.android.fragment.ToolsFragment;
+import org.keynote.godtools.android.model.Tool;
 
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_LANGUAGE_SETTINGS;
+import java.util.Locale;
 
-public class LanguageSettingsActivity extends BaseActivity {
+import static org.cru.godtools.analytics.AnalyticsService.SCREEN_ADD_TOOLS;
+
+public class AddToolsActivity extends BaseActivity implements ToolsFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
     public static void start(@NonNull final Context context) {
-        context.startActivity(new Intent(context, LanguageSettingsActivity.class));
+        context.startActivity(new Intent(context, AddToolsActivity.class));
     }
 
     /* BEGIN lifecycle */
@@ -30,6 +34,12 @@ public class LanguageSettingsActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_add_tools, menu);
+        return true;
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         loadInitialFragmentIfNeeded();
@@ -38,7 +48,22 @@ public class LanguageSettingsActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mAnalytics.onTrackScreen(SCREEN_LANGUAGE_SETTINGS);
+        mAnalytics.onTrackScreen(SCREEN_ADD_TOOLS);
+    }
+
+    @Override
+    public void onToolSelect(@Nullable final String code, @NonNull final Tool.Type type, final Locale... languages) {
+        ToolDetailsActivity.start(this, code);
+    }
+
+    @Override
+    public void onToolInfo(@Nullable final String code) {
+        ToolDetailsActivity.start(this, code);
+    }
+
+    @Override
+    public void onNoToolsAvailableAction() {
+        finish();
     }
 
     /* END lifecycle */
@@ -55,12 +80,7 @@ public class LanguageSettingsActivity extends BaseActivity {
 
         // update the displayed fragment
         fm.beginTransaction()
-                .replace(R.id.frame, LanguageSettingsFragment.newInstance(), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, ToolsFragment.newAvailableInstance(), TAG_MAIN_FRAGMENT)
                 .commit();
-    }
-
-    @Override
-    public void supportNavigateUpTo(@NonNull final Intent upIntent) {
-        finish();
     }
 }

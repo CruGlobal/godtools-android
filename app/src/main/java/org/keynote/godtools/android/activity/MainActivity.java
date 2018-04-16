@@ -13,6 +13,10 @@ import android.view.MenuItem;
 
 import com.annimon.stream.Stream;
 
+import org.cru.godtools.activity.AddToolsActivity;
+import org.cru.godtools.activity.BaseActivity;
+import org.cru.godtools.activity.ToolDetailsActivity;
+import org.cru.godtools.activity.TourActivity;
 import org.cru.godtools.everystudent.EveryStudent;
 import org.cru.godtools.init.content.task.InitialContentTasks;
 import org.cru.godtools.sync.GodToolsSyncService;

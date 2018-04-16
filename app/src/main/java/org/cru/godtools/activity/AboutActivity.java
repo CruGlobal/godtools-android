@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentManager;
 
 import org.cru.godtools.fragment.AboutFragment;
 import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.activity.BaseActivity;
 
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_ABOUT;
 

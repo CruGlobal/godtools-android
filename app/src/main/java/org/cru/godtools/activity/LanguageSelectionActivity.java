@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.activity;
+package org.cru.godtools.activity;
 
 import android.content.Context;
 import android.content.Intent;
