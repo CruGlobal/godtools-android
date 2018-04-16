@@ -20,9 +20,9 @@ import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
+import org.cru.godtools.BuildConfig;
+import org.cru.godtools.R;
 import org.cru.godtools.base.Settings;
-import org.keynote.godtools.android.BuildConfig;
-import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.util.WebUrlLauncher;
 
 import java.util.Locale;

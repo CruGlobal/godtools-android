@@ -10,7 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 
-import org.keynote.godtools.android.R;
+import org.cru.godtools.R;
 import org.keynote.godtools.android.fragment.ToolDetailsFragment;
 import org.keynote.godtools.android.model.Tool;
 

@@ -10,8 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 
+import org.cru.godtools.R;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
-import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.fragment.LanguagesFragment;
 
 import java.util.Locale;

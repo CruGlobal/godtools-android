@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.keynote.godtools.android.R;
+import org.cru.godtools.R;
 
 public class AboutFragment extends Fragment {
     @NonNull

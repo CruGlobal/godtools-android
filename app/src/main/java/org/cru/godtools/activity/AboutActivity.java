@@ -9,8 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import org.cru.godtools.R;
 import org.cru.godtools.fragment.AboutFragment;
-import org.keynote.godtools.android.R;
 
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_ABOUT;
 

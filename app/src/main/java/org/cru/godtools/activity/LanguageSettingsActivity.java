@@ -9,7 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
-import org.keynote.godtools.android.R;
+import org.cru.godtools.R;
 import org.keynote.godtools.android.fragment.LanguageSettingsFragment;
 
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_LANGUAGE_SETTINGS;

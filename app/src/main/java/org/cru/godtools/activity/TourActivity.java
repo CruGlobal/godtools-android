@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.ccci.gto.android.common.util.BundleUtils;
-import org.keynote.godtools.android.R;
+import org.cru.godtools.R;
 import org.keynote.godtools.android.fragment.BaseFragment;
 
 import butterknife.OnClick;
