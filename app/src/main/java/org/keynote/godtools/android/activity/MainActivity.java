@@ -13,12 +13,16 @@ import android.view.MenuItem;
 
 import com.annimon.stream.Stream;
 
+import org.cru.godtools.R;
+import org.cru.godtools.activity.AddToolsActivity;
+import org.cru.godtools.activity.BaseActivity;
+import org.cru.godtools.activity.ToolDetailsActivity;
+import org.cru.godtools.activity.TourActivity;
 import org.cru.godtools.everystudent.EveryStudent;
 import org.cru.godtools.init.content.task.InitialContentTasks;
 import org.cru.godtools.sync.GodToolsSyncService;
 import org.cru.godtools.tract.activity.TractActivity;
 import org.cru.godtools.tract.service.TractManager;
-import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.fragment.ToolsFragment;
 import org.keynote.godtools.android.model.Tool;
 

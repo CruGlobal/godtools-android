@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.keynote.godtools.android.R;
-import org.keynote.godtools.android.activity.LanguageSelectionActivity;
+import org.cru.godtools.R;
+import org.cru.godtools.activity.LanguageSelectionActivity;
 import org.keynote.godtools.android.utils.WordUtils;
 
 import butterknife.BindView;

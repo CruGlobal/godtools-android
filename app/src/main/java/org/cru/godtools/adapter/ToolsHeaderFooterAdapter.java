@@ -1,6 +1,6 @@
 package org.cru.godtools.adapter;
 
-import org.keynote.godtools.android.R;
+import org.cru.godtools.R;
 
 public class ToolsHeaderFooterAdapter extends BaseHeaderFooterAdapter {
     public ToolsHeaderFooterAdapter() {

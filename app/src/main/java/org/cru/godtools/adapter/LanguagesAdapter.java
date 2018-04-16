@@ -15,10 +15,10 @@ import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.google.common.base.Objects;
 
+import org.cru.godtools.R;
 import org.cru.godtools.adapter.LanguagesAdapter.LanguageViewHolder;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Language;
-import org.keynote.godtools.android.R;
 import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.util.Collections;

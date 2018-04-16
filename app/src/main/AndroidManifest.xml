@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.keynote.godtools.android">
+    package="org.cru.godtools">
 
     <!-- Unused permissions, kept around for older android in case we want to start using them again -->
     <uses-permission
@@ -24,10 +24,10 @@
 
 
     <application
-        android:name="org.cru.godtools.GodToolsApplication"
+        android:name=".GodToolsApplication"
         android:allowBackup="false"
         android:theme="@style/Theme.GodTools2.AppBar">
-        <activity android:name=".activity.MainActivity">
+        <activity android:name="org.keynote.godtools.android.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -35,9 +35,9 @@
         </activity>
 
         <activity
-            android:name="org.cru.godtools.activity.AboutActivity"
+            android:name=".activity.AboutActivity"
             android:label="@string/title_about"
-            android:parentActivityName=".activity.MainActivity">
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.keynote.godtools.android.activity.MainActivity" />
@@ -46,7 +46,7 @@
         <activity
             android:name=".activity.AddToolsActivity"
             android:label="@string/title_tools_add"
-            android:parentActivityName=".activity.MainActivity">
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.keynote.godtools.android.activity.MainActivity" />
@@ -54,7 +54,7 @@
 
         <activity
             android:name=".activity.ToolDetailsActivity"
-            android:parentActivityName=".activity.MainActivity">
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.keynote.godtools.android.activity.MainActivity" />
@@ -63,7 +63,7 @@
         <activity
             android:name=".activity.LanguageSettingsActivity"
             android:label="@string/title_language_settings"
-            android:parentActivityName=".activity.MainActivity">
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.keynote.godtools.android.activity.MainActivity" />
@@ -74,7 +74,7 @@
             android:parentActivityName=".activity.LanguageSettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.keynote.godtools.android.activity.LanguageSettingsActivity" />
+                android:value="org.cru.godtools.activity.LanguageSettingsActivity" />
         </activity>
 
         <activity
@@ -82,8 +82,8 @@
             android:theme="@style/Theme.GodTools2.Activity.Tour" />
 
         <activity
-            android:name="org.cru.godtools.tract.activity.TractActivity"
-            android:parentActivityName=".activity.MainActivity">
+            android:name=".tract.activity.TractActivity"
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.keynote.godtools.android.activity.MainActivity" />

@@ -17,11 +17,11 @@ import com.google.common.base.Strings;
 
 import org.ccci.gto.android.sync.event.SyncFinishedEvent;
 import org.ccci.gto.android.sync.widget.SwipeRefreshSyncHelper;
+import org.cru.godtools.R;
 import org.cru.godtools.base.Settings;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.keynote.godtools.android.R;
 
 import java.util.Locale;
 

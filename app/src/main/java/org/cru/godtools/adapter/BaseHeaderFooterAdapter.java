@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.h6ah4i.android.widget.advrecyclerview.headerfooter.AbstractHeaderFooterWrapperAdapter;
 
-import org.keynote.godtools.android.R;
+import org.cru.godtools.R;
 
 import butterknife.BindView;
 import butterknife.OnClick;
