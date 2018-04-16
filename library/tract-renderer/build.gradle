@@ -49,6 +49,10 @@ dependencies {
     androidTestImplementation "org.hamcrest:hamcrest-library:${deps.hamcrest}"
 
     testImplementation "junit:junit:${deps.junit}"
+    testImplementation "org.mockito:mockito-core:${deps.mockito}"
+    testImplementation "org.powermock:powermock-classloading-xstream:${deps.powermock}"
+    testImplementation "org.powermock:powermock-module-junit4-rule:${deps.powermock}"
+    testImplementation "org.ccci.gto.android:gto-support-testing:${deps.gtoSupport}"
 
     annotationProcessor "android.arch.lifecycle:compiler:${deps.androidLifecycle}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"

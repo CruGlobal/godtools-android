@@ -12,7 +12,9 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RestrictTo;
 import android.support.annotation.UiThread;
+import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayoutUtils;
 import android.support.v4.app.LoaderManager;
@@ -134,15 +136,17 @@ public class TractActivity extends ImmersiveActivity
     @Nullable
     private GodToolsDownloadManager mDownloadManager;
     @NonNull
-    private SettableFuture[] mDownloadTasks = new SettableFuture[0];
+    @VisibleForTesting
+    SettableFuture[] mDownloadTasks = new SettableFuture[0];
     @NonNull
     private DownloadProgress mDownloadProgress = DownloadProgress.INDETERMINATE;
 
-    private final SparseArray<Translation> mTranslations = new SparseArray<>();
-    private final SparseArray<Manifest> mManifests = new SparseArray<>();
+    private final SparseArray<Translation> mTranslations;
+    private final SparseArray<Manifest> mManifests;
     @NonNull
     boolean[] mHiddenLanguages = new boolean[0];
-    private int mActiveLanguage = 0;
+    @VisibleForTesting
+    int mActiveLanguage = 0;
 
     protected static void populateExtras(@NonNull final Bundle extras, @NonNull final String toolCode,
                                          @NonNull final Locale... languages) {
@@ -155,6 +159,18 @@ public class TractActivity extends ImmersiveActivity
         final Bundle extras = new Bundle();
         populateExtras(extras, toolCode, languages);
         context.startActivity(new Intent(context, TractActivity.class).putExtras(extras));
+    }
+
+    public TractActivity() {
+        mTranslations = new SparseArray<>();
+        mManifests = new SparseArray<>();
+    }
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    TractActivity(@NonNull final SparseArray<Translation> translations,
+                  @NonNull final SparseArray<Manifest> manifests) {
+        mTranslations = translations;
+        mManifests = manifests;
     }
 
     /* BEGIN lifecycle */
@@ -386,6 +402,7 @@ public class TractActivity extends ImmersiveActivity
      * via a deep link.
      */
     @UiThread
+    @VisibleForTesting
     void updateHiddenLanguages() {
         int primaryLanguage = -1;
         for (int i = 0; i < mLanguages.length; i++) {
