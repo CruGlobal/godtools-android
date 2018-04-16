@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayoutUtils;
 import android.support.v4.app.LoaderManager;
@@ -128,6 +129,7 @@ public class TractActivity extends ImmersiveActivity
     /*final*/ String mTool = Tool.INVALID_CODE;
     @NonNull
     /*final*/ Locale[] mLanguages = new Locale[0];
+    /*final*/ int mPrimaryLanguages = 1;
 
     @Nullable
     private GodToolsDownloadManager mDownloadManager;
@@ -138,6 +140,8 @@ public class TractActivity extends ImmersiveActivity
 
     private final SparseArray<Translation> mTranslations = new SparseArray<>();
     private final SparseArray<Manifest> mManifests = new SparseArray<>();
+    @NonNull
+    boolean[] mHiddenLanguages = new boolean[0];
     private int mActiveLanguage = 0;
 
     protected static void populateExtras(@NonNull final Bundle extras, @NonNull final String toolCode,
@@ -302,6 +306,7 @@ public class TractActivity extends ImmersiveActivity
             final Locale[] languages = BundleUtils.getLocaleArray(extras, EXTRA_LANGUAGES);
             mLanguages = languages != null ? languages : mLanguages;
         }
+        mHiddenLanguages = new boolean[mLanguages.length];
 
         mDownloadTasks = new SettableFuture[mLanguages.length];
     }
@@ -335,6 +340,7 @@ public class TractActivity extends ImmersiveActivity
         if (!rawPrimaryLanguages.isEmpty()) {
             rawPrimaryLanguages.add(uriLocale);
             final Locale[] primaryLanguages = LocaleCompat.getFallbacks(rawPrimaryLanguages.toArray(new Locale[0]));
+            mPrimaryLanguages = primaryLanguages.length;
             return primaryLanguages;
         }
 
@@ -372,6 +378,39 @@ public class TractActivity extends ImmersiveActivity
             return STATE_NOT_FOUND;
         } else {
             return STATE_LOADING;
+        }
+    }
+
+    /**
+     * This method updates the list of artificially hidden languages. This includes primary language fallbacks provided
+     * via a deep link.
+     */
+    @UiThread
+    void updateHiddenLanguages() {
+        int primaryLanguage = -1;
+        for (int i = 0; i < mLanguages.length; i++) {
+            // default hidden state to whether the language exists or not
+            final int state = determineLanguageState(i);
+            mHiddenLanguages[i] = state == STATE_NOT_FOUND;
+
+            // primary language specific logic
+            if (i < mPrimaryLanguages && state != STATE_NOT_FOUND) {
+                if (mActiveLanguage == i || (state == STATE_LOADED && primaryLanguage == -1)) {
+                    // don't hide the primary language
+                    mHiddenLanguages[i] = false;
+
+                    // hide any previously identified primary languages
+                    if (primaryLanguage != -1) {
+                        mHiddenLanguages[primaryLanguage] = true;
+                    }
+
+                    // track our current primary language
+                    primaryLanguage = i;
+                } else if (i < mPrimaryLanguages) {
+                    // hide any other potential primary language
+                    mHiddenLanguages[i] = true;
+                }
+            }
         }
     }
 
@@ -506,15 +545,9 @@ public class TractActivity extends ImmersiveActivity
     }
 
     private void updateLanguageToggle() {
-        // show or hide the title based on if we have visible language tabs
-        if (mActionBar != null) {
-            mActionBar.setDisplayShowTitleEnabled(mLanguageTabs == null || mManifests.size() <= 1);
-        }
-
         // update the styles for the language tabs
+        int visibleTabs = 0;
         if (mLanguageTabs != null) {
-            mLanguageTabs.setVisibility(mManifests.size() > 1 ? View.VISIBLE : View.GONE);
-
             // determine colors for the language toggle
             final Manifest manifest = getActiveManifest();
             final int controlColor = Manifest.getNavBarControlColor(manifest);
@@ -532,11 +565,16 @@ public class TractActivity extends ImmersiveActivity
             ViewUtils.setBackgroundTint(mLanguageTabs, controlColor);
 
             // update visible tabs
+            updateHiddenLanguages();
             for (int i = 0; i < mLanguages.length; i++) {
                 final TabLayout.Tab tab = mLanguageTabs.getTabAt(i);
                 if (tab != null) {
                     // update tab visibility
-                    TabLayoutUtils.setVisibility(tab, mManifests.get(i) != null ? View.VISIBLE : View.GONE);
+                    final boolean visible = mManifests.get(i) != null && !mHiddenLanguages[i];
+                    TabLayoutUtils.setVisibility(tab, visible ? View.VISIBLE : View.GONE);
+                    if (visible) {
+                        visibleTabs++;
+                    }
 
                     // update tab background
                     Drawable bkg = AppCompatResources.getDrawable(mLanguageTabs.getContext(), R.drawable.bkg_tab_label);
@@ -552,6 +590,13 @@ public class TractActivity extends ImmersiveActivity
                     }
                 }
             }
+
+            mLanguageTabs.setVisibility(visibleTabs > 1 ? View.VISIBLE : View.GONE);
+        }
+
+        // show or hide the title based on how many visible tabs we have
+        if (mActionBar != null) {
+            mActionBar.setDisplayShowTitleEnabled(visibleTabs <= 1);
         }
     }
 
