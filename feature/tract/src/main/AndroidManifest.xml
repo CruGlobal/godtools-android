@@ -3,6 +3,16 @@
     package="org.cru.godtools.feature.tract">
 
     <application android:name=".GodToolsTractApplication">
+        <activity android:name="org.cru.godtools.tract.activity.TractActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <meta-data
+                android:name="default-url"
+                android:value="https://knowgod.com/en/kgp/" />
+        </activity>
+
         <!-- XXX: we need this present for now to work around Crashlytics tooling bugs -->
         <meta-data
             android:name="io.fabric.ApiKey"
