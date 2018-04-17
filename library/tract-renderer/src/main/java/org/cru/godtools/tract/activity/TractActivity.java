@@ -423,7 +423,7 @@ public class TractActivity extends ImmersiveActivity
 
                     // track our current primary language
                     primaryLanguage = i;
-                } else if (i < mPrimaryLanguages) {
+                } else {
                     // hide any other potential primary language
                     mHiddenLanguages[i] = true;
                 }
