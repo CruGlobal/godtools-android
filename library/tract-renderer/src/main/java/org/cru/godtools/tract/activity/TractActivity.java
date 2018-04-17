@@ -23,7 +23,6 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.content.res.AppCompatResources;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Menu;
@@ -92,8 +91,6 @@ public class TractActivity extends ImmersiveActivity
     private static final int STATE_NOT_FOUND = 2;
 
     // App/Action Bar
-    @BindView(R2.id.appBar)
-    Toolbar mToolbar;
     @Nullable
     private Menu mToolbarMenu;
     @Nullable

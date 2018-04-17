@@ -1,3 +1,5 @@
+apply plugin: 'com.jakewharton.butterknife'
+
 dependencies {
     api project(':library:analytics')
 

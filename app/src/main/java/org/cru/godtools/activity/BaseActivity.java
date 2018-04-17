@@ -13,7 +13,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.google.common.base.Objects;
@@ -53,9 +52,6 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
     private final ChangeListener mSettingsChangeListener = new ChangeListener();
 
     // App/Action Bar
-    @Nullable
-    @BindView(R.id.appBar)
-    Toolbar mToolbar;
     @Nullable
     private ActionBar mActionBar;
 
