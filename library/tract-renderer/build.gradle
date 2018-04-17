@@ -28,6 +28,7 @@ dependencies {
     implementation "com.android.support:design:${deps.androidSupport}"
     implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
 
+    implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-design:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"

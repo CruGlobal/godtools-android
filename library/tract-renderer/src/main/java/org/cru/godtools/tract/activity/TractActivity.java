@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.MainThread;
@@ -36,6 +35,7 @@ import com.google.android.instantapps.InstantApps;
 import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
+import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.BundleUtils;
 import org.cru.godtools.base.model.Event;
@@ -459,9 +459,7 @@ public class TractActivity extends ImmersiveActivity
 
     private void setupLanguageToggle() {
         if (mLanguageTabs != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mLanguageTabs.setClipToOutline(true);
-            }
+            ViewCompat.setClipToOutline(mLanguageTabs, true);
 
             for (final Locale locale : mLanguages) {
                 mLanguageTabs.addTab(mLanguageTabs.newTab()
