@@ -27,7 +27,7 @@
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/language_toggle"
-                style="@style/Widget.GodTools.Tract.TabLayout"
+                style="@style/Widget.GodTools.TabLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
                 android:layout_gravity="center"

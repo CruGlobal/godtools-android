@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Widget.GodTools.Tract.Content.Tabs" parent="Widget.GodTools.Tract.TabLayout">
+    <style name="Widget.GodTools.Tract.Content.Tabs" parent="Widget.GodTools.TabLayout">
         <item name="android:layout_width">wrap_content</item>
         <item name="tabMinWidth">200dp</item>
     </style>
