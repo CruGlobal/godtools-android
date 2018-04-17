@@ -411,22 +411,24 @@ public class TractActivity extends ImmersiveActivity
             mHiddenLanguages[i] = state == STATE_NOT_FOUND;
 
             // primary language specific logic
-            if (i < mPrimaryLanguages && state != STATE_NOT_FOUND) {
-                if (mActiveLanguage == i || (state == STATE_LOADED && primaryLanguage == -1)) {
-                    // don't hide the primary language
-                    mHiddenLanguages[i] = false;
+            if (i >= mPrimaryLanguages || state != STATE_NOT_FOUND) {
+                continue;
+            }
 
-                    // hide any previously identified primary languages
-                    if (primaryLanguage != -1) {
-                        mHiddenLanguages[primaryLanguage] = true;
-                    }
+            if (mActiveLanguage == i || (state == STATE_LOADED && primaryLanguage == -1)) {
+                // don't hide the primary language
+                mHiddenLanguages[i] = false;
 
-                    // track our current primary language
-                    primaryLanguage = i;
-                } else if (i < mPrimaryLanguages) {
-                    // hide any other potential primary language
-                    mHiddenLanguages[i] = true;
+                // hide any previously identified primary languages
+                if (primaryLanguage != -1) {
+                    mHiddenLanguages[primaryLanguage] = true;
                 }
+
+                // track our current primary language
+                primaryLanguage = i;
+            } else if (i < mPrimaryLanguages) {
+                // hide any other potential primary language
+                mHiddenLanguages[i] = true;
             }
         }
     }
