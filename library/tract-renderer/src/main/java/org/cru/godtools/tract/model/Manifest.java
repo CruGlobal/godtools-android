@@ -7,6 +7,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RestrictTo;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.SimpleArrayMap;
@@ -89,8 +90,14 @@ public final class Manifest extends Base implements Styles {
     @VisibleForTesting
     final SimpleArrayMap<String, Resource> mResources = new SimpleArrayMap<>();
 
-    @VisibleForTesting
-    Manifest(@NonNull final String manifestName, @NonNull final String toolCode, @NonNull final Locale locale) {
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    public Manifest() {
+        mManifestName = "";
+        mCode = "";
+        mLocale = Locale.ENGLISH;
+    }
+
+    private Manifest(@NonNull final String manifestName, @NonNull final String toolCode, @NonNull final Locale locale) {
         super();
         mManifestName = manifestName;
         mCode = toolCode;

@@ -12,6 +12,9 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RestrictTo;
+import android.support.annotation.UiThread;
+import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayoutUtils;
 import android.support.v4.app.LoaderManager;
@@ -21,12 +24,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.annimon.stream.IntPair;
 import com.annimon.stream.Stream;
 import com.google.android.instantapps.InstantApps;
 import com.google.common.util.concurrent.SettableFuture;
@@ -59,6 +64,7 @@ import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.model.Tool;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -67,6 +73,7 @@ import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
 import static org.cru.godtools.base.ui.util.LocaleTypefaceUtils.safeApplyTypefaceSpan;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
+import static org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE;
 
 public class TractActivity extends ImmersiveActivity
         implements ManifestPagerAdapter.Callbacks, TabLayout.OnTabSelectedListener,
@@ -81,7 +88,7 @@ public class TractActivity extends ImmersiveActivity
     private static final int LOADER_TYPE_TRANSLATION = 2 << LOADER_ID_BITS;
 
     private static final int STATE_LOADING = 0;
-    private static final int STATE_ACTIVE = 1;
+    private static final int STATE_LOADED = 1;
     private static final int STATE_NOT_FOUND = 2;
 
     // App/Action Bar
@@ -124,17 +131,22 @@ public class TractActivity extends ImmersiveActivity
     /*final*/ String mTool = Tool.INVALID_CODE;
     @NonNull
     /*final*/ Locale[] mLanguages = new Locale[0];
+    /*final*/ int mPrimaryLanguages = 1;
 
     @Nullable
     private GodToolsDownloadManager mDownloadManager;
-    @Nullable
-    private SettableFuture<?> mDownloadTask;
+    @NonNull
+    @VisibleForTesting
+    SettableFuture[] mDownloadTasks = new SettableFuture[0];
     @NonNull
     private DownloadProgress mDownloadProgress = DownloadProgress.INDETERMINATE;
 
-    private final SparseArray<Translation> mTranslations = new SparseArray<>();
-    private final SparseArray<Manifest> mManifests = new SparseArray<>();
-    private int mActiveLanguage = 0;
+    private final SparseArray<Translation> mTranslations;
+    private final SparseArray<Manifest> mManifests;
+    @NonNull
+    boolean[] mHiddenLanguages = new boolean[0];
+    @VisibleForTesting
+    int mActiveLanguage = 0;
 
     protected static void populateExtras(@NonNull final Bundle extras, @NonNull final String toolCode,
                                          @NonNull final Locale... languages) {
@@ -147,6 +159,18 @@ public class TractActivity extends ImmersiveActivity
         final Bundle extras = new Bundle();
         populateExtras(extras, toolCode, languages);
         context.startActivity(new Intent(context, TractActivity.class).putExtras(extras));
+    }
+
+    public TractActivity() {
+        mTranslations = new SparseArray<>();
+        mManifests = new SparseArray<>();
+    }
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    TractActivity(@NonNull final SparseArray<Translation> translations,
+                  @NonNull final SparseArray<Manifest> manifests) {
+        mTranslations = translations;
+        mManifests = manifests;
     }
 
     /* BEGIN lifecycle */
@@ -177,8 +201,8 @@ public class TractActivity extends ImmersiveActivity
             return;
         }
 
-        // download the translation for the active language of this tool
-        downloadTranslation();
+        // download the translations for the requested languages of this tool
+        downloadTranslations();
 
         // track this share
         if (savedInstanceState == null) {
@@ -243,14 +267,9 @@ public class TractActivity extends ImmersiveActivity
     @Override
     public void onTabSelected(final TabLayout.Tab tab) {
         final Locale locale = (Locale) tab.getTag();
-        for (int i = 0; i < mLanguages.length; i++) {
-            if (mLanguages[i].equals(locale)) {
-                mActiveLanguage = i;
-                restartDownloadProgressListener();
-                updateActiveManifest();
-                mAnalytics.onTrackToggleLanguage(locale);
-                return;
-            }
+        if (locale != null) {
+            updateActiveLanguage(locale);
+            mAnalytics.onTrackToggleLanguage(locale);
         }
     }
 
@@ -297,12 +316,15 @@ public class TractActivity extends ImmersiveActivity
         final Bundle extras = intent != null ? intent.getExtras() : null;
         if (Intent.ACTION_VIEW.equals(action) && isDeepLinkValid(data)) {
             mTool = getToolFromDeepLink(data);
-            mLanguages = new Locale[] {getLanguageFromDeepLink(data)};
+            mLanguages = processDeepLinkLanguages(data);
         } else if (extras != null) {
             mTool = extras.getString(EXTRA_TOOL, mTool);
             final Locale[] languages = BundleUtils.getLocaleArray(extras, EXTRA_LANGUAGES);
             mLanguages = languages != null ? languages : mLanguages;
         }
+        mHiddenLanguages = new boolean[mLanguages.length];
+
+        mDownloadTasks = new SettableFuture[mLanguages.length];
     }
 
     @Contract("null -> false")
@@ -320,8 +342,26 @@ public class TractActivity extends ImmersiveActivity
     }
 
     @NonNull
-    private Locale getLanguageFromDeepLink(@NonNull final Uri data) {
-        return LocaleCompat.forLanguageTag(data.getPathSegments().get(0));
+    private Locale[] processDeepLinkLanguages(@NonNull final Uri data) {
+        // extract raw locales from the uri
+        final Locale uriLocale = LocaleCompat.forLanguageTag(data.getPathSegments().get(0));
+        final List<Locale> rawPrimaryLanguages = Stream.of(data.getQueryParameters(PARAM_PRIMARY_LANGUAGE))
+                .flatMap(lang -> Stream.of(TextUtils.split(lang, ",")))
+                .map(String::trim)
+                .filterNot(TextUtils::isEmpty)
+                .map(LocaleCompat::forLanguageTag)
+                .toList();
+
+        // process the primary languages specified in the uri
+        if (!rawPrimaryLanguages.isEmpty()) {
+            rawPrimaryLanguages.add(uriLocale);
+            final Locale[] primaryLanguages = LocaleCompat.getFallbacks(rawPrimaryLanguages.toArray(new Locale[0]));
+            mPrimaryLanguages = primaryLanguages.length;
+            return primaryLanguages;
+        }
+
+        // default to the uri locale
+        return new Locale[] {uriLocale};
     }
 
     @Nullable
@@ -335,34 +375,79 @@ public class TractActivity extends ImmersiveActivity
 
     /* END creation methods */
 
-    private void downloadTranslation() {
-        if (mTool != null && mDownloadManager != null) {
-            mDownloadManager.cacheTranslation(mTool, mLanguages[mActiveLanguage]);
-            mDownloadTask = SettableFuture.create();
-            AsyncTask.THREAD_POOL_EXECUTOR
-                    .execute(new DownloadTranslationRunnable(this, mTool, mLanguages[mActiveLanguage], mDownloadTask));
+    private void downloadTranslations() {
+        if (mDownloadManager != null && mTool != null) {
+            for (int language = 0; language < mLanguages.length; language++) {
+                mDownloadManager.cacheTranslation(mTool, mLanguages[language]);
+                mDownloadTasks[language] = SettableFuture.create();
+                AsyncTask.THREAD_POOL_EXECUTOR.execute(
+                        new DownloadTranslationRunnable(this, mTool, mLanguages[language], mDownloadTasks[language]));
+            }
+        }
+    }
+
+    private int determineLanguageState(final int languageIndex) {
+        if (mManifests.get(languageIndex) != null) {
+            return STATE_LOADED;
+        } else if (mDownloadTasks[languageIndex] != null && mDownloadTasks[languageIndex].isDone() &&
+                mTranslations.indexOfKey(languageIndex) >= 0 && mTranslations.get(languageIndex) == null) {
+            return STATE_NOT_FOUND;
+        } else {
+            return STATE_LOADING;
+        }
+    }
+
+    /**
+     * This method updates the list of artificially hidden languages. This includes primary language fallbacks provided
+     * via a deep link.
+     */
+    @UiThread
+    @VisibleForTesting
+    void updateHiddenLanguages() {
+        int primaryLanguage = -1;
+        for (int i = 0; i < mLanguages.length; i++) {
+            // default hidden state to whether the language exists or not
+            final int state = determineLanguageState(i);
+            mHiddenLanguages[i] = state == STATE_NOT_FOUND;
+
+            // short-circuit loop if this language was not found
+            if (state == STATE_NOT_FOUND) {
+                continue;
+            }
+
+            // primary language specific logic
+            if (i < mPrimaryLanguages) {
+                if (mActiveLanguage == i || (state == STATE_LOADED && primaryLanguage == -1)) {
+                    // don't hide the primary language
+                    mHiddenLanguages[i] = false;
+
+                    // hide any previously identified primary languages
+                    if (primaryLanguage != -1) {
+                        mHiddenLanguages[primaryLanguage] = true;
+                    }
+
+                    // track our current primary language
+                    primaryLanguage = i;
+                } else {
+                    // hide any other potential primary language
+                    mHiddenLanguages[i] = true;
+                }
+            }
         }
     }
 
     private void updateVisibilityState() {
-        final int visibilityState;
-        if (getActiveManifest() != null) {
-            visibilityState = STATE_ACTIVE;
-        } else if (mDownloadTask != null && mDownloadTask.isDone() &&
-                mTranslations.indexOfKey(mActiveLanguage) >= 0 && mTranslations.get(mActiveLanguage) == null) {
-            visibilityState = STATE_NOT_FOUND;
-        } else {
-            visibilityState = STATE_LOADING;
-        }
+        updateActiveLanguageToPotentiallyAvailableLanguageIfNecessary();
+        final int state = determineLanguageState(mActiveLanguage);
 
         if (mLoadingContent != null) {
-            mLoadingContent.setVisibility(visibilityState == STATE_LOADING ? View.VISIBLE : View.GONE);
+            mLoadingContent.setVisibility(state == STATE_LOADING ? View.VISIBLE : View.GONE);
         }
         if (mMainContent != null) {
-            mMainContent.setVisibility(visibilityState == STATE_ACTIVE ? View.VISIBLE : View.GONE);
+            mMainContent.setVisibility(state == STATE_LOADED ? View.VISIBLE : View.GONE);
         }
         if (mMissingContent != null) {
-            mMissingContent.setVisibility(visibilityState == STATE_NOT_FOUND ? View.VISIBLE : View.GONE);
+            mMissingContent.setVisibility(state == STATE_NOT_FOUND ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -428,6 +513,31 @@ public class TractActivity extends ImmersiveActivity
         }
     }
 
+    private void updateActiveLanguage(@NonNull final Locale locale) {
+        for (int i = 0; i < mLanguages.length; i++) {
+            if (mLanguages[i].equals(locale)) {
+                if (i != mActiveLanguage) {
+                    mActiveLanguage = i;
+                    restartDownloadProgressListener();
+                    updateActiveManifest();
+                    updateLanguageToggle();
+                }
+                return;
+            }
+        }
+    }
+
+    private void updateActiveLanguageToPotentiallyAvailableLanguageIfNecessary() {
+        // only process if the active language is not found
+        if (determineLanguageState(mActiveLanguage) == STATE_NOT_FOUND) {
+            Stream.of(mLanguages).indexed()
+                    .filter(l -> determineLanguageState(l.getFirst()) != STATE_NOT_FOUND)
+                    .map(IntPair::getSecond)
+                    .findFirst()
+                    .ifPresent(this::updateActiveLanguage);
+        }
+    }
+
     @Nullable
     protected Manifest getActiveManifest() {
         return mManifests.get(mActiveLanguage);
@@ -457,15 +567,9 @@ public class TractActivity extends ImmersiveActivity
     }
 
     private void updateLanguageToggle() {
-        // show or hide the title based on if we have visible language tabs
-        if (mActionBar != null) {
-            mActionBar.setDisplayShowTitleEnabled(mLanguageTabs == null || mManifests.size() <= 1);
-        }
-
         // update the styles for the language tabs
+        int visibleTabs = 0;
         if (mLanguageTabs != null) {
-            mLanguageTabs.setVisibility(mManifests.size() > 1 ? View.VISIBLE : View.GONE);
-
             // determine colors for the language toggle
             final Manifest manifest = getActiveManifest();
             final int controlColor = Manifest.getNavBarControlColor(manifest);
@@ -483,11 +587,16 @@ public class TractActivity extends ImmersiveActivity
             ViewUtils.setBackgroundTint(mLanguageTabs, controlColor);
 
             // update visible tabs
+            updateHiddenLanguages();
             for (int i = 0; i < mLanguages.length; i++) {
                 final TabLayout.Tab tab = mLanguageTabs.getTabAt(i);
                 if (tab != null) {
                     // update tab visibility
-                    TabLayoutUtils.setVisibility(tab, mManifests.get(i) != null ? View.VISIBLE : View.GONE);
+                    final boolean visible = mManifests.get(i) != null && !mHiddenLanguages[i];
+                    TabLayoutUtils.setVisibility(tab, visible ? View.VISIBLE : View.GONE);
+                    if (visible) {
+                        visibleTabs++;
+                    }
 
                     // update tab background
                     Drawable bkg = AppCompatResources.getDrawable(mLanguageTabs.getContext(), R.drawable.bkg_tab_label);
@@ -496,8 +605,20 @@ public class TractActivity extends ImmersiveActivity
                         DrawableCompat.setTint(bkg, controlColor);
                     }
                     TabLayoutUtils.setBackground(tab, bkg);
+
+                    // ensure tab is selected if it is active
+                    if (i == mActiveLanguage && !tab.isSelected()) {
+                        tab.select();
+                    }
                 }
             }
+
+            mLanguageTabs.setVisibility(visibleTabs > 1 ? View.VISIBLE : View.GONE);
+        }
+
+        // show or hide the title based on how many visible tabs we have
+        if (mActionBar != null) {
+            mActionBar.setDisplayShowTitleEnabled(visibleTabs <= 1);
         }
     }
 
