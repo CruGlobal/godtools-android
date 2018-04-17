@@ -410,8 +410,13 @@ public class TractActivity extends ImmersiveActivity
             final int state = determineLanguageState(i);
             mHiddenLanguages[i] = state == STATE_NOT_FOUND;
 
+            // short-circuit loop if this language was not found
+            if (state == STATE_NOT_FOUND) {
+                continue;
+            }
+
             // primary language specific logic
-            if (i < mPrimaryLanguages && state != STATE_NOT_FOUND) {
+            if (i < mPrimaryLanguages) {
                 if (mActiveLanguage == i || (state == STATE_LOADED && primaryLanguage == -1)) {
                     // don't hide the primary language
                     mHiddenLanguages[i] = false;
