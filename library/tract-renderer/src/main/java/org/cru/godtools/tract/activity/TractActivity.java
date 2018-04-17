@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,7 +22,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.content.res.AppCompatResources;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -93,8 +93,6 @@ public class TractActivity extends ImmersiveActivity
     // App/Action Bar
     @Nullable
     private Menu mToolbarMenu;
-    @Nullable
-    private ActionBar mActionBar;
 
     @Nullable
     @BindView(R2.id.language_toggle)
@@ -215,8 +213,19 @@ public class TractActivity extends ImmersiveActivity
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        setupToolbar();
         setupPager();
+    }
+
+    @CallSuper
+    @Override
+    protected void onSetupActionBar() {
+        super.onSetupActionBar();
+        if (mToolbar != null && InstantApps.isInstantApp(this)) {
+            mToolbar.setNavigationIcon(R.drawable.ic_close);
+        }
+        setupLanguageToggle();
+        updateToolbar();
+        updateLanguageToggle();
     }
 
     @Override
@@ -446,20 +455,6 @@ public class TractActivity extends ImmersiveActivity
         if (mMissingContent != null) {
             mMissingContent.setVisibility(state == STATE_NOT_FOUND ? View.VISIBLE : View.GONE);
         }
-    }
-
-    private void setupToolbar() {
-        setSupportActionBar(mToolbar);
-        mActionBar = getSupportActionBar();
-        if (mActionBar != null) {
-            mActionBar.setDisplayHomeAsUpEnabled(true);
-        }
-        if (InstantApps.isInstantApp(this)) {
-            mToolbar.setNavigationIcon(R.drawable.ic_close);
-        }
-        setupLanguageToggle();
-        updateToolbar();
-        updateLanguageToggle();
     }
 
     private void setupLanguageToggle() {

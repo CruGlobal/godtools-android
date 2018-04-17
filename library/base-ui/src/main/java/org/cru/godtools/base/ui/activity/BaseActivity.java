@@ -3,8 +3,10 @@ package org.cru.godtools.base.ui.activity;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.Lifecycle;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -19,6 +21,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Nullable
     @BindView(R2.id.appbar)
     protected Toolbar mToolbar;
+    @Nullable
+    protected ActionBar mActionBar;
 
     @NonNull
     protected /*final*/ AnalyticsService mAnalytics;
@@ -35,7 +39,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void onContentChanged() {
         super.onContentChanged();
         ButterKnife.bind(this);
+        setupActionBar();
     }
+
+    @CallSuper
+    protected void onSetupActionBar() {}
 
     @Override
     protected void onResume() {
@@ -50,6 +58,19 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /* END lifecycle */
+
+    private void setupActionBar() {
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
+        }
+        mActionBar = getSupportActionBar();
+        if (mActionBar != null) {
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        // trigger lifecycle event for subclasses
+        onSetupActionBar();
+    }
 
     // HACK: workaround this bug: https://issuetracker.google.com/issues/64039135
     @Override

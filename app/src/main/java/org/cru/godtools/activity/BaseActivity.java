@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
@@ -51,10 +50,6 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
         implements NavigationView.OnNavigationItemSelectedListener {
     private final ChangeListener mSettingsChangeListener = new ChangeListener();
 
-    // App/Action Bar
-    @Nullable
-    private ActionBar mActionBar;
-
     // Navigation Drawer
     @Nullable
     @BindView(R.id.drawer_layout)
@@ -83,11 +78,16 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        setupActionBar();
         setupNavigationDrawer();
     }
 
-    protected void onSetupActionBar(@NonNull final ActionBar actionBar) {}
+    @CallSuper
+    protected void onSetupActionBar() {
+        super.onSetupActionBar();
+        if (mActionBar != null && mDrawerLayout != null) {
+            mActionBar.setHomeButtonEnabled(true);
+        }
+    }
 
     @Override
     protected void onStart() {
@@ -96,8 +96,6 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
         startLanguagesChangeListener();
         loadLanguages(false);
     }
-
-    protected void onUpdateActionBar(@NonNull final ActionBar actionBar) {}
 
     protected void onUpdatePrimaryLanguage() {}
 
@@ -179,28 +177,6 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
     @NonNull
     protected Settings prefs() {
         return Settings.getInstance(this);
-    }
-
-    private void setupActionBar() {
-        if (mToolbar != null) {
-            setSupportActionBar(mToolbar);
-        }
-        mActionBar = getSupportActionBar();
-        if (mActionBar != null) {
-            mActionBar.setDisplayHomeAsUpEnabled(true);
-            if (mDrawerLayout != null) {
-                mActionBar.setHomeButtonEnabled(true);
-            }
-            onSetupActionBar(mActionBar);
-        }
-        updateActionBar();
-    }
-
-    protected final void updateActionBar() {
-        final ActionBar actionBar = mActionBar;
-        if (actionBar != null) {
-            onUpdateActionBar(actionBar);
-        }
     }
 
     private void setupNavigationDrawer() {
