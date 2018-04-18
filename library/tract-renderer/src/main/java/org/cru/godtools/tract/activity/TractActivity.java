@@ -545,14 +545,16 @@ public class TractActivity extends ImmersiveActivity
         final Manifest manifest = getActiveManifest();
         setTitle(safeApplyTypefaceSpan(Manifest.getTitle(manifest), Manifest.getTypeface(manifest, this)));
 
-        // set toolbar background color
-        mToolbar.setBackgroundColor(Manifest.getNavBarColor(manifest));
+        if (mToolbar != null) {
+            // set toolbar background color
+            mToolbar.setBackgroundColor(Manifest.getNavBarColor(manifest));
 
-        // set text & controls color
-        final int controlColor = Manifest.getNavBarControlColor(manifest);
-        mToolbar.setNavigationIcon(DrawableUtils.tint(mToolbar.getNavigationIcon(), controlColor));
-        mToolbar.setTitleTextColor(controlColor);
-        mToolbar.setSubtitleTextColor(controlColor);
+            // set text & controls color
+            final int controlColor = Manifest.getNavBarControlColor(manifest);
+            mToolbar.setNavigationIcon(DrawableUtils.tint(mToolbar.getNavigationIcon(), controlColor));
+            mToolbar.setTitleTextColor(controlColor);
+            mToolbar.setSubtitleTextColor(controlColor);
+        }
 
         updateToolbarMenu();
         updateLanguageToggle();
