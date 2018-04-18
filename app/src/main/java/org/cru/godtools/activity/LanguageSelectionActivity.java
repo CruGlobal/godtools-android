@@ -17,7 +17,7 @@ import java.util.Locale;
 
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_LANGUAGE_SELECTION;
 
-public class LanguageSelectionActivity extends BaseActivity implements LanguagesFragment.Callbacks {
+public class LanguageSelectionActivity extends BasePlatformActivity implements LanguagesFragment.Callbacks {
     private static final String EXTRA_PRIMARY = LanguageSelectionActivity.class.getName() + ".PRIMARY";
 
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";

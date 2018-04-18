@@ -16,7 +16,7 @@ import org.keynote.godtools.android.model.Tool;
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_TOOL_DETAILS;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 
-public class ToolDetailsActivity extends BaseActivity implements ToolDetailsFragment.Callbacks {
+public class ToolDetailsActivity extends BasePlatformActivity implements ToolDetailsFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
     @Nullable

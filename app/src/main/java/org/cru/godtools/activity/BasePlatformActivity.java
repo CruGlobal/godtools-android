@@ -21,6 +21,7 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
 import org.cru.godtools.base.Settings;
+import org.cru.godtools.base.ui.activity.BaseActivity;
 import org.keynote.godtools.android.util.WebUrlLauncher;
 
 import java.util.Locale;
@@ -46,7 +47,7 @@ import static org.keynote.godtools.android.Constants.URI_SUPPORT;
 import static org.keynote.godtools.android.Constants.URI_TERMS_OF_USE;
 import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 
-public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.BaseActivity
+public abstract class BasePlatformActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private final ChangeListener mSettingsChangeListener = new ChangeListener();
 
