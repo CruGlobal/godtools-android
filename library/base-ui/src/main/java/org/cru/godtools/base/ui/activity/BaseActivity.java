@@ -38,6 +38,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void onContentChanged() {
         super.onContentChanged();
+
+        // HACK: manually trigger this ButterKnife view binding to work around an inheritance across libraries bug
+        // HACK: see: https://github.com/JakeWharton/butterknife/issues/808
+        new BaseActivity_ViewBinding(this);
+
         ButterKnife.bind(this);
         setupActionBar();
     }
