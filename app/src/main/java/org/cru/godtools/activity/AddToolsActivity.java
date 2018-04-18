@@ -18,7 +18,7 @@ import java.util.Locale;
 
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_ADD_TOOLS;
 
-public class AddToolsActivity extends BaseActivity implements ToolsFragment.Callbacks {
+public class AddToolsActivity extends BasePlatformActivity implements ToolsFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
     public static void start(@NonNull final Context context) {

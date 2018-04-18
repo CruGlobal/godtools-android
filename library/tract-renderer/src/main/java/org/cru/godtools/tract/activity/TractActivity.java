@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,9 +22,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.content.res.AppCompatResources;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Menu;
@@ -92,12 +91,8 @@ public class TractActivity extends ImmersiveActivity
     private static final int STATE_NOT_FOUND = 2;
 
     // App/Action Bar
-    @BindView(R2.id.appBar)
-    Toolbar mToolbar;
     @Nullable
     private Menu mToolbarMenu;
-    @Nullable
-    private ActionBar mActionBar;
 
     @Nullable
     @BindView(R2.id.language_toggle)
@@ -218,8 +213,19 @@ public class TractActivity extends ImmersiveActivity
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        setupToolbar();
         setupPager();
+    }
+
+    @CallSuper
+    @Override
+    protected void onSetupActionBar() {
+        super.onSetupActionBar();
+        if (mToolbar != null && InstantApps.isInstantApp(this)) {
+            mToolbar.setNavigationIcon(R.drawable.ic_close);
+        }
+        setupLanguageToggle();
+        updateToolbar();
+        updateLanguageToggle();
     }
 
     @Override
@@ -451,20 +457,6 @@ public class TractActivity extends ImmersiveActivity
         }
     }
 
-    private void setupToolbar() {
-        setSupportActionBar(mToolbar);
-        mActionBar = getSupportActionBar();
-        if (mActionBar != null) {
-            mActionBar.setDisplayHomeAsUpEnabled(true);
-        }
-        if (InstantApps.isInstantApp(this)) {
-            mToolbar.setNavigationIcon(R.drawable.ic_close);
-        }
-        setupLanguageToggle();
-        updateToolbar();
-        updateLanguageToggle();
-    }
-
     private void setupLanguageToggle() {
         if (mLanguageTabs != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -553,14 +545,16 @@ public class TractActivity extends ImmersiveActivity
         final Manifest manifest = getActiveManifest();
         setTitle(safeApplyTypefaceSpan(Manifest.getTitle(manifest), Manifest.getTypeface(manifest, this)));
 
-        // set toolbar background color
-        mToolbar.setBackgroundColor(Manifest.getNavBarColor(manifest));
+        if (mToolbar != null) {
+            // set toolbar background color
+            mToolbar.setBackgroundColor(Manifest.getNavBarColor(manifest));
 
-        // set text & controls color
-        final int controlColor = Manifest.getNavBarControlColor(manifest);
-        mToolbar.setNavigationIcon(DrawableUtils.tint(mToolbar.getNavigationIcon(), controlColor));
-        mToolbar.setTitleTextColor(controlColor);
-        mToolbar.setSubtitleTextColor(controlColor);
+            // set text & controls color
+            final int controlColor = Manifest.getNavBarControlColor(manifest);
+            mToolbar.setNavigationIcon(DrawableUtils.tint(mToolbar.getNavigationIcon(), controlColor));
+            mToolbar.setTitleTextColor(controlColor);
+            mToolbar.setSubtitleTextColor(controlColor);
+        }
 
         updateToolbarMenu();
         updateLanguageToggle();

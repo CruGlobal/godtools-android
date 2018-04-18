@@ -11,9 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.google.common.base.Objects;
@@ -23,6 +21,7 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
 import org.cru.godtools.base.Settings;
+import org.cru.godtools.base.ui.activity.BaseActivity;
 import org.keynote.godtools.android.util.WebUrlLauncher;
 
 import java.util.Locale;
@@ -48,16 +47,9 @@ import static org.keynote.godtools.android.Constants.URI_SUPPORT;
 import static org.keynote.godtools.android.Constants.URI_TERMS_OF_USE;
 import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 
-public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.BaseActivity
+public abstract class BasePlatformActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private final ChangeListener mSettingsChangeListener = new ChangeListener();
-
-    // App/Action Bar
-    @Nullable
-    @BindView(R.id.appBar)
-    Toolbar mToolbar;
-    @Nullable
-    private ActionBar mActionBar;
 
     // Navigation Drawer
     @Nullable
@@ -87,11 +79,16 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        setupActionBar();
         setupNavigationDrawer();
     }
 
-    protected void onSetupActionBar(@NonNull final ActionBar actionBar) {}
+    @CallSuper
+    protected void onSetupActionBar() {
+        super.onSetupActionBar();
+        if (mActionBar != null && mDrawerLayout != null) {
+            mActionBar.setHomeButtonEnabled(true);
+        }
+    }
 
     @Override
     protected void onStart() {
@@ -100,8 +97,6 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
         startLanguagesChangeListener();
         loadLanguages(false);
     }
-
-    protected void onUpdateActionBar(@NonNull final ActionBar actionBar) {}
 
     protected void onUpdatePrimaryLanguage() {}
 
@@ -183,28 +178,6 @@ public abstract class BaseActivity extends org.cru.godtools.base.ui.activity.Bas
     @NonNull
     protected Settings prefs() {
         return Settings.getInstance(this);
-    }
-
-    private void setupActionBar() {
-        if (mToolbar != null) {
-            setSupportActionBar(mToolbar);
-        }
-        mActionBar = getSupportActionBar();
-        if (mActionBar != null) {
-            mActionBar.setDisplayHomeAsUpEnabled(true);
-            if (mDrawerLayout != null) {
-                mActionBar.setHomeButtonEnabled(true);
-            }
-            onSetupActionBar(mActionBar);
-        }
-        updateActionBar();
-    }
-
-    protected final void updateActionBar() {
-        final ActionBar actionBar = mActionBar;
-        if (actionBar != null) {
-            onUpdateActionBar(actionBar);
-        }
     }
 
     private void setupNavigationDrawer() {

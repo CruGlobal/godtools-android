@@ -14,7 +14,7 @@ import org.cru.godtools.fragment.AboutFragment;
 
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_ABOUT;
 
-public final class AboutActivity extends BaseActivity {
+public final class AboutActivity extends BasePlatformActivity {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
     public static void start(@NonNull final Context context) {

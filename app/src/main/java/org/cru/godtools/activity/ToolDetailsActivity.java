@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBar;
 
 import org.cru.godtools.R;
 import org.keynote.godtools.android.fragment.ToolDetailsFragment;
@@ -17,7 +16,7 @@ import org.keynote.godtools.android.model.Tool;
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_TOOL_DETAILS;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 
-public class ToolDetailsActivity extends BaseActivity implements ToolDetailsFragment.Callbacks {
+public class ToolDetailsActivity extends BasePlatformActivity implements ToolDetailsFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
     @Nullable
@@ -51,8 +50,8 @@ public class ToolDetailsActivity extends BaseActivity implements ToolDetailsFrag
     }
 
     @Override
-    protected void onSetupActionBar(@NonNull final ActionBar actionBar) {
-        super.onSetupActionBar(actionBar);
+    protected void onSetupActionBar() {
+        super.onSetupActionBar();
         setTitle("");
     }
 

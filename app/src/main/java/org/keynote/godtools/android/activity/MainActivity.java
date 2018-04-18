@@ -15,7 +15,7 @@ import com.annimon.stream.Stream;
 
 import org.cru.godtools.R;
 import org.cru.godtools.activity.AddToolsActivity;
-import org.cru.godtools.activity.BaseActivity;
+import org.cru.godtools.activity.BasePlatformActivity;
 import org.cru.godtools.activity.ToolDetailsActivity;
 import org.cru.godtools.activity.TourActivity;
 import org.cru.godtools.everystudent.EveryStudent;
@@ -30,7 +30,7 @@ import java.util.Locale;
 
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_HOME;
 
-public class MainActivity extends BaseActivity implements ToolsFragment.Callbacks {
+public class MainActivity extends BasePlatformActivity implements ToolsFragment.Callbacks {
     private static final String EXTRA_TOUR_LAUNCHED = MainActivity.class.getName() + ".TOUR_LAUNCHED";
 
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";

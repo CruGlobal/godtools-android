@@ -14,7 +14,7 @@ import org.keynote.godtools.android.fragment.LanguageSettingsFragment;
 
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_LANGUAGE_SETTINGS;
 
-public class LanguageSettingsActivity extends BaseActivity {
+public class LanguageSettingsActivity extends BasePlatformActivity {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
     public static void start(@NonNull final Context context) {
