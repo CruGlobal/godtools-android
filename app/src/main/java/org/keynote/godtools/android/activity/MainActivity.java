@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
@@ -13,8 +14,8 @@ import android.view.MenuItem;
 
 import com.annimon.stream.Stream;
 
+import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
-import org.cru.godtools.activity.AddToolsActivity;
 import org.cru.godtools.activity.BasePlatformActivity;
 import org.cru.godtools.activity.ToolDetailsActivity;
 import org.cru.godtools.activity.TourActivity;
@@ -37,6 +38,11 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
     private static final int REQUEST_TOUR = 101;
 
+    @Nullable
+    private TabLayout.Tab mMyToolsTab;
+    @Nullable
+    private TabLayout.Tab mFindToolsTab;
+
     private boolean mTourLaunched = false;
 
     /* BEGIN lifecycle */
@@ -44,7 +50,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_generic_fragment);
+        setContentView(R.layout.activity_dashboard);
 
         if (savedInstanceState != null) {
             mTourLaunched = savedInstanceState.getBoolean(EXTRA_TOUR_LAUNCHED, mTourLaunched);
@@ -98,6 +104,18 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     }
 
     @Override
+    public void onTabSelected(final TabLayout.Tab tab) {
+        if (tab == mMyToolsTab) {
+            showMyTools();
+        } else if (tab == mFindToolsTab) {
+            showAddTools();
+        } else if (BuildConfig.DEBUG) {
+            // The tab selection logic is brittle, so throw an error in unrecognized scenarios
+            throw new IllegalArgumentException("Unrecognized tab!! something changed with the navigation tabs");
+        }
+    }
+
+    @Override
     public void onToolSelect(@Nullable final String code, @NonNull final Tool.Type type, Locale... languages) {
         if (code != null) {
             switch (type) {
@@ -139,8 +157,36 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
     /* END lifecycle */
 
+    @Override
+    protected void setupNavigationTabs() {
+        super.setupNavigationTabs();
+        if (mNavigationTabs != null) {
+            // This logic is brittle, so throw an error on debug builds if something changes.
+            if (BuildConfig.DEBUG && mNavigationTabs.getTabCount() != 2) {
+                throw new IllegalStateException("The navigation tabs changed!!! Logic needs to be updated!!!");
+            }
+
+            mMyToolsTab = mNavigationTabs.getTabAt(0);
+            mFindToolsTab = mNavigationTabs.getTabAt(1);
+        }
+    }
+
     private void showAddTools() {
-        AddToolsActivity.start(this);
+        // update the displayed fragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame, ToolsFragment.newAvailableInstance(), TAG_MAIN_FRAGMENT)
+                .commit();
+
+        selectNavigationTabIfNecessary(mFindToolsTab);
+    }
+
+    private void showMyTools() {
+        // update the displayed fragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame, ToolsFragment.newAddedInstance(), TAG_MAIN_FRAGMENT)
+                .commit();
+
+        selectNavigationTabIfNecessary(mMyToolsTab);
     }
 
     private void syncData() {
@@ -163,10 +209,8 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
             return;
         }
 
-        // update the displayed fragment
-        fm.beginTransaction()
-                .replace(R.id.frame, ToolsFragment.newAddedInstance(), TAG_MAIN_FRAGMENT)
-                .commit();
+        // default to My Tools
+        showMyTools();
     }
 
     private void showTourIfNeeded() {
