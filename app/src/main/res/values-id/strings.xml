@@ -25,6 +25,8 @@
     <string name="action_tour_later">Nanti</string>
     <!-- Tools UI -->
     <string name="title_tools_add">Tambah Alat</string>
+    <string name="nav_find_tools">Cari Alat</string>
+    <string name="nav_my_tools">Alat Saya</string>
     <string name="menu_add_tool">Tambah Alat</string>
     <string name="menu_switch_language">Ganti Bahasa</string>
     <string name="title_add_new_tools">Tambah Alat Baru</string>

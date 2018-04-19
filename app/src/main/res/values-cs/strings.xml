@@ -25,6 +25,8 @@
     <string name="action_tour_later">Později</string>
     <!-- Tools UI -->
     <string name="title_tools_add">Přidat nástroje</string>
+    <string name="nav_find_tools">Najít nástroje</string>
+    <string name="nav_my_tools">Moje nástroje</string>
     <string name="menu_add_tool">Přidat nástroj</string>
     <string name="menu_switch_language">Přepnout jazyk</string>
     <string name="title_add_new_tools">Přidat nové nástroje</string>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main Activity-->
+    <string name="share_prompt">safidio ny Fomba hizaranao</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Ankapobeny</string>
+    <string name="menu_heading_share">Mizara</string>
+    <string name="menu_heading_legal">Ara-dalàna</string>
+    <string name="menu_about">Mikasika</string>
+    <string name="menu_help">Fanampiana</string>
+    <string name="menu_contact_us">Te Hifandray Aminay</string>
+    <string name="menu_share_godtools">Hizara GodTools</string>
+    <string name="menu_share_story">Hizara Tantara Aminay</string>
+    <string name="menu_rate">Omeo Isa GodTools</string>
+    <string name="menu_terms_of_use">Voambolana Fampiasa</string>
+    <string name="menu_privacy_policy">Politika Fiarovana</string>
+    <!-- Share a story -->
+    <!-- Tour UI -->
+    <string name="title_tour_tools">Hanampy Fitaovana Hafa</string>
+    <string name="title_tour_language">Safidio ny Fiteninao</string>
+    <string name="action_tour_ok">OK</string>
+    <string name="action_tour_now">Ankehitriny</string>
+    <string name="action_tour_later">Aoriana</string>
+    <!-- Tools UI -->
+    <string name="title_tools_add">Hanampy Fitaovana</string>
+    <string name="nav_find_tools">Hikaroka Fitaovana</string>
+    <string name="nav_my_tools">Ireo Fitaovana</string>
+    <string name="menu_add_tool">Hanampy Fitaovana</string>
+    <string name="menu_switch_language">Hanova Fitenenana</string>
+    <string name="title_add_new_tools">Hanampy Fitaovana Hafa</string>
+    <string name="action_tools_download">Alaivo</string>
+    <string name="action_tools_remove">Esorina</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d Hita</item>
+        <item quantity="other">%1$,d Hita</item>
+    </plurals>
+    <string name="label_tools_about">Mikasika</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d Fiteny</item>
+        <item quantity="other">%1$,d Fiteny</item>
+    </plurals>
+    <!-- Language Selection UI -->
+    <string name="menu_language_settings">Fanovàna Fiteny</string>
+    <string name="title_language_settings">Fanovàna Fiteny</string>
+    <string name="title_language_primary">Fiteny Fototra</string>
+    <string name="title_language_parallel">Fiteny Mitovy</string>
+    <string name="action_language_parallel_select">Hisafidy Fiteny Mitovy</string>
+    <string name="text_language_parallel_description">"Zarao amin'ny hafa amin'ny tenindrazany ny GodTools. "</string>
+    <string name="text_language_warning">Tsy ny fitaovana rehetra no voadika amin\'ny fiteny samihafa.</string>
+    <string name="label_language_none">Tsy fantatra</string>
+    <!-- Sharing -->
+</resources>

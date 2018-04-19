@@ -25,6 +25,8 @@
     <string name="action_tour_later">Потім</string>
     <!-- Tools UI -->
     <string name="title_tools_add">Додати інструменти</string>
+    <string name="nav_find_tools">Шукати інструменти</string>
+    <string name="nav_my_tools">Інструменти</string>
     <string name="menu_add_tool">Додати інструмент</string>
     <string name="menu_switch_language">Змінити мову</string>
     <string name="title_add_new_tools">Додати інструменти</string>

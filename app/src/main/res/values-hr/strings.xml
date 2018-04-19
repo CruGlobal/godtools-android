@@ -25,6 +25,8 @@
     <string name="action_tour_later">Kasnije</string>
     <!-- Tools UI -->
     <string name="title_tools_add">Dodaj alate</string>
+    <string name="nav_find_tools">Pronađi alate</string>
+    <string name="nav_my_tools">Moji alati</string>
     <string name="menu_add_tool">Dodaj alat</string>
     <string name="menu_switch_language">Promijeni jezik</string>
     <string name="title_add_new_tools">Dodajte nove alate</string>
