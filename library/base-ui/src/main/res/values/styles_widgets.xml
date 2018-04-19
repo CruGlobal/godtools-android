@@ -27,7 +27,7 @@
     <dimen name="tabs_corner_radius">0dp</dimen>
     <style name="Widget.GodTools.TabLayout" parent="Widget.Design.TabLayout">
         <item name="android:background">@drawable/bkg_tabs</item>
-        <item name="tabBackground">@drawable/bkg_tab_label</item>
+        <item name="tabBackground">@drawable/bkg_tab_label_tintable</item>
         <item name="tabMode">scrollable</item>
         <item name="tabGravity">fill</item>
         <item name="tabIndicatorHeight">0dp</item>
