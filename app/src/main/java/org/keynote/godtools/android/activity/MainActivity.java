@@ -125,6 +125,11 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
     @Override
     public void onToolSelect(@Nullable final String code, @NonNull final Tool.Type type, Locale... languages) {
+        if (mActiveState == STATE_FIND_TOOLS) {
+            ToolDetailsActivity.start(this, code);
+            return;
+        }
+
         if (code != null) {
             switch (type) {
                 case TRACT:
