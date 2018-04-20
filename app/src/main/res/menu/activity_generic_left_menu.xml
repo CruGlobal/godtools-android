@@ -44,7 +44,6 @@
     </item>
 
     <item
-        android:id="@+id/action_legal"
         android:orderInCategory="300"
         android:title="@string/menu_heading_legal">
         <menu>
