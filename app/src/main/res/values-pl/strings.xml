@@ -24,10 +24,8 @@
     <string name="action_tour_now">Teraz</string>
     <string name="action_tour_later">Później</string>
     <!-- Tools UI -->
-    <string name="title_tools_add">Dodaj Narzędzia</string>
     <string name="nav_find_tools">Znajdź Prezentacje</string>
     <string name="nav_my_tools">Moje Prezentacje</string>
-    <string name="menu_add_tool">Dodaj Narzędzie</string>
     <string name="menu_switch_language">Zmień język</string>
     <string name="title_add_new_tools">Dodaj Nowe Narzędzia</string>
     <string name="action_tools_download">Pobierz</string>

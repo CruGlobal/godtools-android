@@ -24,10 +24,8 @@
     <string name="action_tour_now">Tani</string>
     <string name="action_tour_later">Më vonë</string>
     <!-- Tools UI -->
-    <string name="title_tools_add">Shto mjete</string>
     <string name="nav_find_tools">Gjej Burimet​</string>
     <string name="nav_my_tools">Burimet e mia</string>
-    <string name="menu_add_tool">Shto mjet</string>
     <string name="menu_switch_language">Ndërro gjuhë</string>
     <string name="title_add_new_tools">Shto mjete të reja</string>
     <string name="action_tools_download">Shkarko</string>

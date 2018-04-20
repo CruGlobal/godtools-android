@@ -24,10 +24,8 @@
     <string name="action_tour_now">지금</string>
     <string name="action_tour_later">나중에</string>
     <!-- Tools UI -->
-    <string name="title_tools_add">도구 추가</string>
     <string name="nav_find_tools">도구 찾기</string>
     <string name="nav_my_tools">내 도구</string>
-    <string name="menu_add_tool">도구 추가</string>
     <string name="menu_switch_language">언어 변경</string>
     <string name="title_add_new_tools">새 툴 추가</string>
     <string name="action_tools_download">다운로드</string>

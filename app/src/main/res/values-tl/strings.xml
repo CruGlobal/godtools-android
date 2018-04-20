@@ -24,8 +24,6 @@
     <string name="action_tour_now">Ngayon</string>
     <string name="action_tour_later">Sa Ibang Pagkakataon</string>
     <!-- Tools UI -->
-    <string name="title_tools_add">Magdagdag ng Mga Tool</string>
-    <string name="menu_add_tool">Magdagdag ng Tool</string>
     <string name="menu_switch_language">Magpalit ng Wika</string>
     <string name="title_add_new_tools">Magdagdag ng Mga Bagong Tool</string>
     <string name="action_tools_download">I-download</string>

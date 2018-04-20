@@ -24,10 +24,8 @@
     <string name="action_tour_now">الآن</string>
     <string name="action_tour_later">لاحقاً</string>
     <!-- Tools UI -->
-    <string name="title_tools_add">إضافة أدوات</string>
     <string name="nav_find_tools">إيجاد أدوات</string>
     <string name="nav_my_tools">أدواتي</string>
-    <string name="menu_add_tool">إضافة أداة</string>
     <string name="menu_switch_language">تبديل اللغة</string>
     <string name="title_add_new_tools">إضافة مزيد من الأدوات</string>
     <string name="action_tools_download">تحميل</string>

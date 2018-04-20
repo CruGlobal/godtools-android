@@ -24,8 +24,6 @@
     <string name="action_tour_now">Ngay bây giờ</string>
     <string name="action_tour_later">Để sau</string>
     <!-- Tools UI -->
-    <string name="title_tools_add">Thêm Công cụ</string>
-    <string name="menu_add_tool">Thêm Công cụ</string>
     <string name="menu_switch_language">Chuyển Ngôn ngữ</string>
     <string name="title_add_new_tools">Thêm các Công cụ Mới</string>
     <string name="action_tools_download">Tải về</string>

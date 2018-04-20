@@ -24,8 +24,6 @@
     <string name="action_tour_now">Сад</string>
     <string name="action_tour_later">Касније</string>
     <!-- Tools UI -->
-    <string name="title_tools_add">Додај алате</string>
-    <string name="menu_add_tool">Додај алат</string>
     <string name="menu_switch_language">Пребаците језик</string>
     <string name="title_add_new_tools">Додај нове алатке</string>
     <string name="action_tools_download">Преузми</string>

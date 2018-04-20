@@ -23,10 +23,8 @@
     <string name="action_tour_now">Nou</string>
     <string name="action_tour_later">Later</string>
     <!-- Tools UI -->
-    <string name="title_tools_add">Voeg hulpmiddels by</string>
     <string name="nav_find_tools">Vind hulpmiddels</string>
     <string name="nav_my_tools">My hulpmiddels</string>
-    <string name="menu_add_tool">Voeg hulpmiddel by</string>
     <string name="menu_switch_language">Verander taal</string>
     <string name="title_add_new_tools">Voeg nuwe Hulpmiddels by</string>
     <string name="action_tools_download">Laai af</string>

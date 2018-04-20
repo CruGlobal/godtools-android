@@ -24,8 +24,6 @@
     <string name="action_tour_now">Kohe</string>
     <string name="action_tour_later">Hiljem</string>
     <!-- Tools UI -->
-    <string name="title_tools_add">Lisa tööriistu</string>
-    <string name="menu_add_tool">Lisa tööriist</string>
     <string name="menu_switch_language">Vaheta keelt</string>
     <string name="title_add_new_tools">Lisa uusi tööriistu</string>
     <string name="action_tools_download">Laadi alla</string>
