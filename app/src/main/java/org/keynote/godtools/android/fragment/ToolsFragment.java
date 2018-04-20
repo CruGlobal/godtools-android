@@ -151,7 +151,7 @@ public class ToolsFragment extends BaseFragment
     @Override
     public void onToolAdd(@Nullable final String code) {
         if (code != null) {
-            GodToolsDownloadManager.getInstance(getContext()).addTool(code);
+            GodToolsDownloadManager.getInstance(requireContext()).addTool(code);
         }
     }
 
