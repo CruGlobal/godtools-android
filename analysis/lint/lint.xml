@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
     <!-- make MissingTranslation a warning to prevent new strings from breaking builds before they can be translated -->
-    <issue id="MissingTranslation" severity="warning"/>
+    <issue id="MissingTranslation" severity="warning" />
+
+    <!-- enable a few additional lint checks -->
+    <issue id="UnusedIds" severity="warning" />
 </lint>
