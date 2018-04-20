@@ -29,20 +29,27 @@ import org.keynote.godtools.android.model.Tool;
 
 import java.util.Locale;
 
+import static android.arch.lifecycle.Lifecycle.State.STARTED;
+import static org.cru.godtools.analytics.AnalyticsService.SCREEN_ADD_TOOLS;
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_HOME;
 
 public class MainActivity extends BasePlatformActivity implements ToolsFragment.Callbacks {
     private static final String EXTRA_TOUR_LAUNCHED = MainActivity.class.getName() + ".TOUR_LAUNCHED";
+    private static final String EXTRA_ACTIVE_STATE = MainActivity.class.getName() + ".ACTIVE_STATE";
 
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
     private static final int REQUEST_TOUR = 101;
+
+    private static final int STATE_MY_TOOLS = 0;
+    private static final int STATE_FIND_TOOLS = 1;
 
     @Nullable
     private TabLayout.Tab mMyToolsTab;
     @Nullable
     private TabLayout.Tab mFindToolsTab;
 
+    private int mActiveState = STATE_MY_TOOLS;
     private boolean mTourLaunched = false;
 
     /* BEGIN lifecycle */
@@ -53,6 +60,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         setContentView(R.layout.activity_dashboard);
 
         if (savedInstanceState != null) {
+            mActiveState = savedInstanceState.getInt(EXTRA_ACTIVE_STATE, mActiveState);
             mTourLaunched = savedInstanceState.getBoolean(EXTRA_TOUR_LAUNCHED, mTourLaunched);
         }
 
@@ -79,7 +87,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     @Override
     protected void onResume() {
         super.onResume();
-        mAnalytics.onTrackScreen(SCREEN_HOME);
+        trackInAnalytics();
     }
 
     @Override
@@ -152,6 +160,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     @Override
     protected void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putInt(EXTRA_ACTIVE_STATE, mActiveState);
         outState.putBoolean(EXTRA_TOUR_LAUNCHED, mTourLaunched);
     }
 
@@ -171,6 +180,20 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         }
     }
 
+    private void trackInAnalytics() {
+        // only track analytics if this activity has been started
+        if (getLifecycle().getCurrentState().isAtLeast(STARTED)) {
+            switch (mActiveState) {
+                case STATE_FIND_TOOLS:
+                    mAnalytics.onTrackScreen(SCREEN_ADD_TOOLS);
+                    break;
+                case STATE_MY_TOOLS:
+                default:
+                    mAnalytics.onTrackScreen(SCREEN_HOME);
+            }
+        }
+    }
+
     private void showAddTools() {
         // update the displayed fragment
         getSupportFragmentManager().beginTransaction()
@@ -178,6 +201,8 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
                 .commit();
 
         selectNavigationTabIfNecessary(mFindToolsTab);
+        mActiveState = STATE_FIND_TOOLS;
+        trackInAnalytics();
     }
 
     private void showMyTools() {
@@ -187,6 +212,8 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
                 .commit();
 
         selectNavigationTabIfNecessary(mMyToolsTab);
+        mActiveState = STATE_MY_TOOLS;
+        trackInAnalytics();
     }
 
     private void syncData() {
