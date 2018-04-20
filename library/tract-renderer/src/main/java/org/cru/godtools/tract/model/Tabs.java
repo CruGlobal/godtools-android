@@ -1,22 +1,19 @@
 package org.cru.godtools.tract.model;
 
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.OnTabSelectedListener;
 import android.support.design.widget.TabLayoutUtils;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.util.Pools;
-import android.support.v7.content.res.AppCompatResources;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableList;
 
+import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
@@ -127,9 +124,7 @@ final class Tabs extends Content {
 
         private void setupTabs() {
             mTabs.addOnTabSelectedListener(this);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mTabs.setClipToOutline(true);
-            }
+            ViewCompat.setClipToOutline(mTabs, true);
         }
 
         private void bindTabs() {
@@ -163,12 +158,7 @@ final class Tabs extends Content {
                             .setText(Text.getText(label));
 
                     // set the tab background
-                    Drawable bkg = AppCompatResources.getDrawable(mTabs.getContext(), R.drawable.bkg_tab_label);
-                    if (bkg != null) {
-                        bkg = DrawableCompat.wrap(bkg).mutate();
-                        DrawableCompat.setTint(bkg, primaryColor);
-                    }
-                    TabLayoutUtils.setBackground(tab2, bkg);
+                    TabLayoutUtils.setBackgroundTint(tab2, primaryColor);
 
                     mTabs.addTab(tab2);
                 }

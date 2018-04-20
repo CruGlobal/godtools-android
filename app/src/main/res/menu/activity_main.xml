@@ -6,6 +6,7 @@
         android:icon="@drawable/ic_ab_add"
         android:orderInCategory="100"
         android:title="@string/menu_add_tool"
+        android:visible="false"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_switch_language"

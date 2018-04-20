@@ -4,10 +4,8 @@ import android.arch.lifecycle.Lifecycle;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.MainThread;
@@ -20,9 +18,7 @@ import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayoutUtils;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.content.res.AppCompatResources;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Menu;
@@ -36,6 +32,7 @@ import com.google.android.instantapps.InstantApps;
 import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
+import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.BundleUtils;
 import org.cru.godtools.base.model.Event;
@@ -459,9 +456,7 @@ public class TractActivity extends ImmersiveActivity
 
     private void setupLanguageToggle() {
         if (mLanguageTabs != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mLanguageTabs.setClipToOutline(true);
-            }
+            ViewCompat.setClipToOutline(mLanguageTabs, true);
 
             for (final Locale locale : mLanguages) {
                 mLanguageTabs.addTab(mLanguageTabs.newTab()
@@ -593,12 +588,7 @@ public class TractActivity extends ImmersiveActivity
                     }
 
                     // update tab background
-                    Drawable bkg = AppCompatResources.getDrawable(mLanguageTabs.getContext(), R.drawable.bkg_tab_label);
-                    if (bkg != null) {
-                        bkg = DrawableCompat.wrap(bkg).mutate();
-                        DrawableCompat.setTint(bkg, controlColor);
-                    }
-                    TabLayoutUtils.setBackground(tab, bkg);
+                    TabLayoutUtils.setBackgroundTint(tab, controlColor);
 
                     // ensure tab is selected if it is active
                     if (i == mActiveLanguage && !tab.isSelected()) {

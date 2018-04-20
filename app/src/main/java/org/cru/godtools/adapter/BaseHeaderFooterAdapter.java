@@ -1,6 +1,7 @@
 package org.cru.godtools.adapter;
 
 import android.support.annotation.DrawableRes;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -24,22 +25,77 @@ import static org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES;
 
 public abstract class BaseHeaderFooterAdapter
         extends AbstractHeaderFooterWrapperAdapter<BaseViewHolder, BaseViewHolder> {
+    public abstract static class Builder<T extends Builder> {
+        @LayoutRes
+        int mLayout = R.layout.list_item_none;
+        @DrawableRes
+        int mEmptyIcon = INVALID_DRAWABLE_RES;
+        @StringRes
+        int mEmptyLabel = INVALID_STRING_RES;
+        @StringRes
+        int mEmptyText = INVALID_STRING_RES;
+        @StringRes
+        int mEmptyAction = INVALID_STRING_RES;
+
+        @SuppressWarnings("unchecked")
+        protected T self() {
+            return (T) this;
+        }
+
+        public T layout(@LayoutRes final int layout) {
+            mLayout = layout;
+            return self();
+        }
+
+        public T emptyIcon(@DrawableRes final int icon) {
+            mEmptyIcon = icon;
+            return self();
+        }
+
+        public T emptyLabel(@StringRes final int label) {
+            mEmptyLabel = label;
+            return self();
+        }
+
+        public T emptyText(@StringRes final int text) {
+            mEmptyText = text;
+            return self();
+        }
+
+        public T emptyAction(@StringRes final int action) {
+            mEmptyAction = action;
+            return self();
+        }
+    }
+
     public interface EmptyCallbacks {
         void onEmptyActionClick();
     }
 
     private static final int TYPE_SHOW_NONE_FOOTER = 1;
 
+    @LayoutRes
+    final int mLayout;
     @DrawableRes
-    int mEmptyIcon = INVALID_DRAWABLE_RES;
+    final int mEmptyIcon;
     @StringRes
-    int mEmptyLabel = INVALID_STRING_RES;
+    final int mEmptyLabel;
     @StringRes
-    int mEmptyAction = INVALID_STRING_RES;
+    final int mEmptyText;
+    @StringRes
+    final int mEmptyAction;
     private boolean mShowEmptyFooter = false;
 
     @Nullable
     EmptyCallbacks mEmptyCallbacks;
+
+    protected BaseHeaderFooterAdapter(@NonNull final Builder builder) {
+        mLayout = builder.mLayout;
+        mEmptyIcon = builder.mEmptyIcon;
+        mEmptyLabel = builder.mEmptyLabel;
+        mEmptyText = builder.mEmptyText;
+        mEmptyAction = builder.mEmptyAction;
+    }
 
     public void setEmptyCallbacks(@Nullable EmptyCallbacks callbacks) {
         mEmptyCallbacks = callbacks;
@@ -112,20 +168,41 @@ public abstract class BaseHeaderFooterAdapter
         @BindView(R.id.label)
         TextView mLabel;
         @Nullable
+        @BindView(R.id.text)
+        TextView mText;
+        @Nullable
         @BindView(R.id.action)
         TextView mAction;
 
         EmptyStaticViewHolder(@NonNull final ViewGroup parent) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_none, parent, false));
+            super(LayoutInflater.from(parent.getContext()).inflate(mLayout, parent, false));
         }
 
         @Override
         void bind(final int position) {
             if (mIcon != null) {
-                mIcon.setImageResource(mEmptyIcon);
+                if (mEmptyIcon != INVALID_DRAWABLE_RES) {
+                    mIcon.setVisibility(View.VISIBLE);
+                    mIcon.setImageResource(mEmptyIcon);
+                } else {
+                    mIcon.setVisibility(View.GONE);
+                }
             }
             if (mLabel != null) {
-                mLabel.setText(mEmptyLabel);
+                if (mEmptyLabel != INVALID_STRING_RES) {
+                    mLabel.setVisibility(View.VISIBLE);
+                    mLabel.setText(mEmptyLabel);
+                } else {
+                    mLabel.setVisibility(View.GONE);
+                }
+            }
+            if (mText != null) {
+                if (mEmptyText != INVALID_STRING_RES) {
+                    mText.setVisibility(View.VISIBLE);
+                    mText.setText(mEmptyText);
+                } else {
+                    mText.setVisibility(View.GONE);
+                }
             }
             if (mAction != null) {
                 if (mEmptyAction != INVALID_STRING_RES) {

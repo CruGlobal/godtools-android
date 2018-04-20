@@ -9,4 +9,13 @@
     <style name="Widget.GodTools2.Toolbar.AppBar" parent="@style/Widget.AppCompat.Toolbar" />
 
     <style name="ThemeOverlay.GodTools2.Toolbar.AppBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <dimen name="appbar_tabs_height">32dp</dimen>
+    <style name="Widget.GodTools.TabLayout.AppBar">
+        <item name="android:layout_gravity">center</item>
+        <item name="backgroundTint">?attr/colorControlNormal</item>
+        <item name="tabBackground">@drawable/bkg_tab_label_appbar</item>
+        <item name="tabTextColor">?attr/colorControlNormal</item>
+        <item name="tabSelectedTextColor">?attr/colorPrimary</item>
+    </style>
 </resources>

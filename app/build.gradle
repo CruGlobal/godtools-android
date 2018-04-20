@@ -125,6 +125,7 @@ dependencies {
     implementation "com.android.support:percent:${deps.androidSupport}"
 
     implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-design:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"

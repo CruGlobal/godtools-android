@@ -10,12 +10,13 @@
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/icon"
-            style="@style/Widget.GodTools.Static.Icon"
+            style="@style/Widget.GodTools.Static.Icon.Tinted.Blue"
             app:srcCompat="@drawable/ic_frowny" />
 
         <android.support.v7.widget.AppCompatTextView
             style="@style/Widget.GodTools.Static.Label"
             android:layout_below="@id/icon"
+            android:layout_marginBottom="0dp"
             android:text="@string/tract_not_found" />
     </RelativeLayout>
 </RelativeLayout>

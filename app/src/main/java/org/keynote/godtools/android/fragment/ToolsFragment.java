@@ -22,8 +22,9 @@ import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.R;
 import org.cru.godtools.adapter.BaseHeaderFooterAdapter;
+import org.cru.godtools.adapter.EmptyListHeaderFooterAdapter;
+import org.cru.godtools.adapter.EmptyListHeaderFooterAdapter.Builder;
 import org.cru.godtools.adapter.ToolsAdapter;
-import org.cru.godtools.adapter.ToolsHeaderFooterAdapter;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Language;
@@ -65,7 +66,7 @@ public class ToolsFragment extends BaseFragment
     @BindView(R.id.resources)
     RecyclerView mResourcesView;
     @Nullable
-    private ToolsHeaderFooterAdapter mToolsHeaderAdapter;
+    private EmptyListHeaderFooterAdapter mToolsHeaderAdapter;
     @Nullable
     private ToolsAdapter mToolsAdapter;
 
@@ -196,9 +197,21 @@ public class ToolsFragment extends BaseFragment
             mToolsAdapter = new ToolsAdapter(mMode == MODE_ADDED);
             mToolsAdapter.setCallbacks(this);
 
-            // provide an empty list view if we are displaying added tools
+            // provide an empty list view if required for the current mode
             if (mMode == MODE_ADDED) {
-                mToolsHeaderAdapter = new ToolsHeaderFooterAdapter();
+                mToolsHeaderAdapter = new Builder()
+                        .layout(R.layout.list_item_none_large_icon)
+                        .emptyIcon(R.drawable.ic_find_tools)
+                        .emptyAction(R.string.nav_find_tools)
+                        .build();
+            } else if (mMode == MODE_AVAILABLE) {
+                mToolsHeaderAdapter = new Builder()
+                        .emptyText(R.string.text_tools_all_installed)
+                        .build();
+            } else {
+                mToolsHeaderAdapter = null;
+            }
+            if (mToolsHeaderAdapter != null) {
                 mToolsHeaderAdapter.setEmptyCallbacks(this);
                 mToolsHeaderAdapter.setAdapter(mToolsAdapter);
                 mResourcesView.setAdapter(mToolsHeaderAdapter);
