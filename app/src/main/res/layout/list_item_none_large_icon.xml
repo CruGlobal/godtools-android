@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout style="@style/Widget.GodTools.Static.Layout">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/icon"
+            style="@style/Widget.GodTools.Static.Icon.Large"
+            tools:src="@drawable/ic_find_tools" />
+
+        <Button
+            android:id="@+id/action"
+            style="@style/Widget.GodTools.Static.Action"
+            android:layout_width="144dp"
+            android:layout_below="@id/icon"
+            tools:text="@string/nav_find_tools" />
+    </RelativeLayout>
+</RelativeLayout>

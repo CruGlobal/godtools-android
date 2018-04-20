@@ -25,6 +25,49 @@ import static org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES;
 
 public abstract class BaseHeaderFooterAdapter
         extends AbstractHeaderFooterWrapperAdapter<BaseViewHolder, BaseViewHolder> {
+    public abstract static class Builder<T extends Builder> {
+        @LayoutRes
+        int mLayout = R.layout.list_item_none;
+        @DrawableRes
+        int mEmptyIcon = INVALID_DRAWABLE_RES;
+        @StringRes
+        int mEmptyLabel = INVALID_STRING_RES;
+        @StringRes
+        int mEmptyText = INVALID_STRING_RES;
+        @StringRes
+        int mEmptyAction = INVALID_STRING_RES;
+
+        @SuppressWarnings("unchecked")
+        protected T self() {
+            return (T) this;
+        }
+
+        public T layout(@LayoutRes final int layout) {
+            mLayout = layout;
+            return self();
+        }
+
+        public T emptyIcon(@DrawableRes final int icon) {
+            mEmptyIcon = icon;
+            return self();
+        }
+
+        public T emptyLabel(@StringRes final int label) {
+            mEmptyLabel = label;
+            return self();
+        }
+
+        public T emptyText(@StringRes final int text) {
+            mEmptyText = text;
+            return self();
+        }
+
+        public T emptyAction(@StringRes final int action) {
+            mEmptyAction = action;
+            return self();
+        }
+    }
+
     public interface EmptyCallbacks {
         void onEmptyActionClick();
     }
@@ -32,19 +75,27 @@ public abstract class BaseHeaderFooterAdapter
     private static final int TYPE_SHOW_NONE_FOOTER = 1;
 
     @LayoutRes
-    int mLayout = R.layout.list_item_none;
+    final int mLayout;
     @DrawableRes
-    int mEmptyIcon = INVALID_DRAWABLE_RES;
+    final int mEmptyIcon;
     @StringRes
-    int mEmptyLabel = INVALID_STRING_RES;
+    final int mEmptyLabel;
     @StringRes
-    int mEmptyText = INVALID_STRING_RES;
+    final int mEmptyText;
     @StringRes
-    int mEmptyAction = INVALID_STRING_RES;
+    final int mEmptyAction;
     private boolean mShowEmptyFooter = false;
 
     @Nullable
     EmptyCallbacks mEmptyCallbacks;
+
+    protected BaseHeaderFooterAdapter(@NonNull final Builder builder) {
+        mLayout = builder.mLayout;
+        mEmptyIcon = builder.mEmptyIcon;
+        mEmptyLabel = builder.mEmptyLabel;
+        mEmptyText = builder.mEmptyText;
+        mEmptyAction = builder.mEmptyAction;
+    }
 
     public void setEmptyCallbacks(@Nullable EmptyCallbacks callbacks) {
         mEmptyCallbacks = callbacks;
