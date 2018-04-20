@@ -17,10 +17,16 @@
             android:layout_below="@id/icon"
             tools:text="@string/title_add_new_tools" />
 
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text"
+            style="@style/Widget.GodTools.Static.Text"
+            android:layout_below="@id/label"
+            tools:text="@string/title_add_new_tools" />
+
         <Button
             android:id="@+id/action"
             style="@style/Widget.GodTools.Static.Action"
-            android:layout_below="@id/label"
+            android:layout_below="@id/text"
             tools:text="@string/title_add_new_tools" />
     </RelativeLayout>
 </RelativeLayout>
