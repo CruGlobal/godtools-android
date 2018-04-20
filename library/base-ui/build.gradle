@@ -4,9 +4,9 @@ dependencies {
     api project(':library:analytics')
 
     api "com.android.support:appcompat-v7:${deps.androidSupport}"
-    compileOnly "com.android.support:design:${deps.androidSupport}"
+    implementation "com.android.support:design:${deps.androidSupport}"
 
-    compileOnly "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
 
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
