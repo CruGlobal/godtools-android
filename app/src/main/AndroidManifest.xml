@@ -27,7 +27,9 @@
         android:name=".GodToolsApplication"
         android:allowBackup="false"
         android:theme="@style/Theme.GodTools2.AppBar">
-        <activity android:name="org.keynote.godtools.android.activity.MainActivity">
+        <activity
+            android:name="org.keynote.godtools.android.activity.MainActivity"
+            android:screenOrientation="@integer/default_screen_orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -37,7 +39,8 @@
         <activity
             android:name=".activity.AboutActivity"
             android:label="@string/title_about"
-            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
+            android:screenOrientation="@integer/default_screen_orientation">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.keynote.godtools.android.activity.MainActivity" />
@@ -46,7 +49,8 @@
         <activity
             android:name=".activity.AddToolsActivity"
             android:label="@string/title_tools_add"
-            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
+            android:screenOrientation="@integer/default_screen_orientation">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.keynote.godtools.android.activity.MainActivity" />
@@ -54,7 +58,8 @@
 
         <activity
             android:name=".activity.ToolDetailsActivity"
-            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
+            android:screenOrientation="@integer/default_screen_orientation">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.keynote.godtools.android.activity.MainActivity" />
@@ -63,7 +68,8 @@
         <activity
             android:name=".activity.LanguageSettingsActivity"
             android:label="@string/title_language_settings"
-            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
+            android:screenOrientation="@integer/default_screen_orientation">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.keynote.godtools.android.activity.MainActivity" />
@@ -71,7 +77,8 @@
 
         <activity
             android:name=".activity.LanguageSelectionActivity"
-            android:parentActivityName=".activity.LanguageSettingsActivity">
+            android:parentActivityName=".activity.LanguageSettingsActivity"
+            android:screenOrientation="@integer/default_screen_orientation">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.cru.godtools.activity.LanguageSettingsActivity" />
@@ -79,7 +86,8 @@
 
         <activity
             android:name=".activity.TourActivity"
-            android:theme="@style/Theme.GodTools2.Activity.Tour" />
+            android:theme="@style/Theme.GodTools2.Activity.Tour"
+            android:screenOrientation="@integer/default_screen_orientation" />
 
         <activity
             android:name=".tract.activity.TractActivity"
