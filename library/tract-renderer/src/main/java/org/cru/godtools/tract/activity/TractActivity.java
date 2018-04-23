@@ -705,19 +705,26 @@ public class TractActivity extends ImmersiveActivity
         }
     }
 
+    @NonNull
     private String buildSharingURL(@NonNull final Manifest manifest) {
-        // temporary until knowgod.com is rebuilt
+        final Uri.Builder uri;
         switch (manifest.getCode()) {
+            // temporary cases until knowgod.com is rebuilt
             case "honorrestored":
-                return "https://godtoolsapp.com";
+                uri = Uri.parse("https://godtoolsapp.com").buildUpon();
+                break;
             case "thefour":
-                return "https://thefour.com";
+                uri = Uri.parse("https://thefour.com").buildUpon();
+                break;
+            default:
+                uri = URI_SHARE_BASE.buildUpon()
+                        .appendPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
+                        .appendPath(getCodeForShareActivity(manifest))
+                        .appendPath(getPagePathPartForSharing(manifest));
         }
 
-        return URI_SHARE_BASE.buildUpon()
-                .appendPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
-                .appendPath(getCodeForShareActivity(manifest))
-                .appendPath(getPagePathPartForSharing(manifest))
+        return uri
+                .appendQueryParameter("icid", "gtshare")
                 .build().toString();
     }
 
