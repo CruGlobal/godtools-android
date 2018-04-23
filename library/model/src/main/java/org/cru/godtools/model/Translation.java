@@ -23,6 +23,7 @@ public class Translation extends Base {
     private static final String JSON_MANIFEST = "manifest-name";
     private static final String JSON_NAME = "translated-name";
     private static final String JSON_DESCRIPTION = "translated-description";
+    private static final String JSON_TAGLINE = "translated-tagline";
 
     public static final boolean DEFAULT_PUBLISHED = false;
     public static final int DEFAULT_VERSION = 0;
@@ -53,6 +54,9 @@ public class Translation extends Base {
     @Nullable
     @JsonApiAttribute(name = JSON_DESCRIPTION)
     private String mDescription;
+    @Nullable
+    @JsonApiAttribute(name = JSON_TAGLINE)
+    private String mTagline;
 
     @JsonApiAttribute(name = JSON_IS_PUBLISHED)
     private boolean mPublished = DEFAULT_PUBLISHED;
@@ -121,6 +125,15 @@ public class Translation extends Base {
 
     public void setDescription(@Nullable final String description) {
         mDescription = description;
+    }
+
+    @Nullable
+    public String getTagline() {
+        return mTagline;
+    }
+
+    public void setTagline(@Nullable final String tagline) {
+        mTagline = tagline;
     }
 
     public boolean isPublished() {

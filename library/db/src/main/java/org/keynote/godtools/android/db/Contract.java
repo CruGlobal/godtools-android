@@ -142,6 +142,7 @@ public final class Contract extends BaseContract {
         public static final String COLUMN_VERSION = "version";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";
+        public static final String COLUMN_TAGLINE = "tagline";
         public static final String COLUMN_MANIFEST = "manifest";
         public static final String COLUMN_PUBLISHED = "published";
         public static final String COLUMN_DOWNLOADED = "downloaded";
@@ -157,12 +158,13 @@ public final class Contract extends BaseContract {
 
         static final String[] PROJECTION_ALL =
                 {COLUMN_ID, COLUMN_TOOL, COLUMN_LANGUAGE, COLUMN_VERSION, COLUMN_NAME, COLUMN_DESCRIPTION,
-                        COLUMN_MANIFEST, COLUMN_PUBLISHED, COLUMN_DOWNLOADED, COLUMN_LAST_ACCESSED};
+                        COLUMN_TAGLINE, COLUMN_MANIFEST, COLUMN_PUBLISHED, COLUMN_DOWNLOADED, COLUMN_LAST_ACCESSED};
 
         private static final String SQL_COLUMN_LANGUAGE = COLUMN_LANGUAGE + " TEXT NOT NULL";
         private static final String SQL_COLUMN_VERSION = COLUMN_VERSION + " INTEGER";
         private static final String SQL_COLUMN_NAME = COLUMN_NAME + " TEXT";
         private static final String SQL_COLUMN_DESCRIPTION = COLUMN_DESCRIPTION + " TEXT";
+        private static final String SQL_COLUMN_TAGLINE = COLUMN_TAGLINE + " TEXT";
         private static final String SQL_COLUMN_MANIFEST = COLUMN_MANIFEST + " TEXT";
         private static final String SQL_COLUMN_PUBLISHED = COLUMN_PUBLISHED + " INTEGER";
         private static final String SQL_COLUMN_DOWNLOADED = COLUMN_DOWNLOADED + " INTEGER";
@@ -182,8 +184,8 @@ public final class Contract extends BaseContract {
 
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_TOOL, SQL_COLUMN_LANGUAGE, SQL_COLUMN_VERSION,
-                       SQL_COLUMN_NAME, SQL_COLUMN_DESCRIPTION, SQL_COLUMN_MANIFEST, SQL_COLUMN_PUBLISHED,
-                       SQL_COLUMN_DOWNLOADED, SQL_COLUMN_LAST_ACCESSED);
+                       SQL_COLUMN_NAME, SQL_COLUMN_DESCRIPTION, SQL_COLUMN_TAGLINE, SQL_COLUMN_MANIFEST,
+                       SQL_COLUMN_PUBLISHED, SQL_COLUMN_DOWNLOADED, SQL_COLUMN_LAST_ACCESSED);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
 
         /* DB migrations */
@@ -195,6 +197,8 @@ public final class Contract extends BaseContract {
                 "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_LAST_ACCESSED;
         static final String SQL_V36_POPULATE_LAST_ACCESSED =
                 "UPDATE " + TABLE_NAME + " SET " + COLUMN_LAST_ACCESSED + " = 0";
+        static final String SQL_V37_ALTER_TAGLINE =
+                "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_TAGLINE;
     }
 
     public static class LocalFileTable implements Base {
