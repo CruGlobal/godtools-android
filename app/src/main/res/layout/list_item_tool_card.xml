@@ -35,8 +35,9 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@id/banner">
+            android:layout_height="80dp"
+            android:layout_below="@id/banner"
+            android:layout_margin="4dp">
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/action_add"
@@ -52,7 +53,7 @@
             <View
                 android:id="@+id/divider_download"
                 android:layout_width="2dp"
-                android:layout_height="30dp"
+                android:layout_height="48sp"
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@id/action_add"
                 android:layout_toRightOf="@id/action_add"
@@ -62,22 +63,12 @@
                 android:id="@+id/action_info"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
                 android:padding="8dp"
                 android:tint="@color/gt_blue"
                 app:srcCompat="@drawable/ic_info" />
-
-            <android.support.v7.widget.AppCompatTextViewImpl
-                android:id="@+id/language_parallel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@id/action_info"
-                android:layout_toStartOf="@id/action_info"
-                android:textAppearance="@style/TextAppearance.GodTools2.Tools.Card.ParallelLanguage"
-                tools:text="French" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -86,26 +77,43 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_toEndOf="@id/divider_download"
-                android:layout_toLeftOf="@id/language_parallel"
-                android:layout_toRightOf="@id/divider_download"
-                android:layout_toStartOf="@id/language_parallel">
+                android:layout_toRightOf="@id/divider_download">
+
+                <android.support.v7.widget.AppCompatTextViewImpl
+                    android:id="@+id/language_parallel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:ellipsize="end"
+                    android:gravity="end"
+                    android:lines="1"
+                    android:maxWidth="60dp"
+                    android:textAppearance="@style/TextAppearance.GodTools2.Tools.Card.ParallelLanguage"
+                    tools:text="Bosnian (Bosnia &amp; Herzegovina)" />
 
                 <android.support.v7.widget.AppCompatTextViewImpl
                     android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.GodTools2.Tools.Card.Title"
+                    android:layout_toLeftOf="@id/language_parallel"
+                    android:layout_toStartOf="@id/language_parallel"
                     android:ellipsize="end"
                     android:lines="1"
-                    tools:text="Knowing God Personally" />
+                    android:textAppearance="@style/TextAppearance.GodTools2.Tools.Card.Title"
+                    tools:text="Knowing God Personally (Extra Long Title)" />
 
                 <android.support.v7.widget.AppCompatTextViewImpl
-                    android:id="@+id/shares"
+                    android:id="@+id/tagline"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.GodTools2.Tools.Card.Shares"
                     android:layout_below="@id/title"
-                    tools:text="20,000 Shares" />
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginRight="32dp"
+                    android:ellipsize="end"
+                    android:lines="2"
+                    android:textAppearance="@style/TextAppearance.GodTools2.Tools.Card.Tagline"
+                    tools:text="A Gospel presentation that uses hand drawn images to help illustrate God’s invitation to know" />
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
