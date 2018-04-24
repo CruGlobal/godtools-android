@@ -23,7 +23,7 @@ import retrofit2.Response;
 
 import static org.ccci.gto.android.common.TimeConstants.DAY_IN_MS;
 
-@RestrictTo(RestrictTo.Scope.LIBRARY)
+@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 public final class ToolSyncTasks extends BaseDataSyncTasks {
     private static final Object LOCK_SYNC_TOOLS = new Object();
     private static final Object LOCK_SYNC_SHARES = new Object();
