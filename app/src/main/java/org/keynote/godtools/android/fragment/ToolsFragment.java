@@ -287,7 +287,8 @@ public class ToolsFragment extends BaseFragment
                     TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_TAGLINE + "," +
                     TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_DESCRIPTION + "," +
                     TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_TAGLINE + "," +
-                    TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_DESCRIPTION + ") " +
+                    TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_DESCRIPTION + "," +
+                    ToolTable.TABLE_NAME + "." + ToolTable.COLUMN_DESCRIPTION + ") " +
                     "AS " + ToolsAdapter.COL_TAGLINE,
             "CASE " +
                     "WHEN " + TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_TAGLINE +
