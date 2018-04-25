@@ -283,6 +283,23 @@ public class ToolsFragment extends BaseFragment
                     "WHEN " + TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_NAME + " IS NOT NULL THEN " +
                     TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
                     "ELSE NULL END AS " + ToolsAdapter.COL_TITLE_LANGUAGE,
+            "coalesce(" +
+                    TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_TAGLINE + "," +
+                    TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_DESCRIPTION + "," +
+                    TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_TAGLINE + "," +
+                    TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_DESCRIPTION + "," +
+                    ToolTable.TABLE_NAME + "." + ToolTable.COLUMN_DESCRIPTION + ") " +
+                    "AS " + ToolsAdapter.COL_TAGLINE,
+            "CASE " +
+                    "WHEN " + TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_TAGLINE +
+                    " IS NOT NULL THEN " + TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
+                    "WHEN " + TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_DESCRIPTION +
+                    " IS NOT NULL THEN " + TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
+                    "WHEN " + TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_TAGLINE +
+                    " IS NOT NULL THEN " + TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
+                    "WHEN " + TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_DESCRIPTION +
+                    " IS NOT NULL THEN " + TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
+                    "ELSE NULL END AS " + ToolsAdapter.COL_TAGLINE_LANGUAGE,
             ToolTable.COLUMN_SHARES,
             ToolTable.COLUMN_PENDING_SHARES,
             ToolTable.COLUMN_ADDED,

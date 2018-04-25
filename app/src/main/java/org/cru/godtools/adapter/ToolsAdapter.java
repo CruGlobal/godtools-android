@@ -35,6 +35,8 @@ import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
     public static final String COL_TITLE = "title";
     public static final String COL_TITLE_LANGUAGE = "title_lang";
+    public static final String COL_TAGLINE = "tagline";
+    public static final String COL_TAGLINE_LANGUAGE = "tagline_lang";
     public static final String COL_BANNER = "banner";
     public static final String COL_PRIMARY_LANGUAGE = "primary_language";
     public static final String COL_PARALLEL_LANGUAGE = "parallel_language";
@@ -99,6 +101,9 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         @BindView(R.id.title)
         TextView mTitleView;
         @Nullable
+        @BindView(R.id.tagline)
+        TextView mTaglineView;
+        @Nullable
         @BindView(R.id.shares)
         TextView mSharesView;
         @Nullable
@@ -123,6 +128,10 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         String mTitle;
         @Nullable
         Locale mTitleLanguage;
+        @Nullable
+        String mTagline;
+        @Nullable
+        Locale mTaglineLanguage;
         @Nullable
         String mBannerFile;
         @Nullable
@@ -152,6 +161,8 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
                 mType = CursorUtils.getEnum(cursor, ToolTable.COLUMN_TYPE, Tool.Type.class, Tool.Type.DEFAULT);
                 mTitle = CursorUtils.getString(cursor, COL_TITLE, null);
                 mTitleLanguage = CursorUtils.getLocale(cursor, COL_TITLE_LANGUAGE, null);
+                mTagline = CursorUtils.getString(cursor, COL_TAGLINE, null);
+                mTaglineLanguage = CursorUtils.getLocale(cursor, COL_TAGLINE_LANGUAGE, null);
                 mBannerFile = CursorUtils.getString(cursor, COL_BANNER, null);
                 mPrimaryLanguage = CursorUtils.getLocale(cursor, COL_PRIMARY_LANGUAGE, null);
                 mDefaultLanguage = CursorUtils.getLocale(cursor, COL_DEFAULT_LANGUAGE, null);
@@ -165,6 +176,8 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
                 mType = Tool.Type.DEFAULT;
                 mTitle = null;
                 mTitleLanguage = null;
+                mTagline = null;
+                mTaglineLanguage = null;
                 mBannerFile = null;
                 mPrimaryLanguage = null;
                 mDefaultLanguage = null;
@@ -178,6 +191,10 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
             if (mTitleView != null) {
                 mTitleView.setText(mTitle);
                 mTitleView.setTypeface(LocaleTypefaceUtils.getTypeface(mTitleView.getContext(), mTitleLanguage));
+            }
+            if (mTaglineView != null) {
+                mTaglineView.setText(mTagline);
+                mTaglineView.setTypeface(LocaleTypefaceUtils.getTypeface(mTaglineView.getContext(), mTaglineLanguage));
             }
             bindShares(mSharesView, mShares);
             if (mParallelLanguageView != null) {

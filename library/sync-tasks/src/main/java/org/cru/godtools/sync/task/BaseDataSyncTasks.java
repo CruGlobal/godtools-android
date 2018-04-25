@@ -37,8 +37,8 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
             {AttachmentTable.COLUMN_TOOL, AttachmentTable.COLUMN_FILENAME, AttachmentTable.COLUMN_SHA256};
     private static final String[] API_FIELDS_TRANSLATION =
             {TranslationTable.COLUMN_TOOL, TranslationTable.COLUMN_LANGUAGE, TranslationTable.COLUMN_VERSION,
-                    TranslationTable.COLUMN_NAME, TranslationTable.COLUMN_DESCRIPTION, TranslationTable.COLUMN_MANIFEST,
-                    TranslationTable.COLUMN_PUBLISHED};
+                    TranslationTable.COLUMN_NAME, TranslationTable.COLUMN_DESCRIPTION, TranslationTable.COLUMN_TAGLINE,
+                    TranslationTable.COLUMN_MANIFEST, TranslationTable.COLUMN_PUBLISHED};
 
     BaseDataSyncTasks(@NonNull Context context) {
         super(context);
