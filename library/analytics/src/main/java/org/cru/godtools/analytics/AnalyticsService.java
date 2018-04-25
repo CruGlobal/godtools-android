@@ -15,7 +15,7 @@ import java.util.Locale;
 public interface AnalyticsService {
     /* Screen event names */
     String SCREEN_HOME = "Home";
-    String SCREEN_ADD_TOOLS = "Add Tools";
+    String SCREEN_FIND_TOOLS = "Find Tools";
     String SCREEN_TOOL_DETAILS = "Tool Info";
     String SCREEN_LANGUAGE_SETTINGS = "Language Settings";
     String SCREEN_LANGUAGE_SELECTION = "Select Language";

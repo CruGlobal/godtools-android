@@ -3,4 +3,12 @@
     <!-- Permissions required for Google Analytics -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <application>
+        <receiver android:name=".adobe.AdobeBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+    </application>
 </manifest>

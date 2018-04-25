@@ -27,7 +27,7 @@
     "batchLimit": 0,
     "timezone": "EDT",
     "timezoneOffset": -240,
-    "referrerTimeout": 0,
+    "referrerTimeout": 5,
     "backdateSessionInfo": true,
     "poi": []
   },

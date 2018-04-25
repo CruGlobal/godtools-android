@@ -2,6 +2,7 @@ package org.cru.godtools.analytics;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.AnyThread;
 import android.support.annotation.NonNull;
@@ -26,7 +27,7 @@ import java.util.concurrent.Executors;
 import static org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag;
 import static org.cru.godtools.analytics.AnalyticsService.tractPageToScreenName;
 
-class AdobeAnalyticsService implements AnalyticsService {
+public final class AdobeAnalyticsService implements AnalyticsService {
     /* Property Keys */
     private static final String KEY_APP_NAME = "cru.appname";
     private static final String KEY_MARKETING_CLOUD_ID = "cru.mcid";
@@ -43,6 +44,7 @@ class AdobeAnalyticsService implements AnalyticsService {
     private static final String VALUE_GODTOOLS = "GodTools";
     private static final String VALUE_NOT_LOGGED_IN = "not logged in";
 
+    private final Context mContext;
     /**
      * Single thread executor to serialize events on a background thread.
      */
@@ -53,13 +55,14 @@ class AdobeAnalyticsService implements AnalyticsService {
     private String mPreviousScreenName;
 
     private AdobeAnalyticsService(@NonNull final Context context) {
+        mContext = context;
         Config.setContext(context);
     }
 
     @Nullable
     private static AdobeAnalyticsService sInstance;
     @NonNull
-    static synchronized AnalyticsService getInstance(@NonNull final Context context) {
+    public static synchronized AdobeAnalyticsService getInstance(@NonNull final Context context) {
         if (sInstance == null) {
             sInstance = new AdobeAnalyticsService(context.getApplicationContext());
         }
@@ -83,6 +86,10 @@ class AdobeAnalyticsService implements AnalyticsService {
             mActiveActivity = new WeakReference<>(null);
             mAnalyticsExecutor.execute(Config::pauseCollectingLifecycleData);
         }
+    }
+
+    public void onProcessReferrer(@NonNull final Intent intent) {
+        mAnalyticsExecutor.execute(() -> Analytics.processReferrer(mContext, intent));
     }
 
     @Override

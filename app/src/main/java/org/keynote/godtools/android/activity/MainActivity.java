@@ -30,7 +30,7 @@ import org.keynote.godtools.android.model.Tool;
 import java.util.Locale;
 
 import static android.arch.lifecycle.Lifecycle.State.STARTED;
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_ADD_TOOLS;
+import static org.cru.godtools.analytics.AnalyticsService.SCREEN_FIND_TOOLS;
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_HOME;
 
 public class MainActivity extends BasePlatformActivity implements ToolsFragment.Callbacks {
@@ -190,7 +190,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         if (getLifecycle().getCurrentState().isAtLeast(STARTED)) {
             switch (mActiveState) {
                 case STATE_FIND_TOOLS:
-                    mAnalytics.onTrackScreen(SCREEN_ADD_TOOLS);
+                    mAnalytics.onTrackScreen(SCREEN_FIND_TOOLS);
                     break;
                 case STATE_MY_TOOLS:
                 default:
