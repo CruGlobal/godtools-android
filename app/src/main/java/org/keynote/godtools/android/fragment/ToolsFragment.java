@@ -320,7 +320,7 @@ public class ToolsFragment extends BaseFragment
         public Loader<Cursor> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_TOOLS:
-                    final DaoCursorEventBusLoader<Tool> loader = new ToolsCursorLoader(getContext(), args);
+                    final DaoCursorEventBusLoader<Tool> loader = new ToolsCursorLoader(requireContext(), args);
                     loader.addEventBusSubscriber(new AttachmentEventBusSubscriber(loader));
                     loader.setProjection(TOOLS_PROJECTION);
                     //noinspection unchecked
