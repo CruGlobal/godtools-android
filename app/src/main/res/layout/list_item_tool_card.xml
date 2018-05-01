@@ -59,57 +59,60 @@
                 android:layout_toRightOf="@id/action_add"
                 android:background="@color/gray_E6" />
 
-            <RelativeLayout
-                android:id="@+id/layout_name"
+            <android.support.v7.widget.AppCompatTextViewImpl
+                android:id="@+id/language_parallel"
+                style="@style/Widget.GodTools.Tools.Card.ParallelLanguage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/title"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="4dp"
+                android:gravity="end"
+                android:maxWidth="72dp"
+                tools:text="Bosnian (Bosnia &amp; Herzegovina)" />
+
+            <android.support.v7.widget.AppCompatTextViewImpl
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_toEndOf="@id/divider_download"
-                android:layout_toRightOf="@id/divider_download">
+                android:layout_toLeftOf="@id/language_parallel"
+                android:layout_toRightOf="@id/divider_download"
+                android:layout_toStartOf="@id/language_parallel"
+                android:ellipsize="end"
+                android:lines="1"
+                android:textAppearance="@style/TextAppearance.GodTools2.Tools.Card.Title"
+                tools:text="Knowing God Personally (Extra Long Title)" />
 
-                <android.support.v7.widget.AppCompatTextViewImpl
-                    android:id="@+id/language_parallel"
-                    style="@style/Widget.GodTools.Tools.Card.ParallelLanguage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/title"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginStart="4dp"
-                    android:gravity="end"
-                    android:maxWidth="72dp"
-                    tools:text="Bosnian (Bosnia &amp; Herzegovina)" />
-
-                <android.support.v7.widget.AppCompatTextViewImpl
-                    android:id="@+id/title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@id/language_parallel"
-                    android:layout_toStartOf="@id/language_parallel"
-                    android:ellipsize="end"
-                    android:lines="1"
-                    android:textAppearance="@style/TextAppearance.GodTools2.Tools.Card.Title"
-                    tools:text="Knowing God Personally (Extra Long Title)" />
-
-                <android.support.v7.widget.AppCompatTextViewImpl
-                    android:id="@+id/tagline"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/title"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginRight="32dp"
-                    android:ellipsize="end"
-                    android:lines="2"
-                    android:textAppearance="@style/TextAppearance.GodTools2.Tools.Card.Tagline"
-                    tools:text="A Gospel presentation that uses hand drawn images to help illustrate God’s invitation to know" />
-            </RelativeLayout>
+            <android.support.v7.widget.AppCompatTextViewImpl
+                android:id="@+id/tagline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@id/divider_download"
+                android:layout_toRightOf="@id/divider_download"
+                android:ellipsize="end"
+                android:lines="2"
+                android:textAppearance="@style/TextAppearance.GodTools2.Tools.Card.Tagline"
+                tools:text="A Gospel presentation that uses hand drawn images to help illustrate God’s invitation to know" />
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/action_info"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_alignBottom="@id/layout_name"
+                android:layout_alignBottom="@id/tagline"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="-8dp"
