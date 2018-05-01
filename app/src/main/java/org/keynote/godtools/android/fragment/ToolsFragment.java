@@ -192,7 +192,7 @@ public class ToolsFragment extends BaseFragment
     private void setupToolsList() {
         if (mResourcesView != null) {
             mResourcesView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            mResourcesView.setHasFixedSize(true);
+            mResourcesView.setHasFixedSize(false);
 
             mToolsAdapter = new ToolsAdapter(mMode == MODE_ADDED);
             mToolsAdapter.setCallbacks(this);

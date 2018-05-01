@@ -35,7 +35,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/banner"
             android:layout_margin="4dp">
 
@@ -59,23 +59,11 @@
                 android:layout_toRightOf="@id/action_add"
                 android:background="@color/gray_E6" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/action_info"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:padding="8dp"
-                android:tint="@color/gt_blue"
-                app:srcCompat="@drawable/ic_info" />
-
             <RelativeLayout
+                android:id="@+id/layout_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_margin="8dp"
                 android:layout_toEndOf="@id/divider_download"
                 android:layout_toRightOf="@id/divider_download">
 
@@ -116,6 +104,18 @@
                     android:textAppearance="@style/TextAppearance.GodTools2.Tools.Card.Tagline"
                     tools:text="A Gospel presentation that uses hand drawn images to help illustrate God’s invitation to know" />
             </RelativeLayout>
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/action_info"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignBottom="@id/layout_name"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="-8dp"
+                android:padding="8dp"
+                android:tint="@color/gt_blue"
+                app:srcCompat="@drawable/ic_info" />
         </RelativeLayout>
     </RelativeLayout>
 </android.support.v7.widget.CardView>
