@@ -31,5 +31,10 @@
         <item name="tabMode">scrollable</item>
         <item name="tabGravity">fill</item>
         <item name="tabIndicatorHeight">0dp</item>
+        <item name="tabTextAppearance">@style/TextAppearance.GodTools.TabLayout.Tab</item>
+    </style>
+
+    <style name="TextAppearance.GodTools.TabLayout.Tab" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
     </style>
 </resources>
