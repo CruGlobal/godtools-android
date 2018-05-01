@@ -1,6 +1,7 @@
 package org.cru.godtools.adapter;
 
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.ccci.gto.android.common.compat.view.TextViewCompat;
 import org.ccci.gto.android.common.db.util.CursorUtils;
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.ccci.gto.android.common.recyclerview.adapter.CursorAdapter;
@@ -100,6 +102,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         @Nullable
         @BindView(R.id.title)
         TextView mTitleView;
+        int mTitleTextStyle = Typeface.NORMAL;
         @Nullable
         @BindView(R.id.tagline)
         TextView mTaglineView;
@@ -148,8 +151,10 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         ToolViewHolder(@NonNull final View view) {
             super(view);
             if (mAddViews != null) {
-                ButterKnife.apply(mAddViews, (ButterKnife.Action<View>) (v, i) -> v
-                        .setVisibility(mHideAddAction ? View.GONE : View.VISIBLE));
+                ButterKnife.apply(mAddViews, (v, i) -> v.setVisibility(mHideAddAction ? View.GONE : View.VISIBLE));
+            }
+            if (mTitleView != null) {
+                mTitleTextStyle = TextViewCompat.getTypefaceStyle(mTitleView);
             }
         }
 
@@ -190,7 +195,8 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
             ViewUtils.bindLocalImage(mBanner, mBannerFile);
             if (mTitleView != null) {
                 mTitleView.setText(mTitle);
-                mTitleView.setTypeface(LocaleTypefaceUtils.getTypeface(mTitleView.getContext(), mTitleLanguage));
+                mTitleView.setTypeface(LocaleTypefaceUtils.getTypeface(mTitleView.getContext(), mTitleLanguage),
+                                       mTitleTextStyle);
             }
             if (mTaglineView != null) {
                 mTaglineView.setText(mTagline);
