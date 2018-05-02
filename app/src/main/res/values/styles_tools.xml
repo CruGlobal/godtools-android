@@ -38,6 +38,7 @@
     <style name="TextAppearance.GodTools2.Tools.Card.Title" parent="TextAppearance.GodTools">
         <item name="android:textColor">@color/gray_5A</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.GodTools2.Tools.Card.Shares" parent="TextAppearance.GodTools.Small">
