@@ -12,7 +12,7 @@
         android:adjustViewBounds="true"
         android:cropToPadding="false" />
 
-    <android.support.v4.view.ViewPager
+    <org.ccci.gto.android.common.viewpager.view.HackyViewPager
         android:id="@+id/pages"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
