@@ -18,6 +18,10 @@ public final class Settings {
     private static final String PREF_PRIMARY_LANGUAGE = "languagePrimary";
     private static final String PREF_PARALLEL_LANGUAGE = "languageParallel";
     private static final String PREF_TOUR_COMPLETED = "tour_completed";
+    private static final String PREF_FEATURE_DISCOVERED = "feature_discovered.";
+
+    // feature discovery
+    public static final String FEATURE_LANGUAGE_SETTINGS = "languageSettings";
 
     @NonNull
     private final SharedPreferences mPrefs;
@@ -45,6 +49,25 @@ public final class Settings {
     public void setTourCompleted() {
         mPrefs.edit()
                 .putBoolean(PREF_TOUR_COMPLETED, true)
+                .apply();
+    }
+
+    public boolean isFeatureDiscovered(@NonNull final String feature) {
+        // handle pre-conditions that would indicate a feature was already discovered
+        switch (feature) {
+            case FEATURE_LANGUAGE_SETTINGS:
+                if (getParallelLanguage() != null) {
+                    setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS);
+                }
+                break;
+        }
+
+        return mPrefs.getBoolean(PREF_FEATURE_DISCOVERED + feature, false);
+    }
+
+    public void setFeatureDiscovered(@NonNull final String feature) {
+        mPrefs.edit()
+                .putBoolean(PREF_FEATURE_DISCOVERED + feature, true)
                 .apply();
     }
 
