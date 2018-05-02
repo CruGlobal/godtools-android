@@ -25,6 +25,8 @@
     <string name="action_tour_later">Később</string>
     <!-- Tools UI -->
     <string name="title_tools_add">Eszközök hozzáadása</string>
+    <string name="nav_find_tools">Eszközök keresése</string>
+    <string name="nav_my_tools">Saját eszközeim</string>
     <string name="menu_add_tool">Eszköz hozzáadása</string>
     <string name="menu_switch_language">Nyelv váltása</string>
     <string name="title_add_new_tools">Új eszközök hozzáadása</string>

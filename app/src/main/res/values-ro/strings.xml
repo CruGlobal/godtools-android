@@ -25,6 +25,8 @@
     <string name="action_tour_later">Mai târziu</string>
     <!-- Tools UI -->
     <string name="title_tools_add">Adaugă instrumente</string>
+    <string name="nav_find_tools">Găsește instrumente</string>
+    <string name="nav_my_tools">Instrumentele mele</string>
     <string name="menu_add_tool">Adaugă instrument</string>
     <string name="menu_switch_language">Schimbă limba</string>
     <string name="title_add_new_tools">Adaugă instrumente noi</string>

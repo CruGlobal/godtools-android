@@ -21,6 +21,8 @@
     <string name="action_tour_later">পরে</string>
     <!-- Tools UI -->
     <string name="title_tools_add">টুল যোগ করুন</string>
+    <string name="nav_find_tools">সরঞ্জাম খুঁজুন</string>
+    <string name="nav_my_tools">আমার সরঞ্জামগুলি</string>
     <string name="menu_add_tool">ডাউনলোড</string>
     <string name="title_add_new_tools">নতুন সরঞ্জাম যোগ করুন</string>
     <string name="action_tools_download">ডাউনলোড</string>

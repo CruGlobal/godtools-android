@@ -25,6 +25,8 @@
     <string name="action_tour_later">Più tardi</string>
     <!-- Tools UI -->
     <string name="title_tools_add">Aggiungi strumenti</string>
+    <string name="nav_find_tools">Trova strumenti</string>
+    <string name="nav_my_tools">I miei strumenti</string>
     <string name="menu_add_tool">Aggiungi strumento</string>
     <string name="menu_switch_language">Cambia lingua</string>
     <string name="title_add_new_tools">Aggiungi nuovi strumenti</string>

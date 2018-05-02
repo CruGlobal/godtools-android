@@ -25,6 +25,8 @@
     <string name="action_tour_later">後で</string>
     <!-- Tools UI -->
     <string name="title_tools_add">ツールを追加</string>
+    <string name="nav_find_tools">ツールを探す</string>
+    <string name="nav_my_tools">マイツール</string>
     <string name="menu_add_tool">ツールを追加</string>
     <string name="menu_switch_language">言語の切り替え</string>
     <string name="title_add_new_tools">新規ツールを追加</string>

@@ -25,6 +25,8 @@
     <string name="action_tour_later">待會</string>
     <!-- Tools UI -->
     <string name="title_tools_add">添加工具</string>
+    <string name="nav_find_tools">搜尋工具</string>
+    <string name="nav_my_tools">我的工具</string>
     <string name="menu_add_tool">添加工具</string>
     <string name="menu_switch_language">切換語言</string>
     <string name="title_add_new_tools">添加新工具</string>

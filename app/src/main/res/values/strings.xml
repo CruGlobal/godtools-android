@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
+    <eat-comment />
     <string name="share_prompt">Select how you would like to share</string>
 
     <!-- Navigation Menu -->
+    <eat-comment />
     <string name="menu_heading_general">General</string>
     <string name="menu_heading_share">Share</string>
     <string name="menu_heading_legal">Legal</string>
@@ -18,9 +20,11 @@
     <string name="menu_copyright">Copyright</string>
 
     <!-- Share a story -->
+    <eat-comment />
     <string name="share_story_subject">Hear how God is moving!</string>
 
     <!-- Tour UI -->
+    <eat-comment />
     <string name="title_tour_tools">Add New Tools</string>
     <string name="title_tour_language">Set Your Languages</string>
     <string name="action_tour_ok">Okay</string>
@@ -28,6 +32,7 @@
     <string name="action_tour_later">Later</string>
 
     <!-- Tools UI -->
+    <eat-comment />
     <string name="title_tools_add">Add Tools</string>
     <string name="nav_find_tools">Find Tools</string>
     <string name="nav_my_tools">My Tools</string>
@@ -48,6 +53,7 @@
     <string name="text_tools_all_installed">You have downloaded all available tools.</string>
 
     <!-- Language Selection UI -->
+    <eat-comment />
     <string name="menu_language_settings">Language Settings</string>
     <string name="title_language_settings">Language Settings</string>
     <string name="title_language_primary">Primary Language</string>
@@ -58,6 +64,7 @@
     <string name="label_language_none">None</string>
 
     <!-- Sharing -->
+    <eat-comment />
     <string name="share_general_message">Here’s the link to download the app we were looking at today: http://godtoolsapp.com \n\n
 
 		Here’s a link to a web version of the app {{share_link}} \n\n

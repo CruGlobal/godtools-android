@@ -25,6 +25,8 @@
     <string name="action_tour_later">Baadaye</string>
     <!-- Tools UI -->
     <string name="title_tools_add">Ongeza Vifaa</string>
+    <string name="nav_find_tools">Pata Zana</string>
+    <string name="nav_my_tools">Zana Zangu</string>
     <string name="menu_add_tool">Ongeza Kifaa</string>
     <string name="menu_switch_language">Badilisha lugha</string>
     <string name="title_add_new_tools">Ongeza Vifaa Vipya</string>

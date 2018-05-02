@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_share_tract">"सांगा
+       "</string>
+    <string name="share_tract_title">सांगा “%1$s” उपयोग करून</string>
+    <string name="tract_not_found">आपण विनंती केलेले साधन आढळले नाही</string>
+    <string name="tract_loading">आपण विनंती केलेले साधन लोड होत आहे</string>
+    <string name="tract_content_input_error_required">%1$s ची गरज आहे</string>
+    <string name="tract_content_input_error_invalid_email">योग्य ई-मेल पत्ता टाका</string>
+</resources>

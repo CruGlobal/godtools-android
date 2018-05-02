@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main Activity-->
+    <string name="share_prompt">בחרו כיצד ברצונכם לשתף</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">כללי</string>
+    <string name="menu_heading_share">שתף</string>
+    <string name="menu_heading_legal">חוקיות</string>
+    <string name="menu_about">אודות</string>
+    <string name="menu_help">עזרה</string>
+    <string name="menu_contact_us">צרו איתנו קשר</string>
+    <string name="menu_share_godtools">שתף את GodTools</string>
+    <string name="menu_share_story">שתפו איתנו סיפור</string>
+    <string name="menu_rate">דרגו את GodTools</string>
+    <string name="menu_terms_of_use">תנאי שימוש</string>
+    <string name="menu_privacy_policy">מדיניות פרטיות</string>
+    <string name="menu_copyright">זכויות יוצרים</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">הקשיבו איך האל זז!</string>
+    <!-- Tour UI -->
+    <string name="title_tour_tools">הוסיפו כלים חדשים</string>
+    <string name="title_tour_language">הגדירו את השפה שלכם</string>
+    <string name="action_tour_ok">בסדר</string>
+    <string name="action_tour_now">עכשיו</string>
+    <string name="action_tour_later">אחר כך</string>
+    <!-- Tools UI -->
+    <string name="title_tools_add">הוסף כלים</string>
+    <string name="nav_find_tools">חפש כלים</string>
+    <string name="nav_my_tools">הכלים שלי</string>
+    <string name="menu_add_tool">הוסף כלי</string>
+    <string name="menu_switch_language">שנה שפה</string>
+    <string name="title_add_new_tools">הוסף כלים חדשים</string>
+    <string name="action_tools_download">הורד</string>
+    <string name="action_tools_remove">הסר</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d צפייה</item>
+        <item quantity="other">%1$,d צפיות</item>
+        <item quantity="many">%1$,d צפיות</item>
+        <item quantity="two">%1$,d צפיות</item>
+    </plurals>
+    <string name="label_tools_about">אודות</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d שפה</item>
+        <item quantity="other">%1$,d שפות</item>
+        <item quantity="many">%1$,d שפות</item>
+        <item quantity="two">%1$,d שפות</item>
+    </plurals>
+    <!-- Language Selection UI -->
+    <string name="menu_language_settings">הגדרות שפה</string>
+    <string name="title_language_settings">הגדרות שפה</string>
+    <string name="title_language_primary">שפה ראשית</string>
+    <string name="title_language_parallel">שפה מקבילה</string>
+    <string name="action_language_parallel_select">בחרו שפה מקבילה</string>
+    <string name="text_language_parallel_description">שתפו את GodTools עם מישהו בשפת האם שלהם.</string>
+    <string name="text_language_warning">לא כל כלי זמין בכל שפה</string>
+    <string name="label_language_none">אף אחד</string>
+    <!-- Sharing -->
+    <string name="share_general_message">הנה הקישור להורדה של האפליקציה שהסתכלנו עליה היום: http://godtoolsapp.com \n\n
+
+הנה הקישור לגרסת האתר של האפליקציה {{share_link}} \n\n
+
+בואו נדבר יותר!</string>
+</resources>
