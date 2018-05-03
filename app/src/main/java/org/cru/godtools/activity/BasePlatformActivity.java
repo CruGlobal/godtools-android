@@ -54,7 +54,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     // Navigation Drawer
     @Nullable
     @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
+    protected DrawerLayout mDrawerLayout;
     @Nullable
     @BindView(R.id.drawer_menu)
     NavigationView mDrawerMenu;

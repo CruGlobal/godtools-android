@@ -3,12 +3,14 @@ package org.keynote.godtools.android.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -47,6 +49,9 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     private static final int STATE_MY_TOOLS = 0;
     private static final int STATE_FIND_TOOLS = 1;
 
+    @NonNull
+    /*final*/ Handler mFeatureDiscoveryHandler;
+
     @Nullable
     private TabLayout.Tab mMyToolsTab;
     @Nullable
@@ -63,6 +68,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mFeatureDiscoveryHandler = new Handler();
         setContentView(R.layout.activity_dashboard);
 
         if (savedInstanceState != null) {
@@ -261,26 +267,26 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     }
 
     void showNextFeatureDiscovery() {
-        if (!prefs().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS)) {
-            showFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, false);
+        if (!prefs().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
+                canShowFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS)) {
+            mFeatureDiscoveryHandler.postDelayed(() -> showFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, false), 10000);
         }
+    }
+
+    /**
+     * Returns if the activity is in a state that it can actually show the specified feature discovery.
+     */
+    private boolean canShowFeatureDiscovery(@NonNull final String feature) {
+        switch (feature) {
+            case FEATURE_LANGUAGE_SETTINGS:
+                return mToolbar != null && (mDrawerLayout == null || !mDrawerLayout.isDrawerOpen(Gravity.START));
+        }
+
+        // assume we can show it if we don't have any specific rules about it
+        return true;
     }
 
     private void showFeatureDiscovery(@NonNull final String feature, final boolean force) {
-        switch (feature) {
-            case FEATURE_LANGUAGE_SETTINGS:
-                if (force) {
-                    showLanguageSettingsFeatureDiscovery(true);
-                    break;
-                }
-                if (mToolbar != null) {
-                    mToolbar.postDelayed(() -> showLanguageSettingsFeatureDiscovery(false), 10000);
-                }
-                break;
-        }
-    }
-
-    void showLanguageSettingsFeatureDiscovery(final boolean force) {
         // short-circuit if this activity is not started
         if (!getLifecycle().getCurrentState().isAtLeast(RESUMED)) {
             return;
@@ -291,25 +297,39 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
             return;
         }
 
-        // short-circuit if language settings was discovered and we aren't forcing it
-        if (prefs().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) && !force) {
+        // short-circuit if this feature was discovered and we aren't forcing it
+        if (prefs().isFeatureDiscovered(feature) && !force) {
             return;
         }
 
-        if (mToolbar != null) {
-            if (mToolbar.findViewById(R.id.action_switch_language) != null) {
-                final TapTarget target = TapTarget.forToolbarMenuItem(
-                        mToolbar, R.id.action_switch_language,
-                        getString(R.string.feature_discovery_title_language_settings),
-                        getString(R.string.feature_discovery_desc_language_settings));
-                mFeatureDiscovery = TapTargetView.showFor(this, target, new LanguageSettingsFeatureDiscoveryListener());
-                mFeatureDiscoveryActive = FEATURE_LANGUAGE_SETTINGS;
-            } else {
-                // delay for now to see if the target shows up later.
-                // TODO: there probably needs to be some sort of backoff so this doesn't spin indefinitely if the
-                // TODO: switch_language action never shows up
-                mToolbar.post(() -> showLanguageSettingsFeatureDiscovery(force));
-            }
+        // short-circuit if we can't show this feature discovery right now,
+        // and try to show the next feature discovery that can be shown.
+        if (!canShowFeatureDiscovery(feature)) {
+            showNextFeatureDiscovery();
+            return;
+        }
+
+        // dispatch specific feature discovery
+        switch (feature) {
+            case FEATURE_LANGUAGE_SETTINGS:
+                assert mToolbar != null : "canShowFeatureDiscovery() verifies mToolbar is not null";
+                if (mToolbar.findViewById(R.id.action_switch_language) != null) {
+                    final TapTarget target = TapTarget.forToolbarMenuItem(
+                            mToolbar, R.id.action_switch_language,
+                            getString(R.string.feature_discovery_title_language_settings),
+                            getString(R.string.feature_discovery_desc_language_settings));
+                    mFeatureDiscovery =
+                            TapTargetView.showFor(this, target, new LanguageSettingsFeatureDiscoveryListener());
+                    mFeatureDiscoveryActive = feature;
+                } else {
+                    // TODO: we currently don't (can't?) distinguish between when the menu item doesn't exist and when
+                    // TODO: the menu item just hasn't been drawn yet.
+
+                    // the toolbar action isn't available yet.
+                    // re-attempt this feature discovery on the next iteration of the main Looper.
+                    mToolbar.post(() -> showFeatureDiscovery(feature, force));
+                }
+                break;
         }
     }
 
