@@ -19,7 +19,7 @@
     <string name="share_story_subject">صدای حرکت خداوند را بشنوید!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">افزودن ابزار جدید</string>
-    <string name="title_tour_language">زبان خود را تنظیم کنید</string>
+    <string name="feature_discovery_title_language_settings">زبان خود را تنظیم کنید</string>
     <string name="action_tour_ok">تأیید</string>
     <string name="action_tour_now">اکنون</string>
     <string name="action_tour_later">بعداً</string>

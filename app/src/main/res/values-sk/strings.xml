@@ -19,7 +19,7 @@
     <string name="share_story_subject">Vypočujte si, aký je boh pôsobivý!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">Pridať nové nástroje</string>
-    <string name="title_tour_language">Nastavte si jazyky</string>
+    <string name="feature_discovery_title_language_settings">Nastavte si jazyky</string>
     <string name="action_tour_ok">OK</string>
     <string name="action_tour_now">Teraz</string>
     <string name="action_tour_later">Neskôr</string>

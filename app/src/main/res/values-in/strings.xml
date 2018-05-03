@@ -19,7 +19,7 @@
     <string name="share_story_subject">Dengarkan bagaimana Tuhan bergerak!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">Tambah Alat Baru</string>
-    <string name="title_tour_language">Tetapkan Bahasa Anda</string>
+    <string name="feature_discovery_title_language_settings">Tetapkan Bahasa Anda</string>
     <string name="action_tour_ok">Oke</string>
     <string name="action_tour_now">Sekarang</string>
     <string name="action_tour_later">Nanti</string>

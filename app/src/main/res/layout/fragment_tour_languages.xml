@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
-            android:text="@string/title_tour_language" />
+            android:text="@string/feature_discovery_title_language_settings" />
 
         <View style="@style/Widget.GodTools2.Tour.Spacer" />
 

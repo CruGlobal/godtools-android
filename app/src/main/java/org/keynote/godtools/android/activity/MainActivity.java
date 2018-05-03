@@ -298,9 +298,10 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
         if (mToolbar != null) {
             if (mToolbar.findViewById(R.id.action_switch_language) != null) {
-                final TapTarget target = TapTarget.forToolbarMenuItem(mToolbar, R.id.action_switch_language,
-                                                                      getString(R.string.title_tour_language),
-                                                                      getString(R.string.desc_tour_language));
+                final TapTarget target = TapTarget.forToolbarMenuItem(
+                        mToolbar, R.id.action_switch_language,
+                        getString(R.string.feature_discovery_title_language_settings),
+                        getString(R.string.feature_discovery_desc_language_settings));
                 mFeatureDiscovery = TapTargetView.showFor(this, target, new LanguageSettingsFeatureDiscoveryListener());
                 mFeatureDiscoveryActive = FEATURE_LANGUAGE_SETTINGS;
             } else {

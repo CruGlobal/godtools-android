@@ -19,7 +19,7 @@
     <string name="share_story_subject">神とのストーリーを聞いてみましょう。</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">新しいツールを追加</string>
-    <string name="title_tour_language">言語を設定</string>
+    <string name="feature_discovery_title_language_settings">言語を設定</string>
     <string name="action_tour_ok">OK</string>
     <string name="action_tour_now">今すぐ</string>
     <string name="action_tour_later">後で</string>

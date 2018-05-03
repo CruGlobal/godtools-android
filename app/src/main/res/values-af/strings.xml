@@ -18,7 +18,7 @@
     <string name="share_story_subject">Hoor hoe God beweeg!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">Voeg nuwe hulpmiddels by</string>
-    <string name="title_tour_language">Stel jou Tale in</string>
+    <string name="feature_discovery_title_language_settings">Stel jou Tale in</string>
     <string name="action_tour_ok">Okei</string>
     <string name="action_tour_now">Nou</string>
     <string name="action_tour_later">Later</string>

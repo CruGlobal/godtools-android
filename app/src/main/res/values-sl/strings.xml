@@ -19,7 +19,7 @@
     <string name="share_story_subject">Poslušaj, kako deluje Bog!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">Dodaj nova orodja</string>
-    <string name="title_tour_language">Izberi jezike</string>
+    <string name="feature_discovery_title_language_settings">Izberi jezike</string>
     <string name="action_tour_ok">V redu</string>
     <string name="action_tour_now">Zdaj</string>
     <string name="action_tour_later">Kasneje</string>

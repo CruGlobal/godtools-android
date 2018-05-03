@@ -19,7 +19,7 @@
     <string name="share_story_subject">Hören Sie, wie Gott bewegt!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">Neue Tools hinzufügen</string>
-    <string name="title_tour_language">Wählen Sie Ihre Sprache</string>
+    <string name="feature_discovery_title_language_settings">Wählen Sie Ihre Sprache</string>
     <string name="action_tour_ok">Okay</string>
     <string name="action_tour_now">Jetzt</string>
     <string name="action_tour_later">Später</string>
