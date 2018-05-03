@@ -26,7 +26,8 @@
     <!-- Tour UI -->
     <eat-comment />
     <string name="title_tour_tools">Add New Tools</string>
-    <string name="title_tour_language">Set Your Languages</string>
+    <string name="title_tour_language">60+ Languages</string>
+    <string name="desc_tour_language">Share GodTools with someone in their native language.</string>
     <string name="action_tour_ok">Okay</string>
     <string name="action_tour_now">Now</string>
     <string name="action_tour_later">Later</string>

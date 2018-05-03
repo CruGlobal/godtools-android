@@ -13,12 +13,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.annimon.stream.Stream;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 
 import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
 import org.cru.godtools.activity.BasePlatformActivity;
 import org.cru.godtools.activity.ToolDetailsActivity;
-import org.cru.godtools.activity.TourActivity;
 import org.cru.godtools.everystudent.EveryStudent;
 import org.cru.godtools.init.content.task.InitialContentTasks;
 import org.cru.godtools.sync.GodToolsSyncService;
@@ -29,12 +30,14 @@ import org.keynote.godtools.android.model.Tool;
 
 import java.util.Locale;
 
+import static android.arch.lifecycle.Lifecycle.State.RESUMED;
 import static android.arch.lifecycle.Lifecycle.State.STARTED;
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_FIND_TOOLS;
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_HOME;
+import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
 
 public class MainActivity extends BasePlatformActivity implements ToolsFragment.Callbacks {
-    private static final String EXTRA_TOUR_LAUNCHED = MainActivity.class.getName() + ".TOUR_LAUNCHED";
+    private static final String EXTRA_FEATURE_DISCOVERY = MainActivity.class.getName() + ".FEATURE_DISCOVERY";
     private static final String EXTRA_ACTIVE_STATE = MainActivity.class.getName() + ".ACTIVE_STATE";
 
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
@@ -48,9 +51,12 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     private TabLayout.Tab mMyToolsTab;
     @Nullable
     private TabLayout.Tab mFindToolsTab;
+    @Nullable
+    TapTargetView mFeatureDiscovery;
 
     private int mActiveState = STATE_MY_TOOLS;
-    private boolean mTourLaunched = false;
+    @Nullable
+    String mFeatureDiscoveryActive;
 
     /* BEGIN lifecycle */
 
@@ -61,7 +67,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
         if (savedInstanceState != null) {
             mActiveState = savedInstanceState.getInt(EXTRA_ACTIVE_STATE, mActiveState);
-            mTourLaunched = savedInstanceState.getBoolean(EXTRA_TOUR_LAUNCHED, mTourLaunched);
+            mFeatureDiscoveryActive = savedInstanceState.getString(EXTRA_FEATURE_DISCOVERY, mFeatureDiscoveryActive);
         }
 
         // install any missing initial content
@@ -81,13 +87,22 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     protected void onStart() {
         super.onStart();
         loadInitialFragmentIfNeeded();
-        showTourIfNeeded();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         trackInAnalytics();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if (mFeatureDiscoveryActive != null) {
+            showFeatureDiscovery(mFeatureDiscoveryActive, true);
+        } else {
+            showNextFeatureDiscovery();
+        }
     }
 
     @Override
@@ -166,7 +181,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     protected void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(EXTRA_ACTIVE_STATE, mActiveState);
-        outState.putBoolean(EXTRA_TOUR_LAUNCHED, mTourLaunched);
+        outState.putString(EXTRA_FEATURE_DISCOVERY, mFeatureDiscoveryActive);
     }
 
     /* END lifecycle */
@@ -245,10 +260,82 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         showMyTools();
     }
 
-    private void showTourIfNeeded() {
-        if (!prefs().isTourCompleted() && !mTourLaunched) {
-            mTourLaunched = true;
-            TourActivity.startForResult(this, REQUEST_TOUR);
+    void showNextFeatureDiscovery() {
+        if (!prefs().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS)) {
+            showFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, false);
+        }
+    }
+
+    private void showFeatureDiscovery(@NonNull final String feature, final boolean force) {
+        switch (feature) {
+            case FEATURE_LANGUAGE_SETTINGS:
+                if (force) {
+                    showLanguageSettingsFeatureDiscovery(true);
+                    break;
+                }
+                if (mToolbar != null) {
+                    mToolbar.postDelayed(() -> showLanguageSettingsFeatureDiscovery(false), 10000);
+                }
+                break;
+        }
+    }
+
+    void showLanguageSettingsFeatureDiscovery(final boolean force) {
+        // short-circuit if this activity is not started
+        if (!getLifecycle().getCurrentState().isAtLeast(RESUMED)) {
+            return;
+        }
+
+        // short-circuit if feature discovery is already visible
+        if (mFeatureDiscovery != null) {
+            return;
+        }
+
+        // short-circuit if language settings was discovered and we aren't forcing it
+        if (prefs().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) && !force) {
+            return;
+        }
+
+        if (mToolbar != null) {
+            if (mToolbar.findViewById(R.id.action_switch_language) != null) {
+                final TapTarget target = TapTarget.forToolbarMenuItem(mToolbar, R.id.action_switch_language,
+                                                                      getString(R.string.title_tour_language),
+                                                                      getString(R.string.desc_tour_language));
+                mFeatureDiscovery = TapTargetView.showFor(this, target, new LanguageSettingsFeatureDiscoveryListener());
+                mFeatureDiscoveryActive = FEATURE_LANGUAGE_SETTINGS;
+            } else {
+                // delay for now to see if the target shows up later.
+                // TODO: there probably needs to be some sort of backoff so this doesn't spin indefinitely if the
+                // TODO: switch_language action never shows up
+                mToolbar.post(() -> showLanguageSettingsFeatureDiscovery(force));
+            }
+        }
+    }
+
+    private class LanguageSettingsFeatureDiscoveryListener extends TapTargetView.Listener {
+        @Override
+        public void onTargetClick(final TapTargetView view) {
+            super.onTargetClick(view);
+            showLanguageSettings();
+        }
+
+        @Override
+        public void onOuterCircleClick(final TapTargetView view) {
+            onTargetCancel(view);
+        }
+
+        @Override
+        public void onTargetDismissed(final TapTargetView view, final boolean userInitiated) {
+            super.onTargetDismissed(view, userInitiated);
+            if (userInitiated) {
+                prefs().setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS);
+                mFeatureDiscoveryActive = null;
+                showNextFeatureDiscovery();
+            }
+
+            if (view == mFeatureDiscovery) {
+                mFeatureDiscovery = null;
+            }
         }
     }
 }
