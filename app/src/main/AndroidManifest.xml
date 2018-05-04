@@ -75,11 +75,6 @@
         </activity>
 
         <activity
-            android:name=".activity.TourActivity"
-            android:theme="@style/Theme.GodTools2.Activity.Tour"
-            android:screenOrientation="@integer/default_screen_orientation" />
-
-        <activity
             android:name=".tract.activity.TractActivity"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity">
             <meta-data
