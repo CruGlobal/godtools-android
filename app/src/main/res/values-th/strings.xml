@@ -18,11 +18,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">มาฟังกันว่าพระผู้เป็นเจ้าทรงนำเราได้อย่างไร!</string>
     <!-- Tour UI -->
-    <string name="title_tour_tools">เพิ่มเครื่องมือใหม่</string>
     <string name="feature_discovery_title_language_settings">ตั้งค่าภาษา</string>
-    <string name="action_tour_ok">โอเค</string>
-    <string name="action_tour_now">ตอนนี้</string>
-    <string name="action_tour_later">ภายหลัง</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">ค้นหาเครื่องมือ</string>
     <string name="nav_my_tools">เครื่องมือของฉัน</string>

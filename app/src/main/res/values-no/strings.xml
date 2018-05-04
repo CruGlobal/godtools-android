@@ -18,11 +18,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">Hør hvordan Gud rører!</string>
     <!-- Tour UI -->
-    <string name="title_tour_tools">Legg til nye verktøy</string>
     <string name="feature_discovery_title_language_settings">Angi språk</string>
-    <string name="action_tour_ok">OK</string>
-    <string name="action_tour_now">Nå</string>
-    <string name="action_tour_later">Senere</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Finn verktøy</string>
     <string name="nav_my_tools">Mine verktøy</string>

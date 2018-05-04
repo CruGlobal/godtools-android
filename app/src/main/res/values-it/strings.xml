@@ -18,11 +18,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">Senti la presenza di Dio!</string>
     <!-- Tour UI -->
-    <string name="title_tour_tools">Aggiungi nuovi strumenti</string>
     <string name="feature_discovery_title_language_settings">Imposta le lingue</string>
-    <string name="action_tour_ok">OK</string>
-    <string name="action_tour_now">Adesso</string>
-    <string name="action_tour_later">Più tardi</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Trova strumenti</string>
     <string name="nav_my_tools">I miei strumenti</string>

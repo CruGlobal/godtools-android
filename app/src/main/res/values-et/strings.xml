@@ -18,11 +18,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">Kuula, kuidas Jumal tegutseb!</string>
     <!-- Tour UI -->
-    <string name="title_tour_tools">Lisa uusi tööriistu</string>
     <string name="feature_discovery_title_language_settings">Seadista oma keeled</string>
-    <string name="action_tour_ok">Nõus</string>
-    <string name="action_tour_now">Kohe</string>
-    <string name="action_tour_later">Hiljem</string>
     <!-- Tools UI -->
     <string name="menu_switch_language">Vaheta keelt</string>
     <string name="title_add_new_tools">Lisa uusi tööriistu</string>

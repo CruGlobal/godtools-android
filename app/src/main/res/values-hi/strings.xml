@@ -18,11 +18,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">गॉड का चलना सुनें!</string>
     <!-- Tour UI -->
-    <string name="title_tour_tools">नए टूल जोड़ें</string>
     <string name="feature_discovery_title_language_settings">अपनी भाषा निर्धारित करें</string>
-    <string name="action_tour_ok">ठीक</string>
-    <string name="action_tour_now">अभी</string>
-    <string name="action_tour_later">बाद में</string>
     <!-- Tools UI -->
     <string name="menu_switch_language">भाषा बदलें</string>
     <string name="title_add_new_tools">नए टूल जोड़ें</string>

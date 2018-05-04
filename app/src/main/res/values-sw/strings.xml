@@ -18,11 +18,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">Sikiliza namna Mungu anavyotembea!</string>
     <!-- Tour UI -->
-    <string name="title_tour_tools">Ongeza Vifaa Vipya</string>
     <string name="feature_discovery_title_language_settings">Weka Lugha Zako</string>
-    <string name="action_tour_ok">Sawa</string>
-    <string name="action_tour_now">Sasa</string>
-    <string name="action_tour_later">Baadaye</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Pata Zana</string>
     <string name="nav_my_tools">Zana Zangu</string>

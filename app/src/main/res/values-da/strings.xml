@@ -18,11 +18,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">Hør, hvordan Gud bevæger!</string>
     <!-- Tour UI -->
-    <string name="title_tour_tools">Tilføj nye værktøjer</string>
     <string name="feature_discovery_title_language_settings">Angiv dine sprog</string>
-    <string name="action_tour_ok">OK</string>
-    <string name="action_tour_now">Nu</string>
-    <string name="action_tour_later">Senere</string>
     <!-- Tools UI -->
     <string name="menu_switch_language">Skift sprog</string>
     <string name="title_add_new_tools">Tilføj nye værktøjer</string>

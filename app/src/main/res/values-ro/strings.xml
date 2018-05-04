@@ -18,11 +18,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">Află cum lucrează Dumnezeu!</string>
     <!-- Tour UI -->
-    <string name="title_tour_tools">Adaugă instrumente noi</string>
     <string name="feature_discovery_title_language_settings">Setează limbile</string>
-    <string name="action_tour_ok">Ok</string>
-    <string name="action_tour_now">Acum</string>
-    <string name="action_tour_later">Mai târziu</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Găsește instrumente</string>
     <string name="nav_my_tools">Instrumentele mele</string>

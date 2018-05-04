@@ -18,11 +18,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">¡Escucha cómo se mueve Dios!</string>
     <!-- Tour UI -->
-    <string name="title_tour_tools">Agrega nuevas herramientas</string>
     <string name="feature_discovery_title_language_settings">Establece tus idiomas</string>
-    <string name="action_tour_ok">Ok</string>
-    <string name="action_tour_now">Ahora</string>
-    <string name="action_tour_later">Más tarde</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Encontrar herramientas</string>
     <string name="nav_my_tools">Mis herramientas</string>

@@ -18,11 +18,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">Dëgjo se si Perëndia po punon.</string>
     <!-- Tour UI -->
-    <string name="title_tour_tools">Shto mjete të reja</string>
     <string name="feature_discovery_title_language_settings">Vendos gjuhët e tua</string>
-    <string name="action_tour_ok">Në rregull</string>
-    <string name="action_tour_now">Tani</string>
-    <string name="action_tour_later">Më vonë</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Gjej Burimet​</string>
     <string name="nav_my_tools">Burimet e mia</string>
