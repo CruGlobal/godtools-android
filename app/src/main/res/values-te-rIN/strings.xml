@@ -24,8 +24,6 @@
     <string name="action_tour_now">ఇప్పుడు</string>
     <string name="action_tour_later">తరువాత</string>
     <!-- Tools UI -->
-    <string name="title_tools_add">సాధనాలను జోడించండి</string>
-    <string name="menu_add_tool">సాధనం జోడించండి</string>
     <string name="menu_switch_language">భాషను మార్చండి</string>
     <string name="title_add_new_tools">కొత్త పరకరాలను జోడించండి</string>
     <string name="action_tools_download">డౌన్‌లోడ్</string>

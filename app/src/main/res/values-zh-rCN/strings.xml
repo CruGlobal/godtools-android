@@ -24,10 +24,8 @@
     <string name="action_tour_now">现在</string>
     <string name="action_tour_later">稍后</string>
     <!-- Tools UI -->
-    <string name="title_tools_add">添加工具</string>
     <string name="nav_find_tools">查找工具</string>
     <string name="nav_my_tools">我的工具</string>
-    <string name="menu_add_tool">添加工具</string>
     <string name="menu_switch_language">切换语言</string>
     <string name="title_add_new_tools">添加新工具</string>
     <string name="action_tools_download">下载</string>

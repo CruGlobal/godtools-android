@@ -24,10 +24,8 @@
     <string name="action_tour_now">עכשיו</string>
     <string name="action_tour_later">אחר כך</string>
     <!-- Tools UI -->
-    <string name="title_tools_add">הוסף כלים</string>
     <string name="nav_find_tools">חפש כלים</string>
     <string name="nav_my_tools">הכלים שלי</string>
-    <string name="menu_add_tool">הוסף כלי</string>
     <string name="menu_switch_language">שנה שפה</string>
     <string name="title_add_new_tools">הוסף כלים חדשים</string>
     <string name="action_tools_download">הורד</string>

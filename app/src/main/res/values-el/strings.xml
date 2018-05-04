@@ -24,8 +24,6 @@
     <string name="action_tour_now">Τώρα</string>
     <string name="action_tour_later">Αργότερα</string>
     <!-- Tools UI -->
-    <string name="title_tools_add">Προσθέστε Εργαλεία</string>
-    <string name="menu_add_tool">Προσθήκη Εργαλείου</string>
     <string name="menu_switch_language">Αλλάξτε Γλώσσα</string>
     <string name="title_add_new_tools">Προσθήκη Νέων Εργαλείων</string>
     <string name="action_tools_download">Λήψη</string>

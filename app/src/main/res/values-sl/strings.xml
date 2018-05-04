@@ -24,10 +24,8 @@
     <string name="action_tour_now">Zdaj</string>
     <string name="action_tour_later">Kasneje</string>
     <!-- Tools UI -->
-    <string name="title_tools_add">Dodaj orodja</string>
     <string name="nav_find_tools">Dodaj orodje</string>
     <string name="nav_my_tools">Moja orodja</string>
-    <string name="menu_add_tool">Dodaj orodje</string>
     <string name="menu_switch_language">Spremeni jezik</string>
     <string name="title_add_new_tools">Dodaj orodja</string>
     <string name="action_tools_download">Naloži</string>

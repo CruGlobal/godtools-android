@@ -24,10 +24,8 @@
     <string name="action_tour_now">Şimdi</string>
     <string name="action_tour_later">Daha Sonra</string>
     <!-- Tools UI -->
-    <string name="title_tools_add">Araçlar Ekle</string>
     <string name="nav_find_tools">Araçlar Bul</string>
     <string name="nav_my_tools">Araçlarım</string>
-    <string name="menu_add_tool">Araç Ekle</string>
     <string name="menu_switch_language">Dil Değiştir</string>
     <string name="title_add_new_tools">Yeni Araçlar Ekle</string>
     <string name="action_tools_download">İndir</string>
