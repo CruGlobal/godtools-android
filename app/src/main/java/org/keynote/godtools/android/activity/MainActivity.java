@@ -344,12 +344,12 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
                             TapTargetView.showFor(this, target, new LanguageSettingsFeatureDiscoveryListener());
                     mFeatureDiscoveryActive = feature;
                 } else {
-                    final MenuItem item = mToolbar.getMenu().findItem(R.id.action_switch_language);
-                    if (item != null && item.isVisible()) {
-                        // the toolbar action isn't available yet.
-                        // re-attempt this feature discovery on the next frame iteration.
-                        dispatchDelayedFeatureDiscovery(feature, force, 17);
-                    }
+                    // TODO: we currently don't (can't?) distinguish between when the menu item doesn't exist and when
+                    // TODO: the menu item just hasn't been drawn yet.
+
+                    // the toolbar action isn't available yet.
+                    // re-attempt this feature discovery on the next frame iteration.
+                    dispatchDelayedFeatureDiscovery(feature, force, 17);
                 }
                 break;
         }
