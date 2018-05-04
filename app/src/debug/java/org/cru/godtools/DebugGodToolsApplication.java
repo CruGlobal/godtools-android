@@ -60,12 +60,12 @@ public class DebugGodToolsApplication extends GodToolsApplication {
                         .finish());
         Stetho.initialize(stethoBuilder.build());
         OkHttpClientUtil.addGlobalNetworkInterceptor(new StethoInterceptor());
+        Timber.plant(new StethoTree());
     }
 
     private void initTimber() {
-        // plant output trees we want
+        // plant debug output trees we want
         Timber.plant(new Timber.DebugTree());
-        Timber.plant(new StethoTree());
 
         // add TimberAnalyticsService
         AnalyticsDispatcher.getInstance(this).addAnalyticsService(new TimberAnalyticsService());
