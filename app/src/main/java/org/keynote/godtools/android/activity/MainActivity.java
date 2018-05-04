@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -41,8 +42,12 @@ import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
 public class MainActivity extends BasePlatformActivity implements ToolsFragment.Callbacks {
     private static final String EXTRA_FEATURE_DISCOVERY = MainActivity.class.getName() + ".FEATURE_DISCOVERY";
     private static final String EXTRA_ACTIVE_STATE = MainActivity.class.getName() + ".ACTIVE_STATE";
+    private static final String EXTRA_FEATURE = MainActivity.class.getName() + ".FEATURE";
+    private static final String EXTRA_FORCE = MainActivity.class.getName() + ".FORCE";
 
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
+
+    private static final int TASK_FEATURE_DISCOVERY = 1;
 
     private static final int REQUEST_TOUR = 101;
 
@@ -50,7 +55,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     private static final int STATE_FIND_TOOLS = 1;
 
     @NonNull
-    /*final*/ Handler mFeatureDiscoveryHandler;
+    /*final*/ Handler mTaskHandler;
 
     @Nullable
     private TabLayout.Tab mMyToolsTab;
@@ -68,7 +73,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mFeatureDiscoveryHandler = new Handler();
+        mTaskHandler = new Handler(this::onHandleMessage);
         setContentView(R.layout.activity_dashboard);
 
         if (savedInstanceState != null) {
@@ -109,6 +114,15 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         } else {
             showNextFeatureDiscovery();
         }
+    }
+
+    boolean onHandleMessage(@NonNull final Message message) {
+        switch (message.what) {
+            case TASK_FEATURE_DISCOVERY:
+                showFeatureDiscovery(message);
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -269,7 +283,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     void showNextFeatureDiscovery() {
         if (!prefs().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
                 canShowFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS)) {
-            mFeatureDiscoveryHandler.postDelayed(() -> showFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, false), 10000);
+            dispatchDelayedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, false, 10000);
         }
     }
 
@@ -284,6 +298,14 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
         // assume we can show it if we don't have any specific rules about it
         return true;
+    }
+
+    private void showFeatureDiscovery(final Message message) {
+        final Bundle data = message.getData();
+        final String feature = data.getString(EXTRA_FEATURE);
+        if (feature != null) {
+            showFeatureDiscovery(feature, data.getBoolean(EXTRA_FORCE, false));
+        }
     }
 
     private void showFeatureDiscovery(@NonNull final String feature, final boolean force) {
@@ -322,15 +344,29 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
                             TapTargetView.showFor(this, target, new LanguageSettingsFeatureDiscoveryListener());
                     mFeatureDiscoveryActive = feature;
                 } else {
-                    // TODO: we currently don't (can't?) distinguish between when the menu item doesn't exist and when
-                    // TODO: the menu item just hasn't been drawn yet.
-
-                    // the toolbar action isn't available yet.
-                    // re-attempt this feature discovery on the next frame iteration.
-                    mToolbar.postDelayed(() -> showFeatureDiscovery(feature, force), 17);
+                    final MenuItem item = mToolbar.getMenu().findItem(R.id.action_switch_language);
+                    if (item != null && item.isVisible()) {
+                        // the toolbar action isn't available yet.
+                        // re-attempt this feature discovery on the next frame iteration.
+                        dispatchDelayedFeatureDiscovery(feature, force, 17);
+                    }
                 }
                 break;
         }
+    }
+
+    private void dispatchDelayedFeatureDiscovery(@NonNull final String feature, final boolean force, final long delay) {
+        // remove all previously queued feature discovery tasks for this feature if we are forcing it now
+        if (force) {
+            mTaskHandler.removeMessages(TASK_FEATURE_DISCOVERY, feature);
+        }
+
+        final Message msg = mTaskHandler.obtainMessage(TASK_FEATURE_DISCOVERY, feature);
+        final Bundle data = new Bundle();
+        data.putString(EXTRA_FEATURE, feature);
+        data.putBoolean(EXTRA_FORCE, force);
+        msg.setData(data);
+        mTaskHandler.sendMessageDelayed(msg, delay);
     }
 
     private class LanguageSettingsFeatureDiscoveryListener extends TapTargetView.Listener {
