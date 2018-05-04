@@ -9,7 +9,7 @@
     <string name="menu_about">గురించి</string>
     <string name="menu_help">సహాయం</string>
     <string name="menu_contact_us">మమ్మల్ని సంప్రదించండి</string>
-    <string name="menu_share_godtools">GodToolsను పంచుకోండి</string>
+    <string name="menu_share_godtools">GodTools యాప్ పంచుకోండి</string>
     <string name="menu_share_story">మాతో ఒక కథను పంచుకోండి</string>
     <string name="menu_rate">GodToolsను రేట్ చేయండి</string>
     <string name="menu_terms_of_use">ఉపయోగ నిబంధనలు</string>
@@ -17,9 +17,9 @@
     <string name="menu_copyright">కాపీరైట్</string>
     <!-- Share a story -->
     <string name="share_story_subject">దేవుడు ఎలా కదులుతున్నాడో వినండి!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">మీ భాషలను సెట్ చేయండి</string>
     <!-- Tools UI -->
+    <string name="nav_find_tools">సాధనాలను కనుగొనండి</string>
+    <string name="nav_my_tools">నా సాధనాలు</string>
     <string name="menu_switch_language">భాషను మార్చండి</string>
     <string name="title_add_new_tools">కొత్త పరకరాలను జోడించండి</string>
     <string name="action_tools_download">డౌన్‌లోడ్</string>
@@ -33,7 +33,9 @@
         <item quantity="one">%1$,d భాష</item>
         <item quantity="other">%1$,d భాషలు</item>
     </plurals>
+    <string name="text_tools_all_installed">అందుబాటులో ఉన్న అన్ని పరికరాలను మీరు డౌన్‌లోడ్ చేశారు.</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">60+ భాషలు</string>
     <string name="menu_language_settings">భాష సెట్టింగ్స్</string>
     <string name="title_language_settings">భాష సెట్టింగ్స్</string>
     <string name="title_language_primary">ప్రాథమిక భాష</string>

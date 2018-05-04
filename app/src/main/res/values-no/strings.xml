@@ -9,7 +9,7 @@
     <string name="menu_about">Om</string>
     <string name="menu_help">Hjelp</string>
     <string name="menu_contact_us">Kontakt oss</string>
-    <string name="menu_share_godtools">Del GodTools</string>
+    <string name="menu_share_godtools">Del GodTools-appen</string>
     <string name="menu_share_story">Del en historie med oss</string>
     <string name="menu_rate">Vurder GodTools</string>
     <string name="menu_terms_of_use">Betingelser for bruk</string>
@@ -17,8 +17,6 @@
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
     <string name="share_story_subject">Hør hvordan Gud rører!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">Angi språk</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Finn verktøy</string>
     <string name="nav_my_tools">Mine verktøy</string>
@@ -35,7 +33,9 @@
         <item quantity="one">%1$,d språk</item>
         <item quantity="other">%1$,d språk</item>
     </plurals>
+    <string name="text_tools_all_installed">Du har lastet ned alle tilgjengelige verktøy.</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">Over 60 språk</string>
     <string name="menu_language_settings">Språkinnstillinger</string>
     <string name="title_language_settings">Språkinnstillinger</string>
     <string name="title_language_primary">Hovedspråk</string>

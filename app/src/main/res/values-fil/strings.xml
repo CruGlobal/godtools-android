@@ -9,7 +9,7 @@
     <string name="menu_about">Tungkol dito</string>
     <string name="menu_help">Tulong</string>
     <string name="menu_contact_us">Kontakin Kami</string>
-    <string name="menu_share_godtools">Ibahagi ang GodTools</string>
+    <string name="menu_share_godtools">I-share ang GodTools App</string>
     <string name="menu_share_story">Magbahagi ng Kuwento sa Amin</string>
     <string name="menu_rate">I-rate ang GodTools</string>
     <string name="menu_terms_of_use">Mga Tuntunin ng Paggamit</string>
@@ -17,8 +17,6 @@
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
     <string name="share_story_subject">Pakinggan kung paano nakakabagabag ng puso ang Diyos!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">I-set ang Iyong Mga Wika</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Makahanap ng Mga Tool</string>
     <string name="nav_my_tools">Mga Tool Ko</string>
@@ -35,7 +33,9 @@
         <item quantity="one">%1$,d Wika</item>
         <item quantity="other">%1$,d (na) Wika</item>
     </plurals>
+    <string name="text_tools_all_installed">Na-download mo ang lahat ng available na tool.</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">60+ Wika</string>
     <string name="menu_language_settings">Mga Setting ng Wika</string>
     <string name="title_language_settings">Mga Setting ng Wika</string>
     <string name="title_language_primary">Pangunahing Wika</string>

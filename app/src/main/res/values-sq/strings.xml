@@ -17,8 +17,6 @@
     <string name="menu_copyright">E drejta e autorit</string>
     <!-- Share a story -->
     <string name="share_story_subject">Dëgjo se si Perëndia po punon.</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">Vendos gjuhët e tua</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Gjej Burimet​</string>
     <string name="nav_my_tools">Burimet e mia</string>
@@ -36,6 +34,7 @@
         <item quantity="other">%1,d e gjuhëve</item>
     </plurals>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">60+ gjuhët</string>
     <string name="menu_language_settings">Kushtet e gjuhës</string>
     <string name="title_language_settings">Kushtet e gjuhës</string>
     <string name="title_language_primary">Gjuha kryesore</string>

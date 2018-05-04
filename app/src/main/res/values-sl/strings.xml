@@ -17,8 +17,6 @@
     <string name="menu_copyright">Založniške pravice</string>
     <!-- Share a story -->
     <string name="share_story_subject">Poslušaj, kako deluje Bog!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">Izberi jezike</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Dodaj orodje</string>
     <string name="nav_my_tools">Moja orodja</string>
@@ -40,6 +38,7 @@
         <item quantity="two">%1$,d jezika</item>
     </plurals>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">60+ jezike</string>
     <string name="menu_language_settings">Jezikovne nastavitve</string>
     <string name="title_language_settings">Jezikovne nastavitve</string>
     <string name="title_language_primary">Osnovni jezik</string>

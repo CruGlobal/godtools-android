@@ -9,7 +9,7 @@
     <string name="menu_about">Despre</string>
     <string name="menu_help">Ajutor</string>
     <string name="menu_contact_us">Contactează-ne</string>
-    <string name="menu_share_godtools">Distribuie GodTools</string>
+    <string name="menu_share_godtools">Distribuie aplicația GodTools</string>
     <string name="menu_share_story">Împărtășește o poveste cu noi</string>
     <string name="menu_rate">Evaluează GodTools</string>
     <string name="menu_terms_of_use">Condiții de utilizare</string>
@@ -17,8 +17,6 @@
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
     <string name="share_story_subject">Află cum lucrează Dumnezeu!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">Setează limbile</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Găsește instrumente</string>
     <string name="nav_my_tools">Instrumentele mele</string>
@@ -37,7 +35,9 @@
         <item quantity="other">%1$,d limbi</item>
         <item quantity="few">%1$,d limbi</item>
     </plurals>
+    <string name="text_tools_all_installed">Ai descărcat toate instrumentele disponibile.</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">Peste 60 de limbi</string>
     <string name="menu_language_settings">Setări de limbă</string>
     <string name="title_language_settings">Setări de limbă</string>
     <string name="title_language_primary">Limba principală</string>

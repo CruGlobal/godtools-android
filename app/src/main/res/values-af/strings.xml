@@ -9,15 +9,13 @@
     <string name="menu_about">Aangaande</string>
     <string name="menu_help">Hulp</string>
     <string name="menu_contact_us">Kontak ons</string>
-    <string name="menu_share_godtools">Deel GodTools</string>
+    <string name="menu_share_godtools">Deel die GodTools-toep</string>
     <string name="menu_share_story">Deel \'n storie met ons</string>
     <string name="menu_terms_of_use">Gebruiksvoorwaardes</string>
     <string name="menu_privacy_policy">Privaatheidsbeleid</string>
     <string name="menu_copyright">Kopiereg</string>
     <!-- Share a story -->
     <string name="share_story_subject">Hoor hoe God beweeg!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">Stel jou Tale in</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Vind hulpmiddels</string>
     <string name="nav_my_tools">My hulpmiddels</string>
@@ -34,7 +32,9 @@
         <item quantity="one">%1$,d Taal</item>
         <item quantity="other">%1$,d Tale</item>
     </plurals>
+    <string name="text_tools_all_installed">Jy het alle beskikbare nutsmiddele afgelaai.</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">60+Tale</string>
     <string name="menu_language_settings">Taalinstellings</string>
     <string name="title_language_settings">Taalinstellings</string>
     <string name="title_language_primary">Primêre taal</string>

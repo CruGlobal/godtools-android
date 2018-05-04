@@ -9,7 +9,7 @@
     <string name="menu_about">정보</string>
     <string name="menu_help">도움말</string>
     <string name="menu_contact_us">연락처</string>
-    <string name="menu_share_godtools">GodTools 공유</string>
+    <string name="menu_share_godtools">GodTools 앱 공유</string>
     <string name="menu_share_story">이야기를 공유하세요</string>
     <string name="menu_rate">GodTools 평가</string>
     <string name="menu_terms_of_use">이용 약관</string>
@@ -17,8 +17,6 @@
     <string name="menu_copyright">저작권</string>
     <!-- Share a story -->
     <string name="share_story_subject">신이 어떻게 움직이는지 들어보세요!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">언어 설정</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">도구 찾기</string>
     <string name="nav_my_tools">내 도구</string>
@@ -33,7 +31,9 @@
     <plurals name="label_tools_languages">
         <item quantity="other">%1$,d 언어</item>
     </plurals>
+    <string name="text_tools_all_installed">모든 이용 가능한 도구를 다운로드했습니다.</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">60개 이상의 언어</string>
     <string name="menu_language_settings">언어 설정</string>
     <string name="title_language_settings">언어 설정</string>
     <string name="title_language_primary">기본 언어</string>

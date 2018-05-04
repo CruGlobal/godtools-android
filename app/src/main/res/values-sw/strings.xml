@@ -9,7 +9,7 @@
     <string name="menu_about">Kuhusu</string>
     <string name="menu_help">Msaada</string>
     <string name="menu_contact_us">Wasiliana Nasi</string>
-    <string name="menu_share_godtools">Shirikisha wenzako na Zana za Mungu</string>
+    <string name="menu_share_godtools">Shirikisha wenzako na Programu ya Zana za Mungu</string>
     <string name="menu_share_story">Tushirikishe Kwenye Hadithi Yako</string>
     <string name="menu_rate">Tathmini Zana za Mungu</string>
     <string name="menu_terms_of_use">Masharti ya Matumizi</string>
@@ -17,8 +17,6 @@
     <string name="menu_copyright">Hati miliki</string>
     <!-- Share a story -->
     <string name="share_story_subject">Sikiliza namna Mungu anavyotembea!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">Weka Lugha Zako</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Pata Zana</string>
     <string name="nav_my_tools">Zana Zangu</string>
@@ -35,7 +33,9 @@
         <item quantity="one">Lugha %1$,d</item>
         <item quantity="other">Lugha %1$,d</item>
     </plurals>
+    <string name="text_tools_all_installed">Umepakua zana zote zilizopo.</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">Lugha Sitini na Zaidi</string>
     <string name="menu_language_settings">Mipangilio ya Lugha</string>
     <string name="title_language_settings">Mipangilio ya Lugha</string>
     <string name="title_language_primary">Lugha ya Msingi</string>

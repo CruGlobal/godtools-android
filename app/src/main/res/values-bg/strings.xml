@@ -9,7 +9,7 @@
     <string name="menu_about">За приложението</string>
     <string name="menu_help">Помощ</string>
     <string name="menu_contact_us">Свържете се с нас</string>
-    <string name="menu_share_godtools">Споделете GodTools</string>
+    <string name="menu_share_godtools">Споделете приложението GodTools</string>
     <string name="menu_share_story">Споделете една история с нас</string>
     <string name="menu_rate">Оценете GodTools</string>
     <string name="menu_terms_of_use">Условия за употреба</string>
@@ -17,8 +17,6 @@
     <string name="menu_copyright">Авторско право</string>
     <!-- Share a story -->
     <string name="share_story_subject">Чуйте как се движи Бог</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">Настройте Вашите езици</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Намиране на инструменти</string>
     <string name="nav_my_tools">Моите инструменти</string>
@@ -35,7 +33,9 @@
         <item quantity="one">%1$,d език</item>
         <item quantity="other">%1$,d езици</item>
     </plurals>
+    <string name="text_tools_all_installed">Вие изтеглихте всички налични инструменти.</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">60+ Езика</string>
     <string name="menu_language_settings">Езикови настройки</string>
     <string name="title_language_settings">Езикови настройки</string>
     <string name="title_language_primary">Главен език</string>

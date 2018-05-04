@@ -9,7 +9,7 @@
     <string name="menu_about">关于</string>
     <string name="menu_help">帮助</string>
     <string name="menu_contact_us">联系我们</string>
-    <string name="menu_share_godtools">分享GodTools</string>
+    <string name="menu_share_godtools">分享GodTools应用</string>
     <string name="menu_share_story">与我们分享故事</string>
     <string name="menu_rate">为GodTools评分</string>
     <string name="menu_terms_of_use">使用条款</string>
@@ -17,8 +17,6 @@
     <string name="menu_copyright">版权</string>
     <!-- Share a story -->
     <string name="share_story_subject">聆听神是如何作工的！</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">设置您的语言</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">查找工具</string>
     <string name="nav_my_tools">我的工具</string>
@@ -33,7 +31,9 @@
     <plurals name="label_tools_languages">
         <item quantity="other">%1$,d 种语言</item>
     </plurals>
+    <string name="text_tools_all_installed">您已下载所有可用工具。</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">60多种语言</string>
     <string name="menu_language_settings">语言设置</string>
     <string name="title_language_settings">语言设置</string>
     <string name="title_language_primary">主要语言</string>

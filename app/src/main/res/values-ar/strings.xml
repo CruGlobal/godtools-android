@@ -9,7 +9,7 @@
     <string name="menu_about">حول</string>
     <string name="menu_help">مساعدة</string>
     <string name="menu_contact_us">اتصل بنا</string>
-    <string name="menu_share_godtools">شارك GodTools</string>
+    <string name="menu_share_godtools">شارك تطبيق GodTools</string>
     <string name="menu_share_story">شارك قصة معنا</string>
     <string name="menu_rate">قيم GodTools</string>
     <string name="menu_terms_of_use">شروط الاستخدام</string>
@@ -17,8 +17,6 @@
     <string name="menu_copyright">حق النشر والتأليف</string>
     <!-- Share a story -->
     <string name="share_story_subject">استمع لكيفية تحرك الرب!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">حدد لغاتك</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">إيجاد أدوات</string>
     <string name="nav_my_tools">أدواتي</string>
@@ -43,7 +41,9 @@
         <item quantity="two">%1$,d لغتين</item>
         <item quantity="zero">%1$,d لغة</item>
     </plurals>
+    <string name="text_tools_all_installed">لقد حملت كل الأدوات المتوفرة.</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">+60 لغة</string>
     <string name="menu_language_settings">إعدادات اللغة</string>
     <string name="title_language_settings">إعدادات اللغات</string>
     <string name="title_language_primary">اللغة الرئيسية</string>

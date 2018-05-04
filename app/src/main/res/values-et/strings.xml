@@ -17,9 +17,9 @@
     <string name="menu_copyright">Autoriõigus</string>
     <!-- Share a story -->
     <string name="share_story_subject">Kuula, kuidas Jumal tegutseb!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">Seadista oma keeled</string>
     <!-- Tools UI -->
+    <string name="nav_find_tools">Ei ole saadaval</string>
+    <string name="nav_my_tools">Leia tööriistu</string>
     <string name="menu_switch_language">Vaheta keelt</string>
     <string name="title_add_new_tools">Lisa uusi tööriistu</string>
     <string name="action_tools_download">Laadi alla</string>
@@ -33,7 +33,9 @@
         <item quantity="one">%1$,d keel</item>
         <item quantity="other">%1$,d keelt</item>
     </plurals>
+    <string name="text_tools_all_installed">"Sa oled alla laadinud kõik olemasolevad tööriistad. "</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">60+ keelt</string>
     <string name="menu_language_settings">Keeleseaded</string>
     <string name="title_language_settings">Keeleseaded</string>
     <string name="title_language_primary">Põhikeel</string>
