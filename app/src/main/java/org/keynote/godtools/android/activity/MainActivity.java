@@ -336,6 +336,10 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
             case FEATURE_LANGUAGE_SETTINGS:
                 assert mToolbar != null : "canShowFeatureDiscovery() verifies mToolbar is not null";
                 if (mToolbar.findViewById(R.id.action_switch_language) != null) {
+                    // purge any pending feature discovery triggers since we are showing feature discovery now
+                    purgeQueuedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS);
+
+                    // show language settings feature discovery
                     final TapTarget target = TapTarget.forToolbarMenuItem(
                             mToolbar, R.id.action_switch_language,
                             getString(R.string.feature_discovery_title_language_settings),
@@ -356,17 +360,16 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     }
 
     private void dispatchDelayedFeatureDiscovery(@NonNull final String feature, final boolean force, final long delay) {
-        // remove all previously queued feature discovery tasks for this feature if we are forcing it now
-        if (force) {
-            mTaskHandler.removeMessages(TASK_FEATURE_DISCOVERY, feature);
-        }
-
         final Message msg = mTaskHandler.obtainMessage(TASK_FEATURE_DISCOVERY, feature);
         final Bundle data = new Bundle();
         data.putString(EXTRA_FEATURE, feature);
         data.putBoolean(EXTRA_FORCE, force);
         msg.setData(data);
         mTaskHandler.sendMessageDelayed(msg, delay);
+    }
+
+    private void purgeQueuedFeatureDiscovery(@NonNull final String feature) {
+        mTaskHandler.removeMessages(TASK_FEATURE_DISCOVERY, feature);
     }
 
     private class LanguageSettingsFeatureDiscoveryListener extends TapTargetView.Listener {
