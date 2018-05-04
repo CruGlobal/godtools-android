@@ -15,7 +15,7 @@
     <!-- Share a story -->
     <!-- Tour UI -->
     <string name="title_tour_tools">নতুন সরঞ্জাম যোগ করুন</string>
-    <string name="title_tour_language">আপনার ভাষা সেট করুন</string>
+    <string name="feature_discovery_title_language_settings">আপনার ভাষা সেট করুন</string>
     <string name="action_tour_ok">ঠিক আছে</string>
     <string name="action_tour_now">ekhon</string>
     <string name="action_tour_later">পরে</string>

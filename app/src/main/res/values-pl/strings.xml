@@ -19,7 +19,7 @@
     <string name="share_story_subject">Posłuchaj o tym jak porusza się Bóg we świecie!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">Dodaj Nowe Narzędzia</string>
-    <string name="title_tour_language">Ustaw języki</string>
+    <string name="feature_discovery_title_language_settings">Ustaw języki</string>
     <string name="action_tour_ok">Okej</string>
     <string name="action_tour_now">Teraz</string>
     <string name="action_tour_later">Później</string>

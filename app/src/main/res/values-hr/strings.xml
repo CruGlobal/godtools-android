@@ -19,7 +19,7 @@
     <string name="share_story_subject">Poslušajte kako nas Bog nadahnjuje!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">Dodaj nove alate</string>
-    <string name="title_tour_language">Odredite svoje jezike</string>
+    <string name="feature_discovery_title_language_settings">Odredite svoje jezike</string>
     <string name="action_tour_ok">U redu</string>
     <string name="action_tour_now">Odmah</string>
     <string name="action_tour_later">Kasnije</string>

@@ -19,7 +19,7 @@
     <string name="share_story_subject">Tanrı\'nın nasıl hareket ettiğini duyun!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">Yeni Araçlar Ekle</string>
-    <string name="title_tour_language">Dillerinizi Ayarlayın</string>
+    <string name="feature_discovery_title_language_settings">Dillerinizi Ayarlayın</string>
     <string name="action_tour_ok">Tamam</string>
     <string name="action_tour_now">Şimdi</string>
     <string name="action_tour_later">Daha Sonra</string>

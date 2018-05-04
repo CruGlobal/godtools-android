@@ -19,7 +19,7 @@
     <string name="share_story_subject">దేవుడు ఎలా కదులుతున్నాడో వినండి!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">కొత్త సాధనాలను జోడించండి</string>
-    <string name="title_tour_language">మీ భాషలను సెట్ చేయండి</string>
+    <string name="feature_discovery_title_language_settings">మీ భాషలను సెట్ చేయండి</string>
     <string name="action_tour_ok">సరే</string>
     <string name="action_tour_now">ఇప్పుడు</string>
     <string name="action_tour_later">తరువాత</string>

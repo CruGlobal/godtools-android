@@ -19,7 +19,7 @@
     <string name="share_story_subject">Halld Isten cselekedeteit!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">Új eszközök hozzáadása</string>
-    <string name="title_tour_language">A nyelvek beállítása</string>
+    <string name="feature_discovery_title_language_settings">A nyelvek beállítása</string>
     <string name="action_tour_ok">OK</string>
     <string name="action_tour_now">Most</string>
     <string name="action_tour_later">Később</string>

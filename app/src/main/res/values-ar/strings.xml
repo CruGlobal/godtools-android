@@ -19,7 +19,7 @@
     <string name="share_story_subject">استمع لكيفية تحرك الرب!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">إضافة أدوات جديدة</string>
-    <string name="title_tour_language">حدد لغاتك</string>
+    <string name="feature_discovery_title_language_settings">حدد لغاتك</string>
     <string name="action_tour_ok">حسناً</string>
     <string name="action_tour_now">الآن</string>
     <string name="action_tour_later">لاحقاً</string>

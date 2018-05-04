@@ -19,7 +19,7 @@
     <string name="share_story_subject">Poslechněte si, jak Bůh hýbe světem!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">Přidat nové nástroje</string>
-    <string name="title_tour_language">Nastavení jazyků</string>
+    <string name="feature_discovery_title_language_settings">Nastavení jazyků</string>
     <string name="action_tour_ok">OK</string>
     <string name="action_tour_now">Nyní</string>
     <string name="action_tour_later">Později</string>

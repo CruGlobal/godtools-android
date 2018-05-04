@@ -19,7 +19,7 @@
     <string name="share_story_subject">Ακούστε πώς κινείται ο Θεός!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">Προσθήκη Νέων Εργαλείων</string>
-    <string name="title_tour_language">Ορίστε τις γλώσσες σας</string>
+    <string name="feature_discovery_title_language_settings">Ορίστε τις γλώσσες σας</string>
     <string name="action_tour_ok">Εντάξει</string>
     <string name="action_tour_now">Τώρα</string>
     <string name="action_tour_later">Αργότερα</string>

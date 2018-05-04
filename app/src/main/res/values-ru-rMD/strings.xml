@@ -19,7 +19,7 @@
     <string name="share_story_subject">Услышьте поступь божью!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">Добавить новые инструменты</string>
-    <string name="title_tour_language">Установите свои языки</string>
+    <string name="feature_discovery_title_language_settings">Установите свои языки</string>
     <string name="action_tour_ok">Ок</string>
     <string name="action_tour_now">Сейчас</string>
     <string name="action_tour_later">Позже</string>

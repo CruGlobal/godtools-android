@@ -54,7 +54,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     // Navigation Drawer
     @Nullable
     @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
+    protected DrawerLayout mDrawerLayout;
     @Nullable
     @BindView(R.id.drawer_menu)
     NavigationView mDrawerMenu;
@@ -120,7 +120,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
                 }
                 break;
             case R.id.action_switch_language:
-                LanguageSettingsActivity.start(this);
+                showLanguageSettings();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -287,6 +287,10 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
         } catch (@NonNull final ActivityNotFoundException e) {
             WebUrlLauncher.openUrl(this, URI_SUPPORT);
         }
+    }
+
+    protected void showLanguageSettings() {
+        LanguageSettingsActivity.start(this);
     }
 
     class ChangeListener implements SharedPreferences.OnSharedPreferenceChangeListener {

@@ -19,7 +19,7 @@
     <string name="share_story_subject">Чујте како се Бог креће!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">Додај нове алате</string>
-    <string name="title_tour_language">Подесите своје језике</string>
+    <string name="feature_discovery_title_language_settings">Подесите своје језике</string>
     <string name="action_tour_ok">У реду</string>
     <string name="action_tour_now">Сад</string>
     <string name="action_tour_later">Касније</string>

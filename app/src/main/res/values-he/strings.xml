@@ -19,7 +19,7 @@
     <string name="share_story_subject">הקשיבו איך האל זז!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">הוסיפו כלים חדשים</string>
-    <string name="title_tour_language">הגדירו את השפה שלכם</string>
+    <string name="feature_discovery_title_language_settings">הגדירו את השפה שלכם</string>
     <string name="action_tour_ok">בסדר</string>
     <string name="action_tour_now">עכשיו</string>
     <string name="action_tour_later">אחר כך</string>

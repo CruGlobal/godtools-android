@@ -19,7 +19,7 @@
     <string name="share_story_subject">Pakinggan kung paano nakakabagabag ng puso ang Diyos!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">Magdagdag ng Mga Bagong Tool</string>
-    <string name="title_tour_language">I-set ang Iyong Mga Wika</string>
+    <string name="feature_discovery_title_language_settings">I-set ang Iyong Mga Wika</string>
     <string name="action_tour_ok">Okay</string>
     <string name="action_tour_now">Ngayon</string>
     <string name="action_tour_later">Sa Ibang Pagkakataon</string>

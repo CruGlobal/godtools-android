@@ -19,7 +19,7 @@
     <string name="share_story_subject">Почуйте, як Бог пробуджує сердце!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">Додати інструменти</string>
-    <string name="title_tour_language">Встановіть мови</string>
+    <string name="feature_discovery_title_language_settings">Встановіть мови</string>
     <string name="action_tour_ok">Добре</string>
     <string name="action_tour_now">Зараз</string>
     <string name="action_tour_later">Потім</string>

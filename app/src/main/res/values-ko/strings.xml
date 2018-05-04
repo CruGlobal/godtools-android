@@ -19,7 +19,7 @@
     <string name="share_story_subject">신이 어떻게 움직이는지 들어보세요!</string>
     <!-- Tour UI -->
     <string name="title_tour_tools">새 도구 추가</string>
-    <string name="title_tour_language">언어 설정</string>
+    <string name="feature_discovery_title_language_settings">언어 설정</string>
     <string name="action_tour_ok">확인</string>
     <string name="action_tour_now">지금</string>
     <string name="action_tour_later">나중에</string>
