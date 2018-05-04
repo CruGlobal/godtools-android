@@ -91,7 +91,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     @Override
     public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
