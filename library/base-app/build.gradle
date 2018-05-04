@@ -30,4 +30,5 @@ dependencies {
     implementation "com.newrelic.agent.android:android-agent:${deps.newrelic}"
 
     implementation "com.jakewharton.timber:timber:${deps.timber}"
+    api "org.greenrobot:eventbus:${deps.eventbus}"
 }
