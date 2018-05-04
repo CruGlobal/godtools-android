@@ -16,11 +16,7 @@
     <string name="menu_privacy_policy">Politika Fiarovana</string>
     <!-- Share a story -->
     <!-- Tour UI -->
-    <string name="title_tour_tools">Hanampy Fitaovana Hafa</string>
     <string name="feature_discovery_title_language_settings">Safidio ny Fiteninao</string>
-    <string name="action_tour_ok">OK</string>
-    <string name="action_tour_now">Ankehitriny</string>
-    <string name="action_tour_later">Aoriana</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Hikaroka Fitaovana</string>
     <string name="nav_my_tools">Ireo Fitaovana</string>

@@ -14,11 +14,7 @@
     <string name="menu_copyright">কপিরাইট তথ্য</string>
     <!-- Share a story -->
     <!-- Tour UI -->
-    <string name="title_tour_tools">নতুন সরঞ্জাম যোগ করুন</string>
     <string name="feature_discovery_title_language_settings">আপনার ভাষা সেট করুন</string>
-    <string name="action_tour_ok">ঠিক আছে</string>
-    <string name="action_tour_now">ekhon</string>
-    <string name="action_tour_later">পরে</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">সরঞ্জাম খুঁজুন</string>
     <string name="nav_my_tools">আমার সরঞ্জামগুলি</string>

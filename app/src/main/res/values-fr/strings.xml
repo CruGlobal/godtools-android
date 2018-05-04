@@ -18,11 +18,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">Découvrez comment Dieu agit !</string>
     <!-- Tour UI -->
-    <string name="title_tour_tools">Ajouter de nouveaux outils</string>
     <string name="feature_discovery_title_language_settings">Définissez vos langues</string>
-    <string name="action_tour_ok">OK</string>
-    <string name="action_tour_now">Maintenant</string>
-    <string name="action_tour_later">Plus tard</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Trouver des outils</string>
     <string name="nav_my_tools">Mes outils</string>

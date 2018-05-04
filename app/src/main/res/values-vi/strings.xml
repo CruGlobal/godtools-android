@@ -18,11 +18,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">Nghe xem Chúa di chuyển như thế nào!</string>
     <!-- Tour UI -->
-    <string name="title_tour_tools">Thêm các Công cụ Mới</string>
     <string name="feature_discovery_title_language_settings">Thiết lập Ngôn ngữ của Bạn</string>
-    <string name="action_tour_ok">Ok</string>
-    <string name="action_tour_now">Ngay bây giờ</string>
-    <string name="action_tour_later">Để sau</string>
     <!-- Tools UI -->
     <string name="menu_switch_language">Chuyển Ngôn ngữ</string>
     <string name="title_add_new_tools">Thêm các Công cụ Mới</string>

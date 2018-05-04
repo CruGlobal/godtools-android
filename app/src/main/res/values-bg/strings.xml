@@ -18,11 +18,7 @@
     <!-- Share a story -->
     <string name="share_story_subject">Чуйте как се движи Бог</string>
     <!-- Tour UI -->
-    <string name="title_tour_tools">Добавете нови инструменти</string>
     <string name="feature_discovery_title_language_settings">Настройте Вашите езици</string>
-    <string name="action_tour_ok">ОК</string>
-    <string name="action_tour_now">Сега</string>
-    <string name="action_tour_later">По-късно</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Намиране на инструменти</string>
     <string name="nav_my_tools">Моите инструменти</string>
