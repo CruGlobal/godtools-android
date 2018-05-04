@@ -326,8 +326,8 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
                     // TODO: the menu item just hasn't been drawn yet.
 
                     // the toolbar action isn't available yet.
-                    // re-attempt this feature discovery on the next iteration of the main Looper.
-                    mToolbar.post(() -> showFeatureDiscovery(feature, force));
+                    // re-attempt this feature discovery on the next frame iteration.
+                    mToolbar.postDelayed(() -> showFeatureDiscovery(feature, force), 17);
                 }
                 break;
         }
