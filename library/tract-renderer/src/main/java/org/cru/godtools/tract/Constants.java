@@ -8,6 +8,7 @@ public final class Constants {
 
     // deep link uri params
     public static final String PARAM_PRIMARY_LANGUAGE = "primaryLanguage";
+    public static final String PARAM_PARALLEL_LANGUAGE = "parallelLanguage";
 
     // common extras
     public static final String EXTRA_MANIFEST_FILE_NAME = "manifest_file";

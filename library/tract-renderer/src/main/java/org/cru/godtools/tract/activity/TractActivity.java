@@ -60,6 +60,8 @@ import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.model.Tool;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -69,6 +71,7 @@ import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
 import static org.cru.godtools.base.ui.util.LocaleTypefaceUtils.safeApplyTypefaceSpan;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
+import static org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE;
 import static org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE;
 
 public class TractActivity extends ImmersiveActivity
@@ -124,6 +127,7 @@ public class TractActivity extends ImmersiveActivity
     @NonNull
     /*final*/ Locale[] mLanguages = new Locale[0];
     /*final*/ int mPrimaryLanguages = 1;
+    /*final*/ int mParallelLanguages = 0;
 
     @Nullable
     private GodToolsDownloadManager mDownloadManager;
@@ -346,7 +350,9 @@ public class TractActivity extends ImmersiveActivity
 
     @NonNull
     private Locale[] processDeepLinkLanguages(@NonNull final Uri data) {
-        // extract raw locales from the uri
+        final List<Locale> locales = new ArrayList<>();
+
+        // process the primary languages specified in the uri
         final Locale uriLocale = LocaleCompat.forLanguageTag(data.getPathSegments().get(0));
         final List<Locale> rawPrimaryLanguages = Stream.of(data.getQueryParameters(PARAM_PRIMARY_LANGUAGE))
                 .flatMap(lang -> Stream.of(TextUtils.split(lang, ",")))
@@ -354,17 +360,29 @@ public class TractActivity extends ImmersiveActivity
                 .filterNot(TextUtils::isEmpty)
                 .map(LocaleCompat::forLanguageTag)
                 .toList();
-
-        // process the primary languages specified in the uri
         if (!rawPrimaryLanguages.isEmpty()) {
             rawPrimaryLanguages.add(uriLocale);
             final Locale[] primaryLanguages = LocaleCompat.getFallbacks(rawPrimaryLanguages.toArray(new Locale[0]));
+            Collections.addAll(locales, primaryLanguages);
             mPrimaryLanguages = primaryLanguages.length;
-            return primaryLanguages;
+        } else {
+            locales.add(uriLocale);
+            mPrimaryLanguages = 1;
         }
 
-        // default to the uri locale
-        return new Locale[] {uriLocale};
+        // process parallel languages specified in the uri
+        final Locale[] parallelLanguages = LocaleCompat.getFallbacks(
+                Stream.of(data.getQueryParameters(PARAM_PARALLEL_LANGUAGE))
+                        .flatMap(lang -> Stream.of(TextUtils.split(lang, ",")))
+                        .map(String::trim)
+                        .filterNot(TextUtils::isEmpty)
+                        .map(LocaleCompat::forLanguageTag)
+                        .toArray(Locale[]::new));
+        Collections.addAll(locales, parallelLanguages);
+        mParallelLanguages = parallelLanguages.length;
+
+        // return all the parsed languages
+        return locales.toArray(new Locale[0]);
     }
 
     @Nullable
@@ -407,8 +425,13 @@ public class TractActivity extends ImmersiveActivity
     @UiThread
     @VisibleForTesting
     void updateHiddenLanguages() {
-        int primaryLanguage = -1;
-        for (int i = 0; i < mLanguages.length; i++) {
+        showSingleBestLanguageInRange(0, mPrimaryLanguages);
+        showSingleBestLanguageInRange(mPrimaryLanguages, mPrimaryLanguages + mParallelLanguages);
+    }
+
+    private void showSingleBestLanguageInRange(final int start, final int end) {
+        int language = -1;
+        for (int i = start; i < mLanguages.length && i < end; i++) {
             // default hidden state to whether the language exists or not
             final int state = determineLanguageState(i);
             mHiddenLanguages[i] = state == STATE_NOT_FOUND;
@@ -418,23 +441,21 @@ public class TractActivity extends ImmersiveActivity
                 continue;
             }
 
-            // primary language specific logic
-            if (i < mPrimaryLanguages) {
-                if (mActiveLanguage == i || (state == STATE_LOADED && primaryLanguage == -1)) {
-                    // don't hide the primary language
-                    mHiddenLanguages[i] = false;
+            // is this language currently active, or is it loaded and we haven't found a language to show yet
+            if (mActiveLanguage == i || (state == STATE_LOADED && language == -1)) {
+                // don't hide the language
+                mHiddenLanguages[i] = false;
 
-                    // hide any previously identified primary languages
-                    if (primaryLanguage != -1) {
-                        mHiddenLanguages[primaryLanguage] = true;
-                    }
-
-                    // track our current primary language
-                    primaryLanguage = i;
-                } else {
-                    // hide any other potential primary language
-                    mHiddenLanguages[i] = true;
+                // hide any previously identified languages
+                if (language != -1) {
+                    mHiddenLanguages[language] = true;
                 }
+
+                // track our current language
+                language = i;
+            } else {
+                // hide any other potential language
+                mHiddenLanguages[i] = true;
             }
         }
     }
