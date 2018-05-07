@@ -9,7 +9,7 @@
     <string name="menu_about">Rólunk</string>
     <string name="menu_help">Súgó</string>
     <string name="menu_contact_us">Kapcsolatfelvétel</string>
-    <string name="menu_share_godtools">GodTools megosztása</string>
+    <string name="menu_share_godtools">A GodTools alkalmazás megosztása</string>
     <string name="menu_share_story">Ossz meg velünk egy történetet</string>
     <string name="menu_rate">Értékeld a GodTools-t</string>
     <string name="menu_terms_of_use">Használati feltételek</string>
@@ -17,8 +17,6 @@
     <string name="menu_copyright">Copyright</string>
     <!-- Share a story -->
     <string name="share_story_subject">Halld Isten cselekedeteit!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">A nyelvek beállítása</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Eszközök keresése</string>
     <string name="nav_my_tools">Saját eszközeim</string>
@@ -35,7 +33,9 @@
         <item quantity="one">%1$,d nyelv</item>
         <item quantity="other">%1$,d nyelv</item>
     </plurals>
+    <string name="text_tools_all_installed">Az összes elérhető eszközt letöltötted.</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">60+ nyelv</string>
     <string name="menu_language_settings">Nyelvbeállítások</string>
     <string name="title_language_settings">Nyelvbeállítások</string>
     <string name="title_language_primary">Elsődleges nyelv</string>

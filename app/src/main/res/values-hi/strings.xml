@@ -9,7 +9,7 @@
     <string name="menu_about">परिचय</string>
     <string name="menu_help">मदद</string>
     <string name="menu_contact_us">हमसे संपर्क करें</string>
-    <string name="menu_share_godtools">GodTools शेयर करें</string>
+    <string name="menu_share_godtools">GodTools ऐप शेयर करें</string>
     <string name="menu_share_story">हमसे कोई कहानी शेयर करें</string>
     <string name="menu_rate">GodTools को आंकें</string>
     <string name="menu_terms_of_use">प्रयोग की शर्तें</string>
@@ -17,9 +17,9 @@
     <string name="menu_copyright">कॉपीराइट</string>
     <!-- Share a story -->
     <string name="share_story_subject">गॉड का चलना सुनें!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">अपनी भाषा निर्धारित करें</string>
     <!-- Tools UI -->
+    <string name="nav_find_tools">टूल्स खोजें</string>
+    <string name="nav_my_tools">मेरे टूल्स</string>
     <string name="menu_switch_language">भाषा बदलें</string>
     <string name="title_add_new_tools">नए टूल जोड़ें</string>
     <string name="action_tools_download">डाउनलोड</string>
@@ -33,7 +33,9 @@
         <item quantity="one">%1$,d भाषा</item>
         <item quantity="other">%1$,d भाषाएं</item>
     </plurals>
+    <string name="text_tools_all_installed">आपने सभी उपलब्ध टूल्स डाउनलोड कर लिए हैं।</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">60+ भाषाएँ</string>
     <string name="menu_language_settings">भाषा सेटिंग्स</string>
     <string name="title_language_settings">भाषा सेटिंग्स</string>
     <string name="title_language_primary">प्राथमिक भाषा</string>

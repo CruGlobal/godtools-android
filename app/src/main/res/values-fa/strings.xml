@@ -9,7 +9,7 @@
     <string name="menu_about">درباره</string>
     <string name="menu_help">راهنمایی</string>
     <string name="menu_contact_us">تماس با ما</string>
-    <string name="menu_share_godtools">اشتراگ‌گذاری GodTools</string>
+    <string name="menu_share_godtools">اشتراگ‌گذاری برنامه GodTools</string>
     <string name="menu_share_story">یک داستان با ما به اشتراک بگذارید</string>
     <string name="menu_rate">امتیازدهی به GodTools</string>
     <string name="menu_terms_of_use">شرایط استفاده</string>
@@ -17,8 +17,6 @@
     <string name="menu_copyright">حق نسخه‌برداری</string>
     <!-- Share a story -->
     <string name="share_story_subject">صدای حرکت خداوند را بشنوید!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">زبان خود را تنظیم کنید</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">یافتن ابزار</string>
     <string name="nav_my_tools">ابزار من</string>
@@ -35,7 +33,9 @@
         <item quantity="one">%1$,d زبان</item>
         <item quantity="other">%1$,d زبان</item>
     </plurals>
+    <string name="text_tools_all_installed">همه ابزارهای موجود را دانلود کرده‌اید.</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">+60 زبان</string>
     <string name="menu_language_settings">تنظیمات زبان</string>
     <string name="title_language_settings">تنظیمات زبان</string>
     <string name="title_language_primary">زبان اصلی</string>

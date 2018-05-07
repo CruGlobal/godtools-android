@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_share_tract">Ibahagi</string>
+    <string name="share_tract_title">Ibahagi ang “%1$s” gamit ang</string>
+    <string name="tract_not_found">Hindi mahanap ang tool na hiniling mo</string>
+    <string name="tract_loading">Naglo-load ang hiniling mong tool…</string>
+    <string name="tract_content_input_error_required">Kinakailangan ang %1$s</string>
+    <string name="tract_content_input_error_invalid_email">Mangyaring maglagay ng tamang email address</string>
+</resources>

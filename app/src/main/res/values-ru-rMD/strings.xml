@@ -17,8 +17,6 @@
     <string name="menu_copyright">Авторское право</string>
     <!-- Share a story -->
     <string name="share_story_subject">Услышьте поступь божью!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">Установите свои языки</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Другие</string>
     <string name="nav_my_tools">Мои инструменты</string>

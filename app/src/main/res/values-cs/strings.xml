@@ -17,8 +17,6 @@
     <string name="menu_copyright">Autorská práva</string>
     <!-- Share a story -->
     <string name="share_story_subject">Poslechněte si, jak Bůh hýbe světem!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">Nastavení jazyků</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Najít nástroje</string>
     <string name="nav_my_tools">Moje nástroje</string>
@@ -39,7 +37,9 @@
         <item quantity="few">%1$,d jazyků</item>
         <item quantity="many">%1$,d jazyků</item>
     </plurals>
+    <string name="text_tools_all_installed">Máte staženy všechny dostupné nástroje.</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">60+ jazyků</string>
     <string name="menu_language_settings">Jazyková nastavení</string>
     <string name="title_language_settings">Jazyková nastavení</string>
     <string name="title_language_primary">Primární jazyk</string>

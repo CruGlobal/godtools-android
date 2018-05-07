@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main Activity-->
+    <string name="share_prompt">Necə paylaşmaq istədiyinizi seçin</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Ümumi</string>
+    <string name="menu_heading_share">Paylaş</string>
+    <string name="menu_heading_legal">Hüquqi</string>
+    <string name="menu_about">Haqqında</string>
+    <string name="menu_help">Kömək</string>
+    <string name="menu_contact_us">Bizimlə əlaqə</string>
+    <string name="menu_share_godtools">GodTools App paylaşın</string>
+    <string name="menu_share_story">Bizimlə hekayənizi paylaşın</string>
+    <string name="menu_terms_of_use">İstifadə şərtləri</string>
+    <string name="menu_privacy_policy">Məxfilik siyasəti</string>
+    <string name="menu_copyright">Müəllif hüququ</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">God-un hərəkətini dinləyin!</string>
+    <!-- Tools UI -->
+    <string name="nav_find_tools">Alət tapın</string>
+    <string name="nav_my_tools">Mənim alətlərim</string>
+    <string name="menu_switch_language">Dili dəyiş</string>
+    <string name="title_add_new_tools">Yeni alətlər əlavə edin</string>
+    <string name="action_tools_download">Yüklə</string>
+    <string name="action_tools_remove">Sil</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d Baxış</item>
+        <item quantity="other">%1$,d Baxışlar</item>
+    </plurals>
+    <string name="label_tools_about">Haqqında</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d Dil</item>
+        <item quantity="other">%1$,d Dillər</item>
+    </plurals>
+    <string name="text_tools_all_installed">Bütün mövcud alətləri yükləmisiniz.</string>
+    <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">60+ Dillər</string>
+    <string name="menu_language_settings">Dil parametrləri</string>
+    <string name="title_language_settings">Dil parametrləri</string>
+    <string name="title_language_primary">Əsas dil</string>
+    <string name="title_language_parallel">Paralel dil</string>
+    <string name="action_language_parallel_select">Paralel dil seç</string>
+    <string name="text_language_parallel_description">GodTools-u insanlarla öz dillərində paylaş</string>
+    <string name="text_language_warning">Hər alət bütün dillərdə mövcud deyil.</string>
+    <string name="label_language_none">Heç biri</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Bu gün baxdığımız app-a keçid aşağıdadır: http://godtoolsapp.com \n\n
+
+App-ın veb versiyasına keçid {{share_link}} \n\n
+
+Gəlin daha çox danışaq!</string>
+</resources>

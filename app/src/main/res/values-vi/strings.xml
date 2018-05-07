@@ -9,7 +9,7 @@
     <string name="menu_about">Giới thiệu về</string>
     <string name="menu_help">Trợ giúp</string>
     <string name="menu_contact_us">Liên hệ chúng tôi</string>
-    <string name="menu_share_godtools">Chia sẻ GodTools</string>
+    <string name="menu_share_godtools">Chia sẻ Ứng dụng GodTools</string>
     <string name="menu_share_story">Chia sẻ một Câu chuyện với Chúng tôi</string>
     <string name="menu_rate">Đánh giá GodTools</string>
     <string name="menu_terms_of_use">Điều khoản Sử dụng</string>
@@ -17,9 +17,9 @@
     <string name="menu_copyright">Bản quyền</string>
     <!-- Share a story -->
     <string name="share_story_subject">Nghe xem Chúa di chuyển như thế nào!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">Thiết lập Ngôn ngữ của Bạn</string>
     <!-- Tools UI -->
+    <string name="nav_find_tools">Tìm Công cụ</string>
+    <string name="nav_my_tools">Công cụ của Tôi</string>
     <string name="menu_switch_language">Chuyển Ngôn ngữ</string>
     <string name="title_add_new_tools">Thêm các Công cụ Mới</string>
     <string name="action_tools_download">Tải về</string>
@@ -31,7 +31,9 @@
     <plurals name="label_tools_languages">
         <item quantity="other">%1$,d Ngôn ngữ</item>
     </plurals>
+    <string name="text_tools_all_installed">Bạn đã tải về tất cả các công cụ sẵn có.</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">Hơn 60 Thứ Tiếng</string>
     <string name="menu_language_settings">Các thiết lập Ngôn ngữ</string>
     <string name="title_language_settings">Các thiết lập Ngôn ngữ</string>
     <string name="title_language_primary">Ngôn ngữ Chính</string>

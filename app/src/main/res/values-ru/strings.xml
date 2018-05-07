@@ -9,7 +9,7 @@
     <string name="menu_about">О приложении</string>
     <string name="menu_help">Справка</string>
     <string name="menu_contact_us">Связаться с нами</string>
-    <string name="menu_share_godtools">Поделиться GodTools</string>
+    <string name="menu_share_godtools">Поделиться приложением GodTools</string>
     <string name="menu_share_story">Поделитесь с нами историей</string>
     <string name="menu_rate">Оценить GodTools</string>
     <string name="menu_terms_of_use">Условия использования</string>
@@ -17,8 +17,6 @@
     <string name="menu_copyright">Авторское право</string>
     <!-- Share a story -->
     <string name="share_story_subject">Услышьте поступь божью!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">Установите свои языки</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Другие</string>
     <string name="nav_my_tools">Мои инструменты</string>
@@ -39,7 +37,9 @@
         <item quantity="few">%1$,d языка</item>
         <item quantity="many">%1$,d языков</item>
     </plurals>
+    <string name="text_tools_all_installed">Вы загрузили все доступные инструменты.</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">Более 60 языков</string>
     <string name="menu_language_settings">Настройки языка</string>
     <string name="title_language_settings">Настройки языка</string>
     <string name="title_language_primary">Основной язык</string>

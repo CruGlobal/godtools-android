@@ -9,7 +9,7 @@
     <string name="menu_about">Sobre</string>
     <string name="menu_help">Ajuda</string>
     <string name="menu_contact_us">Contactar-nos</string>
-    <string name="menu_share_godtools">Partilhar GodTools</string>
+    <string name="menu_share_godtools">Partilhar a aplicação GodTools</string>
     <string name="menu_share_story">Partilhar uma história connosco</string>
     <string name="menu_rate">Avaliar GodTools</string>
     <string name="menu_terms_of_use">Termos de Utilização</string>
@@ -17,8 +17,6 @@
     <string name="menu_copyright">Direitos de Autor</string>
     <!-- Share a story -->
     <string name="share_story_subject">Ouve como Deus está a comover!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">Definir os idiomas</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Encontrar ferramentas</string>
     <string name="nav_my_tools">As minhas ferramentas</string>
@@ -35,7 +33,9 @@
         <item quantity="one">%1$,d idioma</item>
         <item quantity="other">%1$,d idiomas</item>
     </plurals>
+    <string name="text_tools_all_installed">Transferiu todas as ferramentas disponíveis.</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">Mais de 60 idiomas</string>
     <string name="menu_language_settings">Definições de idioma</string>
     <string name="title_language_settings">Definições de idioma</string>
     <string name="title_language_primary">Idioma principal</string>

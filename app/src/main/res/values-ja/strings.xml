@@ -9,7 +9,7 @@
     <string name="menu_about">情報</string>
     <string name="menu_help">ヘルプ</string>
     <string name="menu_contact_us">お問い合わせ</string>
-    <string name="menu_share_godtools">GodToolsをシェア</string>
+    <string name="menu_share_godtools">GodToolsアプリをシェア</string>
     <string name="menu_share_story">体験談を紹介</string>
     <string name="menu_rate">GodToolsの評価</string>
     <string name="menu_terms_of_use">利用規約</string>
@@ -17,8 +17,6 @@
     <string name="menu_copyright">著作権</string>
     <!-- Share a story -->
     <string name="share_story_subject">神とのストーリーを聞いてみましょう。</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">言語を設定</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">ツールを探す</string>
     <string name="nav_my_tools">マイツール</string>
@@ -33,7 +31,9 @@
     <plurals name="label_tools_languages">
         <item quantity="other">%1$,d 言語</item>
     </plurals>
+    <string name="text_tools_all_installed">利用可能なツールをすべてダウンロードしました。</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">60種類以上の言語</string>
     <string name="menu_language_settings">言語設定</string>
     <string name="title_language_settings">言語設定</string>
     <string name="title_language_primary">第1言語</string>

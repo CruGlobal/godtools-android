@@ -9,7 +9,7 @@
     <string name="menu_about">Про програму</string>
     <string name="menu_help">Підтримка</string>
     <string name="menu_contact_us">Зв\'язок з нами</string>
-    <string name="menu_share_godtools">Поширити GodTools</string>
+    <string name="menu_share_godtools">Показати GodTools іншим</string>
     <string name="menu_share_story">Розкажіть нам історію</string>
     <string name="menu_rate">Оцінити GodTools</string>
     <string name="menu_terms_of_use">Умови користування</string>
@@ -17,8 +17,6 @@
     <string name="menu_copyright">Авторське право</string>
     <!-- Share a story -->
     <string name="share_story_subject">Почуйте, як Бог пробуджує сердце!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">Встановіть мови</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Шукати інструменти</string>
     <string name="nav_my_tools">Інструменти</string>
@@ -39,7 +37,9 @@
         <item quantity="few">%1$,d мови</item>
         <item quantity="many">%1$,d мов</item>
     </plurals>
+    <string name="text_tools_all_installed">Ви завантажили усі доступні інструменти.</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">Понад 60 мов</string>
     <string name="menu_language_settings">Налаштування мови</string>
     <string name="title_language_settings">Налаштування мови</string>
     <string name="title_language_primary">Основна мова</string>

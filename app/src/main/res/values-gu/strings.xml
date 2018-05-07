@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main Activity-->
+    <string name="share_prompt">તમે કેવી રીતે વહેંચવા માંગો છો તે પસંદ કરો</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">સામાન્ય</string>
+    <string name="menu_heading_share">વહેંચો</string>
+    <string name="menu_heading_legal">કાનૂની</string>
+    <string name="menu_about">વિશે/આશરે</string>
+    <string name="menu_help">મદદ</string>
+    <string name="menu_contact_us">સંપર્ક સાંધો</string>
+    <string name="menu_share_godtools">\'ગોડ ટુલ્સ\' વહેંચો</string>
+    <string name="menu_share_story">તમારી વાત અમને કહો</string>
+    <string name="menu_terms_of_use">વાપરવા માટેની શરતો</string>
+    <string name="menu_privacy_policy">અંગત પૉલિસી/નીતી</string>
+    <string name="menu_copyright">કોપીરાઈટ માહિતી</string>
+    <!-- Share a story -->
+    <string name="share_story_subject">ઈશ્વર કેવી રીતે કાર્ય કરે છે તે સાંભળો!</string>
+    <!-- Tools UI -->
+    <string name="nav_find_tools">સાધનો/ટુલ્સ શોધો</string>
+    <string name="nav_my_tools">મારા સાધનો/ટુલ્સ</string>
+    <string name="menu_switch_language">ભાષાની ફેરબદલી કરો</string>
+    <string name="title_add_new_tools">નવા સાધનો/ટુલ્સ ઉમેરો</string>
+    <string name="action_tools_download">ડાઉનલોડ</string>
+    <string name="action_tools_remove">દૂર કરો</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d દર્શક</item>
+        <item quantity="other">%1$,d દર્શકો</item>
+    </plurals>
+    <string name="label_tools_about">વિશે/આશરે</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d ભાષા</item>
+        <item quantity="other">%1$,d ભાષાઓ</item>
+    </plurals>
+    <string name="text_tools_all_installed">પ્રાપ્ય બધાં જ સાધનો/ટુલ્સ તમે ડાઉનલોડ કરી લીધાં છે.</string>
+    <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">૬૦થી વધારે ભાષાઓ</string>
+    <string name="menu_language_settings">ભાષા સુયોજન</string>
+    <string name="title_language_settings">ભાષા સુયોજન</string>
+    <string name="title_language_primary">પ્રાથમિક ભાષા</string>
+    <string name="title_language_parallel">સમાંતર ભાષા</string>
+    <string name="action_language_parallel_select">સમાંતર ભાષા પસંદ કરો</string>
+    <string name="text_language_parallel_description">કોઈની સાથે તેની જ મૂળ ભાષામાં \'ગોડ ટુલ્સ\' વહેંચો</string>
+    <string name="text_language_warning">બધી જ ભાષામાં બધાં જ સાધનો/ટુલ્સ પ્રાપ્ય નથી</string>
+    <string name="label_language_none">એક પણ નહિ</string>
+    <!-- Sharing -->
+    <string name="share_general_message">આજે આપણે જે એપ જોતા હતાં તે ડાઉનલોડ કરવા માટેની લીંક: http://godtoolsapp.com \n\n
+
+આ એપ ની વેબ વર્ઝનની લીંક 
+{{share_link}} \n\n
+
+ચાલો, વાત આગળ વધારીએ!</string>
+</resources>

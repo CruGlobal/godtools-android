@@ -17,8 +17,6 @@
     <string name="menu_copyright">Autorské právo</string>
     <!-- Share a story -->
     <string name="share_story_subject">Vypočujte si, aký je boh pôsobivý!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">Nastavte si jazyky</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">Nájsť nástroje</string>
     <string name="nav_my_tools">Moje nástroje</string>
@@ -39,7 +37,9 @@
         <item quantity="few">%1$,d jazyky</item>
         <item quantity="many">%1$,d jazyka</item>
     </plurals>
+    <string name="text_tools_all_installed">Stiahli ste si všetky dostupné nástroje</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">Vyše 60 jazykov</string>
     <string name="menu_language_settings">Nastavenia jazyka</string>
     <string name="title_language_settings">Nastavenia jazyka</string>
     <string name="title_language_primary">Hlavný jazyk</string>

@@ -9,7 +9,7 @@
     <string name="menu_about">เกี่ยวกับ</string>
     <string name="menu_help">ช่วยเหลือ</string>
     <string name="menu_contact_us">ติดต่อเรา</string>
-    <string name="menu_share_godtools">แชร์ GodTools</string>
+    <string name="menu_share_godtools">แชร์แอป GodTools</string>
     <string name="menu_share_story">แชร์เรื่องราวกับเรา</string>
     <string name="menu_rate">ให้คะแนน GodTools</string>
     <string name="menu_terms_of_use">เงื่อนไขการใช้งาน</string>
@@ -17,8 +17,6 @@
     <string name="menu_copyright">ลิขสิทธิ์</string>
     <!-- Share a story -->
     <string name="share_story_subject">มาฟังกันว่าพระผู้เป็นเจ้าทรงนำเราได้อย่างไร!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">ตั้งค่าภาษา</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">ค้นหาเครื่องมือ</string>
     <string name="nav_my_tools">เครื่องมือของฉัน</string>
@@ -33,7 +31,9 @@
     <plurals name="label_tools_languages">
         <item quantity="other">%1$,d ภาษา</item>
     </plurals>
+    <string name="text_tools_all_installed">คุณดาวน์โหลดเครื่องมือทั้งหมดแล้ว</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">กว่า 60 ภาษา</string>
     <string name="menu_language_settings">การตั้งค่าภาษา</string>
     <string name="title_language_settings">การตั้งค่าภาษา</string>
     <string name="title_language_primary">ภาษาหลัก</string>

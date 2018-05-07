@@ -9,7 +9,7 @@
     <string name="menu_about">Σχετικά</string>
     <string name="menu_help">Βοήθεια</string>
     <string name="menu_contact_us">Επικοινωνήστε μαζί μας</string>
-    <string name="menu_share_godtools">Κοινοποίηση Θεϊκών Εργαλείων</string>
+    <string name="menu_share_godtools">Κοινοποίηση Εφαρμογής Θεϊκών Εργαλείων</string>
     <string name="menu_share_story">Μοιραστείτε μια ιστορία μαζί μας</string>
     <string name="menu_rate">Βαθμολογήστε τα Θεϊκά Εργαλεία</string>
     <string name="menu_terms_of_use">Όροι χρήσης</string>
@@ -17,9 +17,9 @@
     <string name="menu_copyright">Πνευματικά δικαιώματα</string>
     <!-- Share a story -->
     <string name="share_story_subject">Ακούστε πώς κινείται ο Θεός!</string>
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">Ορίστε τις γλώσσες σας</string>
     <!-- Tools UI -->
+    <string name="nav_find_tools">Βρείτε Εργαλεία</string>
+    <string name="nav_my_tools">Τα Εργαλεία μου</string>
     <string name="menu_switch_language">Αλλάξτε Γλώσσα</string>
     <string name="title_add_new_tools">Προσθήκη Νέων Εργαλείων</string>
     <string name="action_tools_download">Λήψη</string>
@@ -33,7 +33,9 @@
         <item quantity="one">%1$,d Γλώσσα</item>
         <item quantity="other">%1$,d Γλώσσες</item>
     </plurals>
+    <string name="text_tools_all_installed">Κάνατε λήψη όλων των διαθέσιμων εργαλείων.</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">60+ Γλώσσες</string>
     <string name="menu_language_settings">Ρυθμίσεις Γλώσσας</string>
     <string name="title_language_settings">Ρυθμίσεις Γλώσσας</string>
     <string name="title_language_primary">Κύρια Γλώσσα</string>

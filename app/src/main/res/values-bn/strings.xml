@@ -13,8 +13,6 @@
     <string name="menu_privacy_policy">গোপনীয়তা নীতি</string>
     <string name="menu_copyright">কপিরাইট তথ্য</string>
     <!-- Share a story -->
-    <!-- Tour UI -->
-    <string name="feature_discovery_title_language_settings">আপনার ভাষা সেট করুন</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">সরঞ্জাম খুঁজুন</string>
     <string name="nav_my_tools">আমার সরঞ্জামগুলি</string>
