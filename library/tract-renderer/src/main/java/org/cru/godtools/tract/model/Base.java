@@ -15,10 +15,12 @@ import com.annimon.stream.Stream;
 
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
+import org.cru.godtools.tract.analytics.model.ContentAnalyticsActionEvent;
 import org.cru.godtools.tract.model.Text.Align;
 import org.greenrobot.eventbus.EventBus;
 import org.xmlpull.v1.XmlPullParser;
 
+import java.util.Collection;
 import java.util.Set;
 
 import butterknife.ButterKnife;
@@ -227,6 +229,17 @@ abstract class Base {
                     .map(builder::id)
                     .map(Event.Builder::build)
                     .forEach(EventBus.getDefault()::post);
+        }
+
+        final void triggerAnalyticsEvents(final Collection<AnalyticsEvent> events,
+                                          final AnalyticsEvent.Trigger... types) {
+            Stream.of(events)
+                    .filter(e -> e.isTriggerType(types))
+                    .forEach(this::sendAnalyticsEvent);
+        }
+
+        private void sendAnalyticsEvent(@NonNull final AnalyticsEvent event) {
+            EventBus.getDefault().post(new ContentAnalyticsActionEvent(event));
         }
 
         /**
