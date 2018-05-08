@@ -39,7 +39,7 @@ public class AnalyticsEvent {
     private static final String XML_ATTRIBUTE_KEY = "key";
     private static final String XML_ATTRIBUTE_VALUE = "value";
 
-    private enum System {
+    public enum System {
         ADOBE, UNKNOWN;
 
         @NonNull
@@ -92,6 +92,28 @@ public class AnalyticsEvent {
     private Trigger mTrigger = Trigger.DEFAULT;
     @NonNull
     private Map<String, String> mAttributes = ImmutableMap.of();
+
+    public String getAction() {
+        return mAction;
+    }
+
+    @NonNull
+    public Map<String, String> getAttributes() {
+        return mAttributes;
+    }
+
+    public boolean isTriggerType(final Trigger... types) {
+        for (final Trigger type : types) {
+            if (mTrigger == type) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isForSystem(@NonNull final System system) {
+        return mSystems.contains(system);
+    }
 
     @NonNull
     @WorkerThread

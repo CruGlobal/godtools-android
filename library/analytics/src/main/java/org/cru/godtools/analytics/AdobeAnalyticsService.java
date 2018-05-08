@@ -15,6 +15,10 @@ import com.adobe.mobile.Config;
 import com.adobe.mobile.Visitor;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
+import org.cru.godtools.analytics.model.AnalyticsActionEvent;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.ref.WeakReference;
 import java.util.Collections;
@@ -57,6 +61,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     private AdobeAnalyticsService(@NonNull final Context context) {
         mContext = context;
         Config.setContext(context);
+        EventBus.getDefault().register(this);
     }
 
     @Nullable
@@ -85,6 +90,14 @@ public final class AdobeAnalyticsService implements AnalyticsService {
         if (mActiveActivity.get() == activity) {
             mActiveActivity = new WeakReference<>(null);
             mAnalyticsExecutor.execute(Config::pauseCollectingLifecycleData);
+        }
+    }
+
+    @UiThread
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAnalyticsActionEvent(@NonNull final AnalyticsActionEvent event) {
+        if (event.trackInService(this)) {
+            trackAction(event.getAction(), event.getAttributes());
         }
     }
 
@@ -124,7 +137,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     /* END tracking methods */
 
     @AnyThread
-    private void trackAction(@NonNull final String action, @Nullable final Map<String, Object> attributes) {
+    private void trackAction(@NonNull final String action, @Nullable final Map<String, ?> attributes) {
         mAnalyticsExecutor.execute(() -> {
             final Map<String, Object> data = baseContextData();
             if (mPreviousScreenName != null) {
