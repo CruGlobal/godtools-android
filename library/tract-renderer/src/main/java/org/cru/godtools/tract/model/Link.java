@@ -13,20 +13,26 @@ import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static org.cru.godtools.tract.Constants.XMLNS_ANALYTICS;
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.model.Text.XML_TEXT;
 
 public final class Link extends Content {
     static final String XML_LINK = "link";
+
+    @NonNull
+    Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
 
     @NonNull
     Set<Event.Id> mEvents = ImmutableSet.of();
@@ -58,6 +64,13 @@ public final class Link extends Content {
 
             // process recognized nodes
             switch (parser.getNamespace()) {
+                case XMLNS_ANALYTICS:
+                    switch (parser.getName()) {
+                        case AnalyticsEvent.XML_EVENTS:
+                            mAnalyticsEvents = AnalyticsEvent.fromEventsXml(parser);
+                            continue;
+                    }
+                    break;
                 case XMLNS_CONTENT:
                     switch (parser.getName()) {
                         case XML_TEXT:
@@ -108,6 +121,7 @@ public final class Link extends Content {
         void click() {
             if (mModel != null) {
                 sendEvents(mModel.mEvents);
+                triggerAnalyticsEvents(mModel.mAnalyticsEvents, Trigger.SELECTED, Trigger.DEFAULT);
             }
         }
     }
