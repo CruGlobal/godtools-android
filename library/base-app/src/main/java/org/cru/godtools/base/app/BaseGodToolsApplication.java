@@ -10,6 +10,8 @@ import com.newrelic.agent.android.NewRelic;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.crashlytics.timber.CrashlyticsTree;
+import org.cru.godtools.analytics.AdobeAnalyticsService;
+import org.cru.godtools.analytics.AnalyticsDispatcher;
 import org.cru.godtools.analytics.AnalyticsEventBusIndex;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.EventBusBuilder;
@@ -33,6 +35,9 @@ public class BaseGodToolsApplication extends Application {
 
         // configure eventbus
         configureEventBus(EventBus.builder()).installDefaultEventBus();
+
+        // configure analytics
+        configureAnalyticsServices();
     }
 
     private void initializeCrashlytics() {
@@ -45,6 +50,11 @@ public class BaseGodToolsApplication extends Application {
         Crashlytics.setString("SystemLanguage", LocaleCompat.toLanguageTag(Locale.getDefault()));
 
         Timber.plant(new CrashlyticsTree());
+    }
+
+    protected void configureAnalyticsServices() {
+        AdobeAnalyticsService.getInstance(this);
+        AnalyticsDispatcher.getInstance(this);
     }
 
     @NonNull
