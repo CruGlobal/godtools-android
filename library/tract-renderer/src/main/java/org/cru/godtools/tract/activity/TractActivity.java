@@ -353,14 +353,13 @@ public class TractActivity extends ImmersiveActivity
         final List<Locale> locales = new ArrayList<>();
 
         // process the primary languages specified in the uri
-        final Locale uriLocale = LocaleCompat.forLanguageTag(data.getPathSegments().get(0));
         final List<Locale> rawPrimaryLanguages = Stream.of(data.getQueryParameters(PARAM_PRIMARY_LANGUAGE))
                 .flatMap(lang -> Stream.of(TextUtils.split(lang, ",")))
                 .map(String::trim)
                 .filterNot(TextUtils::isEmpty)
                 .map(LocaleCompat::forLanguageTag)
                 .toList();
-        rawPrimaryLanguages.add(uriLocale);
+        rawPrimaryLanguages.add(LocaleCompat.forLanguageTag(data.getPathSegments().get(0)));
         final Locale[] primaryLanguages = LocaleCompat.getFallbacks(rawPrimaryLanguages.toArray(new Locale[0]));
         Collections.addAll(locales, primaryLanguages);
         mPrimaryLanguages = primaryLanguages.length;
