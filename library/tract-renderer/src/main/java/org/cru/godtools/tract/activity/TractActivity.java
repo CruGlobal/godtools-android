@@ -360,15 +360,10 @@ public class TractActivity extends ImmersiveActivity
                 .filterNot(TextUtils::isEmpty)
                 .map(LocaleCompat::forLanguageTag)
                 .toList();
-        if (!rawPrimaryLanguages.isEmpty()) {
-            rawPrimaryLanguages.add(uriLocale);
-            final Locale[] primaryLanguages = LocaleCompat.getFallbacks(rawPrimaryLanguages.toArray(new Locale[0]));
-            Collections.addAll(locales, primaryLanguages);
-            mPrimaryLanguages = primaryLanguages.length;
-        } else {
-            locales.add(uriLocale);
-            mPrimaryLanguages = 1;
-        }
+        rawPrimaryLanguages.add(uriLocale);
+        final Locale[] primaryLanguages = LocaleCompat.getFallbacks(rawPrimaryLanguages.toArray(new Locale[0]));
+        Collections.addAll(locales, primaryLanguages);
+        mPrimaryLanguages = primaryLanguages.length;
 
         // process parallel languages specified in the uri
         final Locale[] parallelLanguages = LocaleCompat.getFallbacks(
