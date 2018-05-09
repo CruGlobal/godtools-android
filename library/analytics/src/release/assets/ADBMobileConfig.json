@@ -17,7 +17,7 @@
     "appid": "f2307572f2f270d310b5301e7f8c0d4e758855fd1447020332f675be797125e0"
   },
   "analytics": {
-    "rsids": "crugodtools",
+    "rsids": "crugodtools,cruproduction",
     "server": "cru.sc.omtrdc.net",
     "ssl": true,
     "offlineEnabled": true,
