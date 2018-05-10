@@ -204,6 +204,12 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         outState.putString(EXTRA_FEATURE_DISCOVERY, mFeatureDiscoveryActive);
     }
 
+    @Override
+    protected void onDestroy() {
+        mTaskHandler.removeCallbacksAndMessages(null);
+        super.onDestroy();
+    }
+
     /* END lifecycle */
 
     @Override

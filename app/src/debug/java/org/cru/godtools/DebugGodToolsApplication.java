@@ -9,6 +9,7 @@ import com.facebook.stetho.inspector.database.SqliteDatabaseDriver;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.facebook.stetho.timber.StethoTree;
 import com.squareup.leakcanary.AndroidExcludedRefs;
+import com.squareup.leakcanary.ExcludedRefs;
 import com.squareup.leakcanary.LeakCanary;
 
 import org.ccci.gto.android.common.api.okhttp3.util.OkHttpClientUtil;
@@ -42,9 +43,15 @@ public class DebugGodToolsApplication extends GodToolsApplication {
     }
 
     private void initLeakCanary() {
+        final ExcludedRefs excludedRefs = AndroidExcludedRefs.createAppDefaults()
+                .staticField("android.view.accessibility.AccessibilityNodeInfo", "sPool").alwaysExclude()
+                .reason("AccessibilityNodeInfo.mOriginalText is not cleared when recycling an instance. " +
+                                "This can be a Spanned object that holds a reference to a Context object.")
+                .build();
+
         LeakCanary.refWatcher(this)
                 .listenerServiceClass(CrashlyticsLeakService.class)
-                .excludedRefs(AndroidExcludedRefs.createAppDefaults().build())
+                .excludedRefs(excludedRefs)
                 .buildAndInstall();
     }
 
