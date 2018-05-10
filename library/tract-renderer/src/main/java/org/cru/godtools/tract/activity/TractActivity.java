@@ -639,6 +639,9 @@ public class TractActivity extends ImmersiveActivity
                 final MenuItem item = mToolbarMenu.getItem(i);
                 item.setIcon(DrawableUtils.tint(item.getIcon(), controlColor));
             }
+            if (mToolbar != null) {
+                mToolbar.setOverflowIcon(DrawableUtils.tint(mToolbar.getOverflowIcon(), controlColor));
+            }
         }
     }
 
