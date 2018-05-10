@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">Install</string>
     <string name="menu_share_tract">Share</string>
     <string name="share_tract_subject" translatable="false">%1$s</string>
     <string name="share_tract_title">Share “%1$s” using</string>
