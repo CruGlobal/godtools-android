@@ -233,6 +233,13 @@ public class TractActivity extends ImmersiveActivity
     public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
         getMenuInflater().inflate(R.menu.activity_tract, menu);
         mToolbarMenu = menu;
+
+        // make the install menu item visible if this is an Instant App
+        final MenuItem install = mToolbarMenu.findItem(R.id.action_install);
+        if (install != null) {
+            install.setVisible(InstantApps.isInstantApp(this));
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -254,6 +261,9 @@ public class TractActivity extends ImmersiveActivity
         final int id = item.getItemId();
         if (id == R.id.action_share) {
             shareCurrentTract();
+            return true;
+        } else if (id == R.id.action_install) {
+            installFullAppFromInstantApp();
             return true;
         } else if (id == android.R.id.home) {
             // handle close button if this is an instant app
@@ -705,6 +715,10 @@ public class TractActivity extends ImmersiveActivity
         if (mDownloadManager != null) {
             mDownloadManager.removeOnDownloadProgressUpdateListener(this);
         }
+    }
+
+    private void installFullAppFromInstantApp() {
+        InstantApps.showInstallPrompt(this, null, -1, "instantapp");
     }
 
     private void shareCurrentTract() {
