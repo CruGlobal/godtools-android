@@ -29,6 +29,7 @@ android {
         // Crashlytics config
         ext.betaDistributionGroupAliasesFilePath = "crashlytics/beta_groups.txt"
         ext.betaDistributionNotifications = false
+        ext.betaDistributionReleaseNotes = generateCrashlyticsBetaReleaseNotes()
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -162,4 +163,14 @@ dependencies {
 // make crashlytics upload task dependent on assembling the apk
 afterEvaluate {
     crashlyticsUploadDistributionProductionDebug.dependsOn assembleProductionDebug
+}
+
+def generateCrashlyticsBetaReleaseNotes(size = 10) {
+    def output = "Recent changes:\n\n"
+    grgit.log {
+        maxCommits = size
+    }.each { commit ->
+        output = output + "* " + commit.shortMessage + "\n"
+    }
+    return output
 }
