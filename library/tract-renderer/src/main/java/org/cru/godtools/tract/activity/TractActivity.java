@@ -35,6 +35,7 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.BundleUtils;
+import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
@@ -178,7 +179,7 @@ public class TractActivity extends ImmersiveActivity
         FollowupService.start(this);
 
         // read requested tract from the provided intent
-        processIntent(getIntent());
+        processIntent(getIntent(), savedInstanceState);
 
         // restore any persisted state
         if (savedInstanceState != null) {
@@ -327,13 +328,18 @@ public class TractActivity extends ImmersiveActivity
 
     /* BEGIN creation methods */
 
-    private void processIntent(@Nullable final Intent intent) {
+    private void processIntent(@Nullable final Intent intent, @Nullable final Bundle savedInstanceState) {
         final String action = intent != null ? intent.getAction() : null;
         final Uri data = intent != null ? intent.getData() : null;
         final Bundle extras = intent != null ? intent.getExtras() : null;
         if (Intent.ACTION_VIEW.equals(action) && isDeepLinkValid(data)) {
             mTool = getToolFromDeepLink(data);
             mLanguages = processDeepLinkLanguages(data);
+
+            // track the deep link via analytics only if we aren't re-initializing the Activity w/ savedState
+            if (savedInstanceState == null) {
+                EventBus.getDefault().post(new AnalyticsDeepLinkEvent(data));
+            }
         } else if (extras != null) {
             mTool = extras.getString(EXTRA_TOOL, mTool);
             final Locale[] languages = BundleUtils.getLocaleArray(extras, EXTRA_LANGUAGES);
