@@ -35,6 +35,7 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.BundleUtils;
+import org.ccci.gto.android.common.util.NumberUtils;
 import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.download.manager.DownloadProgress;
@@ -80,6 +81,7 @@ public class TractActivity extends ImmersiveActivity
         GodToolsDownloadManager.OnDownloadProgressUpdateListener {
     private static final String EXTRA_LANGUAGES = TractActivity.class.getName() + ".LANGUAGES";
     private static final String EXTRA_ACTIVE_LANGUAGE = TractActivity.class.getName() + ".ACTIVE_LANGUAGE";
+    private static final String EXTRA_INITIAL_PAGE = TractActivity.class.getName() + ".INITIAL_PAGE";
 
     private static final int LOADER_ID_BITS = 8;
     private static final int LOADER_ID_MASK = (1 << LOADER_ID_BITS) - 1;
@@ -144,6 +146,7 @@ public class TractActivity extends ImmersiveActivity
     boolean[] mHiddenLanguages = new boolean[0];
     @VisibleForTesting
     int mActiveLanguage = 0;
+    int mInitialPage = -1;
 
     protected static void populateExtras(@NonNull final Bundle extras, @NonNull final String toolCode,
                                          @NonNull final Locale... languages) {
@@ -190,6 +193,7 @@ public class TractActivity extends ImmersiveActivity
                     break;
                 }
             }
+            mInitialPage = savedInstanceState.getInt(EXTRA_INITIAL_PAGE, mInitialPage);
         }
 
         // finish now if this activity is in an invalid state
@@ -322,6 +326,7 @@ public class TractActivity extends ImmersiveActivity
         if (mActiveLanguage < mLanguages.length) {
             BundleUtils.putLocale(outState, EXTRA_ACTIVE_LANGUAGE, mLanguages[mActiveLanguage]);
         }
+        outState.putInt(EXTRA_INITIAL_PAGE, mInitialPage);
     }
 
     /* END lifecycle */
@@ -335,6 +340,7 @@ public class TractActivity extends ImmersiveActivity
         if (Intent.ACTION_VIEW.equals(action) && isDeepLinkValid(data)) {
             mTool = getToolFromDeepLink(data);
             mLanguages = processDeepLinkLanguages(data);
+            processDeepLinkPage(data, savedInstanceState);
 
             // track the deep link via analytics only if we aren't re-initializing the Activity w/ savedState
             if (savedInstanceState == null) {
@@ -393,6 +399,15 @@ public class TractActivity extends ImmersiveActivity
 
         // return all the parsed languages
         return locales.toArray(new Locale[0]);
+    }
+
+    private void processDeepLinkPage(@NonNull final Uri data, @Nullable final Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            final List<String> segments = data.getPathSegments();
+            if (segments.size() >= 3) {
+                mInitialPage = NumberUtils.toInteger(segments.get(2), mInitialPage);
+            }
+        }
     }
 
     @Nullable
@@ -689,7 +704,14 @@ public class TractActivity extends ImmersiveActivity
 
     private void updatePager() {
         if (mPagerAdapter != null) {
-            mPagerAdapter.setManifest(getActiveManifest());
+            final Manifest manifest = getActiveManifest();
+            mPagerAdapter.setManifest(manifest);
+            if (manifest != null && mInitialPage >= 0) {
+                if (mPager != null) {
+                    mPager.setCurrentItem(mInitialPage, false);
+                    mInitialPage = -1;
+                }
+            }
         }
     }
 
