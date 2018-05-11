@@ -6,16 +6,20 @@ import android.support.annotation.UiThread;
 import android.view.ViewGroup;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
+import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.tract.model.Tabs.TabsViewHolder;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
+import static org.cru.godtools.tract.Constants.XMLNS_ANALYTICS;
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 
 public final class Tab extends Base implements Parent {
@@ -23,6 +27,9 @@ public final class Tab extends Base implements Parent {
     private static final String XML_LABEL = "label";
 
     private final int mPosition;
+
+    @NonNull
+    Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
 
     @Nullable
     private Text mLabel;
@@ -70,6 +77,13 @@ public final class Tab extends Base implements Parent {
 
             // process recognized nodes
             switch (parser.getNamespace()) {
+                case XMLNS_ANALYTICS:
+                    switch (parser.getName()) {
+                        case AnalyticsEvent.XML_EVENTS:
+                            mAnalyticsEvents = AnalyticsEvent.fromEventsXml(parser);
+                            continue;
+                    }
+                    break;
                 case XMLNS_CONTENT:
                     switch (parser.getName()) {
                         case XML_LABEL:
@@ -104,6 +118,12 @@ public final class Tab extends Base implements Parent {
     public static final class TabViewHolder extends ParentViewHolder<Tab> {
         TabViewHolder(@NonNull final ViewGroup parent, @Nullable final TabsViewHolder parentViewHolder) {
             super(Tab.class, parent, R.layout.tract_content_paragraph, parentViewHolder);
+        }
+
+        public void trackSelectedAnalyticsEvents() {
+            if (mModel != null) {
+                triggerAnalyticsEvents(mModel.mAnalyticsEvents, Trigger.SELECTED, Trigger.DEFAULT);
+            }
         }
     }
 }

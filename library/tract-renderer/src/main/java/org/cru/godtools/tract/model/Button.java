@@ -21,17 +21,20 @@ import org.cru.godtools.analytics.AnalyticsService;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.tract.model.Text.Align;
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static org.cru.godtools.tract.Constants.XMLNS_ANALYTICS;
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.model.Text.XML_TEXT;
 
@@ -67,6 +70,9 @@ public final class Button extends Content implements Styles {
     @Nullable
     @ColorInt
     private Integer mColor;
+
+    @NonNull
+    Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
 
     @NonNull
     Type mType = Type.DEFAULT;
@@ -125,6 +131,13 @@ public final class Button extends Content implements Styles {
 
             // process recognized nodes
             switch (parser.getNamespace()) {
+                case XMLNS_ANALYTICS:
+                    switch (parser.getName()) {
+                        case AnalyticsEvent.XML_EVENTS:
+                            mAnalyticsEvents = AnalyticsEvent.fromEventsXml(parser);
+                            continue;
+                    }
+                    break;
                 case XMLNS_CONTENT:
                     switch (parser.getName()) {
                         case XML_TEXT:
@@ -171,6 +184,8 @@ public final class Button extends Content implements Styles {
         @OnClick(R2.id.button)
         void click() {
             if (mModel != null) {
+                triggerAnalyticsEvents(mModel.mAnalyticsEvents, Trigger.SELECTED, Trigger.DEFAULT);
+
                 switch (mModel.mType) {
                     case URL:
                         if (mModel.mUrl != null) {

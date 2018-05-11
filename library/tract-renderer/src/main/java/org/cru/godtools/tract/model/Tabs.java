@@ -92,6 +92,8 @@ final class Tabs extends Content {
         @BindView(R2.id.tab)
         FrameLayout mTabContent;
 
+        boolean mBinding = false;
+
         @NonNull
         private TabViewHolder[] mTabContentViewHolders = EMPTY_TAB_VIEW_HOLDERS;
         private final Pools.Pool<TabViewHolder> mRecycledTabViewHolders = new Pools.SimplePool<>(5);
@@ -103,6 +105,7 @@ final class Tabs extends Content {
 
         /* BEGIN lifecycle */
 
+        @UiThread
         @Override
         void onBind() {
             super.onBind();
@@ -111,7 +114,10 @@ final class Tabs extends Content {
 
         @Override
         public void onTabSelected(@NonNull final TabLayout.Tab tab) {
-            showTabContent(tab.getPosition());
+            final TabViewHolder holder = showTabContent(tab.getPosition());
+            if (!mBinding) {
+                holder.trackSelectedAnalyticsEvents();
+            }
         }
 
         @Override
@@ -128,6 +134,8 @@ final class Tabs extends Content {
         }
 
         private void bindTabs() {
+            mBinding = true;
+
             // remove all the old tabs
             mTabs.removeAllTabs();
             Stream.of(mTabContentViewHolders)
@@ -163,6 +171,8 @@ final class Tabs extends Content {
                     mTabs.addTab(tab2);
                 }
             }
+
+            mBinding = false;
         }
 
         @NonNull
@@ -175,12 +185,13 @@ final class Tabs extends Content {
             return holder;
         }
 
-        private void showTabContent(final int position) {
+        private TabViewHolder showTabContent(final int position) {
             final TabViewHolder holder = mTabContentViewHolders[position];
             if (holder.mRoot.getParent() != mTabContent) {
                 mTabContent.removeAllViews();
                 mTabContent.addView(holder.mRoot);
             }
+            return holder;
         }
     }
 }
