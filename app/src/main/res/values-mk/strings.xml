@@ -2,10 +2,30 @@
 <resources>
     <!-- Main Activity-->
     <!-- Navigation Menu -->
+    <string name="menu_heading_general">Општо</string>
+    <string name="menu_heading_share">Сподели</string>
+    <string name="menu_heading_legal">Правно</string>
+    <string name="menu_about">За</string>
+    <string name="menu_help">Помош</string>
+    <string name="menu_contact_us">Обрати ни се</string>
+    <string name="menu_share_godtools">Сподели ја GodTools</string>
+    <string name="menu_share_story">Сподели приказна со нас</string>
+    <string name="menu_terms_of_use">Одредби за употреба</string>
+    <string name="menu_privacy_policy">Политика за приватност</string>
     <!-- Share a story -->
     <!-- Tools UI -->
     <string name="nav_find_tools">Најди алатки</string>
     <string name="nav_my_tools">Мои алатки</string>
+    <string name="action_tools_download">Преземи</string>
+    <string name="action_tools_remove">Отстрани</string>
+    <string name="label_tools_about">3a</string>
     <!-- Language Selection UI -->
+    <string name="menu_language_settings">Јазични поставки</string>
+    <string name="title_language_settings">Јазични поставки</string>
+    <string name="title_language_primary">Примарен јазик</string>
+    <string name="title_language_parallel">Паралелен јазик</string>
+    <string name="action_language_parallel_select">Избери паралелен јазик</string>
+    <string name="text_language_parallel_description">Сподели ја God Tools со некого на нивниот мајчин јазик</string>
+    <string name="text_language_warning">Не се сите алатки достапни на сите јазици</string>
     <!-- Sharing -->
 </resources>
