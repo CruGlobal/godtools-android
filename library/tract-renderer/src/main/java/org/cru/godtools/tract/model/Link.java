@@ -82,11 +82,11 @@ public final class Link extends Content {
 
     @UiThread
     static final class LinkViewHolder extends BaseViewHolder<Link> {
-        @BindView(R2.id.content_text)
+        @BindView(R2.id.content_link)
         TextView mLink;
 
         LinkViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
-            super(Link.class, parent, R.layout.tract_content_text, parentViewHolder);
+            super(Link.class, parent, R.layout.tract_content_link, parentViewHolder);
         }
 
         /* BEGIN lifecycle */
@@ -104,7 +104,7 @@ public final class Link extends Content {
             Text.bind(text, mLink, null, Styles.getPrimaryColor(Base.getStylesParent(mModel)));
         }
 
-        @OnClick(R2.id.content_text)
+        @OnClick(R2.id.content_link)
         void click() {
             if (mModel != null) {
                 sendEvents(mModel.mEvents);
