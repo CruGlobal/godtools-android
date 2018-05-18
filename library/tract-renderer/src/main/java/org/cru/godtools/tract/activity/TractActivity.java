@@ -35,6 +35,7 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.BundleUtils;
+import org.ccci.gto.android.common.util.LocaleUtils;
 import org.ccci.gto.android.common.util.NumberUtils;
 import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
@@ -375,30 +376,29 @@ public class TractActivity extends ImmersiveActivity
         final List<Locale> locales = new ArrayList<>();
 
         // process the primary languages specified in the uri
-        final List<Locale> rawPrimaryLanguages = Stream.of(data.getQueryParameters(PARAM_PRIMARY_LANGUAGE))
-                .flatMap(lang -> Stream.of(TextUtils.split(lang, ",")))
-                .map(String::trim)
-                .filterNot(TextUtils::isEmpty)
-                .map(LocaleCompat::forLanguageTag)
-                .toList();
+        final List<Locale> rawPrimaryLanguages = streamLanguageParamater(data, PARAM_PRIMARY_LANGUAGE).toList();
         rawPrimaryLanguages.add(LocaleCompat.forLanguageTag(data.getPathSegments().get(0)));
-        final Locale[] primaryLanguages = LocaleCompat.getFallbacks(rawPrimaryLanguages.toArray(new Locale[0]));
+        final Locale[] primaryLanguages = LocaleUtils.getFallbacks(rawPrimaryLanguages.toArray(new Locale[0]));
         Collections.addAll(locales, primaryLanguages);
         mPrimaryLanguages = primaryLanguages.length;
 
         // process parallel languages specified in the uri
-        final Locale[] parallelLanguages = LocaleCompat.getFallbacks(
-                Stream.of(data.getQueryParameters(PARAM_PARALLEL_LANGUAGE))
-                        .flatMap(lang -> Stream.of(TextUtils.split(lang, ",")))
-                        .map(String::trim)
-                        .filterNot(TextUtils::isEmpty)
-                        .map(LocaleCompat::forLanguageTag)
-                        .toArray(Locale[]::new));
+        final Locale[] parallelLanguages = LocaleUtils.getFallbacks(
+                streamLanguageParamater(data, PARAM_PARALLEL_LANGUAGE).toArray(Locale[]::new));
         Collections.addAll(locales, parallelLanguages);
         mParallelLanguages = parallelLanguages.length;
 
         // return all the parsed languages
         return locales.toArray(new Locale[0]);
+    }
+
+    @NonNull
+    private Stream<Locale> streamLanguageParamater(@NonNull final Uri data, @NonNull final String param) {
+        return Stream.of(data.getQueryParameters(param))
+                .flatMap(lang -> Stream.of(TextUtils.split(lang, ",")))
+                .map(String::trim)
+                .filterNot(TextUtils::isEmpty)
+                .map(LocaleCompat::forLanguageTag);
     }
 
     private void processDeepLinkPage(@NonNull final Uri data, @Nullable final Bundle savedInstanceState) {

@@ -12,12 +12,12 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Closer;
 
-import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.ccci.gto.android.common.util.IOUtils;
+import org.ccci.gto.android.common.util.LocaleUtils;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Attachment;
@@ -130,7 +130,7 @@ public class InitialContentTasks implements Runnable {
     private void initSystemLanguages() {
         // check to see if we have any languages currently added
         if (mDao.get(Query.select(Language.class).where(LanguageTable.SQL_WHERE_ADDED).limit(1)).isEmpty()) {
-            final Locale[] locales = LocaleCompat.getFallbacks(Locale.getDefault(), Locale.ENGLISH);
+            final Locale[] locales = LocaleUtils.getFallbacks(Locale.getDefault(), Locale.ENGLISH);
 
             // add any languages active on the device
             Stream.of(locales)
