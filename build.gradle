@@ -24,9 +24,10 @@ version '5.0.12-SNAPSHOT'
 
 // define dependency versions for this project
 ext {
-    compileSdk = 27
-    minSdk     = 15
-    targetSdk  = 27
+    compileSdk    = 27
+    minSdk        = 15
+    minSdkFeature = 21
+    targetSdk     = 27
 }
 ext.deps = [
         advrecyclerview      : '0.10.6',
@@ -138,7 +139,7 @@ configure(subprojects.findAll { it.path.startsWith(":feature:") }) {
             compileSdkVersion compileSdk
 
             defaultConfig {
-                minSdkVersion 19
+                minSdkVersion minSdkFeature
                 targetSdkVersion targetSdk
 
                 versionName rootProject.version
