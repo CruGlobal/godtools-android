@@ -1,7 +1,7 @@
-# Google Guava
+# Google Guava 25.0-android
 # http://stackoverflow.com/questions/9120338/proguard-configuration-for-guava-with-obfuscation-and-optimization
 -dontwarn com.google.errorprone.annotations.**
--dontwarn com.google.j2objc.annotations.Weak
 -dontwarn java.lang.ClassValue
--dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontwarn afu.org.checkerframework.checker.**
+-dontwarn org.checkerframework.checker.**
 -dontwarn sun.misc.Unsafe
