@@ -34,7 +34,7 @@ ext.deps = [
         androidInstantApps   : '1.1.0',
         androidLifecycle     : '1.1.0',
         androidSupport       : '27.1.1',
-        androidTestingSupport: '1.0.0',
+        androidTestingSupport: '1.0.2',
         butterknife          : '8.7.0',
         calligraphy          : '2.3.0',
         crashlytics          : '2.9.2',
@@ -111,6 +111,8 @@ configure(subprojects.findAll { it.path.startsWith(":library:") }) {
             defaultConfig {
                 minSdkVersion minSdk
                 targetSdkVersion targetSdk
+
+                testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             }
 
             compileOptions {
