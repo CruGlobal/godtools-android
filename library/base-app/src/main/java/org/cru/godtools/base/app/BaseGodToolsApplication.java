@@ -10,6 +10,7 @@ import com.newrelic.agent.android.NewRelic;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.crashlytics.timber.CrashlyticsTree;
+import org.ccci.gto.android.common.util.LocaleUtils;
 import org.cru.godtools.analytics.AdobeAnalyticsService;
 import org.cru.godtools.analytics.AnalyticsDispatcher;
 import org.cru.godtools.analytics.AnalyticsEventBusIndex;
@@ -38,6 +39,9 @@ public class BaseGodToolsApplication extends Application {
 
         // configure analytics
         configureAnalyticsServices();
+
+        // configure some language fallbacks
+        configureLanguageFallacks();
     }
 
     private void initializeCrashlytics() {
@@ -62,5 +66,11 @@ public class BaseGodToolsApplication extends Application {
     protected EventBusBuilder configureEventBus(@NonNull final EventBusBuilder builder) {
         return builder
                 .addIndex(new AnalyticsEventBusIndex());
+    }
+
+    private void configureLanguageFallacks() {
+        // These fallbacks are used for JesusFilm
+        LocaleUtils.addFallback("abs", "ms");
+        LocaleUtils.addFallback("pmy", "ms");
     }
 }
