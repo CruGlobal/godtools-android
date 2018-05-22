@@ -11,12 +11,12 @@ import android.support.v4.util.LruCache;
 import android.util.Xml;
 
 import com.annimon.stream.Stream;
-import com.crashlytics.android.Crashlytics;
 import com.google.common.io.Closer;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 
+import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.support.v4.util.WeakLruCache;
@@ -39,6 +39,8 @@ import java.util.Locale;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import timber.log.Timber;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
@@ -178,7 +180,8 @@ public class TractManager {
                 // complete this task
                 manifestTask.set(manifest);
             } catch (final Throwable t) {
-                Crashlytics.logException(t);
+                Timber.tag("TractManager")
+                        .e(t, "Error loading manifest for %s (%s)", toolCode, LocaleCompat.toLanguageTag(locale));
                 manifestTask.setException(t);
             }
         });
@@ -234,7 +237,10 @@ public class TractManager {
                 // complete this task
                 result.set(page);
             } catch (final Throwable t) {
-                Crashlytics.logException(t);
+                final Manifest manifest = page.getManifest();
+                Timber.tag("TractManager")
+                        .e(t, "Error parsing page %s-%d (%s)", manifest.getCode(), page.getPosition(),
+                           LocaleCompat.toLanguageTag(manifest.getLocale()));
                 result.setException(t);
             }
         });
