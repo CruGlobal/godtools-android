@@ -22,6 +22,9 @@
         android:name="${applicationId}.permission.C2D_MESSAGE"
         android:maxSdkVersion="22" />
 
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
 
     <application
         android:name=".GodToolsApplication"
