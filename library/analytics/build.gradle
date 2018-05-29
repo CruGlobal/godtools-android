@@ -16,7 +16,7 @@ android {
 dependencies {
     implementation project(':library:base')
 
-    implementation "com.google.android.gms:play-services-analytics:${deps.playServices}"
+    implementation "com.google.android.gms:play-services-analytics:${deps.playServicesAnalytics}"
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
 
