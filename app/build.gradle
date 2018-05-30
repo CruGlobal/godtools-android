@@ -7,7 +7,7 @@ android {
     compileSdkVersion compileSdk
 
     defaultConfig {
-        applicationId 'org.keynote.godtools.android'
+        applicationId rootProject.applicationId
         versionName rootProject.version
         versionCode grgit.log(includes:['HEAD']).size() + 4029047
 
