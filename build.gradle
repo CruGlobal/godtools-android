@@ -1,9 +1,9 @@
 buildscript {
     repositories {
         mavenLocal()
-        jcenter()
         google()
         maven { url 'https://maven.fabric.io/public' }
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.2'
@@ -61,8 +61,9 @@ ext.deps = [
 subprojects {
     repositories {
         mavenLocal()
-        jcenter()
         google()
+        maven { url 'https://maven.fabric.io/public' }
+        jcenter()
         maven { url 'https://cruglobal.jfrog.io/cruglobal/list/maven-locals/' }
         maven {
             name "maven.gcx.org"
@@ -72,7 +73,6 @@ subprojects {
                 password gcxMavenRepositoryPassword
             }
         }
-        maven { url 'https://maven.fabric.io/public' }
         // XXX: temporary to use beta version of powermock
         maven { url 'https://dl.bintray.com/powermock/maven' }
     }
