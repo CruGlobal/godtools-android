@@ -89,7 +89,7 @@ public interface AnalyticsService {
         if (card != null) {
             if (card >= 0 && card < 26) {
                 // convert card index to letter 'a'-'z'
-                name.append((char) 97 + card);
+                name.append((char) (97 + card));
             } else {
                 name.append('-').append(card);
             }
