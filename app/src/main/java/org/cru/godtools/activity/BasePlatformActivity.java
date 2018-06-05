@@ -285,9 +285,14 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
                 .path(getString(R.string.account_deeplink_path))
                 .build();
 
+        // try using an external browser first if we will deeplink back to GodTools
+        boolean handled = false;
         if (ComponentNameUtils.isDefaultComponentFor(this, MainActivity.class, redirectUri)) {
-            WebUrlLauncher.openUrl(this, mTheKey.loginUriBuilder().redirectUri(redirectUri).build());
-        } else {
+            handled = WebUrlLauncher.openUrl(this, mTheKey.loginUriBuilder().redirectUri(redirectUri).build());
+        }
+
+        // fallback to an in-app DialogFragment for login
+        if (!handled) {
             final FragmentManager fm = getSupportFragmentManager();
             if (fm.findFragmentByTag(TAG_KEY_LOGIN_DIALOG) == null) {
                 LoginDialogFragment loginDialogFragment = LoginDialogFragment.builder()
