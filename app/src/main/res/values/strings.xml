@@ -62,4 +62,8 @@
 		Here’s a link to a web version of the app {{share_link}} \n\n
 
 		Let’s talk more!</string>
+
+    <!-- Miscellaneous -->
+    <eat-comment />
+    <string name="error_unable_to_launch_url">Unable to open %s</string>
 </resources>
