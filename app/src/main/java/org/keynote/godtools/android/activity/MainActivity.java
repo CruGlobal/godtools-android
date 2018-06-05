@@ -1,7 +1,6 @@
 package org.keynote.godtools.android.activity;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,7 +23,6 @@ import org.cru.godtools.R;
 import org.cru.godtools.activity.BasePlatformActivity;
 import org.cru.godtools.activity.ToolDetailsActivity;
 import org.cru.godtools.everystudent.EveryStudent;
-import org.cru.godtools.init.content.task.InitialContentTasks;
 import org.cru.godtools.sync.GodToolsSyncService;
 import org.cru.godtools.tract.activity.TractActivity;
 import org.cru.godtools.tract.service.TractManager;
@@ -80,9 +78,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
             mActiveState = savedInstanceState.getInt(EXTRA_ACTIVE_STATE, mActiveState);
             mFeatureDiscoveryActive = savedInstanceState.getString(EXTRA_FEATURE_DISCOVERY, mFeatureDiscoveryActive);
         }
-
-        // install any missing initial content
-        AsyncTask.THREAD_POOL_EXECUTOR.execute(new InitialContentTasks(this));
 
         // sync any pending updates
         syncData();

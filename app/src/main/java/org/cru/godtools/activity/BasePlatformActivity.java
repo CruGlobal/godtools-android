@@ -1,5 +1,6 @@
 package org.cru.godtools.activity;
 
+import android.arch.lifecycle.Lifecycle;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -66,8 +67,6 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     @Nullable
     protected Locale mParallelLanguage;
 
-    private boolean mVisible = false;
-
     /* BEGIN lifecycle */
 
     @Override
@@ -93,7 +92,6 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     @Override
     protected void onStart() {
         super.onStart();
-        mVisible = true;
         startLanguagesChangeListener();
         loadLanguages(false);
     }
@@ -169,7 +167,6 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     @Override
     protected void onStop() {
         super.onStop();
-        mVisible = false;
         stopLanguagesChangeListener();
     }
 
@@ -200,7 +197,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     }
 
     protected final void closeNavigationDrawer() {
-        closeNavigationDrawer(mVisible);
+        closeNavigationDrawer(getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED));
     }
 
     protected final void closeNavigationDrawer(final boolean animate) {

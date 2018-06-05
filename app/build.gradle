@@ -7,14 +7,14 @@ android {
     compileSdkVersion compileSdk
 
     defaultConfig {
-        applicationId 'org.keynote.godtools.android'
+        applicationId rootProject.applicationId
         versionName rootProject.version
         versionCode grgit.log(includes:['HEAD']).size() + 4029047
 
         minSdkVersion minSdk
         targetSdkVersion targetSdk
 
-        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+        proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
 
         vectorDrawables.useSupportLibrary = true
 
