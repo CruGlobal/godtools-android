@@ -131,6 +131,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
 
@@ -139,6 +140,8 @@ dependencies {
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
+    implementation "me.thekey.android:thekey-eventbus:${deps.thekey}"
+    implementation "me.thekey.android:thekey-view-dialog-fragment:${deps.thekey}"
     implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
 
     debugImplementation "com.android.support:multidex:${deps.multidex}"
