@@ -279,8 +279,11 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     }
 
     private void launchLogin(final boolean signup) {
-        final String host = getString(R.string.account_deeplink_host);
-        final Uri redirectUri = new Uri.Builder().scheme("https").authority(host).appendPath("auth").build();
+        final Uri redirectUri = new Uri.Builder()
+                .scheme("https")
+                .authority(getString(R.string.account_deeplink_host))
+                .path(getString(R.string.account_deeplink_path))
+                .build();
 
         if (ComponentNameUtils.isDefaultComponentFor(this, MainActivity.class, redirectUri)) {
             WebUrlLauncher.openUrl(this, mTheKey.loginUriBuilder().redirectUri(redirectUri).build());

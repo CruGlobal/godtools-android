@@ -1,6 +1,7 @@
 package org.keynote.godtools.android.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,6 +31,8 @@ import org.keynote.godtools.android.fragment.ToolsFragment;
 import org.keynote.godtools.android.model.Tool;
 
 import java.util.Locale;
+
+import me.thekey.android.core.CodeGrantAsyncTask;
 
 import static android.arch.lifecycle.Lifecycle.State.RESUMED;
 import static android.arch.lifecycle.Lifecycle.State.STARTED;
@@ -74,6 +77,8 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         mTaskHandler = new Handler(this::onHandleMessage);
         setContentView(R.layout.activity_dashboard);
 
+        processIntent(getIntent());
+
         if (savedInstanceState != null) {
             mActiveState = savedInstanceState.getInt(EXTRA_ACTIVE_STATE, mActiveState);
             mFeatureDiscoveryActive = savedInstanceState.getString(EXTRA_FEATURE_DISCOVERY, mFeatureDiscoveryActive);
@@ -93,6 +98,12 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     protected void onStart() {
         super.onStart();
         loadInitialFragmentIfNeeded();
+    }
+
+    @Override
+    protected void onNewIntent(final Intent intent) {
+        super.onNewIntent(intent);
+        processIntent(intent);
     }
 
     @Override
@@ -206,6 +217,19 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     }
 
     /* END lifecycle */
+
+    private void processIntent(@Nullable final Intent intent) {
+        final String action = intent != null ? intent.getAction() : null;
+        final Uri data = intent != null ? intent.getData() : null;
+        if (Intent.ACTION_VIEW.equals(action) && data != null) {
+            if (getString(R.string.account_deeplink_host).equalsIgnoreCase(data.getHost())) {
+                if (getString(R.string.account_deeplink_path).equalsIgnoreCase(data.getPath())) {
+                    new CodeGrantAsyncTask(mTheKey, data).execute();
+                    intent.setData(null);
+                }
+            }
+        }
+    }
 
     @Override
     protected void setupNavigationTabs() {
