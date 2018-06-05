@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.util;
+package org.cru.godtools.base.ui.util;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
-import org.cru.godtools.R;
+import org.cru.godtools.base.ui.R;
 
 import timber.log.Timber;
 
@@ -26,7 +26,7 @@ public class WebUrlLauncher {
         } catch (final ActivityNotFoundException e) {
             Timber.tag("WebUrlLauncher")
                     .d(e, "Unable to open url: %s", url);
-            Toast.makeText(context, context.getString(R.string.error_unable_to_launch_url, url), Toast.LENGTH_LONG)
+            Toast.makeText(context, context.getString(R.string.toast_unable_to_launch_activity, url), Toast.LENGTH_LONG)
                     .show();
             return false;
         }
