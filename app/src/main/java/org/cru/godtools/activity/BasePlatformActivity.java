@@ -69,10 +69,14 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     @BindView(R.id.drawer_layout)
     protected DrawerLayout mDrawerLayout;
     @Nullable
+    private ActionBarDrawerToggle mDrawerToggle;
+    @Nullable
     @BindView(R.id.drawer_menu)
     NavigationView mDrawerMenu;
     @Nullable
-    private ActionBarDrawerToggle mDrawerToggle;
+    MenuItem mLoginItem;
+    @Nullable
+    MenuItem mLogoutItem;
 
     @NonNull
     protected /*final*/ TheKey mTheKey;
@@ -155,6 +159,12 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
             case R.id.action_about:
                 AboutActivity.start(this);
                 return true;
+            case R.id.action_login:
+                launchLogin(false);
+                return true;
+            case R.id.action_logout:
+                mTheKey.logout();
+                return true;
             case R.id.action_help:
                 mAnalytics.onTrackScreen(SCREEN_HELP);
                 WebUrlLauncher.openUrl(this, URI_HELP);
@@ -219,11 +229,19 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
                 return handled;
             });
 
+            mLoginItem = mDrawerMenu.getMenu().findItem(R.id.action_login);
+            mLogoutItem = mDrawerMenu.getMenu().findItem(R.id.action_logout);
             updateNavigationDrawerMenu();
         }
     }
 
     private void updateNavigationDrawerMenu() {
+        if (mLoginItem != null) {
+            mLoginItem.setVisible(mTheKey.getDefaultSessionGuid() == null);
+        }
+        if (mLogoutItem != null) {
+            mLogoutItem.setVisible(mTheKey.getDefaultSessionGuid() != null);
+        }
     }
 
     protected final void closeNavigationDrawer() {
