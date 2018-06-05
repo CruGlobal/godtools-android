@@ -14,7 +14,7 @@ android {
         minSdkVersion minSdk
         targetSdkVersion targetSdk
 
-        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+        proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
 
         vectorDrawables.useSupportLibrary = true
 
