@@ -8,6 +8,7 @@ public final class Constants {
     public static final String XMLNS_CONTENT = "https://mobile-content-api.cru.org/xmlns/content";
 
     // deep link uri params
+    public static final String PARAM_USE_DEVICE_LANGUAGE = "useDeviceLanguage";
     public static final String PARAM_PRIMARY_LANGUAGE = "primaryLanguage";
     public static final String PARAM_PARALLEL_LANGUAGE = "parallelLanguage";
 
