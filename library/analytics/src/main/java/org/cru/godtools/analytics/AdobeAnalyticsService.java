@@ -86,8 +86,9 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     @UiThread
     @Override
     public void onActivityResume(@NonNull final Activity activity) {
+        final String guid = mTheKey.getDefaultSessionGuid();
         mActiveActivity = new WeakReference<>(activity);
-        mAnalyticsExecutor.execute(() -> Config.collectLifecycleData(activity, baseContextData()));
+        mAnalyticsExecutor.execute(() -> Config.collectLifecycleData(activity, baseContextData(guid)));
     }
 
     @UiThread
@@ -144,22 +145,24 @@ public final class AdobeAnalyticsService implements AnalyticsService {
 
     @AnyThread
     private void trackAction(@NonNull final String action, @Nullable final Map<String, ?> attributes) {
+        final String guid = mTheKey.getDefaultSessionGuid();
         mAnalyticsExecutor.execute(() -> {
-            final Map<String, Object> data = baseContextData();
+            final Map<String, Object> data = baseContextData(guid);
             if (mPreviousScreenName != null) {
                 data.put(KEY_SCREEN_NAME, mPreviousScreenName);
             }
             if (attributes != null) {
                 data.putAll(attributes);
             }
-            Analytics.trackAction(action, baseContextData());
+            Analytics.trackAction(action, data);
         });
     }
 
     @AnyThread
     private void trackState(@NonNull final String screen, @Nullable final Locale contentLocale) {
+        final String guid = mTheKey.getDefaultSessionGuid();
         mAnalyticsExecutor.execute(() -> {
-            final Map<String, Object> adobeContextData = stateContextData(screen, contentLocale);
+            final Map<String, Object> adobeContextData = stateContextData(guid, screen, contentLocale);
             Analytics.trackState(screen, adobeContextData);
             mPreviousScreenName = screen;
         });
@@ -169,13 +172,12 @@ public final class AdobeAnalyticsService implements AnalyticsService {
      * Visitor.getMarketingCloudId() may be blocking. So, we need to call it on a worker thread.
      */
     @WorkerThread
-    private Map<String, Object> baseContextData() {
+    private Map<String, Object> baseContextData(@Nullable final String guid) {
         final Map<String, Object> data = new HashMap<>();
         data.put(KEY_APP_NAME, VALUE_GODTOOLS);
         data.put(KEY_MARKETING_CLOUD_ID, Visitor.getMarketingCloudId());
 
         // login state
-        final String guid = mTheKey.getDefaultSessionGuid();
         data.put(KEY_LOGGED_IN_STATUS, guid != null ? VALUE_LOGGED_IN : VALUE_NOT_LOGGED_IN);
         if (guid != null) {
             data.put(KEY_SSO_GUID, guid);
@@ -185,8 +187,8 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     }
 
     @WorkerThread
-    private Map<String, Object> stateContextData(final String screen, @Nullable final Locale contentLocale) {
-        final Map<String, Object> data = baseContextData();
+    private Map<String, Object> stateContextData(@Nullable final String guid, final String screen, @Nullable final Locale contentLocale) {
+        final Map<String, Object> data = baseContextData(guid);
         data.put(KEY_SCREEN_NAME_PREVIOUS, mPreviousScreenName);
         data.put(KEY_SCREEN_NAME, screen);
         if (contentLocale != null) {
