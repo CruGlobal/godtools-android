@@ -76,6 +76,7 @@ import static org.cru.godtools.base.ui.util.LocaleTypefaceUtils.safeApplyTypefac
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
 import static org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE;
 import static org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE;
+import static org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE;
 
 public class TractActivity extends ImmersiveActivity
         implements ManifestPagerAdapter.Callbacks, TabLayout.OnTabSelectedListener,
@@ -376,7 +377,11 @@ public class TractActivity extends ImmersiveActivity
         final List<Locale> locales = new ArrayList<>();
 
         // process the primary languages specified in the uri
-        final List<Locale> rawPrimaryLanguages = streamLanguageParamater(data, PARAM_PRIMARY_LANGUAGE).toList();
+        final List<Locale> rawPrimaryLanguages = new ArrayList<>();
+        if (!TextUtils.isEmpty(data.getQueryParameter(PARAM_USE_DEVICE_LANGUAGE))) {
+            rawPrimaryLanguages.add(Locale.getDefault());
+        }
+        streamLanguageParamater(data, PARAM_PRIMARY_LANGUAGE).forEach(rawPrimaryLanguages::add);
         rawPrimaryLanguages.add(LocaleCompat.forLanguageTag(data.getPathSegments().get(0)));
         final Locale[] primaryLanguages = LocaleUtils.getFallbacks(rawPrimaryLanguages.toArray(new Locale[0]));
         Collections.addAll(locales, primaryLanguages);
