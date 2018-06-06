@@ -34,14 +34,11 @@ public class BaseGodToolsApplication extends Application {
         initializeCrashlytics();
         NewRelic.withApplicationToken(NEW_RELIC_API_KEY).start(this);
 
-        // configure eventbus
-        configureEventBus(EventBus.builder()).installDefaultEventBus();
-
-        // configure analytics
-        configureAnalyticsServices();
-
-        // configure some language fallbacks
+        // configure components
         configureLanguageFallacks();
+        configureEventBus(EventBus.builder()).installDefaultEventBus();
+        configureTheKey();
+        configureAnalyticsServices();
     }
 
     private void initializeCrashlytics() {
@@ -73,4 +70,6 @@ public class BaseGodToolsApplication extends Application {
         LocaleUtils.addFallback("abs", "ms");
         LocaleUtils.addFallback("pmy", "ms");
     }
+
+    protected void configureTheKey() {}
 }

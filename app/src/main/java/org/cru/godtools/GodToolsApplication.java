@@ -30,7 +30,6 @@ public class GodToolsApplication extends BaseGodToolsApplication {
         super.onCreate();
 
         // configure the API
-        TheKeyImpl.configure(theKeyConfiguration());
         GodToolsApi.configure(this, MOBILE_CONTENT_API);
 
         // start the Job Manager
@@ -52,6 +51,11 @@ public class GodToolsApplication extends BaseGodToolsApplication {
                 .addIndex(new ModelEventEventBusIndex())
                 .addIndex(new ModelLoaderEventBusIndex())
                 .addIndex(new TractEventBusIndex());
+    }
+
+    @Override
+    protected void configureTheKey() {
+        TheKeyImpl.configure(theKeyConfiguration());
     }
 
     private TheKeyImpl.Configuration theKeyConfiguration() {
