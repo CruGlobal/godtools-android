@@ -1,7 +1,6 @@
 package org.cru.godtools.tract.model;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.support.annotation.ColorInt;
@@ -19,6 +18,7 @@ import com.google.common.collect.ImmutableSet;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.analytics.AnalyticsService;
 import org.cru.godtools.base.model.Event;
+import org.cru.godtools.base.ui.util.WebUrlLauncher;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
@@ -191,7 +191,7 @@ public final class Button extends Content implements Styles {
                         if (mModel.mUrl != null) {
                             final Context context = mRoot.getContext();
                             AnalyticsService.getInstance(context).onTrackExitUrl(mModel.mUrl);
-                            context.startActivity(new Intent(Intent.ACTION_VIEW, mModel.mUrl));
+                            WebUrlLauncher.openUrl(context, mModel.mUrl);
                         }
                         break;
                     case EVENT:
