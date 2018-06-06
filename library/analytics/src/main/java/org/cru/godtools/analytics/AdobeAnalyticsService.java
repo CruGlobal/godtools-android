@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import me.thekey.android.TheKey;
+
 import static org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag;
 import static org.cru.godtools.analytics.AnalyticsService.tractPageToScreenName;
 
@@ -35,6 +37,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     /* Property Keys */
     private static final String KEY_APP_NAME = "cru.appname";
     private static final String KEY_MARKETING_CLOUD_ID = "cru.mcid";
+    private static final String KEY_SSO_GUID = "cru.ssoguid";
     private static final String KEY_LOGGED_IN_STATUS = "cru.loggedinstatus";
     private static final String KEY_SCREEN_NAME = "cru.screenname";
     private static final String KEY_SCREEN_NAME_PREVIOUS = "cru.previousscreenname";
@@ -46,9 +49,11 @@ public final class AdobeAnalyticsService implements AnalyticsService {
 
     /* Value constants */
     private static final String VALUE_GODTOOLS = "GodTools";
+    private static final String VALUE_LOGGED_IN = "logged in";
     private static final String VALUE_NOT_LOGGED_IN = "not logged in";
 
     private final Context mContext;
+    private final TheKey mTheKey;
     /**
      * Single thread executor to serialize events on a background thread.
      */
@@ -60,6 +65,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
 
     private AdobeAnalyticsService(@NonNull final Context context) {
         mContext = context;
+        mTheKey = TheKey.getInstance(mContext);
         Config.setContext(context);
         EventBus.getDefault().register(this);
     }
@@ -167,7 +173,14 @@ public final class AdobeAnalyticsService implements AnalyticsService {
         final Map<String, Object> data = new HashMap<>();
         data.put(KEY_APP_NAME, VALUE_GODTOOLS);
         data.put(KEY_MARKETING_CLOUD_ID, Visitor.getMarketingCloudId());
-        data.put(KEY_LOGGED_IN_STATUS, VALUE_NOT_LOGGED_IN);
+
+        // login state
+        final String guid = mTheKey.getDefaultSessionGuid();
+        data.put(KEY_LOGGED_IN_STATUS, guid != null ? VALUE_LOGGED_IN : VALUE_NOT_LOGGED_IN);
+        if (guid != null) {
+            data.put(KEY_SSO_GUID, guid);
+        }
+
         return data;
     }
 

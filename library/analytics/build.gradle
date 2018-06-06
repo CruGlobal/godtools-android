@@ -22,6 +22,7 @@ dependencies {
 
     implementation 'com.adobe.mobile:adobeMobileLibrary:4.15.0'
     implementation "com.snowplowanalytics:snowplow-android-tracker:${deps.snowplow}"
+    implementation "me.thekey.android:thekey-api:${deps.thekey}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
     debugImplementation "com.jakewharton.timber:timber:${deps.timber}"
