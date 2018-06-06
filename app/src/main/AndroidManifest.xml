@@ -32,6 +32,7 @@
         android:theme="@style/Theme.GodTools2.AppBar">
         <activity
             android:name="org.keynote.godtools.android.activity.MainActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="@integer/default_screen_orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,8 +46,18 @@
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
-                <data android:host="knowgod.com" />
+                <data android:host="@string/tract_deeplink_host_2" />
                 <data android:path="/" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="@string/account_deeplink_host" />
+                <data android:path="@string/account_deeplink_path" />
             </intent-filter>
         </activity>
 

@@ -17,6 +17,11 @@ import org.cru.godtools.tract.TractEventBusIndex;
 import org.cru.godtools.tract.service.FollowupService;
 import org.greenrobot.eventbus.EventBusBuilder;
 
+import me.thekey.android.core.TheKeyImpl;
+import me.thekey.android.eventbus.EventBusEventsManager;
+
+import static org.cru.godtools.account.BuildConfig.ACCOUNT_TYPE;
+import static org.cru.godtools.account.BuildConfig.THEKEY_CLIENTID;
 import static org.cru.godtools.config.BuildConfig.MOBILE_CONTENT_API;
 
 public class GodToolsApplication extends BaseGodToolsApplication {
@@ -25,6 +30,7 @@ public class GodToolsApplication extends BaseGodToolsApplication {
         super.onCreate();
 
         // configure the API
+        TheKeyImpl.configure(theKeyConfiguration());
         GodToolsApi.configure(this, MOBILE_CONTENT_API);
 
         // start the Job Manager
@@ -46,5 +52,12 @@ public class GodToolsApplication extends BaseGodToolsApplication {
                 .addIndex(new ModelEventEventBusIndex())
                 .addIndex(new ModelLoaderEventBusIndex())
                 .addIndex(new TractEventBusIndex());
+    }
+
+    private TheKeyImpl.Configuration theKeyConfiguration() {
+        return TheKeyImpl.Configuration.base()
+                .accountType(ACCOUNT_TYPE)
+                .clientId(THEKEY_CLIENTID)
+                .eventsManager(new EventBusEventsManager());
     }
 }

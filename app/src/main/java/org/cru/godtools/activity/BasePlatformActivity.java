@@ -7,9 +7,11 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,15 +21,23 @@ import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
+import org.ccci.gto.android.common.util.content.ComponentNameUtils;
 import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.ui.activity.BaseDesignActivity;
 import org.cru.godtools.base.ui.util.WebUrlLauncher;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.keynote.godtools.android.activity.MainActivity;
 
 import java.util.Locale;
 
 import butterknife.BindView;
+import me.thekey.android.TheKey;
+import me.thekey.android.eventbus.event.TheKeyEvent;
+import me.thekey.android.view.dialog.LoginDialogFragment;
 
 import static org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES;
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_CONTACT_US;
@@ -50,6 +60,8 @@ import static org.keynote.godtools.android.utils.Constants.SHARE_LINK;
 
 public abstract class BasePlatformActivity extends BaseDesignActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String TAG_KEY_LOGIN_DIALOG = "keyLoginDialog";
+
     private final ChangeListener mSettingsChangeListener = new ChangeListener();
 
     // Navigation Drawer
@@ -57,10 +69,17 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     @BindView(R.id.drawer_layout)
     protected DrawerLayout mDrawerLayout;
     @Nullable
+    private ActionBarDrawerToggle mDrawerToggle;
+    @Nullable
     @BindView(R.id.drawer_menu)
     NavigationView mDrawerMenu;
     @Nullable
-    private ActionBarDrawerToggle mDrawerToggle;
+    MenuItem mLoginItem;
+    @Nullable
+    MenuItem mLogoutItem;
+
+    @NonNull
+    protected /*final*/ TheKey mTheKey;
 
     @NonNull
     protected Locale mPrimaryLanguage = Settings.getDefaultLanguage();
@@ -72,6 +91,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mTheKey = TheKey.getInstance(this);
         loadLanguages(true);
     }
 
@@ -93,7 +113,15 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     protected void onStart() {
         super.onStart();
         startLanguagesChangeListener();
+        EventBus.getDefault().register(this);
         loadLanguages(false);
+        updateNavigationDrawerMenu();
+    }
+
+    @MainThread
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onTheKeyEvent(@NonNull final TheKeyEvent event) {
+        updateNavigationDrawerMenu();
     }
 
     protected void onUpdatePrimaryLanguage() {}
@@ -131,6 +159,12 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
             case R.id.action_about:
                 AboutActivity.start(this);
                 return true;
+            case R.id.action_login:
+                launchLogin(false);
+                return true;
+            case R.id.action_logout:
+                mTheKey.logout();
+                return true;
             case R.id.action_help:
                 mAnalytics.onTrackScreen(SCREEN_HELP);
                 WebUrlLauncher.openUrl(this, URI_HELP);
@@ -167,6 +201,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     @Override
     protected void onStop() {
         super.onStop();
+        EventBus.getDefault().unregister(this);
         stopLanguagesChangeListener();
     }
 
@@ -193,6 +228,19 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
                 }
                 return handled;
             });
+
+            mLoginItem = mDrawerMenu.getMenu().findItem(R.id.action_login);
+            mLogoutItem = mDrawerMenu.getMenu().findItem(R.id.action_logout);
+            updateNavigationDrawerMenu();
+        }
+    }
+
+    private void updateNavigationDrawerMenu() {
+        if (mLoginItem != null) {
+            mLoginItem.setVisible(mTheKey.getDefaultSessionGuid() == null);
+        }
+        if (mLogoutItem != null) {
+            mLogoutItem.setVisible(mTheKey.getDefaultSessionGuid() != null);
         }
     }
 
@@ -245,6 +293,31 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
         } catch (ActivityNotFoundException e) {
             startActivity(new Intent(Intent.ACTION_VIEW,
                                      Uri.parse("https://play.google.com/store/apps/details?id=" + appId)));
+        }
+    }
+
+    private void launchLogin(final boolean signup) {
+        final Uri redirectUri = new Uri.Builder()
+                .scheme("https")
+                .authority(getString(R.string.account_deeplink_host))
+                .path(getString(R.string.account_deeplink_path))
+                .build();
+
+        // try using an external browser first if we will deeplink back to GodTools
+        boolean handled = false;
+        if (ComponentNameUtils.isDefaultComponentFor(this, MainActivity.class, redirectUri)) {
+            handled = WebUrlLauncher.openUrl(this, mTheKey.loginUriBuilder().redirectUri(redirectUri).build());
+        }
+
+        // fallback to an in-app DialogFragment for login
+        if (!handled) {
+            final FragmentManager fm = getSupportFragmentManager();
+            if (fm.findFragmentByTag(TAG_KEY_LOGIN_DIALOG) == null) {
+                LoginDialogFragment loginDialogFragment = LoginDialogFragment.builder()
+                        .redirectUri(redirectUri)
+                        .build();
+                loginDialogFragment.show(fm.beginTransaction().addToBackStack("loginDialog"), TAG_KEY_LOGIN_DIALOG);
+            }
         }
     }
 

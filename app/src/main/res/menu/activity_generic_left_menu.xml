@@ -20,6 +20,14 @@
                 android:id="@+id/action_contact_us"
                 android:orderInCategory="400"
                 android:title="@string/menu_contact_us" />
+            <item
+                android:id="@+id/action_login"
+                android:orderInCategory="500"
+                android:title="@string/menu_login" />
+            <item
+                android:id="@+id/action_logout"
+                android:orderInCategory="500"
+                android:title="@string/menu_logout" />
         </menu>
     </item>
 
