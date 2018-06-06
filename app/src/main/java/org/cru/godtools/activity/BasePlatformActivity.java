@@ -23,7 +23,7 @@ import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.ui.activity.BaseDesignActivity;
-import org.keynote.godtools.android.util.WebUrlLauncher;
+import org.cru.godtools.base.ui.util.WebUrlLauncher;
 
 import java.util.Locale;
 
