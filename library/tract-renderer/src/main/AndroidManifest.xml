@@ -26,7 +26,7 @@
 
         <activity
             android:name=".activity.ModalActivity"
-            android:screenOrientation="userPortrait"
+            android:screenOrientation="user"
             android:theme="@style/Theme.GodTools.Tract.Activity.Modal" />
     </application>
 </manifest>
