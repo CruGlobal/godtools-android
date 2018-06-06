@@ -12,10 +12,5 @@
                 android:name="default-url"
                 android:value="https://knowgod.com/en/kgp/" />
         </activity>
-
-        <!-- XXX: we need this present for now to work around Crashlytics tooling bugs -->
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="4c6c9eb55214633c5eca4176c06b20bb8fd07a72" />
     </application>
 </manifest>
