@@ -195,7 +195,8 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     }
 
     @WorkerThread
-    private Map<String, Object> stateContextData(@Nullable final String guid, final String screen, @Nullable final Locale contentLocale) {
+    private Map<String, Object> stateContextData(@Nullable final String guid, final String screen,
+                                                 @Nullable final Locale contentLocale) {
         final Map<String, Object> data = baseContextData(guid);
         data.put(KEY_SCREEN_NAME_PREVIOUS, mPreviousScreenName);
         data.put(KEY_SCREEN_NAME, screen);
