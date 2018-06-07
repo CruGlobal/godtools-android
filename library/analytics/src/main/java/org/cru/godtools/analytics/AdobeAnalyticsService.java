@@ -208,16 +208,16 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     @NonNull
     @WorkerThread
     private Attributes getAttributesFor(@NonNull final String guid) {
+        // load attributes if they aren't valid or are stale
         final Attributes attributes = mTheKey.getAttributes(guid);
-        if (attributes.areValid() && !attributes.areStale()) {
-            return attributes;
+        if (!attributes.areValid() || attributes.areStale()) {
+            try {
+                mTheKey.loadAttributes(guid);
+                return mTheKey.getAttributes(guid);
+            } catch (final TheKeySocketException ignored) {
+            }
         }
 
-        try {
-            mTheKey.loadAttributes(guid);
-        } catch (final TheKeySocketException ignored) {
-        }
-
-        return mTheKey.getAttributes(guid);
+        return attributes;
     }
 }
