@@ -3,12 +3,14 @@ package org.cru.godtools.sync.task;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.support.v4.util.LongSparseArray;
 import android.support.v4.util.SimpleArrayMap;
 
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.jsonapi.util.Includes;
 import org.cru.godtools.model.Attachment;
+import org.cru.godtools.model.Base;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.event.AttachmentUpdateEvent;
@@ -64,8 +66,19 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
         }
     }
 
-    private void storeLanguage(@NonNull final SimpleArrayMap<Class<?>, Object> events,
-                               @NonNull final Language language) {
+    @VisibleForTesting
+    void storeLanguage(@NonNull final SimpleArrayMap<Class<?>, Object> events, @NonNull final Language language) {
+        // this language doesn't exist yet, check to see if a different language shares the same id
+        if (language.getId() != Base.INVALID_ID && mDao.refresh(language) == null) {
+            // update the language code to preserve the added state
+            mDao.streamCompat(Query.select(Language.class).where(LanguageTable.FIELD_ID.eq(language.getId())).limit(1))
+                    .findFirst()
+                    .ifPresent(old -> {
+                        mDao.update(language, mDao.getPrimaryKeyWhere(old), LanguageTable.COLUMN_CODE);
+                        coalesceEvent(events, LanguageUpdateEvent.INSTANCE);
+                    });
+        }
+
         mDao.updateOrInsert(language, CONFLICT_REPLACE, API_FIELDS_LANGUAGE);
         coalesceEvent(events, new LanguageUpdateEvent());
     }

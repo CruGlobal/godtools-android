@@ -66,7 +66,7 @@ public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
 
     @NonNull
     @Override
-    protected Expression getPrimaryKeyWhere(@NonNull final Object obj) {
+    public Expression getPrimaryKeyWhere(@NonNull final Object obj) {
         if (obj instanceof LocalFile) {
             return getPrimaryKeyWhere(LocalFile.class, ((LocalFile) obj).getFileName());
         } else if (obj instanceof TranslationFile) {

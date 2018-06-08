@@ -19,5 +19,7 @@ dependencies {
 
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
+    androidTestImplementation "com.android.support.test:runner:${deps.androidTestingSupport}"
+
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
 }
