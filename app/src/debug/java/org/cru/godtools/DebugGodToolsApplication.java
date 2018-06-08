@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 
+import com.adobe.mobile.Config;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.inspector.database.SqliteDatabaseDriver;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
@@ -40,6 +41,14 @@ public class DebugGodToolsApplication extends GodToolsApplication {
     protected void attachBaseContext(@NonNull final Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+    }
+
+    @Override
+    protected void configureAnalyticsServices() {
+        super.configureAnalyticsServices();
+
+        // enable debug logging for Adobe Analytics
+        Config.setDebugLogging(true);
     }
 
     private void initLeakCanary() {

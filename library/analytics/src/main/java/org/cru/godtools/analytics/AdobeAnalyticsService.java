@@ -28,6 +28,11 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import me.thekey.android.Attributes;
+import me.thekey.android.TheKey;
+import me.thekey.android.exception.TheKeySocketException;
+
+import static me.thekey.android.Attributes.ATTR_GR_MASTER_PERSON_ID;
 import static org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag;
 import static org.cru.godtools.analytics.AnalyticsService.tractPageToScreenName;
 
@@ -35,6 +40,8 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     /* Property Keys */
     private static final String KEY_APP_NAME = "cru.appname";
     private static final String KEY_MARKETING_CLOUD_ID = "cru.mcid";
+    private static final String KEY_SSO_GUID = "cru.ssoguid";
+    private static final String KEY_GR_MASTER_PERSON_ID = "cru.grmpid";
     private static final String KEY_LOGGED_IN_STATUS = "cru.loggedinstatus";
     private static final String KEY_SCREEN_NAME = "cru.screenname";
     private static final String KEY_SCREEN_NAME_PREVIOUS = "cru.previousscreenname";
@@ -46,9 +53,11 @@ public final class AdobeAnalyticsService implements AnalyticsService {
 
     /* Value constants */
     private static final String VALUE_GODTOOLS = "GodTools";
+    private static final String VALUE_LOGGED_IN = "logged in";
     private static final String VALUE_NOT_LOGGED_IN = "not logged in";
 
     private final Context mContext;
+    private final TheKey mTheKey;
     /**
      * Single thread executor to serialize events on a background thread.
      */
@@ -60,6 +69,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
 
     private AdobeAnalyticsService(@NonNull final Context context) {
         mContext = context;
+        mTheKey = TheKey.getInstance(mContext);
         Config.setContext(context);
         EventBus.getDefault().register(this);
     }
@@ -80,8 +90,9 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     @UiThread
     @Override
     public void onActivityResume(@NonNull final Activity activity) {
+        final String guid = mTheKey.getDefaultSessionGuid();
         mActiveActivity = new WeakReference<>(activity);
-        mAnalyticsExecutor.execute(() -> Config.collectLifecycleData(activity, baseContextData()));
+        mAnalyticsExecutor.execute(() -> Config.collectLifecycleData(activity, baseContextData(guid)));
     }
 
     @UiThread
@@ -138,22 +149,24 @@ public final class AdobeAnalyticsService implements AnalyticsService {
 
     @AnyThread
     private void trackAction(@NonNull final String action, @Nullable final Map<String, ?> attributes) {
+        final String guid = mTheKey.getDefaultSessionGuid();
         mAnalyticsExecutor.execute(() -> {
-            final Map<String, Object> data = baseContextData();
+            final Map<String, Object> data = baseContextData(guid);
             if (mPreviousScreenName != null) {
                 data.put(KEY_SCREEN_NAME, mPreviousScreenName);
             }
             if (attributes != null) {
                 data.putAll(attributes);
             }
-            Analytics.trackAction(action, baseContextData());
+            Analytics.trackAction(action, data);
         });
     }
 
     @AnyThread
     private void trackState(@NonNull final String screen, @Nullable final Locale contentLocale) {
+        final String guid = mTheKey.getDefaultSessionGuid();
         mAnalyticsExecutor.execute(() -> {
-            final Map<String, Object> adobeContextData = stateContextData(screen, contentLocale);
+            final Map<String, Object> adobeContextData = stateContextData(guid, screen, contentLocale);
             Analytics.trackState(screen, adobeContextData);
             mPreviousScreenName = screen;
         });
@@ -163,22 +176,49 @@ public final class AdobeAnalyticsService implements AnalyticsService {
      * Visitor.getMarketingCloudId() may be blocking. So, we need to call it on a worker thread.
      */
     @WorkerThread
-    private Map<String, Object> baseContextData() {
+    private Map<String, Object> baseContextData(@Nullable final String guid) {
         final Map<String, Object> data = new HashMap<>();
         data.put(KEY_APP_NAME, VALUE_GODTOOLS);
         data.put(KEY_MARKETING_CLOUD_ID, Visitor.getMarketingCloudId());
-        data.put(KEY_LOGGED_IN_STATUS, VALUE_NOT_LOGGED_IN);
+
+        // login state
+        data.put(KEY_LOGGED_IN_STATUS, guid != null ? VALUE_LOGGED_IN : VALUE_NOT_LOGGED_IN);
+        if (guid != null) {
+            data.put(KEY_SSO_GUID, guid);
+            final String grMasterPersonId = getAttributesFor(guid).getAttribute(ATTR_GR_MASTER_PERSON_ID);
+            if (grMasterPersonId != null) {
+                data.put(KEY_GR_MASTER_PERSON_ID, grMasterPersonId);
+            }
+        }
+
         return data;
     }
 
     @WorkerThread
-    private Map<String, Object> stateContextData(final String screen, @Nullable final Locale contentLocale) {
-        final Map<String, Object> data = baseContextData();
+    private Map<String, Object> stateContextData(@Nullable final String guid, final String screen,
+                                                 @Nullable final Locale contentLocale) {
+        final Map<String, Object> data = baseContextData(guid);
         data.put(KEY_SCREEN_NAME_PREVIOUS, mPreviousScreenName);
         data.put(KEY_SCREEN_NAME, screen);
         if (contentLocale != null) {
             data.put(KEY_CONTENT_LANGUAGE, toLanguageTag(contentLocale));
         }
         return data;
+    }
+
+    @NonNull
+    @WorkerThread
+    private Attributes getAttributesFor(@NonNull final String guid) {
+        // load attributes if they aren't valid or are stale
+        final Attributes attributes = mTheKey.getAttributes(guid);
+        if (!attributes.areValid() || attributes.areStale()) {
+            try {
+                mTheKey.loadAttributes(guid);
+                return mTheKey.getAttributes(guid);
+            } catch (final TheKeySocketException ignored) {
+            }
+        }
+
+        return attributes;
     }
 }

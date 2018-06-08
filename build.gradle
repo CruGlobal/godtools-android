@@ -31,6 +31,7 @@ ext {
     targetSdk     = 27
 }
 ext.deps = [
+        adobeMobileServices  : '4.16.0',
         advrecyclerview      : '0.10.6',
         androidInstantApps   : '1.1.0',
         androidLifecycle     : '1.1.0',
