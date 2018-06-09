@@ -156,11 +156,17 @@ public class TractActivity extends ImmersiveActivity
         BundleUtils.putLocaleArray(extras, EXTRA_LANGUAGES, Stream.of(languages).withoutNulls().toArray(Locale[]::new));
     }
 
-    public static void start(@NonNull final Context context, @NonNull final String toolCode,
-                             @NonNull final Locale... languages) {
+    @NonNull
+    public static Intent createIntent(@NonNull final Context context, @NonNull final String toolCode,
+                                      @NonNull final Locale... languages) {
         final Bundle extras = new Bundle();
         populateExtras(extras, toolCode, languages);
-        context.startActivity(new Intent(context, TractActivity.class).putExtras(extras));
+        return new Intent(context, TractActivity.class).setAction(Intent.ACTION_VIEW).putExtras(extras);
+    }
+
+    public static void start(@NonNull final Context context, @NonNull final String toolCode,
+                             @NonNull final Locale... languages) {
+        context.startActivity(createIntent(context, toolCode, languages));
     }
 
     public TractActivity() {
