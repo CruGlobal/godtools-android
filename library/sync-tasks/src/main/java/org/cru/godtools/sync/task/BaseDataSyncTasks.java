@@ -12,6 +12,7 @@ import org.ccci.gto.android.common.jsonapi.util.Includes;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Base;
 import org.cru.godtools.model.Language;
+import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.event.AttachmentUpdateEvent;
 import org.cru.godtools.model.event.LanguageUpdateEvent;
@@ -21,7 +22,6 @@ import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
-import org.keynote.godtools.android.model.Tool;
 
 import java.util.List;
 import java.util.Locale;

@@ -8,8 +8,8 @@ import android.support.annotation.Nullable;
 import com.google.common.base.Strings;
 
 import org.cru.godtools.base.ui.util.LocaleTypefaceUtils;
+import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
-import org.keynote.godtools.android.model.Tool;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 

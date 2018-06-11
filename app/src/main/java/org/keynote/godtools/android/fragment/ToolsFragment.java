@@ -28,13 +28,13 @@ import org.cru.godtools.adapter.ToolsAdapter;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Language;
+import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.event.content.AttachmentEventBusSubscriber;
 import org.cru.godtools.sync.GodToolsSyncService;
 import org.keynote.godtools.android.content.ToolsCursorLoader;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
-import org.keynote.godtools.android.model.Tool;
 
 import java.util.Locale;
 

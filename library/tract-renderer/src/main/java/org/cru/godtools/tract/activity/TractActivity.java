@@ -41,6 +41,7 @@ import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
+import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.sync.task.ToolSyncTasks;
@@ -60,7 +61,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.Contract;
 import org.keynote.godtools.android.db.GodToolsDao;
-import org.keynote.godtools.android.model.Tool;
 
 import java.io.IOException;
 import java.util.ArrayList;

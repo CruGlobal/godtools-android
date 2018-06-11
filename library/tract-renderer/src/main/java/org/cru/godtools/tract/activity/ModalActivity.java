@@ -18,6 +18,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import org.ccci.gto.android.common.util.BundleUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.model.Language;
+import org.cru.godtools.model.Tool;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.content.TractManifestLoader;
@@ -28,7 +29,6 @@ import org.cru.godtools.tract.service.TractManager;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.keynote.godtools.android.model.Tool;
 
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;

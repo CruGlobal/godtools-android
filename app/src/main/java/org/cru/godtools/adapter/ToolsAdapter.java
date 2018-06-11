@@ -18,8 +18,8 @@ import org.cru.godtools.R;
 import org.cru.godtools.base.ui.util.LocaleTypefaceUtils;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
+import org.cru.godtools.model.Tool;
 import org.keynote.godtools.android.db.Contract.ToolTable;
-import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.util.ViewUtils;
 
 import java.util.List;
