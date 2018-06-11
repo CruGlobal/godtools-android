@@ -13,6 +13,7 @@ import org.cru.godtools.init.content.task.InitialContentTasks;
 import org.cru.godtools.model.event.ModelEventEventBusIndex;
 import org.cru.godtools.model.loader.ModelLoaderEventBusIndex;
 import org.cru.godtools.shortcuts.GodToolsShortcutManager;
+import org.cru.godtools.shortcuts.ShortcutsEventBusIndex;
 import org.cru.godtools.sync.job.SyncJobCreator;
 import org.cru.godtools.tract.TractEventBusIndex;
 import org.cru.godtools.tract.service.FollowupService;
@@ -54,6 +55,7 @@ public class GodToolsApplication extends BaseGodToolsApplication {
                 .addIndex(new DownloadManagerEventBusIndex())
                 .addIndex(new ModelEventEventBusIndex())
                 .addIndex(new ModelLoaderEventBusIndex())
+                .addIndex(new ShortcutsEventBusIndex())
                 .addIndex(new TractEventBusIndex());
     }
 
