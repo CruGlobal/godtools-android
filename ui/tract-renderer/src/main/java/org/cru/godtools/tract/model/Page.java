@@ -366,7 +366,6 @@ public final class Page extends Base implements Styles, Parent {
         @BindView(R2.id.page_content_layout)
         PageContentLayout mPageContentLayout;
 
-        @Nullable
         @BindView(R2.id.hero)
         View mHero;
 
@@ -376,6 +375,8 @@ public final class Page extends Base implements Styles, Parent {
         private Card[] mCards = new Card[0];
         private Set<String> mVisibleCards = new ArraySet<>();
 
+        @NonNull
+        private final Hero.HeroViewHolder mHeroViewHolder;
         @NonNull
         private final Pools.Pool<CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
         @NonNull
@@ -387,6 +388,7 @@ public final class Page extends Base implements Styles, Parent {
         PageViewHolder(@NonNull final View root) {
             super(Page.class, root, null);
             mPageContentLayout.setActiveCardListener(this);
+            mHeroViewHolder = Hero.getViewHolder(mHero, this);
         }
 
         /* BEGIN lifecycle */
@@ -394,9 +396,9 @@ public final class Page extends Base implements Styles, Parent {
         @Override
         void onBind() {
             super.onBind();
-            updateDisplayedCards();
             bindPage();
-            Hero.bind(mModel != null ? mModel.getHero() : null, mHero);
+            bindHero();
+            updateDisplayedCards();
         }
 
         public void onContentEvent(@NonNull final Event event) {
@@ -478,6 +480,10 @@ public final class Page extends Base implements Styles, Parent {
             mPageView.setBackgroundColor(Page.getBackgroundColor(mModel));
             Resource.bindBackgroundImage(mBackgroundImage, getBackgroundImageResource(mModel),
                                          getBackgroundImageScaleType(mModel), getBackgroundImageGravity(mModel));
+        }
+
+        private void bindHero() {
+            mHeroViewHolder.bind(mModel != null ? mModel.getHero() : null);
         }
 
         @UiThread

@@ -78,7 +78,7 @@
                         tools:textSize="54sp" />
 
                     <LinearLayout
-                        android:id="@+id/hero_content"
+                        android:id="@+id/content"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/hero_heading"
