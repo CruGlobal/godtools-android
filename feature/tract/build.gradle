@@ -14,7 +14,7 @@ dependencies {
 
     implementation project(':library:api')
     implementation project(':library:config')
-    implementation project(':library:tract-renderer')
 
     implementation project(':ui:base-app')
+    implementation project(':ui:tract-renderer')
 }

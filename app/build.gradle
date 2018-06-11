@@ -116,9 +116,9 @@ dependencies {
     implementation project(':library:model-events')
     implementation project(':library:model-loader')
     implementation project(':library:sync')
-    implementation project(':library:tract-renderer')
     implementation project(':ui:account')
     implementation project(':ui:base-app')
+    implementation project(':ui:tract-renderer')
 
     implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
     implementation "com.android.support:cardview-v7:${deps.androidSupport}"

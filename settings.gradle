@@ -14,10 +14,10 @@ include 'library:model-events'
 include 'library:model-loader'
 include 'library:sync'
 include 'library:sync-tasks'
-include 'library:tract-renderer'
 
 include 'ui:account'
 include 'ui:base-app'
+include 'ui:tract-renderer'
 
 include 'feature:tract'
 
