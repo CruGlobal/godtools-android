@@ -19,6 +19,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 import android.support.v4.content.pm.ShortcutInfoCompat;
+import android.support.v4.content.pm.ShortcutManagerCompat;
 import android.support.v4.graphics.drawable.IconCompat;
 
 import com.annimon.stream.Collectors;
@@ -48,7 +49,10 @@ import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -61,7 +65,9 @@ import static org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE;
 public final class GodToolsShortcutManager implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final boolean SUPPORTS_SHORTCUT_MANAGER = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1;
     private static final int MSG_UPDATE_SHORTCUTS = 1;
+    private static final int MSG_UPDATE_PENDING_SHORTCUTS = 2;
     private static final long DELAY_UPDATE_SHORTCUTS = 5000;
+    private static final long DELAY_UPDATE_PENDING_SHORTCUTS = 100;
 
     private static final String TYPE_TOOL = "tool|";
 
@@ -73,6 +79,8 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
     private final GodToolsDao mDao;
     @NonNull
     private final Handler mHandler;
+
+    private final Map<String, WeakReference<PendingShortcut>> mPendingShortcuts = new HashMap<>();
 
     private GodToolsShortcutManager(@NonNull final Context context) {
         mContext = context;
@@ -115,6 +123,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
     public void onUpdateSystemLocale(@NonNull final BroadcastReceiver.PendingResult result) {
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
             updateShortcuts();
+            updatePendingShortcuts();
             result.finish();
         });
     }
@@ -128,6 +137,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
             case PREF_PRIMARY_LANGUAGE:
             case PREF_PARALLEL_LANGUAGE:
                 enqueueUpdateShortcuts(false);
+                enqueueUpdatePendingShortcuts(false);
         }
     }
 
@@ -138,6 +148,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
     @Subscribe
     public void onAttachmentUpdate(@NonNull final AttachmentUpdateEvent event) {
         enqueueUpdateShortcuts(false);
+        enqueueUpdatePendingShortcuts(false);
     }
 
     @AnyThread
@@ -145,6 +156,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
     public void onToolUpdate(@NonNull final ToolUpdateEvent event) {
         // Could change which tools are visible or the label for tools
         enqueueUpdateShortcuts(false);
+        enqueueUpdatePendingShortcuts(false);
     }
 
     @AnyThread
@@ -152,6 +164,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
     public void onTranslationUpdate(@NonNull final TranslationUpdateEvent event) {
         // Could change which tools are available or the label for tools
         enqueueUpdateShortcuts(false);
+        enqueueUpdatePendingShortcuts(false);
     }
 
     @AnyThread
@@ -163,6 +176,100 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
     }
 
     /* END lifecycle */
+
+    /* BEGIN Pending shortcut */
+
+    @AnyThread
+    public boolean canPinToolShortcut(@Nullable final Tool tool) {
+        // short-circuit if this tool isn't pinnable
+        if (tool == null || tool.getType() != Tool.Type.TRACT) {
+            return false;
+        }
+
+        // return if the shortcut manager supports pinning
+        return ShortcutManagerCompat.isRequestPinShortcutSupported(mContext);
+    }
+
+    @Nullable
+    @AnyThread
+    public PendingShortcut getPendingToolShortcut(@Nullable final String code) {
+        if (code == null) {
+            return null;
+        }
+
+        final String id = toolShortcutId(code);
+        PendingShortcut shortcut;
+        synchronized (mPendingShortcuts) {
+            final WeakReference<PendingShortcut> ref = mPendingShortcuts.get(id);
+            shortcut = ref != null ? ref.get() : null;
+            if (shortcut == null) {
+                shortcut = new PendingShortcut(code);
+                mPendingShortcuts.put(id, new WeakReference<>(shortcut));
+            }
+        }
+        enqueueUpdatePendingShortcuts(true);
+        return shortcut;
+    }
+
+    @AnyThread
+    public void pinShortcut(@NonNull final PendingShortcut pendingShortcut) {
+        final ShortcutInfoCompat shortcut = pendingShortcut.mShortcut;
+        if (shortcut != null) {
+            ShortcutManagerCompat.requestPinShortcut(mContext, shortcut, null);
+        }
+    }
+
+    @AnyThread
+    private void enqueueUpdatePendingShortcuts(final boolean immediate) {
+        // cancel any pending update
+        mHandler.removeMessages(MSG_UPDATE_PENDING_SHORTCUTS);
+
+        final Runnable task = () -> {
+            if (ThreadUtils.isUiThread()) {
+                AsyncTask.THREAD_POOL_EXECUTOR.execute(this::updatePendingShortcuts);
+            } else {
+                updatePendingShortcuts();
+            }
+        };
+
+        // enqueue processing
+        final Message m = Message.obtain(mHandler, task);
+        m.what = MSG_UPDATE_PENDING_SHORTCUTS;
+        mHandler.sendMessageDelayed(m, immediate ? 0 : DELAY_UPDATE_PENDING_SHORTCUTS);
+    }
+
+    @WorkerThread
+    synchronized void updatePendingShortcuts() {
+        final List<PendingShortcut> shortcuts = new ArrayList<>();
+        synchronized (mPendingShortcuts) {
+            final Iterator<WeakReference<PendingShortcut>> i = mPendingShortcuts.values().iterator();
+            while (i.hasNext()) {
+                // prune any references that are no longer valid
+                final WeakReference<PendingShortcut> ref = i.next();
+                final PendingShortcut shortcut = ref != null ? ref.get() : null;
+                if (shortcut == null) {
+                    i.remove();
+                    continue;
+                }
+
+                shortcuts.add(shortcut);
+            }
+        }
+
+        // update all the pending shortcuts
+        for (final PendingShortcut shortcut : shortcuts) {
+            // short-circuit if the tool doesn't actually exist
+            final Tool tool = mDao.find(Tool.class, shortcut.mTool);
+            if (tool == null) {
+                continue;
+            }
+
+            // update the shortcut
+            shortcut.mShortcut = createToolShortcut(tool).orElse(null);
+        }
+    }
+
+    /* END Pending shortcut */
 
     @AnyThread
     private void enqueueUpdateShortcuts(final boolean immediate) {
@@ -312,5 +419,17 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
     @NonNull
     private static String toolShortcutId(@Nullable final String tool) {
         return TYPE_TOOL + tool;
+    }
+
+    public static final class PendingShortcut {
+        @NonNull
+        final String mTool;
+
+        @Nullable
+        volatile ShortcutInfoCompat mShortcut;
+
+        PendingShortcut(@NonNull final String tool) {
+            mTool = tool;
+        }
     }
 }

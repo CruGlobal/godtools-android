@@ -8,6 +8,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -26,6 +29,8 @@ import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.loader.LatestTranslationLoader;
+import org.cru.godtools.shortcuts.GodToolsShortcutManager;
+import org.cru.godtools.shortcuts.GodToolsShortcutManager.PendingShortcut;
 import org.keynote.godtools.android.content.AttachmentLoader;
 import org.keynote.godtools.android.content.AvailableLanguagesLoader;
 import org.keynote.godtools.android.content.ToolLoader;
@@ -58,10 +63,15 @@ public class ToolDetailsFragment extends BaseFragment
 
     @Nullable
     private GodToolsDownloadManager mDownloadManager;
+    @Nullable
+    private GodToolsShortcutManager mShortcutManager;
 
     // these properties should be treated as final and only set/modified in onCreate()
     @Nullable
     /*final*/ String mToolCode = Tool.INVALID_CODE;
+
+    @Nullable
+    private MenuItem mPinShortcutItem;
 
     @Nullable
     @BindView(R.id.banner)
@@ -101,6 +111,8 @@ public class ToolDetailsFragment extends BaseFragment
     private DownloadProgress mDownloadProgress;
     @NonNull
     private List<Locale> mLanguages = Collections.emptyList();
+    @Nullable
+    private PendingShortcut mPendingToolShortcut;
 
     public static Fragment newInstance(@Nullable final String code) {
         final ToolDetailsFragment fragment = new ToolDetailsFragment();
@@ -118,6 +130,9 @@ public class ToolDetailsFragment extends BaseFragment
         if (mDownloadManager == null && context != null) {
             mDownloadManager = GodToolsDownloadManager.getInstance(context);
         }
+        if (mShortcutManager == null && context != null) {
+            mShortcutManager = GodToolsShortcutManager.getInstance(context);
+        }
     }
 
     @Override
@@ -129,6 +144,7 @@ public class ToolDetailsFragment extends BaseFragment
             mToolCode = args.getString(EXTRA_TOOL, mToolCode);
         }
 
+        setHasOptionsMenu(true);
         startLoaders();
     }
 
@@ -146,10 +162,30 @@ public class ToolDetailsFragment extends BaseFragment
     }
 
     @Override
+    public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_tool_details, menu);
+        mPinShortcutItem = menu.findItem(R.id.action_pin_shortcut);
+        updatePinShortcutAction();
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         updateLatestTranslationLoader();
         startProgressListener();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_pin_shortcut:
+                if (mShortcutManager != null && mPendingToolShortcut != null) {
+                    mShortcutManager.pinShortcut(mPendingToolShortcut);
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -164,6 +200,7 @@ public class ToolDetailsFragment extends BaseFragment
     void onLoadTool(@Nullable final Tool tool) {
         mTool = tool;
         updateBannerLoader();
+        updatePinShortcutAction();
         updateViews();
     }
 
@@ -194,6 +231,12 @@ public class ToolDetailsFragment extends BaseFragment
         stopProgressListener();
     }
 
+    @Override
+    public void onDestroyOptionsMenu() {
+        super.onDestroyOptionsMenu();
+        mPinShortcutItem = null;
+    }
+
     /* END lifecycle */
 
     private void startProgressListener() {
@@ -212,6 +255,21 @@ public class ToolDetailsFragment extends BaseFragment
     private void stopProgressListener() {
         if (mDownloadManager != null) {
             mDownloadManager.removeOnDownloadProgressUpdateListener(this);
+        }
+    }
+
+    private void updatePinShortcutAction() {
+        if (mPinShortcutItem != null) {
+            if (mShortcutManager != null && mShortcutManager.canPinToolShortcut(mTool)) {
+                // get a pending shortcut if we don't have one yet
+                if (mPendingToolShortcut == null) {
+                    mPendingToolShortcut = mShortcutManager.getPendingToolShortcut(mToolCode);
+                }
+
+                mPinShortcutItem.setVisible(mPendingToolShortcut != null);
+            } else {
+                mPinShortcutItem.setVisible(false);
+            }
         }
     }
 

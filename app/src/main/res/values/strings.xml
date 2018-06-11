@@ -43,6 +43,7 @@
         <item quantity="other">%1$,d Languages</item>
     </plurals>
     <string name="text_tools_all_installed">You have downloaded all available tools.</string>
+    <string name="menu_add_to_home">Add to Home screen</string>
 
     <!-- Language Selection UI -->
     <eat-comment />
