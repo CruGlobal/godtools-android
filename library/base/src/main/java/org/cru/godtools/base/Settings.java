@@ -15,8 +15,8 @@ import java.util.Set;
 
 public final class Settings {
     private static final String PREFS_SETTINGS = "GodTools";
-    private static final String PREF_PRIMARY_LANGUAGE = "languagePrimary";
-    private static final String PREF_PARALLEL_LANGUAGE = "languageParallel";
+    public static final String PREF_PRIMARY_LANGUAGE = "languagePrimary";
+    public static final String PREF_PARALLEL_LANGUAGE = "languageParallel";
     private static final String PREF_TOUR_COMPLETED = "tour_completed";
     private static final String PREF_FEATURE_DISCOVERED = "feature_discovered.";
 

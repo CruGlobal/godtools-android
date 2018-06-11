@@ -29,8 +29,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
-import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
+import static org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE;
+import static org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE;
 
 public abstract class BaseFragment extends Fragment {
     private static final String EXTRA_SYNC_HELPER = BaseFragment.class.getName() + ".SYNC_HELPER";

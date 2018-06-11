@@ -3,10 +3,6 @@ package org.keynote.godtools.android;
 import android.net.Uri;
 
 public final class Constants {
-    // SharedPreferences for this app
-    public static final String PREF_PRIMARY_LANGUAGE = "languagePrimary";
-    public static final String PREF_PARALLEL_LANGUAGE = "languageParallel";
-
     // Common base URI's
     public static final Uri MAILTO_SUPPORT = Uri.parse("mailto:support@godtoolsapp.com");
     public static final Uri URI_SUPPORT = Uri.parse("https://godtoolsapp.com/#contact");
