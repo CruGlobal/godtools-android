@@ -67,17 +67,9 @@ subprojects {
         google()
         maven { url 'https://maven.fabric.io/public' }
         jcenter()
-        maven { url 'https://cruglobal.jfrog.io/cruglobal/list/maven-locals/' }
-        maven {
-            name "maven.gcx.org"
-            url "https://maven.gcx.org/"
-            credentials {
-                username gcxMavenRepositoryUsername
-                password gcxMavenRepositoryPassword
-            }
-        }
         // XXX: temporary to use beta version of powermock
         maven { url 'https://dl.bintray.com/powermock/maven' }
+        maven { url 'https://cruglobal.jfrog.io/cruglobal/list/maven-locals/' }
     }
 }
 
