@@ -1,0 +1,12 @@
+dependencies {
+    implementation project(':library:base')
+    implementation project(':library:db')
+    implementation project(':library:model')
+    implementation project(':library:model-events')
+
+    implementation project(':ui:base')
+    implementation project(':ui:base-app')
+    implementation project(':ui:tract-renderer')
+
+    implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
+}
