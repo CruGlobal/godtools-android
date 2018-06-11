@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Pair;
 
+import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 
 import org.ccci.gto.android.common.db.Expression;
@@ -30,6 +31,8 @@ import org.keynote.godtools.android.db.Contract.LocalFileTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationFileTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
+
+import java.util.Locale;
 
 public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
     private GodToolsDao(@NonNull final Context context) {
@@ -136,5 +139,18 @@ public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
         } finally {
             tx.endTransaction().recycle();
         }
+    }
+
+    @NonNull
+    public Optional<Translation> getLatestTranslation(@Nullable final String code, @Nullable final Locale locale) {
+        if (code == null || locale == null) {
+            return Optional.empty();
+        }
+
+        return streamCompat(Query.select(Translation.class)
+                                    .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale))
+                                    .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
+                                    .limit(1))
+                .findFirst();
     }
 }

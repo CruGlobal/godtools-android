@@ -43,6 +43,7 @@ import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
+import org.cru.godtools.model.event.ToolUsedEvent;
 import org.cru.godtools.model.loader.LatestTranslationLoader;
 import org.cru.godtools.sync.task.ToolSyncTasks;
 import org.cru.godtools.tract.R;
@@ -156,11 +157,17 @@ public class TractActivity extends ImmersiveActivity
         BundleUtils.putLocaleArray(extras, EXTRA_LANGUAGES, Stream.of(languages).withoutNulls().toArray(Locale[]::new));
     }
 
-    public static void start(@NonNull final Context context, @NonNull final String toolCode,
-                             @NonNull final Locale... languages) {
+    @NonNull
+    public static Intent createIntent(@NonNull final Context context, @NonNull final String toolCode,
+                                      @NonNull final Locale... languages) {
         final Bundle extras = new Bundle();
         populateExtras(extras, toolCode, languages);
-        context.startActivity(new Intent(context, TractActivity.class).putExtras(extras));
+        return new Intent(context, TractActivity.class).setAction(Intent.ACTION_VIEW).putExtras(extras);
+    }
+
+    public static void start(@NonNull final Context context, @NonNull final String toolCode,
+                             @NonNull final Locale... languages) {
+        context.startActivity(createIntent(context, toolCode, languages));
     }
 
     public TractActivity() {
@@ -203,12 +210,15 @@ public class TractActivity extends ImmersiveActivity
             finish();
             return;
         }
+        assert mTool != null : "If mTool was null, validStartState() would have failed";
 
         // download the translations for the requested languages of this tool
         downloadTranslations();
 
-        // track this share
+        // track this view
         if (savedInstanceState == null) {
+            EventBus.getDefault().post(new ToolUsedEvent(mTool));
+
             final GodToolsDao dao = GodToolsDao.getInstance(this);
             AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> dao.updateSharesDelta(mTool, 1));
         }

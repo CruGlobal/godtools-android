@@ -1,0 +1,29 @@
+android {
+    defaultConfig {
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [eventBusIndex: 'org.cru.godtools.shortcuts.ShortcutsEventBusIndex']
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation project(':library:base')
+    implementation project(':library:db')
+    implementation project(':library:model')
+    implementation project(':library:model-events')
+
+    implementation project(':ui:base')
+    implementation project(':ui:base-app')
+    implementation project(':ui:everystudent')
+    implementation project(':ui:tract-renderer')
+
+    implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
+
+    // transitive dependencies for ui:tract-renderer, needed to build this module
+    implementation project(':library:download-manager')
+    implementation "com.android.support:design:${deps.androidSupport}"
+
+    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
+}

@@ -53,6 +53,7 @@ ext.deps = [
         mockito              : '2.17.0',
         multidex             : '1.0.3',
         newrelic             : '5.14.0',
+        picassoTransforms    : '2.2.1',
         playServicesAnalytics: '16.0.0',
         powermock            : '2.0.0-beta.9',
         retrofit2            : '2.4.0',
@@ -117,6 +118,10 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
             lintOptions {
                 lintConfig rootProject.file("analysis/lint/lint.xml")
             }
+        }
+
+        dependencies {
+            compileOnly 'org.jetbrains:annotations:15.0'
         }
     }
 }

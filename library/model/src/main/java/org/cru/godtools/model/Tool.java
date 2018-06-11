@@ -28,6 +28,7 @@ public class Tool extends Base {
     public static final String JSON_ATTACHMENTS = "attachments";
 
     public static final String INVALID_CODE = null;
+    public static final String CODE_EVERYSTUDENT = "es";
 
     public enum Type {
         TRACT(JSON_TYPE_TRACT), ARTICLE(JSON_TYPE_ARTICLE), UNKNOWN(null);

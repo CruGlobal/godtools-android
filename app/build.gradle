@@ -119,6 +119,7 @@ dependencies {
     implementation project(':ui:base')
     implementation project(':ui:base-app')
     implementation project(':ui:everystudent')
+    implementation project(':ui:shortcuts')
     implementation project(':ui:tract-renderer')
 
     implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
