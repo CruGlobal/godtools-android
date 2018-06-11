@@ -10,8 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import org.cru.godtools.R;
+import org.cru.godtools.model.Tool;
 import org.keynote.godtools.android.fragment.ToolDetailsFragment;
-import org.keynote.godtools.android.model.Tool;
 
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_TOOL_DETAILS;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;

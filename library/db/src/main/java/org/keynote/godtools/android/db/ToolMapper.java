@@ -5,8 +5,8 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import org.cru.godtools.model.Attachment;
-import org.keynote.godtools.android.model.Tool;
-import org.keynote.godtools.android.model.Tool.Type;
+import org.cru.godtools.model.Tool;
+import org.cru.godtools.model.Tool.Type;
 
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_ADDED;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_BANNER;

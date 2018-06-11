@@ -5,8 +5,8 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import org.cru.godtools.model.Language;
+import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
-import org.keynote.godtools.android.model.Tool;
 
 import static org.cru.godtools.model.Translation.DEFAULT_LAST_ACCESSED;
 import static org.cru.godtools.model.Translation.DEFAULT_PUBLISHED;

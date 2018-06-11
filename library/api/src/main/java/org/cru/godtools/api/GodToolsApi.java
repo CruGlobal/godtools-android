@@ -14,9 +14,9 @@ import org.cru.godtools.api.model.ToolViews;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Followup;
 import org.cru.godtools.model.Language;
+import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.jsonapi.ToolTypeConverter;
-import org.keynote.godtools.android.model.Tool;
 
 import java.util.concurrent.TimeUnit;
 

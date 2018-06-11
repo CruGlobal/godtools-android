@@ -9,9 +9,9 @@ import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Followup;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.LocalFile;
+import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.TranslationFile;
-import org.keynote.godtools.android.model.Tool;
 
 import static org.ccci.gto.android.common.db.Expression.bind;
 

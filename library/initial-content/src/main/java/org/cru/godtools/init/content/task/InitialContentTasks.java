@@ -22,6 +22,7 @@ import org.cru.godtools.base.Settings;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Language;
+import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.event.AttachmentUpdateEvent;
 import org.cru.godtools.model.event.LanguageUpdateEvent;
@@ -31,7 +32,6 @@ import org.cru.godtools.model.jsonapi.ToolTypeConverter;
 import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.db.Contract.LanguageTable;
 import org.keynote.godtools.android.db.GodToolsDao;
-import org.keynote.godtools.android.model.Tool;
 
 import java.io.IOException;
 import java.io.InputStream;

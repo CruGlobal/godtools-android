@@ -12,9 +12,9 @@ import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams;
 import org.ccci.gto.android.common.jsonapi.util.Includes;
 import org.cru.godtools.api.model.ToolViews;
+import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.keynote.godtools.android.db.Contract.ToolTable;
-import org.keynote.godtools.android.model.Tool;
 
 import java.io.IOException;
 import java.util.List;

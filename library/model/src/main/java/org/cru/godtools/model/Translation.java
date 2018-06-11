@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
-import org.keynote.godtools.android.model.Tool;
 
 import java.util.Date;
 import java.util.Locale;

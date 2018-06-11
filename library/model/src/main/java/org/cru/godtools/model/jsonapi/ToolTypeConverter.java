@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.ccci.gto.android.common.jsonapi.converter.TypeConverter;
-import org.keynote.godtools.android.model.Tool.Type;
+import org.cru.godtools.model.Tool.Type;
 
 public final class ToolTypeConverter implements TypeConverter<Type> {
     @Override

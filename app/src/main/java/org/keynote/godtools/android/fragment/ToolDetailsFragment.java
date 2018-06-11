@@ -19,16 +19,16 @@ import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.R;
+import org.cru.godtools.base.ui.util.ModelUtils;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Attachment;
+import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.loader.LatestTranslationLoader;
-import org.cru.godtools.util.ModelUtils;
 import org.keynote.godtools.android.content.AttachmentLoader;
 import org.keynote.godtools.android.content.AvailableLanguagesLoader;
 import org.keynote.godtools.android.content.ToolLoader;
-import org.keynote.godtools.android.model.Tool;
 import org.keynote.godtools.android.util.ViewUtils;
 
 import java.util.Collections;

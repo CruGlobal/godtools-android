@@ -37,6 +37,7 @@ import org.cru.godtools.base.util.FileUtils;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.LocalFile;
+import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.TranslationFile;
 import org.cru.godtools.model.event.AttachmentUpdateEvent;
@@ -53,7 +54,6 @@ import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationFileTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
-import org.keynote.godtools.android.model.Tool;
 
 import java.io.BufferedInputStream;
 import java.io.File;

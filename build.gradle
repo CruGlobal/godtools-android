@@ -96,7 +96,7 @@ subprojects {
 }
 
 // base library config
-configure(subprojects.findAll { it.path.startsWith(":library:") }) {
+configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.startsWith(":ui:") }) {
     apply plugin: 'com.android.library'
 
     beforeEvaluate {
