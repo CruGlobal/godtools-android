@@ -119,6 +119,10 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
                 lintConfig rootProject.file("analysis/lint/lint.xml")
             }
         }
+
+        dependencies {
+            compileOnly 'org.jetbrains:annotations:15.0'
+        }
     }
 }
 

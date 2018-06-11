@@ -20,5 +20,9 @@ dependencies {
 
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 
+    // transitive dependencies for ui:tract-renderer, needed to build this module
+    implementation project(':library:download-manager')
+    implementation "com.android.support:design:${deps.androidSupport}"
+
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
 }

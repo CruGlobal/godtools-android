@@ -44,8 +44,6 @@ dependencies {
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
     implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
 
-    compileOnly 'org.jetbrains:annotations:15.0'
-
     androidTestImplementation "com.android.support.test:runner:${deps.androidTestingSupport}"
     androidTestImplementation "com.android.support.test:rules:${deps.androidTestingSupport}"
     androidTestImplementation "org.hamcrest:hamcrest-library:${deps.hamcrest}"

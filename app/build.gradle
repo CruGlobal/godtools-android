@@ -143,7 +143,6 @@ dependencies {
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
-    implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
     implementation "me.thekey.android:thekey-eventbus:${deps.thekey}"
     implementation "me.thekey.android:thekey-view-dialog-fragment:${deps.thekey}"
     implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
