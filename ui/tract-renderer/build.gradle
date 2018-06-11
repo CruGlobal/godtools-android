@@ -16,13 +16,14 @@ android {
 
 dependencies {
     implementation project(':library:base')
-    implementation project(':library:base-ui')
     implementation project(':library:db')
     implementation project(':library:download-manager')
     implementation project(':library:model')
     implementation project(':library:model-events')
     implementation project(':library:model-loader')
     implementation project(':library:sync-tasks')
+
+    implementation project(':ui:base')
 
     implementation "com.android.support:cardview-v7:${deps.androidSupport}"
     implementation "com.android.support:design:${deps.androidSupport}"

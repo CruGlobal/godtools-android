@@ -106,7 +106,6 @@ android {
 dependencies {
     implementation project(':library:api')
     implementation project(':library:base')
-    implementation project(':library:base-ui')
     implementation project(':library:config')
     implementation project(':library:db')
     implementation project(':library:download-manager')
@@ -117,6 +116,7 @@ dependencies {
     implementation project(':library:sync')
 
     implementation project(':ui:account')
+    implementation project(':ui:base')
     implementation project(':ui:base-app')
     implementation project(':ui:everystudent')
     implementation project(':ui:tract-renderer')
