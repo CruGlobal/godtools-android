@@ -6,7 +6,9 @@
         <item name="displayOptions">showHome|showTitle</item>
     </style>
 
-    <style name="Widget.GodTools2.Toolbar.AppBar" parent="@style/Widget.AppCompat.Toolbar" />
+    <style name="Widget.GodTools.Toolbar.AppBar" parent="@style/Widget.AppCompat.Toolbar">
+        <item name="popupTheme">?attr/actionBarPopupTheme</item>
+    </style>
 
     <style name="ThemeOverlay.GodTools2.Toolbar.AppBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

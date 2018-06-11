@@ -9,7 +9,8 @@
 
         <item name="actionBarTheme">@style/ThemeOverlay.GodTools2.Toolbar.AppBar</item>
         <item name="actionBarStyle">@style/Widget.GodTools2.ActionBar.Solid</item>
-        <item name="toolbarStyle">@style/Widget.GodTools2.Toolbar.AppBar</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="toolbarStyle">@style/Widget.GodTools.Toolbar.AppBar</item>
     </style>
 
     <style name="Theme.GodTools2.AppBar">
