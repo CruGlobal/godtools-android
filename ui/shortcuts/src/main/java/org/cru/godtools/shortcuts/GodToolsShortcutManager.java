@@ -39,6 +39,7 @@ import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.event.AttachmentUpdateEvent;
 import org.cru.godtools.model.event.ToolUpdateEvent;
+import org.cru.godtools.model.event.ToolUsedEvent;
 import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.cru.godtools.tract.activity.TractActivity;
 import org.greenrobot.eventbus.EventBus;
@@ -151,6 +152,14 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
     public void onTranslationUpdate(@NonNull final TranslationUpdateEvent event) {
         // Could change which tools are available or the label for tools
         enqueueUpdateShortcuts(false);
+    }
+
+    @AnyThread
+    @Subscribe
+    public void onToolUsed(@NonNull final ToolUsedEvent event) {
+        if (SUPPORTS_SHORTCUT_MANAGER) {
+            mContext.getSystemService(ShortcutManager.class).reportShortcutUsed(toolShortcutId(event.getToolCode()));
+        }
     }
 
     /* END lifecycle */
