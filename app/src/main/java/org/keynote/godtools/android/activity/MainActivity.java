@@ -39,6 +39,7 @@ import static android.arch.lifecycle.Lifecycle.State.STARTED;
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_FIND_TOOLS;
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_HOME;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
+import static org.cru.godtools.model.Tool.CODE_EVERYSTUDENT;
 
 public class MainActivity extends BasePlatformActivity implements ToolsFragment.Callbacks {
     private static final String EXTRA_FEATURE_DISCOVERY = MainActivity.class.getName() + ".FEATURE_DISCOVERY";
@@ -186,7 +187,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
                     break;
                 case ARTICLE:
                     // hardcode everystudent content for now
-                    if ("es".equals(code)) {
+                    if (CODE_EVERYSTUDENT.equals(code)) {
                         EveryStudent.start(this);
                     }
             }

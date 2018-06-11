@@ -16,6 +16,7 @@ dependencies {
 
     implementation project(':ui:base')
     implementation project(':ui:base-app')
+    implementation project(':ui:everystudent')
     implementation project(':ui:tract-renderer')
 
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
