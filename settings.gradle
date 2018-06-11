@@ -4,7 +4,6 @@ include 'library:account'
 include 'library:analytics'
 include 'library:api'
 include 'library:base'
-include 'library:base-app'
 include 'library:base-ui'
 include 'library:config'
 include 'library:db'
@@ -17,6 +16,8 @@ include 'library:model-loader'
 include 'library:sync'
 include 'library:sync-tasks'
 include 'library:tract-renderer'
+
+include 'ui:base-app'
 
 include 'feature:tract'
 
