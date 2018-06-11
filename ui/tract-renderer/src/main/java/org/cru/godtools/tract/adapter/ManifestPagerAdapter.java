@@ -176,7 +176,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         PageViewHolder(@NonNull final View view) {
             super(view);
             ButterKnife.bind(this, view);
-            mModelViewHolder = Page.getViewHolder(view);
+            mModelViewHolder = Page.PageViewHolder.forView(view);
             mModelViewHolder.setCallbacks(this);
         }
 

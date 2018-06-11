@@ -88,19 +88,19 @@ public final class Hero extends Base implements Parent, Styles {
         return this;
     }
 
-    @NonNull
-    public static HeroViewHolder getViewHolder(@NonNull final View root,
-                                               @Nullable final PageViewHolder parentViewHolder) {
-        final HeroViewHolder holder = BaseViewHolder.forView(root, HeroViewHolder.class);
-        return holder != null ? holder : new HeroViewHolder(root, parentViewHolder);
-    }
-
     public static class HeroViewHolder extends Parent.ParentViewHolder<Hero> {
         @BindView(R2.id.hero_heading)
         TextView mHeading;
 
         HeroViewHolder(@NonNull final View root, @Nullable final BaseViewHolder parentViewHolder) {
             super(Hero.class, root, parentViewHolder);
+        }
+
+        @NonNull
+        public static HeroViewHolder forView(@NonNull final View root,
+                                             @Nullable final PageViewHolder parentViewHolder) {
+            final HeroViewHolder holder = forView(root, HeroViewHolder.class);
+            return holder != null ? holder : new HeroViewHolder(root, parentViewHolder);
         }
 
         /* BEGIN lifecycle */

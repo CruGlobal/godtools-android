@@ -168,7 +168,7 @@ public class ModalActivity extends ImmersiveActivity {
 
     private void setupModalViewHolder() {
         if (mModalView != null) {
-            mModalViewHolder = Modal.getViewHolder(mModalView);
+            mModalViewHolder = ModalViewHolder.forView(mModalView);
             updateModalViewHolder();
         }
     }

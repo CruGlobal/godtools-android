@@ -21,6 +21,7 @@ import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.model.Card.CardViewHolder;
+import org.cru.godtools.tract.model.Hero.HeroViewHolder;
 import org.cru.godtools.tract.widget.PageContentLayout;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
@@ -346,12 +347,6 @@ public final class Page extends Base implements Styles, Parent {
         mModals = ImmutableList.copyOf(modals);
     }
 
-    @NonNull
-    public static PageViewHolder getViewHolder(@NonNull final View root) {
-        final PageViewHolder holder = BaseViewHolder.forView(root, PageViewHolder.class);
-        return holder != null ? holder : new PageViewHolder(root);
-    }
-
     public static class PageViewHolder extends Parent.ParentViewHolder<Page>
             implements CardViewHolder.Callbacks, PageContentLayout.OnActiveCardListener {
         public interface Callbacks {
@@ -376,7 +371,7 @@ public final class Page extends Base implements Styles, Parent {
         private Set<String> mVisibleCards = new ArraySet<>();
 
         @NonNull
-        private final Hero.HeroViewHolder mHeroViewHolder;
+        private final HeroViewHolder mHeroViewHolder;
         @NonNull
         private final Pools.Pool<CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
         @NonNull
@@ -388,7 +383,13 @@ public final class Page extends Base implements Styles, Parent {
         PageViewHolder(@NonNull final View root) {
             super(Page.class, root, null);
             mPageContentLayout.setActiveCardListener(this);
-            mHeroViewHolder = Hero.getViewHolder(mHero, this);
+            mHeroViewHolder = HeroViewHolder.forView(mHero, this);
+        }
+
+        @NonNull
+        public static PageViewHolder forView(@NonNull final View root) {
+            final PageViewHolder holder = forView(root, PageViewHolder.class);
+            return holder != null ? holder : new PageViewHolder(root);
         }
 
         /* BEGIN lifecycle */

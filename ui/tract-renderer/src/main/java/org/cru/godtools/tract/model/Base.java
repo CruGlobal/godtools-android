@@ -160,7 +160,7 @@ abstract class Base {
         }
 
         @Nullable
-        public static BaseViewHolder forView(@Nullable final View view) {
+        public static BaseViewHolder forView(@NonNull final View view) {
             return forView(view, BaseViewHolder.class);
         }
 
