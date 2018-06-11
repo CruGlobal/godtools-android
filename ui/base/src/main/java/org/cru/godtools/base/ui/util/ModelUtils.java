@@ -1,4 +1,4 @@
-package org.cru.godtools.util;
+package org.cru.godtools.base.ui.util;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 
 import com.google.common.base.Strings;
 
-import org.cru.godtools.base.ui.util.LocaleTypefaceUtils;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
 
