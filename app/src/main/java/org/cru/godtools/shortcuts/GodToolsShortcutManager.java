@@ -2,13 +2,19 @@ package org.cru.godtools.shortcuts;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.support.annotation.AnyThread;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,17 +26,24 @@ import com.annimon.stream.Collectors;
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.Predicate;
+import com.google.common.base.Strings;
 import com.squareup.picasso.Picasso;
 
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.util.LocaleUtils;
+import org.ccci.gto.android.common.util.ThreadUtils;
 import org.cru.godtools.R;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.util.FileUtils;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Translation;
+import org.cru.godtools.model.event.AttachmentUpdateEvent;
+import org.cru.godtools.model.event.ToolUpdateEvent;
+import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.cru.godtools.tract.activity.TractActivity;
 import org.cru.godtools.util.ModelUtils;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.keynote.godtools.android.activity.MainActivity;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.GodToolsDao;
@@ -44,7 +57,14 @@ import java.util.Map;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
-public final class GodToolsShortcutManager {
+import static org.keynote.godtools.android.Constants.PREF_PARALLEL_LANGUAGE;
+import static org.keynote.godtools.android.Constants.PREF_PRIMARY_LANGUAGE;
+
+public final class GodToolsShortcutManager implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private static final boolean SUPPORTS_SHORTCUT_MANAGER = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1;
+    private static final int MSG_UPDATE_SHORTCUTS = 1;
+    private static final long DELAY_UPDATE_SHORTCUTS = 5000;
+
     private static final String TYPE_TOOL = "tool|";
 
     @NonNull
@@ -53,15 +73,23 @@ public final class GodToolsShortcutManager {
     private final Settings mSettings;
     @NonNull
     private final GodToolsDao mDao;
+    @NonNull
+    private final Handler mHandler;
 
     private GodToolsShortcutManager(@NonNull final Context context) {
         mContext = context;
         mSettings = Settings.getInstance(context);
         mDao = GodToolsDao.getInstance(context);
+        mHandler = new Handler(Looper.getMainLooper());
 
-        // perform an initial update
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            AsyncTask.THREAD_POOL_EXECUTOR.execute(this::updateShortcuts);
+        // native ShortcutManager support
+        if (SUPPORTS_SHORTCUT_MANAGER) {
+            // register any appropriate event listeners
+            EventBus.getDefault().register(this);
+            mSettings.registerOnSharedPreferenceChangeListener(this);
+
+            // enqueue an initial update
+            enqueueUpdateShortcuts(true);
         }
     }
 
@@ -80,16 +108,91 @@ public final class GodToolsShortcutManager {
         return sInstance;
     }
 
-    @WorkerThread
-    @TargetApi(Build.VERSION_CODES.N_MR1)
-    void updateShortcuts() {
-        final Map<String, ShortcutInfo> shortcuts = createAllShortcuts();
-        updateDynamicShortcuts(shortcuts);
+    /* BEGIN lifecycle */
+
+    /**
+     * Called when the device locale was updated.
+     */
+    @MainThread
+    public void onUpdateSystemLocale(@NonNull final BroadcastReceiver.PendingResult result) {
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
+            updateShortcuts();
+            result.finish();
+        });
+    }
+
+    /**
+     * Called when the in-app language preferences are changed.
+     */
+    @Override
+    public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
+        switch (Strings.nullToEmpty(key)) {
+            case PREF_PRIMARY_LANGUAGE:
+            case PREF_PARALLEL_LANGUAGE:
+                enqueueUpdateShortcuts(false);
+        }
+    }
+
+    /**
+     * Handles potential icon image changes.
+     */
+    @AnyThread
+    @Subscribe
+    public void onAttachmentUpdate(@NonNull final AttachmentUpdateEvent event) {
+        enqueueUpdateShortcuts(false);
+    }
+
+    @AnyThread
+    @Subscribe
+    public void onToolUpdate(@NonNull final ToolUpdateEvent event) {
+        // Could change which tools are visible or the label for tools
+        enqueueUpdateShortcuts(false);
+    }
+
+    @AnyThread
+    @Subscribe
+    public void onTranslationUpdate(@NonNull final TranslationUpdateEvent event) {
+        // Could change which tools are available or the label for tools
+        enqueueUpdateShortcuts(false);
+    }
+
+    /* END lifecycle */
+
+    @AnyThread
+    private void enqueueUpdateShortcuts(final boolean immediate) {
+        // short-circuit if there isn't native ShortcutManager support
+        if (!SUPPORTS_SHORTCUT_MANAGER) {
+            return;
+        }
+
+        // cancel any pending update
+        mHandler.removeMessages(MSG_UPDATE_SHORTCUTS);
+
+        final Runnable task = () -> {
+            if (ThreadUtils.isUiThread()) {
+                AsyncTask.THREAD_POOL_EXECUTOR.execute(this::updateShortcuts);
+            } else {
+                updateShortcuts();
+            }
+        };
+
+        // enqueue processing
+        final Message m = Message.obtain(mHandler, task);
+        m.what = MSG_UPDATE_SHORTCUTS;
+        mHandler.sendMessageDelayed(m, immediate ? 0 : DELAY_UPDATE_SHORTCUTS);
     }
 
     @WorkerThread
     @TargetApi(Build.VERSION_CODES.N_MR1)
-    void updateDynamicShortcuts(@NonNull final Map<String, ShortcutInfo> shortcuts) {
+    synchronized void updateShortcuts() {
+        final Map<String, ShortcutInfo> shortcuts = createAllShortcuts();
+        updateDynamicShortcuts(shortcuts);
+        updatePinnedShortcuts(shortcuts);
+    }
+
+    @WorkerThread
+    @TargetApi(Build.VERSION_CODES.N_MR1)
+    private void updateDynamicShortcuts(@NonNull final Map<String, ShortcutInfo> shortcuts) {
         final ShortcutManager manager = mContext.getSystemService(ShortcutManager.class);
 
         final List<ShortcutInfo> dynamic = mDao.streamCompat(
@@ -101,6 +204,19 @@ public final class GodToolsShortcutManager {
                 .limit(manager.getMaxShortcutCountPerActivity())
                 .toList();
         manager.setDynamicShortcuts(dynamic);
+    }
+
+    @TargetApi(Build.VERSION_CODES.N_MR1)
+    private void updatePinnedShortcuts(@NonNull final Map<String, ShortcutInfo> shortcuts) {
+        final ShortcutManager manager = mContext.getSystemService(ShortcutManager.class);
+
+        final List<String> invalid = Stream.of(manager.getPinnedShortcuts())
+                .map(ShortcutInfo::getId)
+                .filterNot(shortcuts::containsKey)
+                .toList();
+        manager.disableShortcuts(invalid);
+        manager.enableShortcuts(new ArrayList<>(shortcuts.keySet()));
+        manager.updateShortcuts(new ArrayList<>(shortcuts.values()));
     }
 
     @WorkerThread
@@ -185,6 +301,11 @@ public final class GodToolsShortcutManager {
 
     @NonNull
     private static String toolShortcutId(@NonNull final Tool tool) {
-        return TYPE_TOOL + tool.getCode();
+        return toolShortcutId(tool.getCode());
+    }
+
+    @NonNull
+    private static String toolShortcutId(@Nullable final String tool) {
+        return TYPE_TOOL + tool;
     }
 }
