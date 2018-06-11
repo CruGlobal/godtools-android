@@ -104,7 +104,6 @@ android {
 }
 
 dependencies {
-    implementation project(':library:account')
     implementation project(':library:api')
     implementation project(':library:base')
     implementation project(':library:base-ui')
@@ -118,6 +117,7 @@ dependencies {
     implementation project(':library:model-loader')
     implementation project(':library:sync')
     implementation project(':library:tract-renderer')
+    implementation project(':ui:account')
     implementation project(':ui:base-app')
 
     implementation "com.android.support:appcompat-v7:${deps.androidSupport}"

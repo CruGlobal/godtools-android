@@ -1,6 +1,5 @@
 rootProject.name='godtools'
 
-include 'library:account'
 include 'library:analytics'
 include 'library:api'
 include 'library:base'
@@ -17,6 +16,7 @@ include 'library:sync'
 include 'library:sync-tasks'
 include 'library:tract-renderer'
 
+include 'ui:account'
 include 'ui:base-app'
 
 include 'feature:tract'
