@@ -2,4 +2,15 @@
     package="org.cru.godtools.shortcuts">
     <!-- Allows shortcuts to be added to earlier versions of Android -->
     <uses-permission-sdk-23 android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+
+    <application>
+        <receiver
+            android:name=".LocaleUpdateBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+            </intent-filter>
+        </receiver>
+    </application>
 </manifest>
