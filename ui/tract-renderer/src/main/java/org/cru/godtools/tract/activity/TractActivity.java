@@ -162,7 +162,7 @@ public class TractActivity extends ImmersiveActivity
                                       @NonNull final Locale... languages) {
         final Bundle extras = new Bundle();
         populateExtras(extras, toolCode, languages);
-        return new Intent(context, TractActivity.class).setAction(Intent.ACTION_VIEW).putExtras(extras);
+        return new Intent(context, TractActivity.class).putExtras(extras);
     }
 
     public static void start(@NonNull final Context context, @NonNull final String toolCode,

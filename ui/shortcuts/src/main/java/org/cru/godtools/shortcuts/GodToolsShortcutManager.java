@@ -388,13 +388,13 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
             case ARTICLE:
                 if (CODE_EVERYSTUDENT.equals(tool.getCode())) {
                     intent = new Intent(mContext, EveryStudent.class);
-                    intent.setAction(Intent.ACTION_VIEW);
                     break;
                 }
             default:
                 // XXX: we don't support shortcuts for this tool type
                 return Optional.empty();
         }
+        intent.setAction(Intent.ACTION_VIEW);
 
         // Generate the shortcut label
         final Translation deviceTranslation = Stream.of(LocaleUtils.getFallbacks(Locale.getDefault(), Locale.ENGLISH))
