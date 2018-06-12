@@ -145,6 +145,8 @@ abstract class Base {
         @Nullable
         T mModel;
 
+        boolean mVisible = false;
+
         BaseViewHolder(@NonNull final Class<T> modelType, @NonNull final ViewGroup parent, @LayoutRes final int layout,
                        @Nullable final BaseViewHolder parentViewHolder) {
             this(modelType, LayoutInflater.from(parent.getContext()).inflate(layout, parent, false), parentViewHolder);
@@ -181,12 +183,18 @@ abstract class Base {
         @CallSuper
         void onBind() {}
 
+        @CallSuper
+        void onVisible() {}
+
         boolean onValidate() {
             // default to being valid
             return true;
         }
 
         void onBuildEvent(@NonNull final Event.Builder builder, final boolean recursive) {}
+
+        @CallSuper
+        void onHidden() {}
 
         /* END lifecycle */
 
@@ -196,10 +204,27 @@ abstract class Base {
         }
 
         public final void bind(@Nullable final T model) {
+            if (model == null) {
+                markHidden();
+            }
             final T old = mModel;
             mModel = model;
             if (old != mModel) {
                 onBind();
+            }
+        }
+
+        public final void markVisible() {
+            if (!mVisible && mModel != null) {
+                mVisible = true;
+                onVisible();
+            }
+        }
+
+        public final void markHidden() {
+            if (mVisible && mModel != null) {
+                mVisible = false;
+                onHidden();
             }
         }
 

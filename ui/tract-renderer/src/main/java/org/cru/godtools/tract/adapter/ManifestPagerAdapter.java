@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.annimon.stream.Optional;
 import com.google.common.collect.ImmutableList;
 
 import org.ccci.gto.android.common.support.v4.util.IdUtils;
@@ -100,6 +101,8 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void onStart() {
         EventBus.getDefault().register(this);
+        Optional.ofNullable(getPrimaryItem())
+                .ifPresent(PageViewHolder::markVisible);
     }
 
     @NonNull
@@ -121,6 +124,16 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         if (current != null && current.mPage != null) {
             dispatchUpdateActiveCard(current.mPage, current.getActiveCard());
         }
+
+        // update visibility
+        if (old != current) {
+            if (old != null) {
+                old.markHidden();
+            }
+            if (current != null) {
+                current.markVisible();
+            }
+        }
     }
 
     @MainThread
@@ -141,6 +154,8 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void onStop() {
+        Optional.ofNullable(getPrimaryItem())
+                .ifPresent(PageViewHolder::markHidden);
         EventBus.getDefault().unregister(this);
     }
 
@@ -241,6 +256,14 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         @Nullable
         Card getActiveCard() {
             return mModelViewHolder.getActiveCard();
+        }
+
+        void markVisible() {
+            mModelViewHolder.markVisible();
+        }
+
+        void markHidden() {
+            mModelViewHolder.markHidden();
         }
 
         @Override

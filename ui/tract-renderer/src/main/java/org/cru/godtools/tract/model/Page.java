@@ -370,6 +370,8 @@ public final class Page extends Base implements Styles, Parent {
         private Card[] mCards = new Card[0];
         private Set<String> mVisibleCards = new ArraySet<>();
 
+        @Nullable
+        private CardViewHolder mVisibleCardViewHolder;
         @NonNull
         private final HeroViewHolder mHeroViewHolder;
         @NonNull
@@ -402,6 +404,18 @@ public final class Page extends Base implements Styles, Parent {
             updateDisplayedCards();
         }
 
+        @Override
+        void onVisible() {
+            super.onVisible();
+
+            // cascade event to currently visible hero or card
+            if (mVisibleCardViewHolder != null) {
+                mVisibleCardViewHolder.markVisible();
+            } else {
+                mHeroViewHolder.markVisible();
+            }
+        }
+
         public void onContentEvent(@NonNull final Event event) {
             checkForCardEvent(event);
         }
@@ -409,9 +423,9 @@ public final class Page extends Base implements Styles, Parent {
         @Override
         public void onActiveCardChanged(@Nullable final View activeCard) {
             if (!mBindingCards) {
-                final Optional<Card> card =
-                        Optional.ofNullable(BaseViewHolder.forView(activeCard, CardViewHolder.class))
-                                .map(BaseViewHolder::getModel);
+                final CardViewHolder cardViewHolder = BaseViewHolder.forView(activeCard, CardViewHolder.class);
+                final Optional<Card> card = Optional.ofNullable(cardViewHolder)
+                        .map(BaseViewHolder::getModel);
 
                 // only process if we have explicitly visible cards
                 if (mVisibleCards.size() > 0) {
@@ -432,6 +446,8 @@ public final class Page extends Base implements Styles, Parent {
                 if (mCallbacks != null) {
                     mCallbacks.onUpdateActiveCard(card.orElse(null));
                 }
+
+                updateVisibleCard(cardViewHolder);
             }
         }
 
@@ -446,6 +462,18 @@ public final class Page extends Base implements Styles, Parent {
         public void onToggleCard(@NonNull final CardViewHolder holder) {
             mPageContentLayout
                     .changeActiveCard(holder.mRoot != mPageContentLayout.getActiveCard() ? holder.mRoot : null, true);
+        }
+
+        @Override
+        void onHidden() {
+            super.onHidden();
+
+            // cascade event to currently visible hero or card
+            if (mVisibleCardViewHolder != null) {
+                mVisibleCardViewHolder.markHidden();
+            } else {
+                mHeroViewHolder.markHidden();
+            }
         }
 
         /* END lifecycle */
@@ -587,6 +615,27 @@ public final class Page extends Base implements Styles, Parent {
                 }
             }
 
+        }
+
+        private void updateVisibleCard(@Nullable final CardViewHolder visibleCardViewHolder) {
+            // update the visible card view holder
+            final CardViewHolder old = mVisibleCardViewHolder;
+            mVisibleCardViewHolder = visibleCardViewHolder;
+
+            // update state as necessary
+            if (mVisible && mVisibleCardViewHolder != old) {
+                if (old != null) {
+                    old.markHidden();
+                } else {
+                    mHeroViewHolder.markHidden();
+                }
+
+                if (mVisibleCardViewHolder != null) {
+                    mVisibleCardViewHolder.markVisible();
+                } else {
+                    mHeroViewHolder.markVisible();
+                }
+            }
         }
 
         private void checkForCardEvent(@NonNull final Event event) {
