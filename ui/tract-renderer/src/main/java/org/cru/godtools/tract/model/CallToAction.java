@@ -93,11 +93,6 @@ public final class CallToAction extends Base {
         return this;
     }
 
-    public static void bind(@Nullable final CallToAction callToAction, @Nullable final View view) {
-        if (view != null) {
-        }
-    }
-
     static final class CallToActionViewHolder extends BaseViewHolder<CallToAction> {
         public interface Callbacks {
             void goToNextPage();
