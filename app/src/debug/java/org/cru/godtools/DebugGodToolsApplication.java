@@ -84,6 +84,6 @@ public class DebugGodToolsApplication extends GodToolsApplication {
         Timber.plant(new Timber.DebugTree());
 
         // add TimberAnalyticsService
-        AnalyticsDispatcher.getInstance(this).addAnalyticsService(new TimberAnalyticsService());
+        AnalyticsDispatcher.getInstance(this).addAnalyticsService(TimberAnalyticsService.getInstance());
     }
 }
