@@ -112,6 +112,7 @@
                 android:layout_marginEnd="@dimen/horiz_margin_call_to_action_arrow"
                 android:layout_marginRight="@dimen/horiz_margin_call_to_action_arrow"
                 android:padding="8dp"
+                android:saveEnabled="false"
                 app:srcCompat="@drawable/ic_call_to_action"
                 tools:src="@drawable/ic_call_to_action"
                 tools:tint="@android:color/Purple_800" />
@@ -125,6 +126,7 @@
                 android:layout_marginStart="@dimen/horiz_margin_call_to_action_label"
                 android:layout_toLeftOf="@id/call_to_action_arrow"
                 android:layout_toStartOf="@id/call_to_action_arrow"
+                android:saveEnabled="false"
                 android:textIsSelectable="true"
                 tools:text="Call To Action" />
         </RelativeLayout>
