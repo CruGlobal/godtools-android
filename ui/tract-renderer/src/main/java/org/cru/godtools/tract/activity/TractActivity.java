@@ -34,9 +34,9 @@ import com.google.common.util.concurrent.SettableFuture;
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
-import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.ccci.gto.android.common.util.LocaleUtils;
 import org.ccci.gto.android.common.util.NumberUtils;
+import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.download.manager.DownloadProgress;
@@ -155,7 +155,8 @@ public class TractActivity extends ImmersiveActivity
                                          @NonNull final Locale... languages) {
         extras.putString(EXTRA_TOOL, toolCode);
         // XXX: we use singleString mode to support using this intent for legacy shortcuts
-        BundleUtils.putLocaleArray(extras, EXTRA_LANGUAGES, Stream.of(languages).withoutNulls().toArray(Locale[]::new), true);
+        BundleUtils.putLocaleArray(extras, EXTRA_LANGUAGES, Stream.of(languages).withoutNulls().toArray(Locale[]::new),
+                                   true);
     }
 
     @NonNull
