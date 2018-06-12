@@ -85,6 +85,7 @@ interface Parent {
             if (mContent != null) {
                 return IntStream.range(0, mContent.getChildCount())
                         .mapToObj(mContent::getChildAt)
+                        .withoutNulls()
                         .map(BaseViewHolder::forView)
                         .select(BaseViewHolder.class);
             }

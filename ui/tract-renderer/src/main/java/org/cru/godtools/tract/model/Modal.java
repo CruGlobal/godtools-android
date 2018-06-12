@@ -149,12 +149,6 @@ public final class Modal extends Base implements Parent, Styles {
         return this;
     }
 
-    @NonNull
-    public static ModalViewHolder getViewHolder(@NonNull final View root) {
-        final ModalViewHolder holder = BaseViewHolder.forView(root, ModalViewHolder.class);
-        return holder != null ? holder : new ModalViewHolder(root);
-    }
-
     public static class ModalViewHolder extends ParentViewHolder<Modal> {
         @Nullable
         @BindView(R2.id.title)
@@ -162,6 +156,12 @@ public final class Modal extends Base implements Parent, Styles {
 
         ModalViewHolder(@NonNull final View root) {
             super(Modal.class, root, null);
+        }
+
+        @NonNull
+        public static ModalViewHolder forView(@NonNull final View root) {
+            final ModalViewHolder holder = forView(root, ModalViewHolder.class);
+            return holder != null ? holder : new ModalViewHolder(root);
         }
 
         @Override

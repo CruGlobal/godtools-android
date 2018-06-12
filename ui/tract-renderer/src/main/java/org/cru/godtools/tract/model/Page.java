@@ -21,6 +21,7 @@ import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.model.Card.CardViewHolder;
+import org.cru.godtools.tract.model.Hero.HeroViewHolder;
 import org.cru.godtools.tract.widget.PageContentLayout;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
@@ -346,12 +347,6 @@ public final class Page extends Base implements Styles, Parent {
         mModals = ImmutableList.copyOf(modals);
     }
 
-    @NonNull
-    public static PageViewHolder getViewHolder(@NonNull final View root) {
-        final PageViewHolder holder = BaseViewHolder.forView(root, PageViewHolder.class);
-        return holder != null ? holder : new PageViewHolder(root);
-    }
-
     public static class PageViewHolder extends Parent.ParentViewHolder<Page>
             implements CardViewHolder.Callbacks, PageContentLayout.OnActiveCardListener {
         public interface Callbacks {
@@ -366,7 +361,6 @@ public final class Page extends Base implements Styles, Parent {
         @BindView(R2.id.page_content_layout)
         PageContentLayout mPageContentLayout;
 
-        @Nullable
         @BindView(R2.id.hero)
         View mHero;
 
@@ -376,6 +370,10 @@ public final class Page extends Base implements Styles, Parent {
         private Card[] mCards = new Card[0];
         private Set<String> mVisibleCards = new ArraySet<>();
 
+        @Nullable
+        private CardViewHolder mVisibleCardViewHolder;
+        @NonNull
+        private final HeroViewHolder mHeroViewHolder;
         @NonNull
         private final Pools.Pool<CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
         @NonNull
@@ -387,6 +385,13 @@ public final class Page extends Base implements Styles, Parent {
         PageViewHolder(@NonNull final View root) {
             super(Page.class, root, null);
             mPageContentLayout.setActiveCardListener(this);
+            mHeroViewHolder = HeroViewHolder.forView(mHero, this);
+        }
+
+        @NonNull
+        public static PageViewHolder forView(@NonNull final View root) {
+            final PageViewHolder holder = forView(root, PageViewHolder.class);
+            return holder != null ? holder : new PageViewHolder(root);
         }
 
         /* BEGIN lifecycle */
@@ -394,9 +399,21 @@ public final class Page extends Base implements Styles, Parent {
         @Override
         void onBind() {
             super.onBind();
-            updateDisplayedCards();
             bindPage();
-            Hero.bind(mModel != null ? mModel.getHero() : null, mHero);
+            bindHero();
+            updateDisplayedCards();
+        }
+
+        @Override
+        void onVisible() {
+            super.onVisible();
+
+            // cascade event to currently visible hero or card
+            if (mVisibleCardViewHolder != null) {
+                mVisibleCardViewHolder.markVisible();
+            } else {
+                mHeroViewHolder.markVisible();
+            }
         }
 
         public void onContentEvent(@NonNull final Event event) {
@@ -406,9 +423,9 @@ public final class Page extends Base implements Styles, Parent {
         @Override
         public void onActiveCardChanged(@Nullable final View activeCard) {
             if (!mBindingCards) {
-                final Optional<Card> card =
-                        Optional.ofNullable(BaseViewHolder.forView(activeCard, CardViewHolder.class))
-                                .map(BaseViewHolder::getModel);
+                final CardViewHolder cardViewHolder = BaseViewHolder.forView(activeCard, CardViewHolder.class);
+                final Optional<Card> card = Optional.ofNullable(cardViewHolder)
+                        .map(BaseViewHolder::getModel);
 
                 // only process if we have explicitly visible cards
                 if (mVisibleCards.size() > 0) {
@@ -429,6 +446,8 @@ public final class Page extends Base implements Styles, Parent {
                 if (mCallbacks != null) {
                     mCallbacks.onUpdateActiveCard(card.orElse(null));
                 }
+
+                updateVisibleCard(cardViewHolder);
             }
         }
 
@@ -443,6 +462,18 @@ public final class Page extends Base implements Styles, Parent {
         public void onToggleCard(@NonNull final CardViewHolder holder) {
             mPageContentLayout
                     .changeActiveCard(holder.mRoot != mPageContentLayout.getActiveCard() ? holder.mRoot : null, true);
+        }
+
+        @Override
+        void onHidden() {
+            super.onHidden();
+
+            // cascade event to currently visible hero or card
+            if (mVisibleCardViewHolder != null) {
+                mVisibleCardViewHolder.markHidden();
+            } else {
+                mHeroViewHolder.markHidden();
+            }
         }
 
         /* END lifecycle */
@@ -478,6 +509,10 @@ public final class Page extends Base implements Styles, Parent {
             mPageView.setBackgroundColor(Page.getBackgroundColor(mModel));
             Resource.bindBackgroundImage(mBackgroundImage, getBackgroundImageResource(mModel),
                                          getBackgroundImageScaleType(mModel), getBackgroundImageGravity(mModel));
+        }
+
+        private void bindHero() {
+            mHeroViewHolder.bind(mModel != null ? mModel.getHero() : null);
         }
 
         @UiThread
@@ -580,6 +615,27 @@ public final class Page extends Base implements Styles, Parent {
                 }
             }
 
+        }
+
+        private void updateVisibleCard(@Nullable final CardViewHolder visibleCardViewHolder) {
+            // update the visible card view holder
+            final CardViewHolder old = mVisibleCardViewHolder;
+            mVisibleCardViewHolder = visibleCardViewHolder;
+
+            // update state as necessary
+            if (mVisible && mVisibleCardViewHolder != old) {
+                if (old != null) {
+                    old.markHidden();
+                } else {
+                    mHeroViewHolder.markHidden();
+                }
+
+                if (mVisibleCardViewHolder != null) {
+                    mVisibleCardViewHolder.markVisible();
+                } else {
+                    mHeroViewHolder.markVisible();
+                }
+            }
         }
 
         private void checkForCardEvent(@NonNull final Event event) {
