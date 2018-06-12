@@ -9,7 +9,7 @@ public class DrawableUtils {
     @Nullable
     public static Drawable tint(@Nullable final Drawable drawable, @ColorInt final int color) {
         if (drawable != null) {
-            final Drawable out = DrawableCompat.wrap(drawable);
+            final Drawable out = DrawableCompat.wrap(drawable).mutate();
             DrawableCompat.setTint(out, color);
             return out;
         }
