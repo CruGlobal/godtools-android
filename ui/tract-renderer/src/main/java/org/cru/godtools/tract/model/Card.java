@@ -17,6 +17,7 @@ import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.tract.model.Page.PageViewHolder;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.cru.godtools.tract.widget.TractPicassoImageView;
@@ -24,6 +25,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -31,6 +33,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
 
+import static org.cru.godtools.tract.Constants.XMLNS_ANALYTICS;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 import static org.cru.godtools.tract.model.Utils.parseBoolean;
 import static org.cru.godtools.tract.model.Utils.parseColor;
@@ -51,6 +54,9 @@ public final class Card extends Base implements Styles, Parent {
     private Set<Event.Id> mListeners = ImmutableSet.of();
     @NonNull
     private Set<Event.Id> mDismissListeners = ImmutableSet.of();
+
+    @NonNull
+    Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
 
     @Nullable
     @ColorInt
@@ -162,6 +168,13 @@ public final class Card extends Base implements Styles, Parent {
 
             // process recognized nodes
             switch (parser.getNamespace()) {
+                case XMLNS_ANALYTICS:
+                    switch (parser.getName()) {
+                        case AnalyticsEvent.XML_EVENTS:
+                            mAnalyticsEvents = AnalyticsEvent.fromEventsXml(parser);
+                            continue;
+                    }
+                    break;
                 case XMLNS_TRACT:
                     switch (parser.getName()) {
                         case XML_LABEL:
@@ -210,6 +223,8 @@ public final class Card extends Base implements Styles, Parent {
         View mDivider;
 
         @Nullable
+        private List<Runnable> mPendingAnalyticsEvents;
+        @Nullable
         private Callbacks mCallbacks;
 
         CardViewHolder(@NonNull final ViewGroup parent, @Nullable final PageViewHolder pageViewHolder) {
@@ -229,8 +244,25 @@ public final class Card extends Base implements Styles, Parent {
             bindLabel();
         }
 
+        @Override
+        void onVisible() {
+            super.onVisible();
+            if (mModel != null) {
+                mPendingAnalyticsEvents =
+                        triggerAnalyticsEvents(mModel.mAnalyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT);
+            }
+        }
+
         public void onContentEvent(@NonNull final Event event) {
             checkForDismissEvent(event);
+        }
+
+        @Override
+        void onHidden() {
+            super.onHidden();
+            if (mPendingAnalyticsEvents != null) {
+                cancelPendingAnalyticsEvents(mPendingAnalyticsEvents);
+            }
         }
 
         /* END lifecycle */
