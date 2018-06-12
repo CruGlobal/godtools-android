@@ -349,9 +349,12 @@ public final class Page extends Base implements Styles, Parent {
     }
 
     public static class PageViewHolder extends Parent.ParentViewHolder<Page>
-            implements CardViewHolder.Callbacks, PageContentLayout.OnActiveCardListener {
+            implements CardViewHolder.Callbacks, PageContentLayout.OnActiveCardListener,
+            CallToActionViewHolder.Callbacks {
         public interface Callbacks {
             void onUpdateActiveCard(@Nullable Card card);
+
+            void goToNextPage();
         }
 
         @BindView(R2.id.page)
@@ -392,6 +395,7 @@ public final class Page extends Base implements Styles, Parent {
             mPageContentLayout.setActiveCardListener(this);
             mHeroViewHolder = HeroViewHolder.forView(mHero, this);
             mCallToActionViewHolder = CallToActionViewHolder.forView(mCallToAction, this);
+            mCallToActionViewHolder.setCallbacks(this);
         }
 
         @NonNull
@@ -626,6 +630,13 @@ public final class Page extends Base implements Styles, Parent {
                 }
             }
 
+        }
+
+        @Override
+        public void goToNextPage() {
+            if (mCallbacks != null) {
+                mCallbacks.goToNextPage();
+            }
         }
 
         private void updateVisibleCard(@Nullable final CardViewHolder visibleCardViewHolder) {

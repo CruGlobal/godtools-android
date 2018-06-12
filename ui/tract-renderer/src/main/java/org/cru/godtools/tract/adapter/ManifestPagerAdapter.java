@@ -161,8 +161,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
 
     /* END lifecycle */
 
-    class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder
-            implements Page.PageViewHolder.Callbacks, CallToAction.Callbacks {
+    class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements Page.PageViewHolder.Callbacks {
         private final Page.PageViewHolder mModelViewHolder;
 
         @BindView(R2.id.page)
@@ -206,7 +205,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
             mModelViewHolder.bind(page);
 
             bindHeader(page);
-            CallToAction.bind(page != null ? page.getCallToAction() : null, mCallToAction, this);
+            CallToAction.bind(page != null ? page.getCallToAction() : null, mCallToAction);
         }
 
         void onContentEvent(@NonNull final Event event) {

@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.Set;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
@@ -32,10 +33,6 @@ public final class CallToAction extends Base {
     private static final String XML_EVENTS = "events";
     private static final String XML_CONTROL_COLOR = "control-color";
 
-    public interface Callbacks {
-        void goToNextPage();
-    }
-
     @Nullable
     Text mLabel;
 
@@ -43,7 +40,7 @@ public final class CallToAction extends Base {
     private Integer mControlColor;
 
     @NonNull
-    private Set<Event.Id> mEvents = ImmutableSet.of();
+    Set<Event.Id> mEvents = ImmutableSet.of();
 
     CallToAction(@NonNull final Base parent) {
         super(parent);
@@ -97,35 +94,31 @@ public final class CallToAction extends Base {
         return this;
     }
 
-    public static void bind(@Nullable final CallToAction callToAction, @Nullable final View view,
-                            @Nullable final Callbacks callbacks) {
+    public static void bind(@Nullable final CallToAction callToAction, @Nullable final View view) {
         if (view != null) {
-            bindArrow(callToAction, view.findViewById(R.id.call_to_action_arrow), callbacks);
+            bindArrow(callToAction, view.findViewById(R.id.call_to_action_arrow));
         }
     }
 
-    private static void bindArrow(@Nullable final CallToAction callToAction, @Nullable final ImageView arrow,
-                                  @Nullable final Callbacks callbacks) {
+    private static void bindArrow(@Nullable final CallToAction callToAction, @Nullable final ImageView arrow) {
         if (arrow != null) {
             final boolean visible =
                     callToAction == null || !callToAction.getPage().isLastPage() || !callToAction.mEvents.isEmpty();
             arrow.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
             arrow.setImageDrawable(DrawableUtils.tint(arrow.getDrawable(), CallToAction.getControlColor(callToAction)));
-            arrow.setOnClickListener((v) -> CallToAction.trigger(callToAction, callbacks));
-        }
-    }
-
-    static void trigger(@Nullable final CallToAction callToAction, @Nullable final Callbacks callbacks) {
-        if (callbacks != null && (callToAction == null || callToAction.mEvents.isEmpty())) {
-            callbacks.goToNextPage();
-        } else if (callToAction != null) {
-            //TODO: trigger events
         }
     }
 
     static final class CallToActionViewHolder extends BaseViewHolder<CallToAction> {
+        public interface Callbacks {
+            void goToNextPage();
+        }
+
         @BindView(R2.id.call_to_action_label)
         TextView mLabelView;
+
+        @Nullable
+        private Callbacks mCallbacks;
 
         CallToActionViewHolder(@NonNull final View root, @Nullable final BaseViewHolder parentViewHolder) {
             super(CallToAction.class, root, parentViewHolder);
@@ -146,7 +139,20 @@ public final class CallToAction extends Base {
             bindLabel();
         }
 
+        @OnClick(R2.id.call_to_action_arrow)
+        void onTrigger() {
+            if (mCallbacks != null && (mModel == null || mModel.mEvents.isEmpty())) {
+                mCallbacks.goToNextPage();
+            } else if (mModel != null && !mModel.mEvents.isEmpty()) {
+                //TODO: trigger events
+            }
+        }
+
         /* END lifecycle */
+
+        public void setCallbacks(@Nullable final Callbacks callbacks) {
+            mCallbacks = callbacks;
+        }
 
         private void bindLabel() {
             Text.bind(mModel != null ? mModel.mLabel : null, mLabelView);
