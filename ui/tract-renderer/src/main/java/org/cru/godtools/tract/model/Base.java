@@ -271,7 +271,7 @@ abstract class Base {
          */
         @NonNull
         final List<Runnable> triggerAnalyticsEvents(final Collection<AnalyticsEvent> events,
-                                          final AnalyticsEvent.Trigger... types) {
+                                                    final AnalyticsEvent.Trigger... types) {
             return Stream.of(events)
                     .filter(e -> e.isTriggerType(types))
                     .map(this::sendAnalyticsEvent)
