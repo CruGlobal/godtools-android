@@ -1,5 +1,7 @@
 package org.cru.godtools.tract.model;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.CallSuper;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DimenRes;
@@ -21,6 +23,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import butterknife.ButterKnife;
@@ -134,9 +137,10 @@ abstract class Base {
 
     @UiThread
     abstract static class BaseViewHolder<T extends Base> {
+        private final Handler mHandler;
+
         @Nullable
         final BaseViewHolder mParentViewHolder;
-
         @NonNull
         public final View mRoot;
 
@@ -154,6 +158,8 @@ abstract class Base {
 
         BaseViewHolder(@NonNull final Class<T> modelType, @NonNull final View root,
                        @Nullable final BaseViewHolder parentViewHolder) {
+            mHandler = new Handler(Looper.getMainLooper());
+
             mParentViewHolder = parentViewHolder;
             mModelType = modelType;
             mRoot = root;
@@ -256,15 +262,38 @@ abstract class Base {
                     .forEach(EventBus.getDefault()::post);
         }
 
-        final void triggerAnalyticsEvents(final Collection<AnalyticsEvent> events,
+        /**
+         * Trigger the specified analytics events.
+         *
+         * @param events All analytics events
+         * @param types  The types of analytics events to actually trigger
+         * @return Any pending analytics events.
+         */
+        @NonNull
+        final List<Runnable> triggerAnalyticsEvents(final Collection<AnalyticsEvent> events,
                                           final AnalyticsEvent.Trigger... types) {
-            Stream.of(events)
+            return Stream.of(events)
                     .filter(e -> e.isTriggerType(types))
-                    .forEach(this::sendAnalyticsEvent);
+                    .map(this::sendAnalyticsEvent)
+                    .withoutNulls()
+                    .toList();
         }
 
-        private void sendAnalyticsEvent(@NonNull final AnalyticsEvent event) {
+        @Nullable
+        private Runnable sendAnalyticsEvent(@NonNull final AnalyticsEvent event) {
+            if (event.getDelay() > 0) {
+                final Runnable task = () -> EventBus.getDefault().post(new ContentAnalyticsActionEvent(event));
+                mHandler.postDelayed(task, event.getDelay() * 1000);
+                return task;
+            }
+
             EventBus.getDefault().post(new ContentAnalyticsActionEvent(event));
+            return null;
+        }
+
+        final void cancelPendingAnalyticsEvents(@NonNull final List<Runnable> pendingTasks) {
+            Stream.of(pendingTasks)
+                    .forEach(mHandler::removeCallbacks);
         }
 
         /**

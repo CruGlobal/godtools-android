@@ -97,6 +97,10 @@ public class AnalyticsEvent {
         return mAction;
     }
 
+    public int getDelay() {
+        return mDelay;
+    }
+
     @NonNull
     public Map<String, String> getAttributes() {
         return mAttributes;
