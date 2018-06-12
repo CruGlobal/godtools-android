@@ -12,12 +12,15 @@ import com.google.common.collect.ImmutableSet;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
+import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.util.DrawableUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.Set;
+
+import butterknife.BindView;
 
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
@@ -34,7 +37,7 @@ public final class CallToAction extends Base {
     }
 
     @Nullable
-    private Text mLabel;
+    Text mLabel;
 
     @Nullable @ColorInt
     private Integer mControlColor;
@@ -97,14 +100,7 @@ public final class CallToAction extends Base {
     public static void bind(@Nullable final CallToAction callToAction, @Nullable final View view,
                             @Nullable final Callbacks callbacks) {
         if (view != null) {
-            bindLabel(callToAction, view.findViewById(R.id.call_to_action_label));
             bindArrow(callToAction, view.findViewById(R.id.call_to_action_arrow), callbacks);
-        }
-    }
-
-    private static void bindLabel(@Nullable final CallToAction callToAction, @Nullable final TextView mLabel) {
-        if (mLabel != null) {
-            Text.bind(callToAction != null ? callToAction.mLabel : null, mLabel);
         }
     }
 
@@ -124,6 +120,36 @@ public final class CallToAction extends Base {
             callbacks.goToNextPage();
         } else if (callToAction != null) {
             //TODO: trigger events
+        }
+    }
+
+    static final class CallToActionViewHolder extends BaseViewHolder<CallToAction> {
+        @BindView(R2.id.call_to_action_label)
+        TextView mLabelView;
+
+        CallToActionViewHolder(@NonNull final View root, @Nullable final BaseViewHolder parentViewHolder) {
+            super(CallToAction.class, root, parentViewHolder);
+        }
+
+        @NonNull
+        public static CallToActionViewHolder forView(@NonNull final View root,
+                                                     @Nullable final Page.PageViewHolder parentViewHolder) {
+            final CallToActionViewHolder holder = forView(root, CallToActionViewHolder.class);
+            return holder != null ? holder : new CallToActionViewHolder(root, parentViewHolder);
+        }
+
+        /* BEGIN lifecycle */
+
+        @Override
+        void onBind() {
+            super.onBind();
+            bindLabel();
+        }
+
+        /* END lifecycle */
+
+        private void bindLabel() {
+            Text.bind(mModel != null ? mModel.mLabel : null, mLabelView);
         }
     }
 }

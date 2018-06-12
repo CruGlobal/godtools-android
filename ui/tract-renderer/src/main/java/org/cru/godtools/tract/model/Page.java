@@ -20,6 +20,7 @@ import com.google.common.collect.Sets;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.CallToAction.CallToActionViewHolder;
 import org.cru.godtools.tract.model.Card.CardViewHolder;
 import org.cru.godtools.tract.model.Hero.HeroViewHolder;
 import org.cru.godtools.tract.widget.PageContentLayout;
@@ -363,6 +364,8 @@ public final class Page extends Base implements Styles, Parent {
 
         @BindView(R2.id.hero)
         View mHero;
+        @BindView(R2.id.call_to_action)
+        View mCallToAction;
 
         private boolean mBindingCards = false;
         private boolean mNeedsCardsRebind = false;
@@ -370,14 +373,16 @@ public final class Page extends Base implements Styles, Parent {
         private Card[] mCards = new Card[0];
         private Set<String> mVisibleCards = new ArraySet<>();
 
-        @Nullable
-        private CardViewHolder mVisibleCardViewHolder;
         @NonNull
         private final HeroViewHolder mHeroViewHolder;
+        @Nullable
+        private CardViewHolder mVisibleCardViewHolder;
         @NonNull
         private final Pools.Pool<CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
         @NonNull
         private CardViewHolder[] mCardViewHolders = new CardViewHolder[0];
+        @NonNull
+        private final CallToActionViewHolder mCallToActionViewHolder;
 
         @Nullable
         private Callbacks mCallbacks;
@@ -386,6 +391,7 @@ public final class Page extends Base implements Styles, Parent {
             super(Page.class, root, null);
             mPageContentLayout.setActiveCardListener(this);
             mHeroViewHolder = HeroViewHolder.forView(mHero, this);
+            mCallToActionViewHolder = CallToActionViewHolder.forView(mCallToAction, this);
         }
 
         @NonNull
@@ -402,6 +408,7 @@ public final class Page extends Base implements Styles, Parent {
             bindPage();
             bindHero();
             updateDisplayedCards();
+            bindCallToAction();
         }
 
         @Override
@@ -513,6 +520,10 @@ public final class Page extends Base implements Styles, Parent {
 
         private void bindHero() {
             mHeroViewHolder.bind(mModel != null ? mModel.getHero() : null);
+        }
+
+        private void bindCallToAction() {
+            mCallToActionViewHolder.bind(mModel != null ? mModel.getCallToAction() : null);
         }
 
         @UiThread
