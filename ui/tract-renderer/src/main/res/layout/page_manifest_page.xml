@@ -34,6 +34,7 @@
                     android:id="@+id/header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:saveEnabled="false"
                     tools:background="@android:color/Purple_800">
 
                     <TextView
@@ -43,6 +44,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
                         android:layout_marginStart="16dp"
+                        android:saveEnabled="false"
                         android:textIsSelectable="false"
                         tools:text="1"
                         tools:textSize="54sp" />
@@ -55,6 +57,7 @@
                         android:layout_margin="16dp"
                         android:layout_toEndOf="@id/header_number"
                         android:layout_toRightOf="@id/header_number"
+                        android:saveEnabled="false"
                         android:textIsSelectable="true"
                         tools:text="GOD LOVES YOU AND CREATED YOU TO KNOW HIM PERSONALLY."
                         tools:textSize="18sp" />
@@ -73,6 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
+                        android:saveEnabled="false"
                         android:textIsSelectable="true"
                         tools:text="Knowing God Personally"
                         tools:textSize="54sp" />
@@ -83,7 +87,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/hero_heading"
                         android:layout_marginTop="16dp"
-                        android:orientation="vertical" />
+                        android:orientation="vertical"
+                        android:saveEnabled="false" />
                 </RelativeLayout>
             </RelativeLayout>
         </android.support.v4.widget.NestedScrollView>
