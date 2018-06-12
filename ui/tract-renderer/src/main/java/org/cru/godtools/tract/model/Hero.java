@@ -6,19 +6,24 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.common.collect.ImmutableSet;
+
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.tract.model.Page.PageViewHolder;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import butterknife.BindView;
 
+import static org.cru.godtools.tract.Constants.XMLNS_ANALYTICS;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 
 public final class Hero extends Base implements Parent, Styles {
@@ -27,6 +32,9 @@ public final class Hero extends Base implements Parent, Styles {
 
     @Nullable
     Text mHeading;
+
+    @NonNull
+    Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
 
     @NonNull
     private final List<Content> mContent = new ArrayList<>();
@@ -65,6 +73,13 @@ public final class Hero extends Base implements Parent, Styles {
 
             // process recognized nodes
             switch (parser.getNamespace()) {
+                case XMLNS_ANALYTICS:
+                    switch (parser.getName()) {
+                        case AnalyticsEvent.XML_EVENTS:
+                            mAnalyticsEvents = AnalyticsEvent.fromEventsXml(parser);
+                            continue;
+                    }
+                    break;
                 case XMLNS_TRACT:
                     switch (parser.getName()) {
                         case XML_HEADING:
@@ -92,6 +107,9 @@ public final class Hero extends Base implements Parent, Styles {
         @BindView(R2.id.hero_heading)
         TextView mHeading;
 
+        @Nullable
+        private List<Runnable> mPendingAnalyticsEvents;
+
         HeroViewHolder(@NonNull final View root, @Nullable final BaseViewHolder parentViewHolder) {
             super(Hero.class, root, parentViewHolder);
         }
@@ -110,6 +128,23 @@ public final class Hero extends Base implements Parent, Styles {
             super.onBind();
             mRoot.setVisibility(mModel != null ? View.VISIBLE : View.GONE);
             bindHeading();
+        }
+
+        @Override
+        void onVisible() {
+            super.onVisible();
+            if (mModel != null) {
+                mPendingAnalyticsEvents =
+                        triggerAnalyticsEvents(mModel.mAnalyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT);
+            }
+        }
+
+        @Override
+        void onHidden() {
+            super.onHidden();
+            if (mPendingAnalyticsEvents != null) {
+                cancelPendingAnalyticsEvents(mPendingAnalyticsEvents);
+            }
         }
 
         /* END lifecycle */
