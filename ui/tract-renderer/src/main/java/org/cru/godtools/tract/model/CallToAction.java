@@ -11,7 +11,6 @@ import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.util.DrawableUtils;
 import org.xmlpull.v1.XmlPullParser;
@@ -47,7 +46,7 @@ public final class CallToAction extends Base {
     }
 
     @ColorInt
-    private static int getControlColor(@Nullable final CallToAction callToAction) {
+    static int getControlColor(@Nullable final CallToAction callToAction) {
         return callToAction != null ? callToAction.getControlColor() : Styles.getPrimaryColor(null);
     }
 
@@ -96,16 +95,6 @@ public final class CallToAction extends Base {
 
     public static void bind(@Nullable final CallToAction callToAction, @Nullable final View view) {
         if (view != null) {
-            bindArrow(callToAction, view.findViewById(R.id.call_to_action_arrow));
-        }
-    }
-
-    private static void bindArrow(@Nullable final CallToAction callToAction, @Nullable final ImageView arrow) {
-        if (arrow != null) {
-            final boolean visible =
-                    callToAction == null || !callToAction.getPage().isLastPage() || !callToAction.mEvents.isEmpty();
-            arrow.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
-            arrow.setImageDrawable(DrawableUtils.tint(arrow.getDrawable(), CallToAction.getControlColor(callToAction)));
         }
     }
 
@@ -116,6 +105,8 @@ public final class CallToAction extends Base {
 
         @BindView(R2.id.call_to_action_label)
         TextView mLabelView;
+        @BindView(R2.id.call_to_action_arrow)
+        ImageView mArrowView;
 
         @Nullable
         private Callbacks mCallbacks;
@@ -137,6 +128,7 @@ public final class CallToAction extends Base {
         void onBind() {
             super.onBind();
             bindLabel();
+            bindArrow();
         }
 
         @OnClick(R2.id.call_to_action_arrow)
@@ -156,6 +148,12 @@ public final class CallToAction extends Base {
 
         private void bindLabel() {
             Text.bind(mModel != null ? mModel.mLabel : null, mLabelView);
+        }
+
+        private void bindArrow() {
+            final boolean visible = mModel == null || !mModel.getPage().isLastPage() || !mModel.mEvents.isEmpty();
+            mArrowView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+            mArrowView.setImageDrawable(DrawableUtils.tint(mArrowView.getDrawable(), getControlColor(mModel)));
         }
     }
 }
