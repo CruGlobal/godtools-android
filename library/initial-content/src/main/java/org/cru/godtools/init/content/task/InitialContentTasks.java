@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
 import com.annimon.stream.Stream;
-import com.crashlytics.android.Crashlytics;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Closer;
@@ -40,6 +39,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
+import timber.log.Timber;
 
 import static android.database.sqlite.SQLiteDatabase.CONFLICT_IGNORE;
 
@@ -136,7 +137,8 @@ public class InitialContentTasks implements Runnable {
             }
         } catch (final Exception e) {
             // log exception, but it shouldn't be fatal (for now)
-            Crashlytics.logException(e);
+            Timber.tag("InitialContentTasks")
+                    .e(e, "Error loading bundled languages");
         }
     }
 
@@ -228,7 +230,8 @@ public class InitialContentTasks implements Runnable {
             }
         } catch (final Exception e) {
             // log exception, but it shouldn't be fatal (for now)
-            Crashlytics.logException(e);
+            Timber.tag("InitialContentTasks")
+                    .e(e, "Error loading bundled tools");
         }
     }
 
@@ -255,7 +258,8 @@ public class InitialContentTasks implements Runnable {
                 }
 
             } catch (final Exception e) {
-                Crashlytics.logException(e);
+                Timber.tag("InitialContentTasks")
+                        .e(e, "Error importing bundled translations");
             }
         }
     }
@@ -285,7 +289,8 @@ public class InitialContentTasks implements Runnable {
                 }
             }
         } catch (final Exception e) {
-            Crashlytics.logException(e);
+            Timber.tag("InitialContentTasks")
+                    .e(e, "Error importing bundled attachments");
         }
     }
 }
