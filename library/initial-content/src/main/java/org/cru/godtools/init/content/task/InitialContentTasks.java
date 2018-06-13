@@ -116,11 +116,23 @@ public class InitialContentTasks implements Runnable {
 
             // convert to a usable object
             final JsonApiObject<Language> languages = getJsonApiConverter().fromJson(raw, Language.class);
-            final long changed = Stream.of(languages.getData()).mapToLong(l -> mDao.insert(l, CONFLICT_IGNORE)).sum();
+
+            // store languages in the database
+            long changed;
+            final Transaction tx = mDao.newTransaction();
+            try {
+                tx.beginTransaction();
+                changed = Stream.of(languages.getData())
+                        .mapToLong(l -> mDao.insert(l, CONFLICT_IGNORE))
+                        .sum();
+                tx.setTransactionSuccessful();
+            } finally {
+                tx.endTransaction().recycle();
+            }
 
             // send a broadcast if we inserted any languages
             if (changed > 0) {
-                mEventBus.post(new LanguageUpdateEvent());
+                mEventBus.post(LanguageUpdateEvent.INSTANCE);
             }
         } catch (final Exception e) {
             // log exception, but it shouldn't be fatal (for now)
