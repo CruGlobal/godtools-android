@@ -123,11 +123,15 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
      */
     @MainThread
     public void onUpdateSystemLocale(@NonNull final BroadcastReceiver.PendingResult result) {
-        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
-            updateShortcuts();
-            updatePendingShortcuts();
+        if (SUPPORTS_SHORTCUT_MANAGER) {
+            AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
+                updateShortcuts();
+                updatePendingShortcuts();
+                result.finish();
+            });
+        } else {
             result.finish();
-        });
+        }
     }
 
     /**
