@@ -40,6 +40,7 @@ dependencies {
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
 
     implementation "com.annimon:stream:${deps.lightweightStream}"
+    implementation 'com.duolingo.open:rtl-viewpager:1.0.3'
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"

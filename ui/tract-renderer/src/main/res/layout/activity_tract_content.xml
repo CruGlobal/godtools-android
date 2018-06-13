@@ -12,7 +12,7 @@
         android:adjustViewBounds="true"
         android:cropToPadding="false" />
 
-    <org.ccci.gto.android.common.viewpager.view.HackyViewPager
+    <org.cru.godtools.tract.widget.HackyRtlViewPager
         android:id="@+id/pages"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
