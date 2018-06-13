@@ -3,6 +3,7 @@ package org.cru.godtools.tract.model;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -85,10 +86,11 @@ public final class Resource extends Base {
         // update the background image itself
         bind(resource, image);
         image.setScaleType(scale);
-        // TODO: RTL support?
-        image.setGravityHorizontal(ImageGravity.isStart(gravity) ? GravityHorizontal.LEFT :
-                                           ImageGravity.isEnd(gravity) ? GravityHorizontal.RIGHT :
-                                                   GravityHorizontal.CENTER);
+        final boolean rtl = Resource.getLayoutDirection(resource) == ViewCompat.LAYOUT_DIRECTION_RTL;
+        image.setGravityHorizontal(
+                ImageGravity.isStart(gravity) ? (!rtl ? GravityHorizontal.LEFT : GravityHorizontal.RIGHT) :
+                        ImageGravity.isEnd(gravity) ? (!rtl ? GravityHorizontal.RIGHT : GravityHorizontal.LEFT) :
+                                GravityHorizontal.CENTER);
         image.setGravityVertical(ImageGravity.isTop(gravity) ? GravityVertical.TOP :
                                          ImageGravity.isBottom(gravity) ? GravityVertical.BOTTOM :
                                                  GravityVertical.CENTER);
@@ -108,7 +110,6 @@ public final class Resource extends Base {
             rlp.addRule(CENTER_VERTICAL, 0);
 
             // update gravity (X-Axis)
-            // TODO: RTL support
             if (ImageGravity.isStart(gravity)) {
                 rlp.addRule(ALIGN_PARENT_START);
             } else if (ImageGravity.isEnd(gravity)) {

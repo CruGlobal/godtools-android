@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
+import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.util.DrawableUtils;
 import org.xmlpull.v1.XmlPullParser;
@@ -148,6 +149,7 @@ public final class CallToAction extends Base {
         private void bindArrow() {
             final boolean visible = mModel == null || !mModel.getPage().isLastPage() || !mModel.mEvents.isEmpty();
             mArrowView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+            mArrowView.setImageResource(R.drawable.ic_call_to_action);
             mArrowView.setImageDrawable(DrawableUtils.tint(mArrowView.getDrawable(), getControlColor(mModel)));
         }
     }
