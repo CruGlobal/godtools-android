@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Closer;
 
 import org.ccci.gto.android.common.db.Query;
+import org.ccci.gto.android.common.db.Transaction;
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
@@ -168,31 +169,39 @@ public class InitialContentTasks implements Runnable {
             boolean toolsChanged = false;
             boolean translationsChanged = false;
             boolean attachmentsChanged = false;
-            for (final Tool tool : tools.getData()) {
-                if (mDao.refresh(tool) == null) {
-                    if (mDao.insert(tool, CONFLICT_IGNORE) > 0) {
-                        toolsChanged = true;
-                        if (tool.getCode() != null) {
-                            mDownloadManager.addTool(tool.getCode());
-                        }
+            final Transaction tx = mDao.newTransaction();
+            try {
+                tx.beginTransaction();
 
-                        // import all bundled translations
-                        final List<Translation> translations = tool.getLatestTranslations();
-                        if (translations != null) {
-                            translationsChanged = Stream.of(tool.getLatestTranslations())
-                                    .mapToLong(t -> mDao.insert(t, CONFLICT_IGNORE))
-                                    .sum() > 0 || translationsChanged;
-                        }
+                for (final Tool tool : tools.getData()) {
+                    if (mDao.refresh(tool) == null) {
+                        if (mDao.insert(tool, CONFLICT_IGNORE) > 0) {
+                            toolsChanged = true;
+                            if (tool.getCode() != null) {
+                                mDownloadManager.addTool(tool.getCode());
+                            }
 
-                        // import all bundled attachments
-                        final List<Attachment> attachments = tool.getAttachments();
-                        if (attachments != null) {
-                            attachmentsChanged = Stream.of(tool.getAttachments())
-                                    .mapToLong(a -> mDao.insert(a, CONFLICT_IGNORE))
-                                    .sum() > 0 || attachmentsChanged;
+                            // import all bundled translations
+                            final List<Translation> translations = tool.getLatestTranslations();
+                            if (translations != null) {
+                                translationsChanged = Stream.of(tool.getLatestTranslations())
+                                        .mapToLong(t -> mDao.insert(t, CONFLICT_IGNORE))
+                                        .sum() > 0 || translationsChanged;
+                            }
+
+                            // import all bundled attachments
+                            final List<Attachment> attachments = tool.getAttachments();
+                            if (attachments != null) {
+                                attachmentsChanged = Stream.of(tool.getAttachments())
+                                        .mapToLong(a -> mDao.insert(a, CONFLICT_IGNORE))
+                                        .sum() > 0 || attachmentsChanged;
+                            }
                         }
                     }
                 }
+                tx.setSuccessful();
+            } finally {
+                tx.endTransaction().recycle();
             }
 
             // send a broadcast if we inserted any tools, translations, or attachments
