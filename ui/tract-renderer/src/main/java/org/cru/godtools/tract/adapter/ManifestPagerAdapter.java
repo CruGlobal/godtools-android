@@ -223,8 +223,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         private void bindHeader(@Nullable final Page page) {
             final Header header = page != null ? page.getHeader() : null;
 
-            ButterKnife.apply(mHeaderViews, (ButterKnife.Action<View>) (view, i) -> view
-                    .setVisibility(header != null ? View.VISIBLE : View.GONE));
+            ButterKnife.apply(mHeaderViews, (view, i) -> view.setVisibility(header != null ? View.VISIBLE : View.GONE));
 
             if (header != null) {
                 mHeader.setBackgroundColor(header.getBackgroundColor());
