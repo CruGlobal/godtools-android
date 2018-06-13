@@ -23,7 +23,6 @@ import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.activity.ModalActivity;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter.PageViewHolder;
-import org.cru.godtools.tract.model.CallToAction;
 import org.cru.godtools.tract.model.Card;
 import org.cru.godtools.tract.model.Header;
 import org.cru.godtools.tract.model.Manifest;
@@ -161,8 +160,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
 
     /* END lifecycle */
 
-    class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder
-            implements Page.PageViewHolder.Callbacks, CallToAction.Callbacks {
+    class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements Page.PageViewHolder.Callbacks {
         private final Page.PageViewHolder mModelViewHolder;
 
         @BindView(R2.id.page)
@@ -177,10 +175,6 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         TextView mHeaderNumber;
         @BindView(R2.id.header_title)
         TextView mHeaderTitle;
-
-        // call to action
-        @BindView(R2.id.call_to_action)
-        View mCallToAction;
 
         @BindViews({R2.id.header, R2.id.header_number, R2.id.header_title})
         List<View> mHeaderViews;
@@ -206,7 +200,6 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
             mModelViewHolder.bind(page);
 
             bindHeader(page);
-            CallToAction.bind(page != null ? page.getCallToAction() : null, mCallToAction, this);
         }
 
         void onContentEvent(@NonNull final Event event) {
