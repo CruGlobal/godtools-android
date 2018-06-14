@@ -51,6 +51,8 @@ public class InitialContentTasks implements Runnable {
             523L, "kgp-en-111.zip"
     );
 
+    private static final String SYNC_TIME_DEFAULT_TOOLS = "last_synced.default_tools";
+
     private final AssetManager mAssets;
     private final Settings mSettings;
     private final Context mContext;
@@ -79,6 +81,7 @@ public class InitialContentTasks implements Runnable {
 
         // tools init
         loadBundledTools();
+        initDefaultTools();
         importBundledTranslations();
         importBundledAttachments();
     }
@@ -191,9 +194,6 @@ public class InitialContentTasks implements Runnable {
                     if (mDao.refresh(tool) == null) {
                         if (mDao.insert(tool, CONFLICT_IGNORE) > 0) {
                             toolsChanged = true;
-                            if (tool.getCode() != null) {
-                                mDownloadManager.addTool(tool.getCode());
-                            }
 
                             // import all bundled translations
                             final List<Translation> translations = tool.getLatestTranslations();
@@ -233,6 +233,21 @@ public class InitialContentTasks implements Runnable {
             Timber.tag("InitialContentTasks")
                     .e(e, "Error loading bundled tools");
         }
+    }
+
+    private void initDefaultTools() {
+        // check to see if we have initialized the default tools before
+        if (mDao.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) {
+            return;
+        }
+
+        // add the default tools
+        mDownloadManager.addTool("kgp");
+        mDownloadManager.addTool("fourlaws");
+        mDownloadManager.addTool("satisfied");
+
+        // update the last sync time
+        mDao.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS);
     }
 
     private void importBundledTranslations() {

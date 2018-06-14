@@ -36,7 +36,7 @@ android.libraryVariants.all { variant ->
             simplifyBundledTools(toolsJson)
         }
     }
-//    assetGenTask.dependsOn(sanitizeToolsTask)
+    assetGenTask.dependsOn(sanitizeToolsTask)
 }
 
 static def simplifyBundledLanguages(File file) {
