@@ -23,3 +23,5 @@ dependencies {
 
     implementation "com.jakewharton.timber:timber:${deps.timber}"
 }
+
+apply from: 'download_initial_content.gradle'
