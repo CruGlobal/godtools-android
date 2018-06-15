@@ -3,6 +3,10 @@ apply plugin: 'io.fabric'
 
 android {
     baseFeature true
+
+    defaultConfig {
+        versionCode baseVersionCode
+    }
 }
 
 crashlytics {
