@@ -27,9 +27,11 @@ android {
         }
 
         // Crashlytics config
-        ext.betaDistributionGroupAliasesFilePath = "crashlytics/beta_groups.txt"
-        ext.betaDistributionNotifications = false
-        ext.betaDistributionReleaseNotes = generateCrashlyticsBetaReleaseNotes()
+        ext {
+            betaDistributionGroupAliasesFilePath = "crashlytics/beta_groups.txt"
+            betaDistributionNotifications = false
+            betaDistributionReleaseNotes = generateCrashlyticsBetaReleaseNotes()
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
