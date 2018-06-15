@@ -1,4 +1,4 @@
-import groovy.json.JsonBuilder
+import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 
 // the tools, languages, and attachments to bundle with app
@@ -111,8 +111,7 @@ static def simplifyBundledLanguages(File file) {
     }
 
     sortJsonApiObject(data)
-    String output = new JsonBuilder(data).toPrettyString()
-    file.text = output
+    file.text = JsonOutput.toJson(data)
 }
 
 static def simplifyBundledTools(File file) {
@@ -141,8 +140,7 @@ static def simplifyBundledTools(File file) {
     }
 
     sortJsonApiObject(data)
-    String output = new JsonBuilder(data).toPrettyString()
-    file.text = output
+    file.text = JsonOutput.toJson(data)
 }
 
 static def removeJsonApiAttrs(obj, String... attrs) {
