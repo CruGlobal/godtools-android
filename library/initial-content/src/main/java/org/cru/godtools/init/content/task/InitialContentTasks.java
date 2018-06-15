@@ -166,6 +166,11 @@ public class InitialContentTasks implements Runnable {
     }
 
     private void loadBundledTools() {
+        // short-circuit if we already have any tools loaded
+        if (!mDao.get(Query.select(Tool.class).limit(1)).isEmpty()) {
+            return;
+        }
+
         try {
             // read in raw tools json
             final Closer closer = Closer.create();
@@ -255,6 +260,23 @@ public class InitialContentTasks implements Runnable {
             // short-circuit if this translation doesn't exist, or is already downloaded
             final Translation translation = mDao.find(Translation.class, bundle.getKey());
             if (translation == null || translation.isDownloaded()) {
+                continue;
+            }
+
+            // short-circuit if the tool or language are not added to this device
+            final Tool tool = mDao.find(Tool.class, translation.getToolCode());
+            if (tool == null || !tool.isAdded()) {
+                continue;
+            }
+            final Language language = mDao.find(Language.class, translation.getLanguageCode());
+            if (language == null || !language.isAdded()) {
+                continue;
+            }
+
+            // short-circuit if a newer translation is already downloaded
+            final Translation latestTranslation =
+                    mDao.getLatestTranslation(translation.getToolCode(), translation.getLanguageCode()).orElse(null);
+            if (latestTranslation != null && latestTranslation.isDownloaded()) {
                 continue;
             }
 
