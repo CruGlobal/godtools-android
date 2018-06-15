@@ -1,9 +1,11 @@
 package org.cru.godtools.feature.tract;
 
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import org.cru.godtools.api.GodToolsApi;
 import org.cru.godtools.base.app.BaseGodToolsApplication;
+import org.cru.godtools.init.content.task.InitialContentTasks;
 import org.cru.godtools.tract.TractEventBusIndex;
 import org.greenrobot.eventbus.EventBusBuilder;
 
@@ -16,6 +18,9 @@ public class GodToolsTractApplication extends BaseGodToolsApplication {
 
         // configure the API
         GodToolsApi.configure(this, MOBILE_CONTENT_API);
+
+        // load initial content
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(new InitialContentTasks(this));
     }
 
     @NonNull
