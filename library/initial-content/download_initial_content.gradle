@@ -1,10 +1,15 @@
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 
+// the tools, languages, and attachments to bundle with app
+def toolsToDownload = ['kgp', 'fourlaws', 'satisfied']
+def languagesToDownload = ['en']
+def attachmentsToDownload = ['attr-banner', 'attr-banner-about']
+
 apply plugin: 'de.undercouch.download'
 
 android.libraryVariants.all { variant ->
-    def mobileContentApi = 'https://mobile-content-api.cru.org/'
+    def mobileContentApi = variant.flavorName.contains("stage") ? uris.mobileContentApi.stage : uris.mobileContentApi.production
 
     // XXX: we hardcode the generated shader assets directory because I couldn't find a public API to get/add a generated output dir. -DMF
     def assetGenDir = new File(project.buildDir, "generated/assets/shaders/" + variant.dirName)
@@ -35,11 +40,6 @@ android.libraryVariants.all { variant ->
         }
     }
     assetGenTask.dependsOn(downloadToolsTask)
-
-    // the tools, languages, and attachments to include
-    def toolsToDownload = ['kgp', 'fourlaws', 'satisfied']
-    def attachmentsToDownload = ['attr-banner', 'attr-banner-about']
-    def languagesToDownload = ['en']
 
     // download attachments
     def attachmentsDir = new File(assetGenDir, 'attachments')

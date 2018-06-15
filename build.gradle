@@ -1,4 +1,11 @@
 buildscript {
+    ext.uris = [
+            mobileContentApi: [
+                    stage     : "https://mobile-content-api-stage.cru.org/",
+                    production: "https://mobile-content-api.cru.org/"
+            ]
+    ]
+
     repositories {
         mavenLocal()
         google()

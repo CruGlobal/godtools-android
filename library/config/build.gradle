@@ -4,12 +4,12 @@ android {
         stage {
             dimension "env"
 
-            buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api-stage.cru.org/\""
+            buildConfigField "String", "MOBILE_CONTENT_API", "\"${uris.mobileContentApi.stage}\""
         }
         production {
             dimension "env"
 
-            buildConfigField "String", "MOBILE_CONTENT_API", "\"https://mobile-content-api.cru.org/\""
+            buildConfigField "String", "MOBILE_CONTENT_API", "\"${uris.mobileContentApi.production}\""
         }
     }
 }
