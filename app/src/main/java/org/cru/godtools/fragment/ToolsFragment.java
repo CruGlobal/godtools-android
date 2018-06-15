@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.fragment;
+package org.cru.godtools.fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -35,6 +35,7 @@ import org.keynote.godtools.android.content.ToolsCursorLoader;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
+import org.keynote.godtools.android.fragment.BaseFragment;
 
 import java.util.Locale;
 
