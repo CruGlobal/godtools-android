@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'newrelic'
-apply plugin: 'org.ajoberstar.grgit'
 
 android {
     compileSdkVersion compileSdk
@@ -9,7 +8,7 @@ android {
     defaultConfig {
         applicationId rootProject.applicationId
         versionName rootProject.version
-        versionCode baseVersionCode + 1
+        versionCode rootProject.versionCode + 1
 
         minSdkVersion minSdk
         targetSdkVersion targetSdk
