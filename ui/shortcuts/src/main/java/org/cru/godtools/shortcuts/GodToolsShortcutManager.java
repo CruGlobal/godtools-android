@@ -415,6 +415,8 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
                 icon = IconCompat.createWithBitmap(
                         Picasso.with(mContext)
                                 .load(FileUtils.getFile(mContext, banner.getLocalFileName()))
+                                .centerCrop()
+                                .resizeDimen(android.R.dimen.app_icon_size, android.R.dimen.app_icon_size)
                                 .transform(new CropCircleTransformation())
                                 .get());
             } catch (final IOException ignored) {
@@ -426,6 +428,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
 
         // build the shortcut
         return Optional.of(new ShortcutInfoCompat.Builder(mContext, toolShortcutId(tool))
+                                   .setAlwaysBadged()
                                    .setIntent(intent)
                                    .setShortLabel(label)
                                    .setLongLabel(label)
