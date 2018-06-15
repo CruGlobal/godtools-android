@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.common.wrappers.InstantApps;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.cru.godtools.base.model.Event;
@@ -17,11 +18,17 @@ class GoogleAnalyticsService implements AnalyticsService {
     /* Custom dimensions */
     private static final int DIMENSION_TOOL = 1;
     private static final int DIMENSION_LANGUAGE = 2;
+    private static final int DIMENSION_APP_TYPE = 4;
+
+    private static final String VALUE_APP_TYPE_INSTANT = "instant";
+    private static final String VALUE_APP_TYPE_INSTALLED = "installed";
 
     private final Tracker mTracker;
+    private final String mAppType;
 
     private GoogleAnalyticsService(@NonNull final Context context) {
         mTracker = GoogleAnalytics.getInstance(context).newTracker(BuildConfig.GOOGLE_ANALYTICS_CLIENT_ID);
+        mAppType = InstantApps.isInstantApp(context) ? VALUE_APP_TYPE_INSTANT : VALUE_APP_TYPE_INSTALLED;
     }
 
     @Nullable
@@ -45,7 +52,7 @@ class GoogleAnalyticsService implements AnalyticsService {
 
         // send event
         mTracker.setScreenName(screen);
-        mTracker.send(event.build());
+        sendEvent(event);
     }
 
     @Override
@@ -59,16 +66,20 @@ class GoogleAnalyticsService implements AnalyticsService {
         }
 
         // send event
-        mTracker.send(eventBuilder.build());
+        sendEvent(eventBuilder);
     }
 
     @Override
     public void onTrackEveryStudentSearch(@NonNull final String query) {
         mTracker.setScreenName(SCREEN_EVERYSTUDENT_SEARCH);
-        mTracker.send(new HitBuilders.EventBuilder()
+        sendEvent(new HitBuilders.EventBuilder()
                               .setCategory(CATEGORY_EVERYSTUDENT_SEARCH)
                               .setAction(ACTION_EVERYSTUDENT_SEARCH)
-                              .setLabel(query)
-                              .build());
+                              .setLabel(query));
+    }
+
+    private void sendEvent(@NonNull final HitBuilders.HitBuilder<? extends HitBuilders.HitBuilder> event) {
+        event.setCustomDimension(DIMENSION_APP_TYPE, mAppType);
+        mTracker.send(event.build());
     }
 }
