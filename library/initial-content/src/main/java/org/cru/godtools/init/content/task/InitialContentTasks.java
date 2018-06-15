@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
 import com.annimon.stream.Stream;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Closer;
 
@@ -37,7 +36,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 import timber.log.Timber;
@@ -45,12 +43,6 @@ import timber.log.Timber;
 import static android.database.sqlite.SQLiteDatabase.CONFLICT_IGNORE;
 
 public class InitialContentTasks implements Runnable {
-    private static final ImmutableMap<Long, String> BUNDLED_TRANSLATIONS = ImmutableMap.of(
-            388L, "fourlaws-en-38.zip",
-            428L, "satisfied-en-50.zip",
-            523L, "kgp-en-111.zip"
-    );
-
     private static final String SYNC_TIME_DEFAULT_TOOLS = "last_synced.default_tools";
 
     private final AssetManager mAssets;
@@ -256,48 +248,55 @@ public class InitialContentTasks implements Runnable {
     }
 
     private void importBundledTranslations() {
-        for (final Map.Entry<Long, String> bundle : BUNDLED_TRANSLATIONS.entrySet()) {
-            // short-circuit if this translation doesn't exist, or is already downloaded
-            final Translation translation = mDao.find(Translation.class, bundle.getKey());
-            if (translation == null || translation.isDownloaded()) {
-                continue;
-            }
-
-            // short-circuit if the tool or language are not added to this device
-            final Tool tool = mDao.find(Tool.class, translation.getToolCode());
-            if (tool == null || !tool.isAdded()) {
-                continue;
-            }
-            final Language language = mDao.find(Language.class, translation.getLanguageCode());
-            if (language == null || !language.isAdded()) {
-                continue;
-            }
-
-            // short-circuit if a newer translation is already downloaded
-            final Translation latestTranslation =
-                    mDao.getLatestTranslation(translation.getToolCode(), translation.getLanguageCode()).orElse(null);
-            if (latestTranslation != null && latestTranslation.isDownloaded()) {
-                continue;
-            }
-
-            try {
-                final String fileName = "translations/" + bundle.getValue();
-
-                // open zip file
-                final Closer closer = Closer.create();
-                try {
-                    final InputStream in = closer.register(mAssets.open(fileName));
-                    mDownloadManager.storeTranslation(translation, in, -1);
-                } catch (final IOException e) {
-                    throw closer.rethrow(e);
-                } finally {
-                    closer.close();
+        try {
+            for (final String file : mAssets.list("translations")) {
+                // short-circuit if this translation doesn't exist, or is already downloaded
+                final Translation translation = mDao.find(Translation.class, file.substring(0, file.lastIndexOf('.')));
+                if (translation == null || translation.isDownloaded()) {
+                    continue;
                 }
 
-            } catch (final Exception e) {
-                Timber.tag("InitialContentTasks")
-                        .e(e, "Error importing bundled translations");
+                // short-circuit if the tool or language are not added to this device
+                final Tool tool = mDao.find(Tool.class, translation.getToolCode());
+                if (tool == null || !tool.isAdded()) {
+                    continue;
+                }
+                final Language language = mDao.find(Language.class, translation.getLanguageCode());
+                if (language == null || !language.isAdded()) {
+                    continue;
+                }
+
+                // short-circuit if a newer translation is already downloaded
+                final Translation latestTranslation =
+                        mDao.getLatestTranslation(translation.getToolCode(), translation.getLanguageCode())
+                                .orElse(null);
+                if (latestTranslation != null && latestTranslation.isDownloaded()) {
+                    continue;
+                }
+
+                try {
+                    final String fileName = "translations/" + file;
+
+                    // open zip file
+                    final Closer closer = Closer.create();
+                    try {
+                        final InputStream in = closer.register(mAssets.open(fileName));
+                        mDownloadManager.storeTranslation(translation, in, -1);
+                    } catch (final IOException e) {
+                        throw closer.rethrow(e);
+                    } finally {
+                        closer.close();
+                    }
+
+                } catch (final Exception e) {
+                    Timber.tag("InitialContentTasks")
+                            .e(e, "Error importing bundled translation %s-%s-%d (%s)", tool.getCode(),
+                               language.getCode(), translation.getVersion(), file);
+                }
             }
+        } catch (final Exception e) {
+            Timber.tag("InitialContentTasks")
+                    .e(e, "Error importing bundled translations");
         }
     }
 
