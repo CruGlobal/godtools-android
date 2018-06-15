@@ -4,39 +4,37 @@ import groovy.json.JsonSlurper
 apply plugin: 'de.undercouch.download'
 
 android.libraryVariants.all { variant ->
+    def mobileContentApi = 'https://mobile-content-api.cru.org/'
+
     // XXX: we hardcode the generated shader assets directory because I couldn't find a public API to get/add a generated output dir. -DMF
     def assetGenDir = new File(project.buildDir, "generated/assets/shaders/" + variant.dirName)
     def assetGenTask = project.tasks.getByName("generate${variant.name.capitalize()}Assets")
 
     // languages json
-    def languagesJson = new File(assetGenDir, 'languages.json')
+    def languagesJsonFile = new File(assetGenDir, 'languages.json')
     def downloadLanguagesTask = project.tasks.create "download${variant.name.capitalize()}BundledLanguages", Download, {
-        src 'https://mobile-content-api.cru.org/languages'
-        dest languagesJson
+        src "${mobileContentApi}languages"
+        dest languagesJsonFile
         quiet true
-    }
-    def sanitizeLanguagesTask = project.tasks.create("sanitize${variant.name.capitalize()}BundledLanguages") {
-        dependsOn downloadLanguagesTask
+
         doLast {
-            simplifyBundledLanguages(languagesJson)
+            simplifyBundledLanguages(languagesJsonFile)
         }
     }
-    assetGenTask.dependsOn(sanitizeLanguagesTask)
+    assetGenTask.dependsOn(downloadLanguagesTask)
 
     // tools json
-    def toolsJson = new File(assetGenDir, 'tools.json')
+    def toolsJsonFile = new File(assetGenDir, 'tools.json')
     def downloadToolsTask = project.tasks.create "download${variant.name.capitalize()}BundledTools", Download, {
-        src 'https://mobile-content-api.cru.org/resources?filter[system]=GodTools&include=attachments,latest-translations.language'
-        dest toolsJson
+        src "${mobileContentApi}resources?filter[system]=GodTools&include=attachments,latest-translations.language"
+        dest toolsJsonFile
         quiet true
-    }
-    def sanitizeToolsTask = project.tasks.create("sanitize${variant.name.capitalize()}BundledTools") {
-        dependsOn downloadToolsTask
+
         doLast {
-            simplifyBundledTools(toolsJson)
+            simplifyBundledTools(toolsJsonFile)
         }
     }
-    assetGenTask.dependsOn(sanitizeToolsTask)
+    assetGenTask.dependsOn(downloadToolsTask)
 }
 
 static def simplifyBundledLanguages(File file) {
