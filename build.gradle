@@ -16,7 +16,7 @@ buildscript {
 }
 
 plugins {
-    id "org.ajoberstar.grgit" version "2.1.1" apply false
+    id "org.ajoberstar.grgit" version "2.1.1"
 }
 
 group 'org.cru.android'
@@ -24,11 +24,12 @@ version '5.0.13-SNAPSHOT'
 
 // define dependency versions for this project
 ext {
-    applicationId = 'org.keynote.godtools.android'
-    compileSdk    = 27
-    minSdk        = 15
-    minSdkFeature = 21
-    targetSdk     = 27
+    applicationId   = 'org.keynote.godtools.android'
+    baseVersionCode = (grgit.log(includes:['HEAD']).size() * 2) + 4026230
+    compileSdk      = 27
+    minSdk          = 15
+    minSdkFeature   = 21
+    targetSdk       = 27
 }
 ext.deps = [
         adobeMobileServices  : '4.16.0',

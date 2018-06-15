@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId rootProject.applicationId
         versionName rootProject.version
-        versionCode grgit.log(includes:['HEAD']).size() + 4029047
+        versionCode baseVersionCode + 1
 
         minSdkVersion minSdk
         targetSdkVersion targetSdk
