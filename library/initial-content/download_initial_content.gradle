@@ -35,6 +35,40 @@ android.libraryVariants.all { variant ->
         }
     }
     assetGenTask.dependsOn(downloadToolsTask)
+
+    // the tools, languages, and attachments to include
+    def toolsToDownload = ['kgp', 'fourlaws', 'satisfied']
+    def attachmentsToDownload = ['attr-banner', 'attr-banner-about']
+
+    // download attachments
+    def attachmentsDir = new File(assetGenDir, 'attachments')
+    def downloadAttachmentsTask = project.tasks.create("download${variant.name.capitalize()}BundledAttachments") {
+        dependsOn downloadToolsTask
+
+        doLast {
+            def toolsJson = new JsonSlurper().parseText(toolsJsonFile.text)
+            toolsJson.data.findAll { toolsToDownload.contains(it.attributes.abbreviation) }.each { tool ->
+                attachmentsToDownload.each { attr ->
+                    def attachmentId = tool.attributes.get(attr)
+                    def attachment = toolsJson.included.find { it.id == attachmentId && it.type == "attachment" }
+                    if (!attachment) {
+                        return
+                    }
+
+                    def rawName = attachment.attributes.get('file-file-name')
+                    def fileName = attachment.attributes.sha256 + rawName.substring(rawName.lastIndexOf('.'))
+                    download {
+                        src "${mobileContentApi}attachments/${attachmentId}/download"
+                        dest new File(attachmentsDir, fileName)
+                        overwrite false
+                        tempAndMove true
+                        quiet true
+                    }
+                }
+            }
+        }
+    }
+    assetGenTask.dependsOn(downloadAttachmentsTask)
 }
 
 static def simplifyBundledLanguages(File file) {
