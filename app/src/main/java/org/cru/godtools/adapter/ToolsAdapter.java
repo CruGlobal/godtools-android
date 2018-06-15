@@ -53,6 +53,8 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         void onToolAdd(@Nullable String code);
     }
 
+    @NonNull
+    private int[] mTmpPositions = new int[0];
     final boolean mHideAddAction;
 
     @Nullable
@@ -96,6 +98,45 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
     }
 
     /* END lifecycle */
+
+    @Nullable
+    @Override
+    public Cursor swapCursor(@Nullable final Cursor cursor) {
+        mTmpPositions = new int[cursor != null ? cursor.getCount() : 0];
+        for (int i = 0; i < mTmpPositions.length; i++) {
+            mTmpPositions[i] = i;
+        }
+
+        return super.swapCursor(cursor);
+    }
+
+    @Override
+    protected Cursor scrollCursor(@Nullable final Cursor cursor, final int position) {
+        return super.scrollCursor(cursor, mTmpPositions[position]);
+    }
+
+    private void updateTmpPositions(final int fromPosition, final int toPosition) {
+        // short-circuit if the position isn't actually changing
+        if (fromPosition == toPosition) {
+            return;
+        }
+
+        // short-circuit if there are invalid positions
+        if (fromPosition < 0 || fromPosition >= mTmpPositions.length ||
+                toPosition < 0 || toPosition >= mTmpPositions.length) {
+            return;
+        }
+
+        final int tmp = mTmpPositions[fromPosition];
+        if (fromPosition < toPosition) {
+            // 0123F56T8 -> 0123_56T8 -> 012356T_8 -> 012356TF8
+            System.arraycopy(mTmpPositions, fromPosition + 1, mTmpPositions, fromPosition, toPosition - fromPosition);
+        } else {
+            // 0123T56F8 -> 0123T56_8 -> 0123_T568 -> 0123FT568
+            System.arraycopy(mTmpPositions, toPosition, mTmpPositions, toPosition + 1, fromPosition - toPosition);
+        }
+        mTmpPositions[toPosition] = tmp;
+    }
 
     class ToolViewHolder extends BaseViewHolder implements GodToolsDownloadManager.OnDownloadProgressUpdateListener {
         @Nullable
