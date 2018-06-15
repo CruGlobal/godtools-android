@@ -65,7 +65,7 @@ public class ToolsFragment extends BaseFragment
 
     @Nullable
     @BindView(R.id.resources)
-    RecyclerView mResourcesView;
+    RecyclerView mToolsView;
     @Nullable
     private EmptyListHeaderFooterAdapter mToolsHeaderAdapter;
     @Nullable
@@ -191,9 +191,9 @@ public class ToolsFragment extends BaseFragment
     }
 
     private void setupToolsList() {
-        if (mResourcesView != null) {
-            mResourcesView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            mResourcesView.setHasFixedSize(false);
+        if (mToolsView != null) {
+            mToolsView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mToolsView.setHasFixedSize(false);
 
             mToolsAdapter = new ToolsAdapter(mMode == MODE_ADDED);
             mToolsAdapter.setCallbacks(this);
@@ -215,9 +215,9 @@ public class ToolsFragment extends BaseFragment
             if (mToolsHeaderAdapter != null) {
                 mToolsHeaderAdapter.setEmptyCallbacks(this);
                 mToolsHeaderAdapter.setAdapter(mToolsAdapter);
-                mResourcesView.setAdapter(mToolsHeaderAdapter);
+                mToolsView.setAdapter(mToolsHeaderAdapter);
             } else {
-                mResourcesView.setAdapter(mToolsAdapter);
+                mToolsView.setAdapter(mToolsAdapter);
             }
 
             updateToolsList();
@@ -240,8 +240,8 @@ public class ToolsFragment extends BaseFragment
         if (mToolsAdapter != null) {
             mToolsAdapter.setCallbacks(null);
         }
-        if (mResourcesView != null) {
-            mResourcesView.setAdapter(null);
+        if (mToolsView != null) {
+            mToolsView.setAdapter(null);
         }
         mToolsHeaderAdapter = null;
         mToolsAdapter = null;
