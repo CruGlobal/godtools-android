@@ -5,6 +5,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.WorkerThread;
 import android.util.Pair;
 
 import com.annimon.stream.Optional;
@@ -88,12 +89,14 @@ public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
 
     @NonNull
     @Override
+    @WorkerThread
     public <T> Stream<T> streamCompat(@NonNull final Query<T> query) {
         return StreamHelper.stream(this, query);
     }
 
     /* Miscellaneous app specific dao methods */
 
+    @WorkerThread
     public long insertNew(final Base obj) {
         int attempts = 10;
         while (true) {
@@ -109,6 +112,7 @@ public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
         }
     }
 
+    @WorkerThread
     public void updateSharesDelta(@Nullable final String toolCode, final int shares) {
         // short-circuit if this is a valid tool
         if (toolCode == null) {
@@ -142,6 +146,7 @@ public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
     }
 
     @NonNull
+    @WorkerThread
     public Optional<Translation> getLatestTranslation(@Nullable final String code, @Nullable final Locale locale) {
         if (code == null || locale == null) {
             return Optional.empty();
