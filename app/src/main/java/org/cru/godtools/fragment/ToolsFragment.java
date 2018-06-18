@@ -337,6 +337,9 @@ public class ToolsFragment extends BaseFragment
                     final Expression where = ToolTable.FIELD_ADDED.eq(mMode == MODE_ADDED);
                     loader.setWhere(where);
                     loader.setGroupBy(ToolTable.FIELD_CODE);
+                    if (mMode == MODE_ADDED) {
+                        loader.setSortOrder(ToolTable.COLUMN_ORDER);
+                    }
                     return loader;
                 default:
                     return null;

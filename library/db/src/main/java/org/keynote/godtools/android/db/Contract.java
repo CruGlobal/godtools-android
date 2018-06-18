@@ -79,7 +79,7 @@ public final class Contract extends BaseContract {
         public static final String COLUMN_BANNER = "banner";
         public static final String COLUMN_DETAILS_BANNER = "banner_details";
         public static final String COLUMN_COPYRIGHT = "copyright";
-        static final String COLUMN_ORDER = "ordering";
+        public static final String COLUMN_ORDER = "ordering";
         public static final String COLUMN_ADDED = "added";
 
         static final Field FIELD_ID = TABLE.field(COLUMN_ID);
