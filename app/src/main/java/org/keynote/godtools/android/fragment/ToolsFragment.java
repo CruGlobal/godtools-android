@@ -83,7 +83,7 @@ public class ToolsFragment extends BaseFragment
 
     public static Fragment newAvailableInstance() {
         final Fragment fragment = new ToolsFragment();
-        final Bundle args = new Bundle();
+        final Bundle args = new Bundle(1);
         args.putInt(EXTRA_MODE, MODE_AVAILABLE);
         fragment.setArguments(args);
         return fragment;
