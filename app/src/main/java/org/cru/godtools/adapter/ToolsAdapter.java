@@ -7,11 +7,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.text.TextUtilsCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
+import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemViewHolder;
+import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
+import com.h6ah4i.android.widget.advrecyclerview.draggable.annotation.DraggableItemStateFlags;
 
 import org.ccci.gto.android.common.compat.view.TextViewCompat;
 import org.ccci.gto.android.common.db.util.CursorUtils;
@@ -34,10 +40,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
 
+import static android.view.HapticFeedbackConstants.LONG_PRESS;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
-public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
+public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
+        implements DraggableItemAdapter<ToolsAdapter.ToolViewHolder> {
     public static final String COL_TITLE = "title";
     public static final String COL_TITLE_LANGUAGE = "title_lang";
     public static final String COL_TAGLINE = "tagline";
@@ -55,6 +63,9 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
 
         void onToolsReordered(final long... ids);
     }
+
+    @Nullable
+    private RecyclerView mRecyclerView;
 
     @NonNull
     private int[] mTmpPositions = new int[0];
@@ -74,6 +85,12 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
     /* BEGIN lifecycle */
 
     @Override
+    public void onAttachedToRecyclerView(@NonNull final RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRecyclerView = recyclerView;
+    }
+
+    @Override
     public ToolViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
         return new ToolViewHolder(LayoutInflater.from(parent.getContext())
                                           .inflate(R.layout.list_item_tool_card, parent, false));
@@ -91,6 +108,38 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
     }
 
     @Override
+    public boolean onCheckCanStartDrag(final ToolViewHolder holder, final int position, final int x, final int y) {
+        return true;
+    }
+
+    @Override
+    public void onItemDragStarted(final int position) {
+        // perform haptic feedback
+        if (mRecyclerView != null) {
+            mRecyclerView.performHapticFeedback(LONG_PRESS);
+        }
+    }
+
+    @Override
+    public void onItemDragFinished(final int fromPosition, final int toPosition, final boolean result) {}
+
+    @Override
+    public ItemDraggableRange onGetItemDraggableRange(final ToolViewHolder holder, final int position) {
+        return null;
+    }
+
+    @Override
+    public void onMoveItem(final int fromPosition, final int toPosition) {
+        updateTmpPositions(fromPosition, toPosition);
+        triggerToolOrderUpdate();
+    }
+
+    @Override
+    public boolean onCheckCanDrop(final int draggingPosition, final int dropPosition) {
+        return true;
+    }
+
+    @Override
     public void onViewDetachedFromWindow(final ToolViewHolder holder) {
         holder.stopDownloadProgressListener();
     }
@@ -98,6 +147,14 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
     @Override
     public void onViewRecycled(final ToolViewHolder holder) {
         holder.bind(null);
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull final RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        if (mRecyclerView == recyclerView) {
+            mRecyclerView = null;
+        }
     }
 
     /* END lifecycle */
@@ -154,7 +211,8 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         }
     }
 
-    class ToolViewHolder extends BaseViewHolder implements GodToolsDownloadManager.OnDownloadProgressUpdateListener {
+    class ToolViewHolder extends BaseViewHolder
+            implements GodToolsDownloadManager.OnDownloadProgressUpdateListener, DraggableItemViewHolder {
         @Nullable
         @BindView(R.id.banner)
         PicassoImageView mBanner;
@@ -206,6 +264,9 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         boolean mAdded = false;
         @Nullable
         private DownloadProgress mDownloadProgress;
+
+        @DraggableItemStateFlags
+        private int mDragStateFlags;
 
         ToolViewHolder(@NonNull final View view) {
             super(view);
@@ -275,6 +336,17 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
             if (mActionAdd != null) {
                 mActionAdd.setEnabled(!mAdded);
             }
+        }
+
+        @Override
+        public void setDragStateFlags(@DraggableItemStateFlags final int flags) {
+            mDragStateFlags = flags;
+        }
+
+        @Override
+        @DraggableItemStateFlags
+        public int getDragStateFlags() {
+            return mDragStateFlags;
         }
 
         void startDownloadProgressListener() {
