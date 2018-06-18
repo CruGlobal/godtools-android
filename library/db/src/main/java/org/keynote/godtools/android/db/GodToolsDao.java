@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 import android.util.Pair;
 
+import com.annimon.stream.LongStream;
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 
@@ -157,5 +158,29 @@ public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
                                     .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
                                     .limit(1))
                 .findFirst();
+    }
+
+    @WorkerThread
+    public void updateToolOrder(final long... tools) {
+        final Tool tool = new Tool();
+
+        final Transaction tx = newTransaction();
+        try {
+            tx.beginTransactionNonExclusive();
+
+            // reset order for all tools
+            update(tool, (Expression) null, ToolTable.COLUMN_ORDER);
+
+            // set order for each specified tool
+            LongStream.of(tools).boxed().indexed()
+                    .forEach(t -> {
+                        tool.setOrder(t.getFirst());
+                        update(tool, ToolTable.FIELD_ID.eq(t.getSecond()), ToolTable.COLUMN_ORDER);
+                    });
+
+            tx.setSuccessful();
+        } finally {
+            tx.endTransaction().recycle();
+        }
     }
 }
