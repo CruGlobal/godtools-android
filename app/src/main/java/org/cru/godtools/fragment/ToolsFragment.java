@@ -25,7 +25,6 @@ import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Expression.Field;
 import org.ccci.gto.android.common.db.Join;
 import org.ccci.gto.android.common.db.Table;
-import org.ccci.gto.android.common.eventbus.content.DaoCursorEventBusLoader;
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.R;
@@ -64,8 +63,8 @@ public class ToolsFragment extends BaseFragment
         void onNoToolsAvailableAction();
     }
 
-    private static final int MODE_ADDED = 1;
-    private static final int MODE_AVAILABLE = 2;
+    static final int MODE_ADDED = 1;
+    static final int MODE_AVAILABLE = 2;
 
     private static final int LOADER_TOOLS = 101;
 
@@ -323,100 +322,14 @@ public class ToolsFragment extends BaseFragment
         mToolsAdapter = null;
     }
 
-    // set repetitive TranslationTable objects for primary, parallel, and default
-    private static final int TRANS_COUNT = 3;
-    private static final int TRANS_PRIMARY = 0;
-    private static final int TRANS_PARALLEL = 1;
-    private static final int TRANS_DEFAULT = 2;
-    static final String[] TRANS_ALIAS = new String[TRANS_COUNT];
-    static final Table[] TRANS_TABLE = new Table[TRANS_COUNT];
-    static final Join[] TRANS_JOIN = new Join[TRANS_COUNT];
-    static final Field[] TRANS_FIELD_LANG = new Field[TRANS_COUNT];
-
-    static {
-        for (int i = 0; i < TRANS_COUNT; i++) {
-            TRANS_ALIAS[i] = "trans" + i;
-            TRANS_TABLE[i] = TranslationTable.TABLE.as(TRANS_ALIAS[i]);
-            TRANS_FIELD_LANG[i] = TRANS_TABLE[i].field(TranslationTable.COLUMN_LANGUAGE);
-            //noinspection unchecked
-            TRANS_JOIN[i] = Join.create(TRANS_TABLE[i]).type("LEFT")
-                    .on(TRANS_TABLE[i].field(TranslationTable.COLUMN_TOOL).eq(ToolTable.FIELD_CODE))
-                    .andOn(TRANS_TABLE[i].field(TranslationTable.COLUMN_PUBLISHED).eq(true));
-        }
-    }
-
-    static final String[] TOOLS_PROJECTION = {
-            ToolTable.COLUMN_ID,
-            ToolTable.COLUMN_CODE,
-            ToolTable.COLUMN_TYPE,
-            "coalesce(" +
-                    TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_NAME + "," +
-                    TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_NAME + "," +
-                    ToolTable.TABLE_NAME + "." + ToolTable.COLUMN_NAME + ") " +
-                    "AS " + ToolsAdapter.COL_TITLE,
-            "CASE " +
-                    "WHEN " + TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_NAME + " IS NOT NULL THEN " +
-                    TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
-                    "WHEN " + TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_NAME + " IS NOT NULL THEN " +
-                    TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
-                    "ELSE NULL END AS " + ToolsAdapter.COL_TITLE_LANGUAGE,
-            "coalesce(" +
-                    TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_TAGLINE + "," +
-                    TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_DESCRIPTION + "," +
-                    TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_TAGLINE + "," +
-                    TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_DESCRIPTION + "," +
-                    ToolTable.TABLE_NAME + "." + ToolTable.COLUMN_DESCRIPTION + ") " +
-                    "AS " + ToolsAdapter.COL_TAGLINE,
-            "CASE " +
-                    "WHEN " + TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_TAGLINE +
-                    " IS NOT NULL THEN " + TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
-                    "WHEN " + TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_DESCRIPTION +
-                    " IS NOT NULL THEN " + TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
-                    "WHEN " + TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_TAGLINE +
-                    " IS NOT NULL THEN " + TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
-                    "WHEN " + TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_DESCRIPTION +
-                    " IS NOT NULL THEN " + TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
-                    "ELSE NULL END AS " + ToolsAdapter.COL_TAGLINE_LANGUAGE,
-            ToolTable.COLUMN_SHARES,
-            ToolTable.COLUMN_PENDING_SHARES,
-            ToolTable.COLUMN_ADDED,
-            TRANS_ALIAS[TRANS_PRIMARY] + "." + TranslationTable.COLUMN_LANGUAGE + " AS " +
-                    ToolsAdapter.COL_PRIMARY_LANGUAGE,
-            TRANS_ALIAS[TRANS_PARALLEL] + "." + TranslationTable.COLUMN_LANGUAGE + " AS " +
-                    ToolsAdapter.COL_PARALLEL_LANGUAGE,
-            TRANS_ALIAS[TRANS_DEFAULT] + "." + TranslationTable.COLUMN_LANGUAGE + " AS " +
-                    ToolsAdapter.COL_DEFAULT_LANGUAGE,
-            AttachmentTable.TABLE_NAME + "." + AttachmentTable.COLUMN_LOCALFILENAME + " AS " + ToolsAdapter.COL_BANNER
-    };
-    static final Join TOOLS_JOIN_BANNER =
-            ToolTable.SQL_JOIN_BANNER.type("LEFT").andOn(AttachmentTable.SQL_WHERE_DOWNLOADED);
-
     class CursorLoaderCallbacks extends SimpleLoaderCallbacks<Cursor> {
         @Nullable
         @Override
         public Loader<Cursor> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_TOOLS:
-                    final DaoCursorEventBusLoader<Tool> loader = new ToolsCursorLoader(requireContext(), args);
-                    loader.addEventBusSubscriber(new AttachmentEventBusSubscriber(loader));
-                    loader.setProjection(TOOLS_PROJECTION);
-                    //noinspection unchecked
-                    loader.setJoins(
-                            TOOLS_JOIN_BANNER,
-                            TRANS_JOIN[TRANS_PRIMARY].andOn(TRANS_FIELD_LANG[TRANS_PRIMARY].eq(mPrimaryLanguage)),
-                            TRANS_JOIN[TRANS_PARALLEL].andOn(
-                                    TRANS_FIELD_LANG[TRANS_PARALLEL]
-                                            .eq(mParallelLanguage != null ? mParallelLanguage : Language.INVALID_CODE)),
-                            TRANS_JOIN[TRANS_DEFAULT]
-                                    .andOn(TRANS_FIELD_LANG[TRANS_DEFAULT].eq(Settings.getDefaultLanguage()))
-                    );
-                    final Expression where = ToolTable.FIELD_ADDED.eq(mMode == MODE_ADDED);
-                    loader.setWhere(where);
-                    loader.setGroupBy(ToolTable.FIELD_CODE);
-                    if (mMode == MODE_ADDED) {
-                        loader.setSortOrder(ToolTable.COLUMN_ORDER);
-                    }
-                    return loader;
+                    return new LocalToolsCursorLoader(requireContext(), args, mMode, mPrimaryLanguage,
+                                                      mParallelLanguage);
                 default:
                     return null;
             }
@@ -428,6 +341,127 @@ public class ToolsFragment extends BaseFragment
                 case LOADER_TOOLS:
                     onLoadResources(cursor);
                     break;
+            }
+        }
+    }
+
+    static class LocalToolsCursorLoader extends ToolsCursorLoader {
+        // set repetitive TranslationTable objects for primary, parallel, and default
+        private static final int TRANS_COUNT = 3;
+        private static final int TRANS_PRIM = 0;
+        private static final int TRANS_PARA = 1;
+        private static final int TRANS_DEF = 2;
+        private static final String[] TRANS_ALIAS = new String[TRANS_COUNT];
+        private static final Table[] TRANS_TABLE = new Table[TRANS_COUNT];
+        private static final Join[] TRANS_JOIN = new Join[TRANS_COUNT];
+        private static final Field[] TRANS_FIELD_LANG = new Field[TRANS_COUNT];
+
+        static {
+            for (int i = 0; i < TRANS_COUNT; i++) {
+                TRANS_ALIAS[i] = "trans" + i;
+                TRANS_TABLE[i] = TranslationTable.TABLE.as(TRANS_ALIAS[i]);
+                TRANS_FIELD_LANG[i] = TRANS_TABLE[i].field(TranslationTable.COLUMN_LANGUAGE);
+                //noinspection unchecked
+                TRANS_JOIN[i] = Join.create(TRANS_TABLE[i]).type("LEFT")
+                        .on(TRANS_TABLE[i].field(TranslationTable.COLUMN_TOOL).eq(ToolTable.FIELD_CODE))
+                        .andOn(TRANS_TABLE[i].field(TranslationTable.COLUMN_PUBLISHED).eq(true));
+            }
+        }
+
+        private static final String[] TOOLS_PROJECTION = {
+                ToolTable.COLUMN_ID,
+                ToolTable.COLUMN_CODE,
+                ToolTable.COLUMN_TYPE,
+                // title
+                "coalesce(" +
+                        TRANS_ALIAS[TRANS_PRIM] + "." + TranslationTable.COLUMN_NAME + "," +
+                        TRANS_ALIAS[TRANS_DEF] + "." + TranslationTable.COLUMN_NAME + "," +
+                        ToolTable.TABLE_NAME + "." + ToolTable.COLUMN_NAME + ") " +
+                        "AS " + ToolsAdapter.COL_TITLE,
+                // title_lang
+                "CASE " +
+                        "WHEN " + TRANS_ALIAS[TRANS_PRIM] + "." + TranslationTable.COLUMN_NAME + " IS NOT NULL THEN " +
+                        TRANS_ALIAS[TRANS_PRIM] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
+                        "WHEN " + TRANS_ALIAS[TRANS_DEF] + "." + TranslationTable.COLUMN_NAME + " IS NOT NULL THEN " +
+                        TRANS_ALIAS[TRANS_DEF] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
+                        "ELSE NULL END AS " + ToolsAdapter.COL_TITLE_LANGUAGE,
+                // tagline
+                "coalesce(" +
+                        TRANS_ALIAS[TRANS_PRIM] + "." + TranslationTable.COLUMN_TAGLINE + "," +
+                        TRANS_ALIAS[TRANS_PRIM] + "." + TranslationTable.COLUMN_DESCRIPTION + "," +
+                        TRANS_ALIAS[TRANS_DEF] + "." + TranslationTable.COLUMN_TAGLINE + "," +
+                        TRANS_ALIAS[TRANS_DEF] + "." + TranslationTable.COLUMN_DESCRIPTION + "," +
+                        ToolTable.TABLE_NAME + "." + ToolTable.COLUMN_DESCRIPTION + ") " +
+                        "AS " + ToolsAdapter.COL_TAGLINE,
+                // tagline_lang
+                "CASE " +
+                        "WHEN " + TRANS_ALIAS[TRANS_PRIM] + "." + TranslationTable.COLUMN_TAGLINE +
+                        " IS NOT NULL THEN " + TRANS_ALIAS[TRANS_PRIM] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
+                        "WHEN " + TRANS_ALIAS[TRANS_PRIM] + "." + TranslationTable.COLUMN_DESCRIPTION +
+                        " IS NOT NULL THEN " + TRANS_ALIAS[TRANS_PRIM] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
+                        "WHEN " + TRANS_ALIAS[TRANS_DEF] + "." + TranslationTable.COLUMN_TAGLINE +
+                        " IS NOT NULL THEN " + TRANS_ALIAS[TRANS_DEF] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
+                        "WHEN " + TRANS_ALIAS[TRANS_DEF] + "." + TranslationTable.COLUMN_DESCRIPTION +
+                        " IS NOT NULL THEN " + TRANS_ALIAS[TRANS_DEF] + "." + TranslationTable.COLUMN_LANGUAGE + " " +
+                        "ELSE NULL END AS " + ToolsAdapter.COL_TAGLINE_LANGUAGE,
+                ToolTable.COLUMN_SHARES,
+                ToolTable.COLUMN_PENDING_SHARES,
+                ToolTable.COLUMN_ADDED,
+                TRANS_ALIAS[TRANS_PRIM] + "." + TranslationTable.COLUMN_LANGUAGE + " AS " +
+                        ToolsAdapter.COL_PRIMARY_LANGUAGE,
+                TRANS_ALIAS[TRANS_PARA] + "." + TranslationTable.COLUMN_LANGUAGE + " AS " +
+                        ToolsAdapter.COL_PARALLEL_LANGUAGE,
+                TRANS_ALIAS[TRANS_DEF] + "." + TranslationTable.COLUMN_LANGUAGE + " AS " +
+                        ToolsAdapter.COL_DEFAULT_LANGUAGE,
+                AttachmentTable.TABLE_NAME + "." + AttachmentTable.COLUMN_LOCALFILENAME + " AS " +
+                        ToolsAdapter.COL_BANNER
+        };
+
+        static final Join TOOLS_JOIN_BANNER =
+                ToolTable.SQL_JOIN_BANNER.type("LEFT").andOn(AttachmentTable.SQL_WHERE_DOWNLOADED);
+
+        private final int mMode;
+
+        LocalToolsCursorLoader(@NonNull final Context context, @Nullable final Bundle args, final int mode,
+                               @NonNull final Locale primaryLanguage, @Nullable final Locale parallelLanguage) {
+            super(context, args);
+            addEventBusSubscriber(new AttachmentEventBusSubscriber(this));
+            setProjection(TOOLS_PROJECTION);
+            //noinspection unchecked
+            setJoins(
+                    TOOLS_JOIN_BANNER,
+                    TRANS_JOIN[TRANS_PRIM].andOn(TRANS_FIELD_LANG[TRANS_PRIM].eq(primaryLanguage)),
+                    TRANS_JOIN[TRANS_PARA].andOn(TRANS_FIELD_LANG[TRANS_PARA]
+                                                         .eq(parallelLanguage != null ? parallelLanguage :
+                                                                     Language.INVALID_CODE)),
+                    TRANS_JOIN[TRANS_DEF].andOn(TRANS_FIELD_LANG[TRANS_DEF].eq(Settings.getDefaultLanguage()))
+            );
+            setGroupBy(ToolTable.FIELD_CODE);
+
+            mMode = mode;
+        }
+
+        @Nullable
+        @Override
+        public Expression getWhere() {
+            switch (mMode) {
+                case MODE_ADDED:
+                case MODE_AVAILABLE:
+                    return ToolTable.FIELD_ADDED.eq(mMode == MODE_ADDED);
+                default:
+                    return null;
+            }
+        }
+
+        @Nullable
+        @Override
+        public String getSortOrder() {
+            switch (mMode) {
+                case MODE_ADDED:
+                    return ToolTable.COLUMN_ORDER;
+                case MODE_AVAILABLE:
+                default:
+                    return null;
             }
         }
     }
