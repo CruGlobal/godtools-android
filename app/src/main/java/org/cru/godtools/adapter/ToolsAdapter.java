@@ -69,14 +69,9 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
 
     @NonNull
     private int[] mTmpPositions = new int[0];
-    final boolean mHideAddAction;
 
     @Nullable
     Callbacks mCallbacks;
-
-    public ToolsAdapter(final boolean hideAddAction) {
-        mHideAddAction = hideAddAction;
-    }
 
     public void setCallbacks(@Nullable final Callbacks callbacks) {
         mCallbacks = callbacks;
@@ -270,9 +265,6 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
 
         ToolViewHolder(@NonNull final View view) {
             super(view);
-            if (mAddViews != null) {
-                ButterKnife.apply(mAddViews, (v, i) -> v.setVisibility(mHideAddAction ? View.GONE : View.VISIBLE));
-            }
             if (mTitleView != null) {
                 mTitleTextStyle = TextViewCompat.getTypefaceStyle(mTitleView);
             }
@@ -335,6 +327,9 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
             }
             if (mActionAdd != null) {
                 mActionAdd.setEnabled(!mAdded);
+            }
+            if (mAddViews != null) {
+                ButterKnife.apply(mAddViews, (v, i) -> v.setVisibility(mAdded ? View.GONE : View.VISIBLE));
             }
         }
 

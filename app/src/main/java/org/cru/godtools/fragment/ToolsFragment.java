@@ -241,7 +241,7 @@ public class ToolsFragment extends BaseFragment
             mToolsView.setHasFixedSize(false);
 
             // create base tools adapter
-            mToolsAdapter = new ToolsAdapter(mMode == MODE_ADDED);
+            mToolsAdapter = new ToolsAdapter();
             mToolsAdapter.setCallbacks(this);
             RecyclerView.Adapter adapter = mToolsAdapter;
 
