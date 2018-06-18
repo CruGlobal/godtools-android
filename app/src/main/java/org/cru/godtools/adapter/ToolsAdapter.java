@@ -61,7 +61,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
 
         void onToolAdd(@Nullable String code);
 
-        void onToolsReordered(final long... ids);
+        void onToolsReordered(long... ids);
     }
 
     @Nullable
