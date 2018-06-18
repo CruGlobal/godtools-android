@@ -126,10 +126,8 @@ public final class Contract extends BaseContract {
                 "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_DETAILS_BANNER;
         static final String SQL_V30_ALTER_PENDING_SHARES =
                 "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_PENDING_SHARES;
-        static final String SQL_V31_ALTER_CODE =
-                "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_CODE;
-        static final String SQL_V31_ALTER_TYPE =
-                "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_TYPE;
+        static final String SQL_V31_ALTER_CODE = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_CODE;
+        static final String SQL_V31_ALTER_TYPE = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_TYPE;
         static final String SQL_V35_UNIQUE_CODE =
                 "CREATE UNIQUE INDEX " + TABLE_NAME + "_" + COLUMN_CODE + " ON " + TABLE_NAME + " (" + COLUMN_CODE +
                         ")";
