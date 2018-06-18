@@ -231,10 +231,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         }
 
         void stopDownloadProgressListener() {
-            final GodToolsDownloadManager downloadManager = GodToolsDownloadManager.getInstance(itemView.getContext());
-
-            // clear any previous download state
-            downloadManager.removeOnDownloadProgressUpdateListener(this);
+            GodToolsDownloadManager.getInstance(itemView.getContext()).removeOnDownloadProgressUpdateListener(this);
             mDownloadProgress = null;
         }
 
