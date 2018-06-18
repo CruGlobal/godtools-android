@@ -2,18 +2,24 @@ package org.cru.godtools.fragment;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.drawable.NinePatchDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator;
+import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
+import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Expression.Field;
@@ -74,6 +80,10 @@ public class ToolsFragment extends BaseFragment
     @Nullable
     @BindView(R.id.resources)
     RecyclerView mToolsView;
+    @Nullable
+    private RecyclerViewDragDropManager mToolsDragDropManager;
+    @Nullable
+    private RecyclerView.Adapter mToolsDragDropAdapter;
     @Nullable
     private EmptyListHeaderFooterAdapter mToolsHeaderAdapter;
     @Nullable
@@ -191,6 +201,14 @@ public class ToolsFragment extends BaseFragment
     }
 
     @Override
+    public void onPause() {
+        if (mToolsDragDropManager != null) {
+            mToolsDragDropManager.cancelDrag();
+        }
+        super.onPause();
+    }
+
+    @Override
     public void onDestroyView() {
         cleanupToolsList();
         super.onDestroyView();
@@ -216,34 +234,58 @@ public class ToolsFragment extends BaseFragment
         getLoaderManager().restartLoader(LOADER_TOOLS, null, mCursorLoaderCallbacks);
     }
 
+    @SuppressWarnings("unchecked")
     private void setupToolsList() {
         if (mToolsView != null) {
-            mToolsView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mToolsView.setLayoutManager(new LinearLayoutManager(requireActivity()));
             mToolsView.setHasFixedSize(false);
 
+            // create base tools adapter
             mToolsAdapter = new ToolsAdapter(mMode == MODE_ADDED);
             mToolsAdapter.setCallbacks(this);
+            RecyclerView.Adapter adapter = mToolsAdapter;
 
-            // provide an empty list view if required for the current mode
+            // configure the DragDrop RecyclerView components (Only for Added tools)
             if (mMode == MODE_ADDED) {
-                mToolsHeaderAdapter = new Builder()
-                        .layout(R.layout.list_item_none_large_icon)
-                        .emptyIcon(R.drawable.ic_find_tools)
-                        .emptyAction(R.string.nav_find_tools)
-                        .build();
-            } else if (mMode == MODE_AVAILABLE) {
-                mToolsHeaderAdapter = new Builder()
-                        .emptyText(R.string.text_tools_all_installed)
-                        .build();
-            } else {
-                mToolsHeaderAdapter = null;
+                mToolsView.setItemAnimator(new DraggableItemAnimator());
+                mToolsDragDropManager = new RecyclerViewDragDropManager();
+                mToolsDragDropManager.setDraggingItemShadowDrawable((NinePatchDrawable) ContextCompat
+                        .getDrawable(requireActivity(), R.drawable.material_shadow_z3));
+                mToolsDragDropManager.setInitiateOnLongPress(true);
+                mToolsDragDropManager.setInitiateOnMove(false);
+                mToolsDragDropAdapter = mToolsDragDropManager.createWrappedAdapter(adapter);
+                adapter = mToolsDragDropAdapter;
+            }
+
+            // configure empty list view if required for the current mode
+            switch (mMode) {
+                case MODE_ADDED:
+                    mToolsHeaderAdapter = new Builder()
+                            .layout(R.layout.list_item_none_large_icon)
+                            .emptyIcon(R.drawable.ic_find_tools)
+                            .emptyAction(R.string.nav_find_tools)
+                            .build();
+                    break;
+                case MODE_AVAILABLE:
+                    mToolsHeaderAdapter = new Builder()
+                            .emptyText(R.string.text_tools_all_installed)
+                            .build();
+                    break;
+                default:
+                    mToolsHeaderAdapter = null;
             }
             if (mToolsHeaderAdapter != null) {
                 mToolsHeaderAdapter.setEmptyCallbacks(this);
-                mToolsHeaderAdapter.setAdapter(mToolsAdapter);
-                mToolsView.setAdapter(mToolsHeaderAdapter);
-            } else {
-                mToolsView.setAdapter(mToolsAdapter);
+                mToolsHeaderAdapter.setAdapter(adapter);
+                adapter = mToolsHeaderAdapter;
+            }
+
+            // attach the correct adapter to the tools RecyclerView
+            mToolsView.setAdapter(adapter);
+
+            // handle some post-adapter configuration
+            if (mToolsDragDropManager != null) {
+                mToolsDragDropManager.attachRecyclerView(mToolsView);
             }
 
             updateToolsList();
@@ -267,9 +309,17 @@ public class ToolsFragment extends BaseFragment
             mToolsAdapter.setCallbacks(null);
         }
         if (mToolsView != null) {
+            mToolsView.setItemAnimator(null);
             mToolsView.setAdapter(null);
         }
+        if (mToolsDragDropManager != null) {
+            mToolsDragDropManager.release();
+        }
+        WrapperAdapterUtils.releaseAll(mToolsDragDropAdapter);
+
         mToolsHeaderAdapter = null;
+        mToolsDragDropAdapter = null;
+        mToolsDragDropManager = null;
         mToolsAdapter = null;
     }
 
