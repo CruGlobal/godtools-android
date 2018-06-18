@@ -8,6 +8,16 @@ android {
             dimension "env"
         }
     }
+
+    variantFilter { variant ->
+        // stage product flavors
+        if (variant.flavors*.name.contains("stage")) {
+            // ignore for non-debug build types
+            if (!variant.buildType.name.equals("debug")) {
+                setIgnore(true)
+            }
+        }
+    }
 }
 
 dependencies {
@@ -20,4 +30,8 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-jsonapi:${deps.gtoSupport}"
 
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
+
+    implementation "com.jakewharton.timber:timber:${deps.timber}"
 }
+
+apply from: 'download_initial_content.gradle'
