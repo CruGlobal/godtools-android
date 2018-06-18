@@ -2,6 +2,7 @@ package org.cru.godtools.adapter;
 
 import android.database.Cursor;
 import android.graphics.Typeface;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.text.TextUtilsCompat;
@@ -51,6 +52,8 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
         void onToolSelect(@Nullable String code, @NonNull Tool.Type type, Locale... languages);
 
         void onToolAdd(@Nullable String code);
+
+        void onToolsReordered(final long... ids);
     }
 
     @NonNull
@@ -136,6 +139,19 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder> {
             System.arraycopy(mTmpPositions, toPosition, mTmpPositions, toPosition + 1, fromPosition - toPosition);
         }
         mTmpPositions[toPosition] = tmp;
+    }
+
+    @MainThread
+    private void triggerToolOrderUpdate() {
+        if (mCallbacks != null) {
+            final int count = getItemCount();
+            final long[] ids = new long[count];
+            for (int i = 0; i < count; i++) {
+                ids[i] = getItemId(i);
+            }
+
+            mCallbacks.onToolsReordered(ids);
+        }
     }
 
     class ToolViewHolder extends BaseViewHolder implements GodToolsDownloadManager.OnDownloadProgressUpdateListener {

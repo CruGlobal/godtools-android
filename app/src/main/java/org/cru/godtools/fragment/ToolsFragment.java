@@ -1,6 +1,8 @@
 package org.cru.godtools.fragment;
 
+import android.content.Context;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
@@ -29,12 +31,15 @@ import org.cru.godtools.base.Settings;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
+import org.cru.godtools.model.event.ToolUpdateEvent;
 import org.cru.godtools.model.event.content.AttachmentEventBusSubscriber;
 import org.cru.godtools.sync.GodToolsSyncService;
+import org.greenrobot.eventbus.EventBus;
 import org.keynote.godtools.android.content.ToolsCursorLoader;
 import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
+import org.keynote.godtools.android.db.GodToolsDao;
 import org.keynote.godtools.android.fragment.BaseFragment;
 
 import java.util.Locale;
@@ -57,6 +62,9 @@ public class ToolsFragment extends BaseFragment
     private static final int MODE_AVAILABLE = 2;
 
     private static final int LOADER_TOOLS = 101;
+
+    @Nullable
+    private GodToolsDao mDao;
 
     private final CursorLoaderCallbacks mCursorLoaderCallbacks = new CursorLoaderCallbacks();
 
@@ -91,6 +99,14 @@ public class ToolsFragment extends BaseFragment
     }
 
     /* BEGIN lifecycle */
+
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (context != null) {
+            mDao = GodToolsDao.getInstance(context);
+        }
+    }
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -153,6 +169,16 @@ public class ToolsFragment extends BaseFragment
     public void onToolAdd(@Nullable final String code) {
         if (code != null) {
             GodToolsDownloadManager.getInstance(requireContext()).addTool(code);
+        }
+    }
+
+    @Override
+    public void onToolsReordered(final long... ids) {
+        if (mDao != null) {
+            AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
+                mDao.updateToolOrder(ids);
+                EventBus.getDefault().post(ToolUpdateEvent.INSTANCE);
+            });
         }
     }
 
