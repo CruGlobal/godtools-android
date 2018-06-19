@@ -96,6 +96,9 @@ public class Tool extends Base {
     private String mCopyright;
 
     @JsonApiIgnore
+    private int mOrder = Integer.MAX_VALUE;
+
+    @JsonApiIgnore
     private boolean mAdded = false;
 
     @Nullable
@@ -187,6 +190,14 @@ public class Tool extends Base {
 
     public void setCopyright(@Nullable final String copyright) {
         mCopyright = copyright;
+    }
+
+    public int getOrder() {
+        return mOrder;
+    }
+
+    public void setOrder(final int order) {
+        mOrder = order;
     }
 
     public boolean isAdded() {

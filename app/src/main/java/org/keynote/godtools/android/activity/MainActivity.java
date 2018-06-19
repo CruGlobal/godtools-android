@@ -24,11 +24,11 @@ import org.cru.godtools.R;
 import org.cru.godtools.activity.BasePlatformActivity;
 import org.cru.godtools.activity.ToolDetailsActivity;
 import org.cru.godtools.everystudent.EveryStudent;
+import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.sync.GodToolsSyncService;
 import org.cru.godtools.tract.activity.TractActivity;
 import org.cru.godtools.tract.service.TractManager;
-import org.keynote.godtools.android.fragment.ToolsFragment;
 
 import java.util.Locale;
 

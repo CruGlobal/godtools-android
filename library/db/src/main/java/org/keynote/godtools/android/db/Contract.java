@@ -79,6 +79,7 @@ public final class Contract extends BaseContract {
         public static final String COLUMN_BANNER = "banner";
         public static final String COLUMN_DETAILS_BANNER = "banner_details";
         public static final String COLUMN_COPYRIGHT = "copyright";
+        public static final String COLUMN_ORDER = "ordering";
         public static final String COLUMN_ADDED = "added";
 
         static final Field FIELD_ID = TABLE.field(COLUMN_ID);
@@ -90,7 +91,8 @@ public final class Contract extends BaseContract {
 
         static final String[] PROJECTION_ALL =
                 {COLUMN_ID, COLUMN_CODE, COLUMN_TYPE, COLUMN_NAME, COLUMN_DESCRIPTION, COLUMN_SHARES,
-                        COLUMN_PENDING_SHARES, COLUMN_BANNER, COLUMN_DETAILS_BANNER, COLUMN_COPYRIGHT, COLUMN_ADDED};
+                        COLUMN_PENDING_SHARES, COLUMN_BANNER, COLUMN_DETAILS_BANNER, COLUMN_COPYRIGHT, COLUMN_ORDER,
+                        COLUMN_ADDED};
 
         private static final String SQL_COLUMN_CODE = COLUMN_CODE + " TEXT";
         private static final String SQL_COLUMN_TYPE = COLUMN_TYPE + " TEXT";
@@ -101,6 +103,7 @@ public final class Contract extends BaseContract {
         private static final String SQL_COLUMN_BANNER = COLUMN_BANNER + " INTEGER";
         private static final String SQL_COLUMN_DETAILS_BANNER = COLUMN_DETAILS_BANNER + " INTEGER";
         private static final String SQL_COLUMN_COPYRIGHT = COLUMN_COPYRIGHT + " TEXT";
+        private static final String SQL_COLUMN_ORDER = COLUMN_ORDER + " INTEGER";
         private static final String SQL_COLUMN_ADDED = COLUMN_ADDED + " INTEGER";
         private static final String SQL_PRIMARY_KEY = uniqueIndex(COLUMN_CODE);
 
@@ -113,7 +116,8 @@ public final class Contract extends BaseContract {
         static final String SQL_CREATE_TABLE =
                 create(TABLE_NAME, SQL_COLUMN_ID, SQL_COLUMN_CODE, SQL_COLUMN_TYPE, SQL_COLUMN_NAME,
                        SQL_COLUMN_DESCRIPTION, SQL_COLUMN_SHARES, SQL_COLUMN_PENDING_SHARES, SQL_COLUMN_BANNER,
-                       SQL_COLUMN_DETAILS_BANNER, SQL_COLUMN_COPYRIGHT, SQL_COLUMN_ADDED, SQL_PRIMARY_KEY);
+                       SQL_COLUMN_DETAILS_BANNER, SQL_COLUMN_COPYRIGHT, SQL_COLUMN_ORDER, SQL_COLUMN_ADDED,
+                       SQL_PRIMARY_KEY);
         static final String SQL_DELETE_TABLE = drop(TABLE_NAME);
 
         /* DB migrations */
@@ -131,6 +135,9 @@ public final class Contract extends BaseContract {
         static final String SQL_V35_UNIQUE_CODE =
                 "CREATE UNIQUE INDEX " + TABLE_NAME + "_" + COLUMN_CODE + " ON " + TABLE_NAME + " (" + COLUMN_CODE +
                         ")";
+        static final String SQL_V38_ALTER_ORDER = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + SQL_COLUMN_ORDER;
+        static final String SQL_V38_POPULATE_ORDER =
+                "UPDATE " + TABLE_NAME + " SET " + COLUMN_ORDER + " = " + Integer.MAX_VALUE;
     }
 
     public static class TranslationTable extends BaseTable implements ToolCode {

@@ -15,6 +15,7 @@ import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_COPYRIGH
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DESCRIPTION;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DETAILS_BANNER;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_NAME;
+import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_ORDER;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_PENDING_SHARES;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_SHARES;
 import static org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_TYPE;
@@ -51,6 +52,9 @@ final class ToolMapper extends BaseMapper<Tool> {
             case COLUMN_COPYRIGHT:
                 values.put(field, tool.getCopyright());
                 break;
+            case COLUMN_ORDER:
+                values.put(field, tool.getOrder());
+                break;
             case COLUMN_ADDED:
                 values.put(field, tool.isAdded());
                 break;
@@ -80,6 +84,7 @@ final class ToolMapper extends BaseMapper<Tool> {
         tool.setBannerId(getLong(c, COLUMN_BANNER, Attachment.INVALID_ID));
         tool.setDetailsBannerId(getLong(c, COLUMN_DETAILS_BANNER, Attachment.INVALID_ID));
         tool.setCopyright(getString(c, COLUMN_COPYRIGHT, null));
+        tool.setOrder(getInt(c, COLUMN_ORDER, Integer.MAX_VALUE));
         tool.setAdded(getBool(c, COLUMN_ADDED, false));
 
         return tool;

@@ -44,7 +44,7 @@ public abstract class BaseFragment extends Fragment {
     @Nullable
     @BindView(R.id.refresh)
     SwipeRefreshLayout mRefreshLayout;
-    final SwipeRefreshSyncHelper mSyncHelper = new SwipeRefreshSyncHelper();
+    protected final SwipeRefreshSyncHelper mSyncHelper = new SwipeRefreshSyncHelper();
 
     @NonNull
     protected Locale mPrimaryLanguage = Settings.getDefaultLanguage();

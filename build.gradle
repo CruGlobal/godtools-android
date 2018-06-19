@@ -41,7 +41,7 @@ ext {
 }
 ext.deps = [
         adobeMobileServices  : '4.16.0',
-        advrecyclerview      : '0.10.6',
+        advrecyclerview      : '0.11.0',
         androidInstantApps   : '1.1.0',
         androidLifecycle     : '1.1.0',
         androidSupport       : '27.1.1',
