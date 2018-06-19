@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.MainThread;
@@ -726,15 +725,6 @@ public class TractActivity extends ImmersiveActivity
             mPagerAdapter.setManifest(manifest);
 
             if (mPager != null) {
-                // update pager direction
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    if (manifest != null) {
-                        mPager.setLayoutDirection(TextUtils.getLayoutDirectionFromLocale(manifest.getLocale()));
-                    } else {
-                        mPager.setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);
-                    }
-                }
-
                 // scroll to initial page
                 if (manifest != null && mInitialPage >= 0) {
                     mPager.setCurrentItem(mInitialPage, false);
