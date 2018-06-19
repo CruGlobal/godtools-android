@@ -326,7 +326,8 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
 
         final List<ShortcutInfo> dynamic = mDao.streamCompat(
                 Query.select(Tool.class)
-                        .where(ToolTable.FIELD_ADDED.eq(true)))
+                        .where(ToolTable.FIELD_ADDED.eq(true))
+                        .orderBy(ToolTable.COLUMN_ORDER))
                 .map(GodToolsShortcutManager::toolShortcutId)
                 .map(shortcuts::get)
                 .filter(Predicate.Util.notNull())
