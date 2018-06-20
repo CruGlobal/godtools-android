@@ -12,21 +12,6 @@ import org.cru.godtools.base.model.Event;
 import java.util.Locale;
 
 public interface AnalyticsService {
-    /* Screen event names */
-    String SCREEN_HOME = "Home";
-    String SCREEN_FIND_TOOLS = "Find Tools";
-    String SCREEN_TOOL_DETAILS = "Tool Info";
-    String SCREEN_LANGUAGE_SETTINGS = "Language Settings";
-    String SCREEN_LANGUAGE_SELECTION = "Select Language";
-    String SCREEN_MENU = "Menu";
-    String SCREEN_ABOUT = "About";
-    String SCREEN_HELP = "Help";
-    String SCREEN_CONTACT_US = "Contact Us";
-    String SCREEN_SHARE_GODTOOLS = "Share App";
-    String SCREEN_SHARE_STORY = "Share Story";
-    String SCREEN_TERMS_OF_USE = "Terms of Use";
-    String SCREEN_PRIVACY_POLICY = "Privacy Policy";
-    String SCREEN_COPYRIGHT = "Copyright Info";
 
     /* Action event names */
     String ACTION_SHARE = "Share Icon Engaged";

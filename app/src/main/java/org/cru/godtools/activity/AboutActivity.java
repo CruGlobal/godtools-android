@@ -13,7 +13,7 @@ import org.cru.godtools.R;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.fragment.AboutFragment;
 
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_ABOUT;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_ABOUT;
 import static org.cru.godtools.base.util.LocaleUtils.getDeviceLocale;
 
 public final class AboutActivity extends BasePlatformActivity {

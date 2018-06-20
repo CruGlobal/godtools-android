@@ -14,7 +14,7 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.model.Tool;
 import org.keynote.godtools.android.fragment.ToolDetailsFragment;
 
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_TOOL_DETAILS;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_TOOL_DETAILS;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 
 public class ToolDetailsActivity extends BasePlatformActivity implements ToolDetailsFragment.Callbacks {

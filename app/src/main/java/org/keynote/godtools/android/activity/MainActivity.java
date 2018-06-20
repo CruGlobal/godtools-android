@@ -37,8 +37,8 @@ import me.thekey.android.core.CodeGrantAsyncTask;
 
 import static android.arch.lifecycle.Lifecycle.State.RESUMED;
 import static android.arch.lifecycle.Lifecycle.State.STARTED;
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_FIND_TOOLS;
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_HOME;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_FIND_TOOLS;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
 import static org.cru.godtools.model.Tool.CODE_EVERYSTUDENT;
 

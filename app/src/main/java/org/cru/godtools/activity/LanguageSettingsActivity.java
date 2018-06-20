@@ -13,7 +13,7 @@ import org.cru.godtools.R;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.keynote.godtools.android.fragment.LanguageSettingsFragment;
 
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_LANGUAGE_SETTINGS;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_LANGUAGE_SETTINGS;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
 
 public class LanguageSettingsActivity extends BasePlatformActivity {
