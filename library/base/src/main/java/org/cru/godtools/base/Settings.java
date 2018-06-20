@@ -19,6 +19,7 @@ public final class Settings {
     public static final String PREF_PARALLEL_LANGUAGE = "languageParallel";
     private static final String PREF_TOUR_COMPLETED = "tour_completed";
     private static final String PREF_FEATURE_DISCOVERED = "feature_discovered.";
+    private static final String PREF_ADDED_TO_CAMPAIGN = "added_to_campaign.";
 
     // feature discovery
     public static final String FEATURE_LANGUAGE_SETTINGS = "languageSettings";
@@ -68,6 +69,16 @@ public final class Settings {
     public void setFeatureDiscovered(@NonNull final String feature) {
         mPrefs.edit()
                 .putBoolean(PREF_FEATURE_DISCOVERED + feature, true)
+                .apply();
+    }
+
+    public boolean isAddedToCampaign(@NonNull final String guid) {
+        return mPrefs.getBoolean(PREF_ADDED_TO_CAMPAIGN + guid.toUpperCase(Locale.ROOT), false);
+    }
+
+    public void setAddedToCampaign(@NonNull final String guid, final boolean added) {
+        mPrefs.edit()
+                .putBoolean(PREF_ADDED_TO_CAMPAIGN + guid.toUpperCase(Locale.ROOT), added)
                 .apply();
     }
 
