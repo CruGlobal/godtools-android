@@ -76,6 +76,8 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     @Nullable
     MenuItem mLoginItem;
     @Nullable
+    MenuItem mSignupItem;
+    @Nullable
     MenuItem mLogoutItem;
 
     @NonNull
@@ -162,6 +164,9 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
             case R.id.action_login:
                 launchLogin(false);
                 return true;
+            case R.id.action_signup:
+                launchLogin(true);
+                return true;
             case R.id.action_logout:
                 mTheKey.logout();
                 return true;
@@ -230,6 +235,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
             });
 
             mLoginItem = mDrawerMenu.getMenu().findItem(R.id.action_login);
+            mSignupItem = mDrawerMenu.getMenu().findItem(R.id.action_signup);
             mLogoutItem = mDrawerMenu.getMenu().findItem(R.id.action_logout);
             updateNavigationDrawerMenu();
         }
@@ -238,6 +244,9 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     private void updateNavigationDrawerMenu() {
         if (mLoginItem != null) {
             mLoginItem.setVisible(mTheKey.getDefaultSessionGuid() == null);
+        }
+        if (mSignupItem != null) {
+            mSignupItem.setVisible(mTheKey.getDefaultSessionGuid() == null);
         }
         if (mLogoutItem != null) {
             mLogoutItem.setVisible(mTheKey.getDefaultSessionGuid() != null);
@@ -306,7 +315,10 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
         // try using an external browser first if we will deeplink back to GodTools
         boolean handled = false;
         if (ComponentNameUtils.isDefaultComponentFor(this, MainActivity.class, redirectUri)) {
-            handled = WebUrlLauncher.openUrl(this, mTheKey.loginUriBuilder().redirectUri(redirectUri).build());
+            handled = WebUrlLauncher.openUrl(this, mTheKey.loginUriBuilder()
+                    .redirectUri(redirectUri)
+                    .signup(signup)
+                    .build());
         }
 
         // fallback to an in-app DialogFragment for login
@@ -315,6 +327,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
             if (fm.findFragmentByTag(TAG_KEY_LOGIN_DIALOG) == null) {
                 LoginDialogFragment loginDialogFragment = LoginDialogFragment.builder()
                         .redirectUri(redirectUri)
+                        .signup(signup)
                         .build();
                 loginDialogFragment.show(fm.beginTransaction().addToBackStack("loginDialog"), TAG_KEY_LOGIN_DIALOG);
             }
