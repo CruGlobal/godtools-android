@@ -11,6 +11,8 @@ import com.snowplowanalytics.snowplow.tracker.Tracker;
 import com.snowplowanalytics.snowplow.tracker.events.ScreenView;
 import com.snowplowanalytics.snowplow.tracker.events.Structured;
 
+import org.cru.godtools.analytics.model.AnalyticsActionEvent;
+import org.cru.godtools.analytics.model.AnalyticsBaseEvent;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.analytics.model.AnalyticsSystem;
 import org.greenrobot.eventbus.EventBus;
@@ -23,7 +25,7 @@ import java.util.concurrent.Executors;
 
 import static org.cru.godtools.analytics.BuildConfig.SNOWPLOW_ENDPOINT;
 
-class SnowplowAnalyticsService implements AnalyticsService {
+public class SnowplowAnalyticsService implements AnalyticsService {
     /* SnowPlow value constants */
     private static final String SNOWPLOW_APP_ID = "GodTools";
     private static final String SNOWPLOW_NAMESPACE = "GodToolsSnowPlowAndroidTracker";
@@ -53,7 +55,7 @@ class SnowplowAnalyticsService implements AnalyticsService {
     @Nullable
     private static SnowplowAnalyticsService sInstance;
     @NonNull
-    static synchronized AnalyticsService getInstance(@NonNull final Context context) {
+    public static synchronized AnalyticsService getInstance(@NonNull final Context context) {
         if (sInstance == null) {
             sInstance = new SnowplowAnalyticsService(context.getApplicationContext());
         }
@@ -63,12 +65,15 @@ class SnowplowAnalyticsService implements AnalyticsService {
 
     /* BEGIN tracking methods */
 
-
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void onAnalyticsScreenEvent(@NonNull final AnalyticsScreenEvent event) {
+    public void onAnalyticsEvent(@NonNull final AnalyticsBaseEvent event) {
         if (event.isForSystem(AnalyticsSystem.SNOWPLOW)) {
-            trackScreen(event.getScreen(), event.getLocale());
+            if (event instanceof AnalyticsScreenEvent) {
+                handleScreenEvent((AnalyticsScreenEvent) event);
+            } else if (event instanceof AnalyticsActionEvent) {
+                handleActionEvent((AnalyticsActionEvent) event);
+            }
         }
     }
 
@@ -82,6 +87,22 @@ class SnowplowAnalyticsService implements AnalyticsService {
     }
 
     /* END tracking methods */
+
+    private void handleScreenEvent(@NonNull final AnalyticsScreenEvent event) {
+        trackScreen(event.getScreen(), event.getLocale());
+    }
+
+    private void handleActionEvent(@NonNull final AnalyticsActionEvent event) {
+        final Structured.Builder builder = Structured.builder()
+                .category(event.getCategory())
+                .action(event.getAction());
+        final String label = event.getLabel();
+        if (label != null) {
+            builder.label(label);
+        }
+
+        mAnalyticsExecutor.execute(() -> mSnowPlowTracker.track(builder.build()));
+    }
 
     @AnyThread
     private void trackScreen(@NonNull final String screen, @Nullable final Locale locale) {
