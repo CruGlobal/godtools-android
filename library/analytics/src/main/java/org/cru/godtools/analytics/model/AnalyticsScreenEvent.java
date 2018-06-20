@@ -24,25 +24,18 @@ public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
 
     @NonNull
     private final String mScreen;
-    @Nullable
-    private final Locale mLocale;
 
     public AnalyticsScreenEvent(@NonNull final String screen) {
         this(screen, null);
     }
 
     public AnalyticsScreenEvent(@NonNull final String screen, @Nullable final Locale locale) {
+        super(locale);
         mScreen = screen;
-        mLocale = locale;
     }
 
     @NonNull
     public String getScreen() {
         return mScreen;
-    }
-
-    @Nullable
-    public Locale getLocale() {
-        return mLocale;
     }
 }
