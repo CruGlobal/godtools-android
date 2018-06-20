@@ -63,8 +63,8 @@ public class ToolsFragment extends BaseFragment
         void onNoToolsAvailableAction();
     }
 
-    static final int MODE_ADDED = 1;
-    static final int MODE_AVAILABLE = 2;
+    public static final int MODE_ADDED = 1;
+    public static final int MODE_AVAILABLE = 2;
 
     private static final int LOADER_TOOLS = 101;
 
@@ -91,18 +91,10 @@ public class ToolsFragment extends BaseFragment
     @Nullable
     private Cursor mResources;
 
-    public static Fragment newAddedInstance() {
+    public static Fragment newInstance(final int mode) {
         final Fragment fragment = new ToolsFragment();
         final Bundle args = new Bundle(1);
-        args.putInt(EXTRA_MODE, MODE_ADDED);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static Fragment newAvailableInstance() {
-        final Fragment fragment = new ToolsFragment();
-        final Bundle args = new Bundle(1);
-        args.putInt(EXTRA_MODE, MODE_AVAILABLE);
+        args.putInt(EXTRA_MODE, mode);
         fragment.setArguments(args);
         return fragment;
     }
