@@ -1,6 +1,7 @@
 package org.cru.godtools.analytics;
 
 import android.content.Context;
+import android.support.annotation.AnyThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
@@ -67,13 +68,8 @@ class SnowplowAnalyticsService implements AnalyticsService {
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onAnalyticsScreenEvent(@NonNull final AnalyticsScreenEvent event) {
         if (event.isForSystem(AnalyticsSystem.SNOWPLOW)) {
-            onTrackScreen(event.getScreen(), event.getLocale());
+            trackScreen(event.getScreen(), event.getLocale());
         }
-    }
-
-    @Override
-    public void onTrackScreen(@NonNull final String screen, @Nullable final Locale locale) {
-        mAnalyticsExecutor.execute(() -> mSnowPlowTracker.track(ScreenView.builder().name(screen).build()));
     }
 
     @Override
@@ -86,4 +82,9 @@ class SnowplowAnalyticsService implements AnalyticsService {
     }
 
     /* END tracking methods */
+
+    @AnyThread
+    private void trackScreen(@NonNull final String screen, @Nullable final Locale locale) {
+        mAnalyticsExecutor.execute(() -> mSnowPlowTracker.track(ScreenView.builder().name(screen).build()));
+    }
 }

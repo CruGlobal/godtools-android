@@ -127,11 +127,6 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     }
 
     @Override
-    public void onTrackScreen(@NonNull final String screen, @Nullable final Locale locale) {
-        trackState(screen, locale);
-    }
-
-    @Override
     public void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page,
                                  @Nullable final Integer card) {
         trackState(tractPageToScreenName(tract, page, card), locale);

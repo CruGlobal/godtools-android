@@ -53,21 +53,8 @@ class GoogleAnalyticsService implements AnalyticsService {
     @Subscribe
     public void onAnalyticsScreenEvent(@NonNull final AnalyticsScreenEvent event) {
         if (event.isForSystem(AnalyticsSystem.GOOGLE)) {
-            onTrackScreen(event.getScreen(), event.getLocale());
+            trackScreenEvent(event.getScreen(), event.getLocale());
         }
-    }
-
-    @Override
-    public void onTrackScreen(@NonNull final String screen, @Nullable final Locale locale) {
-        // build event
-        final HitBuilders.ScreenViewBuilder event = new HitBuilders.ScreenViewBuilder();
-        if (locale != null) {
-            event.setCustomDimension(DIMENSION_LANGUAGE, LocaleCompat.toLanguageTag(locale));
-        }
-
-        // send event
-        mTracker.setScreenName(screen);
-        sendEvent(event);
     }
 
     @Override
@@ -91,6 +78,19 @@ class GoogleAnalyticsService implements AnalyticsService {
                               .setCategory(CATEGORY_EVERYSTUDENT_SEARCH)
                               .setAction(ACTION_EVERYSTUDENT_SEARCH)
                               .setLabel(query));
+    }
+
+    @AnyThread
+    private void trackScreenEvent(@NonNull final String screen, @Nullable final Locale locale) {
+        // build event
+        final HitBuilders.ScreenViewBuilder event = new HitBuilders.ScreenViewBuilder();
+        if (locale != null) {
+            event.setCustomDimension(DIMENSION_LANGUAGE, LocaleCompat.toLanguageTag(locale));
+        }
+
+        // send event
+        mTracker.setScreenName(screen);
+        sendEvent(event);
     }
 
     private void sendEvent(@NonNull final HitBuilders.HitBuilder<? extends HitBuilders.HitBuilder> event) {

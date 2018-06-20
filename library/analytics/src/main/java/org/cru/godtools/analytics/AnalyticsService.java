@@ -8,7 +8,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.base.model.Event;
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Locale;
 
@@ -54,18 +56,13 @@ public interface AnalyticsService {
 
     @AnyThread
     default void onTrackScreen(@NonNull String screen) {
-        onTrackScreen(screen, null);
-    }
-
-    @AnyThread
-    default void onTrackScreen(@NonNull String screen, @Nullable Locale locale) {
-        onTrackScreen(screen);
+        EventBus.getDefault().post(new AnalyticsScreenEvent(screen, null));
     }
 
     @AnyThread
     default void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page,
                                   @Nullable final Integer card) {
-        onTrackScreen(tractPageToScreenName(tract, page, card), locale);
+        EventBus.getDefault().post(new AnalyticsScreenEvent(tractPageToScreenName(tract, page, card), null));
     }
 
     @AnyThread

@@ -53,12 +53,6 @@ public class TimberAnalyticsService implements AnalyticsService {
     }
 
     @Override
-    public void onTrackScreen(@NonNull final String screen, @Nullable final Locale locale) {
-        Timber.tag("AnalyticsService")
-                .d("onTrackScreen('%s', %s)", screen, locale);
-    }
-
-    @Override
     public void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page,
                                  @Nullable final Integer card) {
         Timber.tag("AnalyticsService")
