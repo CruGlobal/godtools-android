@@ -40,6 +40,9 @@ public class BaseGodToolsApplication extends Application {
         configureTheKey();
         configureAnalyticsServices();
         configureApis();
+
+        // start various services
+        startServices();
     }
 
     private void initializeCrashlytics() {
@@ -75,4 +78,7 @@ public class BaseGodToolsApplication extends Application {
     }
 
     protected void configureTheKey() {}
+
+    @CallSuper
+    protected void startServices() {}
 }

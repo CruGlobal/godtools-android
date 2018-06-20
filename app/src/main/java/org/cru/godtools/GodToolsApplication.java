@@ -34,15 +34,8 @@ public class GodToolsApplication extends BaseGodToolsApplication {
         // start the Job Manager
         JobManager.create(this).addJobCreator(new SyncJobCreator());
 
-        // Initialize tool manager
-        GodToolsDownloadManager.getInstance(this);
-        FollowupService.start(this);
-
         // install any missing initial content
         AsyncTask.THREAD_POOL_EXECUTOR.execute(new InitialContentTasks(this));
-
-        // start shortcut manager
-        GodToolsShortcutManager.getInstance(this);
     }
 
     @Override
@@ -64,6 +57,14 @@ public class GodToolsApplication extends BaseGodToolsApplication {
     @Override
     protected void configureTheKey() {
         TheKeyImpl.configure(theKeyConfiguration());
+    }
+
+    @Override
+    protected void startServices() {
+        super.startServices();
+        GodToolsDownloadManager.getInstance(this);
+        GodToolsShortcutManager.getInstance(this);
+        FollowupService.start(this);
     }
 
     private TheKeyImpl.Configuration theKeyConfiguration() {
