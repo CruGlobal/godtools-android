@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 
 import org.cru.godtools.analytics.model.AnalyticsActionEvent;
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.base.model.Event;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -62,6 +63,13 @@ public class TimberAnalyticsService implements AnalyticsService {
                                  @Nullable final Integer card) {
         Timber.tag("AnalyticsService")
                 .d("onTrackTractPage('%s', %s, %d, %d)", tract, locale, page, card);
+    }
+
+    @UiThread
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAnalyticsScreenEvent(@NonNull final AnalyticsScreenEvent event) {
+        Timber.tag("AnalyticsService")
+                .d("onAnalyticsScreenEvent('%s', '%s')", event.getScreen(), event.getLocale());
     }
 
     @UiThread

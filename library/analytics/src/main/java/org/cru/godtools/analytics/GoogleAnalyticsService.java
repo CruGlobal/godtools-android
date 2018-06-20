@@ -1,6 +1,7 @@
 package org.cru.godtools.analytics;
 
 import android.content.Context;
+import android.support.annotation.AnyThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -10,7 +11,11 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.wrappers.InstantApps;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
+import org.cru.godtools.analytics.model.AnalyticsSystem;
 import org.cru.godtools.base.model.Event;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Locale;
 
@@ -29,6 +34,8 @@ class GoogleAnalyticsService implements AnalyticsService {
     private GoogleAnalyticsService(@NonNull final Context context) {
         mTracker = GoogleAnalytics.getInstance(context).newTracker(BuildConfig.GOOGLE_ANALYTICS_CLIENT_ID);
         mAppType = InstantApps.isInstantApp(context) ? VALUE_APP_TYPE_INSTANT : VALUE_APP_TYPE_INSTALLED;
+
+        EventBus.getDefault().register(this);
     }
 
     @Nullable
@@ -40,6 +47,14 @@ class GoogleAnalyticsService implements AnalyticsService {
         }
 
         return sInstance;
+    }
+
+    @AnyThread
+    @Subscribe
+    public void onAnalyticsScreenEvent(@NonNull final AnalyticsScreenEvent event) {
+        if (event.isForSystem(AnalyticsSystem.GOOGLE)) {
+            onTrackScreen(event.getScreen(), event.getLocale());
+        }
     }
 
     @Override

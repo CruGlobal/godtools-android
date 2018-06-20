@@ -3,11 +3,18 @@ package org.cru.godtools.analytics;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.WorkerThread;
 
 import com.snowplowanalytics.snowplow.tracker.Emitter;
 import com.snowplowanalytics.snowplow.tracker.Tracker;
 import com.snowplowanalytics.snowplow.tracker.events.ScreenView;
 import com.snowplowanalytics.snowplow.tracker.events.Structured;
+
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
+import org.cru.godtools.analytics.model.AnalyticsSystem;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Locale;
 import java.util.concurrent.Executor;
@@ -38,6 +45,8 @@ class SnowplowAnalyticsService implements AnalyticsService {
                     .lifecycleEvents(true)
                     .build();
         });
+
+        EventBus.getDefault().register(this);
     }
 
     @Nullable
@@ -52,6 +61,15 @@ class SnowplowAnalyticsService implements AnalyticsService {
     }
 
     /* BEGIN tracking methods */
+
+
+    @WorkerThread
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onAnalyticsScreenEvent(@NonNull final AnalyticsScreenEvent event) {
+        if (event.isForSystem(AnalyticsSystem.SNOWPLOW)) {
+            onTrackScreen(event.getScreen(), event.getLocale());
+        }
+    }
 
     @Override
     public void onTrackScreen(@NonNull final String screen, @Nullable final Locale locale) {
