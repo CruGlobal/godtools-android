@@ -21,7 +21,7 @@ public class ContentAnalyticsActionEvent extends AnalyticsActionEvent {
 
     @Override
     public boolean isForSystem(@NonNull final AnalyticsSystem system) {
-        return mAnalyticsEvent.isForSystem(AnalyticsSystem.ADOBE);
+        return mAnalyticsEvent.isForSystem(system);
     }
 
     @NonNull
