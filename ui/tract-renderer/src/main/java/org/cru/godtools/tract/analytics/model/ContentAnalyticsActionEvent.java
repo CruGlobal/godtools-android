@@ -8,6 +8,7 @@ import com.google.common.base.Strings;
 import org.cru.godtools.analytics.AdobeAnalyticsService;
 import org.cru.godtools.analytics.AnalyticsService;
 import org.cru.godtools.analytics.model.AnalyticsActionEvent;
+import org.cru.godtools.analytics.model.AnalyticsSystem;
 import org.cru.godtools.tract.model.AnalyticsEvent;
 
 import java.util.Map;
@@ -23,7 +24,7 @@ public class ContentAnalyticsActionEvent extends AnalyticsActionEvent {
     @Override
     public boolean trackInService(@NonNull final AnalyticsService service) {
         if (service instanceof AdobeAnalyticsService) {
-            return mAnalyticsEvent.isForSystem(AnalyticsEvent.System.ADOBE);
+            return mAnalyticsEvent.isForSystem(AnalyticsSystem.ADOBE);
         }
         return false;
     }

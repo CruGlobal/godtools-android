@@ -14,6 +14,7 @@ import com.google.common.collect.Sets;
 
 import org.ccci.gto.android.common.util.NumberUtils;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.cru.godtools.analytics.model.AnalyticsSystem;
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -38,28 +39,6 @@ public class AnalyticsEvent {
     private static final String XML_ATTRIBUTE = "attribute";
     private static final String XML_ATTRIBUTE_KEY = "key";
     private static final String XML_ATTRIBUTE_VALUE = "value";
-
-    public enum System {
-        ADOBE, UNKNOWN;
-
-        @NonNull
-        static Collection<System> parseMultiple(@Nullable final String systems) {
-            return Sets.immutableEnumSet(
-                    Stream.of(TextUtils.split(systems, "\\s"))
-                            .map(system -> {
-                                switch (Strings.nullToEmpty(system)) {
-                                    case XML_SYSTEM_ADOBE:
-                                        return ADOBE;
-                                    default:
-                                        return UNKNOWN;
-                                }
-                            })
-                            .filterNot(UNKNOWN::equals)
-                            .distinct()
-                            .toList()
-            );
-        }
-    }
 
     public enum Trigger {
         SELECTED, VISIBLE, HIDDEN, DEFAULT, UNKNOWN;
@@ -87,7 +66,7 @@ public class AnalyticsEvent {
     private String mAction;
     private int mDelay = 0;
     @NonNull
-    private Collection<System> mSystems = ImmutableSet.of();
+    private Collection<AnalyticsSystem> mSystems = ImmutableSet.of();
     @NonNull
     private Trigger mTrigger = Trigger.DEFAULT;
     @NonNull
@@ -115,7 +94,7 @@ public class AnalyticsEvent {
         return false;
     }
 
-    public boolean isForSystem(@NonNull final System system) {
+    public boolean isForSystem(@NonNull final AnalyticsSystem system) {
         return mSystems.contains(system);
     }
 
@@ -165,7 +144,7 @@ public class AnalyticsEvent {
 
         mAction = parser.getAttributeValue(null, XML_ACTION);
         mDelay = NumberUtils.toInteger(parser.getAttributeValue(null, XML_DELAY), mDelay);
-        mSystems = System.parseMultiple(parser.getAttributeValue(null, XML_SYSTEM));
+        mSystems = parseSystemsAttr(parser.getAttributeValue(null, XML_SYSTEM));
         mTrigger = Trigger.parse(parser.getAttributeValue(null, XML_TRIGGER), mTrigger);
 
         // process any child elements
@@ -195,5 +174,23 @@ public class AnalyticsEvent {
         mAttributes = attributes.build();
 
         return this;
+    }
+
+    @NonNull
+    private static Collection<AnalyticsSystem> parseSystemsAttr(@Nullable final String systems) {
+        return Sets.immutableEnumSet(
+                Stream.of(TextUtils.split(systems, "\\s"))
+                        .map(system -> {
+                            switch (Strings.nullToEmpty(system)) {
+                                case XML_SYSTEM_ADOBE:
+                                    return AnalyticsSystem.ADOBE;
+                                default:
+                                    return AnalyticsSystem.UNKNOWN;
+                            }
+                        })
+                        .filterNot(AnalyticsSystem.UNKNOWN::equals)
+                        .distinct()
+                        .toList()
+        );
     }
 }
