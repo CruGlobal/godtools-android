@@ -74,15 +74,6 @@ class GoogleAnalyticsService implements AnalyticsService {
         sendEvent(eventBuilder, event.locale);
     }
 
-    @Override
-    public void onTrackEveryStudentSearch(@NonNull final String query) {
-        mTracker.setScreenName(SCREEN_EVERYSTUDENT_SEARCH);
-        sendEvent(new HitBuilders.EventBuilder()
-                              .setCategory(CATEGORY_EVERYSTUDENT_SEARCH)
-                              .setAction(ACTION_EVERYSTUDENT_SEARCH)
-                              .setLabel(query), null);
-    }
-
     @AnyThread
     private void handleScreenEvent(@NonNull final AnalyticsScreenEvent event) {
         mTracker.setScreenName(event.getScreen());

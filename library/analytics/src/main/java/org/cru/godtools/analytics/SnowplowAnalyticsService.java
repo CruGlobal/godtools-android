@@ -63,8 +63,6 @@ public class SnowplowAnalyticsService implements AnalyticsService {
         return sInstance;
     }
 
-    /* BEGIN tracking methods */
-
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onAnalyticsEvent(@NonNull final AnalyticsBaseEvent event) {
@@ -76,17 +74,6 @@ public class SnowplowAnalyticsService implements AnalyticsService {
             }
         }
     }
-
-    @Override
-    public void onTrackEveryStudentSearch(@NonNull final String query) {
-        mAnalyticsExecutor.execute(() -> mSnowPlowTracker.track(Structured.builder()
-                                                                        .category(CATEGORY_EVERYSTUDENT_SEARCH)
-                                                                        .action(ACTION_EVERYSTUDENT_SEARCH)
-                                                                        .label(query)
-                                                                        .build()));
-    }
-
-    /* END tracking methods */
 
     private void handleScreenEvent(@NonNull final AnalyticsScreenEvent event) {
         trackScreen(event.getScreen(), event.getLocale());

@@ -19,10 +19,7 @@ public interface AnalyticsService {
 
     /* Legacy constants */
     String SCREEN_EVERYSTUDENT = "EveryStudent";
-    String SCREEN_EVERYSTUDENT_SEARCH = "everystudent-search";
     String CATEGORY_CONTENT_EVENT = "Content Event";
-    String CATEGORY_EVERYSTUDENT_SEARCH = "searchbar";
-    String ACTION_EVERYSTUDENT_SEARCH = "tap";
 
     @NonNull
     static AnalyticsService getInstance(@NonNull final Context context) {
@@ -46,7 +43,4 @@ public interface AnalyticsService {
 
     @AnyThread
     default void onTrackContentEvent(@NonNull Event event) {}
-
-    @AnyThread
-    default void onTrackEveryStudentSearch(@NonNull String query) {}
 }
