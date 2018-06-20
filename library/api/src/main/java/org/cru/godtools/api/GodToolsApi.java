@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.ccci.gto.android.common.api.okhttp3.util.OkHttpClientUtil;
+import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory;
 import org.ccci.gto.android.common.api.retrofit2.converter.LocaleConverterFactory;
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter;
@@ -24,10 +25,17 @@ import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
+import static org.cru.godtools.api.BuildConfig.CAMPAIGN_FORMS_API;
+
 public class GodToolsApi {
     @NonNull
     private final Context mContext;
 
+    // Campaign Forms API
+    @NonNull
+    public final CampaignFormsApi campaignForms;
+
+    // Mobile Content APIs
     @NonNull
     public final LanguagesApi languages;
     @NonNull
@@ -44,7 +52,7 @@ public class GodToolsApi {
     private GodToolsApi(@NonNull final Context context, @NonNull final String apiUri) {
         mContext = context;
 
-        // create Retrofit APIs
+        // create Mobile Content Retrofit APIs
         final Call.Factory okhttp = okhttp();
         final Retrofit retrofit = mobileContentRetrofit(apiUri)
                 .callFactory(okhttp)
@@ -55,6 +63,12 @@ public class GodToolsApi {
         attachments = retrofit.create(AttachmentsApi.class);
         followups = retrofit.create(FollowupApi.class);
         views = retrofit.create(ViewsApi.class);
+
+        // Adobe Campaign Forms APIs
+        campaignForms = new Retrofit.Builder().baseUrl(CAMPAIGN_FORMS_API)
+                .addConverterFactory(new JSONObjectConverterFactory())
+                .callFactory(okhttp)
+                .build().create(CampaignFormsApi.class);
     }
 
     @Nullable
