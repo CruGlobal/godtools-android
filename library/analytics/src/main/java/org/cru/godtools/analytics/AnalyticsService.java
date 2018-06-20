@@ -12,7 +12,6 @@ import org.cru.godtools.base.model.Event;
 import java.util.Locale;
 
 public interface AnalyticsService {
-
     /* Action event names */
     String ACTION_SHARE = "Share Icon Engaged";
     String ACTION_EXIT_LINK = "Exit Link Engaged";

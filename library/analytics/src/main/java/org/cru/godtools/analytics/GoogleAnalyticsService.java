@@ -11,6 +11,8 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.wrappers.InstantApps;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
+import org.cru.godtools.analytics.model.AnalyticsActionEvent;
+import org.cru.godtools.analytics.model.AnalyticsBaseEvent;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.analytics.model.AnalyticsSystem;
 import org.cru.godtools.base.model.Event;
@@ -51,9 +53,13 @@ class GoogleAnalyticsService implements AnalyticsService {
 
     @AnyThread
     @Subscribe
-    public void onAnalyticsScreenEvent(@NonNull final AnalyticsScreenEvent event) {
+    public void onAnalyticsEvent(@NonNull final AnalyticsBaseEvent event) {
         if (event.isForSystem(AnalyticsSystem.GOOGLE)) {
-            trackScreenEvent(event.getScreen(), event.getLocale());
+            if (event instanceof AnalyticsScreenEvent) {
+                handleScreenEvent((AnalyticsScreenEvent) event);
+            } else if (event instanceof AnalyticsActionEvent) {
+                handleActionEvent((AnalyticsActionEvent) event);
+            }
         }
     }
 
@@ -63,12 +69,9 @@ class GoogleAnalyticsService implements AnalyticsService {
         final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
                 .setCategory(CATEGORY_CONTENT_EVENT)
                 .setAction(event.id.namespace + ":" + event.id.name);
-        if (event.locale != null) {
-            eventBuilder.setCustomDimension(DIMENSION_LANGUAGE, LocaleCompat.toLanguageTag(event.locale));
-        }
 
         // send event
-        sendEvent(eventBuilder);
+        sendEvent(eventBuilder, event.locale);
     }
 
     @Override
@@ -77,24 +80,34 @@ class GoogleAnalyticsService implements AnalyticsService {
         sendEvent(new HitBuilders.EventBuilder()
                               .setCategory(CATEGORY_EVERYSTUDENT_SEARCH)
                               .setAction(ACTION_EVERYSTUDENT_SEARCH)
-                              .setLabel(query));
+                              .setLabel(query), null);
     }
 
     @AnyThread
-    private void trackScreenEvent(@NonNull final String screen, @Nullable final Locale locale) {
-        // build event
-        final HitBuilders.ScreenViewBuilder event = new HitBuilders.ScreenViewBuilder();
+    private void handleScreenEvent(@NonNull final AnalyticsScreenEvent event) {
+        mTracker.setScreenName(event.getScreen());
+        sendEvent(new HitBuilders.ScreenViewBuilder(), event.getLocale());
+    }
+
+    @AnyThread
+    private void handleActionEvent(@NonNull final AnalyticsActionEvent event) {
+        final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                .setCategory(event.getCategory())
+                .setAction(event.getAction());
+        final String label = event.getLabel();
+        if (label != null) {
+            eventBuilder.setLabel(label);
+        }
+
+        sendEvent(eventBuilder, event.getLocale());
+    }
+
+    private void sendEvent(@NonNull final HitBuilders.HitBuilder<? extends HitBuilders.HitBuilder> event,
+                           @Nullable final Locale locale) {
+        event.setCustomDimension(DIMENSION_APP_TYPE, mAppType);
         if (locale != null) {
             event.setCustomDimension(DIMENSION_LANGUAGE, LocaleCompat.toLanguageTag(locale));
         }
-
-        // send event
-        mTracker.setScreenName(screen);
-        sendEvent(event);
-    }
-
-    private void sendEvent(@NonNull final HitBuilders.HitBuilder<? extends HitBuilders.HitBuilder> event) {
-        event.setCustomDimension(DIMENSION_APP_TYPE, mAppType);
         mTracker.send(event.build());
     }
 }
