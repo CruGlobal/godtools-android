@@ -57,6 +57,7 @@ public class BaseGodToolsApplication extends Application {
         Timber.plant(new CrashlyticsTree());
     }
 
+    @CallSuper
     protected void configureAnalyticsServices() {
         AdobeAnalyticsService.getInstance(this);
         AnalyticsDispatcher.getInstance(this);
