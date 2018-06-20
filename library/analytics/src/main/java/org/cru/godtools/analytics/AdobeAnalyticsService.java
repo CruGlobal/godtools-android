@@ -16,6 +16,7 @@ import com.adobe.mobile.Visitor;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.cru.godtools.analytics.model.AnalyticsActionEvent;
+import org.cru.godtools.analytics.model.AnalyticsSystem;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -107,7 +108,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     @UiThread
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAnalyticsActionEvent(@NonNull final AnalyticsActionEvent event) {
-        if (event.trackInService(this)) {
+        if (event.isForSystem(AnalyticsSystem.ADOBE)) {
             trackAction(event.getAction(), event.getAttributes());
         }
     }
