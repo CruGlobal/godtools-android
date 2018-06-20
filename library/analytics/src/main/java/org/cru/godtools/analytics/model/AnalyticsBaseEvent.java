@@ -1,11 +1,14 @@
 package org.cru.godtools.analytics.model;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.Locale;
 
 public abstract class AnalyticsBaseEvent {
+    private static final String SNOWPLOW_CONTENT_SCORING_URI_SCHEME = "godtools";
+
     @Nullable
     private final Locale mLocale;
 
@@ -23,5 +26,10 @@ public abstract class AnalyticsBaseEvent {
     @Nullable
     public Locale getLocale() {
         return mLocale;
+    }
+
+    public Uri.Builder getSnowPlowContentScoringUri() {
+        return new Uri.Builder()
+                .scheme(SNOWPLOW_CONTENT_SCORING_URI_SCHEME);
     }
 }

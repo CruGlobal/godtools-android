@@ -1,5 +1,6 @@
 package org.cru.godtools.analytics.model;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -7,6 +8,8 @@ import java.util.Locale;
 import java.util.Map;
 
 public class AnalyticsActionEvent extends AnalyticsBaseEvent {
+    private static final String SNOWPLOW_CONTENT_SCORING_URI_PATH_ACTION = "action";
+
     @Nullable
     private final String mCategory;
     @NonNull
@@ -53,5 +56,13 @@ public class AnalyticsActionEvent extends AnalyticsBaseEvent {
     @Nullable
     public Map<String, ?> getAttributes() {
         return null;
+    }
+
+    @Override
+    public Uri.Builder getSnowPlowContentScoringUri() {
+        return super.getSnowPlowContentScoringUri()
+                .appendPath(SNOWPLOW_CONTENT_SCORING_URI_PATH_ACTION)
+                .appendPath(getCategory())
+                .appendPath(getAction());
     }
 }

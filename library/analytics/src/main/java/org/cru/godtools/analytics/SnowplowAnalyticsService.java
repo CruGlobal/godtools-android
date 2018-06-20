@@ -42,10 +42,12 @@ public class SnowplowAnalyticsService {
     private static final String SNOWPLOW_NAMESPACE = "GodToolsSnowPlowAndroidTracker";
 
     private static final String CONTEXT_SCHEMA_IDS = "iglu:org.cru/ids/jsonschema/1-0-3";
+    private static final String CONTEXT_SCHEMA_SCORING = "iglu:org.cru/content-scoring/jsonschema/1-0-0";
 
     private static final String CONTEXT_ATTR_ID_MCID = "mcid";
     private static final String CONTEXT_ATTR_ID_GUID = "sso_guid";
     private static final String CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID = "gr_master_person_id";
+    private static final String CONTEXT_ATTR_SCORING_URI = "uri";
 
     @NonNull
     private final TheKey mTheKey;
@@ -98,7 +100,7 @@ public class SnowplowAnalyticsService {
     private void handleScreenEvent(@NonNull final AnalyticsScreenEvent event) {
         final ScreenView.Builder builder = ScreenView.builder()
                 .name(event.getScreen());
-        sendEvent(populate(builder).build());
+        sendEvent(populate(builder, event).build());
     }
 
     @WorkerThread
@@ -111,13 +113,13 @@ public class SnowplowAnalyticsService {
             builder.label(label);
         }
 
-        sendEvent(populate(builder).build());
+        sendEvent(populate(builder, event).build());
     }
 
     @WorkerThread
-    private <T extends AbstractEvent.Builder> T populate(T event) {
-        event.customContext(ImmutableList.of(idContext()));
-        return event;
+    private <T extends AbstractEvent.Builder> T populate(@NonNull final T builder, @NonNull final AnalyticsBaseEvent event) {
+        builder.customContext(ImmutableList.of(idContext(), contentScoringContext(event)));
+        return builder;
     }
 
     @WorkerThread
@@ -128,18 +130,26 @@ public class SnowplowAnalyticsService {
     @NonNull
     @WorkerThread
     private SelfDescribingJson idContext() {
-        final Map<String, String> attrs = new HashMap<>();
-        attrs.put(CONTEXT_ATTR_ID_MCID, Visitor.getMarketingCloudId());
+        final Map<String, String> data = new HashMap<>();
+        data.put(CONTEXT_ATTR_ID_MCID, Visitor.getMarketingCloudId());
 
         final String guid = mTheKey.getDefaultSessionGuid();
         if (guid != null) {
-            attrs.put(CONTEXT_ATTR_ID_GUID, guid);
+            data.put(CONTEXT_ATTR_ID_GUID, guid);
             final String grMasterPersonId = mTheKey.getAttributes(guid).getAttribute(ATTR_GR_MASTER_PERSON_ID);
             if (grMasterPersonId != null) {
-                attrs.put(CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID, grMasterPersonId);
+                data.put(CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID, grMasterPersonId);
             }
         }
 
-        return new SelfDescribingJson(CONTEXT_SCHEMA_IDS, attrs);
+        return new SelfDescribingJson(CONTEXT_SCHEMA_IDS, data);
+    }
+
+    @NonNull
+    private SelfDescribingJson contentScoringContext(@NonNull final AnalyticsBaseEvent event) {
+        final Map<String, String> data = new HashMap<>();
+        data.put(CONTEXT_ATTR_SCORING_URI, event.getSnowPlowContentScoringUri().toString());
+
+        return new SelfDescribingJson(CONTEXT_SCHEMA_SCORING, data);
     }
 }

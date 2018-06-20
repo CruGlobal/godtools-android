@@ -1,11 +1,14 @@
 package org.cru.godtools.analytics.model;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.Locale;
 
 public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
+    private static final String SNOWPLOW_CONTENT_SCORING_URI_PATH_SCREEN = "screen_view";
+
     /* Screen event names */
     public static final String SCREEN_HOME = "Home";
     public static final String SCREEN_FIND_TOOLS = "Find Tools";
@@ -37,5 +40,12 @@ public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
     @NonNull
     public String getScreen() {
         return mScreen;
+    }
+
+    @Override
+    public Uri.Builder getSnowPlowContentScoringUri() {
+        return super.getSnowPlowContentScoringUri()
+                .appendPath(SNOWPLOW_CONTENT_SCORING_URI_PATH_SCREEN)
+                .appendPath(getScreen());
     }
 }
