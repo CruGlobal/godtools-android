@@ -7,12 +7,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
+import com.adobe.mobile.Visitor;
+import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.Futures;
 import com.snowplowanalytics.snowplow.tracker.Emitter;
 import com.snowplowanalytics.snowplow.tracker.Tracker;
+import com.snowplowanalytics.snowplow.tracker.events.AbstractEvent;
 import com.snowplowanalytics.snowplow.tracker.events.Event;
 import com.snowplowanalytics.snowplow.tracker.events.ScreenView;
 import com.snowplowanalytics.snowplow.tracker.events.Structured;
+import com.snowplowanalytics.snowplow.tracker.payload.SelfDescribingJson;
 
 import org.cru.godtools.analytics.model.AnalyticsActionEvent;
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent;
@@ -22,9 +26,14 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
 
+import me.thekey.android.TheKey;
+
+import static me.thekey.android.Attributes.ATTR_GR_MASTER_PERSON_ID;
 import static org.cru.godtools.analytics.BuildConfig.SNOWPLOW_ENDPOINT;
 
 public class SnowplowAnalyticsService {
@@ -32,6 +41,14 @@ public class SnowplowAnalyticsService {
     private static final String SNOWPLOW_APP_ID = "GodTools";
     private static final String SNOWPLOW_NAMESPACE = "GodToolsSnowPlowAndroidTracker";
 
+    private static final String CONTEXT_SCHEMA_IDS = "iglu:org.cru/ids/jsonschema/1-0-3";
+
+    private static final String CONTEXT_ATTR_ID_MCID = "mcid";
+    private static final String CONTEXT_ATTR_ID_GUID = "sso_guid";
+    private static final String CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID = "gr_master_person_id";
+
+    @NonNull
+    private final TheKey mTheKey;
     private final RunnableFuture<Tracker> mSnowPlowTracker;
 
     @AnyThread
@@ -47,8 +64,9 @@ public class SnowplowAnalyticsService {
                     .lifecycleEvents(true)
                     .build();
         });
-
         AsyncTask.THREAD_POOL_EXECUTOR.execute(mSnowPlowTracker);
+
+        mTheKey = TheKey.getInstance(context);
         EventBus.getDefault().register(this);
     }
 
@@ -78,7 +96,9 @@ public class SnowplowAnalyticsService {
 
     @WorkerThread
     private void handleScreenEvent(@NonNull final AnalyticsScreenEvent event) {
-        sendEvent(ScreenView.builder().name(event.getScreen()).build());
+        final ScreenView.Builder builder = ScreenView.builder()
+                .name(event.getScreen());
+        sendEvent(populate(builder).build());
     }
 
     @WorkerThread
@@ -91,11 +111,35 @@ public class SnowplowAnalyticsService {
             builder.label(label);
         }
 
-        sendEvent(builder.build());
+        sendEvent(populate(builder).build());
+    }
+
+    @WorkerThread
+    private <T extends AbstractEvent.Builder> T populate(T event) {
+        event.customContext(ImmutableList.of(idContext()));
+        return event;
     }
 
     @WorkerThread
     private void sendEvent(@NonNull final Event event) {
         Futures.getUnchecked(mSnowPlowTracker).track(event);
+    }
+
+    @NonNull
+    @WorkerThread
+    private SelfDescribingJson idContext() {
+        final Map<String, String> attrs = new HashMap<>();
+        attrs.put(CONTEXT_ATTR_ID_MCID, Visitor.getMarketingCloudId());
+
+        final String guid = mTheKey.getDefaultSessionGuid();
+        if (guid != null) {
+            attrs.put(CONTEXT_ATTR_ID_GUID, guid);
+            final String grMasterPersonId = mTheKey.getAttributes(guid).getAttribute(ATTR_GR_MASTER_PERSON_ID);
+            if (grMasterPersonId != null) {
+                attrs.put(CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID, grMasterPersonId);
+            }
+        }
+
+        return new SelfDescribingJson(CONTEXT_SCHEMA_IDS, attrs);
     }
 }
