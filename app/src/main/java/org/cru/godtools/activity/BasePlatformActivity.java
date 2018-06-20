@@ -81,8 +81,6 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     MenuItem mLogoutItem;
 
     @NonNull
-    protected /*final*/ EventBus mEventBus;
-    @NonNull
     protected /*final*/ TheKey mTheKey;
 
     @NonNull
@@ -95,7 +93,6 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mEventBus = EventBus.getDefault();
         mTheKey = TheKey.getInstance(this);
         loadLanguages(true);
     }

@@ -12,8 +12,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.Locale;
-
 import timber.log.Timber;
 
 public class TimberAnalyticsService implements AnalyticsService {
@@ -50,13 +48,6 @@ public class TimberAnalyticsService implements AnalyticsService {
     public void onTrackContentEvent(@NonNull final Event event) {
         Timber.tag("AnalyticsService")
                 .d("onTrackContentEvent(%s:%s)", event.id.namespace, event.id.name);
-    }
-
-    @Override
-    public void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page,
-                                 @Nullable final Integer card) {
-        Timber.tag("AnalyticsService")
-                .d("onTrackTractPage('%s', %s, %d, %d)", tract, locale, page, card);
     }
 
     @UiThread

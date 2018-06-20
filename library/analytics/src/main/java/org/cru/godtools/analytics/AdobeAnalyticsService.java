@@ -36,7 +36,6 @@ import me.thekey.android.exception.TheKeySocketException;
 
 import static me.thekey.android.Attributes.ATTR_GR_MASTER_PERSON_ID;
 import static org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag;
-import static org.cru.godtools.analytics.AnalyticsService.tractPageToScreenName;
 
 public final class AdobeAnalyticsService implements AnalyticsService {
     /* Property Keys */
@@ -124,12 +123,6 @@ public final class AdobeAnalyticsService implements AnalyticsService {
 
     public void onProcessReferrer(@NonNull final Intent intent) {
         mAnalyticsExecutor.execute(() -> Analytics.processReferrer(mContext, intent));
-    }
-
-    @Override
-    public void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page,
-                                 @Nullable final Integer card) {
-        trackState(tractPageToScreenName(tract, page, card), locale);
     }
 
     @Override

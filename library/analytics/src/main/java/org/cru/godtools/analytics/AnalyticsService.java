@@ -5,12 +5,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.AnyThread;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.base.model.Event;
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.Locale;
 
@@ -55,12 +52,6 @@ public interface AnalyticsService {
     default void onActivityPause(@NonNull Activity activity) {}
 
     @AnyThread
-    default void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page,
-                                  @Nullable final Integer card) {
-        EventBus.getDefault().post(new AnalyticsScreenEvent(tractPageToScreenName(tract, page, card), null));
-    }
-
-    @AnyThread
     default void onTrackShareAction() {}
 
     @AnyThread
@@ -74,18 +65,4 @@ public interface AnalyticsService {
 
     @AnyThread
     default void onTrackEveryStudentSearch(@NonNull String query) {}
-
-    @NonNull
-    static String tractPageToScreenName(@NonNull final String tract, final int page, @Nullable final Integer card) {
-        final StringBuilder name = new StringBuilder(tract).append('-').append(page);
-        if (card != null) {
-            if (card >= 0 && card < 26) {
-                // convert card index to letter 'a'-'z'
-                name.append((char) (97 + card));
-            } else {
-                name.append('-').append(card);
-            }
-        }
-        return name.toString();
-    }
 }

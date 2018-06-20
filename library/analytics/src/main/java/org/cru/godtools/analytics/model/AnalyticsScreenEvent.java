@@ -11,10 +11,6 @@ public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
     @Nullable
     private final Locale mLocale;
 
-    protected AnalyticsScreenEvent() {
-        this("", null);
-    }
-
     public AnalyticsScreenEvent(@NonNull final String screen) {
         this(screen, null);
     }
