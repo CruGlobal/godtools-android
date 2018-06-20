@@ -28,9 +28,7 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import me.thekey.android.Attributes;
 import me.thekey.android.TheKey;
-import me.thekey.android.exception.TheKeySocketException;
 
 import static me.thekey.android.Attributes.ATTR_GR_MASTER_PERSON_ID;
 import static org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag;
@@ -185,7 +183,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
         data.put(KEY_LOGGED_IN_STATUS, guid != null ? VALUE_LOGGED_IN : VALUE_NOT_LOGGED_IN);
         if (guid != null) {
             data.put(KEY_SSO_GUID, guid);
-            final String grMasterPersonId = getAttributesFor(guid).getAttribute(ATTR_GR_MASTER_PERSON_ID);
+            final String grMasterPersonId = mTheKey.getAttributes(guid).getAttribute(ATTR_GR_MASTER_PERSON_ID);
             if (grMasterPersonId != null) {
                 data.put(KEY_GR_MASTER_PERSON_ID, grMasterPersonId);
             }
@@ -204,21 +202,5 @@ public final class AdobeAnalyticsService implements AnalyticsService {
             data.put(KEY_CONTENT_LANGUAGE, toLanguageTag(contentLocale));
         }
         return data;
-    }
-
-    @NonNull
-    @WorkerThread
-    private Attributes getAttributesFor(@NonNull final String guid) {
-        // load attributes if they aren't valid or are stale
-        final Attributes attributes = mTheKey.getAttributes(guid);
-        if (!attributes.areValid() || attributes.areStale()) {
-            try {
-                mTheKey.loadAttributes(guid);
-                return mTheKey.getAttributes(guid);
-            } catch (final TheKeySocketException ignored) {
-            }
-        }
-
-        return attributes;
     }
 }
