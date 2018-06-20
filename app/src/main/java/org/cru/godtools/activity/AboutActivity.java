@@ -10,9 +10,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import org.cru.godtools.R;
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.fragment.AboutFragment;
 
 import static org.cru.godtools.analytics.AnalyticsService.SCREEN_ABOUT;
+import static org.cru.godtools.base.util.LocaleUtils.getDeviceLocale;
 
 public final class AboutActivity extends BasePlatformActivity {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
@@ -38,7 +40,7 @@ public final class AboutActivity extends BasePlatformActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mAnalytics.onTrackScreen(SCREEN_ABOUT);
+        mEventBus.post(new AnalyticsScreenEvent(SCREEN_ABOUT, getDeviceLocale(this)));
     }
 
     /* END lifecycle */

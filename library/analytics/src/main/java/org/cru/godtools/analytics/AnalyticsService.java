@@ -55,11 +55,6 @@ public interface AnalyticsService {
     default void onActivityPause(@NonNull Activity activity) {}
 
     @AnyThread
-    default void onTrackScreen(@NonNull String screen) {
-        EventBus.getDefault().post(new AnalyticsScreenEvent(screen, null));
-    }
-
-    @AnyThread
     default void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page,
                                   @Nullable final Integer card) {
         EventBus.getDefault().post(new AnalyticsScreenEvent(tractPageToScreenName(tract, page, card), null));

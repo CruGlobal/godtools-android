@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import org.cru.godtools.R;
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.model.Tool;
 import org.keynote.godtools.android.fragment.ToolDetailsFragment;
 
@@ -64,7 +65,7 @@ public class ToolDetailsActivity extends BasePlatformActivity implements ToolDet
     @Override
     protected void onResume() {
         super.onResume();
-        mAnalytics.onTrackScreen(SCREEN_TOOL_DETAILS);
+        mEventBus.post(new AnalyticsScreenEvent(SCREEN_TOOL_DETAILS));
     }
 
     @Override

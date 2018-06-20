@@ -23,6 +23,7 @@ import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
 import org.cru.godtools.activity.BasePlatformActivity;
 import org.cru.godtools.activity.ToolDetailsActivity;
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.everystudent.EveryStudent;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
@@ -251,11 +252,11 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         if (getLifecycle().getCurrentState().isAtLeast(STARTED)) {
             switch (mActiveState) {
                 case STATE_FIND_TOOLS:
-                    mAnalytics.onTrackScreen(SCREEN_FIND_TOOLS);
+                    mEventBus.post(new AnalyticsScreenEvent(SCREEN_FIND_TOOLS));
                     break;
                 case STATE_MY_TOOLS:
                 default:
-                    mAnalytics.onTrackScreen(SCREEN_HOME);
+                    mEventBus.post(new AnalyticsScreenEvent(SCREEN_HOME));
             }
         }
     }

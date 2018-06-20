@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import org.cru.godtools.R;
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.keynote.godtools.android.fragment.LanguagesFragment;
 
@@ -60,7 +61,7 @@ public class LanguageSelectionActivity extends BasePlatformActivity implements L
     @Override
     protected void onResume() {
         super.onResume();
-        mAnalytics.onTrackScreen(SCREEN_LANGUAGE_SELECTION);
+        mEventBus.post(new AnalyticsScreenEvent(SCREEN_LANGUAGE_SELECTION));
     }
 
     @Override
