@@ -39,6 +39,7 @@ public class BaseGodToolsApplication extends Application {
         configureEventBus(EventBus.builder()).installDefaultEventBus();
         configureTheKey();
         configureAnalyticsServices();
+        configureApis();
     }
 
     private void initializeCrashlytics() {
@@ -57,6 +58,8 @@ public class BaseGodToolsApplication extends Application {
         AdobeAnalyticsService.getInstance(this);
         AnalyticsDispatcher.getInstance(this);
     }
+
+    protected void configureApis() {}
 
     @NonNull
     @CallSuper

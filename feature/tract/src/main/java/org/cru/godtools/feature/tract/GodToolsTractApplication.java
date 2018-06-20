@@ -16,11 +16,13 @@ public class GodToolsTractApplication extends BaseGodToolsApplication {
     public void onCreate() {
         super.onCreate();
 
-        // configure the API
-        GodToolsApi.configure(this, MOBILE_CONTENT_API);
-
         // load initial content
         AsyncTask.THREAD_POOL_EXECUTOR.execute(new InitialContentTasks(this));
+    }
+
+    @Override
+    protected void configureApis() {
+        GodToolsApi.configure(this, MOBILE_CONTENT_API);
     }
 
     @NonNull

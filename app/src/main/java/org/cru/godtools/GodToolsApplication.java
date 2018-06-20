@@ -31,9 +31,6 @@ public class GodToolsApplication extends BaseGodToolsApplication {
     public void onCreate() {
         super.onCreate();
 
-        // configure the API
-        GodToolsApi.configure(this, MOBILE_CONTENT_API);
-
         // start the Job Manager
         JobManager.create(this).addJobCreator(new SyncJobCreator());
 
@@ -46,6 +43,11 @@ public class GodToolsApplication extends BaseGodToolsApplication {
 
         // start shortcut manager
         GodToolsShortcutManager.getInstance(this);
+    }
+
+    @Override
+    protected void configureApis() {
+        GodToolsApi.configure(this, MOBILE_CONTENT_API);
     }
 
     @NonNull
