@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 
 import static org.cru.godtools.analytics.BuildConfig.SNOWPLOW_ENDPOINT;
 
-public class SnowplowAnalyticsService implements AnalyticsService {
+public class SnowplowAnalyticsService {
     /* SnowPlow value constants */
     private static final String SNOWPLOW_APP_ID = "GodTools";
     private static final String SNOWPLOW_NAMESPACE = "GodToolsSnowPlowAndroidTracker";
@@ -55,7 +55,7 @@ public class SnowplowAnalyticsService implements AnalyticsService {
     @Nullable
     private static SnowplowAnalyticsService sInstance;
     @NonNull
-    public static synchronized AnalyticsService getInstance(@NonNull final Context context) {
+    public static synchronized SnowplowAnalyticsService getInstance(@NonNull final Context context) {
         if (sInstance == null) {
             sInstance = new SnowplowAnalyticsService(context.getApplicationContext());
         }

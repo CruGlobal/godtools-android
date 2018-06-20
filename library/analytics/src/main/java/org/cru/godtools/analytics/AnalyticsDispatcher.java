@@ -23,7 +23,6 @@ public final class AnalyticsDispatcher implements InvocationHandler {
 
         addAnalyticsService(GoogleAnalyticsService.getInstance(context));
         addAnalyticsService(AdobeAnalyticsService.getInstance(context));
-        addAnalyticsService(SnowplowAnalyticsService.getInstance(context));
     }
 
     @Nullable
