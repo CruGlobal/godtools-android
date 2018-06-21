@@ -10,12 +10,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import org.cru.godtools.R;
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.keynote.godtools.android.fragment.LanguagesFragment;
 
 import java.util.Locale;
 
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_LANGUAGE_SELECTION;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_LANGUAGE_SELECTION;
 
 public class LanguageSelectionActivity extends BasePlatformActivity implements LanguagesFragment.Callbacks {
     private static final String EXTRA_PRIMARY = LanguageSelectionActivity.class.getName() + ".PRIMARY";
@@ -60,7 +61,7 @@ public class LanguageSelectionActivity extends BasePlatformActivity implements L
     @Override
     protected void onResume() {
         super.onResume();
-        mAnalytics.onTrackScreen(SCREEN_LANGUAGE_SELECTION);
+        mEventBus.post(new AnalyticsScreenEvent(SCREEN_LANGUAGE_SELECTION));
     }
 
     @Override

@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.cru.godtools.analytics.AnalyticsService;
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -101,7 +103,7 @@ public class EveryStudentView extends Activity {
     }
 
     private void recordScreenView() {
-        mAnalytics.onTrackScreen("everystudent-" + massageTitleToTrainCase());
+        EventBus.getDefault().post(new AnalyticsScreenEvent("everystudent-" + massageTitleToTrainCase()));
     }
 
     private String massageTitleToTrainCase() {

@@ -24,6 +24,8 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.SimpleExpandableListAdapter;
 
 import org.cru.godtools.analytics.AnalyticsService;
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,7 +93,7 @@ public class EveryStudent extends ExpandableListActivity {
             }
         });
 
-        mTracker.onTrackScreen(SCREEN_EVERYSTUDENT, GA_LANGUAGE_EVERYSTUDENT);
+        EventBus.getDefault().post(new AnalyticsScreenEvent(SCREEN_EVERYSTUDENT, GA_LANGUAGE_EVERYSTUDENT));
     }
 
     @Override

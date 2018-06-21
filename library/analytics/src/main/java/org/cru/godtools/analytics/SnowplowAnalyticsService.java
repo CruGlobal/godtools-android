@@ -1,43 +1,82 @@
 package org.cru.godtools.analytics;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.support.annotation.AnyThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.WorkerThread;
 
+import com.adobe.mobile.Visitor;
+import com.google.common.collect.ImmutableList;
+import com.google.common.util.concurrent.Futures;
 import com.snowplowanalytics.snowplow.tracker.Emitter;
-import com.snowplowanalytics.snowplow.tracker.Emitter.EmitterBuilder;
 import com.snowplowanalytics.snowplow.tracker.Tracker;
-import com.snowplowanalytics.snowplow.tracker.Tracker.TrackerBuilder;
+import com.snowplowanalytics.snowplow.tracker.events.AbstractEvent;
+import com.snowplowanalytics.snowplow.tracker.events.Event;
 import com.snowplowanalytics.snowplow.tracker.events.ScreenView;
 import com.snowplowanalytics.snowplow.tracker.events.Structured;
+import com.snowplowanalytics.snowplow.tracker.payload.SelfDescribingJson;
 
-import java.util.Locale;
+import org.cru.godtools.analytics.model.AnalyticsActionEvent;
+import org.cru.godtools.analytics.model.AnalyticsBaseEvent;
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
+import org.cru.godtools.analytics.model.AnalyticsSystem;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.RunnableFuture;
+
+import me.thekey.android.TheKey;
+
+import static me.thekey.android.Attributes.ATTR_GR_MASTER_PERSON_ID;
 import static org.cru.godtools.analytics.BuildConfig.SNOWPLOW_ENDPOINT;
 
-class SnowplowAnalyticsService implements AnalyticsService {
+public class SnowplowAnalyticsService {
     /* SnowPlow value constants */
     private static final String SNOWPLOW_APP_ID = "GodTools";
     private static final String SNOWPLOW_NAMESPACE = "GodToolsSnowPlowAndroidTracker";
 
-    @NonNull
-    private final Tracker mSnowPlowTracker;
+    private static final String CONTEXT_SCHEMA_IDS = "iglu:org.cru/ids/jsonschema/1-0-3";
+    private static final String CONTEXT_SCHEMA_SCORING = "iglu:org.cru/content-scoring/jsonschema/1-0-0";
 
+    private static final String CONTEXT_ATTR_ID_MCID = "mcid";
+    private static final String CONTEXT_ATTR_ID_GUID = "sso_guid";
+    private static final String CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID = "gr_master_person_id";
+    private static final String CONTEXT_ATTR_SCORING_URI = "uri";
+
+    @NonNull
+    private final TheKey mTheKey;
+    private final RunnableFuture<Tracker> mSnowPlowTracker;
+
+    @AnyThread
     private SnowplowAnalyticsService(@NonNull final Context context) {
-        Tracker.close();
-        final Emitter emitter = new EmitterBuilder(SNOWPLOW_ENDPOINT, context).build();
-        mSnowPlowTracker = new TrackerBuilder(emitter, SNOWPLOW_NAMESPACE, SNOWPLOW_APP_ID, context)
-//                .level(LogLevel.DEBUG)
-                .base64(false)
-                .mobileContext(true)
-                .lifecycleEvents(true)
-                .build();
+        mSnowPlowTracker = new FutureTask<>(() -> {
+            Tracker.close();
+            // XXX: creating an Emitter will initialize the event store database on whichever thread the emitter is
+            // XXX: created on. Because of this we initialize Snowplow in a background task
+            final Emitter emitter = new Emitter.EmitterBuilder(SNOWPLOW_ENDPOINT, context).build();
+            return new Tracker.TrackerBuilder(emitter, SNOWPLOW_NAMESPACE, SNOWPLOW_APP_ID, context)
+                    .base64(false)
+                    .mobileContext(true)
+                    .lifecycleEvents(true)
+                    .build();
+        });
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(mSnowPlowTracker);
+
+        mTheKey = TheKey.getInstance(context);
+        EventBus.getDefault().register(this);
     }
 
     @Nullable
     private static SnowplowAnalyticsService sInstance;
     @NonNull
-    static synchronized AnalyticsService getInstance(@NonNull final Context context) {
+    @AnyThread
+    public static synchronized SnowplowAnalyticsService getInstance(@NonNull final Context context) {
         if (sInstance == null) {
             sInstance = new SnowplowAnalyticsService(context.getApplicationContext());
         }
@@ -45,21 +84,73 @@ class SnowplowAnalyticsService implements AnalyticsService {
         return sInstance;
     }
 
-    /* BEGIN tracking methods */
-
-    @Override
-    public void onTrackScreen(@NonNull final String screen, @Nullable final Locale locale) {
-        mSnowPlowTracker.track(ScreenView.builder().name(screen).build());
+    @WorkerThread
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onAnalyticsEvent(@NonNull final AnalyticsBaseEvent event) {
+        if (event.isForSystem(AnalyticsSystem.SNOWPLOW)) {
+            if (event instanceof AnalyticsScreenEvent) {
+                handleScreenEvent((AnalyticsScreenEvent) event);
+            } else if (event instanceof AnalyticsActionEvent) {
+                handleActionEvent((AnalyticsActionEvent) event);
+            }
+        }
     }
 
-    @Override
-    public void onTrackEveryStudentSearch(@NonNull final String query) {
-        mSnowPlowTracker.track(Structured.builder()
-                                       .category(CATEGORY_EVERYSTUDENT_SEARCH)
-                                       .action(ACTION_EVERYSTUDENT_SEARCH)
-                                       .label(query)
-                                       .build());
+    @WorkerThread
+    private void handleScreenEvent(@NonNull final AnalyticsScreenEvent event) {
+        final ScreenView.Builder builder = ScreenView.builder()
+                .name(event.getScreen());
+        sendEvent(populate(builder, event).build());
     }
 
-    /* END tracking methods */
+    @WorkerThread
+    private void handleActionEvent(@NonNull final AnalyticsActionEvent event) {
+        final Structured.Builder builder = Structured.builder()
+                .category(event.getCategory())
+                .action(event.getAction());
+        final String label = event.getLabel();
+        if (label != null) {
+            builder.label(label);
+        }
+
+        sendEvent(populate(builder, event).build());
+    }
+
+    @WorkerThread
+    private <T extends AbstractEvent.Builder> T populate(@NonNull final T builder,
+                                                         @NonNull final AnalyticsBaseEvent event) {
+        builder.customContext(ImmutableList.of(idContext(), contentScoringContext(event)));
+        return builder;
+    }
+
+    @WorkerThread
+    private void sendEvent(@NonNull final Event event) {
+        Futures.getUnchecked(mSnowPlowTracker).track(event);
+    }
+
+    @NonNull
+    @WorkerThread
+    private SelfDescribingJson idContext() {
+        final Map<String, String> data = new HashMap<>();
+        data.put(CONTEXT_ATTR_ID_MCID, Visitor.getMarketingCloudId());
+
+        final String guid = mTheKey.getDefaultSessionGuid();
+        if (guid != null) {
+            data.put(CONTEXT_ATTR_ID_GUID, guid);
+            final String grMasterPersonId = mTheKey.getAttributes(guid).getAttribute(ATTR_GR_MASTER_PERSON_ID);
+            if (grMasterPersonId != null) {
+                data.put(CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID, grMasterPersonId);
+            }
+        }
+
+        return new SelfDescribingJson(CONTEXT_SCHEMA_IDS, data);
+    }
+
+    @NonNull
+    private SelfDescribingJson contentScoringContext(@NonNull final AnalyticsBaseEvent event) {
+        final Map<String, String> data = new HashMap<>();
+        data.put(CONTEXT_ATTR_SCORING_URI, event.getSnowPlowContentScoringUri().toString());
+
+        return new SelfDescribingJson(CONTEXT_SCHEMA_SCORING, data);
+    }
 }

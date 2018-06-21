@@ -6,12 +6,11 @@ import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 
 import org.cru.godtools.analytics.model.AnalyticsActionEvent;
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.base.model.Event;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -51,17 +50,11 @@ public class TimberAnalyticsService implements AnalyticsService {
                 .d("onTrackContentEvent(%s:%s)", event.id.namespace, event.id.name);
     }
 
-    @Override
-    public void onTrackScreen(@NonNull final String screen, @Nullable final Locale locale) {
+    @UiThread
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAnalyticsScreenEvent(@NonNull final AnalyticsScreenEvent event) {
         Timber.tag("AnalyticsService")
-                .d("onTrackScreen('%s', %s)", screen, locale);
-    }
-
-    @Override
-    public void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page,
-                                 @Nullable final Integer card) {
-        Timber.tag("AnalyticsService")
-                .d("onTrackTractPage('%s', %s, %d, %d)", tract, locale, page, card);
+                .d("onAnalyticsScreenEvent('%s', '%s')", event.getScreen(), event.getLocale());
     }
 
     @UiThread

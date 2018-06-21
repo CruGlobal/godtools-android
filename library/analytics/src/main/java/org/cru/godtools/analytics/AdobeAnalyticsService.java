@@ -16,6 +16,8 @@ import com.adobe.mobile.Visitor;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.cru.godtools.analytics.model.AnalyticsActionEvent;
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
+import org.cru.godtools.analytics.model.AnalyticsSystem;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -32,7 +34,6 @@ import me.thekey.android.TheKey;
 
 import static me.thekey.android.Attributes.ATTR_GR_MASTER_PERSON_ID;
 import static org.ccci.gto.android.common.compat.util.LocaleCompat.toLanguageTag;
-import static org.cru.godtools.analytics.AnalyticsService.tractPageToScreenName;
 
 public final class AdobeAnalyticsService implements AnalyticsService {
     /* Property Keys */
@@ -102,27 +103,24 @@ public final class AdobeAnalyticsService implements AnalyticsService {
         }
     }
 
-    @UiThread
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @WorkerThread
+    @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onAnalyticsActionEvent(@NonNull final AnalyticsActionEvent event) {
-        if (event.trackInService(this)) {
+        if (event.isForSystem(AnalyticsSystem.ADOBE)) {
             trackAction(event.getAction(), event.getAttributes());
+        }
+    }
+
+    @WorkerThread
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onAnalyticsScreenEvent(@NonNull final AnalyticsScreenEvent event) {
+        if (event.isForSystem(AnalyticsSystem.ADOBE)) {
+            trackState(event.getScreen(), event.getLocale());
         }
     }
 
     public void onProcessReferrer(@NonNull final Intent intent) {
         mAnalyticsExecutor.execute(() -> Analytics.processReferrer(mContext, intent));
-    }
-
-    @Override
-    public void onTrackScreen(@NonNull final String screen, @Nullable final Locale locale) {
-        trackState(screen, locale);
-    }
-
-    @Override
-    public void onTrackTractPage(@NonNull final String tract, @NonNull final Locale locale, final int page,
-                                 @Nullable final Integer card) {
-        trackState(tractPageToScreenName(tract, page, card), locale);
     }
 
     @Override

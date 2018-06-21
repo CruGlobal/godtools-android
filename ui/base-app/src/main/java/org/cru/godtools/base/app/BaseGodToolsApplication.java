@@ -14,6 +14,7 @@ import org.ccci.gto.android.common.util.LocaleUtils;
 import org.cru.godtools.analytics.AdobeAnalyticsService;
 import org.cru.godtools.analytics.AnalyticsDispatcher;
 import org.cru.godtools.analytics.AnalyticsEventBusIndex;
+import org.cru.godtools.analytics.SnowplowAnalyticsService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.EventBusBuilder;
 
@@ -60,6 +61,7 @@ public class BaseGodToolsApplication extends Application {
     @CallSuper
     protected void configureAnalyticsServices() {
         AdobeAnalyticsService.getInstance(this);
+        SnowplowAnalyticsService.getInstance(this);
         AnalyticsDispatcher.getInstance(this);
     }
 

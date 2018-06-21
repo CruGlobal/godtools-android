@@ -1,6 +1,7 @@
 package org.cru.godtools.analytics;
 
 import android.content.Context;
+import android.support.annotation.AnyThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -10,7 +11,13 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.wrappers.InstantApps;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
+import org.cru.godtools.analytics.model.AnalyticsActionEvent;
+import org.cru.godtools.analytics.model.AnalyticsBaseEvent;
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
+import org.cru.godtools.analytics.model.AnalyticsSystem;
 import org.cru.godtools.base.model.Event;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Locale;
 
@@ -29,6 +36,8 @@ class GoogleAnalyticsService implements AnalyticsService {
     private GoogleAnalyticsService(@NonNull final Context context) {
         mTracker = GoogleAnalytics.getInstance(context).newTracker(BuildConfig.GOOGLE_ANALYTICS_CLIENT_ID);
         mAppType = InstantApps.isInstantApp(context) ? VALUE_APP_TYPE_INSTANT : VALUE_APP_TYPE_INSTALLED;
+
+        EventBus.getDefault().register(this);
     }
 
     @Nullable
@@ -42,17 +51,16 @@ class GoogleAnalyticsService implements AnalyticsService {
         return sInstance;
     }
 
-    @Override
-    public void onTrackScreen(@NonNull final String screen, @Nullable final Locale locale) {
-        // build event
-        final HitBuilders.ScreenViewBuilder event = new HitBuilders.ScreenViewBuilder();
-        if (locale != null) {
-            event.setCustomDimension(DIMENSION_LANGUAGE, LocaleCompat.toLanguageTag(locale));
+    @AnyThread
+    @Subscribe
+    public void onAnalyticsEvent(@NonNull final AnalyticsBaseEvent event) {
+        if (event.isForSystem(AnalyticsSystem.GOOGLE)) {
+            if (event instanceof AnalyticsScreenEvent) {
+                handleScreenEvent((AnalyticsScreenEvent) event);
+            } else if (event instanceof AnalyticsActionEvent) {
+                handleActionEvent((AnalyticsActionEvent) event);
+            }
         }
-
-        // send event
-        mTracker.setScreenName(screen);
-        sendEvent(event);
     }
 
     @Override
@@ -61,25 +69,36 @@ class GoogleAnalyticsService implements AnalyticsService {
         final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
                 .setCategory(CATEGORY_CONTENT_EVENT)
                 .setAction(event.id.namespace + ":" + event.id.name);
-        if (event.locale != null) {
-            eventBuilder.setCustomDimension(DIMENSION_LANGUAGE, LocaleCompat.toLanguageTag(event.locale));
-        }
 
         // send event
-        sendEvent(eventBuilder);
+        sendEvent(eventBuilder, event.locale);
     }
 
-    @Override
-    public void onTrackEveryStudentSearch(@NonNull final String query) {
-        mTracker.setScreenName(SCREEN_EVERYSTUDENT_SEARCH);
-        sendEvent(new HitBuilders.EventBuilder()
-                              .setCategory(CATEGORY_EVERYSTUDENT_SEARCH)
-                              .setAction(ACTION_EVERYSTUDENT_SEARCH)
-                              .setLabel(query));
+    @AnyThread
+    private void handleScreenEvent(@NonNull final AnalyticsScreenEvent event) {
+        mTracker.setScreenName(event.getScreen());
+        sendEvent(new HitBuilders.ScreenViewBuilder(), event.getLocale());
     }
 
-    private void sendEvent(@NonNull final HitBuilders.HitBuilder<? extends HitBuilders.HitBuilder> event) {
+    @AnyThread
+    private void handleActionEvent(@NonNull final AnalyticsActionEvent event) {
+        final HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+                .setCategory(event.getCategory())
+                .setAction(event.getAction());
+        final String label = event.getLabel();
+        if (label != null) {
+            eventBuilder.setLabel(label);
+        }
+
+        sendEvent(eventBuilder, event.getLocale());
+    }
+
+    private void sendEvent(@NonNull final HitBuilders.HitBuilder<? extends HitBuilders.HitBuilder> event,
+                           @Nullable final Locale locale) {
         event.setCustomDimension(DIMENSION_APP_TYPE, mAppType);
+        if (locale != null) {
+            event.setCustomDimension(DIMENSION_LANGUAGE, LocaleCompat.toLanguageTag(locale));
+        }
         mTracker.send(event.build());
     }
 }

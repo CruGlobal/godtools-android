@@ -10,7 +10,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import org.cru.godtools.analytics.AnalyticsService;
+import org.cru.godtools.everystudent.analytics.model.EveryStudentSearchAnalyticsActionEvent;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Provides access to the EveryStudent database.
@@ -109,7 +110,7 @@ public class EveryStudentProvider extends ContentProvider {
         if (!"search_suggest_query".equalsIgnoreCase(query)) {
             final Context context = getContext();
             if (context != null) {
-                AnalyticsService.getInstance(context).onTrackEveryStudentSearch(query);
+                EventBus.getDefault().post(new EveryStudentSearchAnalyticsActionEvent(query));
             }
         }
 

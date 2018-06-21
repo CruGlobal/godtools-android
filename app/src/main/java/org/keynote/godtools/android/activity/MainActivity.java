@@ -23,6 +23,7 @@ import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
 import org.cru.godtools.activity.BasePlatformActivity;
 import org.cru.godtools.activity.ToolDetailsActivity;
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.everystudent.EveryStudent;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
@@ -36,8 +37,8 @@ import me.thekey.android.core.CodeGrantAsyncTask;
 
 import static android.arch.lifecycle.Lifecycle.State.RESUMED;
 import static android.arch.lifecycle.Lifecycle.State.STARTED;
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_FIND_TOOLS;
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_HOME;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_FIND_TOOLS;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
 import static org.cru.godtools.model.Tool.CODE_EVERYSTUDENT;
 
@@ -251,11 +252,11 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         if (getLifecycle().getCurrentState().isAtLeast(STARTED)) {
             switch (mActiveState) {
                 case STATE_FIND_TOOLS:
-                    mAnalytics.onTrackScreen(SCREEN_FIND_TOOLS);
+                    mEventBus.post(new AnalyticsScreenEvent(SCREEN_FIND_TOOLS));
                     break;
                 case STATE_MY_TOOLS:
                 default:
-                    mAnalytics.onTrackScreen(SCREEN_HOME);
+                    mEventBus.post(new AnalyticsScreenEvent(SCREEN_HOME));
             }
         }
     }

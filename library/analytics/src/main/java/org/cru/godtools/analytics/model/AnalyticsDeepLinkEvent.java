@@ -8,6 +8,7 @@ public class AnalyticsDeepLinkEvent extends AnalyticsBaseEvent {
     private final Uri mDeepLink;
 
     public AnalyticsDeepLinkEvent(@NonNull final Uri deepLink) {
+        super(null);
         mDeepLink = deepLink;
     }
 

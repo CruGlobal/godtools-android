@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 
 import org.cru.godtools.analytics.AnalyticsService;
 import org.cru.godtools.base.ui.R2;
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,6 +27,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @NonNull
     protected /*final*/ AnalyticsService mAnalytics;
+    @NonNull
+    protected /*final*/ EventBus mEventBus;
 
     /* BEGIN lifecycle */
 
@@ -33,6 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAnalytics = AnalyticsService.getInstance(this);
+        mEventBus = EventBus.getDefault();
     }
 
     @Override

@@ -49,6 +49,7 @@ import org.cru.godtools.sync.task.ToolSyncTasks;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
+import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent;
 import org.cru.godtools.tract.content.TractManifestLoader;
 import org.cru.godtools.tract.model.Card;
 import org.cru.godtools.tract.model.Manifest;
@@ -831,8 +832,8 @@ public class TractActivity extends ImmersiveActivity
 
     void trackTractPage(@NonNull final Page page, @Nullable final Card card) {
         final Manifest manifest = page.getManifest();
-        mAnalytics.onTrackTractPage(manifest.getCode(), manifest.getLocale(), page.getPosition(),
-                                    card != null ? card.getPosition() : null);
+        mEventBus.post(new TractPageAnalyticsScreenEvent(manifest.getCode(), manifest.getLocale(), page.getPosition(),
+                                                         card != null ? card.getPosition() : null));
     }
 
     class TranslationLoaderCallbacks implements LoaderManager.LoaderCallbacks<Translation> {

@@ -24,10 +24,10 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.util.content.ComponentNameUtils;
 import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.ui.activity.BaseDesignActivity;
 import org.cru.godtools.base.ui.util.WebUrlLauncher;
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.keynote.godtools.android.activity.MainActivity;
@@ -40,16 +40,17 @@ import me.thekey.android.eventbus.event.TheKeyEvent;
 import me.thekey.android.view.dialog.LoginDialogFragment;
 
 import static org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES;
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_CONTACT_US;
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_COPYRIGHT;
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_HELP;
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_PRIVACY_POLICY;
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_SHARE_GODTOOLS;
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_SHARE_STORY;
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_TERMS_OF_USE;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_CONTACT_US;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_COPYRIGHT;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HELP;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_PRIVACY_POLICY;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_SHARE_GODTOOLS;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_SHARE_STORY;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_TERMS_OF_USE;
 import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
 import static org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE;
 import static org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE;
+import static org.cru.godtools.base.util.LocaleUtils.getDeviceLocale;
 import static org.keynote.godtools.android.Constants.MAILTO_SUPPORT;
 import static org.keynote.godtools.android.Constants.URI_COPYRIGHT;
 import static org.keynote.godtools.android.Constants.URI_HELP;
@@ -115,7 +116,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     protected void onStart() {
         super.onStart();
         startLanguagesChangeListener();
-        EventBus.getDefault().register(this);
+        mEventBus.register(this);
         loadLanguages(false);
         updateNavigationDrawerMenu();
     }
@@ -171,7 +172,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
                 mTheKey.logout();
                 return true;
             case R.id.action_help:
-                mAnalytics.onTrackScreen(SCREEN_HELP);
+                mEventBus.post(new AnalyticsScreenEvent(SCREEN_HELP, getDeviceLocale(this)));
                 WebUrlLauncher.openUrl(this, URI_HELP);
                 return true;
             case R.id.action_rate:
@@ -187,15 +188,15 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
                 launchContactUs();
                 return true;
             case R.id.action_terms_of_use:
-                mAnalytics.onTrackScreen(SCREEN_TERMS_OF_USE);
+                mEventBus.post(new AnalyticsScreenEvent(SCREEN_TERMS_OF_USE, getDeviceLocale(this)));
                 WebUrlLauncher.openUrl(this, URI_TERMS_OF_USE);
                 return true;
             case R.id.action_privacy_policy:
-                mAnalytics.onTrackScreen(SCREEN_PRIVACY_POLICY);
+                mEventBus.post(new AnalyticsScreenEvent(SCREEN_PRIVACY_POLICY, getDeviceLocale(this)));
                 WebUrlLauncher.openUrl(this, URI_PRIVACY);
                 return true;
             case R.id.action_copyright:
-                mAnalytics.onTrackScreen(SCREEN_COPYRIGHT);
+                mEventBus.post(new AnalyticsScreenEvent(SCREEN_COPYRIGHT, getDeviceLocale(this)));
                 WebUrlLauncher.openUrl(this, URI_COPYRIGHT);
                 return true;
         }
@@ -206,7 +207,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     @Override
     protected void onStop() {
         super.onStop();
-        EventBus.getDefault().unregister(this);
+        mEventBus.unregister(this);
         stopLanguagesChangeListener();
     }
 
@@ -335,7 +336,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     }
 
     private void launchContactUs() {
-        mAnalytics.onTrackScreen(SCREEN_CONTACT_US);
+        mEventBus.post(new AnalyticsScreenEvent(SCREEN_CONTACT_US, getDeviceLocale(this)));
         final Intent intent = new Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT);
         try {
             startActivity(intent);
@@ -345,9 +346,9 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     }
 
     private void launchShare() {
-        mAnalytics.onTrackScreen(SCREEN_SHARE_GODTOOLS);
+        mEventBus.post(new AnalyticsScreenEvent(SCREEN_SHARE_GODTOOLS, mPrimaryLanguage));
         final String shareLink = URI_SHARE_BASE.buildUpon()
-                .appendPath(LocaleCompat.toLanguageTag(prefs().getPrimaryLanguage()).toLowerCase())
+                .appendPath(LocaleCompat.toLanguageTag(mPrimaryLanguage).toLowerCase())
                 .appendPath("")
                 .build().toString();
 
@@ -362,7 +363,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     }
 
     private void launchShareStory() {
-        mAnalytics.onTrackScreen(SCREEN_SHARE_STORY);
+        mEventBus.post(new AnalyticsScreenEvent(SCREEN_SHARE_STORY, getDeviceLocale(this)));
         final Intent intent = new Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT);
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_story_subject));
         try {

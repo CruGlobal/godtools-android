@@ -10,9 +10,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import org.cru.godtools.R;
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.keynote.godtools.android.fragment.LanguageSettingsFragment;
 
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_LANGUAGE_SETTINGS;
+import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_LANGUAGE_SETTINGS;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
 
 public class LanguageSettingsActivity extends BasePlatformActivity {
@@ -40,7 +41,7 @@ public class LanguageSettingsActivity extends BasePlatformActivity {
     protected void onResume() {
         super.onResume();
         prefs().setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS);
-        mAnalytics.onTrackScreen(SCREEN_LANGUAGE_SETTINGS);
+        mEventBus.post(new AnalyticsScreenEvent(SCREEN_LANGUAGE_SETTINGS));
     }
 
     /* END lifecycle */
