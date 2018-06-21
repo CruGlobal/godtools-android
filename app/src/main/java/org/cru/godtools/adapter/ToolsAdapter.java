@@ -317,7 +317,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
             }
             bindShares(mSharesView, mShares);
             if (mParallelLanguageView != null) {
-                if (mParallelLanguage != null) {
+                if (mParallelLanguage != null && (mPrimaryLanguage != null || mDefaultLanguage != mParallelLanguage)) {
                     mParallelLanguageView.setVisibility(View.VISIBLE);
                     mParallelLanguageView.setText(mParallelLanguage.getDisplayName());
                 } else {
