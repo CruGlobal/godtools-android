@@ -117,7 +117,8 @@ public class SnowplowAnalyticsService {
     }
 
     @WorkerThread
-    private <T extends AbstractEvent.Builder> T populate(@NonNull final T builder, @NonNull final AnalyticsBaseEvent event) {
+    private <T extends AbstractEvent.Builder> T populate(@NonNull final T builder,
+                                                         @NonNull final AnalyticsBaseEvent event) {
         builder.customContext(ImmutableList.of(idContext(), contentScoringContext(event)));
         return builder;
     }
