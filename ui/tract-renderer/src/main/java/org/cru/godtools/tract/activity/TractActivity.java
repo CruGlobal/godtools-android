@@ -522,7 +522,7 @@ public class TractActivity extends ImmersiveActivity
 
             for (final Locale locale : mLanguages) {
                 mLanguageTabs.addTab(mLanguageTabs.newTab()
-                                             .setText(locale.getDisplayName())
+                                             .setText(locale.getDisplayName(locale))
                                              .setTag(locale));
             }
 
