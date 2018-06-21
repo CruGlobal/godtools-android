@@ -25,6 +25,10 @@
                 android:orderInCategory="500"
                 android:title="@string/menu_login" />
             <item
+                android:id="@+id/action_signup"
+                android:orderInCategory="500"
+                android:title="@string/menu_signup" />
+            <item
                 android:id="@+id/action_logout"
                 android:orderInCategory="500"
                 android:title="@string/menu_logout" />
