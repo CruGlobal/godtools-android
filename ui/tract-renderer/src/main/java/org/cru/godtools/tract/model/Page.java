@@ -8,6 +8,7 @@ import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.ArraySet;
 import android.support.v4.util.Pools;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
 
 import com.annimon.stream.IntPair;
@@ -22,6 +23,7 @@ import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.model.CallToAction.CallToActionViewHolder;
 import org.cru.godtools.tract.model.Card.CardViewHolder;
+import org.cru.godtools.tract.model.Header.HeaderViewHolder;
 import org.cru.godtools.tract.model.Hero.HeroViewHolder;
 import org.cru.godtools.tract.widget.PageContentLayout;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
@@ -35,6 +37,8 @@ import java.util.List;
 import java.util.Set;
 
 import butterknife.BindView;
+import butterknife.BindViews;
+import butterknife.ButterKnife;
 
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
@@ -365,10 +369,15 @@ public final class Page extends Base implements Styles, Parent {
         @BindView(R2.id.page_content_layout)
         PageContentLayout mPageContentLayout;
 
+        @BindView(R2.id.header)
+        View mHeader;
         @BindView(R2.id.hero)
         View mHero;
         @BindView(R2.id.call_to_action)
         View mCallToAction;
+
+        @BindViews({R2.id.background_image, R2.id.initial_page_content})
+        List<View> mLayoutDirectionViews;
 
         private boolean mBindingCards = false;
         private boolean mNeedsCardsRebind = false;
@@ -376,6 +385,8 @@ public final class Page extends Base implements Styles, Parent {
         private Card[] mCards = new Card[0];
         private Set<String> mVisibleCards = new ArraySet<>();
 
+        @NonNull
+        private final HeaderViewHolder mHeaderViewHolder;
         @NonNull
         private final HeroViewHolder mHeroViewHolder;
         @Nullable
@@ -393,6 +404,7 @@ public final class Page extends Base implements Styles, Parent {
         PageViewHolder(@NonNull final View root) {
             super(Page.class, root, null);
             mPageContentLayout.setActiveCardListener(this);
+            mHeaderViewHolder = HeaderViewHolder.forView(mHeader, this);
             mHeroViewHolder = HeroViewHolder.forView(mHero, this);
             mCallToActionViewHolder = CallToActionViewHolder.forView(mCallToAction, this);
             mCallToActionViewHolder.setCallbacks(this);
@@ -410,9 +422,10 @@ public final class Page extends Base implements Styles, Parent {
         void onBind() {
             super.onBind();
             bindPage();
-            bindHero();
+            mHeaderViewHolder.bind(mModel != null ? mModel.getHeader() : null);
+            mHeroViewHolder.bind(mModel != null ? mModel.getHero() : null);
             updateDisplayedCards();
-            bindCallToAction();
+            mCallToActionViewHolder.bind(mModel != null ? mModel.getCallToAction() : null);
         }
 
         @Override
@@ -506,6 +519,16 @@ public final class Page extends Base implements Styles, Parent {
             return !card.isHidden() || mVisibleCards.contains(card.getId());
         }
 
+        @Override
+        protected void updateLayoutDirection() {
+            // HACK: the root view should inherit it's layout direction so the call-to-action view can inherit as well.
+            ViewCompat.setLayoutDirection(mRoot, ViewCompat.LAYOUT_DIRECTION_INHERIT);
+
+            // force the layout direction for any other views that do care
+            final int dir = Page.getLayoutDirection(mModel);
+            ButterKnife.apply(mLayoutDirectionViews, (v, i) -> ViewCompat.setLayoutDirection(v, dir));
+        }
+
         private void updateDisplayedCards() {
             mCards = Optional.ofNullable(mModel).stream()
                     .map(Page::getCards)
@@ -520,14 +543,6 @@ public final class Page extends Base implements Styles, Parent {
             mPageView.setBackgroundColor(Page.getBackgroundColor(mModel));
             Resource.bindBackgroundImage(mBackgroundImage, getBackgroundImageResource(mModel),
                                          getBackgroundImageScaleType(mModel), getBackgroundImageGravity(mModel));
-        }
-
-        private void bindHero() {
-            mHeroViewHolder.bind(mModel != null ? mModel.getHero() : null);
-        }
-
-        private void bindCallToAction() {
-            mCallToActionViewHolder.bind(mModel != null ? mModel.getCallToAction() : null);
         }
 
         @UiThread

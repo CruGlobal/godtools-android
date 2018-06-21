@@ -198,10 +198,7 @@ abstract class Base {
 
         @CallSuper
         void onBind() {
-            // update the layout direction for this view
-            // HACK: In theory we should be able to set this on the root page only.
-            // HACK: But updating the direction doesn't seem to trigger a re-layout of descendant views.
-            ViewCompat.setLayoutDirection(mRoot, CallToAction.getLayoutDirection(mModel));
+            updateLayoutDirection();
         }
 
         @CallSuper
@@ -247,6 +244,12 @@ abstract class Base {
                 mVisible = false;
                 onHidden();
             }
+        }
+
+        protected void updateLayoutDirection() {
+            // HACK: In theory we should be able to set this on the root page only.
+            // HACK: But updating the direction doesn't seem to trigger a re-layout of descendant views.
+            ViewCompat.setLayoutDirection(mRoot, CallToAction.getLayoutDirection(mModel));
         }
 
         final void sendEvents(@NonNull final Set<Event.Id> ids) {

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.MainThread;
@@ -522,7 +523,7 @@ public class TractActivity extends ImmersiveActivity
 
             for (final Locale locale : mLanguages) {
                 mLanguageTabs.addTab(mLanguageTabs.newTab()
-                                             .setText(locale.getDisplayName())
+                                             .setText(locale.getDisplayName(locale))
                                              .setTag(locale));
             }
 
@@ -588,7 +589,28 @@ public class TractActivity extends ImmersiveActivity
     }
 
     @Nullable
-    protected Manifest getActiveManifest() {
+    private Locale getFirstVisibleLocale() {
+        for (int i = 0; i < mLanguages.length; i++) {
+            // skip any hidden languages
+            if (mHiddenLanguages[i]) {
+                continue;
+            }
+
+            // skip any language that we don't have a manifest for
+            if (mManifests.get(i) == null) {
+                continue;
+            }
+
+            // return this language
+            return mLanguages[i];
+        }
+
+        // default to null
+        return null;
+    }
+
+    @Nullable
+    private Manifest getActiveManifest() {
         return mManifests.get(mActiveLanguage);
     }
 
@@ -724,6 +746,10 @@ public class TractActivity extends ImmersiveActivity
             mPagerAdapter.setManifest(manifest);
 
             if (mPager != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    mPager.setLayoutDirection(TextUtils.getLayoutDirectionFromLocale(getFirstVisibleLocale()));
+                }
+
                 // scroll to initial page
                 if (manifest != null && mInitialPage >= 0) {
                     mPager.setCurrentItem(mInitialPage, false);

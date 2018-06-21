@@ -3,6 +3,7 @@ package org.cru.godtools.tract.model;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -151,6 +152,12 @@ public final class CallToAction extends Base {
             mArrowView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
             mArrowView.setImageResource(R.drawable.ic_call_to_action);
             mArrowView.setImageDrawable(DrawableUtils.tint(mArrowView.getDrawable(), getControlColor(mModel)));
+        }
+
+        @Override
+        protected void updateLayoutDirection() {
+            // force CallToAction to inherit it's layout direction
+            ViewCompat.setLayoutDirection(mRoot, ViewCompat.LAYOUT_DIRECTION_INHERIT);
         }
     }
 }

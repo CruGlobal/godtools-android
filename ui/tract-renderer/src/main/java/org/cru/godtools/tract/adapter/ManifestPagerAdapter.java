@@ -3,15 +3,12 @@ package org.cru.godtools.tract.adapter;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
-import android.graphics.Color;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.NestedScrollView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.annimon.stream.Optional;
 import com.google.common.collect.ImmutableList;
@@ -24,7 +21,6 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.activity.ModalActivity;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter.PageViewHolder;
 import org.cru.godtools.tract.model.Card;
-import org.cru.godtools.tract.model.Header;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Modal;
 import org.cru.godtools.tract.model.Page;
@@ -35,7 +31,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.BindViews;
 import butterknife.ButterKnife;
 
 public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewHolder> implements LifecycleObserver {
@@ -166,19 +161,6 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         @BindView(R2.id.page)
         View mPageView;
 
-        // Header & Hero
-        @BindView(R2.id.initial_page_content)
-        NestedScrollView mHeaderAndHeroLayout;
-        @BindView(R2.id.header)
-        View mHeader;
-        @BindView(R2.id.header_number)
-        TextView mHeaderNumber;
-        @BindView(R2.id.header_title)
-        TextView mHeaderTitle;
-
-        @BindViews({R2.id.header, R2.id.header_number, R2.id.header_title})
-        List<View> mHeaderViews;
-
         @Nullable
         Page mPage;
 
@@ -198,8 +180,6 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
             }
             mPage = page;
             mModelViewHolder.bind(page);
-
-            bindHeader(page);
         }
 
         void onContentEvent(@NonNull final Event event) {
@@ -219,20 +199,6 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         }
 
         /* END lifecycle */
-
-        private void bindHeader(@Nullable final Page page) {
-            final Header header = page != null ? page.getHeader() : null;
-
-            ButterKnife.apply(mHeaderViews, (view, i) -> view.setVisibility(header != null ? View.VISIBLE : View.GONE));
-
-            if (header != null) {
-                mHeader.setBackgroundColor(header.getBackgroundColor());
-                header.bindNumber(mHeaderNumber);
-                header.bindTitle(mHeaderTitle);
-            } else {
-                mHeader.setBackgroundColor(Color.TRANSPARENT);
-            }
-        }
 
         private void checkForModalEvent(@NonNull final Event event) {
             assert mPage != null;
