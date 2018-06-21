@@ -610,7 +610,7 @@ public class TractActivity extends ImmersiveActivity
     }
 
     @Nullable
-    protected Manifest getActiveManifest() {
+    private Manifest getActiveManifest() {
         return mManifests.get(mActiveLanguage);
     }
 
