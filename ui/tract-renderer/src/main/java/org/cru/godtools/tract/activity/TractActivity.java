@@ -149,7 +149,7 @@ public class TractActivity extends ImmersiveActivity
     boolean[] mHiddenLanguages = new boolean[0];
     @VisibleForTesting
     int mActiveLanguage = 0;
-    int mInitialPage = -1;
+    int mInitialPage = 0;
 
     protected static void populateExtras(@NonNull final Bundle extras, @NonNull final String toolCode,
                                          @NonNull final Locale... languages) {
