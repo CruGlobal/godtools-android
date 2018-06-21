@@ -37,6 +37,8 @@ import java.util.List;
 import java.util.Set;
 
 import butterknife.BindView;
+import butterknife.BindViews;
+import butterknife.ButterKnife;
 
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
@@ -374,6 +376,9 @@ public final class Page extends Base implements Styles, Parent {
         @BindView(R2.id.call_to_action)
         View mCallToAction;
 
+        @BindViews({R2.id.background_image, R2.id.initial_page_content})
+        List<View> mLayoutDirectionViews;
+
         private boolean mBindingCards = false;
         private boolean mNeedsCardsRebind = false;
         @NonNull
@@ -516,8 +521,12 @@ public final class Page extends Base implements Styles, Parent {
 
         @Override
         protected void updateLayoutDirection() {
-            // force Page to inherit it's layout direction
+            // HACK: the root view should inherit it's layout direction so the call-to-action view can inherit as well.
             ViewCompat.setLayoutDirection(mRoot, ViewCompat.LAYOUT_DIRECTION_INHERIT);
+
+            // force the layout direction for any other views that do care
+            final int dir = Page.getLayoutDirection(mModel);
+            ButterKnife.apply(mLayoutDirectionViews, (v, i) -> ViewCompat.setLayoutDirection(v, dir));
         }
 
         private void updateDisplayedCards() {
