@@ -9,6 +9,8 @@
     <string name="menu_about">Acerca de</string>
     <string name="menu_help">Ayuda</string>
     <string name="menu_contact_us">Contáctanos</string>
+    <string name="menu_login">Iniciar</string>
+    <string name="menu_logout">Cerrar sesión</string>
     <string name="menu_share_godtools">Comparte la aplicación GodTools</string>
     <string name="menu_share_story">Comparte una historia con nosotros</string>
     <string name="menu_rate">Califica a GodTools</string>
