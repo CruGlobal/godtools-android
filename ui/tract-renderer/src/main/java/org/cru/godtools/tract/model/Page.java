@@ -410,9 +410,9 @@ public final class Page extends Base implements Styles, Parent {
         void onBind() {
             super.onBind();
             bindPage();
-            bindHero();
+            mHeroViewHolder.bind(mModel != null ? mModel.getHero() : null);
             updateDisplayedCards();
-            bindCallToAction();
+            mCallToActionViewHolder.bind(mModel != null ? mModel.getCallToAction() : null);
         }
 
         @Override
@@ -520,14 +520,6 @@ public final class Page extends Base implements Styles, Parent {
             mPageView.setBackgroundColor(Page.getBackgroundColor(mModel));
             Resource.bindBackgroundImage(mBackgroundImage, getBackgroundImageResource(mModel),
                                          getBackgroundImageScaleType(mModel), getBackgroundImageGravity(mModel));
-        }
-
-        private void bindHero() {
-            mHeroViewHolder.bind(mModel != null ? mModel.getHero() : null);
-        }
-
-        private void bindCallToAction() {
-            mCallToActionViewHolder.bind(mModel != null ? mModel.getCallToAction() : null);
         }
 
         @UiThread
