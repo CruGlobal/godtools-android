@@ -22,6 +22,7 @@ import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.model.CallToAction.CallToActionViewHolder;
 import org.cru.godtools.tract.model.Card.CardViewHolder;
+import org.cru.godtools.tract.model.Header.HeaderViewHolder;
 import org.cru.godtools.tract.model.Hero.HeroViewHolder;
 import org.cru.godtools.tract.widget.PageContentLayout;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
@@ -365,6 +366,8 @@ public final class Page extends Base implements Styles, Parent {
         @BindView(R2.id.page_content_layout)
         PageContentLayout mPageContentLayout;
 
+        @BindView(R2.id.header)
+        View mHeader;
         @BindView(R2.id.hero)
         View mHero;
         @BindView(R2.id.call_to_action)
@@ -376,6 +379,8 @@ public final class Page extends Base implements Styles, Parent {
         private Card[] mCards = new Card[0];
         private Set<String> mVisibleCards = new ArraySet<>();
 
+        @NonNull
+        private final HeaderViewHolder mHeaderViewHolder;
         @NonNull
         private final HeroViewHolder mHeroViewHolder;
         @Nullable
@@ -393,6 +398,7 @@ public final class Page extends Base implements Styles, Parent {
         PageViewHolder(@NonNull final View root) {
             super(Page.class, root, null);
             mPageContentLayout.setActiveCardListener(this);
+            mHeaderViewHolder = HeaderViewHolder.forView(mHeader, this);
             mHeroViewHolder = HeroViewHolder.forView(mHero, this);
             mCallToActionViewHolder = CallToActionViewHolder.forView(mCallToAction, this);
             mCallToActionViewHolder.setCallbacks(this);
@@ -410,6 +416,7 @@ public final class Page extends Base implements Styles, Parent {
         void onBind() {
             super.onBind();
             bindPage();
+            mHeaderViewHolder.bind(mModel != null ? mModel.getHeader() : null);
             mHeroViewHolder.bind(mModel != null ? mModel.getHero() : null);
             updateDisplayedCards();
             mCallToActionViewHolder.bind(mModel != null ? mModel.getCallToAction() : null);
