@@ -42,6 +42,7 @@ import butterknife.Optional;
 
 import static android.view.HapticFeedbackConstants.LONG_PRESS;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
+import static org.cru.godtools.model.Tool.CODE_EVERYSTUDENT;
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
 public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
@@ -375,7 +376,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
                     mCallbacks.onToolSelect(mCode, mType, mDefaultLanguage, mParallelLanguage);
                 } else if (mParallelLanguage != null) {
                     mCallbacks.onToolSelect(mCode, mType, mParallelLanguage);
-                } else if (mType == Tool.Type.ARTICLE && "es".equals(mCode)) {
+                } else if (mType == Tool.Type.ARTICLE && CODE_EVERYSTUDENT.equals(mCode)) {
                     // everystudent content for now
                     mCallbacks.onToolSelect(mCode, mType);
                 } else {
