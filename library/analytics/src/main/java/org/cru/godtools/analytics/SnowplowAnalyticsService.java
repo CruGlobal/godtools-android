@@ -63,6 +63,7 @@ public class SnowplowAnalyticsService {
             return new Tracker.TrackerBuilder(emitter, SNOWPLOW_NAMESPACE, SNOWPLOW_APP_ID, context)
                     .base64(false)
                     .mobileContext(true)
+                    .applicationCrash(false)
                     .lifecycleEvents(true)
                     .build();
         });
