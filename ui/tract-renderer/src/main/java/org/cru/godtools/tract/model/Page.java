@@ -8,6 +8,7 @@ import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.ArraySet;
 import android.support.v4.util.Pools;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
 
 import com.annimon.stream.IntPair;
@@ -511,6 +512,12 @@ public final class Page extends Base implements Styles, Parent {
 
         private boolean isCardVisible(@NonNull final Card card) {
             return !card.isHidden() || mVisibleCards.contains(card.getId());
+        }
+
+        @Override
+        protected void updateLayoutDirection() {
+            // force Page to inherit it's layout direction
+            ViewCompat.setLayoutDirection(mRoot, ViewCompat.LAYOUT_DIRECTION_INHERIT);
         }
 
         private void updateDisplayedCards() {
