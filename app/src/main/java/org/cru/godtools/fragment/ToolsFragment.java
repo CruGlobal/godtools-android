@@ -436,12 +436,13 @@ public class ToolsFragment extends BaseFragment
         @Nullable
         @Override
         public Expression getWhere() {
+            final Expression where = ToolTable.FIELD_TYPE.ne(Tool.Type.UNKNOWN);
             switch (mMode) {
                 case MODE_ADDED:
                 case MODE_AVAILABLE:
-                    return ToolTable.FIELD_ADDED.eq(mMode == MODE_ADDED);
+                    return where.and(ToolTable.FIELD_ADDED.eq(mMode == MODE_ADDED));
                 default:
-                    return null;
+                    return where;
             }
         }
 
