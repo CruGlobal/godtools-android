@@ -33,7 +33,7 @@ public class BaseGodToolsApplication extends Application {
 
         // Enable application monitoring
         initializeCrashlytics();
-        NewRelic.withApplicationToken(NEW_RELIC_API_KEY).start(this);
+        initializeNewRelic();
 
         // configure components
         configureLanguageFallacks();
@@ -56,6 +56,12 @@ public class BaseGodToolsApplication extends Application {
         Crashlytics.setString("SystemLanguage", LocaleCompat.toLanguageTag(Locale.getDefault()));
 
         Timber.plant(new CrashlyticsTree());
+    }
+
+    private void initializeNewRelic() {
+        NewRelic.withApplicationToken(NEW_RELIC_API_KEY)
+                .withCrashReportingEnabled(false)
+                .start(this);
     }
 
     @CallSuper
