@@ -25,7 +25,7 @@
 
             <ProgressBar
                 android:id="@+id/download_progress"
-                style="@style/Widget.GodTools2.Tools.Download.ProgressBar"
+                style="@style/Widget.GodTools.Tools.Download.ProgressBar"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_alignBottom="@id/banner"
@@ -35,7 +35,7 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/title"
-            style="@style/TextAppearance.GodTools2.Tools.Details.Title"
+            style="@style/Widget.GodTools.Tools.Details.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/tools_details_margin_horiz"
@@ -45,7 +45,7 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/shares"
-            style="@style/TextAppearance.GodTools2.Tools.Details.Shares"
+            style="@style/Widget.GodTools.Tools.Details.Shares"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/tools_details_margin_horiz"
@@ -80,7 +80,7 @@
             tools:visibility="gone" />
 
         <android.support.v7.widget.AppCompatTextView
-            style="@style/TextAppearance.GodTools2.Tools.Details.Subhead"
+            style="@style/Widget.GodTools.Tools.Details.Subhead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/tools_details_margin_horiz"
@@ -89,7 +89,7 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/description"
-            style="@style/TextAppearance.GodTools2.Tools.Details.Content"
+            style="@style/Widget.GodTools.Tools.Details.Content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
@@ -100,7 +100,7 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/languages_header"
-            style="@style/TextAppearance.GodTools2.Tools.Details.Subhead"
+            style="@style/Widget.GodTools.Tools.Details.Subhead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/tools_details_margin_horiz"
@@ -109,7 +109,7 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/languages"
-            style="@style/TextAppearance.GodTools2.Tools.Details.Content"
+            style="@style/Widget.GodTools.Tools.Details.Content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"

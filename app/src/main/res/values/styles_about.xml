@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Widget.GodTools2.About.Text" parent="Base">
+    <style name="Widget.GodTools.About.Text" parent="Base">
         <item name="android:layout_marginTop">4dp</item>
         <item name="android:layout_marginBottom">4dp</item>
         <item name="android:autoLink">email|web</item>
-        <item name="android:textAppearance">@style/TextAppearance.GodTools2.About.Text</item>
+        <item name="android:textAppearance">@style/TextAppearance.GodTools.About.Text</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.About.Text" parent="TextAppearance.GodTools" />
+    <style name="TextAppearance.GodTools.About.Text" parent="TextAppearance.GodTools" />
 </resources>

@@ -29,7 +29,7 @@
     <application
         android:name=".GodToolsApplication"
         android:allowBackup="false"
-        android:theme="@style/Theme.GodTools2.AppBar">
+        android:theme="@style/Theme.GodTools.AppBar">
         <activity
             android:name="org.keynote.godtools.android.activity.MainActivity"
             android:launchMode="singleTop"

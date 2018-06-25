@@ -14,61 +14,61 @@
         android:paddingTop="12dp">
 
         <android.support.v7.widget.AppCompatTextView
-            style="@style/Widget.GodTools2.About.Text"
+            style="@style/Widget.GodTools.About.Text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/general_about_1" />
 
         <android.support.v7.widget.AppCompatTextView
-            style="@style/Widget.GodTools2.About.Text"
+            style="@style/Widget.GodTools.About.Text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/general_about_2" />
 
         <android.support.v7.widget.AppCompatTextView
-            style="@style/Widget.GodTools2.About.Text"
+            style="@style/Widget.GodTools.About.Text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/general_about_3" />
 
         <android.support.v7.widget.AppCompatTextView
-            style="@style/Widget.GodTools2.About.Text"
+            style="@style/Widget.GodTools.About.Text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/general_about_4" />
 
         <android.support.v7.widget.AppCompatTextView
-            style="@style/Widget.GodTools2.About.Text"
+            style="@style/Widget.GodTools.About.Text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/general_about_5" />
 
         <android.support.v7.widget.AppCompatTextView
-            style="@style/Widget.GodTools2.About.Text"
+            style="@style/Widget.GodTools.About.Text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/general_about_6" />
 
         <android.support.v7.widget.AppCompatTextView
-            style="@style/Widget.GodTools2.About.Text"
+            style="@style/Widget.GodTools.About.Text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/general_about_7" />
 
         <android.support.v7.widget.AppCompatTextView
-            style="@style/Widget.GodTools2.About.Text"
+            style="@style/Widget.GodTools.About.Text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/general_about_8" />
 
         <android.support.v7.widget.AppCompatTextView
-            style="@style/Widget.GodTools2.About.Text"
+            style="@style/Widget.GodTools.About.Text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/general_about_9" />
 
         <android.support.v7.widget.AppCompatTextView
-            style="@style/Widget.GodTools2.About.Text"
+            style="@style/Widget.GodTools.About.Text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/general_about_10" />

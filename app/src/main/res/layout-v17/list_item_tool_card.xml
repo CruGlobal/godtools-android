@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
-    style="@style/Widget.GodTools2.Tools.CardView"
+    style="@style/Widget.GodTools.Tools.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -26,7 +26,7 @@
 
         <ProgressBar
             android:id="@+id/download_progress"
-            style="@style/Widget.GodTools2.Tools.Download.ProgressBar"
+            style="@style/Widget.GodTools.Tools.Download.ProgressBar"
             android:layout_width="match_parent"
             android:layout_height="10dp"
             android:layout_alignBottom="@id/banner"
@@ -82,7 +82,7 @@
                 android:layout_toStartOf="@id/language_parallel"
                 android:ellipsize="end"
                 android:lines="1"
-                android:textAppearance="@style/TextAppearance.GodTools2.Tools.Card.Title"
+                android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Title"
                 tools:text="Knowing God Personally (Extra Long Title)" />
 
             <android.support.v7.widget.AppCompatTextViewImpl
@@ -96,7 +96,7 @@
                 android:layout_toEndOf="@id/divider_download"
                 android:ellipsize="end"
                 android:lines="2"
-                android:textAppearance="@style/TextAppearance.GodTools2.Tools.Card.Tagline"
+                android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Tagline"
                 tools:text="A Gospel presentation that uses hand drawn images to help illustrate God’s invitation to know" />
 
             <android.support.v7.widget.AppCompatImageView

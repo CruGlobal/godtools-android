@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- CardView Widgets -->
-    <style name="Widget.GodTools2.CardView" parent="CardView.Light" />
+    <style name="Widget.GodTools.CardView" parent="CardView.Light" />
 
     <!-- LinearLayout Spacer -->
-    <style name="Widget.GodTools2.Spacer" parent="Base">
+    <style name="Widget.GodTools.Spacer" parent="Base">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>

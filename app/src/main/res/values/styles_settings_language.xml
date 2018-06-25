@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Widget.GodTools2.Settings.Language.Spacer" parent="Widget.GodTools2.Spacer" />
+    <style name="Widget.GodTools.Settings.Language.Spacer" parent="Widget.GodTools.Spacer" />
 
-    <style name="Widget.GodTools2.Settings.Language.Label" parent="Base">
-        <item name="android:textAppearance">@style/TextAppearance.GodTools2.Settings.Language.Label</item>
+    <style name="Widget.GodTools.Settings.Language.Label" parent="Base">
+        <item name="android:textAppearance">@style/TextAppearance.GodTools.Settings.Language.Label</item>
     </style>
 
-    <style name="Widget.GodTools2.Settings.Language.Description" parent="Base">
-        <item name="android:textAppearance">@style/TextAppearance.GodTools2.Settings.Language.Description</item>
+    <style name="Widget.GodTools.Settings.Language.Description" parent="Base">
+        <item name="android:textAppearance">@style/TextAppearance.GodTools.Settings.Language.Description</item>
         <item name="android:breakStrategy" tools:targetApi="m">balanced</item>
     </style>
 
-    <style name="Widget.GodTools2.Settings.Language.Button" parent="Widget.GodTools.Button.Colored.Blue">
+    <style name="Widget.GodTools.Settings.Language.Button" parent="Widget.GodTools.Button.Colored.Blue">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">56dp</item>
         <item name="android:maxWidth">260dp</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.Settings.Language.Label" parent="TextAppearance.AppCompat.Medium">
+    <style name="TextAppearance.GodTools.Settings.Language.Label" parent="TextAppearance.AppCompat.Medium">
         <item name="android:textColor">@color/gt_blue</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.Settings.Language.Description" parent="TextAppearance.AppCompat">
+    <style name="TextAppearance.GodTools.Settings.Language.Description" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/gray_5A</item>
     </style>
 </resources>

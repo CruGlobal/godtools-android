@@ -8,7 +8,7 @@
 
     <color name="tools_download_progress_bg">#7F000000</color>
 
-    <style name="Widget.GodTools2.Tools.CardView" parent="Widget.GodTools2.CardView">
+    <style name="Widget.GodTools.Tools.CardView" parent="Widget.GodTools.CardView">
         <item name="android:layout_marginBottom">@dimen/tools_card_margin_vert</item>
         <item name="android:layout_marginLeft">@dimen/tools_card_margin_horiz</item>
         <item name="android:layout_marginRight">@dimen/tools_card_margin_horiz</item>
@@ -18,12 +18,12 @@
         <item name="cardCornerRadius">@dimen/tools_card_corner_radius</item>
     </style>
 
-    <style name="Widget.GodTools2.Tools.Download.ProgressBar" parent="Widget.GodTools.ProgressBar">
+    <style name="Widget.GodTools.Tools.Download.ProgressBar" parent="Widget.GodTools.ProgressBar">
         <item name="android:progressDrawable">@drawable/progress_download</item>
     </style>
 
     <style name="Widget.GodTools.Tools.Card.ParallelLanguage" parent="Base">
-        <item name="android:textAppearance">@style/TextAppearance.GodTools2.Tools.Card.ParallelLanguage</item>
+        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tools.Card.ParallelLanguage</item>
 
         <!-- text output behavior -->
         <item name="android:lines">1</item>
@@ -35,57 +35,52 @@
         <item name="android:drawablePadding">4dp</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.Tools.Card.Title" parent="TextAppearance.GodTools">
+    <style name="TextAppearance.GodTools.Tools.Card.Title" parent="TextAppearance.GodTools">
         <item name="android:textColor">@color/gray_5A</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.Tools.Card.Shares" parent="TextAppearance.GodTools.Small">
-        <item name="android:textColor">@color/gray_BE</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="TextAppearance.GodTools2.Tools.Card.Tagline" parent="TextAppearance.GodTools.Small">
+    <style name="TextAppearance.GodTools.Tools.Card.Tagline" parent="TextAppearance.GodTools.Small">
         <item name="android:textColor">@color/gray_5A</item>
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.Tools.Card.ParallelLanguage" parent="TextAppearance.GodTools.Small">
+    <style name="TextAppearance.GodTools.Tools.Card.ParallelLanguage" parent="TextAppearance.GodTools.Small">
         <item name="android:textColor">@color/gray_BE</item>
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="Widget.GodTools2.Tools.Details.Title" parent="Base">
-        <item name="android:textAppearance">@style/TextAppearance.GodTools2.Tools.Details.Title</item>
+    <style name="Widget.GodTools.Tools.Details.Title" parent="Base">
+        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tools.Details.Title</item>
     </style>
 
-    <style name="Widget.GodTools2.Tools.Details.Shares" parent="Base">
-        <item name="android:textAppearance">@style/TextAppearance.GodTools2.Tools.Details.Shares</item>
+    <style name="Widget.GodTools.Tools.Details.Shares" parent="Base">
+        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tools.Details.Shares</item>
     </style>
 
-    <style name="Widget.GodTools2.Tools.Details.Subhead" parent="Base">
-        <item name="android:textAppearance">@style/TextAppearance.GodTools2.Tools.Details.Subhead</item>
+    <style name="Widget.GodTools.Tools.Details.Subhead" parent="Base">
+        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tools.Details.Subhead</item>
     </style>
 
-    <style name="Widget.GodTools2.Tools.Details.Content" parent="Base">
-        <item name="android:textAppearance">@style/TextAppearance.GodTools2.Tools.Details.Content</item>
+    <style name="Widget.GodTools.Tools.Details.Content" parent="Base">
+        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tools.Details.Content</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.Tools.Details.Title" parent="TextAppearance.GodTools.Headline">
+    <style name="TextAppearance.GodTools.Tools.Details.Title" parent="TextAppearance.GodTools.Headline">
         <item name="android:textColor">@color/gray_5A</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.Tools.Details.Shares" parent="TextAppearance.GodTools">
+    <style name="TextAppearance.GodTools.Tools.Details.Shares" parent="TextAppearance.GodTools">
         <item name="android:textColor">@color/gray_5A</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.Tools.Details.Subhead" parent="TextAppearance.GodTools.Subhead">
+    <style name="TextAppearance.GodTools.Tools.Details.Subhead" parent="TextAppearance.GodTools.Subhead">
         <item name="android:textColor">@color/gray_BE</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextAppearance.GodTools2.Tools.Details.Content" parent="TextAppearance.GodTools">
+    <style name="TextAppearance.GodTools.Tools.Details.Content" parent="TextAppearance.GodTools">
         <item name="android:textColor">@color/gray_5A</item>
     </style>
 </resources>
