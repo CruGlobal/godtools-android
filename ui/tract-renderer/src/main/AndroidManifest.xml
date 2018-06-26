@@ -24,6 +24,9 @@
                 <data android:pathPattern="/.*/satisfied.*" />
                 <data android:pathPattern="/.*/thefour.*" />
             </intent-filter>
+            <meta-data
+                android:name="default-url"
+                android:value="https://knowgod.com/en/kgp/?useDeviceLanguage=true" />
         </activity>
 
         <activity
