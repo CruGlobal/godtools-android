@@ -126,9 +126,8 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
         updateNavigationDrawerMenu();
     }
 
-    @MainThread
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onTheKeyEvent(@NonNull final TheKeyEvent event) {
+    @CallSuper
+    protected void onTheKeyEvent(@NonNull final TheKeyEvent event) {
         updateNavigationDrawerMenu();
     }
 
@@ -219,6 +218,12 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     }
 
     /* END lifecycle */
+
+    @MainThread
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public final void theKeyEvent(@NonNull final TheKeyEvent event) {
+        onTheKeyEvent(event);
+    }
 
     @NonNull
     protected Settings prefs() {
