@@ -44,17 +44,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:host="@string/tract_deeplink_host_2" />
-                <data android:path="/" />
-            </intent-filter>
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="https" />
                 <data android:host="@string/account_deeplink_host" />
                 <data android:path="@string/account_deeplink_path" />
