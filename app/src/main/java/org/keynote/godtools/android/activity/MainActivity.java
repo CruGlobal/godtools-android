@@ -52,8 +52,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
     private static final int TASK_FEATURE_DISCOVERY = 1;
 
-    private static final int REQUEST_TOUR = 101;
-
     private static final int STATE_MY_TOOLS = 0;
     private static final int STATE_FIND_TOOLS = 1;
 
@@ -131,17 +129,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
                 return true;
         }
         return false;
-    }
-
-    @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, @Nullable final Intent data) {
-        switch (requestCode) {
-            case REQUEST_TOUR:
-                prefs().setTourCompleted();
-                break;
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
-        }
     }
 
     @Override
