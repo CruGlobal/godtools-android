@@ -297,7 +297,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     void showNextFeatureDiscovery() {
         if (!prefs().isFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS) &&
                 canShowFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS)) {
-            dispatchDelayedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, false, 10000);
+            dispatchDelayedFeatureDiscovery(FEATURE_LANGUAGE_SETTINGS, false, 15000);
         }
     }
 
