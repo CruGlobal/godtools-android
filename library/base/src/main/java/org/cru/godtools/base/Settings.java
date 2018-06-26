@@ -13,20 +13,26 @@ import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import java.util.Locale;
 import java.util.Set;
 
+import me.thekey.android.TheKey;
+
 public final class Settings {
     private static final String PREFS_SETTINGS = "GodTools";
     public static final String PREF_PRIMARY_LANGUAGE = "languagePrimary";
     public static final String PREF_PARALLEL_LANGUAGE = "languageParallel";
-    private static final String PREF_FEATURE_DISCOVERED = "feature_discovered.";
+    public static final String PREF_FEATURE_DISCOVERED = "feature_discovered.";
     private static final String PREF_ADDED_TO_CAMPAIGN = "added_to_campaign.";
 
     // feature discovery
     public static final String FEATURE_LANGUAGE_SETTINGS = "languageSettings";
+    public static final String FEATURE_LOGIN = "login";
 
+    @NonNull
+    private final Context mContext;
     @NonNull
     private final SharedPreferences mPrefs;
 
     private Settings(@NonNull final Context context) {
+        mContext = context;
         mPrefs = context.getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE);
     }
 
@@ -37,22 +43,42 @@ public final class Settings {
     public static Settings getInstance(@NonNull final Context context) {
         synchronized (Settings.class) {
             if (sInstance == null) {
-                sInstance = new Settings(context);
+                sInstance = new Settings(context.getApplicationContext());
             }
         }
         return sInstance;
     }
 
     public boolean isFeatureDiscovered(@NonNull final String feature) {
+        boolean discovered = isFeatureDiscoveredInt(feature);
+
         // handle pre-conditions that would indicate a feature was already discovered
-        switch (feature) {
-            case FEATURE_LANGUAGE_SETTINGS:
-                if (getParallelLanguage() != null) {
-                    setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS);
-                }
-                break;
+        if (!discovered) {
+            boolean changed = false;
+            switch (feature) {
+                case FEATURE_LANGUAGE_SETTINGS:
+                    if (getParallelLanguage() != null) {
+                        setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS);
+                        changed = true;
+                    }
+                    break;
+                case FEATURE_LOGIN:
+                    if (TheKey.getInstance(mContext).getDefaultSessionGuid() != null) {
+                        setFeatureDiscovered(FEATURE_LOGIN);
+                        changed = true;
+                    }
+                    break;
+            }
+
+            if (changed) {
+                discovered = isFeatureDiscoveredInt(feature);
+            }
         }
 
+        return discovered;
+    }
+
+    private boolean isFeatureDiscoveredInt(@NonNull final String feature) {
         return mPrefs.getBoolean(PREF_FEATURE_DISCOVERED + feature, false);
     }
 
