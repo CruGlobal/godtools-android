@@ -28,7 +28,7 @@ plugins {
 }
 
 group 'org.cru.android'
-version '5.0.14'
+version '5.0.15-SNAPSHOT'
 ext.versionCode = (grgit.log(includes:['HEAD']).size() * 2) + 4026230
 
 // define dependency versions for this project
