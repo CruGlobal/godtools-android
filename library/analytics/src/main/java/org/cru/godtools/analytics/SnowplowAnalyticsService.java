@@ -11,6 +11,8 @@ import com.adobe.mobile.Visitor;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.Futures;
 import com.snowplowanalytics.snowplow.tracker.Emitter;
+import com.snowplowanalytics.snowplow.tracker.Executor;
+import com.snowplowanalytics.snowplow.tracker.Subject;
 import com.snowplowanalytics.snowplow.tracker.Tracker;
 import com.snowplowanalytics.snowplow.tracker.events.AbstractEvent;
 import com.snowplowanalytics.snowplow.tracker.events.Event;
@@ -65,6 +67,8 @@ public class SnowplowAnalyticsService {
                     .mobileContext(true)
                     .applicationCrash(false)
                     .lifecycleEvents(true)
+                    .threadCount(1)
+                    .subject(new Subject.SubjectBuilder().build())
                     .build();
         });
         AsyncTask.THREAD_POOL_EXECUTOR.execute(mSnowPlowTracker);
@@ -101,7 +105,7 @@ public class SnowplowAnalyticsService {
     private void handleScreenEvent(@NonNull final AnalyticsScreenEvent event) {
         final ScreenView.Builder builder = ScreenView.builder()
                 .name(event.getScreen());
-        sendEvent(populate(builder, event).build());
+        sendEvent(populate(builder, event).build(), event);
     }
 
     @WorkerThread
@@ -114,7 +118,7 @@ public class SnowplowAnalyticsService {
             builder.label(label);
         }
 
-        sendEvent(populate(builder, event).build());
+        sendEvent(populate(builder, event).build(), event);
     }
 
     @WorkerThread
@@ -125,8 +129,12 @@ public class SnowplowAnalyticsService {
     }
 
     @WorkerThread
-    private void sendEvent(@NonNull final Event event) {
-        Futures.getUnchecked(mSnowPlowTracker).track(event);
+    private synchronized void sendEvent(@NonNull final Event event, @NonNull final AnalyticsBaseEvent origEvent) {
+        final Tracker tracker = Futures.getUnchecked(mSnowPlowTracker);
+        final Subject subject = tracker.getSubject();
+        Executor.execute(() -> populateSubject(subject, origEvent));
+        tracker.track(event);
+        Executor.execute(() -> resetSubject(subject));
     }
 
     @NonNull
@@ -153,5 +161,13 @@ public class SnowplowAnalyticsService {
         data.put(CONTEXT_ATTR_SCORING_URI, event.getSnowPlowContentScoringUri().toString());
 
         return new SelfDescribingJson(CONTEXT_SCHEMA_SCORING, data);
+    }
+
+    private void populateSubject(@NonNull final Subject subject, @NonNull final AnalyticsBaseEvent event) {
+        subject.getSubject().put("url", event.getSnowPlowContentScoringUri().toString());
+    }
+
+    private void resetSubject(@NonNull final Subject subject) {
+        subject.getSubject().remove("url");
     }
 }
