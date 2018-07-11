@@ -225,11 +225,8 @@ abstract class Base {
             if (model == null) {
                 markHidden();
             }
-            final T old = mModel;
             mModel = model;
-            if (old != mModel) {
-                onBind();
-            }
+            onBind();
         }
 
         public final void markVisible() {
