@@ -143,11 +143,7 @@ public final class Input extends Content {
     @WorkerThread
     private Input parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_INPUT);
-
-        mType = Type.parse(parser.getAttributeValue(null, XML_TYPE), mType);
-        mName = parser.getAttributeValue(null, XML_NAME);
-        mValue = parser.getAttributeValue(null, XML_VALUE);
-        mRequired = parseBoolean(parser.getAttributeValue(null, XML_REQUIRED), mRequired);
+        parseAttrs(parser);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -174,6 +170,15 @@ public final class Input extends Content {
         }
 
         return this;
+    }
+
+    @Override
+    void parseAttrs(@NonNull final XmlPullParser parser) {
+        super.parseAttrs(parser);
+        mType = Type.parse(parser.getAttributeValue(null, XML_TYPE), mType);
+        mName = parser.getAttributeValue(null, XML_NAME);
+        mValue = parser.getAttributeValue(null, XML_VALUE);
+        mRequired = parseBoolean(parser.getAttributeValue(null, XML_REQUIRED), mRequired);
     }
 
     @NonNull

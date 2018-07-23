@@ -42,6 +42,7 @@ public final class Paragraph extends Content implements Parent {
     @NonNull
     private Paragraph parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_PARAGRAPH);
+        parseAttrs(parser);
 
         // process any child elements
         final ImmutableList.Builder<Content> contentList = ImmutableList.builder();

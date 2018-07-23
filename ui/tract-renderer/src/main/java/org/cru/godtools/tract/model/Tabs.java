@@ -50,6 +50,7 @@ final class Tabs extends Content {
     @NonNull
     private Tabs parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_TABS);
+        parseAttrs(parser);
 
         // process any child elements
         final List<Tab> tabs = new ArrayList<>();

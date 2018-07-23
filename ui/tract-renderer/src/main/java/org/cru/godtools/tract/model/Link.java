@@ -53,8 +53,7 @@ public final class Link extends Content {
     @WorkerThread
     private Link parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_LINK);
-
-        mEvents = parseEvents(parser, XML_EVENTS);
+        parseAttrs(parser);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -85,6 +84,12 @@ public final class Link extends Content {
         }
 
         return this;
+    }
+
+    @Override
+    void parseAttrs(@NonNull final XmlPullParser parser) {
+        super.parseAttrs(parser);
+        mEvents = parseEvents(parser, XML_EVENTS);
     }
 
     @NonNull

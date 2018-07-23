@@ -44,6 +44,7 @@ public final class Form extends Content implements Parent {
     @NonNull
     private Form parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_FORM);
+        parseAttrs(parser);
 
         // process any child elements
         final ImmutableList.Builder<Content> contentList = ImmutableList.builder();

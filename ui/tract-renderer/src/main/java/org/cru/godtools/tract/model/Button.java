@@ -117,11 +117,7 @@ public final class Button extends Content implements Styles {
     @WorkerThread
     private Button parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_BUTTON);
-
-        mColor = Utils.parseColor(parser, XML_COLOR, mColor);
-        mType = Type.parse(parser.getAttributeValue(null, XML_TYPE), mType);
-        mEvents = parseEvents(parser, XML_EVENTS);
-        mUrl = Utils.parseUrl(parser, XML_URL, null);
+        parseAttrs(parser);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -151,6 +147,15 @@ public final class Button extends Content implements Styles {
             XmlPullParserUtils.skipTag(parser);
         }
         return this;
+    }
+
+    @Override
+    void parseAttrs(@NonNull final XmlPullParser parser) {
+        super.parseAttrs(parser);
+        mColor = Utils.parseColor(parser, XML_COLOR, mColor);
+        mType = Type.parse(parser.getAttributeValue(null, XML_TYPE), mType);
+        mEvents = parseEvents(parser, XML_EVENTS);
+        mUrl = Utils.parseUrl(parser, XML_URL, null);
     }
 
     @NonNull
