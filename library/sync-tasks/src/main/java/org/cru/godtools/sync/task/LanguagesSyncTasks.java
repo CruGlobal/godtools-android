@@ -7,11 +7,13 @@ import android.support.v4.util.SimpleArrayMap;
 
 import com.annimon.stream.Collectors;
 
+import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.db.Transaction;
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams;
 import org.cru.godtools.model.Language;
+import org.keynote.godtools.android.db.Contract.LanguageTable;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -61,6 +63,8 @@ public final class LanguagesSyncTasks extends BaseDataSyncTasks {
                                 Timber.tag("LanguagesSyncTask")
                                         .d(new RuntimeException("Duplicate Language sync error"),
                                            "Duplicate languages detected: %s %s", l1, l2);
+                                mDao.delete(Language.class,
+                                            LanguageTable.FIELD_ID.in(Expression.constants(l1.getId(), l2.getId())));
                                 return l1;
                             }));
                     storeLanguages(events, json.getData(), existing);
