@@ -46,4 +46,13 @@ public class Language extends Base {
     public String getDisplayName() {
         return mCode != null ? mCode.getDisplayName() : "";
     }
+
+    @Override
+    public String toString() {
+        // XXX: output the language id and code for debugging purposes
+        return "Language{" +
+                "id=" + getId() +
+                ", code=" + mCode +
+                '}';
+    }
 }
