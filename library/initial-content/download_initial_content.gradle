@@ -11,6 +11,10 @@ apply plugin: 'de.undercouch.download'
 android.libraryVariants.all { variant ->
     def mobileContentApi = variant.flavorName.contains("stage") ? uris.mobileContentApi.stage : uris.mobileContentApi.production
 
+    // include the list of downloaded languages as a BuildConfig constant
+    variant.buildConfigField('java.util.Set<String>', 'BUNDLED_LANGUAGES', 'com.google.common.collect.ImmutableSet.of('
+            + languagesToDownload.collect{ "\"$it\"" }.join(',') + ')')
+
     // XXX: we hardcode the generated shader assets directory because I couldn't find a public API to get/add a generated output dir. -DMF
     def assetGenDir = new File(project.buildDir, "generated/assets/shaders/" + variant.dirName)
     def assetGenTask = project.tasks.getByName("generate${variant.name.capitalize()}Assets")
