@@ -168,13 +168,17 @@ public final class Text extends Content {
     @WorkerThread
     private Text parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_TEXT);
+        parseAttrs(parser);
+        mText = XmlPullParserUtils.safeNextText(parser);
+        return this;
+    }
 
+    @Override
+    void parseAttrs(@NonNull final XmlPullParser parser) {
+        super.parseAttrs(parser);
         mTextAlign = Align.parse(parser.getAttributeValue(null, XML_TEXT_ALIGN), mTextAlign);
         mTextColor = parseColor(parser, XML_TEXT_COLOR, mTextColor);
         mTextScale = NumberUtils.toDouble(parser.getAttributeValue(null, XML_TEXT_SCALE), mTextScale);
-
-        mText = XmlPullParserUtils.safeNextText(parser);
-        return this;
     }
 
     @ColorInt

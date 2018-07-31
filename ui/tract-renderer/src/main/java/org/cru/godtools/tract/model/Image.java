@@ -44,11 +44,15 @@ public final class Image extends Content {
     @WorkerThread
     private Image parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_IMAGE);
-
-        mResource = parser.getAttributeValue(null, XML_RESOURCE);
-
+        parseAttrs(parser);
         XmlPullParserUtils.skipTag(parser);
         return this;
+    }
+
+    @Override
+    void parseAttrs(@NonNull final XmlPullParser parser) {
+        super.parseAttrs(parser);
+        mResource = parser.getAttributeValue(null, XML_RESOURCE);
     }
 
     @NonNull

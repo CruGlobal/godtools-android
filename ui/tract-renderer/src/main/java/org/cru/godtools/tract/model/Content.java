@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.model;
 
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.model.Button.XML_BUTTON;
@@ -23,8 +25,20 @@ import static org.cru.godtools.tract.model.Tabs.XML_TABS;
 import static org.cru.godtools.tract.model.Text.XML_TEXT;
 
 public abstract class Content extends Base {
+    private static final String XML_RESTRICT_TO = "restrictTo";
+
+    @NonNull
+    private Set<DeviceType> mRestrictTo = DeviceType.ALL;
+
     Content(@NonNull final Base parent) {
         super(parent);
+    }
+
+    /**
+     * @return true if this content element should be completely ignored.
+     */
+    boolean isIgnored() {
+        return !mRestrictTo.contains(DeviceType.MOBILE);
     }
 
     @Nullable
@@ -55,6 +69,11 @@ public abstract class Content extends Base {
         }
 
         return null;
+    }
+
+    @CallSuper
+    void parseAttrs(@NonNull final XmlPullParser parser) {
+        mRestrictTo = DeviceType.parse(parser.getAttributeValue(null, XML_RESTRICT_TO), mRestrictTo);
     }
 
     @NonNull

@@ -96,7 +96,9 @@ public final class Tab extends Base implements Parent {
             // try parsing this child element as a content node
             final Content content = Content.fromXml(this, parser);
             if (content != null) {
-                contentList.add(content);
+                if (!content.isIgnored()) {
+                    contentList.add(content);
+                }
                 continue;
             }
 
