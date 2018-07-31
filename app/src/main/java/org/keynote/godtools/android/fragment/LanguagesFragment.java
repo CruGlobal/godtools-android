@@ -168,7 +168,7 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         public Loader<List<Language>> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_LANGUAGES:
-                    return new LanguagesLoader(getContext());
+                    return new LanguagesLoader(requireContext());
                 default:
                     return null;
             }
