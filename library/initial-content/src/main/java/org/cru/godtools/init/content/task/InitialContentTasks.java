@@ -10,6 +10,7 @@ import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Closer;
 
+import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.db.Transaction;
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter;
@@ -19,6 +20,7 @@ import org.ccci.gto.android.common.util.IOUtils;
 import org.ccci.gto.android.common.util.LocaleUtils;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
+import org.cru.godtools.init.content.BuildConfig;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
@@ -155,6 +157,11 @@ public class InitialContentTasks implements Runnable {
 
         // always add english
         mDownloadManager.addLanguage(Locale.ENGLISH);
+
+        // add any bundled languages
+        for (final String code : BuildConfig.BUNDLED_LANGUAGES) {
+            mDownloadManager.addLanguage(LocaleCompat.forLanguageTag(code));
+        }
     }
 
     private void loadBundledTools() {
