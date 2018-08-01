@@ -64,20 +64,16 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
     }
 
     /* BEGIN lifecycle */
-    //region BEGIN lifecycle
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        // Allow Fragment to have its own menu
+        setHasOptionsMenu(true);
         final Bundle args = getArguments();
         if (args != null) {
             mPrimary = args.getBoolean(EXTRA_PRIMARY, mPrimary);
         }
-
-        // Allow Fragment to have its own menu
-        setHasOptionsMenu(true);
-
         startLoaders();
     }
 
@@ -133,19 +129,20 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         super.onDestroyView();
     }
 
-    //region Language Search
-
+    //region Initialize Menu
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.fragment_language_search, menu);
+        setSearchView(menu);
 
+    }
+
+    private void setSearchView(Menu menu) {
         // Configuring the SearchView
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_language_search).getActionView();
         searchView.setQueryHint(getString(R.string.label_language_search));
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
 
         // Will listen for search event and trigger
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -164,9 +161,7 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
     }
 
     private void updateLanguageWithSearch(String query) {
-
         List<Language> queryList = new ArrayList<>();
-
         // Iterate through list and create new list for adapter
         if (mLanguages != null) {
             for(Language language: mLanguages){
@@ -176,7 +171,6 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
                 }
             }
         }
-
         if (mLanguagesAdapter != null) {
             mLanguagesAdapter.setLanguages(
                     sortLanguages(queryList)
@@ -184,10 +178,8 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         }
     }
 
-
     //endregion
 
-    //endregion
     /* END lifecycle */
 
     private void startLoaders() {

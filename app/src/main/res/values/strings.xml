@@ -58,7 +58,7 @@
     <string name="text_language_parallel_description">Share GodTools with someone in their native language.</string>
     <string name="text_language_warning">Not every tool is available in every language.</string>
     <string name="label_language_none">None</string>
-    <string name="label_language_search">Enter Parallel Language</string>
+    <string name="label_language_search">Filter Languages</string>
 
     <!-- Sharing -->
     <eat-comment />
