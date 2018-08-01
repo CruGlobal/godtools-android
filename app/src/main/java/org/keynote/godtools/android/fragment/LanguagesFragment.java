@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.fragment;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -10,7 +11,10 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,6 +28,7 @@ import org.cru.godtools.model.Language;
 import org.cru.godtools.sync.GodToolsSyncService;
 import org.keynote.godtools.android.content.LanguagesLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -59,6 +64,7 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
     }
 
     /* BEGIN lifecycle */
+    //region BEGIN lifecycle
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -68,6 +74,9 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         if (args != null) {
             mPrimary = args.getBoolean(EXTRA_PRIMARY, mPrimary);
         }
+
+        // Allow Fragment to have its own menu
+        setHasOptionsMenu(true);
 
         startLoaders();
     }
@@ -98,12 +107,16 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         if (languages == null) {
             mLanguages = null;
         } else {
-            mLanguages = Stream.of(languages)
-                    .sorted((l1, l2) -> l1.getDisplayName().compareToIgnoreCase(l2.getDisplayName()))
-                    .toList();
+            mLanguages = sortLanguages(languages);
         }
 
         updateLanguagesList();
+    }
+
+    private List<Language> sortLanguages(@NonNull List<Language> languages) {
+        return Stream.of(languages)
+                .sorted((l1, l2) -> l1.getDisplayName().compareToIgnoreCase(l2.getDisplayName()))
+                .toList();
     }
 
     @Override
@@ -120,6 +133,61 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         super.onDestroyView();
     }
 
+    //region Language Search
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.fragment_language_search, menu);
+
+        // Configuring the SearchView
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_language_search).getActionView();
+        searchView.setQueryHint(getString(R.string.label_language_search));
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+
+        // Will listen for search event and trigger
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                updateLanguageWithSearch(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                updateLanguageWithSearch(newText);
+                return false;
+            }
+        });
+    }
+
+    private void updateLanguageWithSearch(String query) {
+
+        List<Language> queryList = new ArrayList<>();
+
+        // Iterate through list and create new list for adapter
+        if (mLanguages != null) {
+            for(Language language: mLanguages){
+
+                if (language.getDisplayName().toLowerCase().contains(query.toLowerCase())){
+                    queryList.add(language);
+                }
+            }
+        }
+
+        if (mLanguagesAdapter != null) {
+            mLanguagesAdapter.setLanguages(
+                    sortLanguages(queryList)
+            );
+        }
+    }
+
+
+    //endregion
+
+    //endregion
     /* END lifecycle */
 
     private void startLoaders() {
