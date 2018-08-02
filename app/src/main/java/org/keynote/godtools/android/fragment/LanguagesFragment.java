@@ -11,7 +11,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,7 +29,6 @@ import org.cru.godtools.model.Language;
 import org.cru.godtools.sync.GodToolsSyncService;
 import org.keynote.godtools.android.content.LanguagesLoader;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -85,10 +84,8 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
             mPrimary = args.getBoolean(EXTRA_PRIMARY, mPrimary);
         }
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(KEY_SEARCH))
-                mQuery = savedInstanceState.getString(KEY_SEARCH);
-            if (savedInstanceState.containsKey(KEY_IS_SEARCH_OPEN))
-                mIsSearchViewOpen = savedInstanceState.getBoolean(KEY_IS_SEARCH_OPEN);
+            mQuery = savedInstanceState.getString(KEY_SEARCH, "");
+            mIsSearchViewOpen = savedInstanceState.getBoolean(KEY_IS_SEARCH_OPEN, false);
         }
         startLoaders();
     }
@@ -119,16 +116,11 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         if (languages == null) {
             mLanguages = null;
         } else {
-            mLanguages = sortLanguages(languages);
+            mLanguages = Stream.of(languages)
+                    .sorted((l1, l2) -> l1.getDisplayName().compareToIgnoreCase(l2.getDisplayName()))
+                    .toList();
         }
-
         updateLanguagesList();
-    }
-
-    private List<Language> sortLanguages(@NonNull List<Language> languages) {
-        return Stream.of(languages)
-                .sorted((l1, l2) -> l1.getDisplayName().compareToIgnoreCase(l2.getDisplayName()))
-                .toList();
     }
 
     @Override
@@ -169,7 +161,7 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         mSearchView.setQueryHint(getString(R.string.label_language_search));
         if (mIsSearchViewOpen) {
             mSearchItem.expandActionView();
-            if (mQuery != null) {
+            if (!TextUtils.isEmpty(mQuery)) {
                 mSearchView.setQuery(mQuery, false);
             }
         }
@@ -192,24 +184,10 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         });
     }
 
-    private List<Language> updateLanguageWithSearch(String query) {
-        List<Language> queryList = new ArrayList<>();
-        // Iterate through list and create new list for adapter
-        if (mLanguages != null) {
-            for (Language language : mLanguages) {
-
-                if (language.getDisplayName().toLowerCase().contains(query.toLowerCase())) {
-                    queryList.add(language);
-                }
-            }
-        }
-        return queryList;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d("TAG", "onOptionsItemSelected() called with: item = [" + item + "]");
-        return super.onOptionsItemSelected(item);
+    private List<Language> updateLanguageWithSearch(final String query) {
+        return Stream.of(mLanguages)
+                .filter(l -> l.getDisplayName().toLowerCase().contains(query.toLowerCase()))
+                .toList();
     }
 
     //endregion
@@ -251,11 +229,11 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
 
     // This will check to see if the language needs to be filtered by search
     private List<Language> filterLang(List<Language> languages) {
-       if (mQuery == null || mQuery.isEmpty()) {
-           return languages;
-       } else {
-           return updateLanguageWithSearch(mQuery);
-       }
+        if (TextUtils.isEmpty(mQuery)) {
+            return languages;
+        } else {
+            return updateLanguageWithSearch(mQuery);
+        }
 
     }
 
