@@ -53,7 +53,7 @@
         <activity
             android:name=".activity.AboutActivity"
             android:label="@string/title_about"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
             android:screenOrientation="@integer/default_screen_orientation">
             <meta-data
@@ -72,7 +72,7 @@
 
         <activity
             android:name=".activity.LanguageSettingsActivity"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:label="@string/title_language_settings"
             android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
             android:screenOrientation="@integer/default_screen_orientation">
