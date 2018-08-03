@@ -29,6 +29,7 @@ import org.cru.godtools.model.Language;
 import org.cru.godtools.sync.GodToolsSyncService;
 import org.keynote.godtools.android.content.LanguagesLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -185,9 +186,13 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
     }
 
     private List<Language> updateLanguageWithSearch(final String query) {
-        return Stream.of(mLanguages)
-                .filter(l -> l.getDisplayName().toLowerCase().contains(query.toLowerCase()))
-                .toList();
+        if (mLanguages != null) {
+            return Stream.of(mLanguages)
+                    .filter(l -> l.getDisplayName().toLowerCase().contains(query.toLowerCase()))
+                    .toList();
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     //endregion
