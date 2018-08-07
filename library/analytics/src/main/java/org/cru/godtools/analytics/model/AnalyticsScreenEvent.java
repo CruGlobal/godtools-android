@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import java.util.Locale;
 
 public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
-    private static final String SNOWPLOW_CONTENT_SCORING_URI_PATH_SCREEN = "screen_view";
+    private static final String SNOWPLOW_CONTENT_SCORING_URI_PATH_SCREEN = "screenview";
 
     /* Screen event names */
     public static final String SCREEN_HOME = "Home";
