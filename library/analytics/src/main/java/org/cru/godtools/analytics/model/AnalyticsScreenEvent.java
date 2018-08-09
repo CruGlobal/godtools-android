@@ -45,7 +45,7 @@ public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
     @Override
     public Uri.Builder getSnowPlowContentScoringUri() {
         return super.getSnowPlowContentScoringUri()
-                .appendPath(SNOWPLOW_CONTENT_SCORING_URI_PATH_SCREEN)
+                .authority(SNOWPLOW_CONTENT_SCORING_URI_PATH_SCREEN)
                 .appendPath(getScreen());
     }
 }

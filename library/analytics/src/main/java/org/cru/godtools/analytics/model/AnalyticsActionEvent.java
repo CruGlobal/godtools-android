@@ -61,7 +61,7 @@ public class AnalyticsActionEvent extends AnalyticsBaseEvent {
     @Override
     public Uri.Builder getSnowPlowContentScoringUri() {
         return super.getSnowPlowContentScoringUri()
-                .appendPath(SNOWPLOW_CONTENT_SCORING_URI_PATH_ACTION)
+                .authority(SNOWPLOW_CONTENT_SCORING_URI_PATH_ACTION)
                 .appendPath(getCategory())
                 .appendPath(getAction());
     }
