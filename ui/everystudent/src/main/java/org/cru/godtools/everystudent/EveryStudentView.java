@@ -51,7 +51,10 @@ public class EveryStudentView extends Activity {
         SharedPreferences settings = getSharedPreferences(Constants.PREFS_SETTINGS, 0);
         if (settings.getBoolean("wakelock", true)) {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");
+            // Lint Check requires a prefix. I will use using gdt: - Gyasi Story
+            if (pm != null) {
+                wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "gdt:DoNotDimScreen");
+            }
         }
 
         setContentView(R.layout.everystudent_view);

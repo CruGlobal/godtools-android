@@ -30,7 +30,6 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.ui.activity.BaseDesignActivity;
 import org.cru.godtools.base.ui.util.WebUrlLauncher;
-import org.cru.godtools.tract.model.Resource;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.keynote.godtools.android.activity.MainActivity;
@@ -254,7 +253,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
      */
     private void updateNavigationDrawerMenu() {
         if (!ConfigurationCompat.getLocales(Resources.getSystem().getConfiguration())
-                .toLanguageTags().startsWith("en")){  // For non English
+                .toLanguageTags().startsWith("en")) {  // For non English
             if (mLoginItem != null) {
                 mLoginItem.setVisible(false);
             }
@@ -265,7 +264,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
                 mLogoutItem.setVisible(false);
             }
 
-        }else { // For English 
+        } else { // For English
             if (mLoginItem != null) {
                 mLoginItem.setVisible(mTheKey.getDefaultSessionGuid() == null);
             }
