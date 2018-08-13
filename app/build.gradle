@@ -169,7 +169,7 @@ dependencies {
 
 // make crashlytics upload task dependent on assembling the apk
 afterEvaluate {
-//    crashlyticsUploadDistributionProductionDebug.dependsOn assembleProductionDebug
+    crashlyticsUploadDistributionProductionDebug.dependsOn assembleProductionDebug
 }
 
 def generateCrashlyticsBetaReleaseNotes(size = 10) {
