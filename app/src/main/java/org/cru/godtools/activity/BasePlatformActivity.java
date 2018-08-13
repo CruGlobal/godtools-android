@@ -4,6 +4,7 @@ import android.arch.lifecycle.Lifecycle;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -12,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.os.ConfigurationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -28,6 +30,7 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.ui.activity.BaseDesignActivity;
 import org.cru.godtools.base.ui.util.WebUrlLauncher;
+import org.cru.godtools.tract.model.Resource;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.keynote.godtools.android.activity.MainActivity;
@@ -242,15 +245,36 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
         }
     }
 
+    /**
+     * This method is used to update the Navigation Draws Login settings.
+     * It will only show log in information if the device is set to english
+     * and display log in links based on users status.
+     * Updated by:
+     * @author Gyasi Story
+     */
     private void updateNavigationDrawerMenu() {
-        if (mLoginItem != null) {
-            mLoginItem.setVisible(mTheKey.getDefaultSessionGuid() == null);
-        }
-        if (mSignupItem != null) {
-            mSignupItem.setVisible(mTheKey.getDefaultSessionGuid() == null);
-        }
-        if (mLogoutItem != null) {
-            mLogoutItem.setVisible(mTheKey.getDefaultSessionGuid() != null);
+        if (!ConfigurationCompat.getLocales(Resources.getSystem().getConfiguration())
+                .toLanguageTags().startsWith("en")){  // For non English
+            if (mLoginItem != null) {
+                mLoginItem.setVisible(false);
+            }
+            if (mSignupItem != null) {
+                mSignupItem.setVisible(false);
+            }
+            if (mLogoutItem != null) {
+                mLogoutItem.setVisible(false);
+            }
+
+        }else { // For English 
+            if (mLoginItem != null) {
+                mLoginItem.setVisible(mTheKey.getDefaultSessionGuid() == null);
+            }
+            if (mSignupItem != null) {
+                mSignupItem.setVisible(mTheKey.getDefaultSessionGuid() == null);
+            }
+            if (mLogoutItem != null) {
+                mLogoutItem.setVisible(mTheKey.getDefaultSessionGuid() != null);
+            }
         }
     }
 
