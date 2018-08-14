@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.os.ConfigurationCompat;
+import android.support.v4.os.LocaleListCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -129,9 +130,11 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
         updateNavigationDrawerMenu();
     }
 
-    protected void onUpdatePrimaryLanguage() {}
+    protected void onUpdatePrimaryLanguage() {
+    }
 
-    protected void onUpdateParallelLanguage() {}
+    protected void onUpdateParallelLanguage() {
+    }
 
     @Override
     @CallSuper
@@ -248,12 +251,10 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
      * This method is used to update the Navigation Draws Login settings.
      * It will only show log in information if the device is set to english
      * and display log in links based on users status.
-     * Updated by:
-     * @author Gyasi Story
+     * Updated by:  Gyasi Story
      */
     private void updateNavigationDrawerMenu() {
-        if (!ConfigurationCompat.getLocales(Resources.getSystem().getConfiguration())
-                .toLanguageTags().startsWith("en")) {  // For non English
+        if (!containsLoginLanguage()) {  // For non English
             if (mLoginItem != null) {
                 mLoginItem.setVisible(false);
             }
@@ -265,16 +266,46 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
             }
 
         } else { // For English
+            Boolean isNotLoggedIn = mTheKey.getDefaultSessionGuid() == null;
             if (mLoginItem != null) {
-                mLoginItem.setVisible(mTheKey.getDefaultSessionGuid() == null);
+                mLoginItem.setVisible(isNotLoggedIn);
             }
             if (mSignupItem != null) {
-                mSignupItem.setVisible(mTheKey.getDefaultSessionGuid() == null);
+                mSignupItem.setVisible(isNotLoggedIn);
             }
             if (mLogoutItem != null) {
-                mLogoutItem.setVisible(mTheKey.getDefaultSessionGuid() != null);
+                mLogoutItem.setVisible(!isNotLoggedIn);
             }
         }
+    }
+
+    /**
+     * This method will determine if the application contains
+     * a supported language for Login Notifications. As we
+     * get more support for more languages you can add them to {@code languages}.
+     *
+     * @return Boolean value if login Language
+     *
+     * Updated by: Gyasi Story
+     */
+    private boolean containsLoginLanguage() {
+        // List of supported Login Languages
+        String[] languages = {
+                Locale.ENGLISH.getLanguage()
+        };
+
+        LocaleListCompat localeListCompat = ConfigurationCompat
+                .getLocales(Resources.getSystem().getConfiguration());
+        for (int i = 0; i < localeListCompat.size(); i++) {
+            for (String lang : languages) {
+                if (localeListCompat.get(i).getLanguage().equals(lang)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+
     }
 
     protected final void closeNavigationDrawer() {
@@ -325,7 +356,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appId)));
         } catch (ActivityNotFoundException e) {
             startActivity(new Intent(Intent.ACTION_VIEW,
-                                     Uri.parse("https://play.google.com/store/apps/details?id=" + appId)));
+                    Uri.parse("https://play.google.com/store/apps/details?id=" + appId)));
         }
     }
 
