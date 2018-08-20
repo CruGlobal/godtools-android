@@ -352,7 +352,7 @@ public final class Page extends Base implements Styles, Parent {
         mModals = ImmutableList.copyOf(modals);
     }
 
-    public static class PageViewHolder extends Parent.ParentViewHolder<Page>
+    public static class PageViewHolder extends ParentViewHolder<Page>
             implements CardViewHolder.Callbacks, PageContentLayout.OnActiveCardListener,
             CallToActionViewHolder.Callbacks {
         public interface Callbacks {

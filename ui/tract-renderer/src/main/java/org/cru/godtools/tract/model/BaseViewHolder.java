@@ -74,7 +74,7 @@ abstract class BaseViewHolder<T extends Base> {
         return null;
     }
 
-    /* BEGIN lifecycle */
+    // region Lifecycle Events
 
     @CallSuper
     void onBind() {
@@ -94,7 +94,7 @@ abstract class BaseViewHolder<T extends Base> {
     @CallSuper
     void onHidden() {}
 
-    /* END lifecycle */
+    // endregion Lifecycle Events
 
     @Nullable
     public final T getModel() {

@@ -105,7 +105,7 @@ public final class Hero extends Base implements Parent, Styles {
         return this;
     }
 
-    public static class HeroViewHolder extends Parent.ParentViewHolder<Hero> {
+    public static class HeroViewHolder extends ParentViewHolder<Hero> {
         @BindView(R2.id.hero_heading)
         TextView mHeading;
 
