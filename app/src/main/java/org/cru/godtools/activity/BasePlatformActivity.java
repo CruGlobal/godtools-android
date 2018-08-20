@@ -68,6 +68,11 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
 
     private final ChangeListener mSettingsChangeListener = new ChangeListener();
 
+    // List of supported Login Languages
+    private String[] mLoginLanguages = {
+            Locale.ENGLISH.getLanguage()
+    };
+
     // Navigation Drawer
     @Nullable
     @BindView(R.id.drawer_layout)
@@ -289,21 +294,14 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
      * Updated by: Gyasi Story
      */
     private boolean containsLoginLanguage() {
-        // List of supported Login Languages
-        String[] languages = {
-                Locale.ENGLISH.getLanguage()
-        };
-
         LocaleListCompat localeListCompat = ConfigurationCompat
                 .getLocales(Resources.getSystem().getConfiguration());
-        for (int i = 0; i < localeListCompat.size(); i++) {
-            for (String lang : languages) {
-                if (localeListCompat.get(i).getLanguage().equals(lang)) {
+        String matchLanguage = localeListCompat.getFirstMatch(mLoginLanguages).getLanguage();
+            for (String lang : mLoginLanguages) {
+                if (matchLanguage.equals(lang)) {
                     return true;
                 }
             }
-        }
-
         return false;
 
     }
