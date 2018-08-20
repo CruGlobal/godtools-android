@@ -6,15 +6,14 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType.FILL_X;
-import static org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType.FILL_Y;
+import static org.cru.godtools.tract.model.ImageScaleType.FILL_X;
+import static org.cru.godtools.tract.model.ImageScaleType.FILL_Y;
 
 final class Utils {
     private static final Pattern COLOR_VALUE =
@@ -59,14 +58,14 @@ final class Utils {
     }
 
     @Nullable
-    static ScaleType parseScaleType(@NonNull final XmlPullParser parser, @NonNull final String attribute,
-                                    @Nullable final ScaleType defValue) {
+    static ImageScaleType parseScaleType(@NonNull final XmlPullParser parser, @NonNull final String attribute,
+                                         @Nullable final ImageScaleType defValue) {
         return parseScaleType(parser.getAttributeValue(null, attribute), defValue);
     }
 
     @Nullable
     @Contract("_, !null -> !null")
-    static ScaleType parseScaleType(@Nullable final String value, @Nullable final ScaleType defValue) {
+    static ImageScaleType parseScaleType(@Nullable final String value, @Nullable final ImageScaleType defValue) {
         if (value != null) {
             try {
                 switch (value) {
@@ -75,7 +74,7 @@ final class Utils {
                     case "fill-x":
                         return FILL_X;
                     default:
-                        return ScaleType.valueOf(value.toUpperCase());
+                        return ImageScaleType.valueOf(value.toUpperCase());
                 }
             } catch (final Exception ignored) {
             }

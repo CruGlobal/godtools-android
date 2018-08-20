@@ -19,7 +19,6 @@ import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
 import org.cru.godtools.tract.model.Page.PageViewHolder;
-import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.cru.godtools.tract.widget.TractPicassoImageView;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -44,7 +43,7 @@ public final class Card extends Base implements Styles, Parent {
     private static final String XML_LABEL = "label";
     private static final String XML_HIDDEN = "hidden";
 
-    private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL_X;
+    private static final ImageScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL_X;
     private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
 
     private final int mPosition;
@@ -69,7 +68,7 @@ public final class Card extends Base implements Styles, Parent {
     private String mBackgroundImage;
     private int mBackgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     @NonNull
-    private ScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
+    private ImageScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
 
     @Nullable
     Text mLabel;
@@ -130,7 +129,7 @@ public final class Card extends Base implements Styles, Parent {
         return card != null ? card.mBackgroundImageGravity : DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     }
 
-    static ScaleType getBackgroundImageScaleType(@Nullable final Card card) {
+    static ImageScaleType getBackgroundImageScaleType(@Nullable final Card card) {
         return card != null ? card.mBackgroundImageScaleType : DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
     }
 

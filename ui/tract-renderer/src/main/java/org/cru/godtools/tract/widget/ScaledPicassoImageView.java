@@ -13,22 +13,19 @@ import org.ccci.gto.android.common.base.model.Dimension;
 import org.ccci.gto.android.common.picasso.transformation.ScaleTransformation;
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.cru.godtools.tract.R;
+import org.cru.godtools.tract.model.ImageScaleType;
 import org.cru.godtools.tract.picasso.transformation.ScaledCropTransformation;
 
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal;
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical;
 
-import static org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType.FILL_X;
-import static org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType.FILL_Y;
+import static org.cru.godtools.tract.model.ImageScaleType.FILL_X;
+import static org.cru.godtools.tract.model.ImageScaleType.FILL_Y;
 
 public interface ScaledPicassoImageView extends PicassoImageView {
-    enum ScaleType {
-        FIT, FILL, FILL_X, FILL_Y
-    }
-
     class ScaleHelper extends Helper {
         @NonNull
-        private ScaleType mScaleType = ScaleType.FIT;
+        private ImageScaleType mScaleType = ImageScaleType.FIT;
         @NonNull
         private GravityHorizontal mGravityHorizontal = GravityHorizontal.CENTER;
         @NonNull
@@ -45,13 +42,14 @@ public interface ScaledPicassoImageView extends PicassoImageView {
             final TypedArray a =
                     context.obtainStyledAttributes(attrs, R.styleable.ScaledPicassoImageView, defStyleAttr,
                                                    defStyleRes);
-            mScaleType =
-                    ScaleType.values()[a.getInt(R.styleable.ScaledPicassoImageView_scaleType, mScaleType.ordinal())];
+            mScaleType = ImageScaleType.values()[
+                    a.getInt(R.styleable.ScaledPicassoImageView_scaleType, mScaleType.ordinal())
+                    ];
             a.recycle();
         }
 
-        public final void setScaleType(@NonNull final ScaleType type) {
-            final ScaleType old = mScaleType;
+        public final void setScaleType(@NonNull final ImageScaleType type) {
+            final ImageScaleType old = mScaleType;
             mScaleType = type;
             if (old != mScaleType) {
                 triggerUpdate();
@@ -104,7 +102,7 @@ public interface ScaledPicassoImageView extends PicassoImageView {
         }
     }
 
-    void setScaleType(@NonNull ScaleType type);
+    void setScaleType(@NonNull ImageScaleType type);
 
     void setGravityHorizontal(@NonNull GravityHorizontal gravity);
 

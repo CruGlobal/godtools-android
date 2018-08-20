@@ -27,7 +27,6 @@ import org.cru.godtools.tract.model.Header.HeaderViewHolder;
 import org.cru.godtools.tract.model.Hero.HeroViewHolder;
 import org.cru.godtools.tract.widget.PageContentLayout;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
-import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -60,7 +59,7 @@ public final class Page extends Base implements Styles, Parent {
 
     @ColorInt
     private static final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
-    private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL_X;
+    private static final ImageScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL_X;
     private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
 
     private final int mPosition;
@@ -92,7 +91,7 @@ public final class Page extends Base implements Styles, Parent {
     private String mBackgroundImage;
     private int mBackgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     @NonNull
-    private ScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
+    private ImageScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
 
     @Nullable
     private Header mHeader;
@@ -180,7 +179,7 @@ public final class Page extends Base implements Styles, Parent {
     }
 
     @NonNull
-    static ScaleType getBackgroundImageScaleType(@Nullable final Page page) {
+    static ImageScaleType getBackgroundImageScaleType(@Nullable final Page page) {
         return page != null ? page.mBackgroundImageScaleType : DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
     }
 

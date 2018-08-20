@@ -29,7 +29,7 @@ public class ResourceViewUtils {
     }
 
     static void bindBackgroundImage(@NonNull final ScaledPicassoImageView image, @Nullable final Resource resource,
-                                    @NonNull final ScaledPicassoImageView.ScaleType scale, final int gravity) {
+                                    @NonNull final ImageScaleType scale, final int gravity) {
         image.toggleBatchUpdates(true);
 
         // set the background image visibility
