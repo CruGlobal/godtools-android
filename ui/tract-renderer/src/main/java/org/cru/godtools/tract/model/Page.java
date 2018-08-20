@@ -25,6 +25,7 @@ import org.cru.godtools.tract.model.CallToAction.CallToActionViewHolder;
 import org.cru.godtools.tract.model.Card.CardViewHolder;
 import org.cru.godtools.tract.model.Header.HeaderViewHolder;
 import org.cru.godtools.tract.model.Hero.HeroViewHolder;
+import org.cru.godtools.tract.viewmodel.ResourceViewUtils;
 import org.cru.godtools.tract.widget.PageContentLayout;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.xmlpull.v1.XmlPullParser;

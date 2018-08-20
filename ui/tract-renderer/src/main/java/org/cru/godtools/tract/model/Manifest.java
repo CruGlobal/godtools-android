@@ -214,15 +214,15 @@ public final class Manifest extends Base implements Styles {
         return manifest != null ? manifest.mBackgroundColor : DEFAULT_BACKGROUND_COLOR;
     }
 
-    static Resource getBackgroundImageResource(@Nullable final Manifest manifest) {
+    public static Resource getBackgroundImageResource(@Nullable final Manifest manifest) {
         return manifest != null ? manifest.getResource(manifest.mBackgroundImage) : null;
     }
 
-    static int getBackgroundImageGravity(@Nullable final Manifest manifest) {
+    public static int getBackgroundImageGravity(@Nullable final Manifest manifest) {
         return manifest != null ? manifest.mBackgroundImageGravity : DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     }
 
-    static ImageScaleType getBackgroundImageScaleType(@Nullable final Manifest manifest) {
+    public static ImageScaleType getBackgroundImageScaleType(@Nullable final Manifest manifest) {
         return manifest != null ? manifest.mBackgroundImageScaleType : DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
     }
 
