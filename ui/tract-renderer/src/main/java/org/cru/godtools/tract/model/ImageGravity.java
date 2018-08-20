@@ -3,12 +3,10 @@ package org.cru.godtools.tract.model;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.crashlytics.android.Crashlytics;
-
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlPullParser;
 
-import io.fabric.sdk.android.Fabric;
+import timber.log.Timber;
 
 final class ImageGravity {
     static final int START = 1 << 0;
@@ -83,9 +81,7 @@ final class ImageGravity {
                 }
                 return gravity;
             } catch (final IllegalArgumentException e) {
-                if (Fabric.isInitialized()) {
-                    Crashlytics.logException(e);
-                }
+                Timber.e(e, "error parsing ImageGravity");
             }
         }
         return defValue;
