@@ -13,7 +13,7 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.+'
+        classpath 'com.android.tools.build:gradle:3.1.4'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         //noinspection GradleDependency
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
@@ -46,9 +46,9 @@ ext.deps = [
         androidLifecycle     : '1.1.0',
         androidSupport       : '27.1.1',
         androidTestingSupport: '1.0.2',
-        butterknife          : '8.8.+',
+        butterknife          : '8.7.0',
         calligraphy          : '2.3.0',
-        crashlytics          : '2.9.+',
+        crashlytics          : '2.9.4',
         eventbus             : '3.0.0',
         eventbusAnnotations  : '3.0.1',
         evernoteAndroidJob   : '1.2.5',
