@@ -14,7 +14,6 @@ import com.google.common.collect.ImmutableList;
 
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.Base.BaseViewHolder;
 
 import java.util.List;
 
