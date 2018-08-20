@@ -290,18 +290,18 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
      * get more support for more languages you can add them to {@code languages}.
      *
      * @return Boolean value if login Language
-     *
+     * <p>
      * Updated by: Gyasi Story
      */
     private boolean containsLoginLanguage() {
         LocaleListCompat localeListCompat = ConfigurationCompat
                 .getLocales(Resources.getSystem().getConfiguration());
         String matchLanguage = localeListCompat.getFirstMatch(mLoginLanguages).getLanguage();
-            for (String lang : mLoginLanguages) {
-                if (matchLanguage.equals(lang)) {
-                    return true;
-                }
+        for (String lang : mLoginLanguages) {
+            if (matchLanguage.equals(lang)) {
+                return true;
             }
+        }
         return false;
 
     }
