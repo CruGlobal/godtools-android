@@ -73,7 +73,7 @@ public final class Image extends Content {
         @Override
         void onBind() {
             super.onBind();
-            Resource.bind(getResource(mModel), mImage);
+            ResourceViewUtils.bind(getResource(mModel), mImage);
         }
     }
 }

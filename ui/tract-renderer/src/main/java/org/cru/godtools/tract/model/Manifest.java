@@ -350,7 +350,8 @@ public final class Manifest extends Base implements Styles {
 
     public static void bindBackgroundImage(@Nullable final Manifest manifest,
                                            @NonNull final ScaledPicassoImageView view) {
-        Resource.bindBackgroundImage(view, getBackgroundImageResource(manifest), getBackgroundImageScaleType(manifest),
-                                     getBackgroundImageGravity(manifest));
+        ResourceViewUtils.bindBackgroundImage(view, getBackgroundImageResource(manifest),
+                                              getBackgroundImageScaleType(manifest),
+                                              getBackgroundImageGravity(manifest));
     }
 }

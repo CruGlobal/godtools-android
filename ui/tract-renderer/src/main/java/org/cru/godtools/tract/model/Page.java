@@ -541,8 +541,8 @@ public final class Page extends Base implements Styles, Parent {
 
         private void bindPage() {
             mPageView.setBackgroundColor(Page.getBackgroundColor(mModel));
-            Resource.bindBackgroundImage(mBackgroundImage, getBackgroundImageResource(mModel),
-                                         getBackgroundImageScaleType(mModel), getBackgroundImageGravity(mModel));
+            ResourceViewUtils.bindBackgroundImage(mBackgroundImage, getBackgroundImageResource(mModel),
+                                                  getBackgroundImageScaleType(mModel), getBackgroundImageGravity(mModel));
         }
 
         @UiThread

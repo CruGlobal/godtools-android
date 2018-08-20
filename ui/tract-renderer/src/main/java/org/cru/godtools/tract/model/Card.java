@@ -275,8 +275,9 @@ public final class Card extends Base implements Styles, Parent {
 
         private void bindBackground() {
             mCardView.setCardBackgroundColor(Card.getBackgroundColor(mModel));
-            Resource.bindBackgroundImage(mBackgroundView, getBackgroundImageResource(mModel),
-                                         getBackgroundImageScaleType(mModel), getBackgroundImageGravity(mModel));
+            ResourceViewUtils.bindBackgroundImage(mBackgroundView, getBackgroundImageResource(mModel),
+                                                  getBackgroundImageScaleType(mModel),
+                                                  getBackgroundImageGravity(mModel));
         }
 
         private void bindLabel() {
