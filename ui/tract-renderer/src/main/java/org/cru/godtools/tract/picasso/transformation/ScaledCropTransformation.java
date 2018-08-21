@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.squareup.picasso.Transformation;
 
-import org.cru.godtools.tract.model.ImageScaleType;
+import org.cru.godtools.xml.model.ImageScaleType;
 
 import jp.wasabeef.picasso.transformations.CropTransformation;
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal;

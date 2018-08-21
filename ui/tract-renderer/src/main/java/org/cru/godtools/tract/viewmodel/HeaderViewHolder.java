@@ -7,8 +7,8 @@ import android.widget.TextView;
 
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.Header;
-import org.cru.godtools.tract.model.Text;
+import org.cru.godtools.xml.model.Header;
+import org.cru.godtools.xml.model.Text;
 
 import butterknife.BindView;
 

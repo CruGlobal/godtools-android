@@ -6,8 +6,8 @@ import android.support.annotation.UiThread;
 import android.view.ViewGroup;
 
 import org.cru.godtools.tract.R;
-import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
-import org.cru.godtools.tract.model.Tab;
+import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
+import org.cru.godtools.xml.model.Tab;
 
 @UiThread
 public final class TabViewHolder extends ParentViewHolder<Tab> {

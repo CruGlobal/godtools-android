@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.Modal;
+import org.cru.godtools.xml.model.Modal;
 
 import butterknife.BindView;
 

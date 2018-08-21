@@ -15,9 +15,9 @@ import com.google.common.collect.ImmutableList;
 
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.Base;
-import org.cru.godtools.tract.model.Content;
-import org.cru.godtools.tract.model.Parent;
+import org.cru.godtools.xml.model.Base;
+import org.cru.godtools.xml.model.Content;
+import org.cru.godtools.xml.model.Parent;
 
 import java.util.List;
 

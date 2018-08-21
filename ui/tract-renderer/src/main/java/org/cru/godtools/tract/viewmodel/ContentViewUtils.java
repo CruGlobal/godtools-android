@@ -5,15 +5,15 @@ import android.support.annotation.Nullable;
 import android.view.ViewGroup;
 
 import org.ccci.gto.android.common.app.ApplicationUtils;
-import org.cru.godtools.tract.model.Button;
-import org.cru.godtools.tract.model.Content;
-import org.cru.godtools.tract.model.Form;
-import org.cru.godtools.tract.model.Image;
-import org.cru.godtools.tract.model.Input;
-import org.cru.godtools.tract.model.Link;
-import org.cru.godtools.tract.model.Paragraph;
-import org.cru.godtools.tract.model.Tabs;
-import org.cru.godtools.tract.model.Text;
+import org.cru.godtools.xml.model.Button;
+import org.cru.godtools.xml.model.Content;
+import org.cru.godtools.xml.model.Form;
+import org.cru.godtools.xml.model.Image;
+import org.cru.godtools.xml.model.Input;
+import org.cru.godtools.xml.model.Link;
+import org.cru.godtools.xml.model.Paragraph;
+import org.cru.godtools.xml.model.Tabs;
+import org.cru.godtools.xml.model.Text;
 
 import timber.log.Timber;
 

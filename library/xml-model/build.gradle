@@ -1,0 +1,15 @@
+dependencies {
+    implementation project(':library:base')
+    implementation project(':library:analytics')
+
+    implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+
+    implementation "com.annimon:stream:${deps.lightweightStream}"
+    implementation "com.google.guava:guava:${deps.guava}"
+
+    androidTestImplementation "com.android.support.test:runner:${deps.androidTestingSupport}"
+    androidTestImplementation "com.android.support.test:rules:${deps.androidTestingSupport}"
+    androidTestImplementation "org.hamcrest:hamcrest-library:${deps.hamcrest}"
+
+    testImplementation "junit:junit:${deps.junit}"
+}

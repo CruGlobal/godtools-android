@@ -7,7 +7,7 @@ import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.testing.CommonMocks;
 import org.cru.godtools.model.Translation;
-import org.cru.godtools.tract.model.Manifest;
+import org.cru.godtools.xml.model.Manifest;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

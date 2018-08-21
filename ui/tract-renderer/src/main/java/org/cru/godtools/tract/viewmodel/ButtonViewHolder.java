@@ -14,9 +14,9 @@ import org.cru.godtools.analytics.AnalyticsService;
 import org.cru.godtools.base.ui.util.WebUrlLauncher;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
-import org.cru.godtools.tract.model.Button;
-import org.cru.godtools.tract.model.Text;
+import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
+import org.cru.godtools.xml.model.Button;
+import org.cru.godtools.xml.model.Text;
 
 import butterknife.BindView;
 import butterknife.OnClick;

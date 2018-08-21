@@ -6,8 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.cru.godtools.base.ui.util.LocaleTypefaceUtils;
-import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
+import org.cru.godtools.xml.model.Manifest;
 
 public class ManifestViewUtils {
     @Nullable
