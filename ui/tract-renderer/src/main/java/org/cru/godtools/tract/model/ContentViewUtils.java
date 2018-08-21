@@ -18,7 +18,7 @@ public class ContentViewUtils {
         } else if (Form.class.equals(clazz)) {
             return new FormViewHolder(parent, parentViewHolder);
         } else if (Image.class.equals(clazz)) {
-            return new Image.ImageViewHolder(parent, parentViewHolder);
+            return new ImageViewHolder(parent, parentViewHolder);
         } else if (Input.class.equals(clazz)) {
             return new Input.InputViewHolder(parent, parentViewHolder);
         } else if (Link.class.equals(clazz)) {
