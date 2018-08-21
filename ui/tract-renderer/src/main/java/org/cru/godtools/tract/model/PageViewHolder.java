@@ -63,7 +63,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
     @NonNull
     private final HeaderViewHolder mHeaderViewHolder;
     @NonNull
-    private final Hero.HeroViewHolder mHeroViewHolder;
+    private final HeroViewHolder mHeroViewHolder;
     @Nullable
     private CardViewHolder mVisibleCardViewHolder;
     @NonNull
@@ -80,7 +80,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
         super(Page.class, root, null);
         mPageContentLayout.setActiveCardListener(this);
         mHeaderViewHolder = HeaderViewHolder.forView(mHeader, this);
-        mHeroViewHolder = Hero.HeroViewHolder.forView(mHero, this);
+        mHeroViewHolder = HeroViewHolder.forView(mHero, this);
         mCallToActionViewHolder = CallToActionViewHolder.forView(mCallToAction, this);
         mCallToActionViewHolder.setCallbacks(this);
     }
