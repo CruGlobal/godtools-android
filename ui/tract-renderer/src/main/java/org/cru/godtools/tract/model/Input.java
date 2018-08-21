@@ -181,12 +181,6 @@ public final class Input extends Content {
         mRequired = parseBoolean(parser.getAttributeValue(null, XML_REQUIRED), mRequired);
     }
 
-    @NonNull
-    @Override
-    InputViewHolder createViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
-        return new InputViewHolder(parent, parentViewHolder);
-    }
-
     @UiThread
     static final class InputViewHolder extends BaseViewHolder<Input> {
         @Nullable

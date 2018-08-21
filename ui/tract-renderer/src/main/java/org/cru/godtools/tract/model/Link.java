@@ -92,12 +92,6 @@ public final class Link extends Content {
         mEvents = parseEvents(parser, XML_EVENTS);
     }
 
-    @NonNull
-    @Override
-    LinkViewHolder createViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
-        return new LinkViewHolder(parent, parentViewHolder);
-    }
-
     @UiThread
     static final class LinkViewHolder extends BaseViewHolder<Link> {
         @BindView(R2.id.content_link)

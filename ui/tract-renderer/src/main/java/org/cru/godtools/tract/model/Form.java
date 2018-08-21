@@ -70,12 +70,6 @@ public final class Form extends Content implements Parent {
         return this;
     }
 
-    @NonNull
-    @Override
-    FormViewHolder createViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
-        return new FormViewHolder(parent, parentViewHolder);
-    }
-
     @UiThread
     public static final class FormViewHolder extends ParentViewHolder<Form> {
         FormViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {

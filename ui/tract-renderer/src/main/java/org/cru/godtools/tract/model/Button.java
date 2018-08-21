@@ -158,13 +158,6 @@ public final class Button extends Content implements Styles {
         mUrl = Utils.parseUrl(parser, XML_URL, null);
     }
 
-    @NonNull
-    @Override
-    ButtonViewHolder createViewHolder(@NonNull final ViewGroup parent,
-                                      @Nullable final BaseViewHolder parentViewHolder) {
-        return new ButtonViewHolder(parent, parentViewHolder);
-    }
-
     @UiThread
     static final class ButtonViewHolder extends BaseViewHolder<Button> {
         @BindView(R2.id.button)

@@ -56,12 +56,6 @@ public final class Image extends Content {
         mResource = parser.getAttributeValue(null, XML_RESOURCE);
     }
 
-    @NonNull
-    @Override
-    ImageViewHolder createViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
-        return new ImageViewHolder(parent, parentViewHolder);
-    }
-
     @UiThread
     static final class ImageViewHolder extends BaseViewHolder<Image> {
         @BindView(R2.id.image)

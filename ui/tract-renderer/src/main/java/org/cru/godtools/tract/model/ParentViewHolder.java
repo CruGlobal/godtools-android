@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.annimon.stream.IntStream;
+import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableList;
 
@@ -68,10 +69,12 @@ public abstract class ParentViewHolder<T extends Base & Parent> extends BaseView
             mContent.removeAllViews();
 
             for (final Content item : content) {
-                final BaseViewHolder holder = item.createViewHolder(mContent, this);
-                //noinspection unchecked
-                holder.bind(item);
-                mContent.addView(holder.mRoot);
+                Optional.ofNullable(ContentViewUtils.createViewHolder(item.getClass(), mContent, this))
+                        .ifPresent(holder -> {
+                            //noinspection unchecked
+                            holder.bind(item);
+                            mContent.addView(holder.mRoot);
+                        });
             }
         }
     }

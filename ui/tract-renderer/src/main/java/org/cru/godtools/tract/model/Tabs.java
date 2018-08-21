@@ -78,12 +78,6 @@ final class Tabs extends Content {
         return this;
     }
 
-    @NonNull
-    @Override
-    BaseViewHolder createViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
-        return new TabsViewHolder(parent, parentViewHolder);
-    }
-
     @UiThread
     public static final class TabsViewHolder extends BaseViewHolder<Tabs> implements OnTabSelectedListener {
         private static final TabViewHolder[] EMPTY_TAB_VIEW_HOLDERS = new TabViewHolder[0];

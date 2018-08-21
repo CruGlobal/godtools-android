@@ -68,13 +68,6 @@ public final class Paragraph extends Content implements Parent {
         return this;
     }
 
-    @NonNull
-    @Override
-    ParagraphViewHolder createViewHolder(@NonNull final ViewGroup parent,
-                                         @Nullable final BaseViewHolder parentViewHolder) {
-        return new ParagraphViewHolder(parent, parentViewHolder);
-    }
-
     @UiThread
     public static final class ParagraphViewHolder extends ParentViewHolder<Paragraph> {
         ParagraphViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {

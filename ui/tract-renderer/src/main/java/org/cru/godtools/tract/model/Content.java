@@ -3,7 +3,6 @@ package org.cru.godtools.tract.model;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.ViewGroup;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -72,7 +71,4 @@ public abstract class Content extends Base {
     void parseAttrs(@NonNull final XmlPullParser parser) {
         mRestrictTo = DeviceType.parse(parser.getAttributeValue(null, XML_RESTRICT_TO), mRestrictTo);
     }
-
-    @NonNull
-    abstract BaseViewHolder createViewHolder(@NonNull ViewGroup parent, @Nullable BaseViewHolder parentViewHolder);
 }
