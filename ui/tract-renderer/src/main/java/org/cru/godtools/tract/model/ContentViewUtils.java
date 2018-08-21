@@ -28,7 +28,7 @@ public class ContentViewUtils {
         } else if (Tabs.class.equals(clazz)) {
             return new TabsViewHolder(parent, parentViewHolder);
         } else if (Text.class.equals(clazz)) {
-            return new Text.TextViewHolder(parent, parentViewHolder);
+            return new TextViewHolder(parent, parentViewHolder);
         } else {
             final IllegalArgumentException e =
                     new IllegalArgumentException("Unsupported Content class specified: " + clazz.getName());

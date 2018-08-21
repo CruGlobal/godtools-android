@@ -6,23 +6,16 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 import android.view.Gravity;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import org.ccci.gto.android.common.util.NumberUtils;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
-import org.cru.godtools.tract.R;
-import org.cru.godtools.tract.R2;
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-
-import butterknife.BindView;
 
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.model.Utils.parseColor;
@@ -188,21 +181,5 @@ public final class Text extends Content {
     @DimenRes
     static int textSize(@Nullable final Text text) {
         return Styles.getTextSize(getStylesParent(text));
-    }
-
-    @UiThread
-    static final class TextViewHolder extends BaseViewHolder<Text> {
-        @BindView(R2.id.content_text)
-        TextView mText;
-
-        TextViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
-            super(Text.class, parent, R.layout.tract_content_text, parentViewHolder);
-        }
-
-        @Override
-        void onBind() {
-            super.onBind();
-            TextViewUtils.bind(mModel, mText);
-        }
     }
 }
