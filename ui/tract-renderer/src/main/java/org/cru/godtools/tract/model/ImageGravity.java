@@ -3,14 +3,12 @@ package org.cru.godtools.tract.model;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.crashlytics.android.Crashlytics;
-
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlPullParser;
 
-import io.fabric.sdk.android.Fabric;
+import timber.log.Timber;
 
-final class ImageGravity {
+public final class ImageGravity {
     static final int START = 1 << 0;
     public static final int END = 1 << 1;
     static final int TOP = 1 << 2;
@@ -22,8 +20,8 @@ final class ImageGravity {
     private static final int Y_AXIS = TOP | BOTTOM | CENTER_Y;
 
     @Nullable
-    public static Integer parse(@NonNull final XmlPullParser parser, @NonNull final String attribute,
-                                @Nullable final Integer defValue) {
+    static Integer parse(@NonNull final XmlPullParser parser, @NonNull final String attribute,
+                         @Nullable final Integer defValue) {
         return parse(parser.getAttributeValue(null, attribute), defValue);
     }
 
@@ -83,43 +81,41 @@ final class ImageGravity {
                 }
                 return gravity;
             } catch (final IllegalArgumentException e) {
-                if (Fabric.isInitialized()) {
-                    Crashlytics.logException(e);
-                }
+                Timber.e(e, "error parsing ImageGravity");
             }
         }
         return defValue;
     }
 
-    static boolean isCenter(final int align) {
+    public static boolean isCenter(final int align) {
         return (align & CENTER) == CENTER;
     }
 
     /* X-Axis tests */
 
-    static boolean isCenterX(final int align) {
+    public static boolean isCenterX(final int align) {
         return (align & X_AXIS) == CENTER_X;
     }
 
-    static boolean isStart(final int align) {
+    public static boolean isStart(final int align) {
         return (align & X_AXIS) == START;
     }
 
-    static boolean isEnd(final int align) {
+    public static boolean isEnd(final int align) {
         return (align & X_AXIS) == END;
     }
 
     /* Y-Axis tests */
 
-    static boolean isCenterY(final int align) {
+    public static boolean isCenterY(final int align) {
         return (align & Y_AXIS) == CENTER_Y;
     }
 
-    static boolean isTop(final int align) {
+    public static boolean isTop(final int align) {
         return (align & Y_AXIS) == TOP;
     }
 
-    static boolean isBottom(final int align) {
+    public static boolean isBottom(final int align) {
         return (align & Y_AXIS) == BOTTOM;
     }
 }

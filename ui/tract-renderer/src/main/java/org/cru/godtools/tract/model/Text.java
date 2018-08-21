@@ -6,25 +6,17 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 import android.view.Gravity;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import org.ccci.gto.android.common.util.NumberUtils;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
-import org.cru.godtools.tract.R;
-import org.cru.godtools.tract.R2;
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-import butterknife.BindView;
-
-import static android.util.TypedValue.COMPLEX_UNIT_PX;
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 
@@ -38,12 +30,12 @@ public final class Text extends Content {
 
     private static final double DEFAULT_TEXT_SCALE = 1.0;
 
-    enum Align {
+    public enum Align {
         START(Gravity.START), CENTER(Gravity.CENTER_HORIZONTAL), END(Gravity.END);
 
         public static final Align DEFAULT = START;
 
-        final int mGravity;
+        public final int mGravity;
 
         Align(final int gravity) {
             mGravity = gravity;
@@ -82,7 +74,7 @@ public final class Text extends Content {
     }
 
     @Nullable
-    private static Typeface getTypeface(@Nullable final Text text, @NonNull final Context context) {
+    public static Typeface getTypeface(@Nullable final Text text, @NonNull final Context context) {
         return text != null ? text.getManifest().getTypeface(context) : null;
     }
 
@@ -92,7 +84,7 @@ public final class Text extends Content {
     }
 
     @NonNull
-    private static Align getTextAlign(@Nullable final Text text) {
+    public static Align getTextAlign(@Nullable final Text text) {
         return text != null ? text.getTextAlign() : Align.DEFAULT;
     }
 
@@ -102,12 +94,12 @@ public final class Text extends Content {
     }
 
     @ColorInt
-    private int getTextColor(@ColorInt final int defColor) {
+    public int getTextColor(@ColorInt final int defColor) {
         return mTextColor != null ? mTextColor : defColor;
     }
 
     @ColorInt
-    static int getTextColor(@Nullable final Text text) {
+    public static int getTextColor(@Nullable final Text text) {
         return text != null ? text.getTextColor() : Styles.getTextColor(null);
     }
 
@@ -115,7 +107,7 @@ public final class Text extends Content {
         return mTextScale != null ? mTextScale : DEFAULT_TEXT_SCALE;
     }
 
-    private static double getTextScale(@Nullable final Text text) {
+    public static double getTextScale(@Nullable final Text text) {
         return text != null ? text.getTextScale() : DEFAULT_TEXT_SCALE;
     }
 
@@ -125,7 +117,7 @@ public final class Text extends Content {
     }
 
     @Nullable
-    static String getText(@Nullable final Text text) {
+    public static String getText(@Nullable final Text text) {
         return text != null ? text.getText() : null;
     }
 
@@ -182,66 +174,12 @@ public final class Text extends Content {
     }
 
     @ColorInt
-    private static int defaultTextColor(@Nullable final Text text) {
+    public static int defaultTextColor(@Nullable final Text text) {
         return Styles.getTextColor(getStylesParent(text));
     }
 
     @DimenRes
-    private static int textSize(@Nullable final Text text) {
+    public static int textSize(@Nullable final Text text) {
         return Styles.getTextSize(getStylesParent(text));
-    }
-
-    static void bind(@Nullable final Text text, @Nullable final TextView view) {
-        bind(text, view, null, null);
-    }
-
-    static void bind(@Nullable final Text text, @Nullable final TextView view, @Nullable @DimenRes Integer textSize,
-                     @Nullable @ColorInt Integer defaultTextColor) {
-        if (view != null) {
-            // set default values if null
-            if (textSize == null) {
-                textSize = textSize(text);
-            }
-            if (defaultTextColor == null) {
-                defaultTextColor = defaultTextColor(text);
-            }
-
-            view.setText(Text.getText(text));
-            view.setTypeface(Text.getTypeface(text, view.getContext()));
-
-            final float size = view.getContext().getResources().getDimension(textSize);
-            view.setTextSize(COMPLEX_UNIT_PX, (float) (size * Text.getTextScale(text)));
-
-            if (text != null) {
-                view.setTextColor(text.getTextColor(defaultTextColor));
-            } else {
-                view.setTextColor(defaultTextColor);
-            }
-
-            // set the alignment for the text
-            view.setGravity((view.getGravity() & Gravity.VERTICAL_GRAVITY_MASK) | Text.getTextAlign(text).mGravity);
-        }
-    }
-
-    @NonNull
-    @Override
-    TextViewHolder createViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
-        return new TextViewHolder(parent, parentViewHolder);
-    }
-
-    @UiThread
-    static final class TextViewHolder extends BaseViewHolder<Text> {
-        @BindView(R2.id.content_text)
-        TextView mText;
-
-        TextViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
-            super(Text.class, parent, R.layout.tract_content_text, parentViewHolder);
-        }
-
-        @Override
-        void onBind() {
-            super.onBind();
-            Text.bind(mModel, mText);
-        }
     }
 }

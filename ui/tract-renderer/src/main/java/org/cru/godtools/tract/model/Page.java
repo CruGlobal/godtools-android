@@ -4,30 +4,14 @@ import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
-import android.support.v4.util.ArraySet;
-import android.support.v4.util.Pools;
-import android.support.v4.view.ViewCompat;
-import android.view.View;
 
-import com.annimon.stream.IntPair;
-import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.CallToAction.CallToActionViewHolder;
-import org.cru.godtools.tract.model.Card.CardViewHolder;
-import org.cru.godtools.tract.model.Header.HeaderViewHolder;
-import org.cru.godtools.tract.model.Hero.HeroViewHolder;
-import org.cru.godtools.tract.widget.PageContentLayout;
-import org.cru.godtools.tract.widget.ScaledPicassoImageView;
-import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -35,10 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import butterknife.BindView;
-import butterknife.BindViews;
-import butterknife.ButterKnife;
 
 import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
@@ -60,7 +40,7 @@ public final class Page extends Base implements Styles, Parent {
 
     @ColorInt
     private static final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
-    private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL_X;
+    private static final ImageScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL_X;
     private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
 
     private final int mPosition;
@@ -92,7 +72,7 @@ public final class Page extends Base implements Styles, Parent {
     private String mBackgroundImage;
     private int mBackgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     @NonNull
-    private ScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
+    private ImageScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
 
     @Nullable
     private Header mHeader;
@@ -120,7 +100,7 @@ public final class Page extends Base implements Styles, Parent {
 
     @NonNull
     @Override
-    protected Page getPage() {
+    public Page getPage() {
         return this;
     }
 
@@ -128,7 +108,7 @@ public final class Page extends Base implements Styles, Parent {
         return mPosition;
     }
 
-    boolean isLastPage() {
+    public boolean isLastPage() {
         return mPosition == getManifest().getPages().size() - 1;
     }
 
@@ -171,16 +151,16 @@ public final class Page extends Base implements Styles, Parent {
     }
 
     @Nullable
-    static Resource getBackgroundImageResource(@Nullable final Page page) {
+    public static Resource getBackgroundImageResource(@Nullable final Page page) {
         return page != null ? page.getResource(page.mBackgroundImage) : null;
     }
 
-    static int getBackgroundImageGravity(@Nullable final Page page) {
+    public static int getBackgroundImageGravity(@Nullable final Page page) {
         return page != null ? page.mBackgroundImageGravity : DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     }
 
     @NonNull
-    static ScaleType getBackgroundImageScaleType(@Nullable final Page page) {
+    public static ImageScaleType getBackgroundImageScaleType(@Nullable final Page page) {
         return page != null ? page.mBackgroundImageScaleType : DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
     }
 
@@ -350,346 +330,5 @@ public final class Page extends Base implements Styles, Parent {
             XmlPullParserUtils.skipTag(parser);
         }
         mModals = ImmutableList.copyOf(modals);
-    }
-
-    public static class PageViewHolder extends Parent.ParentViewHolder<Page>
-            implements CardViewHolder.Callbacks, PageContentLayout.OnActiveCardListener,
-            CallToActionViewHolder.Callbacks {
-        public interface Callbacks {
-            void onUpdateActiveCard(@Nullable Card card);
-
-            void goToNextPage();
-        }
-
-        @BindView(R2.id.page)
-        View mPageView;
-        @BindView(R2.id.background_image)
-        ScaledPicassoImageView mBackgroundImage;
-
-        @BindView(R2.id.page_content_layout)
-        PageContentLayout mPageContentLayout;
-
-        @BindView(R2.id.header)
-        View mHeader;
-        @BindView(R2.id.hero)
-        View mHero;
-        @BindView(R2.id.call_to_action)
-        View mCallToAction;
-
-        @BindViews({R2.id.background_image, R2.id.initial_page_content})
-        List<View> mLayoutDirectionViews;
-
-        private boolean mBindingCards = false;
-        private boolean mNeedsCardsRebind = false;
-        @NonNull
-        private Card[] mCards = new Card[0];
-        private Set<String> mVisibleCards = new ArraySet<>();
-
-        @NonNull
-        private final HeaderViewHolder mHeaderViewHolder;
-        @NonNull
-        private final HeroViewHolder mHeroViewHolder;
-        @Nullable
-        private CardViewHolder mVisibleCardViewHolder;
-        @NonNull
-        private final Pools.Pool<CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
-        @NonNull
-        private CardViewHolder[] mCardViewHolders = new CardViewHolder[0];
-        @NonNull
-        private final CallToActionViewHolder mCallToActionViewHolder;
-
-        @Nullable
-        private Callbacks mCallbacks;
-
-        PageViewHolder(@NonNull final View root) {
-            super(Page.class, root, null);
-            mPageContentLayout.setActiveCardListener(this);
-            mHeaderViewHolder = HeaderViewHolder.forView(mHeader, this);
-            mHeroViewHolder = HeroViewHolder.forView(mHero, this);
-            mCallToActionViewHolder = CallToActionViewHolder.forView(mCallToAction, this);
-            mCallToActionViewHolder.setCallbacks(this);
-        }
-
-        @NonNull
-        public static PageViewHolder forView(@NonNull final View root) {
-            final PageViewHolder holder = forView(root, PageViewHolder.class);
-            return holder != null ? holder : new PageViewHolder(root);
-        }
-
-        /* BEGIN lifecycle */
-
-        @Override
-        void onBind() {
-            super.onBind();
-            bindPage();
-            mHeaderViewHolder.bind(mModel != null ? mModel.getHeader() : null);
-            mHeroViewHolder.bind(mModel != null ? mModel.getHero() : null);
-            updateDisplayedCards();
-            mCallToActionViewHolder.bind(mModel != null ? mModel.getCallToAction() : null);
-        }
-
-        @Override
-        void onVisible() {
-            super.onVisible();
-
-            // cascade event to currently visible hero or card
-            if (mVisibleCardViewHolder != null) {
-                mVisibleCardViewHolder.markVisible();
-            } else {
-                mHeroViewHolder.markVisible();
-            }
-        }
-
-        public void onContentEvent(@NonNull final Event event) {
-            checkForCardEvent(event);
-        }
-
-        @Override
-        public void onActiveCardChanged(@Nullable final View activeCard) {
-            if (!mBindingCards) {
-                final CardViewHolder cardViewHolder = BaseViewHolder.forView(activeCard, CardViewHolder.class);
-                final Optional<Card> card = Optional.ofNullable(cardViewHolder)
-                        .map(BaseViewHolder::getModel);
-
-                // only process if we have explicitly visible cards
-                if (mVisibleCards.size() > 0) {
-                    // generate a set containing the id of the current active card
-                    final Set<String> id = card
-                            .map(Card::getId)
-                            .map(ImmutableSet::of)
-                            .orElseGet(ImmutableSet::of);
-
-                    // remove any non-matching ids from the visible cards set
-                    final Set<String> diff = Sets.difference(mVisibleCards, id);
-                    if (diff.size() > 0) {
-                        mVisibleCards.removeAll(diff);
-                        updateDisplayedCards();
-                    }
-                }
-
-                if (mCallbacks != null) {
-                    mCallbacks.onUpdateActiveCard(card.orElse(null));
-                }
-
-                updateVisibleCard(cardViewHolder);
-            }
-        }
-
-        @Override
-        public void onDismissCard(@NonNull final CardViewHolder holder) {
-            if (holder.mRoot == mPageContentLayout.getActiveCard()) {
-                mPageContentLayout.changeActiveCard(null, true);
-            }
-        }
-
-        @Override
-        public void onToggleCard(@NonNull final CardViewHolder holder) {
-            mPageContentLayout
-                    .changeActiveCard(holder.mRoot != mPageContentLayout.getActiveCard() ? holder.mRoot : null, true);
-        }
-
-        @Override
-        void onHidden() {
-            super.onHidden();
-
-            // cascade event to currently visible hero or card
-            if (mVisibleCardViewHolder != null) {
-                mVisibleCardViewHolder.markHidden();
-            } else {
-                mHeroViewHolder.markHidden();
-            }
-        }
-
-        /* END lifecycle */
-
-        public void setCallbacks(@Nullable final Callbacks callbacks) {
-            mCallbacks = callbacks;
-        }
-
-        @Nullable
-        public Card getActiveCard() {
-            final CardViewHolder holder = forView(mPageContentLayout.getActiveCard(), CardViewHolder.class);
-            if (holder == null) {
-                return null;
-            }
-            return holder.mModel;
-        }
-
-        private boolean isCardVisible(@NonNull final Card card) {
-            return !card.isHidden() || mVisibleCards.contains(card.getId());
-        }
-
-        @Override
-        protected void updateLayoutDirection() {
-            // HACK: the root view should inherit it's layout direction so the call-to-action view can inherit as well.
-            ViewCompat.setLayoutDirection(mRoot, ViewCompat.LAYOUT_DIRECTION_INHERIT);
-
-            // force the layout direction for any other views that do care
-            final int dir = Page.getLayoutDirection(mModel);
-            ButterKnife.apply(mLayoutDirectionViews, (v, i) -> ViewCompat.setLayoutDirection(v, dir));
-        }
-
-        private void updateDisplayedCards() {
-            mCards = Optional.ofNullable(mModel).stream()
-                    .map(Page::getCards)
-                    .flatMap(Stream::of)
-                    .filter(this::isCardVisible)
-                    .toArray(Card[]::new);
-
-            bindCards();
-        }
-
-        private void bindPage() {
-            mPageView.setBackgroundColor(Page.getBackgroundColor(mModel));
-            Resource.bindBackgroundImage(mBackgroundImage, getBackgroundImageResource(mModel),
-                                         getBackgroundImageScaleType(mModel), getBackgroundImageGravity(mModel));
-        }
-
-        @UiThread
-        private void bindCards() {
-            // short-circuit since we are already binding cards
-            if (mBindingCards) {
-                mNeedsCardsRebind = true;
-                return;
-            }
-            mBindingCards = true;
-            mNeedsCardsRebind = false;
-
-            // map old view holders to new location
-            final CardViewHolder[] holders = new CardViewHolder[mCards.length];
-            View activeCard = null;
-            int lastNewPos = -1;
-            for (final CardViewHolder holder : mCardViewHolders) {
-                final Card card = holder.getModel();
-                final String id = card != null ? card.getId() : null;
-                final int newPos = Stream.of(mCards).indexed()
-                        .filter(c -> c.getSecond().getId().equals(id))
-                        .findFirst()
-                        .mapToInt(IntPair::getFirst)
-                        .orElse(-1);
-
-                // store the ViewHolder at the correct new location
-                if (newPos == -1) {
-                    // recycle this view holder
-                    mPageContentLayout.removeView(holder.mRoot);
-                    holder.bind(null);
-                    mRecycledCardViewHolders.release(holder);
-                } else {
-                    holders[newPos] = holder;
-
-                    // is this the active card? if so track it to restore it after we finish binding
-                    if (activeCard == null && mPageContentLayout.getActiveCard() == holder.mRoot) {
-                        activeCard = holder.mRoot;
-                    }
-
-                    if (lastNewPos > newPos) {
-                        // remove this view for now, we will re-add it shortly
-                        mPageContentLayout.removeView(holder.mRoot);
-                    } else {
-                        lastNewPos = newPos;
-                    }
-                }
-            }
-
-            // bind and create any needed view holders
-            for (int pos = 0; pos < holders.length; pos++) {
-                // create any missing view holders
-                if (holders[pos] == null) {
-                    holders[pos] = mRecycledCardViewHolders.acquire();
-                    if (holders[pos] == null) {
-                        holders[pos] = Card.createViewHolder(mPageContentLayout, this);
-                    }
-                }
-
-                // add views to container if they aren't already there
-                if (holders[pos].mRoot.getParent() != mPageContentLayout) {
-                    mPageContentLayout.addCard(holders[pos].mRoot, pos);
-                }
-
-                // bind data
-                holders[pos].bind(mCards[pos]);
-            }
-
-            // replace the list of active card view holders
-            mCardViewHolders = holders;
-
-            // finished binding cards
-            mBindingCards = false;
-
-            // restore the active card
-            if (activeCard != null) {
-                mPageContentLayout.changeActiveCard(activeCard, false);
-            } else {
-                // trigger onActiveCard in case the active card changed during binding
-                onActiveCardChanged(mPageContentLayout.getActiveCard());
-            }
-
-            // rebind cards if a request to bind happened while we were already binding
-            if (mNeedsCardsRebind) {
-                bindCards();
-            }
-        }
-
-        private void displayCard(@NonNull final Card card) {
-            final String cardId = card.getId();
-            if (card.isHidden()) {
-                mVisibleCards.add(cardId);
-                updateDisplayedCards();
-            }
-
-            // navigate to this specified card
-            for (int i = 0; i < mCards.length; i++) {
-                if (mCards[i].getId().equals(cardId)) {
-                    mPageContentLayout.changeActiveCard(i, true);
-                    return;
-                }
-            }
-
-        }
-
-        @Override
-        public void goToNextPage() {
-            if (mCallbacks != null) {
-                mCallbacks.goToNextPage();
-            }
-        }
-
-        private void updateVisibleCard(@Nullable final CardViewHolder visibleCardViewHolder) {
-            // update the visible card view holder
-            final CardViewHolder old = mVisibleCardViewHolder;
-            mVisibleCardViewHolder = visibleCardViewHolder;
-
-            // update state as necessary
-            if (mVisible && mVisibleCardViewHolder != old) {
-                if (old != null) {
-                    old.markHidden();
-                } else {
-                    mHeroViewHolder.markHidden();
-                }
-
-                if (mVisibleCardViewHolder != null) {
-                    mVisibleCardViewHolder.markVisible();
-                } else {
-                    mHeroViewHolder.markVisible();
-                }
-            }
-        }
-
-        private void checkForCardEvent(@NonNull final Event event) {
-            // send event to current card
-            final CardViewHolder holder =
-                    BaseViewHolder.forView(mPageContentLayout.getActiveCard(), CardViewHolder.class);
-            if (holder != null) {
-                holder.onContentEvent(event);
-            }
-
-            // check for card display event
-            if (mModel != null) {
-                Stream.of(mModel.getCards())
-                        .filter(c -> c.getListeners().contains(event.id))
-                        .findFirst()
-                        .ifPresent(this::displayCard);
-            }
-        }
     }
 }

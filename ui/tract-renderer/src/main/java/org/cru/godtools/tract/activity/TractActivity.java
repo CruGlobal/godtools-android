@@ -57,6 +57,7 @@ import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Page;
 import org.cru.godtools.tract.util.DrawableUtils;
 import org.cru.godtools.tract.util.ViewUtils;
+import org.cru.godtools.tract.viewmodel.ManifestViewUtils;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -707,7 +708,7 @@ public class TractActivity extends ImmersiveActivity
     private void updateBackground() {
         final Manifest manifest = getActiveManifest();
         getWindow().getDecorView().setBackgroundColor(Manifest.getBackgroundColor(manifest));
-        Manifest.bindBackgroundImage(manifest, mBackgroundImage);
+        ManifestViewUtils.bindBackgroundImage(manifest, mBackgroundImage);
     }
 
     /* BEGIN Tool Pager methods */

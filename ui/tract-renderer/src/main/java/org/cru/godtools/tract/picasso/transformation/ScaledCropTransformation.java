@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.squareup.picasso.Transformation;
 
-import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
+import org.cru.godtools.tract.model.ImageScaleType;
 
 import jp.wasabeef.picasso.transformations.CropTransformation;
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal;
@@ -15,11 +15,11 @@ import static com.google.common.base.MoreObjects.toStringHelper;
 
 public final class ScaledCropTransformation implements Transformation {
     private final float mAspectRatio;
-    private final ScaleType mScaleType;
+    private final ImageScaleType mScaleType;
     private final GravityHorizontal mGravityHorizontal;
     private final GravityVertical mGravityVertical;
 
-    public ScaledCropTransformation(final int width, final int height, @NonNull final ScaleType scaleType,
+    public ScaledCropTransformation(final int width, final int height, @NonNull final ImageScaleType scaleType,
                                     @NonNull final GravityHorizontal gravityHorizontal,
                                     @NonNull final GravityVertical gravityVertical) {
         mAspectRatio = height != 0 ? ((float) width) / ((float) height) : 1;

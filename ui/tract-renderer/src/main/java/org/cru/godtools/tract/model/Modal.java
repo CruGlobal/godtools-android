@@ -4,8 +4,6 @@ import android.graphics.Color;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.View;
-import android.widget.TextView;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -13,7 +11,6 @@ import com.google.common.collect.ImmutableSet;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
-import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.model.Text.Align;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -21,8 +18,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
-
-import butterknife.BindView;
 
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 
@@ -40,7 +35,7 @@ public final class Modal extends Base implements Parent, Styles {
     private Set<Event.Id> mDismissListeners = ImmutableSet.of();
 
     @Nullable
-    Text mTitle;
+    private Text mTitle;
 
     @NonNull
     private List<Content> mContent = ImmutableList.of();
@@ -63,6 +58,11 @@ public final class Modal extends Base implements Parent, Styles {
     @NonNull
     public Set<Event.Id> getDismissListeners() {
         return mDismissListeners;
+    }
+
+    @Nullable
+    public Text getTitle() {
+        return mTitle;
     }
 
     @NonNull
@@ -149,27 +149,5 @@ public final class Modal extends Base implements Parent, Styles {
         mContent = contentList.build();
 
         return this;
-    }
-
-    public static class ModalViewHolder extends ParentViewHolder<Modal> {
-        @Nullable
-        @BindView(R2.id.title)
-        TextView mTitle;
-
-        ModalViewHolder(@NonNull final View root) {
-            super(Modal.class, root, null);
-        }
-
-        @NonNull
-        public static ModalViewHolder forView(@NonNull final View root) {
-            final ModalViewHolder holder = forView(root, ModalViewHolder.class);
-            return holder != null ? holder : new ModalViewHolder(root);
-        }
-
-        @Override
-        void onBind() {
-            super.onBind();
-            Text.bind(mModel != null ? mModel.mTitle : null, mTitle, R.dimen.text_size_modal_title, null);
-        }
     }
 }

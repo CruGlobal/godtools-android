@@ -3,15 +3,11 @@ package org.cru.godtools.tract.model;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.ViewGroup;
-
-import com.annimon.stream.Stream;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Set;
 
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
@@ -74,20 +70,5 @@ public abstract class Content extends Base {
     @CallSuper
     void parseAttrs(@NonNull final XmlPullParser parser) {
         mRestrictTo = DeviceType.parse(parser.getAttributeValue(null, XML_RESTRICT_TO), mRestrictTo);
-    }
-
-    @NonNull
-    abstract BaseViewHolder createViewHolder(@NonNull ViewGroup parent, @Nullable BaseViewHolder parentViewHolder);
-
-    static void renderAll(@NonNull final ViewGroup parent, @NonNull final List<? extends Content> content) {
-        Stream.of(content)
-                .map(c -> {
-                    final BaseViewHolder holder = c.createViewHolder(parent, null);
-                    //noinspection unchecked
-                    holder.bind(c);
-                    return holder;
-                })
-                .map(vh -> vh.mRoot)
-                .forEach(parent::addView);
     }
 }

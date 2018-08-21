@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView;
+import org.cru.godtools.tract.model.ImageScaleType;
 
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal;
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical;
@@ -36,7 +37,7 @@ public class TractPicassoImageView extends SimplePicassoImageView implements Sca
     }
 
     @Override
-    public void setScaleType(@NonNull final ScaledPicassoImageView.ScaleType type) {
+    public void setScaleType(@NonNull final ImageScaleType type) {
         if (mHelper instanceof ScaleHelper) {
             ((ScaleHelper) mHelper).setScaleType(type);
         }

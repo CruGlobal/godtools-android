@@ -19,8 +19,6 @@ import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.ui.util.LocaleTypefaceUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.model.Text.Align;
-import org.cru.godtools.tract.widget.ScaledPicassoImageView;
-import org.cru.godtools.tract.widget.ScaledPicassoImageView.ScaleType;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -49,7 +47,7 @@ public final class Manifest extends Base implements Styles {
     private static final int DEFAULT_TEXT_COLOR = Color.argb(255, 90, 90, 90);
     @ColorInt
     private static final int DEFAULT_BACKGROUND_COLOR = Color.WHITE;
-    private static final ScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ScaleType.FILL;
+    private static final ImageScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL;
     private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
 
     @NonNull
@@ -73,7 +71,7 @@ public final class Manifest extends Base implements Styles {
     private String mBackgroundImage;
     private int mBackgroundImageGravity = DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     @NonNull
-    private ScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
+    private ImageScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
 
     @Nullable
     @ColorInt
@@ -216,15 +214,15 @@ public final class Manifest extends Base implements Styles {
         return manifest != null ? manifest.mBackgroundColor : DEFAULT_BACKGROUND_COLOR;
     }
 
-    private static Resource getBackgroundImageResource(@Nullable final Manifest manifest) {
+    public static Resource getBackgroundImageResource(@Nullable final Manifest manifest) {
         return manifest != null ? manifest.getResource(manifest.mBackgroundImage) : null;
     }
 
-    private static int getBackgroundImageGravity(@Nullable final Manifest manifest) {
+    public static int getBackgroundImageGravity(@Nullable final Manifest manifest) {
         return manifest != null ? manifest.mBackgroundImageGravity : DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     }
 
-    private static ScaleType getBackgroundImageScaleType(@Nullable final Manifest manifest) {
+    public static ImageScaleType getBackgroundImageScaleType(@Nullable final Manifest manifest) {
         return manifest != null ? manifest.mBackgroundImageScaleType : DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
     }
 
@@ -346,11 +344,5 @@ public final class Manifest extends Base implements Styles {
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
-    }
-
-    public static void bindBackgroundImage(@Nullable final Manifest manifest,
-                                           @NonNull final ScaledPicassoImageView view) {
-        Resource.bindBackgroundImage(view, getBackgroundImageResource(manifest), getBackgroundImageScaleType(manifest),
-                                     getBackgroundImageGravity(manifest));
     }
 }

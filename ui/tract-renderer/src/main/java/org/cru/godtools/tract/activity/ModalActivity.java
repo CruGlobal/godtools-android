@@ -24,7 +24,7 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.content.TractManifestLoader;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Modal;
-import org.cru.godtools.tract.model.Modal.ModalViewHolder;
+import org.cru.godtools.tract.viewmodel.ModalViewHolder;
 import org.cru.godtools.tract.service.TractManager;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

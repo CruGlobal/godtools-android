@@ -2,16 +2,11 @@ package org.cru.godtools.tract.model;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
-import android.view.ViewGroup;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
-import org.cru.godtools.tract.R;
-import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
-import org.cru.godtools.tract.model.Tabs.TabsViewHolder;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -29,7 +24,7 @@ public final class Tab extends Base implements Parent {
     private final int mPosition;
 
     @NonNull
-    Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
+    private Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
 
     @Nullable
     private Text mLabel;
@@ -45,6 +40,11 @@ public final class Tab extends Base implements Parent {
     @NonNull
     public String getId() {
         return Integer.toString(mPosition);
+    }
+
+    @NonNull
+    public Collection<AnalyticsEvent> getAnalyticsEvents() {
+        return mAnalyticsEvents;
     }
 
     @Nullable
@@ -108,24 +108,5 @@ public final class Tab extends Base implements Parent {
         mContent = contentList.build();
 
         return this;
-    }
-
-    @NonNull
-    public static TabViewHolder createViewHolder(@NonNull final ViewGroup parent,
-                                                 @Nullable final TabsViewHolder tabsViewHolder) {
-        return new TabViewHolder(parent, tabsViewHolder);
-    }
-
-    @UiThread
-    public static final class TabViewHolder extends ParentViewHolder<Tab> {
-        TabViewHolder(@NonNull final ViewGroup parent, @Nullable final TabsViewHolder parentViewHolder) {
-            super(Tab.class, parent, R.layout.tract_content_paragraph, parentViewHolder);
-        }
-
-        public void trackSelectedAnalyticsEvents() {
-            if (mModel != null) {
-                triggerAnalyticsEvents(mModel.mAnalyticsEvents, Trigger.SELECTED, Trigger.DEFAULT);
-            }
-        }
     }
 }

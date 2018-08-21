@@ -3,16 +3,11 @@ package org.cru.godtools.tract.model;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.View;
-import android.widget.TextView;
 
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
-import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
-import org.cru.godtools.tract.model.Page.PageViewHolder;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -21,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import butterknife.BindView;
-
 import static org.cru.godtools.tract.Constants.XMLNS_ANALYTICS;
 import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 
@@ -30,11 +23,11 @@ public final class Hero extends Base implements Parent, Styles {
     static final String XML_HERO = "hero";
     private static final String XML_HEADING = "heading";
 
-    @Nullable
-    Text mHeading;
-
     @NonNull
-    Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
+    private Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
+
+    @Nullable
+    private Text mHeading;
 
     @NonNull
     private final List<Content> mContent = new ArrayList<>();
@@ -47,6 +40,16 @@ public final class Hero extends Base implements Parent, Styles {
     @Override
     public int getTextSize() {
         return R.dimen.text_size_hero;
+    }
+
+    @NonNull
+    public Collection<AnalyticsEvent> getAnalyticsEvents() {
+        return mAnalyticsEvents;
+    }
+
+    @Nullable
+    public Text getHeading() {
+        return mHeading;
     }
 
     @NonNull
@@ -103,58 +106,5 @@ public final class Hero extends Base implements Parent, Styles {
         }
 
         return this;
-    }
-
-    public static class HeroViewHolder extends Parent.ParentViewHolder<Hero> {
-        @BindView(R2.id.hero_heading)
-        TextView mHeading;
-
-        @Nullable
-        private List<Runnable> mPendingAnalyticsEvents;
-
-        HeroViewHolder(@NonNull final View root, @Nullable final BaseViewHolder parentViewHolder) {
-            super(Hero.class, root, parentViewHolder);
-        }
-
-        @NonNull
-        public static HeroViewHolder forView(@NonNull final View root,
-                                             @Nullable final PageViewHolder parentViewHolder) {
-            final HeroViewHolder holder = forView(root, HeroViewHolder.class);
-            return holder != null ? holder : new HeroViewHolder(root, parentViewHolder);
-        }
-
-        /* BEGIN lifecycle */
-
-        @Override
-        void onBind() {
-            super.onBind();
-            mRoot.setVisibility(mModel != null ? View.VISIBLE : View.GONE);
-            bindHeading();
-        }
-
-        @Override
-        void onVisible() {
-            super.onVisible();
-            if (mModel != null) {
-                mPendingAnalyticsEvents =
-                        triggerAnalyticsEvents(mModel.mAnalyticsEvents, Trigger.VISIBLE, Trigger.DEFAULT);
-            }
-        }
-
-        @Override
-        void onHidden() {
-            super.onHidden();
-            if (mPendingAnalyticsEvents != null) {
-                cancelPendingAnalyticsEvents(mPendingAnalyticsEvents);
-            }
-        }
-
-        /* END lifecycle */
-
-        private void bindHeading() {
-            final Text heading = mModel != null ? mModel.mHeading : null;
-            Text.bind(heading, mHeading, R.dimen.text_size_hero_heading, Styles.getPrimaryColor(mModel));
-            mHeading.setVisibility(heading != null ? View.VISIBLE : View.GONE);
-        }
     }
 }
