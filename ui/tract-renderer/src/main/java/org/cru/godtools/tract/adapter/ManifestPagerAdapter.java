@@ -24,7 +24,7 @@ import org.cru.godtools.tract.model.Card;
 import org.cru.godtools.tract.model.Manifest;
 import org.cru.godtools.tract.model.Modal;
 import org.cru.godtools.tract.model.Page;
-import org.cru.godtools.tract.model.PageViewHolder;
+import org.cru.godtools.tract.viewmodel.PageViewHolder;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;

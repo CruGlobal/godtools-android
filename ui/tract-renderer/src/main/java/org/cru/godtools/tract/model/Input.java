@@ -35,11 +35,11 @@ public final class Input extends Content {
 
     private static final Pattern VALIDATE_EMAIL = Pattern.compile(".+@.+");
 
-    static class Error {
+    public static class Error {
         @StringRes
-        final int msgId;
+        public final int msgId;
         @NonNull
-        final String msg;
+        public final String msg;
 
         Error(@StringRes final int resId) {
             msgId = resId;
@@ -52,10 +52,10 @@ public final class Input extends Content {
         }
     }
 
-    enum Type {
+    public enum Type {
         TEXT, EMAIL, PHONE, HIDDEN;
 
-        static final Type DEFAULT = TEXT;
+        public static final Type DEFAULT = TEXT;
 
         @Nullable
         @Contract("_,!null -> !null")
@@ -93,8 +93,33 @@ public final class Input extends Content {
         super(parent);
     }
 
+    @NonNull
+    public Type getType() {
+        return mType;
+    }
+
     @Nullable
-    Error validateValue(@Nullable final String raw) {
+    public String getName() {
+        return mName;
+    }
+
+    @Nullable
+    public String getValue() {
+        return mValue;
+    }
+
+    @Nullable
+    public Text getLabel() {
+        return mLabel;
+    }
+
+    @Nullable
+    public Text getPlaceholder() {
+        return mPlaceholder;
+    }
+
+    @Nullable
+    public Error validateValue(@Nullable final String raw) {
         final String value = Strings.nullToEmpty(raw);
 
         // check to see if the field is required

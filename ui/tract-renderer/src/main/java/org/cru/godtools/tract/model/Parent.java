@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-interface Parent {
+public interface Parent {
     @NonNull
     List<Content> getContent();
 }

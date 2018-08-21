@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.model;
+package org.cru.godtools.tract.viewmodel;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.viewmodel.ResourceViewUtils;
+import org.cru.godtools.tract.model.Image;
 
 import butterknife.BindView;
 

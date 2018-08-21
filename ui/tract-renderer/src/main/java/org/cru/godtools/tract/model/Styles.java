@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 import org.cru.godtools.tract.model.Text.Align;
 
 // XXX: I really want to use default methods for this interface, but default methods are not backwards compatible
-interface Styles {
+public interface Styles {
     @ColorInt
     int getPrimaryColor();
 

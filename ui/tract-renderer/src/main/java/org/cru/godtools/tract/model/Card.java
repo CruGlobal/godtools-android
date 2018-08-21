@@ -40,7 +40,7 @@ public final class Card extends Base implements Styles, Parent {
     private Set<Event.Id> mDismissListeners = ImmutableSet.of();
 
     @NonNull
-    Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
+    private Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
 
     @Nullable
     @ColorInt
@@ -75,18 +75,23 @@ public final class Card extends Base implements Styles, Parent {
         return mPosition;
     }
 
-    boolean isHidden() {
+    public boolean isHidden() {
         return mHidden;
     }
 
     @NonNull
-    Set<Event.Id> getListeners() {
+    public Set<Event.Id> getListeners() {
         return mListeners;
     }
 
     @NonNull
-    Set<Event.Id> getDismissListeners() {
+    public Set<Event.Id> getDismissListeners() {
         return mDismissListeners;
+    }
+
+    @NonNull
+    public Collection<AnalyticsEvent> getAnalyticsEvents() {
+        return mAnalyticsEvents;
     }
 
     @Nullable
@@ -106,20 +111,20 @@ public final class Card extends Base implements Styles, Parent {
     }
 
     @ColorInt
-    static int getBackgroundColor(@Nullable final Card card) {
+    public static int getBackgroundColor(@Nullable final Card card) {
         // TODO: implement card-background-color on Page & Manifest
         return card != null ? card.getBackgroundColor() : Manifest.getBackgroundColor(null);
     }
 
-    static Resource getBackgroundImageResource(@Nullable final Card card) {
+    public static Resource getBackgroundImageResource(@Nullable final Card card) {
         return card != null ? card.getResource(card.mBackgroundImage) : null;
     }
 
-    static int getBackgroundImageGravity(@Nullable final Card card) {
+    public static int getBackgroundImageGravity(@Nullable final Card card) {
         return card != null ? card.mBackgroundImageGravity : DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     }
 
-    static ImageScaleType getBackgroundImageScaleType(@Nullable final Card card) {
+    public static ImageScaleType getBackgroundImageScaleType(@Nullable final Card card) {
         return card != null ? card.mBackgroundImageScaleType : DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
     }
 

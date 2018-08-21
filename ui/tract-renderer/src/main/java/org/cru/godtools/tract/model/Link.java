@@ -23,16 +23,31 @@ public final class Link extends Content {
     static final String XML_LINK = "link";
 
     @NonNull
-    Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
+    private Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
 
     @NonNull
-    Set<Event.Id> mEvents = ImmutableSet.of();
+    private Set<Event.Id> mEvents = ImmutableSet.of();
 
     @Nullable
-    Text mText;
+    private Text mText;
 
     private Link(@NonNull final Base parent) {
         super(parent);
+    }
+
+    @NonNull
+    public Collection<AnalyticsEvent> getAnalyticsEvents() {
+        return mAnalyticsEvents;
+    }
+
+    @NonNull
+    public Set<Event.Id> getEvents() {
+        return mEvents;
+    }
+
+    @Nullable
+    public Text getText() {
+        return mText;
     }
 
     @WorkerThread

@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.model;
+package org.cru.godtools.tract.viewmodel;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +14,11 @@ import com.annimon.stream.Stream;
 import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.Base;
+import org.cru.godtools.tract.model.Styles;
+import org.cru.godtools.tract.model.Tab;
+import org.cru.godtools.tract.model.Tabs;
+import org.cru.godtools.tract.model.Text;
 import org.cru.godtools.tract.util.ViewUtils;
 
 import butterknife.BindView;
@@ -27,7 +32,7 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
     @BindView(R2.id.tab)
     FrameLayout mTabContent;
 
-    boolean mBinding = false;
+    private boolean mBinding = false;
 
     @NonNull
     private TabViewHolder[] mTabContentViewHolders = EMPTY_TAB_VIEW_HOLDERS;
@@ -90,12 +95,12 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
         // add all the current tabs
         if (mModel != null) {
             // create view holders for every tab
-            mTabContentViewHolders = Stream.of(mModel.mTabs)
+            mTabContentViewHolders = Stream.of(mModel.getTabs())
                     .map(this::bindTabContentViewHolder)
                     .toArray(TabViewHolder[]::new);
 
             // add all the tabs to the TabLayout
-            for (final Tab tab : mModel.mTabs) {
+            for (final Tab tab : mModel.getTabs()) {
                 final Text label = tab.getLabel();
                 final TabLayout.Tab tab2 = mTabs.newTab()
                         .setText(Text.getText(label));

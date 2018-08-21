@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.model;
+package org.cru.godtools.tract.viewmodel;
 
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
@@ -12,7 +12,10 @@ import android.widget.TextView;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.viewmodel.ResourceViewUtils;
+import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
+import org.cru.godtools.tract.model.Card;
+import org.cru.godtools.tract.model.Styles;
+import org.cru.godtools.tract.model.Text;
 import org.cru.godtools.tract.widget.TractPicassoImageView;
 
 import java.util.List;
@@ -71,7 +74,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         super.onVisible();
         if (mModel != null) {
             mPendingAnalyticsEvents =
-                    triggerAnalyticsEvents(mModel.mAnalyticsEvents, AnalyticsEvent.Trigger.VISIBLE, AnalyticsEvent.Trigger.DEFAULT);
+                    triggerAnalyticsEvents(mModel.getAnalyticsEvents(), Trigger.VISIBLE, Trigger.DEFAULT);
         }
     }
 

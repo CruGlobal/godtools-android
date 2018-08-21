@@ -24,7 +24,7 @@ public final class Tab extends Base implements Parent {
     private final int mPosition;
 
     @NonNull
-    Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
+    private Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
 
     @Nullable
     private Text mLabel;
@@ -40,6 +40,11 @@ public final class Tab extends Base implements Parent {
     @NonNull
     public String getId() {
         return Integer.toString(mPosition);
+    }
+
+    @NonNull
+    public Collection<AnalyticsEvent> getAnalyticsEvents() {
+        return mAnalyticsEvents;
     }
 
     @Nullable

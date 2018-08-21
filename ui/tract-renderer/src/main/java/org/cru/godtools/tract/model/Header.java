@@ -25,12 +25,22 @@ public final class Header extends Base implements Styles {
     @ColorInt
     private Integer mBackgroundColor = null;
     @Nullable
-    Text mNumber;
+    private Text mNumber;
     @Nullable
-    Text mTitle;
+    private Text mTitle;
 
     private Header(@NonNull final Page parent) {
         super(parent);
+    }
+
+    @Nullable
+    public Text getNumber() {
+        return mNumber;
+    }
+
+    @Nullable
+    public Text getTitle() {
+        return mTitle;
     }
 
     @ColorInt

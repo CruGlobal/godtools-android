@@ -25,26 +25,37 @@ public final class CallToAction extends Base {
     private static final String XML_CONTROL_COLOR = "control-color";
 
     @Nullable
-    Text mLabel;
+    private Text mLabel;
 
-    @Nullable @ColorInt
+    @Nullable
+    @ColorInt
     private Integer mControlColor;
 
     @NonNull
-    Set<Event.Id> mEvents = ImmutableSet.of();
+    private Set<Event.Id> mEvents = ImmutableSet.of();
 
     CallToAction(@NonNull final Base parent) {
         super(parent);
     }
 
+    @Nullable
+    public Text getLabel() {
+        return mLabel;
+    }
+
     @ColorInt
-    static int getControlColor(@Nullable final CallToAction callToAction) {
+    public static int getControlColor(@Nullable final CallToAction callToAction) {
         return callToAction != null ? callToAction.getControlColor() : Styles.getPrimaryColor(null);
     }
 
     @ColorInt
     private int getControlColor() {
         return mControlColor != null ? mControlColor : Styles.getPrimaryColor(getPage());
+    }
+
+    @NonNull
+    public Set<Event.Id> getEvents() {
+        return mEvents;
     }
 
     @NonNull

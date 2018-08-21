@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.model;
+package org.cru.godtools.tract.viewmodel;
 
 import android.content.res.ColorStateList;
 import android.support.annotation.NonNull;
@@ -16,6 +16,10 @@ import android.widget.TextView;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.Base;
+import org.cru.godtools.tract.model.Input;
+import org.cru.godtools.tract.model.Styles;
+import org.cru.godtools.tract.model.Text;
 
 import butterknife.BindView;
 import butterknife.OnFocusChange;
@@ -47,14 +51,14 @@ final class InputViewHolder extends BaseViewHolder<Input> {
     void onBind() {
         super.onBind();
         if (mModel != null) {
-            mLabel = mModel.mLabel;
-            mPlaceholder = mModel.mPlaceholder;
+            mLabel = mModel.getLabel();
+            mPlaceholder = mModel.getPlaceholder();
         } else {
             mLabel = null;
             mPlaceholder = null;
         }
 
-        mRoot.setVisibility(mModel != null && mModel.mType == Input.Type.HIDDEN ? View.GONE : View.VISIBLE);
+        mRoot.setVisibility(mModel != null && mModel.getType() == Input.Type.HIDDEN ? View.GONE : View.VISIBLE);
         bindLabel();
         bindPlaceholder();
         bindInput();
@@ -82,7 +86,7 @@ final class InputViewHolder extends BaseViewHolder<Input> {
         final String value = getValue();
         final Input.Error error = mModel != null ? mModel.validateValue(value) : null;
         final String msg = error == null ? null : error.msgId != INVALID_STRING_RES ?
-                mRoot.getResources().getString(error.msgId, mModel.mName, value) : error.msg;
+                mRoot.getResources().getString(error.msgId, mModel.getName(), value) : error.msg;
         showError(msg);
         return error == null;
     }
@@ -91,8 +95,8 @@ final class InputViewHolder extends BaseViewHolder<Input> {
     void onBuildEvent(@NonNull final Event.Builder builder, final boolean recursive) {
         if (mModel != null) {
             final String value = getValue();
-            if (mModel.mName != null && value != null) {
-                builder.field(mModel.mName, value);
+            if (mModel.getName() != null && value != null) {
+                builder.field(mModel.getName(), value);
             }
         }
     }
@@ -135,7 +139,7 @@ final class InputViewHolder extends BaseViewHolder<Input> {
         // setup inputType
         if (mInputView != null) {
             int inputType = InputType.TYPE_CLASS_TEXT;
-            switch (mModel != null ? mModel.mType : Input.Type.DEFAULT) {
+            switch (mModel != null ? mModel.getType() : Input.Type.DEFAULT) {
                 case EMAIL:
                     inputType |= InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
                     break;
@@ -166,8 +170,8 @@ final class InputViewHolder extends BaseViewHolder<Input> {
 
     @Nullable
     private String getValue() {
-        if (mModel != null && mModel.mType == Input.Type.HIDDEN) {
-            return mModel.mValue;
+        if (mModel != null && mModel.getType() == Input.Type.HIDDEN) {
+            return mModel.getValue();
         } else if (mInputView != null) {
             return mInputView.getText().toString();
         }

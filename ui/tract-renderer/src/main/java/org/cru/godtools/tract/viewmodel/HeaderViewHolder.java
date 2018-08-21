@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.model;
+package org.cru.godtools.tract.viewmodel;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.Header;
+import org.cru.godtools.tract.model.Text;
 
 import butterknife.BindView;
 
@@ -45,13 +47,13 @@ final class HeaderViewHolder extends BaseViewHolder<Header> {
     }
 
     private void bindNumber() {
-        final Text number = mModel != null ? mModel.mNumber : null;
+        final Text number = mModel != null ? mModel.getNumber() : null;
         mHeaderNumber.setVisibility(number != null ? View.VISIBLE : View.GONE);
         TextViewUtils.bind(number, mHeaderNumber, R.dimen.text_size_header_number, null);
     }
 
     private void bindTitle() {
-        final Text title = mModel != null ? mModel.mTitle : null;
+        final Text title = mModel != null ? mModel.getTitle() : null;
         mHeaderTitle.setVisibility(title != null ? View.VISIBLE : View.GONE);
         TextViewUtils.bind(title, mHeaderTitle);
     }

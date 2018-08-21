@@ -1,10 +1,12 @@
-package org.cru.godtools.tract.model;
+package org.cru.godtools.tract.viewmodel;
 
 import android.support.annotation.ColorInt;
 import android.support.annotation.DimenRes;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.widget.TextView;
+
+import org.cru.godtools.tract.model.Text;
 
 import static android.util.TypedValue.COMPLEX_UNIT_PX;
 

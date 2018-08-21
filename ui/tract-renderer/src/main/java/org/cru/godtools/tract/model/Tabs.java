@@ -15,14 +15,19 @@ import java.util.List;
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.model.Tab.XML_TAB;
 
-final class Tabs extends Content {
+public final class Tabs extends Content {
     static final String XML_TABS = "tabs";
 
     @NonNull
-    List<Tab> mTabs = ImmutableList.of();
+    private List<Tab> mTabs = ImmutableList.of();
 
     private Tabs(@NonNull final Base parent) {
         super(parent);
+    }
+
+    @NonNull
+    public List<Tab> getTabs() {
+        return mTabs;
     }
 
     @NonNull

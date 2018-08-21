@@ -23,11 +23,11 @@ public final class Hero extends Base implements Parent, Styles {
     static final String XML_HERO = "hero";
     private static final String XML_HEADING = "heading";
 
-    @Nullable
-    Text mHeading;
-
     @NonNull
-    Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
+    private Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
+
+    @Nullable
+    private Text mHeading;
 
     @NonNull
     private final List<Content> mContent = new ArrayList<>();
@@ -40,6 +40,16 @@ public final class Hero extends Base implements Parent, Styles {
     @Override
     public int getTextSize() {
         return R.dimen.text_size_hero;
+    }
+
+    @NonNull
+    public Collection<AnalyticsEvent> getAnalyticsEvents() {
+        return mAnalyticsEvents;
+    }
+
+    @Nullable
+    public Text getHeading() {
+        return mHeading;
     }
 
     @NonNull

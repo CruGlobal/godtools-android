@@ -13,7 +13,7 @@ import org.xmlpull.v1.XmlPullParser;
 
 import java.util.Set;
 
-abstract class Base {
+public abstract class Base {
     static final String XML_PRIMARY_COLOR = "primary-color";
     static final String XML_PRIMARY_TEXT_COLOR = "primary-text-color";
     static final String XML_TEXT_COLOR = "text-color";
@@ -46,7 +46,7 @@ abstract class Base {
         }
     }
 
-    public int getLayoutDirection() {
+    private int getLayoutDirection() {
         return TextUtilsCompat.getLayoutDirectionFromLocale(getManifest().getLocale());
     }
 
@@ -64,7 +64,7 @@ abstract class Base {
     }
 
     @NonNull
-    protected Page getPage() {
+    public Page getPage() {
         if (mParent == this) {
             throw new IllegalStateException();
         } else {
@@ -84,7 +84,7 @@ abstract class Base {
     }
 
     @Nullable
-    static Styles getStylesParent(@Nullable final Base obj) {
+    public static Styles getStylesParent(@Nullable final Base obj) {
         return obj != null ? obj.getStylesParent() : null;
     }
 

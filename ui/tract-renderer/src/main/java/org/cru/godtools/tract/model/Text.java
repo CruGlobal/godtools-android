@@ -30,12 +30,12 @@ public final class Text extends Content {
 
     private static final double DEFAULT_TEXT_SCALE = 1.0;
 
-    enum Align {
+    public enum Align {
         START(Gravity.START), CENTER(Gravity.CENTER_HORIZONTAL), END(Gravity.END);
 
         public static final Align DEFAULT = START;
 
-        final int mGravity;
+        public final int mGravity;
 
         Align(final int gravity) {
             mGravity = gravity;
@@ -74,7 +74,7 @@ public final class Text extends Content {
     }
 
     @Nullable
-    static Typeface getTypeface(@Nullable final Text text, @NonNull final Context context) {
+    public static Typeface getTypeface(@Nullable final Text text, @NonNull final Context context) {
         return text != null ? text.getManifest().getTypeface(context) : null;
     }
 
@@ -84,7 +84,7 @@ public final class Text extends Content {
     }
 
     @NonNull
-    static Align getTextAlign(@Nullable final Text text) {
+    public static Align getTextAlign(@Nullable final Text text) {
         return text != null ? text.getTextAlign() : Align.DEFAULT;
     }
 
@@ -94,12 +94,12 @@ public final class Text extends Content {
     }
 
     @ColorInt
-    int getTextColor(@ColorInt final int defColor) {
+    public int getTextColor(@ColorInt final int defColor) {
         return mTextColor != null ? mTextColor : defColor;
     }
 
     @ColorInt
-    static int getTextColor(@Nullable final Text text) {
+    public static int getTextColor(@Nullable final Text text) {
         return text != null ? text.getTextColor() : Styles.getTextColor(null);
     }
 
@@ -107,7 +107,7 @@ public final class Text extends Content {
         return mTextScale != null ? mTextScale : DEFAULT_TEXT_SCALE;
     }
 
-    static double getTextScale(@Nullable final Text text) {
+    public static double getTextScale(@Nullable final Text text) {
         return text != null ? text.getTextScale() : DEFAULT_TEXT_SCALE;
     }
 
@@ -117,7 +117,7 @@ public final class Text extends Content {
     }
 
     @Nullable
-    static String getText(@Nullable final Text text) {
+    public static String getText(@Nullable final Text text) {
         return text != null ? text.getText() : null;
     }
 
@@ -174,12 +174,12 @@ public final class Text extends Content {
     }
 
     @ColorInt
-    static int defaultTextColor(@Nullable final Text text) {
+    public static int defaultTextColor(@Nullable final Text text) {
         return Styles.getTextColor(getStylesParent(text));
     }
 
     @DimenRes
-    static int textSize(@Nullable final Text text) {
+    public static int textSize(@Nullable final Text text) {
         return Styles.getTextSize(getStylesParent(text));
     }
 }

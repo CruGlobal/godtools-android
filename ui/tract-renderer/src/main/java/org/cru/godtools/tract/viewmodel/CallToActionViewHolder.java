@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.model;
+package org.cru.godtools.tract.viewmodel;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.CallToAction;
 import org.cru.godtools.tract.util.DrawableUtils;
 
 import butterknife.BindView;
@@ -49,9 +50,9 @@ final class CallToActionViewHolder extends BaseViewHolder<CallToAction> {
 
     @OnClick(R2.id.call_to_action_arrow)
     void onTrigger() {
-        if (mCallbacks != null && (mModel == null || mModel.mEvents.isEmpty())) {
+        if (mCallbacks != null && (mModel == null || mModel.getEvents().isEmpty())) {
             mCallbacks.goToNextPage();
-        } else if (mModel != null && !mModel.mEvents.isEmpty()) {
+        } else if (mModel != null && !mModel.getEvents().isEmpty()) {
             //TODO: trigger events
         }
     }
@@ -63,11 +64,11 @@ final class CallToActionViewHolder extends BaseViewHolder<CallToAction> {
     }
 
     private void bindLabel() {
-        TextViewUtils.bind(mModel != null ? mModel.mLabel : null, mLabelView);
+        TextViewUtils.bind(mModel != null ? mModel.getLabel() : null, mLabelView);
     }
 
     private void bindArrow() {
-        final boolean visible = mModel == null || !mModel.getPage().isLastPage() || !mModel.mEvents.isEmpty();
+        final boolean visible = mModel == null || !mModel.getPage().isLastPage() || !mModel.getEvents().isEmpty();
         mArrowView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
         mArrowView.setImageResource(R.drawable.ic_call_to_action);
         mArrowView.setImageDrawable(DrawableUtils.tint(mArrowView.getDrawable(), CallToAction.getControlColor(mModel)));

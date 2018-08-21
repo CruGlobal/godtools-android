@@ -24,7 +24,7 @@ public final class Image extends Content {
     }
 
     @Nullable
-    static Resource getResource(@Nullable final Image image) {
+    public static Resource getResource(@Nullable final Image image) {
         return image != null ? image.getResource(image.mResource) : null;
     }
 

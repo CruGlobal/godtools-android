@@ -100,7 +100,7 @@ public final class Page extends Base implements Styles, Parent {
 
     @NonNull
     @Override
-    protected Page getPage() {
+    public Page getPage() {
         return this;
     }
 
@@ -108,7 +108,7 @@ public final class Page extends Base implements Styles, Parent {
         return mPosition;
     }
 
-    boolean isLastPage() {
+    public boolean isLastPage() {
         return mPosition == getManifest().getPages().size() - 1;
     }
 
@@ -151,16 +151,16 @@ public final class Page extends Base implements Styles, Parent {
     }
 
     @Nullable
-    static Resource getBackgroundImageResource(@Nullable final Page page) {
+    public static Resource getBackgroundImageResource(@Nullable final Page page) {
         return page != null ? page.getResource(page.mBackgroundImage) : null;
     }
 
-    static int getBackgroundImageGravity(@Nullable final Page page) {
+    public static int getBackgroundImageGravity(@Nullable final Page page) {
         return page != null ? page.mBackgroundImageGravity : DEFAULT_BACKGROUND_IMAGE_GRAVITY;
     }
 
     @NonNull
-    static ImageScaleType getBackgroundImageScaleType(@Nullable final Page page) {
+    public static ImageScaleType getBackgroundImageScaleType(@Nullable final Page page) {
         return page != null ? page.mBackgroundImageScaleType : DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
     }
 

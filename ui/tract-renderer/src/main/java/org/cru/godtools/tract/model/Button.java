@@ -34,7 +34,7 @@ public final class Button extends Content implements Styles {
 
     private static final Align DEFAULT_TEXT_ALIGN = Align.CENTER;
 
-    enum Type {
+    public enum Type {
         EVENT, URL, UNKNOWN;
 
         static final Type DEFAULT = UNKNOWN;
@@ -61,13 +61,13 @@ public final class Button extends Content implements Styles {
     private Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
 
     @NonNull
-    Type mType = Type.DEFAULT;
+    private Type mType = Type.DEFAULT;
     @NonNull
-    Set<Event.Id> mEvents = ImmutableSet.of();
+    private Set<Event.Id> mEvents = ImmutableSet.of();
     @Nullable
-    Uri mUrl;
+    private Uri mUrl;
     @Nullable
-    Text mText;
+    private Text mText;
 
     private Button(@NonNull final Base parent) {
         super(parent);
@@ -79,13 +79,33 @@ public final class Button extends Content implements Styles {
     }
 
     @ColorInt
-    static int getButtonColor(@Nullable final Button button) {
+    public static int getButtonColor(@Nullable final Button button) {
         return button != null ? button.getButtonColor() : Styles.getButtonColor(null);
     }
 
     @NonNull
     public Collection<AnalyticsEvent> getAnalyticsEvents() {
         return mAnalyticsEvents;
+    }
+
+    @NonNull
+    public Type getType() {
+        return mType;
+    }
+
+    @NonNull
+    public Set<Event.Id> getEvents() {
+        return mEvents;
+    }
+
+    @Nullable
+    public Uri getUrl() {
+        return mUrl;
+    }
+
+    @Nullable
+    public Text getText() {
+        return mText;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.model;
+package org.cru.godtools.tract.viewmodel;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,6 +7,10 @@ import android.widget.TextView;
 
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
+import org.cru.godtools.tract.model.Hero;
+import org.cru.godtools.tract.model.Styles;
+import org.cru.godtools.tract.model.Text;
 
 import java.util.List;
 
@@ -44,7 +48,7 @@ public class HeroViewHolder extends ParentViewHolder<Hero> {
         super.onVisible();
         if (mModel != null) {
             mPendingAnalyticsEvents =
-                    triggerAnalyticsEvents(mModel.mAnalyticsEvents, AnalyticsEvent.Trigger.VISIBLE, AnalyticsEvent.Trigger.DEFAULT);
+                    triggerAnalyticsEvents(mModel.getAnalyticsEvents(), Trigger.VISIBLE, Trigger.DEFAULT);
         }
     }
 
@@ -59,7 +63,7 @@ public class HeroViewHolder extends ParentViewHolder<Hero> {
     // endregion Lifecycle Events
 
     private void bindHeading() {
-        final Text heading = mModel != null ? mModel.mHeading : null;
+        final Text heading = mModel != null ? mModel.getHeading() : null;
         TextViewUtils.bind(heading, mHeading, R.dimen.text_size_hero_heading, Styles.getPrimaryColor(mModel));
         mHeading.setVisibility(heading != null ? View.VISIBLE : View.GONE);
     }

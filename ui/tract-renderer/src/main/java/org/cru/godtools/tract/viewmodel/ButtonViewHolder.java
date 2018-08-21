@@ -1,7 +1,8 @@
-package org.cru.godtools.tract.model;
+package org.cru.godtools.tract.viewmodel;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
@@ -14,6 +15,8 @@ import org.cru.godtools.base.ui.util.WebUrlLauncher;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
+import org.cru.godtools.tract.model.Button;
+import org.cru.godtools.tract.model.Text;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -32,7 +35,7 @@ final class ButtonViewHolder extends BaseViewHolder<Button> {
     @Override
     void onBind() {
         super.onBind();
-        final Text text = mModel != null ? mModel.mText : null;
+        final Text text = mModel != null ? mModel.getText() : null;
         TextViewUtils.bind(text, mButton);
         ViewCompat.setBackgroundTintList(mButton, ColorStateList.valueOf(Button.getButtonColor(mModel)));
     }
@@ -44,16 +47,17 @@ final class ButtonViewHolder extends BaseViewHolder<Button> {
         if (mModel != null) {
             triggerAnalyticsEvents(mModel.getAnalyticsEvents(), Trigger.SELECTED, Trigger.DEFAULT);
 
-            switch (mModel.mType) {
+            switch (mModel.getType()) {
                 case URL:
-                    if (mModel.mUrl != null) {
+                    final Uri url = mModel.getUrl();
+                    if (url != null) {
                         final Context context = mRoot.getContext();
-                        AnalyticsService.getInstance(context).onTrackExitUrl(mModel.mUrl);
-                        WebUrlLauncher.openUrl(context, mModel.mUrl);
+                        AnalyticsService.getInstance(context).onTrackExitUrl(url);
+                        WebUrlLauncher.openUrl(context, url);
                     }
                     break;
                 case EVENT:
-                    sendEvents(mModel.mEvents);
+                    sendEvents(mModel.getEvents());
                     break;
             }
         }

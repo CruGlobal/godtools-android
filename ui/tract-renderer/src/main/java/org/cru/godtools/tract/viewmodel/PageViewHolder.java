@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.model;
+package org.cru.godtools.tract.viewmodel;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,7 +16,8 @@ import com.google.common.collect.Sets;
 
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.viewmodel.ResourceViewUtils;
+import org.cru.godtools.tract.model.Card;
+import org.cru.godtools.tract.model.Page;
 import org.cru.godtools.tract.widget.PageContentLayout;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 

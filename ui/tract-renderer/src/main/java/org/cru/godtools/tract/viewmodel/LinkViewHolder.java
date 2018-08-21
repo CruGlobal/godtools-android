@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.model;
+package org.cru.godtools.tract.viewmodel;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,6 +8,11 @@ import android.widget.TextView;
 
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
+import org.cru.godtools.tract.model.Base;
+import org.cru.godtools.tract.model.Link;
+import org.cru.godtools.tract.model.Styles;
+import org.cru.godtools.tract.model.Text;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -32,15 +37,15 @@ final class LinkViewHolder extends BaseViewHolder<Link> {
     // endregion Lifecycle Events
 
     private void bindText() {
-        final Text text = mModel != null ? mModel.mText : null;
+        final Text text = mModel != null ? mModel.getText() : null;
         TextViewUtils.bind(text, mLink, null, Styles.getPrimaryColor(Base.getStylesParent(mModel)));
     }
 
     @OnClick(R2.id.content_link)
     void click() {
         if (mModel != null) {
-            sendEvents(mModel.mEvents);
-            triggerAnalyticsEvents(mModel.mAnalyticsEvents, AnalyticsEvent.Trigger.SELECTED, AnalyticsEvent.Trigger.DEFAULT);
+            sendEvents(mModel.getEvents());
+            triggerAnalyticsEvents(mModel.getAnalyticsEvents(), Trigger.SELECTED, Trigger.DEFAULT);
         }
     }
 }

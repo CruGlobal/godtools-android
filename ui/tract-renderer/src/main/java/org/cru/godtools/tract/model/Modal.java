@@ -35,7 +35,7 @@ public final class Modal extends Base implements Parent, Styles {
     private Set<Event.Id> mDismissListeners = ImmutableSet.of();
 
     @Nullable
-    Text mTitle;
+    private Text mTitle;
 
     @NonNull
     private List<Content> mContent = ImmutableList.of();
@@ -58,6 +58,11 @@ public final class Modal extends Base implements Parent, Styles {
     @NonNull
     public Set<Event.Id> getDismissListeners() {
         return mDismissListeners;
+    }
+
+    @Nullable
+    public Text getTitle() {
+        return mTitle;
     }
 
     @NonNull
