@@ -61,7 +61,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
     private Set<String> mVisibleCards = new ArraySet<>();
 
     @NonNull
-    private final Header.HeaderViewHolder mHeaderViewHolder;
+    private final HeaderViewHolder mHeaderViewHolder;
     @NonNull
     private final Hero.HeroViewHolder mHeroViewHolder;
     @Nullable
@@ -79,7 +79,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
     PageViewHolder(@NonNull final View root) {
         super(Page.class, root, null);
         mPageContentLayout.setActiveCardListener(this);
-        mHeaderViewHolder = Header.HeaderViewHolder.forView(mHeader, this);
+        mHeaderViewHolder = HeaderViewHolder.forView(mHeader, this);
         mHeroViewHolder = Hero.HeroViewHolder.forView(mHero, this);
         mCallToActionViewHolder = CallToActionViewHolder.forView(mCallToAction, this);
         mCallToActionViewHolder.setCallbacks(this);
