@@ -20,7 +20,7 @@ public class ContentViewUtils {
         } else if (Image.class.equals(clazz)) {
             return new ImageViewHolder(parent, parentViewHolder);
         } else if (Input.class.equals(clazz)) {
-            return new Input.InputViewHolder(parent, parentViewHolder);
+            return new InputViewHolder(parent, parentViewHolder);
         } else if (Link.class.equals(clazz)) {
             return new Link.LinkViewHolder(parent, parentViewHolder);
         } else if (Paragraph.class.equals(clazz)) {
