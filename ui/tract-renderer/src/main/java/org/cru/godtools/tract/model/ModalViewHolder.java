@@ -28,6 +28,6 @@ public class ModalViewHolder extends ParentViewHolder<Modal> {
     @Override
     void onBind() {
         super.onBind();
-        Text.bind(mModel != null ? mModel.mTitle : null, mTitle, R.dimen.text_size_modal_title, null);
+        TextViewUtils.bind(mModel != null ? mModel.mTitle : null, mTitle, R.dimen.text_size_modal_title, null);
     }
 }

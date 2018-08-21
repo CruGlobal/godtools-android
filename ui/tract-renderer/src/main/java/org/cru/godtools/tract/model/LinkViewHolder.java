@@ -33,7 +33,7 @@ final class LinkViewHolder extends BaseViewHolder<Link> {
 
     private void bindText() {
         final Text text = mModel != null ? mModel.mText : null;
-        Text.bind(text, mLink, null, Styles.getPrimaryColor(Base.getStylesParent(mModel)));
+        TextViewUtils.bind(text, mLink, null, Styles.getPrimaryColor(Base.getStylesParent(mModel)));
     }
 
     @OnClick(R2.id.content_link)

@@ -47,12 +47,12 @@ final class HeaderViewHolder extends BaseViewHolder<Header> {
     private void bindNumber() {
         final Text number = mModel != null ? mModel.mNumber : null;
         mHeaderNumber.setVisibility(number != null ? View.VISIBLE : View.GONE);
-        Text.bind(number, mHeaderNumber, R.dimen.text_size_header_number, null);
+        TextViewUtils.bind(number, mHeaderNumber, R.dimen.text_size_header_number, null);
     }
 
     private void bindTitle() {
         final Text title = mModel != null ? mModel.mTitle : null;
         mHeaderTitle.setVisibility(title != null ? View.VISIBLE : View.GONE);
-        Text.bind(title, mHeaderTitle);
+        TextViewUtils.bind(title, mHeaderTitle);
     }
 }

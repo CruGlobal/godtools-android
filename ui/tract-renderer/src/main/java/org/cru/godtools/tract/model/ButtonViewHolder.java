@@ -33,7 +33,7 @@ final class ButtonViewHolder extends BaseViewHolder<Button> {
     void onBind() {
         super.onBind();
         final Text text = mModel != null ? mModel.mText : null;
-        Text.bind(text, mButton);
+        TextViewUtils.bind(text, mButton);
         ViewCompat.setBackgroundTintList(mButton, ColorStateList.valueOf(Button.getButtonColor(mModel)));
     }
 

@@ -63,7 +63,7 @@ final class CallToActionViewHolder extends BaseViewHolder<CallToAction> {
     }
 
     private void bindLabel() {
-        Text.bind(mModel != null ? mModel.mLabel : null, mLabelView);
+        TextViewUtils.bind(mModel != null ? mModel.mLabel : null, mLabelView);
     }
 
     private void bindArrow() {

@@ -60,7 +60,7 @@ public class HeroViewHolder extends ParentViewHolder<Hero> {
 
     private void bindHeading() {
         final Text heading = mModel != null ? mModel.mHeading : null;
-        Text.bind(heading, mHeading, R.dimen.text_size_hero_heading, Styles.getPrimaryColor(mModel));
+        TextViewUtils.bind(heading, mHeading, R.dimen.text_size_hero_heading, Styles.getPrimaryColor(mModel));
         mHeading.setVisibility(heading != null ? View.VISIBLE : View.GONE);
     }
 }
