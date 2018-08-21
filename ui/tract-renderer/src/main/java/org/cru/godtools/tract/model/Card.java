@@ -17,11 +17,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static org.cru.godtools.tract.Constants.XMLNS_ANALYTICS;
-import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 import static org.cru.godtools.tract.model.Utils.parseBoolean;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.model.Utils.parseScaleType;
+import static org.cru.godtools.xml.Constants.XMLNS_ANALYTICS;
+import static org.cru.godtools.xml.Constants.XMLNS_TRACT;
 
 public final class Card extends Base implements Styles, Parent {
     static final String XML_CARD = "card";

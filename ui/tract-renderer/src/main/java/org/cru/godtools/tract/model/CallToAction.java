@@ -14,10 +14,10 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.Set;
 
-import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
-import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 import static org.cru.godtools.tract.model.Text.XML_TEXT;
 import static org.cru.godtools.tract.model.Utils.parseColor;
+import static org.cru.godtools.xml.Constants.XMLNS_CONTENT;
+import static org.cru.godtools.xml.Constants.XMLNS_TRACT;
 
 public final class CallToAction extends Base {
     static final String XML_CALL_TO_ACTION = "call-to-action";

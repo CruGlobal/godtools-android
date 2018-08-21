@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
-import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 import static org.cru.godtools.tract.model.CallToAction.XML_CALL_TO_ACTION;
 import static org.cru.godtools.tract.model.Card.XML_CARD;
 import static org.cru.godtools.tract.model.Header.XML_HEADER;
@@ -29,6 +27,8 @@ import static org.cru.godtools.tract.model.Hero.XML_HERO;
 import static org.cru.godtools.tract.model.Modal.XML_MODAL;
 import static org.cru.godtools.tract.model.Utils.parseColor;
 import static org.cru.godtools.tract.model.Utils.parseScaleType;
+import static org.cru.godtools.xml.Constants.XMLNS_MANIFEST;
+import static org.cru.godtools.xml.Constants.XMLNS_TRACT;
 
 public final class Page extends Base implements Styles, Parent {
     static final String XML_PAGE = "page";

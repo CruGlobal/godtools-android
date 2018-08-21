@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
+import static org.cru.godtools.xml.Constants.XMLNS_TRACT;
 
 public final class Modal extends Base implements Parent, Styles {
     static final String XML_MODAL = "modal";

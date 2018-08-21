@@ -17,8 +17,8 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 import static org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES;
-import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.model.Utils.parseBoolean;
+import static org.cru.godtools.xml.Constants.XMLNS_CONTENT;
 
 public final class Input extends Content {
     static final String XML_INPUT = "input";

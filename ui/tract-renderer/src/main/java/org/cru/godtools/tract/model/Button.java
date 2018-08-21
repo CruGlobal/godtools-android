@@ -20,9 +20,9 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Set;
 
-import static org.cru.godtools.tract.Constants.XMLNS_ANALYTICS;
-import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.model.Text.XML_TEXT;
+import static org.cru.godtools.xml.Constants.XMLNS_ANALYTICS;
+import static org.cru.godtools.xml.Constants.XMLNS_CONTENT;
 
 public final class Button extends Content implements Styles {
     static final String XML_BUTTON = "button";

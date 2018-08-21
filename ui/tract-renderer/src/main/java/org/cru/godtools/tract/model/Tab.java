@@ -14,8 +14,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import static org.cru.godtools.tract.Constants.XMLNS_ANALYTICS;
-import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
+import static org.cru.godtools.xml.Constants.XMLNS_ANALYTICS;
+import static org.cru.godtools.xml.Constants.XMLNS_CONTENT;
 
 public final class Tab extends Base implements Parent {
     static final String XML_TAB = "tab";

@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
-import static org.cru.godtools.tract.Constants.XMLNS_ANALYTICS;
+import static org.cru.godtools.xml.Constants.XMLNS_ANALYTICS;
 
 public class AnalyticsEvent {
     public static final String XML_EVENTS = "events";

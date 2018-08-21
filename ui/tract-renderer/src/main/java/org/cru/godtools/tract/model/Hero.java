@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.cru.godtools.tract.Constants.XMLNS_ANALYTICS;
-import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
+import static org.cru.godtools.xml.Constants.XMLNS_ANALYTICS;
+import static org.cru.godtools.xml.Constants.XMLNS_TRACT;
 
 public final class Hero extends Base implements Parent, Styles {
     static final String XML_HERO = "hero";

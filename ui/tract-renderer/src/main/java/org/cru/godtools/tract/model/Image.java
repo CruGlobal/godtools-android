@@ -10,7 +10,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
+import static org.cru.godtools.xml.Constants.XMLNS_CONTENT;
 
 public final class Image extends Content {
     static final String XML_IMAGE = "image";

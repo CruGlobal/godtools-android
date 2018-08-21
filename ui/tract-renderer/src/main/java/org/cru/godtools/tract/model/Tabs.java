@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.model.Tab.XML_TAB;
+import static org.cru.godtools.xml.Constants.XMLNS_CONTENT;
 
 public final class Tabs extends Content {
     static final String XML_TABS = "tabs";

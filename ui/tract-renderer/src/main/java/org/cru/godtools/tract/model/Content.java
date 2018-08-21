@@ -10,7 +10,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.Set;
 
-import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
 import static org.cru.godtools.tract.model.Button.XML_BUTTON;
 import static org.cru.godtools.tract.model.Form.XML_FORM;
 import static org.cru.godtools.tract.model.Image.XML_IMAGE;
@@ -19,6 +18,7 @@ import static org.cru.godtools.tract.model.Link.XML_LINK;
 import static org.cru.godtools.tract.model.Paragraph.XML_PARAGRAPH;
 import static org.cru.godtools.tract.model.Tabs.XML_TABS;
 import static org.cru.godtools.tract.model.Text.XML_TEXT;
+import static org.cru.godtools.xml.Constants.XMLNS_CONTENT;
 
 public abstract class Content extends Base {
     private static final String XML_RESTRICT_TO = "restrictTo";

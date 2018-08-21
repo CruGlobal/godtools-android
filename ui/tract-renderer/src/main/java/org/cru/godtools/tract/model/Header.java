@@ -13,8 +13,8 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-import static org.cru.godtools.tract.Constants.XMLNS_TRACT;
 import static org.cru.godtools.tract.model.Utils.parseColor;
+import static org.cru.godtools.xml.Constants.XMLNS_TRACT;
 
 public final class Header extends Base implements Styles {
     static final String XML_HEADER = "header";

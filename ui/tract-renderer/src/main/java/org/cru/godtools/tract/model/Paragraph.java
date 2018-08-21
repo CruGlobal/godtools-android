@@ -11,7 +11,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.List;
 
-import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
+import static org.cru.godtools.xml.Constants.XMLNS_CONTENT;
 
 public final class Paragraph extends Content implements Parent {
     static final String XML_PARAGRAPH = "paragraph";

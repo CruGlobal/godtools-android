@@ -10,7 +10,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-import static org.cru.godtools.tract.Constants.XMLNS_MANIFEST;
+import static org.cru.godtools.xml.Constants.XMLNS_MANIFEST;
 
 public final class Resource extends Base {
     static final String XML_RESOURCE = "resource";
