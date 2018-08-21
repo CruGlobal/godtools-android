@@ -9,7 +9,7 @@ import org.cru.godtools.tract.R;
 
 @UiThread
 public final class TabViewHolder extends ParentViewHolder<Tab> {
-    TabViewHolder(@NonNull final ViewGroup parent, @Nullable final Tabs.TabsViewHolder parentViewHolder) {
+    TabViewHolder(@NonNull final ViewGroup parent, @Nullable final TabsViewHolder parentViewHolder) {
         super(Tab.class, parent, R.layout.tract_content_paragraph, parentViewHolder);
     }
 
