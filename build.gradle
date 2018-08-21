@@ -68,7 +68,9 @@ ext.deps = [
         retrofit2            : '2.4.0',
         snowplow             : '0.7.0',
         thekey               : '2.0.0-SNAPSHOT',
-        timber               : '4.7.0'
+        timber               : '4.7.0',
+        roomVersion          : '1.0.0',
+        archLifecycleVersion : '1.1.0'
 ]
 
 subprojects {

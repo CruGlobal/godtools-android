@@ -1,3 +1,4 @@
+include ':articles-aem-renderer'
 rootProject.name='godtools'
 
 include 'library:analytics'
@@ -19,6 +20,7 @@ include 'ui:base-app'
 include 'ui:everystudent'
 include 'ui:shortcuts'
 include 'ui:tract-renderer'
+include 'ui:articles-aem-renderer'
 
 include 'feature:tract'
 
