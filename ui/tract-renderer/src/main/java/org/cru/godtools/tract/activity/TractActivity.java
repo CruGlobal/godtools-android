@@ -623,7 +623,7 @@ public class TractActivity extends ImmersiveActivity
 
     private void updateToolbar() {
         final Manifest manifest = getActiveManifest();
-        setTitle(safeApplyTypefaceSpan(Manifest.getTitle(manifest), Manifest.getTypeface(manifest, this)));
+        setTitle(safeApplyTypefaceSpan(Manifest.getTitle(manifest), ManifestViewUtils.getTypeface(manifest, this)));
 
         if (mToolbar != null) {
             // set toolbar background color

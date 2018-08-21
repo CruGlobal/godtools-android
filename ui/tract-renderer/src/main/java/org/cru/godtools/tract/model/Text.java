@@ -1,7 +1,5 @@
 package org.cru.godtools.tract.model;
 
-import android.content.Context;
-import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
@@ -71,11 +69,6 @@ public final class Text extends Content {
 
     private Text(@NonNull final Base parent) {
         super(parent);
-    }
-
-    @Nullable
-    public static Typeface getTypeface(@Nullable final Text text, @NonNull final Context context) {
-        return text != null ? text.getManifest().getTypeface(context) : null;
     }
 
     @NonNull
