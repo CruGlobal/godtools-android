@@ -1,14 +1,10 @@
 package org.cru.godtools.tract.model;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
-import android.view.ViewGroup;
 
 import com.google.common.collect.ImmutableList;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
-import org.cru.godtools.tract.R;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -66,12 +62,5 @@ public final class Paragraph extends Content implements Parent {
         mContent = contentList.build();
 
         return this;
-    }
-
-    @UiThread
-    public static final class ParagraphViewHolder extends ParentViewHolder<Paragraph> {
-        ParagraphViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
-            super(Paragraph.class, parent, R.layout.tract_content_paragraph, parentViewHolder);
-        }
     }
 }

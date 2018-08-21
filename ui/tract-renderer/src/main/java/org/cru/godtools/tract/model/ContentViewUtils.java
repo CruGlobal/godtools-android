@@ -24,7 +24,7 @@ public class ContentViewUtils {
         } else if (Link.class.equals(clazz)) {
             return new LinkViewHolder(parent, parentViewHolder);
         } else if (Paragraph.class.equals(clazz)) {
-            return new Paragraph.ParagraphViewHolder(parent, parentViewHolder);
+            return new ParagraphViewHolder(parent, parentViewHolder);
         } else if (Tabs.class.equals(clazz)) {
             return new Tabs.TabsViewHolder(parent, parentViewHolder);
         } else if (Text.class.equals(clazz)) {
