@@ -17,7 +17,6 @@ import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.Tab.TabViewHolder;
 import org.cru.godtools.tract.util.ViewUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -174,7 +173,7 @@ final class Tabs extends Content {
         private TabViewHolder bindTabContentViewHolder(@Nullable final Tab tab) {
             TabViewHolder holder = mRecycledTabViewHolders.acquire();
             if (holder == null) {
-                holder = Tab.createViewHolder(mTabContent, this);
+                holder = new TabViewHolder(mTabContent, this);
             }
             holder.bind(tab);
             return holder;
