@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
 
 public class PageViewHolder extends ParentViewHolder<Page>
         implements Card.CardViewHolder.Callbacks, PageContentLayout.OnActiveCardListener,
-        CallToAction.CallToActionViewHolder.Callbacks {
+        CallToActionViewHolder.Callbacks {
     public interface Callbacks {
         void onUpdateActiveCard(@Nullable Card card);
 
@@ -71,7 +71,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
     @NonNull
     private Card.CardViewHolder[] mCardViewHolders = new Card.CardViewHolder[0];
     @NonNull
-    private final CallToAction.CallToActionViewHolder mCallToActionViewHolder;
+    private final CallToActionViewHolder mCallToActionViewHolder;
 
     @Nullable
     private Callbacks mCallbacks;
@@ -81,7 +81,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
         mPageContentLayout.setActiveCardListener(this);
         mHeaderViewHolder = Header.HeaderViewHolder.forView(mHeader, this);
         mHeroViewHolder = Hero.HeroViewHolder.forView(mHero, this);
-        mCallToActionViewHolder = CallToAction.CallToActionViewHolder.forView(mCallToAction, this);
+        mCallToActionViewHolder = CallToActionViewHolder.forView(mCallToAction, this);
         mCallToActionViewHolder.setCallbacks(this);
     }
 
