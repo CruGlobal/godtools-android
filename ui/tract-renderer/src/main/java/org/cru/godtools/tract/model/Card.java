@@ -56,7 +56,7 @@ public final class Card extends Base implements Styles, Parent {
     private ImageScaleType mBackgroundImageScaleType = DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE;
 
     @Nullable
-    Text mLabel;
+    private Text mLabel;
 
     @NonNull
     private List<Content> mContent = ImmutableList.of();
@@ -87,6 +87,11 @@ public final class Card extends Base implements Styles, Parent {
     @NonNull
     Set<Event.Id> getDismissListeners() {
         return mDismissListeners;
+    }
+
+    @Nullable
+    public Text getLabel() {
+        return mLabel;
     }
 
     @Override

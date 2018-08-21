@@ -58,7 +58,7 @@ public final class Button extends Content implements Styles {
     private Integer mColor;
 
     @NonNull
-    Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
+    private Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
 
     @NonNull
     Type mType = Type.DEFAULT;
@@ -81,6 +81,11 @@ public final class Button extends Content implements Styles {
     @ColorInt
     static int getButtonColor(@Nullable final Button button) {
         return button != null ? button.getButtonColor() : Styles.getButtonColor(null);
+    }
+
+    @NonNull
+    public Collection<AnalyticsEvent> getAnalyticsEvents() {
+        return mAnalyticsEvents;
     }
 
     @Override

@@ -13,6 +13,7 @@ import org.cru.godtools.analytics.AnalyticsService;
 import org.cru.godtools.base.ui.util.WebUrlLauncher;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
+import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -41,7 +42,7 @@ final class ButtonViewHolder extends BaseViewHolder<Button> {
     @OnClick(R2.id.button)
     void click() {
         if (mModel != null) {
-            triggerAnalyticsEvents(mModel.mAnalyticsEvents, AnalyticsEvent.Trigger.SELECTED, AnalyticsEvent.Trigger.DEFAULT);
+            triggerAnalyticsEvents(mModel.getAnalyticsEvents(), Trigger.SELECTED, Trigger.DEFAULT);
 
             switch (mModel.mType) {
                 case URL:

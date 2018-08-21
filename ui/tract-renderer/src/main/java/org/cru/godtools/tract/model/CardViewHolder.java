@@ -101,7 +101,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     }
 
     private void bindLabel() {
-        final Text label = mModel != null ? mModel.mLabel : null;
+        final Text label = mModel != null ? mModel.getLabel() : null;
         Text.bind(label, mLabel, R.dimen.text_size_card_label, Styles.getPrimaryColor(mModel));
         mDivider.setBackgroundColor(Styles.getTextColor(mModel));
     }
