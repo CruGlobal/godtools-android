@@ -18,7 +18,6 @@ import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
-import org.cru.godtools.tract.model.Page.PageViewHolder;
 import org.cru.godtools.tract.viewmodel.ResourceViewUtils;
 import org.cru.godtools.tract.widget.TractPicassoImageView;
 import org.xmlpull.v1.XmlPullParser;

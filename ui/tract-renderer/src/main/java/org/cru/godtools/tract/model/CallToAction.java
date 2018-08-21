@@ -114,7 +114,7 @@ public final class CallToAction extends Base {
 
         @NonNull
         public static CallToActionViewHolder forView(@NonNull final View root,
-                                                     @Nullable final Page.PageViewHolder parentViewHolder) {
+                                                     @Nullable final PageViewHolder parentViewHolder) {
             final CallToActionViewHolder holder = forView(root, CallToActionViewHolder.class);
             return holder != null ? holder : new CallToActionViewHolder(root, parentViewHolder);
         }
