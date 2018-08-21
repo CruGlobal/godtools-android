@@ -16,7 +16,7 @@ public class ContentViewUtils {
         if (Button.class.equals(clazz)) {
             return new ButtonViewHolder(parent, parentViewHolder);
         } else if (Form.class.equals(clazz)) {
-            return new Form.FormViewHolder(parent, parentViewHolder);
+            return new FormViewHolder(parent, parentViewHolder);
         } else if (Image.class.equals(clazz)) {
             return new Image.ImageViewHolder(parent, parentViewHolder);
         } else if (Input.class.equals(clazz)) {
