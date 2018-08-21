@@ -4,6 +4,4 @@
     <string name="share_tract_title">ను ఉపయోగిస్తూ “%1$s” ను పంచుకోండి</string>
     <string name="tract_not_found">మీరు అభ్యర్థించిన పరికరము కనుగొనబడలేదు</string>
     <string name="tract_loading">మీ అభ్యర్థించిన పరికరము లోడ్ అవుతున్నది…</string>
-    <string name="tract_content_input_error_required">%1$s అవసరం</string>
-    <string name="tract_content_input_error_invalid_email">చెల్లుబాటయ్యే ఈమెయిల్ చిరునామాను దయచేసి ఎంటర్ చేయండి</string>
 </resources>

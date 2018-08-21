@@ -4,6 +4,4 @@
     <string name="share_tract_title">Sdílet “%1$s” přes</string>
     <string name="tract_not_found">Požadovaný nástroj nebyl nalezen</string>
     <string name="tract_loading">Požadovaný nástroj se načítá...</string>
-    <string name="tract_content_input_error_required">%1$s je povinné</string>
-    <string name="tract_content_input_error_invalid_email">Prosím vložte platnou e-mailovou adresu</string>
 </resources>

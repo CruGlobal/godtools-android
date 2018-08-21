@@ -4,6 +4,4 @@
     <string name="share_tract_title">Dalytis „%1$s“ naudojant</string>
     <string name="tract_not_found">Jūsų prašomas įrankis nerastas</string>
     <string name="tract_loading">Jūsų prašomas įrankis įkeliamas...</string>
-    <string name="tract_content_input_error_required">Reikalingas %1$s</string>
-    <string name="tract_content_input_error_invalid_email">Įrašykite teisingą el. pašto adresą</string>
 </resources>
