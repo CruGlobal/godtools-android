@@ -14,7 +14,8 @@ import org.cru.godtools.tract.model.ImageScaleType;
 import org.cru.godtools.tract.model.Resource;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 
-import jp.wasabeef.picasso.transformations.CropTransformation;
+import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal;
+import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical;
 
 import static android.widget.RelativeLayout.ALIGN_PARENT_BOTTOM;
 import static android.widget.RelativeLayout.ALIGN_PARENT_TOP;
@@ -44,12 +45,12 @@ public class ResourceViewUtils {
         image.setScaleType(scale);
         final boolean rtl = Resource.getLayoutDirection(resource) == ViewCompat.LAYOUT_DIRECTION_RTL;
         image.setGravityHorizontal(
-                ImageGravity.isStart(gravity) ? (!rtl ? CropTransformation.GravityHorizontal.LEFT : CropTransformation.GravityHorizontal.RIGHT) :
-                        ImageGravity.isEnd(gravity) ? (!rtl ? CropTransformation.GravityHorizontal.RIGHT : CropTransformation.GravityHorizontal.LEFT) :
-                                CropTransformation.GravityHorizontal.CENTER);
-        image.setGravityVertical(ImageGravity.isTop(gravity) ? CropTransformation.GravityVertical.TOP :
-                                         ImageGravity.isBottom(gravity) ? CropTransformation.GravityVertical.BOTTOM :
-                                                 CropTransformation.GravityVertical.CENTER);
+                ImageGravity.isStart(gravity) ? (!rtl ? GravityHorizontal.LEFT : GravityHorizontal.RIGHT) :
+                        ImageGravity.isEnd(gravity) ? (!rtl ? GravityHorizontal.RIGHT : GravityHorizontal.LEFT) :
+                                GravityHorizontal.CENTER);
+        image.setGravityVertical(ImageGravity.isTop(gravity) ? GravityVertical.TOP :
+                                         ImageGravity.isBottom(gravity) ? GravityVertical.BOTTOM :
+                                                 GravityVertical.CENTER);
 
         image.toggleBatchUpdates(false);
 
