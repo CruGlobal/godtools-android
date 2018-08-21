@@ -28,7 +28,7 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 
 public class PageViewHolder extends ParentViewHolder<Page>
-        implements Card.CardViewHolder.Callbacks, PageContentLayout.OnActiveCardListener,
+        implements CardViewHolder.Callbacks, PageContentLayout.OnActiveCardListener,
         CallToActionViewHolder.Callbacks {
     public interface Callbacks {
         void onUpdateActiveCard(@Nullable Card card);
@@ -65,11 +65,11 @@ public class PageViewHolder extends ParentViewHolder<Page>
     @NonNull
     private final Hero.HeroViewHolder mHeroViewHolder;
     @Nullable
-    private Card.CardViewHolder mVisibleCardViewHolder;
+    private CardViewHolder mVisibleCardViewHolder;
     @NonNull
-    private final Pools.Pool<Card.CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
+    private final Pools.Pool<CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
     @NonNull
-    private Card.CardViewHolder[] mCardViewHolders = new Card.CardViewHolder[0];
+    private CardViewHolder[] mCardViewHolders = new CardViewHolder[0];
     @NonNull
     private final CallToActionViewHolder mCallToActionViewHolder;
 
@@ -122,7 +122,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
     @Override
     public void onActiveCardChanged(@Nullable final View activeCard) {
         if (!mBindingCards) {
-            final Card.CardViewHolder cardViewHolder = BaseViewHolder.forView(activeCard, Card.CardViewHolder.class);
+            final CardViewHolder cardViewHolder = BaseViewHolder.forView(activeCard, CardViewHolder.class);
             final Optional<Card> card = Optional.ofNullable(cardViewHolder)
                     .map(BaseViewHolder::getModel);
 
@@ -151,14 +151,14 @@ public class PageViewHolder extends ParentViewHolder<Page>
     }
 
     @Override
-    public void onDismissCard(@NonNull final Card.CardViewHolder holder) {
+    public void onDismissCard(@NonNull final CardViewHolder holder) {
         if (holder.mRoot == mPageContentLayout.getActiveCard()) {
             mPageContentLayout.changeActiveCard(null, true);
         }
     }
 
     @Override
-    public void onToggleCard(@NonNull final Card.CardViewHolder holder) {
+    public void onToggleCard(@NonNull final CardViewHolder holder) {
         mPageContentLayout
                 .changeActiveCard(holder.mRoot != mPageContentLayout.getActiveCard() ? holder.mRoot : null, true);
     }
@@ -183,7 +183,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
 
     @Nullable
     public Card getActiveCard() {
-        final Card.CardViewHolder holder = forView(mPageContentLayout.getActiveCard(), Card.CardViewHolder.class);
+        final CardViewHolder holder = forView(mPageContentLayout.getActiveCard(), CardViewHolder.class);
         if (holder == null) {
             return null;
         }
@@ -232,10 +232,10 @@ public class PageViewHolder extends ParentViewHolder<Page>
         mNeedsCardsRebind = false;
 
         // map old view holders to new location
-        final Card.CardViewHolder[] holders = new Card.CardViewHolder[mCards.length];
+        final CardViewHolder[] holders = new CardViewHolder[mCards.length];
         View activeCard = null;
         int lastNewPos = -1;
-        for (final Card.CardViewHolder holder : mCardViewHolders) {
+        for (final CardViewHolder holder : mCardViewHolders) {
             final Card card = holder.getModel();
             final String id = card != null ? card.getId() : null;
             final int newPos = Stream.of(mCards).indexed()
@@ -273,7 +273,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
             if (holders[pos] == null) {
                 holders[pos] = mRecycledCardViewHolders.acquire();
                 if (holders[pos] == null) {
-                    holders[pos] = Card.createViewHolder(mPageContentLayout, this);
+                    holders[pos] = CardViewHolder.create(mPageContentLayout, this);
                 }
             }
 
@@ -330,9 +330,9 @@ public class PageViewHolder extends ParentViewHolder<Page>
         }
     }
 
-    private void updateVisibleCard(@Nullable final Card.CardViewHolder visibleCardViewHolder) {
+    private void updateVisibleCard(@Nullable final CardViewHolder visibleCardViewHolder) {
         // update the visible card view holder
-        final Card.CardViewHolder old = mVisibleCardViewHolder;
+        final CardViewHolder old = mVisibleCardViewHolder;
         mVisibleCardViewHolder = visibleCardViewHolder;
 
         // update state as necessary
@@ -353,8 +353,8 @@ public class PageViewHolder extends ParentViewHolder<Page>
 
     private void checkForCardEvent(@NonNull final Event event) {
         // send event to current card
-        final Card.CardViewHolder holder =
-                BaseViewHolder.forView(mPageContentLayout.getActiveCard(), Card.CardViewHolder.class);
+        final CardViewHolder holder =
+                BaseViewHolder.forView(mPageContentLayout.getActiveCard(), CardViewHolder.class);
         if (holder != null) {
             holder.onContentEvent(event);
         }
