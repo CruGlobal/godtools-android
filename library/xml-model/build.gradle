@@ -1,6 +1,9 @@
 dependencies {
-    implementation project(':library:base')
     implementation project(':library:analytics')
+    implementation project(':library:base')
+    implementation project(':library:db')
+    implementation project(':library:model')
+    implementation project(':library:model-events')
 
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
 

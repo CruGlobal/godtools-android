@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.service;
+package org.cru.godtools.xml.service;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -44,7 +44,7 @@ import timber.log.Timber;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
-public class TractManager {
+public class ManifestManager {
     private static final int PARSING_CONCURRENCY = 6;
 
     private final LruCache<String, ListenableFuture<Manifest>> mCache = new WeakLruCache<>(6);
@@ -57,20 +57,20 @@ public class TractManager {
 
     @Nullable
     @SuppressLint("StaticFieldLeak")
-    private static TractManager sInstance;
+    private static ManifestManager sInstance;
     @NonNull
-    public static synchronized TractManager getInstance(@NonNull final Context context) {
+    public static synchronized ManifestManager getInstance(@NonNull final Context context) {
         if (sInstance == null) {
-            sInstance = new TractManager(context.getApplicationContext());
+            sInstance = new ManifestManager(context.getApplicationContext());
         }
         return sInstance;
     }
 
-    private TractManager(@NonNull final Context context) {
+    private ManifestManager(@NonNull final Context context) {
         mContext = context;
         mDao = GodToolsDao.getInstance(mContext);
         mExecutor = new ThreadPoolExecutor(0, PARSING_CONCURRENCY, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<>(),
-                                           new NamedThreadFactory(TractManager.class.getSimpleName()));
+                                           new NamedThreadFactory(ManifestManager.class.getSimpleName()));
     }
 
     @NonNull

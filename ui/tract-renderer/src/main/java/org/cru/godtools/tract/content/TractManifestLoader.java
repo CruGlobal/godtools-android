@@ -5,13 +5,13 @@ import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.eventbus.content.CachingAsyncTaskEventBusLoader;
 import org.cru.godtools.model.loader.TranslationEventBusSubscriber;
-import org.cru.godtools.tract.service.TractManager;
 import org.cru.godtools.xml.model.Manifest;
+import org.cru.godtools.xml.service.ManifestManager;
 
 import java.util.Locale;
 
 public class TractManifestLoader extends CachingAsyncTaskEventBusLoader<Manifest> {
-    private final TractManager mTractManager;
+    private final ManifestManager mManifestManager;
 
     @NonNull
     private final String mTool;
@@ -21,7 +21,7 @@ public class TractManifestLoader extends CachingAsyncTaskEventBusLoader<Manifest
     public TractManifestLoader(@NonNull final Context context, @NonNull final String toolCode,
                                @NonNull final Locale locale) {
         super(context);
-        mTractManager = TractManager.getInstance(context);
+        mManifestManager = ManifestManager.getInstance(context);
         mTool = toolCode;
         mLocale = locale;
 
@@ -36,7 +36,7 @@ public class TractManifestLoader extends CachingAsyncTaskEventBusLoader<Manifest
     @Override
     public Manifest loadInBackground() {
         try {
-            return mTractManager.getLatestPublishedManifest(mTool, mLocale).get();
+            return mManifestManager.getLatestPublishedManifest(mTool, mLocale).get();
         } catch (final Exception ignored) {
             return null;
         }

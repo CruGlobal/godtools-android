@@ -22,10 +22,10 @@ import org.cru.godtools.model.Tool;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.content.TractManifestLoader;
-import org.cru.godtools.tract.service.TractManager;
 import org.cru.godtools.tract.viewmodel.ModalViewHolder;
 import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.xml.model.Modal;
+import org.cru.godtools.xml.service.ManifestManager;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -140,7 +140,7 @@ public class ModalActivity extends ImmersiveActivity {
     private void checkForAlreadyLoadedManifest() {
         if (mManifestFileName != null) {
             final ListenableFuture<Manifest> manifest =
-                    TractManager.getInstance(this).getManifest(mManifestFileName, mTool, mLocale);
+                    ManifestManager.getInstance(this).getManifest(mManifestFileName, mTool, mLocale);
             if (manifest.isDone()) {
                 try {
                     updateModal(Futures.getDone(manifest));
