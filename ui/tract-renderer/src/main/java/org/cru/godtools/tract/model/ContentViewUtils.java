@@ -14,7 +14,7 @@ public class ContentViewUtils {
                                            @NonNull final ViewGroup parent,
                                            @Nullable final BaseViewHolder parentViewHolder) {
         if (Button.class.equals(clazz)) {
-            return new Button.ButtonViewHolder(parent, parentViewHolder);
+            return new ButtonViewHolder(parent, parentViewHolder);
         } else if (Form.class.equals(clazz)) {
             return new Form.FormViewHolder(parent, parentViewHolder);
         } else if (Image.class.equals(clazz)) {
