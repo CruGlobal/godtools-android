@@ -22,7 +22,7 @@ public class ContentViewUtils {
         } else if (Input.class.equals(clazz)) {
             return new InputViewHolder(parent, parentViewHolder);
         } else if (Link.class.equals(clazz)) {
-            return new Link.LinkViewHolder(parent, parentViewHolder);
+            return new LinkViewHolder(parent, parentViewHolder);
         } else if (Paragraph.class.equals(clazz)) {
             return new Paragraph.ParagraphViewHolder(parent, parentViewHolder);
         } else if (Tabs.class.equals(clazz)) {

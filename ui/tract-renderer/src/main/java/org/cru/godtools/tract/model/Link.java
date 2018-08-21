@@ -2,27 +2,18 @@ package org.cru.godtools.tract.model;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.tract.R;
-import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Set;
-
-import butterknife.BindView;
-import butterknife.OnClick;
 
 import static org.cru.godtools.tract.Constants.XMLNS_ANALYTICS;
 import static org.cru.godtools.tract.Constants.XMLNS_CONTENT;
@@ -90,38 +81,5 @@ public final class Link extends Content {
     void parseAttrs(@NonNull final XmlPullParser parser) {
         super.parseAttrs(parser);
         mEvents = parseEvents(parser, XML_EVENTS);
-    }
-
-    @UiThread
-    static final class LinkViewHolder extends BaseViewHolder<Link> {
-        @BindView(R2.id.content_link)
-        TextView mLink;
-
-        LinkViewHolder(@NonNull final ViewGroup parent, @Nullable final BaseViewHolder parentViewHolder) {
-            super(Link.class, parent, R.layout.tract_content_link, parentViewHolder);
-        }
-
-        /* BEGIN lifecycle */
-
-        @Override
-        void onBind() {
-            super.onBind();
-            bindText();
-        }
-
-        /* END lifecycle */
-
-        private void bindText() {
-            final Text text = mModel != null ? mModel.mText : null;
-            Text.bind(text, mLink, null, Styles.getPrimaryColor(Base.getStylesParent(mModel)));
-        }
-
-        @OnClick(R2.id.content_link)
-        void click() {
-            if (mModel != null) {
-                sendEvents(mModel.mEvents);
-                triggerAnalyticsEvents(mModel.mAnalyticsEvents, Trigger.SELECTED, Trigger.DEFAULT);
-            }
-        }
     }
 }
