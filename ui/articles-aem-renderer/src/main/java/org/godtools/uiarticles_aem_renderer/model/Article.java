@@ -12,7 +12,7 @@ import java.sql.Date;
  *
  * @author Gyasi Story
  */
-@Entity(tableName = "article_table", indices = )
+@Entity(tableName = "article_table")
 public class Article {
     /**
      * Unique Identifier for the article table
