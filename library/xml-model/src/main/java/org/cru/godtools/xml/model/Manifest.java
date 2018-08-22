@@ -1,6 +1,7 @@
 package org.cru.godtools.xml.model;
 
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
@@ -24,9 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static org.cru.godtools.xml.Constants.XMLNS_ARTICLE;
 import static org.cru.godtools.xml.Constants.XMLNS_MANIFEST;
 import static org.cru.godtools.xml.model.Utils.parseColor;
 import static org.cru.godtools.xml.model.Utils.parseScaleType;
+import static org.cru.godtools.xml.model.Utils.parseUrl;
 
 public final class Manifest extends Base implements Styles {
     private static final String XML_MANIFEST = "manifest";
@@ -34,6 +37,7 @@ public final class Manifest extends Base implements Styles {
     private static final String XML_NAVBAR_COLOR = "navbar-color";
     private static final String XML_NAVBAR_CONTROL_COLOR = "navbar-control-color";
     private static final String XML_PAGES = "pages";
+    private static final String XML_PAGES_AEM_IMPORT = "aem-import";
     private static final String XML_RESOURCES = "resources";
 
     @ColorInt
@@ -82,6 +86,8 @@ public final class Manifest extends Base implements Styles {
 
     @NonNull
     private List<Page> mPages = ImmutableList.of();
+    @NonNull
+    private List<Uri> mAemImports = ImmutableList.of();
     @VisibleForTesting
     final SimpleArrayMap<String, Resource> mResources = new SimpleArrayMap<>();
 
@@ -283,6 +289,7 @@ public final class Manifest extends Base implements Styles {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_PAGES);
 
         // process any child elements
+        final List<Uri> aemImports = new ArrayList<>();
         final List<Page> pages = new ArrayList<>();
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -298,12 +305,24 @@ public final class Manifest extends Base implements Styles {
                             continue;
                     }
                     break;
+                case XMLNS_ARTICLE:
+                    switch (parser.getName()) {
+                        case XML_PAGES_AEM_IMPORT:
+                            final Uri url = parseUrl(parser, "url", null);
+                            if (url != null) {
+                                aemImports.add(url);
+                            }
+                            XmlPullParserUtils.skipTag(parser);
+                            continue;
+                    }
+                    break;
             }
 
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);
         }
         mPages = ImmutableList.copyOf(pages);
+        mAemImports = ImmutableList.copyOf(aemImports);
     }
 
     @WorkerThread
