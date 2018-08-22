@@ -1,4 +1,4 @@
-package org.godtools.uiarticles_aem_renderer.model;
+package org.godtools.articles.aem.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;

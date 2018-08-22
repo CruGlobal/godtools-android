@@ -1,4 +1,3 @@
-include ':articles-aem-renderer'
 rootProject.name='godtools'
 
 include 'library:analytics'

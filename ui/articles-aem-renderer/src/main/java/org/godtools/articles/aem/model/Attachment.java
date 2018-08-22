@@ -1,4 +1,4 @@
-package org.godtools.uiarticles_aem_renderer.model;
+package org.godtools.articles.aem.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -19,28 +19,29 @@ import android.support.annotation.NonNull;
 public class Attachment {
 
     /**
-     *
+     * Unique Identifier for Attachment table
      */
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id")
     public int mID;
 
     /**
-     *
+     * the Foreign Key for the associated Article
      */
     @NonNull
     @ColumnInfo(name = "article_key")
     public int mArticleKey;
 
     /**
-     *
+     *  The Url path fot the attachment
      */
     @NonNull
     @ColumnInfo(name = "attachment_url")
     public String mAttachmentUrl;
 
     /**
-     *
+     *  This is the path to the local directory of the saved attachment.  This
+     *  most likely will be set after the creation of the record.
      */
     @ColumnInfo(name = "attachment_file_path")
     public String mAttachmentFilePath;

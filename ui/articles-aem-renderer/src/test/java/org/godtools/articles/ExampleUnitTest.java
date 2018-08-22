@@ -1,4 +1,4 @@
-package org.godtools.uiarticles_aem_renderer;
+package org.godtools.articles;
 
 import org.junit.Test;
 

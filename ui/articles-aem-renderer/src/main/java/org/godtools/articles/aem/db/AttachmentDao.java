@@ -1,4 +1,4 @@
-package org.godtools.uiarticles_aem_renderer.db;
+package org.godtools.articles.aem.db;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
@@ -7,7 +7,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
-import org.godtools.uiarticles_aem_renderer.model.Attachment;
+import org.godtools.articles.aem.model.Attachment;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * @author gyasistory
  */
 @Dao
-public interface AttachmentDao {
+interface AttachmentDao {
 
     /**
      * Insertion of a unique Attachment.  If there is a conflict
@@ -46,6 +46,6 @@ public interface AttachmentDao {
      * @return = a list of Attachments.  Using live data to support in Live updates.
      */
     @Query("SELECT * FROM attachment_table WHERE article_key = :articleId")
-    List<Attachment> getAttachmentsByArticle(int articleId);
+    LiveData<List<Attachment>> getAttachmentsByArticle(int articleId);
 
 }

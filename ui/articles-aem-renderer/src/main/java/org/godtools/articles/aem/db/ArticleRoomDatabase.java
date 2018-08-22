@@ -1,16 +1,19 @@
-package org.godtools.uiarticles_aem_renderer.db;
+package org.godtools.articles.aem.db;
 
+import android.app.Application;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import org.godtools.uiarticles_aem_renderer.model.Article;
-import org.godtools.uiarticles_aem_renderer.model.Attachment;
-import org.godtools.uiarticles_aem_renderer.model.ManifestAssociation;
+import org.godtools.articles.aem.model.Article;
+import org.godtools.articles.aem.model.Attachment;
+import org.godtools.articles.aem.model.ManifestAssociation;
 
 /**
+ * This class is used to create the database table.
  *
+ * @author Gyasi Story
  */
 @Database(entities = {Article.class, ManifestAssociation.class, Attachment.class}, version = 1)
 public abstract class ArticleRoomDatabase extends RoomDatabase {
@@ -22,9 +25,10 @@ public abstract class ArticleRoomDatabase extends RoomDatabase {
     private static ArticleRoomDatabase INSTANCE;
 
     /**
+     * Used to get the current Instance of the Room database.
      *
-     * @param _context
-     * @return
+     * @param _context = the application context
+     * @return = Instance of the current Room Database
      */
     static ArticleRoomDatabase getINSTANCE(final Context _context){
         if (INSTANCE == null){
