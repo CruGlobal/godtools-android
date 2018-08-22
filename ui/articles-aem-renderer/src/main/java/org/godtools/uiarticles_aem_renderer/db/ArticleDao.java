@@ -30,10 +30,11 @@ public interface ArticleDao {
     @Delete
     void deleteArticles(Article... articles);
 
+    //TODO: Convert to LiveData after Testing
     /**
      *
      * @return
      */
     @Query("SELECT * FROM article_table")
-    LiveData<List<Article>> getAllArticles();
+    List<Article> getAllArticles();
 }

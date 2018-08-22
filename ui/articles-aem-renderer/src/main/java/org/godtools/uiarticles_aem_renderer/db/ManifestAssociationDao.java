@@ -19,10 +19,10 @@ import java.util.List;
 public interface ManifestAssociationDao {
     /**
      *
-     * @param _manifestAssociation
+     * @param manifestAssociation
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAssocation(ManifestAssociation _manifestAssociation);
+    void insertAssocation(ManifestAssociation manifestAssociation);
 
     /**
      *
@@ -36,16 +36,18 @@ public interface ManifestAssociationDao {
      * @param manifestID
      * @return
      */
-    @Query("SELECT * FROM manifest_association_table WHERE manifest_id = :manifestID")
+    @Query("SELECT * FROM manifest_association_table WHERE manifest_key = :manifestID")
     List<ManifestAssociation> getAssociationByManifestID(String manifestID);
 
+    //TODO: Convert to LiveData after Testing
     /**
      *
      * @param manifestID
      * @return
      */
     @Query("SELECT * FROM article_table AS art " +
-            "INNER JOIN manifest_association_table AS assc ON art._id == assc.article_id " +
-            "WHERE assc.manifest_id = :manifestID")
-    LiveData<List<Article>> getArticlesByManifestID(String manifestID);
+            "INNER JOIN manifest_association_table AS assc ON art._id == assc.article_key " +
+            "WHERE assc.manifest_key = :manifestID")
+    List<Article> getArticlesByManifestID(String manifestID);
+
 }

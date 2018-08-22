@@ -37,6 +37,7 @@ public interface AttachmentDao {
     @Delete
     void deleteAttachments(Attachment... attachments);
 
+    //TODO: Convert to LiveData after Testing
     /**
      * To obtain a collection of attachment that are associated with a
      * particular article.
@@ -45,6 +46,6 @@ public interface AttachmentDao {
      * @return = a list of Attachments.  Using live data to support in Live updates.
      */
     @Query("SELECT * FROM attachment_table WHERE article_key = :articleId")
-    LiveData<List<Attachment>> getAttachmentsByArticle(int articleId);
+    List<Attachment> getAttachmentsByArticle(int articleId);
 
 }

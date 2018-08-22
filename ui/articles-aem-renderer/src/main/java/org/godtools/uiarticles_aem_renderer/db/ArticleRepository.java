@@ -13,7 +13,7 @@ import java.util.List;
 public class ArticleRepository {
 
     private ArticleDao mArticleDao;
-    private LiveData<List<Article>> mAllArticles;
+    private List<Article> mAllArticles;
 
     public ArticleRepository(Application _application) {
         ArticleRoomDatabase db = ArticleRoomDatabase.getINSTANCE(_application);
@@ -26,7 +26,7 @@ public class ArticleRepository {
      *
      * @return
      */
-    LiveData<List<Article>> getmAllArticles(){
+    List<Article> getmAllArticles(){
         return mAllArticles;
     }
 }
