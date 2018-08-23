@@ -40,6 +40,7 @@ import org.ccci.gto.android.common.util.NumberUtils;
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
+import org.cru.godtools.base.tool.activity.ImmersiveActivity;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Tool;
@@ -175,6 +176,7 @@ public class TractActivity extends ImmersiveActivity
     }
 
     public TractActivity() {
+        super(true);
         mTranslations = new SparseArray<>();
         mManifests = new SparseArray<>();
     }
@@ -182,6 +184,7 @@ public class TractActivity extends ImmersiveActivity
     @RestrictTo(RestrictTo.Scope.TESTS)
     TractActivity(@NonNull final SparseArray<Translation> translations,
                   @NonNull final SparseArray<Manifest> manifests) {
+        super(true);
         mTranslations = translations;
         mManifests = manifests;
     }

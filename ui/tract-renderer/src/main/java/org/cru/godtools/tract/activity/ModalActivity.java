@@ -17,6 +17,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.base.model.Event;
+import org.cru.godtools.base.tool.activity.ImmersiveActivity;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.tract.R;
@@ -78,6 +79,10 @@ public class ModalActivity extends ImmersiveActivity {
         ContextCompat.startActivity(context, new Intent(context, ModalActivity.class).putExtras(extras),
                                     makeCustomAnimation(context, R.anim.activity_fade_in, R.anim.activity_fade_out)
                                             .toBundle());
+    }
+
+    public ModalActivity() {
+        super(true);
     }
 
     /* BEGIN lifecycle */

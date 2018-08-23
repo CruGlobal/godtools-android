@@ -24,7 +24,7 @@ dependencies {
     implementation project(':library:sync-tasks')
     implementation project(':library:xml-model')
 
-    implementation project(':ui:base')
+    api project(':ui:base-tool')
 
     implementation "com.android.support:cardview-v7:${deps.androidSupport}"
     implementation "com.android.support:design:${deps.androidSupport}"
