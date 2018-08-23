@@ -4,6 +4,4 @@
     <string name="share_tract_title">Deel \"%1$s\" deur gebruik te maak van</string>
     <string name="tract_not_found">Die hulpmiddel wat jy gevra het kannie gevind word nie</string>
     <string name="tract_loading">Die hulpmiddel wat jy aangevra het is besig om te laai...</string>
-    <string name="tract_content_input_error_required">%1$s word benodig</string>
-    <string name="tract_content_input_error_invalid_email">Voer asseblief \'n geldige e-posadres in</string>
 </resources>

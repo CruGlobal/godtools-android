@@ -19,11 +19,12 @@ import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.activity.ModalActivity;
-import org.cru.godtools.tract.adapter.ManifestPagerAdapter.PageViewHolder;
-import org.cru.godtools.tract.model.Card;
-import org.cru.godtools.tract.model.Manifest;
-import org.cru.godtools.tract.model.Modal;
-import org.cru.godtools.tract.model.Page;
+import org.cru.godtools.tract.adapter.ManifestPagerAdapter.RVPageViewHolder;
+import org.cru.godtools.tract.viewmodel.PageViewHolder;
+import org.cru.godtools.xml.model.Card;
+import org.cru.godtools.xml.model.Manifest;
+import org.cru.godtools.xml.model.Modal;
+import org.cru.godtools.xml.model.Page;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -33,7 +34,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewHolder> implements LifecycleObserver {
+public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<RVPageViewHolder> implements LifecycleObserver {
     public interface Callbacks {
         void goToPage(int position);
 
@@ -90,31 +91,31 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         }
     }
 
-    /* BEGIN lifecycle */
+    // region Lifecycle Events
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void onStart() {
         EventBus.getDefault().register(this);
         Optional.ofNullable(getPrimaryItem())
-                .ifPresent(PageViewHolder::markVisible);
+                .ifPresent(RVPageViewHolder::markVisible);
     }
 
     @NonNull
     @Override
-    protected PageViewHolder onCreateViewHolder(@NonNull final ViewGroup parent) {
-        return new PageViewHolder(
+    protected RVPageViewHolder onCreateViewHolder(@NonNull final ViewGroup parent) {
+        return new RVPageViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(R.layout.page_manifest_page, parent, false));
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull final PageViewHolder holder, final int position) {
+    protected void onBindViewHolder(@NonNull final RVPageViewHolder holder, final int position) {
         super.onBindViewHolder(holder, position);
         assert mManifest != null;
         holder.onBind(mManifest.getPages().get(position));
     }
 
     @Override
-    protected void onUpdatePrimaryItem(@Nullable final PageViewHolder old, @Nullable final PageViewHolder current) {
+    protected void onUpdatePrimaryItem(@Nullable final RVPageViewHolder old, @Nullable final RVPageViewHolder current) {
         if (current != null && current.mPage != null) {
             dispatchUpdateActiveCard(current.mPage, current.getActiveCard());
         }
@@ -134,14 +135,14 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onContentEvent(@NonNull final Event event) {
         // check for the event on the current page
-        final PageViewHolder holder = getPrimaryItem();
+        final RVPageViewHolder holder = getPrimaryItem();
         if (holder != null) {
             holder.onContentEvent(event);
         }
     }
 
     @Override
-    protected void onViewHolderRecycled(@NonNull final PageViewHolder holder) {
+    protected void onViewHolderRecycled(@NonNull final RVPageViewHolder holder) {
         super.onViewHolderRecycled(holder);
         holder.onBind(null);
     }
@@ -149,14 +150,14 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void onStop() {
         Optional.ofNullable(getPrimaryItem())
-                .ifPresent(PageViewHolder::markHidden);
+                .ifPresent(RVPageViewHolder::markHidden);
         EventBus.getDefault().unregister(this);
     }
 
-    /* END lifecycle */
+    // endregion Lifecycle Events
 
-    class PageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements Page.PageViewHolder.Callbacks {
-        private final Page.PageViewHolder mModelViewHolder;
+    class RVPageViewHolder extends ViewHolderPagerAdapter.ViewHolder implements PageViewHolder.Callbacks {
+        private final PageViewHolder mModelViewHolder;
 
         @BindView(R2.id.page)
         View mPageView;
@@ -164,14 +165,14 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
         @Nullable
         Page mPage;
 
-        PageViewHolder(@NonNull final View view) {
+        RVPageViewHolder(@NonNull final View view) {
             super(view);
             ButterKnife.bind(this, view);
-            mModelViewHolder = Page.PageViewHolder.forView(view);
+            mModelViewHolder = PageViewHolder.forView(view);
             mModelViewHolder.setCallbacks(this);
         }
 
-        /* BEGIN lifecycle */
+        // region Lifecycle Events
 
         void onBind(@Nullable final Page page) {
             // short-circuit if we aren't changing the page
@@ -198,7 +199,7 @@ public final class ManifestPagerAdapter extends ViewHolderPagerAdapter<PageViewH
             }
         }
 
-        /* END lifecycle */
+        // endregion Lifecycle Events
 
         private void checkForModalEvent(@NonNull final Event event) {
             assert mPage != null;
