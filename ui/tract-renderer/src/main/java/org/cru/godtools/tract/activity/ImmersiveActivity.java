@@ -6,7 +6,7 @@ import android.view.View;
 import org.cru.godtools.base.ui.activity.BaseActivity;
 
 public abstract class ImmersiveActivity extends BaseActivity {
-    /* BEGIN lifecycle */
+    // region Lifecycle Events
 
     @Override
     public void onMultiWindowModeChanged(final boolean isInMultiWindowMode) {
@@ -22,7 +22,7 @@ public abstract class ImmersiveActivity extends BaseActivity {
         }
     }
 
-    /* END lifecycle */
+    // endregion Lifecycle Events
 
     private void updateSystemUi() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || !isInMultiWindowMode()) {

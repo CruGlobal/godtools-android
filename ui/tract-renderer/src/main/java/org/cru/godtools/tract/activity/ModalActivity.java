@@ -15,7 +15,7 @@ import com.annimon.stream.Optional;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
-import org.ccci.gto.android.common.util.BundleUtils;
+import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
