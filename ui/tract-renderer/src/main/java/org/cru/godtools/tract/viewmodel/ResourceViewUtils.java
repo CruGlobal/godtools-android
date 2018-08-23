@@ -9,10 +9,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
-import org.cru.godtools.tract.model.ImageGravity;
-import org.cru.godtools.tract.model.ImageScaleType;
-import org.cru.godtools.tract.model.Resource;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
+import org.cru.godtools.xml.model.ImageGravity;
+import org.cru.godtools.xml.model.ImageScaleType;
+import org.cru.godtools.xml.model.Resource;
 
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal;
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical;

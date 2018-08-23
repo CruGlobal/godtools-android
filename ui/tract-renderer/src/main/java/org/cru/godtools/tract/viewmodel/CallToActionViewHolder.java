@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.CallToAction;
 import org.cru.godtools.tract.util.DrawableUtils;
+import org.cru.godtools.xml.model.CallToAction;
 
 import butterknife.BindView;
 import butterknife.OnClick;

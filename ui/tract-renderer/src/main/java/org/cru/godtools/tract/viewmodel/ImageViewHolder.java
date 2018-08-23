@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.Image;
+import org.cru.godtools.xml.model.Image;
 
 import butterknife.BindView;
 

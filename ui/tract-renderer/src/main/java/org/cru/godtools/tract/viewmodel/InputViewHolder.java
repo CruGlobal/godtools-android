@@ -16,10 +16,10 @@ import android.widget.TextView;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.Base;
-import org.cru.godtools.tract.model.Input;
-import org.cru.godtools.tract.model.Styles;
-import org.cru.godtools.tract.model.Text;
+import org.cru.godtools.xml.model.Base;
+import org.cru.godtools.xml.model.Input;
+import org.cru.godtools.xml.model.Styles;
+import org.cru.godtools.xml.model.Text;
 
 import butterknife.BindView;
 import butterknife.OnFocusChange;

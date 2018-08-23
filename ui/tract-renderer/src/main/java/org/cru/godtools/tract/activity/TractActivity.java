@@ -52,13 +52,13 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent;
 import org.cru.godtools.tract.content.TractManifestLoader;
-import org.cru.godtools.tract.model.Card;
-import org.cru.godtools.tract.model.Manifest;
-import org.cru.godtools.tract.model.Page;
 import org.cru.godtools.tract.util.DrawableUtils;
 import org.cru.godtools.tract.util.ViewUtils;
 import org.cru.godtools.tract.viewmodel.ManifestViewUtils;
 import org.cru.godtools.tract.widget.ScaledPicassoImageView;
+import org.cru.godtools.xml.model.Card;
+import org.cru.godtools.xml.model.Manifest;
+import org.cru.godtools.xml.model.Page;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -623,7 +623,7 @@ public class TractActivity extends ImmersiveActivity
 
     private void updateToolbar() {
         final Manifest manifest = getActiveManifest();
-        setTitle(safeApplyTypefaceSpan(Manifest.getTitle(manifest), Manifest.getTypeface(manifest, this)));
+        setTitle(safeApplyTypefaceSpan(Manifest.getTitle(manifest), ManifestViewUtils.getTypeface(manifest, this)));
 
         if (mToolbar != null) {
             // set toolbar background color

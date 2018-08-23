@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
-import org.cru.godtools.tract.model.Form;
+import org.cru.godtools.xml.model.Form;
 
 import java.util.Set;
 

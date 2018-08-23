@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView;
-import org.cru.godtools.tract.model.ImageScaleType;
+import org.cru.godtools.xml.model.ImageScaleType;
 
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal;
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical;

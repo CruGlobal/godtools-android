@@ -12,11 +12,11 @@ import android.widget.TextView;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.AnalyticsEvent.Trigger;
-import org.cru.godtools.tract.model.Card;
-import org.cru.godtools.tract.model.Styles;
-import org.cru.godtools.tract.model.Text;
 import org.cru.godtools.tract.widget.TractPicassoImageView;
+import org.cru.godtools.xml.model.AnalyticsEvent.Trigger;
+import org.cru.godtools.xml.model.Card;
+import org.cru.godtools.xml.model.Styles;
+import org.cru.godtools.xml.model.Text;
 
 import java.util.List;
 

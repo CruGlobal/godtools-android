@@ -17,9 +17,9 @@ import com.annimon.stream.Stream;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.analytics.model.ContentAnalyticsActionEvent;
-import org.cru.godtools.tract.model.AnalyticsEvent;
-import org.cru.godtools.tract.model.Base;
-import org.cru.godtools.tract.model.CallToAction;
+import org.cru.godtools.xml.model.AnalyticsEvent;
+import org.cru.godtools.xml.model.Base;
+import org.cru.godtools.xml.model.CallToAction;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.Collection;

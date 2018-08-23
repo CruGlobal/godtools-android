@@ -22,6 +22,7 @@ dependencies {
     implementation project(':library:model-events')
     implementation project(':library:model-loader')
     implementation project(':library:sync-tasks')
+    implementation project(':library:xml-model')
 
     implementation project(':ui:base')
 
@@ -45,10 +46,6 @@ dependencies {
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
     implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
-
-    androidTestImplementation "com.android.support.test:runner:${deps.androidTestingSupport}"
-    androidTestImplementation "com.android.support.test:rules:${deps.androidTestingSupport}"
-    androidTestImplementation "org.hamcrest:hamcrest-library:${deps.hamcrest}"
 
     testImplementation "junit:junit:${deps.junit}"
     testImplementation "org.mockito:mockito-core:${deps.mockito}"

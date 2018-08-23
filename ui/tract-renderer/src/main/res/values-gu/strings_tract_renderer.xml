@@ -4,6 +4,4 @@
     <string name="share_tract_title">%1$s નો ઉપયોગ કરી વહેંચો</string>
     <string name="tract_not_found">જે સાધન/ટુલ તમે માંગો છો તે જડતું નથી</string>
     <string name="tract_loading">જે સાધન/ટુલ તમે માંગો છો તે લોડ થઈ રહ્યું છે...</string>
-    <string name="tract_content_input_error_required">%1$s ફરજીયાત છે</string>
-    <string name="tract_content_input_error_invalid_email">કૃપા કરી તમારું અસલ ઈ-મેલ આપો</string>
 </resources>

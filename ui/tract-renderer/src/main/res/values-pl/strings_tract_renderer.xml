@@ -4,6 +4,4 @@
     <string name="share_tract_title">Podziel się “%1$s” przy pomocy</string>
     <string name="tract_not_found">Nie można znaleźć żądanego narzędzia</string>
     <string name="tract_loading">Trwa wczytywanie żądanego narzędzia...</string>
-    <string name="tract_content_input_error_required">%1$s jest wymagane</string>
-    <string name="tract_content_input_error_invalid_email">Wpisz ważny adres e-mail</string>
 </resources>

@@ -14,12 +14,12 @@ import com.annimon.stream.Stream;
 import org.ccci.gto.android.common.compat.view.ViewCompat;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.model.Base;
-import org.cru.godtools.tract.model.Styles;
-import org.cru.godtools.tract.model.Tab;
-import org.cru.godtools.tract.model.Tabs;
-import org.cru.godtools.tract.model.Text;
 import org.cru.godtools.tract.util.ViewUtils;
+import org.cru.godtools.xml.model.Base;
+import org.cru.godtools.xml.model.Styles;
+import org.cru.godtools.xml.model.Tab;
+import org.cru.godtools.xml.model.Tabs;
+import org.cru.godtools.xml.model.Text;
 
 import butterknife.BindView;
 

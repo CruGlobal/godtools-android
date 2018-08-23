@@ -5,6 +5,4 @@
     <string name="share_tract_title">Teilen Sie „%1$s“ mit</string>
     <string name="tract_not_found">Das von Ihnen angeforderte Tool konnte nicht gefunden werden.</string>
     <string name="tract_loading">Das von Ihnen angeforderte Tool wird geladen ...</string>
-    <string name="tract_content_input_error_required">%1$s ist erforderlich</string>
-    <string name="tract_content_input_error_invalid_email">Bitte eine gültige E-Mail-Adresse eingeben.</string>
 </resources>

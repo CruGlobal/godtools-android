@@ -6,7 +6,7 @@ import android.support.annotation.UiThread;
 import android.view.ViewGroup;
 
 import org.cru.godtools.tract.R;
-import org.cru.godtools.tract.model.Paragraph;
+import org.cru.godtools.xml.model.Paragraph;
 
 @UiThread
 public final class ParagraphViewHolder extends ParentViewHolder<Paragraph> {

@@ -13,14 +13,14 @@ import org.ccci.gto.android.common.base.model.Dimension;
 import org.ccci.gto.android.common.picasso.transformation.ScaleTransformation;
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
 import org.cru.godtools.tract.R;
-import org.cru.godtools.tract.model.ImageScaleType;
 import org.cru.godtools.tract.picasso.transformation.ScaledCropTransformation;
+import org.cru.godtools.xml.model.ImageScaleType;
 
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal;
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical;
 
-import static org.cru.godtools.tract.model.ImageScaleType.FILL_X;
-import static org.cru.godtools.tract.model.ImageScaleType.FILL_Y;
+import static org.cru.godtools.xml.model.ImageScaleType.FILL_X;
+import static org.cru.godtools.xml.model.ImageScaleType.FILL_Y;
 
 public interface ScaledPicassoImageView extends PicassoImageView {
     class ScaleHelper extends Helper {
