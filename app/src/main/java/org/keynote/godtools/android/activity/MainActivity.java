@@ -29,7 +29,7 @@ import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.sync.GodToolsSyncService;
 import org.cru.godtools.tract.activity.TractActivity;
-import org.cru.godtools.tract.service.TractManager;
+import org.cru.godtools.xml.service.ManifestManager;
 
 import java.util.Locale;
 
@@ -167,7 +167,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
                         languages = Stream.of(languages).withoutNulls().toArray(Locale[]::new);
                         if (languages.length > 0) {
                             // start preloading the tract in the first language
-                            TractManager.getInstance(this).getLatestPublishedManifest(code, languages[0]);
+                            ManifestManager.getInstance(this).getLatestPublishedManifest(code, languages[0]);
 
                             TractActivity.start(this, code, languages);
                         }

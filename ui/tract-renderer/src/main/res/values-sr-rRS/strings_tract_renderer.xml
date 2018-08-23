@@ -4,6 +4,4 @@
     <string name="share_tract_title">Подели “%1$s” користећи</string>
     <string name="tract_not_found">Алатка коју сте тражили није могуће пронаћи</string>
     <string name="tract_loading">Алатка коју сте тражили се учитава…</string>
-    <string name="tract_content_input_error_required">%1$s је обавезно</string>
-    <string name="tract_content_input_error_invalid_email">Унесите важећу адресу е-поште</string>
 </resources>

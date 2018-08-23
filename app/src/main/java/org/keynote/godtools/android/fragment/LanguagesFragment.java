@@ -37,6 +37,8 @@ import butterknife.BindView;
 
 public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.Callbacks {
     private static final String EXTRA_PRIMARY = LanguagesFragment.class.getName() + ".PRIMARY";
+    private static final String EXTRA_SEARCH = LanguagesFragment.class.getName() + ".SEARCH";
+    private static final String EXTRA_SEARCH_OPEN = LanguagesFragment.class.getName() + ".SEARCH_OPEN";
 
     private static final int LOADER_LANGUAGES = 101;
 
@@ -54,16 +56,12 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
     // these properties should be treated as final and only set/modified in onCreate()
     /*final*/ boolean mPrimary = true;
 
-    // this string is to store query result and maintain them during device rotation
-    private String mQuery = "";
-    private static final String KEY_SEARCH = LanguagesFragment.class.getName() + ".SEARCH";
-
-    // this boolean value will return if the searchView is open
-    private boolean mIsSearchViewOpen = false;
-    private static final String KEY_IS_SEARCH_OPEN = LanguagesFragment.class.getName() + ".IS_OPEN";
-
     @Nullable
     private List<Language> mLanguages;
+
+    // search related properties
+    private boolean mIsSearchViewOpen = false;
+    String mQuery = "";
 
     public static Fragment newInstance(final boolean primary) {
         final Fragment fragment = new LanguagesFragment();
@@ -73,22 +71,31 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         return fragment;
     }
 
-    /* BEGIN lifecycle */
+    // region Lifecycle Events
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Allow Fragment to have its own menu
         setHasOptionsMenu(true);
+
         final Bundle args = getArguments();
         if (args != null) {
             mPrimary = args.getBoolean(EXTRA_PRIMARY, mPrimary);
         }
+
         if (savedInstanceState != null) {
-            mQuery = savedInstanceState.getString(KEY_SEARCH, "");
-            mIsSearchViewOpen = savedInstanceState.getBoolean(KEY_IS_SEARCH_OPEN, false);
+            mQuery = savedInstanceState.getString(EXTRA_SEARCH, mQuery);
+            mIsSearchViewOpen = savedInstanceState.getBoolean(EXTRA_SEARCH_OPEN, mIsSearchViewOpen);
         }
+
         startLoaders();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_language_search, menu);
+        setSearchView(menu);
     }
 
     @Override
@@ -133,27 +140,21 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(EXTRA_SEARCH_OPEN, mSearchItem.isActionViewExpanded());
+        outState.putString(EXTRA_SEARCH, mQuery);
+    }
+
+    @Override
     public void onDestroyView() {
         cleanupLanguagesList();
         super.onDestroyView();
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(KEY_IS_SEARCH_OPEN, mSearchItem.isActionViewExpanded());
-        outState.putString(KEY_SEARCH, mQuery);
-    }
+    // endregion Lifecycle Events
 
-    //region Initialize Menu
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-
-        inflater.inflate(R.menu.fragment_language_search, menu);
-        setSearchView(menu);
-
-    }
+    // region Initialize Menu
 
     private void setSearchView(Menu menu) {
         // Configuring the SearchView
@@ -195,9 +196,7 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         }
     }
 
-    //endregion
-
-    /* END lifecycle */
+    // endregion
 
     private void startLoaders() {
         getLoaderManager().initLoader(LOADER_LANGUAGES, null, new LanguagesLoaderCallbacks());
@@ -223,7 +222,7 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         }
     }
 
-    private void updateLanguagesList() {
+    void updateLanguagesList() {
         if (mLanguagesAdapter != null) {
             mLanguagesAdapter.setSelected(mPrimary ? mPrimaryLanguage : mParallelLanguage);
             mLanguagesAdapter.setLanguages(filterLang(mLanguages));
@@ -239,7 +238,6 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         } else {
             return updateLanguageWithSearch(mQuery);
         }
-
     }
 
     private void cleanupLanguagesList() {

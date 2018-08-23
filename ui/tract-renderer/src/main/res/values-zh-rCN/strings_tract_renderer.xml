@@ -4,6 +4,4 @@
     <string name="share_tract_title">分享 “%1$s” 的方法：</string>
     <string name="tract_not_found">找不到您申请的工具</string>
     <string name="tract_loading">正在加载您申请的工具...</string>
-    <string name="tract_content_input_error_required">需要 %1$s</string>
-    <string name="tract_content_input_error_invalid_email">请输入有效的电子邮件地址</string>
 </resources>

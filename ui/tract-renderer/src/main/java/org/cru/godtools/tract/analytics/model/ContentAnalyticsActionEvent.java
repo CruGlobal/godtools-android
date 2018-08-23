@@ -7,7 +7,7 @@ import com.google.common.base.Strings;
 
 import org.cru.godtools.analytics.model.AnalyticsActionEvent;
 import org.cru.godtools.analytics.model.AnalyticsSystem;
-import org.cru.godtools.tract.model.AnalyticsEvent;
+import org.cru.godtools.xml.model.AnalyticsEvent;
 
 import java.util.Map;
 

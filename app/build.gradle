@@ -115,6 +115,8 @@ dependencies {
     implementation project(':library:model-events')
     implementation project(':library:model-loader')
     implementation project(':library:sync')
+    implementation project(':library:xml-model')
+
     implementation project(':ui:account')
     implementation project(':ui:base')
     implementation project(':ui:base-app')
@@ -122,10 +124,12 @@ dependencies {
     implementation project(':ui:shortcuts')
     implementation project(':ui:articles-aem-renderer')
     implementation project(':ui:tract-renderer')
+
     implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
     implementation "com.android.support:cardview-v7:${deps.androidSupport}"
     implementation "com.android.support:design:${deps.androidSupport}"
     implementation "com.android.support:percent:${deps.androidSupport}"
+
     implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-design:${deps.gtoSupport}"
@@ -134,7 +138,9 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
+
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
+
     implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
     implementation "com.google.guava:guava:${deps.guava}"
@@ -143,6 +149,7 @@ dependencies {
     implementation "me.thekey.android:thekey-eventbus:${deps.thekey}"
     implementation "me.thekey.android:thekey-view-dialog-fragment:${deps.thekey}"
     implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
+
     debugImplementation "com.android.support:multidex:${deps.multidex}"
     debugImplementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
     debugImplementation "org.ccci.gto.android:gto-support-leakcanary:${deps.gtoSupport}"
@@ -153,6 +160,7 @@ dependencies {
     debugImplementation "com.jakewharton.timber:timber:${deps.timber}"
     debugImplementation "com.facebook.stetho:stetho-okhttp3:${deps.facebookStetho}"
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
+
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
 

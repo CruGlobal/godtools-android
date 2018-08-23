@@ -4,6 +4,4 @@
     <string name="share_tract_title">Deli \"%1$s\" na</string>
     <string name="tract_not_found">Zahtevanega orodja ni bilo mogoče najti</string>
     <string name="tract_loading">Zahtevano orodje se nalaga...</string>
-    <string name="tract_content_input_error_required">%1$s  je obvesno polje.</string>
-    <string name="tract_content_input_error_invalid_email">Prosimo vpiši veljaven elektronski naslov</string>
 </resources>

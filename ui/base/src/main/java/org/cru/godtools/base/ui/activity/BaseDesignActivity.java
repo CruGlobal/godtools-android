@@ -19,7 +19,7 @@ public abstract class BaseDesignActivity extends BaseActivity implements TabLayo
     @BindView(R2.id.appbar_tabs)
     protected TabLayout mNavigationTabs;
 
-    /* BEGIN lifecycle */
+    // region Lifecycle Events
 
     @Override
     public void onContentChanged() {
@@ -55,7 +55,7 @@ public abstract class BaseDesignActivity extends BaseActivity implements TabLayo
         saveNavigationTabsState(outState);
     }
 
-    /* END lifecycle */
+    // endregion Lifecycle Events
 
     @CallSuper
     protected void setupNavigationTabs() {
