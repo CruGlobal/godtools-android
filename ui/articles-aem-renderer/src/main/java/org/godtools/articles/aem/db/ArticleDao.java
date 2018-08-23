@@ -35,7 +35,7 @@ interface ArticleDao {
     @Delete
     void deleteArticles(Article... articles);
 
-    //TODO: Convert to LiveData after Testing
+    //todo: Convert to LiveData after Testing
     /**
      *  The method to return all Articles.  User should use the ManifestAssociationDoa to
      *  get proper categories of the article.

@@ -37,7 +37,6 @@ interface AttachmentDao {
     @Delete
     void deleteAttachments(Attachment... attachments);
 
-    //TODO: Convert to LiveData after Testing
     /**
      * To obtain a collection of attachment that are associated with a
      * particular article.

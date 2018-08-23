@@ -1,6 +1,5 @@
 package org.godtools.articles.aem.db;
 
-import android.app.Application;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
@@ -15,32 +14,34 @@ import org.godtools.articles.aem.model.ManifestAssociation;
  *
  * @author Gyasi Story
  */
-@Database(entities = {Article.class, ManifestAssociation.class, Attachment.class}, version = 1)
+@Database(entities = { Article.class, ManifestAssociation.class, Attachment.class }, version = 1)
 public abstract class ArticleRoomDatabase extends RoomDatabase {
 
     public abstract ArticleDao mArticleDao();
+
     public abstract ManifestAssociationDao mManifestAssociationDao();
+
     public abstract AttachmentDao mAttachmentDao();
 
-    private static ArticleRoomDatabase INSTANCE;
+    private static ArticleRoomDatabase instance;
 
     /**
      * Used to get the current Instance of the Room database.
      *
-     * @param _context = the application context
+     * @param context = the application context
      * @return = Instance of the current Room Database
      */
-    static ArticleRoomDatabase getINSTANCE(final Context _context){
-        if (INSTANCE == null){
-            synchronized (ArticleRoomDatabase.class){
-                if (INSTANCE == null){
-                    INSTANCE = Room.databaseBuilder(_context.getApplicationContext(),
-                            ArticleRoomDatabase.class, "article_database")
-                            .build();
-                }
+    static ArticleRoomDatabase getINSTANCE(final Context context) {
+        synchronized (ArticleRoomDatabase.class) {
+            if (instance == null) {
+                instance = Room.databaseBuilder(context.getApplicationContext(),
+                        ArticleRoomDatabase.class, "article_database")
+                        //Todo: Create a Migration for database
+                        .fallbackToDestructiveMigration()
+                        .build();
             }
         }
-        return INSTANCE;
+        return instance;
     }
 
 }

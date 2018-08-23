@@ -42,7 +42,7 @@ interface ManifestAssociationDao {
     @Query("SELECT * FROM manifest_association_table WHERE manifest_key = :manifestID")
     LiveData<List<ManifestAssociation>> getAssociationByManifestID(String manifestID);
 
-    //TODO: Convert to LiveData after Testing
+    //todo: Convert to LiveData after Testing
     /**
      *
      * @param manifestID
