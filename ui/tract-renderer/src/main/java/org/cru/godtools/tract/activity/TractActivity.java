@@ -54,9 +54,9 @@ import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent;
-import org.cru.godtools.tract.content.TractManifestLoader;
 import org.cru.godtools.tract.util.DrawableUtils;
 import org.cru.godtools.tract.util.ViewUtils;
+import org.cru.godtools.xml.content.ManifestLoader;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.xml.model.Page;
@@ -883,7 +883,7 @@ public class TractActivity extends ImmersiveActivity
                 case LOADER_TYPE_MANIFEST:
                     final int langId = id & LOADER_ID_MASK;
                     if (mTool != null && langId >= 0 && langId < mLanguages.length) {
-                        return new TractManifestLoader(TractActivity.this, mTool, mLanguages[langId]);
+                        return new ManifestLoader(TractActivity.this, mTool, mLanguages[langId]);
                     }
                     break;
             }
@@ -895,8 +895,8 @@ public class TractActivity extends ImmersiveActivity
         public void onLoadFinished(@NonNull final Loader<Manifest> loader, @Nullable final Manifest manifest) {
             switch (loader.getId() & LOADER_TYPE_MASK) {
                 case LOADER_TYPE_MANIFEST:
-                    if (loader instanceof TractManifestLoader) {
-                        setManifest(((TractManifestLoader) loader).getLocale(), manifest);
+                    if (loader instanceof ManifestLoader) {
+                        setManifest(((ManifestLoader) loader).getLocale(), manifest);
                     }
                     break;
             }
