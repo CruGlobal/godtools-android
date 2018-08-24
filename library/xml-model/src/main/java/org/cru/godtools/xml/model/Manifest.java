@@ -149,6 +149,11 @@ public final class Manifest extends Base implements Styles {
                 .orElse(null);
     }
 
+    @NonNull
+    public List<Uri> getAemImports() {
+        return mAemImports;
+    }
+
     @Nullable
     @Override
     Resource getResource(@Nullable final String name) {
