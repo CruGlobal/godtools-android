@@ -1,6 +1,6 @@
 dependencies {
     implementation project(':library:base')
-    implementation project(':library:xml-model')
+    api project(':library:xml-model')
 
     api project(':ui:base')
 
