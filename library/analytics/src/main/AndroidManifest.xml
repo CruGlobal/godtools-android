@@ -5,6 +5,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
+        <activity
+            android:name="com.adobe.mobile.MessageFullScreenActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <receiver android:name="com.adobe.mobile.MessageNotificationHandler" />
+
         <receiver android:name=".adobe.AdobeBroadcastReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
