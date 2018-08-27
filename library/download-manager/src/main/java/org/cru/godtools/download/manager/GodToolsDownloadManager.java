@@ -146,7 +146,7 @@ public final class GodToolsDownloadManager {
         return sInstance;
     }
 
-    /* BEGIN lifecycle */
+    // region Lifecycle Events
 
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
@@ -173,7 +173,7 @@ public final class GodToolsDownloadManager {
         enqueueStaleAttachments();
     }
 
-    /* END lifecycle */
+    // endregion Lifecycle Events
 
     @AnyThread
     public void addLanguage(@Nullable final Locale locale) {
@@ -642,7 +642,7 @@ public final class GodToolsDownloadManager {
         }
     }
 
-    /* BEGIN download progress methods */
+    // region Download Progress Methods
 
     private void startProgress(@NonNull final TranslationKey translation) {
         synchronized (mDownloadingTranslations) {
@@ -757,9 +757,9 @@ public final class GodToolsDownloadManager {
         }
     }
 
-    /* END download progress methods */
+    // endregion Download Progress Methods
 
-    /* BEGIN download & cleaning scheduling methods */
+    // region Download & Cleaning Scheduling Methods
 
     @WorkerThread
     private void enqueuePendingPublishedTranslations() {
@@ -826,7 +826,7 @@ public final class GodToolsDownloadManager {
         mHandler.sendMessageDelayed(m, CLEANER_INTERVAL_IN_MS);
     }
 
-    /* END download & cleaning scheduling methods */
+    // endregion Download & Cleaning Scheduling Methods
 
     static final class TranslationKey {
         @Nullable

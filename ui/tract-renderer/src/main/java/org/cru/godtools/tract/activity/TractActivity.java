@@ -186,7 +186,7 @@ public class TractActivity extends ImmersiveActivity
         mManifests = manifests;
     }
 
-    /* BEGIN lifecycle */
+    // region Lifecycle Events
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -344,9 +344,9 @@ public class TractActivity extends ImmersiveActivity
         outState.putInt(EXTRA_INITIAL_PAGE, mInitialPage);
     }
 
-    /* END lifecycle */
+    // endregion Lifecycle Events
 
-    /* BEGIN creation methods */
+    // region Creation Methods
 
     private void processIntent(@Nullable final Intent intent, @Nullable final Bundle savedInstanceState) {
         final String action = intent != null ? intent.getAction() : null;
@@ -437,7 +437,7 @@ public class TractActivity extends ImmersiveActivity
         return mTool != null && mLanguages.length > 0;
     }
 
-    /* END creation methods */
+    // endregion Creation Methods
 
     private void downloadTranslations() {
         if (mDownloadManager != null && mTool != null) {
@@ -711,7 +711,7 @@ public class TractActivity extends ImmersiveActivity
         ManifestViewUtils.bindBackgroundImage(manifest, mBackgroundImage);
     }
 
-    /* BEGIN Tool Pager methods */
+    // region Tool Pager Methods
 
     private void setupPager() {
         if (mPager != null) {
@@ -760,7 +760,7 @@ public class TractActivity extends ImmersiveActivity
         }
     }
 
-    /* END Tool Pager methods */
+    // endregion Tool Pager Methods
 
     private void startLoaders() {
         final LoaderManager manager = getSupportLoaderManager();
