@@ -19,5 +19,5 @@ dependencies {
 
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
 
-    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
+    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

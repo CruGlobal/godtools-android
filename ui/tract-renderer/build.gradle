@@ -55,5 +55,5 @@ dependencies {
 
     annotationProcessor "android.arch.lifecycle:compiler:${deps.androidLifecycle}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
-    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
+    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
