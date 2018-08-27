@@ -161,7 +161,7 @@ dependencies {
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
 
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
-    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
+    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 
     // fix conflicts in transitive dependencies
     androidTestImplementation "com.android.support:multidex:${deps.multidex}"
