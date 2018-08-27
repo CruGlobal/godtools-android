@@ -1,19 +1,7 @@
-apply plugin: 'com.jakewharton.butterknife'
-
 android {
     defaultConfig {
-        vectorDrawables.useSupportLibrary = true
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [eventBusIndex: 'org.cru.godtools.article.TractEventBusIndex']
-            }
-        }
         multiDexEnabled true
     }
-
 }
 
 dependencies {
