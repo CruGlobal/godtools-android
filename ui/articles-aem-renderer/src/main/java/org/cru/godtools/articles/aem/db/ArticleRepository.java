@@ -1,10 +1,11 @@
-package org.godtools.articles.aem.db;
+package org.cru.godtools.articles.aem.db;
 
-import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.content.Context;
 import android.os.AsyncTask;
 
-import org.godtools.articles.aem.model.Article;
+
+import org.cru.godtools.articles.aem.model.Article;
 
 import java.util.List;
 
@@ -15,12 +16,12 @@ import java.util.List;
  */
 public class ArticleRepository {
 
-    private ArticleDao mArticleDao;
+    private final ArticleDao mArticleDao;
     private LiveData<List<Article>> mAllArticles;
 
-    public ArticleRepository(Application application) {
-        ArticleRoomDatabase db = ArticleRoomDatabase.getINSTANCE(application);
-        mArticleDao = db.mArticleDao();
+    public ArticleRepository(Context context) {
+        ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(context);
+        mArticleDao = db.articleDao();
         mAllArticles = mArticleDao.getAllArticles();
     }
 
@@ -29,7 +30,7 @@ public class ArticleRepository {
      *
      * @return = Live Data Collection of Articles
      */
-    public LiveData<List<Article>> getmAllArticles() {
+    public LiveData<List<Article>> getAllArticles() {
         return mAllArticles;
     }
 

@@ -118,11 +118,11 @@ dependencies {
     implementation project(':library:xml-model')
 
     implementation project(':ui:account')
+    implementation project(':ui:articles-aem-renderer')
     implementation project(':ui:base')
     implementation project(':ui:base-app')
     implementation project(':ui:everystudent')
     implementation project(':ui:shortcuts')
-    implementation project(':ui:articles-aem-renderer')
     implementation project(':ui:tract-renderer')
 
     implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
@@ -171,7 +171,7 @@ dependencies {
 
 // make crashlytics upload task dependent on assembling the apk
 afterEvaluate {
-    crashlyticsUploadDistributionProductionDebug.dependsOn assembleProductionDebug
+//    crashlyticsUploadDistributionProductionDebug.dependsOn assembleProductionDebug
 }
 
 def generateCrashlyticsBetaReleaseNotes(size = 10) {

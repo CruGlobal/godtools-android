@@ -1,25 +1,26 @@
-package org.godtools.articles.aem.db;
+package org.cru.godtools.articles.aem.db;
 
-import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.content.Context;
 import android.os.AsyncTask;
 
-import org.godtools.articles.aem.model.Article;
-import org.godtools.articles.aem.model.ManifestAssociation;
+import org.cru.godtools.articles.aem.model.Article;
+import org.cru.godtools.articles.aem.model.ManifestAssociation;
 
 import java.util.List;
+
 
 /**
  * This class is used a connector for the Data Access Object for Manifest Associations
  */
 public class ManifestAssociationRepository {
 
-    private ManifestAssociationDao mManifestAssociationDao;
+    private final ManifestAssociationDao mManifestAssociationDao;
 
-    public ManifestAssociationRepository(Application application) {
+    public ManifestAssociationRepository(Context context) {
 
-        ArticleRoomDatabase db = ArticleRoomDatabase.getINSTANCE(application);
-        mManifestAssociationDao = db.mManifestAssociationDao();
+        ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(context);
+        mManifestAssociationDao = db.manifestAssociationDao();
     }
 
     /**

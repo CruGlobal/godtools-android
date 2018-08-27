@@ -1,23 +1,24 @@
-package org.godtools.articles.aem.view_model;
+package org.cru.godtools.articles.aem.view_model;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
-import org.godtools.articles.aem.db.ArticleRepository;
-import org.godtools.articles.aem.db.AttachmentRepository;
-import org.godtools.articles.aem.db.ManifestAssociationRepository;
-import org.godtools.articles.aem.model.Article;
-import org.godtools.articles.aem.model.Attachment;
+
+import org.cru.godtools.articles.aem.db.ArticleRepository;
+import org.cru.godtools.articles.aem.db.AttachmentRepository;
+import org.cru.godtools.articles.aem.db.ManifestAssociationRepository;
+import org.cru.godtools.articles.aem.model.Article;
+import org.cru.godtools.articles.aem.model.Attachment;
 
 import java.util.List;
 
 public class ArticleViewModel extends AndroidViewModel {
 
-    private ArticleRepository mArticleRepository;
-    private AttachmentRepository mAttchReposistory;
-    private ManifestAssociationRepository mManifestRepository;
+    private final ArticleRepository mArticleRepository;
+    private final AttachmentRepository mAttchReposistory;
+    private final ManifestAssociationRepository mManifestRepository;
 
     public ArticleViewModel(@NonNull Application application) {
         super(application);
@@ -37,7 +38,7 @@ public class ArticleViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Article>> getArticles() {
-        return mArticleRepository.getmAllArticles();
+        return mArticleRepository.getAllArticles();
     }
 
 

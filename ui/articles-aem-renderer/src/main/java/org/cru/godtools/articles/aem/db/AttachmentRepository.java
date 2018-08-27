@@ -1,10 +1,11 @@
-package org.godtools.articles.aem.db;
+package org.cru.godtools.articles.aem.db;
 
-import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.content.Context;
 import android.os.AsyncTask;
 
-import org.godtools.articles.aem.model.Attachment;
+
+import org.cru.godtools.articles.aem.model.Attachment;
 
 import java.util.List;
 
@@ -15,11 +16,11 @@ import java.util.List;
  */
 public class AttachmentRepository {
 
-    private AttachmentDao mAttachmentDao;
+    private final AttachmentDao mAttachmentDao;
 
-    public AttachmentRepository(Application application) {
-        ArticleRoomDatabase db = ArticleRoomDatabase.getINSTANCE(application);
-        mAttachmentDao = db.mAttachmentDao();
+    public AttachmentRepository(Context context) {
+        ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(context);
+        mAttachmentDao = db.attachmentDao();
     }
 
     /**

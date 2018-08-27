@@ -1,4 +1,4 @@
-package org.godtools.articles.aem.model;
+package org.cru.godtools.articles.aem.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -39,12 +39,12 @@ public class Article {
      */
     @NonNull
     @ColumnInfo(name = "date_created")
-    public String mDateCreated;
+    public long mDateCreated;
 
     /**
      * The date the article was last updated. If no
      * data exist should be set to date created.
      */
     @ColumnInfo(name = "date_updated")
-    public String mDateUpdated;
+    public long mDateUpdated;
 }

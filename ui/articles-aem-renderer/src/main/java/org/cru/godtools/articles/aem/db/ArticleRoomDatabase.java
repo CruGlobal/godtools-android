@@ -1,13 +1,14 @@
-package org.godtools.articles.aem.db;
+package org.cru.godtools.articles.aem.db;;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import org.godtools.articles.aem.model.Article;
-import org.godtools.articles.aem.model.Attachment;
-import org.godtools.articles.aem.model.ManifestAssociation;
+import org.cru.godtools.articles.aem.model.Article;
+import org.cru.godtools.articles.aem.model.Attachment;
+import org.cru.godtools.articles.aem.model.ManifestAssociation;
+
 
 /**
  * This class is used to create the database table.
@@ -17,11 +18,11 @@ import org.godtools.articles.aem.model.ManifestAssociation;
 @Database(entities = { Article.class, ManifestAssociation.class, Attachment.class }, version = 1)
 public abstract class ArticleRoomDatabase extends RoomDatabase {
 
-    public abstract ArticleDao mArticleDao();
+    public abstract ArticleDao articleDao();
 
-    public abstract ManifestAssociationDao mManifestAssociationDao();
+    public abstract ManifestAssociationDao manifestAssociationDao();
 
-    public abstract AttachmentDao mAttachmentDao();
+    public abstract AttachmentDao attachmentDao();
 
     private static ArticleRoomDatabase instance;
 
@@ -31,7 +32,7 @@ public abstract class ArticleRoomDatabase extends RoomDatabase {
      * @param context = the application context
      * @return = Instance of the current Room Database
      */
-    static ArticleRoomDatabase getINSTANCE(final Context context) {
+    static ArticleRoomDatabase getInstance(final Context context) {
         synchronized (ArticleRoomDatabase.class) {
             if (instance == null) {
                 instance = Room.databaseBuilder(context.getApplicationContext(),
