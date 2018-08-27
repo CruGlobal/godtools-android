@@ -70,7 +70,6 @@ ext.deps = [
         snowplow             : '0.7.0',
         thekey               : '2.0.0-SNAPSHOT',
         timber               : '4.7.0'
-
 ]
 
 subprojects {
