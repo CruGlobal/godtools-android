@@ -45,4 +45,9 @@ interface ArticleDao {
      */
     @Query("SELECT * FROM article_table")
     LiveData<List<Article>> getAllArticles();
+
+    //region Testable (Non Live Data)
+    @Query("SELECT * FROM article_table")
+    List<Article> getTestableAllArticles();
+    //endregion
 }

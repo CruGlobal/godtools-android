@@ -1,12 +1,10 @@
 package org.cru.godtools.articles.aem.db;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.Observer;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
@@ -22,9 +20,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-
-import timber.log.Timber;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -32,14 +27,15 @@ import timber.log.Timber;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ArticleDBTest implements LifecycleOwner {
+public class ArticleDBTest {
+    private static final String TAG = "ArticleDBTest";
 
     private ArticleDao mArticleDao;
     private AttachmentDao mAttachmentDao;
     private ManifestAssociationDao mAssociationDao;
     private ArticleRoomDatabase db;
 
-    private Observer<List<Article>> articleObserver;
+    private List<Article> mSavedArticles = new ArrayList<>();
 
     @Before
     public void createDb() {
@@ -50,19 +46,6 @@ public class ArticleDBTest implements LifecycleOwner {
         mAttachmentDao = db.attachmentDao();
         mAssociationDao = db.manifestAssociationDao();
 
-    }
-
-    @After
-    public void closeDb() {
-        db.close();
-    }
-
-    @Test
-    public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
-
-        List<Article> articles = new ArrayList<>();
 
         for (int i = 0; i < 12; i++) {
             Article article = new Article();
@@ -74,8 +57,8 @@ public class ArticleDBTest implements LifecycleOwner {
                 article.mDateUpdated = new SimpleDateFormat("E MMM dd yyyy HH:mm:ss zz")
                         .parse("Sat May 19 2018 00:23:39 GMT+0000").getTime();
             } catch (ParseException e) {
-                Timber.e(e);
-                article.mDateCreated = Calendar.getInstance().getTimeInMillis();
+                Log.e(TAG, "createDb: ", e);
+                assert (false);
             }
             Calendar calendar = Calendar.getInstance();
             calendar.getTime();
@@ -90,56 +73,59 @@ public class ArticleDBTest implements LifecycleOwner {
 
         }
 
-    }
+        mSavedArticles = mArticleDao.getTestableAllArticles();
 
 
-    private void associateToArticles(List<Article> savedArticles) {
-        for (Article article : savedArticles != null ? savedArticles : new ArrayList<Article>()) {
-            // Create an attachment for each
-            Attachment attachment = new Attachment();
-            attachment.mArticleKey = article.mId;
-            attachment.mAttachmentUrl = "https://i.pinimg.com/originals/b9/9e/a0/b99ea0abc5e6bf5f5c67c1797791cc82.jpg";
-            mAttachmentDao.insertAttachment(attachment);
-
-            // Create Manifest Association
+        for (int i = 0; i < mSavedArticles.size(); i++) {
             ManifestAssociation association = new ManifestAssociation();
-            association.mArticleId = article.mId;
-            association.mManifestId = String.valueOf(article.mId % 3);  // just need to only have three versions
-            association.mManifestName = String.format("Manifest # %s", association.mManifestId);
+            association.mArticleId = mSavedArticles.get(i).mId;
+            association.mManifestName = "Manifest ID " + (i % 3);
+            association.mManifestId = (i % 3) + "";
             mAssociationDao.insertAssociation(association);
+
+            Attachment attachment = new Attachment();
+            attachment.mArticleKey = mSavedArticles.get(i).mId;
+            attachment.mAttachmentUrl =
+                    "https://believeacts2blog.files.wordpress.com/2015/10/image16.jpg";
         }
+
     }
 
-    private void getAllSavedArticles() {
-        mArticleDao.getAllArticles().observe(this, articles -> {
-            associateToArticles(articles);
+    @After
+    public void closeDb() {
+        db.close();
+    }
 
-            //verify that we are getting bat the Articles
-            Boolean allAttachmentsSaved = false;
+    @Test
+    public void verifyGetAllArticles() {
 
-            for (Article article : articles) {
-                if (mAttachmentDao.getAttachmentsByArticle(article.mId) == null) {
-                    allAttachmentsSaved = false;
-                    break;
-                }
+        assert (mSavedArticles.size() > 1);
 
-                allAttachmentsSaved = true;
+    }
+
+
+    @Test
+    public void verifyArticleHasAttachment() {
+        Boolean hasAttachment = false;
+        for (Article article : mSavedArticles) {
+            hasAttachment = mAttachmentDao.getTestableAttachmentsByArticle(article.mId)
+                    .size() > 0;
+            if (!hasAttachment) {
+                break;
             }
+        }
 
-            // verify that all of the Articles are retr
-
-            assert (Objects.requireNonNull(articles).size() > 0 &&
-                    allAttachmentsSaved &&
-                    Objects.requireNonNull(mAssociationDao
-                            .getArticlesByManifestID("0").getValue()).size() > 0 &&
-                    Objects.requireNonNull(mAssociationDao
-                            .getAssociationByManifestID("1").getValue()).size() > 0);
-        });
+        assert (hasAttachment);
     }
 
 
-    @Override
-    public Lifecycle getLifecycle() {
-        return null;
+    @Test
+    public void verifyManifestHasArticles() {
+
+        assert (mAssociationDao.getTestableArticlesByManifestID("0").size() > 0 &&
+                mAssociationDao.getTestableArticlesByManifestID("1").size() > 0 &&
+                mAssociationDao.getTestableArticlesByManifestID("2").size() > 0);
     }
+
+
 }

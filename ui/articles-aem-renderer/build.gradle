@@ -5,15 +5,6 @@ android {
 }
 
 dependencies {
-    implementation project(':library:base')
-    implementation project(':library:db')
-    implementation project(':library:download-manager')
-    implementation project(':library:model')
-    implementation project(':library:model-events')
-    implementation project(':library:model-loader')
-    implementation project(':library:sync-tasks')
-
-    implementation project(':ui:base')
 
     implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
     implementation "android.arch.persistence.room:runtime:${deps.roomVersion}"
@@ -21,6 +12,7 @@ dependencies {
 
     androidTestImplementation "com.android.support.test:runner:${deps.androidTestingSupport}"
     androidTestImplementation "android.arch.persistence.room:testing:${deps.roomVersion}"
+    testImplementation "android.arch.core:core-testing:${deps.androidLifecycle}"
 
     annotationProcessor "android.arch.lifecycle:compiler:${deps.androidLifecycle}"
     annotationProcessor "android.arch.persistence.room:compiler:${deps.roomVersion}"

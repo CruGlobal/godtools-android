@@ -48,4 +48,8 @@ interface AttachmentDao {
     @Query("SELECT * FROM attachment_table WHERE article_key = :articleId")
     LiveData<List<Attachment>> getAttachmentsByArticle(int articleId);
 
+    //region Testable (None Live Data)
+    @Query("SELECT * FROM attachment_table WHERE article_key = :articleId")
+    List<Attachment> getTestableAttachmentsByArticle(int articleId);
+    //endregion
 }
