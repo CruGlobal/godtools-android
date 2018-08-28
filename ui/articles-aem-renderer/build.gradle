@@ -1,43 +1,21 @@
-apply plugin: 'com.jakewharton.butterknife'
-
 android {
     defaultConfig {
-        vectorDrawables.useSupportLibrary = true
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [eventBusIndex: 'org.cru.godtools.article.TractEventBusIndex']
-            }
-        }
         multiDexEnabled true
     }
-
 }
 
 dependencies {
-    implementation project(':library:base')
-    implementation project(':library:db')
-    implementation project(':library:download-manager')
-    implementation project(':library:model')
-    implementation project(':library:model-events')
-    implementation project(':library:model-loader')
-    implementation project(':library:sync-tasks')
-    implementation project(':ui:base')
+    implementation project(':library:xml-model')
 
-    implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    // Room components
-    implementation "android.arch.persistence.room:runtime:${deps.roomVersion}"
-    annotationProcessor "android.arch.persistence.room:compiler:${deps.roomVersion}"
-    androidTestImplementation "android.arch.persistence.room:testing:${deps.roomVersion}"
-
-    // Lifecycle components
     implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
+    implementation "android.arch.persistence.room:runtime:${deps.roomVersion}"
+    implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
+    androidTestImplementation "com.android.support.test:runner:${deps.androidTestingSupport}"
+    androidTestImplementation "android.arch.persistence.room:testing:${deps.roomVersion}"
+    testImplementation "android.arch.core:core-testing:${deps.androidLifecycle}"
     annotationProcessor "android.arch.lifecycle:compiler:${deps.androidLifecycle}"
+    annotationProcessor "android.arch.persistence.room:compiler:${deps.roomVersion}"
 
-    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
 }
+
