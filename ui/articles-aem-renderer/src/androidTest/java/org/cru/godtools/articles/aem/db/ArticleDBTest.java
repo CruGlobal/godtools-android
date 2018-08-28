@@ -9,7 +9,6 @@ import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.articles.aem.model.ManifestAssociation;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -93,35 +94,23 @@ public class ArticleDBTest {
 
     @Test
     public void verifyGetAllArticles() {
-
-        Assert.assertTrue("No article was saved.",
-                mSavedArticles.size() > 0);
-
+        assertTrue("No article was saved.", mSavedArticles.size() > 0);
     }
 
 
     @Test
     public void verifyArticleHasAttachment() {
-        Boolean hasAttachment = false;
         for (Article article : mSavedArticles) {
-            hasAttachment = mAttachmentDao.getTestableAttachmentsByArticle(article.mId)
-                    .size() > 0;
-
-            Assert.assertTrue(String.format("Article %s has no attachment",
-                    article.mTitle), hasAttachment);
+            assertTrue(String.format("Article %s has no attachment", article.mTitle),
+                       mAttachmentDao.getTestableAttachmentsByArticle(article.mId).size() > 0);
         }
-
     }
 
 
     @Test
     public void verifyManifestHasArticles() {
-
-        Assert.assertTrue("One of the checks came back false",
-                mAssociationDao.getTestableArticlesByManifestID("0").size() > 0 &&
-                        mAssociationDao.getTestableArticlesByManifestID("1").size() > 0 &&
-                        mAssociationDao.getTestableArticlesByManifestID("2").size() > 0);
+        assertTrue("Manifest 0 should have articles", mAssociationDao.getTestableArticlesByManifestID("0").size() > 0);
+        assertTrue("Manifest 1 should have articles", mAssociationDao.getTestableArticlesByManifestID("1").size() > 0);
+        assertTrue("Manifest 2 should have articles", mAssociationDao.getTestableArticlesByManifestID("2").size() > 0);
     }
-
-
 }
