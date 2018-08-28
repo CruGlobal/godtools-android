@@ -10,6 +10,7 @@ import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.articles.aem.model.ManifestAssociation;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -87,6 +88,8 @@ public class ArticleDBTest {
             attachment.mArticleKey = mSavedArticles.get(i).mId;
             attachment.mAttachmentUrl =
                     "https://believeacts2blog.files.wordpress.com/2015/10/image16.jpg";
+
+            mAttachmentDao.insertAttachment(attachment);
         }
 
     }
@@ -99,7 +102,8 @@ public class ArticleDBTest {
     @Test
     public void verifyGetAllArticles() {
 
-        assert (mSavedArticles.size() > 1);
+        Assert.assertTrue("No article was saved.",
+                mSavedArticles.size() > 0);
 
     }
 
@@ -110,21 +114,21 @@ public class ArticleDBTest {
         for (Article article : mSavedArticles) {
             hasAttachment = mAttachmentDao.getTestableAttachmentsByArticle(article.mId)
                     .size() > 0;
-            if (!hasAttachment) {
-                break;
-            }
+
+            Assert.assertTrue(String.format("Article %s has no attachment",
+                    article.mTitle), hasAttachment);
         }
 
-        assert (hasAttachment);
     }
 
 
     @Test
     public void verifyManifestHasArticles() {
 
-        assert (mAssociationDao.getTestableArticlesByManifestID("0").size() > 0 &&
-                mAssociationDao.getTestableArticlesByManifestID("1").size() > 0 &&
-                mAssociationDao.getTestableArticlesByManifestID("2").size() > 0);
+        Assert.assertTrue("One of the checks came back false",
+                mAssociationDao.getTestableArticlesByManifestID("0").size() > 0 &&
+                        mAssociationDao.getTestableArticlesByManifestID("1").size() > 0 &&
+                        mAssociationDao.getTestableArticlesByManifestID("2").size() > 0);
     }
 
 

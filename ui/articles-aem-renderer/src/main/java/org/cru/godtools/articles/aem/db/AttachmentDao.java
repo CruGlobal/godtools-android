@@ -6,6 +6,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.support.annotation.VisibleForTesting;
 
 import org.cru.godtools.articles.aem.model.Attachment;
 
@@ -49,6 +50,7 @@ interface AttachmentDao {
     LiveData<List<Attachment>> getAttachmentsByArticle(int articleId);
 
     //region Testable (None Live Data)
+    @VisibleForTesting()
     @Query("SELECT * FROM attachment_table WHERE article_key = :articleId")
     List<Attachment> getTestableAttachmentsByArticle(int articleId);
     //endregion

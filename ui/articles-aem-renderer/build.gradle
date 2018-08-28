@@ -12,7 +12,6 @@ dependencies {
 
     androidTestImplementation "com.android.support.test:runner:${deps.androidTestingSupport}"
     androidTestImplementation "android.arch.persistence.room:testing:${deps.roomVersion}"
-    testImplementation "android.arch.core:core-testing:${deps.androidLifecycle}"
 
     annotationProcessor "android.arch.lifecycle:compiler:${deps.androidLifecycle}"
     annotationProcessor "android.arch.persistence.room:compiler:${deps.roomVersion}"
