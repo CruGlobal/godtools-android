@@ -6,6 +6,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.support.annotation.VisibleForTesting;
 
 
 import org.cru.godtools.articles.aem.model.Article;
@@ -50,8 +51,20 @@ interface ManifestAssociationDao {
      * @return
      */
     @Query("SELECT * FROM article_table AS art " +
-            "INNER JOIN manifest_association_table AS assc ON art._id == assc.article_key " +
+            "INNER JOIN manifest_association_table AS assc ON art.article_key == assc.article_key " +
             "WHERE assc.manifest_key = :manifestID")
     LiveData<List<Article>> getArticlesByManifestID(String manifestID);
+
+    //region Testable calls (No Live Data)
+    @VisibleForTesting()
+    @Query("SELECT * FROM article_table AS art " +
+            "INNER JOIN manifest_association_table AS assc ON art.article_key == assc.article_key " +
+            "WHERE assc.manifest_key = :manifestID")
+    List<Article> getTestableArticlesByManifestID(String manifestID);
+
+    @VisibleForTesting()
+    @Query("SELECT * FROM manifest_association_table WHERE manifest_key = :manifestID")
+    List<ManifestAssociation> getTestableAssociationByManifestID(String manifestID);
+    //endregion
 
 }

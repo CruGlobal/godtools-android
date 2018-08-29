@@ -49,7 +49,7 @@ public class AttachmentRepository {
      * @param articleId = the id of the article which is it refers to.
      * @return = Live Data Collection of Attachments
      */
-    public LiveData<List<Attachment>> getAttachmentsByArticle(int articleId) {
+    public LiveData<List<Attachment>> getAttachmentsByArticle(String articleId) {
 
         return mAttachmentDao.getAttachmentsByArticle(articleId);
     }

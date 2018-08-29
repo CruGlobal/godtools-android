@@ -1,6 +1,7 @@
 package org.cru.godtools.articles.aem.service;
 
 import android.net.Uri;
+import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
 
@@ -12,6 +13,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Iterator;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  *
@@ -46,18 +50,23 @@ public class AEMDownloadManger {
 
     }
 
+
     private static void loadAemManifestIntoAemModel(Manifest manifest, Uri aemImports) throws IOException, JSONException {
 
         JSONObject importJson = getJsonFromUri(aemImports);
 
         // Get Category out of Json
-        JSONObject categoryObject = importJson.getJSONObject()
+        for (Iterator<String> it = importJson.keys(); it.hasNext(); ) {
+            String key = it.next();
+
+        }
     }
 
-    private static JSONObject getJsonFromUri(Uri aemImports) throws IOException, JSONException {
+    @VisibleForTesting
+    public static JSONObject getJsonFromUri(Uri aemImports) throws IOException, JSONException {
 
-        URL url = new URL(aemImports.getPath());
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        URL url = new URL("https://stage.cru.org/" + aemImports.getPath());
+        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         String results = IOUtils.toString(connection.getInputStream());
         return new JSONObject(results);
     }

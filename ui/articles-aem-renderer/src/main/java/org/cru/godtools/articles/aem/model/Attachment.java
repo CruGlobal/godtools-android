@@ -14,7 +14,7 @@ import android.support.annotation.NonNull;
  * @author Gyasi Story
  */
 @Entity(tableName = "attachment_table", foreignKeys = @ForeignKey(entity = Article.class,
-    parentColumns = "_id", childColumns = "article_key"), indices = {@Index(value =
+    parentColumns = "article_key", childColumns = "article_key"), indices = {@Index(value =
         {"attachment_url"})})
 public class Attachment {
 
@@ -30,7 +30,7 @@ public class Attachment {
      */
     @NonNull
     @ColumnInfo(name = "article_key")
-    public int mArticleKey;
+    public String mArticleKey;
 
     /**
      *  The Url path fot the attachment

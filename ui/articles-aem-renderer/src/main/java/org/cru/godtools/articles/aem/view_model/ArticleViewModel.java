@@ -47,6 +47,6 @@ public class ArticleViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Attachment>> getAttachmentsByArticle(Article article) {
-        return mAttchReposistory.getAttachmentsByArticle(article.mId);
+        return mAttchReposistory.getAttachmentsByArticle(article.mkey);
     }
 }

@@ -15,10 +15,10 @@ public class Article {
     /**
      * Unique Identifier for the article table
      */
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @NonNull
-    @ColumnInfo(name = "_id")
-    public int mId;
+    @ColumnInfo(name = "article_key")
+    public String mkey;
 
     /**
      * The title of the Article

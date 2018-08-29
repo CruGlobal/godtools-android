@@ -1,31 +1,35 @@
 package org.cru.godtools.articles.aem.db;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.Observer;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
-import junit.framework.Assert;
-
+import org.apache.commons.io.IOUtils;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.articles.aem.model.ManifestAssociation;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
+
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -33,53 +37,29 @@ import java.util.Objects;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ArticleDBTest implements LifecycleOwner {
-
-    private static final String TAG = "ArticleDBTest";
-
+public class ArticleDBTest {
     private ArticleDao mArticleDao;
     private AttachmentDao mAttachmentDao;
     private ManifestAssociationDao mAssociationDao;
     private ArticleRoomDatabase db;
-
-    private Observer<List<Article>> articleObserver;
+    private List<Article> mSavedArticles = new ArrayList<>();
 
     @Before
-    public void createDb() {
+    public void createDb() throws Exception {
         Context context = InstrumentationRegistry.getTargetContext();
         db = Room.inMemoryDatabaseBuilder(context,
                 ArticleRoomDatabase.class).allowMainThreadQueries().build();
         mArticleDao = db.articleDao();
         mAttachmentDao = db.attachmentDao();
         mAssociationDao = db.manifestAssociationDao();
-
-    }
-
-    @After
-    public void closeDb() {
-        db.close();
-    }
-
-    @Test
-    public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
-
-        List<Article> articles = new ArrayList<>();
-
         for (int i = 0; i < 12; i++) {
             Article article = new Article();
-
+            article.mkey = i + "aaslf" + i;
             article.mContent = "<p> The Body </>";
-            try {
-                article.mDateCreated = new SimpleDateFormat("E MMM dd yyyy HH:mm:ss zz")
-                        .parse("Fri Jun 08 2018 18:55:00 GMT+0000").getTime();
-                article.mDateUpdated = new SimpleDateFormat("E MMM dd yyyy HH:mm:ss zz")
-                        .parse("Sat May 19 2018 00:23:39 GMT+0000").getTime();
-            } catch (ParseException e) {
-                Log.e(TAG, "useAppContext: ", e);
-                article.mDateCreated = Calendar.getInstance().getTimeInMillis();
-            }
+            article.mDateCreated = new SimpleDateFormat("E MMM dd yyyy HH:mm:ss zz")
+                    .parse("Fri Jun 08 2018 18:55:00 GMT+0000").getTime();
+            article.mDateUpdated = new SimpleDateFormat("E MMM dd yyyy HH:mm:ss zz")
+                    .parse("Sat May 19 2018 00:23:39 GMT+0000").getTime();
             Calendar calendar = Calendar.getInstance();
             calendar.getTime();
             calendar.setTimeInMillis(article.mDateCreated);
@@ -90,59 +70,138 @@ public class ArticleDBTest implements LifecycleOwner {
             date.getTimezoneOffset();
             article.mTitle = " The title = " + i;
             mArticleDao.insertArticle(article);
-
         }
-
-    }
-
-
-    private void associateToArticles(List<Article> savedArticles) {
-        for (Article article : savedArticles != null ? savedArticles : new ArrayList<Article>()) {
-            // Create an attachment for each
-            Attachment attachment = new Attachment();
-            attachment.mArticleKey = article.mId;
-            attachment.mAttachmentUrl = "https://i.pinimg.com/originals/b9/9e/a0/b99ea0abc5e6bf5f5c67c1797791cc82.jpg";
-            mAttachmentDao.insertAttachment(attachment);
-
-            // Create Manifest Association
+        mSavedArticles = mArticleDao.getTestableAllArticles();
+        for (int i = 0; i < mSavedArticles.size(); i++) {
             ManifestAssociation association = new ManifestAssociation();
-            association.mArticleId = article.mId;
-            association.mManifestId = String.valueOf(article.mId % 3);  // just need to only have three versions
-            association.mManifestName = String.format("Manifest # %s", association.mManifestId);
+            association.mArticleId = mSavedArticles.get(i).mkey;
+            association.mManifestName = "Manifest ID " + (i % 3);
+            association.mManifestId = (i % 3) + "";
             mAssociationDao.insertAssociation(association);
+            Attachment attachment = new Attachment();
+            attachment.mArticleKey = String.valueOf(mSavedArticles.get(i).mkey);
+            attachment.mAttachmentUrl =
+                    "https://believeacts2blog.files.wordpress.com/2015/10/image16.jpg";
+            mAttachmentDao.insertAttachment(attachment);
         }
     }
 
-    private void getAllSavedArticles() {
-        mArticleDao.getAllArticles().observe(this, articles -> {
-            associateToArticles(articles);
+    @After
+    public void closeDb() {
+        db.close();
+    }
 
-            //verify that we are getting bat the Articles
-            Boolean allAttachmentsSaved = false;
+    @Test
+    public void verifyGetAllArticles() {
+        assertTrue("No article was saved.", mSavedArticles.size() > 0);
+    }
 
-            for (Article article : articles) {
-                if (mAttachmentDao.getAttachmentsByArticle(article.mId) == null) {
-                    allAttachmentsSaved = false;
+    @Test
+    public void verifyArticleHasAttachment() {
+        for (Article article : mSavedArticles) {
+            assertTrue(String.format("Article %s has no attachment", article.mTitle),
+                    mAttachmentDao.getTestableAttachmentsByArticle(article.mkey).size() > 0);
+        }
+    }
+
+    @Test
+    public void verifyManifestHasArticles() {
+        assertTrue("Manifest 0 should have articles", mAssociationDao.getTestableArticlesByManifestID("0").size() > 0);
+        assertTrue("Manifest 1 should have articles", mAssociationDao.getTestableArticlesByManifestID("1").size() > 0);
+        assertTrue("Manifest 2 should have articles", mAssociationDao.getTestableArticlesByManifestID("2").size() > 0);
+    }
+
+
+    @Test
+    public void verifyArticleParseLogic() {
+
+        try {
+            URL url = new URL("https://stage.cru.org/content/experience-fragments/questions_about_god/english.100.json");
+            URLConnection connection = url.openConnection();
+            JSONObject jsonObject = new JSONObject(IOUtils.toString(connection.getInputStream()));
+
+            Iterator<String> keys = jsonObject.keys();
+
+            JSONObject categoryObject = null;
+            while (keys.hasNext()){
+                String neededKey = keys.next();
+                if (!keys.hasNext()){
+                    categoryObject = jsonObject.getJSONObject(neededKey);
                     break;
                 }
-
-                allAttachmentsSaved = true;
             }
 
-            // verify that all of the Articles are returned
+            String articleName = "";
+            if (categoryObject != null) {
+                keys = categoryObject.keys();
 
-            assert (Objects.requireNonNull(articles).size() > 0 &&
-                    allAttachmentsSaved &&
-                    Objects.requireNonNull(mAssociationDao
-                            .getArticlesByManifestID("0").getValue()).size() > 0 &&
-                    Objects.requireNonNull(mAssociationDao
-                            .getAssociationByManifestID("1").getValue()).size() > 0);
-        } );
-    }
+                JSONObject articleObject = null;
+                while (keys.hasNext()){
+                    articleName = keys.next();
+                    if (!keys.hasNext()){
+                        articleObject = categoryObject.getJSONObject(articleName);
+                        break;
+                    }
+                } // end While
 
+                Article createdArticle = new Article();
+                createdArticle.mTitle = articleName;
+                if (articleObject != null) {
+                    // Initialize Created Date
+                    if (articleObject.has("jcr:created")) {
+                        createdArticle.mDateCreated = new SimpleDateFormat("E MMM dd yyyy HH:mm:ss zz")
+                                .parse(articleObject.getString("jcr:created")).getTime();
+                    } else {
+                        createdArticle.mDateCreated = new Date().getTime();
+                    }
 
-    @Override
-    public Lifecycle getLifecycle() {
-        return null;
+                    // Initialize Updated date
+                    if (articleObject.has("jcr:Content")) {
+                        createdArticle.mDateUpdated = new SimpleDateFormat("E MMM dd yyyy HH:mm:ss zz")
+                                .parse(articleObject.getJSONObject("jcr:Content").getString("cq:lastModified")).getTime();
+                    }
+
+                    // Initialize Content
+                    if (articleObject.has(articleName)){
+                        createdArticle.mkey = articleObject.getJSONObject(articleName)
+                                .getJSONObject("jcr:content")
+                                .getString("jcr:uuid");
+
+                        JSONObject rootObject = articleObject
+                                .getJSONObject(articleName)
+                                .getJSONObject("jcr:content")
+                                .getJSONObject("root");
+
+                        createdArticle.mContent = rootObject.getJSONObject("text")
+                                .getString("text");
+
+                        mArticleDao.insertArticle(createdArticle);
+
+                        Attachment articleAttachment = new Attachment();
+                        articleAttachment.mAttachmentUrl = String.format("https://stage.cru.org%s",
+                                rootObject.getJSONObject("image").getString("fileReference"));
+                        articleAttachment.mArticleKey = createdArticle.mkey;
+                        mAttachmentDao.insertAttachment(articleAttachment);
+
+                        assertTrue(mArticleDao.getArticleByKey(createdArticle.mkey) != null);
+
+                    } else {
+                        fail();
+                    }
+                } else {
+                    fail();
+                }
+            } // end if
+
+        } catch (MalformedURLException | JSONException | ParseException e) {
+            fail(e.getMessage());
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
     }
 }
+
+
+
+
