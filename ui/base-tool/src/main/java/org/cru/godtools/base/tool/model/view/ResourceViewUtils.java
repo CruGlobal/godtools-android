@@ -1,5 +1,6 @@
-package org.cru.godtools.tract.viewmodel;
+package org.cru.godtools.base.tool.model.view;
 
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
@@ -22,18 +23,24 @@ import static android.widget.RelativeLayout.ALIGN_PARENT_TOP;
 import static android.widget.RelativeLayout.CENTER_HORIZONTAL;
 import static android.widget.RelativeLayout.CENTER_VERTICAL;
 import static org.cru.godtools.base.util.FileUtils.getFile;
-import static org.cru.godtools.tract.compat.RelativeLayoutCompat.ALIGN_PARENT_END;
-import static org.cru.godtools.tract.compat.RelativeLayoutCompat.ALIGN_PARENT_START;
 
 public class ResourceViewUtils {
-    static void bind(@Nullable final Resource resource, @Nullable final PicassoImageView view) {
+    private static final int ALIGN_PARENT_START =
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 ? RelativeLayout.ALIGN_PARENT_START :
+                    RelativeLayout.ALIGN_PARENT_LEFT;
+    private static final int ALIGN_PARENT_END =
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 ? RelativeLayout.ALIGN_PARENT_END :
+                    RelativeLayout.ALIGN_PARENT_RIGHT;
+
+    public static void bind(@Nullable final Resource resource, @Nullable final PicassoImageView view) {
         if (view != null) {
             view.setPicassoFile(resource != null ? getFile(view.getContext(), resource.getLocalName()) : null);
         }
     }
 
-    static void bindBackgroundImage(@NonNull final ScaledPicassoImageView image, @Nullable final Resource resource,
-                                    @NonNull final ImageScaleType scale, final int gravity) {
+    public static void bindBackgroundImage(@Nullable final Resource resource,
+                                           @NonNull final ScaledPicassoImageView image,
+                                           @NonNull final ImageScaleType scale, final int gravity) {
         image.toggleBatchUpdates(true);
 
         // set the background image visibility
