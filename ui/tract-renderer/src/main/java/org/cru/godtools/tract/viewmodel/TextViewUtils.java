@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.widget.TextView;
 
+import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
 import org.cru.godtools.xml.model.Text;
 
 import static android.util.TypedValue.COMPLEX_UNIT_PX;
