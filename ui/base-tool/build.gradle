@@ -1,3 +1,10 @@
 dependencies {
+    implementation project(':library:xml-model')
+
     api project(':ui:base')
+
+    implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
+
+    implementation "com.google.guava:guava:${deps.guava}"
+    implementation "jp.wasabeef:picasso-transformations:${deps.picassoTransforms}"
 }
