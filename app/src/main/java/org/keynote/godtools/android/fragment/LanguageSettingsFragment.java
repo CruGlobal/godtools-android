@@ -15,7 +15,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;
 
-public class LanguageSettingsFragment extends BaseFragment {
+public class LanguageSettingsFragment extends BasePlatformFragment {
     @Nullable
     @BindView(R.id.primary_language)
     TextView mPrimaryLanguageView;
