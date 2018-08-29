@@ -138,13 +138,13 @@ public class ToolDetailsFragment extends BaseFragment
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         final Bundle args = getArguments();
         if (args != null) {
             mToolCode = args.getString(EXTRA_TOOL, mToolCode);
         }
 
-        setHasOptionsMenu(true);
         startLoaders();
     }
 
