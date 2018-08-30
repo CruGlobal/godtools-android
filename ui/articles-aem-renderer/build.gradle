@@ -1,0 +1,18 @@
+android {
+    defaultConfig {
+        multiDexEnabled true
+    }
+}
+
+dependencies {
+
+    implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
+    implementation "android.arch.persistence.room:runtime:${deps.roomVersion}"
+    implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
+
+    androidTestImplementation "com.android.support.test:runner:${deps.androidTestingSupport}"
+    androidTestImplementation "android.arch.persistence.room:testing:${deps.roomVersion}"
+
+    annotationProcessor "android.arch.lifecycle:compiler:${deps.androidLifecycle}"
+    annotationProcessor "android.arch.persistence.room:compiler:${deps.roomVersion}"
+}

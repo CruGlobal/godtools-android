@@ -118,6 +118,7 @@ dependencies {
     implementation project(':library:xml-model')
 
     implementation project(':ui:account')
+    implementation project(':ui:articles-aem-renderer')
     implementation project(':ui:base')
     implementation project(':ui:base-app')
     implementation project(':ui:everystudent')
@@ -141,7 +142,7 @@ dependencies {
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
 
     implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"
-    implementation "com.getkeepsafe.taptargetview:taptargetview:1.11.0"
+    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:${deps.advrecyclerview}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
@@ -165,7 +166,7 @@ dependencies {
 
     // fix conflicts in transitive dependencies
     androidTestImplementation "com.android.support:multidex:${deps.multidex}"
-    androidTestImplementation "com.google.code.findbugs:jsr305:2.0.1"
+    androidTestImplementation 'com.google.code.findbugs:jsr305:2.0.1'
 }
 
 // make crashlytics upload task dependent on the assemble task for all build variants
