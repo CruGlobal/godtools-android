@@ -140,6 +140,11 @@ public final class Manifest extends Base implements Styles {
     }
 
     @NonNull
+    public List<Category> getCategories() {
+        return mCategories;
+    }
+
+    @NonNull
     public List<Page> getPages() {
         return mPages;
     }

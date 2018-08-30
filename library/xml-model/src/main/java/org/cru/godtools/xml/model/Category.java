@@ -15,10 +15,13 @@ import static org.cru.godtools.xml.Constants.XMLNS_MANIFEST;
 public class Category extends Base {
     static final String XML_CATEGORY = "category";
     private static final String XML_ID = "id";
+    private static final String XML_LABEL = "label";
     private static final String XML_BANNER = "banner";
 
     @Nullable
     private String mId;
+    @Nullable
+    private Text mLabel;
     @Nullable
     private String mBanner;
 
@@ -26,9 +29,7 @@ public class Category extends Base {
     @WorkerThread
     static Category fromXml(@NonNull final Manifest manifest, @NonNull final XmlPullParser parser)
             throws XmlPullParserException, IOException {
-        final Category category = new Category(manifest);
-        category.parse(parser);
-        return category;
+        return new Category(manifest).parse(parser);
     }
 
     private Category(@NonNull final Manifest manifest) {
@@ -36,23 +37,47 @@ public class Category extends Base {
     }
 
     @Nullable
+    public String getId() {
+        return mId;
+    }
+
+    @Nullable
+    public Text getLabel() {
+        return mLabel;
+    }
+
+    @Nullable
     public Resource getBanner() {
         return getResource(mBanner);
     }
 
-    @Nullable
-    public static Resource getBanner(@Nullable final Category category) {
-        return category != null ? category.getBanner() : null;
-    }
-
     @WorkerThread
-    private void parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
+    private Category parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_CATEGORY);
 
         mId = parser.getAttributeValue(null, XML_ID);
         mBanner = parser.getAttributeValue(null, XML_BANNER);
 
-        // discard any nested nodes
-        XmlPullParserUtils.skipTag(parser);
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+
+            // process recognized nodes
+            switch (parser.getNamespace()) {
+                case XMLNS_MANIFEST:
+                    switch (parser.getName()) {
+                        case XML_LABEL:
+                            mLabel = Text.fromNestedXml(this, parser, XMLNS_MANIFEST, XML_LABEL);
+                            continue;
+                    }
+                    break;
+            }
+
+            // skip unrecognized nodes
+            XmlPullParserUtils.skipTag(parser);
+        }
+
+        return this;
     }
 }
