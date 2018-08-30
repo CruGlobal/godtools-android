@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.viewmodel;
+package org.cru.godtools.base.tool.model.view;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -9,18 +9,17 @@ import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.widget.TextView;
 
-import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
 import org.cru.godtools.xml.model.Text;
 
 import static android.util.TypedValue.COMPLEX_UNIT_PX;
 
-final class TextViewUtils {
-    static void bind(@Nullable final Text text, @Nullable final TextView view) {
+public final class TextViewUtils {
+    public static void bind(@Nullable final Text text, @Nullable final TextView view) {
         bind(text, view, null, null);
     }
 
-    static void bind(@Nullable final Text text, @Nullable final TextView view, @Nullable @DimenRes Integer textSize,
-                     @Nullable @ColorInt Integer defaultTextColor) {
+    public static void bind(@Nullable final Text text, @Nullable final TextView view,
+                            @Nullable @DimenRes Integer textSize, @Nullable @ColorInt Integer defaultTextColor) {
         if (view != null) {
             // set default values if null
             if (textSize == null) {
