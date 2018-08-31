@@ -130,7 +130,7 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
         }
 
         dependencies {
-            compileOnly 'org.jetbrains:annotations:15.0'
+            compileOnly 'org.jetbrains:annotations:16.0.1'
         }
     }
 }
