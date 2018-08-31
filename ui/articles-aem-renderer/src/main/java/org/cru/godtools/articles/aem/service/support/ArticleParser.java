@@ -13,6 +13,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import timber.log.Timber;
+
+/**
+ * This class handles parsing any AEM json calls into DOA objects.
+ */
 public class ArticleParser {
 
     public static final String ARTICLE_LIST_KEY = "article_list_key";
@@ -21,29 +26,50 @@ public class ArticleParser {
 
     private JSONObject articleJSON;
 
-
     private List<Attachment> attachmentList = new ArrayList<>();
 
     private List<Article> articleList = new ArrayList<>();
 
-    private String CREATED_TAG = "jcr:created";
-    private String CONTENT_TAG = "jcr:content";
-    private String LAST_MODIFIED_TAG = "cq:lastModified";
-    private String UUID_TAG = "jcr:uuid";
-    private String TITLE_TAG = "jcr:title";
-    private String ROOT_TAG = "root";
-    private String FILE_TAG = "fileReference";
-    private String BASE_URL = "https://stage.cru.org";
+    private String createdTag = "jcr:created";
+    private String contentTag = "jcr:content";
+    private String lastModifiedTag = "cq:lastModified";
+    private String uuidTag = "jcr:uuid";
+    private String titleTag = "jcr:title";
+    private String rootTag = "root";
+    private String fileTag = "fileReference";
+    private String baseUrl = "https://stage.cru.org";
 
+    /**
+     * Constructor
+     * @param jsonObject = the Object to be parsed.
+     */
     public ArticleParser(JSONObject jsonObject) {
         this.articleJSON = jsonObject;
     }
 
+    //region Public Executor
+    /**
+     * This execute function allows you to change the initial jsonObject and run the execution.
+     *
+     * use <code>ARTICLE_LIST_KEY</code> and <code>ATTACHMENT_LIST_KEY</code> to access the Collections
+     * out of the HashMaps
+     *
+     * @param jsonObject = the object to be parsed.
+     * @return = return a list of <code>Article</code> and <code>Attachments</code> in HashMap
+     */
     public HashMap<String, Object> execute(JSONObject jsonObject) {
         this.articleJSON = jsonObject;
         return execute();
     }
 
+    /**
+     * This executes the parsing of the local JsonObject.
+     *
+     * use <code>ARTICLE_LIST_KEY</code> and <code>ATTACHMENT_LIST_KEY</code> to access the Collections
+     * out of the HashMaps
+     *
+     * @return = return a list of <code>Article</code> and <code>Attachments</code> in HashMap
+     */
     public HashMap<String, Object> execute() {
 
         // Create loop through Keys
@@ -57,10 +83,10 @@ public class ArticleParser {
                         getArticleFromCategory(returnedObject);
                     } else {
                         // Get inner Article Object
-                        parseArticleObject(returnedObject, nextKey);
+                        parseArticleObject(returnedObject);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Timber.e(e, "getArticleFromCategory: ");
                 }
             }
         }
@@ -70,7 +96,14 @@ public class ArticleParser {
 
         return returnObject;
     }
+    //endregion public Executor
 
+    //region Article Parsing
+    /**
+     * This method takes a Category Json object and extracts the articles out and send it to be parsed.
+     *
+     * @param categoryObject = category JsonObject
+     */
     private void getArticleFromCategory(JSONObject categoryObject) {
         Iterator<String> keys = categoryObject.keys();
         while (keys.hasNext()) {
@@ -78,31 +111,49 @@ public class ArticleParser {
             if (isArticleOrCategory(nextKey)) {
                 try {
                     JSONObject articleObject = categoryObject.getJSONObject(nextKey);
-                    parseArticleObject(articleObject, nextKey);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                    parseArticleObject(articleObject);
+                } catch (Exception e) {
+                    Timber.e(e, "getArticleFromCategory: ");
                 }
             }
         }
     }
 
-    private void parseArticleObject(JSONObject articleObject, String articleTag) throws JSONException, ParseException {
+    /**
+     * This method parses an Article Json Object into the Database. On completion it will add
+     * articles to <code>articleList</code>
+     *
+     * @param articleObject = article JsonObject
+     * @throws Exception =
+     */
+    private void parseArticleObject(JSONObject articleObject) throws Exception {
         // Create Article
         Article retrievedArticle = new Article();
-        retrievedArticle.mDateCreated = getDateLongFromJsonString(articleObject.getString(CREATED_TAG));
-        if (articleObject.has(CONTENT_TAG) && articleObject.getJSONObject(CONTENT_TAG)
-                .has(LAST_MODIFIED_TAG)) {
-            retrievedArticle.mDateUpdated = getDateLongFromJsonString(articleObject
-                    .getJSONObject(CONTENT_TAG).getString(LAST_MODIFIED_TAG));
+        // get Inner article Object
+        Iterator<String> keys = articleObject.keys();
+        JSONObject articleTagObject = null;
+        while (keys.hasNext()) {
+            String nextKey = keys.next();
+            if (isArticleOrCategory(nextKey)) {
+                articleTagObject = articleObject.getJSONObject(nextKey);
+            }
         }
-        retrievedArticle.mkey = articleObject.getJSONObject(CONTENT_TAG).getString(UUID_TAG);
-        retrievedArticle.mTitle = articleObject.getJSONObject(articleTag).getJSONObject(CONTENT_TAG)
-                .getString(TITLE_TAG);
 
-        JSONObject articleRootObject = articleObject.getJSONObject(articleTag)
-                .getJSONObject(CONTENT_TAG).getJSONObject(ROOT_TAG);
+        if (articleTagObject == null) {
+            throw new Exception("Article not configured properly");
+        }
+        retrievedArticle.mDateCreated = getDateLongFromJsonString(articleObject.getString(createdTag));
+        if (articleObject.has(contentTag) && articleObject.getJSONObject(contentTag)
+                .has(lastModifiedTag)) {
+            retrievedArticle.mDateUpdated = getDateLongFromJsonString(articleObject
+                    .getJSONObject(contentTag).getString(lastModifiedTag));
+        }
+        retrievedArticle.mkey = articleObject.getJSONObject(contentTag).getString(uuidTag);
+        retrievedArticle.mTitle = articleTagObject.getJSONObject(contentTag)
+                .getString(titleTag);
+
+        JSONObject articleRootObject = articleTagObject.getJSONObject(contentTag)
+                .getJSONObject(rootTag);
 
         retrievedArticle.mContent = articleRootObject.getJSONObject("text").getString("text");
 
@@ -115,7 +166,14 @@ public class ArticleParser {
 
     }
 
-    private void getAttachmentsFromRootObject(JSONObject articleRootObject, String articlKey) {
+    /**
+     *  This method if for extracting Attachments from the root Json Object of the article.  On
+     *  completion it will add Attachment to <code>attachmentList</code>
+     *
+     * @param articleRootObject = the root json Object of Article
+     * @param articleKey = the uuid of the article
+     */
+    private void getAttachmentsFromRootObject(JSONObject articleRootObject, String articleKey) {
         // Iterate through keys
         Iterator<String> keys = articleRootObject.keys();
         while (keys.hasNext()) {
@@ -124,23 +182,30 @@ public class ArticleParser {
                 //  This Key is an Attachment
                 try {
                     Attachment retrievedAttachment = new Attachment();
-                    retrievedAttachment.mArticleKey = articlKey;
-                    retrievedAttachment.mAttachmentUrl = String.format("%s%s", BASE_URL,
-                            articleRootObject.getJSONObject(nextKey).getString(FILE_TAG));
+                    retrievedAttachment.mArticleKey = articleKey;
+                    retrievedAttachment.mAttachmentUrl = String.format("%s%s", baseUrl,
+                            articleRootObject.getJSONObject(nextKey).getString(fileTag));
                     attachmentList.add(retrievedAttachment);
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Timber.e(e, "getArticleFromCategory: ");
                 }
             }
         }
 
-
     }
 
+    /**
+     * This method is used to convert a json Date string to long.
+     *
+     * @param dateString = the string representation of Date
+     * @return = Date as a long
+     * @throws ParseException
+     */
     private long getDateLongFromJsonString(String dateString) throws ParseException {
         return new SimpleDateFormat("E MMM dd yyyy HH:mm:ss zz",
                 Locale.getDefault()).parse(dateString).getTime();
     }
+    //endregion Article Parsing
 
     //region Validation
 
@@ -151,13 +216,9 @@ public class ArticleParser {
      * @return = true if the key is associated with an Article or Category
      */
     private Boolean isArticleOrCategory(String key) {
-        if (key.startsWith("jcr:") ||
-                key.startsWith("cq:") ||
-                key.startsWith("sling:")) {
-            return false;
-        } else {
-            return true;
-        }
+        return !key.startsWith("jcr:") &&
+                !key.startsWith("cq:") &&
+                !key.startsWith("sling:");
     }
 
     /**
@@ -170,7 +231,7 @@ public class ArticleParser {
     private Boolean isObjectCategory(JSONObject testObject) throws Exception {
         if (testObject.has("jcr:primaryType")) {
             String type = testObject.getString("jcr:primaryType");
-            return type.equals("sling:OrderedFolder");
+            return "sling:OrderedFolder".equals(type);
         } else {
             throw new Exception("Object Doesn't contain primaryType Tag");
         }

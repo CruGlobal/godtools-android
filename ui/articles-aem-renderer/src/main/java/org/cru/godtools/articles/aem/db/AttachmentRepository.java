@@ -33,7 +33,7 @@ public class AttachmentRepository {
         AsyncTask.execute(() -> mAttachmentDao.insertAttachment(attachment));
     }
 
-    public void updateAttachment(Attachment attachment){
+    public void updateAttachment(Attachment attachment) {
         AsyncTask.execute(() -> mAttachmentDao.updateAttachment(attachment));
     }
 

@@ -22,13 +22,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * This class hold all Download methods for retrieving and saving an Article
@@ -38,16 +33,17 @@ import java.util.Locale;
 public class AEMDownloadManger {
 
     /**
-     * @param manifest
-     * @param context
-     * @throws URISyntaxException
-     * @throws ParseException
-     * @throws JSONException
-     * @throws IOException
+     * This method  handles loading AEM Imports into the local Database.  Please ensure that the
+     * manifest used contains AemImports.
+     * @param manifest = the model for the manifest
+     * @param context = the Application Context
+     * @throws URISyntaxException =
+     * @throws JSONException =
+     * @throws IOException =
      */
     @WorkerThread
     public static void loadAEMFromManifest(final Manifest manifest, Context context)
-            throws URISyntaxException, ParseException, JSONException, IOException {
+            throws URISyntaxException, JSONException, IOException {
 
         // Verify that Manifest has AEM Articles (Should be checked already
         if (manifest.getAemImports() == null || manifest.getAemImports().size() <= 0) {
@@ -63,13 +59,14 @@ public class AEMDownloadManger {
 
 
     /**
-     * @param manifest
-     * @param aemImports
-     * @param context
+     * This method take the manifest and one of its aemImports and extracts all associated data to
+     * the database.
+     * @param manifest = manifest object
+     * @param aemImports = uri from one of the aemImports
+     * @param context = the Application or Activity Context
      * @throws JSONException
      * @throws IOException
      * @throws URISyntaxException
-     * @throws ParseException
      */
     private static void loadAemManifestIntoAemModel(Manifest manifest, Uri aemImports, Context context)
             throws JSONException, IOException, URISyntaxException {
@@ -89,7 +86,7 @@ public class AEMDownloadManger {
         List<Attachment> attachments = (List<Attachment>) articleResults
                 .get(ArticleParser.ATTACHMENT_LIST_KEY);
 
-        for (Article createdArticle: articles) {
+        for (Article createdArticle : articles) {
             ManifestAssociation createdAssociation = new ManifestAssociation();
             createdAssociation.mManifestId = manifest.getCode();
             createdAssociation.mManifestName = manifest.getManifestName();
@@ -102,7 +99,7 @@ public class AEMDownloadManger {
             articleRepository.insertArticle(createdArticle);
         }
 
-        for (Attachment createdAttachement: attachments){
+        for (Attachment createdAttachement : attachments) {
             attachmentRepository.insertAttachment(createdAttachement);
             //Todo: Decide if you want to store attachment here.
         }
@@ -111,9 +108,11 @@ public class AEMDownloadManger {
     }
 
     /**
-     * @param aemImports
-     * @return
-     * @throws JSONException
+     * Gets JSON Object out of Uri
+     *
+     * @param aemImports = uri
+     * @return = JSON object from the Uri
+     * @throws JSONException =
      * @throws URISyntaxException
      * @throws IOException
      */
