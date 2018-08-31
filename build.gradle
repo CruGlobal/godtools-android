@@ -48,7 +48,7 @@ ext.deps = [
         androidTestingSupport: '1.0.2',
         butterknife          : '8.7.0',
         calligraphy          : '2.3.0',
-        crashlytics          : '2.9.4',
+        crashlytics          : '2.9.5',
         eventbus             : '3.1.1',
         evernoteAndroidJob   : '1.2.5',
         facebookStetho       : '1.5.0',
