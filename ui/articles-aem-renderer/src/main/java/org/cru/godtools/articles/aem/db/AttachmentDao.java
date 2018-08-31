@@ -6,6 +6,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 import android.support.annotation.VisibleForTesting;
 
 import org.cru.godtools.articles.aem.model.Attachment;
@@ -29,6 +30,13 @@ interface AttachmentDao {
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAttachment(Attachment attachments);
+
+    /**
+     *
+     * @param attachment
+     */
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    void updateAttachment(Attachment attachment);
 
     /**
      * Deletion of Attachments.  This can be one Attachment or

@@ -7,16 +7,20 @@ android {
 dependencies {
     implementation project(':library:xml-model')
 
-    implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
-    implementation "android.arch.persistence.room:runtime:${deps.roomVersion}"
-    implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
+    // For Testing
     androidTestImplementation "com.android.support.test:runner:${deps.androidTestingSupport}"
     androidTestImplementation "android.arch.persistence.room:testing:${deps.roomVersion}"
     testImplementation "android.arch.core:core-testing:${deps.androidLifecycle}"
+
+    // For Room Implementation
+    implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
+    implementation "android.arch.persistence.room:runtime:${deps.roomVersion}"
+    implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
     annotationProcessor "android.arch.lifecycle:compiler:${deps.androidLifecycle}"
     annotationProcessor "android.arch.persistence.room:compiler:${deps.roomVersion}"
 
-    implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
+    // for convert Uri to Json
+    implementation "org.apache.directory.studio:org.apache.commons.io:${deps.ioCommons}"
 
 }
 

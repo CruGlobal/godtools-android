@@ -2,6 +2,7 @@ package org.cru.godtools.articles.aem.db;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -9,6 +10,8 @@ import org.apache.commons.io.IOUtils;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.articles.aem.model.ManifestAssociation;
+import org.cru.godtools.articles.aem.service.AEMDownloadManger;
+import org.cru.godtools.articles.aem.service.support.ArticleParser;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
@@ -18,16 +21,19 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
@@ -43,10 +49,11 @@ public class ArticleDBTest {
     private ManifestAssociationDao mAssociationDao;
     private ArticleRoomDatabase db;
     private List<Article> mSavedArticles = new ArrayList<>();
+    Context context;
 
     @Before
     public void createDb() throws Exception {
-        Context context = InstrumentationRegistry.getTargetContext();
+        context = InstrumentationRegistry.getTargetContext();
         db = Room.inMemoryDatabaseBuilder(context,
                 ArticleRoomDatabase.class).allowMainThreadQueries().build();
         mArticleDao = db.articleDao();
@@ -116,89 +123,42 @@ public class ArticleDBTest {
     public void verifyArticleParseLogic() {
 
         try {
-            URL url = new URL("https://stage.cru.org/content/experience-fragments/questions_about_god/english.100.json");
-            URLConnection connection = url.openConnection();
-            JSONObject jsonObject = new JSONObject(IOUtils.toString(connection.getInputStream()));
+            Uri url = Uri.parse("https://stage.cru.org/content/experience-fragments/questions_about_god/english.100.json");
 
-            Iterator<String> keys = jsonObject.keys();
+            JSONObject jsonObject = new JSONObject(IOUtils.toString(
+                    new URI(url.toString()))
+            );
 
-            JSONObject categoryObject = null;
-            while (keys.hasNext()){
-                String neededKey = keys.next();
-                if (!keys.hasNext()){
-                    categoryObject = jsonObject.getJSONObject(neededKey);
-                    break;
-                }
-            }
+            HashMap<String, Object> results = new ArticleParser(jsonObject).execute();
 
-            String articleName = "";
-            if (categoryObject != null) {
-                keys = categoryObject.keys();
-
-                JSONObject articleObject = null;
-                while (keys.hasNext()){
-                    articleName = keys.next();
-                    if (!keys.hasNext()){
-                        articleObject = categoryObject.getJSONObject(articleName);
-                        break;
-                    }
-                } // end While
-
-                Article createdArticle = new Article();
-                createdArticle.mTitle = articleName;
-                if (articleObject != null) {
-                    // Initialize Created Date
-                    if (articleObject.has("jcr:created")) {
-                        createdArticle.mDateCreated = new SimpleDateFormat("E MMM dd yyyy HH:mm:ss zz")
-                                .parse(articleObject.getString("jcr:created")).getTime();
-                    } else {
-                        createdArticle.mDateCreated = new Date().getTime();
-                    }
-
-                    // Initialize Updated date
-                    if (articleObject.has("jcr:Content")) {
-                        createdArticle.mDateUpdated = new SimpleDateFormat("E MMM dd yyyy HH:mm:ss zz")
-                                .parse(articleObject.getJSONObject("jcr:Content").getString("cq:lastModified")).getTime();
-                    }
-
-                    // Initialize Content
-                    if (articleObject.has(articleName)){
-                        createdArticle.mkey = articleObject.getJSONObject(articleName)
-                                .getJSONObject("jcr:content")
-                                .getString("jcr:uuid");
-
-                        JSONObject rootObject = articleObject
-                                .getJSONObject(articleName)
-                                .getJSONObject("jcr:content")
-                                .getJSONObject("root");
-
-                        createdArticle.mContent = rootObject.getJSONObject("text")
-                                .getString("text");
-
-                        mArticleDao.insertArticle(createdArticle);
-
-                        Attachment articleAttachment = new Attachment();
-                        articleAttachment.mAttachmentUrl = String.format("https://stage.cru.org%s",
-                                rootObject.getJSONObject("image").getString("fileReference"));
-                        articleAttachment.mArticleKey = createdArticle.mkey;
-                        mAttachmentDao.insertAttachment(articleAttachment);
-
-                        assertTrue(mArticleDao.getArticleByKey(createdArticle.mkey) != null);
-
-                    } else {
-                        fail();
-                    }
-                } else {
-                    fail();
-                }
-            } // end if
-
-        } catch (MalformedURLException | JSONException | ParseException e) {
+            assertTrue(results.containsKey(ArticleParser.ATTACHMENT_LIST_KEY));
+            assertTrue(results.containsKey(ArticleParser.ARTICLE_LIST_KEY));
+        } catch (MalformedURLException | JSONException | URISyntaxException e) {
             fail(e.getMessage());
         } catch (IOException e) {
             fail(e.getMessage());
         }
 
+    }
+
+    @Test
+    public void verifyAttachmentsAreSaved() {
+        for (Article article : mSavedArticles) {
+            for (Attachment attachment: mAttachmentDao.getTestableAttachmentsByArticle(article.mkey)) {
+                try {
+                    AEMDownloadManger
+                            .saveAttachmentToStorage(attachment, context);
+                } catch (IOException e) {
+                    fail("Data was not saved");
+                }
+            }
+        }
+
+        for (Article article: mSavedArticles){
+            for (Attachment attachment: mAttachmentDao.getTestableAttachmentsByArticle(article.mkey)) {
+                assertFalse(attachment.mAttachmentFilePath != null);
+            }
+        }
     }
 }
 
