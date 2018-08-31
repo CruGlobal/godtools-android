@@ -165,9 +165,11 @@ public class SnowplowAnalyticsService {
 
     private void populateSubject(@NonNull final Subject subject, @NonNull final AnalyticsBaseEvent event) {
         subject.getSubject().put("url", event.getSnowPlowContentScoringUri().toString());
+        subject.getSubject().put("page", event.getSnowPlowPageTitle());
     }
 
     private void resetSubject(@NonNull final Subject subject) {
         subject.getSubject().remove("url");
+        subject.getSubject().remove("page");
     }
 }

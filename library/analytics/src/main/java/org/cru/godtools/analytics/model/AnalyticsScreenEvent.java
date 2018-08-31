@@ -48,4 +48,9 @@ public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
                 .authority(SNOWPLOW_CONTENT_SCORING_URI_PATH_SCREEN)
                 .appendPath(getScreen());
     }
+
+    @Override
+    public String getSnowPlowPageTitle() {
+        return getScreen();
+    }
 }

@@ -3,6 +3,7 @@ package org.cru.godtools.analytics.model;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import java.util.Locale;
 import java.util.Map;
@@ -64,5 +65,20 @@ public class AnalyticsActionEvent extends AnalyticsBaseEvent {
                 .authority(SNOWPLOW_CONTENT_SCORING_URI_PATH_ACTION)
                 .appendPath(getCategory())
                 .appendPath(getAction());
+    }
+
+    @Override
+    public String getSnowPlowPageTitle() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (!TextUtils.isEmpty(getCategory())) {
+            stringBuilder.append(getCategory()).append(" : ");
+        }
+        stringBuilder.append(getAction());
+
+        if (!TextUtils.isEmpty(getLabel())) {
+            stringBuilder.append(" : ").append(getLabel());
+        }
+        return stringBuilder.toString();
     }
 }

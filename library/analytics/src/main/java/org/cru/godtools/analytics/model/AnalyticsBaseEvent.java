@@ -32,4 +32,8 @@ public abstract class AnalyticsBaseEvent {
         return new Uri.Builder()
                 .scheme(SNOWPLOW_CONTENT_SCORING_URI_SCHEME);
     }
+
+    public String getSnowPlowPageTitle() {
+        return null;
+    }
 }
