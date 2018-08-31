@@ -25,5 +25,5 @@ dependencies {
     implementation project(':library:download-manager')
     implementation "com.android.support:design:${deps.androidSupport}"
 
-    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbusAnnotations}"
+    annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }
