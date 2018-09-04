@@ -4,12 +4,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.google.common.collect.ImmutableMap;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.Map;
 
 import static org.cru.godtools.xml.model.Utils.parseColor;
 import static org.cru.godtools.xml.model.Utils.parseUrl;
@@ -30,15 +26,10 @@ public final class UtilsIT {
         assertThat(parseColor("akjsdf", Color.RED), is(Color.RED));
     }
 
-    private static final Map<String, Uri> TEST_URLS = ImmutableMap.<String, Uri>builder()
-            .put("https://www.example.com/path", Uri.parse("https://www.example.com/path"))
-            .put("www.example.com/path", Uri.parse("http://www.example.com/path"))
-            .put("mailto:someone@example.com", Uri.parse("mailto:someone@example.com"))
-            .build();
     @Test
     public void verifyParseUrl() throws Exception {
-        for (final Map.Entry<String, Uri> url : TEST_URLS.entrySet()) {
-            assertThat(parseUrl(url.getKey(), null), is(url.getValue()));
-        }
+        assertThat(parseUrl("https://www.example.com/path", null), is(Uri.parse("https://www.example.com/path")));
+        assertThat(parseUrl("www.example.com/path", null), is(Uri.parse("http://www.example.com/path")));
+        assertThat(parseUrl("mailto:someone@example.com", null), is(Uri.parse("mailto:someone@example.com")));
     }
 }
