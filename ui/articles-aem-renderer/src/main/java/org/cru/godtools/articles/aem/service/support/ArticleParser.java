@@ -30,14 +30,14 @@ public class ArticleParser {
 
     private List<Article> articleList = new ArrayList<>();
 
-    private String createdTag = "jcr:created";
-    private String contentTag = "jcr:content";
-    private String lastModifiedTag = "cq:lastModified";
-    private String uuidTag = "jcr:uuid";
-    private String titleTag = "jcr:title";
-    private String rootTag = "root";
-    private String fileTag = "fileReference";
-    private String baseUrl = "https://stage.cru.org";
+    private static final String createdTag = "jcr:created";
+    private static final String contentTag = "jcr:content";
+    private static final String lastModifiedTag = "cq:lastModified";
+    private static final String uuidTag = "jcr:uuid";
+    private static final String titleTag = "jcr:title";
+    private static final String rootTag = "root";
+    private static final String fileTag = "fileReference";
+    private static final String baseUrl = "https://stage.cru.org";
 
     /**
      * Constructor
