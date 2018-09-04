@@ -27,6 +27,7 @@ public final class AnalyticsDispatcher implements InvocationHandler {
 
     @Nullable
     private static AnalyticsDispatcher sInstance;
+
     @NonNull
     public static synchronized AnalyticsDispatcher getInstance(@NonNull final Context context) {
         if (sInstance == null) {

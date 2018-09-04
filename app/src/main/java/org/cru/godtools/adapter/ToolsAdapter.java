@@ -55,6 +55,7 @@ public class ToolsAdapter extends CursorAdapter<ToolsAdapter.ToolViewHolder>
     public static final String COL_PRIMARY_LANGUAGE = "primary_language";
     public static final String COL_PARALLEL_LANGUAGE = "parallel_language";
     public static final String COL_DEFAULT_LANGUAGE = "default_language";
+
     public interface Callbacks {
         void onToolInfo(@Nullable String code);
 
