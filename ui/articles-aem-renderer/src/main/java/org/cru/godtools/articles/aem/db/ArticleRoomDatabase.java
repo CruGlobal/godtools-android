@@ -1,4 +1,4 @@
-package org.cru.godtools.articles.aem.db;;
+package org.cru.godtools.articles.aem.db;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -9,7 +9,6 @@ import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.articles.aem.model.ManifestAssociation;
 
-
 /**
  * This class is used to create the database table.
  *
@@ -17,13 +16,6 @@ import org.cru.godtools.articles.aem.model.ManifestAssociation;
  */
 @Database(entities = { Article.class, ManifestAssociation.class, Attachment.class }, version = 1)
 public abstract class ArticleRoomDatabase extends RoomDatabase {
-
-    public abstract ArticleDao articleDao();
-
-    public abstract ManifestAssociationDao manifestAssociationDao();
-
-    public abstract AttachmentDao attachmentDao();
-
     private static ArticleRoomDatabase instance;
 
     /**
@@ -45,4 +37,9 @@ public abstract class ArticleRoomDatabase extends RoomDatabase {
         return instance;
     }
 
+    public abstract ArticleDao articleDao();
+
+    public abstract ManifestAssociationDao manifestAssociationDao();
+
+    public abstract AttachmentDao attachmentDao();
 }

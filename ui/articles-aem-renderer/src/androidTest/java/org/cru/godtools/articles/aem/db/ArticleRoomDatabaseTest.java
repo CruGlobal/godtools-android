@@ -44,7 +44,6 @@ public class ArticleRoomDatabaseTest {
         mAttachmentDao = db.attachmentDao();
         mAssociationDao = db.manifestAssociationDao();
 
-
         for (int i = 0; i < 12; i++) {
             Article article = new Article();
 
@@ -63,7 +62,6 @@ public class ArticleRoomDatabaseTest {
             date.getTimezoneOffset();
             article.mTitle = " The title = " + i;
             mArticleDao.insertArticle(article);
-
         }
 
         mSavedArticles = mArticleDao.getTestableAllArticles();
@@ -82,7 +80,6 @@ public class ArticleRoomDatabaseTest {
 
             mAttachmentDao.insertAttachment(attachment);
         }
-
     }
 
     @After
@@ -95,7 +92,6 @@ public class ArticleRoomDatabaseTest {
         assertTrue("No article was saved.", mSavedArticles.size() > 0);
     }
 
-
     @Test
     public void verifyArticleHasAttachment() {
         for (Article article : mSavedArticles) {
@@ -103,7 +99,6 @@ public class ArticleRoomDatabaseTest {
                        mAttachmentDao.getTestableAttachmentsByArticle(article.mId).size() > 0);
         }
     }
-
 
     @Test
     public void verifyManifestHasArticles() {
