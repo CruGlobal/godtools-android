@@ -42,6 +42,7 @@ class GoogleAnalyticsService implements AnalyticsService {
 
     @Nullable
     private static GoogleAnalyticsService sInstance;
+
     @NonNull
     static synchronized GoogleAnalyticsService getInstance(@NonNull final Context context) {
         if (sInstance == null) {

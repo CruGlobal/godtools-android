@@ -1,5 +1,6 @@
 package org.cru.godtools.analytics;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -74,7 +75,9 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     }
 
     @Nullable
+    @SuppressLint("StaticFieldLeak")
     private static AdobeAnalyticsService sInstance;
+
     @NonNull
     public static synchronized AdobeAnalyticsService getInstance(@NonNull final Context context) {
         if (sInstance == null) {

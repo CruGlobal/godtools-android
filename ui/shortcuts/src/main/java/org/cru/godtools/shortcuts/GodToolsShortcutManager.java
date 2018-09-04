@@ -104,6 +104,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
     @Nullable
     @SuppressLint("StaticFieldLeak")
     private static GodToolsShortcutManager sInstance;
+
     @NonNull
     @MainThread
     public static GodToolsShortcutManager getInstance(@NonNull final Context context) {
@@ -116,7 +117,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
         return sInstance;
     }
 
-    /* BEGIN lifecycle */
+    // region Lifecycle Events
 
     /**
      * Called when the device locale was updated.
@@ -181,9 +182,9 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
         }
     }
 
-    /* END lifecycle */
+    // endregion Lifecycle Events
 
-    /* BEGIN Pending shortcut */
+    // region Pending shortcut
 
     @AnyThread
     public boolean canPinToolShortcut(@Nullable final Tool tool) {
@@ -285,7 +286,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
         }
     }
 
-    /* END Pending shortcut */
+    // endregion Pending shortcut
 
     @AnyThread
     private void enqueueUpdateShortcuts(final boolean immediate) {

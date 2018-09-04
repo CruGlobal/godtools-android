@@ -8,7 +8,6 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.support.annotation.VisibleForTesting;
 
-
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.ManifestAssociation;
 

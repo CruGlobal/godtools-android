@@ -21,6 +21,7 @@ public class TimberAnalyticsService implements AnalyticsService {
 
     @Nullable
     private static TimberAnalyticsService sInstance;
+
     @NonNull
     public static synchronized TimberAnalyticsService getInstance() {
         if (sInstance == null) {
