@@ -14,6 +14,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
 import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 public final class LocaleTypefaceUtils {
+    @SuppressWarnings("checkstyle:EmptyLineSeparator")
     private static final Map<Locale, String> TYPEFACES;
     static {
         final ImmutableMap.Builder<Locale, String> typefaceBuilder = ImmutableMap.builder();

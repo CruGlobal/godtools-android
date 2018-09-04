@@ -58,6 +58,7 @@ public class ManifestManager {
     @Nullable
     @SuppressLint("StaticFieldLeak")
     private static ManifestManager sInstance;
+
     @NonNull
     public static synchronized ManifestManager getInstance(@NonNull final Context context) {
         if (sInstance == null) {
