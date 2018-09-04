@@ -36,7 +36,3 @@ public class ArticleRoomDatabaseTest extends DBBaseTest {
         assertTrue("Manifest 2 should have articles", mAssociationDao.getTestableArticlesByManifestID("2").size() > 0);
     }
 }
-
-
-
-
