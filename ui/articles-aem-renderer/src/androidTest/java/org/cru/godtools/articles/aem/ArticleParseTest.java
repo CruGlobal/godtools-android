@@ -3,7 +3,6 @@ package org.cru.godtools.articles.aem;
 import android.net.Uri;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.apache.commons.io.IOUtils;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.articles.aem.service.support.ArticleParser;
@@ -13,11 +12,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
@@ -31,9 +31,17 @@ public class ArticleParseTest {
         try {
             Uri url = Uri.parse("https://stage.cru.org/content/experience-fragments/questions_about_god/english.999.json");
 
-            JSONObject jsonObject = new JSONObject(IOUtils.toString(
-                    new URI(url.toString()))
-            );
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+                    .url(url.toString())
+                    .build();
+
+            Response response = client.newCall(request).execute();
+
+            String result = response.body().string();
+
+            JSONObject jsonObject = new JSONObject(result);
 
             HashMap<String, Object> results = new ArticleParser(jsonObject).execute();
 
@@ -44,11 +52,8 @@ public class ArticleParseTest {
             assertTrue(resultsArticles.size() > 0);
             List<Attachment> resultAttachments = (List<Attachment>) results.get(ArticleParser.ATTACHMENT_LIST_KEY);
             assertTrue(resultAttachments.size() > 0);
-        } catch (MalformedURLException | JSONException | URISyntaxException e) {
-            fail(e.getMessage());
-        } catch (IOException e) {
+        } catch (JSONException | IOException | IllegalStateException e) {
             fail(e.getMessage());
         }
-
     }
 }

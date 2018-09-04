@@ -2,32 +2,23 @@ package org.cru.godtools.articles.aem.db;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
-import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.apache.commons.io.IOUtils;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.articles.aem.model.ManifestAssociation;
 import org.cru.godtools.articles.aem.service.AEMDownloadManger;
-import org.cru.godtools.articles.aem.service.support.ArticleParser;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import static junit.framework.Assert.assertFalse;
@@ -114,9 +105,6 @@ public class ArticleRoomDatabaseTest {
         assertTrue("Manifest 1 should have articles", mAssociationDao.getTestableArticlesByManifestID("1").size() > 0);
         assertTrue("Manifest 2 should have articles", mAssociationDao.getTestableArticlesByManifestID("2").size() > 0);
     }
-
-
-
 
     @Test
     public void verifyAttachmentsAreSaved() {

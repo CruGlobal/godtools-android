@@ -19,11 +19,14 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * This class hold all Download methods for retrieving and saving an Article
@@ -43,7 +46,7 @@ public class AEMDownloadManger {
      */
     @WorkerThread
     public static void loadAEMFromManifest(final Manifest manifest, Context context)
-            throws URISyntaxException, JSONException, IOException {
+            throws JSONException, IOException {
 
         // Verify that Manifest has AEM Articles (Should be checked already
         if (manifest.getAemImports() == null || manifest.getAemImports().size() <= 0) {
@@ -69,7 +72,7 @@ public class AEMDownloadManger {
      * @throws URISyntaxException
      */
     private static void loadAemManifestIntoAemModel(Manifest manifest, Uri aemImports, Context context)
-            throws JSONException, IOException, URISyntaxException {
+            throws JSONException, IOException {
 
         ArticleRepository articleRepository = new ArticleRepository(context);
         AttachmentRepository attachmentRepository = new AttachmentRepository(context);
@@ -99,12 +102,10 @@ public class AEMDownloadManger {
             articleRepository.insertArticle(createdArticle);
         }
 
-        for (Attachment createdAttachement : attachments) {
-            attachmentRepository.insertAttachment(createdAttachement);
+        for (Attachment createdAttachment : attachments) {
+            attachmentRepository.insertAttachment(createdAttachment);
             //Todo: Decide if you want to store attachment here.
         }
-
-
     }
 
     /**
@@ -117,12 +118,15 @@ public class AEMDownloadManger {
      * @throws IOException
      */
     private static JSONObject getJsonFromUri(Uri aemImports)
-            throws JSONException, URISyntaxException, IOException {
+            throws JSONException, IOException {
 
         // Have to convert android Uri to a Java URI
-        URI uri = new URI(aemImports.toString());
-        String results = IOUtils.toString(uri);
-        return new JSONObject(results);
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(aemImports.toString())
+                .build();
+        Response response = client.newCall(request).execute();
+        return new JSONObject(response.body().string());
     }
 
     /**
@@ -154,6 +158,5 @@ public class AEMDownloadManger {
             AttachmentRepository repository = new AttachmentRepository(context);
             repository.updateAttachment(attachment);
         }
-
     }
 }
