@@ -30,14 +30,14 @@ public class ArticleParser {
 
     private List<Article> articleList = new ArrayList<>();
 
-    private static final String createdTag = "jcr:created";
-    private static final String contentTag = "jcr:content";
-    private static final String lastModifiedTag = "cq:lastModified";
-    private static final String uuidTag = "jcr:uuid";
-    private static final String titleTag = "jcr:title";
-    private static final String rootTag = "root";
-    private static final String fileTag = "fileReference";
-    private static final String baseUrl = "https://stage.cru.org";
+    private static final String CREATED_TAG = "jcr:created";
+    private static final String CONTENT_TAG = "jcr:content";
+    private static final String LAST_MODIFIED_TAG = "cq:lastModified";
+    private static final String UUID_TAG = "jcr:uuid";
+    private static final String TITLE_TAG = "jcr:title";
+    private static final String ROOT_TAG = "root";
+    private static final String FILE_TAG = "fileReference";
+    private static final String BASE_URL = "https://stage.cru.org";
 
     /**
      * Constructor
@@ -142,18 +142,18 @@ public class ArticleParser {
         if (articleTagObject == null) {
             throw new Exception("Article not configured properly");
         }
-        retrievedArticle.mDateCreated = getDateLongFromJsonString(articleObject.getString(createdTag));
-        if (articleObject.has(contentTag) && articleObject.getJSONObject(contentTag)
-                .has(lastModifiedTag)) {
+        retrievedArticle.mDateCreated = getDateLongFromJsonString(articleObject.getString(CREATED_TAG));
+        if (articleObject.has(CONTENT_TAG) && articleObject.getJSONObject(CONTENT_TAG)
+                .has(LAST_MODIFIED_TAG)) {
             retrievedArticle.mDateUpdated = getDateLongFromJsonString(articleObject
-                    .getJSONObject(contentTag).getString(lastModifiedTag));
+                    .getJSONObject(CONTENT_TAG).getString(LAST_MODIFIED_TAG));
         }
-        retrievedArticle.mkey = articleObject.getJSONObject(contentTag).getString(uuidTag);
-        retrievedArticle.mTitle = articleTagObject.getJSONObject(contentTag)
-                .getString(titleTag);
+        retrievedArticle.mkey = articleObject.getJSONObject(CONTENT_TAG).getString(UUID_TAG);
+        retrievedArticle.mTitle = articleTagObject.getJSONObject(CONTENT_TAG)
+                .getString(TITLE_TAG);
 
-        JSONObject articleRootObject = articleTagObject.getJSONObject(contentTag)
-                .getJSONObject(rootTag);
+        JSONObject articleRootObject = articleTagObject.getJSONObject(CONTENT_TAG)
+                .getJSONObject(ROOT_TAG);
 
         retrievedArticle.mContent = articleRootObject.getJSONObject("text").getString("text");
 
@@ -183,8 +183,8 @@ public class ArticleParser {
                 try {
                     Attachment retrievedAttachment = new Attachment();
                     retrievedAttachment.mArticleKey = articleKey;
-                    retrievedAttachment.mAttachmentUrl = String.format("%s%s", baseUrl,
-                            articleRootObject.getJSONObject(nextKey).getString(fileTag));
+                    retrievedAttachment.mAttachmentUrl = String.format("%s%s", BASE_URL,
+                            articleRootObject.getJSONObject(nextKey).getString(FILE_TAG));
                     attachmentList.add(retrievedAttachment);
                 } catch (JSONException e) {
                     Timber.e(e, "getArticleFromCategory: ");
