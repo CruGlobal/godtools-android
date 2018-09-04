@@ -10,7 +10,6 @@ dependencies {
     // For Testing
     androidTestImplementation "com.android.support.test:runner:${deps.androidTestingSupport}"
     androidTestImplementation "android.arch.persistence.room:testing:${deps.roomVersion}"
-//    testImplementation "android.arch.core:core-testing:${deps.androidLifecycle}"
 
     // For Room Implementation
     implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
