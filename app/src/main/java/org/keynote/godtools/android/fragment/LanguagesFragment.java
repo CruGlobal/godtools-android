@@ -97,7 +97,7 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
     public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_language_search, menu);
-        mSearchItem = menu.findItem(R.id.app_bar_language_search);
+        mSearchItem = menu.findItem(R.id.action_search);
         setupSearchMenu();
     }
 

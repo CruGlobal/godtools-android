@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/app_bar_language_search"
+        android:id="@+id/action_search"
         android:icon="@drawable/ic_ab_search"
         android:title="@string/label_language_search"
         app:showAsAction="always|collapseActionView"
