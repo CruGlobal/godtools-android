@@ -14,6 +14,7 @@ android {
         targetSdkVersion targetSdk
 
         proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
+        proguardFile 'proguard-searchview.pro'
 
         vectorDrawables.useSupportLibrary = true
 
