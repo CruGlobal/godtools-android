@@ -86,6 +86,7 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
 
     @SuppressLint("StaticFieldLeak")
     private static GodToolsDatabase sInstance;
+
     @NonNull
     public static GodToolsDatabase getInstance(@NonNull final Context context) {
         synchronized (GodToolsDatabase.class) {

@@ -41,6 +41,7 @@ public final class FollowupService {
     @Nullable
     @SuppressLint("StaticFieldLeak")
     private static FollowupService sInstance;
+
     @NonNull
     @MainThread
     public static FollowupService start(@NonNull final Context context) {

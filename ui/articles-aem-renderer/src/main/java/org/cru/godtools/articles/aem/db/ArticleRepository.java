@@ -4,7 +4,6 @@ import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.os.AsyncTask;
 
-
 import org.cru.godtools.articles.aem.model.Article;
 
 import java.util.List;
@@ -54,7 +53,4 @@ public class ArticleRepository {
         /* This is called in AsyncTask to insure it doesn't run on UI thread */
         AsyncTask.execute(() -> mArticleDao.deleteArticles(articles));
     }
-
-
-
 }

@@ -58,6 +58,7 @@ public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
 
     @Nullable
     private static GodToolsDao sInstance;
+
     @NonNull
     public static GodToolsDao getInstance(@NonNull final Context context) {
         synchronized (GodToolsDao.class) {

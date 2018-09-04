@@ -8,7 +8,6 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.support.annotation.VisibleForTesting;
 
-
 import org.cru.godtools.articles.aem.model.Article;
 
 import java.util.List;
@@ -48,11 +47,11 @@ interface ArticleDao {
     LiveData<List<Article>> getAllArticles();
 
     //region Testable (Non Live Data)
-    @VisibleForTesting()
+    @VisibleForTesting
     @Query("SELECT * FROM article_table")
     List<Article> getTestableAllArticles();
 
-    @VisibleForTesting()
+    @VisibleForTesting
     @Query("SELECT * FROM article_table WHERE article_key = :key")
     Article getArticleByKey(String key);
     //endregion

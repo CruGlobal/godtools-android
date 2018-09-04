@@ -116,32 +116,7 @@ public class ArticleRoomDatabaseTest {
     }
 
 
-    @Test
-    public void verifyArticleParseLogic() {
 
-        try {
-            Uri url = Uri.parse("https://stage.cru.org/content/experience-fragments/questions_about_god/english.999.json");
-
-            JSONObject jsonObject = new JSONObject(IOUtils.toString(
-                    new URI(url.toString()))
-            );
-
-            HashMap<String, Object> results = new ArticleParser(jsonObject).execute();
-
-            assertTrue(results.containsKey(ArticleParser.ATTACHMENT_LIST_KEY));
-            assertTrue(results.containsKey(ArticleParser.ARTICLE_LIST_KEY));
-
-            List<Article> resultsArticles = (List<Article>) results.get(ArticleParser.ARTICLE_LIST_KEY);
-            assertTrue(resultsArticles.size() > 0);
-            List<Attachment> resultAttachments = (List<Attachment>) results.get(ArticleParser.ATTACHMENT_LIST_KEY);
-            assertTrue(resultAttachments.size() > 0);
-        } catch (MalformedURLException | JSONException | URISyntaxException e) {
-            fail(e.getMessage());
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
-
-    }
 
     @Test
     public void verifyAttachmentsAreSaved() {

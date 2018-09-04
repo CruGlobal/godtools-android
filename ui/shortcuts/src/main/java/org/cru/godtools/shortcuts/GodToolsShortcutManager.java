@@ -104,6 +104,7 @@ public final class GodToolsShortcutManager implements SharedPreferences.OnShared
     @Nullable
     @SuppressLint("StaticFieldLeak")
     private static GodToolsShortcutManager sInstance;
+
     @NonNull
     @MainThread
     public static GodToolsShortcutManager getInstance(@NonNull final Context context) {

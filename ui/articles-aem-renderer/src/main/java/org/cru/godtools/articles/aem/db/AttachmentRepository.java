@@ -4,7 +4,6 @@ import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.os.AsyncTask;
 
-
 import org.cru.godtools.articles.aem.model.Attachment;
 
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.List;
  * @author Gyasi Story
  */
 public class AttachmentRepository {
-
     private final AttachmentDao mAttachmentDao;
 
     public AttachmentRepository(Context context) {
@@ -54,7 +52,6 @@ public class AttachmentRepository {
      * @return = Live Data Collection of Attachments
      */
     public LiveData<List<Attachment>> getAttachmentsByArticle(String articleId) {
-
         return mAttachmentDao.getAttachmentsByArticle(articleId);
     }
 }

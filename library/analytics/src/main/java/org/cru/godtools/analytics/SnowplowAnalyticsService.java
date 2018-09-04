@@ -79,6 +79,7 @@ public class SnowplowAnalyticsService {
 
     @Nullable
     private static SnowplowAnalyticsService sInstance;
+
     @NonNull
     @AnyThread
     public static synchronized SnowplowAnalyticsService getInstance(@NonNull final Context context) {

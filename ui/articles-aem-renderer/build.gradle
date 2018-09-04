@@ -21,6 +21,7 @@ dependencies {
 
     // for convert Uri to Json
     implementation "org.apache.directory.studio:org.apache.commons.io:${deps.ioCommons}"
+    implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
 
     implementation "com.jakewharton.timber:timber:${deps.timber}"
 
