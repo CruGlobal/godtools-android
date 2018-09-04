@@ -8,5 +8,4 @@ dependencies {
     api "org.ccci.gto.android:gto-support-db-stream:${deps.gtoSupport}"
 
     implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
-
 }

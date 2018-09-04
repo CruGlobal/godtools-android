@@ -179,7 +179,6 @@ afterEvaluate {
         def crashlyticsTask = project.tasks.getByName("crashlyticsUploadDistribution${variant.name.capitalize()}")
         crashlyticsTask.dependsOn assembleTask
     }
-
 }
 
 def generateCrashlyticsBetaReleaseNotes(size = 10) {
