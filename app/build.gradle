@@ -172,7 +172,7 @@ dependencies {
 // make crashlytics upload task dependent on the assemble task for all build variants
 afterEvaluate {
 
-//    crashlyticsUploadDistributionProductionDebug.dependsOn assembleProductionDebug
+    crashlyticsUploadDistributionProductionDebug.dependsOn assembleProductionDebug
 
     android.applicationVariants.all { variant ->
         def assembleTask = project.tasks.getByName("assemble${variant.name.capitalize()}")
