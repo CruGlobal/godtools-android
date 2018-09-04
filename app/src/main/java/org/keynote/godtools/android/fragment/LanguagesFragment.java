@@ -29,7 +29,6 @@ import org.cru.godtools.model.Language;
 import org.cru.godtools.sync.GodToolsSyncService;
 import org.keynote.godtools.android.content.LanguagesLoader;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -51,7 +50,10 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
     RecyclerView mLanguagesView;
     @Nullable
     private LanguagesAdapter mLanguagesAdapter;
+    @Nullable
     private MenuItem mSearchItem;
+    @Nullable
+    private SearchView mSearchView;
 
     // these properties should be treated as final and only set/modified in onCreate()
     /*final*/ boolean mPrimary = true;
@@ -95,7 +97,8 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
     public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_language_search, menu);
-        setSearchView(menu);
+        mSearchItem = menu.findItem(R.id.app_bar_language_search);
+        setupSearchMenu();
     }
 
     @Override
@@ -142,8 +145,15 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(EXTRA_SEARCH_OPEN, mSearchItem.isActionViewExpanded());
+        outState.putBoolean(EXTRA_SEARCH_OPEN,
+                            mSearchItem != null ? mSearchItem.isActionViewExpanded() : mIsSearchViewOpen);
         outState.putString(EXTRA_SEARCH, mQuery);
+    }
+
+    @Override
+    public void onDestroyOptionsMenu() {
+        cleanupSearchMenu();
+        super.onDestroyOptionsMenu();
     }
 
     @Override
@@ -154,49 +164,54 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
 
     // endregion Lifecycle Events
 
-    // region Initialize Menu
+    // region Search Action Item
 
-    private void setSearchView(Menu menu) {
+    private void setupSearchMenu() {
+        if (mSearchItem != null) {
+            mSearchView = (SearchView) mSearchItem.getActionView();
+            if (mIsSearchViewOpen) {
+                mSearchItem.expandActionView();
+            }
+        }
+
         // Configuring the SearchView
-        mSearchItem = menu.findItem(R.id.app_bar_language_search);
-        SearchView mSearchView = (SearchView) mSearchItem.getActionView();
-        mSearchView.setQueryHint(getString(R.string.label_language_search));
-        if (mIsSearchViewOpen) {
-            mSearchItem.expandActionView();
+        if (mSearchView != null) {
+            mSearchView.setQueryHint(getString(R.string.label_language_search));
             if (!TextUtils.isEmpty(mQuery)) {
                 mSearchView.setQuery(mQuery, false);
             }
-        }
 
-        // Will listen for search event and trigger
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                mQuery = query;
-                updateLanguagesList();
-                return false;
-            }
+            // Will listen for search event and trigger
+            mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(@Nullable final String query) {
+                    mQuery = query;
+                    updateLanguagesList();
+                    return true;
+                }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                mQuery = newText;
-                updateLanguagesList();
-                return false;
-            }
-        });
-    }
-
-    private List<Language> updateLanguageWithSearch(final String query) {
-        if (mLanguages != null) {
-            return Stream.of(mLanguages)
-                    .filter(l -> l.getDisplayName().toLowerCase().contains(query.toLowerCase()))
-                    .toList();
-        } else {
-            return new ArrayList<>();
+                @Override
+                public boolean onQueryTextChange(@Nullable final String newText) {
+                    mQuery = newText;
+                    updateLanguagesList();
+                    return true;
+                }
+            });
         }
     }
 
-    // endregion
+    private void cleanupSearchMenu() {
+        if (mSearchView != null) {
+            mSearchView.setOnQueryTextListener(null);
+        }
+        if (mSearchItem != null) {
+            mIsSearchViewOpen = mSearchItem.isActionViewExpanded();
+        }
+        mSearchView = null;
+        mSearchItem = null;
+    }
+
+    // endregion Search Action Item
 
     private void startLoaders() {
         getLoaderManager().initLoader(LOADER_LANGUAGES, null, new LanguagesLoaderCallbacks());
@@ -207,6 +222,8 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         super.syncData(force);
         mSyncHelper.sync(GodToolsSyncService.syncLanguages(getContext(), force));
     }
+
+    // region Languages List
 
     private void setupLanguagesList() {
         if (mLanguagesView != null) {
@@ -225,19 +242,28 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
     void updateLanguagesList() {
         if (mLanguagesAdapter != null) {
             mLanguagesAdapter.setSelected(mPrimary ? mPrimaryLanguage : mParallelLanguage);
-            mLanguagesAdapter.setLanguages(filterLang(mLanguages));
+            mLanguagesAdapter.setLanguages(filterLangs(mLanguages, mQuery));
             mLanguagesAdapter.setDisabled(mPrimary ? null : mPrimaryLanguage);
             mLanguagesAdapter.setProtected(mSettings != null ? mSettings.getProtectedLanguages() : null);
         }
     }
 
-    // This will check to see if the language needs to be filtered by search
-    private List<Language> filterLang(List<Language> languages) {
-        if (TextUtils.isEmpty(mQuery)) {
+    @Nullable
+    private List<Language> filterLangs(@Nullable final List<Language> languages, @Nullable final String query) {
+        // short-circuit if there aren't any languages to filter
+        if (languages == null || languages.isEmpty()) {
             return languages;
-        } else {
-            return updateLanguageWithSearch(mQuery);
         }
+
+        // short-circuit if there isn't a query
+        if (TextUtils.isEmpty(query)) {
+            return languages;
+        }
+
+        // otherwise filter the list of languages based on the query
+        return Stream.of(languages)
+                .filter(l -> l.getDisplayName().toLowerCase().contains(query.toLowerCase()))
+                .toList();
     }
 
     private void cleanupLanguagesList() {
@@ -246,6 +272,8 @@ public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.
         }
         mLanguagesAdapter = null;
     }
+
+    // endregion Languages List
 
     class LanguagesLoaderCallbacks extends SimpleLoaderCallbacks<List<Language>> {
         @Nullable
