@@ -74,6 +74,7 @@ public class GodToolsApi {
     @Nullable
     @SuppressLint("StaticFieldLeak")
     private static GodToolsApi sInstance;
+
     public static synchronized void configure(@NonNull final Context context, @NonNull final String apiUri) {
         if (sInstance != null) {
             throw new IllegalStateException("Attempted to configure GodToolsApi multiple times");
@@ -81,7 +82,6 @@ public class GodToolsApi {
 
         sInstance = new GodToolsApi(context.getApplicationContext(), apiUri);
     }
-
 
     @NonNull
     public static synchronized GodToolsApi getInstance(@NonNull final Context context) {
