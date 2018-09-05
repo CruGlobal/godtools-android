@@ -40,6 +40,9 @@ import org.ccci.gto.android.common.util.NumberUtils;
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
+import org.cru.godtools.base.tool.activity.ImmersiveActivity;
+import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
+import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Tool;
@@ -54,8 +57,6 @@ import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent;
 import org.cru.godtools.tract.content.TractManifestLoader;
 import org.cru.godtools.tract.util.DrawableUtils;
 import org.cru.godtools.tract.util.ViewUtils;
-import org.cru.godtools.tract.viewmodel.ManifestViewUtils;
-import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.xml.model.Page;
@@ -175,6 +176,7 @@ public class TractActivity extends ImmersiveActivity
     }
 
     public TractActivity() {
+        super(true);
         mTranslations = new SparseArray<>();
         mManifests = new SparseArray<>();
     }
@@ -182,6 +184,7 @@ public class TractActivity extends ImmersiveActivity
     @RestrictTo(RestrictTo.Scope.TESTS)
     TractActivity(@NonNull final SparseArray<Translation> translations,
                   @NonNull final SparseArray<Manifest> manifests) {
+        super(true);
         mTranslations = translations;
         mManifests = manifests;
     }

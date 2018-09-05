@@ -6,6 +6,7 @@ import android.support.annotation.UiThread;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.cru.godtools.base.tool.model.view.TextViewUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.xml.model.Text;

@@ -15,9 +15,10 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import org.cru.godtools.base.model.Event;
+import org.cru.godtools.base.tool.model.view.ResourceViewUtils;
+import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.widget.PageContentLayout;
-import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Page;
 
@@ -217,7 +218,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
 
     private void bindPage() {
         mPageView.setBackgroundColor(Page.getBackgroundColor(mModel));
-        ResourceViewUtils.bindBackgroundImage(mBackgroundImage, Page.getBackgroundImageResource(mModel),
+        ResourceViewUtils.bindBackgroundImage(Page.getBackgroundImageResource(mModel), mBackgroundImage,
                                               Page.getBackgroundImageScaleType(mModel),
                                               Page.getBackgroundImageGravity(mModel));
     }
