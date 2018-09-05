@@ -807,30 +807,26 @@ public class TractActivity extends ImmersiveActivity
             final Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_tract_subject, manifest.getTitle()));
-            intent.putExtra(Intent.EXTRA_TEXT, buildSharingURL(manifest));
+            intent.putExtra(Intent.EXTRA_TEXT, buildSharingURL(manifest, mPager != null ? mPager.getCurrentItem() : 0));
             startActivity(Intent.createChooser(intent, getString(R.string.share_tract_title, manifest.getTitle())));
         }
     }
 
     /**
-     * This method takes in a Manifest Object and return a shareable Like for
-     *  the corresponding tool.
-     * @param manifest = The Manifest Object to be used.
-     * @return = Url string of the shareable link.
+     * This method takes in a Manifest and page and returns a shareable link for the corresponding tool.
+     *
+     * @param manifest The Manifest Object to be used.
+     * @param page     The page being shared
+     * @return Url string of the shareable link.
      */
     @NonNull
-    private String buildSharingURL(@NonNull final Manifest manifest) {
-        final Uri.Builder uri;
-        String code = manifest.getCode();
-
-        String pagePath = "";
-        if (mPager != null && mPager.getCurrentItem() > 0) {
-            pagePath = String.valueOf(mPager.getCurrentItem());
-        }
-        uri = URI_SHARE_BASE.buildUpon()
+    private String buildSharingURL(@NonNull final Manifest manifest, final int page) {
+        final Uri.Builder uri = URI_SHARE_BASE.buildUpon()
                 .appendEncodedPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
-                .appendPath(code)
-                .appendPath(pagePath);
+                .appendPath(manifest.getCode());
+        if (page > 0) {
+            uri.appendPath(String.valueOf(page));
+        }
 
         return uri
                 .appendQueryParameter("icid", "gtshare")
