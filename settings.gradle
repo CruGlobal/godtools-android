@@ -15,6 +15,7 @@ include 'library:sync-tasks'
 include 'library:xml-model'
 
 include 'ui:account'
+include 'ui:article-renderer'
 include 'ui:base'
 include 'ui:base-app'
 include 'ui:base-tool'
