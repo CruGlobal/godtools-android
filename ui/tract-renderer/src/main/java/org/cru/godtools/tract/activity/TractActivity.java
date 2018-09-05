@@ -158,7 +158,7 @@ public class TractActivity extends ImmersiveActivity
         extras.putString(EXTRA_TOOL, toolCode);
         // XXX: we use singleString mode to support using this intent for legacy shortcuts
         BundleUtils.putLocaleArray(extras, EXTRA_LANGUAGES, Stream.of(languages).withoutNulls().toArray(Locale[]::new),
-                                   true);
+                true);
     }
 
     @NonNull
@@ -311,10 +311,12 @@ public class TractActivity extends ImmersiveActivity
     }
 
     @Override
-    public void onTabUnselected(final TabLayout.Tab tab) {}
+    public void onTabUnselected(final TabLayout.Tab tab) {
+    }
 
     @Override
-    public void onTabReselected(final TabLayout.Tab tab) {}
+    public void onTabReselected(final TabLayout.Tab tab) {
+    }
 
     @Override
     public void onUpdateActiveCard(@NonNull final Page page,
@@ -524,8 +526,8 @@ public class TractActivity extends ImmersiveActivity
 
             for (final Locale locale : mLanguages) {
                 mLanguageTabs.addTab(mLanguageTabs.newTab()
-                                             .setText(locale.getDisplayName(locale))
-                                             .setTag(locale));
+                        .setText(locale.getDisplayName(locale))
+                        .setTag(locale));
             }
 
             mLanguageTabs.addOnTabSelectedListener(this);
@@ -810,57 +812,35 @@ public class TractActivity extends ImmersiveActivity
         }
     }
 
+    /**
+     * This method takes in a Manifest Object and return a shareable Like for
+     *  the corresponding tool.
+     * @param manifest = The Manifest Object to be used.
+     * @return = Url string of the shareable link.
+     */
     @NonNull
     private String buildSharingURL(@NonNull final Manifest manifest) {
         final Uri.Builder uri;
-        switch (manifest.getCode()) {
-            // temporary cases until knowgod.com is rebuilt
-            case "honorrestored":
-                uri = Uri.parse("https://godtoolsapp.com").buildUpon();
-                break;
-            case "thefour":
-                uri = Uri.parse("https://thefour.com").buildUpon();
-                break;
-            default:
-                uri = URI_SHARE_BASE.buildUpon()
-                        .appendPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
-                        .appendPath(getCodeForShareActivity(manifest))
-                        .appendPath(getPagePathPartForSharing(manifest));
+        String code = manifest.getCode();
+
+        String pagePath = "";
+        if (mPager != null && mPager.getCurrentItem() > 0) {
+            pagePath = String.valueOf(mPager.getCurrentItem());
         }
+        uri = URI_SHARE_BASE.buildUpon()
+                .appendEncodedPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
+                .appendPath(code)
+                .appendPath(pagePath);
 
         return uri
                 .appendQueryParameter("icid", "gtshare")
                 .build().toString();
     }
 
-    private String getCodeForShareActivity(@NonNull final Manifest manifest) {
-        switch (manifest.getCode()) {
-            // temporary until knowgod.com is rebuilt
-            case "kgp-us":
-                return "kgp";
-        }
-
-        return manifest.getCode();
-    }
-
-    private String getPagePathPartForSharing(@NonNull final Manifest manifest) {
-        switch (manifest.getCode()) {
-            // temporary until knowgod.com is rebuilt
-            case "kgp-us":
-                return "";
-        }
-
-        if (mPager != null && mPager.getCurrentItem() > 0) {
-            return String.valueOf(mPager.getCurrentItem());
-        }
-
-        return "";
-    }
-
     void trackTractPage(@NonNull final Page page, @Nullable final Card card) {
         final Manifest manifest = page.getManifest();
         mEventBus.post(new TractPageAnalyticsScreenEvent(manifest.getCode(), manifest.getLocale(), page.getPosition(),
-                                                         card != null ? card.getPosition() : null));
+                card != null ? card.getPosition() : null));
     }
 
     class TranslationLoaderCallbacks implements LoaderManager.LoaderCallbacks<Translation> {
