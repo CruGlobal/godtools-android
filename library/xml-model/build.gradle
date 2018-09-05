@@ -7,7 +7,7 @@ dependencies {
     implementation project(':library:model-loader')
 
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
-    implementation "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
+    api "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
 
     implementation "com.annimon:stream:${deps.lightweightStream}"
     implementation "com.google.guava:guava:${deps.guava}"
