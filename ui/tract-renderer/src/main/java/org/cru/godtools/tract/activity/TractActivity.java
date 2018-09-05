@@ -821,38 +821,20 @@ public class TractActivity extends ImmersiveActivity
     @NonNull
     private String buildSharingURL(@NonNull final Manifest manifest) {
         final Uri.Builder uri;
+        String code = manifest.getCode();
 
+        String pagePath = "";
+        if (mPager != null && mPager.getCurrentItem() > 0) {
+            pagePath = String.valueOf(mPager.getCurrentItem());
+        }
         uri = URI_SHARE_BASE.buildUpon()
-                .appendPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
-                .appendPath(getCodeForShareActivity(manifest))
-                .appendPath(getPagePathPartForSharing());
+                .appendEncodedPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
+                .appendPath(code)
+                .appendPath(pagePath);
 
         return uri
                 .appendQueryParameter("icid", "gtshare")
                 .build().toString();
-    }
-
-    /**
-     * This method returns the code associated with the Manifest Object
-     * @param manifest = Manifest Object
-     * @return = String Value of the manifest code
-     */
-    private String getCodeForShareActivity(@NonNull final Manifest manifest) {
-
-        return manifest.getCode();
-    }
-
-    /**
-     * This method returns the current Page needed for the Sharing link.
-     * @return = Returns the current page unless on the first page then returns empty string.
-     */
-    private String getPagePathPartForSharing() { // No longer needed Manifest param
-
-        if (mPager != null && mPager.getCurrentItem() > 0) {
-            return String.valueOf(mPager.getCurrentItem());
-        }
-
-        return "";
     }
 
     void trackTractPage(@NonNull final Page page, @Nullable final Card card) {
