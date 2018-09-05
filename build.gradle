@@ -127,6 +127,14 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
             lintOptions {
                 lintConfig rootProject.file("analysis/lint/lint.xml")
             }
+
+            buildTypes {
+                debug {
+                    // HACK: Unfortunately we cannot target androidTest builds with multidex only, so we have to target
+                    // HACK: all debug builds so that androidTest works when multidex is required.
+                    multiDexEnabled true
+                }
+            }
         }
 
         dependencies {
