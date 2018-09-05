@@ -72,24 +72,8 @@ public class ArticleParser {
      */
     public HashMap<String, Object> execute() {
 
-        // Create loop through Keys
-        Iterator<String> keys = articleJSON.keys();
-        while (keys.hasNext()) {
-            String nextKey = keys.next();
-            if (isArticleOrCategory(nextKey)) {
-                try {
-                    JSONObject returnedObject = articleJSON.getJSONObject(nextKey);
-                    if (isObjectCategory(returnedObject)) {
-                        getArticleFromCategory(returnedObject);
-                    } else {
-                        // Get inner Article Object
-                        parseArticleObject(returnedObject);
-                    }
-                } catch (Exception e) {
-                    Timber.e(e, "getArticleFromCategory: ");
-                }
-            }
-        }
+        jsonObjectHandler(articleJSON);
+
         HashMap<String, Object> returnObject = new HashMap<>();
         returnObject.put(ARTICLE_LIST_KEY, articleList);
         returnObject.put(ATTACHMENT_LIST_KEY, attachmentList);
@@ -99,19 +83,27 @@ public class ArticleParser {
     //endregion public Executor
 
     //region Article Parsing
+
     /**
-     * This method takes a Category Json object and extracts the articles out and send it to be parsed.
-     *
-     * @param categoryObject = category JsonObject
+     * This method takes in a Json Object and Iterates through the keys to determine if they
+     * are Article Objects or Category Object.  Article Objects will be passed on to be parsed
+     * and Category Object will be Recursively placed back into this method.
+     * @param evaluatingObject = the Json Object to be evaluated.
      */
-    private void getArticleFromCategory(JSONObject categoryObject) {
-        Iterator<String> keys = categoryObject.keys();
+    private void jsonObjectHandler(JSONObject evaluatingObject) {
+        // Create loop through Keys
+        Iterator<String> keys = evaluatingObject.keys();
         while (keys.hasNext()) {
             String nextKey = keys.next();
             if (isArticleOrCategory(nextKey)) {
                 try {
-                    JSONObject articleObject = categoryObject.getJSONObject(nextKey);
-                    parseArticleObject(articleObject);
+                    JSONObject returnedObject = evaluatingObject.getJSONObject(nextKey);
+                    if (isObjectCategory(returnedObject)) {
+                        jsonObjectHandler(returnedObject);
+                    } else {
+                        // Get inner Article Object
+                        parseArticleObject(returnedObject);
+                    }
                 } catch (Exception e) {
                     Timber.e(e, "getArticleFromCategory: ");
                 }

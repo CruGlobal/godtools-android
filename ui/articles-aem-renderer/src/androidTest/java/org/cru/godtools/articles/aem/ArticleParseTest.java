@@ -1,8 +1,9 @@
 package org.cru.godtools.articles.aem;
 
-import android.net.Uri;
+import android.content.res.AssetManager;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.apache.commons.io.IOUtils;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.articles.aem.service.support.ArticleParser;
@@ -12,13 +13,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
@@ -29,17 +28,12 @@ public class ArticleParseTest {
     public void verifyArticleParseLogic() {
 
         try {
-            Uri url = Uri.parse("https://stage.cru.org/content/experience-fragments/questions_about_god/english.999.json");
 
-            OkHttpClient client = new OkHttpClient();
+            AssetManager manager = getInstrumentation().getContext().getAssets();
 
-            Request request = new Request.Builder()
-                    .url(url.toString())
-                    .build();
+            InputStream input = manager.open("tests/article-test.json");
 
-            Response response = client.newCall(request).execute();
-
-            String result = response.body().string();
+            String result = IOUtils.toString(input);
 
             JSONObject jsonObject = new JSONObject(result);
 
