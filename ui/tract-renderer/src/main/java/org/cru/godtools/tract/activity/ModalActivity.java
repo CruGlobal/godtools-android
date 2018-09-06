@@ -22,8 +22,8 @@ import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.content.TractManifestLoader;
 import org.cru.godtools.tract.viewmodel.ModalViewHolder;
+import org.cru.godtools.xml.content.ManifestLoader;
 import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.xml.model.Modal;
 import org.cru.godtools.xml.service.ManifestManager;
@@ -199,7 +199,7 @@ public class ModalActivity extends ImmersiveActivity {
             switch (id) {
                 case LOADER_MANIFEST:
                     if (mTool != null) {
-                        return new TractManifestLoader(ModalActivity.this, mTool, mLocale);
+                        return new ManifestLoader(ModalActivity.this, mTool, mLocale);
                     }
                     break;
             }

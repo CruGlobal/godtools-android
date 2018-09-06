@@ -40,7 +40,7 @@ import org.ccci.gto.android.common.util.NumberUtils;
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
-import org.cru.godtools.base.tool.activity.ImmersiveActivity;
+import org.cru.godtools.base.tool.activity.BaseToolActivity;
 import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
 import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
 import org.cru.godtools.download.manager.DownloadProgress;
@@ -54,9 +54,8 @@ import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent;
-import org.cru.godtools.tract.content.TractManifestLoader;
-import org.cru.godtools.tract.util.DrawableUtils;
 import org.cru.godtools.tract.util.ViewUtils;
+import org.cru.godtools.xml.content.ManifestLoader;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.xml.model.Page;
@@ -76,13 +75,12 @@ import butterknife.BindView;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
-import static org.cru.godtools.base.ui.util.LocaleTypefaceUtils.safeApplyTypefaceSpan;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
 import static org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE;
 import static org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE;
 import static org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE;
 
-public class TractActivity extends ImmersiveActivity
+public class TractActivity extends BaseToolActivity
         implements ManifestPagerAdapter.Callbacks, TabLayout.OnTabSelectedListener,
         GodToolsDownloadManager.OnDownloadProgressUpdateListener {
     private static final String EXTRA_LANGUAGES = TractActivity.class.getName() + ".LANGUAGES";
@@ -98,10 +96,6 @@ public class TractActivity extends ImmersiveActivity
     private static final int STATE_LOADING = 0;
     private static final int STATE_LOADED = 1;
     private static final int STATE_NOT_FOUND = 2;
-
-    // App/Action Bar
-    @Nullable
-    private Menu mToolbarMenu;
 
     @Nullable
     @BindView(R2.id.language_toggle)
@@ -248,17 +242,15 @@ public class TractActivity extends ImmersiveActivity
             mToolbar.setNavigationIcon(R.drawable.ic_close);
         }
         setupLanguageToggle();
-        updateToolbar();
         updateLanguageToggle();
     }
 
     @Override
     public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
         getMenuInflater().inflate(R.menu.activity_tract, menu);
-        mToolbarMenu = menu;
 
         // make the install menu item visible if this is an Instant App
-        final MenuItem install = mToolbarMenu.findItem(R.id.action_install);
+        final MenuItem install = menu.findItem(R.id.action_install);
         if (install != null) {
             install.setVisible(InstantApps.isInstantApp(this));
         }
@@ -267,16 +259,24 @@ public class TractActivity extends ImmersiveActivity
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(final Menu menu) {
-        updateToolbarMenu();
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
         startDownloadProgressListener();
+    }
+
+    @Override
+    @CallSuper
+    protected void onUpdateActiveManifest() {
+        super.onUpdateActiveManifest();
+        updateBackground();
+        updatePager();
+    }
+
+    @Override
+    protected void onUpdateToolbar() {
+        super.onUpdateToolbar();
+        updateLanguageToggle();
     }
 
     @Override
@@ -560,7 +560,7 @@ public class TractActivity extends ImmersiveActivity
                 }
 
                 if (i == mActiveLanguage) {
-                    updateActiveManifest();
+                    onUpdateActiveManifest();
                     updateVisibilityState();
                 }
                 updateLanguageToggle();
@@ -575,8 +575,7 @@ public class TractActivity extends ImmersiveActivity
                 if (i != mActiveLanguage) {
                     mActiveLanguage = i;
                     restartDownloadProgressListener();
-                    updateActiveManifest();
-                    updateLanguageToggle();
+                    onUpdateActiveManifest();
                 }
                 return;
             }
@@ -616,33 +615,8 @@ public class TractActivity extends ImmersiveActivity
     }
 
     @Nullable
-    private Manifest getActiveManifest() {
+    protected Manifest getActiveManifest() {
         return mManifests.get(mActiveLanguage);
-    }
-
-    private void updateActiveManifest() {
-        updateToolbar();
-        updateBackground();
-        updatePager();
-    }
-
-    private void updateToolbar() {
-        final Manifest manifest = getActiveManifest();
-        setTitle(safeApplyTypefaceSpan(Manifest.getTitle(manifest), ManifestViewUtils.getTypeface(manifest, this)));
-
-        if (mToolbar != null) {
-            // set toolbar background color
-            mToolbar.setBackgroundColor(Manifest.getNavBarColor(manifest));
-
-            // set text & controls color
-            final int controlColor = Manifest.getNavBarControlColor(manifest);
-            mToolbar.setNavigationIcon(DrawableUtils.tint(mToolbar.getNavigationIcon(), controlColor));
-            mToolbar.setTitleTextColor(controlColor);
-            mToolbar.setSubtitleTextColor(controlColor);
-        }
-
-        updateToolbarMenu();
-        updateLanguageToggle();
     }
 
     private void updateLanguageToggle() {
@@ -693,20 +667,6 @@ public class TractActivity extends ImmersiveActivity
         // show or hide the title based on how many visible tabs we have
         if (mActionBar != null) {
             mActionBar.setDisplayShowTitleEnabled(visibleTabs <= 1);
-        }
-    }
-
-    private void updateToolbarMenu() {
-        if (mToolbarMenu != null) {
-            // tint all action icons
-            final int controlColor = Manifest.getNavBarControlColor(getActiveManifest());
-            for (int i = 0; i < mToolbarMenu.size(); ++i) {
-                final MenuItem item = mToolbarMenu.getItem(i);
-                item.setIcon(DrawableUtils.tint(item.getIcon(), controlColor));
-            }
-            if (mToolbar != null) {
-                mToolbar.setOverflowIcon(DrawableUtils.tint(mToolbar.getOverflowIcon(), controlColor));
-            }
         }
     }
 
@@ -883,7 +843,7 @@ public class TractActivity extends ImmersiveActivity
                 case LOADER_TYPE_MANIFEST:
                     final int langId = id & LOADER_ID_MASK;
                     if (mTool != null && langId >= 0 && langId < mLanguages.length) {
-                        return new TractManifestLoader(TractActivity.this, mTool, mLanguages[langId]);
+                        return new ManifestLoader(TractActivity.this, mTool, mLanguages[langId]);
                     }
                     break;
             }
@@ -895,8 +855,8 @@ public class TractActivity extends ImmersiveActivity
         public void onLoadFinished(@NonNull final Loader<Manifest> loader, @Nullable final Manifest manifest) {
             switch (loader.getId() & LOADER_TYPE_MASK) {
                 case LOADER_TYPE_MANIFEST:
-                    if (loader instanceof TractManifestLoader) {
-                        setManifest(((TractManifestLoader) loader).getLocale(), manifest);
+                    if (loader instanceof ManifestLoader) {
+                        setManifest(((ManifestLoader) loader).getLocale(), manifest);
                     }
                     break;
             }
