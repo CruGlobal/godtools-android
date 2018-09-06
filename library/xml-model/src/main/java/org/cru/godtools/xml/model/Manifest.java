@@ -36,6 +36,7 @@ public final class Manifest extends Base implements Styles {
     private static final String XML_TITLE = "title";
     private static final String XML_NAVBAR_COLOR = "navbar-color";
     private static final String XML_NAVBAR_CONTROL_COLOR = "navbar-control-color";
+    private static final String XML_CATEGORIES = "categories";
     private static final String XML_PAGES = "pages";
     private static final String XML_PAGES_AEM_IMPORT = "aem-import";
     private static final String XML_RESOURCES = "resources";
@@ -84,6 +85,8 @@ public final class Manifest extends Base implements Styles {
     @Nullable
     private Text mTitle;
 
+    @NonNull
+    private List<Category> mCategories = ImmutableList.of();
     @NonNull
     private List<Page> mPages = ImmutableList.of();
     @NonNull
@@ -134,6 +137,11 @@ public final class Manifest extends Base implements Styles {
     @Nullable
     public static String getTitle(@Nullable final Manifest manifest) {
         return manifest != null ? manifest.getTitle() : null;
+    }
+
+    @NonNull
+    public List<Category> getCategories() {
+        return mCategories;
     }
 
     @NonNull
@@ -272,6 +280,9 @@ public final class Manifest extends Base implements Styles {
                         case XML_TITLE:
                             mTitle = Text.fromNestedXml(this, parser, XMLNS_MANIFEST, XML_TITLE);
                             continue;
+                        case XML_CATEGORIES:
+                            parseCategories(parser);
+                            continue;
                         case XML_PAGES:
                             parsePages(parser);
                             continue;
@@ -287,6 +298,32 @@ public final class Manifest extends Base implements Styles {
         }
 
         return this;
+    }
+
+    private void parseCategories(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_CATEGORIES);
+
+        final List<Category> categories = new ArrayList<>();
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+
+            // process recognized nodes
+            switch (parser.getNamespace()) {
+                case XMLNS_MANIFEST:
+                    switch (parser.getName()) {
+                        case Category.XML_CATEGORY:
+                            categories.add(Category.fromXml(this, parser));
+                            continue;
+                    }
+                    break;
+            }
+
+            // skip unrecognized nodes
+            XmlPullParserUtils.skipTag(parser);
+        }
+        mCategories = ImmutableList.copyOf(categories);
     }
 
     @WorkerThread
