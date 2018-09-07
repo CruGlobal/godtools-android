@@ -50,6 +50,8 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     private static final String KEY_EXIT_LINK = "cru.mobileexitlink";
     private static final String KEY_SHARE_CONTENT = "cru.shareiconengaged";
     private static final String KEY_TOGGLE_LANGUAGE = "cru.parallellanguagetoggle";
+    private static final String KEY_SITE_SECTION = "cru:sitesection";
+    private static final String KEY_SITE_SUB_SECTION = "cru:sitesubsection";
 
     /* Value constants */
     private static final String VALUE_GODTOOLS = "GodTools";
@@ -193,6 +195,13 @@ public final class AdobeAnalyticsService implements AnalyticsService {
         return data;
     }
 
+    /**
+     *  This method created the Data to be passed to Adobe my converting it to a HashMap
+     * @param guid = user id from key
+     * @param screen = The screen name of the event
+     * @param contentLocale = The Locale of the event
+     * @return = HashMap of the data to be tracked by Adobe Analytics
+     */
     @WorkerThread
     private Map<String, Object> stateContextData(@Nullable final String guid, final String screen,
                                                  @Nullable final Locale contentLocale) {
@@ -201,6 +210,55 @@ public final class AdobeAnalyticsService implements AnalyticsService {
         data.put(KEY_SCREEN_NAME, screen);
         if (contentLocale != null) {
             data.put(KEY_CONTENT_LANGUAGE, toLanguageTag(contentLocale));
+        }
+
+        switch (screen) {
+            case "Home":
+                //No site Section for this screen
+
+                break;
+            case "Find Tools":
+                data.put(KEY_SITE_SECTION, "tools");
+
+                break;
+            case "Tool Info":
+                data.put(KEY_SITE_SECTION, "tools");
+                data.put(KEY_SITE_SUB_SECTION, "add tools");
+
+                break;
+            case "Language Settings":
+            case "Select Language":
+            case "About":
+            case "Help":
+            case "Contact Us":
+            case "Share App":
+            case "Share Story":
+            case "Term of Use":
+            case "Privacy Policy":
+            case "Copyright Info":
+                data.put(KEY_SITE_SECTION, "menu");
+
+                break;
+            case "Select Settings":
+                data.put(KEY_SITE_SECTION, "menu");
+                data.put(KEY_SITE_SUB_SECTION, "language settings");
+
+                break;
+            case "EveryStudent":
+                data.put(KEY_SITE_SECTION, "articles");
+                data.put(KEY_SITE_SUB_SECTION, "everystudent");
+
+                break;
+            default:
+                if (screen.startsWith("everystudent-")) {
+                    data.put(KEY_SITE_SECTION, "articles");
+                    data.put(KEY_SITE_SUB_SECTION, "everystudent");
+                } else if (screen.contains("-")) { // prevent crash if invalid value gets through
+                    String subScreenName = screen.substring(0, screen.lastIndexOf("-"));
+                    data.put(KEY_SITE_SECTION, subScreenName);
+                }
+
+                break;
         }
         return data;
     }
