@@ -1,0 +1,17 @@
+android {
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation project(':library:base')
+
+    implementation project(':ui:base-tool')
+
+    implementation "androidx.constraintlayout:constraintlayout:${deps.constraintLayout}"
+    implementation "com.android.support:recyclerview-v7:${deps.androidSupport}"
+
+    implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
+}
