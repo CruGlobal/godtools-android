@@ -1,1 +1,9 @@
-<manifest package="org.cru.godtools.article" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.cru.godtools.article">
+
+    <application>
+        <activity
+            android:name=".activity.CategoriesActivity"
+            android:theme="@style/Theme.GodTools.Tool.AppBar" />
+    </application>
+</manifest>
