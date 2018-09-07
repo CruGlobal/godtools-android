@@ -1,3 +1,5 @@
+apply plugin: 'com.jakewharton.butterknife'
+
 android {
     dataBinding {
         enabled = true
@@ -14,4 +16,8 @@ dependencies {
 
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
+
+    implementation "com.jakewharton:butterknife:${deps.butterknife}"
+
+    annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }
