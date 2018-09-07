@@ -1,4 +1,4 @@
-package org.cru.godtools.base.tool.databinding.adapters;
+package org.cru.godtools.article.databinding.adapter;
 
 import android.databinding.BindingAdapter;
 import android.support.annotation.NonNull;

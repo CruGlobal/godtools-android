@@ -1,9 +1,3 @@
-android {
-    dataBinding {
-        enabled = true
-    }
-}
-
 dependencies {
     implementation project(':library:base')
     implementation project(':library:model')
