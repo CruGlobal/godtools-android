@@ -5,6 +5,8 @@ dependencies {
 
     api project(':ui:base')
 
+    implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
+
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
