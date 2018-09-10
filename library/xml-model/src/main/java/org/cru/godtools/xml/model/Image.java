@@ -4,11 +4,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
+import com.google.common.collect.ImmutableSet;
+
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.cru.godtools.base.model.Event;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.Set;
 
 import static org.cru.godtools.xml.Constants.XMLNS_CONTENT;
 
@@ -18,6 +22,8 @@ public final class Image extends Content {
 
     @Nullable
     private String mResource = null;
+    @NonNull
+    private Set<Event.Id> mEvents = ImmutableSet.of();
 
     private Image(@NonNull final Base parent) {
         super(parent);
@@ -26,6 +32,11 @@ public final class Image extends Content {
     @Nullable
     public static Resource getResource(@Nullable final Image image) {
         return image != null ? image.getResource(image.mResource) : null;
+    }
+
+    @NonNull
+    public Set<Event.Id> getEvents() {
+        return mEvents;
     }
 
     @WorkerThread
@@ -46,5 +57,6 @@ public final class Image extends Content {
     void parseAttrs(@NonNull final XmlPullParser parser) {
         super.parseAttrs(parser);
         mResource = parser.getAttributeValue(null, XML_RESOURCE);
+        mEvents = parseEvents(parser, XML_EVENTS);
     }
 }

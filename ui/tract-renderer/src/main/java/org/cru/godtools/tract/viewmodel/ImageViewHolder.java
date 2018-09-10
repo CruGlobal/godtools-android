@@ -12,6 +12,7 @@ import org.cru.godtools.tract.R2;
 import org.cru.godtools.xml.model.Image;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 @UiThread
 final class ImageViewHolder extends BaseViewHolder<Image> {
@@ -26,5 +27,12 @@ final class ImageViewHolder extends BaseViewHolder<Image> {
     void onBind() {
         super.onBind();
         ResourceViewUtils.bind(Image.getResource(mModel), mImage);
+    }
+
+    @OnClick(R2.id.image)
+    void click() {
+        if (mModel != null) {
+            sendEvents(mModel.getEvents());
+        }
     }
 }
