@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
-public class DBBaseTest {
+public abstract class DBBaseTest {
 
     ArticleDao mArticleDao;
     AttachmentDao mAttachmentDao;

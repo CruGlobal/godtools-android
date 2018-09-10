@@ -8,20 +8,15 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.fail;
 
 public class AEMDownloadMangerTest extends DBBaseTest {
 
     @Test
-    public void verifyAttachmentsAreSaved() {
+    public void verifyAttachmentsAreSaved() throws IOException {
         for (Article article : mSavedArticles) {
             for (Attachment attachment : mAttachmentDao.getTestableAttachmentsByArticle(article.mkey)) {
-                try {
                     AEMDownloadManger
                             .saveAttachmentToStorage(attachment, context);
-                } catch (IOException e) {
-                    fail("Data was not saved");
-                }
             }
         }
 

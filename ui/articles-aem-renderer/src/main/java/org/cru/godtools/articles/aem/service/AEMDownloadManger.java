@@ -40,9 +40,8 @@ public class AEMDownloadManger {
      * manifest used contains AemImports.
      * @param manifest = the model for the manifest
      * @param context = the Application Context
-     * @throws URISyntaxException =
-     * @throws JSONException =
-     * @throws IOException =
+     * @throws JSONException
+     * @throws IOException
      */
     @WorkerThread
     public static void loadAEMFromManifest(final Manifest manifest, Context context)
@@ -64,9 +63,9 @@ public class AEMDownloadManger {
     /**
      * This method take the manifest and one of its aemImports and extracts all associated data to
      * the database.
-     * @param manifest = manifest object
-     * @param aemImports = uri from one of the aemImports
-     * @param context = the Application or Activity Context
+     * @param manifest manifest object
+     * @param aemImports uri from one of the aemImports
+     * @param context the Application or Activity Context
      * @throws JSONException
      * @throws IOException
      * @throws URISyntaxException
@@ -81,8 +80,7 @@ public class AEMDownloadManger {
 
         JSONObject importJson = getJsonFromUri(aemImports);
 
-        ArticleParser articleParser = new ArticleParser(importJson);
-        HashMap<String, Object> articleResults = articleParser.execute();
+        HashMap<String, Object> articleResults = ArticleParser.execute(importJson);
 
         List<Article> articles = (List<Article>) articleResults.get(ArticleParser.ARTICLE_LIST_KEY);
 
@@ -111,10 +109,9 @@ public class AEMDownloadManger {
     /**
      * Gets JSON Object out of Uri
      *
-     * @param aemImports = uri
-     * @return = JSON object from the Uri
-     * @throws JSONException =
-     * @throws URISyntaxException
+     * @param aemImports uri
+     * @return JSON object from the Uri
+     * @throws JSONException
      * @throws IOException
      */
     private static JSONObject getJsonFromUri(Uri aemImports)

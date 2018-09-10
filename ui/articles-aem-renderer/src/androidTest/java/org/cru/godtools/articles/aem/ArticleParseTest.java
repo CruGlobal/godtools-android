@@ -19,15 +19,12 @@ import java.util.List;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class ArticleParseTest {
 
     @Test
-    public void verifyArticleParseLogic() {
-
-        try {
+    public void verifyArticleParseLogic() throws IOException, JSONException {
 
             AssetManager manager = getInstrumentation().getContext().getAssets();
 
@@ -37,7 +34,7 @@ public class ArticleParseTest {
 
             JSONObject jsonObject = new JSONObject(result);
 
-            HashMap<String, Object> results = new ArticleParser(jsonObject).execute();
+            HashMap<String, Object> results = ArticleParser.execute(jsonObject);
 
             assertTrue(results.containsKey(ArticleParser.ATTACHMENT_LIST_KEY));
             assertTrue(results.containsKey(ArticleParser.ARTICLE_LIST_KEY));
@@ -46,8 +43,5 @@ public class ArticleParseTest {
             assertTrue(resultsArticles.size() > 0);
             List<Attachment> resultAttachments = (List<Attachment>) results.get(ArticleParser.ATTACHMENT_LIST_KEY);
             assertTrue(resultAttachments.size() > 0);
-        } catch (JSONException | IOException | IllegalStateException e) {
-            fail(e.getMessage());
-        }
     }
 }
