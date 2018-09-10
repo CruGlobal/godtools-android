@@ -20,7 +20,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -79,9 +78,7 @@ public class AEMDownloadManger {
 
         JSONObject importJson = getJsonFromUri(aemImports);
 
-        HashMap<String, Object> articleResults = ArticleParser.execute(importJson);
-
-        List<Article> articles = (List<Article>) articleResults.get(ArticleParser.ARTICLE_LIST_KEY);
+        final List<Article> articles = ArticleParser.parse(importJson);
 
         for (Article createdArticle : articles) {
             ManifestAssociation createdAssociation = new ManifestAssociation();

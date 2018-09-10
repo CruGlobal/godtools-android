@@ -10,7 +10,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -19,10 +18,6 @@ import java.util.Locale;
  * This class handles parsing any AEM json calls into DOA objects.
  */
 public class ArticleParser {
-    public static final String ARTICLE_LIST_KEY = "article_list_key";
-
-    public static final String ATTACHMENT_LIST_KEY = "attachment_list_key";
-
     private static final String CREATED_TAG = "jcr:created";
     private static final String CONTENT_TAG = "jcr:content";
     private static final String LAST_MODIFIED_TAG = "cq:lastModified";
@@ -40,18 +35,10 @@ public class ArticleParser {
     /**
      * This executes the parsing of the local JsonObject.
      *
-     * use <code>ARTICLE_LIST_KEY</code> and <code>ATTACHMENT_LIST_KEY</code> to access the Collections
-     * out of the HashMaps
-     *
-     * @return return a list of <code>Article</code> and <code>Attachments</code> in HashMap
+     * @return return a list of {@link Article}
      */
-    public static HashMap<String, Object> execute(final JSONObject articleJSON) {
-        final List<Article> articles = jsonObjectHandler(articleJSON);
-
-        HashMap<String, Object> returnObject = new HashMap<>();
-        returnObject.put(ARTICLE_LIST_KEY, articles);
-
-        return returnObject;
+    public static List<Article> parse(@NonNull final JSONObject articleJSON) {
+        return jsonObjectHandler(articleJSON);
     }
     //endregion public Executor
 
