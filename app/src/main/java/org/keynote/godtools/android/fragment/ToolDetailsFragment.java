@@ -48,7 +48,7 @@ import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
 import static org.keynote.godtools.android.util.ViewUtils.bindShares;
 
-public class ToolDetailsFragment extends BaseFragment
+public class ToolDetailsFragment extends BasePlatformFragment
         implements GodToolsDownloadManager.OnDownloadProgressUpdateListener {
     public interface Callbacks {
         void onToolAdded();

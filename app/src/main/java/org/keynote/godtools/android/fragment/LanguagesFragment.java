@@ -34,7 +34,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 
-public class LanguagesFragment extends BaseFragment implements LanguagesAdapter.Callbacks {
+public class LanguagesFragment extends BasePlatformFragment implements LanguagesAdapter.Callbacks {
     private static final String EXTRA_PRIMARY = LanguagesFragment.class.getName() + ".PRIMARY";
     private static final String EXTRA_SEARCH = LanguagesFragment.class.getName() + ".SEARCH";
     private static final String EXTRA_SEARCH_OPEN = LanguagesFragment.class.getName() + ".SEARCH_OPEN";

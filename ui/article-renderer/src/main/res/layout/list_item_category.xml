@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="org.cru.godtools.article.R" />
+
+        <variable name="callbacks" type="org.cru.godtools.article.adapter.CategoriesAdapter.Callbacks" />
+        <variable name="category" type="org.cru.godtools.xml.model.Category" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> callbacks.onCategorySelected(category)}">
+
+        <org.ccci.gto.android.common.picasso.view.SimplePicassoImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:cropToPadding="true"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="15:8"
+            app:picassoFile="@{category.banner}"
+            tools:background="@android:color/darker_gray" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/categories_list_label_margin"
+            android:ellipsize="end"
+            android:lines="2"
+            android:textSize="@{R.dimen.text_size_category}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:textNode="@{category.label}"
+            tools:text="About God"
+            tools:textSize="@dimen/text_size_category" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

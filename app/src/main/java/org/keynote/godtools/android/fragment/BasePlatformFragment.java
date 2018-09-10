@@ -7,7 +7,6 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 
@@ -18,6 +17,7 @@ import org.ccci.gto.android.sync.event.SyncFinishedEvent;
 import org.ccci.gto.android.sync.widget.SwipeRefreshSyncHelper;
 import org.cru.godtools.R;
 import org.cru.godtools.base.Settings;
+import org.cru.godtools.base.ui.fragment.BaseFragment;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -25,21 +25,16 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.Locale;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 import static org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE;
 import static org.cru.godtools.base.Settings.PREF_PRIMARY_LANGUAGE;
 
-public abstract class BaseFragment extends Fragment {
-    private static final String EXTRA_SYNC_HELPER = BaseFragment.class.getName() + ".SYNC_HELPER";
+public abstract class BasePlatformFragment extends BaseFragment {
+    private static final String EXTRA_SYNC_HELPER = BasePlatformFragment.class.getName() + ".SYNC_HELPER";
 
     @Nullable
     Settings mSettings;
     private final ChangeListener mSettingsChangeListener = new ChangeListener();
-
-    @Nullable
-    private Unbinder mButterKnife;
 
     @Nullable
     @BindView(R.id.refresh)
@@ -51,7 +46,7 @@ public abstract class BaseFragment extends Fragment {
     @Nullable
     protected Locale mParallelLanguage;
 
-    /* BEGIN lifecycle */
+    // region Lifecycle Events
 
     @Override
     public void onAttach(final Context context) {
@@ -77,7 +72,6 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mButterKnife = ButterKnife.bind(this, view);
         setupRefreshView();
     }
 
@@ -115,15 +109,11 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         cleanupRefreshView();
-        if (mButterKnife != null) {
-            mButterKnife.unbind();
-        }
-        mButterKnife = null;
+        super.onDestroyView();
     }
 
-    /* END lifecycle */
+    // endregion Lifecycle Events
 
     @CallSuper
     protected void syncData(final boolean force) {}

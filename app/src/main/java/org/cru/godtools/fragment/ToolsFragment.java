@@ -45,13 +45,13 @@ import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
-import org.keynote.godtools.android.fragment.BaseFragment;
+import org.keynote.godtools.android.fragment.BasePlatformFragment;
 
 import java.util.Locale;
 
 import butterknife.BindView;
 
-public class ToolsFragment extends BaseFragment
+public class ToolsFragment extends BasePlatformFragment
         implements ToolsAdapter.Callbacks, BaseHeaderFooterAdapter.EmptyCallbacks {
     private static final String EXTRA_MODE = ToolsFragment.class.getName() + ".MODE";
 
