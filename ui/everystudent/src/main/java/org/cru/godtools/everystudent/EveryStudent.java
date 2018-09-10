@@ -24,7 +24,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.SimpleExpandableListAdapter;
 
 import org.cru.godtools.analytics.AnalyticsService;
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
+import org.cru.godtools.everystudent.analytics.model.EveryStudentAnalyticsScreenEvent;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_EVERYSTUDENT;
+import static org.cru.godtools.everystudent.analytics.model.EveryStudentAnalyticsScreenEvent.SCREEN_EVERYSTUDENT;
 
 @SuppressWarnings("deprecation")
 public class EveryStudent extends ExpandableListActivity {
@@ -93,7 +93,7 @@ public class EveryStudent extends ExpandableListActivity {
             }
         });
 
-        EventBus.getDefault().post(new AnalyticsScreenEvent(SCREEN_EVERYSTUDENT, GA_LANGUAGE_EVERYSTUDENT));
+        EventBus.getDefault().post(new EveryStudentAnalyticsScreenEvent(SCREEN_EVERYSTUDENT));
     }
 
     @Override

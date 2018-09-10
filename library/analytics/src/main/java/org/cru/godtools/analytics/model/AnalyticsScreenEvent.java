@@ -8,8 +8,6 @@ import java.util.Locale;
 
 import javax.annotation.concurrent.Immutable;
 
-import static org.cru.godtools.analytics.AnalyticsService.SCREEN_EVERYSTUDENT;
-
 @Immutable
 public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
     private static final String SNOWPLOW_CONTENT_SCORING_URI_PATH_SCREEN = "screenview";
@@ -33,10 +31,8 @@ public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
     /* Adobe Site Sections */
     private static final String SITE_SECTION_TOOLS = "tools";
     private static final String SITE_SECTION_MENU = "menu";
-    private static final String SITE_SECTION_ARTICLES = "articles";
     private static final String SITE_SUB_SECTION_ADD_TOOLS = "add tools";
     private static final String SITE_SUB_SECTION_LANGUAGE_SETTINGS = "language settings";
-    private static final String SITE_SUB_SECTION_EVERYSTUDENT = "everystudent";
 
     @NonNull
     private final String mScreen;
@@ -72,8 +68,6 @@ public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
             case SCREEN_PRIVACY_POLICY:
             case SCREEN_COPYRIGHT:
                 return SITE_SECTION_MENU;
-            case SCREEN_EVERYSTUDENT:
-                return SITE_SECTION_ARTICLES;
         }
         return null;
     }
@@ -85,8 +79,6 @@ public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
                 return SITE_SUB_SECTION_ADD_TOOLS;
             case SCREEN_LANGUAGE_SELECTION:
                 return SITE_SUB_SECTION_LANGUAGE_SETTINGS;
-            case SCREEN_EVERYSTUDENT:
-                return SITE_SUB_SECTION_EVERYSTUDENT;
         }
         return null;
     }
