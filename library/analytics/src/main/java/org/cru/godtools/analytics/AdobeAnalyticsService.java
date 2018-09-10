@@ -120,7 +120,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onAnalyticsScreenEvent(@NonNull final AnalyticsScreenEvent event) {
         if (event.isForSystem(AnalyticsSystem.ADOBE)) {
-            trackState(event.getScreen(), event.getLocale());
+            trackState(event);
         }
     }
 
@@ -164,12 +164,11 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     }
 
     @AnyThread
-    private void trackState(@NonNull final String screen, @Nullable final Locale contentLocale) {
+    private void trackState(@NonNull final AnalyticsScreenEvent event) {
         final String guid = mTheKey.getDefaultSessionGuid();
         mAnalyticsExecutor.execute(() -> {
-            final Map<String, Object> adobeContextData = stateContextData(guid, screen, contentLocale);
-            Analytics.trackState(screen, adobeContextData);
-            mPreviousScreenName = screen;
+            Analytics.trackState(event.getScreen(), stateContextData(guid, event));
+            mPreviousScreenName = event.getScreen();
         });
     }
 
@@ -196,69 +195,29 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     }
 
     /**
-     *  This method created the Data to be passed to Adobe my converting it to a HashMap
-     * @param guid = user id from key
-     * @param screen = The screen name of the event
-     * @param contentLocale = The Locale of the event
-     * @return = HashMap of the data to be tracked by Adobe Analytics
+     * This method created the Data to be passed to Adobe my converting it to a HashMap
+     *
+     * @param guid  user id from key
+     * @param event The analytics event we are generating context data for
+     * @return The data to be tracked by Adobe Analytics
      */
     @WorkerThread
-    private Map<String, Object> stateContextData(@Nullable final String guid, final String screen,
-                                                 @Nullable final Locale contentLocale) {
+    private Map<String, Object> stateContextData(@Nullable final String guid,
+                                                 @NonNull final AnalyticsScreenEvent event) {
         final Map<String, Object> data = baseContextData(guid);
         data.put(KEY_SCREEN_NAME_PREVIOUS, mPreviousScreenName);
-        data.put(KEY_SCREEN_NAME, screen);
+        data.put(KEY_SCREEN_NAME, event.getScreen());
+        final String siteSection = event.getAdobeSiteSection();
+        if (siteSection != null) {
+            data.put(KEY_SITE_SECTION, siteSection);
+        }
+        final String siteSubSection = event.getAdobeSiteSubSection();
+        if (siteSubSection != null) {
+            data.put(KEY_SITE_SUB_SECTION, siteSubSection);
+        }
+        final Locale contentLocale = event.getLocale();
         if (contentLocale != null) {
             data.put(KEY_CONTENT_LANGUAGE, toLanguageTag(contentLocale));
-        }
-
-        switch (screen) {
-            case "Home":
-                //No site Section for this screen
-
-                break;
-            case "Find Tools":
-                data.put(KEY_SITE_SECTION, "tools");
-
-                break;
-            case "Tool Info":
-                data.put(KEY_SITE_SECTION, "tools");
-                data.put(KEY_SITE_SUB_SECTION, "add tools");
-
-                break;
-            case "Language Settings":
-            case "Select Language":
-            case "About":
-            case "Help":
-            case "Contact Us":
-            case "Share App":
-            case "Share Story":
-            case "Term of Use":
-            case "Privacy Policy":
-            case "Copyright Info":
-                data.put(KEY_SITE_SECTION, "menu");
-
-                break;
-            case "Select Settings":
-                data.put(KEY_SITE_SECTION, "menu");
-                data.put(KEY_SITE_SUB_SECTION, "language settings");
-
-                break;
-            case "EveryStudent":
-                data.put(KEY_SITE_SECTION, "articles");
-                data.put(KEY_SITE_SUB_SECTION, "everystudent");
-
-                break;
-            default:
-                if (screen.startsWith("everystudent-")) {
-                    data.put(KEY_SITE_SECTION, "articles");
-                    data.put(KEY_SITE_SUB_SECTION, "everystudent");
-                } else if (screen.contains("-")) { // prevent crash if invalid value gets through
-                    String subScreenName = screen.substring(0, screen.lastIndexOf("-"));
-                    data.put(KEY_SITE_SECTION, subScreenName);
-                }
-
-                break;
         }
         return data;
     }
