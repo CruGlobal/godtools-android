@@ -7,10 +7,23 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 
 import java.util.Locale;
 
+import javax.annotation.concurrent.Immutable;
+
+@Immutable
 public class TractPageAnalyticsScreenEvent extends AnalyticsScreenEvent {
+    @NonNull
+    private final String mTract;
+
     public TractPageAnalyticsScreenEvent(@NonNull final String tract, @NonNull final Locale locale, final int page,
                                          @Nullable final Integer card) {
         super(tractPageToScreenName(tract, page, card), locale);
+        mTract = tract;
+    }
+
+    @Nullable
+    @Override
+    public String getAdobeSiteSection() {
+        return mTract;
     }
 
     @NonNull
