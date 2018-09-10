@@ -16,4 +16,3 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:${deps.androidLifecycle}"
     annotationProcessor "android.arch.persistence.room:compiler:${deps.roomVersion}"
 }
-
