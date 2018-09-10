@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.WorkerThread;
 
-import org.apache.commons.io.IOUtils;
 import org.cru.godtools.articles.aem.db.ArticleRepository;
 import org.cru.godtools.articles.aem.db.AttachmentRepository;
 import org.cru.godtools.articles.aem.db.ManifestAssociationRepository;
@@ -129,9 +128,9 @@ public class AEMDownloadManger {
     /**
      * This method is used to save an Attachment to Storage and update Database
      *
-     * @param attachment = the attachment to be saved
-     * @param context    = The context is needed to save the attachment and database entry
-     * @throws IOException = Is thrown if an error occurs in saving to storage.
+     * @param attachment the attachment to be saved
+     * @param context The context is needed to save the attachment and database entry
+     * @throws IOException Is thrown if an error occurs in saving to storage.
      */
     public static void saveAttachmentToStorage(Attachment attachment, Context context)
             throws IOException {
@@ -148,7 +147,12 @@ public class AEMDownloadManger {
             articleFile = new File(articleFile, filename);
             FileOutputStream outputStream = new FileOutputStream(articleFile);
             URL url = new URL(attachment.mAttachmentUrl);
-            outputStream.write(IOUtils.toByteArray(url));
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+
+            outputStream.write(client.newCall(request).execute().body().bytes());
 
             // update attachment with file Path
             attachment.mAttachmentFilePath = articleFile.getAbsolutePath();

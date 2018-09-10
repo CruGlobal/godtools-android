@@ -94,7 +94,7 @@ public class ArticleParser {
      * This method parses an Article Json Object into the Database. On completion it will add
      * articles to <code>articleList</code>
      *
-     * @param articleObject = article JsonObject
+     * @param articleObject article JsonObject
      */
     private static void parseArticleObject(JSONObject articleObject) {
         // Create Article
