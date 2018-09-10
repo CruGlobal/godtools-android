@@ -1,12 +1,11 @@
-package org.cru.godtools.articles.aem;
+package org.cru.godtools.articles.aem.service.support;
 
 import android.content.res.AssetManager;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.apache.commons.io.IOUtils;
+import org.ccci.gto.android.common.util.IOUtils;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
-import org.cru.godtools.articles.aem.service.support.ArticleParser;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -21,8 +20,7 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static junit.framework.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class ArticleParseTest {
-
+public class ArticleParserTest {
     @Test
     public void verifyArticleParseLogic() throws IOException, JSONException {
 
@@ -30,7 +28,7 @@ public class ArticleParseTest {
 
             InputStream input = manager.open("tests/article-test.json");
 
-            String result = IOUtils.toString(input);
+            String result = IOUtils.readString(input);
 
             JSONObject jsonObject = new JSONObject(result);
 
