@@ -89,7 +89,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
         return sInstance;
     }
 
-    /* BEGIN tracking methods */
+    // region Tracking Methods
 
     @UiThread
     @Override
@@ -146,7 +146,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
         trackAction(ACTION_TOGGLE_LANGUAGE, attrs);
     }
 
-    /* END tracking methods */
+    // endregion Tracking Methods
 
     @AnyThread
     private void trackAction(@NonNull final String action, @Nullable final Map<String, ?> attributes) {
