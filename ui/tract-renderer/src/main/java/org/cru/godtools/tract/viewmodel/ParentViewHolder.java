@@ -64,6 +64,13 @@ public abstract class ParentViewHolder<T extends Base & Parent> extends BaseView
         }
     }
 
+    @Override
+    @CallSuper
+    public void onContentEvent(@NonNull final Event event) {
+        super.onContentEvent(event);
+        streamChildViewHolders().forEach(vh -> vh.onContentEvent(event));
+    }
+
     // endregion Lifecycle Events
 
     private void bindContent() {
