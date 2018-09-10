@@ -23,8 +23,6 @@ public class ArticleParser {
 
     public static final String ATTACHMENT_LIST_KEY = "attachment_list_key";
 
-    private static List<Attachment> attachmentList = new ArrayList<>();
-
     private static final String CREATED_TAG = "jcr:created";
     private static final String CONTENT_TAG = "jcr:content";
     private static final String LAST_MODIFIED_TAG = "cq:lastModified";
@@ -52,7 +50,6 @@ public class ArticleParser {
 
         HashMap<String, Object> returnObject = new HashMap<>();
         returnObject.put(ARTICLE_LIST_KEY, articles);
-        returnObject.put(ATTACHMENT_LIST_KEY, attachmentList);
 
         return returnObject;
     }
@@ -133,7 +130,8 @@ public class ArticleParser {
 
             // get Attachments from Articles
             if (articleRootObject != null) {
-                getAttachmentsFromRootObject(articleRootObject, retrievedArticle.mkey);
+                retrievedArticle.parsedAttachments =
+                        getAttachmentsFromRootObject(articleRootObject, retrievedArticle.mkey);
             }
         }
 
@@ -141,13 +139,17 @@ public class ArticleParser {
     }
 
     /**
-     *  This method if for extracting Attachments from the root Json Object of the article.  On
-     *  completion it will add Attachment to <code>attachmentList</code>
+     * This method if for extracting Attachments from the root Json Object of the article.  On
+     * completion it will add Attachment to <code>attachmentList</code>
      *
-     * @param articleRootObject  the root json Object of Article
-     * @param articleKey  the uuid of the article
+     * @param articleRootObject the root json Object of Article
+     * @param articleKey        the uuid of the article
+     * @return the list of attachments that were parsed
      */
-    private static void getAttachmentsFromRootObject(JSONObject articleRootObject, String articleKey) {
+    @NonNull
+    private static List<Attachment> getAttachmentsFromRootObject(JSONObject articleRootObject, String articleKey) {
+        final List<Attachment> attachments = new ArrayList<>();
+
         // Iterate through keys
         Iterator<String> keys = articleRootObject.keys();
         while (keys.hasNext()) {
@@ -162,9 +164,11 @@ public class ArticleParser {
                 retrievedAttachment.mArticleKey = articleKey;
                 retrievedAttachment.mAttachmentUrl = String.format("%s%s", BASE_URL,
                         innerObject.optString(FILE_TAG));
-                attachmentList.add(retrievedAttachment);
+                attachments.add(retrievedAttachment);
             }
         }
+
+        return attachments;
     }
 
     /**

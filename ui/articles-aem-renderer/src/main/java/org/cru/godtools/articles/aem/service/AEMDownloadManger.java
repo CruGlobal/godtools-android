@@ -83,9 +83,6 @@ public class AEMDownloadManger {
 
         List<Article> articles = (List<Article>) articleResults.get(ArticleParser.ARTICLE_LIST_KEY);
 
-        List<Attachment> attachments = (List<Attachment>) articleResults
-                .get(ArticleParser.ATTACHMENT_LIST_KEY);
-
         for (Article createdArticle : articles) {
             ManifestAssociation createdAssociation = new ManifestAssociation();
             createdAssociation.mManifestId = manifest.getCode();
@@ -97,11 +94,12 @@ public class AEMDownloadManger {
 
             // Save Article
             articleRepository.insertArticle(createdArticle);
-        }
 
-        for (Attachment createdAttachment : attachments) {
-            attachmentRepository.insertAttachment(createdAttachment);
-            //Todo: Decide if you want to store attachment here.
+            if (createdArticle.parsedAttachments != null) {
+                for (final Attachment attachment : createdArticle.parsedAttachments) {
+                    attachmentRepository.insertAttachment(attachment);
+                }
+            }
         }
     }
 

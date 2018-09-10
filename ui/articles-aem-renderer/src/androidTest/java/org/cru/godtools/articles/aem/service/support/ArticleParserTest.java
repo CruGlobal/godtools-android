@@ -5,7 +5,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import org.ccci.gto.android.common.util.IOUtils;
 import org.cru.godtools.articles.aem.model.Article;
-import org.cru.godtools.articles.aem.model.Attachment;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,13 +26,13 @@ public class ArticleParserTest {
 
             HashMap<String, Object> results = ArticleParser.execute(jsonObject);
 
-            assertTrue(results.containsKey(ArticleParser.ATTACHMENT_LIST_KEY));
             assertTrue(results.containsKey(ArticleParser.ARTICLE_LIST_KEY));
 
             List<Article> resultsArticles = (List<Article>) results.get(ArticleParser.ARTICLE_LIST_KEY);
             assertThat(resultsArticles.size(), is(2));
-            List<Attachment> resultAttachments = (List<Attachment>) results.get(ArticleParser.ATTACHMENT_LIST_KEY);
-            assertThat(resultAttachments.size(), is(6));
+        for (final Article article : resultsArticles) {
+            assertThat(article.parsedAttachments.size(), is(3));
+        }
     }
 
     private JSONObject loadJson(@NonNull final String file) throws Exception {
