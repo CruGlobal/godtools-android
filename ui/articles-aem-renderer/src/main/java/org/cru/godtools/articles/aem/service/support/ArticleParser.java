@@ -1,5 +1,7 @@
 package org.cru.godtools.articles.aem.service.support;
 
+import android.support.annotation.NonNull;
+
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.json.JSONObject;
@@ -17,14 +19,11 @@ import java.util.Locale;
  * This class handles parsing any AEM json calls into DOA objects.
  */
 public class ArticleParser {
-
     public static final String ARTICLE_LIST_KEY = "article_list_key";
 
     public static final String ATTACHMENT_LIST_KEY = "attachment_list_key";
 
     private static List<Attachment> attachmentList = new ArrayList<>();
-
-    private static List<Article> articleList = new ArrayList<>();
 
     private static final String CREATED_TAG = "jcr:created";
     private static final String CONTENT_TAG = "jcr:content";
@@ -49,11 +48,10 @@ public class ArticleParser {
      * @return return a list of <code>Article</code> and <code>Attachments</code> in HashMap
      */
     public static HashMap<String, Object> execute(final JSONObject articleJSON) {
-
-        jsonObjectHandler(articleJSON);
+        final List<Article> articles = jsonObjectHandler(articleJSON);
 
         HashMap<String, Object> returnObject = new HashMap<>();
-        returnObject.put(ARTICLE_LIST_KEY, articleList);
+        returnObject.put(ARTICLE_LIST_KEY, articles);
         returnObject.put(ATTACHMENT_LIST_KEY, attachmentList);
 
         return returnObject;
@@ -65,9 +63,14 @@ public class ArticleParser {
      * This method takes in a Json Object and Iterates through the keys to determine if they
      * are Article Objects or Category Object.  Article Objects will be passed on to be parsed
      * and Category Object will be Recursively placed back into this method.
+     *
      * @param evaluatingObject the Json Object to be evaluated.
+     * @return All the articles that were parsed
      */
-    private static void jsonObjectHandler(JSONObject evaluatingObject) {
+    @NonNull
+    private static List<Article> jsonObjectHandler(JSONObject evaluatingObject) {
+        final List<Article> articles = new ArrayList<>();
+
         // Create loop through Keys
         Iterator<String> keys = evaluatingObject.keys();
         while (keys.hasNext()) {
@@ -77,17 +80,19 @@ public class ArticleParser {
                 if (returnedObject != null) {
                     switch (returnedObject.optString(PRIMARY_TYPE_TAG)) {
                         case ORDER_FOLDER_TAG:
-                            jsonObjectHandler(returnedObject);
+                            articles.addAll(jsonObjectHandler(returnedObject));
 
                             break;
                         case PAGE_TAG:
-                            parseArticleObject(returnedObject);
+                            articles.add(parseArticleObject(returnedObject));
 
                             break;
                     }
                 }
             }
         }
+
+        return articles;
     }
 
     /**
@@ -95,8 +100,10 @@ public class ArticleParser {
      * articles to <code>articleList</code>
      *
      * @param articleObject article JsonObject
+     * @return The AEM Article that was just parsed
      */
-    private static void parseArticleObject(JSONObject articleObject) {
+    @NonNull
+    private static Article parseArticleObject(JSONObject articleObject) {
         // Create Article
         Article retrievedArticle = new Article();
         // get Inner article Object
@@ -124,14 +131,13 @@ public class ArticleParser {
 
             // TODO: need to set code to extract content from url
 
-            // add retrieved Article to List
-            articleList.add(retrievedArticle);
-
             // get Attachments from Articles
             if (articleRootObject != null) {
                 getAttachmentsFromRootObject(articleRootObject, retrievedArticle.mkey);
             }
         }
+
+        return retrievedArticle;
     }
 
     /**
@@ -190,5 +196,4 @@ public class ArticleParser {
                 !key.startsWith("sling:");
     }
     // endregion Validation
-
 }
