@@ -10,7 +10,8 @@ import org.cru.godtools.xml.model.Text;
 
 public final class TextViewAdapters {
     @BindingAdapter(value = {"textNode", "android:textSize"}, requireAll = false)
-    public static void setText(@NonNull final TextView view, @Nullable final Text text, @Nullable final Integer textSize) {
+    public static void setText(@NonNull final TextView view, @Nullable final Text text,
+                               @Nullable final Integer textSize) {
         TextViewUtils.bind(text, view, textSize, null);
     }
 }

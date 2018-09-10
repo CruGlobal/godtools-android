@@ -13,7 +13,7 @@ import java.util.List;
 
 public class CategoriesAdapter extends SimpleDataBindingAdapter<ListItemCategoryBinding> {
     public interface Callbacks {
-        void onCategorySelected(@Nullable final Category category);
+        void onCategorySelected(@Nullable Category category);
     }
 
     @Nullable
