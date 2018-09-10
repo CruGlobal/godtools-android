@@ -18,6 +18,8 @@ import java.util.List;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 @RunWith(AndroidJUnit4.class)
 public class ArticleParserTest {
@@ -38,8 +40,8 @@ public class ArticleParserTest {
             assertTrue(results.containsKey(ArticleParser.ARTICLE_LIST_KEY));
 
             List<Article> resultsArticles = (List<Article>) results.get(ArticleParser.ARTICLE_LIST_KEY);
-            assertTrue(resultsArticles.size() > 0);
+            assertThat(resultsArticles.size(), is(2));
             List<Attachment> resultAttachments = (List<Attachment>) results.get(ArticleParser.ATTACHMENT_LIST_KEY);
-            assertTrue(resultAttachments.size() > 0);
+            assertThat(resultAttachments.size(), is(6));
     }
 }
