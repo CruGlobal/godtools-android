@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true"
-    tools:theme="@style/Theme.GodTools.Tract">
+    tools:theme="@style/Theme.GodTools.Tract.Activity.Tract">
 
     <include layout="@layout/activity_tract_missing" />
 

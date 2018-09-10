@@ -69,7 +69,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     @Nullable
     String mFeatureDiscoveryActive;
 
-    /* BEGIN lifecycle */
+    // region Lifecycle Events
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -205,7 +205,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         super.onDestroy();
     }
 
-    /* END lifecycle */
+    // endregion Lifecycle Events
 
     private void processIntent(@Nullable final Intent intent) {
         final String action = intent != null ? intent.getAction() : null;

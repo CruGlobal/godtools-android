@@ -134,6 +134,7 @@ public final class GodToolsDownloadManager {
     @Nullable
     @SuppressLint("StaticFieldLeak")
     private static GodToolsDownloadManager sInstance;
+
     @NonNull
     @MainThread
     public static GodToolsDownloadManager getInstance(@NonNull final Context context) {

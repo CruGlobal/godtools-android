@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.widget;
+package org.cru.godtools.base.tool.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -12,8 +12,8 @@ import com.squareup.picasso.RequestCreator;
 import org.ccci.gto.android.common.base.model.Dimension;
 import org.ccci.gto.android.common.picasso.transformation.ScaleTransformation;
 import org.ccci.gto.android.common.picasso.view.PicassoImageView;
-import org.cru.godtools.tract.R;
-import org.cru.godtools.tract.picasso.transformation.ScaledCropTransformation;
+import org.cru.godtools.base.tool.R;
+import org.cru.godtools.base.tool.picasso.transformation.ScaledCropTransformation;
 import org.cru.godtools.xml.model.ImageScaleType;
 
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal;
@@ -31,8 +31,8 @@ public interface ScaledPicassoImageView extends PicassoImageView {
         @NonNull
         private GravityVertical mGravityVertical = GravityVertical.CENTER;
 
-        ScaleHelper(@NonNull final ImageView view, @Nullable final AttributeSet attrs, final int defStyleAttr,
-                    final int defStyleRes) {
+        public ScaleHelper(@NonNull final ImageView view, @Nullable final AttributeSet attrs, final int defStyleAttr,
+                           final int defStyleRes) {
             super(view, attrs, defStyleAttr, defStyleRes);
             init(view.getContext(), attrs, defStyleAttr, defStyleRes);
         }

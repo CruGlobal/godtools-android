@@ -15,9 +15,10 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import org.cru.godtools.base.model.Event;
+import org.cru.godtools.base.tool.model.view.ResourceViewUtils;
+import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.widget.PageContentLayout;
-import org.cru.godtools.tract.widget.ScaledPicassoImageView;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Page;
 
@@ -66,7 +67,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
     @NonNull
     private final HeroViewHolder mHeroViewHolder;
     @Nullable
-    private CardViewHolder mVisibleCardViewHolder;
+    private CardViewHolder mActiveCardViewHolder;
     @NonNull
     private final Pools.Pool<CardViewHolder> mRecycledCardViewHolders = new Pools.SimplePool<>(3);
     @NonNull
@@ -109,8 +110,8 @@ public class PageViewHolder extends ParentViewHolder<Page>
         super.onVisible();
 
         // cascade event to currently visible hero or card
-        if (mVisibleCardViewHolder != null) {
-            mVisibleCardViewHolder.markVisible();
+        if (mActiveCardViewHolder != null) {
+            mActiveCardViewHolder.markVisible();
         } else {
             mHeroViewHolder.markVisible();
         }
@@ -123,31 +124,16 @@ public class PageViewHolder extends ParentViewHolder<Page>
     @Override
     public void onActiveCardChanged(@Nullable final View activeCard) {
         if (!mBindingCards) {
-            final CardViewHolder cardViewHolder = BaseViewHolder.forView(activeCard, CardViewHolder.class);
-            final Optional<Card> card = Optional.ofNullable(cardViewHolder)
-                    .map(BaseViewHolder::getModel);
-
-            // only process if we have explicitly visible cards
-            if (mVisibleCards.size() > 0) {
-                // generate a set containing the id of the current active card
-                final Set<String> id = card
-                        .map(Card::getId)
-                        .map(ImmutableSet::of)
-                        .orElseGet(ImmutableSet::of);
-
-                // remove any non-matching ids from the visible cards set
-                final Set<String> diff = Sets.difference(mVisibleCards, id);
-                if (diff.size() > 0) {
-                    mVisibleCards.removeAll(diff);
-                    updateDisplayedCards();
-                }
-            }
+            final CardViewHolder old = mActiveCardViewHolder;
+            mActiveCardViewHolder = BaseViewHolder.forView(activeCard, CardViewHolder.class);
+            hideHiddenCardsThatArentActive();
+            updateVisibleCard(old);
 
             if (mCallbacks != null) {
+                final Optional<Card> card = Optional.ofNullable(mActiveCardViewHolder)
+                        .map(BaseViewHolder::getModel);
                 mCallbacks.onUpdateActiveCard(card.orElse(null));
             }
-
-            updateVisibleCard(cardViewHolder);
         }
     }
 
@@ -169,8 +155,8 @@ public class PageViewHolder extends ParentViewHolder<Page>
         super.onHidden();
 
         // cascade event to currently visible hero or card
-        if (mVisibleCardViewHolder != null) {
-            mVisibleCardViewHolder.markHidden();
+        if (mActiveCardViewHolder != null) {
+            mActiveCardViewHolder.markHidden();
         } else {
             mHeroViewHolder.markHidden();
         }
@@ -184,11 +170,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
 
     @Nullable
     public Card getActiveCard() {
-        final CardViewHolder holder = forView(mPageContentLayout.getActiveCard(), CardViewHolder.class);
-        if (holder == null) {
-            return null;
-        }
-        return holder.mModel;
+        return mActiveCardViewHolder != null ? mActiveCardViewHolder.mModel : null;
     }
 
     private boolean isCardVisible(@NonNull final Card card) {
@@ -217,7 +199,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
 
     private void bindPage() {
         mPageView.setBackgroundColor(Page.getBackgroundColor(mModel));
-        ResourceViewUtils.bindBackgroundImage(mBackgroundImage, Page.getBackgroundImageResource(mModel),
+        ResourceViewUtils.bindBackgroundImage(Page.getBackgroundImageResource(mModel), mBackgroundImage,
                                               Page.getBackgroundImageScaleType(mModel),
                                               Page.getBackgroundImageGravity(mModel));
     }
@@ -331,33 +313,48 @@ public class PageViewHolder extends ParentViewHolder<Page>
         }
     }
 
-    private void updateVisibleCard(@Nullable final CardViewHolder visibleCardViewHolder) {
-        // update the visible card view holder
-        final CardViewHolder old = mVisibleCardViewHolder;
-        mVisibleCardViewHolder = visibleCardViewHolder;
-
-        // update state as necessary
-        if (mVisible && mVisibleCardViewHolder != old) {
+    private void updateVisibleCard(@Nullable final CardViewHolder old) {
+        // update visibility state as necessary
+        if (mVisible && old != mActiveCardViewHolder) {
             if (old != null) {
                 old.markHidden();
             } else {
                 mHeroViewHolder.markHidden();
             }
 
-            if (mVisibleCardViewHolder != null) {
-                mVisibleCardViewHolder.markVisible();
+            if (mActiveCardViewHolder != null) {
+                mActiveCardViewHolder.markVisible();
             } else {
                 mHeroViewHolder.markVisible();
             }
         }
     }
 
+    private void hideHiddenCardsThatArentActive() {
+        // only process if we have explicitly visible cards
+        if (mVisibleCards.size() > 0) {
+            final Optional<Card> card = Optional.ofNullable(mActiveCardViewHolder)
+                    .map(BaseViewHolder::getModel);
+
+            // generate a set containing the id of the current active card
+            final Set<String> id = card
+                    .map(Card::getId)
+                    .map(ImmutableSet::of)
+                    .orElseGet(ImmutableSet::of);
+
+            // remove any non-matching ids from the visible cards set
+            final Set<String> diff = Sets.difference(mVisibleCards, id);
+            if (diff.size() > 0) {
+                mVisibleCards.removeAll(diff);
+                updateDisplayedCards();
+            }
+        }
+    }
+
     private void checkForCardEvent(@NonNull final Event event) {
         // send event to current card
-        final CardViewHolder holder =
-                BaseViewHolder.forView(mPageContentLayout.getActiveCard(), CardViewHolder.class);
-        if (holder != null) {
-            holder.onContentEvent(event);
+        if (mActiveCardViewHolder != null) {
+            mActiveCardViewHolder.onContentEvent(event);
         }
 
         // check for card display event

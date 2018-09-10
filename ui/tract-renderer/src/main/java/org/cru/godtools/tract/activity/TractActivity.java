@@ -40,6 +40,9 @@ import org.ccci.gto.android.common.util.NumberUtils;
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.analytics.model.AnalyticsDeepLinkEvent;
 import org.cru.godtools.base.model.Event;
+import org.cru.godtools.base.tool.activity.BaseToolActivity;
+import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
+import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Tool;
@@ -51,11 +54,8 @@ import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent;
-import org.cru.godtools.tract.content.TractManifestLoader;
-import org.cru.godtools.tract.util.DrawableUtils;
 import org.cru.godtools.tract.util.ViewUtils;
-import org.cru.godtools.tract.viewmodel.ManifestViewUtils;
-import org.cru.godtools.tract.widget.ScaledPicassoImageView;
+import org.cru.godtools.xml.content.ManifestLoader;
 import org.cru.godtools.xml.model.Card;
 import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.xml.model.Page;
@@ -75,13 +75,12 @@ import butterknife.BindView;
 
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.base.Constants.URI_SHARE_BASE;
-import static org.cru.godtools.base.ui.util.LocaleTypefaceUtils.safeApplyTypefaceSpan;
 import static org.cru.godtools.download.manager.util.ViewUtils.bindDownloadProgress;
 import static org.cru.godtools.tract.Constants.PARAM_PARALLEL_LANGUAGE;
 import static org.cru.godtools.tract.Constants.PARAM_PRIMARY_LANGUAGE;
 import static org.cru.godtools.tract.Constants.PARAM_USE_DEVICE_LANGUAGE;
 
-public class TractActivity extends ImmersiveActivity
+public class TractActivity extends BaseToolActivity
         implements ManifestPagerAdapter.Callbacks, TabLayout.OnTabSelectedListener,
         GodToolsDownloadManager.OnDownloadProgressUpdateListener {
     private static final String EXTRA_LANGUAGES = TractActivity.class.getName() + ".LANGUAGES";
@@ -97,10 +96,6 @@ public class TractActivity extends ImmersiveActivity
     private static final int STATE_LOADING = 0;
     private static final int STATE_LOADED = 1;
     private static final int STATE_NOT_FOUND = 2;
-
-    // App/Action Bar
-    @Nullable
-    private Menu mToolbarMenu;
 
     @Nullable
     @BindView(R2.id.language_toggle)
@@ -158,7 +153,7 @@ public class TractActivity extends ImmersiveActivity
         extras.putString(EXTRA_TOOL, toolCode);
         // XXX: we use singleString mode to support using this intent for legacy shortcuts
         BundleUtils.putLocaleArray(extras, EXTRA_LANGUAGES, Stream.of(languages).withoutNulls().toArray(Locale[]::new),
-                                   true);
+                true);
     }
 
     @NonNull
@@ -175,6 +170,7 @@ public class TractActivity extends ImmersiveActivity
     }
 
     public TractActivity() {
+        super(true);
         mTranslations = new SparseArray<>();
         mManifests = new SparseArray<>();
     }
@@ -182,6 +178,7 @@ public class TractActivity extends ImmersiveActivity
     @RestrictTo(RestrictTo.Scope.TESTS)
     TractActivity(@NonNull final SparseArray<Translation> translations,
                   @NonNull final SparseArray<Manifest> manifests) {
+        super(true);
         mTranslations = translations;
         mManifests = manifests;
     }
@@ -245,17 +242,15 @@ public class TractActivity extends ImmersiveActivity
             mToolbar.setNavigationIcon(R.drawable.ic_close);
         }
         setupLanguageToggle();
-        updateToolbar();
         updateLanguageToggle();
     }
 
     @Override
     public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
         getMenuInflater().inflate(R.menu.activity_tract, menu);
-        mToolbarMenu = menu;
 
         // make the install menu item visible if this is an Instant App
-        final MenuItem install = mToolbarMenu.findItem(R.id.action_install);
+        final MenuItem install = menu.findItem(R.id.action_install);
         if (install != null) {
             install.setVisible(InstantApps.isInstantApp(this));
         }
@@ -264,16 +259,24 @@ public class TractActivity extends ImmersiveActivity
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(final Menu menu) {
-        updateToolbarMenu();
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
         startDownloadProgressListener();
+    }
+
+    @Override
+    @CallSuper
+    protected void onUpdateActiveManifest() {
+        super.onUpdateActiveManifest();
+        updateBackground();
+        updatePager();
+    }
+
+    @Override
+    protected void onUpdateToolbar() {
+        super.onUpdateToolbar();
+        updateLanguageToggle();
     }
 
     @Override
@@ -311,10 +314,12 @@ public class TractActivity extends ImmersiveActivity
     }
 
     @Override
-    public void onTabUnselected(final TabLayout.Tab tab) {}
+    public void onTabUnselected(final TabLayout.Tab tab) {
+    }
 
     @Override
-    public void onTabReselected(final TabLayout.Tab tab) {}
+    public void onTabReselected(final TabLayout.Tab tab) {
+    }
 
     @Override
     public void onUpdateActiveCard(@NonNull final Page page,
@@ -524,8 +529,8 @@ public class TractActivity extends ImmersiveActivity
 
             for (final Locale locale : mLanguages) {
                 mLanguageTabs.addTab(mLanguageTabs.newTab()
-                                             .setText(locale.getDisplayName(locale))
-                                             .setTag(locale));
+                        .setText(locale.getDisplayName(locale))
+                        .setTag(locale));
             }
 
             mLanguageTabs.addOnTabSelectedListener(this);
@@ -555,7 +560,7 @@ public class TractActivity extends ImmersiveActivity
                 }
 
                 if (i == mActiveLanguage) {
-                    updateActiveManifest();
+                    onUpdateActiveManifest();
                     updateVisibilityState();
                 }
                 updateLanguageToggle();
@@ -570,8 +575,7 @@ public class TractActivity extends ImmersiveActivity
                 if (i != mActiveLanguage) {
                     mActiveLanguage = i;
                     restartDownloadProgressListener();
-                    updateActiveManifest();
-                    updateLanguageToggle();
+                    onUpdateActiveManifest();
                 }
                 return;
             }
@@ -611,33 +615,8 @@ public class TractActivity extends ImmersiveActivity
     }
 
     @Nullable
-    private Manifest getActiveManifest() {
+    protected Manifest getActiveManifest() {
         return mManifests.get(mActiveLanguage);
-    }
-
-    private void updateActiveManifest() {
-        updateToolbar();
-        updateBackground();
-        updatePager();
-    }
-
-    private void updateToolbar() {
-        final Manifest manifest = getActiveManifest();
-        setTitle(safeApplyTypefaceSpan(Manifest.getTitle(manifest), ManifestViewUtils.getTypeface(manifest, this)));
-
-        if (mToolbar != null) {
-            // set toolbar background color
-            mToolbar.setBackgroundColor(Manifest.getNavBarColor(manifest));
-
-            // set text & controls color
-            final int controlColor = Manifest.getNavBarControlColor(manifest);
-            mToolbar.setNavigationIcon(DrawableUtils.tint(mToolbar.getNavigationIcon(), controlColor));
-            mToolbar.setTitleTextColor(controlColor);
-            mToolbar.setSubtitleTextColor(controlColor);
-        }
-
-        updateToolbarMenu();
-        updateLanguageToggle();
     }
 
     private void updateLanguageToggle() {
@@ -688,20 +667,6 @@ public class TractActivity extends ImmersiveActivity
         // show or hide the title based on how many visible tabs we have
         if (mActionBar != null) {
             mActionBar.setDisplayShowTitleEnabled(visibleTabs <= 1);
-        }
-    }
-
-    private void updateToolbarMenu() {
-        if (mToolbarMenu != null) {
-            // tint all action icons
-            final int controlColor = Manifest.getNavBarControlColor(getActiveManifest());
-            for (int i = 0; i < mToolbarMenu.size(); ++i) {
-                final MenuItem item = mToolbarMenu.getItem(i);
-                item.setIcon(DrawableUtils.tint(item.getIcon(), controlColor));
-            }
-            if (mToolbar != null) {
-                mToolbar.setOverflowIcon(DrawableUtils.tint(mToolbar.getOverflowIcon(), controlColor));
-            }
         }
     }
 
@@ -805,27 +770,25 @@ public class TractActivity extends ImmersiveActivity
             final Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_tract_subject, manifest.getTitle()));
-            intent.putExtra(Intent.EXTRA_TEXT, buildSharingURL(manifest));
+            intent.putExtra(Intent.EXTRA_TEXT, buildSharingURL(manifest, mPager != null ? mPager.getCurrentItem() : 0));
             startActivity(Intent.createChooser(intent, getString(R.string.share_tract_title, manifest.getTitle())));
         }
     }
 
+    /**
+     * This method takes in a Manifest and page and returns a shareable link for the corresponding tool.
+     *
+     * @param manifest The Manifest Object to be used.
+     * @param page     The page being shared
+     * @return Url string of the shareable link.
+     */
     @NonNull
-    private String buildSharingURL(@NonNull final Manifest manifest) {
-        final Uri.Builder uri;
-        switch (manifest.getCode()) {
-            // temporary cases until knowgod.com is rebuilt
-            case "honorrestored":
-                uri = Uri.parse("https://godtoolsapp.com").buildUpon();
-                break;
-            case "thefour":
-                uri = Uri.parse("https://thefour.com").buildUpon();
-                break;
-            default:
-                uri = URI_SHARE_BASE.buildUpon()
-                        .appendPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
-                        .appendPath(getCodeForShareActivity(manifest))
-                        .appendPath(getPagePathPartForSharing(manifest));
+    private String buildSharingURL(@NonNull final Manifest manifest, final int page) {
+        final Uri.Builder uri = URI_SHARE_BASE.buildUpon()
+                .appendEncodedPath(LocaleCompat.toLanguageTag(manifest.getLocale()).toLowerCase())
+                .appendPath(manifest.getCode());
+        if (page > 0) {
+            uri.appendPath(String.valueOf(page));
         }
 
         return uri
@@ -833,34 +796,10 @@ public class TractActivity extends ImmersiveActivity
                 .build().toString();
     }
 
-    private String getCodeForShareActivity(@NonNull final Manifest manifest) {
-        switch (manifest.getCode()) {
-            // temporary until knowgod.com is rebuilt
-            case "kgp-us":
-                return "kgp";
-        }
-
-        return manifest.getCode();
-    }
-
-    private String getPagePathPartForSharing(@NonNull final Manifest manifest) {
-        switch (manifest.getCode()) {
-            // temporary until knowgod.com is rebuilt
-            case "kgp-us":
-                return "";
-        }
-
-        if (mPager != null && mPager.getCurrentItem() > 0) {
-            return String.valueOf(mPager.getCurrentItem());
-        }
-
-        return "";
-    }
-
     void trackTractPage(@NonNull final Page page, @Nullable final Card card) {
         final Manifest manifest = page.getManifest();
         mEventBus.post(new TractPageAnalyticsScreenEvent(manifest.getCode(), manifest.getLocale(), page.getPosition(),
-                                                         card != null ? card.getPosition() : null));
+                card != null ? card.getPosition() : null));
     }
 
     class TranslationLoaderCallbacks implements LoaderManager.LoaderCallbacks<Translation> {
@@ -904,7 +843,7 @@ public class TractActivity extends ImmersiveActivity
                 case LOADER_TYPE_MANIFEST:
                     final int langId = id & LOADER_ID_MASK;
                     if (mTool != null && langId >= 0 && langId < mLanguages.length) {
-                        return new TractManifestLoader(TractActivity.this, mTool, mLanguages[langId]);
+                        return new ManifestLoader(TractActivity.this, mTool, mLanguages[langId]);
                     }
                     break;
             }
@@ -916,8 +855,8 @@ public class TractActivity extends ImmersiveActivity
         public void onLoadFinished(@NonNull final Loader<Manifest> loader, @Nullable final Manifest manifest) {
             switch (loader.getId() & LOADER_TYPE_MASK) {
                 case LOADER_TYPE_MANIFEST:
-                    if (loader instanceof TractManifestLoader) {
-                        setManifest(((TractManifestLoader) loader).getLocale(), manifest);
+                    if (loader instanceof ManifestLoader) {
+                        setManifest(((ManifestLoader) loader).getLocale(), manifest);
                     }
                     break;
             }

@@ -17,12 +17,13 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.base.model.Event;
+import org.cru.godtools.base.tool.activity.ImmersiveActivity;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
-import org.cru.godtools.tract.content.TractManifestLoader;
 import org.cru.godtools.tract.viewmodel.ModalViewHolder;
+import org.cru.godtools.xml.content.ManifestLoader;
 import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.xml.model.Modal;
 import org.cru.godtools.xml.service.ManifestManager;
@@ -78,6 +79,10 @@ public class ModalActivity extends ImmersiveActivity {
         ContextCompat.startActivity(context, new Intent(context, ModalActivity.class).putExtras(extras),
                                     makeCustomAnimation(context, R.anim.activity_fade_in, R.anim.activity_fade_out)
                                             .toBundle());
+    }
+
+    public ModalActivity() {
+        super(true);
     }
 
     /* BEGIN lifecycle */
@@ -194,7 +199,7 @@ public class ModalActivity extends ImmersiveActivity {
             switch (id) {
                 case LOADER_MANIFEST:
                     if (mTool != null) {
-                        return new TractManifestLoader(ModalActivity.this, mTool, mLocale);
+                        return new ManifestLoader(ModalActivity.this, mTool, mLocale);
                     }
                     break;
             }

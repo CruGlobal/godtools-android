@@ -5,24 +5,9 @@
     <dimen name="horiz_margin_call_to_action_arrow">8dp</dimen>
     <dimen name="horiz_margin_modal">32dp</dimen>
 
-    <style name="Theme.GodTools.Tract" parent="Theme.AppCompat">
-        <item name="actionBarTheme">@style/ThemeOverlay.GodTools.Tract.Toolbar.AppBar</item>
-        <item name="toolbarStyle">@style/Widget.GodTools.Tract.Toolbar.AppBar</item>
-    </style>
+    <style name="Theme.GodTools.Tract.Activity.Tract" parent="Theme.GodTools.Tool.AppBar" />
 
-    <style name="Theme.GodTools.Tract.AppBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.GodTools.Tract.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.GodTools.Tract.Activity.Tract" parent="Theme.GodTools.Tract.AppBar" />
-
-    <style name="Theme.GodTools.Tract.Activity.Modal" parent="Theme.GodTools.Tract.NoActionBar">
+    <style name="Theme.GodTools.Tract.Activity.Modal" parent="Theme.GodTools.Tool.NoActionBar">
         <item name="android:fitsSystemWindows">false</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -32,10 +17,6 @@
 
         <item name="buttonStyle">@style/Widget.GodTools.Button.Outline</item>
     </style>
-
-    <style name="Widget.GodTools.Tract.Toolbar.AppBar" parent="@style/Widget.AppCompat.Toolbar" />
-
-    <style name="ThemeOverlay.GodTools.Tract.Toolbar.AppBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Widget.GodTools.Tract.Static.ProgressBar" parent="Widget.GodTools.ProgressBar">
         <item name="android:progressDrawable">@drawable/progress_loading</item>

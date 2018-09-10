@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.util;
+package org.cru.godtools.base.ui.util;
 
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="categories_list_label_margin">20dp</dimen>
+    <dimen name="categories_list_gap">1dp</dimen>
+</resources>

@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.cru.godtools.base.model.Event;
+import org.cru.godtools.base.tool.model.view.ResourceViewUtils;
+import org.cru.godtools.base.tool.model.view.TextViewUtils;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.widget.TractPicassoImageView;
@@ -98,7 +100,7 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
 
     private void bindBackground() {
         mCardView.setCardBackgroundColor(Card.getBackgroundColor(mModel));
-        ResourceViewUtils.bindBackgroundImage(mBackgroundView, Card.getBackgroundImageResource(mModel),
+        ResourceViewUtils.bindBackgroundImage(Card.getBackgroundImageResource(mModel), mBackgroundView,
                                               Card.getBackgroundImageScaleType(mModel),
                                               Card.getBackgroundImageGravity(mModel));
     }

@@ -1,11 +1,18 @@
-package org.cru.godtools.tract.activity;
+package org.cru.godtools.base.tool.activity;
 
+import android.annotation.TargetApi;
 import android.os.Build;
 import android.view.View;
 
 import org.cru.godtools.base.ui.activity.BaseActivity;
 
 public abstract class ImmersiveActivity extends BaseActivity {
+    private final boolean mEnableImmersive;
+
+    public ImmersiveActivity(final boolean immersive) {
+        mEnableImmersive = immersive;
+    }
+
     // region Lifecycle Events
 
     @Override
@@ -25,19 +32,26 @@ public abstract class ImmersiveActivity extends BaseActivity {
     // endregion Lifecycle Events
 
     private void updateSystemUi() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || !isInMultiWindowMode()) {
+        // short-circuit for android versions before KitKat because they don't support full-screen/immersive mode
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            return;
+        }
+
+        // toggle immersive/non-immersive mode based on state
+        if (!mEnableImmersive) {
+            // Force non-immersive if immersive is not enabled
+            makeNonImmersive();
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            makeImmersive();
+        } else if (!isInMultiWindowMode()) {
             makeImmersive();
         } else {
             makeNonImmersive();
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void makeImmersive() {
-        // Only enable Full-screen/Immersive starting in KitKat
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            return;
-        }
-
         // enable immersive mode
         final View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |

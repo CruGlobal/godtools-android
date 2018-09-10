@@ -14,6 +14,7 @@ android {
         targetSdkVersion targetSdk
 
         proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
+        proguardFile 'proguard-searchview.pro'
 
         vectorDrawables.useSupportLibrary = true
 
@@ -118,7 +119,6 @@ dependencies {
     implementation project(':library:xml-model')
 
     implementation project(':ui:account')
-    implementation project(':ui:articles-aem-renderer')
     implementation project(':ui:base')
     implementation project(':ui:base-app')
     implementation project(':ui:everystudent')
@@ -163,10 +163,6 @@ dependencies {
 
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
-
-    // fix conflicts in transitive dependencies
-    androidTestImplementation "com.android.support:multidex:${deps.multidex}"
-    androidTestImplementation 'com.google.code.findbugs:jsr305:2.0.1'
 }
 
 // make crashlytics upload task dependent on the assemble task for all build variants

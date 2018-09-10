@@ -1,9 +1,3 @@
-android {
-    defaultConfig {
-        multiDexEnabled true
-    }
-}
-
 dependencies {
     implementation project(':library:xml-model')
 

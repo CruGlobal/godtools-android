@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.cru.godtools.analytics.AnalyticsService;
+import org.cru.godtools.base.tool.model.view.TextViewUtils;
 import org.cru.godtools.base.ui.util.WebUrlLauncher;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
