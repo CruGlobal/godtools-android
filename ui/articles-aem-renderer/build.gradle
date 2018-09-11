@@ -1,4 +1,5 @@
 dependencies {
+    implementation project(':library:model-events')
     implementation project(':library:xml-model')
 
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"

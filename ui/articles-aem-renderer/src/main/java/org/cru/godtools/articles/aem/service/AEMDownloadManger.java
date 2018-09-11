@@ -15,7 +15,11 @@ import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.articles.aem.model.ManifestAssociation;
 import org.cru.godtools.articles.aem.service.support.ArticleParser;
+import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.cru.godtools.xml.model.Manifest;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,6 +49,8 @@ public class AEMDownloadManger {
     private AEMDownloadManger(@NonNull final Context context) {
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS, new PriorityBlockingQueue<>(),
                                            new NamedThreadFactory(AEMDownloadManger.class.getSimpleName()));
+
+        EventBus.getDefault().register(this);
     }
 
     @Nullable
@@ -56,6 +62,16 @@ public class AEMDownloadManger {
         }
         return sInstance;
     }
+
+    // region Lifecycle Events
+
+    @WorkerThread
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onTranslationUpdate(@NonNull final TranslationUpdateEvent event) {
+        enqueueFindAemImports();
+    }
+
+    // endregion Lifecycle Events
 
     // region Task Scheduling Methods
 
