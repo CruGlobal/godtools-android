@@ -83,6 +83,15 @@ subprojects {
         maven { url 'https://cruglobal.jfrog.io/cruglobal/list/maven-locals/' }
         mavenLocal()
     }
+
+    configurations.all {
+        // force versions when there are conflicts
+        resolutionStrategy.force(
+                "android.arch.lifecycle:livedata-core:${deps.androidLifecycle}",
+                "android.arch.lifecycle:runtime:${deps.androidLifecycle}",
+                "android.arch.lifecycle:viewmodel:${deps.androidLifecycle}"
+        )
+    }
 }
 
 // configure checkstyle
