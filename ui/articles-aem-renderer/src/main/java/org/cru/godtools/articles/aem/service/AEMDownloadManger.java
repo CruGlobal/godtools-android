@@ -60,8 +60,9 @@ public class AEMDownloadManger {
 
     @Nullable
     private static AEMDownloadManger sInstance;
+
     @NonNull
-    public synchronized static AEMDownloadManger getInstance(@NonNull final Context context) {
+    public static synchronized AEMDownloadManger getInstance(@NonNull final Context context) {
         if (sInstance == null) {
             sInstance = new AEMDownloadManger(context);
         }
