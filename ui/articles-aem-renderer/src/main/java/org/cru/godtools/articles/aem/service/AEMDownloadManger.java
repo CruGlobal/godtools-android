@@ -71,7 +71,7 @@ public class AEMDownloadManger {
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onTranslationUpdate(@NonNull final TranslationUpdateEvent event) {
-        enqueueFindAemImports();
+        enqueueExtractAemImportsFromManifests();
     }
 
     // endregion Lifecycle Events
@@ -79,10 +79,10 @@ public class AEMDownloadManger {
     // region Task Scheduling Methods
 
     @AnyThread
-    private void enqueueFindAemImports() {
+    private void enqueueExtractAemImportsFromManifests() {
         // only enqueue task if it's not currently enqueued
         if (!mFindAemImportsQueued.getAndSet(true)) {
-            mExecutor.execute(this::findAemImportsTask);
+            mExecutor.execute(this::extractAemImportsFromManifestsTask);
         }
     }
 
@@ -100,7 +100,7 @@ public class AEMDownloadManger {
      * AEM Article database.
      */
     @WorkerThread
-    private void findAemImportsTask() {
+    private void extractAemImportsFromManifestsTask() {
         mFindAemImportsQueued.set(false);
         // TODO
     }
