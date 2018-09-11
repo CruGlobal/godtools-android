@@ -50,6 +50,8 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     private static final String KEY_EXIT_LINK = "cru.mobileexitlink";
     private static final String KEY_SHARE_CONTENT = "cru.shareiconengaged";
     private static final String KEY_TOGGLE_LANGUAGE = "cru.parallellanguagetoggle";
+    private static final String KEY_SITE_SECTION = "cru:sitesection";
+    private static final String KEY_SITE_SUB_SECTION = "cru:sitesubsection";
 
     /* Value constants */
     private static final String VALUE_GODTOOLS = "GodTools";
@@ -87,7 +89,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
         return sInstance;
     }
 
-    /* BEGIN tracking methods */
+    // region Tracking Methods
 
     @UiThread
     @Override
@@ -118,7 +120,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onAnalyticsScreenEvent(@NonNull final AnalyticsScreenEvent event) {
         if (event.isForSystem(AnalyticsSystem.ADOBE)) {
-            trackState(event.getScreen(), event.getLocale());
+            trackState(event);
         }
     }
 
@@ -144,7 +146,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
         trackAction(ACTION_TOGGLE_LANGUAGE, attrs);
     }
 
-    /* END tracking methods */
+    // endregion Tracking Methods
 
     @AnyThread
     private void trackAction(@NonNull final String action, @Nullable final Map<String, ?> attributes) {
@@ -162,12 +164,11 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     }
 
     @AnyThread
-    private void trackState(@NonNull final String screen, @Nullable final Locale contentLocale) {
+    private void trackState(@NonNull final AnalyticsScreenEvent event) {
         final String guid = mTheKey.getDefaultSessionGuid();
         mAnalyticsExecutor.execute(() -> {
-            final Map<String, Object> adobeContextData = stateContextData(guid, screen, contentLocale);
-            Analytics.trackState(screen, adobeContextData);
-            mPreviousScreenName = screen;
+            Analytics.trackState(event.getScreen(), stateContextData(guid, event));
+            mPreviousScreenName = event.getScreen();
         });
     }
 
@@ -193,12 +194,28 @@ public final class AdobeAnalyticsService implements AnalyticsService {
         return data;
     }
 
+    /**
+     * This method created the Data to be passed to Adobe my converting it to a HashMap
+     *
+     * @param guid  user id from key
+     * @param event The analytics event we are generating context data for
+     * @return The data to be tracked by Adobe Analytics
+     */
     @WorkerThread
-    private Map<String, Object> stateContextData(@Nullable final String guid, final String screen,
-                                                 @Nullable final Locale contentLocale) {
+    private Map<String, Object> stateContextData(@Nullable final String guid,
+                                                 @NonNull final AnalyticsScreenEvent event) {
         final Map<String, Object> data = baseContextData(guid);
         data.put(KEY_SCREEN_NAME_PREVIOUS, mPreviousScreenName);
-        data.put(KEY_SCREEN_NAME, screen);
+        data.put(KEY_SCREEN_NAME, event.getScreen());
+        final String siteSection = event.getAdobeSiteSection();
+        if (siteSection != null) {
+            data.put(KEY_SITE_SECTION, siteSection);
+        }
+        final String siteSubSection = event.getAdobeSiteSubSection();
+        if (siteSubSection != null) {
+            data.put(KEY_SITE_SUB_SECTION, siteSubSection);
+        }
+        final Locale contentLocale = event.getLocale();
         if (contentLocale != null) {
             data.put(KEY_CONTENT_LANGUAGE, toLanguageTag(contentLocale));
         }

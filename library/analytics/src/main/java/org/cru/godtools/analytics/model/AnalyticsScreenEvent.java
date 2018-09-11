@@ -6,6 +6,9 @@ import android.support.annotation.Nullable;
 
 import java.util.Locale;
 
+import javax.annotation.concurrent.Immutable;
+
+@Immutable
 public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
     private static final String SNOWPLOW_CONTENT_SCORING_URI_PATH_SCREEN = "screenview";
 
@@ -25,6 +28,12 @@ public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
     public static final String SCREEN_PRIVACY_POLICY = "Privacy Policy";
     public static final String SCREEN_COPYRIGHT = "Copyright Info";
 
+    /* Adobe Site Sections */
+    private static final String SITE_SECTION_TOOLS = "tools";
+    private static final String SITE_SECTION_MENU = "menu";
+    private static final String SITE_SUB_SECTION_ADD_TOOLS = "add tools";
+    private static final String SITE_SUB_SECTION_LANGUAGE_SETTINGS = "language settings";
+
     @NonNull
     private final String mScreen;
 
@@ -40,6 +49,38 @@ public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
     @NonNull
     public String getScreen() {
         return mScreen;
+    }
+
+    @Nullable
+    public String getAdobeSiteSection() {
+        switch (mScreen) {
+            case SCREEN_FIND_TOOLS:
+            case SCREEN_TOOL_DETAILS:
+                return SITE_SECTION_TOOLS;
+            case SCREEN_LANGUAGE_SETTINGS:
+            case SCREEN_LANGUAGE_SELECTION:
+            case SCREEN_ABOUT:
+            case SCREEN_HELP:
+            case SCREEN_CONTACT_US:
+            case SCREEN_SHARE_GODTOOLS:
+            case SCREEN_SHARE_STORY:
+            case SCREEN_TERMS_OF_USE:
+            case SCREEN_PRIVACY_POLICY:
+            case SCREEN_COPYRIGHT:
+                return SITE_SECTION_MENU;
+        }
+        return null;
+    }
+
+    @Nullable
+    public String getAdobeSiteSubSection() {
+        switch (mScreen) {
+            case SCREEN_TOOL_DETAILS:
+                return SITE_SUB_SECTION_ADD_TOOLS;
+            case SCREEN_LANGUAGE_SELECTION:
+                return SITE_SUB_SECTION_LANGUAGE_SETTINGS;
+        }
+        return null;
     }
 
     @Override

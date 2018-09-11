@@ -6,6 +6,9 @@ import android.support.annotation.Nullable;
 
 import java.util.Locale;
 
+import javax.annotation.concurrent.Immutable;
+
+@Immutable
 public abstract class AnalyticsBaseEvent {
     private static final String SNOWPLOW_CONTENT_SCORING_URI_SCHEME = "godtools";
 

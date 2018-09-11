@@ -18,7 +18,6 @@ public interface AnalyticsService {
     String ACTION_TOGGLE_LANGUAGE = "Parallel Language Toggled";
 
     /* Legacy constants */
-    String SCREEN_EVERYSTUDENT = "EveryStudent";
     String CATEGORY_CONTENT_EVENT = "Content Event";
 
     @NonNull
