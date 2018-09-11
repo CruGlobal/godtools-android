@@ -18,7 +18,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
@@ -32,12 +31,12 @@ import okhttp3.Response;
  * @author Gyasi Story
  */
 public class AEMDownloadManger {
-
     /**
      * This method  handles loading AEM Imports into the local Database.  Please ensure that the
      * manifest used contains AemImports.
-     * @param manifest = the model for the manifest
-     * @param context = the Application Context
+     *
+     * @param manifest the model for the manifest
+     * @param context  the Application Context
      * @throws JSONException
      * @throws IOException
      */
@@ -57,16 +56,15 @@ public class AEMDownloadManger {
 
     }
 
-
     /**
      * This method take the manifest and one of its aemImports and extracts all associated data to
      * the database.
-     * @param manifest manifest object
+     *
+     * @param manifest   manifest object
      * @param aemImports uri from one of the aemImports
-     * @param context the Application or Activity Context
+     * @param context    the Application or Activity Context
      * @throws JSONException
      * @throws IOException
-     * @throws URISyntaxException
      */
     private static void loadAemManifestIntoAemModel(Manifest manifest, Uri aemImports, Context context)
             throws JSONException, IOException {
@@ -124,7 +122,7 @@ public class AEMDownloadManger {
      * This method is used to save an Attachment to Storage and update Database
      *
      * @param attachment the attachment to be saved
-     * @param context The context is needed to save the attachment and database entry
+     * @param context    The context is needed to save the attachment and database entry
      * @throws IOException Is thrown if an error occurs in saving to storage.
      */
     public static void saveAttachmentToStorage(Attachment attachment, Context context)
