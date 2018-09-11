@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -45,6 +46,8 @@ public class AEMDownloadManger {
     private static final int TASK_CONCURRENCY = 4;
 
     private final ThreadPoolExecutor mExecutor;
+
+    private final AtomicBoolean mFindAemImportsQueued = new AtomicBoolean(false);
 
     private AEMDownloadManger(@NonNull final Context context) {
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS, new PriorityBlockingQueue<>(),
@@ -77,7 +80,10 @@ public class AEMDownloadManger {
 
     @AnyThread
     private void enqueueFindAemImports() {
-        mExecutor.execute(this::findAemImportsTask);
+        // only enqueue task if it's not currently enqueued
+        if (!mFindAemImportsQueued.getAndSet(true)) {
+            mExecutor.execute(this::findAemImportsTask);
+        }
     }
 
     @AnyThread
@@ -95,6 +101,7 @@ public class AEMDownloadManger {
      */
     @WorkerThread
     private void findAemImportsTask() {
+        mFindAemImportsQueued.set(false);
         // TODO
     }
 
