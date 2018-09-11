@@ -2,6 +2,7 @@ package org.cru.godtools.articles.aem.service;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.AnyThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
@@ -55,6 +56,43 @@ public class AEMDownloadManger {
         }
         return sInstance;
     }
+
+    // region Task Scheduling Methods
+
+    @AnyThread
+    private void enqueueFindAemImports() {
+        mExecutor.execute(this::findAemImportsTask);
+    }
+
+    @AnyThread
+    private void enqueueStaleAemImport() {
+        // TODO
+    }
+
+    // endregion Task Scheduling Methods
+
+    // region Tasks
+
+    /**
+     * This task is responsible for syncing the list of all AEM Import URLs defined in manifests to the locally cached
+     * AEM Article database.
+     */
+    @WorkerThread
+    private void findAemImportsTask() {
+        // TODO
+    }
+
+    /**
+     * This task is responsible for syncing an individual AEM Import url to the AEM Article database.
+     *
+     * @param baseUri The base AEM Import URL to sync
+     */
+    @WorkerThread
+    private void syncAemImportTask(@NonNull final Uri baseUri) {
+        // TODO
+    }
+
+    // endregion Tasks
 
     /**
      * This method  handles loading AEM Imports into the local Database.  Please ensure that the
