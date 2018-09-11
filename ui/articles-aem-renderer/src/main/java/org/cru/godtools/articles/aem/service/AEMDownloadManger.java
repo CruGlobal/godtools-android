@@ -2,6 +2,8 @@ package org.cru.godtools.articles.aem.service;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
 import org.cru.godtools.articles.aem.db.ArticleRepository;
@@ -31,6 +33,19 @@ import okhttp3.Response;
  * @author Gyasi Story
  */
 public class AEMDownloadManger {
+    private AEMDownloadManger(@NonNull final Context context) {
+    }
+
+    @Nullable
+    private static AEMDownloadManger sInstance;
+    @NonNull
+    public synchronized static AEMDownloadManger getInstance(@NonNull final Context context) {
+        if (sInstance == null) {
+            sInstance = new AEMDownloadManger(context);
+        }
+        return sInstance;
+    }
+
     /**
      * This method  handles loading AEM Imports into the local Database.  Please ensure that the
      * manifest used contains AemImports.
