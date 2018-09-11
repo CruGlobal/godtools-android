@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
+import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.cru.godtools.articles.aem.db.ArticleRepository;
 import org.cru.godtools.articles.aem.db.AttachmentRepository;
 import org.cru.godtools.articles.aem.db.ManifestAssociationRepository;
@@ -22,6 +23,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -33,7 +37,13 @@ import okhttp3.Response;
  * @author Gyasi Story
  */
 public class AEMDownloadManger {
+    private static final int TASK_CONCURRENCY = 4;
+
+    private final ThreadPoolExecutor mExecutor;
+
     private AEMDownloadManger(@NonNull final Context context) {
+        mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS, new PriorityBlockingQueue<>(),
+                                           new NamedThreadFactory(AEMDownloadManger.class.getSimpleName()));
     }
 
     @Nullable
