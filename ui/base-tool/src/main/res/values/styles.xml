@@ -5,9 +5,10 @@
         <item name="toolbarStyle">@style/Widget.GodTools.Tool.Toolbar.AppBar</item>
     </style>
 
-    <style name="Theme.GodTools.Tool.AppBar">
+    <style name="Theme.GodTools.Tool.AppBar" >
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
     <style name="Theme.GodTools.Tool.NoActionBar">
