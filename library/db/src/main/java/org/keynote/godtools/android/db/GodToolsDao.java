@@ -15,7 +15,6 @@ import com.annimon.stream.Stream;
 import org.ccci.gto.android.common.db.Expression;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.db.StreamDao;
-import org.ccci.gto.android.common.db.Transaction;
 import org.ccci.gto.android.common.db.async.AbstractAsyncDao;
 import org.ccci.gto.android.common.util.ArrayUtils;
 import org.cru.godtools.model.Attachment;
@@ -137,14 +136,10 @@ public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
 
         // perform update and sanitize PersonalMeasurements
         final SQLiteDatabase db = getWritableDatabase();
-        final Transaction tx = newTransaction(db);
-        try {
-            tx.beginTransactionNonExclusive();
+        inNonExclusiveTransaction(db, () -> {
             db.execSQL(sql.toString(), args);
-            tx.setTransactionSuccessful();
-        } finally {
-            tx.endTransaction().recycle();
-        }
+            return null;
+        });
     }
 
     @NonNull
@@ -165,10 +160,7 @@ public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
     public void updateToolOrder(final long... tools) {
         final Tool tool = new Tool();
 
-        final Transaction tx = newTransaction();
-        try {
-            tx.beginTransactionNonExclusive();
-
+        inNonExclusiveTransaction(() -> {
             // reset order for all tools
             update(tool, (Expression) null, ToolTable.COLUMN_ORDER);
 
@@ -178,10 +170,7 @@ public class GodToolsDao extends AbstractAsyncDao implements StreamDao {
                         tool.setOrder(t.getFirst());
                         update(tool, ToolTable.FIELD_ID.eq(t.getSecond()), ToolTable.COLUMN_ORDER);
                     });
-
-            tx.setSuccessful();
-        } finally {
-            tx.endTransaction().recycle();
-        }
+            return null;
+        });
     }
 }

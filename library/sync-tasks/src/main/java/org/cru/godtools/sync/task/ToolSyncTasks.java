@@ -8,7 +8,6 @@ import android.support.v4.util.LongSparseArray;
 import android.support.v4.util.SimpleArrayMap;
 
 import org.ccci.gto.android.common.db.Query;
-import org.ccci.gto.android.common.db.Transaction;
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams;
 import org.ccci.gto.android.common.jsonapi.util.Includes;
@@ -66,17 +65,11 @@ public final class ToolSyncTasks extends BaseDataSyncTasks {
             // store fetched tools
             final JsonApiObject<Tool> json = response.body();
             if (json != null) {
-                final Transaction tx = mDao.newTransaction();
-                try {
-                    tx.beginTransaction();
-
+                mDao.inTransaction(() -> {
                     final LongSparseArray<Tool> existing = index(mDao.get(Query.select(Tool.class)));
                     storeTools(events, json.getData(), existing, includes);
-
-                    tx.setTransactionSuccessful();
-                } finally {
-                    tx.endTransaction().recycle();
-                }
+                    return null;
+                });
             }
 
             // send any pending events
