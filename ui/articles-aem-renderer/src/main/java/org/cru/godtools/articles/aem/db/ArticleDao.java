@@ -50,5 +50,9 @@ interface ArticleDao {
     @VisibleForTesting
     @Query("SELECT * FROM article_table")
     List<Article> getTestableAllArticles();
+
+    @VisibleForTesting
+    @Query("SELECT * FROM article_table WHERE article_key = :key")
+    Article getArticleByKey(String key);
     //endregion
 }

@@ -13,7 +13,7 @@ import android.support.annotation.NonNull;
  * @author Gyasi Story
  */
 @Entity(tableName = "manifest_association_table", foreignKeys = @ForeignKey(
-        entity = Article.class, parentColumns = "_id", childColumns = "article_key"))
+        entity = Article.class, parentColumns = "article_key", childColumns = "article_key"))
 public class ManifestAssociation {
 
     /**
@@ -44,5 +44,5 @@ public class ManifestAssociation {
      */
     @NonNull
     @ColumnInfo(name = "article_key")
-    public int mArticleId;
+    public String mArticleId;
 }

@@ -6,6 +6,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 import android.support.annotation.VisibleForTesting;
 
 import org.cru.godtools.articles.aem.model.Attachment;
@@ -31,6 +32,13 @@ interface AttachmentDao {
     void insertAttachment(Attachment attachments);
 
     /**
+     *
+     * @param attachment
+     */
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    void updateAttachment(Attachment attachment);
+
+    /**
      * Deletion of Attachments.  This can be one Attachment or
      * a collection.
      *
@@ -47,11 +55,12 @@ interface AttachmentDao {
      * @return = a list of Attachments.  Using live data to support in Live updates.
      */
     @Query("SELECT * FROM attachment_table WHERE article_key = :articleId")
-    LiveData<List<Attachment>> getAttachmentsByArticle(int articleId);
+    LiveData<List<Attachment>> getAttachmentsByArticle(String articleId);
 
     //region Testable (None Live Data)
     @VisibleForTesting()
     @Query("SELECT * FROM attachment_table WHERE article_key = :articleId")
-    List<Attachment> getTestableAttachmentsByArticle(int articleId);
+    List<Attachment> getTestableAttachmentsByArticle(String articleId);
     //endregion
+
 }
