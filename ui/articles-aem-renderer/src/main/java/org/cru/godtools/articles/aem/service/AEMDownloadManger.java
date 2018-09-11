@@ -47,7 +47,9 @@ public class AEMDownloadManger {
 
     private final ThreadPoolExecutor mExecutor;
 
-    private final AtomicBoolean mFindAemImportsQueued = new AtomicBoolean(false);
+    // Task synchronization locks and flags
+    private final Object mExtractAemImportsLock = new Object();
+    private final AtomicBoolean mExtractAemImportsQueued = new AtomicBoolean(false);
 
     private AEMDownloadManger(@NonNull final Context context) {
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS, new PriorityBlockingQueue<>(),
@@ -81,7 +83,7 @@ public class AEMDownloadManger {
     @AnyThread
     private void enqueueExtractAemImportsFromManifests() {
         // only enqueue task if it's not currently enqueued
-        if (!mFindAemImportsQueued.getAndSet(true)) {
+        if (!mExtractAemImportsQueued.getAndSet(true)) {
             mExecutor.execute(this::extractAemImportsFromManifestsTask);
         }
     }
@@ -101,8 +103,10 @@ public class AEMDownloadManger {
      */
     @WorkerThread
     private void extractAemImportsFromManifestsTask() {
-        mFindAemImportsQueued.set(false);
-        // TODO
+        synchronized (mExtractAemImportsLock) {
+            mExtractAemImportsQueued.set(false);
+            // TODO
+        }
     }
 
     /**
