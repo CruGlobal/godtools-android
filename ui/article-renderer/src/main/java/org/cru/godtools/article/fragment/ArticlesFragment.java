@@ -1,5 +1,6 @@
 package org.cru.godtools.article.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,7 +21,7 @@ public class ArticlesFragment extends Fragment {
     private static final String MANIFEST_Key = "manifest-key";
     private ArticleAdapter mAdapter;
 
-    public static ArticlesFragment newInstance(String manifestKey){
+    public static ArticlesFragment newInstance(String manifestKey) {
         ArticlesFragment fragment = new ArticlesFragment();
         Bundle args = new Bundle();
         args.putString(MANIFEST_Key, manifestKey);
@@ -28,9 +29,18 @@ public class ArticlesFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (!(context instanceof ArticleAdapter.Callback)) {
+            throw new IllegalArgumentException("Callback not integrated");
+        }
+    }
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
         return inflater.inflate(R.layout.fragment_articles, container, false);
@@ -42,7 +52,7 @@ public class ArticlesFragment extends Fragment {
 
         RecyclerView recyclerView = Objects.requireNonNull(getActivity())
                 .findViewById(R.id.articles_recycler_view);
-        mAdapter = new ArticleAdapter(getActivity());
+        mAdapter = new ArticleAdapter(getContext());
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 

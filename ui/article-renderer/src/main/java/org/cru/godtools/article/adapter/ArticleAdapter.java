@@ -20,6 +20,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
 
     private final LayoutInflater mInflater;
     private List<Article> mArticles;
+    private Callback mCallback;
 
     /**
      *  This constructor is used to create the layout inflater
@@ -27,6 +28,11 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
      */
     public ArticleAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
+        if (context instanceof Callback){
+            mCallback = (Callback) context;
+        } else {
+            throw new IllegalArgumentException("Callback not integrated");
+        }
     }
 
     @NonNull
@@ -45,6 +51,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
                     new SimpleDateFormat("MM/DD/YYYY", Locale.getDefault())
                             .format(new Date(article.mDateUpdated)));
             holder.mUpdatedTextView.setText(updatedString);
+
         } else {
             holder.mTitleTextView.setText("No Article in Category"); // Todo: Convert to String Res
         }
@@ -63,12 +70,15 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     class ArticleViewHolder extends RecyclerView.ViewHolder{
         private TextView mTitleTextView;
         private TextView mUpdatedTextView;
+        private Article mArticle;
 
         private ArticleViewHolder(View itemView) {
             super(itemView);
             mTitleTextView = itemView.findViewById(R.id.list_item_title_text);
             mUpdatedTextView = itemView.findViewById(R.id.list_item_updated_text);
+            itemView.setOnClickListener(v -> mCallback.onArticleSelected(mArticle));
         }
+
     }
 
     /**
@@ -79,5 +89,9 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     public void setArticles(List<Article> articles){
         mArticles = articles;
         notifyDataSetChanged();
+    }
+
+    public interface Callback{
+        void onArticleSelected(Article article);
     }
 }
