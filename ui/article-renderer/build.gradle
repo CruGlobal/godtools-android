@@ -22,6 +22,4 @@ dependencies {
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
 
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
-
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 }

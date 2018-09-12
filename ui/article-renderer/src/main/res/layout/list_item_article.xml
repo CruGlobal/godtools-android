@@ -1,26 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/list_item_title_text"
+    <data>
+        <import type="org.cru.godtools.article.R"/>
+        <variable name="article" type="org.cru.godtools.articles.aem.model.Article"/>
+        <variable name="callback" type="org.cru.godtools.article.adapter.ArticleAdapter.Callback"/>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:textAppearance="@style/TextAppearance.GodTools.Headline"
-        tools:text="Dances with Wolves and Romance" />
+        android:onClick="@{() -> callback.onArticleSelected(article)}"
+        android:padding="5dp">
 
-    <TextView
-        android:id="@+id/list_item_updated_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:textAppearance="@style/TextAppearance.GodTools.Subhead"
-        tools:text="Updated: 12/12/20012" />
+        <TextView
+            android:id="@+id/article_title_text_view"
+            textNode="@{article.mTitle}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.GodTools.Headline"
+            tools:text="Dances with Wolves and Romance" />
 
-</LinearLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="20dp"
+            android:text="@{String.format(@string/update, article.getLastUpdatedFormatedString())}"
+            android:textAppearance="@style/TextAppearance.GodTools.Subhead"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/article_title_text_view"
+            tools:text="Updated: 12/12/20012" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

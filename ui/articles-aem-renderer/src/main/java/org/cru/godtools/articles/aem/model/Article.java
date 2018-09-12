@@ -7,7 +7,10 @@ import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * This class represents the article table
@@ -55,4 +58,9 @@ public class Article {
     @Ignore
     @Nullable
     public List<Attachment> parsedAttachments;
+
+    public String getLastUpdatedFormatedString(){
+        return new SimpleDateFormat("MM/DD/YYYY", Locale.getDefault())
+                .format(new Date(mDateUpdated));
+    }
 }

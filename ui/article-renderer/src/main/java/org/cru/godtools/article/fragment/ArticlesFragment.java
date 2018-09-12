@@ -1,10 +1,8 @@
 package org.cru.godtools.article.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,14 +10,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.cru.godtools.article.R;
+import org.cru.godtools.article.R2;
 import org.cru.godtools.article.adapter.ArticleAdapter;
+import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.view_model.ArticleViewModel;
+import org.cru.godtools.base.ui.fragment.BaseFragment;
 
 import java.util.Objects;
 
-public class ArticlesFragment extends Fragment {
+import butterknife.BindView;
+import timber.log.Timber;
+
+public class ArticlesFragment extends BaseFragment implements ArticleAdapter.Callback {
     private static final String MANIFEST_Key = "manifest-key";
-    private ArticleAdapter mAdapter;
+
+    @Nullable
+    @BindView(R2.id.articles_recycler_view)
+    RecyclerView mArticlesView;
+
+    ArticleAdapter mAdapter;
 
     public static ArticlesFragment newInstance(String manifestKey) {
         ArticlesFragment fragment = new ArticlesFragment();
@@ -27,14 +36,6 @@ public class ArticlesFragment extends Fragment {
         args.putString(MANIFEST_Key, manifestKey);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (!(context instanceof ArticleAdapter.Callback)) {
-            throw new IllegalArgumentException("Callback not integrated");
-        }
     }
 
     @Nullable
@@ -50,11 +51,9 @@ public class ArticlesFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        RecyclerView recyclerView = Objects.requireNonNull(getActivity())
-                .findViewById(R.id.articles_recycler_view);
-        mAdapter = new ArticleAdapter(getContext());
-        recyclerView.setAdapter(mAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mAdapter = new ArticleAdapter();
+        Objects.requireNonNull(mArticlesView).setAdapter(mAdapter);
+        mArticlesView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         ArticleViewModel viewModel = ArticleViewModel.getInstance(getActivity());
 
@@ -64,5 +63,10 @@ public class ArticlesFragment extends Fragment {
             // This will be triggered by any change to the database
             mAdapter.setArticles(articles);
         });
+    }
+
+    @Override
+    public void onArticleSelected(Article article) {
+        Timber.d("You selected %s as your article", article.mTitle);
     }
 }
