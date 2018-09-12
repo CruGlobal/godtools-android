@@ -3,7 +3,9 @@ package org.cru.godtools.articles.aem.view_model;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 
 import org.cru.godtools.articles.aem.db.ArticleRepository;
 import org.cru.godtools.articles.aem.db.AttachmentRepository;
@@ -17,6 +19,16 @@ public class ArticleViewModel extends AndroidViewModel {
     private final ArticleRepository mArticleRepository;
     private final AttachmentRepository mAttchReposistory;
     private final ManifestAssociationRepository mManifestRepository;
+
+    /**
+     * This allows other models to get an instance of this ViewModel with out adding dependencies
+     * to their .gradle file
+     * @param activity FragmentActivity
+     * @return this
+     */
+    public static ArticleViewModel getInstance(FragmentActivity activity){
+        return ViewModelProviders.of(activity).get(ArticleViewModel.class);
+    }
 
     public ArticleViewModel(@NonNull Application application) {
         super(application);

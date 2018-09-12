@@ -76,7 +76,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
      *
      * @param articles list of Articles
      */
-    void setArticles(List<Article> articles){
+    public void setArticles(List<Article> articles){
         mArticles = articles;
         notifyDataSetChanged();
     }
