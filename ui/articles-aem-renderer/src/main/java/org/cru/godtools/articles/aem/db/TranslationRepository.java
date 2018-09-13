@@ -55,6 +55,4 @@ public abstract class TranslationRepository {
 
         return true;
     }
-
-    
 }
