@@ -5,6 +5,7 @@ dependencies {
     implementation project(':library:xml-model')
 
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-room:${deps.gtoSupport}"
 
     implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
     implementation "android.arch.persistence.room:runtime:${deps.room}"
