@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="org.cru.godtools.article.R"/>
         <variable name="article" type="org.cru.godtools.articles.aem.model.Article"/>
         <variable name="callback" type="org.cru.godtools.article.adapter.ArticleAdapter.Callback"/>
 
@@ -15,11 +14,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{() -> callback.onArticleSelected(article)}"
-        android:padding="5dp">
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/article_title_text_view"
-            textNode="@{article.mTitle}"
+            android:text="@{article.mTitle}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.GodTools.Headline"
@@ -32,7 +31,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="20dp"
-            android:text="@{String.format(@string/update, article.getLastUpdatedFormatedString())}"
+            android:text="@{article.getLastUpdatedFormattedString()}"
             android:textAppearance="@style/TextAppearance.GodTools.Subhead"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

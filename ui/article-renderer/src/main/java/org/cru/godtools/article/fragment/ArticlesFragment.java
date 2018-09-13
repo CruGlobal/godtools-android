@@ -16,8 +16,6 @@ import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.view_model.ArticleViewModel;
 import org.cru.godtools.base.ui.fragment.BaseFragment;
 
-import java.util.Objects;
-
 import butterknife.BindView;
 import timber.log.Timber;
 
@@ -50,19 +48,26 @@ public class ArticlesFragment extends BaseFragment implements ArticleAdapter.Cal
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setupArticleRecyclerView();
+    }
 
-        mAdapter = new ArticleAdapter();
-        Objects.requireNonNull(mArticlesView).setAdapter(mAdapter);
-        mArticlesView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    private void setupArticleRecyclerView() {
+        if (mArticlesView != null) {
+            mAdapter = new ArticleAdapter();
+            mAdapter.setCallbacks(this);
 
-        ArticleViewModel viewModel = ArticleViewModel.getInstance(getActivity());
+            mArticlesView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mArticlesView.setAdapter(mAdapter);
 
-        String manifestKey = getArguments() != null ? getArguments().getString(MANIFEST_Key) : "";
+            ArticleViewModel viewModel = ArticleViewModel.getInstance(getActivity());
 
-        viewModel.getArticlesByManifest(manifestKey).observe(this, articles -> {
-            // This will be triggered by any change to the database
-            mAdapter.setArticles(articles);
-        });
+            String manifestKey = getArguments() != null ? getArguments().getString(MANIFEST_Key) : "";
+
+            viewModel.getArticlesByManifest(manifestKey).observe(this, articles -> {
+                // This will be triggered by any change to the database
+                mAdapter.setArticles(articles);
+            });
+        }
     }
 
     @Override

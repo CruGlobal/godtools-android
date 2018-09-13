@@ -29,6 +29,11 @@ public class ArticleAdapter extends SimpleDataBindingAdapter<ListItemArticleBind
         binding.setArticle(mArticles.get(position));
     }
 
+    public void setCallbacks(Callback callbacks) {
+        this.mCallback = callbacks;
+        notifyItemRangeChanged(0, getItemCount());
+    }
+
     @Override
     protected void onViewDataBindingRecycled(@NonNull ListItemArticleBinding binding) {
         super.onViewDataBindingRecycled(binding);

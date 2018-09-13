@@ -59,8 +59,10 @@ public class Article {
     @Nullable
     public List<Attachment> parsedAttachments;
 
-    public String getLastUpdatedFormatedString(){
-        return new SimpleDateFormat("MM/DD/YYYY", Locale.getDefault())
+    public String getLastUpdatedFormattedString(){
+        String date = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
                 .format(new Date(mDateUpdated));
+
+        return String.format("Updated: %s", date);
     }
 }
