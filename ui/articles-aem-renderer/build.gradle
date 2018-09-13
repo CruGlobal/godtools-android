@@ -11,6 +11,7 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:${deps.room}"
     implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
 
+    implementation "com.annimon:stream:${deps.lightweightStream}"
     implementation "com.jakewharton.timber:timber:${deps.timber}"
     implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
 

@@ -13,8 +13,6 @@ import org.cru.godtools.model.Translation;
 
 import java.util.Locale;
 
-import javax.annotation.concurrent.Immutable;
-
 @Entity(tableName = "translations")
 public class TranslationRef {
     @NonNull
@@ -28,7 +26,6 @@ public class TranslationRef {
         this.key = key;
     }
 
-    @Immutable
     public static class Key {
         @NonNull
         public final String tool;
@@ -60,7 +57,6 @@ public class TranslationRef {
         }
     }
 
-    @Immutable
     @Entity(tableName = "translationAemImports", primaryKeys = {"tool", "language", "version", "aemImportUri"})
     public static class TranslationAemImport {
         @NonNull
