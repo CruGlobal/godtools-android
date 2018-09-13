@@ -70,7 +70,7 @@ ext.deps = [
         room                 : '1.1.1',
         snowplow             : '0.7.0',
         thekey               : '2.0.0',
-        timber               : '4.7.0'
+        timber               : '4.7.1'
 ]
 
 subprojects {
