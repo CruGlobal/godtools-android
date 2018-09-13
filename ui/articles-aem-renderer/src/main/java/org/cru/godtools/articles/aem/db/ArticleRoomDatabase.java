@@ -52,9 +52,24 @@ public abstract class ArticleRoomDatabase extends RoomDatabase {
         return sInstance;
     }
 
-    public abstract ArticleDao articleDao();
+    // region DAOs
 
-    public abstract ManifestAssociationDao manifestAssociationDao();
+    abstract TranslationDao translationDao();
 
-    public abstract AttachmentDao attachmentDao();
+    abstract AemImportDao aemImportDao();
+
+    abstract ArticleDao articleDao();
+
+    abstract ManifestAssociationDao manifestAssociationDao();
+
+    abstract AttachmentDao attachmentDao();
+
+    // endregion DAOs
+
+    // region Repositories
+
+    @NonNull
+    public abstract TranslationRepository translationRepository();
+
+    // endregion Repositories
 }
