@@ -7,5 +7,5 @@ dependencies {
     api "org.ccci.gto.android:gto-support-db-async:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-db-stream:${deps.gtoSupport}"
 
-    implementation "com.crashlytics.sdk.android:crashlytics:${deps.crashlytics}"
+    implementation "com.jakewharton.timber:timber:${deps.timber}"
 }
