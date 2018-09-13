@@ -22,6 +22,7 @@ import com.annimon.stream.Stream;
 import com.google.common.base.Objects;
 import com.google.common.io.Closer;
 import com.google.common.io.CountingInputStream;
+import com.google.common.primitives.Ints;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
@@ -883,7 +884,7 @@ public final class GodToolsDownloadManager {
 
         @Override
         public final int compareTo(@NonNull final PriorityRunnable o) {
-            return ((Integer) getPriority()).compareTo(o.getPriority());
+            return Ints.compare(getPriority(), o.getPriority());
         }
     }
 
