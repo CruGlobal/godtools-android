@@ -58,6 +58,11 @@ public class TranslationRepositoryIT extends BaseArticleRoomDatabaseIT {
     }
 
     @Test
+    public void verifyIsProcessedNotPresent() {
+        assertFalse(mRepository.isProcessed(mTranslation));
+    }
+
+    @Test
     public void verifyAddAemImportsTranslationAlreadyPresent() {
         // setup test
         mDb.translationDao().insertOrIgnore(new TranslationRef(mTranslationKey));
