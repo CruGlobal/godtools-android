@@ -5,7 +5,9 @@ import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 
 import com.adobe.mobile.Config;
+import com.annimon.stream.Stream;
 import com.facebook.stetho.Stetho;
+import com.facebook.stetho.inspector.database.DatabaseFilesProvider;
 import com.facebook.stetho.inspector.database.SqliteDatabaseDriver;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.facebook.stetho.timber.StethoTree;
@@ -19,6 +21,9 @@ import org.ccci.gto.android.common.stetho.db.SQLiteOpenHelperStethoDatabaseProvi
 import org.cru.godtools.analytics.AnalyticsDispatcher;
 import org.cru.godtools.analytics.TimberAnalyticsService;
 import org.keynote.godtools.android.db.GodToolsDatabase;
+
+import java.io.File;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -65,14 +70,14 @@ public class DebugGodToolsApplication extends GodToolsApplication {
     }
 
     private void initStetho() {
-        final SqliteDatabaseDriver dbDriver =
-                new SQLiteOpenHelperStethoDatabaseProvider(GodToolsDatabase.getInstance(this)).toDatabaseDriver(this);
+        final GodToolsDatabase db = GodToolsDatabase.getInstance(this);
 
         final Stetho.InitializerBuilder stethoBuilder = Stetho.newInitializerBuilder(this);
         stethoBuilder.enableDumpapp(Stetho.defaultDumperPluginsProvider(this));
         stethoBuilder.enableWebKitInspector(
                 () -> new Stetho.DefaultInspectorModulesBuilder(DebugGodToolsApplication.this)
-                        .provideDatabaseDriver(dbDriver)
+                        .provideDatabaseDriver(new SQLiteOpenHelperStethoDatabaseProvider(db).toDatabaseDriver(this))
+                        .provideDatabaseDriver(new SqliteDatabaseDriver(this, new GtDatabaseFilesProvider()))
                         .finish());
         Stetho.initialize(stethoBuilder.build());
         OkHttpClientUtil.addGlobalNetworkInterceptor(new StethoInterceptor());
@@ -85,5 +90,16 @@ public class DebugGodToolsApplication extends GodToolsApplication {
 
         // add TimberAnalyticsService
         AnalyticsDispatcher.getInstance(this).addAnalyticsService(TimberAnalyticsService.getInstance());
+    }
+
+    class GtDatabaseFilesProvider implements DatabaseFilesProvider {
+        @Override
+        public List<File> getDatabaseFiles() {
+            final GodToolsDatabase db = GodToolsDatabase.getInstance(DebugGodToolsApplication.this);
+            return Stream.of(DebugGodToolsApplication.this.databaseList())
+                    .filterNot(name -> name.startsWith(db.getDatabaseName()))
+                    .map(DebugGodToolsApplication.this::getDatabasePath)
+                    .toList();
+        }
     }
 }

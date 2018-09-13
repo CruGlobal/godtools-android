@@ -43,7 +43,7 @@ ext.deps = [
         adobeMobileServices  : '4.16.0',
         advrecyclerview      : '0.11.0',
         androidInstantApps   : '1.1.0',
-        androidLifecycle     : '1.1.0',
+        androidLifecycle     : '1.1.1',
         androidSupport       : '27.1.1',
         androidTestingSupport: '1.0.2',
         butterknife          : '8.7.0',
@@ -67,7 +67,7 @@ ext.deps = [
         playServicesAnalytics: '16.0.1',
         powermock            : '2.0.0-beta.9',
         retrofit2            : '2.4.0',
-        room                 : '1.0.0',
+        room                 : '1.1.1',
         snowplow             : '0.7.0',
         thekey               : '2.0.0',
         timber               : '4.7.0'
@@ -82,6 +82,15 @@ subprojects {
         maven { url 'https://dl.bintray.com/powermock/maven' }
         maven { url 'https://cruglobal.jfrog.io/cruglobal/list/maven-locals/' }
         mavenLocal()
+    }
+
+    configurations.all {
+        // force versions when there are conflicts
+        resolutionStrategy.force(
+                "android.arch.lifecycle:livedata-core:${deps.androidLifecycle}",
+                "android.arch.lifecycle:runtime:${deps.androidLifecycle}",
+                "android.arch.lifecycle:viewmodel:${deps.androidLifecycle}"
+        )
     }
 }
 
