@@ -60,7 +60,7 @@ before_install:
 #  -PdisablePreDex : disable library pre-dex to improve build server performance
 install:
   - ./gradlew --stop
-  - ./gradlew clean assemble assembleAndroidTest -PdisablePreDex --parallel --continue --stacktrace --max-workers 2 --no-daemon --parallel
+  - ./gradlew clean assemble assembleAndroidTest -PdisablePreDex --parallel --continue --stacktrace --max-workers 2 --no-daemon
 
 before_script:
   - android-wait-for-emulator
