@@ -18,6 +18,7 @@ dependencies {
     // For Testing
     androidTestImplementation "android.arch.persistence.room:testing:${deps.room}"
     androidTestImplementation "com.android.support.test:runner:${deps.androidTestingSupport}"
+    androidTestImplementation "com.google.guava:guava:${deps.guava}"
     androidTestImplementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
 
     annotationProcessor "android.arch.lifecycle:compiler:${deps.androidLifecycle}"
