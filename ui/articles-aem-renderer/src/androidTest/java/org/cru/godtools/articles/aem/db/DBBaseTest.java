@@ -1,14 +1,10 @@
 package org.cru.godtools.articles.aem.db;
 
-import android.arch.persistence.room.Room;
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.articles.aem.model.ManifestAssociation;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
@@ -19,23 +15,18 @@ import java.util.Date;
 import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
-public abstract class DBBaseTest {
+public abstract class DBBaseTest extends BaseArticleRoomDatabaseIT {
 
     ArticleDao mArticleDao;
     AttachmentDao mAttachmentDao;
     ManifestAssociationDao mAssociationDao;
-    ArticleRoomDatabase db;
     List<Article> mSavedArticles = new ArrayList<>();
-    Context context;
 
     @Before
     public void createDb() throws Exception {
-        context = InstrumentationRegistry.getTargetContext();
-        db = Room.inMemoryDatabaseBuilder(context,
-                ArticleRoomDatabase.class).allowMainThreadQueries().build();
-        mArticleDao = db.articleDao();
-        mAttachmentDao = db.attachmentDao();
-        mAssociationDao = db.manifestAssociationDao();
+        mArticleDao = mDb.articleDao();
+        mAttachmentDao = mDb.attachmentDao();
+        mAssociationDao = mDb.manifestAssociationDao();
         for (int i = 0; i < 12; i++) {
             Article article = new Article();
             article.mkey = i + "aaslf" + i;
@@ -69,10 +60,4 @@ public abstract class DBBaseTest {
             mAttachmentDao.insertAttachment(attachment);
         }
     }
-
-    @After
-    public void closeDb() {
-        db.close();
-    }
-
 }

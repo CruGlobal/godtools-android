@@ -17,8 +17,7 @@ public class AEMDownloadMangerTest extends DBBaseTest {
     public void verifyAttachmentsAreSaved() throws IOException {
         for (Article article : mSavedArticles) {
             for (Attachment attachment : mAttachmentDao.getTestableAttachmentsByArticle(article.mkey)) {
-                    AEMDownloadManger
-                            .saveAttachmentToStorage(attachment, context);
+                    AEMDownloadManger.saveAttachmentToStorage(attachment, mContext);
             }
         }
 
