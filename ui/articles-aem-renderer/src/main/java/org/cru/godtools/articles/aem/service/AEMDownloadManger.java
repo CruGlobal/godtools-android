@@ -7,22 +7,33 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
+import com.google.common.util.concurrent.Futures;
+
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
+import org.ccci.gto.android.common.db.Query;
 import org.cru.godtools.articles.aem.db.ArticleRepository;
+import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.db.AttachmentRepository;
 import org.cru.godtools.articles.aem.db.ManifestAssociationRepository;
+import org.cru.godtools.articles.aem.db.TranslationRepository;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.articles.aem.model.ManifestAssociation;
 import org.cru.godtools.articles.aem.service.support.ArticleParser;
 import org.cru.godtools.base.util.PriorityRunnable;
+import org.cru.godtools.model.Tool;
+import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.cru.godtools.xml.model.Manifest;
+import org.cru.godtools.xml.service.ManifestManager;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.keynote.godtools.android.db.Contract.ToolTable;
+import org.keynote.godtools.android.db.Contract.TranslationTable;
+import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -46,15 +57,21 @@ import okhttp3.Response;
 public class AEMDownloadManger {
     private static final int TASK_CONCURRENCY = 4;
 
+    private final ArticleRoomDatabase mAemDb;
+    private final GodToolsDao mDao;
     private final ThreadPoolExecutor mExecutor;
+    private final ManifestManager mManifestManager;
 
     // Task synchronization locks and flags
     private final Object mExtractAemImportsLock = new Object();
     private final AtomicBoolean mExtractAemImportsQueued = new AtomicBoolean(false);
 
     private AEMDownloadManger(@NonNull final Context context) {
+        mAemDb = ArticleRoomDatabase.getInstance(context);
+        mDao = GodToolsDao.getInstance(context);
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS, new PriorityBlockingQueue<>(),
                                            new NamedThreadFactory(AEMDownloadManger.class.getSimpleName()));
+        mManifestManager = ManifestManager.getInstance(context);
 
         EventBus.getDefault().register(this);
     }
@@ -107,7 +124,26 @@ public class AEMDownloadManger {
     void extractAemImportsFromManifestsTask() {
         synchronized (mExtractAemImportsLock) {
             mExtractAemImportsQueued.set(false);
-            // TODO
+
+            // load all downloaded translations of the "article" tool type
+            final Query<Translation> query = Query.select(Translation.class)
+                    .join(TranslationTable.SQL_JOIN_TOOL)
+                    .where(ToolTable.FIELD_TYPE.eq(Tool.Type.ARTICLE).and(TranslationTable.SQL_WHERE_DOWNLOADED));
+            final List<Translation> translations = mDao.get(query);
+
+            final TranslationRepository repository = mAemDb.translationRepository();
+            for (final Translation translation : translations) {
+                // skip any translation we have already processed
+                if (repository.isProcessed(translation)) {
+                    continue;
+                }
+
+                // add AEM imports extracted from the manifest to the AEM article cache
+                final Manifest manifest = Futures.getUnchecked(mManifestManager.getManifest(translation));
+                repository.addAemImports(translation, manifest.getAemImports());
+            }
+
+            // TODO: prune any translations that we no longer have downloaded.
         }
     }
 
