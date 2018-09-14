@@ -43,9 +43,8 @@ public class ArticleAdapter extends SimpleDataBindingAdapter<ListItemArticleBind
 
     @Override
     public int getItemCount() {
-        return mArticles != null? mArticles.size() : 0;
+        return mArticles != null ? mArticles.size() : 0;
     }
-
 
     public interface Callback{
         void onArticleSelected(Article article);
@@ -56,7 +55,7 @@ public class ArticleAdapter extends SimpleDataBindingAdapter<ListItemArticleBind
      *
      * @param articles list of Articles
      */
-    public void setArticles(List<Article> articles){
+    public void setArticles(List<Article> articles) {
         mArticles = articles;
         notifyDataSetChanged();
     }

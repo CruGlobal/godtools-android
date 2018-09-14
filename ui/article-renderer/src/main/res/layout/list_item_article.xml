@@ -6,6 +6,7 @@
     <data>
         <variable name="article" type="org.cru.godtools.articles.aem.model.Article"/>
         <variable name="callback" type="org.cru.godtools.article.adapter.ArticleAdapter.Callback"/>
+        <variable name="fragment" type="org.cru.godtools.article.fragment.ArticlesFragment"/>
 
     </data>
 
@@ -13,16 +14,18 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:onClick="@{() -> callback.onArticleSelected(article)}"
         android:padding="10dp">
 
         <TextView
             android:id="@+id/article_title_text_view"
-            android:text="@{article.mTitle}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.GodTools.Headline"
-            tools:text="Dances with Wolves and Romance" />
+            android:text="@{article.mTitle}"
+            android:textAppearance="@style/TextAppearance.GodTools.Large"
+            android:textColor="@color/gt_blue_dark"
+            tools:text="Romances with wolves" />
 
         <TextView
             android:layout_width="0dp"
@@ -33,6 +36,7 @@
             android:layout_marginStart="20dp"
             android:text="@{article.getLastUpdatedFormattedString()}"
             android:textAppearance="@style/TextAppearance.GodTools.Subhead"
+            android:textColor="@color/gray_5A"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/article_title_text_view"

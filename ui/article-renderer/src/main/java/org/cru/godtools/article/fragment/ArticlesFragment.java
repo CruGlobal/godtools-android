@@ -8,19 +8,24 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.R2;
 import org.cru.godtools.article.adapter.ArticleAdapter;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.view_model.ArticleViewModel;
-import org.cru.godtools.base.ui.fragment.BaseFragment;
+import org.cru.godtools.base.tool.fragment.BaseToolFragment;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import timber.log.Timber;
 
-public class ArticlesFragment extends BaseFragment implements ArticleAdapter.Callback {
-    private static final String MANIFEST_Key = "manifest-key";
+public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter.Callback {
+    public static final String TAG = "ArticlesFragment";
+    private static final String MANIFEST_KEY = "manifest-key";
+
+    public Manifest mArticleManifest;
 
     @Nullable
     @BindView(R2.id.articles_recycler_view)
@@ -28,10 +33,12 @@ public class ArticlesFragment extends BaseFragment implements ArticleAdapter.Cal
 
     ArticleAdapter mAdapter;
 
-    public static ArticlesFragment newInstance(String manifestKey) {
+    public static ArticlesFragment newInstance(@NonNull final String code, @NonNull final Locale locale,
+                                               String manifestKey) {
         ArticlesFragment fragment = new ArticlesFragment();
         Bundle args = new Bundle();
-        args.putString(MANIFEST_Key, manifestKey);
+        populateArgs(args, code, locale);
+        args.putString(MANIFEST_KEY, manifestKey);
         fragment.setArguments(args);
         return fragment;
     }
@@ -41,7 +48,7 @@ public class ArticlesFragment extends BaseFragment implements ArticleAdapter.Cal
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
+        mArticleManifest = mManifest;
         return inflater.inflate(R.layout.fragment_articles, container, false);
     }
 
@@ -61,7 +68,7 @@ public class ArticlesFragment extends BaseFragment implements ArticleAdapter.Cal
 
             ArticleViewModel viewModel = ArticleViewModel.getInstance(getActivity());
 
-            String manifestKey = getArguments() != null ? getArguments().getString(MANIFEST_Key) : "";
+            String manifestKey = getArguments() != null ? getArguments().getString(MANIFEST_KEY) : "";
 
             viewModel.getArticlesByManifest(manifestKey).observe(this, articles -> {
                 // This will be triggered by any change to the database
