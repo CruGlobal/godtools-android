@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.support.annotation.NonNull;
 
-import com.crashlytics.android.Crashlytics;
-
 import org.ccci.gto.android.common.app.ApplicationUtils;
 import org.ccci.gto.android.common.db.CommonTables.LastSyncTable;
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper;
@@ -21,7 +19,7 @@ import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationFileTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 
-import io.fabric.sdk.android.Fabric;
+import timber.log.Timber;
 
 public final class GodToolsDatabase extends WalSQLiteOpenHelper {
     private static final String DATABASE_NAME = "resource.db";
@@ -228,8 +226,9 @@ public final class GodToolsDatabase extends WalSQLiteOpenHelper {
             // report (or rethrow) exception
             if (ApplicationUtils.isDebuggable(mContext)) {
                 throw e;
-            } else if (Fabric.isInitialized() && Crashlytics.getInstance() != null) {
-                Crashlytics.logException(e);
+            } else {
+                Timber.tag("GodToolsDatabase")
+                        .e(e, "Error migrating the database");
             }
 
             // let's try resetting the database instead
