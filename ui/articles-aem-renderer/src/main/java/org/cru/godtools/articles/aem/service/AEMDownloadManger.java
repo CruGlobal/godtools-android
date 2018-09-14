@@ -2,8 +2,12 @@ package org.cru.godtools.articles.aem.service;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.AnyThread;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
+import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.cru.godtools.articles.aem.db.ArticleRepository;
 import org.cru.godtools.articles.aem.db.AttachmentRepository;
 import org.cru.godtools.articles.aem.db.ManifestAssociationRepository;
@@ -11,7 +15,12 @@ import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.articles.aem.model.ManifestAssociation;
 import org.cru.godtools.articles.aem.service.support.ArticleParser;
+import org.cru.godtools.base.util.PriorityRunnable;
+import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.cru.godtools.xml.model.Manifest;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,6 +29,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -31,6 +44,118 @@ import okhttp3.Response;
  * @author Gyasi Story
  */
 public class AEMDownloadManger {
+    private static final int TASK_CONCURRENCY = 4;
+
+    private final ThreadPoolExecutor mExecutor;
+
+    // Task synchronization locks and flags
+    private final Object mExtractAemImportsLock = new Object();
+    private final AtomicBoolean mExtractAemImportsQueued = new AtomicBoolean(false);
+
+    private AEMDownloadManger(@NonNull final Context context) {
+        mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS, new PriorityBlockingQueue<>(),
+                                           new NamedThreadFactory(AEMDownloadManger.class.getSimpleName()));
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Nullable
+    private static AEMDownloadManger sInstance;
+
+    @NonNull
+    public static synchronized AEMDownloadManger getInstance(@NonNull final Context context) {
+        if (sInstance == null) {
+            sInstance = new AEMDownloadManger(context);
+        }
+        return sInstance;
+    }
+
+    // region Lifecycle Events
+
+    @WorkerThread
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onTranslationUpdate(@NonNull final TranslationUpdateEvent event) {
+        enqueueExtractAemImportsFromManifests();
+    }
+
+    // endregion Lifecycle Events
+
+    // region Task Scheduling Methods
+
+    @AnyThread
+    private void enqueueExtractAemImportsFromManifests() {
+        // only enqueue task if it's not currently enqueued
+        if (!mExtractAemImportsQueued.getAndSet(true)) {
+            mExecutor.execute(new ExtractAemImportsFromManifestsTask());
+        }
+    }
+
+    @AnyThread
+    private void enqueueStaleAemImport() {
+        // TODO
+    }
+
+    // endregion Task Scheduling Methods
+
+    // region Tasks
+
+    /**
+     * This task is responsible for syncing the list of all AEM Import URLs defined in manifests to the locally cached
+     * AEM Article database.
+     */
+    @WorkerThread
+    void extractAemImportsFromManifestsTask() {
+        synchronized (mExtractAemImportsLock) {
+            mExtractAemImportsQueued.set(false);
+            // TODO
+        }
+    }
+
+    /**
+     * This task is responsible for triggering syncs of any stale Aem Imports
+     */
+    @WorkerThread
+    void syncStaleAemImports() {
+        // TODO
+    }
+
+    /**
+     * This task is responsible for syncing an individual AEM Import url to the AEM Article database.
+     *
+     * @param baseUri The base AEM Import URL to sync
+     * @param force   This flag indicates that this sync should ignore the lastUpdated time
+     */
+    @WorkerThread
+    void syncAemImportTask(@NonNull final Uri baseUri, final boolean force) {
+        // TODO
+    }
+
+    /**
+     * This task will download the html content for a specific article.
+     */
+    @WorkerThread
+    void downloadArticleTask() {
+        // TODO
+    }
+
+    /**
+     * This task will download an attachment.
+     */
+    @WorkerThread
+    void downloadAttachmentTask() {
+        // TODO
+    }
+
+    /**
+     * This task will remove any attachments no longer in use.
+     */
+    @WorkerThread
+    void pruneOldAttachmentsTask() {
+        // TODO
+    }
+
+    // endregion Tasks
+
     /**
      * This method  handles loading AEM Imports into the local Database.  Please ensure that the
      * manifest used contains AemImports.
@@ -153,4 +278,15 @@ public class AEMDownloadManger {
             repository.updateAttachment(attachment);
         }
     }
+
+    // region Task PriorityRunnables
+
+    class ExtractAemImportsFromManifestsTask extends PriorityRunnable {
+        @Override
+        public void run() {
+            extractAemImportsFromManifestsTask();
+        }
+    }
+
+    // endregion Task PriorityRunnables
 }

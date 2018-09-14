@@ -34,6 +34,7 @@ import org.ccci.gto.android.common.util.IOUtils.ProgressCallback;
 import org.cru.godtools.api.GodToolsApi;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.util.FileUtils;
+import org.cru.godtools.base.util.PriorityRunnable;
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.model.LocalFile;
@@ -870,22 +871,13 @@ public final class GodToolsDownloadManager {
         void onDownloadProgressUpdated(@Nullable DownloadProgress progress);
     }
 
-    abstract static class PriorityRunnable implements Comparable<PriorityRunnable>, Runnable {
-        static final int PRIORITY_PRIMARY = -10;
-        static final int PRIORITY_ATTACHMENT = 0;
-        static final int PRIORITY_PARALLEL = 10;
-        static final int PRIORITY_OTHER = 20;
-        static final int PRIMARY_PRUNE_FILESYSTEM = Integer.MAX_VALUE;
+    // region Task PriorityRunnables
 
-        protected int getPriority() {
-            return Integer.MAX_VALUE;
-        }
-
-        @Override
-        public final int compareTo(@NonNull final PriorityRunnable o) {
-            return ((Integer) getPriority()).compareTo(o.getPriority());
-        }
-    }
+    private static final int PRIORITY_PRIMARY = -10;
+    private static final int PRIORITY_ATTACHMENT = 0;
+    private static final int PRIORITY_PARALLEL = 10;
+    private static final int PRIORITY_OTHER = 20;
+    private static final int PRIMARY_PRUNE_FILESYSTEM = Integer.MAX_VALUE;
 
     final class DownloadTranslationRunnable extends PriorityRunnable {
         @NonNull
@@ -945,4 +937,6 @@ public final class GodToolsDownloadManager {
             scheduleNextCleanFilesystem();
         }
     }
+
+    // endregion Task PriorityRunnables
 }
