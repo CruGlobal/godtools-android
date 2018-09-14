@@ -129,6 +129,7 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
                 targetSdkVersion targetSdk
 
                 testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+                multiDexKeepProguard rootProject.file('multidex-keep.pro')
             }
 
             compileOptions {
