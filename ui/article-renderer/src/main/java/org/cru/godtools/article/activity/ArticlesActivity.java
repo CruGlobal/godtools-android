@@ -27,8 +27,10 @@ public class ArticlesActivity extends BaseSingleToolActivity{
         context.startActivity(intent);
     }
 
-    public ArticlesActivity(boolean immersive) {
-        super(immersive);
+
+
+    public ArticlesActivity() {
+        super(true);
     }
     //endregion
 
@@ -53,7 +55,7 @@ public class ArticlesActivity extends BaseSingleToolActivity{
 
         if (fm.findFragmentByTag(ArticlesFragment.TAG) == null){
            fm.beginTransaction().replace(R.id.articles_frame, ArticlesFragment
-                   .newInstance(mCategoryID != null ? mCategoryID : "")).commit();
+                   .newInstance(mTool, mLocale, mCategoryID != null ? mCategoryID : "")).commit();
         }
 
 
