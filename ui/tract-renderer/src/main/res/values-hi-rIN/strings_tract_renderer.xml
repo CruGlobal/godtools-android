@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_install">इन्सटॉल करें</string>
+    <string name="menu_share_tract">साझा करें</string>
+    <string name="share_tract_title">“%1$s” को उपयोग करते हुए साझा करें</string>
+    <string name="tract_not_found">अनुरोधित टूल नहीं मिला</string>
+    <string name="tract_loading">अनुरोधित टूल लोड हो रहा है ...</string>
+</resources>
