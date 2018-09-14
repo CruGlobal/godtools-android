@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import org.cru.godtools.article.databinding.ListItemArticleBinding;
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter;
 import org.cru.godtools.articles.aem.model.Article;
+import org.cru.godtools.xml.model.Manifest;
 
 import java.util.List;
 
@@ -15,6 +16,8 @@ public class ArticleAdapter extends SimpleDataBindingAdapter<ListItemArticleBind
     private List<Article> mArticles;
     @Nullable
     private Callback mCallback;
+    @Nullable
+    private Manifest mManifest;
 
     @NonNull
     @Override
@@ -27,10 +30,16 @@ public class ArticleAdapter extends SimpleDataBindingAdapter<ListItemArticleBind
         assert mArticles != null : "Article must be defined to bind";
         binding.setCallback(mCallback);
         binding.setArticle(mArticles.get(position));
+        binding.setManifest(mManifest);
     }
 
     public void setCallbacks(Callback callbacks) {
         this.mCallback = callbacks;
+        notifyItemRangeChanged(0, getItemCount());
+    }
+
+    public void setToolManifest(Manifest manifest) {
+        this.mManifest = manifest;
         notifyItemRangeChanged(0, getItemCount());
     }
 

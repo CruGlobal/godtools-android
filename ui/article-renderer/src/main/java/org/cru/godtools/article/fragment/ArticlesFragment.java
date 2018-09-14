@@ -3,12 +3,13 @@ package org.cru.godtools.article.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import org.cru.godtools.xml.model.Manifest;
+
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.R2;
 import org.cru.godtools.article.adapter.ArticleAdapter;
@@ -17,6 +18,7 @@ import org.cru.godtools.articles.aem.view_model.ArticleViewModel;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import butterknife.BindView;
 import timber.log.Timber;
@@ -24,8 +26,6 @@ import timber.log.Timber;
 public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter.Callback {
     public static final String TAG = "ArticlesFragment";
     private static final String MANIFEST_KEY = "manifest-key";
-
-    public Manifest mArticleManifest;
 
     @Nullable
     @BindView(R2.id.articles_recycler_view)
@@ -48,7 +48,6 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        mArticleManifest = mManifest;
         return inflater.inflate(R.layout.fragment_articles, container, false);
     }
 
@@ -62,7 +61,13 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
         if (mArticlesView != null) {
             mAdapter = new ArticleAdapter();
             mAdapter.setCallbacks(this);
+            mAdapter.setToolManifest(mManifest);
+            DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(),
+                    DividerItemDecoration.VERTICAL);
+            itemDecoration.setDrawable(Objects.requireNonNull(getActivity()).getResources()
+                    .getDrawable(R.drawable.divider));
 
+            mArticlesView.addItemDecoration(itemDecoration);
             mArticlesView.setLayoutManager(new LinearLayoutManager(getActivity()));
             mArticlesView.setAdapter(mAdapter);
 
@@ -80,5 +85,11 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
     @Override
     public void onArticleSelected(Article article) {
         Timber.d("You selected %s as your article", article.mTitle);
+    }
+
+    @Override
+    protected void onManifestUpdated() {
+        super.onManifestUpdated();
+        mAdapter.setToolManifest(mManifest);
     }
 }

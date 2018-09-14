@@ -6,8 +6,7 @@
     <data>
         <variable name="article" type="org.cru.godtools.articles.aem.model.Article"/>
         <variable name="callback" type="org.cru.godtools.article.adapter.ArticleAdapter.Callback"/>
-        <variable name="fragment" type="org.cru.godtools.article.fragment.ArticlesFragment"/>
-
+       <variable name="manifest" type="org.cru.godtools.xml.model.Manifest"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,27 +15,28 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:onClick="@{() -> callback.onArticleSelected(article)}"
-        android:padding="10dp">
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/article_title_text_view"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:text="@{article.mTitle}"
+            android:layout_margin="0dp"
+            android:padding="0dp"
             android:textAppearance="@style/TextAppearance.GodTools.Large"
-            android:textColor="@color/gt_blue_dark"
+            android:textColor="@{manifest.getPrimaryColor()}"
+            tools:textColor="@color/gt_blue"
             tools:text="Romances with wolves" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="20dp"
             android:text="@{article.getLastUpdatedFormattedString()}"
             android:textAppearance="@style/TextAppearance.GodTools.Subhead"
-            android:textColor="@color/gray_5A"
+            android:textColor="@color/common_google_signin_btn_text_light_focused"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/article_title_text_view"
