@@ -103,7 +103,7 @@ public class AEMDownloadManger {
      * AEM Article database.
      */
     @WorkerThread
-    private void extractAemImportsFromManifestsTask() {
+    void extractAemImportsFromManifestsTask() {
         synchronized (mExtractAemImportsLock) {
             mExtractAemImportsQueued.set(false);
             // TODO
@@ -111,12 +111,45 @@ public class AEMDownloadManger {
     }
 
     /**
+     * This task is responsible for triggering syncs of any stale Aem Imports
+     */
+    @WorkerThread
+    void syncStaleAemImports() {
+        // TODO
+    }
+
+    /**
      * This task is responsible for syncing an individual AEM Import url to the AEM Article database.
      *
      * @param baseUri The base AEM Import URL to sync
+     * @param force   This flag indicates that this sync should ignore the lastUpdated time
      */
     @WorkerThread
-    private void syncAemImportTask(@NonNull final Uri baseUri) {
+    void syncAemImportTask(@NonNull final Uri baseUri, final boolean force) {
+        // TODO
+    }
+
+    /**
+     * This task will download the html content for a specific article.
+     */
+    @WorkerThread
+    void downloadArticleTask() {
+        // TODO
+    }
+
+    /**
+     * This task will download an attachment.
+     */
+    @WorkerThread
+    void downloadAttachmentTask() {
+        // TODO
+    }
+
+    /**
+     * This task will remove any attachments no longer in use.
+     */
+    @WorkerThread
+    void pruneOldAttachmentsTask() {
         // TODO
     }
 
