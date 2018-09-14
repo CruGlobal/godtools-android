@@ -9,6 +9,9 @@
     <string name="menu_about">विषयी</string>
     <string name="menu_help">मदत करा</string>
     <string name="menu_contact_us">आमच्याशी संपर्क करा</string>
+    <string name="menu_login">लाॅगिन</string>
+    <string name="menu_signup">अकाऊंट सुरू करा.</string>
+    <string name="menu_logout">लाॅग-आऊट</string>
     <string name="menu_share_godtools">गाॅड्स टूलविषयी सांगा</string>
     <string name="menu_share_story">आम्हाला गोष्ट सांगा</string>
     <string name="menu_rate">गाॅड्स टूलचे मूल्यमापन करा</string>
@@ -36,6 +39,8 @@
 "</item>
         <item quantity="other">%1$,d भाषा</item>
     </plurals>
+    <string name="text_tools_all_installed">आपण सर्व उपलब्ध टूल्स डाऊनलोड केले आहेत.</string>
+    <string name="menu_add_to_home">होम स्क्रीनमध्ये जोडा.</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">60+ भाषेची</string>
     <string name="menu_language_settings">भाषेच्या मांडण्या</string>

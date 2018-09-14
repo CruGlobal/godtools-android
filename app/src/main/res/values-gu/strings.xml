@@ -6,14 +6,17 @@
     <string name="menu_heading_general">સામાન્ય</string>
     <string name="menu_heading_share">વહેંચો</string>
     <string name="menu_heading_legal">કાનૂની</string>
-    <string name="menu_about">વિશે/આશરે</string>
+    <string name="menu_about">ના વિશે</string>
     <string name="menu_help">મદદ</string>
     <string name="menu_contact_us">સંપર્ક સાંધો</string>
-    <string name="menu_share_godtools">\'ગોડ ટુલ્સ\' વહેંચો</string>
+    <string name="menu_login">લોગીન/પ્રવેશ કરો</string>
+    <string name="menu_signup">તમારું એકાઉન્ટ બનાવો</string>
+    <string name="menu_logout">લોગ આઉટ/પ્રસ્થાન કરો</string>
+    <string name="menu_share_godtools">\'ગોડ ટુલ્સ\' એપ વહેંચો</string>
     <string name="menu_share_story">તમારી વાત અમને કહો</string>
     <string name="menu_terms_of_use">વાપરવા માટેની શરતો</string>
     <string name="menu_privacy_policy">અંગત પૉલિસી/નીતી</string>
-    <string name="menu_copyright">કોપીરાઈટ માહિતી</string>
+    <string name="menu_copyright">કોપીરાઈટ</string>
     <!-- Share a story -->
     <string name="share_story_subject">ઈશ્વર કેવી રીતે કાર્ય કરે છે તે સાંભળો!</string>
     <!-- Tools UI -->
@@ -33,8 +36,9 @@
         <item quantity="other">%1$,d ભાષાઓ</item>
     </plurals>
     <string name="text_tools_all_installed">પ્રાપ્ય બધાં જ સાધનો/ટુલ્સ તમે ડાઉનલોડ કરી લીધાં છે.</string>
+    <string name="menu_add_to_home">હોમ સ્ક્રીન ઉમેરો</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">૬૦થી વધારે ભાષાઓ</string>
+    <string name="feature_discovery_title_language_settings">૭૦થી વધારે ભાષાઓ</string>
     <string name="menu_language_settings">ભાષા સુયોજન</string>
     <string name="title_language_settings">ભાષા સુયોજન</string>
     <string name="title_language_primary">પ્રાથમિક ભાષા</string>

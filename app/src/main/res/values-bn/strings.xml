@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
+    <string name="share_prompt">আপনি কি ভাবে শেয়ার করতে চান সেটি সিলেক্ট করুন</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">সাধারণ</string>
-    <string name="menu_heading_share">ভাগ করুন</string>
+    <string name="menu_heading_share">শেয়ার করুন</string>
+    <string name="menu_heading_legal">"বৈধ "</string>
     <string name="menu_about">বিষয়ে</string>
     <string name="menu_help">সাহায্য</string>
     <string name="menu_contact_us">আমাদের সঙ্গে সম্পর্ক করুন</string>
+    <string name="menu_login">লগইন করুন</string>
+    <string name="menu_signup">একাউন্ট খুলুন</string>
+    <string name="menu_logout">লগ আউট করুন</string>
     <string name="menu_share_godtools">GodTools ভাগ করুন</string>
     <string name="menu_share_story">আমাদের সঙ্গে একটি গল্প শেয়ার করুন</string>
     <string name="menu_terms_of_use">ব্যবহারের শর্তাবলী</string>
     <string name="menu_privacy_policy">গোপনীয়তা নীতি</string>
     <string name="menu_copyright">কপিরাইট তথ্য</string>
     <!-- Share a story -->
+    <string name="share_story_subject">শুনুন ঈশ্বর কি করে কাজ করছেন</string>
     <!-- Tools UI -->
     <string name="nav_find_tools">সরঞ্জাম খুঁজুন</string>
     <string name="nav_my_tools">আমার সরঞ্জামগুলি</string>
+    <string name="menu_switch_language">ভাষা বদলান</string>
     <string name="title_add_new_tools">নতুন সরঞ্জাম যোগ করুন</string>
     <string name="action_tools_download">ডাউনলোড</string>
     <string name="action_tools_remove">অপসারণ করুন</string>
@@ -28,7 +35,10 @@
         <item quantity="one">%1$,d ভাষাগুলি</item>
         <item quantity="other">%1$,d ভাষাগুলি</item>
     </plurals>
+    <string name="text_tools_all_installed">"আপনি উপলব্ধ সকল সরঞ্জাম ডাউনলোড করেছেন "</string>
+    <string name="menu_add_to_home">হোম স্ক্রিন এ যোগ করুন</string>
     <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">৭০+ ভাষা</string>
     <string name="menu_language_settings">ভাষা ব্যাবস্থা</string>
     <string name="title_language_settings">ভাষা ব্যাবস্থা</string>
     <string name="title_language_primary">প্রাথমিক ভাষা</string>
@@ -36,6 +46,7 @@
     <string name="action_language_parallel_select">একটি সমান্তরাল ভাষা নির্বাচন করুন</string>
     <string name="text_language_parallel_description">স্থানীয় ভাষায় কেউ সঙ্গে  GodTools শেয়ার করুন</string>
     <string name="text_language_warning">সব রকম টুল সব ককম ভাষায় উপলব্ধ নয়</string>
+    <string name="label_language_none">কোনটাই না</string>
     <!-- Sharing -->
     <string name="share_general_message">এখানে আপনি Godtools app ডাউনলোড করতে পারেন:
 http://godtoolsapp.com
