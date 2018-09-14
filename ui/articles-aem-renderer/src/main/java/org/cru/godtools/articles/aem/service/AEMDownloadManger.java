@@ -15,6 +15,7 @@ import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.articles.aem.model.ManifestAssociation;
 import org.cru.godtools.articles.aem.service.support.ArticleParser;
+import org.cru.godtools.base.util.PriorityRunnable;
 import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.cru.godtools.xml.model.Manifest;
 import org.greenrobot.eventbus.EventBus;
@@ -85,7 +86,7 @@ public class AEMDownloadManger {
     private void enqueueExtractAemImportsFromManifests() {
         // only enqueue task if it's not currently enqueued
         if (!mExtractAemImportsQueued.getAndSet(true)) {
-            mExecutor.execute(this::extractAemImportsFromManifestsTask);
+            mExecutor.execute(new ExtractAemImportsFromManifestsTask());
         }
     }
 
@@ -277,4 +278,15 @@ public class AEMDownloadManger {
             repository.updateAttachment(attachment);
         }
     }
+
+    // region Task PriorityRunnables
+
+    class ExtractAemImportsFromManifestsTask extends PriorityRunnable {
+        @Override
+        public void run() {
+            extractAemImportsFromManifestsTask();
+        }
+    }
+
+    // endregion Task PriorityRunnables
 }
