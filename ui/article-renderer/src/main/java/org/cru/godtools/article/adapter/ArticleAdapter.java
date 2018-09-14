@@ -55,7 +55,7 @@ public class ArticleAdapter extends SimpleDataBindingAdapter<ListItemArticleBind
         return mArticles != null ? mArticles.size() : 0;
     }
 
-    public interface Callback{
+    public interface Callback {
         void onArticleSelected(Article article);
     }
 

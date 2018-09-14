@@ -26,7 +26,7 @@ public class ArticleViewModel extends AndroidViewModel {
      * @param activity FragmentActivity
      * @return this
      */
-    public static ArticleViewModel getInstance(FragmentActivity activity){
+    public static ArticleViewModel getInstance(FragmentActivity activity) {
         return ViewModelProviders.of(activity).get(ArticleViewModel.class);
     }
 
