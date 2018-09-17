@@ -62,15 +62,21 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupArticleRecyclerView();
+        setupArticlesView();
     }
 
-    //endregion
+    @Override
+    public void onDestroyView() {
+        cleanupArticlesView();
+        super.onDestroyView();
+    }
+
+    // endregion LifeCycle Events
 
     /**
      * This method will initialize all of the required data for the RecyclerView
      */
-    private void setupArticleRecyclerView() {
+    private void setupArticlesView() {
         if (mArticlesView != null) {
             mArticlesAdapter = new ArticleAdapter();
             mArticlesAdapter.setCallbacks(this);
@@ -90,6 +96,13 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
                 mArticlesAdapter.setArticles(articles);
             });
         }
+    }
+
+    private void cleanupArticlesView() {
+        if (mArticlesAdapter != null) {
+            mArticlesAdapter.setCallbacks(null);
+        }
+        mArticlesAdapter = null;
     }
 
     /**
