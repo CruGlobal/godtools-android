@@ -31,6 +31,16 @@ public abstract class AnalyticsBaseEvent {
         return mLocale;
     }
 
+    @Nullable
+    public String getAdobeSiteSection() {
+        return null;
+    }
+
+    @Nullable
+    public String getAdobeSiteSubSection() {
+        return null;
+    }
+
     public Uri.Builder getSnowPlowContentScoringUri() {
         return new Uri.Builder()
                 .scheme(SNOWPLOW_CONTENT_SCORING_URI_SCHEME);

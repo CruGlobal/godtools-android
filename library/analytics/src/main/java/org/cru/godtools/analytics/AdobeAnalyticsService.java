@@ -16,6 +16,7 @@ import com.adobe.mobile.Config;
 import com.adobe.mobile.Visitor;
 
 import org.cru.godtools.analytics.model.AnalyticsActionEvent;
+import org.cru.godtools.analytics.model.AnalyticsBaseEvent;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.analytics.model.AnalyticsSystem;
 import org.greenrobot.eventbus.EventBus;
@@ -94,7 +95,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     public void onActivityResume(@NonNull final Activity activity) {
         final String guid = mTheKey.getDefaultSessionGuid();
         mActiveActivity = new WeakReference<>(activity);
-        mAnalyticsExecutor.execute(() -> Config.collectLifecycleData(activity, baseContextData(guid)));
+        mAnalyticsExecutor.execute(() -> Config.collectLifecycleData(activity, baseContextData(guid, null)));
     }
 
     @UiThread
@@ -142,7 +143,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     private void trackAction(@NonNull final String action, @Nullable final Map<String, ?> attributes) {
         final String guid = mTheKey.getDefaultSessionGuid();
         mAnalyticsExecutor.execute(() -> {
-            final Map<String, Object> data = baseContextData(guid);
+            final Map<String, Object> data = baseContextData(guid, null);
             if (mPreviousScreenName != null) {
                 data.put(KEY_SCREEN_NAME, mPreviousScreenName);
             }
@@ -166,7 +167,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
      * Visitor.getMarketingCloudId() may be blocking. So, we need to call it on a worker thread.
      */
     @WorkerThread
-    private Map<String, Object> baseContextData(@Nullable final String guid) {
+    private Map<String, Object> baseContextData(@Nullable final String guid, @Nullable final AnalyticsBaseEvent event) {
         final Map<String, Object> data = new HashMap<>();
         data.put(KEY_APP_NAME, VALUE_GODTOOLS);
         data.put(KEY_MARKETING_CLOUD_ID, Visitor.getMarketingCloudId());
@@ -178,6 +179,22 @@ public final class AdobeAnalyticsService implements AnalyticsService {
             final String grMasterPersonId = mTheKey.getAttributes(guid).getAttribute(ATTR_GR_MASTER_PERSON_ID);
             if (grMasterPersonId != null) {
                 data.put(KEY_GR_MASTER_PERSON_ID, grMasterPersonId);
+            }
+        }
+
+        if (event != null) {
+            final Locale contentLocale = event.getLocale();
+            if (contentLocale != null) {
+                data.put(KEY_CONTENT_LANGUAGE, toLanguageTag(contentLocale));
+            }
+
+            final String siteSection = event.getAdobeSiteSection();
+            if (siteSection != null) {
+                data.put(KEY_SITE_SECTION, siteSection);
+            }
+            final String siteSubSection = event.getAdobeSiteSubSection();
+            if (siteSubSection != null) {
+                data.put(KEY_SITE_SUB_SECTION, siteSubSection);
             }
         }
 
@@ -194,21 +211,9 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     @WorkerThread
     private Map<String, Object> stateContextData(@Nullable final String guid,
                                                  @NonNull final AnalyticsScreenEvent event) {
-        final Map<String, Object> data = baseContextData(guid);
+        final Map<String, Object> data = baseContextData(guid, event);
         data.put(KEY_SCREEN_NAME_PREVIOUS, mPreviousScreenName);
         data.put(KEY_SCREEN_NAME, event.getScreen());
-        final String siteSection = event.getAdobeSiteSection();
-        if (siteSection != null) {
-            data.put(KEY_SITE_SECTION, siteSection);
-        }
-        final String siteSubSection = event.getAdobeSiteSubSection();
-        if (siteSubSection != null) {
-            data.put(KEY_SITE_SUB_SECTION, siteSubSection);
-        }
-        final Locale contentLocale = event.getLocale();
-        if (contentLocale != null) {
-            data.put(KEY_CONTENT_LANGUAGE, toLanguageTag(contentLocale));
-        }
         return data;
     }
 }

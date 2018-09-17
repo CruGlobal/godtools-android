@@ -52,6 +52,7 @@ public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
     }
 
     @Nullable
+    @Override
     public String getAdobeSiteSection() {
         switch (mScreen) {
             case SCREEN_FIND_TOOLS:
@@ -73,6 +74,7 @@ public class AnalyticsScreenEvent extends AnalyticsBaseEvent {
     }
 
     @Nullable
+    @Override
     public String getAdobeSiteSubSection() {
         switch (mScreen) {
             case SCREEN_TOOL_DETAILS:
