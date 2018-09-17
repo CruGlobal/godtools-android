@@ -55,15 +55,15 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         return inflater.inflate(R.layout.fragment_articles, container, false);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         setupArticleRecyclerView();
     }
+
     //endregion
 
     /**
