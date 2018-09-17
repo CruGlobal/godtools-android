@@ -23,12 +23,12 @@ branches:
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
 cache:
   directories:
+    - $HOME/.android/build-cache
     - $HOME/.gradle/caches/
-    - $HOME/.gradle/daemon
-    - $HOME/.gradle/native
     - $HOME/.gradle/wrapper/
 
 before_install:
@@ -59,16 +59,14 @@ before_install:
 #  --no-daemon     : disable the background gradle build daemon
 #  -PdisablePreDex : disable library pre-dex to improve build server performance
 install:
-  - ./gradlew --stop
-  - ./gradlew clean assemble assembleAndroidTest -PdisablePreDex --parallel --continue --stacktrace --max-workers 2 --no-daemon
+  - ./gradlew clean assemble assembleAndroidTest --continue --stacktrace --parallel
 
 before_script:
   - android-wait-for-emulator
-  - adb devices
   - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew check connectedCheck -PdisablePreDex --continue --stacktrace --max-workers 2 --no-daemon --parallel
+  - ./gradlew check connectedCheck --continue --stacktrace --max-workers 2 --parallel
 
 after_failure:
   - cat /home/travis/build/CruGlobal/godtools-android/build/reports/lint-results*.xml
