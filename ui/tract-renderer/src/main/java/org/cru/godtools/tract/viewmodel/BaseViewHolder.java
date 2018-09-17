@@ -95,6 +95,9 @@ abstract class BaseViewHolder<T extends Base> {
     void onBuildEvent(@NonNull final Event.Builder builder, final boolean recursive) {}
 
     @CallSuper
+    public void onContentEvent(@NonNull final Event event) {}
+
+    @CallSuper
     void onHidden() {}
 
     // endregion Lifecycle Events

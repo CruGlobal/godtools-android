@@ -80,7 +80,10 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
         }
     }
 
+    @Override
+    @CallSuper
     public void onContentEvent(@NonNull final Event event) {
+        super.onContentEvent(event);
         checkForDismissEvent(event);
     }
 

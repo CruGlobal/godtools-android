@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.viewmodel;
 
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
@@ -117,8 +118,12 @@ public class PageViewHolder extends ParentViewHolder<Page>
         }
     }
 
+    @Override
+    @CallSuper
     public void onContentEvent(@NonNull final Event event) {
+        super.onContentEvent(event);
         checkForCardEvent(event);
+        propagateEventToChildren(event);
     }
 
     @Override
@@ -351,12 +356,15 @@ public class PageViewHolder extends ParentViewHolder<Page>
         }
     }
 
-    private void checkForCardEvent(@NonNull final Event event) {
-        // send event to current card
+    private void propagateEventToChildren(@NonNull final Event event) {
         if (mActiveCardViewHolder != null) {
             mActiveCardViewHolder.onContentEvent(event);
+        } else {
+            mHeroViewHolder.onContentEvent(event);
         }
+    }
 
+    private void checkForCardEvent(@NonNull final Event event) {
         // check for card display event
         if (mModel != null) {
             Stream.of(mModel.getCards())

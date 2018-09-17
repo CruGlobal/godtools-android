@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.viewmodel;
 
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
@@ -9,9 +10,11 @@ import android.support.v4.util.Pools;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 
 import org.ccci.gto.android.common.compat.view.ViewCompat;
+import org.cru.godtools.base.model.Event;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.util.ViewUtils;
@@ -50,6 +53,14 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
     void onBind() {
         super.onBind();
         bindTabs();
+    }
+
+    @Override
+    @CallSuper
+    public void onContentEvent(@NonNull final Event event) {
+        super.onContentEvent(event);
+        checkForTabEvent(event);
+        propagateEventToChildren(event);
     }
 
     @Override
@@ -115,6 +126,11 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
         mBinding = false;
     }
 
+    private void selectTab(@NonNull final Tab tab) {
+        Optional.ofNullable(mTabs.getTabAt(tab.getPosition()))
+                .ifPresent(TabLayout.Tab::select);
+    }
+
     @NonNull
     private TabViewHolder bindTabContentViewHolder(@Nullable final Tab tab) {
         TabViewHolder holder = mRecycledTabViewHolders.acquire();
@@ -132,5 +148,22 @@ public final class TabsViewHolder extends BaseViewHolder<Tabs> implements TabLay
             mTabContent.addView(holder.mRoot);
         }
         return holder;
+    }
+
+    private void propagateEventToChildren(@NonNull final Event event) {
+        final int position = mTabs.getSelectedTabPosition();
+        if (position > -1) {
+            mTabContentViewHolders[position].onContentEvent(event);
+        }
+    }
+
+    private void checkForTabEvent(@NonNull final Event event) {
+        // check for card display event
+        if (mModel != null) {
+            Stream.of(mModel.getTabs())
+                    .filter(c -> c.getListeners().contains(event.id))
+                    .findFirst()
+                    .ifPresent(this::selectTab);
+        }
     }
 }

@@ -17,15 +17,6 @@ public final class FormViewHolder extends ParentViewHolder<Form> {
         super(Form.class, parent, R.layout.tract_content_paragraph, parentViewHolder);
     }
 
-    /* BEGIN lifecycle */
-
-    @Override
-    void onBuildEvent(@NonNull final Event.Builder builder, final boolean recursive) {
-        super.onBuildEvent(builder, recursive);
-    }
-
-    /* END lifecycle */
-
     @Override
     boolean validate(@NonNull final Set<Event.Id> ids) {
         // XXX: right now we only validate if we have a followup:send event

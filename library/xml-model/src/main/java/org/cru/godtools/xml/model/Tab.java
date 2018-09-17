@@ -7,12 +7,14 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
+import org.cru.godtools.base.model.Event;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import static org.cru.godtools.xml.Constants.XMLNS_ANALYTICS;
 import static org.cru.godtools.xml.Constants.XMLNS_CONTENT;
@@ -26,9 +28,11 @@ public final class Tab extends Base implements Parent {
     @NonNull
     private Collection<AnalyticsEvent> mAnalyticsEvents = ImmutableSet.of();
 
+    @NonNull
+    private Set<Event.Id> mListeners = ImmutableSet.of();
+
     @Nullable
     private Text mLabel;
-
     @NonNull
     private List<Content> mContent = ImmutableList.of();
 
@@ -42,9 +46,18 @@ public final class Tab extends Base implements Parent {
         return Integer.toString(mPosition);
     }
 
+    public int getPosition() {
+        return mPosition;
+    }
+
     @NonNull
     public Collection<AnalyticsEvent> getAnalyticsEvents() {
         return mAnalyticsEvents;
+    }
+
+    @NonNull
+    public Set<Event.Id> getListeners() {
+        return mListeners;
     }
 
     @Nullable
@@ -67,6 +80,7 @@ public final class Tab extends Base implements Parent {
     @NonNull
     private Tab parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_CONTENT, XML_TAB);
+        mListeners = parseEvents(parser, XML_LISTENERS);
 
         // process any child elements
         final ImmutableList.Builder<Content> contentList = ImmutableList.builder();
