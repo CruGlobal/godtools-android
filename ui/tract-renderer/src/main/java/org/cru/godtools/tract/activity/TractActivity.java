@@ -53,6 +53,7 @@ import org.cru.godtools.sync.task.ToolSyncTasks;
 import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.R2;
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter;
+import org.cru.godtools.tract.analytics.model.ToggleLanguageAnalyticsActionEvent;
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent;
 import org.cru.godtools.tract.util.ViewUtils;
 import org.cru.godtools.xml.content.ManifestLoader;
@@ -309,7 +310,7 @@ public class TractActivity extends BaseToolActivity
         final Locale locale = (Locale) tab.getTag();
         if (locale != null) {
             updateActiveLanguage(locale);
-            mAnalytics.onTrackToggleLanguage(locale);
+            mEventBus.post(new ToggleLanguageAnalyticsActionEvent(mTool, locale));
         }
     }
 

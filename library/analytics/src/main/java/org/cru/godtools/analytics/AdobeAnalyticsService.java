@@ -15,8 +15,8 @@ import com.adobe.mobile.Analytics;
 import com.adobe.mobile.Config;
 import com.adobe.mobile.Visitor;
 
-import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.cru.godtools.analytics.model.AnalyticsActionEvent;
+import org.cru.godtools.analytics.model.AnalyticsBaseEvent;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.analytics.model.AnalyticsSystem;
 import org.greenrobot.eventbus.EventBus;
@@ -46,10 +46,9 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     private static final String KEY_SCREEN_NAME = "cru.screenname";
     private static final String KEY_SCREEN_NAME_PREVIOUS = "cru.previousscreenname";
     private static final String KEY_CONTENT_LANGUAGE = "cru.contentlanguage";
-    private static final String KEY_CONTENT_LANGUAGE_SECONDARY = "cru.contentlanguagesecondary";
+    public static final String KEY_CONTENT_LANGUAGE_SECONDARY = "cru.contentlanguagesecondary";
     private static final String KEY_EXIT_LINK = "cru.mobileexitlink";
     private static final String KEY_SHARE_CONTENT = "cru.shareiconengaged";
-    private static final String KEY_TOGGLE_LANGUAGE = "cru.parallellanguagetoggle";
     private static final String KEY_SITE_SECTION = "cru:sitesection";
     private static final String KEY_SITE_SUB_SECTION = "cru:sitesubsection";
 
@@ -96,7 +95,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     public void onActivityResume(@NonNull final Activity activity) {
         final String guid = mTheKey.getDefaultSessionGuid();
         mActiveActivity = new WeakReference<>(activity);
-        mAnalyticsExecutor.execute(() -> Config.collectLifecycleData(activity, baseContextData(guid)));
+        mAnalyticsExecutor.execute(() -> Config.collectLifecycleData(activity, baseContextData(guid, null)));
     }
 
     @UiThread
@@ -112,7 +111,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onAnalyticsActionEvent(@NonNull final AnalyticsActionEvent event) {
         if (event.isForSystem(AnalyticsSystem.ADOBE)) {
-            trackAction(event.getAction(), event.getAttributes());
+            trackAction(event.getAction(), event, event.getAttributes());
         }
     }
 
@@ -130,29 +129,22 @@ public final class AdobeAnalyticsService implements AnalyticsService {
 
     @Override
     public void onTrackShareAction() {
-        trackAction(ACTION_SHARE, Collections.singletonMap(KEY_SHARE_CONTENT, null));
+        trackAction(ACTION_SHARE, null, Collections.singletonMap(KEY_SHARE_CONTENT, null));
     }
 
     @Override
     public void onTrackExitUrl(@NonNull final Uri url) {
-        trackAction(ACTION_EXIT_LINK, Collections.singletonMap(KEY_EXIT_LINK, url.toString()));
-    }
-
-    @Override
-    public void onTrackToggleLanguage(@NonNull final Locale newLocale) {
-        final Map<String, Object> attrs = new HashMap<>();
-        attrs.put(KEY_TOGGLE_LANGUAGE, null);
-        attrs.put(KEY_CONTENT_LANGUAGE_SECONDARY, LocaleCompat.toLanguageTag(newLocale));
-        trackAction(ACTION_TOGGLE_LANGUAGE, attrs);
+        trackAction(ACTION_EXIT_LINK, null, Collections.singletonMap(KEY_EXIT_LINK, url.toString()));
     }
 
     // endregion Tracking Methods
 
     @AnyThread
-    private void trackAction(@NonNull final String action, @Nullable final Map<String, ?> attributes) {
+    private void trackAction(@NonNull final String action, @Nullable final AnalyticsActionEvent event,
+                             @Nullable final Map<String, ?> attributes) {
         final String guid = mTheKey.getDefaultSessionGuid();
         mAnalyticsExecutor.execute(() -> {
-            final Map<String, Object> data = baseContextData(guid);
+            final Map<String, Object> data = baseContextData(guid, event);
             if (mPreviousScreenName != null) {
                 data.put(KEY_SCREEN_NAME, mPreviousScreenName);
             }
@@ -176,7 +168,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
      * Visitor.getMarketingCloudId() may be blocking. So, we need to call it on a worker thread.
      */
     @WorkerThread
-    private Map<String, Object> baseContextData(@Nullable final String guid) {
+    private Map<String, Object> baseContextData(@Nullable final String guid, @Nullable final AnalyticsBaseEvent event) {
         final Map<String, Object> data = new HashMap<>();
         data.put(KEY_APP_NAME, VALUE_GODTOOLS);
         data.put(KEY_MARKETING_CLOUD_ID, Visitor.getMarketingCloudId());
@@ -188,6 +180,22 @@ public final class AdobeAnalyticsService implements AnalyticsService {
             final String grMasterPersonId = mTheKey.getAttributes(guid).getAttribute(ATTR_GR_MASTER_PERSON_ID);
             if (grMasterPersonId != null) {
                 data.put(KEY_GR_MASTER_PERSON_ID, grMasterPersonId);
+            }
+        }
+
+        if (event != null) {
+            final Locale contentLocale = event.getLocale();
+            if (contentLocale != null) {
+                data.put(KEY_CONTENT_LANGUAGE, toLanguageTag(contentLocale));
+            }
+
+            final String siteSection = event.getAdobeSiteSection();
+            if (siteSection != null) {
+                data.put(KEY_SITE_SECTION, siteSection);
+            }
+            final String siteSubSection = event.getAdobeSiteSubSection();
+            if (siteSubSection != null) {
+                data.put(KEY_SITE_SUB_SECTION, siteSubSection);
             }
         }
 
@@ -204,21 +212,9 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     @WorkerThread
     private Map<String, Object> stateContextData(@Nullable final String guid,
                                                  @NonNull final AnalyticsScreenEvent event) {
-        final Map<String, Object> data = baseContextData(guid);
+        final Map<String, Object> data = baseContextData(guid, event);
         data.put(KEY_SCREEN_NAME_PREVIOUS, mPreviousScreenName);
         data.put(KEY_SCREEN_NAME, event.getScreen());
-        final String siteSection = event.getAdobeSiteSection();
-        if (siteSection != null) {
-            data.put(KEY_SITE_SECTION, siteSection);
-        }
-        final String siteSubSection = event.getAdobeSiteSubSection();
-        if (siteSubSection != null) {
-            data.put(KEY_SITE_SUB_SECTION, siteSubSection);
-        }
-        final Locale contentLocale = event.getLocale();
-        if (contentLocale != null) {
-            data.put(KEY_CONTENT_LANGUAGE, toLanguageTag(contentLocale));
-        }
         return data;
     }
 }
