@@ -29,8 +29,9 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
     @Nullable
     @BindView(R2.id.articles_recycler_view)
     RecyclerView mArticlesView;
+    @Nullable
+    ArticleAdapter mArticlesAdapter;
 
-    ArticleAdapter mAdapter;
     String mManifestKey;
 
     public static ArticlesFragment newInstance(@NonNull final String code, @NonNull final Locale locale,
@@ -71,22 +72,22 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
      */
     private void setupArticleRecyclerView() {
         if (mArticlesView != null) {
-            mAdapter = new ArticleAdapter();
-            mAdapter.setCallbacks(this);
-            mAdapter.setToolManifest(mManifest);
+            mArticlesAdapter = new ArticleAdapter();
+            mArticlesAdapter.setCallbacks(this);
+            mArticlesAdapter.setToolManifest(mManifest);
             DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(),
                     DividerItemDecoration.VERTICAL);
             itemDecoration.setDrawable(Objects.requireNonNull(getActivity()).getResources()
                     .getDrawable(R.drawable.divider));
 
             mArticlesView.addItemDecoration(itemDecoration);
-            mArticlesView.setAdapter(mAdapter);
+            mArticlesView.setAdapter(mArticlesAdapter);
 
             ArticleViewModel viewModel = ArticleViewModel.getInstance(getActivity());
 
             viewModel.getArticlesByManifest(mManifestKey).observe(this, articles -> {
                 // This will be triggered by any change to the database
-                mAdapter.setArticles(articles);
+                mArticlesAdapter.setArticles(articles);
             });
         }
     }
@@ -109,6 +110,6 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
     @Override
     protected void onManifestUpdated() {
         super.onManifestUpdated();
-        mAdapter.setToolManifest(mManifest);
+        mArticlesAdapter.setToolManifest(mManifest);
     }
 }
