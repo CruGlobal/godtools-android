@@ -69,7 +69,8 @@ public class AEMDownloadManger {
     private AEMDownloadManger(@NonNull final Context context) {
         mAemDb = ArticleRoomDatabase.getInstance(context);
         mDao = GodToolsDao.getInstance(context);
-        mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS, new PriorityBlockingQueue<>(),
+        mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,
+                                           new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
                                            new NamedThreadFactory(AEMDownloadManger.class.getSimpleName()));
         mManifestManager = ManifestManager.getInstance(context);
 
