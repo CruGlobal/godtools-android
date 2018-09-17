@@ -9,13 +9,10 @@ import android.support.annotation.UiThread;
 
 import org.cru.godtools.base.model.Event;
 
-import java.util.Locale;
-
 public interface AnalyticsService {
     /* Action event names */
     String ACTION_SHARE = "Share Icon Engaged";
     String ACTION_EXIT_LINK = "Exit Link Engaged";
-    String ACTION_TOGGLE_LANGUAGE = "Parallel Language Toggled";
 
     /* Legacy constants */
     String CATEGORY_CONTENT_EVENT = "Content Event";
@@ -36,9 +33,6 @@ public interface AnalyticsService {
 
     @AnyThread
     default void onTrackExitUrl(@NonNull final Uri url) {}
-
-    @AnyThread
-    default void onTrackToggleLanguage(@NonNull final Locale newLocale) {}
 
     @AnyThread
     default void onTrackContentEvent(@NonNull Event event) {}
