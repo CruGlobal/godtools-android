@@ -90,6 +90,4 @@ public class ArticleAdapter extends SimpleDataBindingAdapter<ListItemArticleBind
          */
         void onArticleSelected(Article article);
     }
-
-
 }

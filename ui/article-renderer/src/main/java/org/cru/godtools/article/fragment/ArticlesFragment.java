@@ -84,8 +84,6 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
 
             ArticleViewModel viewModel = ArticleViewModel.getInstance(getActivity());
 
-
-
             viewModel.getArticlesByManifest(mManifestKey).observe(this, articles -> {
                 // This will be triggered by any change to the database
                 mAdapter.setArticles(articles);
