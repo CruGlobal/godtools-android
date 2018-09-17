@@ -111,7 +111,7 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onAnalyticsActionEvent(@NonNull final AnalyticsActionEvent event) {
         if (event.isForSystem(AnalyticsSystem.ADOBE)) {
-            trackAction(event.getAction(), event.getAttributes());
+            trackAction(event.getAction(), event, event.getAttributes());
         }
     }
 
@@ -129,21 +129,22 @@ public final class AdobeAnalyticsService implements AnalyticsService {
 
     @Override
     public void onTrackShareAction() {
-        trackAction(ACTION_SHARE, Collections.singletonMap(KEY_SHARE_CONTENT, null));
+        trackAction(ACTION_SHARE, null, Collections.singletonMap(KEY_SHARE_CONTENT, null));
     }
 
     @Override
     public void onTrackExitUrl(@NonNull final Uri url) {
-        trackAction(ACTION_EXIT_LINK, Collections.singletonMap(KEY_EXIT_LINK, url.toString()));
+        trackAction(ACTION_EXIT_LINK, null, Collections.singletonMap(KEY_EXIT_LINK, url.toString()));
     }
 
     // endregion Tracking Methods
 
     @AnyThread
-    private void trackAction(@NonNull final String action, @Nullable final Map<String, ?> attributes) {
+    private void trackAction(@NonNull final String action, @Nullable final AnalyticsActionEvent event,
+                             @Nullable final Map<String, ?> attributes) {
         final String guid = mTheKey.getDefaultSessionGuid();
         mAnalyticsExecutor.execute(() -> {
-            final Map<String, Object> data = baseContextData(guid, null);
+            final Map<String, Object> data = baseContextData(guid, event);
             if (mPreviousScreenName != null) {
                 data.put(KEY_SCREEN_NAME, mPreviousScreenName);
             }

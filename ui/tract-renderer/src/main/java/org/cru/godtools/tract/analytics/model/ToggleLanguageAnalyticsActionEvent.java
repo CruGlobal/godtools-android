@@ -40,4 +40,10 @@ public final class ToggleLanguageAnalyticsActionEvent extends AnalyticsActionEve
     public Map<String, ?> getAttributes() {
         return mAttrs;
     }
+
+    @Nullable
+    @Override
+    public String getAdobeSiteSection() {
+        return mTract;
+    }
 }
