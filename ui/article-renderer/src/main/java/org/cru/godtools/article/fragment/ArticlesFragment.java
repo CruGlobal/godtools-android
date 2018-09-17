@@ -1,6 +1,11 @@
 package org.cru.godtools.article.fragment;
 
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
@@ -12,10 +17,11 @@ import android.view.ViewGroup;
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.R2;
 import org.cru.godtools.article.adapter.ArticleAdapter;
+import org.cru.godtools.articles.aem.db.ManifestAssociationRepository;
 import org.cru.godtools.articles.aem.model.Article;
-import org.cru.godtools.articles.aem.view_model.ArticleViewModel;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -32,7 +38,10 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
     @Nullable
     ArticleAdapter mArticlesAdapter;
 
-    String mManifestKey;
+    String mManifestKey = "";
+
+    @NonNull
+    private /*final*/ ArticleListViewModel mViewModel;
 
     public static ArticlesFragment newInstance(@NonNull final String code, @NonNull final Locale locale,
                                                String manifestKey) {
@@ -46,10 +55,15 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
 
     // region LifeCycle Events
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mManifestKey = getArguments() != null ? getArguments().getString(MANIFEST_KEY) : "";
+        final Bundle args = getArguments();
+        if (args != null) {
+            mManifestKey = args.getString(MANIFEST_KEY, mManifestKey);
+        }
+
+        mViewModel = ViewModelProviders.of(this).get(ArticleListViewModel.class);
     }
 
     @Nullable
@@ -73,6 +87,8 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
 
     // endregion LifeCycle Events
 
+    // region ArticlesView
+
     /**
      * This method will initialize all of the required data for the RecyclerView
      */
@@ -89,11 +105,10 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
             mArticlesView.addItemDecoration(itemDecoration);
             mArticlesView.setAdapter(mArticlesAdapter);
 
-            ArticleViewModel viewModel = ArticleViewModel.getInstance(getActivity());
-
-            viewModel.getArticlesByManifest(mManifestKey).observe(this, articles -> {
-                // This will be triggered by any change to the database
-                mArticlesAdapter.setArticles(articles);
+            mViewModel.getArticles(mManifestKey).observe(this, articles -> {
+                if (mArticlesAdapter != null) {
+                    mArticlesAdapter.setArticles(articles);
+                }
             });
         }
     }
@@ -104,6 +119,8 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
         }
         mArticlesAdapter = null;
     }
+
+    // endregion ArticlesView
 
     /**
      * This is the Override method from ArticleAdapter that will handle the functionality of an article
@@ -124,5 +141,24 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
     protected void onManifestUpdated() {
         super.onManifestUpdated();
         mArticlesAdapter.setToolManifest(mManifest);
+    }
+
+    static class ArticleListViewModel extends AndroidViewModel {
+        @Nullable
+        private LiveData<List<Article>> mArticles;
+
+        public ArticleListViewModel(@NonNull final Application application) {
+            super(application);
+        }
+
+        @NonNull
+        @MainThread
+        LiveData<List<Article>> getArticles(@Nullable final String manifestKey) {
+            if (mArticles == null) {
+                mArticles = new ManifestAssociationRepository(getApplication()).getArticlesByManifestID(manifestKey);
+            }
+
+            return mArticles;
+        }
     }
 }
