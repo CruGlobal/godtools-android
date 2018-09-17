@@ -28,17 +28,17 @@ public class ArticlesActivity extends BaseSingleToolActivity {
     }
 
     public ArticlesActivity() {
-        super(true);
+        super(false);
     }
     //endregion
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_article_articles);
         if (getIntent().hasExtra(CATEGORY_KEY)) {
             mCategoryID = getIntent().getStringExtra(CATEGORY_KEY);
         }
+        setContentView(R.layout.activity_article_articles);
     }
 
     @Override

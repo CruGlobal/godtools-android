@@ -19,6 +19,41 @@ public class ArticleAdapter extends SimpleDataBindingAdapter<ListItemArticleBind
     @Nullable
     private Manifest mManifest;
 
+    //region Setters
+
+    /**
+     * This method initialized the Callback interface used on the Item click event.
+     *
+     * @param callbacks this interface used for this click event
+     */
+    public void setCallbacks(Callback callbacks) {
+        this.mCallback = callbacks;
+        notifyItemRangeChanged(0, getItemCount());
+    }
+
+    /**
+     *  This method initializes the manifest used for data on each item in this adapter.
+     *
+     * @param manifest the Manifest Object to be used.
+     */
+    public void setToolManifest(Manifest manifest) {
+        this.mManifest = manifest;
+        notifyItemRangeChanged(0, getItemCount());
+    }
+
+    /**
+     * This method is called to set the list of articles.  Used by Live Data to update list
+     *
+     * @param articles list of Articles
+     */
+    public void setArticles(List<Article> articles) {
+        mArticles = articles;
+        notifyDataSetChanged();
+    }
+    //endregion
+
+    //region LifeCycle Methods
+
     @NonNull
     @Override
     protected ListItemArticleBinding onCreateViewDataBinding(@NonNull ViewGroup parent, int viewType) {
@@ -33,16 +68,6 @@ public class ArticleAdapter extends SimpleDataBindingAdapter<ListItemArticleBind
         binding.setManifest(mManifest);
     }
 
-    public void setCallbacks(Callback callbacks) {
-        this.mCallback = callbacks;
-        notifyItemRangeChanged(0, getItemCount());
-    }
-
-    public void setToolManifest(Manifest manifest) {
-        this.mManifest = manifest;
-        notifyItemRangeChanged(0, getItemCount());
-    }
-
     @Override
     protected void onViewDataBindingRecycled(@NonNull ListItemArticleBinding binding) {
         super.onViewDataBindingRecycled(binding);
@@ -50,22 +75,21 @@ public class ArticleAdapter extends SimpleDataBindingAdapter<ListItemArticleBind
         binding.setCallback(null);
     }
 
+    //endregion
+
     @Override
     public int getItemCount() {
         return mArticles != null ? mArticles.size() : 0;
     }
 
     public interface Callback {
+        /**
+         * This method will return the select Article Object in the List.
+         *
+         * @param article the selected Article
+         */
         void onArticleSelected(Article article);
     }
 
-    /**
-     * This method is called to set the list of articles.  Used by Live Data to update list
-     *
-     * @param articles list of Articles
-     */
-    public void setArticles(List<Article> articles) {
-        mArticles = articles;
-        notifyDataSetChanged();
-    }
+
 }

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +31,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
     RecyclerView mArticlesView;
 
     ArticleAdapter mAdapter;
+    String mManifestKey;
 
     public static ArticlesFragment newInstance(@NonNull final String code, @NonNull final Locale locale,
                                                String manifestKey) {
@@ -41,6 +41,14 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
         args.putString(MANIFEST_KEY, manifestKey);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    // region LifeCycle Events
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mManifestKey = getArguments() != null ? getArguments().getString(MANIFEST_KEY) : "";
     }
 
     @Nullable
@@ -56,7 +64,11 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
         super.onActivityCreated(savedInstanceState);
         setupArticleRecyclerView();
     }
+    //endregion
 
+    /**
+     * This method will initialize all of the required data for the RecyclerView
+     */
     private void setupArticleRecyclerView() {
         if (mArticlesView != null) {
             mAdapter = new ArticleAdapter();
@@ -68,25 +80,34 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
                     .getDrawable(R.drawable.divider));
 
             mArticlesView.addItemDecoration(itemDecoration);
-            mArticlesView.setLayoutManager(new LinearLayoutManager(getActivity()));
             mArticlesView.setAdapter(mAdapter);
 
             ArticleViewModel viewModel = ArticleViewModel.getInstance(getActivity());
 
-            String manifestKey = getArguments() != null ? getArguments().getString(MANIFEST_KEY) : "";
 
-            viewModel.getArticlesByManifest(manifestKey).observe(this, articles -> {
+
+            viewModel.getArticlesByManifest(mManifestKey).observe(this, articles -> {
                 // This will be triggered by any change to the database
                 mAdapter.setArticles(articles);
             });
         }
     }
 
+    /**
+     * This is the Override method from ArticleAdapter that will handle the functionality of an article
+     * being selected from the list.
+     *
+     * @param article the selected Article
+     */
     @Override
     public void onArticleSelected(Article article) {
-        Timber.d("You selected %s as your article", article.mTitle);
+        Timber.tag(TAG).d("You selected \"%s\" as your article", article.mTitle);
     }
 
+    /**
+     * This is the Override Method from BaseToolFragment.  This is fired anytime the Manifest Object is
+     * updated and will update the adapter of it's changes.
+     */
     @Override
     protected void onManifestUpdated() {
         super.onManifestUpdated();
