@@ -3,6 +3,7 @@ package org.cru.godtools.articles.aem.db;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
+import android.arch.persistence.room.Query;
 import android.support.annotation.NonNull;
 
 import org.cru.godtools.articles.aem.model.AemImport;
@@ -11,7 +12,10 @@ import org.cru.godtools.articles.aem.model.TranslationRef;
 import java.util.List;
 
 @Dao
-abstract class AemImportDao {
+public abstract class AemImportDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract void insertOrIgnore(@NonNull List<AemImport> imports, List<TranslationRef.TranslationAemImport> translationRefs);
+
+    @Query("SELECT * FROM aemImports")
+    public abstract List<AemImport> getAll();
 }

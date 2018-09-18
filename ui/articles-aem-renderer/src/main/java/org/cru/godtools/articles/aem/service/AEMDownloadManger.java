@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
+import com.annimon.stream.Stream;
 import com.google.common.util.concurrent.Futures;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
@@ -16,6 +17,7 @@ import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.db.AttachmentRepository;
 import org.cru.godtools.articles.aem.db.ManifestAssociationRepository;
 import org.cru.godtools.articles.aem.db.TranslationRepository;
+import org.cru.godtools.articles.aem.model.AemImport;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.articles.aem.model.ManifestAssociation;
@@ -104,13 +106,22 @@ public class AEMDownloadManger {
     private void enqueueExtractAemImportsFromManifests() {
         // only enqueue task if it's not currently enqueued
         if (!mExtractAemImportsQueued.getAndSet(true)) {
-            mExecutor.execute(new ExtractAemImportsFromManifestsTask());
+            mExecutor.execute(() -> {
+                extractAemImportsFromManifestsTask();
+                enqueueSyncStaleAemImports();
+            });
         }
     }
 
     @AnyThread
-    private void enqueueStaleAemImport() {
-        // TODO
+    private void enqueueSyncStaleAemImports() {
+        mExecutor.execute(this::syncStaleAemImportsTask);
+    }
+
+    @AnyThread
+    private void enqueueSyncAemImport(@NonNull final Uri uri, final boolean force) {
+        // TODO: don't queue multiple syncs for the same uri. We should override a non-forced sync with a forced sync.
+        mExecutor.execute(() -> syncAemImportTask(uri, force));
     }
 
     // endregion Task Scheduling Methods
@@ -152,8 +163,10 @@ public class AEMDownloadManger {
      * This task is responsible for triggering syncs of any stale Aem Imports
      */
     @WorkerThread
-    void syncStaleAemImports() {
-        // TODO
+    void syncStaleAemImportsTask() {
+        Stream.of(mAemDb.aemImportDao().getAll())
+                .filterNot(AemImport::isStale)
+                .forEach(i -> enqueueSyncAemImport(i.uri, false));
     }
 
     /**
@@ -315,15 +328,4 @@ public class AEMDownloadManger {
             repository.updateAttachment(attachment);
         }
     }
-
-    // region Task PriorityRunnables
-
-    class ExtractAemImportsFromManifestsTask extends PriorityRunnable {
-        @Override
-        public void run() {
-            extractAemImportsFromManifestsTask();
-        }
-    }
-
-    // endregion Task PriorityRunnables
 }
