@@ -14,7 +14,8 @@ import java.util.List;
 @Dao
 public abstract class AemImportDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    abstract void insertOrIgnore(@NonNull List<AemImport> imports, List<TranslationRef.TranslationAemImport> translationRefs);
+    abstract void insertOrIgnore(@NonNull List<AemImport> imports,
+                                 @NonNull List<TranslationRef.TranslationAemImport> translationRefs);
 
     @Query("SELECT * FROM aemImports")
     public abstract List<AemImport> getAll();
