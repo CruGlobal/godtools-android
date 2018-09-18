@@ -23,7 +23,6 @@ import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import butterknife.BindView;
 import timber.log.Timber;
@@ -116,17 +115,13 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
      */
     private void setupArticlesView() {
         if (mArticlesView != null) {
+            mArticlesView.addItemDecoration(
+                    new DividerItemDecoration(mArticlesView.getContext(), DividerItemDecoration.VERTICAL));
+
             mArticlesAdapter = new ArticleAdapter();
             mArticlesAdapter.setCallbacks(this);
-            DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(),
-                    DividerItemDecoration.VERTICAL);
-            itemDecoration.setDrawable(Objects.requireNonNull(getActivity()).getResources()
-                    .getDrawable(R.drawable.divider));
-
-            mArticlesView.addItemDecoration(itemDecoration);
-            mArticlesView.setAdapter(mArticlesAdapter);
-
             mViewModel.getArticles(mManifestKey).observe(this, mArticlesAdapter);
+            mArticlesView.setAdapter(mArticlesAdapter);
 
             updateArticlesViewManifest();
         }
