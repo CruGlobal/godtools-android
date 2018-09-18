@@ -42,6 +42,7 @@ android {
     }
     lintOptions {
         lintConfig rootProject.file("analysis/lint/lint.xml")
+        checkDependencies true
     }
     packagingOptions {
         pickFirst 'META-INF/NOTICE.txt'

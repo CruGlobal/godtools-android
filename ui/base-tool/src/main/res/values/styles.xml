@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.GodTools.Tool" parent="Theme.AppCompat">
-        <item name="actionBarTheme">@style/ThemeOverlay.GodTools.Tool.Toolbar.AppBar</item>
-        <item name="toolbarStyle">@style/Widget.GodTools.Tool.Toolbar.AppBar</item>
-    </style>
+    <style name="Theme.GodTools.Tool" />
 
-    <style name="Theme.GodTools.Tool.AppBar" >
+    <style name="Theme.GodTools.Tool.AppBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionModeOverlay">true</item>
@@ -15,8 +12,4 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
-    <style name="Widget.GodTools.Tool.Toolbar.AppBar" parent="Widget.AppCompat.Toolbar" />
-
-    <style name="ThemeOverlay.GodTools.Tool.Toolbar.AppBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 </resources>
