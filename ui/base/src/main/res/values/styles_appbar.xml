@@ -2,11 +2,11 @@
 <resources>
     <color name="action_bar_action_tint">@color/white</color>
 
-    <style name="Widget.GodTools.ActionBar.Solid" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
+    <style name="Widget.GodTools.ActionBar.Solid" parent="Widget.AppCompat.Light.ActionBar.Solid">
         <item name="displayOptions">showHome|showTitle</item>
     </style>
 
-    <style name="Widget.GodTools.Toolbar.AppBar" parent="@style/Widget.AppCompat.Toolbar">
+    <style name="Widget.GodTools.Toolbar.AppBar" parent="Widget.AppCompat.Toolbar">
         <item name="popupTheme">?attr/actionBarPopupTheme</item>
     </style>
 
