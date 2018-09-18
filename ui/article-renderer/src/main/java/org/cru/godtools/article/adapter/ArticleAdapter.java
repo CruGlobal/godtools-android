@@ -1,17 +1,20 @@
 package org.cru.godtools.article.adapter;
 
+import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import org.cru.godtools.article.databinding.ListItemArticleBinding;
+
 import org.ccci.gto.android.common.recyclerview.adapter.SimpleDataBindingAdapter;
+import org.cru.godtools.article.databinding.ListItemArticleBinding;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.xml.model.Manifest;
 
 import java.util.List;
 
-public class ArticleAdapter extends SimpleDataBindingAdapter<ListItemArticleBinding> {
+public class ArticleAdapter extends SimpleDataBindingAdapter<ListItemArticleBinding>
+        implements Observer<List<Article>> {
     @Nullable
     private List<Article> mArticles;
     @Nullable
@@ -26,18 +29,18 @@ public class ArticleAdapter extends SimpleDataBindingAdapter<ListItemArticleBind
      *
      * @param callbacks this interface used for this click event
      */
-    public void setCallbacks(Callback callbacks) {
-        this.mCallback = callbacks;
+    public void setCallbacks(@Nullable final Callback callbacks) {
+        mCallback = callbacks;
         notifyItemRangeChanged(0, getItemCount());
     }
 
     /**
-     *  This method initializes the manifest used for data on each item in this adapter.
+     * This method initializes the manifest used for data on each item in this adapter.
      *
      * @param manifest the Manifest Object to be used.
      */
-    public void setToolManifest(Manifest manifest) {
-        this.mManifest = manifest;
+    public void setToolManifest(@Nullable final Manifest manifest) {
+        mManifest = manifest;
         notifyItemRangeChanged(0, getItemCount());
     }
 
@@ -46,22 +49,28 @@ public class ArticleAdapter extends SimpleDataBindingAdapter<ListItemArticleBind
      *
      * @param articles list of Articles
      */
-    public void setArticles(List<Article> articles) {
+    public void setArticles(@Nullable final List<Article> articles) {
         mArticles = articles;
         notifyDataSetChanged();
     }
+
     //endregion
 
     //region LifeCycle Methods
 
+    @Override
+    public void onChanged(@Nullable final List<Article> articles) {
+        setArticles(articles);
+    }
+
     @NonNull
     @Override
-    protected ListItemArticleBinding onCreateViewDataBinding(@NonNull ViewGroup parent, int viewType) {
+    protected ListItemArticleBinding onCreateViewDataBinding(@NonNull final ViewGroup parent, final int viewType) {
         return ListItemArticleBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
     }
 
     @Override
-    protected void onBindViewDataBinding(ListItemArticleBinding binding, int position) {
+    protected void onBindViewDataBinding(@NonNull final ListItemArticleBinding binding, final int position) {
         assert mArticles != null : "Article must be defined to bind";
         binding.setCallback(mCallback);
         binding.setArticle(mArticles.get(position));
@@ -69,10 +78,10 @@ public class ArticleAdapter extends SimpleDataBindingAdapter<ListItemArticleBind
     }
 
     @Override
-    protected void onViewDataBindingRecycled(@NonNull ListItemArticleBinding binding) {
-        super.onViewDataBindingRecycled(binding);
+    protected void onViewDataBindingRecycled(@NonNull final ListItemArticleBinding binding) {
         binding.setArticle(null);
         binding.setCallback(null);
+        binding.setManifest(null);
     }
 
     //endregion

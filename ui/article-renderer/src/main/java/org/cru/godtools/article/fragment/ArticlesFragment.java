@@ -54,6 +54,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
     }
 
     // region LifeCycle Events
+
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +80,27 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
         setupArticlesView();
     }
 
+    /**
+     * This is the Override Method from BaseToolFragment. This is fired anytime the Manifest Object is updated and will
+     * update the adapter of it's changes.
+     */
+    @Override
+    protected void onManifestUpdated() {
+        super.onManifestUpdated();
+        updateArticlesViewManifest();
+    }
+
+    /**
+     * This is the callback method from ArticleAdapter that will handle the functionality of an article being selected
+     * from the list.
+     *
+     * @param article the selected Article
+     */
+    @Override
+    public void onArticleSelected(Article article) {
+        Timber.tag(TAG).d("You selected \"%s\" as your article", article.mTitle);
+    }
+
     @Override
     public void onDestroyView() {
         cleanupArticlesView();
@@ -96,7 +118,6 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
         if (mArticlesView != null) {
             mArticlesAdapter = new ArticleAdapter();
             mArticlesAdapter.setCallbacks(this);
-            mArticlesAdapter.setToolManifest(mManifest);
             DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(),
                     DividerItemDecoration.VERTICAL);
             itemDecoration.setDrawable(Objects.requireNonNull(getActivity()).getResources()
@@ -105,51 +126,33 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
             mArticlesView.addItemDecoration(itemDecoration);
             mArticlesView.setAdapter(mArticlesAdapter);
 
-            mViewModel.getArticles(mManifestKey).observe(this, articles -> {
-                if (mArticlesAdapter != null) {
-                    mArticlesAdapter.setArticles(articles);
-                }
-            });
+            mViewModel.getArticles(mManifestKey).observe(this, mArticlesAdapter);
+
+            updateArticlesViewManifest();
+        }
+    }
+
+    private void updateArticlesViewManifest() {
+        if (mArticlesAdapter != null) {
+            mArticlesAdapter.setToolManifest(mManifest);
         }
     }
 
     private void cleanupArticlesView() {
         if (mArticlesAdapter != null) {
             mArticlesAdapter.setCallbacks(null);
+            mViewModel.getArticles(mManifestKey).removeObserver(mArticlesAdapter);
         }
         mArticlesAdapter = null;
     }
 
     // endregion ArticlesView
 
-    /**
-     * This is the Override method from ArticleAdapter that will handle the functionality of an article
-     * being selected from the list.
-     *
-     * @param article the selected Article
-     */
-    @Override
-    public void onArticleSelected(Article article) {
-        Timber.tag(TAG).d("You selected \"%s\" as your article", article.mTitle);
-    }
-
-    /**
-     * This is the Override Method from BaseToolFragment.  This is fired anytime the Manifest Object is
-     * updated and will update the adapter of it's changes.
-     */
-    @Override
-    protected void onManifestUpdated() {
-        super.onManifestUpdated();
-        if (mArticlesAdapter != null) {
-            mArticlesAdapter.setToolManifest(mManifest);
-        }
-    }
-
-    static class ArticleListViewModel extends AndroidViewModel {
+    public static class ArticleListViewModel extends AndroidViewModel {
         @Nullable
         private LiveData<List<Article>> mArticles;
 
-        ArticleListViewModel(@NonNull final Application application) {
+        public ArticleListViewModel(@NonNull final Application application) {
             super(application);
         }
 
