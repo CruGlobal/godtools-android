@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.ccci.gto.android.common.recyclerview.decorator.VerticalSpaceItemDecoration;
+import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.R2;
 import org.cru.godtools.article.adapter.CategoriesAdapter;
@@ -20,9 +21,12 @@ import org.cru.godtools.xml.model.Category;
 import java.util.Locale;
 
 import butterknife.BindView;
-import timber.log.Timber;
 
 public class CategoriesFragment extends BaseToolFragment implements CategoriesAdapter.Callbacks {
+    public interface Callbacks {
+        void onCategorySelected(@Nullable Category category);
+    }
+
     @Nullable
     @BindView(R2.id.categories)
     RecyclerView mCategoriesView;
@@ -61,7 +65,10 @@ public class CategoriesFragment extends BaseToolFragment implements CategoriesAd
 
     @Override
     public void onCategorySelected(@Nullable final Category category) {
-        Timber.d(category != null ? category.getId() : null);
+        final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
+        if (callbacks != null) {
+            callbacks.onCategorySelected(category);
+        }
     }
 
     @Override

@@ -11,10 +11,13 @@ import android.support.v4.app.FragmentManager;
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.fragment.CategoriesFragment;
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity;
+import org.cru.godtools.xml.model.Category;
 
 import java.util.Locale;
 
-public class CategoriesActivity extends BaseSingleToolActivity {
+import timber.log.Timber;
+
+public class CategoriesActivity extends BaseSingleToolActivity implements CategoriesFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
     public static void start(@NonNull final Context context, @NonNull final String toolCode,
@@ -41,6 +44,12 @@ public class CategoriesActivity extends BaseSingleToolActivity {
     protected void onStart() {
         super.onStart();
         loadInitialFragmentIfNeeded();
+    }
+
+    @Override
+    public void onCategorySelected(@Nullable final Category category) {
+        Timber.tag("CategoriesActivity")
+                .d("Category selected: %s", category != null ? category.getId() : null);
     }
 
     // endregion Lifecycle Events
