@@ -34,7 +34,7 @@ public class CategoriesActivity extends BaseSingleToolActivity {
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_article_categories);
+        setContentView(R.layout.activity_generic_fragment);
     }
 
     @Override

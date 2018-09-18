@@ -28,7 +28,7 @@ public final class AboutActivity extends BasePlatformActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_generic_fragment);
+        setContentView(R.layout.activity_generic_fragment_with_nav_drawer);
     }
 
     @Override
