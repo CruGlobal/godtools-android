@@ -7,27 +7,7 @@
     android:layout_height="match_parent"
     tools:openDrawer="start">
 
-    <android.support.design.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/appbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:theme="@style/ThemeOverlay.GodTools.Toolbar.AppBar" />
-        </android.support.design.widget.AppBarLayout>
-
-        <FrameLayout
-            android:id="@+id/frame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-    </android.support.design.widget.CoordinatorLayout>
+    <include layout="@layout/activity_generic_fragment" />
 
     <android.support.design.widget.NavigationView
         android:id="@+id/drawer_menu"
