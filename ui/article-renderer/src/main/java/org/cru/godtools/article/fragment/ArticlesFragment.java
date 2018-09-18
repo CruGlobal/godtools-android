@@ -140,14 +140,16 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
     @Override
     protected void onManifestUpdated() {
         super.onManifestUpdated();
-        mArticlesAdapter.setToolManifest(mManifest);
+        if (mArticlesAdapter != null) {
+            mArticlesAdapter.setToolManifest(mManifest);
+        }
     }
 
     static class ArticleListViewModel extends AndroidViewModel {
         @Nullable
         private LiveData<List<Article>> mArticles;
 
-        public ArticleListViewModel(@NonNull final Application application) {
+        ArticleListViewModel(@NonNull final Application application) {
             super(application);
         }
 
