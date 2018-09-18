@@ -48,7 +48,7 @@ public abstract class TranslationRepository {
         final List<TranslationRef.TranslationAemImport> relations = Stream.of(imports)
                 .map(i -> new TranslationRef.TranslationAemImport(translationKey, i))
                 .toList();
-        mDb.aemImportDao().insert(imports, relations);
+        mDb.aemImportDao().insertOrIgnore(imports, relations);
 
         // mark translation as processed
         mDb.translationDao().markProcessed(translationKey, true);
