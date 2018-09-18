@@ -155,7 +155,8 @@ public class AEMDownloadManger {
                 repository.addAemImports(translation, manifest.getAemImports());
             }
 
-            // TODO: prune any translations that we no longer have downloaded.
+            // prune any translations that we no longer have downloaded.
+            repository.removeMissingTranslations(translations);
         }
     }
 
