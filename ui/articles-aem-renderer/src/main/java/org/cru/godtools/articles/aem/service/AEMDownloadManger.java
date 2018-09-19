@@ -359,6 +359,11 @@ public class AEMDownloadManger {
             mUri = uri;
         }
 
+        @Override
+        protected int getPriority() {
+            return PRIORITY_SYNC_AEM_IMPORT;
+        }
+
         /**
          * Update the force flag for this task, but only before it has started. We never go from forcing the sync to not
          * forcing it.
