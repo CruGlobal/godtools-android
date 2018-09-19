@@ -41,7 +41,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -67,6 +70,9 @@ public class AEMDownloadManger {
     // Task synchronization locks and flags
     private final Object mExtractAemImportsLock = new Object();
     private final AtomicBoolean mExtractAemImportsQueued = new AtomicBoolean(false);
+
+    // Task de-dup related objects
+    private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = Collections.synchronizedMap(new HashMap<>());
 
     private AEMDownloadManger(@NonNull final Context context) {
         mAemDb = ArticleRoomDatabase.getInstance(context);
@@ -120,8 +126,17 @@ public class AEMDownloadManger {
 
     @AnyThread
     private void enqueueSyncAemImport(@NonNull final Uri uri, final boolean force) {
-        // TODO: don't queue multiple syncs for the same uri. We should override a non-forced sync with a forced sync.
-        mExecutor.execute(() -> syncAemImportTask(uri, force));
+        // try updating a task that is currently enqueued
+        final SyncAemImportTask existing = mSyncAemImportTasks.get(uri);
+        if (existing != null && existing.updateTask(force)) {
+            return;
+        }
+
+        // create a new sync task
+        final SyncAemImportTask task = new SyncAemImportTask(uri);
+        task.updateTask(force);
+        mSyncAemImportTasks.put(uri, task);
+        mExecutor.execute(task);
     }
 
     // endregion Task Scheduling Methods
@@ -329,4 +344,44 @@ public class AEMDownloadManger {
             repository.updateAttachment(attachment);
         }
     }
+
+    // region PriorityRunnable Tasks
+
+    private static final int PRIORITY_SYNC_AEM_IMPORT = -30;
+
+    class SyncAemImportTask extends PriorityRunnable {
+        @NonNull
+        private final Uri mUri;
+        private volatile boolean mStarted = false;
+        private volatile boolean mForce = false;
+
+        SyncAemImportTask(@NonNull final Uri uri) {
+            mUri = uri;
+        }
+
+        /**
+         * Update the force flag for this task, but only before it has started. We never go from forcing the sync to not
+         * forcing it.
+         *
+         * @param force whether to force this sync to execute
+         * @return true if the task hasn't started so the update was successful, false if the task has started.
+         */
+        synchronized boolean updateTask(final boolean force) {
+            if (!mStarted) {
+                mForce = mForce || force;
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void run() {
+            synchronized (this) {
+                mStarted = true;
+            }
+            syncAemImportTask(mUri, mForce);
+        }
+    }
+
+    // endregion PriorityRunnable Tasks
 }
