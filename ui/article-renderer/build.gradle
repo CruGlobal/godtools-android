@@ -9,8 +9,10 @@ android {
 dependencies {
     implementation project(':library:base')
 
+    implementation project(':ui:articles-aem-renderer')
     implementation project(':ui:base-tool')
 
+    implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
     implementation "androidx.constraintlayout:constraintlayout:${deps.constraintLayout}"
     implementation "com.android.support:recyclerview-v7:${deps.androidSupport}"
 

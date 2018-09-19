@@ -5,5 +5,8 @@
         <activity
             android:name=".activity.CategoriesActivity"
             android:theme="@style/Theme.GodTools.Tool.AppBar" />
+        <activity
+            android:name=".activity.ArticlesActivity"
+            android:theme="@style/Theme.GodTools.Tool.AppBar"/>
     </application>
 </manifest>
