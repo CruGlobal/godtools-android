@@ -3,6 +3,7 @@ package org.cru.godtools.articles.aem.service;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.AnyThread;
+import android.support.annotation.GuardedBy;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
@@ -12,6 +13,7 @@ import com.google.common.util.concurrent.Futures;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
+import org.ccci.gto.android.common.util.ThreadUtils;
 import org.cru.godtools.articles.aem.db.ArticleRepository;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.db.AttachmentRepository;
@@ -70,6 +72,7 @@ public class AEMDownloadManger {
     // Task synchronization locks and flags
     private final Object mExtractAemImportsLock = new Object();
     private final AtomicBoolean mExtractAemImportsQueued = new AtomicBoolean(false);
+    final Map<Uri, Object> mSyncAemImportLocks = new HashMap<>();
 
     // Task de-dup related objects
     private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = Collections.synchronizedMap(new HashMap<>());
@@ -193,6 +196,7 @@ public class AEMDownloadManger {
      * @param force   This flag indicates that this sync should ignore the lastUpdated time
      */
     @WorkerThread
+    @GuardedBy("mSyncAemImportLocks")
     void syncAemImportTask(@NonNull final Uri baseUri, final boolean force) {
         if (!force) {
             AemImport aemImport = mAemDb.aemImportDao().find(baseUri);
@@ -356,10 +360,12 @@ public class AEMDownloadManger {
 
         @Override
         public void run() {
-            synchronized (this) {
-                mStarted = true;
+            synchronized (ThreadUtils.getLock(mSyncAemImportLocks, mUri)) {
+                synchronized (this) {
+                    mStarted = true;
+                }
+                syncAemImportTask(mUri, mForce);
             }
-            syncAemImportTask(mUri, mForce);
         }
     }
 
