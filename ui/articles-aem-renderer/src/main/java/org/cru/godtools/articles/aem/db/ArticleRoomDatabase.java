@@ -56,7 +56,7 @@ public abstract class ArticleRoomDatabase extends RoomDatabase {
 
     abstract TranslationDao translationDao();
 
-    abstract AemImportDao aemImportDao();
+    public abstract AemImportDao aemImportDao();
 
     abstract ArticleDao articleDao();
 

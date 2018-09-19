@@ -43,6 +43,7 @@ public final class Manifest extends Base implements Styles {
     private static final String XML_CATEGORIES = "categories";
     private static final String XML_PAGES = "pages";
     private static final String XML_PAGES_AEM_IMPORT = "aem-import";
+    private static final String XML_PAGES_AEM_IMPORT_SRC = "src";
     private static final String XML_RESOURCES = "resources";
 
     @ColorInt
@@ -381,7 +382,7 @@ public final class Manifest extends Base implements Styles {
                 case XMLNS_ARTICLE:
                     switch (parser.getName()) {
                         case XML_PAGES_AEM_IMPORT:
-                            final Uri url = parseUrl(parser, "url", null);
+                            final Uri url = parseUrl(parser, XML_PAGES_AEM_IMPORT_SRC, null);
                             if (url != null) {
                                 aemImports.add(url);
                             }

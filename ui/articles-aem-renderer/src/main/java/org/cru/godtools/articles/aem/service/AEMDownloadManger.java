@@ -7,28 +7,44 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
+import com.annimon.stream.Stream;
+import com.google.common.util.concurrent.Futures;
+
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
+import org.ccci.gto.android.common.db.Query;
 import org.cru.godtools.articles.aem.db.ArticleRepository;
+import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.db.AttachmentRepository;
 import org.cru.godtools.articles.aem.db.ManifestAssociationRepository;
+import org.cru.godtools.articles.aem.db.TranslationRepository;
+import org.cru.godtools.articles.aem.model.AemImport;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.articles.aem.model.ManifestAssociation;
 import org.cru.godtools.articles.aem.service.support.ArticleParser;
 import org.cru.godtools.base.util.PriorityRunnable;
+import org.cru.godtools.model.Tool;
+import org.cru.godtools.model.Translation;
 import org.cru.godtools.model.event.TranslationUpdateEvent;
 import org.cru.godtools.xml.model.Manifest;
+import org.cru.godtools.xml.service.ManifestManager;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.keynote.godtools.android.db.Contract.ToolTable;
+import org.keynote.godtools.android.db.Contract.TranslationTable;
+import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -46,15 +62,25 @@ import okhttp3.Response;
 public class AEMDownloadManger {
     private static final int TASK_CONCURRENCY = 4;
 
+    private final ArticleRoomDatabase mAemDb;
+    private final GodToolsDao mDao;
     private final ThreadPoolExecutor mExecutor;
+    private final ManifestManager mManifestManager;
 
     // Task synchronization locks and flags
     private final Object mExtractAemImportsLock = new Object();
     private final AtomicBoolean mExtractAemImportsQueued = new AtomicBoolean(false);
 
+    // Task de-dup related objects
+    private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = Collections.synchronizedMap(new HashMap<>());
+
     private AEMDownloadManger(@NonNull final Context context) {
-        mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS, new PriorityBlockingQueue<>(),
+        mAemDb = ArticleRoomDatabase.getInstance(context);
+        mDao = GodToolsDao.getInstance(context);
+        mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,
+                                           new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
                                            new NamedThreadFactory(AEMDownloadManger.class.getSimpleName()));
+        mManifestManager = ManifestManager.getInstance(context);
 
         EventBus.getDefault().register(this);
     }
@@ -86,13 +112,31 @@ public class AEMDownloadManger {
     private void enqueueExtractAemImportsFromManifests() {
         // only enqueue task if it's not currently enqueued
         if (!mExtractAemImportsQueued.getAndSet(true)) {
-            mExecutor.execute(new ExtractAemImportsFromManifestsTask());
+            mExecutor.execute(() -> {
+                extractAemImportsFromManifestsTask();
+                enqueueSyncStaleAemImports();
+            });
         }
     }
 
     @AnyThread
-    private void enqueueStaleAemImport() {
-        // TODO
+    private void enqueueSyncStaleAemImports() {
+        mExecutor.execute(this::syncStaleAemImportsTask);
+    }
+
+    @AnyThread
+    private void enqueueSyncAemImport(@NonNull final Uri uri, final boolean force) {
+        // try updating a task that is currently enqueued
+        final SyncAemImportTask existing = mSyncAemImportTasks.get(uri);
+        if (existing != null && existing.updateTask(force)) {
+            return;
+        }
+
+        // create a new sync task
+        final SyncAemImportTask task = new SyncAemImportTask(uri);
+        task.updateTask(force);
+        mSyncAemImportTasks.put(uri, task);
+        mExecutor.execute(task);
     }
 
     // endregion Task Scheduling Methods
@@ -107,7 +151,27 @@ public class AEMDownloadManger {
     void extractAemImportsFromManifestsTask() {
         synchronized (mExtractAemImportsLock) {
             mExtractAemImportsQueued.set(false);
-            // TODO
+
+            // load all downloaded translations of the "article" tool type
+            final Query<Translation> query = Query.select(Translation.class)
+                    .join(TranslationTable.SQL_JOIN_TOOL)
+                    .where(ToolTable.FIELD_TYPE.eq(Tool.Type.ARTICLE).and(TranslationTable.SQL_WHERE_DOWNLOADED));
+            final List<Translation> translations = mDao.get(query);
+
+            final TranslationRepository repository = mAemDb.translationRepository();
+            for (final Translation translation : translations) {
+                // skip any translation we have already processed
+                if (repository.isProcessed(translation)) {
+                    continue;
+                }
+
+                // add AEM imports extracted from the manifest to the AEM article cache
+                final Manifest manifest = Futures.getUnchecked(mManifestManager.getManifest(translation));
+                repository.addAemImports(translation, manifest.getAemImports());
+            }
+
+            // prune any translations that we no longer have downloaded.
+            repository.removeMissingTranslations(translations);
         }
     }
 
@@ -115,8 +179,10 @@ public class AEMDownloadManger {
      * This task is responsible for triggering syncs of any stale Aem Imports
      */
     @WorkerThread
-    void syncStaleAemImports() {
-        // TODO
+    void syncStaleAemImportsTask() {
+        Stream.of(mAemDb.aemImportDao().getAll())
+                .filterNot(AemImport::isStale)
+                .forEach(i -> enqueueSyncAemImport(i.uri, false));
     }
 
     /**
@@ -279,14 +345,48 @@ public class AEMDownloadManger {
         }
     }
 
-    // region Task PriorityRunnables
+    // region PriorityRunnable Tasks
 
-    class ExtractAemImportsFromManifestsTask extends PriorityRunnable {
+    private static final int PRIORITY_SYNC_AEM_IMPORT = -30;
+
+    class SyncAemImportTask extends PriorityRunnable {
+        @NonNull
+        private final Uri mUri;
+        private volatile boolean mStarted = false;
+        private volatile boolean mForce = false;
+
+        SyncAemImportTask(@NonNull final Uri uri) {
+            mUri = uri;
+        }
+
+        @Override
+        protected int getPriority() {
+            return PRIORITY_SYNC_AEM_IMPORT;
+        }
+
+        /**
+         * Update the force flag for this task, but only before it has started. We never go from forcing the sync to not
+         * forcing it.
+         *
+         * @param force whether to force this sync to execute
+         * @return true if the task hasn't started so the update was successful, false if the task has started.
+         */
+        synchronized boolean updateTask(final boolean force) {
+            if (!mStarted) {
+                mForce = mForce || force;
+                return true;
+            }
+            return false;
+        }
+
         @Override
         public void run() {
-            extractAemImportsFromManifestsTask();
+            synchronized (this) {
+                mStarted = true;
+            }
+            syncAemImportTask(mUri, mForce);
         }
     }
 
-    // endregion Task PriorityRunnables
+    // endregion PriorityRunnable Tasks
 }

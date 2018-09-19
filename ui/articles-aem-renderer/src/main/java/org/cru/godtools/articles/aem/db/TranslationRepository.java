@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
 
+import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 
 import org.cru.godtools.articles.aem.model.AemImport;
@@ -13,6 +14,7 @@ import org.cru.godtools.articles.aem.model.TranslationRef;
 import org.cru.godtools.model.Translation;
 
 import java.util.List;
+import java.util.Set;
 
 @Dao
 public abstract class TranslationRepository {
@@ -48,11 +50,26 @@ public abstract class TranslationRepository {
         final List<TranslationRef.TranslationAemImport> relations = Stream.of(imports)
                 .map(i -> new TranslationRef.TranslationAemImport(translationKey, i))
                 .toList();
-        mDb.aemImportDao().insert(imports, relations);
+        mDb.aemImportDao().insertOrIgnore(imports, relations);
 
         // mark translation as processed
         mDb.translationDao().markProcessed(translationKey, true);
 
         return true;
+    }
+
+    @Transaction
+    @WorkerThread
+    public void removeMissingTranslations(@NonNull final List<Translation> translationsToKeep) {
+        final Set<TranslationRef.Key> keys = Stream.of(translationsToKeep)
+                .map(TranslationRef.Key::from)
+                .withoutNulls()
+                .collect(Collectors.toSet());
+
+        final List<TranslationRef> orphans = Stream.of(mDb.translationDao().getAll())
+                .filterNot(t -> keys.contains(t.key))
+                .toList();
+
+        mDb.translationDao().remove(orphans);
     }
 }

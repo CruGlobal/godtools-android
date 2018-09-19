@@ -122,7 +122,8 @@ public final class GodToolsDownloadManager {
         mEventBus = EventBus.getDefault();
         mHandler = new Handler(Looper.getMainLooper());
         mPrefs = Settings.getInstance(mContext);
-        mExecutor = new ThreadPoolExecutor(0, DOWNLOAD_CONCURRENCY, 10, TimeUnit.SECONDS, new PriorityBlockingQueue<>(),
+        mExecutor = new ThreadPoolExecutor(0, DOWNLOAD_CONCURRENCY, 10, TimeUnit.SECONDS,
+                                           new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
                                            new NamedThreadFactory(GodToolsDownloadManager.class.getSimpleName()));
 
         // register with EventBus
@@ -873,10 +874,10 @@ public final class GodToolsDownloadManager {
 
     // region Task PriorityRunnables
 
-    private static final int PRIORITY_PRIMARY = -10;
-    private static final int PRIORITY_ATTACHMENT = 0;
-    private static final int PRIORITY_PARALLEL = 10;
-    private static final int PRIORITY_OTHER = 20;
+    private static final int PRIORITY_PRIMARY = -40;
+    private static final int PRIORITY_ATTACHMENT = -30;
+    private static final int PRIORITY_PARALLEL = -20;
+    private static final int PRIORITY_OTHER = -10;
     private static final int PRIMARY_PRUNE_FILESYSTEM = Integer.MAX_VALUE;
 
     final class DownloadTranslationRunnable extends PriorityRunnable {
