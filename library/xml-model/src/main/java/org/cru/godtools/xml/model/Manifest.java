@@ -17,6 +17,7 @@ import com.google.common.collect.ImmutableList;
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.cru.godtools.xml.R;
 import org.cru.godtools.xml.model.Text.Align;
+import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -33,6 +34,9 @@ import static org.cru.godtools.xml.model.Utils.parseUrl;
 
 public final class Manifest extends Base implements Styles {
     private static final String XML_MANIFEST = "manifest";
+    private static final String XML_TYPE = "type";
+    private static final String XML_TYPE_ARTICLE = "article";
+    private static final String XML_TYPE_TRACT = "tract";
     private static final String XML_TITLE = "title";
     private static final String XML_NAVBAR_COLOR = "navbar-color";
     private static final String XML_NAVBAR_CONTROL_COLOR = "navbar-control-color";
@@ -52,6 +56,28 @@ public final class Manifest extends Base implements Styles {
     private static final ImageScaleType DEFAULT_BACKGROUND_IMAGE_SCALE_TYPE = ImageScaleType.FILL;
     private static final int DEFAULT_BACKGROUND_IMAGE_GRAVITY = ImageGravity.CENTER;
 
+    private enum Type {
+        TRACT, ARTICLE, UNKNOWN;
+
+        public static final Type DEFAULT = TRACT;
+
+        @Nullable
+        @Contract("_, !null -> !null")
+        static Type parse(@Nullable final String value, @Nullable final Type defValue) {
+            if (value != null) {
+                switch (value) {
+                    case XML_TYPE_ARTICLE:
+                        return ARTICLE;
+                    case XML_TYPE_TRACT:
+                        return TRACT;
+                    default:
+                        return UNKNOWN;
+                }
+            }
+            return defValue;
+        }
+    }
+
     @NonNull
     private final String mManifestName;
 
@@ -60,6 +86,8 @@ public final class Manifest extends Base implements Styles {
     private final String mCode;
     @NonNull
     private final Locale mLocale;
+    @NonNull
+    private Type mType = Type.DEFAULT;
 
     @ColorInt
     private int mPrimaryColor = DEFAULT_PRIMARY_COLOR;
@@ -256,6 +284,9 @@ public final class Manifest extends Base implements Styles {
     @WorkerThread
     private Manifest parse(@NonNull final XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, XMLNS_MANIFEST, XML_MANIFEST);
+
+        // tool meta-data
+        mType = Type.parse(parser.getAttributeValue(null, XML_TYPE), mType);
 
         mPrimaryColor = parseColor(parser, XML_PRIMARY_COLOR, mPrimaryColor);
         mPrimaryTextColor = parseColor(parser, XML_PRIMARY_TEXT_COLOR, mPrimaryTextColor);
