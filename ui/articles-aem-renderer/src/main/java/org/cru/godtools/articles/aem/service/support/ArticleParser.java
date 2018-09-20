@@ -6,6 +6,8 @@ import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+
+import timber.log.Timber;
 
 /**
  * This class handles parsing any AEM json calls into DOA objects.
@@ -31,16 +35,15 @@ public class ArticleParser {
     private static final String ORDER_FOLDER_TAG = "sling:OrderedFolder";
     private static final String PAGE_TAG = "cq:Page";
 
-    private static final String ARTICLE_BASE_URL = BASE_URL + "/content/experience-fragments/questions_about_god";
-
     //region Public Executor
     /**
      * This executes the parsing of the local JsonObject.
      *
      * @return return a list of {@link Article}
      */
-    public static List<Article> parse(@NonNull final JSONObject articleJSON) {
-        return jsonObjectHandler(articleJSON, new ArrayList<>());
+    public static List<Article> parse(@NonNull final JSONObject articleJSON, String url) {
+        String baseURL = getArticleBaseUrl(url);
+        return jsonObjectHandler(articleJSON, new ArrayList<>(), baseURL);
     }
     //endregion public Executor
 
@@ -52,10 +55,12 @@ public class ArticleParser {
      *
      * @param evaluatingObject the Json Object to be evaluated.
      * @param urlParams
+     * @param baseURL
      * @return All the articles that were parsed
      */
     @NonNull
-    private static List<Article> jsonObjectHandler(JSONObject evaluatingObject, List<String> urlParams) {
+    private static List<Article> jsonObjectHandler(JSONObject evaluatingObject,
+                                                   List<String> urlParams, String baseURL) {
         final List<Article> articles = new ArrayList<>();
 
         // Create loop through Keys
@@ -68,12 +73,12 @@ public class ArticleParser {
                     urlParams.add(nextKey);
                     switch (returnedObject.optString(PRIMARY_TYPE_TAG)) {
                         case ORDER_FOLDER_TAG:
-                            jsonObjectHandler(returnedObject, urlParams);
+                            articles.addAll(jsonObjectHandler(returnedObject, urlParams, baseURL));
                             // This param has been used and needs to be removed before looping.
 
                             break;
                         case PAGE_TAG:
-                            articles.add(parseArticleObject(returnedObject, urlParams));
+                            articles.add(parseArticleObject(returnedObject, urlParams, baseURL));
                             // This param has been used and needs to be removed before looping.
 
                             break;
@@ -92,10 +97,11 @@ public class ArticleParser {
      *
      * @param articleObject article JsonObject
      * @param urlParams
+     * @param baseURL
      * @return The AEM Article that was just parsed
      */
     @NonNull
-    private static Article parseArticleObject(JSONObject articleObject, List<String> urlParams) {
+    private static Article parseArticleObject(JSONObject articleObject, List<String> urlParams, String baseURL) {
         // Create Article
         Article retrievedArticle = new Article();
         // get Inner article Object
@@ -116,8 +122,7 @@ public class ArticleParser {
                 retrievedArticle.mDateUpdated = getDateLongFromJsonString(contentObject
                         .optString(LAST_MODIFIED_TAG));
             }
-            //TODO: get Translation for URL
-            StringBuilder urlKey = new StringBuilder(ARTICLE_BASE_URL + "/english");
+            StringBuilder urlKey = new StringBuilder(baseURL);
             for (int i = 0; i < urlParams.size(); i++) {
                 urlKey.append("/").append(urlParams.get(i));
             }
@@ -148,9 +153,15 @@ public class ArticleParser {
      * @return the list of attachments that were parsed
      */
     @NonNull
-    private static List<Attachment> getAttachmentsFromRootObject(JSONObject articleRootObject, String articleKey) {
+    private static List<Attachment> getAttachmentsFromRootObject(JSONObject articleRootObject, String articleKey)  {
         final List<Attachment> attachments = new ArrayList<>();
-
+        String rootUrl;
+        try {
+            rootUrl = new URL(articleKey).getHost();
+        } catch (MalformedURLException e) {
+            Timber.tag("ArticleParser").e(e);
+            rootUrl = BASE_URL;
+        }
         // Iterate through keys
         Iterator<String> keys = articleRootObject.keys();
         while (keys.hasNext()) {
@@ -163,7 +174,7 @@ public class ArticleParser {
                 //  This Key is an Attachment
                 Attachment retrievedAttachment = new Attachment();
                 retrievedAttachment.mArticleKey = articleKey;
-                retrievedAttachment.mAttachmentUrl = String.format("%s%s", BASE_URL,
+                retrievedAttachment.mAttachmentUrl = String.format("https://%s%s", rootUrl,
                         innerObject.optString(FILE_TAG));
                 attachments.add(retrievedAttachment);
             }
@@ -185,6 +196,17 @@ public class ArticleParser {
         } catch (ParseException e) {
             return new Date().getTime();
         }
+    }
+
+    /**
+     * Using "https://stage.cru.org/content/experience-fragments/questions_about_god/english.9999.json"
+     * as an example url this method will remove ".999.json" from the url leaving the base url.
+     * @param url
+     * @return
+     */
+    private static String getArticleBaseUrl(String url){
+        url = url.substring(0, url.lastIndexOf("."));
+        return url.substring(0, url.lastIndexOf("."));
     }
     //endregion Article Parsing
 
