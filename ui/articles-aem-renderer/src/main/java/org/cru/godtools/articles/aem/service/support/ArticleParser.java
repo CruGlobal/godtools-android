@@ -153,7 +153,7 @@ public class ArticleParser {
      * @return the list of attachments that were parsed
      */
     @NonNull
-    private static List<Attachment> getAttachmentsFromRootObject(JSONObject articleRootObject, String articleKey)  {
+    private static List<Attachment> getAttachmentsFromRootObject(JSONObject articleRootObject, String articleKey) {
         final List<Attachment> attachments = new ArrayList<>();
         String rootUrl;
         try {
@@ -204,7 +204,7 @@ public class ArticleParser {
      * @param url
      * @return
      */
-    private static String getArticleBaseUrl(String url){
+    private static String getArticleBaseUrl(String url) {
         url = url.substring(0, url.lastIndexOf("."));
         return url.substring(0, url.lastIndexOf("."));
     }
