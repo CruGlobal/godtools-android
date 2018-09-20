@@ -15,12 +15,10 @@ import org.ccci.gto.android.common.db.Query;
 import org.cru.godtools.articles.aem.db.ArticleRepository;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.db.AttachmentRepository;
-import org.cru.godtools.articles.aem.db.ManifestAssociationRepository;
 import org.cru.godtools.articles.aem.db.TranslationRepository;
 import org.cru.godtools.articles.aem.model.AemImport;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
-import org.cru.godtools.articles.aem.model.ManifestAssociation;
 import org.cru.godtools.articles.aem.service.support.ArticleParser;
 import org.cru.godtools.base.util.PriorityRunnable;
 import org.cru.godtools.model.Tool;
@@ -53,6 +51,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import timber.log.Timber;
 
 /**
  * This class hold all Download methods for retrieving and saving an Article
@@ -66,6 +65,7 @@ public class AEMDownloadManger {
     private final GodToolsDao mDao;
     private final ThreadPoolExecutor mExecutor;
     private final ManifestManager mManifestManager;
+    private final Context mContext;
 
     // Task synchronization locks and flags
     private final Object mExtractAemImportsLock = new Object();
@@ -75,12 +75,13 @@ public class AEMDownloadManger {
     private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = Collections.synchronizedMap(new HashMap<>());
 
     private AEMDownloadManger(@NonNull final Context context) {
-        mAemDb = ArticleRoomDatabase.getInstance(context);
-        mDao = GodToolsDao.getInstance(context);
+        mContext = context;
+        mAemDb = ArticleRoomDatabase.getInstance(mContext);
+        mDao = GodToolsDao.getInstance(mContext);
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,
                                            new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
                                            new NamedThreadFactory(AEMDownloadManger.class.getSimpleName()));
-        mManifestManager = ManifestManager.getInstance(context);
+        mManifestManager = ManifestManager.getInstance(mContext);
 
         EventBus.getDefault().register(this);
     }
@@ -193,7 +194,11 @@ public class AEMDownloadManger {
      */
     @WorkerThread
     void syncAemImportTask(@NonNull final Uri baseUri, final boolean force) {
-        // TODO
+        try {
+            loadAemManifestIntoAemModel(baseUri);
+        } catch (JSONException | IOException e) {
+            Timber.tag("syncAemImportTask").e(e);
+        }
     }
 
     /**
@@ -223,61 +228,24 @@ public class AEMDownloadManger {
     // endregion Tasks
 
     /**
-     * This method  handles loading AEM Imports into the local Database.  Please ensure that the
-     * manifest used contains AemImports.
-     *
-     * @param manifest the model for the manifest
-     * @param context  the Application Context
-     * @throws JSONException
-     * @throws IOException
-     */
-    @WorkerThread
-    public static void loadAEMFromManifest(final Manifest manifest, Context context)
-            throws JSONException, IOException {
-
-        // Verify that Manifest has AEM Articles (Should be checked already
-        if (manifest.getAemImports() == null || manifest.getAemImports().size() <= 0) {
-
-            return;  // May need to throw an error to limit unnecessary calls.
-        }
-
-        for (Uri aemImports : manifest.getAemImports()) {
-            loadAemManifestIntoAemModel(manifest, aemImports, context);
-        }
-
-    }
-
-    /**
      * This method take the manifest and one of its aemImports and extracts all associated data to
      * the database.
      *
-     * @param manifest   manifest object
      * @param aemImports uri from one of the aemImports
-     * @param context    the Application or Activity Context
      * @throws JSONException
      * @throws IOException
      */
-    private static void loadAemManifestIntoAemModel(Manifest manifest, Uri aemImports, Context context)
+    private void loadAemManifestIntoAemModel(Uri aemImports)
             throws JSONException, IOException {
 
-        ArticleRepository articleRepository = new ArticleRepository(context);
-        AttachmentRepository attachmentRepository = new AttachmentRepository(context);
-        ManifestAssociationRepository manifestAssociationRepository =
-                new ManifestAssociationRepository(context);
+        ArticleRepository articleRepository = new ArticleRepository(mContext);
+        AttachmentRepository attachmentRepository = new AttachmentRepository(mContext);
 
         JSONObject importJson = getJsonFromUri(aemImports);
 
         final List<Article> articles = ArticleParser.parse(importJson);
 
         for (Article createdArticle : articles) {
-            ManifestAssociation createdAssociation = new ManifestAssociation();
-            createdAssociation.mManifestId = manifest.getCode();
-            createdAssociation.mManifestName = manifest.getManifestName();
-            createdAssociation.mArticleId = createdArticle.mkey;
-
-            // Save Association
-            manifestAssociationRepository.insertAssociation(createdAssociation);
-
             // Save Article
             articleRepository.insertArticle(createdArticle);
 
@@ -297,7 +265,7 @@ public class AEMDownloadManger {
      * @throws JSONException
      * @throws IOException
      */
-    private static JSONObject getJsonFromUri(Uri aemImports)
+    private JSONObject getJsonFromUri(Uri aemImports)
             throws JSONException, IOException {
 
         // Have to convert android Uri to a Java URI
@@ -313,10 +281,9 @@ public class AEMDownloadManger {
      * This method is used to save an Attachment to Storage and update Database
      *
      * @param attachment the attachment to be saved
-     * @param context    The context is needed to save the attachment and database entry
      * @throws IOException Is thrown if an error occurs in saving to storage.
      */
-    public static void saveAttachmentToStorage(Attachment attachment, Context context)
+    public void saveAttachmentToStorage(Attachment attachment)
             throws IOException {
         // verify that attachment is not already saved.
         if (attachment.mAttachmentFilePath != null) {
@@ -324,7 +291,7 @@ public class AEMDownloadManger {
         } else {
             String[] urlSplit = attachment.mAttachmentUrl.split("/");
             String filename = urlSplit[urlSplit.length - 1];
-            File articleFile = new File(context.getFilesDir(), "articles");
+            File articleFile = new File(mContext.getFilesDir(), "articles");
             if (!articleFile.exists()) {
                 articleFile.mkdir();
             }
@@ -340,7 +307,7 @@ public class AEMDownloadManger {
 
             // update attachment with file Path
             attachment.mAttachmentFilePath = articleFile.getAbsolutePath();
-            AttachmentRepository repository = new AttachmentRepository(context);
+            AttachmentRepository repository = new AttachmentRepository(mContext);
             repository.updateAttachment(attachment);
         }
     }
