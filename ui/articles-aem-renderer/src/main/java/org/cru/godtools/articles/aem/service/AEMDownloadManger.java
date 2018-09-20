@@ -75,7 +75,7 @@ public class AEMDownloadManger {
     private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = Collections.synchronizedMap(new HashMap<>());
 
     private AEMDownloadManger(@NonNull final Context context) {
-        mContext = context;
+        mContext = context.getApplicationContext();
         mAemDb = ArticleRoomDatabase.getInstance(mContext);
         mDao = GodToolsDao.getInstance(mContext);
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,
@@ -194,6 +194,14 @@ public class AEMDownloadManger {
      */
     @WorkerThread
     void syncAemImportTask(@NonNull final Uri baseUri, final boolean force) {
+        if (!force) {
+            AemImport aemImport = mAemDb.aemImportDao().getAemImport(baseUri);
+            if (aemImport != null){
+                if (!aemImport.isStale()){
+                    return; // Don't import Aem if not forced and aemImport is not stale
+                }
+            }
+        }
         try {
             loadAemManifestIntoAemModel(baseUri);
         } catch (JSONException | IOException e) {

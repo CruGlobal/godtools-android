@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import org.cru.godtools.articles.aem.model.AemImport;
@@ -19,4 +20,7 @@ public abstract class AemImportDao {
 
     @Query("SELECT * FROM aemImports")
     public abstract List<AemImport> getAll();
+
+    @Query("SELECT * FROM aemImports WHERE uri = :uri")
+    public abstract AemImport getAemImport(Uri uri);
 }
