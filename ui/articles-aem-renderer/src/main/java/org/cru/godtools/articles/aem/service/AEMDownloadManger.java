@@ -196,8 +196,8 @@ public class AEMDownloadManger {
     void syncAemImportTask(@NonNull final Uri baseUri, final boolean force) {
         if (!force) {
             AemImport aemImport = mAemDb.aemImportDao().getAemImport(baseUri);
-            if (aemImport != null){
-                if (!aemImport.isStale()){
+            if (aemImport != null) {
+                if (!aemImport.isStale()) {
                     return; // Don't import Aem if not forced and aemImport is not stale
                 }
             }
