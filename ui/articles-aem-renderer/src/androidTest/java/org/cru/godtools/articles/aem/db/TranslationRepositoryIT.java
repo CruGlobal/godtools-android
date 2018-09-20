@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import java.util.Locale;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -76,6 +77,6 @@ public class TranslationRepositoryIT extends BaseArticleRoomDatabaseIT {
         // TODO: test AemImports once we define dao methods for reading AemImports
 
         AemImport aemImport = mDb.aemImportDao().getAemImport(URI1);
-        assert (aemImport.uri == URI1);
+        assertEquals(URI1,aemImport.uri);
     }
 }
