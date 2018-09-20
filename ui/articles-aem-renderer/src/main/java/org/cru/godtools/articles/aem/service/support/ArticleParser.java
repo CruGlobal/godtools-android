@@ -31,6 +31,8 @@ public class ArticleParser {
     private static final String ORDER_FOLDER_TAG = "sling:OrderedFolder";
     private static final String PAGE_TAG = "cq:Page";
 
+    private static final String ARTICLE_BASE_URL = BASE_URL + "/content/experience-fragments/questions_about_god";
+
     //region Public Executor
     /**
      * This executes the parsing of the local JsonObject.
@@ -38,7 +40,7 @@ public class ArticleParser {
      * @return return a list of {@link Article}
      */
     public static List<Article> parse(@NonNull final JSONObject articleJSON) {
-        return jsonObjectHandler(articleJSON);
+        return jsonObjectHandler(articleJSON, new ArrayList<>());
     }
     //endregion public Executor
 
@@ -49,10 +51,11 @@ public class ArticleParser {
      * and Category Object will be Recursively placed back into this method.
      *
      * @param evaluatingObject the Json Object to be evaluated.
+     * @param urlParams
      * @return All the articles that were parsed
      */
     @NonNull
-    private static List<Article> jsonObjectHandler(JSONObject evaluatingObject) {
+    private static List<Article> jsonObjectHandler(JSONObject evaluatingObject, List<String> urlParams) {
         final List<Article> articles = new ArrayList<>();
 
         // Create loop through Keys
@@ -62,16 +65,20 @@ public class ArticleParser {
             if (isArticleOrCategory(nextKey)) {
                 JSONObject returnedObject = evaluatingObject.optJSONObject(nextKey);
                 if (returnedObject != null) {
+                    urlParams.add(nextKey);
                     switch (returnedObject.optString(PRIMARY_TYPE_TAG)) {
                         case ORDER_FOLDER_TAG:
-                            articles.addAll(jsonObjectHandler(returnedObject));
+                            jsonObjectHandler(returnedObject, urlParams);
+                            // This param has been used and needs to be removed before looping.
 
                             break;
                         case PAGE_TAG:
-                            articles.add(parseArticleObject(returnedObject));
+                            articles.add(parseArticleObject(returnedObject, urlParams));
+                            // This param has been used and needs to be removed before looping.
 
                             break;
                     }
+                    urlParams = new ArrayList<>();
                 }
             }
         }
@@ -84,10 +91,11 @@ public class ArticleParser {
      * articles to <code>articleList</code>
      *
      * @param articleObject article JsonObject
+     * @param urlParams
      * @return The AEM Article that was just parsed
      */
     @NonNull
-    private static Article parseArticleObject(JSONObject articleObject) {
+    private static Article parseArticleObject(JSONObject articleObject, List<String> urlParams) {
         // Create Article
         Article retrievedArticle = new Article();
         // get Inner article Object
@@ -96,6 +104,7 @@ public class ArticleParser {
         while (keys.hasNext()) {
             String nextKey = keys.next();
             if (isArticleOrCategory(nextKey)) {
+                urlParams.add(nextKey);
                 articleTagObject = articleObject.optJSONObject(nextKey);
             }
         }
@@ -107,13 +116,18 @@ public class ArticleParser {
                 retrievedArticle.mDateUpdated = getDateLongFromJsonString(contentObject
                         .optString(LAST_MODIFIED_TAG));
             }
-            retrievedArticle.mkey = contentObject.optString(UUID_TAG);
+            //TODO: get Translation for URL
+            StringBuilder urlKey = new StringBuilder(ARTICLE_BASE_URL + "/english");
+            for (int i = 0; i < urlParams.size(); i++) {
+                urlKey.append("/").append(urlParams.get(i));
+            }
+
+            urlKey.append(".html");
+            retrievedArticle.mkey = urlKey.toString();
             retrievedArticle.mTitle = contentObject
                     .optString(TITLE_TAG);
 
             JSONObject articleRootObject = contentObject.optJSONObject(ROOT_TAG);
-
-            // TODO: need to set code to extract content from url
 
             // get Attachments from Articles
             if (articleRootObject != null) {
