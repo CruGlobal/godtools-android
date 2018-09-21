@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ArticlesAdapter extends SimpleDataBindingAdapter<ListItemArticleBinding>
         implements Observer<List<Article>> {
-    public interface Callback {
+    public interface Callbacks {
         /**
          * This method will return the select Article Object in the List.
          *
@@ -27,11 +27,11 @@ public class ArticlesAdapter extends SimpleDataBindingAdapter<ListItemArticleBin
     @Nullable
     private List<Article> mArticles;
     @Nullable
-    private Callback mCallback;
+    private Callbacks mCallback;
     @Nullable
     private Manifest mManifest;
 
-    //region LifeCycle Methods
+    // region LifeCycle Events
 
     @Override
     public void onChanged(@Nullable final List<Article> articles) {
@@ -59,21 +59,21 @@ public class ArticlesAdapter extends SimpleDataBindingAdapter<ListItemArticleBin
         binding.setManifest(null);
     }
 
-    //endregion
+    // endregion LifeCycle Events
 
     @Override
     public int getItemCount() {
         return mArticles != null ? mArticles.size() : 0;
     }
 
-    //region Setters
+    // region Setters
 
     /**
      * This method initialized the Callback interface used on the Item click event.
      *
      * @param callbacks this interface used for this click event
      */
-    public void setCallbacks(@Nullable final Callback callbacks) {
+    public void setCallbacks(@Nullable final Callbacks callbacks) {
         mCallback = callbacks;
         notifyItemRangeChanged(0, getItemCount());
     }
@@ -98,5 +98,5 @@ public class ArticlesAdapter extends SimpleDataBindingAdapter<ListItemArticleBin
         notifyDataSetChanged();
     }
 
-    //endregion
+    // endregion Setters
 }

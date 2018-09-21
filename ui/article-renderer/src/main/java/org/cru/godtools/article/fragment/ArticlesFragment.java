@@ -27,7 +27,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import timber.log.Timber;
 
-public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapter.Callback {
+public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapter.Callbacks {
     public static final String TAG = "ArticlesFragment";
     private static final String MANIFEST_KEY = "manifest-key";
 
