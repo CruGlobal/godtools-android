@@ -198,8 +198,12 @@ public class ArticleParser {
      * @return
      */
     private static String getArticleBaseUrl(String url) {
-        url = url.substring(0, url.lastIndexOf("."));
-        return url.substring(0, url.lastIndexOf("."));
+        if (url.endsWith(".json")) {
+            url = url.substring(0, url.lastIndexOf("."));
+            return url.substring(0, url.lastIndexOf("."));
+        } else {
+            return url;
+        }
     }
     //endregion Article Parsing
 
