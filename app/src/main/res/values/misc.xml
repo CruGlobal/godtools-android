@@ -5,4 +5,6 @@
         userPortrait: 12
     -->
     <integer name="default_screen_orientation">12</integer>
+
+    <bool name="show_login_menu_items">false</bool>
 </resources>
