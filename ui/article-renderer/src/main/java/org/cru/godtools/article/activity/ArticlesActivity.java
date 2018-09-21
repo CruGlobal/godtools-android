@@ -42,6 +42,9 @@ public class ArticlesActivity extends BaseSingleToolActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (isFinishing()) {
+            return;
+        }
 
         final Bundle extras = getIntent().getExtras();
         if (extras != null) {
