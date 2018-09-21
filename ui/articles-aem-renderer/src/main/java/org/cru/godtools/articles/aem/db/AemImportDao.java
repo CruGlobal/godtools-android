@@ -22,5 +22,5 @@ public abstract class AemImportDao {
     public abstract List<AemImport> getAll();
 
     @Query("SELECT * FROM aemImports WHERE uri = :uri")
-    public abstract AemImport getAemImport(Uri uri);
+    public abstract AemImport find(Uri uri);
 }

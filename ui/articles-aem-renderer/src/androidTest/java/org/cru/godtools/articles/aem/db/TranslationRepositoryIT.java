@@ -76,7 +76,7 @@ public class TranslationRepositoryIT extends BaseArticleRoomDatabaseIT {
 
         // TODO: test AemImports once we define dao methods for reading AemImports
 
-        AemImport aemImport = mDb.aemImportDao().getAemImport(URI1);
+        AemImport aemImport = mDb.aemImportDao().find(URI1);
         assertEquals(URI1,aemImport.uri);
     }
 }
