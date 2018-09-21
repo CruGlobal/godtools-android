@@ -65,7 +65,7 @@ public class CategoriesActivity extends BaseSingleToolActivity implements Catego
 
         // update the displayed fragment
         assert mTool != null;
-        getSupportFragmentManager().beginTransaction()
+        fm.beginTransaction()
                 .replace(R.id.frame, CategoriesFragment.newInstance(mTool, mLocale), TAG_MAIN_FRAGMENT)
                 .commit();
     }
