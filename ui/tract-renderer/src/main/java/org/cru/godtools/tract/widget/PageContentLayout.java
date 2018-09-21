@@ -406,6 +406,35 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         return generateDefaultLayoutParams();
     }
 
+    public void animateFirstCardView(){
+        //TODO: add setting logic to only do once
+        for (int i = 0; i < getChildCount(); i++) {
+            final View child = getChildAt(i);
+            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+            switch (lp.childType) {
+                case CHILD_TYPE_CARD:
+                   bounceCardAnimation(child);
+                   return; // Stop after first Card View
+            }
+        }
+    }
+
+    private void bounceCardAnimation(final View targetView){
+
+        ObjectAnimator animator = ObjectAnimator.ofFloat(targetView, "translationY",
+                targetView.getY(), -800, targetView.getY());
+        animator.setInterpolator(input -> {
+            float amount = 3.05f;
+            if ((input *= 2) < 1) {
+                return (float) (0.5 * (input * input * ((amount + 1) * input - amount)));
+            }
+            return (float) (0.5 * ((input -= 2) * input * ((amount + 1) * input + amount) + 2)) ;
+        });
+        animator.setStartDelay(50);
+        animator.setDuration(1500);
+        animator.start();
+    }
+
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
         final int count = getChildCount();
