@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.R2;
-import org.cru.godtools.article.adapter.ArticleAdapter;
+import org.cru.godtools.article.adapter.ArticlesAdapter;
 import org.cru.godtools.articles.aem.db.ManifestAssociationRepository;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
@@ -27,7 +27,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import timber.log.Timber;
 
-public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter.Callback {
+public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapter.Callback {
     public static final String TAG = "ArticlesFragment";
     private static final String MANIFEST_KEY = "manifest-key";
 
@@ -35,7 +35,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
     @BindView(R2.id.articles_recycler_view)
     RecyclerView mArticlesView;
     @Nullable
-    ArticleAdapter mArticlesAdapter;
+    ArticlesAdapter mArticlesAdapter;
 
     String mManifestKey = "";
 
@@ -97,7 +97,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
      * @param article the selected Article
      */
     @Override
-    public void onArticleSelected(Article article) {
+    public void onArticleSelected(@Nullable final Article article) {
         Timber.tag(TAG).d("You selected \"%s\" as your article", article.mTitle);
     }
 
@@ -119,7 +119,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
             mArticlesView.addItemDecoration(
                     new DividerItemDecoration(mArticlesView.getContext(), DividerItemDecoration.VERTICAL));
 
-            mArticlesAdapter = new ArticleAdapter();
+            mArticlesAdapter = new ArticlesAdapter();
             mArticlesAdapter.setCallbacks(this);
             mViewModel.getArticles(mManifestKey).observe(this, mArticlesAdapter);
             mArticlesView.setAdapter(mArticlesAdapter);

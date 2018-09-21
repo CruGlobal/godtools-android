@@ -5,7 +5,7 @@
 
     <data>
         <variable name="article" type="org.cru.godtools.articles.aem.model.Article"/>
-        <variable name="callback" type="org.cru.godtools.article.adapter.ArticleAdapter.Callback"/>
+        <variable name="callback" type="org.cru.godtools.article.adapter.ArticlesAdapter.Callback"/>
        <variable name="manifest" type="org.cru.godtools.xml.model.Manifest"/>
     </data>
 

@@ -13,48 +13,23 @@ import org.cru.godtools.xml.model.Manifest;
 
 import java.util.List;
 
-public class ArticleAdapter extends SimpleDataBindingAdapter<ListItemArticleBinding>
+public class ArticlesAdapter extends SimpleDataBindingAdapter<ListItemArticleBinding>
         implements Observer<List<Article>> {
+    public interface Callback {
+        /**
+         * This method will return the select Article Object in the List.
+         *
+         * @param article the selected Article
+         */
+        void onArticleSelected(@Nullable Article article);
+    }
+
     @Nullable
     private List<Article> mArticles;
     @Nullable
     private Callback mCallback;
     @Nullable
     private Manifest mManifest;
-
-    //region Setters
-
-    /**
-     * This method initialized the Callback interface used on the Item click event.
-     *
-     * @param callbacks this interface used for this click event
-     */
-    public void setCallbacks(@Nullable final Callback callbacks) {
-        mCallback = callbacks;
-        notifyItemRangeChanged(0, getItemCount());
-    }
-
-    /**
-     * This method initializes the manifest used for data on each item in this adapter.
-     *
-     * @param manifest the Manifest Object to be used.
-     */
-    public void setToolManifest(@Nullable final Manifest manifest) {
-        mManifest = manifest;
-        notifyItemRangeChanged(0, getItemCount());
-    }
-
-    /**
-     * This method is called to set the list of articles.  Used by Live Data to update list
-     *
-     * @param articles list of Articles
-     */
-    public void setArticles(@Nullable final List<Article> articles) {
-        mArticles = articles;
-        notifyDataSetChanged();
-    }
-
-    //endregion
 
     //region LifeCycle Methods
 
@@ -91,12 +66,37 @@ public class ArticleAdapter extends SimpleDataBindingAdapter<ListItemArticleBind
         return mArticles != null ? mArticles.size() : 0;
     }
 
-    public interface Callback {
-        /**
-         * This method will return the select Article Object in the List.
-         *
-         * @param article the selected Article
-         */
-        void onArticleSelected(Article article);
+    //region Setters
+
+    /**
+     * This method initialized the Callback interface used on the Item click event.
+     *
+     * @param callbacks this interface used for this click event
+     */
+    public void setCallbacks(@Nullable final Callback callbacks) {
+        mCallback = callbacks;
+        notifyItemRangeChanged(0, getItemCount());
     }
+
+    /**
+     * This method initializes the manifest used for data on each item in this adapter.
+     *
+     * @param manifest the Manifest Object to be used.
+     */
+    public void setToolManifest(@Nullable final Manifest manifest) {
+        mManifest = manifest;
+        notifyItemRangeChanged(0, getItemCount());
+    }
+
+    /**
+     * This method is called to set the list of articles.  Used by Live Data to update list
+     *
+     * @param articles list of Articles
+     */
+    public void setArticles(@Nullable final List<Article> articles) {
+        mArticles = articles;
+        notifyDataSetChanged();
+    }
+
+    //endregion
 }
