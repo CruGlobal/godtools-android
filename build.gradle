@@ -67,6 +67,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.google.gms:google-services:4.1.0'
         //noinspection GradleDependency
         classpath "com.jakewharton:butterknife-gradle-plugin:${deps.butterknife}"
         classpath "com.newrelic.agent.android:agent-gradle-plugin:${deps.newrelic}"
