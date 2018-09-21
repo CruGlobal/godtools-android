@@ -51,7 +51,7 @@ public class ArticlesActivity extends BaseSingleToolActivity {
             mCategoryId = extras.getString(EXTRA_CATEGORY, mCategoryId);
         }
 
-        setContentView(R.layout.activity_article_articles);
+        setContentView(R.layout.activity_generic_fragment);
     }
 
     @Override
@@ -64,10 +64,13 @@ public class ArticlesActivity extends BaseSingleToolActivity {
 
     private void loadInitialFragmentIfNeeded() {
         final FragmentManager fm = getSupportFragmentManager();
-
-        if (fm.findFragmentByTag(TAG_MAIN_FRAGMENT) == null) {
-           fm.beginTransaction().replace(R.id.articles_frame, ArticlesFragment
-                   .newInstance(mTool, mLocale, mCategoryId)).commit();
+        if (fm.findFragmentByTag(TAG_MAIN_FRAGMENT) != null) {
+            return;
         }
+
+        assert mTool != null : "if mTool was null the activity would have already finished";
+        fm.beginTransaction()
+                .replace(R.id.frame, ArticlesFragment.newInstance(mTool, mLocale, mCategoryId))
+                .commit();
     }
 }
