@@ -9,11 +9,14 @@ import android.support.v4.app.FragmentManager;
 
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.fragment.ArticlesFragment;
+import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity;
 
 import java.util.Locale;
 
-public class ArticlesActivity extends BaseSingleToolActivity {
+import timber.log.Timber;
+
+public class ArticlesActivity extends BaseSingleToolActivity implements ArticlesFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
     private static final String EXTRA_CATEGORY = "category";
 
@@ -58,6 +61,12 @@ public class ArticlesActivity extends BaseSingleToolActivity {
     protected void onStart() {
         super.onStart();
         loadInitialFragmentIfNeeded();
+    }
+
+    @Override
+    public void onArticleSelected(@Nullable final Article article) {
+        Timber.tag("ArticlesActivity")
+                .d("Article selected: %s", article != null ? article.mTitle : null);
     }
 
     // endregion Lifecycle Events

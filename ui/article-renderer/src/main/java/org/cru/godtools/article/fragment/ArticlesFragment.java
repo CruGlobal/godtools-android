@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.R2;
 import org.cru.godtools.article.adapter.ArticlesAdapter;
@@ -25,11 +26,13 @@ import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
-import timber.log.Timber;
 
 public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapter.Callbacks {
-    public static final String TAG = "ArticlesFragment";
     private static final String MANIFEST_KEY = "manifest-key";
+
+    public interface Callbacks {
+        void onArticleSelected(@Nullable Article article);
+    }
 
     @Nullable
     @BindView(R2.id.articles_recycler_view)
@@ -98,7 +101,10 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
      */
     @Override
     public void onArticleSelected(@Nullable final Article article) {
-        Timber.tag(TAG).d("You selected \"%s\" as your article", article.mTitle);
+        final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
+        if (callbacks != null) {
+            callbacks.onArticleSelected(article);
+        }
     }
 
     @Override
