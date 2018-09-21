@@ -39,13 +39,14 @@ public class ArticlesFragment extends BaseToolFragment implements ArticleAdapter
 
     String mManifestKey = "";
 
+    // these properties should be treated as final and only set/modified in onCreate()
     @NonNull
     private /*final*/ ArticleListViewModel mViewModel;
 
     public static ArticlesFragment newInstance(@NonNull final String code, @NonNull final Locale locale,
                                                String manifestKey) {
-        ArticlesFragment fragment = new ArticlesFragment();
-        Bundle args = new Bundle();
+        final ArticlesFragment fragment = new ArticlesFragment();
+        final Bundle args = new Bundle();
         populateArgs(args, code, locale);
         args.putString(MANIFEST_KEY, manifestKey);
         fragment.setArguments(args);
