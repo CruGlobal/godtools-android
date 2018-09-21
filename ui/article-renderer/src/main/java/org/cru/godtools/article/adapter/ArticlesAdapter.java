@@ -47,7 +47,7 @@ public class ArticlesAdapter extends SimpleDataBindingAdapter<ListItemArticleBin
     @Override
     protected void onBindViewDataBinding(@NonNull final ListItemArticleBinding binding, final int position) {
         assert mArticles != null : "Article must be defined to bind";
-        binding.setCallback(mCallback);
+        binding.setCallbacks(mCallback);
         binding.setArticle(mArticles.get(position));
         binding.setManifest(mManifest);
     }
@@ -55,7 +55,7 @@ public class ArticlesAdapter extends SimpleDataBindingAdapter<ListItemArticleBin
     @Override
     protected void onViewDataBindingRecycled(@NonNull final ListItemArticleBinding binding) {
         binding.setArticle(null);
-        binding.setCallback(null);
+        binding.setCallbacks(null);
         binding.setManifest(null);
     }
 
