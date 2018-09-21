@@ -1,5 +1,6 @@
 package org.cru.godtools.articles.aem.service.support;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import org.cru.godtools.articles.aem.model.Article;
@@ -43,7 +44,8 @@ public class ArticleParser {
      */
     public static List<Article> parse(@NonNull final JSONObject articleJSON, String url) {
         String baseURL = getArticleBaseUrl(url);
-        return jsonObjectHandler(articleJSON, new ArrayList<>(), baseURL);
+        Uri keyUri = Uri.parse(baseURL);
+        return jsonObjectHandler(articleJSON, keyUri);
     }
     //endregion public Executor
 
@@ -55,12 +57,11 @@ public class ArticleParser {
      *
      * @param evaluatingObject the Json Object to be evaluated.
      * @param urlParams
-     * @param baseURL
      * @return All the articles that were parsed
      */
     @NonNull
     private static List<Article> jsonObjectHandler(JSONObject evaluatingObject,
-                                                   List<String> urlParams, String baseURL) {
+                                                   Uri urlParams) {
         final List<Article> articles = new ArrayList<>();
 
         // Create loop through Keys
@@ -70,20 +71,17 @@ public class ArticleParser {
             if (isArticleOrCategory(nextKey)) {
                 JSONObject returnedObject = evaluatingObject.optJSONObject(nextKey);
                 if (returnedObject != null) {
-                    urlParams.add(nextKey);
+                    Uri keyUri = urlParams.buildUpon().appendPath(nextKey).build();
                     switch (returnedObject.optString(PRIMARY_TYPE_TAG)) {
                         case ORDER_FOLDER_TAG:
-                            articles.addAll(jsonObjectHandler(returnedObject, urlParams, baseURL));
-                            // This param has been used and needs to be removed before looping.
+                            articles.addAll(jsonObjectHandler(returnedObject, keyUri));
 
                             break;
                         case PAGE_TAG:
-                            articles.add(parseArticleObject(returnedObject, urlParams, baseURL));
-                            // This param has been used and needs to be removed before looping.
+                            articles.add(parseArticleObject(returnedObject, keyUri));
 
                             break;
                     }
-                    urlParams = new ArrayList<>();
                 }
             }
         }
@@ -97,20 +95,20 @@ public class ArticleParser {
      *
      * @param articleObject article JsonObject
      * @param urlParams
-     * @param baseURL
      * @return The AEM Article that was just parsed
      */
     @NonNull
-    private static Article parseArticleObject(JSONObject articleObject, List<String> urlParams, String baseURL) {
+    private static Article parseArticleObject(JSONObject articleObject, Uri urlParams) {
         // Create Article
         Article retrievedArticle = new Article();
         // get Inner article Object
         Iterator<String> keys = articleObject.keys();
         JSONObject articleTagObject = null;
+        Uri keyUri = urlParams;
         while (keys.hasNext()) {
             String nextKey = keys.next();
             if (isArticleOrCategory(nextKey)) {
-                urlParams.add(nextKey);
+                keyUri = keyUri.buildUpon().appendPath(nextKey).build();
                 articleTagObject = articleObject.optJSONObject(nextKey);
             }
         }
@@ -122,13 +120,8 @@ public class ArticleParser {
                 retrievedArticle.mDateUpdated = getDateLongFromJsonString(contentObject
                         .optString(LAST_MODIFIED_TAG));
             }
-            StringBuilder urlKey = new StringBuilder(baseURL);
-            for (int i = 0; i < urlParams.size(); i++) {
-                urlKey.append("/").append(urlParams.get(i));
-            }
 
-            urlKey.append(".html");
-            retrievedArticle.mkey = urlKey.toString();
+            retrievedArticle.mkey = keyUri.toString();
             retrievedArticle.mTitle = contentObject
                     .optString(TITLE_TAG);
 
