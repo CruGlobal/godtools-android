@@ -7,8 +7,6 @@ import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.json.JSONObject;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,8 +14,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-
-import timber.log.Timber;
 
 /**
  * This class handles parsing any AEM json calls into DOA objects.
@@ -29,7 +25,6 @@ public class ArticleParser {
     private static final String TITLE_TAG = "jcr:title";
     private static final String ROOT_TAG = "root";
     private static final String FILE_TAG = "fileReference";
-    private static final String BASE_URL = "https://stage.cru.org";
     private static final String RESOURCE_TYPE_TAG = "sling:resourceType";
     private static final String PRIMARY_TYPE_TAG = "jcr:primaryType";
     private static final String ORDER_FOLDER_TAG = "sling:OrderedFolder";
@@ -125,8 +120,7 @@ public class ArticleParser {
 
             // get Attachments from Articles
             if (articleRootObject != null) {
-                retrievedArticle.parsedAttachments =
-                        getAttachmentsFromRootObject(articleRootObject, retrievedArticle.mkey);
+                retrievedArticle.parsedAttachments = getAttachmentsFromRootObject(keyUri, articleRootObject);
             }
         }
 
@@ -138,19 +132,13 @@ public class ArticleParser {
      * completion it will add Attachment to <code>attachmentList</code>
      *
      * @param articleRootObject the root json Object of Article
-     * @param articleKey        the uuid of the article
      * @return the list of attachments that were parsed
      */
     @NonNull
-    private static List<Attachment> getAttachmentsFromRootObject(JSONObject articleRootObject, String articleKey) {
+    private static List<Attachment> getAttachmentsFromRootObject(@NonNull final Uri articleUrl,
+                                                                 JSONObject articleRootObject) {
         final List<Attachment> attachments = new ArrayList<>();
-        String rootUrl;
-        try {
-            rootUrl = new URL(articleKey).getHost();
-        } catch (MalformedURLException e) {
-            Timber.tag("ArticleParser").e(e);
-            rootUrl = BASE_URL;
-        }
+
         // Iterate through keys
         Iterator<String> keys = articleRootObject.keys();
         while (keys.hasNext()) {
@@ -162,8 +150,8 @@ public class ArticleParser {
 
                 //  This Key is an Attachment
                 Attachment retrievedAttachment = new Attachment();
-                retrievedAttachment.mArticleKey = articleKey;
-                retrievedAttachment.mAttachmentUrl = String.format("https://%s%s", rootUrl,
+                retrievedAttachment.mArticleKey = articleUrl.toString();
+                retrievedAttachment.mAttachmentUrl = String.format("https://%s%s", articleUrl.getHost(),
                         innerObject.optString(FILE_TAG));
                 attachments.add(retrievedAttachment);
             }
