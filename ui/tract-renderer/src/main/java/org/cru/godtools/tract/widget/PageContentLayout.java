@@ -32,6 +32,7 @@ import android.widget.FrameLayout;
 
 import org.ccci.gto.android.common.animation.SimpleAnimatorListener;
 import org.cru.godtools.tract.R;
+import org.cru.godtools.tract.util.BounceUtil;
 import org.cru.godtools.tract.util.ViewUtils;
 
 import java.util.ArrayList;
@@ -422,16 +423,10 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     private void bounceCardAnimation(final View targetView){
 
         ObjectAnimator animator = ObjectAnimator.ofFloat(targetView, "translationY",
-                targetView.getY(), -800, targetView.getY());
-        animator.setInterpolator(input -> {
-            float amount = 3.05f;
-            if ((input *= 2) < 1) {
-                return (float) (0.5 * (input * input * ((amount + 1) * input - amount)));
-            }
-            return (float) (0.5 * ((input -= 2) * input * ((amount + 1) * input + amount) + 2)) ;
-        });
-        animator.setStartDelay(50);
-        animator.setDuration(1500);
+                targetView.getY(), targetView.getY() - 50, targetView.getY());
+        animator.setInterpolator(BounceUtil::getBounceInOut);
+        animator.setStartDelay(200);
+        animator.setDuration(1000);
         animator.start();
     }
 
