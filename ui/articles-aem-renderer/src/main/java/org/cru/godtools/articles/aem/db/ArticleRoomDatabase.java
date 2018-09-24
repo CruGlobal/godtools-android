@@ -23,7 +23,8 @@ import org.cru.godtools.articles.aem.model.TranslationRef;
  * @author Gyasi Story
  */
 @Database(entities = {
-        TranslationRef.class, TranslationRef.TranslationAemImport.class, AemImport.class,
+        TranslationRef.class, TranslationRef.TranslationAemImport.class,
+        AemImport.class, AemImport.AemImportArticle.class,
         Article.class, Attachment.class,
         ManifestAssociation.class
 }, version = 1)
