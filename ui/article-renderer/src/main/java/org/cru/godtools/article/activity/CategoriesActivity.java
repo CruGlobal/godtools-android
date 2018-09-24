@@ -37,6 +37,10 @@ public class CategoriesActivity extends BaseSingleToolActivity implements Catego
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (isFinishing()) {
+            return;
+        }
+
         setContentView(R.layout.activity_generic_fragment);
     }
 

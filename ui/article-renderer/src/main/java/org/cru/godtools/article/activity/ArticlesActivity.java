@@ -9,11 +9,14 @@ import android.support.v4.app.FragmentManager;
 
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.fragment.ArticlesFragment;
+import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity;
 
 import java.util.Locale;
 
-public class ArticlesActivity extends BaseSingleToolActivity {
+import timber.log.Timber;
+
+public class ArticlesActivity extends BaseSingleToolActivity implements ArticlesFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
     private static final String EXTRA_CATEGORY = "category";
 
@@ -42,13 +45,16 @@ public class ArticlesActivity extends BaseSingleToolActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (isFinishing()) {
+            return;
+        }
 
         final Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mCategoryId = extras.getString(EXTRA_CATEGORY, mCategoryId);
         }
 
-        setContentView(R.layout.activity_article_articles);
+        setContentView(R.layout.activity_generic_fragment);
     }
 
     @Override
@@ -57,14 +63,23 @@ public class ArticlesActivity extends BaseSingleToolActivity {
         loadInitialFragmentIfNeeded();
     }
 
+    @Override
+    public void onArticleSelected(@Nullable final Article article) {
+        Timber.tag("ArticlesActivity")
+                .d("Article selected: %s", article != null ? article.mTitle : null);
+    }
+
     // endregion Lifecycle Events
 
     private void loadInitialFragmentIfNeeded() {
         final FragmentManager fm = getSupportFragmentManager();
-
-        if (fm.findFragmentByTag(TAG_MAIN_FRAGMENT) == null) {
-           fm.beginTransaction().replace(R.id.articles_frame, ArticlesFragment
-                   .newInstance(mTool, mLocale, mCategoryId)).commit();
+        if (fm.findFragmentByTag(TAG_MAIN_FRAGMENT) != null) {
+            return;
         }
+
+        assert mTool != null : "if mTool was null the activity would have already finished";
+        fm.beginTransaction()
+                .replace(R.id.frame, ArticlesFragment.newInstance(mTool, mLocale, mCategoryId), TAG_MAIN_FRAGMENT)
+                .commit();
     }
 }
