@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import com.google.common.collect.ImmutableList;
 
+import org.cru.godtools.articles.aem.model.AemImport;
 import org.cru.godtools.articles.aem.model.TranslationRef;
 import org.cru.godtools.model.Translation;
 import org.junit.Before;
@@ -11,6 +12,7 @@ import org.junit.Test;
 
 import java.util.Locale;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -73,5 +75,8 @@ public class TranslationRepositoryIT extends BaseArticleRoomDatabaseIT {
         assertTrue(mRepository.isProcessed(mTranslation));
 
         // TODO: test AemImports once we define dao methods for reading AemImports
+
+        AemImport aemImport = mDb.aemImportDao().find(URI1);
+        assertEquals(URI1, aemImport.uri);
     }
 }
