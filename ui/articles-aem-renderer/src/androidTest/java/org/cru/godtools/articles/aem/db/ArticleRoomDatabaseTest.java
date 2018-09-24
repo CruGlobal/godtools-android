@@ -28,11 +28,4 @@ public class ArticleRoomDatabaseTest extends DBBaseTest {
                        mAttachmentDao.getTestableAttachmentsByArticle(article.uri.toString()).size() > 0);
         }
     }
-
-    @Test
-    public void verifyManifestHasArticles() {
-        assertTrue("Manifest 0 should have articles", mAssociationDao.getTestableArticlesByManifestID("0").size() > 0);
-        assertTrue("Manifest 1 should have articles", mAssociationDao.getTestableArticlesByManifestID("1").size() > 0);
-        assertTrue("Manifest 2 should have articles", mAssociationDao.getTestableArticlesByManifestID("2").size() > 0);
-    }
 }

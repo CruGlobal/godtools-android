@@ -5,7 +5,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
-import org.cru.godtools.articles.aem.model.ManifestAssociation;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
@@ -20,14 +19,12 @@ public abstract class DBBaseTest extends BaseArticleRoomDatabaseIT {
 
     ArticleDao mArticleDao;
     AttachmentDao mAttachmentDao;
-    ManifestAssociationDao mAssociationDao;
     List<Article> mSavedArticles = new ArrayList<>();
 
     @Before
     public void createDb() throws Exception {
         mArticleDao = mDb.articleDao();
         mAttachmentDao = mDb.attachmentDao();
-        mAssociationDao = mDb.manifestAssociationDao();
         for (int i = 0; i < 12; i++) {
             Article article = new Article(Uri.parse("test:" + i + "aaslf" + i));
             article.mContent = "<p> The Body </>";
@@ -48,11 +45,6 @@ public abstract class DBBaseTest extends BaseArticleRoomDatabaseIT {
         }
         mSavedArticles = mArticleDao.getTestableAllArticles();
         for (int i = 0; i < mSavedArticles.size(); i++) {
-            ManifestAssociation association = new ManifestAssociation();
-            association.mArticleId = mSavedArticles.get(i).uri.toString();
-            association.mManifestName = "Manifest ID " + (i % 3);
-            association.mManifestId = (i % 3) + "";
-            mAssociationDao.insertAssociation(association);
             Attachment attachment = new Attachment();
             attachment.mArticleKey = String.valueOf(mSavedArticles.get(i).uri.toString());
             attachment.mAttachmentUrl =

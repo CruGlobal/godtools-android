@@ -14,7 +14,6 @@ import org.ccci.gto.android.common.room.converter.UriConverter;
 import org.cru.godtools.articles.aem.model.AemImport;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
-import org.cru.godtools.articles.aem.model.ManifestAssociation;
 import org.cru.godtools.articles.aem.model.TranslationRef;
 
 /**
@@ -25,8 +24,7 @@ import org.cru.godtools.articles.aem.model.TranslationRef;
 @Database(entities = {
         TranslationRef.class, TranslationRef.TranslationAemImport.class,
         AemImport.class, AemImport.AemImportArticle.class,
-        Article.class, Attachment.class,
-        ManifestAssociation.class
+        Article.class, Attachment.class
 }, version = 1)
 @TypeConverters({DateConverter.class, LocaleConverter.class, UriConverter.class})
 public abstract class ArticleRoomDatabase extends RoomDatabase {
@@ -60,8 +58,6 @@ public abstract class ArticleRoomDatabase extends RoomDatabase {
     public abstract AemImportDao aemImportDao();
 
     public abstract ArticleDao articleDao();
-
-    abstract ManifestAssociationDao manifestAssociationDao();
 
     abstract AttachmentDao attachmentDao();
 
