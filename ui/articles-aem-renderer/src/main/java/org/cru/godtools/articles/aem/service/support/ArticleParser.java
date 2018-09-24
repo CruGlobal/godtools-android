@@ -32,6 +32,7 @@ public class ArticleParser {
     private static final String PAGE_TAG = "cq:Page";
 
     //region Public Executor
+
     /**
      * This executes the parsing of the local JsonObject.
      *
@@ -40,9 +41,11 @@ public class ArticleParser {
     public static List<Article> parse(@NonNull final JSONObject articleJSON) {
         return jsonObjectHandler(articleJSON);
     }
+
     //endregion public Executor
 
     //region Article Parsing
+
     /**
      * This method takes in a Json Object and Iterates through the keys to determine if they
      * are Article Objects or Category Object.  Article Objects will be passed on to be parsed
