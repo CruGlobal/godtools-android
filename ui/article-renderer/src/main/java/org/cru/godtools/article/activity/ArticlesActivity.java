@@ -79,7 +79,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
 
         assert mTool != null : "if mTool was null the activity would have already finished";
         fm.beginTransaction()
-                .replace(R.id.frame, ArticlesFragment.newInstance(mTool, mLocale, mCategoryId))
+                .replace(R.id.frame, ArticlesFragment.newInstance(mTool, mLocale, mCategoryId), TAG_MAIN_FRAGMENT)
                 .commit();
     }
 }
