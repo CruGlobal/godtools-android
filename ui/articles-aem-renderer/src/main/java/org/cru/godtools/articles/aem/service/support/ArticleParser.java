@@ -26,7 +26,6 @@ public class ArticleParser {
     private static final String CREATED_TAG = "jcr:created";
     private static final String CONTENT_TAG = "jcr:content";
     private static final String LAST_MODIFIED_TAG = "cq:lastModified";
-    private static final String UUID_TAG = "jcr:uuid";
     private static final String TITLE_TAG = "jcr:title";
     private static final String ROOT_TAG = "root";
     private static final String FILE_TAG = "fileReference";
@@ -42,8 +41,8 @@ public class ArticleParser {
      *
      * @return return a list of {@link Article}
      */
-    public static List<Article> parse(@NonNull final JSONObject articleJSON, @NonNull final Uri baseUri) {
-        return jsonObjectHandler(articleJSON, baseUri);
+    public static List<Article> parse(@NonNull final Uri url, @NonNull final JSONObject json) {
+        return parseObject(url, json);
     }
     //endregion public Executor
 
@@ -53,30 +52,29 @@ public class ArticleParser {
      * are Article Objects or Category Object.  Article Objects will be passed on to be parsed
      * and Category Object will be Recursively placed back into this method.
      *
-     * @param evaluatingObject the Json Object to be evaluated.
-     * @param urlParams
+     * @param url
+     * @param json the Json Object to be evaluated.
      * @return All the articles that were parsed
      */
     @NonNull
-    private static List<Article> jsonObjectHandler(JSONObject evaluatingObject,
-                                                   Uri urlParams) {
+    private static List<Article> parseObject(@NonNull final Uri url, @NonNull final JSONObject json) {
         final List<Article> articles = new ArrayList<>();
 
         // Create loop through Keys
-        Iterator<String> keys = evaluatingObject.keys();
+        Iterator<String> keys = json.keys();
         while (keys.hasNext()) {
             String nextKey = keys.next();
             if (isArticleOrCategory(nextKey)) {
-                JSONObject returnedObject = evaluatingObject.optJSONObject(nextKey);
+                JSONObject returnedObject = json.optJSONObject(nextKey);
                 if (returnedObject != null) {
-                    Uri keyUri = urlParams.buildUpon().appendPath(nextKey).build();
+                    Uri keyUri = url.buildUpon().appendPath(nextKey).build();
                     switch (returnedObject.optString(PRIMARY_TYPE_TAG)) {
                         case ORDER_FOLDER_TAG:
-                            articles.addAll(jsonObjectHandler(returnedObject, keyUri));
+                            articles.addAll(parseObject(keyUri, returnedObject));
 
                             break;
                         case PAGE_TAG:
-                            articles.add(parseArticleObject(returnedObject, keyUri));
+                            articles.add(parseArticle(keyUri, returnedObject));
 
                             break;
                     }
@@ -91,30 +89,30 @@ public class ArticleParser {
      * This method parses an Article Json Object into the Database. On completion it will add
      * articles to <code>articleList</code>
      *
-     * @param articleObject article JsonObject
-     * @param urlParams
+     * @param url The URL of this article
+     * @param json article JsonObject
      * @return The AEM Article that was just parsed
      */
     @NonNull
-    private static Article parseArticleObject(JSONObject articleObject, Uri urlParams) {
+    private static Article parseArticle(@NonNull final Uri url, @NonNull final JSONObject json) {
         // Create Article
         Article retrievedArticle = new Article();
         // get Inner article Object
-        Iterator<String> keys = articleObject.keys();
+        Iterator<String> keys = json.keys();
         JSONObject articleTagObject = null;
-        Uri keyUri = urlParams;
+        Uri keyUri = url;
         while (keys.hasNext()) {
             String nextKey = keys.next();
             if (isArticleOrCategory(nextKey)) {
                 keyUri = keyUri.buildUpon().appendPath(nextKey).build();
-                articleTagObject = articleObject.optJSONObject(nextKey);
+                articleTagObject = json.optJSONObject(nextKey);
             }
         }
 
-        retrievedArticle.mDateCreated = getDateLongFromJsonString(articleObject.optString(CREATED_TAG));
+        retrievedArticle.mDateCreated = getDateLongFromJsonString(json.optString(CREATED_TAG));
         JSONObject contentObject = articleTagObject != null ? articleTagObject.optJSONObject(CONTENT_TAG) : null;
         if (contentObject != null) {
-            if (articleObject.has(CONTENT_TAG) && contentObject.has(LAST_MODIFIED_TAG)) {
+            if (json.has(CONTENT_TAG) && contentObject.has(LAST_MODIFIED_TAG)) {
                 retrievedArticle.mDateUpdated = getDateLongFromJsonString(contentObject
                         .optString(LAST_MODIFIED_TAG));
             }
