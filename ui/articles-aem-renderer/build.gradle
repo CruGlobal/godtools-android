@@ -9,7 +9,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-room:${deps.gtoSupport}"
 
     implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
-    implementation "android.arch.persistence.room:runtime:${deps.room}"
+    api "android.arch.persistence.room:runtime:${deps.room}"
     implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
 
     implementation "com.annimon:stream:${deps.lightweightStream}"

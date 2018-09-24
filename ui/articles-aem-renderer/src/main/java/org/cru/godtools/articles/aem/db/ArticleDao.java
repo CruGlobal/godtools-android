@@ -18,7 +18,7 @@ import java.util.List;
  *  @author Gyasi Story
  */
 @Dao
-interface ArticleDao {
+public interface ArticleDao {
     /**
      *  The insert method for an article.  Any conflict in with stored data will result
      *  in the data being replaced.
