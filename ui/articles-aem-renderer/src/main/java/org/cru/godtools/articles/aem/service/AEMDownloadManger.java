@@ -250,7 +250,7 @@ public class AEMDownloadManger {
     private void loadAemManifestIntoAemModel(Uri aemImports)
             throws JSONException, IOException {
 
-        ArticleRepository articleRepository = new ArticleRepository(mContext);
+        ArticleRepository articleRepository = mAemDb.articleRepository();
         AttachmentRepository attachmentRepository = new AttachmentRepository(mContext);
 
         JSONObject importJson = getJsonFromUri(aemImports);
