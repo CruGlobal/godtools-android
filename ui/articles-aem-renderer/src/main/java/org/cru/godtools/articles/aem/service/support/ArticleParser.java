@@ -42,10 +42,8 @@ public class ArticleParser {
      *
      * @return return a list of {@link Article}
      */
-    public static List<Article> parse(@NonNull final JSONObject articleJSON, String url) {
-        String baseURL = getArticleBaseUrl(url);
-        Uri keyUri = Uri.parse(baseURL);
-        return jsonObjectHandler(articleJSON, keyUri);
+    public static List<Article> parse(@NonNull final JSONObject articleJSON, @NonNull final Uri baseUri) {
+        return jsonObjectHandler(articleJSON, baseUri);
     }
     //endregion public Executor
 
@@ -191,20 +189,6 @@ public class ArticleParser {
         }
     }
 
-    /**
-     * Using "https://stage.cru.org/content/experience-fragments/questions_about_god/english.9999.json"
-     * as an example url this method will remove ".999.json" from the url leaving the base url.
-     * @param url
-     * @return
-     */
-    private static String getArticleBaseUrl(String url) {
-        if (url.endsWith(".json")) {
-            url = url.substring(0, url.lastIndexOf("."));
-            return url.substring(0, url.lastIndexOf("."));
-        } else {
-            return url;
-        }
-    }
     //endregion Article Parsing
 
     //region Validation

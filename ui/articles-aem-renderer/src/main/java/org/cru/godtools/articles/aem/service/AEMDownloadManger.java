@@ -267,7 +267,7 @@ public class AEMDownloadManger {
 
         JSONObject importJson = getJsonFromUri(aemImports);
 
-        final List<Article> articles = ArticleParser.parse(importJson, aemImports.toString());
+        final List<Article> articles = ArticleParser.parse(importJson, aemImports);
 
         for (Article createdArticle : articles) {
             ManifestAssociation createdAssociation = new ManifestAssociation();
