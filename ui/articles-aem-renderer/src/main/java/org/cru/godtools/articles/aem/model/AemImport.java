@@ -25,6 +25,6 @@ public class AemImport {
     }
 
     public boolean isStale() {
-        return lastProcessed.before(new Date(System.currentTimeMillis() - DAY_IN_MS));
+        return lastProcessed.before(new Date(System.currentTimeMillis() - STALE_AGE));
     }
 }
