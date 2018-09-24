@@ -36,23 +36,18 @@ interface ArticleDao {
     @Delete
     void deleteArticles(Article... articles);
 
-    //todo: Convert to LiveData after Testing
     /**
      *  The method to return all Articles.  User should use the ManifestAssociationDoa to
      *  get proper categories of the article.
      *
      * @return = Collection of all articles.
      */
-    @Query("SELECT * FROM article_table")
+    @Query("SELECT * FROM articles")
     LiveData<List<Article>> getAllArticles();
 
     //region Testable (Non Live Data)
     @VisibleForTesting
-    @Query("SELECT * FROM article_table")
+    @Query("SELECT * FROM articles")
     List<Article> getTestableAllArticles();
-
-    @VisibleForTesting
-    @Query("SELECT * FROM article_table WHERE article_key = :key")
-    Article getArticleByKey(String key);
     //endregion
 }

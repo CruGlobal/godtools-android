@@ -49,15 +49,15 @@ interface ManifestAssociationDao {
      * @param manifestID
      * @return
      */
-    @Query("SELECT * FROM article_table AS art " +
-            "INNER JOIN manifest_association_table AS assc ON art.article_key == assc.article_key " +
+    @Query("SELECT * FROM articles AS art " +
+            "INNER JOIN manifest_association_table AS assc ON art.uri == assc.article_key " +
             "WHERE assc.manifest_key = :manifestID")
     LiveData<List<Article>> getArticlesByManifestID(String manifestID);
 
     //region Testable calls (No Live Data)
     @VisibleForTesting()
-    @Query("SELECT * FROM article_table AS art " +
-            "INNER JOIN manifest_association_table AS assc ON art.article_key == assc.article_key " +
+    @Query("SELECT * FROM articles AS art " +
+            "INNER JOIN manifest_association_table AS assc ON art.uri == assc.article_key " +
             "WHERE assc.manifest_key = :manifestID")
     List<Article> getTestableArticlesByManifestID(String manifestID);
 

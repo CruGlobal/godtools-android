@@ -2,18 +2,15 @@ package org.cru.godtools.articles.aem.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 /**
- * This class contain data for the connection of a Manifest
- * to an Article
+ * This class contain data for the connection of a Manifest to an Article
  *
  * @author Gyasi Story
  */
-@Entity(tableName = "manifest_association_table", foreignKeys = @ForeignKey(
-        entity = Article.class, parentColumns = "article_key", childColumns = "article_key"))
+@Entity(tableName = "manifest_association_table")
 public class ManifestAssociation {
 
     /**

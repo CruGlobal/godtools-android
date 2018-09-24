@@ -17,13 +17,13 @@ public class AEMDownloadMangerTest extends DBBaseTest {
     public void verifyAttachmentsAreSaved() throws IOException {
         AEMDownloadManger manger = AEMDownloadManger.getInstance(mContext);
         for (Article article : mSavedArticles) {
-            for (Attachment attachment : mAttachmentDao.getTestableAttachmentsByArticle(article.mkey)) {
+            for (Attachment attachment : mAttachmentDao.getTestableAttachmentsByArticle(article.uri.toString())) {
                     manger.saveAttachmentToStorage(attachment);
             }
         }
 
         for (Article article : mSavedArticles) {
-            for (Attachment attachment : mAttachmentDao.getTestableAttachmentsByArticle(article.mkey)) {
+            for (Attachment attachment : mAttachmentDao.getTestableAttachmentsByArticle(article.uri.toString())) {
                 assertFalse(attachment.mAttachmentFilePath != null);
             }
         }

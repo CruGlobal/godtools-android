@@ -4,6 +4,7 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -17,17 +18,11 @@ import java.util.Locale;
  *
  * @author Gyasi Story
  */
-@Entity(tableName = "article_table")
+@Entity(tableName = "articles")
 public class Article {
-    /**
-     * Unique Identifier for the article table
-     *
-     * This will be the url for the article.
-     */
-    @PrimaryKey
     @NonNull
-    @ColumnInfo(name = "article_key")
-    public String mkey;
+    @PrimaryKey
+    public final Uri uri;
 
     /**
      * The title of the Article
@@ -60,6 +55,10 @@ public class Article {
     @Ignore
     @Nullable
     public List<Attachment> parsedAttachments;
+
+    public Article(@NonNull final Uri uri) {
+        this.uri = uri;
+    }
 
     public String getLastUpdatedFormattedString() {
         String date = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())

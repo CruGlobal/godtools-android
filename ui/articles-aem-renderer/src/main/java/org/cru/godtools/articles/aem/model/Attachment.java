@@ -2,7 +2,6 @@ package org.cru.godtools.articles.aem.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
@@ -13,9 +12,7 @@ import android.support.annotation.NonNull;
  *
  * @author Gyasi Story
  */
-@Entity(tableName = "attachment_table", foreignKeys = @ForeignKey(entity = Article.class,
-    parentColumns = "article_key", childColumns = "article_key"), indices = {@Index(value =
-        {"attachment_url"})})
+@Entity(tableName = "attachment_table", indices = {@Index(value = {"attachment_url"})})
 public class Attachment {
 
     /**

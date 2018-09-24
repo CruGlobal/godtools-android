@@ -6,6 +6,7 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.cru.godtools.articles.aem.model.AemImport;
 import org.cru.godtools.articles.aem.model.TranslationRef;
@@ -18,9 +19,11 @@ public abstract class AemImportDao {
     abstract void insertOrIgnore(@NonNull List<AemImport> imports,
                                  @NonNull List<TranslationRef.TranslationAemImport> translationRefs);
 
-    @Query("SELECT * FROM aemImports")
-    public abstract List<AemImport> getAll();
-
+    @Nullable
     @Query("SELECT * FROM aemImports WHERE uri = :uri")
     public abstract AemImport find(Uri uri);
+
+    @NonNull
+    @Query("SELECT * FROM aemImports")
+    public abstract List<AemImport> getAll();
 }
