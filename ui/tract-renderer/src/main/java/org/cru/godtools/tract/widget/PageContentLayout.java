@@ -71,18 +71,19 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
     @Nullable
     private OnActiveCardListener mActiveCardListener;
-    private ObjectAnimator mBounceAnimator;
 
     private int mCardPositionOffset = 2;
     @Nullable
     private View mActiveCard;
     private int mActiveCardPosition = 0;
 
+    private ObjectAnimator mBounceAnimator;
     @Nullable
     Animator mAnimation;
     private final Animator.AnimatorListener mAnimationListener = new SimpleAnimatorListener() {
         @Override
         public void onAnimationStart(Animator animation, boolean isReverse) {
+            // if an animation is started that is not the bounce it will stop the bounce animation
             if (mBounceAnimator != animation) {
                 stopBounceAnimation();
             }
@@ -98,6 +99,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         }
     };
 
+    //region Initialization
     public PageContentLayout(@NonNull final Context context) {
         this(context, null);
         initialization(context);
@@ -126,8 +128,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         super(context, attrs, defStyleAttr, defStyleRes);
         initialization(context);
     }
+    //endregion
 
-    /* BEGIN lifecycle */
+    //region lifecycle
 
     @Override
     protected void onAttachedToWindow() {
@@ -212,9 +215,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         getViewTreeObserver().removeGlobalOnLayoutListener(this);
     }
 
-    /* END lifecycle */
+    // endregion lifecycle */
 
-    /* BEGIN NestedScrollingParent methods */
+    //region NestedScrollingParent methods
 
     @Override
     public boolean onStartNestedScroll(final View child, final View target, final int nestedScrollAxes) {
@@ -255,7 +258,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         return mParentHelper.getNestedScrollAxes();
     }
 
-    /* END NestedScrollingParent methods */
+    //endregion NestedScrollingParent methods
 
     public void addCard(@NonNull final View card, final int position) {
         addView(card, position + mCardPositionOffset);
@@ -428,6 +431,11 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         return generateDefaultLayoutParams();
     }
 
+    //region Card Bounce Animation
+
+    /**
+     * This method will either create a new bounce Animation or start the one that is already created.
+     */
     @UiThread
     private void animateFirstCardView() {
         if (mBounceAnimator == null) {
@@ -445,6 +453,10 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         }
     }
 
+    /**
+     *  This method will check to see if the Animate Card feature has been detected and start or stop the
+     *  animation if needed.
+     */
     public void shouldAnimateCard() {
         mShouldAnimateCard = !mSettings.isFeatureDiscovered(Settings.FEATURE_ANIMATE_CARD);
         if (mShouldAnimateCard) {
@@ -454,6 +466,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         }
     }
 
+    /**
+     * This method will stop the bounce Animation and set the Feature as Discovered.
+     */
     private void stopBounceAnimation() {
 
         if (mBounceAnimator != null) {
@@ -462,6 +477,10 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         mSettings.setFeatureDiscovered(Settings.FEATURE_ANIMATE_CARD);
     }
 
+    /**
+     * This method will create a new instance of the bounce animation.
+     * @param targetView the Card View
+     */
     @UiThread
     private void bounceCardAnimation(final View targetView){
 
@@ -473,6 +492,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         mBounceAnimator.addListener(mAnimationListener);
         mBounceAnimator.start();
     }
+    //endregion
 
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
@@ -805,6 +825,10 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         }
     }
 
+    //region bounce thread calls
+    /**
+     *  This runnable object is used to create a loop that will run the animation.
+     */
     private Runnable bounceAnimationRunnable = new Runnable() {
         @Override
         public void run() {
@@ -819,5 +843,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         }
     };
 
+    /**
+     *  This Handler is what is used to created the delayed post of bounceAnimationRunnable
+     */
     private Handler mHandler = new Handler(Looper.getMainLooper());
+    //endregion
 }
