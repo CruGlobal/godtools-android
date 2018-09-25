@@ -4,7 +4,7 @@ import android.arch.lifecycle.Lifecycle;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -13,8 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.os.ConfigurationCompat;
-import android.support.v4.os.LocaleListCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -25,6 +23,7 @@ import com.google.common.base.Strings;
 
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.ccci.gto.android.common.util.content.ComponentNameUtils;
+import org.ccci.gto.android.common.util.view.MenuUtils;
 import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
@@ -37,6 +36,7 @@ import org.keynote.godtools.android.activity.MainActivity;
 
 import java.util.Locale;
 
+import butterknife.BindBool;
 import butterknife.BindView;
 import me.thekey.android.TheKey;
 import me.thekey.android.eventbus.event.TheKeyEvent;
@@ -66,12 +66,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG_KEY_LOGIN_DIALOG = "keyLoginDialog";
 
-    private final ChangeListener mSettingsChangeListener = new ChangeListener();
-
-    // List of supported Login Languages
-    private String[] mLoginLanguages = {
-            Locale.ENGLISH.getLanguage()
-    };
+    private final OnSharedPreferenceChangeListener mSettingsChangeListener = this::onSettingsUpdated;
 
     // Navigation Drawer
     @Nullable
@@ -82,6 +77,9 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     @Nullable
     @BindView(R.id.drawer_menu)
     NavigationView mDrawerMenu;
+
+    @BindBool(R.bool.show_login_menu_items)
+    boolean mShowLoginItems = false;
     @Nullable
     MenuItem mLoginItem;
     @Nullable
@@ -123,15 +121,23 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     @Override
     protected void onStart() {
         super.onStart();
-        startLanguagesChangeListener();
+        startSettingsChangeListener();
         mEventBus.register(this);
         loadLanguages(false);
         updateNavigationDrawerMenu();
     }
 
-    @MainThread
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onTheKeyEvent(@NonNull final TheKeyEvent event) {
+    @CallSuper
+    public void onSettingsUpdated(@Nullable final SharedPreferences preferences, @Nullable final String key) {
+        switch (Strings.nullToEmpty(key)) {
+            case PREF_PRIMARY_LANGUAGE:
+            case PREF_PARALLEL_LANGUAGE:
+                loadLanguages(false);
+        }
+    }
+
+    @CallSuper
+    protected void onTheKeyEvent(@NonNull final TheKeyEvent event) {
         updateNavigationDrawerMenu();
     }
 
@@ -218,10 +224,16 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     protected void onStop() {
         super.onStop();
         mEventBus.unregister(this);
-        stopLanguagesChangeListener();
+        stopSettingsChangeListener();
     }
 
     /* END lifecycle */
+
+    @MainThread
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public final void theKeyEvent(@NonNull final TheKeyEvent event) {
+        onTheKeyEvent(event);
+    }
 
     @NonNull
     protected Settings prefs() {
@@ -259,51 +271,22 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
      * Updated by:  Gyasi Story
      */
     private void updateNavigationDrawerMenu() {
-        if (!containsLoginLanguage()) {  // For non English
-            if (mLoginItem != null) {
-                mLoginItem.setVisible(false);
-            }
-            if (mSignupItem != null) {
-                mSignupItem.setVisible(false);
-            }
-            if (mLogoutItem != null) {
-                mLogoutItem.setVisible(false);
-            }
+        final String guid = mTheKey.getDefaultSessionGuid();
+        if (mLoginItem != null) {
+            mLoginItem.setVisible(guid == null);
+        }
+        if (mSignupItem != null) {
+            mSignupItem.setVisible(guid == null);
+        }
+        if (mLogoutItem != null) {
+            mLogoutItem.setVisible(guid != null);
+        }
 
-        } else { // For English
-            Boolean isNotLoggedIn = mTheKey.getDefaultSessionGuid() == null;
-            if (mLoginItem != null) {
-                mLoginItem.setVisible(isNotLoggedIn);
-            }
-            if (mSignupItem != null) {
-                mSignupItem.setVisible(isNotLoggedIn);
-            }
-            if (mLogoutItem != null) {
-                mLogoutItem.setVisible(!isNotLoggedIn);
+        if (mDrawerMenu != null) {
+            if (!mShowLoginItems) {
+                MenuUtils.setGroupVisibleRecursively(mDrawerMenu.getMenu(), R.id.group_login_items, false);
             }
         }
-    }
-
-    /**
-     * This method will determine if the application contains
-     * a supported language for Login Notifications. As we
-     * get more support for more languages you can add them to {@code languages}.
-     *
-     * @return Boolean value if login Language
-     * <p>
-     * Updated by: Gyasi Story
-     */
-    private boolean containsLoginLanguage() {
-        LocaleListCompat localeListCompat = ConfigurationCompat
-                .getLocales(Resources.getSystem().getConfiguration());
-        String matchLanguage = localeListCompat.getFirstMatch(mLoginLanguages).getLanguage();
-        for (String lang : mLoginLanguages) {
-            if (matchLanguage.equals(lang)) {
-                return true;
-            }
-        }
-        return false;
-
     }
 
     protected final void closeNavigationDrawer() {
@@ -338,11 +321,11 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
         }
     }
 
-    private void startLanguagesChangeListener() {
+    private void startSettingsChangeListener() {
         prefs().registerOnSharedPreferenceChangeListener(mSettingsChangeListener);
     }
 
-    private void stopLanguagesChangeListener() {
+    private void stopSettingsChangeListener() {
         prefs().unregisterOnSharedPreferenceChangeListener(mSettingsChangeListener);
     }
 
@@ -427,17 +410,5 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
 
     protected void showLanguageSettings() {
         LanguageSettingsActivity.start(this);
-    }
-
-    class ChangeListener implements SharedPreferences.OnSharedPreferenceChangeListener {
-        @Override
-        public void onSharedPreferenceChanged(@Nullable final SharedPreferences preferences,
-                                              @Nullable final String key) {
-            switch (Strings.nullToEmpty(key)) {
-                case PREF_PRIMARY_LANGUAGE:
-                case PREF_PARALLEL_LANGUAGE:
-                    loadLanguages(false);
-            }
-        }
     }
 }

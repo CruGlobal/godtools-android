@@ -30,7 +30,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @NonNull
     protected /*final*/ EventBus mEventBus;
 
-    /* BEGIN lifecycle */
+    // region Lifecycle Events
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -66,7 +66,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mAnalytics.onActivityPause(this);
     }
 
-    /* END lifecycle */
+    // endregion Lifecycle Events
 
     private void setupActionBar() {
         if (mToolbar != null) {
