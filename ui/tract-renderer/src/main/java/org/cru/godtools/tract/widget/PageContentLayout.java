@@ -59,7 +59,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     private Boolean mShouldAnimateCard = true;
 
     private Settings mSettings;
-    private GestureDetectorCompat mGestureDetector ;
+    private GestureDetectorCompat mGestureDetector;
     private final GestureDetector.OnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
         @Override
         public boolean onFling(final MotionEvent e1, final MotionEvent e2, final float velocityX,
@@ -482,7 +482,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
      * @param targetView the Card View
      */
     @UiThread
-    private void bounceCardAnimation(final View targetView){
+    private void bounceCardAnimation(final View targetView) {
 
         mBounceAnimator = ObjectAnimator.ofFloat(targetView, "translationY",
                 targetView.getY(), targetView.getY() + 30, targetView.getY());
