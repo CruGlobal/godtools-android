@@ -3,9 +3,9 @@ package org.cru.godtools.tract.util;
 public class BounceUtil {
 
     public static float getBounceInOut(float input){
-        if (input < .5f){
-            return getBounceIn(input * 2f) * 0.5f;
-        }
+//        if (input < .5f){
+//            return getBounceIn(input * 2f) * 0.5f;
+//        }
         return getBounceOut(input * 2f -1f) * 0.5f + 0.5f;
     }
 

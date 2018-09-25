@@ -7,11 +7,14 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.v4.os.ParcelableCompat;
 import android.support.v4.os.ParcelableCompatCreatorCallbacks;
 import android.support.v4.view.AbsSavedState;
@@ -47,10 +50,13 @@ import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD
 public class PageContentLayout extends FrameLayout implements NestedScrollingParent,
         ViewTreeObserver.OnGlobalLayoutListener {
     private static final int FLING_SCALE_FACTOR = 20;
+    private String BOUNCE_PROPERTY = "bounce_name";
 
     public interface OnActiveCardListener {
         void onActiveCardChanged(@Nullable View activeCard);
     }
+
+    private Boolean mShouldAnimateCard = true;
 
     private final GestureDetectorCompat mGestureDetector;
     private final GestureDetector.OnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
@@ -64,6 +70,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
     @Nullable
     private OnActiveCardListener mActiveCardListener;
+    private ObjectAnimator mBounceAnimator;
 
     private int mCardPositionOffset = 2;
     @Nullable
@@ -73,6 +80,15 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     @Nullable
     Animator mAnimation;
     private final Animator.AnimatorListener mAnimationListener = new SimpleAnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animation, boolean isReverse) {
+            if (mBounceAnimator != animation) {
+                mBounceAnimator.cancel();
+                setShouldAnimateCard(false);
+                //TODO: Stop Looper
+            }
+        }
+
         @Override
         public void onAnimationEnd(final Animator animation) {
             if (mAnimation == animation) {
@@ -407,27 +423,55 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         return generateDefaultLayoutParams();
     }
 
-    public void animateFirstCardView(){
+    @UiThread
+    private void animateFirstCardView() {
         //TODO: add setting logic to only do once
-        for (int i = 0; i < getChildCount(); i++) {
-            final View child = getChildAt(i);
-            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-            switch (lp.childType) {
-                case CHILD_TYPE_CARD:
-                   bounceCardAnimation(child);
-                   return; // Stop after first Card View
+        if (mBounceAnimator == null) {
+            for (int i = 0; i < getChildCount(); i++) {
+                final View child = getChildAt(i);
+                final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+                switch (lp.childType) {
+                    case CHILD_TYPE_CARD:
+                        bounceCardAnimation(child);
+                        return; // Stop after first Card View
+                }
             }
+        } else {
+            mBounceAnimator.start();
         }
     }
 
+    private void shouldAnimateCard() {
+        // TODO: Create Method to verify if Settings Feature has been activated
+        if (mShouldAnimateCard) {
+            bounceAnimationRunnable.run();
+        } else {
+            stopBounceAnimation();
+        }
+    }
+
+    public void setShouldAnimateCard(Boolean shouldAnimateCard) {
+        mShouldAnimateCard = shouldAnimateCard;
+        shouldAnimateCard();
+    }
+
+    private void stopBounceAnimation() {
+
+        if (mBounceAnimator != null) {
+            mBounceAnimator.cancel();
+        }
+    }
+
+    @UiThread
     private void bounceCardAnimation(final View targetView){
 
-        ObjectAnimator animator = ObjectAnimator.ofFloat(targetView, "translationY",
-                targetView.getY(), targetView.getY() - 50, targetView.getY());
-        animator.setInterpolator(BounceUtil::getBounceInOut);
-        animator.setStartDelay(200);
-        animator.setDuration(1000);
-        animator.start();
+        mBounceAnimator = ObjectAnimator.ofFloat(targetView, "translationY",
+                targetView.getY(), targetView.getY() + 30, targetView.getY());
+        mBounceAnimator.setInterpolator(BounceUtil::getBounceInOut);
+        mBounceAnimator.setStartDelay(500);
+        mBounceAnimator.setDuration(1500);
+        mBounceAnimator.addListener(mAnimationListener);
+        mBounceAnimator.start();
     }
 
     @Override
@@ -760,4 +804,19 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             this.childType = p.childType;
         }
     }
+
+    private Runnable bounceAnimationRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mShouldAnimateCard) {
+                animateFirstCardView();
+
+                mHandler.postDelayed(bounceAnimationRunnable, 10000);
+            } else {
+                mHandler.removeCallbacks(bounceAnimationRunnable);
+            }
+        }
+    };
+
+    private Handler mHandler = new Handler(Looper.getMainLooper());
 }
