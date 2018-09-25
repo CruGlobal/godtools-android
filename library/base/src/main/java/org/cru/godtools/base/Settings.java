@@ -25,6 +25,7 @@ public final class Settings {
     // feature discovery
     public static final String FEATURE_LANGUAGE_SETTINGS = "languageSettings";
     public static final String FEATURE_LOGIN = "login";
+    public static final String FEATURE_ANIMATE_CARD = "animateCard";
 
     @NonNull
     private final Context mContext;
