@@ -2,6 +2,7 @@ package org.cru.godtools.articles.aem.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -29,14 +30,16 @@ public class AemImport {
         return lastProcessed.before(new Date(System.currentTimeMillis() - STALE_AGE));
     }
 
-    @Entity(tableName = "aemImportArticles", primaryKeys = {"aemImportUri", "articleUri"}, foreignKeys = {
-            @ForeignKey(entity = AemImport.class,
-                    onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
-                    parentColumns = {"uri"}, childColumns = {"aemImportUri"}),
-            @ForeignKey(entity = Article.class,
-                    onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
-                    parentColumns = {"uri"}, childColumns = {"articleUri"})
-    })
+    @Entity(tableName = "aemImportArticles", primaryKeys = {"aemImportUri", "articleUri"},
+            indices = {@Index("articleUri")},
+            foreignKeys = {
+                    @ForeignKey(entity = AemImport.class,
+                            onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
+                            parentColumns = {"uri"}, childColumns = {"aemImportUri"}),
+                    @ForeignKey(entity = Article.class,
+                            onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
+                            parentColumns = {"uri"}, childColumns = {"articleUri"})
+            })
     public static class AemImportArticle {
         @NonNull
         public final Uri aemImportUri;
