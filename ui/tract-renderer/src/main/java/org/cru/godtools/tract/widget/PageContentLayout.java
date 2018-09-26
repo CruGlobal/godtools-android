@@ -8,7 +8,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Handler;
-import android.os.Looper;
+import android.os.Message;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.IdRes;
@@ -39,8 +39,11 @@ import org.cru.godtools.tract.R;
 import org.cru.godtools.tract.util.BounceUtil;
 import org.cru.godtools.tract.util.ViewUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 import static android.widget.FrameLayout.LayoutParams.UNSPECIFIED_GRAVITY;
 import static org.ccci.gto.android.common.base.Constants.INVALID_ID_RES;
@@ -51,7 +54,7 @@ import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD
 public class PageContentLayout extends FrameLayout implements NestedScrollingParent,
         ViewTreeObserver.OnGlobalLayoutListener {
     private static final int FLING_SCALE_FACTOR = 20;
-    private static final int DELAY_MILLIS = 20000;
+    private static final int DELAY_MILLIS = 10000;
     public static final int START_DELAY = 50;
     public static final int DURATION = 1000;
     public static final int HEIGHT_ADDED = 30;
@@ -60,7 +63,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         void onActiveCardChanged(@Nullable View activeCard);
     }
 
-    private boolean mShouldAnimateCard = true;
+    private boolean mAnimateCard = true;
 
     private Settings mSettings;
     private final GestureDetectorCompat mGestureDetector;
@@ -137,7 +140,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         getViewTreeObserver().addOnGlobalLayoutListener(this);
-        bounceAnimationRunnable = createRunnable();
     }
 
     @Override
@@ -215,7 +217,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         getViewTreeObserver().removeGlobalOnLayoutListener(this);
-        disposeRunnable();
     }
 
     // endregion lifecycle */
@@ -442,27 +443,38 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
      */
     @UiThread
     private void animateFirstCardView() {
-        if (mBounceAnimator == null) {
-            for (int i = 0; i < getChildCount(); i++) {
-                final View child = getChildAt(i);
-                final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-                switch (lp.childType) {
-                    case CHILD_TYPE_CARD:
-                        bounceCardAnimation(child);
-                        return; // Stop after first Card View
-                }
+        // Cards were in the wrong location need to reset animation each time.
+        for (int i = 0; i < getChildCount(); i++) {
+            final View child = getChildAt(i);
+            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+            switch (lp.childType) {
+                case CHILD_TYPE_CARD:
+                    bounceCardAnimation(child);
+                    return; // Stop after first Card View
             }
-            stopBounceAnimation();
-        } else {
-            mBounceAnimator.start();
         }
+        stopBounceAnimation();
     }
 
     /**
      *  This method starts the card animation.
      */
-    public void animateCard() {
-        bounceAnimationRunnable.run();
+//    private void animateCard() {
+//        if (mAnimateCard) {
+//            mAnimateCard = (!mSettings.isFeatureDiscovered(Settings.FEATURE_TRACT_CARD_CLICKED) ||
+//                    !mSettings.isFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED));
+//            mHandler.postDelayed(bounceAnimationRunnable, DELAY_MILLIS);
+//        } else {
+//            mHandler.removeCallbacks(bounceAnimationRunnable);
+//        }
+//    }
+
+    public void setAnimateCard(boolean animate) {
+        this.mAnimateCard = animate;
+        if (mAnimateCard) {
+            animateFirstCardView();
+            mHandler.postDelayed(bounceAnimationRunnable, DELAY_MILLIS);
+        }
     }
 
     /**
@@ -473,7 +485,12 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         if (mBounceAnimator != null) {
             mBounceAnimator.cancel();
         }
-        mShouldAnimateCard = false;
+        mAnimateCard = false;
+    }
+
+    public boolean isBounceFeatureDiscovered() {
+        return (!mSettings.isFeatureDiscovered(Settings.FEATURE_TRACT_CARD_CLICKED) ||
+                !mSettings.isFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED));
     }
 
     /**
@@ -828,32 +845,45 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     /**
      *  This runnable object is used to create a loop that will run the animation.
      */
-    private Runnable bounceAnimationRunnable;
-    private Runnable createRunnable() {
-        return () -> {
+    private static final Runnable bounceAnimationRunnable = new Runnable() {
+        @Override
+        public void run() {
+            Timber.d("bounceAnimationRunnable");
+//            Looper.prepareMainLooper();
+        }
+    };
 
-            if (mShouldAnimateCard) {
-
-                mShouldAnimateCard = (!mSettings.isFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED) ||
-                        !mSettings.isFeatureDiscovered(Settings.FEATURE_TRACT_CARD_CLICKED));
-
-                animateFirstCardView();
-
-                mHandler.postDelayed(bounceAnimationRunnable, DELAY_MILLIS);
-
-            } else {
-
-                mHandler.removeCallbacks(bounceAnimationRunnable);
-
-            }
-        };
-    }
-    private void disposeRunnable(){
-        bounceAnimationRunnable = null;
-    }
     /**
      *  This Handler is what is used to created the delayed post of bounceAnimationRunnable
      */
-    private Handler mHandler = new Handler(Looper.getMainLooper());
+    private static class BounceHandler extends Handler {
+        private final WeakReference<PageContentLayout> mPageContentLayout;
+
+        BounceHandler(PageContentLayout mPageContentLayout) {
+
+            this.mPageContentLayout = new WeakReference<>(mPageContentLayout);
+        }
+
+        @Override
+        public void dispatchMessage(Message msg) {
+            super.dispatchMessage(msg);
+
+            PageContentLayout layout = mPageContentLayout.get();
+
+            if (layout != null) {
+                if (layout.mAnimateCard) {
+                    layout.animateFirstCardView();
+                    layout.mAnimateCard = layout.isBounceFeatureDiscovered();
+                    postDelayed(bounceAnimationRunnable, DELAY_MILLIS);
+                } else {
+                    removeCallbacks(bounceAnimationRunnable);
+                }
+            }
+        }
+
+
+    }
+
+    private final BounceHandler mHandler = new BounceHandler(this);
     //endregion
 }

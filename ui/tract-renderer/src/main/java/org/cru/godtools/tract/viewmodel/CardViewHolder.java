@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.base.tool.model.view.ResourceViewUtils;
 import org.cru.godtools.base.tool.model.view.TextViewUtils;
@@ -134,6 +135,8 @@ public final class CardViewHolder extends ParentViewHolder<Card> {
     void toggleCard() {
         if (mCallbacks != null) {
             mCallbacks.onToggleCard(this);
+            Settings.getInstance(mCardView.getContext().getApplicationContext())
+                    .setFeatureDiscovered(Settings.FEATURE_TRACT_CARD_CLICKED);
         }
     }
 }
