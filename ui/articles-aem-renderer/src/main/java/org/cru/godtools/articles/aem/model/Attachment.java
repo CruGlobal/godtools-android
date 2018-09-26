@@ -2,8 +2,9 @@ package org.cru.godtools.articles.aem.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 /**
@@ -12,29 +13,20 @@ import android.support.annotation.NonNull;
  *
  * @author Gyasi Story
  */
-@Entity(tableName = "attachment_table", indices = {@Index(value = {"attachment_url"})})
+@Entity(tableName = "attachments",
+        primaryKeys = {"articleUri", "uri"},
+        indices = {@Index("uri")},
+        foreignKeys = {
+                @ForeignKey(entity = Article.class,
+                        onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
+                        parentColumns = {"uri"}, childColumns = {"articleUri"})
+        })
 public class Attachment {
-
-    /**
-     * Unique Identifier for Attachment table
-     */
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "_id")
-    public int mID;
-
-    /**
-     * the Foreign Key for the associated Article
-     */
     @NonNull
-    @ColumnInfo(name = "article_key")
-    public String mArticleKey;
+    public final Uri articleUri;
 
-    /**
-     *  The Url path fot the attachment
-     */
     @NonNull
-    @ColumnInfo(name = "attachment_url")
-    public String mAttachmentUrl;
+    public final Uri uri;
 
     /**
      *  This is the path to the local directory of the saved attachment.  This
@@ -43,5 +35,12 @@ public class Attachment {
     @ColumnInfo(name = "attachment_file_path")
     public String mAttachmentFilePath;
 
+    public Attachment(@NonNull final Article article, @NonNull final Uri uri) {
+        this(article.uri, uri);
+    }
 
+    public Attachment(@NonNull final Uri articleUri, @NonNull final Uri uri) {
+        this.articleUri = articleUri;
+        this.uri = uri;
+    }
 }

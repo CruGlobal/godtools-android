@@ -21,7 +21,6 @@ import java.util.List;
  */
 @Dao
 interface AttachmentDao {
-
     /**
      * Insertion of a unique Attachment.  If there is a conflict
      * the new data will replace the conflicting data.
@@ -54,13 +53,14 @@ interface AttachmentDao {
      * @param articleId = The unique Identifier of the article
      * @return = a list of Attachments.  Using live data to support in Live updates.
      */
-    @Query("SELECT * FROM attachment_table WHERE article_key = :articleId")
+    @Query("SELECT * FROM attachments WHERE articleUri = :articleId")
     LiveData<List<Attachment>> getAttachmentsByArticle(String articleId);
 
-    //region Testable (None Live Data)
-    @VisibleForTesting()
-    @Query("SELECT * FROM attachment_table WHERE article_key = :articleId")
-    List<Attachment> getTestableAttachmentsByArticle(String articleId);
-    //endregion
+    // region Testable (None Live Data)
 
+    @VisibleForTesting()
+    @Query("SELECT * FROM attachments WHERE articleUri = :articleId")
+    List<Attachment> getTestableAttachmentsByArticle(String articleId);
+
+    // endregion
 }

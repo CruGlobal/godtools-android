@@ -297,7 +297,7 @@ public class AEMDownloadManger {
         if (attachment.mAttachmentFilePath != null) {
             //TODO: determine what should happen
         } else {
-            String[] urlSplit = attachment.mAttachmentUrl.split("/");
+            String[] urlSplit = attachment.uri.toString().split("/");
             String filename = urlSplit[urlSplit.length - 1];
             File articleFile = new File(mContext.getFilesDir(), "articles");
             if (!articleFile.exists()) {
@@ -305,7 +305,7 @@ public class AEMDownloadManger {
             }
             articleFile = new File(articleFile, filename);
             FileOutputStream outputStream = new FileOutputStream(articleFile);
-            URL url = new URL(attachment.mAttachmentUrl);
+            URL url = new URL(attachment.uri.toString());
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(url)

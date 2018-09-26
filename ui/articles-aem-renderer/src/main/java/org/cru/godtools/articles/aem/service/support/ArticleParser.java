@@ -150,11 +150,8 @@ public class ArticleParser {
                             .optString(RESOURCE_TYPE_TAG))) {
 
                 //  This Key is an Attachment
-                Attachment retrievedAttachment = new Attachment();
-                retrievedAttachment.mArticleKey = articleUrl.toString();
-                retrievedAttachment.mAttachmentUrl = String.format("https://%s%s", articleUrl.getHost(),
-                        innerObject.optString(FILE_TAG));
-                attachments.add(retrievedAttachment);
+                final Uri attachmentUri = articleUrl.buildUpon().appendPath(nextKey).build();
+                attachments.add(new Attachment(articleUrl, attachmentUri));
             }
         }
 
