@@ -1,0 +1,352 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "3ff7a0ad09fedfa24c80d27c9d86d920",
+    "entities": [
+      {
+        "tableName": "translations",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`processed` INTEGER NOT NULL, `tool` TEXT NOT NULL, `language` TEXT NOT NULL, `version` INTEGER NOT NULL, PRIMARY KEY(`tool`, `language`, `version`))",
+        "fields": [
+          {
+            "fieldPath": "processed",
+            "columnName": "processed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "key.tool",
+            "columnName": "tool",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "key.language",
+            "columnName": "language",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "key.version",
+            "columnName": "version",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "tool",
+            "language",
+            "version"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "translationAemImports",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`aemImportUri` TEXT NOT NULL, `tool` TEXT NOT NULL, `language` TEXT NOT NULL, `version` INTEGER NOT NULL, PRIMARY KEY(`tool`, `language`, `version`, `aemImportUri`), FOREIGN KEY(`tool`, `language`, `version`) REFERENCES `translations`(`tool`, `language`, `version`) ON UPDATE RESTRICT ON DELETE CASCADE , FOREIGN KEY(`aemImportUri`) REFERENCES `aemImports`(`uri`) ON UPDATE RESTRICT ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "aemImportUri",
+            "columnName": "aemImportUri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "translation.tool",
+            "columnName": "tool",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "translation.language",
+            "columnName": "language",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "translation.version",
+            "columnName": "version",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "tool",
+            "language",
+            "version",
+            "aemImportUri"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_translationAemImports_aemImportUri",
+            "unique": false,
+            "columnNames": [
+              "aemImportUri"
+            ],
+            "createSql": "CREATE  INDEX `index_translationAemImports_aemImportUri` ON `${TABLE_NAME}` (`aemImportUri`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "translations",
+            "onDelete": "CASCADE",
+            "onUpdate": "RESTRICT",
+            "columns": [
+              "tool",
+              "language",
+              "version"
+            ],
+            "referencedColumns": [
+              "tool",
+              "language",
+              "version"
+            ]
+          },
+          {
+            "table": "aemImports",
+            "onDelete": "CASCADE",
+            "onUpdate": "RESTRICT",
+            "columns": [
+              "aemImportUri"
+            ],
+            "referencedColumns": [
+              "uri"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "aemImports",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uri` TEXT NOT NULL, `lastProcessed` INTEGER NOT NULL, PRIMARY KEY(`uri`))",
+        "fields": [
+          {
+            "fieldPath": "uri",
+            "columnName": "uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastProcessed",
+            "columnName": "lastProcessed",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "uri"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "aemImportArticles",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`aemImportUri` TEXT NOT NULL, `articleUri` TEXT NOT NULL, PRIMARY KEY(`aemImportUri`, `articleUri`), FOREIGN KEY(`aemImportUri`) REFERENCES `aemImports`(`uri`) ON UPDATE RESTRICT ON DELETE CASCADE , FOREIGN KEY(`articleUri`) REFERENCES `articles`(`uri`) ON UPDATE RESTRICT ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "aemImportUri",
+            "columnName": "aemImportUri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "articleUri",
+            "columnName": "articleUri",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "aemImportUri",
+            "articleUri"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_aemImportArticles_articleUri",
+            "unique": false,
+            "columnNames": [
+              "articleUri"
+            ],
+            "createSql": "CREATE  INDEX `index_aemImportArticles_articleUri` ON `${TABLE_NAME}` (`articleUri`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "aemImports",
+            "onDelete": "CASCADE",
+            "onUpdate": "RESTRICT",
+            "columns": [
+              "aemImportUri"
+            ],
+            "referencedColumns": [
+              "uri"
+            ]
+          },
+          {
+            "table": "articles",
+            "onDelete": "CASCADE",
+            "onUpdate": "RESTRICT",
+            "columns": [
+              "articleUri"
+            ],
+            "referencedColumns": [
+              "uri"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "articles",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uri` TEXT NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `date_created` INTEGER NOT NULL, `date_updated` INTEGER NOT NULL, PRIMARY KEY(`uri`))",
+        "fields": [
+          {
+            "fieldPath": "uri",
+            "columnName": "uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mTitle",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mContent",
+            "columnName": "content",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mDateCreated",
+            "columnName": "date_created",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mDateUpdated",
+            "columnName": "date_updated",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "uri"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "categories",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`articleUri` TEXT NOT NULL, `category` TEXT NOT NULL, PRIMARY KEY(`articleUri`, `category`), FOREIGN KEY(`articleUri`) REFERENCES `articles`(`uri`) ON UPDATE RESTRICT ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "articleUri",
+            "columnName": "articleUri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "articleUri",
+            "category"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "articles",
+            "onDelete": "CASCADE",
+            "onUpdate": "RESTRICT",
+            "columns": [
+              "articleUri"
+            ],
+            "referencedColumns": [
+              "uri"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "attachments",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`articleUri` TEXT NOT NULL, `uri` TEXT NOT NULL, `attachment_file_path` TEXT, PRIMARY KEY(`articleUri`, `uri`), FOREIGN KEY(`articleUri`) REFERENCES `articles`(`uri`) ON UPDATE RESTRICT ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "articleUri",
+            "columnName": "articleUri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uri",
+            "columnName": "uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mAttachmentFilePath",
+            "columnName": "attachment_file_path",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "articleUri",
+            "uri"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_attachments_uri",
+            "unique": false,
+            "columnNames": [
+              "uri"
+            ],
+            "createSql": "CREATE  INDEX `index_attachments_uri` ON `${TABLE_NAME}` (`uri`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "articles",
+            "onDelete": "CASCADE",
+            "onUpdate": "RESTRICT",
+            "columns": [
+              "articleUri"
+            ],
+            "referencedColumns": [
+              "uri"
+            ]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"3ff7a0ad09fedfa24c80d27c9d86d920\")"
+    ]
+  }
+}
