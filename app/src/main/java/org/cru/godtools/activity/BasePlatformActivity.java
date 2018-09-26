@@ -4,6 +4,7 @@ import android.arch.lifecycle.Lifecycle;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -65,7 +66,7 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG_KEY_LOGIN_DIALOG = "keyLoginDialog";
 
-    private final ChangeListener mSettingsChangeListener = new ChangeListener();
+    private final OnSharedPreferenceChangeListener mSettingsChangeListener = this::onSettingsUpdated;
 
     // Navigation Drawer
     @Nullable
@@ -120,15 +121,23 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     @Override
     protected void onStart() {
         super.onStart();
-        startLanguagesChangeListener();
+        startSettingsChangeListener();
         mEventBus.register(this);
         loadLanguages(false);
         updateNavigationDrawerMenu();
     }
 
-    @MainThread
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onTheKeyEvent(@NonNull final TheKeyEvent event) {
+    @CallSuper
+    public void onSettingsUpdated(@Nullable final SharedPreferences preferences, @Nullable final String key) {
+        switch (Strings.nullToEmpty(key)) {
+            case PREF_PRIMARY_LANGUAGE:
+            case PREF_PARALLEL_LANGUAGE:
+                loadLanguages(false);
+        }
+    }
+
+    @CallSuper
+    protected void onTheKeyEvent(@NonNull final TheKeyEvent event) {
         updateNavigationDrawerMenu();
     }
 
@@ -215,10 +224,16 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
     protected void onStop() {
         super.onStop();
         mEventBus.unregister(this);
-        stopLanguagesChangeListener();
+        stopSettingsChangeListener();
     }
 
     /* END lifecycle */
+
+    @MainThread
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public final void theKeyEvent(@NonNull final TheKeyEvent event) {
+        onTheKeyEvent(event);
+    }
 
     @NonNull
     protected Settings prefs() {
@@ -306,11 +321,11 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
         }
     }
 
-    private void startLanguagesChangeListener() {
+    private void startSettingsChangeListener() {
         prefs().registerOnSharedPreferenceChangeListener(mSettingsChangeListener);
     }
 
-    private void stopLanguagesChangeListener() {
+    private void stopSettingsChangeListener() {
         prefs().unregisterOnSharedPreferenceChangeListener(mSettingsChangeListener);
     }
 
@@ -395,17 +410,5 @@ public abstract class BasePlatformActivity extends BaseDesignActivity
 
     protected void showLanguageSettings() {
         LanguageSettingsActivity.start(this);
-    }
-
-    class ChangeListener implements SharedPreferences.OnSharedPreferenceChangeListener {
-        @Override
-        public void onSharedPreferenceChanged(@Nullable final SharedPreferences preferences,
-                                              @Nullable final String key) {
-            switch (Strings.nullToEmpty(key)) {
-                case PREF_PRIMARY_LANGUAGE:
-                case PREF_PARALLEL_LANGUAGE:
-                    loadLanguages(false);
-            }
-        }
     }
 }

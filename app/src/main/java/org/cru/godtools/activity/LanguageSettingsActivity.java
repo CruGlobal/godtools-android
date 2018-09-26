@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import org.cru.godtools.R;
@@ -23,7 +22,7 @@ public class LanguageSettingsActivity extends BasePlatformActivity {
         context.startActivity(new Intent(context, LanguageSettingsActivity.class));
     }
 
-    /* BEGIN lifecycle */
+    // region Lifecycle Events
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,15 +43,13 @@ public class LanguageSettingsActivity extends BasePlatformActivity {
         mEventBus.post(new AnalyticsScreenEvent(SCREEN_LANGUAGE_SETTINGS));
     }
 
-    /* END lifecycle */
+    // endregion Lifecycle Events
 
     @MainThread
     private void loadInitialFragmentIfNeeded() {
-        final FragmentManager fm = getSupportFragmentManager();
-
         // short-circuit if there is a currently attached fragment
-        Fragment fragment = fm.findFragmentByTag(TAG_MAIN_FRAGMENT);
-        if (fragment != null) {
+        final FragmentManager fm = getSupportFragmentManager();
+        if (fm.findFragmentByTag(TAG_MAIN_FRAGMENT) != null) {
             return;
         }
 
