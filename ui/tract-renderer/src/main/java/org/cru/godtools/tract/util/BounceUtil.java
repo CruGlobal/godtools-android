@@ -14,14 +14,11 @@ public class BounceUtil {
         if (input < 1 / 2.75) {
             return (float) (7.5625 * input * input);
         } else if (input < 2 / 2.75) {
-            input -= 1.5;
-            return (float) (7.5625 * (input / 2.75) * input + 0.75);
+            return (float) (7.5625 * (input -= 1.5 / 2.75) * input + 0.75);
         } else if (input < 2.5 / 2.75) {
-            input -= 2.25;
-            return (float) (7.5625 * (input / 2.75) * input + 0.9375);
+            return (float) (7.5625 * (input -= 2.25 / 2.75) * input + 0.9375);
         } else {
-            input -= 2.625;
-            return (float) (7.5625 * (input / 2.75) * input + 0.984375);
+            return (float) (7.5625 * (input -= 2.625 / 2.75) * input + 0.984375);
         }
     }
 }

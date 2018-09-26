@@ -15,6 +15,7 @@ import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
+import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.base.tool.model.view.ResourceViewUtils;
 import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
@@ -116,7 +117,11 @@ public class PageViewHolder extends ParentViewHolder<Page>
         } else {
             mHeroViewHolder.markVisible();
         }
-        mPageContentLayout.shouldAnimateCard();
+        Settings settings = Settings.getInstance(mPageContentLayout.getContext().getApplicationContext());
+        if (!settings.isFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED) ||
+                !settings.isFeatureDiscovered(Settings.FEATURE_TRACT_CARD_CLICKED)) {
+            mPageContentLayout.animateCard();
+        }
     }
 
     @Override
