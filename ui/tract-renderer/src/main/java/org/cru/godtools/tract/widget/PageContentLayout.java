@@ -84,17 +84,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     private View mActiveCard;
     private int mActiveCardPosition = 0;
 
-    private ObjectAnimator mBounceAnimator;
     @Nullable
     Animator mAnimation;
     private final Animator.AnimatorListener mAnimationListener = new SimpleAnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animation, boolean isReverse) {
-            // if an animation is started that is not the bounce it will stop the bounce animation
-            if (mBounceAnimator != animation) {
-                stopBounceAnimation();
-            }
-        }
 
         @Override
         public void onAnimationEnd(final Animator animation) {
@@ -456,19 +448,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         stopBounceAnimation();
     }
 
-    /**
-     *  This method starts the card animation.
-     */
-//    private void animateCard() {
-//        if (mAnimateCard) {
-//            mAnimateCard = (!mSettings.isFeatureDiscovered(Settings.FEATURE_TRACT_CARD_CLICKED) ||
-//                    !mSettings.isFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED));
-//            mHandler.postDelayed(bounceAnimationRunnable, DELAY_MILLIS);
-//        } else {
-//            mHandler.removeCallbacks(bounceAnimationRunnable);
-//        }
-//    }
-
     public void setAnimateCard(boolean animate) {
         this.mAnimateCard = animate;
         if (mAnimateCard) {
@@ -481,10 +460,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
      * This method will stop the bounce Animation and set the Feature as Discovered.
      */
     private void stopBounceAnimation() {
-
-        if (mBounceAnimator != null) {
-            mBounceAnimator.cancel();
-        }
         mAnimateCard = false;
     }
 
@@ -500,13 +475,13 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     @UiThread
     private void bounceCardAnimation(final View targetView) {
 
-        mBounceAnimator = ObjectAnimator.ofFloat(targetView, "translationY",
+        mAnimation = ObjectAnimator.ofFloat(targetView, "translationY",
                 targetView.getY(), targetView.getY() + HEIGHT_ADDED, targetView.getY());
-        mBounceAnimator.setInterpolator(BounceUtil::getBounceInOut);
-        mBounceAnimator.setStartDelay(START_DELAY);
-        mBounceAnimator.setDuration(DURATION);
-        mBounceAnimator.addListener(mAnimationListener);
-        mBounceAnimator.start();
+        mAnimation.setInterpolator(BounceUtil::getBounceInOut);
+        mAnimation.setStartDelay(START_DELAY);
+        mAnimation.setDuration(DURATION);
+        mAnimation.addListener(mAnimationListener);
+        mAnimation.start();
     }
     //endregion
 
