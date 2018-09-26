@@ -55,15 +55,14 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         ViewTreeObserver.OnGlobalLayoutListener {
     private static final int FLING_SCALE_FACTOR = 20;
     private static final int DELAY_MILLIS = 10000;
-    public static final int START_DELAY = 50;
-    public static final int DURATION = 1000;
-    public static final int HEIGHT_ADDED = 30;
+    public static final int START_DELAY = 500;
+    public static final int DURATION = 3000;
 
     public interface OnActiveCardListener {
         void onActiveCardChanged(@Nullable View activeCard);
     }
 
-    private boolean mAnimateCard = true;
+    private boolean mBounceFirstCard = true;
 
     private Settings mSettings;
     private final GestureDetectorCompat mGestureDetector;
@@ -449,18 +448,18 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     }
 
     public void setAnimateCard(boolean animate) {
-        this.mAnimateCard = animate;
-        if (mAnimateCard) {
+        this.mBounceFirstCard = animate;
+        if (mBounceFirstCard) {
             animateFirstCardView();
-            mHandler.postDelayed(bounceAnimationRunnable, DELAY_MILLIS);
+            mHandler.postDelayed(BOUNCE_ANIMATION_RUNNABLE, DELAY_MILLIS);
         }
     }
 
     /**
-     * This method will stop the bounce Animation and set the Feature as Discovered.
+     * This method will stop the bounce Animation by setting the AnimateCard variable to false.
      */
     private void stopBounceAnimation() {
-        mAnimateCard = false;
+        mBounceFirstCard = false;
     }
 
     public boolean isBounceFeatureDiscovered() {
@@ -475,8 +474,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     @UiThread
     private void bounceCardAnimation(final View targetView) {
 
+        int bounceHeight = getResources().getDimensionPixelSize(R.dimen.card_bounce_height);
         mAnimation = ObjectAnimator.ofFloat(targetView, "translationY",
-                targetView.getY(), targetView.getY() + HEIGHT_ADDED, targetView.getY());
+                targetView.getY(), targetView.getY() + bounceHeight, targetView.getY());
         mAnimation.setInterpolator(BounceUtil::getBounceInOut);
         mAnimation.setStartDelay(START_DELAY);
         mAnimation.setDuration(DURATION);
@@ -820,16 +820,10 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     /**
      *  This runnable object is used to create a loop that will run the animation.
      */
-    private static final Runnable bounceAnimationRunnable = new Runnable() {
-        @Override
-        public void run() {
-            Timber.d("bounceAnimationRunnable");
-//            Looper.prepareMainLooper();
-        }
-    };
+    private static final Runnable BOUNCE_ANIMATION_RUNNABLE = () -> Timber.d("BOUNCE_ANIMATION_RUNNABLE");
 
     /**
-     *  This Handler is what is used to created the delayed post of bounceAnimationRunnable
+     *  This Handler is what is used to created the delayed post of BOUNCE_ANIMATION_RUNNABLE
      */
     private static class BounceHandler extends Handler {
         private final WeakReference<PageContentLayout> mPageContentLayout;
@@ -846,17 +840,15 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             PageContentLayout layout = mPageContentLayout.get();
 
             if (layout != null) {
-                if (layout.mAnimateCard) {
+                if (layout.mBounceFirstCard) {
                     layout.animateFirstCardView();
-                    layout.mAnimateCard = layout.isBounceFeatureDiscovered();
-                    postDelayed(bounceAnimationRunnable, DELAY_MILLIS);
+                    layout.mBounceFirstCard = layout.isBounceFeatureDiscovered();
+                    postDelayed(BOUNCE_ANIMATION_RUNNABLE, DELAY_MILLIS);
                 } else {
-                    removeCallbacks(bounceAnimationRunnable);
+                    removeCallbacks(BOUNCE_ANIMATION_RUNNABLE);
                 }
             }
         }
-
-
     }
 
     private final BounceHandler mHandler = new BounceHandler(this);
