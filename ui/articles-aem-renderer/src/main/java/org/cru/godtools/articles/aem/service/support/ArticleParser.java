@@ -1,5 +1,6 @@
 package org.cru.godtools.articles.aem.service.support;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import org.cru.godtools.articles.aem.model.Article;
@@ -21,11 +22,9 @@ public class ArticleParser {
     private static final String CREATED_TAG = "jcr:created";
     private static final String CONTENT_TAG = "jcr:content";
     private static final String LAST_MODIFIED_TAG = "cq:lastModified";
-    private static final String UUID_TAG = "jcr:uuid";
     private static final String TITLE_TAG = "jcr:title";
     private static final String ROOT_TAG = "root";
     private static final String FILE_TAG = "fileReference";
-    private static final String BASE_URL = "https://stage.cru.org";
     private static final String RESOURCE_TYPE_TAG = "sling:resourceType";
     private static final String PRIMARY_TYPE_TAG = "jcr:primaryType";
     private static final String ORDER_FOLDER_TAG = "sling:OrderedFolder";
@@ -38,8 +37,8 @@ public class ArticleParser {
      *
      * @return return a list of {@link Article}
      */
-    public static List<Article> parse(@NonNull final JSONObject articleJSON) {
-        return jsonObjectHandler(articleJSON);
+    public static List<Article> parse(@NonNull final Uri url, @NonNull final JSONObject json) {
+        return parseObject(url, json);
     }
 
     //endregion public Executor
@@ -51,27 +50,29 @@ public class ArticleParser {
      * are Article Objects or Category Object.  Article Objects will be passed on to be parsed
      * and Category Object will be Recursively placed back into this method.
      *
-     * @param evaluatingObject the Json Object to be evaluated.
+     * @param url
+     * @param json the Json Object to be evaluated.
      * @return All the articles that were parsed
      */
     @NonNull
-    private static List<Article> jsonObjectHandler(JSONObject evaluatingObject) {
+    private static List<Article> parseObject(@NonNull final Uri url, @NonNull final JSONObject json) {
         final List<Article> articles = new ArrayList<>();
 
         // Create loop through Keys
-        Iterator<String> keys = evaluatingObject.keys();
+        Iterator<String> keys = json.keys();
         while (keys.hasNext()) {
             String nextKey = keys.next();
             if (isArticleOrCategory(nextKey)) {
-                JSONObject returnedObject = evaluatingObject.optJSONObject(nextKey);
+                JSONObject returnedObject = json.optJSONObject(nextKey);
                 if (returnedObject != null) {
+                    Uri keyUri = url.buildUpon().appendPath(nextKey).build();
                     switch (returnedObject.optString(PRIMARY_TYPE_TAG)) {
                         case ORDER_FOLDER_TAG:
-                            articles.addAll(jsonObjectHandler(returnedObject));
+                            articles.addAll(parseObject(keyUri, returnedObject));
 
                             break;
                         case PAGE_TAG:
-                            articles.add(parseArticleObject(returnedObject));
+                            articles.add(parseArticle(keyUri, returnedObject));
 
                             break;
                     }
@@ -86,42 +87,43 @@ public class ArticleParser {
      * This method parses an Article Json Object into the Database. On completion it will add
      * articles to <code>articleList</code>
      *
-     * @param articleObject article JsonObject
+     * @param url The URL of this article
+     * @param json article JsonObject
      * @return The AEM Article that was just parsed
      */
     @NonNull
-    private static Article parseArticleObject(JSONObject articleObject) {
+    private static Article parseArticle(@NonNull final Uri url, @NonNull final JSONObject json) {
         // Create Article
         Article retrievedArticle = new Article();
         // get Inner article Object
-        Iterator<String> keys = articleObject.keys();
+        Iterator<String> keys = json.keys();
         JSONObject articleTagObject = null;
+        Uri keyUri = url;
         while (keys.hasNext()) {
             String nextKey = keys.next();
             if (isArticleOrCategory(nextKey)) {
-                articleTagObject = articleObject.optJSONObject(nextKey);
+                keyUri = keyUri.buildUpon().appendPath(nextKey).build();
+                articleTagObject = json.optJSONObject(nextKey);
             }
         }
 
-        retrievedArticle.mDateCreated = getDateLongFromJsonString(articleObject.optString(CREATED_TAG));
+        retrievedArticle.mDateCreated = getDateLongFromJsonString(json.optString(CREATED_TAG));
         JSONObject contentObject = articleTagObject != null ? articleTagObject.optJSONObject(CONTENT_TAG) : null;
         if (contentObject != null) {
-            if (articleObject.has(CONTENT_TAG) && contentObject.has(LAST_MODIFIED_TAG)) {
+            if (json.has(CONTENT_TAG) && contentObject.has(LAST_MODIFIED_TAG)) {
                 retrievedArticle.mDateUpdated = getDateLongFromJsonString(contentObject
                         .optString(LAST_MODIFIED_TAG));
             }
-            retrievedArticle.mkey = contentObject.optString(UUID_TAG);
+
+            retrievedArticle.mkey = keyUri.toString();
             retrievedArticle.mTitle = contentObject
                     .optString(TITLE_TAG);
 
             JSONObject articleRootObject = contentObject.optJSONObject(ROOT_TAG);
 
-            // TODO: need to set code to extract content from url
-
             // get Attachments from Articles
             if (articleRootObject != null) {
-                retrievedArticle.parsedAttachments =
-                        getAttachmentsFromRootObject(articleRootObject, retrievedArticle.mkey);
+                retrievedArticle.parsedAttachments = getAttachmentsFromRootObject(keyUri, articleRootObject);
             }
         }
 
@@ -133,11 +135,11 @@ public class ArticleParser {
      * completion it will add Attachment to <code>attachmentList</code>
      *
      * @param articleRootObject the root json Object of Article
-     * @param articleKey        the uuid of the article
      * @return the list of attachments that were parsed
      */
     @NonNull
-    private static List<Attachment> getAttachmentsFromRootObject(JSONObject articleRootObject, String articleKey) {
+    private static List<Attachment> getAttachmentsFromRootObject(@NonNull final Uri articleUrl,
+                                                                 JSONObject articleRootObject) {
         final List<Attachment> attachments = new ArrayList<>();
 
         // Iterate through keys
@@ -151,8 +153,8 @@ public class ArticleParser {
 
                 //  This Key is an Attachment
                 Attachment retrievedAttachment = new Attachment();
-                retrievedAttachment.mArticleKey = articleKey;
-                retrievedAttachment.mAttachmentUrl = String.format("%s%s", BASE_URL,
+                retrievedAttachment.mArticleKey = articleUrl.toString();
+                retrievedAttachment.mAttachmentUrl = String.format("https://%s%s", articleUrl.getHost(),
                         innerObject.optString(FILE_TAG));
                 attachments.add(retrievedAttachment);
             }
@@ -175,6 +177,7 @@ public class ArticleParser {
             return new Date().getTime();
         }
     }
+
     //endregion Article Parsing
 
     //region Validation

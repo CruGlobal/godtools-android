@@ -21,6 +21,8 @@ import java.util.Locale;
 public class Article {
     /**
      * Unique Identifier for the article table
+     *
+     * This will be the url for the article.
      */
     @PrimaryKey
     @NonNull

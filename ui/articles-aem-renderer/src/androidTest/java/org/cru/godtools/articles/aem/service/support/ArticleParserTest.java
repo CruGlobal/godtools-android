@@ -1,5 +1,6 @@
 package org.cru.godtools.articles.aem.service.support;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -22,7 +23,8 @@ public class ArticleParserTest {
     public void verifyArticleParseLogic() throws Exception {
         final JSONObject jsonObject = loadJson("tests/article-test.json");
 
-        final List<Article> articles = ArticleParser.parse(jsonObject);
+        final List<Article> articles = ArticleParser.parse(Uri.parse(
+                "https://stage.cru.org/content/experience-fragments/questions_about_god/english"), jsonObject);
         assertThat(articles.size(), is(2));
         for (final Article article : articles) {
             assertThat(article.parsedAttachments.size(), is(3));
