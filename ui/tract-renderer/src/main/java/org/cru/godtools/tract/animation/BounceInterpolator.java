@@ -9,28 +9,24 @@ public final class BounceInterpolator implements Interpolator {
         // simplicity we center the equation on the y-axis.
         final double x;
         final double verticalOffset;
-        // first bounce
         if (i >= 0 && i < 8.0 / 15) {
+            // first bounce
             x = i - 4.0 / 15.0;
             verticalOffset = 1;
-        }
-        // second bounce
-        else if (i < 12.0 / 15) {
+        } else if (i < 12.0 / 15) {
+            // second bounce
             x = i - 10.0 / 15;
             verticalOffset = 0.25; // 1/4
-        }
-        // third bounce
-        else if (i < 14.0 / 15) {
+        } else if (i < 14.0 / 15) {
+            // third bounce
             x = i - 13.0 / 15;
             verticalOffset = 0.0625; // 1/16
-        }
-        // fourth bounce
-        else if (i < 1) {
+        } else if (i < 1) {
+            // fourth bounce
             x = i - 14.5 / 15;
             verticalOffset = 0.015625; // 1/64
-        }
-        // other
-        else {
+        } else {
+            // other
             return 0;
         }
 
