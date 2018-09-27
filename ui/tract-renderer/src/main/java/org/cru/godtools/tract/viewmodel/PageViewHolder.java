@@ -116,7 +116,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
         } else {
             mHeroViewHolder.markVisible();
         }
-        if (mPageContentLayout.isBounceFeatureDiscovered()) {
+        if (!mPageContentLayout.isBounceFeatureDiscovered()) {
             mPageContentLayout.setAnimateCard(true);
         }
     }

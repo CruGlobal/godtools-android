@@ -43,8 +43,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import timber.log.Timber;
-
 import static android.widget.FrameLayout.LayoutParams.UNSPECIFIED_GRAVITY;
 import static org.ccci.gto.android.common.base.Constants.INVALID_ID_RES;
 import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD_TYPE_CALL_TO_ACTION;
@@ -54,15 +52,17 @@ import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD
 public class PageContentLayout extends FrameLayout implements NestedScrollingParent,
         ViewTreeObserver.OnGlobalLayoutListener {
     private static final int FLING_SCALE_FACTOR = 20;
-    private static final int DELAY_MILLIS = 10000;
-    public static final int START_DELAY = 500;
-    public static final int DURATION = 600;
+    private static final int DELAY_FIRST_BOUNCE_ANIMATION = 1000;
+    private static final int DELAY_BETWEEN_BOUNCE_ANIMATION = 10000;
+    private static final int BOUNCE_ANIMATION_START_DELAY = 500;
+    private static final int BOUNCE_ANIMATION_DURATION = 600;
+    private static final int BOUNCE_MESSAGE = 11;
 
     public interface OnActiveCardListener {
         void onActiveCardChanged(@Nullable View activeCard);
     }
 
-    private boolean mBounceFirstCard = true;
+    private boolean mBounceFirstCard = false;
 
     private Settings mSettings;
     private final GestureDetectorCompat mGestureDetector;
@@ -434,24 +434,24 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
      */
     @UiThread
     private void animateFirstCardView() {
-        // Cards were in the wrong location need to reset animation each time.
-        for (int i = 0; i < getChildCount(); i++) {
-            final View child = getChildAt(i);
-            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-            switch (lp.childType) {
-                case CHILD_TYPE_CARD:
-                    bounceCardAnimation(child);
-                    return; // Stop after first Card View
+        if (mActiveCard == null) {
+            for (int i = 0; i < getChildCount(); i++) {
+                final View child = getChildAt(i);
+                final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+                switch (lp.childType) {
+                    case CHILD_TYPE_CARD:
+                        bounceCardAnimation(child);
+                        return; // Stop after first Card View
+                }
             }
+            stopBounceAnimation();
         }
-        stopBounceAnimation();
     }
 
     public void setAnimateCard(boolean animate) {
         this.mBounceFirstCard = animate;
         if (mBounceFirstCard) {
-            animateFirstCardView();
-            mHandler.postDelayed(BOUNCE_ANIMATION_RUNNABLE, DELAY_MILLIS);
+            mHandler.sendEmptyMessageDelayed(BOUNCE_MESSAGE, DELAY_FIRST_BOUNCE_ANIMATION);
         }
     }
 
@@ -463,11 +463,11 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     }
 
     public boolean isBounceFeatureDiscovered() {
-        return (!mSettings.isFeatureDiscovered(Settings.FEATURE_TRACT_CARD_CLICKED) ||
-                !mSettings.isFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED));
+        return (mSettings.isFeatureDiscovered(Settings.FEATURE_TRACT_CARD_CLICKED) ||
+                mSettings.isFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED));
     }
 
-    /**
+     /**
      * This method will create a new instance of the bounce animation.
      * @param targetView the Card View
      */
@@ -476,8 +476,8 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         int bounceHeight = getResources().getDimensionPixelSize(R.dimen.card_bounce_height);
         mAnimation = ObjectAnimator.ofFloat(targetView, View.Y, targetView.getY() - bounceHeight);
         mAnimation.setInterpolator(new BounceInterpolator());
-        mAnimation.setStartDelay(START_DELAY);
-        mAnimation.setDuration(DURATION);
+        mAnimation.setStartDelay(BOUNCE_ANIMATION_START_DELAY);
+        mAnimation.setDuration(BOUNCE_ANIMATION_DURATION);
         mAnimation.addListener(mAnimationListener);
         mAnimation.start();
     }
@@ -815,10 +815,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     }
 
     //region bounce thread calls
-    /**
-     *  This runnable object is used to create a loop that will run the animation.
-     */
-    private static final Runnable BOUNCE_ANIMATION_RUNNABLE = () -> Timber.d("BOUNCE_ANIMATION_RUNNABLE");
 
     /**
      *  This Handler is what is used to created the delayed post of BOUNCE_ANIMATION_RUNNABLE
@@ -831,19 +827,27 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             this.mPageContentLayout = new WeakReference<>(mPageContentLayout);
         }
 
+        private void verifyAndSendDelayedMessage(int message) {
+            if (!hasMessages(message)) {
+                sendEmptyMessageDelayed(message, DELAY_BETWEEN_BOUNCE_ANIMATION);
+            }
+        }
+
         @Override
-        public void dispatchMessage(Message msg) {
-            super.dispatchMessage(msg);
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
 
             PageContentLayout layout = mPageContentLayout.get();
 
             if (layout != null) {
                 if (layout.mBounceFirstCard) {
                     layout.animateFirstCardView();
-                    layout.mBounceFirstCard = layout.isBounceFeatureDiscovered();
-                    postDelayed(BOUNCE_ANIMATION_RUNNABLE, DELAY_MILLIS);
+                    layout.mBounceFirstCard = !layout.isBounceFeatureDiscovered();
+                    verifyAndSendDelayedMessage(BOUNCE_MESSAGE);
                 } else {
-                    removeCallbacks(BOUNCE_ANIMATION_RUNNABLE);
+                    if (hasMessages(BOUNCE_MESSAGE)) {
+                        removeMessages(BOUNCE_MESSAGE);
+                    }
                 }
             }
         }
