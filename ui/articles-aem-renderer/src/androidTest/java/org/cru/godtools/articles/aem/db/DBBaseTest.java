@@ -1,10 +1,10 @@
 package org.cru.godtools.articles.aem.db;
 
+import android.net.Uri;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
-import org.cru.godtools.articles.aem.model.ManifestAssociation;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
@@ -19,17 +19,14 @@ public abstract class DBBaseTest extends BaseArticleRoomDatabaseIT {
 
     ArticleDao mArticleDao;
     AttachmentDao mAttachmentDao;
-    ManifestAssociationDao mAssociationDao;
     List<Article> mSavedArticles = new ArrayList<>();
 
     @Before
     public void createDb() throws Exception {
         mArticleDao = mDb.articleDao();
         mAttachmentDao = mDb.attachmentDao();
-        mAssociationDao = mDb.manifestAssociationDao();
         for (int i = 0; i < 12; i++) {
-            Article article = new Article();
-            article.mkey = i + "aaslf" + i;
+            Article article = new Article(Uri.parse("test:" + i + "aaslf" + i));
             article.mContent = "<p> The Body </>";
             article.mDateCreated = new SimpleDateFormat("E MMM dd yyyy HH:mm:ss zz")
                     .parse("Fri Jun 08 2018 18:55:00 GMT+0000").getTime();
@@ -48,15 +45,8 @@ public abstract class DBBaseTest extends BaseArticleRoomDatabaseIT {
         }
         mSavedArticles = mArticleDao.getTestableAllArticles();
         for (int i = 0; i < mSavedArticles.size(); i++) {
-            ManifestAssociation association = new ManifestAssociation();
-            association.mArticleId = mSavedArticles.get(i).mkey;
-            association.mManifestName = "Manifest ID " + (i % 3);
-            association.mManifestId = (i % 3) + "";
-            mAssociationDao.insertAssociation(association);
-            Attachment attachment = new Attachment();
-            attachment.mArticleKey = String.valueOf(mSavedArticles.get(i).mkey);
-            attachment.mAttachmentUrl =
-                    "https://believeacts2blog.files.wordpress.com/2015/10/image16.jpg";
+            final Attachment attachment = new Attachment(mSavedArticles.get(i), Uri.parse(
+                    "https://believeacts2blog.files.wordpress.com/2015/10/image16.jpg?_=" + i));
             mAttachmentDao.insertAttachment(attachment);
         }
     }

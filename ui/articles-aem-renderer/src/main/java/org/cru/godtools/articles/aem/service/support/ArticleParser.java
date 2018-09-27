@@ -93,8 +93,6 @@ public class ArticleParser {
      */
     @NonNull
     private static Article parseArticle(@NonNull final Uri url, @NonNull final JSONObject json) {
-        // Create Article
-        Article retrievedArticle = new Article();
         // get Inner article Object
         Iterator<String> keys = json.keys();
         JSONObject articleTagObject = null;
@@ -107,6 +105,8 @@ public class ArticleParser {
             }
         }
 
+        // Create Article
+        final Article retrievedArticle = new Article(keyUri);
         retrievedArticle.mDateCreated = getDateLongFromJsonString(json.optString(CREATED_TAG));
         JSONObject contentObject = articleTagObject != null ? articleTagObject.optJSONObject(CONTENT_TAG) : null;
         if (contentObject != null) {
@@ -115,9 +115,7 @@ public class ArticleParser {
                         .optString(LAST_MODIFIED_TAG));
             }
 
-            retrievedArticle.mkey = keyUri.toString();
-            retrievedArticle.mTitle = contentObject
-                    .optString(TITLE_TAG);
+            retrievedArticle.mTitle = contentObject.optString(TITLE_TAG);
 
             JSONObject articleRootObject = contentObject.optJSONObject(ROOT_TAG);
 
@@ -152,11 +150,8 @@ public class ArticleParser {
                             .optString(RESOURCE_TYPE_TAG))) {
 
                 //  This Key is an Attachment
-                Attachment retrievedAttachment = new Attachment();
-                retrievedAttachment.mArticleKey = articleUrl.toString();
-                retrievedAttachment.mAttachmentUrl = String.format("https://%s%s", articleUrl.getHost(),
-                        innerObject.optString(FILE_TAG));
-                attachments.add(retrievedAttachment);
+                final Uri attachmentUri = articleUrl.buildUpon().appendPath(nextKey).build();
+                attachments.add(new Attachment(articleUrl, attachmentUri));
             }
         }
 

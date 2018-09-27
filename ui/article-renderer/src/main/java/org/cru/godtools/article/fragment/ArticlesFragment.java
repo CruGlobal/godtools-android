@@ -1,11 +1,9 @@
 package org.cru.godtools.article.fragment;
 
-import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
@@ -18,7 +16,7 @@ import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.R2;
 import org.cru.godtools.article.adapter.ArticlesAdapter;
-import org.cru.godtools.articles.aem.db.ManifestAssociationRepository;
+import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 
@@ -67,7 +65,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
             mManifestKey = args.getString(MANIFEST_KEY, mManifestKey);
         }
 
-        mViewModel = ViewModelProviders.of(this).get(ArticleListViewModel.class);
+        setupViewModel();
     }
 
     @Nullable
@@ -115,6 +113,16 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
 
     // endregion LifeCycle Events
 
+    private void setupViewModel() {
+        mViewModel = ViewModelProviders.of(this).get(ArticleListViewModel.class);
+
+        if (!mViewModel.initialized) {
+            final ArticleRoomDatabase aemDb = ArticleRoomDatabase.getInstance(requireContext());
+            mViewModel.articles = aemDb.articleDao().getAllArticles();
+            mViewModel.initialized = true;
+        }
+    }
+
     // region ArticlesView
 
     /**
@@ -127,7 +135,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
 
             mArticlesAdapter = new ArticlesAdapter();
             mArticlesAdapter.setCallbacks(this);
-            mViewModel.getArticles(mManifestKey).observe(this, mArticlesAdapter);
+            mViewModel.articles.observe(this, mArticlesAdapter);
             mArticlesView.setAdapter(mArticlesAdapter);
 
             updateArticlesViewManifest();
@@ -143,29 +151,15 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     private void cleanupArticlesView() {
         if (mArticlesAdapter != null) {
             mArticlesAdapter.setCallbacks(null);
-            mViewModel.getArticles(mManifestKey).removeObserver(mArticlesAdapter);
+            mViewModel.articles.removeObserver(mArticlesAdapter);
         }
         mArticlesAdapter = null;
     }
 
     // endregion ArticlesView
 
-    public static class ArticleListViewModel extends AndroidViewModel {
-        @Nullable
-        private LiveData<List<Article>> mArticles;
-
-        public ArticleListViewModel(@NonNull final Application application) {
-            super(application);
-        }
-
-        @NonNull
-        @MainThread
-        LiveData<List<Article>> getArticles(@Nullable final String manifestKey) {
-            if (mArticles == null) {
-                mArticles = new ManifestAssociationRepository(getApplication()).getArticlesByManifestID(manifestKey);
-            }
-
-            return mArticles;
-        }
+    public static class ArticleListViewModel extends ViewModel {
+        boolean initialized = false;
+        LiveData<List<Article>> articles;
     }
 }

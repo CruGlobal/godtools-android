@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentActivity;
 
 import org.cru.godtools.articles.aem.db.ArticleRepository;
 import org.cru.godtools.articles.aem.db.AttachmentRepository;
-import org.cru.godtools.articles.aem.db.ManifestAssociationRepository;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 
@@ -18,7 +17,6 @@ import java.util.List;
 public class ArticleViewModel extends AndroidViewModel {
     private final ArticleRepository mArticleRepository;
     private final AttachmentRepository mAttchReposistory;
-    private final ManifestAssociationRepository mManifestRepository;
 
     /**
      * This allows other models to get an instance of this ViewModel with out adding dependencies
@@ -35,7 +33,6 @@ public class ArticleViewModel extends AndroidViewModel {
 
         mArticleRepository = new ArticleRepository(application);
         mAttchReposistory = new AttachmentRepository(application);
-        mManifestRepository = new ManifestAssociationRepository(application);
     }
 
     public void insertArticle(Article article) {
@@ -50,11 +47,7 @@ public class ArticleViewModel extends AndroidViewModel {
         return mArticleRepository.getAllArticles();
     }
 
-    public LiveData<List<Article>> getArticlesByManifest(String manifestID) {
-        return mManifestRepository.getArticlesByManifestID(manifestID);
-    }
-
     public LiveData<List<Attachment>> getAttachmentsByArticle(Article article) {
-        return mAttchReposistory.getAttachmentsByArticle(article.mkey);
+        return mAttchReposistory.getAttachmentsByArticle(article.uri.toString());
     }
 }

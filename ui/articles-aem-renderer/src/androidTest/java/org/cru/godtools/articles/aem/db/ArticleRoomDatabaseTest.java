@@ -25,14 +25,7 @@ public class ArticleRoomDatabaseTest extends DBBaseTest {
     public void verifyArticleHasAttachment() {
         for (Article article : mSavedArticles) {
             assertTrue(String.format("Article %s has no attachment", article.mTitle),
-                       mAttachmentDao.getTestableAttachmentsByArticle(article.mkey).size() > 0);
+                       mAttachmentDao.getTestableAttachmentsByArticle(article.uri.toString()).size() > 0);
         }
-    }
-
-    @Test
-    public void verifyManifestHasArticles() {
-        assertTrue("Manifest 0 should have articles", mAssociationDao.getTestableArticlesByManifestID("0").size() > 0);
-        assertTrue("Manifest 1 should have articles", mAssociationDao.getTestableArticlesByManifestID("1").size() > 0);
-        assertTrue("Manifest 2 should have articles", mAssociationDao.getTestableArticlesByManifestID("2").size() > 0);
     }
 }
