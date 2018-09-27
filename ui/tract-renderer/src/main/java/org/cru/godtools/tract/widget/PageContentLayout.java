@@ -36,7 +36,7 @@ import android.widget.FrameLayout;
 import org.ccci.gto.android.common.animation.SimpleAnimatorListener;
 import org.cru.godtools.base.Settings;
 import org.cru.godtools.tract.R;
-import org.cru.godtools.tract.util.BounceUtil;
+import org.cru.godtools.tract.animation.BounceInterpolator;
 import org.cru.godtools.tract.util.ViewUtils;
 
 import java.lang.ref.WeakReference;
@@ -56,7 +56,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     private static final int FLING_SCALE_FACTOR = 20;
     private static final int DELAY_MILLIS = 10000;
     public static final int START_DELAY = 500;
-    public static final int DURATION = 3000;
+    public static final int DURATION = 600;
 
     public interface OnActiveCardListener {
         void onActiveCardChanged(@Nullable View activeCard);
@@ -473,11 +473,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
      */
     @UiThread
     private void bounceCardAnimation(final View targetView) {
-
         int bounceHeight = getResources().getDimensionPixelSize(R.dimen.card_bounce_height);
-        mAnimation = ObjectAnimator.ofFloat(targetView, "translationY",
-                targetView.getY(), targetView.getY() + bounceHeight, targetView.getY());
-        mAnimation.setInterpolator(BounceUtil::getBounceInOut);
+        mAnimation = ObjectAnimator.ofFloat(targetView, View.Y, targetView.getY() - bounceHeight);
+        mAnimation.setInterpolator(new BounceInterpolator());
         mAnimation.setStartDelay(START_DELAY);
         mAnimation.setDuration(DURATION);
         mAnimation.addListener(mAnimationListener);

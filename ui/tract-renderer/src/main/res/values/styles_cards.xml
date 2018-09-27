@@ -13,5 +13,5 @@
     <dimen name="card_margin_content_top">16dp</dimen>
     <dimen name="card_margin_content_bottom">4dp</dimen>
 
-    <dimen name="card_bounce_height">10dp</dimen>
+    <dimen name="card_bounce_height">40dp</dimen>
 </resources>
