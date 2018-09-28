@@ -477,6 +477,8 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
     // endregion Card Bounce Animation
 
+    // region View layout logic
+
     @Override
     protected boolean checkLayoutParams(final ViewGroup.LayoutParams p) {
         return p instanceof LayoutParams;
@@ -745,6 +747,8 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             }
         }
     }
+
+    // endregion View layout logic
 
     protected static class SavedState extends AbsSavedState {
         int activeCardPosition;
