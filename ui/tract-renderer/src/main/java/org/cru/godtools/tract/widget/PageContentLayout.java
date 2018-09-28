@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -53,7 +54,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         ViewTreeObserver.OnGlobalLayoutListener {
     private static final int FLING_SCALE_FACTOR = 20;
 
-    private static final long BOUNCE_ANIMATION_DELAY_INITIAL = 1000;
+    private static final long BOUNCE_ANIMATION_DELAY_INITIAL = 5000;
     private static final long BOUNCE_ANIMATION_DELAY = 10000;
     private static final long BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE = 300;
 
@@ -435,6 +436,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
     // region Card Bounce Animation
 
+    @UiThread
     public void setBounceFirstCard(final boolean animate) {
         mBounceFirstCard = animate;
         if (mBounceFirstCard) {
@@ -448,11 +450,18 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
      * This method will either create a new bounce Animation or start the one that is already created.
      */
     @UiThread
-    private void bounceFirstCard() {
-        if (mActiveCard != null || mAnimation != null) {
+    void bounceFirstCard() {
+        // short-circuit if the first card isn't being displayed
+        if (mActiveCard != null) {
             return;
         }
 
+        // short-circuit if another animation is running
+        if (mAnimation != null) {
+            return;
+        }
+
+        // animate the first card child
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
             final LayoutParams lp = (LayoutParams) child.getLayoutParams();
@@ -857,7 +866,8 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     private static class PageLayoutHandler extends Handler {
         private final WeakReference<PageContentLayout> mPageContentLayout;
 
-        PageLayoutHandler(PageContentLayout layout) {
+        PageLayoutHandler(@NonNull final PageContentLayout layout) {
+            super(Looper.getMainLooper());
             mPageContentLayout = new WeakReference<>(layout);
         }
 
@@ -871,22 +881,17 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             removeMessages(MSG_BOUNCE_ANIMATION);
         }
 
+        @UiThread
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
-            PageContentLayout layout = mPageContentLayout.get();
+            final PageContentLayout layout = mPageContentLayout.get();
             if (layout != null) {
-
                 switch (msg.what) {
                     case MSG_BOUNCE_ANIMATION:
-                        if (layout.mBounceFirstCard) {
-                            layout.bounceFirstCard();
-                            enqueueBounce(BOUNCE_ANIMATION_DELAY);
-                        } else {
-                            cancelBounce();
-                        }
-
+                        layout.bounceFirstCard();
+                        enqueueBounce(BOUNCE_ANIMATION_DELAY);
                         break;
                 }
             }
