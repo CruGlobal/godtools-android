@@ -66,7 +66,8 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     private boolean mBounceFirstCard = false;
     private final BounceInterpolator mBounceInterpolator = new BounceInterpolator();
 
-    private Settings mSettings;
+    private final PageLayoutHandler mHandler = new PageLayoutHandler(this);
+    private final Settings mSettings;
     private final GestureDetectorCompat mGestureDetector;
     private final GestureDetector.OnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
         @Override
@@ -472,14 +473,17 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     }
 
     public void setBounceFirstCard(boolean animate) {
-        this.mBounceFirstCard = animate;
+        mBounceFirstCard = animate;
         if (mBounceFirstCard) {
-            mHandler.sendEmptyMessageDelayed(MSG_BOUNCE_ANIMATION, BOUNCE_ANIMATION_DELAY_INITIAL);
+            mHandler.enqueueBounce(BOUNCE_ANIMATION_DELAY_INITIAL);
+        } else {
+            mHandler.cancelBounce();
         }
     }
 
-     /**
+    /**
      * This method will create a new instance of the bounce animation.
+     *
      * @param targetView the Card View
      */
     @UiThread
@@ -487,11 +491,11 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         int bounceHeight = getResources().getDimensionPixelSize(R.dimen.card_bounce_height);
         mAnimation = ObjectAnimator.ofFloat(targetView, View.Y, targetView.getY() - bounceHeight);
         mAnimation.setInterpolator(mBounceInterpolator);
-//        mAnimation.setStartDelay(BOUNCE_ANIMATION_START_DELAY);
         mAnimation.setDuration(mBounceInterpolator.getTotalDuration(BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE));
         mAnimation.addListener(mBounceAnimationListener);
         mAnimation.start();
     }
+
     //endregion
 
     @Override
@@ -826,23 +830,24 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         }
     }
 
-    //region bounce thread calls
-
     /**
      *  This Handler is what is used to created the delayed post of BOUNCE_ANIMATION_RUNNABLE
      */
     private static class PageLayoutHandler extends Handler {
         private final WeakReference<PageContentLayout> mPageContentLayout;
 
-        PageLayoutHandler(PageContentLayout mPageContentLayout) {
-
-            this.mPageContentLayout = new WeakReference<>(mPageContentLayout);
+        PageLayoutHandler(PageContentLayout layout) {
+            mPageContentLayout = new WeakReference<>(layout);
         }
 
-        private void verifyAndSendDelayedMessage(int message) {
-            if (!hasMessages(message)) {
-                sendEmptyMessageDelayed(message, BOUNCE_ANIMATION_DELAY);
+        void enqueueBounce(final long delay) {
+            if (!hasMessages(MSG_BOUNCE_ANIMATION)) {
+                sendEmptyMessageDelayed(MSG_BOUNCE_ANIMATION, delay);
             }
+        }
+
+        void cancelBounce() {
+            removeMessages(MSG_BOUNCE_ANIMATION);
         }
 
         @Override
@@ -857,9 +862,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
                         if (layout.mBounceFirstCard) {
                             layout.animateFirstCardView();
-                            verifyAndSendDelayedMessage(MSG_BOUNCE_ANIMATION);
+                            enqueueBounce(BOUNCE_ANIMATION_DELAY);
                         } else {
-                            removeMessages(MSG_BOUNCE_ANIMATION);
+                            cancelBounce();
                         }
 
                         break;
@@ -867,7 +872,4 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             }
         }
     }
-
-    private final PageLayoutHandler mHandler = new PageLayoutHandler(this);
-    //endregion
 }
