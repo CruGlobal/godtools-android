@@ -53,11 +53,11 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         ViewTreeObserver.OnGlobalLayoutListener {
     private static final int FLING_SCALE_FACTOR = 20;
 
-    private static final int DELAY_FIRST_BOUNCE_ANIMATION = 1000;
-    private static final int DELAY_BETWEEN_BOUNCE_ANIMATION = 10000;
-    private static final int BOUNCE_ANIMATION_START_DELAY = 500;
+    private static final long BOUNCE_ANIMATION_DELAY_INITIAL = 1000;
+    private static final long BOUNCE_ANIMATION_DELAY = 10000;
     private static final long BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE = 300;
-    private static final int BOUNCE_MESSAGE = 11;
+
+    private static final int MSG_BOUNCE_ANIMATION = 1;
 
     public interface OnActiveCardListener {
         void onActiveCardChanged(@Nullable View activeCard);
@@ -474,7 +474,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     public void setBounceFirstCard(boolean animate) {
         this.mBounceFirstCard = animate;
         if (mBounceFirstCard) {
-            mHandler.sendEmptyMessageDelayed(BOUNCE_MESSAGE, DELAY_FIRST_BOUNCE_ANIMATION);
+            mHandler.sendEmptyMessageDelayed(MSG_BOUNCE_ANIMATION, BOUNCE_ANIMATION_DELAY_INITIAL);
         }
     }
 
@@ -841,7 +841,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
         private void verifyAndSendDelayedMessage(int message) {
             if (!hasMessages(message)) {
-                sendEmptyMessageDelayed(message, DELAY_BETWEEN_BOUNCE_ANIMATION);
+                sendEmptyMessageDelayed(message, BOUNCE_ANIMATION_DELAY);
             }
         }
 
@@ -853,13 +853,13 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             if (layout != null) {
 
                 switch (msg.what) {
-                    case BOUNCE_MESSAGE:
+                    case MSG_BOUNCE_ANIMATION:
 
                         if (layout.mBounceFirstCard) {
                             layout.animateFirstCardView();
-                            verifyAndSendDelayedMessage(BOUNCE_MESSAGE);
+                            verifyAndSendDelayedMessage(MSG_BOUNCE_ANIMATION);
                         } else {
-                            removeMessages(BOUNCE_MESSAGE);
+                            removeMessages(MSG_BOUNCE_ANIMATION);
                         }
 
                         break;
