@@ -64,8 +64,8 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     }
 
     private boolean mBounceFirstCard = false;
-    private final BounceInterpolator mBounceInterpolator = new BounceInterpolator();
     private float mBounceHeight;
+    private final BounceInterpolator mBounceInterpolator = new BounceInterpolator();
 
     private final PageLayoutHandler mHandler = new PageLayoutHandler(this);
     private final Settings mSettings;
@@ -165,7 +165,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         final SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
 
+        mBounceHeight = ss.bounceHeight;
         changeActiveCard(ss.activeCardPosition, false);
+        setBounceFirstCard(ss.bounceFirstCard);
     }
 
     @Override
@@ -223,6 +225,8 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     protected Parcelable onSaveInstanceState() {
         final SavedState state = new SavedState(super.onSaveInstanceState());
         state.activeCardPosition = mActiveCardPosition;
+        state.bounceFirstCard = mBounceFirstCard;
+        state.bounceHeight = mBounceHeight;
         return state;
     }
 
@@ -752,10 +756,14 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
     protected static class SavedState extends AbsSavedState {
         int activeCardPosition;
+        boolean bounceFirstCard;
+        float bounceHeight;
 
         public SavedState(Parcel in, ClassLoader loader) {
             super(in, loader);
             activeCardPosition = in.readInt();
+            bounceFirstCard = in.readInt() == 1;
+            bounceHeight = in.readFloat();
         }
 
         public SavedState(Parcelable superState) {
@@ -766,6 +774,8 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         public void writeToParcel(Parcel dest, int flags) {
             super.writeToParcel(dest, flags);
             dest.writeInt(activeCardPosition);
+            dest.writeInt(bounceFirstCard ? 1 : 0);
+            dest.writeFloat(bounceHeight);
         }
 
         public static final Creator<SavedState> CREATOR = ParcelableCompat.newCreator(
