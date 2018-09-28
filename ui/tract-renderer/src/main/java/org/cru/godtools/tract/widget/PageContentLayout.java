@@ -481,7 +481,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         animation.setInterpolator(mBounceInterpolator);
         animation.setDuration(mBounceInterpolator.getTotalDuration(BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE));
         animation.addListener(mBounceAnimationListener);
-        return mAnimation;
+        return animation;
     }
 
     // endregion Card Bounce Animation
