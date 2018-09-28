@@ -11,6 +11,8 @@ public class BounceInterpolatorTest {
     public void verifyDefaultFourBounces75PercentDecay() {
         final BounceInterpolator interpolator = new BounceInterpolator();
 
+        assertEquals(562, interpolator.getTotalDuration(300));
+
         // first bounce
         assertEquals(0, interpolator.getInterpolation((float) 0), DELTA);
         assertEquals(0.75, interpolator.getInterpolation((float) 2.0 / 15), DELTA);
@@ -41,6 +43,8 @@ public class BounceInterpolatorTest {
     public void verifyFourBouncesNoDecay() {
         final BounceInterpolator interpolator = new BounceInterpolator(4, 0);
 
+        assertEquals(1200, interpolator.getTotalDuration(300));
+
         // first bounce
         assertEquals(0, interpolator.getInterpolation((float) 0), DELTA);
         assertEquals(0.75, interpolator.getInterpolation((float) 1.0 / 16), DELTA);
@@ -70,6 +74,8 @@ public class BounceInterpolatorTest {
     @Test
     public void verifyThreeBounces75PercentDecay() {
         final BounceInterpolator interpolator = new BounceInterpolator(3, BounceInterpolator.DEFAULT_HEIGHT_DECAY);
+
+        assertEquals(525, interpolator.getTotalDuration(300));
 
         // first bounce
         assertEquals(0, interpolator.getInterpolation((float) 0), DELTA);

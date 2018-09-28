@@ -52,10 +52,11 @@ import static org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.CHILD
 public class PageContentLayout extends FrameLayout implements NestedScrollingParent,
         ViewTreeObserver.OnGlobalLayoutListener {
     private static final int FLING_SCALE_FACTOR = 20;
+
     private static final int DELAY_FIRST_BOUNCE_ANIMATION = 1000;
     private static final int DELAY_BETWEEN_BOUNCE_ANIMATION = 10000;
     private static final int BOUNCE_ANIMATION_START_DELAY = 500;
-    private static final int BOUNCE_ANIMATION_DURATION = 600;
+    private static final long BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE = 300;
     private static final int BOUNCE_MESSAGE = 11;
 
     public interface OnActiveCardListener {
@@ -63,6 +64,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     }
 
     private boolean mBounceFirstCard = false;
+    private final BounceInterpolator mBounceInterpolator = new BounceInterpolator();
 
     private Settings mSettings;
     private final GestureDetectorCompat mGestureDetector;
@@ -97,14 +99,14 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         }
     };
 
-    //region Initialization
+    // region Initialization
+
     public PageContentLayout(@NonNull final Context context) {
         this(context, null);
     }
 
     public PageContentLayout(@NonNull final Context context, @Nullable final AttributeSet attrs) {
         this(context, attrs, 0);
-
     }
 
     public PageContentLayout(@NonNull final Context context, @Nullable final AttributeSet attrs,
@@ -123,9 +125,10 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         mParentHelper = new NestedScrollingParentHelper(this);
         mSettings = Settings.getInstance(context.getApplicationContext());
     }
-    //endregion
 
-    //region lifecycle
+    // endregion
+
+    // region Lifecycle Events
 
     @Override
     protected void onAttachedToWindow() {
@@ -210,9 +213,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         getViewTreeObserver().removeGlobalOnLayoutListener(this);
     }
 
-    // endregion lifecycle */
+    // endregion Lifecycle Events
 
-    //region NestedScrollingParent methods
+    // region NestedScrollingParent methods
 
     @Override
     public boolean onStartNestedScroll(final View child, final View target, final int nestedScrollAxes) {
@@ -253,7 +256,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         return mParentHelper.getNestedScrollAxes();
     }
 
-    //endregion NestedScrollingParent methods
+    // endregion NestedScrollingParent methods
 
     public void addCard(@NonNull final View card, final int position) {
         addView(card, position + mCardPositionOffset);
@@ -478,9 +481,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     private void bounceCardAnimation(final View targetView) {
         int bounceHeight = getResources().getDimensionPixelSize(R.dimen.card_bounce_height);
         mAnimation = ObjectAnimator.ofFloat(targetView, View.Y, targetView.getY() - bounceHeight);
-        mAnimation.setInterpolator(new BounceInterpolator());
+        mAnimation.setInterpolator(mBounceInterpolator);
         mAnimation.setStartDelay(BOUNCE_ANIMATION_START_DELAY);
-        mAnimation.setDuration(BOUNCE_ANIMATION_DURATION);
+        mAnimation.setDuration(mBounceInterpolator.getTotalDuration(BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE));
         mAnimation.addListener(mAnimationListener);
         mAnimation.start();
     }

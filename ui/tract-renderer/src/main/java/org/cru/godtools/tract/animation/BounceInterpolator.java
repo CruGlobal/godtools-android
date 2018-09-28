@@ -72,4 +72,8 @@ public final class BounceInterpolator implements Interpolator {
 
         return (float) (output + outputOffset);
     }
+
+    public long getTotalDuration(final long firstBounceDuration) {
+        return (long) (firstBounceDuration * mTotalTime);
+    }
 }
