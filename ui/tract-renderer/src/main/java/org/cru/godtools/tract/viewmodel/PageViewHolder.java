@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.viewmodel;
 
+import android.content.SharedPreferences;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
+import org.cru.godtools.base.Settings;
 import org.cru.godtools.base.model.Event;
 import org.cru.godtools.base.tool.model.view.ResourceViewUtils;
 import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
@@ -30,14 +32,21 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 
+import static org.cru.godtools.base.Settings.FEATURE_TRACT_CARD_CLICKED;
+import static org.cru.godtools.base.Settings.FEATURE_TRACT_CARD_SWIPED;
+import static org.cru.godtools.base.Settings.PREF_FEATURE_DISCOVERED;
+
 public class PageViewHolder extends ParentViewHolder<Page>
-        implements CardViewHolder.Callbacks, PageContentLayout.OnActiveCardListener,
-        CallToActionViewHolder.Callbacks {
+        implements PageContentLayout.OnActiveCardListener, CallToActionViewHolder.Callbacks, CardViewHolder.Callbacks,
+        SharedPreferences.OnSharedPreferenceChangeListener {
     public interface Callbacks {
         void onUpdateActiveCard(@Nullable Card card);
 
         void goToNextPage();
     }
+
+    @NonNull
+    private final Settings mSettings;
 
     @BindView(R2.id.page)
     View mPageView;
@@ -81,6 +90,8 @@ public class PageViewHolder extends ParentViewHolder<Page>
 
     PageViewHolder(@NonNull final View root) {
         super(Page.class, root, null);
+        mSettings = Settings.getInstance(root.getContext());
+
         mPageContentLayout.setActiveCardListener(this);
         mHeaderViewHolder = HeaderViewHolder.forView(mHeader, this);
         mHeroViewHolder = HeroViewHolder.forView(mHero, this);
@@ -109,6 +120,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
     @Override
     void onVisible() {
         super.onVisible();
+        mSettings.registerOnSharedPreferenceChangeListener(this);
 
         // cascade event to currently visible hero or card
         if (mActiveCardViewHolder != null) {
@@ -116,8 +128,17 @@ public class PageViewHolder extends ParentViewHolder<Page>
         } else {
             mHeroViewHolder.markVisible();
         }
-        if (!mPageContentLayout.isBounceFeatureDiscovered()) {
-            mPageContentLayout.setAnimateCard(true);
+
+        updateBounceAnimation();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
+        switch (key) {
+            case PREF_FEATURE_DISCOVERED + FEATURE_TRACT_CARD_CLICKED:
+            case PREF_FEATURE_DISCOVERED + FEATURE_TRACT_CARD_SWIPED:
+                updateBounceAnimation();
+                break;
         }
     }
 
@@ -161,6 +182,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
     @Override
     void onHidden() {
         super.onHidden();
+        mSettings.unregisterOnSharedPreferenceChangeListener(this);
 
         // cascade event to currently visible hero or card
         if (mActiveCardViewHolder != null) {
@@ -169,7 +191,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
             mHeroViewHolder.markHidden();
         }
 
-        mPageContentLayout.setAnimateCard(false);
+        updateBounceAnimation();
     }
 
     // endregion Lifecycle Events
@@ -377,5 +399,11 @@ public class PageViewHolder extends ParentViewHolder<Page>
                     .findFirst()
                     .ifPresent(this::displayCard);
         }
+    }
+
+    private void updateBounceAnimation() {
+        // we bounce the first card if the page is visible and the user hasn't opened a card before
+        mPageContentLayout.setAnimateCard(mVisible && !(mSettings.isFeatureDiscovered(FEATURE_TRACT_CARD_CLICKED) ||
+                mSettings.isFeatureDiscovered(FEATURE_TRACT_CARD_SWIPED)));
     }
 }
