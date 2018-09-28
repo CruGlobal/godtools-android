@@ -164,7 +164,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         final SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
 
-        mBounceHeight = ss.bounceHeight;
         changeActiveCard(ss.activeCardPosition, false);
         setBounceFirstCard(ss.bounceFirstCard);
     }
@@ -225,7 +224,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         final SavedState state = new SavedState(super.onSaveInstanceState());
         state.activeCardPosition = mActiveCardPosition;
         state.bounceFirstCard = mBounceFirstCard;
-        state.bounceHeight = mBounceHeight;
         return state;
     }
 
@@ -764,13 +762,11 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     protected static class SavedState extends AbsSavedState {
         int activeCardPosition;
         boolean bounceFirstCard;
-        float bounceHeight;
 
         public SavedState(Parcel in, ClassLoader loader) {
             super(in, loader);
             activeCardPosition = in.readInt();
             bounceFirstCard = in.readInt() == 1;
-            bounceHeight = in.readFloat();
         }
 
         public SavedState(Parcelable superState) {
@@ -782,7 +778,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             super.writeToParcel(dest, flags);
             dest.writeInt(activeCardPosition);
             dest.writeInt(bounceFirstCard ? 1 : 0);
-            dest.writeFloat(bounceHeight);
         }
 
         public static final Creator<SavedState> CREATOR = ParcelableCompat.newCreator(
