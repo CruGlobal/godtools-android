@@ -91,7 +91,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     @Nullable
     Animator mAnimation;
     private final Animator.AnimatorListener mAnimationListener = new SimpleAnimatorListener() {
-
         @Override
         public void onAnimationEnd(final Animator animation) {
             if (mAnimation == animation) {
@@ -103,7 +102,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     };
 
     private final Animator.AnimatorListener mBounceAnimationListener = new SimpleAnimatorListener() {
-
         @Override
         public void onAnimationEnd(final Animator animation) {
             if (mAnimation == animation) {
