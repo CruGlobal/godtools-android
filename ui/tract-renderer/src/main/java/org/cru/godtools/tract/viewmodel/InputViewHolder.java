@@ -108,7 +108,6 @@ final class InputViewHolder extends BaseViewHolder<Input> {
         if (mInputLayout != null) {
             TextInputLayoutUtils.setCollapsedTextColor(mInputLayout, Text.getTextColor(labelStyles));
         }
-
     }
 
     private void bindPlaceholder() {

@@ -293,6 +293,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         changeActiveCard(getChildAt(mCardPositionOffset + cardPosition), animate);
     }
 
+    @UiThread
     public void changeActiveCard(@Nullable final View view, final boolean animate) {
         if (view != null && view.getParent() != this) {
             throw new IllegalArgumentException("can't change the active view to a view that isn't a child");
@@ -318,10 +319,17 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
                     oldAnimation.cancel();
                 }
                 mAnimation.start();
-            }
+            } else {
+                // stop any running animation
+                final Animator oldAnimation = mAnimation;
+                mAnimation = null;
+                if (oldAnimation != null) {
+                    oldAnimation.cancel();
+                }
 
-            updateChildrenOffsetsAndAlpha();
-            dispatchActiveCardChanged();
+                updateChildrenOffsetsAndAlpha();
+                dispatchActiveCardChanged();
+            }
         } else {
             updateActiveCardPosition(true);
         }
@@ -713,6 +721,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         return 1;
     }
 
+    @UiThread
     void updateChildrenOffsetsAndAlpha() {
         // update the child position if we aren't animating
         if (mAnimation == null) {
