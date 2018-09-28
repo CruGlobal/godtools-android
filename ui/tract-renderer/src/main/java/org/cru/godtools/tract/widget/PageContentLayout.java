@@ -475,6 +475,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
      *
      * @param view the Card View
      */
+    @NonNull
     @UiThread
     private Animator buildBounceAnimation(@NonNull final View view) {
         final Animator animation = ObjectAnimator.ofFloat(view, View.Y, view.getY() - mBounceHeight);
