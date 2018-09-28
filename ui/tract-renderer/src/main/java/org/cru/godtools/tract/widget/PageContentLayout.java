@@ -845,12 +845,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             if (layout != null) {
                 if (layout.mBounceFirstCard) {
                     layout.animateFirstCardView();
-                    layout.mBounceFirstCard = !layout.isBounceFeatureDiscovered();
                     verifyAndSendDelayedMessage(BOUNCE_MESSAGE);
                 } else {
-                    if (hasMessages(BOUNCE_MESSAGE)) {
-                        removeMessages(BOUNCE_MESSAGE);
-                    }
+                    removeMessages(BOUNCE_MESSAGE);
                 }
             }
         }
