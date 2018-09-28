@@ -13,8 +13,6 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
-import android.support.v4.os.ParcelableCompat;
-import android.support.v4.os.ParcelableCompatCreatorCallbacks;
 import android.support.v4.view.AbsSavedState;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.NestedScrollingParent;
@@ -674,18 +672,22 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             dest.writeInt(activeCardPosition);
         }
 
-        public static final Creator<SavedState> CREATOR = ParcelableCompat.newCreator(
-                new ParcelableCompatCreatorCallbacks<SavedState>() {
-                    @Override
-                    public SavedState createFromParcel(Parcel in, ClassLoader loader) {
-                        return new SavedState(in, loader);
-                    }
+        public static final Creator<SavedState> CREATOR = new ClassLoaderCreator<SavedState>() {
+            @Override
+            public SavedState createFromParcel(final Parcel source) {
+                return new SavedState(source, null);
+            }
 
-                    @Override
-                    public SavedState[] newArray(int size) {
-                        return new SavedState[size];
-                    }
-                });
+            @Override
+            public SavedState[] newArray(final int size) {
+                return new SavedState[size];
+            }
+
+            @Override
+            public SavedState createFromParcel(final Parcel source, final ClassLoader loader) {
+                return new SavedState(source, loader);
+            }
+        };
     }
 
     public static class LayoutParams extends FrameLayout.LayoutParams {
