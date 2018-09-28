@@ -7,41 +7,87 @@ import static org.junit.Assert.assertEquals;
 public class BounceInterpolatorTest {
     private static final float DELTA = 0.000001f;
 
-    private final BounceInterpolator mInterpolator = new BounceInterpolator();
-
     @Test
-    public void verifyFirstBounce() {
-        assertEquals(0, mInterpolator.getInterpolation((float) 0), DELTA);
-        assertEquals(0.75, mInterpolator.getInterpolation((float) 2.0 / 15), DELTA);
-        assertEquals(1, mInterpolator.getInterpolation((float) 4.0 / 15), DELTA);
-        assertEquals(0.75, mInterpolator.getInterpolation((float) 6.0 / 15), DELTA);
-        assertEquals(0, mInterpolator.getInterpolation((float) 8.0 / 15), DELTA);
+    public void verifyDefaultFourBounces75PercentDecay() {
+        final BounceInterpolator interpolator = new BounceInterpolator();
+
+        // first bounce
+        assertEquals(0, interpolator.getInterpolation((float) 0), DELTA);
+        assertEquals(0.75, interpolator.getInterpolation((float) 2.0 / 15), DELTA);
+        assertEquals(1, interpolator.getInterpolation((float) 4.0 / 15), DELTA);
+        assertEquals(0.75, interpolator.getInterpolation((float) 6.0 / 15), DELTA);
+        assertEquals(0, interpolator.getInterpolation((float) 8.0 / 15), DELTA);
+
+        // second bounce
+        assertEquals(0.1875, interpolator.getInterpolation((float) 9.0 / 15), DELTA);
+        assertEquals(0.25, interpolator.getInterpolation((float) 10.0 / 15), DELTA);
+        assertEquals(0.1875, interpolator.getInterpolation((float) 11.0 / 15), DELTA);
+        assertEquals(0, interpolator.getInterpolation((float) 12.0 / 15), DELTA);
+
+        // third bounce
+        assertEquals(0.046875, interpolator.getInterpolation((float) 12.5 / 15), DELTA);
+        assertEquals(0.0625, interpolator.getInterpolation((float) 13.0 / 15), DELTA);
+        assertEquals(0.046875, interpolator.getInterpolation((float) 13.5 / 15), DELTA);
+        assertEquals(0, interpolator.getInterpolation((float) 14.0 / 15), DELTA);
+
+        // fourth bounce
+        assertEquals(0.01171875, interpolator.getInterpolation((float) 14.25 / 15), DELTA);
+        assertEquals(0.015625, interpolator.getInterpolation((float) 14.5 / 15), DELTA);
+        assertEquals(0.01171875, interpolator.getInterpolation((float) 14.75 / 15), DELTA);
+        assertEquals(0, interpolator.getInterpolation((float) 15.0 / 15), DELTA);
     }
 
     @Test
-    public void verifySecondBounce() {
-        assertEquals(0, mInterpolator.getInterpolation((float) 8.0 / 15), DELTA);
-        assertEquals(0.1875, mInterpolator.getInterpolation((float) 9.0 / 15), DELTA);
-        assertEquals(0.25, mInterpolator.getInterpolation((float) 10.0 / 15), DELTA);
-        assertEquals(0.1875, mInterpolator.getInterpolation((float) 11.0 / 15), DELTA);
-        assertEquals(0, mInterpolator.getInterpolation((float) 12.0 / 15), DELTA);
+    public void verifyFourBouncesNoDecay() {
+        final BounceInterpolator interpolator = new BounceInterpolator(4, 0);
+
+        // first bounce
+        assertEquals(0, interpolator.getInterpolation((float) 0), DELTA);
+        assertEquals(0.75, interpolator.getInterpolation((float) 1.0 / 16), DELTA);
+        assertEquals(1, interpolator.getInterpolation((float) 2.0 / 16), DELTA);
+        assertEquals(0.75, interpolator.getInterpolation((float) 3.0 / 16), DELTA);
+        assertEquals(0, interpolator.getInterpolation((float) 4.0 / 16), DELTA);
+
+        // second bounce
+        assertEquals(0.75, interpolator.getInterpolation((float) 5.0 / 16), DELTA);
+        assertEquals(1, interpolator.getInterpolation((float) 6.0 / 16), DELTA);
+        assertEquals(0.75, interpolator.getInterpolation((float) 7.0 / 16), DELTA);
+        assertEquals(0, interpolator.getInterpolation((float) 8.0 / 16), DELTA);
+
+        // third bounce
+        assertEquals(0.75, interpolator.getInterpolation((float) 9.0 / 16), DELTA);
+        assertEquals(1, interpolator.getInterpolation((float) 10.0 / 16), DELTA);
+        assertEquals(0.75, interpolator.getInterpolation((float) 11.0 / 16), DELTA);
+        assertEquals(0, interpolator.getInterpolation((float) 12.0 / 16), DELTA);
+
+        // fourth bounce
+        assertEquals(0.75, interpolator.getInterpolation((float) 13.0 / 16), DELTA);
+        assertEquals(1, interpolator.getInterpolation((float) 14.0 / 16), DELTA);
+        assertEquals(0.75, interpolator.getInterpolation((float) 15.0 / 16), DELTA);
+        assertEquals(0, interpolator.getInterpolation((float) 16.0 / 16), DELTA);
     }
 
     @Test
-    public void verifyThirdBounce() {
-        assertEquals(0, mInterpolator.getInterpolation((float) 12.0 / 15), DELTA);
-        assertEquals(0.046875, mInterpolator.getInterpolation((float) 12.5 / 15), DELTA);
-        assertEquals(0.0625, mInterpolator.getInterpolation((float) 13.0 / 15), DELTA);
-        assertEquals(0.046875, mInterpolator.getInterpolation((float) 13.5 / 15), DELTA);
-        assertEquals(0, mInterpolator.getInterpolation((float) 14.0 / 15), DELTA);
-    }
+    public void verifyThreeBounces75PercentDecay() {
+        final BounceInterpolator interpolator = new BounceInterpolator(3, BounceInterpolator.DEFAULT_HEIGHT_DECAY);
 
-    @Test
-    public void verifyFourthBounce() {
-        assertEquals(0, mInterpolator.getInterpolation((float) 14.0 / 15), DELTA);
-        assertEquals(0.01171875, mInterpolator.getInterpolation((float) 14.25 / 15), DELTA);
-        assertEquals(0.015625, mInterpolator.getInterpolation((float) 14.5 / 15), DELTA);
-        assertEquals(0.01171875, mInterpolator.getInterpolation((float) 14.75 / 15), DELTA);
-        assertEquals(0, mInterpolator.getInterpolation((float) 15.0 / 15), DELTA);
+        // first bounce
+        assertEquals(0, interpolator.getInterpolation((float) 0), DELTA);
+        assertEquals(0.75, interpolator.getInterpolation((float) 1.0 / 7), DELTA);
+        assertEquals(1, interpolator.getInterpolation((float) 2.0 / 7), DELTA);
+        assertEquals(0.75, interpolator.getInterpolation((float) 3.0 / 7), DELTA);
+        assertEquals(0, interpolator.getInterpolation((float) 4.0 / 7), DELTA);
+
+        // second bounce
+        assertEquals(0.1875, interpolator.getInterpolation((float) 4.5 / 7), DELTA);
+        assertEquals(0.25, interpolator.getInterpolation((float) 5.0 / 7), DELTA);
+        assertEquals(0.1875, interpolator.getInterpolation((float) 5.5 / 7), DELTA);
+        assertEquals(0, interpolator.getInterpolation((float) 6.0 / 7), DELTA);
+
+        // third bounce
+        assertEquals(0.046875, interpolator.getInterpolation((float) 6.25 / 7), DELTA);
+        assertEquals(0.0625, interpolator.getInterpolation((float) 6.5 / 7), DELTA);
+        assertEquals(0.046875, interpolator.getInterpolation((float) 6.75 / 7), DELTA);
+        assertEquals(0, interpolator.getInterpolation((float) 7.0 / 7), DELTA);
     }
 }
