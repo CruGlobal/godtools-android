@@ -65,6 +65,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
     private boolean mBounceFirstCard = false;
     private final BounceInterpolator mBounceInterpolator = new BounceInterpolator();
+    private float mBounceHeight;
 
     private final PageLayoutHandler mHandler = new PageLayoutHandler(this);
     private final Settings mSettings;
@@ -127,6 +128,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         mGestureDetector = new GestureDetectorCompat(context, mGestureListener);
         mParentHelper = new NestedScrollingParentHelper(this);
         mSettings = Settings.getInstance(context.getApplicationContext());
+        init();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -136,6 +138,11 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         mGestureDetector = new GestureDetectorCompat(context, mGestureListener);
         mParentHelper = new NestedScrollingParentHelper(this);
         mSettings = Settings.getInstance(context.getApplicationContext());
+        init();
+    }
+
+    private void init() {
+        mBounceHeight = getResources().getDimension(R.dimen.card_bounce_height);
     }
 
     // endregion
@@ -422,6 +429,54 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         return animation;
     }
 
+    // region Card Bounce Animation
+
+    public void setBounceFirstCard(final boolean animate) {
+        mBounceFirstCard = animate;
+        if (mBounceFirstCard) {
+            mHandler.enqueueBounce(BOUNCE_ANIMATION_DELAY_INITIAL);
+        } else {
+            mHandler.cancelBounce();
+        }
+    }
+
+    /**
+     * This method will either create a new bounce Animation or start the one that is already created.
+     */
+    @UiThread
+    private void bounceFirstCard() {
+        if (mActiveCard != null || mAnimation != null) {
+            return;
+        }
+
+        for (int i = 0; i < getChildCount(); i++) {
+            final View child = getChildAt(i);
+            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+            switch (lp.childType) {
+                case CHILD_TYPE_CARD:
+                    mAnimation = buildBounceAnimation(child);
+                    mAnimation.start();
+                    return; // Stop after first Card View
+            }
+        }
+    }
+
+    /**
+     * This method will create a new instance of the bounce animation.
+     *
+     * @param view the Card View
+     */
+    @UiThread
+    private Animator buildBounceAnimation(@NonNull final View view) {
+        final Animator animation = ObjectAnimator.ofFloat(view, View.Y, view.getY() - mBounceHeight);
+        animation.setInterpolator(mBounceInterpolator);
+        animation.setDuration(mBounceInterpolator.getTotalDuration(BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE));
+        animation.addListener(mBounceAnimationListener);
+        return mAnimation;
+    }
+
+    // endregion Card Bounce Animation
+
     @Override
     protected boolean checkLayoutParams(final ViewGroup.LayoutParams p) {
         return p instanceof LayoutParams;
@@ -449,54 +504,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
         return generateDefaultLayoutParams();
     }
-
-    //region Card Bounce Animation
-
-    /**
-     * This method will either create a new bounce Animation or start the one that is already created.
-     */
-    @UiThread
-    private void animateFirstCardView() {
-        if (mActiveCard != null || mAnimation != null) {
-            return;
-        }
-
-        for (int i = 0; i < getChildCount(); i++) {
-            final View child = getChildAt(i);
-            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-            switch (lp.childType) {
-                case CHILD_TYPE_CARD:
-                    bounceCardAnimation(child);
-                    return; // Stop after first Card View
-            }
-        }
-    }
-
-    public void setBounceFirstCard(boolean animate) {
-        mBounceFirstCard = animate;
-        if (mBounceFirstCard) {
-            mHandler.enqueueBounce(BOUNCE_ANIMATION_DELAY_INITIAL);
-        } else {
-            mHandler.cancelBounce();
-        }
-    }
-
-    /**
-     * This method will create a new instance of the bounce animation.
-     *
-     * @param targetView the Card View
-     */
-    @UiThread
-    private void bounceCardAnimation(final View targetView) {
-        int bounceHeight = getResources().getDimensionPixelSize(R.dimen.card_bounce_height);
-        mAnimation = ObjectAnimator.ofFloat(targetView, View.Y, targetView.getY() - bounceHeight);
-        mAnimation.setInterpolator(mBounceInterpolator);
-        mAnimation.setDuration(mBounceInterpolator.getTotalDuration(BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE));
-        mAnimation.addListener(mBounceAnimationListener);
-        mAnimation.start();
-    }
-
-    //endregion
 
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
@@ -859,9 +866,8 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
                 switch (msg.what) {
                     case MSG_BOUNCE_ANIMATION:
-
                         if (layout.mBounceFirstCard) {
-                            layout.animateFirstCardView();
+                            layout.bounceFirstCard();
                             enqueueBounce(BOUNCE_ANIMATION_DELAY);
                         } else {
                             cancelBounce();
