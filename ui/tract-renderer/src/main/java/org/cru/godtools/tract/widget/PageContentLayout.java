@@ -437,7 +437,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
      */
     @UiThread
     private void animateFirstCardView() {
-        if (mActiveCard != null) {
+        if (mActiveCard != null || mAnimation != null) {
             return;
         }
 
@@ -454,7 +454,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
     }
 
-    public void setAnimateCard(boolean animate) {
+    public void setBounceFirstCard(boolean animate) {
         this.mBounceFirstCard = animate;
         if (mBounceFirstCard) {
             mHandler.sendEmptyMessageDelayed(BOUNCE_MESSAGE, DELAY_FIRST_BOUNCE_ANIMATION);
@@ -482,7 +482,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         int bounceHeight = getResources().getDimensionPixelSize(R.dimen.card_bounce_height);
         mAnimation = ObjectAnimator.ofFloat(targetView, View.Y, targetView.getY() - bounceHeight);
         mAnimation.setInterpolator(mBounceInterpolator);
-        mAnimation.setStartDelay(BOUNCE_ANIMATION_START_DELAY);
+//        mAnimation.setStartDelay(BOUNCE_ANIMATION_START_DELAY);
         mAnimation.setDuration(mBounceInterpolator.getTotalDuration(BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE));
         mAnimation.addListener(mAnimationListener);
         mAnimation.start();
@@ -825,10 +825,10 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     /**
      *  This Handler is what is used to created the delayed post of BOUNCE_ANIMATION_RUNNABLE
      */
-    private static class BounceHandler extends Handler {
+    private static class PageLayoutHandler extends Handler {
         private final WeakReference<PageContentLayout> mPageContentLayout;
 
-        BounceHandler(PageContentLayout mPageContentLayout) {
+        PageLayoutHandler(PageContentLayout mPageContentLayout) {
 
             this.mPageContentLayout = new WeakReference<>(mPageContentLayout);
         }
@@ -844,18 +844,24 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
             super.handleMessage(msg);
 
             PageContentLayout layout = mPageContentLayout.get();
-
             if (layout != null) {
-                if (layout.mBounceFirstCard) {
-                    layout.animateFirstCardView();
-                    verifyAndSendDelayedMessage(BOUNCE_MESSAGE);
-                } else {
-                    removeMessages(BOUNCE_MESSAGE);
+
+                switch (msg.what) {
+                    case BOUNCE_MESSAGE:
+
+                        if (layout.mBounceFirstCard) {
+                            layout.animateFirstCardView();
+                            verifyAndSendDelayedMessage(BOUNCE_MESSAGE);
+                        } else {
+                            removeMessages(BOUNCE_MESSAGE);
+                        }
+
+                        break;
                 }
             }
         }
     }
 
-    private final BounceHandler mHandler = new BounceHandler(this);
+    private final PageLayoutHandler mHandler = new PageLayoutHandler(this);
     //endregion
 }

@@ -403,7 +403,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
 
     private void updateBounceAnimation() {
         // we bounce the first card if the page is visible and the user hasn't opened a card before
-        mPageContentLayout.setAnimateCard(mVisible && !(mSettings.isFeatureDiscovered(FEATURE_TRACT_CARD_CLICKED) ||
+        mPageContentLayout.setBounceFirstCard(mVisible && !(mSettings.isFeatureDiscovered(FEATURE_TRACT_CARD_CLICKED) ||
                 mSettings.isFeatureDiscovered(FEATURE_TRACT_CARD_SWIPED)));
     }
 }
