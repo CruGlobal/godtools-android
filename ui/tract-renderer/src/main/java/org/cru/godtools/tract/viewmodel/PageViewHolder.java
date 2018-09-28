@@ -175,6 +175,7 @@ public class PageViewHolder extends ParentViewHolder<Page>
 
     @Override
     public void onToggleCard(@NonNull final CardViewHolder holder) {
+        mSettings.setFeatureDiscovered(Settings.FEATURE_TRACT_CARD_CLICKED);
         mPageContentLayout
                 .changeActiveCard(holder.mRoot != mPageContentLayout.getActiveCard() ? holder.mRoot : null, true);
     }
