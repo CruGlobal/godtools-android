@@ -434,18 +434,21 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
      */
     @UiThread
     private void animateFirstCardView() {
-        if (mActiveCard == null) {
-            for (int i = 0; i < getChildCount(); i++) {
-                final View child = getChildAt(i);
-                final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-                switch (lp.childType) {
-                    case CHILD_TYPE_CARD:
-                        bounceCardAnimation(child);
-                        return; // Stop after first Card View
-                }
-            }
-            stopBounceAnimation();
+        if (mActiveCard != null) {
+            return;
         }
+
+        for (int i = 0; i < getChildCount(); i++) {
+            final View child = getChildAt(i);
+            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+            switch (lp.childType) {
+                case CHILD_TYPE_CARD:
+                    bounceCardAnimation(child);
+                    return; // Stop after first Card View
+            }
+        }
+        stopBounceAnimation();
+
     }
 
     public void setAnimateCard(boolean animate) {
