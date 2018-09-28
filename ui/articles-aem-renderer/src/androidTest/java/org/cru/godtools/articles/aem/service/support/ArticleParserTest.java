@@ -24,7 +24,7 @@ public class ArticleParserTest {
         final JSONObject jsonObject = loadJson("tests/article-test.json");
 
         final List<Article> articles = ArticleParser.parse(Uri.parse(
-                "https://stage.cru.org/content/experience-fragments/questions_about_god/english"), jsonObject);
+                "https://stage.cru.org/content/experience-fragments/questions_about_god/english"), jsonObject).toList();
         assertThat(articles.size(), is(2));
         for (final Article article : articles) {
             assertThat(article.parsedAttachments.size(), is(3));

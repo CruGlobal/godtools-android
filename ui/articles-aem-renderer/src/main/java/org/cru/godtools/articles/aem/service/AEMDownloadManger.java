@@ -251,7 +251,7 @@ public class AEMDownloadManger {
 
         JSONObject importJson = getJsonFromUri(aemImports);
 
-        final List<Article> articles = ArticleParser.parse(aemImports, importJson);
+        final List<Article> articles = ArticleParser.parse(aemImports, importJson).toList();
 
         for (Article createdArticle : articles) {
             // Save Article
