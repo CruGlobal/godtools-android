@@ -99,6 +99,17 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         }
     };
 
+    private final Animator.AnimatorListener mBounceAnimationListener = new SimpleAnimatorListener() {
+
+        @Override
+        public void onAnimationEnd(final Animator animation) {
+            if (mAnimation == animation) {
+                mAnimation = null;
+                updateChildrenOffsetsAndAlpha();
+            }
+        }
+    };
+
     // region Initialization
 
     public PageContentLayout(@NonNull final Context context) {
@@ -458,8 +469,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
                     return; // Stop after first Card View
             }
         }
-        stopBounceAnimation();
-
     }
 
     public void setBounceFirstCard(boolean animate) {
@@ -467,18 +476,6 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         if (mBounceFirstCard) {
             mHandler.sendEmptyMessageDelayed(BOUNCE_MESSAGE, DELAY_FIRST_BOUNCE_ANIMATION);
         }
-    }
-
-    /**
-     * This method will stop the bounce Animation by setting the AnimateCard variable to false.
-     */
-    private void stopBounceAnimation() {
-        mBounceFirstCard = false;
-    }
-
-    public boolean isBounceFeatureDiscovered() {
-        return (mSettings.isFeatureDiscovered(Settings.FEATURE_TRACT_CARD_CLICKED) ||
-                mSettings.isFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED));
     }
 
      /**
@@ -492,7 +489,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         mAnimation.setInterpolator(mBounceInterpolator);
 //        mAnimation.setStartDelay(BOUNCE_ANIMATION_START_DELAY);
         mAnimation.setDuration(mBounceInterpolator.getTotalDuration(BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE));
-        mAnimation.addListener(mAnimationListener);
+        mAnimation.addListener(mBounceAnimationListener);
         mAnimation.start();
     }
     //endregion
