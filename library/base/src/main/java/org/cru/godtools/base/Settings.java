@@ -25,6 +25,8 @@ public final class Settings {
     // feature discovery
     public static final String FEATURE_LANGUAGE_SETTINGS = "languageSettings";
     public static final String FEATURE_LOGIN = "login";
+    public static final String FEATURE_TRACT_CARD_SWIPED = "tractCardSwiped";
+    public static final String FEATURE_TRACT_CARD_CLICKED = "tractCardClicked";
 
     @NonNull
     private final Context mContext;
