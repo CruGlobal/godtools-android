@@ -87,8 +87,8 @@ android {
             }
         }
         release {
-            shrinkResources true
             minifyEnabled true
+            shrinkResources true
             if (signingConfigs.release.storeFile.exists()) {
                 signingConfig signingConfigs.release
             }
