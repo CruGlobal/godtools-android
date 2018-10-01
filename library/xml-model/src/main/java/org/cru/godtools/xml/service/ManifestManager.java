@@ -12,6 +12,7 @@ import android.util.Xml;
 
 import com.annimon.stream.Stream;
 import com.google.common.io.Closer;
+import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
@@ -45,6 +46,8 @@ import timber.log.Timber;
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
 public class ManifestManager {
+    private static final String TAG = "ManifestManager";
+
     private static final int PARSING_CONCURRENCY = 6;
 
     private final LruCache<String, ListenableFuture<Manifest>> mCache = new WeakLruCache<>(6);
@@ -181,14 +184,14 @@ public class ManifestManager {
                 // complete this task
                 manifestTask.set(manifest);
             } catch (final Throwable t) {
-                Timber.tag("TractManager")
-                        .e(t, "Error loading manifest for %s (%s)", toolCode, LocaleCompat.toLanguageTag(locale));
+                Timber.tag(TAG)
+                        .e(t, "Error loading manifest xml for %s (%s)", toolCode, LocaleCompat.toLanguageTag(locale));
                 manifestTask.setException(t);
             }
         });
 
         // post-process the manifest
-        return Futures.transformAsync(manifestTask, manifest -> {
+        final ListenableFuture<Manifest> finalManifestTask = Futures.transformAsync(manifestTask, manifest -> {
             // short-circuit if we don't have a manifest
             if (manifest == null) {
                 return Futures.immediateFuture(null);
@@ -196,11 +199,13 @@ public class ManifestManager {
 
             // parse all the pages
             final ListenableFuture<?> allPagesTask =
-                    Futures.successfulAsList(Stream.of(manifest.getPages()).map(this::parsePage).toList());
+                    Futures.allAsList(Stream.of(manifest.getPages()).map(this::parsePage).toList());
 
             // return the manifest after all the pages have been parsed
             return Futures.transform(allPagesTask, i -> manifest, directExecutor());
         }, directExecutor());
+        Futures.addCallback(finalManifestTask, new ManifestLoadingErrorCallback(toolCode, locale), directExecutor());
+        return finalManifestTask;
     }
 
     @NonNull
@@ -239,8 +244,8 @@ public class ManifestManager {
                 result.set(page);
             } catch (final Throwable t) {
                 final Manifest manifest = page.getManifest();
-                Timber.tag("TractManager")
-                        .e(t, "Error parsing page %s-%d (%s)", manifest.getCode(), page.getPosition(),
+                Timber.tag(TAG)
+                        .e(t, "Error parsing page xml %s-%d (%s)", manifest.getCode(), page.getPosition(),
                            LocaleCompat.toLanguageTag(manifest.getLocale()));
                 result.setException(t);
             }
@@ -258,6 +263,25 @@ public class ManifestManager {
         // remove the broken manifest from the cache
         synchronized (mCache) {
             mCache.remove(manifestName);
+        }
+    }
+
+    static class ManifestLoadingErrorCallback implements FutureCallback<Manifest> {
+        private final String mTool;
+        private final Locale mLocale;
+
+        ManifestLoadingErrorCallback(final String tool, final Locale locale) {
+            mTool = tool;
+            mLocale = locale;
+        }
+
+        @Override
+        public void onSuccess(final Manifest result) {}
+
+        @Override
+        public void onFailure(final Throwable t) {
+            Timber.tag(TAG)
+                    .e(t, "Error loading manifest for %s (%s)", mTool, LocaleCompat.toLanguageTag(mLocale));
         }
     }
 }
