@@ -52,9 +52,11 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         ViewTreeObserver.OnGlobalLayoutListener {
     private static final int FLING_SCALE_FACTOR = 20;
 
-    private static final long BOUNCE_ANIMATION_DELAY_INITIAL = 5000;
-    private static final long BOUNCE_ANIMATION_DELAY = 10000;
-    private static final long BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE = 300;
+    private static final int BOUNCE_ANIMATION_BOUNCES = 4;
+    private static final double BOUNCE_ANIMATION_BOUNCE_DECAY = 0.5;
+    private static final long BOUNCE_ANIMATION_DELAY_INITIAL = 2000;
+    private static final long BOUNCE_ANIMATION_DELAY = 7000;
+    private static final long BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE = 400;
 
     private static final int MSG_BOUNCE_ANIMATION = 1;
 
@@ -64,7 +66,8 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
 
     private boolean mBounceFirstCard = false;
     private float mBounceHeight;
-    private final BounceInterpolator mBounceInterpolator = new BounceInterpolator();
+    private final BounceInterpolator mBounceInterpolator =
+            new BounceInterpolator(BOUNCE_ANIMATION_BOUNCES, BOUNCE_ANIMATION_BOUNCE_DECAY);
 
     private final PageLayoutHandler mHandler = new PageLayoutHandler(this);
     private final Settings mSettings;
