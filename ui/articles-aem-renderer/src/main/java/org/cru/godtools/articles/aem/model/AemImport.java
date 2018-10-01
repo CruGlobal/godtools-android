@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 
 import java.util.Date;
 
+import javax.annotation.concurrent.Immutable;
+
 import static org.ccci.gto.android.common.base.TimeConstants.DAY_IN_MS;
 
 @Entity(tableName = "aemImports")
@@ -30,6 +32,7 @@ public class AemImport {
         return lastProcessed.before(new Date(System.currentTimeMillis() - STALE_AGE));
     }
 
+    @Immutable
     @Entity(tableName = "aemImportArticles", primaryKeys = {"aemImportUri", "articleUri"},
             indices = {@Index("articleUri")},
             foreignKeys = {
