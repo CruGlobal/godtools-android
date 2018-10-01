@@ -7,13 +7,15 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.os.ParcelableCompat;
-import android.support.v4.os.ParcelableCompatCreatorCallbacks;
+import android.support.annotation.UiThread;
 import android.support.v4.view.AbsSavedState;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.NestedScrollingParent;
@@ -31,9 +33,12 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
 import org.ccci.gto.android.common.animation.SimpleAnimatorListener;
+import org.cru.godtools.base.Settings;
 import org.cru.godtools.tract.R;
+import org.cru.godtools.tract.animation.BounceInterpolator;
 import org.cru.godtools.tract.util.ViewUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,10 +52,25 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         ViewTreeObserver.OnGlobalLayoutListener {
     private static final int FLING_SCALE_FACTOR = 20;
 
+    private static final int BOUNCE_ANIMATION_BOUNCES = 4;
+    private static final double BOUNCE_ANIMATION_BOUNCE_DECAY = 0.5;
+    private static final long BOUNCE_ANIMATION_DELAY_INITIAL = 2000;
+    private static final long BOUNCE_ANIMATION_DELAY = 7000;
+    private static final long BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE = 400;
+
+    private static final int MSG_BOUNCE_ANIMATION = 1;
+
     public interface OnActiveCardListener {
         void onActiveCardChanged(@Nullable View activeCard);
     }
 
+    private boolean mBounceFirstCard = false;
+    private float mBounceHeight;
+    private final BounceInterpolator mBounceInterpolator =
+            new BounceInterpolator(BOUNCE_ANIMATION_BOUNCES, BOUNCE_ANIMATION_BOUNCE_DECAY);
+
+    private final PageLayoutHandler mHandler = new PageLayoutHandler(this);
+    private final Settings mSettings;
     private final GestureDetectorCompat mGestureDetector;
     private final GestureDetector.OnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
         @Override
@@ -82,6 +102,18 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         }
     };
 
+    private final Animator.AnimatorListener mBounceAnimationListener = new SimpleAnimatorListener() {
+        @Override
+        public void onAnimationEnd(final Animator animation) {
+            if (mAnimation == animation) {
+                mAnimation = null;
+                updateChildrenOffsetsAndAlpha();
+            }
+        }
+    };
+
+    // region Initialization
+
     public PageContentLayout(@NonNull final Context context) {
         this(context, null);
     }
@@ -95,6 +127,8 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         super(context, attrs, defStyleAttr);
         mGestureDetector = new GestureDetectorCompat(context, mGestureListener);
         mParentHelper = new NestedScrollingParentHelper(this);
+        mSettings = Settings.getInstance(context.getApplicationContext());
+        init();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -103,9 +137,17 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         super(context, attrs, defStyleAttr, defStyleRes);
         mGestureDetector = new GestureDetectorCompat(context, mGestureListener);
         mParentHelper = new NestedScrollingParentHelper(this);
+        mSettings = Settings.getInstance(context.getApplicationContext());
+        init();
     }
 
-    /* BEGIN lifecycle */
+    private void init() {
+        mBounceHeight = getResources().getDimension(R.dimen.card_bounce_height);
+    }
+
+    // endregion
+
+    // region Lifecycle Events
 
     @Override
     protected void onAttachedToWindow() {
@@ -124,6 +166,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         super.onRestoreInstanceState(ss.getSuperState());
 
         changeActiveCard(ss.activeCardPosition, false);
+        setBounceFirstCard(ss.bounceFirstCard);
     }
 
     @Override
@@ -181,6 +224,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
     protected Parcelable onSaveInstanceState() {
         final SavedState state = new SavedState(super.onSaveInstanceState());
         state.activeCardPosition = mActiveCardPosition;
+        state.bounceFirstCard = mBounceFirstCard;
         return state;
     }
 
@@ -190,9 +234,9 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         getViewTreeObserver().removeGlobalOnLayoutListener(this);
     }
 
-    /* END lifecycle */
+    // endregion Lifecycle Events
 
-    /* BEGIN NestedScrollingParent methods */
+    // region NestedScrollingParent methods
 
     @Override
     public boolean onStartNestedScroll(final View child, final View target, final int nestedScrollAxes) {
@@ -233,7 +277,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         return mParentHelper.getNestedScrollAxes();
     }
 
-    /* END NestedScrollingParent methods */
+    // endregion NestedScrollingParent methods
 
     public void addCard(@NonNull final View card, final int position) {
         addView(card, position + mCardPositionOffset);
@@ -243,14 +287,15 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         final int minVelocity =
                 ViewConfiguration.get(getContext()).getScaledMinimumFlingVelocity() * FLING_SCALE_FACTOR;
         if (velocityY >= minVelocity && mActiveCardPosition >= 0) {
+            mSettings.setFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED);
             changeActiveCard(mActiveCardPosition - 1, true);
             return true;
         }
         if (velocityY <= 0 - minVelocity && mCardPositionOffset + mActiveCardPosition < getChildCount() - 1) {
             changeActiveCard(mActiveCardPosition + 1, true);
+            mSettings.setFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED);
             return true;
         }
-
         return false;
     }
 
@@ -269,6 +314,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         changeActiveCard(getChildAt(mCardPositionOffset + cardPosition), animate);
     }
 
+    @UiThread
     public void changeActiveCard(@Nullable final View view, final boolean animate) {
         if (view != null && view.getParent() != this) {
             throw new IllegalArgumentException("can't change the active view to a view that isn't a child");
@@ -294,10 +340,17 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
                     oldAnimation.cancel();
                 }
                 mAnimation.start();
-            }
+            } else {
+                // stop any running animation
+                final Animator oldAnimation = mAnimation;
+                mAnimation = null;
+                if (oldAnimation != null) {
+                    oldAnimation.cancel();
+                }
 
-            updateChildrenOffsetsAndAlpha();
-            dispatchActiveCardChanged();
+                updateChildrenOffsetsAndAlpha();
+                dispatchActiveCardChanged();
+            }
         } else {
             updateActiveCardPosition(true);
         }
@@ -377,6 +430,65 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         animation.addListener(mAnimationListener);
         return animation;
     }
+
+    // region Card Bounce Animation
+
+    @UiThread
+    public void setBounceFirstCard(final boolean animate) {
+        mBounceFirstCard = animate;
+        if (mBounceFirstCard) {
+            mHandler.enqueueBounce(BOUNCE_ANIMATION_DELAY_INITIAL);
+        } else {
+            mHandler.cancelBounce();
+        }
+    }
+
+    /**
+     * This method will either create a new bounce Animation or start the one that is already created.
+     */
+    @UiThread
+    void bounceFirstCard() {
+        // short-circuit if the first card isn't being displayed
+        if (mActiveCard != null) {
+            return;
+        }
+
+        // short-circuit if another animation is running
+        if (mAnimation != null) {
+            return;
+        }
+
+        // animate the first card child
+        for (int i = 0; i < getChildCount(); i++) {
+            final View child = getChildAt(i);
+            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+            switch (lp.childType) {
+                case CHILD_TYPE_CARD:
+                    mAnimation = buildBounceAnimation(child);
+                    mAnimation.start();
+                    return; // Stop after first Card View
+            }
+        }
+    }
+
+    /**
+     * This method will create a new instance of the bounce animation.
+     *
+     * @param view the Card View
+     */
+    @NonNull
+    @UiThread
+    private Animator buildBounceAnimation(@NonNull final View view) {
+        final Animator animation = ObjectAnimator.ofFloat(view, View.Y, view.getY() - mBounceHeight);
+        animation.setInterpolator(mBounceInterpolator);
+        animation.setDuration(mBounceInterpolator.getTotalDuration(BOUNCE_ANIMATION_DURATION_FIRST_BOUNCE));
+        animation.addListener(mBounceAnimationListener);
+        return animation;
+    }
+
+    // endregion Card Bounce Animation
+
+    // region View layout logic
 
     @Override
     protected boolean checkLayoutParams(final ViewGroup.LayoutParams p) {
@@ -630,6 +742,7 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         return 1;
     }
 
+    @UiThread
     void updateChildrenOffsetsAndAlpha() {
         // update the child position if we aren't animating
         if (mAnimation == null) {
@@ -646,12 +759,16 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         }
     }
 
+    // endregion View layout logic
+
     protected static class SavedState extends AbsSavedState {
         int activeCardPosition;
+        boolean bounceFirstCard;
 
         public SavedState(Parcel in, ClassLoader loader) {
             super(in, loader);
             activeCardPosition = in.readInt();
+            bounceFirstCard = in.readInt() == 1;
         }
 
         public SavedState(Parcelable superState) {
@@ -662,20 +779,25 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         public void writeToParcel(Parcel dest, int flags) {
             super.writeToParcel(dest, flags);
             dest.writeInt(activeCardPosition);
+            dest.writeInt(bounceFirstCard ? 1 : 0);
         }
 
-        public static final Creator<SavedState> CREATOR = ParcelableCompat.newCreator(
-                new ParcelableCompatCreatorCallbacks<SavedState>() {
-                    @Override
-                    public SavedState createFromParcel(Parcel in, ClassLoader loader) {
-                        return new SavedState(in, loader);
-                    }
+        public static final Creator<SavedState> CREATOR = new ClassLoaderCreator<SavedState>() {
+            @Override
+            public SavedState createFromParcel(final Parcel source) {
+                return new SavedState(source, null);
+            }
 
-                    @Override
-                    public SavedState[] newArray(int size) {
-                        return new SavedState[size];
-                    }
-                });
+            @Override
+            public SavedState[] newArray(final int size) {
+                return new SavedState[size];
+            }
+
+            @Override
+            public SavedState createFromParcel(final Parcel source, final ClassLoader loader) {
+                return new SavedState(source, loader);
+            }
+        };
     }
 
     public static class LayoutParams extends FrameLayout.LayoutParams {
@@ -734,6 +856,44 @@ public class PageContentLayout extends FrameLayout implements NestedScrollingPar
         public LayoutParams(@NonNull final LayoutParams p) {
             this((MarginLayoutParams) p);
             this.childType = p.childType;
+        }
+    }
+
+    /**
+     *  This Handler is what is used to created the delayed post of BOUNCE_ANIMATION_RUNNABLE
+     */
+    private static class PageLayoutHandler extends Handler {
+        private final WeakReference<PageContentLayout> mPageContentLayout;
+
+        PageLayoutHandler(@NonNull final PageContentLayout layout) {
+            super(Looper.getMainLooper());
+            mPageContentLayout = new WeakReference<>(layout);
+        }
+
+        void enqueueBounce(final long delay) {
+            if (!hasMessages(MSG_BOUNCE_ANIMATION)) {
+                sendEmptyMessageDelayed(MSG_BOUNCE_ANIMATION, delay);
+            }
+        }
+
+        void cancelBounce() {
+            removeMessages(MSG_BOUNCE_ANIMATION);
+        }
+
+        @UiThread
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            final PageContentLayout layout = mPageContentLayout.get();
+            if (layout != null) {
+                switch (msg.what) {
+                    case MSG_BOUNCE_ANIMATION:
+                        layout.bounceFirstCard();
+                        enqueueBounce(BOUNCE_ANIMATION_DELAY);
+                        break;
+                }
+            }
         }
     }
 }
