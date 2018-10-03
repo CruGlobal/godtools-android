@@ -27,7 +27,7 @@ public class ArticleParserTest {
                 "https://stage.cru.org/content/experience-fragments/questions_about_god/english"), jsonObject).toList();
         assertThat(articles.size(), is(2));
         for (final Article article : articles) {
-            assertThat(article.parsedAttachments.size(), is(3));
+            assertThat(article.mAttachments.size(), is(3));
         }
     }
 

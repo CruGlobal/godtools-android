@@ -284,10 +284,8 @@ public class AEMDownloadManger {
             // Save Article
             articleRepository.insertArticle(createdArticle);
 
-            if (createdArticle.parsedAttachments != null) {
-                for (final Attachment attachment : createdArticle.parsedAttachments) {
-                    attachmentRepository.insertAttachment(attachment);
-                }
+            for (final Attachment attachment : createdArticle.mAttachments) {
+                attachmentRepository.insertAttachment(attachment);
             }
         }
     }

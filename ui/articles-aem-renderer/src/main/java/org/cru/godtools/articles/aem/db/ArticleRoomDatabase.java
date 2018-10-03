@@ -25,7 +25,7 @@ import org.cru.godtools.articles.aem.model.TranslationRef;
         TranslationRef.class, TranslationRef.TranslationAemImport.class,
         AemImport.class, AemImport.AemImportArticle.class,
         Article.class, Article.Category.class, Attachment.class
-}, version = 2)
+}, version = 3)
 @TypeConverters({DateConverter.class, LocaleConverter.class, UriConverter.class})
 public abstract class ArticleRoomDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "aem_article_cache.db";

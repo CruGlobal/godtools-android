@@ -102,7 +102,7 @@ public class ArticleParser {
 
             // get Attachments from Articles
             if (articleRootObject != null) {
-                retrievedArticle.parsedAttachments = getAttachmentsFromRootObject(url, articleRootObject);
+                retrievedArticle.mAttachments = getAttachmentsFromRootObject(url, articleRootObject);
             }
         }
 
