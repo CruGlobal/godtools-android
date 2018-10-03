@@ -24,14 +24,15 @@ public abstract class AemImportDao {
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    abstract void insertOrIgnore(@NonNull final AemImport.AemImportArticle aemImportArticle);
+    abstract void insertOrIgnore(@NonNull AemImport.AemImportArticle aemImportArticle);
 
     @WorkerThread
     @Query("UPDATE aemImports SET lastProcessed = :date WHERE uri = :aemImportUri")
     public abstract void updateLastProcessed(@NonNull Uri aemImportUri, @NonNull Date date);
 
     @WorkerThread
-    @Query("DELETE FROM aemImportArticles WHERE aemImportUri = :aemImportUri AND articleUri NOT IN (:currentArticleUris)")
+    @Query("DELETE FROM aemImportArticles " +
+            "WHERE aemImportUri = :aemImportUri AND articleUri NOT IN (:currentArticleUris)")
     public abstract void removeOldArticles(@NonNull Uri aemImportUri, @NonNull List<Uri> currentArticleUris);
 
     @Nullable
