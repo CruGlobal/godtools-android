@@ -14,6 +14,7 @@ import com.google.common.util.concurrent.Futures;
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.util.ThreadUtils;
+import org.cru.godtools.articles.aem.api.AemApi;
 import org.cru.godtools.articles.aem.db.ArticleRepository;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.db.AttachmentRepository;
@@ -64,10 +65,11 @@ public class AEMDownloadManger {
     private static final int TASK_CONCURRENCY = 4;
 
     private final ArticleRoomDatabase mAemDb;
+    private final AemApi mApi;
+    private final Context mContext;
     private final GodToolsDao mDao;
     private final ThreadPoolExecutor mExecutor;
     private final ManifestManager mManifestManager;
-    private final Context mContext;
 
     // Task synchronization locks and flags
     private final Object mExtractAemImportsLock = new Object();
@@ -78,6 +80,7 @@ public class AEMDownloadManger {
     private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = Collections.synchronizedMap(new HashMap<>());
 
     private AEMDownloadManger(@NonNull final Context context) {
+        mApi = AemApi.buildInstance("https://www.example.com");
         mContext = context.getApplicationContext();
         mAemDb = ArticleRoomDatabase.getInstance(mContext);
         mDao = GodToolsDao.getInstance(mContext);
@@ -198,19 +201,39 @@ public class AEMDownloadManger {
     @WorkerThread
     @GuardedBy("mSyncAemImportLocks")
     void syncAemImportTask(@NonNull final Uri baseUri, final boolean force) {
-        if (!force) {
-            AemImport aemImport = mAemDb.aemImportDao().find(baseUri);
-            if (aemImport != null) {
-                if (!aemImport.isStale()) {
-                    return; // Don't import Aem if not forced and aemImport is not stale
-                }
-            }
+        // short-circuit if this isn't an absolute URL
+        if (!baseUri.isAbsolute()) {
+            return;
         }
+
+        // short-circuit if there isn't an AemImport for the specified Uri
+        final AemImport aemImport = mAemDb.aemImportDao().find(baseUri);
+        if (aemImport == null) {
+            return;
+        }
+
+        // short-circuit if the AEM Import isn't stale and we aren't forcing a sync
+        if (!aemImport.isStale() && !force) {
+            return;
+        }
+
+        // fetch the raw json
+        JSONObject json = null;
         try {
-            loadAemManifestIntoAemModel(baseUri);
-        } catch (JSONException | IOException e) {
-            Timber.tag("syncAemImportTask").e(e);
+            json = mApi.getJson(Uri.parse(baseUri.toString() + ".9999.json"))
+                    .execute()
+                    .body();
+        } catch (final IOException e) {
+            Timber.tag("AEMDownloadManager")
+                    .v(e, "Error downloading AEM json");
         }
+        if (json == null) {
+            return;
+        }
+
+        // parse & store articles
+        final List<Article> articles = ArticleParser.parse(baseUri, json).toList();
+        mAemDb.aemImportRepository().processAemImportSync(aemImport, articles);
     }
 
     /**
