@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="0dp"
             android:padding="0dp"
-            android:text="@{article.mTitle}"
+            android:text="@{article.title}"
             android:textAppearance="@style/TextAppearance.GodTools.Large"
             android:textColor="@{manifest.getPrimaryColor()}"
             app:layout_constraintEnd_toEndOf="parent"

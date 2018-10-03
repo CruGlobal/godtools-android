@@ -96,7 +96,7 @@ public class ArticleParser {
                 retrievedArticle.mDateUpdated = getDateLongFromJsonString(contentObject.optString(LAST_MODIFIED_TAG));
             }
 
-            retrievedArticle.mTitle = contentObject.optString(TITLE_TAG);
+            retrievedArticle.title = contentObject.optString(TITLE_TAG, retrievedArticle.title);
 
             JSONObject articleRootObject = contentObject.optJSONObject(ROOT_TAG);
 

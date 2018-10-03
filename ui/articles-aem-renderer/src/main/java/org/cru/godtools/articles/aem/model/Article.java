@@ -33,8 +33,7 @@ public class Article {
      * The title of the Article
      */
     @NonNull
-    @ColumnInfo(name = "title")
-    public String mTitle;
+    public String title = "";
 
     /**
      * The main Content of the Article
