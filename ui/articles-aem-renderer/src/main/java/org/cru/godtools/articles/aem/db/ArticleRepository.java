@@ -5,7 +5,6 @@ import android.arch.persistence.room.Dao;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-import org.cru.godtools.articles.aem.model.AemImport;
 import org.cru.godtools.articles.aem.model.Article;
 
 import java.util.List;

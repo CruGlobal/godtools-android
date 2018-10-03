@@ -6,7 +6,10 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
+import android.support.annotation.WorkerThread;
 
 import org.cru.godtools.articles.aem.model.Article;
 
@@ -19,6 +22,14 @@ import java.util.List;
  */
 @Dao
 public interface ArticleDao {
+    @WorkerThread
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertOrIgnore(@NonNull Article article);
+
+    @WorkerThread
+    @Query("UPDATE articles SET title = :title WHERE uri = :uri")
+    void updateTitle(@NonNull Uri uri, @NonNull String title);
+
     /**
      *  The insert method for an article.  Any conflict in with stored data will result
      *  in the data being replaced.
