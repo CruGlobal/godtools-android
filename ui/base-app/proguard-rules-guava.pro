@@ -5,3 +5,7 @@
 -dontwarn afu.org.checkerframework.checker.**
 -dontwarn org.checkerframework.checker.**
 -dontwarn sun.misc.Unsafe
+
+# HACK: workaround a proguard + D8 bug with lambdas implementing google guava functions
+# see: https://issuetracker.google.com/issues/112297269
+-keepnames class com.google.common.base.Function { *; }
