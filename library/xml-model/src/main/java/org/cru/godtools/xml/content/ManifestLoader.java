@@ -10,6 +10,8 @@ import org.cru.godtools.xml.service.ManifestManager;
 
 import java.util.Locale;
 
+import timber.log.Timber;
+
 public class ManifestLoader extends CachingAsyncTaskEventBusLoader<Manifest> {
     private final ManifestManager mManifestManager;
 
@@ -37,7 +39,9 @@ public class ManifestLoader extends CachingAsyncTaskEventBusLoader<Manifest> {
     public Manifest loadInBackground() {
         try {
             return mManifestManager.getLatestPublishedManifest(mTool, mLocale).get();
-        } catch (final Exception ignored) {
+        } catch (final Exception e) {
+            Timber.tag("ManifestLoader")
+                    .d(e, "Error loading manifest");
             return null;
         }
     }
