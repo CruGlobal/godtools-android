@@ -185,7 +185,7 @@ public class AEMDownloadManger {
     @WorkerThread
     void syncStaleAemImportsTask() {
         Stream.of(mAemDb.aemImportDao().getAll())
-                .filterNot(AemImport::isStale)
+                .filter(AemImport::isStale)
                 .forEach(i -> enqueueSyncAemImport(i.uri, false));
     }
 
