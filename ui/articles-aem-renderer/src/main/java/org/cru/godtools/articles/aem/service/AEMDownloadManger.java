@@ -15,7 +15,6 @@ import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.util.ThreadUtils;
 import org.cru.godtools.articles.aem.api.AemApi;
-import org.cru.godtools.articles.aem.db.ArticleRepository;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.db.AttachmentRepository;
 import org.cru.godtools.articles.aem.db.TranslationRepository;
@@ -32,7 +31,6 @@ import org.cru.godtools.xml.service.ManifestManager;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
@@ -53,7 +51,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import timber.log.Timber;
 
 /**
@@ -264,54 +261,6 @@ public class AEMDownloadManger {
     }
 
     // endregion Tasks
-
-    /**
-     * This method take the manifest and one of its aemImports and extracts all associated data to
-     * the database.
-     *
-     * @param aemImports uri from one of the aemImports
-     * @throws JSONException
-     * @throws IOException
-     */
-    private void loadAemManifestIntoAemModel(Uri aemImports)
-            throws JSONException, IOException {
-
-        ArticleRepository articleRepository = mAemDb.articleRepository();
-        AttachmentRepository attachmentRepository = new AttachmentRepository(mContext);
-
-        JSONObject importJson = getJsonFromUri(aemImports);
-
-        final List<Article> articles = ArticleParser.parse(aemImports, importJson).toList();
-
-        for (Article createdArticle : articles) {
-            // Save Article
-            articleRepository.insertArticle(createdArticle);
-
-            for (final Attachment attachment : createdArticle.mAttachments) {
-                attachmentRepository.insertAttachment(attachment);
-            }
-        }
-    }
-
-    /**
-     * Gets JSON Object out of Uri
-     *
-     * @param aemImports uri
-     * @return JSON object from the Uri
-     * @throws JSONException
-     * @throws IOException
-     */
-    private JSONObject getJsonFromUri(Uri aemImports)
-            throws JSONException, IOException {
-
-        // Have to convert android Uri to a Java URI
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(aemImports.toString())
-                .build();
-        Response response = client.newCall(request).execute();
-        return new JSONObject(response.body().string());
-    }
 
     /**
      * This method is used to save an Attachment to Storage and update Database
