@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 3,
-    "identityHash": "01806450709ee14fef16486bd6b316fc",
+    "version": 4,
+    "identityHash": "cb0ed30b00367e1dc408c8dd9b57c68a",
     "entities": [
       {
         "tableName": "translations",
@@ -208,7 +208,7 @@
       },
       {
         "tableName": "articles",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uri` TEXT NOT NULL, `title` TEXT NOT NULL, `content` TEXT, `date_created` INTEGER NOT NULL, `date_updated` INTEGER NOT NULL, PRIMARY KEY(`uri`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uri` TEXT NOT NULL, `uuid` TEXT NOT NULL, `title` TEXT NOT NULL, `contentUuid` TEXT, `content` TEXT, `date_created` INTEGER NOT NULL, `date_updated` INTEGER NOT NULL, PRIMARY KEY(`uri`))",
         "fields": [
           {
             "fieldPath": "uri",
@@ -217,10 +217,22 @@
             "notNull": true
           },
           {
+            "fieldPath": "uuid",
+            "columnName": "uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
             "fieldPath": "title",
             "columnName": "title",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "contentUuid",
+            "columnName": "contentUuid",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "content",
@@ -346,7 +358,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"01806450709ee14fef16486bd6b316fc\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"cb0ed30b00367e1dc408c8dd9b57c68a\")"
     ]
   }
 }

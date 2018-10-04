@@ -27,8 +27,8 @@ public interface ArticleDao {
     void insertOrIgnore(@NonNull Article article);
 
     @WorkerThread
-    @Query("UPDATE articles SET title = :title WHERE uri = :uri")
-    void updateTitle(@NonNull Uri uri, @NonNull String title);
+    @Query("UPDATE articles SET uuid = :uuid, title = :title WHERE uri = :uri")
+    void update(@NonNull Uri uri, @NonNull String uuid, @NonNull String title);
 
     /**
      *  The insert method for an article.  Any conflict in with stored data will result
