@@ -24,7 +24,7 @@ public class ArticleRoomDatabaseTest extends DBBaseTest {
     @Test
     public void verifyArticleHasAttachment() {
         for (Article article : mSavedArticles) {
-            assertTrue(String.format("Article %s has no attachment", article.mTitle),
+            assertTrue(String.format("Article %s has no attachment", article.title),
                        mAttachmentDao.getTestableAttachmentsByArticle(article.uri.toString()).size() > 0);
         }
     }
