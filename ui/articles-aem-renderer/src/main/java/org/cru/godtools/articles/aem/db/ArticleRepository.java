@@ -1,8 +1,9 @@
 package org.cru.godtools.articles.aem.db;
 
 import android.arch.lifecycle.LiveData;
-import android.content.Context;
+import android.arch.persistence.room.Dao;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 
 import org.cru.godtools.articles.aem.model.Article;
 
@@ -13,15 +14,13 @@ import java.util.List;
  *
  * @author Gyasi Story
  */
-public class ArticleRepository {
+@Dao
+public abstract class ArticleRepository {
+    @NonNull
+    private final ArticleRoomDatabase mDb;
 
-    private final ArticleDao mArticleDao;
-    private LiveData<List<Article>> mAllArticles;
-
-    public ArticleRepository(Context context) {
-        ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(context);
-        mArticleDao = db.articleDao();
-        mAllArticles = mArticleDao.getAllArticles();
+    ArticleRepository(@NonNull final ArticleRoomDatabase db) {
+        mDb = db;
     }
 
     /**
@@ -30,7 +29,7 @@ public class ArticleRepository {
      * @return = Live Data Collection of Articles
      */
     public LiveData<List<Article>> getAllArticles() {
-        return mAllArticles;
+        return mDb.articleDao().getAllArticles();
     }
 
     /**
@@ -41,7 +40,7 @@ public class ArticleRepository {
      */
     public void insertArticle(final Article article) {
         /* This is called in AsyncTask to insure it doesn't run on UI thread */
-        AsyncTask.execute(() -> mArticleDao.insertArticle(article));
+        AsyncTask.execute(() -> mDb.articleDao().insertArticle(article));
     }
 
     /**
@@ -51,6 +50,6 @@ public class ArticleRepository {
      */
     public void deleteArticles(final Article... articles) {
         /* This is called in AsyncTask to insure it doesn't run on UI thread */
-        AsyncTask.execute(() -> mArticleDao.deleteArticles(articles));
+        AsyncTask.execute(() -> mDb.articleDao().deleteArticles(articles));
     }
 }

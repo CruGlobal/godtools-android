@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 2,
-    "identityHash": "3ff7a0ad09fedfa24c80d27c9d86d920",
+    "version": 3,
+    "identityHash": "01806450709ee14fef16486bd6b316fc",
     "entities": [
       {
         "tableName": "translations",
@@ -208,7 +208,7 @@
       },
       {
         "tableName": "articles",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uri` TEXT NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `date_created` INTEGER NOT NULL, `date_updated` INTEGER NOT NULL, PRIMARY KEY(`uri`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uri` TEXT NOT NULL, `title` TEXT NOT NULL, `content` TEXT, `date_created` INTEGER NOT NULL, `date_updated` INTEGER NOT NULL, PRIMARY KEY(`uri`))",
         "fields": [
           {
             "fieldPath": "uri",
@@ -217,16 +217,16 @@
             "notNull": true
           },
           {
-            "fieldPath": "mTitle",
+            "fieldPath": "title",
             "columnName": "title",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "mContent",
+            "fieldPath": "content",
             "columnName": "content",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "mDateCreated",
@@ -346,7 +346,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"3ff7a0ad09fedfa24c80d27c9d86d920\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"01806450709ee14fef16486bd6b316fc\")"
     ]
   }
 }

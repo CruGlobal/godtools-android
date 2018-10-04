@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 
 import org.cru.godtools.articles.aem.db.ArticleRepository;
+import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.db.AttachmentRepository;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
@@ -31,7 +32,7 @@ public class ArticleViewModel extends AndroidViewModel {
     public ArticleViewModel(@NonNull Application application) {
         super(application);
 
-        mArticleRepository = new ArticleRepository(application);
+        mArticleRepository = ArticleRoomDatabase.getInstance(application).articleRepository();
         mAttchReposistory = new AttachmentRepository(application);
     }
 

@@ -66,7 +66,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
     @Override
     public void onArticleSelected(@Nullable final Article article) {
         Timber.tag("ArticlesActivity")
-                .d("Article selected: %s", article != null ? article.mTitle : null);
+                .d("Article selected: %s", article != null ? article.title : null);
     }
 
     // endregion Lifecycle Events

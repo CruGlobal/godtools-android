@@ -27,7 +27,7 @@ public abstract class DBBaseTest extends BaseArticleRoomDatabaseIT {
         mAttachmentDao = mDb.attachmentDao();
         for (int i = 0; i < 12; i++) {
             Article article = new Article(Uri.parse("test:" + i + "aaslf" + i));
-            article.mContent = "<p> The Body </>";
+            article.content = "<p> The Body </>";
             article.mDateCreated = new SimpleDateFormat("E MMM dd yyyy HH:mm:ss zz")
                     .parse("Fri Jun 08 2018 18:55:00 GMT+0000").getTime();
             article.mDateUpdated = new SimpleDateFormat("E MMM dd yyyy HH:mm:ss zz")
@@ -40,7 +40,7 @@ public abstract class DBBaseTest extends BaseArticleRoomDatabaseIT {
             date.getDate();
             date.getHours();
             date.getTimezoneOffset();
-            article.mTitle = " The title = " + i;
+            article.title = " The title = " + i;
             mArticleDao.insertArticle(article);
         }
         mSavedArticles = mArticleDao.getTestableAllArticles();

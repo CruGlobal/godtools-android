@@ -33,15 +33,13 @@ public class Article {
      * The title of the Article
      */
     @NonNull
-    @ColumnInfo(name = "title")
-    public String mTitle;
+    public String title = "";
 
     /**
-     * The main Content of the Article
+     * The main HTML Content of the Article
      */
-    @NonNull
-    @ColumnInfo(name = "content")
-    public String mContent;
+    @Nullable
+    public String content;
 
     /**
      * The date the article was created
@@ -62,8 +60,8 @@ public class Article {
     private List<String> mCategories = ImmutableList.of();
 
     @Ignore
-    @Nullable
-    public List<Attachment> parsedAttachments;
+    @NonNull
+    public List<Attachment> mAttachments = ImmutableList.of();
 
     public Article(@NonNull final Uri uri) {
         this.uri = uri;

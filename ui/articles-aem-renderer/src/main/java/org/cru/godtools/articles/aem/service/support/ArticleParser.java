@@ -3,6 +3,9 @@ package org.cru.godtools.articles.aem.service.support;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import com.annimon.stream.Optional;
+import com.annimon.stream.Stream;
+
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.json.JSONObject;
@@ -19,68 +22,59 @@ import java.util.Locale;
  * This class handles parsing any AEM json calls into DOA objects.
  */
 public class ArticleParser {
+    private static final String TAG_TYPE = "jcr:primaryType";
+    private static final String TAG_SUBTYPE_RESOURCE = "sling:resourceType";
+    private static final String TAG_CONTENT = "jcr:content";
+
+    private static final String TYPE_ORDERED_FOLDER = "sling:OrderedFolder";
+    private static final String TYPE_PAGE = "cq:Page";
+    private static final String SUBTYPE_XFPAGE = "cq/experience-fragments/components/xfpage";
+
     private static final String CREATED_TAG = "jcr:created";
-    private static final String CONTENT_TAG = "jcr:content";
     private static final String LAST_MODIFIED_TAG = "cq:lastModified";
     private static final String TITLE_TAG = "jcr:title";
     private static final String ROOT_TAG = "root";
     private static final String FILE_TAG = "fileReference";
-    private static final String RESOURCE_TYPE_TAG = "sling:resourceType";
-    private static final String PRIMARY_TYPE_TAG = "jcr:primaryType";
-    private static final String ORDER_FOLDER_TAG = "sling:OrderedFolder";
-    private static final String PAGE_TAG = "cq:Page";
 
-    //region Public Executor
+    // region Article Parsing
 
     /**
      * This executes the parsing of the local JsonObject.
      *
      * @return return a list of {@link Article}
      */
-    public static List<Article> parse(@NonNull final Uri url, @NonNull final JSONObject json) {
-        return parseObject(url, json);
+    public static Stream<Article> parse(@NonNull final Uri url, @NonNull final JSONObject json) {
+        // parse this JSON node based on it's type & subtype
+        final String type = json.optString(TAG_TYPE, "");
+        final String subtype = Optional.ofNullable(json.optJSONObject(TAG_CONTENT))
+                .map(n -> n.optString(TAG_SUBTYPE_RESOURCE))
+                .orElse("");
+        switch (type) {
+            case TYPE_PAGE:
+                switch (subtype) {
+                    case SUBTYPE_XFPAGE:
+                        return Stream.of(parseArticle(url, json));
+                }
+            case TYPE_ORDERED_FOLDER:
+                return parseNestedObject(url, json);
+        }
+        return Stream.of();
     }
 
-    //endregion public Executor
-
-    //region Article Parsing
-
     /**
-     * This method takes in a Json Object and Iterates through the keys to determine if they
-     * are Article Objects or Category Object.  Article Objects will be passed on to be parsed
-     * and Category Object will be Recursively placed back into this method.
+     * Recursively parse any nested objects for articles.
      *
-     * @param url
-     * @param json the Json Object to be evaluated.
-     * @return All the articles that were parsed
+     * @param url  The url for the current json node being processed.
+     * @param json The current JSON node
+     * @return a Stream of all articles this json node contains
      */
-    @NonNull
-    private static List<Article> parseObject(@NonNull final Uri url, @NonNull final JSONObject json) {
-        final List<Article> articles = new ArrayList<>();
-
-        // Create loop through Keys
-        Iterator<String> keys = json.keys();
-        while (keys.hasNext()) {
-            String nextKey = keys.next();
-            if (isArticleOrCategory(nextKey)) {
-                JSONObject returnedObject = json.optJSONObject(nextKey);
-                if (returnedObject != null) {
-                    Uri keyUri = url.buildUpon().appendPath(nextKey).build();
-                    switch (returnedObject.optString(PRIMARY_TYPE_TAG)) {
-                        case ORDER_FOLDER_TAG:
-                            articles.addAll(parseObject(keyUri, returnedObject));
-
-                            break;
-                        case PAGE_TAG:
-                            articles.add(parseArticle(keyUri, returnedObject));
-
-                            break;
-                    }
-                }
-            }
-        }
-
-        return articles;
+    public static Stream<Article> parseNestedObject(@NonNull final Uri url, @NonNull final JSONObject json) {
+        return Stream.of(json.keys())
+                .filterNot(ArticleParser::isMetadataKey)
+                .flatMap(k -> {
+                    final JSONObject child = json.optJSONObject(k);
+                    return child != null ? parse(url.buildUpon().appendPath(k).build(), child) : null;
+                });
     }
 
     /**
@@ -93,35 +87,22 @@ public class ArticleParser {
      */
     @NonNull
     private static Article parseArticle(@NonNull final Uri url, @NonNull final JSONObject json) {
-        // get Inner article Object
-        Iterator<String> keys = json.keys();
-        JSONObject articleTagObject = null;
-        Uri keyUri = url;
-        while (keys.hasNext()) {
-            String nextKey = keys.next();
-            if (isArticleOrCategory(nextKey)) {
-                keyUri = keyUri.buildUpon().appendPath(nextKey).build();
-                articleTagObject = json.optJSONObject(nextKey);
-            }
-        }
-
         // Create Article
-        final Article retrievedArticle = new Article(keyUri);
+        final Article retrievedArticle = new Article(url);
         retrievedArticle.mDateCreated = getDateLongFromJsonString(json.optString(CREATED_TAG));
-        JSONObject contentObject = articleTagObject != null ? articleTagObject.optJSONObject(CONTENT_TAG) : null;
+        JSONObject contentObject = json.optJSONObject(TAG_CONTENT);
         if (contentObject != null) {
-            if (json.has(CONTENT_TAG) && contentObject.has(LAST_MODIFIED_TAG)) {
-                retrievedArticle.mDateUpdated = getDateLongFromJsonString(contentObject
-                        .optString(LAST_MODIFIED_TAG));
+            if (json.has(TAG_CONTENT) && contentObject.has(LAST_MODIFIED_TAG)) {
+                retrievedArticle.mDateUpdated = getDateLongFromJsonString(contentObject.optString(LAST_MODIFIED_TAG));
             }
 
-            retrievedArticle.mTitle = contentObject.optString(TITLE_TAG);
+            retrievedArticle.title = contentObject.optString(TITLE_TAG, retrievedArticle.title);
 
             JSONObject articleRootObject = contentObject.optJSONObject(ROOT_TAG);
 
             // get Attachments from Articles
             if (articleRootObject != null) {
-                retrievedArticle.parsedAttachments = getAttachmentsFromRootObject(keyUri, articleRootObject);
+                retrievedArticle.mAttachments = getAttachmentsFromRootObject(url, articleRootObject);
             }
         }
 
@@ -145,10 +126,8 @@ public class ArticleParser {
         while (keys.hasNext()) {
             String nextKey = keys.next();
             JSONObject innerObject = articleRootObject.optJSONObject(nextKey);
-            if (innerObject != null && innerObject.has(RESOURCE_TYPE_TAG) &&
-                    "wcm/foundation/components/image".equals(innerObject
-                            .optString(RESOURCE_TYPE_TAG))) {
-
+            if (innerObject != null &&
+                    "wcm/foundation/components/image".equals(innerObject.optString(TAG_SUBTYPE_RESOURCE))) {
                 //  This Key is an Attachment
                 final Uri attachmentUri = articleUrl.buildUpon().appendPath(nextKey).build();
                 attachments.add(new Attachment(articleUrl, attachmentUri));
@@ -173,19 +152,21 @@ public class ArticleParser {
         }
     }
 
-    //endregion Article Parsing
+    // endregion Article Parsing
 
     //region Validation
+
     /**
-     * This method will determine if the key is an Article or Category
+     * This method will make an educated decision on if the key is a metadata key.
      *
-     * @param key Json Key
-     * @return true if the key is associated with an Article or Category
+     * @param key The key being examined
+     * @return whether this is a metadata key or not
      */
-    private static Boolean isArticleOrCategory(String key) {
-        return !key.startsWith("jcr:") &&
-                !key.startsWith("cq:") &&
-                !key.startsWith("sling:");
+    private static boolean isMetadataKey(@NonNull final String key) {
+        return key.startsWith("jcr:") ||
+                key.startsWith("cq:") ||
+                key.startsWith("sling:");
     }
+
     // endregion Validation
 }
