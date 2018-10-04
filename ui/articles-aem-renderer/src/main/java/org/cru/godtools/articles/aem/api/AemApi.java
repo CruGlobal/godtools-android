@@ -13,6 +13,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
@@ -37,6 +38,7 @@ public interface AemApi {
 
         // create RetroFit API
         return new Retrofit.Builder().baseUrl(uri)
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(new JSONObjectConverterFactory())
                 .callFactory(okHttp)
                 .build().create(AemApi.class);
