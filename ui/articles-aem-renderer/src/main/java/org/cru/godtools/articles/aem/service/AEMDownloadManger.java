@@ -366,7 +366,7 @@ public class AEMDownloadManger {
          * @param force whether to force this sync to execute
          * @return true if the task hasn't started so the update was successful, false if the task has started.
          */
-        synchronized final boolean updateTask(final boolean force) {
+        final synchronized boolean updateTask(final boolean force) {
             if (!mStarted) {
                 mForce = mForce || force;
                 return true;
