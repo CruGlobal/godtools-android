@@ -8,6 +8,7 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 
@@ -30,6 +31,10 @@ public interface ArticleDao {
     @Query("UPDATE articles SET uuid = :uuid, title = :title WHERE uri = :uri")
     void update(@NonNull Uri uri, @NonNull String uuid, @NonNull String title);
 
+    @WorkerThread
+    @Query("UPDATE articles SET contentUuid = :uuid, content = :content WHERE uri = :uri")
+    void updateContent(@NonNull Uri uri, @NonNull String uuid, @Nullable String content);
+
     /**
      *  The insert method for an article.  Any conflict in with stored data will result
      *  in the data being replaced.
@@ -46,6 +51,9 @@ public interface ArticleDao {
      */
     @Delete
     void deleteArticles(Article... articles);
+
+    @Query("SELECT * FROM articles WHERE uri = :uri")
+    Article find(@NonNull Uri uri);
 
     /**
      *  The method to return all Articles.  User should use the ManifestAssociationDoa to

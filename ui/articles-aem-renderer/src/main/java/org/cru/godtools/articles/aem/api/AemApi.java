@@ -22,6 +22,9 @@ public interface AemApi {
     Call<JSONObject> getJson(@Url String uri);
 
     @GET
+    Call<String> downloadArticle(@Url String uri);
+
+    @GET
     @Streaming
     Call<ResponseBody> downloadAttachment(@Url Uri uri);
 

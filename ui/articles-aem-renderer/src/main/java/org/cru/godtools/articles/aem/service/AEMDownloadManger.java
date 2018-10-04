@@ -51,7 +51,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import retrofit2.Response;
 import timber.log.Timber;
+
+import static java.net.HttpURLConnection.HTTP_OK;
 
 /**
  * This class hold all Download methods for retrieving and saving an Article
@@ -59,6 +62,8 @@ import timber.log.Timber;
  * @author Gyasi Story
  */
 public class AEMDownloadManger {
+    private static final String TAG = "AEMDownloadManager";
+
     private static final int TASK_CONCURRENCY = 4;
 
     private final ArticleRoomDatabase mAemDb;
@@ -72,9 +77,11 @@ public class AEMDownloadManger {
     private final Object mExtractAemImportsLock = new Object();
     private final AtomicBoolean mExtractAemImportsQueued = new AtomicBoolean(false);
     final Map<Uri, Object> mSyncAemImportLocks = new HashMap<>();
+    final Map<Uri, Object> mDownloadArticleLocks = new HashMap<>();
 
     // Task de-dup related objects
     private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = Collections.synchronizedMap(new HashMap<>());
+    private final Map<Uri, DownloadArticleTask> mDownloadArticleTasks = Collections.synchronizedMap(new HashMap<>());
 
     private AEMDownloadManger(@NonNull final Context context) {
         mApi = AemApi.buildInstance("https://www.example.com");
@@ -143,6 +150,21 @@ public class AEMDownloadManger {
         final SyncAemImportTask task = new SyncAemImportTask(uri);
         task.updateTask(force);
         mSyncAemImportTasks.put(uri, task);
+        mExecutor.execute(task);
+    }
+
+    @AnyThread
+    private void enqueueDownloadArticle(@NonNull final Uri uri, final boolean force) {
+        // try updating a task that is currently enqueued
+        final DownloadArticleTask existing = mDownloadArticleTasks.get(uri);
+        if (existing != null && existing.updateTask(force)) {
+            return;
+        }
+
+        // create a new sync task
+        final DownloadArticleTask task = new DownloadArticleTask(uri);
+        task.updateTask(force);
+        mDownloadArticleTasks.put(uri, task);
         mExecutor.execute(task);
     }
 
@@ -234,14 +256,39 @@ public class AEMDownloadManger {
         // parse & store articles
         final List<Article> articles = ArticleParser.parse(baseUri, json).toList();
         mAemDb.aemImportRepository().processAemImportSync(aemImport, articles);
+
+        // enqueue downloads for all articles
+        for (final Article article : articles) {
+            enqueueDownloadArticle(article.uri, false);
+        }
     }
 
     /**
      * This task will download the html content for a specific article.
      */
     @WorkerThread
-    void downloadArticleTask() {
-        // TODO
+    void downloadArticleTask(@NonNull final Uri uri, final boolean force) {
+        // short-circuit if there isn't an Article for the specified Uri
+        final Article article = mAemDb.articleDao().find(uri);
+        if (article == null) {
+            return;
+        }
+
+        // short-circuit if the Article isn't stale and we aren't forcing a sync
+        if (article.uuid.equals(article.contentUuid) && !force) {
+            return;
+        }
+
+        // download the article html
+        try {
+            final Response<String> response = mApi.downloadArticle(article.uri + ".html").execute();
+            if (response.code() == HTTP_OK) {
+                mAemDb.articleDao().updateContent(article.uri, article.uuid, response.body());
+            }
+        } catch (final IOException e) {
+            Timber.tag(TAG)
+                    .d(e, "Error downloading article");
+        }
     }
 
     /**
@@ -300,6 +347,7 @@ public class AEMDownloadManger {
     // region PriorityRunnable Tasks
 
     private static final int PRIORITY_SYNC_AEM_IMPORT = -30;
+    private static final int PRIORITY_DOWNLOAD_ARTICLE = -20;
 
     abstract class UniqueUriBasedTask extends PriorityRunnable {
         @NonNull
@@ -361,6 +409,28 @@ public class AEMDownloadManger {
         @Override
         void runTask() {
             syncAemImportTask(mUri, mForce);
+        }
+    }
+
+    class DownloadArticleTask extends UniqueUriBasedTask {
+        DownloadArticleTask(@NonNull final Uri uri) {
+            super(uri);
+        }
+
+        @Override
+        protected int getPriority() {
+            return PRIORITY_DOWNLOAD_ARTICLE;
+        }
+
+        @NonNull
+        @Override
+        Object getLock() {
+            return ThreadUtils.getLock(mDownloadArticleLocks, mUri);
+        }
+
+        @Override
+        void runTask() {
+            downloadArticleTask(mUri, mForce);
         }
     }
 
