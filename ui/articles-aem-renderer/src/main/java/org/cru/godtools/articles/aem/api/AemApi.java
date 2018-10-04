@@ -19,7 +19,7 @@ import retrofit2.http.Url;
 
 public interface AemApi {
     @GET
-    Call<JSONObject> getJson(@Url Uri uri);
+    Call<JSONObject> getJson(@Url String uri);
 
     @GET
     @Streaming

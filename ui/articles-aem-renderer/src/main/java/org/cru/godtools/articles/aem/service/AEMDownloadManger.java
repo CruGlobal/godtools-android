@@ -223,7 +223,7 @@ public class AEMDownloadManger {
         // fetch the raw json
         JSONObject json = null;
         try {
-            json = mApi.getJson(Uri.parse(baseUri.toString() + ".9999.json"))
+            json = mApi.getJson(baseUri.toString() + ".9999.json")
                     .execute()
                     .body();
         } catch (final IOException e) {
