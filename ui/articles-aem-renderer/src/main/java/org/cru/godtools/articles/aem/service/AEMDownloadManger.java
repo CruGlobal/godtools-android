@@ -301,19 +301,14 @@ public class AEMDownloadManger {
 
     private static final int PRIORITY_SYNC_AEM_IMPORT = -30;
 
-    class SyncAemImportTask extends PriorityRunnable {
+    abstract class UniqueUriBasedTask extends PriorityRunnable {
         @NonNull
-        private final Uri mUri;
-        private volatile boolean mStarted = false;
-        private volatile boolean mForce = false;
+        final Uri mUri;
+        volatile boolean mStarted = false;
+        volatile boolean mForce = false;
 
-        SyncAemImportTask(@NonNull final Uri uri) {
+        UniqueUriBasedTask(@NonNull final Uri uri) {
             mUri = uri;
-        }
-
-        @Override
-        protected int getPriority() {
-            return PRIORITY_SYNC_AEM_IMPORT;
         }
 
         /**
@@ -323,7 +318,7 @@ public class AEMDownloadManger {
          * @param force whether to force this sync to execute
          * @return true if the task hasn't started so the update was successful, false if the task has started.
          */
-        synchronized boolean updateTask(final boolean force) {
+        synchronized final boolean updateTask(final boolean force) {
             if (!mStarted) {
                 mForce = mForce || force;
                 return true;
@@ -333,12 +328,39 @@ public class AEMDownloadManger {
 
         @Override
         public void run() {
-            synchronized (ThreadUtils.getLock(mSyncAemImportLocks, mUri)) {
+            synchronized (getLock()) {
                 synchronized (this) {
                     mStarted = true;
                 }
-                syncAemImportTask(mUri, mForce);
+                runTask();
             }
+        }
+
+        @NonNull
+        abstract Object getLock();
+
+        abstract void runTask();
+    }
+
+    class SyncAemImportTask extends UniqueUriBasedTask {
+        SyncAemImportTask(@NonNull final Uri uri) {
+            super(uri);
+        }
+
+        @Override
+        protected int getPriority() {
+            return PRIORITY_SYNC_AEM_IMPORT;
+        }
+
+        @NonNull
+        @Override
+        Object getLock() {
+            return ThreadUtils.getLock(mSyncAemImportLocks, mUri);
+        }
+
+        @Override
+        void runTask() {
+            syncAemImportTask(mUri, mForce);
         }
     }
 
