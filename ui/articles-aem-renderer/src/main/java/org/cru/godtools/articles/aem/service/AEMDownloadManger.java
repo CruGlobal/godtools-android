@@ -90,6 +90,9 @@ public class AEMDownloadManger {
         mManifestManager = ManifestManager.getInstance(mContext);
 
         EventBus.getDefault().register(this);
+
+        // trigger some base sync tasks
+        enqueueExtractAemImportsFromManifests();
     }
 
     @Nullable
