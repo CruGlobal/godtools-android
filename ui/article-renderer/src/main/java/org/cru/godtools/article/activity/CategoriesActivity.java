@@ -15,8 +15,6 @@ import org.cru.godtools.xml.model.Category;
 
 import java.util.Locale;
 
-import timber.log.Timber;
-
 public class CategoriesActivity extends BaseSingleToolActivity implements CategoriesFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
@@ -52,8 +50,7 @@ public class CategoriesActivity extends BaseSingleToolActivity implements Catego
 
     @Override
     public void onCategorySelected(@Nullable final Category category) {
-        Timber.tag("CategoriesActivity")
-                .d("Category selected: %s", category != null ? category.getId() : null);
+        ArticlesActivity.start(this, mTool, mLocale, category.getId());
     }
 
     // endregion Lifecycle Events
