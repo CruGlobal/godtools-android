@@ -18,12 +18,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(AndroidJUnit4.class)
-public class ArticleParserTest {
+public class AemJsonParserTest {
     @Test
     public void verifyArticleParseLogic() throws Exception {
         final JSONObject jsonObject = loadJson("tests/article-test.json");
 
-        final List<Article> articles = ArticleParser.parse(Uri.parse(
+        final List<Article> articles = AemJsonParser.findArticles(Uri.parse(
                 "https://stage.cru.org/content/experience-fragments/questions_about_god/english"), jsonObject).toList();
         assertThat(articles.size(), is(2));
         for (final Article article : articles) {

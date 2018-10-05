@@ -21,7 +21,7 @@ import java.util.Locale;
 /**
  * This class handles parsing any AEM json calls into DOA objects.
  */
-public class ArticleParser {
+public class AemJsonParser {
     private static final String TAG_TYPE = "jcr:primaryType";
     private static final String TAG_SUBTYPE_RESOURCE = "sling:resourceType";
     private static final String TAG_UUID = "jcr:uuid";
@@ -44,7 +44,7 @@ public class ArticleParser {
      *
      * @return return a list of {@link Article}
      */
-    public static Stream<Article> parse(@NonNull final Uri url, @NonNull final JSONObject json) {
+    public static Stream<Article> findArticles(@NonNull final Uri url, @NonNull final JSONObject json) {
         // parse this JSON node based on it's type & subtype
         final String type = json.optString(TAG_TYPE, "");
         final String subtype = Optional.ofNullable(json.optJSONObject(TAG_CONTENT))
@@ -70,12 +70,12 @@ public class ArticleParser {
      * @param json The current JSON node
      * @return a Stream of all articles this json node contains
      */
-    public static Stream<Article> parseNestedObject(@NonNull final Uri url, @NonNull final JSONObject json) {
+    private static Stream<Article> parseNestedObject(@NonNull final Uri url, @NonNull final JSONObject json) {
         return Stream.of(json.keys())
-                .filterNot(ArticleParser::isMetadataKey)
+                .filterNot(AemJsonParser::isMetadataKey)
                 .flatMap(k -> {
                     final JSONObject child = json.optJSONObject(k);
-                    return child != null ? parse(url.buildUpon().appendPath(k).build(), child) : null;
+                    return child != null ? findArticles(url.buildUpon().appendPath(k).build(), child) : null;
                 });
     }
 

@@ -20,7 +20,7 @@ import org.cru.godtools.articles.aem.db.TranslationRepository;
 import org.cru.godtools.articles.aem.model.AemImport;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
-import org.cru.godtools.articles.aem.service.support.ArticleParser;
+import org.cru.godtools.articles.aem.service.support.AemJsonParser;
 import org.cru.godtools.base.util.PriorityRunnable;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
@@ -253,7 +253,7 @@ public class AEMDownloadManger {
         }
 
         // parse & store articles
-        final List<Article> articles = ArticleParser.parse(baseUri, json).toList();
+        final List<Article> articles = AemJsonParser.findArticles(baseUri, json).toList();
         mAemDb.aemImportRepository().processAemImportSync(aemImport, articles);
 
         // enqueue downloads for all articles
