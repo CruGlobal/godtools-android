@@ -30,13 +30,25 @@ public class Article {
     public final Uri uri;
 
     /**
+     * UUID of this article
+     */
+    @NonNull
+    public String uuid = "";
+
+    /**
      * The title of the Article
      */
     @NonNull
     public String title = "";
 
     /**
-     * The main HTML Content of the Article
+     * UUID of the article the last time content was cached
+     */
+    @Nullable
+    public String contentUuid;
+
+    /**
+     * The cached HTML Content of the Article
      */
     @Nullable
     public String content;

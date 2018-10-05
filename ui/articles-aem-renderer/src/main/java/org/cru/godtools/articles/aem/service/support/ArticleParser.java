@@ -24,6 +24,8 @@ import java.util.Locale;
 public class ArticleParser {
     private static final String TAG_TYPE = "jcr:primaryType";
     private static final String TAG_SUBTYPE_RESOURCE = "sling:resourceType";
+    private static final String TAG_UUID = "jcr:uuid";
+    private static final String TAG_TITLE = "jcr:title";
     private static final String TAG_CONTENT = "jcr:content";
 
     private static final String TYPE_ORDERED_FOLDER = "sling:OrderedFolder";
@@ -32,7 +34,6 @@ public class ArticleParser {
 
     private static final String CREATED_TAG = "jcr:created";
     private static final String LAST_MODIFIED_TAG = "cq:lastModified";
-    private static final String TITLE_TAG = "jcr:title";
     private static final String ROOT_TAG = "root";
     private static final String FILE_TAG = "fileReference";
 
@@ -49,6 +50,7 @@ public class ArticleParser {
         final String subtype = Optional.ofNullable(json.optJSONObject(TAG_CONTENT))
                 .map(n -> n.optString(TAG_SUBTYPE_RESOURCE))
                 .orElse("");
+
         switch (type) {
             case TYPE_PAGE:
                 switch (subtype) {
@@ -87,26 +89,27 @@ public class ArticleParser {
      */
     @NonNull
     private static Article parseArticle(@NonNull final Uri url, @NonNull final JSONObject json) {
+        final JSONObject content = json.optJSONObject(TAG_CONTENT);
+
         // Create Article
-        final Article retrievedArticle = new Article(url);
-        retrievedArticle.mDateCreated = getDateLongFromJsonString(json.optString(CREATED_TAG));
-        JSONObject contentObject = json.optJSONObject(TAG_CONTENT);
-        if (contentObject != null) {
-            if (json.has(TAG_CONTENT) && contentObject.has(LAST_MODIFIED_TAG)) {
-                retrievedArticle.mDateUpdated = getDateLongFromJsonString(contentObject.optString(LAST_MODIFIED_TAG));
+        final Article article = new Article(url);
+        article.mDateCreated = getDateLongFromJsonString(json.optString(CREATED_TAG));
+        if (content != null) {
+            article.uuid = content.optString(TAG_UUID, article.uuid);
+            article.title = content.optString(TAG_TITLE, article.title);
+
+            if (json.has(TAG_CONTENT) && content.has(LAST_MODIFIED_TAG)) {
+                article.mDateUpdated = getDateLongFromJsonString(content.optString(LAST_MODIFIED_TAG));
             }
 
-            retrievedArticle.title = contentObject.optString(TITLE_TAG, retrievedArticle.title);
-
-            JSONObject articleRootObject = contentObject.optJSONObject(ROOT_TAG);
-
             // get Attachments from Articles
+            JSONObject articleRootObject = content.optJSONObject(ROOT_TAG);
             if (articleRootObject != null) {
-                retrievedArticle.mAttachments = getAttachmentsFromRootObject(url, articleRootObject);
+                article.mAttachments = getAttachmentsFromRootObject(url, articleRootObject);
             }
         }
 
-        return retrievedArticle;
+        return article;
     }
 
     /**

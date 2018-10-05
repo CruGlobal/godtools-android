@@ -15,7 +15,6 @@ import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.util.ThreadUtils;
 import org.cru.godtools.articles.aem.api.AemApi;
-import org.cru.godtools.articles.aem.db.ArticleRepository;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.db.AttachmentRepository;
 import org.cru.godtools.articles.aem.db.TranslationRepository;
@@ -32,7 +31,6 @@ import org.cru.godtools.xml.service.ManifestManager;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
@@ -53,8 +51,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
+import retrofit2.Response;
 import timber.log.Timber;
+
+import static java.net.HttpURLConnection.HTTP_OK;
 
 /**
  * This class hold all Download methods for retrieving and saving an Article
@@ -62,6 +62,8 @@ import timber.log.Timber;
  * @author Gyasi Story
  */
 public class AEMDownloadManger {
+    private static final String TAG = "AEMDownloadManager";
+
     private static final int TASK_CONCURRENCY = 4;
 
     private final ArticleRoomDatabase mAemDb;
@@ -75,9 +77,11 @@ public class AEMDownloadManger {
     private final Object mExtractAemImportsLock = new Object();
     private final AtomicBoolean mExtractAemImportsQueued = new AtomicBoolean(false);
     final Map<Uri, Object> mSyncAemImportLocks = new HashMap<>();
+    final Map<Uri, Object> mDownloadArticleLocks = new HashMap<>();
 
     // Task de-dup related objects
     private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = Collections.synchronizedMap(new HashMap<>());
+    private final Map<Uri, DownloadArticleTask> mDownloadArticleTasks = Collections.synchronizedMap(new HashMap<>());
 
     private AEMDownloadManger(@NonNull final Context context) {
         mApi = AemApi.buildInstance("https://www.example.com");
@@ -90,6 +94,9 @@ public class AEMDownloadManger {
         mManifestManager = ManifestManager.getInstance(mContext);
 
         EventBus.getDefault().register(this);
+
+        // trigger some base sync tasks
+        enqueueExtractAemImportsFromManifests();
     }
 
     @Nullable
@@ -143,6 +150,21 @@ public class AEMDownloadManger {
         final SyncAemImportTask task = new SyncAemImportTask(uri);
         task.updateTask(force);
         mSyncAemImportTasks.put(uri, task);
+        mExecutor.execute(task);
+    }
+
+    @AnyThread
+    private void enqueueDownloadArticle(@NonNull final Uri uri, final boolean force) {
+        // try updating a task that is currently enqueued
+        final DownloadArticleTask existing = mDownloadArticleTasks.get(uri);
+        if (existing != null && existing.updateTask(force)) {
+            return;
+        }
+
+        // create a new sync task
+        final DownloadArticleTask task = new DownloadArticleTask(uri);
+        task.updateTask(force);
+        mDownloadArticleTasks.put(uri, task);
         mExecutor.execute(task);
     }
 
@@ -220,7 +242,7 @@ public class AEMDownloadManger {
         // fetch the raw json
         JSONObject json = null;
         try {
-            json = mApi.getJson(Uri.parse(baseUri.toString() + ".9999.json"))
+            json = mApi.getJson(baseUri.toString() + ".9999.json")
                     .execute()
                     .body();
         } catch (final IOException e) {
@@ -234,14 +256,39 @@ public class AEMDownloadManger {
         // parse & store articles
         final List<Article> articles = ArticleParser.parse(baseUri, json).toList();
         mAemDb.aemImportRepository().processAemImportSync(aemImport, articles);
+
+        // enqueue downloads for all articles
+        for (final Article article : articles) {
+            enqueueDownloadArticle(article.uri, false);
+        }
     }
 
     /**
      * This task will download the html content for a specific article.
      */
     @WorkerThread
-    void downloadArticleTask() {
-        // TODO
+    void downloadArticleTask(@NonNull final Uri uri, final boolean force) {
+        // short-circuit if there isn't an Article for the specified Uri
+        final Article article = mAemDb.articleDao().find(uri);
+        if (article == null) {
+            return;
+        }
+
+        // short-circuit if the Article isn't stale and we aren't forcing a sync
+        if (article.uuid.equals(article.contentUuid) && !force) {
+            return;
+        }
+
+        // download the article html
+        try {
+            final Response<String> response = mApi.downloadArticle(article.uri + ".html").execute();
+            if (response.code() == HTTP_OK) {
+                mAemDb.articleDao().updateContent(article.uri, article.uuid, response.body());
+            }
+        } catch (final IOException e) {
+            Timber.tag(TAG)
+                    .d(e, "Error downloading article");
+        }
     }
 
     /**
@@ -261,54 +308,6 @@ public class AEMDownloadManger {
     }
 
     // endregion Tasks
-
-    /**
-     * This method take the manifest and one of its aemImports and extracts all associated data to
-     * the database.
-     *
-     * @param aemImports uri from one of the aemImports
-     * @throws JSONException
-     * @throws IOException
-     */
-    private void loadAemManifestIntoAemModel(Uri aemImports)
-            throws JSONException, IOException {
-
-        ArticleRepository articleRepository = mAemDb.articleRepository();
-        AttachmentRepository attachmentRepository = new AttachmentRepository(mContext);
-
-        JSONObject importJson = getJsonFromUri(aemImports);
-
-        final List<Article> articles = ArticleParser.parse(aemImports, importJson).toList();
-
-        for (Article createdArticle : articles) {
-            // Save Article
-            articleRepository.insertArticle(createdArticle);
-
-            for (final Attachment attachment : createdArticle.mAttachments) {
-                attachmentRepository.insertAttachment(attachment);
-            }
-        }
-    }
-
-    /**
-     * Gets JSON Object out of Uri
-     *
-     * @param aemImports uri
-     * @return JSON object from the Uri
-     * @throws JSONException
-     * @throws IOException
-     */
-    private JSONObject getJsonFromUri(Uri aemImports)
-            throws JSONException, IOException {
-
-        // Have to convert android Uri to a Java URI
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(aemImports.toString())
-                .build();
-        Response response = client.newCall(request).execute();
-        return new JSONObject(response.body().string());
-    }
 
     /**
      * This method is used to save an Attachment to Storage and update Database
@@ -348,20 +347,16 @@ public class AEMDownloadManger {
     // region PriorityRunnable Tasks
 
     private static final int PRIORITY_SYNC_AEM_IMPORT = -30;
+    private static final int PRIORITY_DOWNLOAD_ARTICLE = -20;
 
-    class SyncAemImportTask extends PriorityRunnable {
+    abstract class UniqueUriBasedTask extends PriorityRunnable {
         @NonNull
-        private final Uri mUri;
-        private volatile boolean mStarted = false;
-        private volatile boolean mForce = false;
+        final Uri mUri;
+        volatile boolean mStarted = false;
+        volatile boolean mForce = false;
 
-        SyncAemImportTask(@NonNull final Uri uri) {
+        UniqueUriBasedTask(@NonNull final Uri uri) {
             mUri = uri;
-        }
-
-        @Override
-        protected int getPriority() {
-            return PRIORITY_SYNC_AEM_IMPORT;
         }
 
         /**
@@ -371,7 +366,7 @@ public class AEMDownloadManger {
          * @param force whether to force this sync to execute
          * @return true if the task hasn't started so the update was successful, false if the task has started.
          */
-        synchronized boolean updateTask(final boolean force) {
+        final synchronized boolean updateTask(final boolean force) {
             if (!mStarted) {
                 mForce = mForce || force;
                 return true;
@@ -381,12 +376,61 @@ public class AEMDownloadManger {
 
         @Override
         public void run() {
-            synchronized (ThreadUtils.getLock(mSyncAemImportLocks, mUri)) {
+            synchronized (getLock()) {
                 synchronized (this) {
                     mStarted = true;
                 }
-                syncAemImportTask(mUri, mForce);
+                runTask();
             }
+        }
+
+        @NonNull
+        abstract Object getLock();
+
+        abstract void runTask();
+    }
+
+    class SyncAemImportTask extends UniqueUriBasedTask {
+        SyncAemImportTask(@NonNull final Uri uri) {
+            super(uri);
+        }
+
+        @Override
+        protected int getPriority() {
+            return PRIORITY_SYNC_AEM_IMPORT;
+        }
+
+        @NonNull
+        @Override
+        Object getLock() {
+            return ThreadUtils.getLock(mSyncAemImportLocks, mUri);
+        }
+
+        @Override
+        void runTask() {
+            syncAemImportTask(mUri, mForce);
+        }
+    }
+
+    class DownloadArticleTask extends UniqueUriBasedTask {
+        DownloadArticleTask(@NonNull final Uri uri) {
+            super(uri);
+        }
+
+        @Override
+        protected int getPriority() {
+            return PRIORITY_DOWNLOAD_ARTICLE;
+        }
+
+        @NonNull
+        @Override
+        Object getLock() {
+            return ThreadUtils.getLock(mDownloadArticleLocks, mUri);
+        }
+
+        @Override
+        void runTask() {
+            downloadArticleTask(mUri, mForce);
         }
     }
 
