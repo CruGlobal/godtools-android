@@ -34,7 +34,7 @@ public abstract class AemImportRepository {
 
             // insert/update article
             articleDao.insertOrIgnore(article);
-            articleDao.updateTitle(article.uri, article.title);
+            articleDao.update(article.uri, article.uuid, article.title);
 
             // associate the article with this AemImport
             aemImportDao.insertOrIgnore(new AemImport.AemImportArticle(aemImport, article));
