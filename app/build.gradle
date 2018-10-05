@@ -33,6 +33,9 @@ android {
             betaDistributionReleaseNotes = generateCrashlyticsBetaReleaseNotes()
         }
     }
+    dataBinding {
+        enabled = true
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -125,6 +128,7 @@ dependencies {
     implementation project(':ui:everystudent')
     implementation project(':ui:shortcuts')
     implementation project(':ui:tract-renderer')
+    implementation project(':ui:article-renderer')
 
     implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
     implementation "com.android.support:cardview-v7:${deps.androidSupport}"

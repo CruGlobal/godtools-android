@@ -54,6 +54,7 @@ public class CategoriesActivity extends BaseSingleToolActivity implements Catego
     public void onCategorySelected(@Nullable final Category category) {
         Timber.tag("CategoriesActivity")
                 .d("Category selected: %s", category != null ? category.getId() : null);
+        ArticlesActivity.start(this, mTool, mLocale, category.getId());
     }
 
     // endregion Lifecycle Events

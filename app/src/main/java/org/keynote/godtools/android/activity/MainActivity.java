@@ -24,7 +24,7 @@ import org.cru.godtools.R;
 import org.cru.godtools.activity.BasePlatformActivity;
 import org.cru.godtools.activity.ToolDetailsActivity;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
-import org.cru.godtools.everystudent.EveryStudent;
+import org.cru.godtools.article.activity.CategoriesActivity;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.sync.GodToolsSyncService;
@@ -176,7 +176,8 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
                 case ARTICLE:
                     // hardcode everystudent content for now
                     if (CODE_EVERYSTUDENT.equals(code)) {
-                        EveryStudent.start(this);
+//                        EveryStudent.start(this);
+                        CategoriesActivity.start(this, code, languages[0]);
                     }
             }
         }
