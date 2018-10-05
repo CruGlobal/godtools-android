@@ -260,6 +260,15 @@ public class AEMDownloadManger {
         // enqueue downloads for all articles
         for (final Article article : articles) {
             enqueueDownloadArticle(article.uri, false);
+            //TODO: Attachments weren't being saved this needs to be refined
+            for (Attachment attachment: article.mAttachments) {
+                new AttachmentRepository(mContext).insertAttachment(attachment);
+                try {
+                    saveAttachmentToStorage(attachment);
+                } catch (IOException e) {
+                    Timber.e(e, "syncAemImportTask: ");
+                }
+            }
         }
     }
 
