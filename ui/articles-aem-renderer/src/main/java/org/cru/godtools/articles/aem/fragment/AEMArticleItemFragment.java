@@ -1,4 +1,4 @@
-package org.cru.godtools.articles.aem;
+package org.cru.godtools.articles.aem.fragment;
 
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -32,12 +32,12 @@ import butterknife.ButterKnife;
 
 public class AEMArticleItemFragment extends BaseToolFragment {
     public static final String TAG = "AEMArticleItemFragment";
-    private final static String ARTICLE_KEY_TAG = "article_key";
+    private static final String ARTICLE_KEY_TAG = "article_key";
     private Uri mArticleKey;
     private List<Attachment> mArticleAttachments;
     private ArticleRoomDatabase mRDb;
     private Article mArticle;
-    private static int MESSAGE_SET_ARTICLE = 101;
+    private static final int MESSAGE_SET_ARTICLE = 101;
 
     @BindView(R2.id.aem_article_web_view)
     WebView mAemWebView;
@@ -64,7 +64,8 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_aem_article_item, container, false);
         ButterKnife.bind(this, view);
         return view;
@@ -73,7 +74,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mAemWebView.setWebViewClient(mWebViewclient);
+        mAemWebView.setWebViewClient(mWebViewClient);
 
         mHandler.post(mWebViewRunnable);
     }
@@ -119,18 +120,20 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
     //region WebClient
 
-    private AEMWebViewClient mWebViewclient = new AEMWebViewClient();
+    private AEMWebViewClient mWebViewClient = new AEMWebViewClient();
 
     private class AEMWebViewClient extends WebViewClient {
-
         @Nullable
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+            if (url.endsWith(".jpg")) {
+                //TODO: Load local Image WebResource
+            } else if (url.endsWith(".css")) {
+                //TODO: Load CSS WebResource
+            }
 
             return super.shouldInterceptRequest(view, url);
         }
-
-
     }
     //endregion WebClient
 
