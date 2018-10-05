@@ -35,6 +35,7 @@ import java.util.concurrent.RunnableFuture;
 
 import me.thekey.android.TheKey;
 
+import static com.snowplowanalytics.snowplow.tracker.emitter.RequestSecurity.HTTPS;
 import static me.thekey.android.Attributes.ATTR_GR_MASTER_PERSON_ID;
 import static org.cru.godtools.analytics.BuildConfig.SNOWPLOW_ENDPOINT;
 
@@ -61,7 +62,9 @@ public class SnowplowAnalyticsService {
             Tracker.close();
             // XXX: creating an Emitter will initialize the event store database on whichever thread the emitter is
             // XXX: created on. Because of this we initialize Snowplow in a background task
-            final Emitter emitter = new Emitter.EmitterBuilder(SNOWPLOW_ENDPOINT, context).build();
+            final Emitter emitter = new Emitter.EmitterBuilder(SNOWPLOW_ENDPOINT, context)
+                    .security(HTTPS)
+                    .build();
             return new Tracker.TrackerBuilder(emitter, SNOWPLOW_NAMESPACE, SNOWPLOW_APP_ID, context)
                     .base64(false)
                     .mobileContext(true)
