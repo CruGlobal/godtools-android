@@ -20,6 +20,7 @@ import com.snowplowanalytics.snowplow.tracker.events.ScreenView;
 import com.snowplowanalytics.snowplow.tracker.events.Structured;
 import com.snowplowanalytics.snowplow.tracker.payload.SelfDescribingJson;
 
+import org.ccci.gto.android.common.snowplow.util.EmitterUtils;
 import org.cru.godtools.analytics.model.AnalyticsActionEvent;
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
@@ -65,6 +66,7 @@ public class SnowplowAnalyticsService {
             final Emitter emitter = new Emitter.EmitterBuilder(SNOWPLOW_ENDPOINT, context)
                     .security(HTTPS)
                     .build();
+            EmitterUtils.attachOkHttp3GlobalInterceptors(emitter);
             return new Tracker.TrackerBuilder(emitter, SNOWPLOW_NAMESPACE, SNOWPLOW_APP_ID, context)
                     .base64(false)
                     .mobileContext(true)
