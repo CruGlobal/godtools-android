@@ -351,7 +351,7 @@ public class AEMDownloadManger {
     private static final int PRIORITY_SYNC_AEM_IMPORT = -30;
     private static final int PRIORITY_DOWNLOAD_ARTICLE = -20;
 
-    abstract class UniqueUriBasedTask extends PriorityRunnable {
+    abstract class UniqueUriBasedTask implements PriorityRunnable {
         @NonNull
         final Uri mUri;
         volatile boolean mStarted = false;
@@ -398,7 +398,7 @@ public class AEMDownloadManger {
         }
 
         @Override
-        protected int getPriority() {
+        public int getPriority() {
             return PRIORITY_SYNC_AEM_IMPORT;
         }
 
@@ -420,7 +420,7 @@ public class AEMDownloadManger {
         }
 
         @Override
-        protected int getPriority() {
+        public int getPriority() {
             return PRIORITY_DOWNLOAD_ARTICLE;
         }
 
