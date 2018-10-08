@@ -1,17 +1,12 @@
 package org.cru.godtools.articles.aem.db;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
-import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
-import android.support.annotation.VisibleForTesting;
 
 import org.cru.godtools.articles.aem.model.Attachment;
-
-import java.util.List;
 
 
 /**
@@ -45,22 +40,4 @@ public interface AttachmentDao {
      */
     @Delete
     void deleteAttachments(Attachment... attachments);
-
-    /**
-     * To obtain a collection of attachment that are associated with a
-     * particular article.
-     *
-     * @param articleId = The unique Identifier of the article
-     * @return = a list of Attachments.  Using live data to support in Live updates.
-     */
-    @Query("SELECT * FROM attachments WHERE articleUri = :articleId")
-    LiveData<List<Attachment>> getAttachmentsByArticle(String articleId);
-
-    // region Testable (None Live Data)
-
-    @VisibleForTesting()
-    @Query("SELECT * FROM attachments WHERE articleUri = :articleId")
-    List<Attachment> getTestableAttachmentsByArticle(String articleId);
-
-    // endregion
 }

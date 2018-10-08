@@ -2,7 +2,6 @@ package org.cru.godtools.articles.aem.db;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import org.cru.godtools.articles.aem.model.Article;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -15,17 +14,8 @@ import static junit.framework.Assert.assertTrue;
  */
 @RunWith(AndroidJUnit4.class)
 public class ArticleRoomDatabaseTest extends DBBaseTest {
-
     @Test
     public void verifyGetAllArticles() {
         assertTrue("No article was saved.", mSavedArticles.size() > 0);
-    }
-
-    @Test
-    public void verifyArticleHasAttachment() {
-        for (Article article : mSavedArticles) {
-            assertTrue(String.format("Article %s has no attachment", article.title),
-                       mAttachmentDao.getTestableAttachmentsByArticle(article.uri.toString()).size() > 0);
-        }
     }
 }

@@ -133,7 +133,7 @@ public class ArticleParser {
                     "wcm/foundation/components/image".equals(innerObject.optString(TAG_SUBTYPE_RESOURCE))) {
                 //  This Key is an Attachment
                 final Uri attachmentUri = articleUrl.buildUpon().appendPath(nextKey).build();
-                attachments.add(new Attachment(articleUrl, attachmentUri));
+                attachments.add(new Attachment(attachmentUri));
             }
         }
 
