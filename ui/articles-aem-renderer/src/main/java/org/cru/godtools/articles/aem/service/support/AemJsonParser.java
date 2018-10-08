@@ -7,15 +7,11 @@ import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 
 import org.cru.godtools.articles.aem.model.Article;
-import org.cru.godtools.articles.aem.model.Attachment;
 import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -101,43 +97,9 @@ public class AemJsonParser {
             if (json.has(TAG_CONTENT) && content.has(LAST_MODIFIED_TAG)) {
                 article.mDateUpdated = getDateLongFromJsonString(content.optString(LAST_MODIFIED_TAG));
             }
-
-            // get Attachments from Articles
-            JSONObject articleRootObject = content.optJSONObject(ROOT_TAG);
-            if (articleRootObject != null) {
-                article.mAttachments = getAttachmentsFromRootObject(url, articleRootObject);
-            }
         }
 
         return article;
-    }
-
-    /**
-     * This method if for extracting Attachments from the root Json Object of the article.  On
-     * completion it will add Attachment to <code>attachmentList</code>
-     *
-     * @param articleRootObject the root json Object of Article
-     * @return the list of attachments that were parsed
-     */
-    @NonNull
-    private static List<Attachment> getAttachmentsFromRootObject(@NonNull final Uri articleUrl,
-                                                                 JSONObject articleRootObject) {
-        final List<Attachment> attachments = new ArrayList<>();
-
-        // Iterate through keys
-        Iterator<String> keys = articleRootObject.keys();
-        while (keys.hasNext()) {
-            String nextKey = keys.next();
-            JSONObject innerObject = articleRootObject.optJSONObject(nextKey);
-            if (innerObject != null &&
-                    "wcm/foundation/components/image".equals(innerObject.optString(TAG_SUBTYPE_RESOURCE))) {
-                //  This Key is an Attachment
-                final Uri attachmentUri = articleUrl.buildUpon().appendPath(nextKey).build();
-                attachments.add(new Attachment(attachmentUri));
-            }
-        }
-
-        return attachments;
     }
 
     /**
