@@ -17,6 +17,7 @@ buildscript {
                 gtoSupport           : '1.3.2-SNAPSHOT',
                 guava                : '26.0-android',
                 hamcrest             : '1.3',
+                jsoup                : '1.11.3',
                 junit                : '4.12',
                 kotlin               : '1.2.71',
                 ktlint               : '0.29.0',

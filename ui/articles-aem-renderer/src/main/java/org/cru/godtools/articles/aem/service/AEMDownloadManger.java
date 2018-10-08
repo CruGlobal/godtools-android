@@ -21,6 +21,7 @@ import org.cru.godtools.articles.aem.model.AemImport;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.articles.aem.service.support.AemJsonParser;
+import org.cru.godtools.articles.aem.service.support.HtmlParserKt;
 import org.cru.godtools.base.util.PriorityRunnable;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
@@ -282,7 +283,10 @@ public class AEMDownloadManger {
         try {
             final Response<String> response = mApi.downloadArticle(article.uri + ".html").execute();
             if (response.code() == HTTP_OK) {
-                mAemDb.articleDao().updateContent(article.uri, article.uuid, response.body());
+                article.contentUuid = article.uuid;
+                article.content = response.body();
+                article.mAttachments = HtmlParserKt.extractResources(article);
+                mAemDb.articleDao().updateContent(article.uri, article.contentUuid, article.content);
             }
         } catch (final IOException e) {
             Timber.tag(TAG)
