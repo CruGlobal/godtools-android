@@ -15,6 +15,7 @@ import android.support.annotation.WorkerThread;
 import org.cru.godtools.articles.aem.model.Article;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  *  The Data Access Object for the Article
@@ -63,6 +64,15 @@ public interface ArticleDao {
      */
     @Query("SELECT * FROM articles")
     LiveData<List<Article>> getAllArticles();
+
+    @Query("SELECT DISTINCT a.* " +
+            "FROM translationAemImports AS t " +
+            "JOIN aemImportArticles AS i ON i.aemImportUri = t.aemImportUri " +
+            "JOIN articles AS a ON a.uri = i.articleUri " +
+            "WHERE t.tool = :tool AND t.language = :locale AND t.version = (" +
+                "SELECT version FROM translations " +
+                "WHERE tool = :tool AND language = :locale AND processed = 1 ORDER BY version DESC)")
+    LiveData<List<Article>> getArticles(@NonNull String tool, @NonNull Locale locale);
 
     //region Testable (Non Live Data)
     @VisibleForTesting

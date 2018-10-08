@@ -4,9 +4,19 @@
     <application>
         <activity
             android:name=".activity.CategoriesActivity"
-            android:theme="@style/Theme.GodTools.Tool.AppBar" />
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
+            android:theme="@style/Theme.GodTools.Tool.AppBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.keynote.godtools.android.activity.MainActivity" />
+        </activity>
         <activity
             android:name=".activity.ArticlesActivity"
-            android:theme="@style/Theme.GodTools.Tool.AppBar"/>
+            android:parentActivityName=".activity.CategoriesActivity"
+            android:theme="@style/Theme.GodTools.Tool.AppBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.cru.godtools.article.activity.CategoriesActivity" />
+        </activity>
     </application>
 </manifest>
