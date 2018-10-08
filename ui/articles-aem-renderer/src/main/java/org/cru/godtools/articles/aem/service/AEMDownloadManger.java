@@ -16,7 +16,6 @@ import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.util.ThreadUtils;
 import org.cru.godtools.articles.aem.api.AemApi;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
-import org.cru.godtools.articles.aem.db.AttachmentRepository;
 import org.cru.godtools.articles.aem.db.TranslationRepository;
 import org.cru.godtools.articles.aem.model.AemImport;
 import org.cru.godtools.articles.aem.model.Article;
@@ -339,8 +338,7 @@ public class AEMDownloadManger {
 
             // update attachment with file Path
             attachment.mAttachmentFilePath = articleFile.getAbsolutePath();
-            AttachmentRepository repository = new AttachmentRepository(mContext);
-            repository.updateAttachment(attachment);
+            mAemDb.attachmentDao().updateAttachment(attachment);
         }
     }
 

@@ -59,7 +59,7 @@ public abstract class ArticleRoomDatabase extends RoomDatabase {
 
     public abstract ArticleDao articleDao();
 
-    abstract AttachmentDao attachmentDao();
+    public abstract AttachmentDao attachmentDao();
 
     // endregion DAOs
 

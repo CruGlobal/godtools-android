@@ -20,7 +20,7 @@ import java.util.List;
  * @author gyasistory
  */
 @Dao
-interface AttachmentDao {
+public interface AttachmentDao {
     /**
      * Insertion of a unique Attachment.  If there is a conflict
      * the new data will replace the conflicting data.
