@@ -67,13 +67,16 @@ public abstract class ArticleRoomDatabase extends RoomDatabase {
     // region Repositories
 
     @NonNull
+    public abstract TranslationRepository translationRepository();
+
+    @NonNull
     public abstract AemImportRepository aemImportRepository();
 
     @NonNull
     public abstract ArticleRepository articleRepository();
 
     @NonNull
-    public abstract TranslationRepository translationRepository();
+    public abstract AttachmentRepository attachmentRepository();
 
     // endregion Repositories
 }

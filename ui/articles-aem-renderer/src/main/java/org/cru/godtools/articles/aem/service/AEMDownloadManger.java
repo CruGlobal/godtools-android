@@ -286,7 +286,7 @@ public class AEMDownloadManger {
                 article.contentUuid = article.uuid;
                 article.content = response.body();
                 article.mAttachments = HtmlParserKt.extractResources(article);
-                mAemDb.articleDao().updateContent(article.uri, article.contentUuid, article.content);
+                mAemDb.articleRepository().updateContent(article);
             }
         } catch (final IOException e) {
             Timber.tag(TAG)

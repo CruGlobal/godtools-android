@@ -5,6 +5,8 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Update;
+import android.support.annotation.NonNull;
+import android.support.annotation.WorkerThread;
 
 import org.cru.godtools.articles.aem.model.Attachment;
 
@@ -16,6 +18,10 @@ import org.cru.godtools.articles.aem.model.Attachment;
  */
 @Dao
 public interface AttachmentDao {
+    @WorkerThread
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertOrIgnore(@NonNull Attachment attachment);
+
     /**
      * Insertion of a unique Attachment.  If there is a conflict
      * the new data will replace the conflicting data.
