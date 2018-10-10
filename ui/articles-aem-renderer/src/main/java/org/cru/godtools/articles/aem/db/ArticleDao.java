@@ -29,12 +29,16 @@ public interface ArticleDao {
     void insertOrIgnore(@NonNull Article article);
 
     @WorkerThread
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertOrIgnore(@NonNull Article.ArticleAttachment articleAttachment);
+
+    @WorkerThread
     @Query("UPDATE articles SET uuid = :uuid, title = :title WHERE uri = :uri")
     void update(@NonNull Uri uri, @NonNull String uuid, @NonNull String title);
 
     @WorkerThread
     @Query("UPDATE articles SET contentUuid = :uuid, content = :content WHERE uri = :uri")
-    void updateContent(@NonNull Uri uri, @NonNull String uuid, @Nullable String content);
+    void updateContent(@NonNull Uri uri, @Nullable String uuid, @Nullable String content);
 
     /**
      *  The insert method for an article.  Any conflict in with stored data will result
@@ -44,6 +48,11 @@ public interface ArticleDao {
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertArticle(Article article);
+
+    @WorkerThread
+    @Query("DELETE FROM articleAttachments " +
+            "WHERE articleUri = :articleUri AND attachmentUri NOT IN (:currentAttachmentUris)")
+    void removeOldAttachments(@NonNull Uri articleUri, @NonNull List<Uri> currentAttachmentUris);
 
     /**
      *  The delete method for an article.  Can take in on or multiple task.

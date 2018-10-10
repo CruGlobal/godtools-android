@@ -4,6 +4,7 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -17,6 +18,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import javax.annotation.concurrent.Immutable;
 
 /**
  * This class represents the article table
@@ -98,6 +101,7 @@ public class Article {
         return String.format("Updated: %s", date);
     }
 
+    @Immutable
     @Entity(tableName = "categories", primaryKeys = {"articleUri", "category"},
             foreignKeys = {
                     @ForeignKey(entity = Article.class,
@@ -119,6 +123,34 @@ public class Article {
         public Category(@NonNull final Uri articleUri, @NonNull final String category) {
             this.articleUri = articleUri;
             this.category = category;
+        }
+    }
+
+    @Immutable
+    @Entity(tableName = "articleAttachments", primaryKeys = {"articleUri", "attachmentUri"},
+            indices = {@Index("attachmentUri")},
+            foreignKeys = {
+                    @ForeignKey(entity = Article.class,
+                            onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
+                            parentColumns = {"uri"}, childColumns = {"articleUri"}),
+                    @ForeignKey(entity = Attachment.class,
+                            onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
+                            parentColumns = {"uri"}, childColumns = {"attachmentUri"})
+    })
+    public static class ArticleAttachment {
+        @NonNull
+        public final Uri articleUri;
+
+        @NonNull
+        public final Uri attachmentUri;
+
+        public ArticleAttachment(@NonNull final Uri articleUri, @NonNull final Uri attachmentUri) {
+            this.articleUri = articleUri;
+            this.attachmentUri = attachmentUri;
+        }
+
+        public ArticleAttachment(@NonNull final Article article, @NonNull final Attachment attachment) {
+            this(article.uri, attachment.uri);
         }
     }
 }
