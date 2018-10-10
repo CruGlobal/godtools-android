@@ -16,32 +16,32 @@ import java.util.Date;
 import java.util.List;
 
 @Dao
-public abstract class AemImportDao {
+public interface AemImportDao {
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    abstract void insertOrIgnore(@NonNull List<AemImport> imports,
-                                 @NonNull List<TranslationRef.TranslationAemImport> translationRefs);
+    void insertOrIgnore(@NonNull List<AemImport> imports,
+                        @NonNull List<TranslationRef.TranslationAemImport> translationRefs);
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    abstract void insertOrIgnore(@NonNull AemImport.AemImportArticle aemImportArticle);
+    void insertOrIgnore(@NonNull AemImport.AemImportArticle aemImportArticle);
 
     @WorkerThread
     @Query("UPDATE aemImports SET lastProcessed = :date WHERE uri = :aemImportUri")
-    public abstract void updateLastProcessed(@NonNull Uri aemImportUri, @NonNull Date date);
+    void updateLastProcessed(@NonNull Uri aemImportUri, @NonNull Date date);
 
     @WorkerThread
     @Query("DELETE FROM aemImportArticles " +
             "WHERE aemImportUri = :aemImportUri AND articleUri NOT IN (:currentArticleUris)")
-    public abstract void removeOldArticles(@NonNull Uri aemImportUri, @NonNull List<Uri> currentArticleUris);
+    void removeOldArticles(@NonNull Uri aemImportUri, @NonNull List<Uri> currentArticleUris);
 
     @Nullable
     @WorkerThread
     @Query("SELECT * FROM aemImports WHERE uri = :uri")
-    public abstract AemImport find(Uri uri);
+    AemImport find(Uri uri);
 
     @NonNull
     @WorkerThread
     @Query("SELECT * FROM aemImports")
-    public abstract List<AemImport> getAll();
+    List<AemImport> getAll();
 }
