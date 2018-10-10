@@ -4,6 +4,7 @@
     <application>
         <activity
             android:name=".activity.CategoriesActivity"
+            android:parentActivityName="org.keynote.godtools.android.activity.MainActivity"
             android:theme="@style/Theme.GodTools.Tool.AppBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -11,6 +12,7 @@
         </activity>
         <activity
             android:name=".activity.ArticlesActivity"
+            android:parentActivityName=".activity.CategoriesActivity"
             android:theme="@style/Theme.GodTools.Tool.AppBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
