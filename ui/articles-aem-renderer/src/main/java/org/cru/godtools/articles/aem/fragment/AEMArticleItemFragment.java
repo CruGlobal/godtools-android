@@ -68,7 +68,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mAemWebView.setWebChromeClient(new WebChromeClient());
+
         mAemWebView.setWebViewClient(mWebViewClient);
 
         mHandler.post(mWebViewRunnable);
@@ -103,7 +103,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         StringBuilder builder = new StringBuilder(mArticle.content);
         builder.insert(mArticle.content.indexOf("<head>") + 7,
                 "<style> img { max-width: 100%; } </style>");
-        mAemWebView.loadDataWithBaseURL(mArticleKey.getHost(), builder.toString(),
+        mAemWebView.loadDataWithBaseURL("https://" + mArticleKey.getHost(), builder.toString(),
                 "text/html", null, null);
     }
 
