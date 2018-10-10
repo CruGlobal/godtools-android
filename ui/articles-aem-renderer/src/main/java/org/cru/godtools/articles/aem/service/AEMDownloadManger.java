@@ -19,7 +19,7 @@ import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.db.TranslationRepository;
 import org.cru.godtools.articles.aem.model.AemImport;
 import org.cru.godtools.articles.aem.model.Article;
-import org.cru.godtools.articles.aem.model.Attachment;
+import org.cru.godtools.articles.aem.model.Resource;
 import org.cru.godtools.articles.aem.service.support.AemJsonParser;
 import org.cru.godtools.articles.aem.service.support.HtmlParserKt;
 import org.cru.godtools.base.util.PriorityRunnable;
@@ -285,7 +285,7 @@ public class AEMDownloadManger {
             if (response.code() == HTTP_OK) {
                 article.contentUuid = article.uuid;
                 article.content = response.body();
-                article.mAttachments = HtmlParserKt.extractResources(article);
+                article.mResources = HtmlParserKt.extractResources(article);
                 mAemDb.articleRepository().updateContent(article);
             }
         } catch (final IOException e) {

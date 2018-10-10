@@ -76,7 +76,7 @@ public class Article {
 
     @Ignore
     @NonNull
-    public List<Attachment> mAttachments = ImmutableList.of();
+    public List<Resource> mResources = ImmutableList.of();
 
     public Article(@NonNull final Uri uri) {
         this.uri = uri;
