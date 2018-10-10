@@ -1,7 +1,6 @@
 package org.cru.godtools.articles.aem.fragment;
 
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -18,11 +18,9 @@ import org.cru.godtools.article.aem.R;
 import org.cru.godtools.article.aem.R2;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.model.Article;
-import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 
 import java.lang.ref.WeakReference;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -71,6 +69,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mAemWebView.setWebChromeClient(new WebChromeClient());
         mAemWebView.setWebViewClient(mWebViewClient);
 
         mHandler.post(mWebViewRunnable);
@@ -78,11 +77,14 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     //endregion LifeCycle
 
     //region Article Data
-    private Article getArticleFromKey() {
+    private void getArticleFromKey() {
         if (mRDb == null) {
             mRDb = ArticleRoomDatabase.getInstance(getContext().getApplicationContext());
         }
-        return mRDb.articleDao().find(mArticleKey);
+        mRDb.articleDao().liveFind(mArticleKey).observeForever(article -> {
+            mArticle = article;
+            mHandler.sendEmptyMessage(MESSAGE_SET_ARTICLE);
+        });
     }
 
     public void setArticle(Article article) {
@@ -128,15 +130,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
     //region Runnable and Handler
 
-    private Runnable mWebViewRunnable = new Runnable() {
-        @Override
-        public void run() {
-            AsyncTask.execute(() -> {
-                mArticle = getArticleFromKey();
-                mHandler.sendEmptyMessage(MESSAGE_SET_ARTICLE);
-            });
-        }
-    };
+    private Runnable mWebViewRunnable = this::getArticleFromKey;
 
     private AEMWebViewHandler mHandler = new AEMWebViewHandler(this);
 

@@ -65,6 +65,9 @@ public interface ArticleDao {
     @Query("SELECT * FROM articles WHERE uri = :uri")
     Article find(@NonNull Uri uri);
 
+    @Query("SELECT * FROM articles WHERE uri = :uri")
+    LiveData<Article> liveFind(@NonNull Uri uri);
+
     /**
      *  The method to return all Articles.  User should use the ManifestAssociationDoa to
      *  get proper categories of the article.

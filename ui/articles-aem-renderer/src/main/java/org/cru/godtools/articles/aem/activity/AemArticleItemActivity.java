@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 
-
 import org.cru.godtools.article.aem.R;
 import org.cru.godtools.articles.aem.fragment.AEMArticleItemFragment;
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity;
@@ -22,8 +21,8 @@ public class AemArticleItemActivity extends BaseSingleToolActivity {
     private String mArticleKey;
 
     // region Constructors and Initializers
-    public static void start (@NonNull final Context context, @NonNull final String toolCode,
-                              @NonNull final Locale language, String articleKey) {
+    public static void start(@NonNull final Context context, @NonNull final String toolCode,
+                             @NonNull final Locale language, String articleKey) {
         final Bundle extras = new Bundle();
         populateExtras(extras, toolCode, language);
         extras.putString(EXTRA_ARTICLE_KEY, articleKey);
@@ -64,7 +63,7 @@ public class AemArticleItemActivity extends BaseSingleToolActivity {
         }
 
         fm.beginTransaction()
-                .replace(R.id.frame, AEMArticleItemFragment.newInstance(mTool, mLocale, mArticleKey)
-                , AEMArticleItemFragment.TAG).commit();
+                .replace(R.id.frame, AEMArticleItemFragment.newInstance(mTool, mLocale, mArticleKey),
+                        AEMArticleItemFragment.TAG).commit();
     }
 }
