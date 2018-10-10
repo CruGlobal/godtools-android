@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.fragment.ArticlesFragment;
+import org.cru.godtools.articles.aem.activity.AemArticleItemActivity;
 import org.cru.godtools.articles.aem.fragment.AEMArticleItemFragment;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity;
@@ -72,17 +73,10 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
     public void onArticleSelected(@Nullable final Article article) {
         Timber.tag("ArticlesActivity")
                 .d("Article selected: %s", article != null ? article.title : null);
-        AEMArticleItemFragment fragment = (AEMArticleItemFragment) getSupportFragmentManager()
-                .findFragmentByTag(AEMArticleItemFragment.TAG);
 
-        if (fragment == null) {
-            fragment = AEMArticleItemFragment.newInstance(mTool, mLocale, article.uri.toString());
-        } else {
-            fragment.setArticle(article);
-        }
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame, fragment,
-                AEMArticleItemFragment.TAG).addToBackStack(AEMArticleItemFragment.TAG).commit();
+        assert article != null;
+        assert mTool != null;
+        AemArticleItemActivity.start(this, mTool, mLocale, article.uri.toString());
     }
 
     // endregion Lifecycle Events

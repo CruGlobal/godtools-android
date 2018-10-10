@@ -1,2 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.cru.godtools.article.aem" />
+    package="org.cru.godtools.article.aem" >
+    <application>
+        <activity android:name="org.cru.godtools.articles.aem.activity.AemArticleItemActivity"
+            android:theme="@style/Theme.GodTools.Tool.AppBar"/>
+    </application>
+</manifest>
