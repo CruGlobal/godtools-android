@@ -66,9 +66,8 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_aem_article_item, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+        return inflater.inflate(R.layout.fragment_aem_article_item, container, false);
+
     }
 
     @Override
