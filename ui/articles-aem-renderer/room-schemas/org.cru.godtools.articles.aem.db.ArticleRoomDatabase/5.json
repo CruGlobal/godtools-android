@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 4,
-    "identityHash": "cb0ed30b00367e1dc408c8dd9b57c68a",
+    "version": 5,
+    "identityHash": "fd0af75cc3207bb848bb1e1fd13d9ca8",
     "entities": [
       {
         "tableName": "translations",
@@ -302,8 +302,8 @@
         ]
       },
       {
-        "tableName": "attachments",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`articleUri` TEXT NOT NULL, `uri` TEXT NOT NULL, `attachment_file_path` TEXT, PRIMARY KEY(`articleUri`, `uri`), FOREIGN KEY(`articleUri`) REFERENCES `articles`(`uri`) ON UPDATE RESTRICT ON DELETE CASCADE )",
+        "tableName": "articleAttachments",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`articleUri` TEXT NOT NULL, `attachmentUri` TEXT NOT NULL, PRIMARY KEY(`articleUri`, `attachmentUri`), FOREIGN KEY(`articleUri`) REFERENCES `articles`(`uri`) ON UPDATE RESTRICT ON DELETE CASCADE , FOREIGN KEY(`attachmentUri`) REFERENCES `attachments`(`uri`) ON UPDATE RESTRICT ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "articleUri",
@@ -311,6 +311,59 @@
             "affinity": "TEXT",
             "notNull": true
           },
+          {
+            "fieldPath": "attachmentUri",
+            "columnName": "attachmentUri",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "articleUri",
+            "attachmentUri"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_articleAttachments_attachmentUri",
+            "unique": false,
+            "columnNames": [
+              "attachmentUri"
+            ],
+            "createSql": "CREATE  INDEX `index_articleAttachments_attachmentUri` ON `${TABLE_NAME}` (`attachmentUri`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "articles",
+            "onDelete": "CASCADE",
+            "onUpdate": "RESTRICT",
+            "columns": [
+              "articleUri"
+            ],
+            "referencedColumns": [
+              "uri"
+            ]
+          },
+          {
+            "table": "attachments",
+            "onDelete": "CASCADE",
+            "onUpdate": "RESTRICT",
+            "columns": [
+              "attachmentUri"
+            ],
+            "referencedColumns": [
+              "uri"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "attachments",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uri` TEXT NOT NULL, `attachment_file_path` TEXT, PRIMARY KEY(`uri`))",
+        "fields": [
           {
             "fieldPath": "uri",
             "columnName": "uri",
@@ -326,39 +379,17 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "articleUri",
             "uri"
           ],
           "autoGenerate": false
         },
-        "indices": [
-          {
-            "name": "index_attachments_uri",
-            "unique": false,
-            "columnNames": [
-              "uri"
-            ],
-            "createSql": "CREATE  INDEX `index_attachments_uri` ON `${TABLE_NAME}` (`uri`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "articles",
-            "onDelete": "CASCADE",
-            "onUpdate": "RESTRICT",
-            "columns": [
-              "articleUri"
-            ],
-            "referencedColumns": [
-              "uri"
-            ]
-          }
-        ]
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"cb0ed30b00367e1dc408c8dd9b57c68a\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"fd0af75cc3207bb848bb1e1fd13d9ca8\")"
     ]
   }
 }

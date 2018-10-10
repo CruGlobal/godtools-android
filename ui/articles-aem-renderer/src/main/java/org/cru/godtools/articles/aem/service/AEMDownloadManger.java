@@ -16,12 +16,12 @@ import org.ccci.gto.android.common.db.Query;
 import org.ccci.gto.android.common.util.ThreadUtils;
 import org.cru.godtools.articles.aem.api.AemApi;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
-import org.cru.godtools.articles.aem.db.AttachmentRepository;
 import org.cru.godtools.articles.aem.db.TranslationRepository;
 import org.cru.godtools.articles.aem.model.AemImport;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
-import org.cru.godtools.articles.aem.service.support.ArticleParser;
+import org.cru.godtools.articles.aem.service.support.AemJsonParser;
+import org.cru.godtools.articles.aem.service.support.HtmlParserKt;
 import org.cru.godtools.base.util.PriorityRunnable;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
@@ -254,21 +254,12 @@ public class AEMDownloadManger {
         }
 
         // parse & store articles
-        final List<Article> articles = ArticleParser.parse(baseUri, json).toList();
+        final List<Article> articles = AemJsonParser.findArticles(baseUri, json).toList();
         mAemDb.aemImportRepository().processAemImportSync(aemImport, articles);
 
         // enqueue downloads for all articles
         for (final Article article : articles) {
             enqueueDownloadArticle(article.uri, false);
-            //TODO: Attachments weren't being saved this needs to be refined
-            for (Attachment attachment : article.mAttachments) {
-                new AttachmentRepository(mContext).insertAttachment(attachment);
-                try {
-                    saveAttachmentToStorage(attachment);
-                } catch (IOException e) {
-                    Timber.e(e, "syncAemImportTask: ");
-                }
-            }
         }
     }
 
@@ -292,7 +283,10 @@ public class AEMDownloadManger {
         try {
             final Response<String> response = mApi.downloadArticle(article.uri + ".html").execute();
             if (response.code() == HTTP_OK) {
-                mAemDb.articleDao().updateContent(article.uri, article.uuid, response.body());
+                article.contentUuid = article.uuid;
+                article.content = response.body();
+                article.mAttachments = HtmlParserKt.extractResources(article);
+                mAemDb.articleRepository().updateContent(article);
             }
         } catch (final IOException e) {
             Timber.tag(TAG)
@@ -348,8 +342,7 @@ public class AEMDownloadManger {
 
             // update attachment with file Path
             attachment.mAttachmentFilePath = articleFile.getAbsolutePath();
-            AttachmentRepository repository = new AttachmentRepository(mContext);
-            repository.updateAttachment(attachment);
+            mAemDb.attachmentDao().updateAttachment(attachment);
         }
     }
 

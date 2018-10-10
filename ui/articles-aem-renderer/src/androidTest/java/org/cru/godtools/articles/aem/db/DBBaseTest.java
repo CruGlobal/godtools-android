@@ -45,7 +45,7 @@ public abstract class DBBaseTest extends BaseArticleRoomDatabaseIT {
         }
         mSavedArticles = mArticleDao.getTestableAllArticles();
         for (int i = 0; i < mSavedArticles.size(); i++) {
-            final Attachment attachment = new Attachment(mSavedArticles.get(i), Uri.parse(
+            final Attachment attachment = new Attachment(Uri.parse(
                     "https://believeacts2blog.files.wordpress.com/2015/10/image16.jpg?_=" + i));
             mAttachmentDao.insertAttachment(attachment);
         }

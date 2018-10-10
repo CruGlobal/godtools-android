@@ -1,10 +1,48 @@
 buildscript {
-    ext.uris = [
-            mobileContentApi: [
-                    stage     : "https://mobile-content-api-stage.cru.org/",
-                    production: "https://mobile-content-api.cru.org/"
-            ]
-    ]
+    ext {
+        deps = [
+                adobeMobileServices  : '4.16.0',
+                advrecyclerview      : '0.11.0',
+                androidInstantApps   : '1.1.0',
+                androidLifecycle     : '1.1.1',
+                androidSupport       : '27.1.1',
+                androidTestingSupport: '1.0.2',
+                butterknife          : '8.7.0',
+                calligraphy          : '2.3.0',
+                constraintLayout     : '1.1.3',
+                crashlytics          : '2.9.5',
+                eventbus             : '3.1.1',
+                evernoteAndroidJob   : '1.2.5',
+                facebookStetho       : '1.5.0',
+                gtoSupport           : '1.3.2-SNAPSHOT',
+                guava                : '26.0-android',
+                hamcrest             : '1.3',
+                jsoup                : '1.11.3',
+                junit                : '4.12',
+                kotlin               : '1.2.71',
+                ktlint               : '0.29.0',
+                leakcanary           : '1.6.1',
+                lightweightStream    : '1.1.9',
+                mockito              : '2.17.0',
+                multidex             : '1.0.3',
+                newrelic             : '5.19.0',
+                okhttp3              : '3.11.0',
+                picassoTransforms    : '2.2.1',
+                playServicesAnalytics: '16.0.1',
+                powermock            : '2.0.0-beta.9',
+                retrofit2            : '2.4.0',
+                room                 : '1.1.1',
+                snowplow             : '0.7.0',
+                thekey               : '2.0.1-SNAPSHOT',
+                timber               : '4.7.1'
+        ]
+        uris = [
+                mobileContentApi: [
+                        stage     : "https://mobile-content-api-stage.cru.org/",
+                        production: "https://mobile-content-api.cru.org/"
+                ]
+        ]
+    }
 
     repositories {
         google()
@@ -16,8 +54,9 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.2.0'
         //noinspection GradleDependency
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
-        classpath 'com.newrelic.agent.android:agent-gradle-plugin:5.19.0'
+        classpath "com.newrelic.agent.android:agent-gradle-plugin:${deps.newrelic}"
         classpath 'io.fabric.tools:gradle:1.25.4'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.kotlin}"
     }
 }
 
@@ -38,39 +77,6 @@ ext {
     minSdkFeature = 21
     targetSdk     = 27
 }
-ext.deps = [
-        adobeMobileServices  : '4.16.0',
-        advrecyclerview      : '0.11.0',
-        androidInstantApps   : '1.1.0',
-        androidLifecycle     : '1.1.1',
-        androidSupport       : '27.1.1',
-        androidTestingSupport: '1.0.2',
-        butterknife          : '8.7.0',
-        calligraphy          : '2.3.0',
-        constraintLayout     : '1.1.3',
-        crashlytics          : '2.9.5',
-        eventbus             : '3.1.1',
-        evernoteAndroidJob   : '1.2.5',
-        facebookStetho       : '1.5.0',
-        gtoSupport           : '1.3.2-SNAPSHOT',
-        guava                : '26.0-android',
-        hamcrest             : '1.3',
-        junit                : '4.12',
-        leakcanary           : '1.6.1',
-        lightweightStream    : '1.1.9',
-        mockito              : '2.17.0',
-        multidex             : '1.0.3',
-        newrelic             : '5.19.0',
-        okhttp3              : '3.11.0',
-        picassoTransforms    : '2.2.1',
-        playServicesAnalytics: '16.0.1',
-        powermock            : '2.0.0-beta.9',
-        retrofit2            : '2.4.0',
-        room                 : '1.1.1',
-        snowplow             : '0.7.0',
-        thekey               : '2.0.1-SNAPSHOT',
-        timber               : '4.7.1'
-]
 
 subprojects {
     repositories {
@@ -111,6 +117,29 @@ subprojects {
     afterEvaluate {
         if (project.tasks.findByName('check')) {
             check.dependsOn('checkstyle')
+        }
+    }
+}
+
+// configure ktlint
+subprojects {
+    configurations {
+        ktlint
+    }
+    dependencies {
+        // ktlint
+        ktlint "com.github.shyiko:ktlint:${deps.ktlint}"
+    }
+    task ktlint(type: JavaExec, group: "verification") {
+        description = "Check Kotlin code style."
+        classpath = configurations.ktlint
+        main = "com.github.shyiko.ktlint.Main"
+        args "src/**/*.kt"
+        args "--reporter=checkstyle,output=${buildDir}/reports/ktlint/ktlint.xml"
+    }
+    afterEvaluate {
+        if (project.tasks.findByName('check')) {
+            check.dependsOn ktlint
         }
     }
 }

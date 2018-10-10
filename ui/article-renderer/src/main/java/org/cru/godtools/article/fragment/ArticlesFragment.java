@@ -118,7 +118,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
 
         if (!mViewModel.initialized) {
             final ArticleRoomDatabase aemDb = ArticleRoomDatabase.getInstance(requireContext());
-            mViewModel.articles = aemDb.articleDao().getAllArticles();
+            mViewModel.articles = aemDb.articleDao().getArticles(mTool, mLocale);
             mViewModel.initialized = true;
         }
     }

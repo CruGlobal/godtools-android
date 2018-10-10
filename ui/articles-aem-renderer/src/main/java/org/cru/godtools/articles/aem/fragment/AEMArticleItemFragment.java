@@ -17,7 +17,6 @@ import android.webkit.WebViewClient;
 import org.cru.godtools.article.aem.R;
 import org.cru.godtools.article.aem.R2;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
-import org.cru.godtools.articles.aem.db.AttachmentRepository;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Attachment;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
@@ -34,7 +33,6 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     public static final String TAG = "AEMArticleItemFragment";
     private static final String ARTICLE_KEY_TAG = "article_key";
     private Uri mArticleKey;
-    private List<Attachment> mArticleAttachments;
     private ArticleRoomDatabase mRDb;
     private Article mArticle;
     private static final int MESSAGE_SET_ARTICLE = 101;
@@ -108,10 +106,6 @@ public class AEMArticleItemFragment extends BaseToolFragment {
                 "text/html", null, null);
     }
 
-    private void getArticleAttachments() {
-        AttachmentRepository repository = new AttachmentRepository(getContext().getApplicationContext());
-        mArticleAttachments = repository.getAttachmentsByArticle(mArticleKey.toString()).getValue();
-    }
     //endregion Article Data
 
     //region WebClient
@@ -140,7 +134,6 @@ public class AEMArticleItemFragment extends BaseToolFragment {
             AsyncTask.execute(() -> {
                 mArticle = getArticleFromKey();
                 mHandler.sendEmptyMessage(MESSAGE_SET_ARTICLE);
-                getArticleAttachments();
             });
         }
     };

@@ -18,6 +18,9 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
+
 public class ArticlesActivity extends BaseSingleToolActivity implements ArticlesFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
     private static final String EXTRA_CATEGORY = "category";
@@ -88,4 +91,23 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
                 .replace(R.id.frame, ArticlesFragment.newInstance(mTool, mLocale, mCategoryId), TAG_MAIN_FRAGMENT)
                 .commit();
     }
+
+    // region Up Navigation
+
+    @Nullable
+    @Override
+    public Intent getSupportParentActivityIntent() {
+        assert mTool != null : "mTool has to be non-null for this activity to even be running";
+        final Intent intent = super.getSupportParentActivityIntent();
+
+        // populate the CategoriesActivity intent
+        if (intent != null) {
+            intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP | FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtras(CategoriesActivity.populateExtras(new Bundle(), mTool, mLocale));
+        }
+
+        return intent;
+    }
+
+    // endregion Up Navigation
 }

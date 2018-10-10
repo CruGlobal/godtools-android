@@ -1,4 +1,5 @@
 apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'kotlin-android'
 
 android {
     defaultConfig {
@@ -18,6 +19,8 @@ dependencies {
     implementation project(':library:xml-model')
     implementation project(':ui:base-tool')
 
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
+
     implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
     api "android.arch.persistence.room:runtime:${deps.room}"
     implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
@@ -33,14 +36,13 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:${deps.retrofit2}"
     implementation "com.squareup.retrofit2:converter-scalars:${deps.retrofit2}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
-    implementation "androidx.constraintlayout:constraintlayout:${deps.constraintLayout}"
+    implementation "org.jsoup:jsoup:${deps.jsoup}"
 
     // For Testing
     androidTestImplementation "android.arch.persistence.room:testing:${deps.room}"
     androidTestImplementation "com.android.support.test:runner:${deps.androidTestingSupport}"
     androidTestImplementation "com.google.guava:guava:${deps.guava}"
     androidTestImplementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
-
 
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
     annotationProcessor "android.arch.lifecycle:compiler:${deps.androidLifecycle}"

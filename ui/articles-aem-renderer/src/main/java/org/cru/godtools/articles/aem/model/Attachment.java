@@ -2,8 +2,7 @@ package org.cru.godtools.articles.aem.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.Index;
+import android.arch.persistence.room.PrimaryKey;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
@@ -13,19 +12,10 @@ import android.support.annotation.NonNull;
  *
  * @author Gyasi Story
  */
-@Entity(tableName = "attachments",
-        primaryKeys = {"articleUri", "uri"},
-        indices = {@Index("uri")},
-        foreignKeys = {
-                @ForeignKey(entity = Article.class,
-                        onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
-                        parentColumns = {"uri"}, childColumns = {"articleUri"})
-        })
+@Entity(tableName = "attachments")
 public class Attachment {
     @NonNull
-    public final Uri articleUri;
-
-    @NonNull
+    @PrimaryKey
     public final Uri uri;
 
     /**
@@ -35,12 +25,7 @@ public class Attachment {
     @ColumnInfo(name = "attachment_file_path")
     public String mAttachmentFilePath;
 
-    public Attachment(@NonNull final Article article, @NonNull final Uri uri) {
-        this(article.uri, uri);
-    }
-
-    public Attachment(@NonNull final Uri articleUri, @NonNull final Uri uri) {
-        this.articleUri = articleUri;
+    public Attachment(@NonNull final Uri uri) {
         this.uri = uri;
     }
 }

@@ -29,10 +29,11 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     @Nullable
     protected Manifest mManifest;
 
-    protected static void populateExtras(@NonNull final Bundle extras, @NonNull final String toolCode,
-                                         @NonNull final Locale language) {
+    protected static Bundle populateExtras(@NonNull final Bundle extras, @NonNull final String toolCode,
+                                           @NonNull final Locale language) {
         extras.putString(EXTRA_TOOL, toolCode);
         BundleUtils.putLocale(extras, EXTRA_LANGUAGE, language);
+        return extras;
     }
 
     public BaseSingleToolActivity(final boolean immersive) {
