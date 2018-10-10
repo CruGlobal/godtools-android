@@ -19,7 +19,6 @@ import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.db.TranslationRepository;
 import org.cru.godtools.articles.aem.model.AemImport;
 import org.cru.godtools.articles.aem.model.Article;
-import org.cru.godtools.articles.aem.model.Resource;
 import org.cru.godtools.articles.aem.service.support.AemJsonParser;
 import org.cru.godtools.articles.aem.service.support.HtmlParserKt;
 import org.cru.godtools.base.util.PriorityRunnable;
@@ -36,10 +35,7 @@ import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -49,8 +45,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import retrofit2.Response;
 import timber.log.Timber;
 
@@ -311,40 +305,6 @@ public class AEMDownloadManger {
     }
 
     // endregion Tasks
-
-    /**
-     * This method is used to save an Attachment to Storage and update Database
-     *
-     * @param attachment the attachment to be saved
-     * @throws IOException Is thrown if an error occurs in saving to storage.
-     */
-    public void saveAttachmentToStorage(Attachment attachment)
-            throws IOException {
-        // verify that attachment is not already saved.
-        if (attachment.mAttachmentFilePath != null) {
-            //TODO: determine what should happen
-        } else {
-            String[] urlSplit = attachment.uri.toString().split("/");
-            String filename = urlSplit[urlSplit.length - 1];
-            File articleFile = new File(mContext.getFilesDir(), "articles");
-            if (!articleFile.exists()) {
-                articleFile.mkdir();
-            }
-            articleFile = new File(articleFile, filename);
-            FileOutputStream outputStream = new FileOutputStream(articleFile);
-            URL url = new URL(attachment.uri.toString());
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-
-            outputStream.write(client.newCall(request).execute().body().bytes());
-
-            // update attachment with file Path
-            attachment.mAttachmentFilePath = articleFile.getAbsolutePath();
-            mAemDb.attachmentDao().updateAttachment(attachment);
-        }
-    }
 
     // region PriorityRunnable Tasks
 
