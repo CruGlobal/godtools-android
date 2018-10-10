@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.fragment.ArticlesFragment;
 import org.cru.godtools.articles.aem.activity.AemArticleItemActivity;
-import org.cru.godtools.articles.aem.fragment.AEMArticleItemFragment;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity;
 

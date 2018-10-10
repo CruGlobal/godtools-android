@@ -28,9 +28,9 @@ import java.util.Locale;
 import java.util.Objects;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class AEMArticleItemFragment extends BaseToolFragment {
+
     public static final String TAG = "AEMArticleItemFragment";
     private static final String ARTICLE_KEY_TAG = "article_key";
     private Uri mArticleKey;
@@ -43,6 +43,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     WebView mAemWebView;
 
     public static AEMArticleItemFragment newInstance(String tool, Locale locale, String articleKey) {
+
         AEMArticleItemFragment fragment = new AEMArticleItemFragment();
         Bundle args = new Bundle();
         populateArgs(args, tool, locale);
@@ -64,8 +65,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_aem_article_item, container, false);
 
     }
