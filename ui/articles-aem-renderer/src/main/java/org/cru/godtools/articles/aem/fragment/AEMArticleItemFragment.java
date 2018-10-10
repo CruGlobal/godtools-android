@@ -65,9 +65,9 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_aem_article_item, container, false);
-
     }
 
     @Override
@@ -77,11 +77,9 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
         mHandler.post(mWebViewRunnable);
     }
-
     //endregion LifeCycle
 
     //region Article Data
-
     private Article getArticleFromKey() {
         if (mRDb == null) {
             mRDb = ArticleRoomDatabase.getInstance(getContext().getApplicationContext());
@@ -114,11 +112,9 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         AttachmentRepository repository = new AttachmentRepository(getContext().getApplicationContext());
         mArticleAttachments = repository.getAttachmentsByArticle(mArticleKey.toString()).getValue();
     }
-
     //endregion Article Data
 
     //region WebClient
-
     private AEMWebViewClient mWebViewClient = new AEMWebViewClient();
 
     private class AEMWebViewClient extends WebViewClient {

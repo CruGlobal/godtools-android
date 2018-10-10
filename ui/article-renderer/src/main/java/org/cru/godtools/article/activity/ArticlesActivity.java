@@ -59,7 +59,6 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
 
         setContentView(R.layout.activity_generic_fragment);
 
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
     }
 
     @Override
@@ -73,9 +72,8 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
         Timber.tag("ArticlesActivity")
                 .d("Article selected: %s", article != null ? article.title : null);
 
-        assert article != null;
-        assert mTool != null;
-        AemArticleItemActivity.start(this, mTool, mLocale, article.uri.toString());
+        AemArticleItemActivity.start(this, Objects.requireNonNull(mTool), mLocale,
+                Objects.requireNonNull(article).uri.toString());
     }
 
     // endregion Lifecycle Events
@@ -90,18 +88,5 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
         fm.beginTransaction()
                 .replace(R.id.frame, ArticlesFragment.newInstance(mTool, mLocale, mCategoryId), TAG_MAIN_FRAGMENT)
                 .commit();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
     }
 }

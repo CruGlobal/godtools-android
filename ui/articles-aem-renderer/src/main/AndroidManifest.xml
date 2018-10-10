@@ -1,7 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.cru.godtools.article.aem" >
     <application>
-        <activity android:name="org.cru.godtools.articles.aem.activity.AemArticleItemActivity"
-            android:theme="@style/Theme.GodTools.Tool.AppBar"/>
+        <activity
+            android:name="org.cru.godtools.articles.aem.activity.AemArticleItemActivity"
+            android:theme="@style/Theme.GodTools.Tool.AppBar"
+            android:parentActivityName="org.cru.godtools.article.activity.ArticlesActivity"
+            tools:targetApi="jelly_bean" />
     </application>
 </manifest>
