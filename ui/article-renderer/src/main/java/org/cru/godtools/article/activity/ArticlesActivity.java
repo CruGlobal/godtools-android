@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
-import android.view.MenuItem;
 
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.fragment.ArticlesFragment;
