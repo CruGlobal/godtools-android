@@ -28,7 +28,6 @@ import butterknife.BindView;
 
 public class AEMArticleItemFragment extends BaseToolFragment {
 
-    public static final String TAG = "AEMArticleItemFragment";
     private static final String ARTICLE_KEY_TAG = "article_key";
     private Uri mArticleKey;
     private ArticleRoomDatabase mRDb;

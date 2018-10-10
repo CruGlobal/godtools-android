@@ -16,6 +16,7 @@ import java.util.Locale;
 
 public class AemArticleItemActivity extends BaseSingleToolActivity {
 
+    private static final String TAG_MAIN_FRAGMENT = "mainFragment";
     private static final String EXTRA_ARTICLE_KEY = "extra_article_key";
 
     private String mArticleKey;
@@ -29,6 +30,7 @@ public class AemArticleItemActivity extends BaseSingleToolActivity {
         final Intent intent = new Intent(context, AemArticleItemActivity.class).putExtras(extras);
         context.startActivity(intent);
     }
+
     public AemArticleItemActivity() {
         super(false);
     }
@@ -58,12 +60,12 @@ public class AemArticleItemActivity extends BaseSingleToolActivity {
     private void loadFragmentIfNeeded() {
         final FragmentManager fm = getSupportFragmentManager();
 
-        if (fm.findFragmentByTag(AEMArticleItemFragment.TAG) != null) {
+        if (fm.findFragmentByTag(TAG_MAIN_FRAGMENT) != null) {
             return; // The fragment is already present
         }
 
         fm.beginTransaction()
                 .replace(R.id.frame, AEMArticleItemFragment.newInstance(mTool, mLocale, mArticleKey),
-                        AEMArticleItemFragment.TAG).commit();
+                        TAG_MAIN_FRAGMENT).commit();
     }
 }
