@@ -1,9 +1,10 @@
 package org.cru.godtools.articles.aem.fragment;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProviders;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -19,9 +20,7 @@ import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 
-import java.lang.ref.WeakReference;
 import java.util.Locale;
-import java.util.Objects;
 
 import butterknife.BindView;
 
@@ -31,7 +30,6 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     private Uri mArticleKey;
     private ArticleRoomDatabase mRDb;
     private Article mArticle;
-    private static final int MESSAGE_SET_ARTICLE = 101;
 
     @BindView(R2.id.aem_article_web_view)
     WebView mAemWebView;
@@ -70,19 +68,20 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
         mAemWebView.setWebViewClient(mWebViewClient);
 
-        mHandler.post(mWebViewRunnable);
+        getArticleFromKey();
     }
     //endregion LifeCycle
 
     //region Article Data
     private void getArticleFromKey() {
-        if (mRDb == null) {
-            mRDb = ArticleRoomDatabase.getInstance(getContext().getApplicationContext());
+        mViewModel = ViewModelProviders.of(this).get(AemArticleWebViewModel.class);
+
+        if (!mViewModel.initialized) {
+            ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(requireActivity().getApplicationContext());
+            mViewModel.getArticle = db.articleDao().liveFind(mArticleKey);
+            mViewModel.getArticle.observe(this, this::setArticle);
+            mViewModel.initialized = true;
         }
-        mRDb.articleDao().liveFind(mArticleKey).observeForever(article -> {
-            mArticle = article;
-            mHandler.sendEmptyMessage(MESSAGE_SET_ARTICLE);
-        });
     }
 
     public void setArticle(Article article) {
@@ -95,7 +94,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         if (mArticle.content != null) {
             loadWebViewData();
         }
-        Objects.requireNonNull(getActivity()).setTitle(mArticle.title);
+        requireActivity().setTitle(mArticle.title);
     }
 
     private void loadWebViewData() {
@@ -126,32 +125,12 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     }
     //endregion WebClient
 
-    //region Runnable and Handler
+    private AemArticleWebViewModel mViewModel;
 
-    private Runnable mWebViewRunnable = this::getArticleFromKey;
+    public static class AemArticleWebViewModel extends ViewModel {
 
-    private AEMWebViewHandler mHandler = new AEMWebViewHandler(this);
+        LiveData<Article> getArticle;
 
-    private static class AEMWebViewHandler extends Handler {
-        WeakReference<AEMArticleItemFragment> mReference;
-
-        AEMWebViewHandler(AEMArticleItemFragment fragment) {
-            mReference = new WeakReference<>(fragment);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            AEMArticleItemFragment fragment = mReference.get();
-
-            if (fragment == null) {
-                return;
-            }
-
-            if (msg.what == MESSAGE_SET_ARTICLE) {
-                fragment.setFragmentViews();
-            }
-        }
+        boolean initialized = false;
     }
-    //endregion Runnable and Handler
 }
