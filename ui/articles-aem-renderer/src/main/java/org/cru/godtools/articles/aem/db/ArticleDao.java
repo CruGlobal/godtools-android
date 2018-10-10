@@ -30,7 +30,7 @@ public interface ArticleDao {
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertOrIgnore(@NonNull Article.ArticleAttachment articleAttachment);
+    void insertOrIgnore(@NonNull Article.ArticleResource articleResource);
 
     @WorkerThread
     @Query("UPDATE articles SET uuid = :uuid, title = :title WHERE uri = :uri")
@@ -50,9 +50,9 @@ public interface ArticleDao {
     void insertArticle(Article article);
 
     @WorkerThread
-    @Query("DELETE FROM articleAttachments " +
-            "WHERE articleUri = :articleUri AND attachmentUri NOT IN (:currentAttachmentUris)")
-    void removeOldAttachments(@NonNull Uri articleUri, @NonNull List<Uri> currentAttachmentUris);
+    @Query("DELETE FROM articleResources " +
+            "WHERE articleUri = :articleUri AND resourceUri NOT IN (:currentResourceUris)")
+    void removeOldResources(@NonNull Uri articleUri, @NonNull List<Uri> currentResourceUris);
 
     /**
      *  The delete method for an article.  Can take in on or multiple task.
