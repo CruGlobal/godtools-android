@@ -15,12 +15,16 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.annimon.stream.Stream;
+
 import org.cru.godtools.article.aem.R;
 import org.cru.godtools.article.aem.R2;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.model.Article;
+import org.cru.godtools.articles.aem.model.Resource;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -30,6 +34,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     private static final String ARTICLE_KEY_TAG = "article_key";
     private Uri mArticleKey;
     private Article mArticle;
+    private List<Resource> mResources;
 
     @BindView(R2.id.aem_article_web_view)
     WebView mAemWebView;
@@ -79,6 +84,8 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         if (!mViewModel.initialized) {
             ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(requireContext());
             mViewModel.getArticle = db.articleDao().liveFind(mArticleKey);
+            mViewModel.getResources = db.resourceDao().getAllLiveForArticle(mArticleKey);
+            mViewModel.getResources.observe(this, resources -> mResources = resources);
             mViewModel.getArticle.observe(this, this::setArticle);
             mViewModel.initialized = true;
         }
@@ -115,6 +122,15 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
             String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+
+            Resource resource = Stream.of(mResources)
+                    .distinctBy(r -> r.getUri().toString().equals(url)).single();
+
+            // If no resource than run normally.
+            if (resource == null) {
+                return super.shouldInterceptRequest(view, url);
+            }
+
             String mimeType;
             switch (extension){
                 case "jpg":
@@ -140,7 +156,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     public static class AemArticleWebViewModel extends ViewModel {
 
         LiveData<Article> getArticle;
-
+        LiveData<List<Resource>> getResources;
         boolean initialized = false;
     }
 }
