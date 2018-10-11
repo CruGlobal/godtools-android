@@ -24,6 +24,9 @@ import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Resource;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 
@@ -147,6 +150,16 @@ public class AEMArticleItemFragment extends BaseToolFragment {
             }
 
             return super.shouldInterceptRequest(view, url);
+        }
+
+        private WebResourceResponse getResponseFromFile(@NonNull String mimeType, @NonNull Resource resource)
+                throws FileNotFoundException {
+            FileInputStream inputStream = new FileInputStream(resource.getLocalFile(requireContext()));
+            return returnWebResponse(mimeType, inputStream);
+        }
+
+        private WebResourceResponse returnWebResponse(String mimeType, InputStream stream) {
+            return new WebResourceResponse(mimeType, "UTF-8", stream);
         }
     }
     //endregion WebClient
