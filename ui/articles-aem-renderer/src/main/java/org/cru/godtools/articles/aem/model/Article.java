@@ -76,7 +76,7 @@ public class Article {
 
     @Ignore
     @NonNull
-    public List<Attachment> mAttachments = ImmutableList.of();
+    public List<Resource> mResources = ImmutableList.of();
 
     public Article(@NonNull final Uri uri) {
         this.uri = uri;
@@ -127,30 +127,30 @@ public class Article {
     }
 
     @Immutable
-    @Entity(tableName = "articleAttachments", primaryKeys = {"articleUri", "attachmentUri"},
-            indices = {@Index("attachmentUri")},
+    @Entity(tableName = "articleResources", primaryKeys = {"articleUri", "resourceUri"},
+            indices = {@Index("resourceUri")},
             foreignKeys = {
                     @ForeignKey(entity = Article.class,
                             onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
                             parentColumns = {"uri"}, childColumns = {"articleUri"}),
-                    @ForeignKey(entity = Attachment.class,
+                    @ForeignKey(entity = Resource.class,
                             onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
-                            parentColumns = {"uri"}, childColumns = {"attachmentUri"})
+                            parentColumns = {"uri"}, childColumns = {"resourceUri"})
     })
-    public static class ArticleAttachment {
+    public static class ArticleResource {
         @NonNull
         public final Uri articleUri;
 
         @NonNull
-        public final Uri attachmentUri;
+        public final Uri resourceUri;
 
-        public ArticleAttachment(@NonNull final Uri articleUri, @NonNull final Uri attachmentUri) {
+        public ArticleResource(@NonNull final Uri articleUri, @NonNull final Uri resourceUri) {
             this.articleUri = articleUri;
-            this.attachmentUri = attachmentUri;
+            this.resourceUri = resourceUri;
         }
 
-        public ArticleAttachment(@NonNull final Article article, @NonNull final Attachment attachment) {
-            this(article.uri, attachment.uri);
+        public ArticleResource(@NonNull final Article article, @NonNull final Resource resource) {
+            this(article.uri, resource.getUri());
         }
     }
 }

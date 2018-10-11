@@ -9,6 +9,6 @@ abstract class ArticleRepository internal constructor(private val mDb: ArticleRo
     @Transaction
     open fun updateContent(article: Article) {
         mDb.articleDao().updateContent(article.uri, article.contentUuid, article.content)
-        mDb.attachmentRepository().storeAttachments(article, article.mAttachments)
+        mDb.resourceRepository().storeResources(article, article.mResources)
     }
 }
