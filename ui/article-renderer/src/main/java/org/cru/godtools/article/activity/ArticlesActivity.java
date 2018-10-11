@@ -24,15 +24,15 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
     private static final String EXTRA_CATEGORY = "category";
 
     @Nullable
-    private String mCategoryId = null;
+    private String mCategory = null;
 
     // region Initialization
 
     public static void start(@NonNull final Context context, @NonNull final String toolCode,
-                             @NonNull final Locale language, @NonNull final String categoryID) {
+                             @NonNull final Locale language, @NonNull final String category) {
         final Bundle args = new Bundle();
         populateExtras(args, toolCode, language);
-        args.putString(EXTRA_CATEGORY, categoryID);
+        args.putString(EXTRA_CATEGORY, category);
         final Intent intent = new Intent(context, ArticlesActivity.class).putExtras(args);
         context.startActivity(intent);
     }
@@ -54,7 +54,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
 
         final Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mCategoryId = extras.getString(EXTRA_CATEGORY, mCategoryId);
+            mCategory = extras.getString(EXTRA_CATEGORY, mCategory);
         }
 
         setContentView(R.layout.activity_generic_fragment);
@@ -82,7 +82,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
 
         assert mTool != null : "if mTool was null the activity would have already finished";
         fm.beginTransaction()
-                .replace(R.id.frame, ArticlesFragment.newInstance(mTool, mLocale, mCategoryId), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, ArticlesFragment.newInstance(mTool, mLocale, mCategory), TAG_MAIN_FRAGMENT)
                 .commit();
     }
 
