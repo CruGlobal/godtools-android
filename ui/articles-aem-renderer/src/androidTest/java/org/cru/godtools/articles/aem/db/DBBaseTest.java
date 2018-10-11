@@ -40,7 +40,7 @@ public abstract class DBBaseTest extends BaseArticleRoomDatabaseIT {
             date.getHours();
             date.getTimezoneOffset();
             article.title = " The title = " + i;
-            mArticleDao.insertArticle(article);
+            mArticleDao.insertOrIgnore(article);
         }
         mSavedArticles = mArticleDao.getTestableAllArticles();
         for (int i = 0; i < mSavedArticles.size(); i++) {

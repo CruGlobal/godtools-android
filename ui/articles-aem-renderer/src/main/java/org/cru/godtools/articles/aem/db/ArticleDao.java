@@ -2,7 +2,6 @@ package org.cru.godtools.articles.aem.db;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
@@ -41,27 +40,10 @@ public interface ArticleDao {
     @Query("UPDATE articles SET contentUuid = :uuid, content = :content WHERE uri = :uri")
     void updateContent(@NonNull Uri uri, @Nullable String uuid, @Nullable String content);
 
-    /**
-     *  The insert method for an article.  Any conflict in with stored data will result
-     *  in the data being replaced.
-     *
-     * @param article = the article to be saved.
-     */
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertArticle(Article article);
-
     @WorkerThread
     @Query("DELETE FROM articleResources " +
             "WHERE articleUri = :articleUri AND resourceUri NOT IN (:currentResourceUris)")
     void removeOldResources(@NonNull Uri articleUri, @NonNull List<Uri> currentResourceUris);
-
-    /**
-     *  The delete method for an article.  Can take in on or multiple task.
-     *
-     * @param articles = The collection of article to be deleted.
-     */
-    @Delete
-    void deleteArticles(Article... articles);
 
     @Query("SELECT * FROM articles WHERE uri = :uri")
     Article find(@NonNull Uri uri);
