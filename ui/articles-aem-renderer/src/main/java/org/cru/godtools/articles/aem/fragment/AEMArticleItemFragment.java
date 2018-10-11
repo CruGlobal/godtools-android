@@ -28,7 +28,6 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
     private static final String ARTICLE_KEY_TAG = "article_key";
     private Uri mArticleKey;
-    private ArticleRoomDatabase mRDb;
     private Article mArticle;
 
     @BindView(R2.id.aem_article_web_view)
@@ -77,7 +76,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         mViewModel = ViewModelProviders.of(this).get(AemArticleWebViewModel.class);
 
         if (!mViewModel.initialized) {
-            ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(requireActivity().getApplicationContext());
+            ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(requireContext());
             mViewModel.getArticle = db.articleDao().liveFind(mArticleKey);
             mViewModel.getArticle.observe(this, this::setArticle);
             mViewModel.initialized = true;
@@ -91,7 +90,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     }
 
     private void setFragmentViews() {
-        if (mArticle.content != null) {
+        if (mArticle != null && mArticle.content != null) {
             loadWebViewData();
         }
         requireActivity().setTitle(mArticle.title);
