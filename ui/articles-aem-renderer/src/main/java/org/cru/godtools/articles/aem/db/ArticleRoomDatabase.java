@@ -54,12 +54,16 @@ public abstract class ArticleRoomDatabase extends RoomDatabase {
 
     // region DAOs
 
+    @NonNull
     abstract TranslationDao translationDao();
 
+    @NonNull
     public abstract AemImportDao aemImportDao();
 
+    @NonNull
     public abstract ArticleDao articleDao();
 
+    @NonNull
     public abstract ResourceDao resourceDao();
 
     // endregion DAOs
