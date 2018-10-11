@@ -118,6 +118,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
 
         if (!mViewModel.initialized) {
             final ArticleRoomDatabase aemDb = ArticleRoomDatabase.getInstance(requireContext());
+            //TODO: Refine article to just the Category that was selected.
             mViewModel.articles = aemDb.articleDao().getArticles(mTool, mLocale);
             mViewModel.initialized = true;
         }
