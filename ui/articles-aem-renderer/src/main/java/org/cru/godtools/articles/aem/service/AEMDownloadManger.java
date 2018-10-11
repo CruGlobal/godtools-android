@@ -261,6 +261,7 @@ public class AEMDownloadManger {
      * This task will download the html content for a specific article.
      */
     @WorkerThread
+    @GuardedBy("mDownloadArticleLocks")
     void downloadArticleTask(@NonNull final Uri uri, final boolean force) {
         // short-circuit if there isn't an Article for the specified Uri
         final Article article = mAemDb.articleDao().find(uri);
@@ -268,7 +269,7 @@ public class AEMDownloadManger {
             return;
         }
 
-        // short-circuit if the Article isn't stale and we aren't forcing a sync
+        // short-circuit if the Article isn't stale and we aren't forcing a download
         if (article.uuid.equals(article.contentUuid) && !force) {
             return;
         }
