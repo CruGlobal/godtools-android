@@ -7,6 +7,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.net.Uri;
+import android.support.annotation.AnyThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
@@ -74,6 +75,7 @@ public interface ArticleDao {
     @Query("SELECT * FROM articles")
     LiveData<List<Article>> getAllArticles();
 
+    @AnyThread
     @Query("SELECT DISTINCT a.* " +
             "FROM translationAemImports AS t " +
             "JOIN aemImportArticles AS i ON i.aemImportUri = t.aemImportUri " +
