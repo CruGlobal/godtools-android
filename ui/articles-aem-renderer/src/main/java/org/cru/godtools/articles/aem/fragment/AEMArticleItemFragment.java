@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -29,8 +30,11 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
 import butterknife.BindView;
+import timber.log.Timber;
 
 public class AEMArticleItemFragment extends BaseToolFragment {
 
@@ -74,6 +78,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mAemWebView.setWebChromeClient(new WebChromeClient());
         mAemWebView.setWebViewClient(mWebViewClient);
 
         getArticleFromKey();
@@ -126,27 +131,34 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
             String extension = MimeTypeMap.getFileExtensionFromUrl(url);
 
-            Resource resource = Stream.of(mResources)
-                    .distinctBy(r -> r.getUri().toString().equals(url)).single();
-
-            // If no resource than run normally.
-            if (resource == null) {
+            if (extension.isEmpty() || mResources == null) {
                 return super.shouldInterceptRequest(view, url);
             }
+            try {
 
-            String mimeType;
-            switch (extension){
-                case "jpg":
-                case "png":
-                case "bmp":
-                case "gif":
-                    //TODO: Load local Image WebResource
-                    mimeType = String.format("image/%s", extension.equals("jpg") ? "jpeg" : extension);
-                    break;
-                case ".css":
-                    //TODO: Load CSS WebResource
-                    mimeType = "text/css";
-                    break;
+                Resource resource = Stream.of(mResources)
+                        .filter(r -> r.getUri().toString().equals(url)).findFirst().get();
+
+                // If no resource than run normally.
+                if (resource == null || resource.getLocalFileName().isEmpty()) {
+                    return super.shouldInterceptRequest(view, url);
+                }
+
+                String mimeType;
+
+                switch (extension) {
+                    case "jpg":
+                    case "png":
+                    case "bmp":
+//                    case "gif":
+                        mimeType = String.format("image/%s", extension.equals("jpg") ? "jpeg" : extension);
+                        return getResponseFromFile(mimeType, resource);
+                    case "css":
+                        mimeType = "text/css";
+                        return getResponseFromFile(mimeType, resource);
+                }
+            } catch (FileNotFoundException | NoSuchElementException e) {
+                Timber.d(e);
             }
 
             return super.shouldInterceptRequest(view, url);
@@ -154,7 +166,8 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
         private WebResourceResponse getResponseFromFile(@NonNull String mimeType, @NonNull Resource resource)
                 throws FileNotFoundException {
-            FileInputStream inputStream = new FileInputStream(resource.getLocalFile(requireContext()));
+            FileInputStream inputStream = new FileInputStream(Objects.requireNonNull(
+                    resource.getLocalFile(requireContext())));
             return returnWebResponse(mimeType, inputStream);
         }
 
