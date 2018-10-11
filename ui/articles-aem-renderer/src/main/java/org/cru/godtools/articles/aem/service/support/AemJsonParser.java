@@ -24,6 +24,7 @@ public class AemJsonParser {
     private static final String TAG_TITLE = "jcr:title";
     private static final String TAG_CONTENT = "jcr:content";
 
+    private static final String TYPE_FOLDER = "sling:Folder";
     private static final String TYPE_ORDERED_FOLDER = "sling:OrderedFolder";
     private static final String TYPE_PAGE = "cq:Page";
     private static final String SUBTYPE_XFPAGE = "cq/experience-fragments/components/xfpage";
@@ -54,6 +55,7 @@ public class AemJsonParser {
                         return Stream.of(parseArticle(url, json));
                 }
             case TYPE_ORDERED_FOLDER:
+            case TYPE_FOLDER:
                 return parseNestedObject(url, json);
         }
         return Stream.of();
