@@ -13,6 +13,7 @@ import android.support.annotation.WorkerThread;
 
 import org.cru.godtools.articles.aem.model.Article;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -29,6 +30,10 @@ public interface ArticleDao {
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertOrIgnore(@NonNull Collection<Article.Category> categories);
+
+    @WorkerThread
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertOrIgnore(@NonNull Article.ArticleResource articleResource);
 
     @WorkerThread
@@ -38,6 +43,10 @@ public interface ArticleDao {
     @WorkerThread
     @Query("UPDATE articles SET contentUuid = :uuid, content = :content WHERE uri = :uri")
     void updateContent(@NonNull Uri uri, @Nullable String uuid, @Nullable String content);
+
+    @WorkerThread
+    @Query("DELETE FROM categories WHERE articleUri = :articleUri")
+    void removeAllCategories(@NonNull Uri articleUri);
 
     @WorkerThread
     @Query("DELETE FROM articleResources " +

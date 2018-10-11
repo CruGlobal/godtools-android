@@ -39,8 +39,9 @@ public abstract class AemImportRepository {
             // associate the article with this AemImport
             aemImportDao.insertOrIgnore(new AemImport.AemImportArticle(aemImport, article));
 
-            // TODO: store categories
-            // TODO: store attachments
+            // replace all categories
+            articleDao.removeAllCategories(article.uri);
+            articleDao.insertOrIgnore(article.getCategoryObjects());
         }
 
         // remove any articles that are no longer part of the AemImport
