@@ -161,6 +161,7 @@ dependencies {
     debugImplementation "com.jakewharton.timber:timber:${deps.timber}"
     debugImplementation "com.facebook.stetho:stetho-okhttp3:${deps.facebookStetho}"
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${deps.leakcanary}"
+    debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:${deps.leakcanary}"
 
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
