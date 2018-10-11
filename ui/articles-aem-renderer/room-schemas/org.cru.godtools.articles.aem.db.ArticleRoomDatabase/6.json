@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 5,
-    "identityHash": "fd0af75cc3207bb848bb1e1fd13d9ca8",
+    "version": 6,
+    "identityHash": "d08c813f2f5d73744bbd61e463a1a67f",
     "entities": [
       {
         "tableName": "translations",
@@ -302,8 +302,8 @@
         ]
       },
       {
-        "tableName": "articleAttachments",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`articleUri` TEXT NOT NULL, `attachmentUri` TEXT NOT NULL, PRIMARY KEY(`articleUri`, `attachmentUri`), FOREIGN KEY(`articleUri`) REFERENCES `articles`(`uri`) ON UPDATE RESTRICT ON DELETE CASCADE , FOREIGN KEY(`attachmentUri`) REFERENCES `attachments`(`uri`) ON UPDATE RESTRICT ON DELETE CASCADE )",
+        "tableName": "articleResources",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`articleUri` TEXT NOT NULL, `resourceUri` TEXT NOT NULL, PRIMARY KEY(`articleUri`, `resourceUri`), FOREIGN KEY(`articleUri`) REFERENCES `articles`(`uri`) ON UPDATE RESTRICT ON DELETE CASCADE , FOREIGN KEY(`resourceUri`) REFERENCES `resources`(`uri`) ON UPDATE RESTRICT ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "articleUri",
@@ -312,8 +312,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "attachmentUri",
-            "columnName": "attachmentUri",
+            "fieldPath": "resourceUri",
+            "columnName": "resourceUri",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -321,18 +321,18 @@
         "primaryKey": {
           "columnNames": [
             "articleUri",
-            "attachmentUri"
+            "resourceUri"
           ],
           "autoGenerate": false
         },
         "indices": [
           {
-            "name": "index_articleAttachments_attachmentUri",
+            "name": "index_articleResources_resourceUri",
             "unique": false,
             "columnNames": [
-              "attachmentUri"
+              "resourceUri"
             ],
-            "createSql": "CREATE  INDEX `index_articleAttachments_attachmentUri` ON `${TABLE_NAME}` (`attachmentUri`)"
+            "createSql": "CREATE  INDEX `index_articleResources_resourceUri` ON `${TABLE_NAME}` (`resourceUri`)"
           }
         ],
         "foreignKeys": [
@@ -348,11 +348,11 @@
             ]
           },
           {
-            "table": "attachments",
+            "table": "resources",
             "onDelete": "CASCADE",
             "onUpdate": "RESTRICT",
             "columns": [
-              "attachmentUri"
+              "resourceUri"
             ],
             "referencedColumns": [
               "uri"
@@ -361,20 +361,26 @@
         ]
       },
       {
-        "tableName": "attachments",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uri` TEXT NOT NULL, `attachment_file_path` TEXT, PRIMARY KEY(`uri`))",
+        "tableName": "resources",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`localFileName` TEXT, `dateDownloaded` INTEGER, `uri` TEXT NOT NULL, PRIMARY KEY(`uri`))",
         "fields": [
+          {
+            "fieldPath": "localFileName",
+            "columnName": "localFileName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateDownloaded",
+            "columnName": "dateDownloaded",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
           {
             "fieldPath": "uri",
             "columnName": "uri",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "mAttachmentFilePath",
-            "columnName": "attachment_file_path",
-            "affinity": "TEXT",
-            "notNull": false
           }
         ],
         "primaryKey": {
@@ -389,7 +395,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"fd0af75cc3207bb848bb1e1fd13d9ca8\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d08c813f2f5d73744bbd61e463a1a67f\")"
     ]
   }
 }
