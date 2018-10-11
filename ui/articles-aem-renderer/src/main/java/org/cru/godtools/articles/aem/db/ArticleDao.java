@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.support.annotation.AnyThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 
 import org.cru.godtools.articles.aem.model.Article;
@@ -66,10 +65,4 @@ public interface ArticleDao {
                 "SELECT version FROM translations " +
                 "WHERE tool = :tool AND language = :locale AND processed = 1 ORDER BY version DESC)")
     LiveData<List<Article>> getArticles(@NonNull String tool, @NonNull Locale locale);
-
-    //region Testable (Non Live Data)
-    @VisibleForTesting
-    @Query("SELECT * FROM articles")
-    List<Article> getTestableAllArticles();
-    //endregion
 }
