@@ -880,7 +880,7 @@ public final class GodToolsDownloadManager {
     private static final int PRIORITY_OTHER = -10;
     private static final int PRIMARY_PRUNE_FILESYSTEM = Integer.MAX_VALUE;
 
-    final class DownloadTranslationRunnable extends PriorityRunnable {
+    final class DownloadTranslationRunnable implements PriorityRunnable {
         @NonNull
         final TranslationKey mKey;
         final int mPriority;
@@ -894,7 +894,7 @@ public final class GodToolsDownloadManager {
         }
 
         @Override
-        protected int getPriority() {
+        public int getPriority() {
             return mPriority;
         }
 
@@ -904,7 +904,7 @@ public final class GodToolsDownloadManager {
         }
     }
 
-    final class DownloadAttachmentRunnable extends PriorityRunnable {
+    final class DownloadAttachmentRunnable implements PriorityRunnable {
         private final long mAttachmentId;
 
         DownloadAttachmentRunnable(final long attachmentId) {
@@ -912,7 +912,7 @@ public final class GodToolsDownloadManager {
         }
 
         @Override
-        protected int getPriority() {
+        public int getPriority() {
             return PRIORITY_ATTACHMENT;
         }
 
@@ -925,9 +925,9 @@ public final class GodToolsDownloadManager {
         }
     }
 
-    final class CleanFileSystem extends PriorityRunnable {
+    final class CleanFileSystem implements PriorityRunnable {
         @Override
-        protected int getPriority() {
+        public int getPriority() {
             return PRIMARY_PRUNE_FILESYSTEM;
         }
 

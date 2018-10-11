@@ -13,7 +13,7 @@ import org.ccci.gto.android.common.room.converter.LocaleConverter;
 import org.ccci.gto.android.common.room.converter.UriConverter;
 import org.cru.godtools.articles.aem.model.AemImport;
 import org.cru.godtools.articles.aem.model.Article;
-import org.cru.godtools.articles.aem.model.Attachment;
+import org.cru.godtools.articles.aem.model.Resource;
 import org.cru.godtools.articles.aem.model.TranslationRef;
 
 /**
@@ -25,8 +25,8 @@ import org.cru.godtools.articles.aem.model.TranslationRef;
         TranslationRef.class, TranslationRef.TranslationAemImport.class,
         AemImport.class, AemImport.AemImportArticle.class,
         Article.class, Article.Category.class,
-        Article.ArticleAttachment.class, Attachment.class
-}, version = 5)
+        Article.ArticleResource.class, Resource.class
+}, version = 6)
 @TypeConverters({DateConverter.class, LocaleConverter.class, UriConverter.class})
 public abstract class ArticleRoomDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "aem_article_cache.db";
@@ -54,13 +54,17 @@ public abstract class ArticleRoomDatabase extends RoomDatabase {
 
     // region DAOs
 
+    @NonNull
     abstract TranslationDao translationDao();
 
+    @NonNull
     public abstract AemImportDao aemImportDao();
 
+    @NonNull
     public abstract ArticleDao articleDao();
 
-    public abstract AttachmentDao attachmentDao();
+    @NonNull
+    public abstract ResourceDao resourceDao();
 
     // endregion DAOs
 
@@ -76,7 +80,7 @@ public abstract class ArticleRoomDatabase extends RoomDatabase {
     public abstract ArticleRepository articleRepository();
 
     @NonNull
-    public abstract AttachmentRepository attachmentRepository();
+    public abstract ResourceRepository resourceRepository();
 
     // endregion Repositories
 }

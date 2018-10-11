@@ -7,6 +7,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.net.Uri;
+import android.support.annotation.AnyThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
@@ -30,7 +31,7 @@ public interface ArticleDao {
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertOrIgnore(@NonNull Article.ArticleAttachment articleAttachment);
+    void insertOrIgnore(@NonNull Article.ArticleResource articleResource);
 
     @WorkerThread
     @Query("UPDATE articles SET uuid = :uuid, title = :title WHERE uri = :uri")
@@ -50,9 +51,9 @@ public interface ArticleDao {
     void insertArticle(Article article);
 
     @WorkerThread
-    @Query("DELETE FROM articleAttachments " +
-            "WHERE articleUri = :articleUri AND attachmentUri NOT IN (:currentAttachmentUris)")
-    void removeOldAttachments(@NonNull Uri articleUri, @NonNull List<Uri> currentAttachmentUris);
+    @Query("DELETE FROM articleResources " +
+            "WHERE articleUri = :articleUri AND resourceUri NOT IN (:currentResourceUris)")
+    void removeOldResources(@NonNull Uri articleUri, @NonNull List<Uri> currentResourceUris);
 
     /**
      *  The delete method for an article.  Can take in on or multiple task.
@@ -77,6 +78,7 @@ public interface ArticleDao {
     @Query("SELECT * FROM articles")
     LiveData<List<Article>> getAllArticles();
 
+    @AnyThread
     @Query("SELECT DISTINCT a.* " +
             "FROM translationAemImports AS t " +
             "JOIN aemImportArticles AS i ON i.aemImportUri = t.aemImportUri " +

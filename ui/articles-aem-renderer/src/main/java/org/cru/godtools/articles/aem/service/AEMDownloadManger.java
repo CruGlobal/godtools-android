@@ -9,19 +9,24 @@ import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
 import com.annimon.stream.Stream;
+import com.google.common.hash.HashCode;
+import com.google.common.io.Closer;
 import com.google.common.util.concurrent.Futures;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
+import org.ccci.gto.android.common.util.IOUtils;
 import org.ccci.gto.android.common.util.ThreadUtils;
 import org.cru.godtools.articles.aem.api.AemApi;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
+import org.cru.godtools.articles.aem.db.ResourceDao;
 import org.cru.godtools.articles.aem.db.TranslationRepository;
 import org.cru.godtools.articles.aem.model.AemImport;
 import org.cru.godtools.articles.aem.model.Article;
-import org.cru.godtools.articles.aem.model.Attachment;
+import org.cru.godtools.articles.aem.model.Resource;
 import org.cru.godtools.articles.aem.service.support.AemJsonParser;
 import org.cru.godtools.articles.aem.service.support.HtmlParserKt;
+import org.cru.godtools.articles.aem.util.ResourceUtilsKt;
 import org.cru.godtools.base.util.PriorityRunnable;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
@@ -39,8 +44,12 @@ import org.keynote.godtools.android.db.GodToolsDao;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Collections;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.DigestOutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,12 +58,12 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 import timber.log.Timber;
 
 import static java.net.HttpURLConnection.HTTP_OK;
+import static java.util.Collections.synchronizedMap;
 
 /**
  * This class hold all Download methods for retrieving and saving an Article
@@ -78,10 +87,12 @@ public class AEMDownloadManger {
     private final AtomicBoolean mExtractAemImportsQueued = new AtomicBoolean(false);
     final Map<Uri, Object> mSyncAemImportLocks = new HashMap<>();
     final Map<Uri, Object> mDownloadArticleLocks = new HashMap<>();
+    final Map<Uri, Object> mDownloadResourceLocks = new HashMap<>();
 
     // Task de-dup related objects
-    private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = Collections.synchronizedMap(new HashMap<>());
-    private final Map<Uri, DownloadArticleTask> mDownloadArticleTasks = Collections.synchronizedMap(new HashMap<>());
+    private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = synchronizedMap(new HashMap<>());
+    private final Map<Uri, DownloadArticleTask> mDownloadArticleTasks = synchronizedMap(new HashMap<>());
+    private final Map<Uri, DownloadResourceTask> mDownloadResourceTasks = synchronizedMap(new HashMap<>());
 
     private AEMDownloadManger(@NonNull final Context context) {
         mApi = AemApi.buildInstance("https://www.example.com");
@@ -165,6 +176,21 @@ public class AEMDownloadManger {
         final DownloadArticleTask task = new DownloadArticleTask(uri);
         task.updateTask(force);
         mDownloadArticleTasks.put(uri, task);
+        mExecutor.execute(task);
+    }
+
+    @AnyThread
+    private void enqueueDownloadResource(@NonNull final Uri uri, final boolean force) {
+        // try updating a task that is currently enqueued
+        final DownloadResourceTask existing = mDownloadResourceTasks.get(uri);
+        if (existing != null && existing.updateTask(force)) {
+            return;
+        }
+
+        // create a new sync task
+        final DownloadResourceTask task = new DownloadResourceTask(uri);
+        task.updateTask(force);
+        mDownloadResourceTasks.put(uri, task);
         mExecutor.execute(task);
     }
 
@@ -267,6 +293,7 @@ public class AEMDownloadManger {
      * This task will download the html content for a specific article.
      */
     @WorkerThread
+    @GuardedBy("mDownloadArticleLocks")
     void downloadArticleTask(@NonNull final Uri uri, final boolean force) {
         // short-circuit if there isn't an Article for the specified Uri
         final Article article = mAemDb.articleDao().find(uri);
@@ -274,7 +301,7 @@ public class AEMDownloadManger {
             return;
         }
 
-        // short-circuit if the Article isn't stale and we aren't forcing a sync
+        // short-circuit if the Article isn't stale and we aren't forcing a download
         if (article.uuid.equals(article.contentUuid) && !force) {
             return;
         }
@@ -285,8 +312,10 @@ public class AEMDownloadManger {
             if (response.code() == HTTP_OK) {
                 article.contentUuid = article.uuid;
                 article.content = response.body();
-                article.mAttachments = HtmlParserKt.extractResources(article);
+                article.mResources = HtmlParserKt.extractResources(article);
                 mAemDb.articleRepository().updateContent(article);
+
+                downloadResourcesNeedingUpdate(mAemDb.resourceDao().getAllForArticle(article.uri));
             }
         } catch (final IOException e) {
             Timber.tag(TAG)
@@ -298,8 +327,38 @@ public class AEMDownloadManger {
      * This task will download an attachment.
      */
     @WorkerThread
-    void downloadAttachmentTask() {
-        // TODO
+    @GuardedBy("mDownloadResourceLocks")
+    void downloadResourceTask(@NonNull final Uri uri, final boolean force) {
+        final ResourceDao resourceDao = mAemDb.resourceDao();
+
+        // short-circuit if there isn't an Attachment for the specified Uri
+        final Resource resource = resourceDao.find(uri);
+        if (resource == null) {
+            return;
+        }
+
+        // short-circuit if the Resource isn't stale and we aren't forcing a download
+        if (!force && !resource.needsDownload()) {
+            return;
+        }
+
+        // download the resource
+        try {
+            final Response<ResponseBody> response = mApi.downloadResource(uri).execute();
+            final ResponseBody responseBody = response.body();
+            if (response.code() == 200 && responseBody != null) {
+                final File file = streamResource(responseBody.byteStream());
+                if (file != null) {
+                    resource.setLocalFileName(file.getName());
+                    resource.setDateDownloaded(new Date());
+                    resourceDao.updateLocalFile(resource.getUri(), resource.getLocalFileName(),
+                                                resource.getDateDownloaded());
+                }
+            }
+        } catch (final IOException e) {
+            Timber.tag(TAG)
+                    .d(e, "Error downloading attachment %s", uri);
+        }
     }
 
     /**
@@ -312,46 +371,74 @@ public class AEMDownloadManger {
 
     // endregion Tasks
 
-    /**
-     * This method is used to save an Attachment to Storage and update Database
-     *
-     * @param attachment the attachment to be saved
-     * @throws IOException Is thrown if an error occurs in saving to storage.
-     */
-    public void saveAttachmentToStorage(Attachment attachment)
-            throws IOException {
-        // verify that attachment is not already saved.
-        if (attachment.mAttachmentFilePath != null) {
-            //TODO: determine what should happen
-        } else {
-            String[] urlSplit = attachment.uri.toString().split("/");
-            String filename = urlSplit[urlSplit.length - 1];
-            File articleFile = new File(mContext.getFilesDir(), "articles");
-            if (!articleFile.exists()) {
-                articleFile.mkdir();
-            }
-            articleFile = new File(articleFile, filename);
-            FileOutputStream outputStream = new FileOutputStream(articleFile);
-            URL url = new URL(attachment.uri.toString());
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url(url)
-                    .build();
+    @WorkerThread
+    private void downloadResourcesNeedingUpdate(@NonNull final List<Resource> resources) {
+        Stream.of(resources)
+                .filter(Resource::needsDownload)
+                .forEach(r -> enqueueDownloadResource(r.getUri(), false));
+    }
 
-            outputStream.write(client.newCall(request).execute().body().bytes());
-
-            // update attachment with file Path
-            attachment.mAttachmentFilePath = articleFile.getAbsolutePath();
-            mAemDb.attachmentDao().updateAttachment(attachment);
+    @Nullable
+    private File streamResource(@NonNull final InputStream in) throws IOException {
+        // short-circuit if the resources directory isn't valid
+        if (!ResourceUtilsKt.ensureResourcesDirExists(mContext)) {
+            return null;
         }
+
+        // create MessageDigest to dedup files
+        MessageDigest digest;
+        try {
+            digest = MessageDigest.getInstance("SHA-1");
+        } catch (final NoSuchAlgorithmException e) {
+            digest = null;
+            Timber.tag(TAG)
+                    .d(e, "Unable to create MessageDigest to dedup AEM resources");
+        }
+
+        // stream resource to temporary file
+        final File tmpFile = ResourceUtilsKt.createNewFile(mContext);
+        final Closer closer = Closer.create();
+        try {
+            OutputStream out = closer.register(new FileOutputStream(tmpFile));
+            if (digest != null) {
+                out = closer.register(new DigestOutputStream(out, digest));
+            }
+            IOUtils.copy(in, out);
+            out.flush();
+            out.close();
+        } catch (final Throwable t) {
+            throw closer.rethrow(t);
+        } finally {
+            closer.close();
+        }
+
+        // rename temporary file to name based on digest
+        if (digest != null) {
+            final String hash = HashCode.fromBytes(digest.digest()).toString() + ".bin";
+            final File file = ResourceUtilsKt.getFile(mContext, hash);
+            if (file.exists()) {
+                //noinspection ResultOfMethodCallIgnored
+                tmpFile.delete();
+                return file;
+            } else if (tmpFile.renameTo(file)) {
+                return file;
+            } else {
+                Timber.tag(TAG)
+                        .d("cannot rename tmp file %s to %s", tmpFile, file);
+            }
+        }
+
+        // default to returning the temporary file
+        return tmpFile;
     }
 
     // region PriorityRunnable Tasks
 
+    private static final int PRIORITY_DOWNLOAD_RESOURCE = -40;
     private static final int PRIORITY_SYNC_AEM_IMPORT = -30;
     private static final int PRIORITY_DOWNLOAD_ARTICLE = -20;
 
-    abstract class UniqueUriBasedTask extends PriorityRunnable {
+    abstract class UniqueUriBasedTask implements PriorityRunnable {
         @NonNull
         final Uri mUri;
         volatile boolean mStarted = false;
@@ -398,7 +485,7 @@ public class AEMDownloadManger {
         }
 
         @Override
-        protected int getPriority() {
+        public int getPriority() {
             return PRIORITY_SYNC_AEM_IMPORT;
         }
 
@@ -420,7 +507,7 @@ public class AEMDownloadManger {
         }
 
         @Override
-        protected int getPriority() {
+        public int getPriority() {
             return PRIORITY_DOWNLOAD_ARTICLE;
         }
 
@@ -433,6 +520,28 @@ public class AEMDownloadManger {
         @Override
         void runTask() {
             downloadArticleTask(mUri, mForce);
+        }
+    }
+
+    class DownloadResourceTask extends UniqueUriBasedTask {
+        DownloadResourceTask(@NonNull final Uri uri) {
+            super(uri);
+        }
+
+        @Override
+        public int getPriority() {
+            return PRIORITY_DOWNLOAD_RESOURCE;
+        }
+
+        @NonNull
+        @Override
+        Object getLock() {
+            return ThreadUtils.getLock(mDownloadResourceLocks, mUri);
+        }
+
+        @Override
+        void runTask() {
+            downloadResourceTask(mUri, mForce);
         }
     }
 
