@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -113,10 +114,20 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         @Nullable
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-            if (url.endsWith(".jpg")) {
-                //TODO: Load local Image WebResource
-            } else if (url.endsWith(".css")) {
-                //TODO: Load CSS WebResource
+            String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+            String mimeType;
+            switch (extension){
+                case "jpg":
+                case "png":
+                case "bmp":
+                case "gif":
+                    //TODO: Load local Image WebResource
+                    mimeType = String.format("image/%s", extension.equals("jpg") ? "jpeg" : extension);
+                    break;
+                case ".css":
+                    //TODO: Load CSS WebResource
+                    mimeType = "text/css";
+                    break;
             }
 
             return super.shouldInterceptRequest(view, url);
