@@ -49,8 +49,8 @@ public final class AdobeAnalyticsService implements AnalyticsService {
     public static final String KEY_CONTENT_LANGUAGE_SECONDARY = "cru.contentlanguagesecondary";
     private static final String KEY_EXIT_LINK = "cru.mobileexitlink";
     private static final String KEY_SHARE_CONTENT = "cru.shareiconengaged";
-    private static final String KEY_SITE_SECTION = "cru:sitesection";
-    private static final String KEY_SITE_SUB_SECTION = "cru:sitesubsection";
+    private static final String KEY_SITE_SECTION = "cru.sitesection";
+    private static final String KEY_SITE_SUB_SECTION = "cru.sitesubsection";
 
     /* Value constants */
     private static final String VALUE_GODTOOLS = "GodTools";
