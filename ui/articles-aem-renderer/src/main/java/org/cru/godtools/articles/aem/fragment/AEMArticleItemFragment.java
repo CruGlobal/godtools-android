@@ -89,7 +89,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
         if (mViewModel.article == null) {
             ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(requireContext());
-            mViewModel.article = db.articleDao().liveFind(mArticleKey);
+            mViewModel.article = db.articleDao().findLiveData(mArticleKey);
         }
         mViewModel.article.observe(this, this::setArticle);
     }
