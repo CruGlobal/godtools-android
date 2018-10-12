@@ -8,7 +8,7 @@ import android.arch.persistence.room.Query
 import android.net.Uri
 import android.support.annotation.WorkerThread
 import org.cru.godtools.articles.aem.model.Resource
-import java.util.*
+import java.util.Date
 
 @Dao
 interface ResourceDao {
