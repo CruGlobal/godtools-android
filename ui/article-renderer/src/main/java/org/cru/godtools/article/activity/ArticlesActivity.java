@@ -29,7 +29,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
     // region Initialization
 
     public static void start(@NonNull final Context context, @NonNull final String toolCode,
-                             @NonNull final Locale language, @NonNull final String category) {
+                             @NonNull final Locale language, @Nullable final String category) {
         final Bundle args = new Bundle();
         populateExtras(args, toolCode, language);
         args.putString(EXTRA_CATEGORY, category);
