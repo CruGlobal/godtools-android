@@ -71,12 +71,12 @@ public class LanguageSettingsFragment extends BasePlatformFragment {
     @Optional
     @OnClick(R.id.primary_language)
     void editPrimaryLanguage() {
-        LanguageSelectionActivity.start(getContext(), true);
+        LanguageSelectionActivity.start(requireActivity(), true);
     }
 
     @Optional
     @OnClick(R.id.parallel_language)
     void editParallelLanguage() {
-        LanguageSelectionActivity.start(getContext(), false);
+        LanguageSelectionActivity.start(requireActivity(), false);
     }
 }

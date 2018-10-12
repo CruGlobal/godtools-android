@@ -16,6 +16,7 @@ import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.R2;
 import org.cru.godtools.article.adapter.ArticlesAdapter;
+import org.cru.godtools.articles.aem.db.ArticleDao;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
@@ -25,9 +26,9 @@ import java.util.Locale;
 
 import butterknife.BindView;
 
-public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapter.Callbacks {
-    private static final String MANIFEST_KEY = "manifest-key";
+import static org.cru.godtools.article.Constants.EXTRA_CATEGORY;
 
+public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapter.Callbacks {
     public interface Callbacks {
         void onArticleSelected(@Nullable Article article);
     }
@@ -38,18 +39,18 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     @Nullable
     ArticlesAdapter mArticlesAdapter;
 
-    String mManifestKey = "";
-
     // these properties should be treated as final and only set/modified in onCreate()
+    @Nullable
+    private /*final*/ String mCategory;
     @NonNull
     private /*final*/ ArticleListViewModel mViewModel;
 
     public static ArticlesFragment newInstance(@NonNull final String code, @NonNull final Locale locale,
-                                               String manifestKey) {
+                                               @Nullable final String category) {
         final ArticlesFragment fragment = new ArticlesFragment();
-        final Bundle args = new Bundle();
+        final Bundle args = new Bundle(3);
         populateArgs(args, code, locale);
-        args.putString(MANIFEST_KEY, manifestKey);
+        args.putString(EXTRA_CATEGORY, category);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,7 +63,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
 
         final Bundle args = getArguments();
         if (args != null) {
-            mManifestKey = args.getString(MANIFEST_KEY, mManifestKey);
+            mCategory = args.getString(EXTRA_CATEGORY, mCategory);
         }
 
         setupViewModel();
@@ -116,11 +117,10 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     private void setupViewModel() {
         mViewModel = ViewModelProviders.of(this).get(ArticleListViewModel.class);
 
-        if (!mViewModel.initialized) {
-            final ArticleRoomDatabase aemDb = ArticleRoomDatabase.getInstance(requireContext());
-            //TODO: Refine article to just the Category that was selected.
-            mViewModel.articles = aemDb.articleDao().getArticles(mTool, mLocale);
-            mViewModel.initialized = true;
+        if (mViewModel.articles == null) {
+            final ArticleDao articleDao = ArticleRoomDatabase.getInstance(requireContext()).articleDao();
+            mViewModel.articles = mCategory != null ? articleDao.getArticles(mTool, mLocale, mCategory) :
+                    articleDao.getArticles(mTool, mLocale);
         }
     }
 
@@ -160,7 +160,6 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     // endregion ArticlesView
 
     public static class ArticleListViewModel extends ViewModel {
-        boolean initialized = false;
         LiveData<List<Article>> articles;
     }
 }

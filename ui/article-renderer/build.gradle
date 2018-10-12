@@ -1,3 +1,4 @@
+apply plugin: 'kotlin-android'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
@@ -11,6 +12,8 @@ dependencies {
 
     implementation project(':ui:articles-aem-renderer')
     implementation project(':ui:base-tool')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
     implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
     implementation "androidx.constraintlayout:constraintlayout:${deps.constraintLayout}"

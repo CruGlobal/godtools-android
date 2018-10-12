@@ -27,7 +27,7 @@ public interface AemApi {
 
     @GET
     @Streaming
-    Call<ResponseBody> downloadAttachment(@Url Uri uri);
+    Call<ResponseBody> downloadResource(@Url Uri uri);
 
     static AemApi buildInstance(@NonNull final String uri) {
         // create OkHttp client
