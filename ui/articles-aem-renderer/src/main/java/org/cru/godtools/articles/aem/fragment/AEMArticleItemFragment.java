@@ -66,7 +66,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
                 R.layout.fragment_aem_article_item,
                 container,
                 false);
-        getArticleFromKey();
+        setViewModel();
         return view;
     }
 
@@ -74,19 +74,22 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (mAemWebView == null || mViewModel == null) {
+            return;
+        }
         mAemWebView.setWebViewClient(mWebViewClient);
+        mViewModel.article.observe(this, this::setArticle);
     }
 
     //endregion LifeCycle
 
     //region Article Data
-    private void getArticleFromKey() {
+    private void setViewModel() {
         mViewModel = ViewModelProviders.of(this).get(AemArticleWebViewModel.class);
 
         if (mViewModel.article == null) {
             ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(requireContext());
             mViewModel.article = db.articleDao().liveFind(mArticleKey);
-            mViewModel.article.observe(this, this::setArticle);
         }
     }
 
