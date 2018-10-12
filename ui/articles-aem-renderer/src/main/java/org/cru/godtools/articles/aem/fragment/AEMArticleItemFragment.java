@@ -35,11 +35,12 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
     private AEMWebViewClient mWebViewClient = new AEMWebViewClient();
 
-    public static AEMArticleItemFragment newInstance(String tool, Locale locale, String articleKey) {
+    public static AEMArticleItemFragment newInstance(@NonNull final String tool, @NonNull final Locale locale,
+                                                     @NonNull final Uri articleUri) {
         AEMArticleItemFragment fragment = new AEMArticleItemFragment();
         Bundle args = new Bundle();
         populateArgs(args, tool, locale);
-        args.putString(ARTICLE_KEY_TAG, articleKey);
+        args.putString(ARTICLE_KEY_TAG, articleUri.toString());
         fragment.setArguments(args);
         return fragment;
     }

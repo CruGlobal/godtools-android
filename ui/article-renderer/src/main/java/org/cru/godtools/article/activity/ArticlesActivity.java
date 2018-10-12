@@ -68,7 +68,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
     @Override
     public void onArticleSelected(@Nullable final Article article) {
         if (article != null) {
-            AemArticleActivity.start(this, mTool, mLocale, article.uri.toString());
+            AemArticleActivity.start(this, mTool, mLocale, article.uri);
         }
     }
 
