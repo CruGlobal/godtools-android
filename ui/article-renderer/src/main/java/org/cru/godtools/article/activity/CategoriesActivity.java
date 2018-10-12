@@ -50,7 +50,7 @@ public class CategoriesActivity extends BaseSingleToolActivity implements Catego
 
     @Override
     public void onCategorySelected(@Nullable final Category category) {
-        ArticlesActivity.start(this, mTool, mLocale, category.getId());
+        ArticlesActivity.start(this, mTool, mLocale, category != null ? category.getId() : null);
     }
 
     // endregion Lifecycle Events

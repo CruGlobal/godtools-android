@@ -18,10 +18,10 @@ import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
+import static org.cru.godtools.article.Constants.EXTRA_CATEGORY;
 
 public class ArticlesActivity extends BaseSingleToolActivity implements ArticlesFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
-    private static final String EXTRA_CATEGORY = "category";
 
     @Nullable
     private String mCategory = null;
@@ -29,7 +29,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
     // region Initialization
 
     public static void start(@NonNull final Context context, @NonNull final String toolCode,
-                             @NonNull final Locale language, @NonNull final String category) {
+                             @NonNull final Locale language, @Nullable final String category) {
         final Bundle args = new Bundle();
         populateExtras(args, toolCode, language);
         args.putString(EXTRA_CATEGORY, category);
