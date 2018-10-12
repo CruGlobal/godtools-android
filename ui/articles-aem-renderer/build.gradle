@@ -17,6 +17,7 @@ dependencies {
     implementation project(':library:model')
     implementation project(':library:model-events')
     implementation project(':library:xml-model')
+
     implementation project(':ui:base-tool')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
@@ -31,11 +32,11 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-room:${deps.gtoSupport}"
 
     implementation "com.annimon:stream:${deps.lightweightStream}"
+    implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "com.jakewharton.timber:timber:${deps.timber}"
     implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
     implementation "com.squareup.retrofit2:retrofit:${deps.retrofit2}"
     implementation "com.squareup.retrofit2:converter-scalars:${deps.retrofit2}"
-    implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "org.jsoup:jsoup:${deps.jsoup}"
 
     // For Testing
@@ -45,7 +46,7 @@ dependencies {
     androidTestImplementation "com.google.guava:guava:${deps.guava}"
     androidTestImplementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
 
-    annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
     annotationProcessor "android.arch.lifecycle:compiler:${deps.androidLifecycle}"
     annotationProcessor "android.arch.persistence.room:compiler:${deps.androidArch.room}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }

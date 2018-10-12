@@ -15,13 +15,13 @@ import org.cru.godtools.base.tool.activity.BaseSingleToolActivity;
 import java.util.Locale;
 
 public class AemArticleItemActivity extends BaseSingleToolActivity {
-
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
     private static final String EXTRA_ARTICLE_KEY = "extra_article_key";
 
     private String mArticleKey;
 
     // region Constructors and Initializers
+
     public static void start(@NonNull final Context context, @NonNull final String toolCode,
                              @NonNull final Locale language, String articleKey) {
         final Bundle extras = new Bundle();
@@ -34,15 +34,17 @@ public class AemArticleItemActivity extends BaseSingleToolActivity {
     public AemArticleItemActivity() {
         super(false);
     }
-    // endregion
 
-    //region Life Cycle
+    // endregion Constructors and Initializers
+
+    // region Lifecycle Events
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.containsKey(EXTRA_ARTICLE_KEY)) {
+
+        final Bundle extras = getIntent().getExtras();
+        if (extras != null) {
             mArticleKey = extras.getString(EXTRA_ARTICLE_KEY, mArticleKey);
         }
 
@@ -54,7 +56,8 @@ public class AemArticleItemActivity extends BaseSingleToolActivity {
         super.onStart();
         loadFragmentIfNeeded();
     }
-    // endregion
+
+    // endregion Lifecycle Events
 
     @MainThread
     private void loadFragmentIfNeeded() {
@@ -65,7 +68,7 @@ public class AemArticleItemActivity extends BaseSingleToolActivity {
         }
 
         fm.beginTransaction()
-                .replace(R.id.frame, AEMArticleItemFragment.newInstance(mTool, mLocale, mArticleKey),
-                        TAG_MAIN_FRAGMENT).commit();
+                .replace(R.id.frame, AEMArticleItemFragment.newInstance(mTool, mLocale, mArticleKey), TAG_MAIN_FRAGMENT)
+                .commit();
     }
 }

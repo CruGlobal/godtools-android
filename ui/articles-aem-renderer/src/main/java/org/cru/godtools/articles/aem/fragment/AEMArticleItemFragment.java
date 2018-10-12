@@ -36,7 +36,6 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     private AEMWebViewClient mWebViewClient = new AEMWebViewClient();
 
     public static AEMArticleItemFragment newInstance(String tool, Locale locale, String articleKey) {
-
         AEMArticleItemFragment fragment = new AEMArticleItemFragment();
         Bundle args = new Bundle();
         populateArgs(args, tool, locale);
@@ -50,7 +49,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle args = getArguments();
+        final Bundle args = getArguments();
         if (args != null) {
             mArticleKey = Uri.parse(args.getString(ARTICLE_KEY_TAG));
         }

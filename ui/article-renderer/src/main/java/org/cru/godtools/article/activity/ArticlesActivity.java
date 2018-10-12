@@ -14,9 +14,6 @@ import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity;
 
 import java.util.Locale;
-import java.util.Objects;
-
-import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
@@ -60,7 +57,6 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
         }
 
         setContentView(R.layout.activity_generic_fragment);
-
     }
 
     @Override
@@ -71,13 +67,9 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
 
     @Override
     public void onArticleSelected(@Nullable final Article article) {
-        Timber.tag("ArticlesActivity")
-                .d("Article selected: %s", article != null ? article.title : null);
-        if (article == null) {
-            return;
+        if (article != null) {
+            AemArticleItemActivity.start(this, mTool, mLocale, article.uri.toString());
         }
-        AemArticleItemActivity.start(this, Objects.requireNonNull(mTool), mLocale,
-                article.uri.toString());
     }
 
     // endregion Lifecycle Events
