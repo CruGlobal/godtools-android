@@ -92,10 +92,7 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
         public Loader<Manifest> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_MANIFEST:
-                    if (mTool != null) {
-                        return new ManifestLoader(BaseSingleToolActivity.this, mTool, mLocale);
-                    }
-                    break;
+                    return new ManifestLoader(BaseSingleToolActivity.this, mTool, mLocale);
             }
 
             return null;
