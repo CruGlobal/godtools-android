@@ -160,7 +160,7 @@ public final class Manifest extends Base implements Styles {
 
     @Nullable
     public String getTitle() {
-        return mTitle != null ? mTitle.getText() : null;
+        return Text.getText(mTitle);
     }
 
     @Nullable
