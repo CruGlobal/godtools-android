@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentManager;
 
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.fragment.ArticlesFragment;
-import org.cru.godtools.articles.aem.activity.AemArticleItemActivity;
+import org.cru.godtools.articles.aem.activity.AemArticleActivity;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity;
 
@@ -68,7 +68,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
     @Override
     public void onArticleSelected(@Nullable final Article article) {
         if (article != null) {
-            AemArticleItemActivity.start(this, mTool, mLocale, article.uri.toString());
+            AemArticleActivity.start(this, mTool, mLocale, article.uri.toString());
         }
     }
 

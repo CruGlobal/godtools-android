@@ -14,7 +14,7 @@ import org.cru.godtools.base.tool.activity.BaseSingleToolActivity;
 
 import java.util.Locale;
 
-public class AemArticleItemActivity extends BaseSingleToolActivity {
+public class AemArticleActivity extends BaseSingleToolActivity {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
     private static final String EXTRA_ARTICLE_KEY = "extra_article_key";
 
@@ -27,11 +27,11 @@ public class AemArticleItemActivity extends BaseSingleToolActivity {
         final Bundle extras = new Bundle();
         populateExtras(extras, toolCode, language);
         extras.putString(EXTRA_ARTICLE_KEY, articleKey);
-        final Intent intent = new Intent(context, AemArticleItemActivity.class).putExtras(extras);
+        final Intent intent = new Intent(context, AemArticleActivity.class).putExtras(extras);
         context.startActivity(intent);
     }
 
-    public AemArticleItemActivity() {
+    public AemArticleActivity() {
         super(false);
     }
 
