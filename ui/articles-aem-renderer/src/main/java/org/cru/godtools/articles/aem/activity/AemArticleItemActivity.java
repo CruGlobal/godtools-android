@@ -43,7 +43,7 @@ public class AemArticleItemActivity extends BaseSingleToolActivity {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.containsKey(EXTRA_ARTICLE_KEY)) {
-            mArticleKey = extras.getString(EXTRA_ARTICLE_KEY);
+            mArticleKey = extras.getString(EXTRA_ARTICLE_KEY, mArticleKey);
         }
 
         setContentView(R.layout.activity_generic_fragment);

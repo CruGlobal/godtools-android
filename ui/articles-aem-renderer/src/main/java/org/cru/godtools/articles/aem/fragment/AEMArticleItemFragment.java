@@ -33,6 +33,8 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     @BindView(R2.id.aem_article_web_view)
     WebView mAemWebView;
 
+    private AEMWebViewClient mWebViewClient = new AEMWebViewClient();
+
     public static AEMArticleItemFragment newInstance(String tool, Locale locale, String articleKey) {
 
         AEMArticleItemFragment fragment = new AEMArticleItemFragment();
@@ -58,16 +60,24 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_aem_article_item, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        View view =  inflater.inflate(R.layout.fragment_aem_article_item, container, false);
+        getArticleFromKey();
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mAemWebView.setWebViewClient(mWebViewClient);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mAemWebView.setWebViewClient(mWebViewClient);
-
-        getArticleFromKey();
     }
     //endregion LifeCycle
 
@@ -75,11 +85,10 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     private void getArticleFromKey() {
         mViewModel = ViewModelProviders.of(this).get(AemArticleWebViewModel.class);
 
-        if (!mViewModel.initialized) {
+        if (mViewModel.article == null) {
             ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(requireContext());
-            mViewModel.getArticle = db.articleDao().liveFind(mArticleKey);
-            mViewModel.getArticle.observe(this, this::setArticle);
-            mViewModel.initialized = true;
+            mViewModel.article = db.articleDao().liveFind(mArticleKey);
+            mViewModel.article.observe(this, this::setArticle);
         }
     }
 
@@ -92,22 +101,30 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     private void setFragmentViews() {
         if (mArticle != null && mArticle.content != null) {
             loadWebViewData();
+            requireActivity().setTitle(mArticle.title);
         }
-        requireActivity().setTitle(mArticle.title);
     }
 
     private void loadWebViewData() {
-        StringBuilder builder = new StringBuilder(mArticle.content);
-        builder.insert(mArticle.content.indexOf("<head>") + 7,
-                "<style> img { max-width: 100%; } </style>");
-        mAemWebView.loadDataWithBaseURL("https://" + mArticleKey.getHost(), builder.toString(),
+        if (mArticle == null || mAemWebView == null || mArticleKey == null) {
+            return;
+        }
+        String data = getUpdatedHtml(mArticle.content);
+        mAemWebView.loadDataWithBaseURL( mArticleKey.toString(), data,
                 "text/html", null, null);
+    }
+
+    @NonNull
+    private String getUpdatedHtml(String content) {
+        StringBuilder builder = new StringBuilder(content);
+        builder.insert(content.indexOf("<head>") + 7,
+                "<style> img { max-width: 100%; } </style>");
+        return builder.toString();
     }
 
     //endregion Article Data
 
     //region WebClient
-    private AEMWebViewClient mWebViewClient = new AEMWebViewClient();
 
     private class AEMWebViewClient extends WebViewClient {
         @Nullable
@@ -127,9 +144,6 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     private AemArticleWebViewModel mViewModel;
 
     public static class AemArticleWebViewModel extends ViewModel {
-
-        LiveData<Article> getArticle;
-
-        boolean initialized = false;
+        LiveData<Article> article;
     }
 }

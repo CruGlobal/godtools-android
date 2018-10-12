@@ -73,9 +73,11 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
     public void onArticleSelected(@Nullable final Article article) {
         Timber.tag("ArticlesActivity")
                 .d("Article selected: %s", article != null ? article.title : null);
-
+        if (article == null) {
+            return;
+        }
         AemArticleItemActivity.start(this, Objects.requireNonNull(mTool), mLocale,
-                Objects.requireNonNull(article).uri.toString());
+                article.uri.toString());
     }
 
     // endregion Lifecycle Events
