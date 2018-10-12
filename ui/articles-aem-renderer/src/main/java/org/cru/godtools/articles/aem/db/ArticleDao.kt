@@ -59,7 +59,7 @@ interface ArticleDao {
 
     @WorkerThread
     @Query("SELECT * FROM articles WHERE uri = :uri")
-    fun find(uri: Uri): Article
+    fun find(uri: Uri): Article?
 
     @AnyThread
     @Query("""
