@@ -117,7 +117,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     private void setupViewModel() {
         mViewModel = ViewModelProviders.of(this).get(ArticleListViewModel.class);
 
-        if (mViewModel.articles != null) {
+        if (mViewModel.articles == null) {
             final ArticleDao articleDao = ArticleRoomDatabase.getInstance(requireContext()).articleDao();
             mViewModel.articles = mCategory != null ? articleDao.getArticles(mTool, mLocale, mCategory) :
                     articleDao.getArticles(mTool, mLocale);
