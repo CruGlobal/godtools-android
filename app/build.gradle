@@ -33,6 +33,7 @@ android {
             betaDistributionReleaseNotes = generateCrashlyticsBetaReleaseNotes()
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -48,6 +49,21 @@ android {
         pickFirst 'META-INF/NOTICE.txt'
         pickFirst 'META-INF/LICENSE.txt'
     }
+
+    dataBinding {
+        enabled = true
+    }
+
+    flavorDimensions "env"
+    productFlavors {
+        stage {
+            dimension "env"
+        }
+        production {
+            dimension "env"
+        }
+    }
+
     signingConfigs {
         crashlyticsBeta {
             storeFile rootProject.file(crashlyticsBetaKeystorePath)
@@ -60,16 +76,6 @@ android {
             storePassword androidKeystoreStorePassword
             keyAlias androidKeystoreKeyAlias
             keyPassword androidKeystoreKeyPassword
-        }
-    }
-
-    flavorDimensions "env"
-    productFlavors {
-        stage {
-            dimension "env"
-        }
-        production {
-            dimension "env"
         }
     }
 
