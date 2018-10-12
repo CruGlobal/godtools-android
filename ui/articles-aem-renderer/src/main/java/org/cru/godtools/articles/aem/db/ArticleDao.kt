@@ -62,6 +62,10 @@ interface ArticleDao {
     fun find(uri: Uri): Article?
 
     @AnyThread
+    @Query("SELECT * FROM articles WHERE uri = :uri")
+    fun findLiveData(uri: Uri): LiveData<Article>
+
+    @AnyThread
     @Query("""
         SELECT DISTINCT a.*
         FROM $GET_ARTICLES_FROM
