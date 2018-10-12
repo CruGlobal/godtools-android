@@ -74,11 +74,11 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (mAemWebView == null || mViewModel == null) {
+        if (mAemWebView == null) {
             return;
         }
         mAemWebView.setWebViewClient(mWebViewClient);
-        mViewModel.article.observe(this, this::setArticle);
+
     }
 
     //endregion LifeCycle
@@ -91,6 +91,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
             ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(requireContext());
             mViewModel.article = db.articleDao().liveFind(mArticleKey);
         }
+        mViewModel.article.observe(this, this::setArticle);
     }
 
     public void setArticle(Article article) {
