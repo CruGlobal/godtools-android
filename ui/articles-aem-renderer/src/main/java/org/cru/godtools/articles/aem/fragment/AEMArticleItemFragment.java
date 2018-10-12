@@ -136,26 +136,18 @@ public class AEMArticleItemFragment extends BaseToolFragment {
             }
             try {
 
-                Resource resource = Stream.of(mResources)
-                        .filter(r -> r.getUri().toString().equals(url)).findFirst().get();
-
-                // If no resource than run normally.
-                if (resource == null || resource.getLocalFileName().isEmpty()) {
-                    return super.shouldInterceptRequest(view, url);
-                }
-
                 String mimeType;
 
                 switch (extension) {
                     case "jpg":
                     case "png":
                     case "bmp":
-//                    case "gif":
-                        mimeType = String.format("image/%s", extension.equals("jpg") ? "jpeg" : extension);
-                        return getResponseFromFile(mimeType, resource);
+                    case "gif":
+                        mimeType = String.format("image/%s", "jpg".equals(extension) ? "jpeg" : extension);
+                        return getResponseFromFile(mimeType, url);
                     case "css":
                         mimeType = "text/css";
-                        return getResponseFromFile(mimeType, resource);
+                        return getResponseFromFile(mimeType, url);
                 }
             } catch (FileNotFoundException | NoSuchElementException e) {
                 Timber.d(e);
@@ -164,8 +156,16 @@ public class AEMArticleItemFragment extends BaseToolFragment {
             return super.shouldInterceptRequest(view, url);
         }
 
-        private WebResourceResponse getResponseFromFile(@NonNull String mimeType, @NonNull Resource resource)
-                throws FileNotFoundException {
+        private WebResourceResponse getResponseFromFile(@NonNull String mimeType, @NonNull String url)
+                throws FileNotFoundException, NoSuchElementException {
+
+            Resource resource = Stream.of(mResources)
+                    .filter(r -> r.getUri().toString().equals(url)).findFirst().get();
+
+            if (resource == null || resource.getLocalFileName().isEmpty()) {
+                throw new FileNotFoundException(String.format("No local file for %s", url));
+            }
+
             FileInputStream inputStream = new FileInputStream(Objects.requireNonNull(
                     resource.getLocalFile(requireContext())));
             return returnWebResponse(mimeType, inputStream);
