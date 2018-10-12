@@ -62,7 +62,10 @@ public class AEMArticleItemFragment extends BaseToolFragment {
                              @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View view =  inflater.inflate(R.layout.fragment_aem_article_item, container, false);
+        View view = inflater.inflate(
+                R.layout.fragment_aem_article_item,
+                container,
+                false);
         getArticleFromKey();
         return view;
     }
@@ -74,11 +77,6 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         mAemWebView.setWebViewClient(mWebViewClient);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
     //endregion LifeCycle
 
     //region Article Data
@@ -110,7 +108,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
             return;
         }
         String data = getUpdatedHtml(mArticle.content);
-        mAemWebView.loadDataWithBaseURL( mArticleKey.toString(), data,
+        mAemWebView.loadDataWithBaseURL(mArticleKey.toString(), data,
                 "text/html", null, null);
     }
 
