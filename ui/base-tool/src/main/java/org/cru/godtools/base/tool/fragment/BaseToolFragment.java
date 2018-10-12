@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.Loader;
 
+import com.google.common.base.Objects;
+
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.base.ui.fragment.BaseFragment;
@@ -22,7 +24,8 @@ import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 public abstract class BaseToolFragment extends BaseFragment {
     private static final int LOADER_MANIFEST = 101;
 
-    @Nullable
+    @NonNull
+    @SuppressWarnings("ConstantConditions")
     protected /*final*/ String mTool = Tool.INVALID_CODE;
     @NonNull
     protected /*final*/ Locale mLocale = Language.INVALID_CODE;
@@ -43,10 +46,13 @@ public abstract class BaseToolFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
 
         final Bundle args = getArguments();
-        if (args != null) {
-            mTool = args.getString(EXTRA_TOOL, mTool);
-            mLocale = BundleUtils.getLocale(args, EXTRA_LANGUAGE, mLocale);
+        if (args == null) {
+            throw new IllegalStateException("Fragment started without any arguments");
         }
+        mTool = args.getString(EXTRA_TOOL, mTool);
+        mLocale = BundleUtils.getLocale(args, EXTRA_LANGUAGE, mLocale);
+
+        validateStartState();
 
         startLoaders();
     }
@@ -55,6 +61,15 @@ public abstract class BaseToolFragment extends BaseFragment {
     protected void onManifestUpdated() {}
 
     // endregion Lifecycle Events
+
+    private void validateStartState() {
+        if (Objects.equal(mTool, Tool.INVALID_CODE)) {
+            throw new IllegalStateException("Invalid tool specified");
+        }
+        if (mLocale.equals(Language.INVALID_CODE)) {
+            throw new IllegalStateException("Invalid locale specified");
+        }
+    }
 
     private void startLoaders() {
         getLoaderManager().initLoader(LOADER_MANIFEST, null, new ManifestLoaderCallbacks());
@@ -71,10 +86,7 @@ public abstract class BaseToolFragment extends BaseFragment {
         public Loader<Manifest> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_MANIFEST:
-                    if (mTool != null) {
-                        return new ManifestLoader(requireContext(), mTool, mLocale);
-                    }
-                    break;
+                    return new ManifestLoader(requireContext(), mTool, mLocale);
             }
 
             return null;
