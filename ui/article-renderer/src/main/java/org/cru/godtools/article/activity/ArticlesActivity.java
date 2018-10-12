@@ -80,7 +80,6 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
             return;
         }
 
-        assert mTool != null : "if mTool was null the activity would have already finished";
         fm.beginTransaction()
                 .replace(R.id.frame, ArticlesFragment.newInstance(mTool, mLocale, mCategory), TAG_MAIN_FRAGMENT)
                 .commit();
@@ -91,7 +90,6 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
     @Nullable
     @Override
     public Intent getSupportParentActivityIntent() {
-        assert mTool != null : "mTool has to be non-null for this activity to even be running";
         final Intent intent = super.getSupportParentActivityIntent();
 
         // populate the CategoriesActivity intent
