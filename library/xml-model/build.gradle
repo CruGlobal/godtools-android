@@ -9,7 +9,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-eventbus:${deps.gtoSupport}"
 
-    implementation "com.annimon:stream:${deps.lightweightStream}"
+    api "com.annimon:stream:${deps.lightweightStream}"
     implementation "com.google.guava:guava:${deps.guava}"
 
     androidTestImplementation "com.android.support.test:runner:${deps.androidTestingSupport}"
