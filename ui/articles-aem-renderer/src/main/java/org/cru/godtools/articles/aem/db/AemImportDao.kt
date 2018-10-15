@@ -8,7 +8,6 @@ import android.net.Uri
 import android.support.annotation.WorkerThread
 import org.cru.godtools.articles.aem.model.AemImport
 import org.cru.godtools.articles.aem.model.AemImport.AemImportArticle
-import org.cru.godtools.articles.aem.model.TranslationRef.TranslationAemImport
 import java.util.Date
 
 @Dao
@@ -19,7 +18,7 @@ interface AemImportDao {
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOrIgnore(imports: List<AemImport>, translationRefs: List<TranslationAemImport>)
+    fun insertOrIgnore(imports: List<AemImport>)
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)

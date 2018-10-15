@@ -29,16 +29,17 @@ abstract class TranslationRepository internal constructor(private val db: Articl
 
     @Transaction
     @WorkerThread
-    open fun addAemImports(translation: Translation, importUris: List<Uri>): Boolean {
+    open fun addAemImports(translation: Translation, uris: List<Uri>): Boolean {
         val translationKey = Key.from(translation) ?: return false
 
         // create translation ref if it doesn't exist already
         db.translationDao().insertOrIgnore(TranslationRef(translationKey))
 
         // create and link all AEM Import objects
-        val imports = importUris.map { AemImport(it) }
-        val relations = imports.map { TranslationAemImport(translationKey, it) }
-        db.aemImportDao().insertOrIgnore(imports, relations)
+        uris.map { AemImport(it) }
+                .apply { db.aemImportDao().insertOrIgnore(this) }
+                .map { TranslationAemImport(translationKey, it) }
+                .apply { db.translationDao().insertOrIgnore(this) }
 
         // mark translation as processed
         markProcessed(translationKey, true)
