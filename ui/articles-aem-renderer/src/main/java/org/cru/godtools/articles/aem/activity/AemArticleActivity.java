@@ -86,7 +86,7 @@ public class AemArticleActivity extends BaseSingleToolActivity {
         }
 
         fm.beginTransaction()
-                .replace(R.id.frame, AEMArticleItemFragment.newInstance(mTool, mLocale, mArticleUri), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, AEMArticleItemFragment.newInstance(mTool, mLocale, mArticleUri.toString()), TAG_MAIN_FRAGMENT)
                 .commit();
     }
 }
