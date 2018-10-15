@@ -15,7 +15,7 @@ public class BuildTypeUtils {
                                                 @NonNull final Tool.Type type, @NonNull final Locale... languages) {
         // hardcode everystudent content for now
         if (CODE_EVERYSTUDENT.equals(code)) {
-            EveryStudent.start(this);
+            EveryStudent.start(activity);
         }
     }
 }
