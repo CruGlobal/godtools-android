@@ -11,11 +11,11 @@ import android.support.annotation.WorkerThread
 import org.cru.godtools.articles.aem.model.Article
 import java.util.Locale
 
-const val GET_ARTICLES_FROM = """
+private const val GET_ARTICLES_FROM = """
     translationAemImports AS t
     JOIN aemImportArticles AS i ON i.aemImportUri = t.aemImportUri
     JOIN articles AS a ON a.uri = i.articleUri"""
-const val GET_ARTICLES_WHERE = """
+private const val GET_ARTICLES_WHERE = """
     t.tool = :tool AND t.language = :locale AND
     t.version = (
         SELECT version FROM translations
