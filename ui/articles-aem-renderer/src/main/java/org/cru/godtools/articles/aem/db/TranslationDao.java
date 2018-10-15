@@ -36,6 +36,7 @@ abstract class TranslationDao {
     @Query("SELECT * FROM translations WHERE " + TRANSLATION_KEY + " LIMIT 1")
     abstract TranslationRef find(String tool, Locale language, int version);
 
+    @NonNull
     @Query("SELECT * FROM translations")
     abstract List<TranslationRef> getAll();
 
