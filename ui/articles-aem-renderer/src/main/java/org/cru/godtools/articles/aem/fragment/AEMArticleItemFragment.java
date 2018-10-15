@@ -91,7 +91,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
         if (!mViewModel.initialized) {
             ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(requireContext());
-            mViewModel.getArticle = db.articleDao().liveFind(mArticleKey);
+            mViewModel.getArticle = db.articleDao().findLiveData(mArticleKey);
             mViewModel.getResources = db.resourceDao().getAllLiveForArticle(mArticleKey);
             mViewModel.getResources.observe(this, resources -> mResources = resources);
             mViewModel.getArticle.observe(this, this::setArticle);
