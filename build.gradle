@@ -3,11 +3,15 @@ buildscript {
         deps = [
                 adobeMobileServices  : '4.16.0',
                 advrecyclerview      : '0.11.0',
+                androidArch          : [
+                        core: '1.1.1',
+                        room: '1.1.1'
+                ],
                 androidInstantApps   : '1.1.0',
                 androidLifecycle     : '1.1.1',
                 androidSupport       : '27.1.1',
                 androidTestingSupport: '1.0.2',
-                butterknife          : '8.7.0',
+                butterknife          : '9.0.0-rc1',
                 calligraphy          : '2.3.0',
                 constraintLayout     : '1.1.3',
                 crashlytics          : '2.9.5',
@@ -31,8 +35,7 @@ buildscript {
                 playServicesAnalytics: '16.0.1',
                 powermock            : '2.0.0-beta.9',
                 retrofit2            : '2.4.0',
-                room                 : '1.1.1',
-                snowplow             : '0.7.0',
+                snowplow             : '0.8.0',
                 thekey               : '2.0.1-SNAPSHOT',
                 timber               : '4.7.1'
         ]
@@ -51,9 +54,9 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0'
+        classpath 'com.android.tools.build:gradle:3.2.1'
         //noinspection GradleDependency
-        classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
+        classpath "com.jakewharton:butterknife-gradle-plugin:${deps.butterknife}"
         classpath "com.newrelic.agent.android:agent-gradle-plugin:${deps.newrelic}"
         classpath 'io.fabric.tools:gradle:1.25.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.kotlin}"
@@ -62,7 +65,7 @@ buildscript {
 
 plugins {
     id "de.undercouch.download" version "3.4.3" apply false
-    id "org.ajoberstar.grgit" version "2.2.1"
+    id "org.ajoberstar.grgit" version "2.3.0"
 }
 
 group 'org.cru.android'
@@ -94,7 +97,12 @@ subprojects {
         resolutionStrategy.force(
                 "android.arch.lifecycle:livedata-core:${deps.androidLifecycle}",
                 "android.arch.lifecycle:runtime:${deps.androidLifecycle}",
-                "android.arch.lifecycle:viewmodel:${deps.androidLifecycle}"
+                "android.arch.lifecycle:viewmodel:${deps.androidLifecycle}",
+
+                // HACK: force the version of the support libraries in order to use new version of ButterKnife before
+                // HACK: we transition to AndroidX
+                "com.android.support:support-compat:${deps.androidSupport}",
+                "com.android.support:support-annotations:${deps.androidSupport}",
         )
     }
 }

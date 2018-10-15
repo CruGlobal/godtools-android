@@ -20,21 +20,21 @@ import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
+import static org.cru.godtools.article.Constants.EXTRA_CATEGORY;
 
 public class ArticlesActivity extends BaseSingleToolActivity implements ArticlesFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
-    private static final String EXTRA_CATEGORY = "category";
 
     @Nullable
-    private String mCategoryId = null;
+    private String mCategory = null;
 
     // region Initialization
 
     public static void start(@NonNull final Context context, @NonNull final String toolCode,
-                             @NonNull final Locale language, @NonNull final String categoryID) {
+                             @NonNull final Locale language, @Nullable final String category) {
         final Bundle args = new Bundle();
         populateExtras(args, toolCode, language);
-        args.putString(EXTRA_CATEGORY, categoryID);
+        args.putString(EXTRA_CATEGORY, category);
         final Intent intent = new Intent(context, ArticlesActivity.class).putExtras(args);
         context.startActivity(intent);
     }
@@ -56,7 +56,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
 
         final Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mCategoryId = extras.getString(EXTRA_CATEGORY, mCategoryId);
+            mCategory = extras.getString(EXTRA_CATEGORY, mCategory);
         }
 
         setContentView(R.layout.activity_generic_fragment);
@@ -86,9 +86,8 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
             return;
         }
 
-        assert mTool != null : "if mTool was null the activity would have already finished";
         fm.beginTransaction()
-                .replace(R.id.frame, ArticlesFragment.newInstance(mTool, mLocale, mCategoryId), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, ArticlesFragment.newInstance(mTool, mLocale, mCategory), TAG_MAIN_FRAGMENT)
                 .commit();
     }
 
@@ -97,7 +96,6 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
     @Nullable
     @Override
     public Intent getSupportParentActivityIntent() {
-        assert mTool != null : "mTool has to be non-null for this activity to even be running";
         final Intent intent = super.getSupportParentActivityIntent();
 
         // populate the CategoriesActivity intent

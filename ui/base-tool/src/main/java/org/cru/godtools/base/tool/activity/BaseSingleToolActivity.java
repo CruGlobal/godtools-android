@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.Loader;
 
+import com.google.common.base.Objects;
+
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.util.os.BundleUtils;
 import org.cru.godtools.model.Language;
@@ -21,7 +23,8 @@ import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 public abstract class BaseSingleToolActivity extends BaseToolActivity {
     private static final int LOADER_MANIFEST = 101;
 
-    @Nullable
+    @NonNull
+    @SuppressWarnings("ConstantConditions")
     protected /*final*/ String mTool = Tool.INVALID_CODE;
     @NonNull
     protected /*final*/ Locale mLocale = Language.INVALID_CODE;
@@ -65,7 +68,7 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
     // endregion Lifecycle Events
 
     private boolean validStartState() {
-        return mTool != null && !Language.INVALID_CODE.equals(mLocale);
+        return !Objects.equal(mTool, Tool.INVALID_CODE) && !Language.INVALID_CODE.equals(mLocale);
     }
 
     private void startLoaders() {
@@ -89,10 +92,7 @@ public abstract class BaseSingleToolActivity extends BaseToolActivity {
         public Loader<Manifest> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_MANIFEST:
-                    if (mTool != null) {
-                        return new ManifestLoader(BaseSingleToolActivity.this, mTool, mLocale);
-                    }
-                    break;
+                    return new ManifestLoader(BaseSingleToolActivity.this, mTool, mLocale);
             }
 
             return null;

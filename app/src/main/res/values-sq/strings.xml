@@ -31,7 +31,7 @@
     <string name="label_tools_about">Rreth</string>
     <plurals name="label_tools_languages">
         <item quantity="one">%1$,d gjuhë</item>
-        <item quantity="other">%1,d e gjuhëve</item>
+        <item quantity="other">%1$,d e gjuhëve</item>
     </plurals>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">60+ gjuhët</string>

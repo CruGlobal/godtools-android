@@ -19,6 +19,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-analytics:${deps.playServicesAnalytics}"
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-snowplow:${deps.gtoSupport}"
 
     implementation "com.adobe.mobile:adobeMobileLibrary:${deps.adobeMobileServices}"
     implementation "com.google.guava:guava:${deps.guava}"

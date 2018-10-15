@@ -154,7 +154,14 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     }
 
     @Override
-    public void onToolSelect(@Nullable final String code, @NonNull final Tool.Type type, Locale... languages) {
+    public void onToolSelect(@Nullable final String code, @NonNull final Tool.Type type,
+                             @Nullable Locale... languages) {
+        // short-circuit if we don't have a valid tool code
+        if (code == null) {
+            return;
+        }
+
+        // trigger tool details if we are in the find tools UI
         if (mActiveState == STATE_FIND_TOOLS) {
             ToolDetailsActivity.start(this, code);
             return;
@@ -185,7 +192,9 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
     @Override
     public void onToolInfo(@Nullable final String code) {
-        ToolDetailsActivity.start(this, code);
+        if (code != null) {
+            ToolDetailsActivity.start(this, code);
+        }
     }
 
     @Override
