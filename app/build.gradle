@@ -130,8 +130,6 @@ dependencies {
     implementation project(':ui:base-app')
     implementation project(':ui:shortcuts')
     implementation project(':ui:tract-renderer')
-    implementation project(':ui:article-renderer')
-    implementation project(':ui:articles-aem-renderer')
 
     implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
     implementation "com.android.support:cardview-v7:${deps.androidSupport}"
