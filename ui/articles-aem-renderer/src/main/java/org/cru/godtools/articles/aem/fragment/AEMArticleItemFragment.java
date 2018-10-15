@@ -24,36 +24,42 @@ import java.util.Locale;
 
 import butterknife.BindView;
 
+import static org.cru.godtools.articles.aem.Constants.EXTRA_ARTICLE;
+
 public class AEMArticleItemFragment extends BaseToolFragment {
-
-    private static final String ARTICLE_KEY_TAG = "article_key";
-    private Uri mArticleKey;
-    private Article mArticle;
-
     @BindView(R2.id.aem_article_web_view)
     WebView mAemWebView;
+    private final AEMWebViewClient mWebViewClient = new AEMWebViewClient();
 
-    private AEMWebViewClient mWebViewClient = new AEMWebViewClient();
+    // these properties should be treated as final and only set/modified in onCreate()
+    @Nullable
+    private /*final*/ Uri mArticleUri;
+
+    @Nullable
+    private Article mArticle;
 
     public static AEMArticleItemFragment newInstance(@NonNull final String tool, @NonNull final Locale locale,
                                                      @NonNull final Uri articleUri) {
         AEMArticleItemFragment fragment = new AEMArticleItemFragment();
-        Bundle args = new Bundle();
+        final Bundle args = new Bundle(3);
         populateArgs(args, tool, locale);
-        args.putString(ARTICLE_KEY_TAG, articleUri.toString());
+        args.putParcelable(EXTRA_ARTICLE, articleUri);
         fragment.setArguments(args);
         return fragment;
     }
 
-    //region LifeCycle
+    // region Lifecycle Events
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         final Bundle args = getArguments();
         if (args != null) {
-            mArticleKey = Uri.parse(args.getString(ARTICLE_KEY_TAG));
+            mArticleUri = args.getParcelable(EXTRA_ARTICLE);
         }
+
+        validateStartState();
 
         setViewModel();
     }
@@ -82,7 +88,13 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         mAemWebView.setWebViewClient(mWebViewClient);
     }
 
-    //endregion LifeCycle
+    // endregion Lifecycle Events
+
+    private void validateStartState() {
+        if (mArticleUri == null) {
+            throw new IllegalStateException("No article specified");
+        }
+    }
 
     //region Article Data
     private void setViewModel() {
@@ -90,7 +102,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
         if (mViewModel.article == null) {
             ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(requireContext());
-            mViewModel.article = db.articleDao().findLiveData(mArticleKey);
+            mViewModel.article = db.articleDao().findLiveData(mArticleUri);
         }
         mViewModel.article.observe(this, this::setArticle);
     }
@@ -109,12 +121,12 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     }
 
     private void loadWebViewData() {
-        if (mArticle == null || mAemWebView == null || mArticleKey == null) {
+        if (mArticle == null || mAemWebView == null || mArticleUri == null) {
             return;
         }
         String data = getUpdatedHtml(mArticle.content);
-        mAemWebView.loadDataWithBaseURL(mArticleKey.toString(), data,
-                "text/html", null, null);
+        mAemWebView.loadDataWithBaseURL(mArticleUri.toString(), data,
+                                        "text/html", null, null);
     }
 
     @NonNull
