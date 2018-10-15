@@ -14,40 +14,23 @@ import java.util.List;
 import java.util.Locale;
 
 @Dao
-abstract class TranslationDao {
-    private static final String TRANSLATION_KEY = "tool = :tool AND language = :language AND version = :version";
+interface TranslationDao {
+    String TRANSLATION_KEY = "tool = :tool AND language = :language AND version = :version";
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    abstract void insertOrIgnore(@NonNull TranslationRef translation);
+    void insertOrIgnore(@NonNull TranslationRef translation);
 
     @Delete
-    abstract void remove(@NonNull List<TranslationRef> translations);
-
-    @Nullable
-    TranslationRef find(@Nullable final TranslationRef.Key key) {
-        if (key == null) {
-            return null;
-        }
-
-        return find(key.tool, key.language, key.version);
-    }
+    void remove(@NonNull List<TranslationRef> translations);
 
     @Nullable
     @Query("SELECT * FROM translations WHERE " + TRANSLATION_KEY + " LIMIT 1")
-    abstract TranslationRef find(String tool, Locale language, int version);
+    TranslationRef find(String tool, Locale language, int version);
 
     @NonNull
     @Query("SELECT * FROM translations")
-    abstract List<TranslationRef> getAll();
-
-    void markProcessed(@Nullable final TranslationRef.Key key, final boolean processed) {
-        if (key == null) {
-            return;
-        }
-
-        markProcessed(key.tool, key.language, key.version, processed);
-    }
+    List<TranslationRef> getAll();
 
     @Query("UPDATE translations SET processed = :processed WHERE " + TRANSLATION_KEY)
-    abstract void markProcessed(String tool, Locale language, int version, boolean processed);
+    void markProcessed(String tool, Locale language, int version, boolean processed);
 }

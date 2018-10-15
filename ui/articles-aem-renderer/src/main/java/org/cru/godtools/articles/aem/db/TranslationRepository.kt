@@ -13,9 +13,18 @@ import org.cru.godtools.model.Translation
 @Dao
 abstract class TranslationRepository internal constructor(private val db: ArticleRoomDatabase) {
     @WorkerThread
+    fun find(key: Key?): TranslationRef? {
+        return key?.run { db.translationDao().find(tool, language, version) }
+    }
+
+    @WorkerThread
     fun isProcessed(translation: Translation): Boolean {
-        val transRef = db.translationDao().find(Key.from(translation))
-        return transRef?.processed ?: false
+        return find(Key.from(translation))?.processed ?: false
+    }
+
+    @WorkerThread
+    fun markProcessed(key: Key?, processed: Boolean) {
+        key?.apply { db.translationDao().markProcessed(tool, language, version, processed) }
     }
 
     @Transaction
@@ -32,7 +41,7 @@ abstract class TranslationRepository internal constructor(private val db: Articl
         db.aemImportDao().insertOrIgnore(imports, relations)
 
         // mark translation as processed
-        db.translationDao().markProcessed(translationKey, true)
+        markProcessed(translationKey, true)
 
         return true
     }
