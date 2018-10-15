@@ -54,6 +54,6 @@ abstract class TranslationRepository internal constructor(private val db: Articl
         db.translationDao().all
                 .filterNot { valid.contains(it.key) }
                 .apply { db.translationDao().remove(this) }
-        db.aemImportDao().removeOrphanedAemImports()
+        db.aemImportRepository().removeOrphanedAemImports()
     }
 }

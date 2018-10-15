@@ -33,4 +33,11 @@ abstract class AemImportRepository internal constructor(private val db: ArticleR
             updateLastProcessed(aemImport.uri, Date())
         }
     }
+
+    @Transaction
+    @WorkerThread
+    open fun removeOrphanedAemImports() {
+        db.aemImportDao().removeOrphanedAemImports()
+        db.articleDao().removeOrphanedArticles()
+    }
 }

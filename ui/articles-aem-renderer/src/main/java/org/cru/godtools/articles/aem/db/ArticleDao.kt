@@ -57,6 +57,11 @@ interface ArticleDao {
         WHERE articleUri = :articleUri AND resourceUri NOT IN (:currentResourceUris)""")
     fun removeOldResources(articleUri: Uri, currentResourceUris: List<@JvmSuppressWildcards Uri>)
 
+    @Query("""
+        DELETE FROM articles
+        WHERE uri NOT IN (SELECT articleUri FROM aemImportArticles)""")
+    fun removeOrphanedArticles()
+
     @WorkerThread
     @Query("SELECT * FROM articles WHERE uri = :uri")
     fun find(uri: Uri): Article?
