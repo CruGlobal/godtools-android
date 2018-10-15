@@ -23,7 +23,7 @@ public class ToolDetailsActivity extends BasePlatformActivity implements ToolDet
     @Nullable
     private /*final*/ String mTool = Tool.INVALID_CODE;
 
-    public static void start(@NonNull final Context context, @Nullable final String toolCode) {
+    public static void start(@NonNull final Context context, @NonNull final String toolCode) {
         final Intent intent = new Intent(context, ToolDetailsActivity.class);
         intent.putExtra(EXTRA_TOOL, toolCode);
         context.startActivity(intent);

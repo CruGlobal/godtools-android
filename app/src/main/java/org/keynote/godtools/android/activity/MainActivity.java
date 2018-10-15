@@ -24,11 +24,11 @@ import org.cru.godtools.R;
 import org.cru.godtools.activity.BasePlatformActivity;
 import org.cru.godtools.activity.ToolDetailsActivity;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
-import org.cru.godtools.article.activity.CategoriesActivity;
 import org.cru.godtools.fragment.ToolsFragment;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.sync.GodToolsSyncService;
 import org.cru.godtools.tract.activity.TractActivity;
+import org.cru.godtools.util.BuildTypeUtils;
 import org.cru.godtools.xml.service.ManifestManager;
 
 import java.util.Locale;
@@ -40,7 +40,6 @@ import static android.arch.lifecycle.Lifecycle.State.STARTED;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_FIND_TOOLS;
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
-import static org.cru.godtools.model.Tool.CODE_EVERYSTUDENT;
 
 public class MainActivity extends BasePlatformActivity implements ToolsFragment.Callbacks {
     private static final String EXTRA_FEATURE_DISCOVERY = MainActivity.class.getName() + ".FEATURE_DISCOVERY";
@@ -154,38 +153,46 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     }
 
     @Override
-    public void onToolSelect(@Nullable final String code, @NonNull final Tool.Type type, Locale... languages) {
+    public void onToolSelect(@Nullable final String code, @NonNull final Tool.Type type,
+                             @Nullable Locale... languages) {
+        // short-circuit if we don't have a valid tool code
+        if (code == null) {
+            return;
+        }
+
+        // trigger tool details if we are in the find tools UI
         if (mActiveState == STATE_FIND_TOOLS) {
             ToolDetailsActivity.start(this, code);
             return;
         }
 
-        if (code != null) {
-            switch (type) {
-                case TRACT:
-                    if (languages != null) {
-                        languages = Stream.of(languages).withoutNulls().toArray(Locale[]::new);
-                        if (languages.length > 0) {
-                            // start preloading the tract in the first language
-                            ManifestManager.getInstance(this).getLatestPublishedManifest(code, languages[0]);
+        // sanitize the languages list, and short-circuit if we don't have any languages
+        if (languages != null) {
+            languages = Stream.of(languages).withoutNulls().toArray(Locale[]::new);
+        }
+        if (languages == null || languages.length == 0) {
+            return;
+        }
 
-                            TractActivity.start(this, code, languages);
-                        }
-                    }
-                    break;
-                case ARTICLE:
-                    // hardcode everystudent content for now
-                    if (CODE_EVERYSTUDENT.equals(code)) {
-//                        EveryStudent.start(this);
-                        CategoriesActivity.start(this, code, languages[0]);
-                    }
-            }
+        // launch activity based on the tool type
+        switch (type) {
+            case TRACT:
+                // start preloading the tract in the first language
+                ManifestManager.getInstance(this).getLatestPublishedManifest(code, languages[0]);
+
+                TractActivity.start(this, code, languages);
+                break;
+            case ARTICLE:
+                BuildTypeUtils.startArticleToolActivity(this, code, type, languages);
+                break;
         }
     }
 
     @Override
     public void onToolInfo(@Nullable final String code) {
-        ToolDetailsActivity.start(this, code);
+        if (code != null) {
+            ToolDetailsActivity.start(this, code);
+        }
     }
 
     @Override

@@ -33,9 +33,7 @@ android {
             betaDistributionReleaseNotes = generateCrashlyticsBetaReleaseNotes()
         }
     }
-    dataBinding {
-        enabled = true
-    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -51,6 +49,21 @@ android {
         pickFirst 'META-INF/NOTICE.txt'
         pickFirst 'META-INF/LICENSE.txt'
     }
+
+    dataBinding {
+        enabled = true
+    }
+
+    flavorDimensions "env"
+    productFlavors {
+        stage {
+            dimension "env"
+        }
+        production {
+            dimension "env"
+        }
+    }
+
     signingConfigs {
         crashlyticsBeta {
             storeFile rootProject.file(crashlyticsBetaKeystorePath)
@@ -63,16 +76,6 @@ android {
             storePassword androidKeystoreStorePassword
             keyAlias androidKeystoreKeyAlias
             keyPassword androidKeystoreKeyPassword
-        }
-    }
-
-    flavorDimensions "env"
-    productFlavors {
-        stage {
-            dimension "env"
-        }
-        production {
-            dimension "env"
         }
     }
 
@@ -125,7 +128,6 @@ dependencies {
     implementation project(':ui:account')
     implementation project(':ui:base')
     implementation project(':ui:base-app')
-    implementation project(':ui:everystudent')
     implementation project(':ui:shortcuts')
     implementation project(':ui:tract-renderer')
     implementation project(':ui:article-renderer')
@@ -155,6 +157,11 @@ dependencies {
     implementation "me.thekey.android:thekey-eventbus:${deps.thekey}"
     implementation "me.thekey.android:thekey-view-dialog-fragment:${deps.thekey}"
     implementation "uk.co.chrisjenx:calligraphy:${deps.calligraphy}"
+
+    releaseImplementation project(':ui:everystudent')
+
+    debugImplementation project(':ui:article-renderer')
+    debugImplementation project(':ui:articles-aem-renderer')
 
     debugImplementation "com.android.support:multidex:${deps.multidex}"
     debugImplementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
