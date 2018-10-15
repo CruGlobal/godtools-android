@@ -15,6 +15,4 @@ dependencies {
     androidTestImplementation "com.android.support.test:runner:${deps.androidTestingSupport}"
     androidTestImplementation "com.android.support.test:rules:${deps.androidTestingSupport}"
     androidTestImplementation "org.hamcrest:hamcrest-library:${deps.hamcrest}"
-
-    testImplementation "junit:junit:${deps.junit}"
 }
