@@ -378,8 +378,8 @@ public class AEMDownloadManger {
 
     @VisibleForTesting
     static long roundTimestamp(final long timestamp, final long interval) {
-        // we use integer math to round to nearest interval timestamp
-        return timestamp / interval * interval;
+        // always round down for simplicity
+        return timestamp - (timestamp % interval);
     }
 
     @WorkerThread
