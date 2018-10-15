@@ -28,7 +28,7 @@ import static org.cru.godtools.articles.aem.Constants.EXTRA_ARTICLE;
 
 public class AEMArticleItemFragment extends BaseToolFragment {
     @BindView(R2.id.aem_article_web_view)
-    WebView mAemWebView;
+    WebView mWebView;
     private final AEMWebViewClient mWebViewClient = new AEMWebViewClient();
 
     // these properties should be treated as final and only set/modified in onCreate()
@@ -74,17 +74,13 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        if (mAemWebView == null) {
-            return;
-        }
-        mAemWebView.setWebViewClient(mWebViewClient);
+        setupWebView();
     }
 
     void onUpdateArticle(@Nullable final Article article) {
         mArticle = article;
-
-        setFragmentViews();
+        setActivityTitle();
+        updateWebView();
     }
 
     // endregion Lifecycle Events
@@ -107,35 +103,40 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         viewModel.article.observe(this, this::onUpdateArticle);
     }
 
-    // region Article Data
-
-    private void setFragmentViews() {
-        if (mArticle != null && mArticle.content != null) {
-            loadWebViewData();
+    private void setActivityTitle() {
+        if (mArticle != null) {
             requireActivity().setTitle(mArticle.title);
         }
     }
 
-    private void loadWebViewData() {
-        if (mArticle == null || mAemWebView == null || mArticleUri == null) {
-            return;
+    // region WebView content
+
+    private void setupWebView() {
+        if (mWebView != null) {
+            mWebView.setWebViewClient(mWebViewClient);
+            updateWebView();
         }
-        String data = getUpdatedHtml(mArticle.content);
-        mAemWebView.loadDataWithBaseURL(mArticleUri.toString(), data,
-                                        "text/html", null, null);
+    }
+
+    private void updateWebView() {
+        if (mWebView != null) {
+            if (mArticle != null && mArticle.content != null) {
+                assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
+                final String content = injectCss(mArticle.content);
+                mWebView.loadDataWithBaseURL(mArticleUri.toString() + ".html", content, null, null, null);
+            }
+        }
     }
 
     @NonNull
-    private String getUpdatedHtml(String content) {
-        StringBuilder builder = new StringBuilder(content);
+    private String injectCss(@NonNull final String content) {
+        final StringBuilder builder = new StringBuilder(content);
         builder.insert(content.indexOf("<head>") + 7,
                 "<style> img { max-width: 100%; } </style>");
         return builder.toString();
     }
 
-    // endregion Article Data
-
-    //region WebClient
+    // endregion WebView content
 
     private class AEMWebViewClient extends WebViewClient {
         @Nullable
@@ -150,7 +151,6 @@ public class AEMArticleItemFragment extends BaseToolFragment {
             return super.shouldInterceptRequest(view, url);
         }
     }
-    //endregion WebClient
 
     public static class AemArticleViewModel extends ViewModel {
         LiveData<Article> article;
