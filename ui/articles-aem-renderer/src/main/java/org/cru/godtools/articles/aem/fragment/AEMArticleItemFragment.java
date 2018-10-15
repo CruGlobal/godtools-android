@@ -61,7 +61,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
         validateStartState();
 
-        setViewModel();
+        setupViewModel();
     }
 
     @Nullable
@@ -88,6 +88,12 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         mAemWebView.setWebViewClient(mWebViewClient);
     }
 
+    void onUpdateArticle(@Nullable final Article article) {
+        mArticle = article;
+
+        setFragmentViews();
+    }
+
     // endregion Lifecycle Events
 
     private void validateStartState() {
@@ -96,22 +102,19 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         }
     }
 
-    //region Article Data
-    private void setViewModel() {
-        mViewModel = ViewModelProviders.of(this).get(AemArticleWebViewModel.class);
+    private void setupViewModel() {
+        final AemArticleViewModel viewModel = ViewModelProviders.of(this).get(AemArticleViewModel.class);
 
-        if (mViewModel.article == null) {
-            ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(requireContext());
-            mViewModel.article = db.articleDao().findLiveData(mArticleUri);
+        if (viewModel.article == null) {
+            assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
+            viewModel.article =
+                    ArticleRoomDatabase.getInstance(requireContext()).articleDao().findLiveData(mArticleUri);
         }
-        mViewModel.article.observe(this, this::setArticle);
+
+        viewModel.article.observe(this, this::onUpdateArticle);
     }
 
-    public void setArticle(Article article) {
-        this.mArticle = article;
-
-        setFragmentViews();
-    }
+    // region Article Data
 
     private void setFragmentViews() {
         if (mArticle != null && mArticle.content != null) {
@@ -137,7 +140,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         return builder.toString();
     }
 
-    //endregion Article Data
+    // endregion Article Data
 
     //region WebClient
 
@@ -156,9 +159,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     }
     //endregion WebClient
 
-    private AemArticleWebViewModel mViewModel;
-
-    public static class AemArticleWebViewModel extends ViewModel {
+    public static class AemArticleViewModel extends ViewModel {
         LiveData<Article> article;
     }
 }
