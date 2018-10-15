@@ -7,6 +7,7 @@ import android.arch.persistence.room.Query
 import android.net.Uri
 import android.support.annotation.WorkerThread
 import org.cru.godtools.articles.aem.model.AemImport
+import org.cru.godtools.articles.aem.model.AemImport.AemImportArticle
 import org.cru.godtools.articles.aem.model.TranslationRef.TranslationAemImport
 import java.util.Date
 
@@ -22,7 +23,7 @@ interface AemImportDao {
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOrIgnore(aemImportArticle: AemImport.AemImportArticle)
+    fun insertOrIgnoreArticles(aemImportArticle: List<AemImportArticle>)
 
     @WorkerThread
     @Query("UPDATE aemImports SET lastProcessed = :date WHERE uri = :aemImportUri")
