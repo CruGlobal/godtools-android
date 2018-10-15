@@ -54,6 +54,8 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         if (args != null) {
             mArticleKey = Uri.parse(args.getString(ARTICLE_KEY_TAG));
         }
+
+        setViewModel();
     }
 
     @Nullable
@@ -66,7 +68,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
                 R.layout.fragment_aem_article_item,
                 container,
                 false);
-        setViewModel();
+
         return view;
     }
 
@@ -78,7 +80,6 @@ public class AEMArticleItemFragment extends BaseToolFragment {
             return;
         }
         mAemWebView.setWebViewClient(mWebViewClient);
-
     }
 
     //endregion LifeCycle
