@@ -38,6 +38,6 @@ abstract class AemImportRepository internal constructor(private val db: ArticleR
     @WorkerThread
     open fun removeOrphanedAemImports() {
         db.aemImportDao().removeOrphanedAemImports()
-        db.articleDao().removeOrphanedArticles()
+        db.articleRepository().removeOrphanedArticles()
     }
 }
