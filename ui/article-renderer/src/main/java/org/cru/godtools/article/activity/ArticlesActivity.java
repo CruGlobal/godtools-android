@@ -9,14 +9,11 @@ import android.support.v4.app.FragmentManager;
 
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.fragment.ArticlesFragment;
-import org.cru.godtools.articles.aem.activity.AemArticleItemActivity;
+import org.cru.godtools.articles.aem.activity.AemArticleActivity;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity;
 
 import java.util.Locale;
-import java.util.Objects;
-
-import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
@@ -60,7 +57,6 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
         }
 
         setContentView(R.layout.activity_generic_fragment);
-
     }
 
     @Override
@@ -71,11 +67,9 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
 
     @Override
     public void onArticleSelected(@Nullable final Article article) {
-        Timber.tag("ArticlesActivity")
-                .d("Article selected: %s", article != null ? article.title : null);
-
-        AemArticleItemActivity.start(this, Objects.requireNonNull(mTool), mLocale,
-                Objects.requireNonNull(article).uri.toString());
+        if (article != null) {
+            AemArticleActivity.start(this, mTool, mLocale, article.uri);
+        }
     }
 
     // endregion Lifecycle Events

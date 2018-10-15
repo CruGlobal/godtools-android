@@ -6,11 +6,11 @@ import org.cru.godtools.articles.aem.model.Article
 import org.cru.godtools.articles.aem.model.Resource
 
 @Dao
-abstract class ResourceRepository internal constructor(private val mDb: ArticleRoomDatabase) {
+abstract class ResourceRepository internal constructor(private val db: ArticleRoomDatabase) {
     @Transaction
     open fun storeResources(article: Article, resources: List<Resource>) {
-        val articleDao = mDb.articleDao()
-        val resourceDao = mDb.resourceDao()
+        val articleDao = db.articleDao()
+        val resourceDao = db.resourceDao()
 
         resources.forEach {
             resourceDao.insertOrIgnore(it)
