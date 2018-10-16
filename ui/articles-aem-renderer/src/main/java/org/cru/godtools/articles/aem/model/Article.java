@@ -136,7 +136,7 @@ public class Article {
                     @ForeignKey(entity = Resource.class,
                             onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
                             parentColumns = {"uri"}, childColumns = {"resourceUri"})
-    })
+            })
     public static class ArticleResource {
         @NonNull
         public final Uri articleUri;
