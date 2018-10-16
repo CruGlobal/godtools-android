@@ -127,6 +127,31 @@ public class Article {
     }
 
     @Immutable
+    @Entity(tableName = "articleTags", primaryKeys = {"articleUri", "tag"},
+            foreignKeys = {
+                    @ForeignKey(entity = Article.class,
+                            onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
+                            parentColumns = {"uri"}, childColumns = {"articleUri"})
+            })
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    public static class Tag {
+        @NonNull
+        public final Uri articleUri;
+
+        @NonNull
+        public final String tag;
+
+        public Tag(@NonNull final Article article, @NonNull final String tag) {
+            this(article.uri, tag);
+        }
+
+        public Tag(@NonNull final Uri articleUri, @NonNull final String tag) {
+            this.articleUri = articleUri;
+            this.tag = tag;
+        }
+    }
+
+    @Immutable
     @Entity(tableName = "articleResources", primaryKeys = {"articleUri", "resourceUri"},
             indices = {@Index("resourceUri")},
             foreignKeys = {
