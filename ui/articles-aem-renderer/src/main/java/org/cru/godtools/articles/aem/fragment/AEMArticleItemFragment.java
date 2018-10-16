@@ -46,6 +46,8 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     @Nullable
     private Article mArticle;
 
+    private ArticleRoomDatabase mAemDB;
+
     public static AEMArticleItemFragment newInstance(String tool, Locale locale, Uri articleKey) {
 
         AEMArticleItemFragment fragment = new AEMArticleItemFragment();
@@ -65,6 +67,8 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         if (args != null) {
             mArticleUri = args.getParcelable(EXTRA_ARTICLE);
         }
+
+        mAemDB = ArticleRoomDatabase.getInstance(requireContext());
 
         validateStartState();
 
@@ -103,9 +107,8 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         final AemArticleViewModel viewModel = ViewModelProviders.of(this).get(AemArticleViewModel.class);
 
         if (viewModel.article == null) {
-            ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(requireContext());
             assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
-            viewModel.article = db.articleDao().findLiveData(mArticleUri);
+            viewModel.article = mAemDB.articleDao().findLiveData(mArticleUri);
 
         }
 
@@ -183,8 +186,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         private WebResourceResponse getResponseFromFile(@NonNull String mimeType, @NonNull String url)
                 throws FileNotFoundException {
 
-            Resource resource = ArticleRoomDatabase.getInstance(requireActivity()).resourceDao()
-                    .find(Uri.parse(url));
+            Resource resource = mAemDB.resourceDao().find(Uri.parse(url));
 
             if (resource == null || resource.getLocalFileName().isEmpty()) {
                 throw new FileNotFoundException(String.format("No local file for %s", url));
