@@ -37,8 +37,6 @@ public class AemJsonParser {
 
     private static final String CREATED_TAG = "jcr:created";
     private static final String LAST_MODIFIED_TAG = "cq:lastModified";
-    private static final String ROOT_TAG = "root";
-    private static final String FILE_TAG = "fileReference";
 
     // region Article Parsing
 
