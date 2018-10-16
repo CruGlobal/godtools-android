@@ -10,101 +10,6 @@
       "jcr:primaryType": "cq:Page",
       "jcr:createdBy": "admin",
       "jcr:created": "Tue Jun 05 2018 20:27:48 GMT+0000",
-      "romances-with-wolves": {
-        "jcr:primaryType": "cq:Page",
-        "jcr:createdBy": "admin",
-        "jcr:created": "Tue Jun 05 2018 20:27:48 GMT+0000",
-        "jcr:content": {
-          "jcr:primaryType": "cq:PageContent",
-          "jcr:mixinTypes": [
-            "mix:versionable"
-          ],
-          "jcr:createdBy": "replication-agent",
-          "jcr:title": "Romances with wolves",
-          "jcr:versionHistory": "d95e737b-6711-4ea5-853a-ad3049c9005c",
-          "cq:template": "/libs/settings/experience-fragments/templates/experience-fragment-template",
-          "jcr:language": "en",
-          "cq:xfMasterVariation": true,
-          "jcr:predecessors": [
-            "67c13900-327b-4382-b5e2-ba3fb2b06acd"
-          ],
-          "jcr:created": "Thu Aug 30 2018 18:31:49 GMT+0000",
-          "cq:lastModified": "Thu Aug 30 2018 18:31:22 GMT+0000",
-          "cq:xfVariantType": "web",
-          "jcr:description": "category:My magic category",
-          "jcr:baseVersion": "67c13900-327b-4382-b5e2-ba3fb2b06acd",
-          "jcr:isCheckedOut": true,
-          "cq:tags": [
-            "themes:changed-lives",
-            "experience-fragments:variation/web"
-          ],
-          "jcr:uuid": "a87113f3-4de1-4c78-954d-d4189c5ce372",
-          "sling:resourceType": "cq/experience-fragments/components/xfpage",
-          "cq:lastModifiedBy": "3a3cb21c-752e-0651-a41b-6dbe868c8576",
-          "root": {
-            "jcr:primaryType": "nt:unstructured",
-            "jcr:lastModifiedBy": "admin",
-            "jcr:lastModified": "Mon Jul 04 2016 15:09:49 GMT+0300",
-            "sling:resourceType": "wcm/foundation/components/responsivegrid",
-            "image": {
-              "jcr:primaryType": "nt:unstructured",
-              "jcr:createdBy": "e5d247ec-77ac-4103-8f14-2d0d73d84cbc",
-              "fileReference": "/content/dam/jesusfilm/strategies-tools/resources/37074516052-7-ed-0539963-k@3x.jpg",
-              "height": "0",
-              "jcr:lastModifiedBy": "e5d247ec-77ac-4103-8f14-2d0d73d84cbc",
-              "jcr:created": "Tue Jun 05 2018 20:25:18 GMT+0000",
-              "width": "0",
-              "jcr:lastModified": "Tue Jun 05 2018 20:25:32 GMT+0000",
-              "sling:resourceType": "wcm/foundation/components/image"
-            },
-            "title": {
-              "jcr:primaryType": "nt:unstructured",
-              "jcr:createdBy": "848392a9-3e58-ed5e-0397-7212128cdf16",
-              "jcr:lastModifiedBy": "848392a9-3e58-ed5e-0397-7212128cdf16",
-              "jcr:created": "Sat May 19 2018 00:28:55 GMT+0000",
-              "jcr:lastModified": "Sat May 19 2018 00:28:55 GMT+0000",
-              "sling:resourceType": "wcm/foundation/components/title"
-            },
-            "textimage": {
-              "jcr:primaryType": "nt:unstructured",
-              "jcr:createdBy": "848392a9-3e58-ed5e-0397-7212128cdf16",
-              "jcr:lastModifiedBy": "848392a9-3e58-ed5e-0397-7212128cdf16",
-              "jcr:created": "Fri Jun 08 2018 18:43:15 GMT+0000",
-              "jcr:lastModified": "Fri Jun 08 2018 18:43:15 GMT+0000",
-              "sling:resourceType": "wcm/foundation/components/textimage"
-            },
-            "text": {
-              "jcr:primaryType": "nt:unstructured",
-              "jcr:createdBy": "848392a9-3e58-ed5e-0397-7212128cdf16",
-              "jcr:lastModifiedBy": "e5d247ec-77ac-4103-8f14-2d0d73d84cbc",
-              "jcr:created": "Sat May 19 2018 00:30:21 GMT+0000",
-              "text": "<p>When one is studying a passage of Scripture, a basic but helpful pattern to follow is the threefold process of observation, interpretation, and application.</p>\n<p>OBSERVATION</p>\n<p>This is pretty straightforward: observe what the passage is saying and describing.<br>\nFirst, read through a portion of Scripture and then go back and make some initial observations about it: Who are the characters? What’s going on? Where is this taking place? Revisit the part of your brain that houses all of that literary criticism stuff your English teacher went on and on about while you doodled with your new four-color ballpoint pen. As a quick refresher, remember to ask yourself some basic who- what-when-where observational questions:</p>\n<p><i>WHO</i>&nbsp;is speaking? Who is this about? Who are the main characters?</p>\n<p><i>WHAT</i>&nbsp;is the subject or event covered in the chapter? What do you learn about the people, event, or teaching?</p>\n<p><i>WHEN</i>&nbsp;do/will the events occur or did/will something happen to someone?</p>\n<p><i>WHERE</i>&nbsp;did or will this happen? Where was it said?</p>\n<p><i>WHY</i>&nbsp;is something being said or mentioned? Why would/will this happen? Why at that time and/or to this person/people?</p>\n<p><i>HOW</i>&nbsp;will it happen? How is it to be done? How is it illustrated?</p>\n<p>I can never remember the “how,” because it rebelliously begins with an h instead of a w. Maybe it’s the same for you. If so, that’s okay. This is just a general template; it’s not meant to be a science or&nbsp;a straitjacket. Once you get a feel for some of these questions, try to keep an eye out for key words or phrases, repeated words, contrasts and comparisons, and terms of summary and conclusions (“so that,” “for this reason,” and so on).</p>\n<p>INTERPRETATION</p>\n<p>Often observation slides right into interpretation. But strictly speaking, observation refers to trying to understand what’s being said, while interpretation refers to understanding the overall meaning.</p>\n<p>From what you’ve learned in your observation&nbsp;of the text, you are trying to discern a primary meaning of the passage—what the biblical author was seeking to communicate and what God was seeking to communicate through that biblical author. A particularly fruitful way to pull these things out&nbsp;of the passage is to ask questions such as “What sinful, broken, or fallen condition is being addressed or corrected by the passage?” “What is the deeper&nbsp;sin beneath the behavior?” and “What prompted&nbsp;the author to write this passage?” Keeping these questions in mind can help you uncover the primary meaning of the text.</p>\n<p>APPLICATION</p>\n<p>So, how does the passage apply to you and to others? And what are some actions you need to take in order to apply God’s Word directly to your life?</p>\n<p>Let me suggest something here. I think our reflections&nbsp;tend to skip along the surface level of behavior or habits that need changing. This is okay, but often a more significant application resides at the level of our relating to God—our experiencing his grace or trusting in his character or promises. In light of this, I like to pray through certain questions that help me to apply what I’ve been reading to my walk with God. God, what are you trying to say to me through this passage?</p>\n<p>In what ways am I looking to find life in things besides you, Lord?</p>\n<p>In what ways am I seeking to earn your favor rather than live by grace?</p>\n<p>What do my actions suggest that I’m wrongly believing about your character, our relationship, and what you’ve said in your Word?</p>\n<p>In what ways do we need to be more intimate in our relationship?</p>\n<p>In what way is Jesus the answer to my problem?</p>\n<p>I particularly like thinking about the last one: In what way does Jesus provide an answer or solution to my sin problem? It’s hard to get into too much theological trouble with a question like this.</p>\n",
-              "jcr:lastModified": "Tue Jun 05 2018 20:24:24 GMT+0000",
-              "sling:resourceType": "wcm/foundation/components/text",
-              "textIsRich": "true"
-            },
-            "image_copy": {
-              "jcr:primaryType": "nt:unstructured",
-              "jcr:createdBy": "e5d247ec-77ac-4103-8f14-2d0d73d84cbc",
-              "fileReference": "/content/dam/jesusfilm/strategies-tools/resources/37074516052-7-ed-0539963-k@3x.jpg",
-              "height": "0",
-              "jcr:lastModifiedBy": "e5d247ec-77ac-4103-8f14-2d0d73d84cbc",
-              "jcr:created": "Tue Jun 05 2018 20:25:18 GMT+0000",
-              "width": "0",
-              "jcr:lastModified": "Tue Jun 05 2018 20:25:32 GMT+0000",
-              "sling:resourceType": "wcm/foundation/components/image"
-            },
-            "image_1562475069": {
-              "jcr:primaryType": "nt:unstructured",
-              "jcr:createdBy": "3a3cb21c-752e-0651-a41b-6dbe868c8576",
-              "jcr:lastModifiedBy": "3a3cb21c-752e-0651-a41b-6dbe868c8576",
-              "jcr:created": "Thu Aug 30 2018 18:31:22 GMT+0000",
-              "jcr:lastModified": "Thu Aug 30 2018 18:31:22 GMT+0000",
-              "sling:resourceType": "wcm/foundation/components/image"
-            }
-          }
-        }
-      },
       "jcr:content": {
         "jcr:primaryType": "cq:PageContent",
         "jcr:mixinTypes": [
@@ -126,61 +31,150 @@
         "jcr:uuid": "f9280e66-0b12-4f8b-8b2a-59e1053d00e0",
         "sling:resourceType": "cq/experience-fragments/components/experiencefragment",
         "cq:lastModifiedBy": "848392a9-3e58-ed5e-0397-7212128cdf16"
+      },
+      "romances-with-wolves": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:createdBy": "replication-agent",
+        "jcr:created": "Thu Oct 04 2018 18:47:17 GMT+0000",
+        "jcr:content": {
+          "jcr:primaryType": "cq:PageContent",
+          "jcr:mixinTypes": [
+            "mix:versionable"
+          ],
+          "jcr:createdBy": "replication-agent",
+          "jcr:title": "Romances with wolves",
+          "jcr:versionHistory": "d261e406-f098-4f17-abfe-59c643d7f04f",
+          "cq:template": "/libs/settings/experience-fragments/templates/experience-fragment-template",
+          "jcr:language": "en",
+          "cq:xfMasterVariation": true,
+          "jcr:predecessors": [
+            "1f6b39e9-ceb0-46dd-9a88-04fa7bbdd4d9"
+          ],
+          "jcr:created": "Fri Oct 12 2018 19:06:58 GMT+0000",
+          "cq:lastModified": "Fri Oct 12 2018 19:06:54 GMT+0000",
+          "cq:xfVariantType": "web",
+          "jcr:description": "category:My magic category",
+          "jcr:baseVersion": "1f6b39e9-ceb0-46dd-9a88-04fa7bbdd4d9",
+          "jcr:isCheckedOut": true,
+          "cq:tags": [
+            "themes:changed-lives",
+            "godtools:category/about-god",
+            "godtools:category/about-life"
+          ],
+          "jcr:uuid": "240fc1bd-36a9-4eb0-9812-c6e6ececca09",
+          "sling:resourceType": "cq/experience-fragments/components/xfpage",
+          "cq:lastModifiedBy": "3a3cb21c-752e-0651-a41b-6dbe868c8576",
+          "root": {
+            "jcr:primaryType": "nt:unstructured",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:lastModified": "Mon Jul 04 2016 15:09:49 GMT+0300",
+            "sling:resourceType": "wcm/foundation/components/responsivegrid",
+            "image": {
+              "jcr:primaryType": "nt:unstructured",
+              "jcr:createdBy": "e5d247ec-77ac-4103-8f14-2d0d73d84cbc",
+              "fileReference": "/content/dam/jesusfilm/strategies-tools/resources/37074516052-7-ed-0539963-k@3x.jpg",
+              "height": "0",
+              "jcr:lastModifiedBy": "3a3cb21c-752e-0651-a41b-6dbe868c8576",
+              "jcr:created": "Tue Jun 05 2018 20:25:18 GMT+0000",
+              "width": "0",
+              "jcr:lastModified": "Thu Oct 04 2018 16:03:08 GMT+0000",
+              "sling:resourceType": "wcm/foundation/components/image",
+              "cq:responsive": {
+                "jcr:primaryType": "nt:unstructured"
+              }
+            },
+            "responsivegrid": {
+              "jcr:primaryType": "nt:unstructured",
+              "jcr:createdBy": "3a3cb21c-752e-0651-a41b-6dbe868c8576",
+              "jcr:lastModifiedBy": "3a3cb21c-752e-0651-a41b-6dbe868c8576",
+              "jcr:created": "Thu Oct 04 2018 15:23:27 GMT+0000",
+              "jcr:lastModified": "Thu Oct 04 2018 15:23:27 GMT+0000",
+              "sling:resourceType": "wcm/foundation/components/responsivegrid",
+              "cq:responsive": {
+                "jcr:primaryType": "nt:unstructured",
+                "default": {
+                  "jcr:primaryType": "nt:unstructured",
+                  "offset": "1",
+                  "width": "10"
+                }
+              },
+              "title": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:createdBy": "848392a9-3e58-ed5e-0397-7212128cdf16",
+                "jcr:lastModifiedBy": "848392a9-3e58-ed5e-0397-7212128cdf16",
+                "jcr:created": "Sat May 19 2018 00:28:55 GMT+0000",
+                "jcr:lastModified": "Sat May 19 2018 00:28:55 GMT+0000",
+                "sling:resourceType": "wcm/foundation/components/title"
+              },
+              "text": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:createdBy": "848392a9-3e58-ed5e-0397-7212128cdf16",
+                "jcr:lastModifiedBy": "3a3cb21c-752e-0651-a41b-6dbe868c8576",
+                "jcr:created": "Sat May 19 2018 00:30:21 GMT+0000",
+                "text": "<p>When one is studying a passage of Scripture, a basic but helpful pattern to follow is the threefold process of observation, interpretation, and application.</p>\n<p>OBSERVATION</p>\n<p>This is pretty straightforward: observe what the passage is saying and describing.<br>\nFirst, read through a portion of Scripture and then go back and make some initial observations about it: Who are the characters? What’s going on? Where is this taking place? Revisit the part of your brain that houses all of that literary criticism stuff your English teacher went on and on about while you doodled with your new four-color ballpoint pen. As a quick refresher, remember to ask yourself some basic who- what-when-where observational questions:</p>\n<p><i>WHO</i>&nbsp;is speaking? Who is this about? Who are the main characters?</p>\n<p><i>WHAT</i>&nbsp;is the subject or event covered in the chapter? What do you learn about the people, event, or teaching?</p>\n<p><i>WHEN</i>&nbsp;do/will the events occur or did/will something happen to someone?</p>\n<p><i>WHERE</i>&nbsp;did or will this happen? Where was it said?</p>\n<p><i>WHY</i>&nbsp;is something being said or mentioned? Why would/will this happen? Why at that time and/or to this person/people?</p>\n<p><i>HOW</i>&nbsp;will it happen? How is it to be done? How is it illustrated?</p>\n<p>I can never remember the “how,” because it rebelliously begins with an h instead of a w. Maybe it’s the same for you. If so, that’s okay. This is just a general template; it’s not meant to be a science or&nbsp;a straitjacket. Once you get a feel for some of these questions, try to keep an eye out for key words or phrases, repeated words, contrasts and comparisons, and terms of summary and conclusions (“so that,” “for this reason,” and so on).</p>\n<p>INTERPRETATION</p>\n<p>Often observation slides right into interpretation. But strictly speaking, observation refers to trying to understand what’s being said, while interpretation refers to understanding the overall meaning.</p>\n<p>From what you’ve learned in your observation&nbsp;of the text, you are trying to discern a primary meaning of the passage—what the biblical author was seeking to communicate and what God was seeking to communicate through that biblical author. A particularly fruitful way to pull these things out&nbsp;of the passage is to ask questions such as “What sinful, broken, or fallen condition is being addressed or corrected by the passage?” “What is the deeper&nbsp;sin beneath the behavior?” and “What prompted&nbsp;the author to write this passage?” Keeping these questions in mind can help you uncover the primary meaning of the text.</p>\n<p>APPLICATION</p>\n<p>So, how does the passage apply to you and to others? And what are some actions you need to take in order to apply God’s Word directly to your life?</p>\n<p>Let me suggest something here. I think our reflections&nbsp;tend to skip along the surface level of behavior or habits that need changing. This is okay, but often a more significant application resides at the level of our relating to God—our experiencing his grace or trusting in his character or promises. In light of this, I like to pray through certain questions that help me to apply what I’ve been reading to my walk with God. God, what are you trying to say to me through this passage?</p>\n<p>In what ways am I looking to find life in things besides you, Lord?</p>\n<p>In what ways am I seeking to earn your favor rather than live by grace?</p>\n<p>What do my actions suggest that I’m wrongly believing about your character, our relationship, and what you’ve said in your Word?</p>\n<p>In what ways do we need to be more intimate in our relationship?</p>\n<p>In what way is Jesus the answer to my problem?</p>\n<p>I particularly like thinking about the last one: In what way does Jesus provide an answer or solution to my sin problem? It’s hard to get into too much theological trouble with a question like this.</p>\n",
+                "jcr:lastModified": "Wed Sep 19 2018 18:54:38 GMT+0000",
+                "sling:resourceType": "wcm/foundation/components/text",
+                "textIsRich": "true"
+              },
+              "textimage": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:createdBy": "3a3cb21c-752e-0651-a41b-6dbe868c8576",
+                "jcr:lastModifiedBy": "3a3cb21c-752e-0651-a41b-6dbe868c8576",
+                "jcr:created": "Thu Oct 04 2018 16:04:48 GMT+0000",
+                "text": "<p>TextImage</p>\n",
+                "jcr:lastModified": "Fri Oct 12 2018 19:06:54 GMT+0000",
+                "sling:resourceType": "wcm/foundation/components/textimage",
+                "textIsRich": "true",
+                "alignment": "top",
+                "image": {
+                  "jcr:primaryType": "nt:unstructured",
+                  "fileReference": "/content/dam/LeaderImpact/global/en/stock-photos/AdobeStock_99514035.jpeg",
+                  "height": "0",
+                  "jcr:lastModifiedBy": "3a3cb21c-752e-0651-a41b-6dbe868c8576",
+                  "width": "200",
+                  "jcr:lastModified": "Fri Oct 12 2018 19:06:36 GMT+0000",
+                  "sling:resourceType": "wcm/foundation/components/image"
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
   "other-romances-with-wolves": {
     "jcr:primaryType": "cq:Page",
     "jcr:createdBy": "replication-agent",
-    "jcr:created": "Thu Aug 30 2018 18:41:39 GMT+0000",
-    "jcr:content": {
-      "jcr:primaryType": "cq:PageContent",
-      "jcr:mixinTypes": [
-        "mix:versionable"
-      ],
-      "jcr:createdBy": "replication-agent",
-      "jcr:title": "Other Romances with wolves",
-      "jcr:versionHistory": "a6921866-c419-47cd-83f9-fff0de3d1916",
-      "cq:template": "/libs/cq/experience-fragments/components/experiencefragment/template",
-      "jcr:godtoolsCategory": "category1,godtools2",
-      "jcr:predecessors": [
-        "3a612e13-3546-4d79-bcd8-170f13f4ab70"
-      ],
-      "jcr:created": "Thu Aug 30 2018 18:41:39 GMT+0000",
-      "cq:lastModified": "Thu Aug 30 2018 18:40:55 GMT+0000",
-      "jcr:baseVersion": "3a612e13-3546-4d79-bcd8-170f13f4ab70",
-      "jcr:isCheckedOut": true,
-      "jcr:uuid": "e75e949d-0674-4290-ae39-4d95c045634b",
-      "sling:resourceType": "cq/experience-fragments/components/experiencefragment",
-      "cq:lastModifiedBy": "3a3cb21c-752e-0651-a41b-6dbe868c8576"
-    },
+    "jcr:created": "Mon Oct 15 2018 13:36:18 GMT+0000",
     "romances-with-wolves": {
       "jcr:primaryType": "cq:Page",
       "jcr:createdBy": "replication-agent",
-      "jcr:created": "Thu Aug 30 2018 18:41:39 GMT+0000",
+      "jcr:created": "Mon Oct 15 2018 13:36:18 GMT+0000",
       "jcr:content": {
         "jcr:primaryType": "cq:PageContent",
         "jcr:mixinTypes": [
           "mix:versionable"
         ],
         "jcr:createdBy": "replication-agent",
-        "jcr:title": "Romances with wolves",
-        "jcr:versionHistory": "275fed2d-79d1-4588-b96c-5ca57b3209b4",
+        "jcr:title": "Other Romances with wolves",
+        "jcr:versionHistory": "694babd8-bb16-4279-baaf-4c62e19042c9",
         "cq:template": "/libs/settings/experience-fragments/templates/experience-fragment-template",
         "jcr:language": "en",
         "jcr:predecessors": [
-          "5cbe4d08-45c8-4098-88f7-6489a8a6c601"
+          "10a2afe6-22f2-4cf3-ba9e-197e50df6e8e"
         ],
-        "jcr:created": "Thu Aug 30 2018 18:41:39 GMT+0000",
-        "cq:lastModified": "Thu Aug 30 2018 18:38:24 GMT+0000",
+        "jcr:created": "Mon Oct 15 2018 13:36:18 GMT+0000",
+        "cq:lastModified": "Thu Oct 11 2018 17:39:05 GMT+0000",
         "cq:xfVariantType": "web",
-        "jcr:baseVersion": "5cbe4d08-45c8-4098-88f7-6489a8a6c601",
+        "jcr:baseVersion": "10a2afe6-22f2-4cf3-ba9e-197e50df6e8e",
         "jcr:isCheckedOut": true,
         "cq:tags": [
           "themes:changed-lives",
-          "experience-fragments:variation/web"
+          "experience-fragments:variation/web",
+          "godtools:category/about-jesus",
+          "godtools:category/about-life"
         ],
-        "jcr:uuid": "1e64460e-7257-4fa7-b222-de216f3eea85",
+        "jcr:uuid": "36d12403-569f-4f0d-bc2a-fd12b8c0e3d4",
         "sling:resourceType": "cq/experience-fragments/components/xfpage",
         "cq:lastModifiedBy": "3a3cb21c-752e-0651-a41b-6dbe868c8576",
         "root": {
@@ -236,6 +230,16 @@
             "jcr:lastModified": "Tue Jun 05 2018 20:25:32 GMT+0000",
             "sling:resourceType": "wcm/foundation/components/image"
           },
+          "text_686690801": {
+            "jcr:primaryType": "nt:unstructured",
+            "jcr:createdBy": "3a3cb21c-752e-0651-a41b-6dbe868c8576",
+            "jcr:lastModifiedBy": "3a3cb21c-752e-0651-a41b-6dbe868c8576",
+            "jcr:created": "Wed Sep 05 2018 14:52:05 GMT+0000",
+            "text": "<p>Additional Content</p>\n",
+            "jcr:lastModified": "Wed Sep 05 2018 14:52:26 GMT+0000",
+            "sling:resourceType": "wcm/foundation/components/text",
+            "textIsRich": "true"
+          },
           "image_1562475069": {
             "jcr:primaryType": "nt:unstructured",
             "jcr:createdBy": "3a3cb21c-752e-0651-a41b-6dbe868c8576",
@@ -246,6 +250,27 @@
           }
         }
       }
+    },
+    "jcr:content": {
+      "jcr:primaryType": "cq:PageContent",
+      "jcr:mixinTypes": [
+        "mix:versionable"
+      ],
+      "jcr:createdBy": "replication-agent",
+      "jcr:title": "Other Romances with wolves",
+      "jcr:versionHistory": "f90ab2ab-75f2-4d0d-9ce2-908c73b10c04",
+      "cq:template": "/libs/cq/experience-fragments/components/experiencefragment/template",
+      "jcr:godtoolsCategory": "category1,godtools2",
+      "jcr:predecessors": [
+        "70be418f-60c7-4673-a94d-cf89de568523"
+      ],
+      "jcr:created": "Mon Oct 15 2018 13:36:19 GMT+0000",
+      "cq:lastModified": "Thu Aug 30 2018 18:50:34 GMT+0000",
+      "jcr:baseVersion": "70be418f-60c7-4673-a94d-cf89de568523",
+      "jcr:isCheckedOut": true,
+      "jcr:uuid": "6bf2cf4a-b320-4fb9-971c-d3650aa67d06",
+      "sling:resourceType": "cq/experience-fragments/components/experiencefragment",
+      "cq:lastModifiedBy": "3a3cb21c-752e-0651-a41b-6dbe868c8576"
     }
   }
 }
