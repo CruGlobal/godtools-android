@@ -103,8 +103,8 @@ public class AEMDownloadManger {
         mAemDb = ArticleRoomDatabase.getInstance(mContext);
         mDao = GodToolsDao.getInstance(mContext);
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,
-                                           new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
-                                           new NamedThreadFactory(AEMDownloadManger.class.getSimpleName()));
+                new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
+                new NamedThreadFactory(AEMDownloadManger.class.getSimpleName()));
         mManifestManager = ManifestManager.getInstance(mContext);
 
         EventBus.getDefault().register(this);
@@ -271,7 +271,6 @@ public class AEMDownloadManger {
         // fetch the raw json
         JSONObject json = null;
         try {
-
             final long timestamp = force ? System.currentTimeMillis() :
                     roundTimestamp(System.currentTimeMillis(), CACHE_BUSTING_INTERVAL_JSON);
             json = mApi.getJson(baseUri.toString() + ".9999.json", timestamp)
@@ -358,7 +357,7 @@ public class AEMDownloadManger {
                     resource.setLocalFileName(file.getName());
                     resource.setDateDownloaded(new Date());
                     resourceDao.updateLocalFile(resource.getUri(), resource.getLocalFileName(),
-                                                resource.getDateDownloaded());
+                            resource.getDateDownloaded());
                 }
             }
         } catch (final IOException e) {
