@@ -25,9 +25,7 @@ import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Locale;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -36,8 +34,6 @@ import timber.log.Timber;
 import static org.cru.godtools.articles.aem.Constants.EXTRA_ARTICLE;
 
 public class AEMArticleItemFragment extends BaseToolFragment {
-
-    private List<Resource> mResources;
 
     @BindView(R2.id.aem_article_web_view)
     WebView mWebView;
@@ -110,12 +106,10 @@ public class AEMArticleItemFragment extends BaseToolFragment {
             ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(requireContext());
             assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
             viewModel.article = db.articleDao().findLiveData(mArticleUri);
-//            viewModel.resources = db.resourceDao().getAllLiveForArticle(mArticleUri);
 
         }
 
         viewModel.article.observe(this, this::onUpdateArticle);
-//        viewModel.resources.observe(this, resources -> mResources = resources);
     }
 
     private void setActivityTitle() {
@@ -161,7 +155,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
             String extension = MimeTypeMap.getFileExtensionFromUrl(url);
 
-            if (extension.isEmpty() || mResources == null) {
+            if (extension.isEmpty()) {
                 return super.shouldInterceptRequest(view, url);
             }
             try {
@@ -179,7 +173,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
                         mimeType = "text/css";
                         return getResponseFromFile(mimeType, url);
                 }
-            } catch (FileNotFoundException | NoSuchElementException e) {
+            } catch (FileNotFoundException e) {
                 Timber.d(e);
             }
 
@@ -187,10 +181,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         }
 
         private WebResourceResponse getResponseFromFile(@NonNull String mimeType, @NonNull String url)
-                throws FileNotFoundException, NoSuchElementException {
-
-//            Resource resource = Stream.of(mResources)
-//                    .filter(r -> r.getUri().toString().equals(url)).findFirst().get();
+                throws FileNotFoundException {
 
             Resource resource = ArticleRoomDatabase.getInstance(requireActivity()).resourceDao()
                     .find(Uri.parse(url));
@@ -212,6 +203,6 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
     public static class AemArticleViewModel extends ViewModel {
         LiveData<Article> article;
-//        LiveData<List<Resource>> resources;
+
     }
 }
