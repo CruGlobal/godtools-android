@@ -189,6 +189,8 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
 
         dependencies {
             compileOnly 'org.jetbrains:annotations:16.0.1'
+
+            testImplementation "junit:junit:${deps.junit}"
         }
 
         // disable lint checks
