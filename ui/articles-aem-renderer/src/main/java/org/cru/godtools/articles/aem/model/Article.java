@@ -102,31 +102,6 @@ public class Article {
     }
 
     @Immutable
-    @Entity(tableName = "categories", primaryKeys = {"articleUri", "category"},
-            foreignKeys = {
-                    @ForeignKey(entity = Article.class,
-                            onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
-                            parentColumns = {"uri"}, childColumns = {"articleUri"})
-            })
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    public static class Category {
-        @NonNull
-        public final Uri articleUri;
-
-        @NonNull
-        public final String category;
-
-        public Category(@NonNull final Article article, @NonNull final String category) {
-            this(article.uri, category);
-        }
-
-        public Category(@NonNull final Uri articleUri, @NonNull final String category) {
-            this.articleUri = articleUri;
-            this.category = category;
-        }
-    }
-
-    @Immutable
     @Entity(tableName = "articleTags", primaryKeys = {"articleUri", "tag"},
             foreignKeys = {
                     @ForeignKey(entity = Article.class,
