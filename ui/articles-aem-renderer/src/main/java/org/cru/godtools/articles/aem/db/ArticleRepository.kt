@@ -5,10 +5,10 @@ import android.arch.persistence.room.Transaction
 import org.cru.godtools.articles.aem.model.Article
 
 @Dao
-abstract class ArticleRepository internal constructor(private val mDb: ArticleRoomDatabase) {
+abstract class ArticleRepository internal constructor(private val db: ArticleRoomDatabase) {
     @Transaction
     open fun updateContent(article: Article) {
-        mDb.articleDao().updateContent(article.uri, article.contentUuid, article.content)
-        mDb.resourceRepository().storeResources(article, article.mResources)
+        db.articleDao().updateContent(article.uri, article.contentUuid, article.content)
+        db.resourceRepository().storeResources(article, article.mResources)
     }
 }
