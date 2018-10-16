@@ -22,11 +22,11 @@ import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Resource;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Locale;
-import java.util.Objects;
 
 import butterknife.BindView;
 import timber.log.Timber;
@@ -158,42 +158,53 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
             String extension = MimeTypeMap.getFileExtensionFromUrl(url);
 
-            if (extension.isEmpty()) {
+            WebResourceResponse response = null;
+
+            String mimeType;
+
+            switch (extension) {
+                case "jpg":
+                case "png":
+                case "bmp":
+                case "gif":
+                    mimeType = String.format("image/%s", "jpg".equals(extension) ? "jpeg" : extension);
+                    response = getResponseFromFile(mimeType, url);
+                    break;
+                case "css":
+                    mimeType = "text/css";
+                    response = getResponseFromFile(mimeType, url);
+                    break;
+            }
+
+            if (response == null) {
                 return super.shouldInterceptRequest(view, url);
             }
-            try {
 
-                String mimeType;
+            return response;
 
-                switch (extension) {
-                    case "jpg":
-                    case "png":
-                    case "bmp":
-                    case "gif":
-                        mimeType = String.format("image/%s", "jpg".equals(extension) ? "jpeg" : extension);
-                        return getResponseFromFile(mimeType, url);
-                    case "css":
-                        mimeType = "text/css";
-                        return getResponseFromFile(mimeType, url);
-                }
-            } catch (FileNotFoundException e) {
-                Timber.d(e);
-            }
-
-            return super.shouldInterceptRequest(view, url);
         }
 
-        private WebResourceResponse getResponseFromFile(@NonNull String mimeType, @NonNull String url)
-                throws FileNotFoundException {
+        private WebResourceResponse getResponseFromFile(@NonNull String mimeType, @NonNull String url) {
 
             Resource resource = mAemDB.resourceDao().find(Uri.parse(url));
 
-            if (resource == null || resource.getLocalFileName().isEmpty()) {
-                throw new FileNotFoundException(String.format("No local file for %s", url));
+            if (resource == null) {
+                return null;
             }
 
-            FileInputStream inputStream = new FileInputStream(Objects.requireNonNull(
-                    resource.getLocalFile(requireContext())));
+            File localFile = resource.getLocalFile(requireContext());
+
+            if (localFile == null || !localFile.isFile()) {
+                return null;
+            }
+
+            FileInputStream inputStream;
+            try {
+                inputStream = new FileInputStream(localFile);
+            } catch (FileNotFoundException e) {
+                Timber.d(e);
+                return null;
+            }
             return returnWebResponse(mimeType, inputStream);
         }
 
