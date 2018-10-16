@@ -3,8 +3,8 @@ package org.cru.godtools.articles.aem.api;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import org.ccci.gto.android.common.api.okhttp3.util.OkHttpClientUtil;
 import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory;
+import org.ccci.gto.android.common.okhttp3.util.OkHttpClientUtil;
 import org.json.JSONObject;
 
 import java.util.concurrent.TimeUnit;
@@ -15,12 +15,13 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
 public interface AemApi {
     @GET
-    Call<JSONObject> getJson(@Url String uri);
+    Call<JSONObject> getJson(@Url String uri, @Query("_") long timestamp);
 
     @GET
     Call<String> downloadArticle(@Url String uri);

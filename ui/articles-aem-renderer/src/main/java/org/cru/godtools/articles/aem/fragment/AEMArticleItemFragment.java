@@ -15,8 +15,6 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.annimon.stream.Stream;
-
 import org.cru.godtools.article.aem.R;
 import org.cru.godtools.article.aem.R2;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
@@ -108,16 +106,16 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     private void setupViewModel() {
         final AemArticleViewModel viewModel = ViewModelProviders.of(this).get(AemArticleViewModel.class);
 
-        if (viewModel.article == null || viewModel.resources == null) {
+        if (viewModel.article == null) {
             ArticleRoomDatabase db = ArticleRoomDatabase.getInstance(requireContext());
             assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
             viewModel.article = db.articleDao().findLiveData(mArticleUri);
-            viewModel.resources = db.resourceDao().getAllLiveForArticle(mArticleUri);
+//            viewModel.resources = db.resourceDao().getAllLiveForArticle(mArticleUri);
 
         }
 
         viewModel.article.observe(this, this::onUpdateArticle);
-        viewModel.resources.observe(this, resources -> mResources = resources);
+//        viewModel.resources.observe(this, resources -> mResources = resources);
     }
 
     private void setActivityTitle() {
@@ -191,8 +189,11 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         private WebResourceResponse getResponseFromFile(@NonNull String mimeType, @NonNull String url)
                 throws FileNotFoundException, NoSuchElementException {
 
-            Resource resource = Stream.of(mResources)
-                    .filter(r -> r.getUri().toString().equals(url)).findFirst().get();
+//            Resource resource = Stream.of(mResources)
+//                    .filter(r -> r.getUri().toString().equals(url)).findFirst().get();
+
+            Resource resource = ArticleRoomDatabase.getInstance(requireActivity()).resourceDao()
+                    .find(Uri.parse(url));
 
             if (resource == null || resource.getLocalFileName().isEmpty()) {
                 throw new FileNotFoundException(String.format("No local file for %s", url));
@@ -211,6 +212,6 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
     public static class AemArticleViewModel extends ViewModel {
         LiveData<Article> article;
-        LiveData<List<Resource>> resources;
+//        LiveData<List<Resource>> resources;
     }
 }

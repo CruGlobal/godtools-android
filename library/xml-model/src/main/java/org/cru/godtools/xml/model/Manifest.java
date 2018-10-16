@@ -11,7 +11,9 @@ import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.SimpleArrayMap;
 
+import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
+import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
@@ -160,7 +162,7 @@ public final class Manifest extends Base implements Styles {
 
     @Nullable
     public String getTitle() {
-        return mTitle != null ? mTitle.getText() : null;
+        return Text.getText(mTitle);
     }
 
     @Nullable
@@ -171,6 +173,13 @@ public final class Manifest extends Base implements Styles {
     @NonNull
     public List<Category> getCategories() {
         return mCategories;
+    }
+
+    @NonNull
+    public Optional<Category> findCategory(@Nullable final String category) {
+        return Stream.of(mCategories)
+                .filter(c -> Objects.equal(category, c.getId()))
+                .findFirst();
     }
 
     @NonNull

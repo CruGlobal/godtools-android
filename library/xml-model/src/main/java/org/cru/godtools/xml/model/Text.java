@@ -105,13 +105,8 @@ public final class Text extends Content {
     }
 
     @Nullable
-    public String getText() {
-        return mText;
-    }
-
-    @Nullable
     public static String getText(@Nullable final Text text) {
-        return text != null ? text.getText() : null;
+        return text != null ? text.mText : null;
     }
 
     static Text fromXml(@NonNull final Base parent, @NonNull final XmlPullParser parser)

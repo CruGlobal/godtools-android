@@ -44,10 +44,6 @@ public abstract class BaseToolActivity extends ImmersiveActivity {
     @CallSuper
     protected void onUpdateToolbar() {}
 
-    protected void onUpdateToolbarTitle(@Nullable final Manifest manifest) {
-        setTitle(safeApplyTypefaceSpan(Manifest.getTitle(manifest), ManifestViewUtils.getTypeface(manifest, this)));
-    }
-
     @CallSuper
     protected void onUpdateActiveManifest() {
         updateToolbar();
@@ -61,10 +57,9 @@ public abstract class BaseToolActivity extends ImmersiveActivity {
     // region Toolbar update logic
 
     private void updateToolbar() {
-        final Manifest manifest = getActiveManifest();
-        onUpdateToolbarTitle(manifest);
-
         if (mToolbar != null) {
+            final Manifest manifest = getActiveManifest();
+
             // set toolbar background color
             mToolbar.setBackgroundColor(Manifest.getNavBarColor(manifest));
 
@@ -75,8 +70,14 @@ public abstract class BaseToolActivity extends ImmersiveActivity {
             mToolbar.setSubtitleTextColor(controlColor);
         }
 
+        updateToolbarTitle();
         updateToolbarMenu();
         onUpdateToolbar();
+    }
+
+    protected void updateToolbarTitle() {
+        final Manifest manifest = getActiveManifest();
+        setTitle(safeApplyTypefaceSpan(Manifest.getTitle(manifest), ManifestViewUtils.getTypeface(manifest, this)));
     }
 
     private void updateToolbarMenu() {
