@@ -7,17 +7,24 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 
+import com.annimon.stream.Optional;
+
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.fragment.ArticlesFragment;
 import org.cru.godtools.articles.aem.activity.AemArticleActivity;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity;
+import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
+import org.cru.godtools.xml.model.Category;
+import org.cru.godtools.xml.model.Manifest;
+import org.cru.godtools.xml.model.Text;
 
 import java.util.Locale;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 import static org.cru.godtools.article.Constants.EXTRA_CATEGORY;
+import static org.cru.godtools.base.ui.util.LocaleTypefaceUtils.safeApplyTypefaceSpan;
 
 public class ArticlesActivity extends BaseSingleToolActivity implements ArticlesFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
@@ -83,6 +90,24 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
         fm.beginTransaction()
                 .replace(R.id.frame, ArticlesFragment.newInstance(mTool, mLocale, mCategory), TAG_MAIN_FRAGMENT)
                 .commit();
+    }
+
+    @Override
+    protected void updateToolbarTitle() {
+        // try to use the Category Label for the title
+        final Manifest manifest = getActiveManifest();
+        if (manifest != null) {
+            final Optional<String> categoryName = manifest.findCategory(mCategory)
+                    .map(Category::getLabel)
+                    .map(Text::getText);
+            if (categoryName.isPresent()) {
+                setTitle(safeApplyTypefaceSpan(categoryName.get(), ManifestViewUtils.getTypeface(manifest, this)));
+                return;
+            }
+        }
+
+        // otherwise default to the default toolbar title
+        super.updateToolbarTitle();
     }
 
     // region Up Navigation
