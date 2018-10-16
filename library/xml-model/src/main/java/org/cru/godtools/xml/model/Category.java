@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
 import org.xmlpull.v1.XmlPullParser;
@@ -13,6 +13,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.cru.godtools.xml.Constants.XMLNS_ARTICLE;
 import static org.cru.godtools.xml.Constants.XMLNS_MANIFEST;
@@ -32,7 +33,7 @@ public class Category extends Base {
     private String mBanner;
 
     @NonNull
-    private List<String> mAemTags = ImmutableList.of();
+    private Set<String> mAemTags = ImmutableSet.of();
 
     @NonNull
     @WorkerThread
@@ -61,7 +62,7 @@ public class Category extends Base {
     }
 
     @NonNull
-    public List<String> getAemTags() {
+    public Set<String> getAemTags() {
         return mAemTags;
     }
 
@@ -95,7 +96,7 @@ public class Category extends Base {
                     }
                     break;
             }
-            mAemTags = ImmutableList.copyOf(aemTags);
+            mAemTags = ImmutableSet.copyOf(aemTags);
 
             // skip unrecognized nodes
             XmlPullParserUtils.skipTag(parser);

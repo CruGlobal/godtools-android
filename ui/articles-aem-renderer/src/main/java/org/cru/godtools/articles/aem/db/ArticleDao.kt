@@ -80,4 +80,13 @@ interface ArticleDao {
         WHERE $GET_ARTICLES_WHERE AND
             c.category = :category""")
     fun getArticles(tool: String, locale: Locale, category: String): LiveData<List<Article>>
+
+    @AnyThread
+    @Query("""
+        SELECT DISTINCT a.*
+        FROM $GET_ARTICLES_FROM
+             JOIN articleTags AS tag ON tag.articleUri = a.uri
+        WHERE $GET_ARTICLES_WHERE AND
+            tag.tag IN (:tags)""")
+    fun getArticles(tool: String, locale: Locale, tags: Collection<@JvmSuppressWildcards String>): LiveData<List<Article>>
 }
