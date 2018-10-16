@@ -6,6 +6,7 @@ import android.support.annotation.AnyThread;
 import android.support.annotation.GuardedBy;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 
 import com.annimon.stream.Stream;
@@ -64,6 +65,7 @@ import timber.log.Timber;
 
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.util.Collections.synchronizedMap;
+import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
 
 /**
  * This class hold all Download methods for retrieving and saving an Article
@@ -74,6 +76,7 @@ public class AEMDownloadManger {
     private static final String TAG = "AEMDownloadManager";
 
     private static final int TASK_CONCURRENCY = 4;
+    private static final long CACHE_BUSTING_INTERVAL_JSON = HOUR_IN_MS;
 
     private final ArticleRoomDatabase mAemDb;
     private final AemApi mApi;
@@ -268,7 +271,9 @@ public class AEMDownloadManger {
         // fetch the raw json
         JSONObject json = null;
         try {
-            json = mApi.getJson(baseUri.toString() + ".9999.json")
+            final long timestamp = force ? System.currentTimeMillis() :
+                    roundTimestamp(System.currentTimeMillis(), CACHE_BUSTING_INTERVAL_JSON);
+            json = mApi.getJson(baseUri.toString() + ".9999.json", timestamp)
                     .execute()
                     .body();
         } catch (final IOException e) {
@@ -370,6 +375,12 @@ public class AEMDownloadManger {
     }
 
     // endregion Tasks
+
+    @VisibleForTesting
+    static long roundTimestamp(final long timestamp, final long interval) {
+        // always round down for simplicity
+        return timestamp - (timestamp % interval);
+    }
 
     @WorkerThread
     private void downloadResourcesNeedingUpdate(@NonNull final List<Resource> resources) {
