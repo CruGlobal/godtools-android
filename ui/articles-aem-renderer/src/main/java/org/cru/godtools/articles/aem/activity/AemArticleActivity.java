@@ -19,7 +19,6 @@ import static org.cru.godtools.articles.aem.Constants.EXTRA_ARTICLE;
 
 public class AemArticleActivity extends BaseSingleToolActivity {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
-    private static final String EXTRA_ARTICLE_KEY = "extra_article_key";
 
     // these properties should be treated as final and only set/modified in onCreate()
     @Nullable
@@ -87,7 +86,7 @@ public class AemArticleActivity extends BaseSingleToolActivity {
 
         fm.beginTransaction()
                 .replace(R.id.frame, AEMArticleItemFragment.newInstance(mTool, mLocale,
-                        mArticleUri.toString()), TAG_MAIN_FRAGMENT)
+                        mArticleUri), TAG_MAIN_FRAGMENT)
                 .commit();
     }
 }
