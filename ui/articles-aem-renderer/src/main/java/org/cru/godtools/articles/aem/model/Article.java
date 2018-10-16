@@ -72,7 +72,7 @@ public class Article {
 
     @Ignore
     @NonNull
-    private List<String> mCategories = ImmutableList.of();
+    private List<String> mTags = ImmutableList.of();
 
     @Ignore
     @NonNull
@@ -82,15 +82,15 @@ public class Article {
         this.uri = uri;
     }
 
-    public void setCategories(@NonNull final List<String> categories) {
-        mCategories = ImmutableList.copyOf(categories);
+    public void setTags(@NonNull final List<String> tags) {
+        mTags = ImmutableList.copyOf(tags);
     }
 
     @NonNull
     @RestrictTo(RestrictTo.Scope.LIBRARY)
-    public List<Category> getCategoryObjects() {
-        return Stream.of(mCategories)
-                .map(category -> new Category(this, category))
+    public List<Tag> getTagObjects() {
+        return Stream.of(mTags)
+                .map(tag -> new Tag(this, tag))
                 .toList();
     }
 

@@ -33,7 +33,7 @@ interface ArticleDao {
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOrIgnore(categories: Collection<Article.Category>)
+    fun insertOrIgnoreTags(tags: Collection<Article.Tag>)
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -48,8 +48,8 @@ interface ArticleDao {
     fun updateContent(uri: Uri, uuid: String?, content: String?)
 
     @WorkerThread
-    @Query("DELETE FROM categories WHERE articleUri = :articleUri")
-    fun removeAllCategories(articleUri: Uri)
+    @Query("DELETE FROM articleTags WHERE articleUri = :articleUri")
+    fun removeAllTags(articleUri: Uri)
 
     @WorkerThread
     @Query("""
