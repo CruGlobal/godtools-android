@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -9,37 +8,23 @@
         <variable name="manifest" type="org.cru.godtools.xml.model.Manifest" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:onClick="@{() -> callbacks.onArticleSelected(article)}"
-        android:padding="20dp">
+        android:layout_height="74dp"
+        android:onClick="@{() -> callbacks.onArticleSelected(article)}">
 
         <TextView
-            android:id="@+id/article_title_text_view"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="0dp"
-            android:padding="0dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:ellipsize="end"
+            android:lines="1"
             android:text="@{article.title}"
-            android:textAppearance="@style/TextAppearance.GodTools.Large"
+            android:textAppearance="@style/TextAppearance.GodTools.Article.ArticlesList.Item.Title"
             android:textColor="@{manifest.getPrimaryColor()}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             tools:text="Romances with wolves"
             tools:textColor="@color/gt_blue" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@{article.getLastUpdatedFormattedString()}"
-            android:textAppearance="@style/TextAppearance.GodTools.Subhead"
-            android:textColor="@color/common_google_signin_btn_text_light_focused"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/article_title_text_view"
-            tools:text="Updated: 12/12/20012" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </layout>

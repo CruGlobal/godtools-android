@@ -6,4 +6,6 @@
     <style name="ThemeOverlay.Widget.GodTools.RecyclerView.Articles" parent="Base">
         <item name="android:listDivider">@drawable/list_item_decorator_article_divider</item>
     </style>
+
+    <style name="TextAppearance.GodTools.Article.ArticlesList.Item.Title" parent="TextAppearance.GodTools.Medium" />
 </resources>
