@@ -14,4 +14,5 @@
         android:theme="@style/ThemeOverlay.Widget.GodTools.RecyclerView.Articles"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         tools:listitem="@layout/list_item_article" />
+    
 </android.support.v4.widget.SwipeRefreshLayout>
