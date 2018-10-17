@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="org.cru.godtools.xml.model.Manifest" />
+
         <variable name="article" type="org.cru.godtools.articles.aem.model.Article" />
         <variable name="callbacks" type="org.cru.godtools.article.adapter.ArticlesAdapter.Callbacks" />
         <variable name="manifest" type="org.cru.godtools.xml.model.Manifest" />
@@ -23,7 +25,7 @@
             android:lines="1"
             android:text="@{article.title}"
             android:textAppearance="@style/TextAppearance.GodTools.Article.ArticlesList.Item.Title"
-            android:textColor="@{manifest.getPrimaryColor()}"
+            android:textColor="@{Manifest.getPrimaryColor(manifest)}"
             tools:text="Romances with wolves"
             tools:textColor="@color/gt_blue" />
     </RelativeLayout>
