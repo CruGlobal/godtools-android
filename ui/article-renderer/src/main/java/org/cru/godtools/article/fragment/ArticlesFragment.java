@@ -26,7 +26,7 @@ import org.cru.godtools.article.adapter.ArticlesAdapter;
 import org.cru.godtools.articles.aem.db.ArticleDao;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.model.Article;
-import org.cru.godtools.articles.aem.service.AEMFutureRunnable;
+import org.cru.godtools.articles.aem.service.AEMDownloadManger;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 
 import java.util.List;
@@ -162,26 +162,22 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     }
 
     private void setUpListenableFuture() {
-        ListeningExecutorService service = MoreExecutors.listeningDecorator(Executors
-                .newFixedThreadPool(1));
-
-        AEMFutureRunnable aemFutureRunnable = new AEMFutureRunnable(requireContext());
-
-        ListenableFuture<Boolean> refreshListener = service.submit(aemFutureRunnable, true);
-
-        Futures.addCallback(refreshListener, new FutureCallback<Boolean>() {
+        AEMDownloadManger manger = AEMDownloadManger.getInstance(requireContext());
+        ListeningExecutorService service = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(4));
+        ListenableFuture<Boolean> future = service.submit(() ->
+                manger.enqueueSyncManifestAemImports(mManifest), true);
+        Futures.addCallback(future, new FutureCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
-                Timber.d("onSuccess() called with: result = [" + result + "]");
                 setRefreshing(false);
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Timber.d("onFailure() called with: t = [" + t + "]");
+                Timber.d(t);
                 setRefreshing(false);
             }
-        }, Runnable::run);
+        }, manger.getExecutor());
     }
 
     //endregion refresh Layout

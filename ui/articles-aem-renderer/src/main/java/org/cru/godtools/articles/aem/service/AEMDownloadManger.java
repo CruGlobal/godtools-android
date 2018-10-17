@@ -148,6 +148,13 @@ public class AEMDownloadManger {
     }
 
     @AnyThread
+    public void enqueueSyncManifestAemImports(Manifest manifest) {
+        for (Uri uri : manifest.getAemImports()) {
+            enqueueSyncAemImport(uri, true);
+        }
+    }
+
+    @AnyThread
     private void enqueueSyncStaleAemImports() {
         mExecutor.execute(this::syncStaleAemImportsTask);
     }
@@ -444,6 +451,10 @@ public class AEMDownloadManger {
     }
 
     // region PriorityRunnable Tasks
+
+    public ThreadPoolExecutor getExecutor() {
+        return mExecutor;
+    }
 
     private static final int PRIORITY_DOWNLOAD_RESOURCE = -40;
     private static final int PRIORITY_SYNC_AEM_IMPORT = -30;
