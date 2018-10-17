@@ -15,7 +15,7 @@ abstract class ArticleRepository internal constructor(private val db: ArticleRoo
 
     @Transaction
     @WorkerThread
-    fun removeOrphanedArticles() {
+    open fun removeOrphanedArticles() {
         db.articleDao().removeOrphanedArticles()
         db.resourceDao().removeOrphanedResources()
     }
