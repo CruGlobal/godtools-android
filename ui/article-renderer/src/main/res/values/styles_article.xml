@@ -3,7 +3,7 @@
     <dimen name="categories_list_label_margin">20dp</dimen>
     <dimen name="categories_list_gap">1dp</dimen>
 
-    <style name="ThemeOverlay.Widget.GodTools.RecyclerView.Articles" parent="Base">
+    <style name="ThemeOverlay.Widget.GodTools.Article.ArticlesList" parent="Base">
         <item name="android:listDivider">@drawable/list_item_decorator_article_divider</item>
     </style>
 
