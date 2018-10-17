@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,10 +26,13 @@ import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
+import timber.log.Timber;
 
 import static org.cru.godtools.article.Constants.EXTRA_CATEGORY;
 
-public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapter.Callbacks {
+public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapter.Callbacks,
+        SwipeRefreshLayout.OnRefreshListener {
+
     public interface Callbacks {
         void onArticleSelected(@Nullable Article article);
     }
@@ -36,6 +40,9 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     @Nullable
     @BindView(R2.id.articles_recycler_view)
     RecyclerView mArticlesView;
+    @Nullable
+    @BindView(R2.id.article_swipe_container)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @Nullable
     ArticlesAdapter mArticlesAdapter;
 
@@ -80,6 +87,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupArticlesView();
+        setUpSwipeRefresh();
     }
 
     /**
@@ -123,6 +131,27 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
                     articleDao.getArticles(mTool, mLocale);
         }
     }
+
+    // region refresh Layout
+    private void setUpSwipeRefresh() {
+        if (mSwipeRefreshLayout == null) {
+            return;
+        }
+
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+    }
+
+    private void setRefreshing(boolean isRefreshing) {
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setRefreshing(isRefreshing);
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        Timber.d("onRefresh() called");
+    }
+    //endregion refresh Layout
 
     // region ArticlesView
 
