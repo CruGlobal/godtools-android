@@ -22,6 +22,7 @@ import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Resource;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -174,10 +175,13 @@ public class AEMArticleItemFragment extends BaseToolFragment {
                     mimeType = "text/css";
                     response = getResponseFromFile(mimeType, url);
                     break;
+                default:
+                    mimeType = "application/octet-stream";
+                    response = getResponseFromFile(mimeType, url);
             }
 
             if (response == null) {
-                return super.shouldInterceptRequest(view, url);
+                return returnWebResponse(mimeType, new ByteArrayInputStream("".getBytes()));
             }
 
             return response;
