@@ -79,5 +79,5 @@ interface ArticleDao {
              JOIN articleTags AS tag ON tag.articleUri = a.uri
         WHERE $GET_ARTICLES_WHERE AND
             tag.tag IN (:tags)""")
-    fun getArticles(tool: String, locale: Locale, tags: Collection<@JvmSuppressWildcards String>): LiveData<List<Article>>
+    fun getArticles(tool: String, locale: Locale, tags: List<@JvmSuppressWildcards String>): LiveData<List<Article>>
 }

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.annimon.stream.Optional;
 import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
@@ -235,7 +236,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
                 mTool = tool;
                 mLocale = locale;
                 mTags = tags;
-                mArticles = mAemDb.articleDao().getArticles(tool, locale, tags);
+                mArticles = mAemDb.articleDao().getArticles(tool, locale, ImmutableList.copyOf(tags));
             }
 
             return mArticles;
