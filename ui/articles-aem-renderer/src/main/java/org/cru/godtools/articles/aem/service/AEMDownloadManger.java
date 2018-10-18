@@ -148,10 +148,18 @@ public class AEMDownloadManger {
     }
 
     @AnyThread
-    public void enqueueSyncManifestAemImports(Manifest manifest) {
+    public ThreadPoolExecutor enqueueSyncManifestAemImports(Manifest manifest, Boolean force) {
+        ThreadPoolExecutor manifestExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,
+                new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
+                new NamedThreadFactory(AEMDownloadManger.class.getSimpleName() + "-ManifestSync"));
+
         for (Uri uri : manifest.getAemImports()) {
-            enqueueSyncAemImport(uri, true);
+            final SyncAemImportTask task = getSyncAemImportTask(uri, force);
+            if (task == null) break;
+            manifestExecutor.execute(task);
         }
+
+        return manifestExecutor;
     }
 
     @AnyThread
@@ -161,17 +169,25 @@ public class AEMDownloadManger {
 
     @AnyThread
     private void enqueueSyncAemImport(@NonNull final Uri uri, final boolean force) {
+        final SyncAemImportTask task = getSyncAemImportTask(uri, force);
+        if (task == null) return;
+
+        mSyncAemImportTasks.put(uri, task);
+        mExecutor.execute(task);
+    }
+
+    @Nullable
+    private SyncAemImportTask getSyncAemImportTask(@NonNull Uri uri, boolean force) {
         // try updating a task that is currently enqueued
         final SyncAemImportTask existing = mSyncAemImportTasks.get(uri);
         if (existing != null && existing.updateTask(force)) {
-            return;
+            return null;
         }
 
         // create a new sync task
         final SyncAemImportTask task = new SyncAemImportTask(uri);
         task.updateTask(force);
-        mSyncAemImportTasks.put(uri, task);
-        mExecutor.execute(task);
+        return task;
     }
 
     @AnyThread

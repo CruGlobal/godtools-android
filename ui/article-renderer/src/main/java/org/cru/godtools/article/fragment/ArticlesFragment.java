@@ -15,9 +15,6 @@ import android.view.ViewGroup;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.ListeningExecutorService;
-import com.google.common.util.concurrent.MoreExecutors;
 
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.article.R;
@@ -31,7 +28,6 @@ import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import timber.log.Timber;
@@ -163,21 +159,20 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
 
     private void setUpListenableFuture() {
         AEMDownloadManger manger = AEMDownloadManger.getInstance(requireContext());
-        ListeningExecutorService service = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(4));
-        ListenableFuture<Boolean> future = service.submit(() ->
-                manger.enqueueSyncManifestAemImports(mManifest), true);
-        Futures.addCallback(future, new FutureCallback<Boolean>() {
+
+        Futures.addCallback(Futures.immediateFuture(true), new FutureCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
+                Timber.d("onSuccess() called with: result = [" + result + "]");
                 setRefreshing(false);
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Timber.d(t);
+                Timber.e(t, "onFailure: ");
                 setRefreshing(false);
             }
-        }, manger.getExecutor());
+        }, manger.enqueueSyncManifestAemImports(mManifest, true));
     }
 
     //endregion refresh Layout
