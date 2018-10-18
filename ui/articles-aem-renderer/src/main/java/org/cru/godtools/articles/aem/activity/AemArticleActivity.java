@@ -84,9 +84,9 @@ public class AemArticleActivity extends BaseSingleToolActivity {
             return; // The fragment is already present
         }
 
+        assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
         fm.beginTransaction()
-                .replace(R.id.frame, AEMArticleItemFragment.newInstance(mTool, mLocale,
-                        mArticleUri), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, AEMArticleItemFragment.newInstance(mTool, mLocale, mArticleUri), TAG_MAIN_FRAGMENT)
                 .commit();
     }
 }

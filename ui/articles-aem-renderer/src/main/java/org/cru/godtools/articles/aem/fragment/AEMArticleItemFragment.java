@@ -35,7 +35,6 @@ import timber.log.Timber;
 import static org.cru.godtools.articles.aem.Constants.EXTRA_ARTICLE;
 
 public class AEMArticleItemFragment extends BaseToolFragment {
-
     @BindView(R2.id.aem_article_web_view)
     WebView mWebView;
     private final AEMWebViewClient mWebViewClient = new AEMWebViewClient();
@@ -49,27 +48,27 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
     private ArticleRoomDatabase mAemDB;
 
-    public static AEMArticleItemFragment newInstance(String tool, Locale locale, Uri articleKey) {
-
+    public static AEMArticleItemFragment newInstance(@NonNull final String tool, @NonNull final Locale locale,
+                                                     @NonNull final Uri articleUri) {
         AEMArticleItemFragment fragment = new AEMArticleItemFragment();
-        Bundle args = new Bundle();
+        final Bundle args = new Bundle(3);
         populateArgs(args, tool, locale);
-        args.putParcelable(EXTRA_ARTICLE, articleKey);
+        args.putParcelable(EXTRA_ARTICLE, articleUri);
         fragment.setArguments(args);
         return fragment;
     }
 
-    //region LifeCycle
+    // region Lifecycle Events
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAemDB = ArticleRoomDatabase.getInstance(requireContext());
 
         final Bundle args = getArguments();
         if (args != null) {
             mArticleUri = args.getParcelable(EXTRA_ARTICLE);
         }
-
-        mAemDB = ArticleRoomDatabase.getInstance(requireContext());
 
         validateStartState();
 
@@ -78,15 +77,14 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container,
+                             @Nullable final Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_aem_article_item, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         setupWebView();
     }
 
@@ -96,7 +94,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         updateWebView();
     }
 
-    //endregion LifeCycle
+    // endregion Lifecycle Events
 
     private void validateStartState() {
         if (mArticleUri == null) {
@@ -110,7 +108,6 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         if (viewModel.article == null) {
             assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
             viewModel.article = mAemDB.articleDao().findLiveData(mArticleUri);
-
         }
 
         viewModel.article.observe(this, this::onUpdateArticle);
@@ -150,8 +147,6 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     }
 
     // endregion WebView content
-
-    //region WebClient
 
     private class AEMWebViewClient extends WebViewClient {
         @Nullable
@@ -216,10 +211,8 @@ public class AEMArticleItemFragment extends BaseToolFragment {
             return new WebResourceResponse(mimeType, "UTF-8", stream);
         }
     }
-    //endregion WebClient
 
     public static class AemArticleViewModel extends ViewModel {
         LiveData<Article> article;
-
     }
 }
