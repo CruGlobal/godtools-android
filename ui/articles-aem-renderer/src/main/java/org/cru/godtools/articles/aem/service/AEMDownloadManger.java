@@ -468,10 +468,6 @@ public class AEMDownloadManger {
 
     // region PriorityRunnable Tasks
 
-    public ThreadPoolExecutor getExecutor() {
-        return mExecutor;
-    }
-
     private static final int PRIORITY_DOWNLOAD_RESOURCE = -40;
     private static final int PRIORITY_SYNC_AEM_IMPORT = -30;
     private static final int PRIORITY_DOWNLOAD_ARTICLE = -20;
