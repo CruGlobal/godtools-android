@@ -1,7 +1,8 @@
 package org.cru.godtools.article.fragment;
 
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,17 +13,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.annimon.stream.Optional;
+import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.R2;
 import org.cru.godtools.article.adapter.ArticlesAdapter;
-import org.cru.godtools.articles.aem.db.ArticleDao;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
+import org.cru.godtools.xml.model.Category;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import butterknife.BindView;
 
@@ -44,6 +51,9 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     private /*final*/ String mCategory;
     @NonNull
     private /*final*/ ArticleListViewModel mViewModel;
+
+    @Nullable
+    private LiveData<List<Article>> mArticles;
 
     public static ArticlesFragment newInstance(@NonNull final String code, @NonNull final Locale locale,
                                                @Nullable final String category) {
@@ -90,6 +100,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     protected void onManifestUpdated() {
         super.onManifestUpdated();
         updateArticlesViewManifest();
+        updateArticlesLiveData();
     }
 
     /**
@@ -114,15 +125,37 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
 
     // endregion LifeCycle Events
 
+    // region ViewModel methods
+
     private void setupViewModel() {
         mViewModel = ViewModelProviders.of(this).get(ArticleListViewModel.class);
+        updateArticlesLiveData();
+    }
 
-        if (mViewModel.articles == null) {
-            final ArticleDao articleDao = ArticleRoomDatabase.getInstance(requireContext()).articleDao();
-            mViewModel.articles = mCategory != null ? articleDao.getArticles(mTool, mLocale, mCategory) :
-                    articleDao.getArticles(mTool, mLocale);
+    private void updateArticlesLiveData() {
+        final LiveData<List<Article>> articles;
+        if (mCategory != null) {
+            // lookup AEM tags from the manifest category
+            final Set<String> tags = Optional.ofNullable(mManifest)
+                    .flatMap(m -> m.findCategory(mCategory))
+                    .map(Category::getAemTags)
+                    .orElseGet(ImmutableSet::of);
+            articles = mViewModel.getArticlesForTags(mTool, mLocale, tags);
+        } else {
+            // no category, so show all articles for this tool
+            articles = mViewModel.getArticles(mTool, mLocale);
+        }
+
+        if (articles != mArticles) {
+            if (mArticles != null) {
+                mArticles.removeObservers(this);
+            }
+            mArticles = articles;
+            updateArticlesViewArticles();
         }
     }
+
+    // endregion ViewModel methods
 
     // region ArticlesView
 
@@ -136,10 +169,10 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
 
             mArticlesAdapter = new ArticlesAdapter();
             mArticlesAdapter.setCallbacks(this);
-            mViewModel.articles.observe(this, mArticlesAdapter);
             mArticlesView.setAdapter(mArticlesAdapter);
 
             updateArticlesViewManifest();
+            updateArticlesViewArticles();
         }
     }
 
@@ -149,17 +182,72 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
         }
     }
 
+    private void updateArticlesViewArticles() {
+        if (mArticlesAdapter != null && mArticles != null) {
+            mArticles.observe(this, mArticlesAdapter);
+        }
+    }
+
     private void cleanupArticlesView() {
         if (mArticlesAdapter != null) {
             mArticlesAdapter.setCallbacks(null);
-            mViewModel.articles.removeObserver(mArticlesAdapter);
+            if (mArticles != null) {
+                mArticles.removeObserver(mArticlesAdapter);
+            }
         }
         mArticlesAdapter = null;
     }
 
     // endregion ArticlesView
 
-    public static class ArticleListViewModel extends ViewModel {
-        LiveData<List<Article>> articles;
+    public static class ArticleListViewModel extends AndroidViewModel {
+        private final ArticleRoomDatabase mAemDb;
+
+        @Nullable
+        private String mTool;
+        @Nullable
+        private Locale mLocale;
+        @Nullable
+        private Set<String> mTags;
+        @Nullable
+        private LiveData<List<Article>> mArticles;
+
+        public ArticleListViewModel(@NonNull final Application application) {
+            super(application);
+            mAemDb = ArticleRoomDatabase.getInstance(application);
+        }
+
+        LiveData<List<Article>> getArticles(@NonNull final String tool, @NonNull final Locale locale) {
+            // re-initialize the articles LiveData if necessary
+            if (isArticlesLiveDataStale(tool, locale, null)) {
+                mTool = tool;
+                mLocale = locale;
+                mTags = null;
+                mArticles = mAemDb.articleDao().getArticles(tool, locale);
+            }
+
+            return mArticles;
+        }
+
+        LiveData<List<Article>> getArticlesForTags(@NonNull final String tool, @NonNull final Locale locale,
+                                                   @NonNull final Set<String> tags) {
+            // re-initialize the articles LiveData if necessary
+            if (isArticlesLiveDataStale(tool, locale, tags)) {
+                mTool = tool;
+                mLocale = locale;
+                mTags = tags;
+                mArticles = mAemDb.articleDao().getArticles(tool, locale, ImmutableList.copyOf(tags));
+            }
+
+            return mArticles;
+        }
+
+        private boolean isArticlesLiveDataStale(@NonNull final String tool, @NonNull final Locale locale,
+                                                @Nullable final Set<String> tags) {
+            return mArticles == null ||
+                    !Objects.equal(mTool, tool) ||
+                    !Objects.equal(mLocale, locale) ||
+                    !Objects.equal(tags, mTags);
+        }
     }
 }

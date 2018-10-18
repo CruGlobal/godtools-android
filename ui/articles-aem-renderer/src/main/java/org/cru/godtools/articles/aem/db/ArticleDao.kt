@@ -33,7 +33,7 @@ interface ArticleDao {
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOrIgnore(categories: Collection<Article.Category>)
+    fun insertOrIgnoreTags(tags: Collection<Article.Tag>)
 
     @WorkerThread
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -48,8 +48,8 @@ interface ArticleDao {
     fun updateContent(uri: Uri, uuid: String?, content: String?)
 
     @WorkerThread
-    @Query("DELETE FROM categories WHERE articleUri = :articleUri")
-    fun removeAllCategories(articleUri: Uri)
+    @Query("DELETE FROM articleTags WHERE articleUri = :articleUri")
+    fun removeAllTags(articleUri: Uri)
 
     @WorkerThread
     @Query("""
@@ -76,8 +76,8 @@ interface ArticleDao {
     @Query("""
         SELECT DISTINCT a.*
         FROM $GET_ARTICLES_FROM
-             JOIN categories AS c ON c.articleUri = a.uri
+             JOIN articleTags AS tag ON tag.articleUri = a.uri
         WHERE $GET_ARTICLES_WHERE AND
-            c.category = :category""")
-    fun getArticles(tool: String, locale: Locale, category: String): LiveData<List<Article>>
+            tag.tag IN (:tags)""")
+    fun getArticles(tool: String, locale: Locale, tags: List<@JvmSuppressWildcards String>): LiveData<List<Article>>
 }

@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 6,
-    "identityHash": "d08c813f2f5d73744bbd61e463a1a67f",
+    "version": 7,
+    "identityHash": "27c5151599f702d9e2c3ef3276c7d961",
     "entities": [
       {
         "tableName": "translations",
@@ -263,8 +263,8 @@
         "foreignKeys": []
       },
       {
-        "tableName": "categories",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`articleUri` TEXT NOT NULL, `category` TEXT NOT NULL, PRIMARY KEY(`articleUri`, `category`), FOREIGN KEY(`articleUri`) REFERENCES `articles`(`uri`) ON UPDATE RESTRICT ON DELETE CASCADE )",
+        "tableName": "articleTags",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`articleUri` TEXT NOT NULL, `tag` TEXT NOT NULL, PRIMARY KEY(`articleUri`, `tag`), FOREIGN KEY(`articleUri`) REFERENCES `articles`(`uri`) ON UPDATE RESTRICT ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "articleUri",
@@ -273,8 +273,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "category",
-            "columnName": "category",
+            "fieldPath": "tag",
+            "columnName": "tag",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -282,7 +282,7 @@
         "primaryKey": {
           "columnNames": [
             "articleUri",
-            "category"
+            "tag"
           ],
           "autoGenerate": false
         },
@@ -395,7 +395,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d08c813f2f5d73744bbd61e463a1a67f\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"27c5151599f702d9e2c3ef3276c7d961\")"
     ]
   }
 }
