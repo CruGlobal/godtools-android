@@ -4,13 +4,13 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -22,14 +22,14 @@ import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Resource;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.nio.charset.Charset;
 import java.util.Locale;
 
 import butterknife.BindView;
+import okhttp3.MediaType;
 import timber.log.Timber;
 
 import static org.cru.godtools.articles.aem.Constants.EXTRA_ARTICLE;
@@ -46,7 +46,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     @Nullable
     private Article mArticle;
 
-    private ArticleRoomDatabase mAemDB;
+    ArticleRoomDatabase mAemDB;
 
     public static AEMArticleItemFragment newInstance(@NonNull final String tool, @NonNull final Locale locale,
                                                      @NonNull final Uri articleUri) {
@@ -151,64 +151,47 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     private class AEMWebViewClient extends WebViewClient {
         @Nullable
         @Override
-        public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-            String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-
-            WebResourceResponse response = null;
-
-            String mimeType;
-
-            switch (extension) {
-                case "jpg":
-                case "png":
-                case "bmp":
-                case "gif":
-                    mimeType = String.format("image/%s", "jpg".equals(extension) ? "jpeg" : extension);
-                    response = getResponseFromFile(mimeType, url);
-                    break;
-                case "css":
-                    mimeType = "text/css";
-                    response = getResponseFromFile(mimeType, url);
-                    break;
-                default:
-                    mimeType = "application/octet-stream";
-                    response = getResponseFromFile(mimeType, url);
+        public WebResourceResponse shouldInterceptRequest(@NonNull final WebView view, @NonNull final String url) {
+            final WebResourceResponse response = getResponseFromFile(url);
+            if (response != null) {
+                return response;
             }
 
-            if (response == null) {
-                return returnWebResponse(mimeType, new ByteArrayInputStream("".getBytes()));
+            // we didn't have a response, return not found
+            final WebResourceResponse notFound = new WebResourceResponse(null, null, null);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                notFound.setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_NOT_FOUND, "Resource not available");
             }
-
-            return response;
-
+            return notFound;
         }
 
-        private WebResourceResponse getResponseFromFile(@NonNull String mimeType, @NonNull String url) {
-
-            Resource resource = mAemDB.resourceDao().find(Uri.parse(url));
-
+        @Nullable
+        private WebResourceResponse getResponseFromFile(@NonNull final String url) {
+            // find the referenced resource
+            final Resource resource = mAemDB.resourceDao().find(Uri.parse(url));
             if (resource == null) {
                 return null;
             }
 
-            File localFile = resource.getLocalFile(requireContext());
+            // TODO: block on downloading the file data
 
-            if (localFile == null || !localFile.isFile()) {
-                return null;
-            }
-
-            FileInputStream inputStream;
+            // get the data input stream
+            InputStream data = null;
             try {
-                inputStream = new FileInputStream(localFile);
-            } catch (FileNotFoundException e) {
-                Timber.d(e);
+                data = resource.getInputStream(requireContext());
+            } catch (final IOException e) {
+                Timber.tag("AEMArticleFragment")
+                        .d(e, "Error opening local file");
+            }
+            if (data == null) {
                 return null;
             }
-            return returnWebResponse(mimeType, inputStream);
-        }
 
-        private WebResourceResponse returnWebResponse(String mimeType, InputStream stream) {
-            return new WebResourceResponse(mimeType, "UTF-8", stream);
+            // return the response object
+            final MediaType type = resource.getContentType();
+            final String mimeType = type != null ? type.type() + "/" + type.subtype() : "application/octet-stream";
+            final Charset encoding = type != null ? type.charset() : null;
+            return new WebResourceResponse(mimeType, encoding != null ? encoding.name() : null, data);
         }
     }
 

@@ -7,6 +7,9 @@ import android.net.Uri
 import okhttp3.MediaType
 import org.cru.godtools.articles.aem.util.getFile
 import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
+import java.io.InputStream
 import java.util.Date
 
 @Entity(tableName = "resources")
@@ -24,5 +27,16 @@ class Resource(@field:PrimaryKey val uri: Uri) {
 
     fun getLocalFile(context: Context): File? {
         return getFile(context, localFileName)
+    }
+
+    @Throws(IOException::class)
+    fun getInputStream(context: Context): InputStream? {
+        return getLocalFile(context)?.run {
+            if (isFile) {
+                FileInputStream(this)
+            } else {
+                null
+            }
+        }
     }
 }
