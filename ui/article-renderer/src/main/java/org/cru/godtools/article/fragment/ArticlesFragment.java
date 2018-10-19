@@ -14,15 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-
 import com.annimon.stream.Optional;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.ccci.gto.android.common.util.MainThreadExecutor;
@@ -200,19 +196,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     private void setUpListenableFuture() {
         AEMDownloadManger manger = AEMDownloadManger.getInstance(requireContext());
         ListenableFuture<List<Boolean>> future = manger.enqueueSyncManifestAemImports(mManifest, true);
-        Futures.addCallback(future, new FutureCallback<List<Boolean>>() {
-            @Override
-            public void onSuccess(List<Boolean> result) {
-                setRefreshing(false);
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Timber.e(t);
-                setRefreshing(false);
-            }
-        }, new MainThreadExecutor());
-
+        future.addListener(() -> setRefreshing(false), new MainThreadExecutor());
     }
 
     //endregion refresh Layout
