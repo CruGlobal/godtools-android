@@ -22,6 +22,7 @@ dependencies {
     implementation project(":ui:base")
 
     implementation "com.google.android.instantapps:instantapps:${deps.androidInstantApps}"
+    implementation "com.google.android.gms:play-services-base:${deps.playServices}"
 
     implementation "org.ccci.gto.android:gto-support-crashlytics:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"

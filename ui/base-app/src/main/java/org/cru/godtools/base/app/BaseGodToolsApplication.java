@@ -5,6 +5,10 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.security.ProviderInstaller;
 import com.google.android.instantapps.InstantApps;
 import com.newrelic.agent.android.NewRelic;
 
@@ -44,6 +48,8 @@ public class BaseGodToolsApplication extends Application {
 
         // start various services
         startServices();
+
+        installTls12();
     }
 
     private void initializeCrashlytics() {
@@ -90,4 +96,17 @@ public class BaseGodToolsApplication extends Application {
 
     @CallSuper
     protected void startServices() {}
+
+    private void installTls12() {
+        try {
+            ProviderInstaller.installIfNeeded(this);
+        } catch (GooglePlayServicesNotAvailableException e) {
+
+            Timber.e(e);
+        } catch (GooglePlayServicesRepairableException e) {
+            GoogleApiAvailability.getInstance()
+                    .showErrorNotification(this, e.getConnectionStatusCode());
+            Timber.e(e);
+        }
+    }
 }
