@@ -185,7 +185,7 @@ public class AEMDownloadManger {
     }
 
     @AnyThread
-    private ListenableFuture<Boolean> enqueueDownloadResource(@NonNull final Uri uri, final boolean force) {
+    public ListenableFuture<Boolean> enqueueDownloadResource(@NonNull final Uri uri, final boolean force) {
         // try updating a task that is currently enqueued
         final DownloadResourceTask existing = mDownloadResourceTasks.get(uri);
         if (existing != null && existing.updateTask(force)) {

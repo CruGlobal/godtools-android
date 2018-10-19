@@ -3,11 +3,13 @@ package org.cru.godtools.articles.aem.fragment;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.WorkerThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import org.cru.godtools.article.aem.R2;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Resource;
+import org.cru.godtools.articles.aem.service.AEMDownloadManger;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 
 import java.io.IOException;
@@ -27,6 +30,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.nio.charset.Charset;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import okhttp3.MediaType;
@@ -152,7 +156,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         @Nullable
         @Override
         public WebResourceResponse shouldInterceptRequest(@NonNull final WebView view, @NonNull final String url) {
-            final WebResourceResponse response = getResponseFromFile(url);
+            final WebResourceResponse response = getResponseFromFile(view.getContext(), Uri.parse(url));
             if (response != null) {
                 return response;
             }
@@ -166,14 +170,34 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         }
 
         @Nullable
-        private WebResourceResponse getResponseFromFile(@NonNull final String url) {
+        @WorkerThread
+        private WebResourceResponse getResponseFromFile(@NonNull final Context context, @NonNull final Uri uri) {
             // find the referenced resource
-            final Resource resource = mAemDB.resourceDao().find(Uri.parse(url));
+            Resource resource = mAemDB.resourceDao().find(uri);
             if (resource == null) {
                 return null;
             }
 
-            // TODO: block on downloading the file data
+            // attempt to download the file if we haven't downloaded it already
+            if (!resource.isDownloaded()) {
+                try {
+                    // TODO: this may create a memory leak due to the call stack holding a reference to a WebView
+                    AEMDownloadManger.getInstance(context).enqueueDownloadResource(resource.getUri(), false).get();
+                } catch (InterruptedException e) {
+                    // propagate thread interruption
+                    Thread.currentThread().interrupt();
+                    return null;
+                } catch (ExecutionException e) {
+                    Timber.tag("AEMArticleFragment")
+                            .d(e.getCause(), "Error downloading resource when trying to render an article");
+                }
+
+                // refresh resource since we may have just downloaded it
+                resource = mAemDB.resourceDao().find(uri);
+                if (resource == null) {
+                    return null;
+                }
+            }
 
             // get the data input stream
             InputStream data = null;

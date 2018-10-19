@@ -18,6 +18,9 @@ class Resource(@field:PrimaryKey val uri: Uri) {
     var localFileName: String? = null
     var dateDownloaded: Date? = null
 
+    val isDownloaded: Boolean
+        get() = localFileName != null
+
     /**
      * @return true if this resource needs to be downloaded
      */
