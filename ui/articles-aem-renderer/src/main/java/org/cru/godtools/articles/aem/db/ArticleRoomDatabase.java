@@ -27,7 +27,7 @@ import org.cru.godtools.articles.aem.room.converter.MediaTypeConverter;
         AemImport.class, AemImport.AemImportArticle.class,
         Article.class, Article.Tag.class,
         Article.ArticleResource.class, Resource.class
-}, version = 7)
+}, version = 8)
 @TypeConverters({DateConverter.class, LocaleConverter.class, MediaTypeConverter.class, UriConverter.class})
 public abstract class ArticleRoomDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "aem_article_cache.db";
