@@ -19,7 +19,6 @@ import static org.cru.godtools.articles.aem.Constants.EXTRA_ARTICLE;
 
 public class AemArticleActivity extends BaseSingleToolActivity {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
-    private static final String EXTRA_ARTICLE_KEY = "extra_article_key";
 
     // these properties should be treated as final and only set/modified in onCreate()
     @Nullable
@@ -85,6 +84,7 @@ public class AemArticleActivity extends BaseSingleToolActivity {
             return; // The fragment is already present
         }
 
+        assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
         fm.beginTransaction()
                 .replace(R.id.frame, AEMArticleItemFragment.newInstance(mTool, mLocale, mArticleUri), TAG_MAIN_FRAGMENT)
                 .commit();

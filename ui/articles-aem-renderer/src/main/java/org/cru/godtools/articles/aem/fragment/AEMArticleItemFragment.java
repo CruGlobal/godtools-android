@@ -3,10 +3,13 @@ package org.cru.godtools.articles.aem.fragment;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.WorkerThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +21,20 @@ import org.cru.godtools.article.aem.R;
 import org.cru.godtools.article.aem.R2;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.model.Article;
+import org.cru.godtools.articles.aem.model.Resource;
+import org.cru.godtools.articles.aem.service.AEMDownloadManger;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.nio.charset.Charset;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
+import okhttp3.MediaType;
+import timber.log.Timber;
 
 import static org.cru.godtools.articles.aem.Constants.EXTRA_ARTICLE;
 
@@ -37,6 +49,8 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
     @Nullable
     private Article mArticle;
+
+    ArticleRoomDatabase mAemDB;
 
     public static AEMArticleItemFragment newInstance(@NonNull final String tool, @NonNull final Locale locale,
                                                      @NonNull final Uri articleUri) {
@@ -53,6 +67,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAemDB = ArticleRoomDatabase.getInstance(requireContext());
 
         final Bundle args = getArguments();
         if (args != null) {
@@ -96,8 +111,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
         if (viewModel.article == null) {
             assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
-            viewModel.article =
-                    ArticleRoomDatabase.getInstance(requireContext()).articleDao().findLiveData(mArticleUri);
+            viewModel.article = mAemDB.articleDao().findLiveData(mArticleUri);
         }
 
         viewModel.article.observe(this, this::onUpdateArticle);
@@ -141,14 +155,67 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     private class AEMWebViewClient extends WebViewClient {
         @Nullable
         @Override
-        public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-            if (url.endsWith(".jpg")) {
-                //TODO: Load local Image WebResource
-            } else if (url.endsWith(".css")) {
-                //TODO: Load CSS WebResource
+        public WebResourceResponse shouldInterceptRequest(@NonNull final WebView view, @NonNull final String url) {
+            final WebResourceResponse response = getResponseFromFile(view.getContext(), Uri.parse(url));
+            if (response != null) {
+                return response;
             }
 
-            return super.shouldInterceptRequest(view, url);
+            // we didn't have a response, return not found
+            final WebResourceResponse notFound = new WebResourceResponse(null, null, null);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                notFound.setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_NOT_FOUND, "Resource not available");
+            }
+            return notFound;
+        }
+
+        @Nullable
+        @WorkerThread
+        private WebResourceResponse getResponseFromFile(@NonNull final Context context, @NonNull final Uri uri) {
+            // find the referenced resource
+            Resource resource = mAemDB.resourceDao().find(uri);
+            if (resource == null) {
+                return null;
+            }
+
+            // attempt to download the file if we haven't downloaded it already
+            if (!resource.isDownloaded()) {
+                try {
+                    // TODO: this may create a memory leak due to the call stack holding a reference to a WebView
+                    AEMDownloadManger.getInstance(context).enqueueDownloadResource(resource.getUri(), false).get();
+                } catch (InterruptedException e) {
+                    // propagate thread interruption
+                    Thread.currentThread().interrupt();
+                    return null;
+                } catch (ExecutionException e) {
+                    Timber.tag("AEMArticleFragment")
+                            .d(e.getCause(), "Error downloading resource when trying to render an article");
+                }
+
+                // refresh resource since we may have just downloaded it
+                resource = mAemDB.resourceDao().find(uri);
+                if (resource == null) {
+                    return null;
+                }
+            }
+
+            // get the data input stream
+            InputStream data = null;
+            try {
+                data = resource.getInputStream(requireContext());
+            } catch (final IOException e) {
+                Timber.tag("AEMArticleFragment")
+                        .d(e, "Error opening local file");
+            }
+            if (data == null) {
+                return null;
+            }
+
+            // return the response object
+            final MediaType type = resource.getContentType();
+            final String mimeType = type != null ? type.type() + "/" + type.subtype() : "application/octet-stream";
+            final Charset encoding = type != null ? type.charset() : null;
+            return new WebResourceResponse(mimeType, encoding != null ? encoding.name() : null, data);
         }
     }
 

@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 7,
-    "identityHash": "27c5151599f702d9e2c3ef3276c7d961",
+    "version": 8,
+    "identityHash": "366081395bd08b3349184c66d7c166fd",
     "entities": [
       {
         "tableName": "translations",
@@ -123,18 +123,18 @@
       },
       {
         "tableName": "aemImports",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uri` TEXT NOT NULL, `lastProcessed` INTEGER NOT NULL, PRIMARY KEY(`uri`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`lastProcessed` INTEGER NOT NULL, `uri` TEXT NOT NULL, PRIMARY KEY(`uri`))",
         "fields": [
-          {
-            "fieldPath": "uri",
-            "columnName": "uri",
-            "affinity": "TEXT",
-            "notNull": true
-          },
           {
             "fieldPath": "lastProcessed",
             "columnName": "lastProcessed",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uri",
+            "columnName": "uri",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -362,8 +362,14 @@
       },
       {
         "tableName": "resources",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`localFileName` TEXT, `dateDownloaded` INTEGER, `uri` TEXT NOT NULL, PRIMARY KEY(`uri`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`contentType` TEXT, `localFileName` TEXT, `dateDownloaded` INTEGER, `uri` TEXT NOT NULL, PRIMARY KEY(`uri`))",
         "fields": [
+          {
+            "fieldPath": "contentType",
+            "columnName": "contentType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
           {
             "fieldPath": "localFileName",
             "columnName": "localFileName",
@@ -395,7 +401,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"27c5151599f702d9e2c3ef3276c7d961\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"366081395bd08b3349184c66d7c166fd\")"
     ]
   }
 }
