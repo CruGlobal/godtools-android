@@ -22,6 +22,7 @@ import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.R2;
 import org.cru.godtools.article.adapter.ArticlesAdapter;
+import org.cru.godtools.article.databinding.FragmentArticlesBinding;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
@@ -41,7 +42,9 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     }
 
     @Nullable
-    @BindView(R2.id.articles_recycler_view)
+    FragmentArticlesBinding mBinding;
+    @Nullable
+    @BindView(R2.id.articles)
     RecyclerView mArticlesView;
     @Nullable
     ArticlesAdapter mArticlesAdapter;
@@ -89,6 +92,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setupDataBinding(view);
         setupArticlesView();
     }
 
@@ -99,6 +103,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     @Override
     protected void onManifestUpdated() {
         super.onManifestUpdated();
+        updateDataBindingManifest();
         updateArticlesViewManifest();
         updateArticlesLiveData();
     }
@@ -120,6 +125,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     @Override
     public void onDestroyView() {
         cleanupArticlesView();
+        cleanupDataBinding();
         super.onDestroyView();
     }
 
@@ -156,6 +162,27 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     }
 
     // endregion ViewModel methods
+
+    // region View Logic
+
+    // region Data Binding
+
+    private void setupDataBinding(@NonNull final View view) {
+        mBinding = FragmentArticlesBinding.bind(view);
+        updateDataBindingManifest();
+    }
+
+    private void updateDataBindingManifest() {
+        if (mBinding != null) {
+            mBinding.setManifest(mManifest);
+        }
+    }
+
+    private void cleanupDataBinding() {
+        mBinding = null;
+    }
+
+    // endregion Data Binding
 
     // region ArticlesView
 
@@ -199,6 +226,8 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     }
 
     // endregion ArticlesView
+
+    // endregion View Logic
 
     public static class ArticleListViewModel extends AndroidViewModel {
         private final ArticleRoomDatabase mAemDb;

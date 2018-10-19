@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/articles_recycler_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:theme="@style/ThemeOverlay.Widget.GodTools.RecyclerView.Articles"
-    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-    tools:listitem="@layout/list_item_article" />
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="org.cru.godtools.xml.model.Manifest" />
+
+        <variable name="manifest" type="org.cru.godtools.xml.model.Manifest" />
+    </data>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/articles"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@{Manifest.getBackgroundColor(manifest)}"
+        android:theme="@style/ThemeOverlay.Widget.GodTools.Article.ArticlesList"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        tools:listitem="@layout/list_item_article" />
+</layout>
