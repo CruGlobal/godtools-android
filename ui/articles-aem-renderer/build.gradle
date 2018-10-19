@@ -32,6 +32,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-room:${deps.gtoSupport}"
 
     implementation "com.annimon:stream:${deps.lightweightStream}"
+    implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
     implementation "com.jakewharton.timber:timber:${deps.timber}"
     implementation "com.squareup.okhttp3:okhttp:${deps.okhttp3}"
