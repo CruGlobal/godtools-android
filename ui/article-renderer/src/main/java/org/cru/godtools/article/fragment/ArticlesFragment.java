@@ -195,7 +195,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
 
     private void setUpListenableFuture() {
         AEMDownloadManger manger = AEMDownloadManger.getInstance(requireContext());
-        ListenableFuture<List<Boolean>> future = manger.enqueueSyncManifestAemImports(mManifest, true);
+        ListenableFuture<?> future = manger.enqueueSyncManifestAemImports(mManifest, true);
         future.addListener(() -> setRefreshing(false), new MainThreadExecutor());
     }
 

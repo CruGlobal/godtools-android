@@ -52,7 +52,6 @@ import java.io.OutputStream;
 import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -151,15 +150,15 @@ public class AEMDownloadManger {
     }
 
     @AnyThread
-    public ListenableFuture<List<Boolean>> enqueueSyncManifestAemImports(Manifest manifest, Boolean force) {
-
-        List<ListenableFuture<Boolean>> futures = new ArrayList<>();
-
-        for (Uri uri : manifest.getAemImports()) {
-            futures.add(enqueueSyncAemImport(uri, force));
+    public ListenableFuture<?> enqueueSyncManifestAemImports(@Nullable final Manifest manifest, final boolean force) {
+        if (manifest == null) {
+            return Futures.immediateFuture(null);
         }
 
-       return Futures.successfulAsList(futures);
+        return Futures.successfulAsList(
+                Stream.of(manifest.getAemImports())
+                        .map(uri -> enqueueSyncAemImport(uri, force))
+                        .toList());
     }
 
     @AnyThread
