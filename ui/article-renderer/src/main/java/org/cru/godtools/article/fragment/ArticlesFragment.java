@@ -15,8 +15,10 @@ import android.view.ViewGroup;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
+import org.ccci.gto.android.common.util.MainThreadExecutor;
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.R2;
 import org.cru.godtools.article.adapter.ArticlesAdapter;
@@ -159,20 +161,20 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
 
     private void setUpListenableFuture() {
         AEMDownloadManger manger = AEMDownloadManger.getInstance(requireContext());
-
-        Futures.addCallback(Futures.immediateFuture(true), new FutureCallback<Boolean>() {
+        ListenableFuture<List<Boolean>> future = manger.enqueueSyncManifestAemImports(mManifest, true);
+        Futures.addCallback(future, new FutureCallback<List<Boolean>>() {
             @Override
-            public void onSuccess(Boolean result) {
-                Timber.d("onSuccess() called with: result = [" + result + "]");
+            public void onSuccess(List<Boolean> result) {
                 setRefreshing(false);
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Timber.e(t, "onFailure: ");
+                Timber.e(t);
                 setRefreshing(false);
             }
-        }, manger.enqueueSyncManifestAemImports(mManifest, true));
+        }, new MainThreadExecutor());
+
     }
 
     //endregion refresh Layout

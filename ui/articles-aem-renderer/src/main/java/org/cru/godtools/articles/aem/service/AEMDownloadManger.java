@@ -13,6 +13,8 @@ import com.annimon.stream.Stream;
 import com.google.common.hash.HashCode;
 import com.google.common.io.Closer;
 import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.SettableFuture;
 
 import org.ccci.gto.android.common.concurrent.NamedThreadFactory;
 import org.ccci.gto.android.common.db.Query;
@@ -50,6 +52,7 @@ import java.io.OutputStream;
 import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -148,18 +151,15 @@ public class AEMDownloadManger {
     }
 
     @AnyThread
-    public ThreadPoolExecutor enqueueSyncManifestAemImports(Manifest manifest, Boolean force) {
-        ThreadPoolExecutor manifestExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,
-                new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
-                new NamedThreadFactory(AEMDownloadManger.class.getSimpleName() + "-ManifestSync"));
+    public ListenableFuture<List<Boolean>> enqueueSyncManifestAemImports(Manifest manifest, Boolean force) {
+
+        List<ListenableFuture<Boolean>> futures = new ArrayList<>();
 
         for (Uri uri : manifest.getAemImports()) {
-            final SyncAemImportTask task = getSyncAemImportTask(uri, force);
-            if (task == null) break;
-            manifestExecutor.execute(task);
+            futures.add(enqueueSyncAemImport(uri, force));
         }
 
-        return manifestExecutor;
+       return Futures.successfulAsList(futures);
     }
 
     @AnyThread
@@ -168,26 +168,18 @@ public class AEMDownloadManger {
     }
 
     @AnyThread
-    private void enqueueSyncAemImport(@NonNull final Uri uri, final boolean force) {
-        final SyncAemImportTask task = getSyncAemImportTask(uri, force);
-        if (task == null) return;
-
-        mSyncAemImportTasks.put(uri, task);
-        mExecutor.execute(task);
-    }
-
-    @Nullable
-    private SyncAemImportTask getSyncAemImportTask(@NonNull Uri uri, boolean force) {
-        // try updating a task that is currently enqueued
+    private ListenableFuture<Boolean> enqueueSyncAemImport(@NonNull final Uri uri, final boolean force) {
         final SyncAemImportTask existing = mSyncAemImportTasks.get(uri);
         if (existing != null && existing.updateTask(force)) {
-            return null;
+            return existing.mResult;
         }
 
         // create a new sync task
         final SyncAemImportTask task = new SyncAemImportTask(uri);
         task.updateTask(force);
-        return task;
+        mSyncAemImportTasks.put(uri, task);
+        mExecutor.execute(task);
+        return task.mResult;
     }
 
     @AnyThread
@@ -478,6 +470,8 @@ public class AEMDownloadManger {
         volatile boolean mStarted = false;
         volatile boolean mForce = false;
 
+        final SettableFuture<Boolean> mResult = SettableFuture.create();
+
         UniqueUriBasedTask(@NonNull final Uri uri) {
             mUri = uri;
         }
@@ -503,14 +497,14 @@ public class AEMDownloadManger {
                 synchronized (this) {
                     mStarted = true;
                 }
-                runTask();
+                mResult.set(runTask());
             }
         }
 
         @NonNull
         abstract Object getLock();
 
-        abstract void runTask();
+        abstract boolean runTask();
     }
 
     class SyncAemImportTask extends UniqueUriBasedTask {
@@ -530,8 +524,9 @@ public class AEMDownloadManger {
         }
 
         @Override
-        void runTask() {
+        boolean runTask() {
             syncAemImportTask(mUri, mForce);
+            return true;
         }
     }
 
@@ -552,8 +547,9 @@ public class AEMDownloadManger {
         }
 
         @Override
-        void runTask() {
+        boolean runTask() {
             downloadArticleTask(mUri, mForce);
+            return true;
         }
     }
 
@@ -574,8 +570,9 @@ public class AEMDownloadManger {
         }
 
         @Override
-        void runTask() {
+        boolean runTask() {
             downloadResourceTask(mUri, mForce);
+            return true;
         }
     }
 
