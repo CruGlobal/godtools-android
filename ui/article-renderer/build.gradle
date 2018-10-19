@@ -23,6 +23,7 @@ dependencies {
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
 
+    implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"
 
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"

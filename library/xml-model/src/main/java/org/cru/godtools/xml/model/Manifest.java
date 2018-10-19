@@ -217,6 +217,11 @@ public final class Manifest extends Base implements Styles {
     }
 
     @ColorInt
+    public static int getPrimaryColor(@Nullable final Manifest manifest) {
+        return manifest != null ? manifest.getPrimaryColor() : getDefaultPrimaryColor();
+    }
+
+    @ColorInt
     static int getDefaultPrimaryColor() {
         return DEFAULT_PRIMARY_COLOR;
     }

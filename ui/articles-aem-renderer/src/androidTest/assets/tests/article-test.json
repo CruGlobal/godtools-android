@@ -44,7 +44,7 @@
           "jcr:createdBy": "replication-agent",
           "jcr:title": "Romances with wolves",
           "jcr:versionHistory": "d261e406-f098-4f17-abfe-59c643d7f04f",
-          "cq:template": "/libs/settings/experience-fragments/templates/experience-fragment-template",
+          "cq:template": "/conf/cru/settings/wcm/templates/experience-fragment-cru-web-variation",
           "jcr:language": "en",
           "cq:xfMasterVariation": true,
           "jcr:predecessors": [
@@ -158,7 +158,7 @@
         "jcr:createdBy": "replication-agent",
         "jcr:title": "Other Romances with wolves",
         "jcr:versionHistory": "694babd8-bb16-4279-baaf-4c62e19042c9",
-        "cq:template": "/libs/settings/experience-fragments/templates/experience-fragment-template",
+        "cq:template": "/conf/cru/settings/wcm/templates/experience-fragment-cru-web-variation",
         "jcr:language": "en",
         "jcr:predecessors": [
           "10a2afe6-22f2-4cf3-ba9e-197e50df6e8e"

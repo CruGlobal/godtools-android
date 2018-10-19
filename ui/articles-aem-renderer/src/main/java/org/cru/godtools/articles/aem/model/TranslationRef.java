@@ -106,7 +106,7 @@ public class TranslationRef {
         public final Uri aemImportUri;
 
         public TranslationAemImport(@NonNull final Key translation, @NonNull final AemImport aemImport) {
-            this(translation, aemImport.uri);
+            this(translation, aemImport.getUri());
         }
 
         public TranslationAemImport(@NonNull final Key translation, @NonNull final Uri aemImportUri) {

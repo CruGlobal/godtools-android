@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
+import com.google.common.collect.ImmutableSet;
 
 import org.cru.godtools.articles.aem.model.Article;
 import org.json.JSONArray;
@@ -16,13 +17,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * This class handles parsing any AEM json calls into DOA objects.
  */
 public class AemJsonParser {
     private static final String TAG_TYPE = "jcr:primaryType";
-    private static final String TAG_SUBTYPE_RESOURCE = "sling:resourceType";
+    private static final String TAG_TEMPLATE = "cq:template";
     private static final String TAG_UUID = "jcr:uuid";
     private static final String TAG_TITLE = "jcr:title";
     private static final String TAG_CONTENT = "jcr:content";
@@ -31,9 +33,11 @@ public class AemJsonParser {
     private static final String TYPE_FOLDER = "sling:Folder";
     private static final String TYPE_ORDERED_FOLDER = "sling:OrderedFolder";
     private static final String TYPE_PAGE = "cq:Page";
-    private static final String SUBTYPE_XFPAGE = "cq/experience-fragments/components/xfpage";
 
-    private static final String PREFIX_TAG_CATEGORY = "godtools:category/";
+    private static final Set<String> SUPPORTED_TEMPLATES = ImmutableSet.of(
+            // Cru Web template, we will use this until we create our own GodTools template
+            "/conf/cru/settings/wcm/templates/experience-fragment-cru-web-variation"
+    );
 
     private static final String CREATED_TAG = "jcr:created";
     private static final String LAST_MODIFIED_TAG = "cq:lastModified";
@@ -48,15 +52,14 @@ public class AemJsonParser {
     public static Stream<Article> findArticles(@NonNull final Uri url, @NonNull final JSONObject json) {
         // parse this JSON node based on it's type & subtype
         final String type = json.optString(TAG_TYPE, "");
-        final String subtype = Optional.ofNullable(json.optJSONObject(TAG_CONTENT))
-                .map(n -> n.optString(TAG_SUBTYPE_RESOURCE))
-                .orElse("");
 
         switch (type) {
             case TYPE_PAGE:
-                switch (subtype) {
-                    case SUBTYPE_XFPAGE:
-                        return Stream.of(parseArticle(url, json));
+                final String template = Optional.ofNullable(json.optJSONObject(TAG_CONTENT))
+                        .map(n -> n.optString(TAG_TEMPLATE))
+                        .orElse("");
+                if (SUPPORTED_TEMPLATES.contains(template)) {
+                    return Stream.of(parseArticle(url, json));
                 }
             case TYPE_ORDERED_FOLDER:
             case TYPE_FOLDER:
@@ -100,16 +103,17 @@ public class AemJsonParser {
             article.uuid = content.optString(TAG_UUID, article.uuid);
             article.title = content.optString(TAG_TITLE, article.title);
 
-            // parse any categories
-            final JSONArray tags = content.optJSONArray(TAG_TAGS);
-            final List<String> categories = new ArrayList<>();
-            for (int i = 0; i < tags.length(); i++) {
-                final String tag = tags.optString(i, "");
-                if (tag.startsWith(PREFIX_TAG_CATEGORY)) {
-                    categories.add(tag.substring(PREFIX_TAG_CATEGORY.length()));
+            // store any tags
+            final JSONArray tagsJson = content.optJSONArray(TAG_TAGS);
+            final List<String> tags = new ArrayList<>();
+            for (int i = 0; i < tagsJson.length(); i++) {
+                final String tag = tagsJson.optString(i, null);
+                if (tag == null) {
+                    continue;
                 }
+                tags.add(tag);
             }
-            article.setCategories(categories);
+            article.setTags(tags);
 
             if (content.has(LAST_MODIFIED_TAG)) {
                 article.mDateUpdated = getDateLongFromJsonString(content.optString(LAST_MODIFIED_TAG));
