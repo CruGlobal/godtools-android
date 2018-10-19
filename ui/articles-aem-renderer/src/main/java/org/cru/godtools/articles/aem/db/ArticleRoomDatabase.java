@@ -15,6 +15,7 @@ import org.cru.godtools.articles.aem.model.AemImport;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Resource;
 import org.cru.godtools.articles.aem.model.TranslationRef;
+import org.cru.godtools.articles.aem.room.converter.MediaTypeConverter;
 
 /**
  * This class is used to create the database table.
@@ -27,7 +28,7 @@ import org.cru.godtools.articles.aem.model.TranslationRef;
         Article.class, Article.Category.class,
         Article.ArticleResource.class, Resource.class
 }, version = 6)
-@TypeConverters({DateConverter.class, LocaleConverter.class, UriConverter.class})
+@TypeConverters({DateConverter.class, LocaleConverter.class, MediaTypeConverter.class, UriConverter.class})
 public abstract class ArticleRoomDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "aem_article_cache.db";
 

@@ -354,10 +354,11 @@ public class AEMDownloadManger {
             if (response.code() == 200 && responseBody != null) {
                 final File file = streamResource(responseBody.byteStream());
                 if (file != null) {
+                    resource.setContentType(responseBody.contentType());
                     resource.setLocalFileName(file.getName());
                     resource.setDateDownloaded(new Date());
-                    resourceDao.updateLocalFile(resource.getUri(), resource.getLocalFileName(),
-                                                resource.getDateDownloaded());
+                    resourceDao.updateLocalFile(resource.getUri(), resource.getContentType(),
+                                                resource.getLocalFileName(), resource.getDateDownloaded());
                 }
             }
         } catch (final IOException e) {

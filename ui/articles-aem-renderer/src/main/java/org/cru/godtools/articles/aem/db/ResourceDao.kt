@@ -6,6 +6,7 @@ import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
 import android.net.Uri
 import android.support.annotation.WorkerThread
+import okhttp3.MediaType
 import org.cru.godtools.articles.aem.model.Resource
 import java.util.Date
 
@@ -16,8 +17,11 @@ interface ResourceDao {
     fun insertOrIgnore(resource: Resource)
 
     @WorkerThread
-    @Query("UPDATE resources SET localFileName = :fileName, dateDownloaded = :downloadDate WHERE uri = :uri")
-    fun updateLocalFile(uri: Uri, fileName: String?, downloadDate: Date?)
+    @Query("""
+        UPDATE resources
+        SET contentType = :contentType, localFileName = :fileName, dateDownloaded = :downloadDate
+        WHERE uri = :uri""")
+    fun updateLocalFile(uri: Uri, contentType: MediaType?, fileName: String?, downloadDate: Date?)
 
     @WorkerThread
     @Query("SELECT * FROM resources WHERE uri = :uri")

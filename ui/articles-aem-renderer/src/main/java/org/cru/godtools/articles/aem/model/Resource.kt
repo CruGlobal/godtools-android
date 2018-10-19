@@ -4,12 +4,14 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import android.content.Context
 import android.net.Uri
+import okhttp3.MediaType
 import org.cru.godtools.articles.aem.util.getFile
 import java.io.File
 import java.util.Date
 
 @Entity(tableName = "resources")
 class Resource(@field:PrimaryKey val uri: Uri) {
+    var contentType: MediaType? = null
     var localFileName: String? = null
     var dateDownloaded: Date? = null
 
