@@ -18,9 +18,9 @@ abstract class AemImportRepository internal constructor(private val db: ArticleR
                 insertOrIgnore(it)
                 update(it.uri, it.uuid, it.title)
 
-                // replace all categories
-                removeAllCategories(it.uri)
-                insertOrIgnore(it.categoryObjects)
+                // replace all tags
+                removeAllTags(it.uri)
+                insertOrIgnoreTags(it.tagObjects)
             }
         }
 

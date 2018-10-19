@@ -72,7 +72,7 @@ public class Article {
 
     @Ignore
     @NonNull
-    private List<String> mCategories = ImmutableList.of();
+    private List<String> mTags = ImmutableList.of();
 
     @Ignore
     @NonNull
@@ -82,15 +82,15 @@ public class Article {
         this.uri = uri;
     }
 
-    public void setCategories(@NonNull final List<String> categories) {
-        mCategories = ImmutableList.copyOf(categories);
+    public void setTags(@NonNull final List<String> tags) {
+        mTags = ImmutableList.copyOf(tags);
     }
 
     @NonNull
     @RestrictTo(RestrictTo.Scope.LIBRARY)
-    public List<Category> getCategoryObjects() {
-        return Stream.of(mCategories)
-                .map(category -> new Category(this, category))
+    public List<Tag> getTagObjects() {
+        return Stream.of(mTags)
+                .map(tag -> new Tag(this, tag))
                 .toList();
     }
 
@@ -102,27 +102,27 @@ public class Article {
     }
 
     @Immutable
-    @Entity(tableName = "categories", primaryKeys = {"articleUri", "category"},
+    @Entity(tableName = "articleTags", primaryKeys = {"articleUri", "tag"},
             foreignKeys = {
                     @ForeignKey(entity = Article.class,
                             onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
                             parentColumns = {"uri"}, childColumns = {"articleUri"})
             })
     @RestrictTo(RestrictTo.Scope.LIBRARY)
-    public static class Category {
+    public static class Tag {
         @NonNull
         public final Uri articleUri;
 
         @NonNull
-        public final String category;
+        public final String tag;
 
-        public Category(@NonNull final Article article, @NonNull final String category) {
-            this(article.uri, category);
+        public Tag(@NonNull final Article article, @NonNull final String tag) {
+            this(article.uri, tag);
         }
 
-        public Category(@NonNull final Uri articleUri, @NonNull final String category) {
+        public Tag(@NonNull final Uri articleUri, @NonNull final String tag) {
             this.articleUri = articleUri;
-            this.category = category;
+            this.tag = tag;
         }
     }
 
@@ -136,7 +136,7 @@ public class Article {
                     @ForeignKey(entity = Resource.class,
                             onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
                             parentColumns = {"uri"}, childColumns = {"resourceUri"})
-    })
+            })
     public static class ArticleResource {
         @NonNull
         public final Uri articleUri;

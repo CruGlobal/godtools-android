@@ -33,12 +33,8 @@ public class AemJsonParser {
     private static final String TYPE_PAGE = "cq:Page";
     private static final String SUBTYPE_XFPAGE = "cq/experience-fragments/components/xfpage";
 
-    private static final String PREFIX_TAG_CATEGORY = "godtools:category/";
-
     private static final String CREATED_TAG = "jcr:created";
     private static final String LAST_MODIFIED_TAG = "cq:lastModified";
-    private static final String ROOT_TAG = "root";
-    private static final String FILE_TAG = "fileReference";
 
     // region Article Parsing
 
@@ -102,16 +98,17 @@ public class AemJsonParser {
             article.uuid = content.optString(TAG_UUID, article.uuid);
             article.title = content.optString(TAG_TITLE, article.title);
 
-            // parse any categories
-            final JSONArray tags = content.optJSONArray(TAG_TAGS);
-            final List<String> categories = new ArrayList<>();
-            for (int i = 0; i < tags.length(); i++) {
-                final String tag = tags.optString(i, "");
-                if (tag.startsWith(PREFIX_TAG_CATEGORY)) {
-                    categories.add(tag.substring(PREFIX_TAG_CATEGORY.length()));
+            // store any tags
+            final JSONArray tagsJson = content.optJSONArray(TAG_TAGS);
+            final List<String> tags = new ArrayList<>();
+            for (int i = 0; i < tagsJson.length(); i++) {
+                final String tag = tagsJson.optString(i, null);
+                if (tag == null) {
+                    continue;
                 }
+                tags.add(tag);
             }
-            article.setCategories(categories);
+            article.setTags(tags);
 
             if (content.has(LAST_MODIFIED_TAG)) {
                 article.mDateUpdated = getDateLongFromJsonString(content.optString(LAST_MODIFIED_TAG));
