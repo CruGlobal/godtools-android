@@ -20,6 +20,7 @@ import android.webkit.WebViewClient;
 import org.cru.godtools.article.aem.R;
 import org.cru.godtools.article.aem.R2;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
+import org.cru.godtools.articles.aem.db.ResourceDao;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Resource;
 import org.cru.godtools.articles.aem.service.AEMDownloadManger;
@@ -46,7 +47,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     // these properties should be treated as final and only set/modified in onCreate()
     @NonNull
     @SuppressWarnings("NullableProblems")
-    private /*final*/ ArticleRoomDatabase mAemDb;
+    /*final*/ ArticleRoomDatabase mAemDb;
     @Nullable
     private /*final*/ Uri mArticleUri;
 
@@ -173,8 +174,10 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         @Nullable
         @WorkerThread
         private WebResourceResponse getResponseFromFile(@NonNull final Context context, @NonNull final Uri uri) {
+            final ResourceDao resourceDao = mAemDb.resourceDao();
+
             // find the referenced resource
-            Resource resource = mAemDb.resourceDao().find(uri);
+            Resource resource = resourceDao.find(uri);
             if (resource == null) {
                 return null;
             }
@@ -194,7 +197,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
                 }
 
                 // refresh resource since we may have just downloaded it
-                resource = mAemDb.resourceDao().find(uri);
+                resource = resourceDao.find(uri);
                 if (resource == null) {
                     return null;
                 }
