@@ -135,6 +135,8 @@ dependencies {
     implementation "com.android.support:cardview-v7:${deps.androidSupport}"
     implementation "com.android.support:design:${deps.androidSupport}"
     implementation "com.android.support:percent:${deps.androidSupport}"
+    implementation "com.google.android.gms:play-services-base:${deps.playServices}"
+
 
     implementation "org.ccci.gto.android:gto-support-appcompat:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
