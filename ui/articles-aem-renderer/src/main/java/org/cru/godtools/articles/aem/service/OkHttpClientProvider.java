@@ -7,8 +7,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -21,7 +21,6 @@ import javax.net.ssl.X509TrustManager;
 
 import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
-import okhttp3.TlsVersion;
 import timber.log.Timber;
 
 public class OkHttpClientProvider {
@@ -39,7 +38,7 @@ public class OkHttpClientProvider {
         try {
             TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
                     TrustManagerFactory.getDefaultAlgorithm());
-            trustManagerFactory.init((KeyStore) null);
+            trustManagerFactory.init(KeyStore.getInstance(KeyStore.getDefaultType()));
             TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
             if (trustManagers.length != 1 || !(trustManagers[0]instanceof X509TrustManager)) {
                 throw new IllegalStateException("Unexpected default trust managers: " + Arrays.toString(trustManagers));
@@ -48,11 +47,10 @@ public class OkHttpClientProvider {
 
             builder.sslSocketFactory(new Tls12SocketFactory(), trustManager);
 
-            ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                    .tlsVersions(TlsVersion.TLS_1_2).build();
+            ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS).build();
 
             builder.connectionSpecs(Collections.singletonList(cs));
-        } catch (NoSuchAlgorithmException | IllegalStateException | KeyStoreException | KeyManagementException e) {
+        } catch (NoSuchAlgorithmException | IllegalStateException | KeyManagementException e) {
             Timber.e(e);
         } catch (Exception e) {
             Timber.e(e);
@@ -108,9 +106,15 @@ public class OkHttpClientProvider {
 
         private Socket enableTLSOnSocket(Socket socket) {
             if (socket instanceof SSLSocket) {
-                ((SSLSocket) socket).setEnabledProtocols(
-                        new String[] {"TLSv1", "TLSv1.1", "TLSv1.2"}
-                );
+                SSLSocket sslSocket = (SSLSocket) socket;
+                String[] supportedProtocols = sslSocket.getSupportedProtocols();
+                ArrayList<String> enabledProtocols = new ArrayList<>(Arrays.asList(sslSocket.getEnabledProtocols()));
+                for (String protocol : supportedProtocols) {
+                    if (!enabledProtocols.contains(protocol)) {
+                        enabledProtocols.add(protocol);
+                    }
+                }
+                sslSocket.setEnabledProtocols(enabledProtocols.toArray(new String[0]));
             }
             return socket;
         }
