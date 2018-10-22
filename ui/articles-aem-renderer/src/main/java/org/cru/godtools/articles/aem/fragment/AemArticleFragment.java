@@ -27,6 +27,7 @@ import org.cru.godtools.articles.aem.service.AEMDownloadManger;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
 import org.cru.godtools.base.ui.util.WebUrlLauncher;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -41,6 +42,8 @@ import timber.log.Timber;
 import static org.cru.godtools.articles.aem.Constants.EXTRA_ARTICLE;
 
 public class AemArticleFragment extends BaseToolFragment {
+    private static final String TAG = "AemArticleFragment";
+
     @BindView(R2.id.aem_article_web_view)
     WebView mWebView;
     private final ArticleWebViewClient mWebViewClient = new ArticleWebViewClient();
@@ -214,8 +217,14 @@ public class AemArticleFragment extends BaseToolFragment {
             InputStream data = null;
             try {
                 data = resource.getInputStream(requireContext());
+            } catch (final FileNotFoundException e) {
+                // the file wasn't found in the local cache directory. log the error and clear the local file state so
+                // it is downloaded again.
+                Timber.tag(TAG)
+                        .e(e, "Missing cached version of: %s", resource.getUri());
+                resourceDao.updateLocalFile(resource.getUri(), null, null, null);
             } catch (final IOException e) {
-                Timber.tag("AEMArticleFragment")
+                Timber.tag(TAG)
                         .d(e, "Error opening local file");
             }
             if (data == null) {
