@@ -18,10 +18,10 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
     implementation "androidx.constraintlayout:constraintlayout:${deps.constraintLayout}"
     implementation "com.android.support:recyclerview-v7:${deps.androidSupport}"
-    implementation "com.google.guava:guava:${deps.guava}"
 
     implementation "org.ccci.gto.android:gto-support-picasso:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-recyclerview:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "com.jakewharton:butterknife:${deps.butterknife}"

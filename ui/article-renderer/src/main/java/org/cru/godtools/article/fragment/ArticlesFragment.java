@@ -22,6 +22,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.ccci.gto.android.common.util.MainThreadExecutor;
+import org.ccci.gto.android.common.util.WeakTask;
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.R2;
 import org.cru.godtools.article.adapter.ArticlesAdapter;
@@ -37,12 +38,12 @@ import java.util.Locale;
 import java.util.Set;
 
 import butterknife.BindView;
-import timber.log.Timber;
 
 import static org.cru.godtools.article.Constants.EXTRA_CATEGORY;
 
 public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapter.Callbacks,
         SwipeRefreshLayout.OnRefreshListener {
+    private static final WeakTask.Task<SwipeRefreshLayout> CLEAR_REFRESHING_TASK = v -> v.setRefreshing(false);
 
     public interface Callbacks {
         void onArticleSelected(@Nullable Article article);
@@ -104,7 +105,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
         super.onViewCreated(view, savedInstanceState);
         setupDataBinding(view);
         setupArticlesView();
-        setUpSwipeRefresh();
+        setupSwipeRefresh();
     }
 
     /**
@@ -117,6 +118,11 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
         updateDataBindingManifest();
         updateArticlesViewManifest();
         updateArticlesLiveData();
+    }
+
+    @Override
+    public void onRefresh() {
+        syncData(true);
     }
 
     /**
@@ -172,36 +178,15 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
         }
     }
 
-    // region refresh Layout
-    private void setUpSwipeRefresh() {
-        if (mSwipeRefreshLayout == null) {
-            return;
-        }
-
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-    }
-
-    private void setRefreshing(boolean isRefreshing) {
-        if (mSwipeRefreshLayout != null) {
-            mSwipeRefreshLayout.setRefreshing(isRefreshing);
-        }
-    }
-
-    @Override
-    public void onRefresh() {
-        Timber.d("onRefresh() called");
-        setUpListenableFuture();
-    }
-
-    private void setUpListenableFuture() {
-        AEMDownloadManger manger = AEMDownloadManger.getInstance(requireContext());
-        ListenableFuture<?> future = manger.enqueueSyncManifestAemImports(mManifest, true);
-        future.addListener(() -> setRefreshing(false), new MainThreadExecutor());
-    }
-
-    //endregion refresh Layout
-
     // endregion ViewModel methods
+
+    private void syncData(final boolean force) {
+        final ListenableFuture<?> sync = AEMDownloadManger.getInstance(requireContext())
+                .enqueueSyncManifestAemImports(mManifest, force);
+        if (mSwipeRefreshLayout != null) {
+            sync.addListener(new WeakTask<>(mSwipeRefreshLayout, CLEAR_REFRESHING_TASK), new MainThreadExecutor());
+        }
+    }
 
     // region View Logic
 
@@ -223,7 +208,6 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     }
 
     // endregion Data Binding
-
 
     // region ArticlesView
 
@@ -267,6 +251,12 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     }
 
     // endregion ArticlesView
+
+    private void setupSwipeRefresh() {
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setOnRefreshListener(this);
+        }
+    }
 
     // endregion View Logic
 
