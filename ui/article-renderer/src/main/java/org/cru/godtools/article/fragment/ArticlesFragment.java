@@ -105,7 +105,7 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
         super.onManifestUpdated();
         updateDataBindingManifest();
         updateArticlesViewManifest();
-        updateArticlesLiveData();
+        updateViewModelArticles();
     }
 
     /**
@@ -135,10 +135,10 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
 
     private void setupViewModel() {
         mViewModel = ViewModelProviders.of(this).get(ArticleListViewModel.class);
-        updateArticlesLiveData();
+        updateViewModelArticles();
     }
 
-    private void updateArticlesLiveData() {
+    private void updateViewModelArticles() {
         final LiveData<List<Article>> articles;
         if (mCategory != null) {
             // lookup AEM tags from the manifest category
