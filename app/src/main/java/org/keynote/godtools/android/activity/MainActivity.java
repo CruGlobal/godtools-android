@@ -18,8 +18,6 @@ import android.view.MenuItem;
 import com.annimon.stream.Stream;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.security.ProviderInstaller;
 
 import org.cru.godtools.BuildConfig;
 import org.cru.godtools.R;
@@ -43,8 +41,7 @@ import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_FIND_
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
 
-public class MainActivity extends BasePlatformActivity implements ToolsFragment.Callbacks,
-        ProviderInstaller.ProviderInstallListener {
+public class MainActivity extends BasePlatformActivity implements ToolsFragment.Callbacks {
     private static final String EXTRA_FEATURE_DISCOVERY = MainActivity.class.getName() + ".FEATURE_DISCOVERY";
     private static final String EXTRA_ACTIVE_STATE = MainActivity.class.getName() + ".ACTIVE_STATE";
     private static final String EXTRA_FEATURE = MainActivity.class.getName() + ".FEATURE";
@@ -79,8 +76,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         mTaskHandler = new Handler(this::onHandleMessage);
         setContentView(R.layout.activity_dashboard);
 
-        ProviderInstaller.installIfNeededAsync(this, this);
-
         processIntent(getIntent());
 
         if (savedInstanceState != null) {
@@ -90,7 +85,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
 
         // sync any pending updates
         syncData();
-
     }
 
     @Override
@@ -293,29 +287,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     protected boolean showNavigationDrawerIndicator() {
         return true;
     }
-
-    //region Provider for updating Google TSL
-    /**
-     * @see https://developer.android.com/training/articles/security-gms-provider
-     */
-    @SuppressWarnings("JavadocReference")
-    @Override
-    public void onProviderInstallFailed(int errorCode, Intent recoveryIntent) {
-        GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
-        if (availability.isUserResolvableError(errorCode)) {
-            availability.showErrorNotification(this, errorCode);
-        }
-    }
-
-    /**
-     * @see https://developer.android.com/training/articles/security-gms-provider
-     */
-    @SuppressWarnings("JavadocReference")
-    @Override
-    public void onProviderInstalled() {
-        // Provider is up-to-date, app can make secure network calls.
-    }
-    //endregion
 
     @MainThread
     private void loadInitialFragmentIfNeeded() {

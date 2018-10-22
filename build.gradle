@@ -35,7 +35,6 @@ buildscript {
                 picassoTransforms    : '2.2.1',
                 playServicesAnalytics: '16.0.1',
                 powermock            : '2.0.0-beta.9',
-                playServices         : '15.0.1',
                 retrofit2            : '2.4.0',
                 snowplow             : '0.8.0',
                 thekey               : '2.0.1-SNAPSHOT',
