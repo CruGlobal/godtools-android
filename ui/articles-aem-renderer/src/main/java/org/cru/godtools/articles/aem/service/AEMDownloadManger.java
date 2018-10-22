@@ -70,9 +70,7 @@ import static java.util.Collections.synchronizedMap;
 import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
 
 /**
- * This class hold all Download methods for retrieving and saving an Article
- *
- * @author Gyasi Story
+ * This class hold all the logic for maintaining a local cache of AEM Articles.:wq
  */
 public class AEMDownloadManger {
     private static final String TAG = "AEMDownloadManager";
