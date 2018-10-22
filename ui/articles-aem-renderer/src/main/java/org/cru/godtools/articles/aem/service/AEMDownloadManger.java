@@ -110,7 +110,9 @@ public class AEMDownloadManger {
         EventBus.getDefault().register(this);
 
         // trigger some base sync tasks
+        // TODO: maybe these sync tasks should be triggered elsewhere?
         enqueueExtractAemImportsFromManifests();
+        enqueueSyncStaleAemImports();
     }
 
     @Nullable
@@ -140,10 +142,7 @@ public class AEMDownloadManger {
     private void enqueueExtractAemImportsFromManifests() {
         // only enqueue task if it's not currently enqueued
         if (!mExtractAemImportsQueued.getAndSet(true)) {
-            mExecutor.execute(() -> {
-                extractAemImportsFromManifestsTask();
-                enqueueSyncStaleAemImports();
-            });
+            mExecutor.execute(this::extractAemImportsFromManifestsTask);
         }
     }
 
@@ -240,6 +239,7 @@ public class AEMDownloadManger {
                 try {
                     final Manifest manifest = mManifestManager.getManifest(translation).get();
                     repository.addAemImports(translation, manifest.getAemImports());
+                    enqueueSyncManifestAemImports(manifest, false);
                 } catch (final InterruptedException e) {
                     // set interrupted and return immediately
                     Thread.currentThread().interrupt();
