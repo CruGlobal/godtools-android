@@ -39,10 +39,10 @@ import timber.log.Timber;
 
 import static org.cru.godtools.articles.aem.Constants.EXTRA_ARTICLE;
 
-public class AEMArticleItemFragment extends BaseToolFragment {
+public class AemArticleFragment extends BaseToolFragment {
     @BindView(R2.id.aem_article_web_view)
     WebView mWebView;
-    private final AEMWebViewClient mWebViewClient = new AEMWebViewClient();
+    private final ArticleWebViewClient mWebViewClient = new ArticleWebViewClient();
 
     // these properties should be treated as final and only set/modified in onCreate()
     @NonNull
@@ -54,9 +54,9 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     @Nullable
     private Article mArticle;
 
-    public static AEMArticleItemFragment newInstance(@NonNull final String tool, @NonNull final Locale locale,
-                                                     @NonNull final Uri articleUri) {
-        AEMArticleItemFragment fragment = new AEMArticleItemFragment();
+    public static AemArticleFragment newInstance(@NonNull final String tool, @NonNull final Locale locale,
+                                                 @NonNull final Uri articleUri) {
+        AemArticleFragment fragment = new AemArticleFragment();
         final Bundle args = new Bundle(3);
         populateArgs(args, tool, locale);
         args.putParcelable(EXTRA_ARTICLE, articleUri);
@@ -154,7 +154,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
     // endregion WebView content
 
-    private class AEMWebViewClient extends WebViewClient {
+    private class ArticleWebViewClient extends WebViewClient {
         @Nullable
         @Override
         public WebResourceResponse shouldInterceptRequest(@NonNull final WebView view, @NonNull final String url) {
