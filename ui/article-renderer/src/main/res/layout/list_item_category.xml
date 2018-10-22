@@ -5,6 +5,7 @@
 
     <data>
         <import type="org.cru.godtools.article.R" />
+        <import type="org.cru.godtools.xml.model.Manifest" />
 
         <variable name="callbacks" type="org.cru.godtools.article.adapter.CategoriesAdapter.Callbacks" />
         <variable name="category" type="org.cru.godtools.xml.model.Category" />
@@ -31,6 +32,7 @@
             android:ellipsize="end"
             android:lines="2"
             android:textSize="@{R.dimen.text_size_category}"
+            app:defaultTextColor="@{Manifest.getCategoryLabelColor(category.getManifest())}"
             app:layout_constraintTop_toTopOf="parent"
             app:textNode="@{category.label}"
             tools:text="About God"

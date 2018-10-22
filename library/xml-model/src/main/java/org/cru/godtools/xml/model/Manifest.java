@@ -292,6 +292,12 @@ public final class Manifest extends Base implements Styles {
                 Styles.getPrimaryTextColor(manifest);
     }
 
+    @ColorInt
+    public static int getCategoryLabelColor(@Nullable final Manifest manifest) {
+        return manifest != null && manifest.mCategoryLabelColor != null ? manifest.mCategoryLabelColor :
+                Styles.getTextColor(manifest);
+    }
+
     @NonNull
     @WorkerThread
     public static Manifest fromXml(@NonNull final XmlPullParser parser, @NonNull final String manifestName,
