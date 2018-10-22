@@ -43,7 +43,8 @@ import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_FIND_
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_HOME;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;
 
-public class MainActivity extends BasePlatformActivity implements ToolsFragment.Callbacks, ProviderInstaller.ProviderInstallListener {
+public class MainActivity extends BasePlatformActivity implements ToolsFragment.Callbacks,
+        ProviderInstaller.ProviderInstallListener {
     private static final String EXTRA_FEATURE_DISCOVERY = MainActivity.class.getName() + ".FEATURE_DISCOVERY";
     private static final String EXTRA_ACTIVE_STATE = MainActivity.class.getName() + ".ACTIVE_STATE";
     private static final String EXTRA_FEATURE = MainActivity.class.getName() + ".FEATURE";
@@ -299,7 +300,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
      */
     @SuppressWarnings("JavadocReference")
     @Override
-    public void onProviderInstallFailed(int errorCode, Intent recoveryIntent){
+    public void onProviderInstallFailed(int errorCode, Intent recoveryIntent) {
         GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
         if (availability.isUserResolvableError(errorCode)) {
             availability.showErrorNotification(this, errorCode);

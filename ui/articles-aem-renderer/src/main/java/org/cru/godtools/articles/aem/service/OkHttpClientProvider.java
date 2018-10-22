@@ -26,7 +26,7 @@ import timber.log.Timber;
 
 public class OkHttpClientProvider {
 
-    public static OkHttpClient.Builder createBuilder () {
+    public static OkHttpClient.Builder createBuilder() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         return getEnabledTLSSupportedBuilder(builder);
     }
@@ -48,7 +48,8 @@ public class OkHttpClientProvider {
 
             builder.sslSocketFactory(new Tls12SocketFactory(), trustManager);
 
-            ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS).tlsVersions(TlsVersion.TLS_1_2).build();
+            ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                    .tlsVersions(TlsVersion.TLS_1_2).build();
 
             builder.connectionSpecs(Collections.singletonList(cs));
         } catch (NoSuchAlgorithmException | IllegalStateException | KeyStoreException | KeyManagementException e) {
@@ -59,12 +60,11 @@ public class OkHttpClientProvider {
         return builder;
     }
 
-
     private static class Tls12SocketFactory extends SSLSocketFactory {
 
         final SSLSocketFactory delegate;
 
-        public Tls12SocketFactory() throws NoSuchAlgorithmException, KeyManagementException {
+        Tls12SocketFactory() throws NoSuchAlgorithmException, KeyManagementException {
             SSLContext context = SSLContext.getInstance("TLS");
             context.init(null, null, null);
             this.delegate = context.getSocketFactory();
@@ -101,7 +101,8 @@ public class OkHttpClientProvider {
         }
 
         @Override
-        public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
+        public Socket createSocket(InetAddress address, int port, InetAddress localAddress,
+                                   int localPort) throws IOException {
             return enableTLSOnSocket(delegate.createSocket(address, port, localAddress, localPort));
         }
 

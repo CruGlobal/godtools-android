@@ -37,8 +37,5 @@ public interface AemApi {
                     .addConverterFactory(new JSONObjectConverterFactory())
                     .callFactory(okHttp)
                     .build().create(AemApi.class);
-
     }
-
-
 }
