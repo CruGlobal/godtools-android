@@ -36,7 +36,6 @@ import org.cru.godtools.xml.service.ManifestManager;
 import java.util.Locale;
 
 import me.thekey.android.core.CodeGrantAsyncTask;
-import timber.log.Timber;
 
 import static android.arch.lifecycle.Lifecycle.State.RESUMED;
 import static android.arch.lifecycle.Lifecycle.State.STARTED;
@@ -79,6 +78,8 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         mTaskHandler = new Handler(this::onHandleMessage);
         setContentView(R.layout.activity_dashboard);
 
+        ProviderInstaller.installIfNeededAsync(this, this);
+
         processIntent(getIntent());
 
         if (savedInstanceState != null) {
@@ -89,7 +90,6 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
         // sync any pending updates
         syncData();
 
-        ProviderInstaller.installIfNeededAsync(this, this);
     }
 
     @Override
@@ -302,8 +302,7 @@ public class MainActivity extends BasePlatformActivity implements ToolsFragment.
     public void onProviderInstallFailed(int errorCode, Intent recoveryIntent){
         GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
         if (availability.isUserResolvableError(errorCode)) {
-            availability.showErrorDialogFragment(this, errorCode, 1001,
-                    dialog -> Timber.d("onCancel() called with: dialog = [" + dialog + "]"));
+            availability.showErrorNotification(this, errorCode);
         }
     }
 
