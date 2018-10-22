@@ -61,6 +61,9 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -87,6 +90,7 @@ public class AEMDownloadManger {
     private final ManifestManager mManifestManager;
 
     // Task synchronization locks and flags
+    private static final ReadWriteLock LOCK_FILESYSTEM = new ReentrantReadWriteLock();
     private final Object mExtractAemImportsLock = new Object();
     private final AtomicBoolean mExtractAemImportsQueued = new AtomicBoolean(false);
     final Map<Uri, Object> mSyncAemImportLocks = new HashMap<>();
@@ -390,6 +394,18 @@ public class AEMDownloadManger {
         }
     }
 
+    @WorkerThread
+    void cleanOrphanedFiles() {
+        // lock the filesystem before removing any orphaned files
+        final Lock lock = LOCK_FILESYSTEM.writeLock();
+        try {
+            lock.lock();
+
+        } finally {
+            lock.unlock();
+        }
+    }
+
     /**
      * This task will remove any attachments no longer in use.
      */
@@ -430,41 +446,49 @@ public class AEMDownloadManger {
                     .d(e, "Unable to create MessageDigest to dedup AEM resources");
         }
 
-        // stream resource to temporary file
-        final File tmpFile = ResourceUtilsKt.createNewFile(mContext);
-        final Closer closer = Closer.create();
+        // lock the file system for writing this resource
+        final Lock lock = LOCK_FILESYSTEM.readLock();
         try {
-            OutputStream out = closer.register(new FileOutputStream(tmpFile));
+            lock.lock();
+
+            // stream resource to temporary file
+            final File tmpFile = ResourceUtilsKt.createNewFile(mContext);
+            final Closer closer = Closer.create();
+            try {
+                OutputStream out = closer.register(new FileOutputStream(tmpFile));
+                if (digest != null) {
+                    out = closer.register(new DigestOutputStream(out, digest));
+                }
+                IOUtils.copy(in, out);
+                out.flush();
+                out.close();
+            } catch (final Throwable t) {
+                throw closer.rethrow(t);
+            } finally {
+                closer.close();
+            }
+
+            // rename temporary file to name based on digest
             if (digest != null) {
-                out = closer.register(new DigestOutputStream(out, digest));
+                final String hash = HashCode.fromBytes(digest.digest()).toString() + ".bin";
+                final File file = ResourceUtilsKt.getFile(mContext, hash);
+                if (file.exists()) {
+                    //noinspection ResultOfMethodCallIgnored
+                    tmpFile.delete();
+                    return file;
+                } else if (tmpFile.renameTo(file)) {
+                    return file;
+                } else {
+                    Timber.tag(TAG)
+                            .d("cannot rename tmp file %s to %s", tmpFile, file);
+                }
             }
-            IOUtils.copy(in, out);
-            out.flush();
-            out.close();
-        } catch (final Throwable t) {
-            throw closer.rethrow(t);
+
+            // default to returning the temporary file
+            return tmpFile;
         } finally {
-            closer.close();
+            lock.unlock();
         }
-
-        // rename temporary file to name based on digest
-        if (digest != null) {
-            final String hash = HashCode.fromBytes(digest.digest()).toString() + ".bin";
-            final File file = ResourceUtilsKt.getFile(mContext, hash);
-            if (file.exists()) {
-                //noinspection ResultOfMethodCallIgnored
-                tmpFile.delete();
-                return file;
-            } else if (tmpFile.renameTo(file)) {
-                return file;
-            } else {
-                Timber.tag(TAG)
-                        .d("cannot rename tmp file %s to %s", tmpFile, file);
-            }
-        }
-
-        // default to returning the temporary file
-        return tmpFile;
     }
 
     // region PriorityRunnable Tasks
