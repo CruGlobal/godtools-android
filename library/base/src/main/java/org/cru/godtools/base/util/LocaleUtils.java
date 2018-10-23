@@ -11,4 +11,9 @@ public class LocaleUtils {
     public static Locale getDeviceLocale(@NonNull final Context context) {
         return ConfigurationCompat.getLocales(context.getResources().getConfiguration()).get(0);
     }
+
+    @NonNull
+    public static String getDisplayName(@NonNull final Locale locale) {
+        return locale.getDisplayName();
+    }
 }
