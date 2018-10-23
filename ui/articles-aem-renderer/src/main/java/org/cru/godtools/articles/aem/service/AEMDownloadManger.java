@@ -12,7 +12,6 @@ import android.support.annotation.WorkerThread;
 import com.annimon.stream.Stream;
 import com.google.common.hash.HashCode;
 import com.google.common.io.Closer;
-import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 
@@ -56,6 +55,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -237,8 +237,17 @@ public class AEMDownloadManger {
                 }
 
                 // add AEM imports extracted from the manifest to the AEM article cache
-                final Manifest manifest = Futures.getUnchecked(mManifestManager.getManifest(translation));
-                repository.addAemImports(translation, manifest.getAemImports());
+                try {
+                    final Manifest manifest = mManifestManager.getManifest(translation).get();
+                    repository.addAemImports(translation, manifest.getAemImports());
+                } catch (final InterruptedException e) {
+                    // set interrupted and return immediately
+                    Thread.currentThread().interrupt();
+                    return;
+                } catch (final ExecutionException e) {
+                    Timber.tag(TAG)
+                            .d(e.getCause(), "Unable to add aem imports from manifest");
+                }
             }
 
             // prune any translations that we no longer have downloaded.
