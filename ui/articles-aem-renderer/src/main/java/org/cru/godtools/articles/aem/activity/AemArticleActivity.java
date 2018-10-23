@@ -10,7 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 
 import org.cru.godtools.article.aem.R;
-import org.cru.godtools.articles.aem.fragment.AEMArticleItemFragment;
+import org.cru.godtools.articles.aem.fragment.AemArticleFragment;
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity;
 
 import java.util.Locale;
@@ -86,7 +86,7 @@ public class AemArticleActivity extends BaseSingleToolActivity {
 
         assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
         fm.beginTransaction()
-                .replace(R.id.frame, AEMArticleItemFragment.newInstance(mTool, mLocale, mArticleUri), TAG_MAIN_FRAGMENT)
+                .replace(R.id.frame, AemArticleFragment.newInstance(mTool, mLocale, mArticleUri), TAG_MAIN_FRAGMENT)
                 .commit();
     }
 }

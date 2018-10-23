@@ -20,10 +20,12 @@ import android.webkit.WebViewClient;
 import org.cru.godtools.article.aem.R;
 import org.cru.godtools.article.aem.R2;
 import org.cru.godtools.articles.aem.db.ArticleRoomDatabase;
+import org.cru.godtools.articles.aem.db.ResourceDao;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Resource;
 import org.cru.godtools.articles.aem.service.AEMDownloadManger;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
+import org.cru.godtools.base.ui.util.WebUrlLauncher;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,23 +40,24 @@ import timber.log.Timber;
 
 import static org.cru.godtools.articles.aem.Constants.EXTRA_ARTICLE;
 
-public class AEMArticleItemFragment extends BaseToolFragment {
+public class AemArticleFragment extends BaseToolFragment {
     @BindView(R2.id.aem_article_web_view)
     WebView mWebView;
-    private final AEMWebViewClient mWebViewClient = new AEMWebViewClient();
+    private final ArticleWebViewClient mWebViewClient = new ArticleWebViewClient();
 
     // these properties should be treated as final and only set/modified in onCreate()
+    @NonNull
+    @SuppressWarnings("NullableProblems")
+    /*final*/ ArticleRoomDatabase mAemDb;
     @Nullable
     private /*final*/ Uri mArticleUri;
 
     @Nullable
     private Article mArticle;
 
-    ArticleRoomDatabase mAemDB;
-
-    public static AEMArticleItemFragment newInstance(@NonNull final String tool, @NonNull final Locale locale,
-                                                     @NonNull final Uri articleUri) {
-        AEMArticleItemFragment fragment = new AEMArticleItemFragment();
+    public static AemArticleFragment newInstance(@NonNull final String tool, @NonNull final Locale locale,
+                                                 @NonNull final Uri articleUri) {
+        AemArticleFragment fragment = new AemArticleFragment();
         final Bundle args = new Bundle(3);
         populateArgs(args, tool, locale);
         args.putParcelable(EXTRA_ARTICLE, articleUri);
@@ -65,9 +68,9 @@ public class AEMArticleItemFragment extends BaseToolFragment {
     // region Lifecycle Events
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAemDB = ArticleRoomDatabase.getInstance(requireContext());
+        mAemDb = ArticleRoomDatabase.getInstance(requireContext());
 
         final Bundle args = getArguments();
         if (args != null) {
@@ -111,7 +114,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
         if (viewModel.article == null) {
             assert mArticleUri != null : "mArticleUri has to be non-null to reach this point";
-            viewModel.article = mAemDB.articleDao().findLiveData(mArticleUri);
+            viewModel.article = mAemDb.articleDao().findLiveData(mArticleUri);
         }
 
         viewModel.article.observe(this, this::onUpdateArticle);
@@ -152,7 +155,13 @@ public class AEMArticleItemFragment extends BaseToolFragment {
 
     // endregion WebView content
 
-    private class AEMWebViewClient extends WebViewClient {
+    private class ArticleWebViewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
+            WebUrlLauncher.openUrl(requireActivity(), Uri.parse(url));
+            return true;
+        }
+
         @Nullable
         @Override
         public WebResourceResponse shouldInterceptRequest(@NonNull final WebView view, @NonNull final String url) {
@@ -172,8 +181,10 @@ public class AEMArticleItemFragment extends BaseToolFragment {
         @Nullable
         @WorkerThread
         private WebResourceResponse getResponseFromFile(@NonNull final Context context, @NonNull final Uri uri) {
+            final ResourceDao resourceDao = mAemDb.resourceDao();
+
             // find the referenced resource
-            Resource resource = mAemDB.resourceDao().find(uri);
+            Resource resource = resourceDao.find(uri);
             if (resource == null) {
                 return null;
             }
@@ -193,7 +204,7 @@ public class AEMArticleItemFragment extends BaseToolFragment {
                 }
 
                 // refresh resource since we may have just downloaded it
-                resource = mAemDB.resourceDao().find(uri);
+                resource = resourceDao.find(uri);
                 if (resource == null) {
                     return null;
                 }

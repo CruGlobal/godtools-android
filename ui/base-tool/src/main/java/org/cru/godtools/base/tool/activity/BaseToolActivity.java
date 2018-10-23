@@ -76,8 +76,7 @@ public abstract class BaseToolActivity extends ImmersiveActivity {
     }
 
     protected void updateToolbarTitle() {
-        final Manifest manifest = getActiveManifest();
-        setTitle(safeApplyTypefaceSpan(Manifest.getTitle(manifest), ManifestViewUtils.getTypeface(manifest, this)));
+        setTitle(Manifest.getTitle(getActiveManifest()));
     }
 
     private void updateToolbarMenu() {
@@ -95,4 +94,9 @@ public abstract class BaseToolActivity extends ImmersiveActivity {
     }
 
     // endregion Toolbar update logic
+
+    @Override
+    public void setTitle(final CharSequence title) {
+        super.setTitle(safeApplyTypefaceSpan(title, ManifestViewUtils.getTypeface(getActiveManifest(), this)));
+    }
 }
