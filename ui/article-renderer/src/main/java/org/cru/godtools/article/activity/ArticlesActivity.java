@@ -14,7 +14,6 @@ import org.cru.godtools.article.fragment.ArticlesFragment;
 import org.cru.godtools.articles.aem.activity.AemArticleActivity;
 import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity;
-import org.cru.godtools.base.tool.model.view.ManifestViewUtils;
 import org.cru.godtools.xml.model.Category;
 import org.cru.godtools.xml.model.Manifest;
 import org.cru.godtools.xml.model.Text;
@@ -24,7 +23,6 @@ import java.util.Locale;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 import static org.cru.godtools.article.Constants.EXTRA_CATEGORY;
-import static org.cru.godtools.base.ui.util.LocaleTypefaceUtils.safeApplyTypefaceSpan;
 
 public class ArticlesActivity extends BaseSingleToolActivity implements ArticlesFragment.Callbacks {
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
@@ -101,7 +99,7 @@ public class ArticlesActivity extends BaseSingleToolActivity implements Articles
                     .map(Category::getLabel)
                     .map(Text::getText);
             if (categoryName.isPresent()) {
-                setTitle(safeApplyTypefaceSpan(categoryName.get(), ManifestViewUtils.getTypeface(manifest, this)));
+                setTitle(categoryName.get());
                 return;
             }
         }
