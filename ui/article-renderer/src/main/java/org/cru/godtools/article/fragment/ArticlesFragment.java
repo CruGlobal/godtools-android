@@ -18,11 +18,10 @@ import com.annimon.stream.Optional;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.util.concurrent.ListenableFuture;
 
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.ccci.gto.android.common.util.MainThreadExecutor;
-import org.ccci.gto.android.common.util.WeakTask;
+import org.ccci.gto.android.common.util.WeakRunnable;
 import org.cru.godtools.article.R;
 import org.cru.godtools.article.R2;
 import org.cru.godtools.article.adapter.ArticlesAdapter;
@@ -43,8 +42,6 @@ import static org.cru.godtools.article.Constants.EXTRA_CATEGORY;
 
 public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapter.Callbacks,
         SwipeRefreshLayout.OnRefreshListener {
-    private static final WeakTask.Task<SwipeRefreshLayout> CLEAR_REFRESHING_TASK = v -> v.setRefreshing(false);
-
     public interface Callbacks {
         void onArticleSelected(@Nullable Article article);
     }
@@ -181,11 +178,13 @@ public class ArticlesFragment extends BaseToolFragment implements ArticlesAdapte
     // endregion ViewModel methods
 
     private void syncData(final boolean force) {
-        final ListenableFuture<?> sync = AEMDownloadManger.getInstance(requireContext())
-                .enqueueSyncManifestAemImports(mManifest, force);
-        if (mSwipeRefreshLayout != null) {
-            sync.addListener(new WeakTask<>(mSwipeRefreshLayout, CLEAR_REFRESHING_TASK), new MainThreadExecutor());
-        }
+        AEMDownloadManger.getInstance(requireContext())
+                .enqueueSyncManifestAemImports(mManifest, force)
+                .addListener(new WeakRunnable(() -> {
+                    if (mSwipeRefreshLayout != null) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }), new MainThreadExecutor());
     }
 
     // region View Logic
