@@ -148,16 +148,27 @@ public class AEMDownloadManger {
     }
 
     @AnyThread
+    public ListenableFuture<?> enqueueSyncManifestAemImports(@Nullable final Manifest manifest, final boolean force) {
+        if (manifest == null) {
+            return Futures.immediateFuture(null);
+        }
+
+        return Futures.successfulAsList(
+                Stream.of(manifest.getAemImports())
+                        .map(uri -> enqueueSyncAemImport(uri, force))
+                        .toList());
+    }
+
+    @AnyThread
     private void enqueueSyncStaleAemImports() {
         mExecutor.execute(this::syncStaleAemImportsTask);
     }
 
     @AnyThread
-    private void enqueueSyncAemImport(@NonNull final Uri uri, final boolean force) {
-        // try updating a task that is currently enqueued
+    private ListenableFuture<Boolean> enqueueSyncAemImport(@NonNull final Uri uri, final boolean force) {
         final SyncAemImportTask existing = mSyncAemImportTasks.get(uri);
         if (existing != null && existing.updateTask(force)) {
-            return;
+            return existing.mResult;
         }
 
         // create a new sync task
@@ -165,6 +176,7 @@ public class AEMDownloadManger {
         task.updateTask(force);
         mSyncAemImportTasks.put(uri, task);
         mExecutor.execute(task);
+        return task.mResult;
     }
 
     @AnyThread
