@@ -83,8 +83,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
-import static org.ccci.gto.android.common.TimeConstants.HOUR_IN_MS;
-import static org.ccci.gto.android.common.TimeConstants.WEEK_IN_MS;
+import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
+import static org.ccci.gto.android.common.base.TimeConstants.WEEK_IN_MS;
 import static org.ccci.gto.android.common.db.Expression.NULL;
 import static org.ccci.gto.android.common.db.Expression.constants;
 import static org.ccci.gto.android.common.util.ThreadUtils.getLock;
