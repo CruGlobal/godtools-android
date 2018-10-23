@@ -2,6 +2,9 @@ package org.cru.godtools.articles.aem.service;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.AnyThread;
 import android.support.annotation.GuardedBy;
 import android.support.annotation.NonNull;
@@ -82,14 +85,18 @@ import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
 public class AEMDownloadManger {
     private static final String TAG = "AEMDownloadManager";
 
+    private static final int MSG_CLEAN = 1;
+
     private static final int TASK_CONCURRENCY = 4;
     private static final long CACHE_BUSTING_INTERVAL_JSON = HOUR_IN_MS;
+    private static final long CLEANER_INTERVAL_IN_MS = HOUR_IN_MS;
 
     private final ArticleRoomDatabase mAemDb;
     private final AemApi mApi;
     private final Context mContext;
     private final GodToolsDao mDao;
     private final ThreadPoolExecutor mExecutor;
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final ManifestManager mManifestManager;
 
     // Task synchronization locks and flags
@@ -221,6 +228,17 @@ public class AEMDownloadManger {
         mDownloadResourceTasks.put(uri, task);
         mExecutor.execute(task);
         return task.mResult;
+    }
+
+    @AnyThread
+    void scheduleCleanOrphanedFiles() {
+        // remove any pending executions
+        mHandler.removeMessages(MSG_CLEAN);
+
+        // schedule another execution
+        final Message m = Message.obtain(mHandler, this::enqueueCleanOrphanedFiles);
+        m.what = MSG_CLEAN;
+        mHandler.sendMessageDelayed(m, CLEANER_INTERVAL_IN_MS);
     }
 
     @AnyThread
@@ -658,6 +676,7 @@ public class AEMDownloadManger {
         @Override
         boolean runTask() {
             cleanOrphanedFiles();
+            scheduleCleanOrphanedFiles();
             return true;
         }
     }
