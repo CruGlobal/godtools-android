@@ -510,17 +510,10 @@ public class AEMDownloadManger {
     private static final int PRIORITY_SYNC_AEM_IMPORT = -30;
     private static final int PRIORITY_DOWNLOAD_ARTICLE = -20;
 
-    abstract class UniqueUriBasedTask implements PriorityRunnable {
-        @NonNull
-        final Uri mUri;
-        volatile boolean mStarted = false;
+    abstract class UniqueTask implements PriorityRunnable {
         volatile boolean mForce = false;
-
+        volatile boolean mStarted = false;
         final SettableFuture<Boolean> mResult = SettableFuture.create();
-
-        UniqueUriBasedTask(@NonNull final Uri uri) {
-            mUri = uri;
-        }
 
         /**
          * Update the force flag for this task, but only before it has started. We never go from forcing the sync to not
@@ -551,6 +544,15 @@ public class AEMDownloadManger {
         abstract Object getLock();
 
         abstract boolean runTask();
+    }
+
+    abstract class UniqueUriBasedTask extends UniqueTask {
+        @NonNull
+        final Uri mUri;
+
+        UniqueUriBasedTask(@NonNull final Uri uri) {
+            mUri = uri;
+        }
     }
 
     class SyncAemImportTask extends UniqueUriBasedTask {
