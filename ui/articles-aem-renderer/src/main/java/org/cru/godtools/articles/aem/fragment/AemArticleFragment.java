@@ -25,6 +25,7 @@ import org.cru.godtools.articles.aem.model.Article;
 import org.cru.godtools.articles.aem.model.Resource;
 import org.cru.godtools.articles.aem.service.AEMDownloadManger;
 import org.cru.godtools.base.tool.fragment.BaseToolFragment;
+import org.cru.godtools.base.ui.util.WebUrlLauncher;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -155,6 +156,12 @@ public class AemArticleFragment extends BaseToolFragment {
     // endregion WebView content
 
     private class ArticleWebViewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
+            WebUrlLauncher.openUrl(requireActivity(), Uri.parse(url));
+            return true;
+        }
+
         @Nullable
         @Override
         public WebResourceResponse shouldInterceptRequest(@NonNull final WebView view, @NonNull final String url) {
