@@ -28,11 +28,11 @@ import java.util.Set;
 
 import butterknife.BindColor;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
+import butterknife.ViewCollections;
 
-import static org.keynote.godtools.android.butterknife.Setters.TINT_LIST;
+import static org.cru.godtools.butterknife.Setters.TINT_LIST;
 
 public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
     public interface Callbacks {
@@ -150,7 +150,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         LanguageViewHolder(@NonNull final View view) {
             super(view);
             if (mActionRemove != null) {
-                ButterKnife.apply(mActionRemove, TINT_LIST, mActionRemoveTint);
+                ViewCollections.set(mActionRemove, TINT_LIST, mActionRemoveTint);
             }
         }
 

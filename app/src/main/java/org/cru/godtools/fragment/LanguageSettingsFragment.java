@@ -1,4 +1,4 @@
-package org.keynote.godtools.android.fragment;
+package org.cru.godtools.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
