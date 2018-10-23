@@ -99,8 +99,11 @@ public class AEMDownloadManger {
     final Map<Uri, Object> mSyncAemImportLocks = new HashMap<>();
     final Map<Uri, Object> mDownloadArticleLocks = new HashMap<>();
     final Map<Uri, Object> mDownloadResourceLocks = new HashMap<>();
+    final Object mCleanOrphanedFilesLock = new Object();
 
     // Task de-dup related objects
+    @Nullable
+    private CleanOrphanedFilesTask mCleanOrphanedFilesTask;
     private final Map<Uri, SyncAemImportTask> mSyncAemImportTasks = synchronizedMap(new HashMap<>());
     private final Map<Uri, DownloadArticleTask> mDownloadArticleTasks = synchronizedMap(new HashMap<>());
     private final Map<Uri, DownloadResourceTask> mDownloadResourceTasks = synchronizedMap(new HashMap<>());
@@ -121,6 +124,9 @@ public class AEMDownloadManger {
         // TODO: maybe these sync tasks should be triggered elsewhere?
         enqueueExtractAemImportsFromManifests();
         enqueueSyncStaleAemImports();
+
+        // perform an initial clean of any orphaned files
+        enqueueCleanOrphanedFiles();
     }
 
     @Nullable
@@ -215,6 +221,18 @@ public class AEMDownloadManger {
         mDownloadResourceTasks.put(uri, task);
         mExecutor.execute(task);
         return task.mResult;
+    }
+
+    @AnyThread
+    void enqueueCleanOrphanedFiles() {
+        // try updating a task that is currently enqueued
+        if (mCleanOrphanedFilesTask != null && !mCleanOrphanedFilesTask.mStarted) {
+            return;
+        }
+
+        // otherwise create a new task
+        mCleanOrphanedFilesTask = new CleanOrphanedFilesTask();
+        mExecutor.execute(mCleanOrphanedFilesTask);
     }
 
     // endregion Task Scheduling Methods
@@ -506,6 +524,7 @@ public class AEMDownloadManger {
 
     // region PriorityRunnable Tasks
 
+    private static final int PRIORITY_CLEANER = Integer.MIN_VALUE;
     private static final int PRIORITY_DOWNLOAD_RESOURCE = -40;
     private static final int PRIORITY_SYNC_AEM_IMPORT = -30;
     private static final int PRIORITY_DOWNLOAD_ARTICLE = -20;
@@ -620,6 +639,25 @@ public class AEMDownloadManger {
         @Override
         boolean runTask() {
             downloadResourceTask(mUri, mForce);
+            return true;
+        }
+    }
+
+    class CleanOrphanedFilesTask extends UniqueTask {
+        @Override
+        public int getPriority() {
+            return PRIORITY_CLEANER;
+        }
+
+        @NonNull
+        @Override
+        Object getLock() {
+            return mCleanOrphanedFilesLock;
+        }
+
+        @Override
+        boolean runTask() {
+            cleanOrphanedFiles();
             return true;
         }
     }
