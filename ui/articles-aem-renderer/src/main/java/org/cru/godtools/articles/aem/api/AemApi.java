@@ -5,8 +5,14 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory;
-import org.cru.godtools.articles.aem.service.OkHttpClientProvider;
+import org.cru.godtools.articles.aem.service.DynamicSSLSocketFactory;
 import org.json.JSONObject;
+
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLSocketFactory;
 
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -17,6 +23,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
+import timber.log.Timber;
 
 public interface AemApi {
     @GET
@@ -31,10 +38,17 @@ public interface AemApi {
 
     static AemApi buildInstance(@NonNull final String uri) {
 
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS);
 
         if (Build.VERSION.SDK_INT <= 21) {
-           builder = OkHttpClientProvider.getEnabledTLSSupportedBuilder(builder);
+            try {
+                SSLSocketFactory sslSocketFactory = new DynamicSSLSocketFactory();
+                builder.sslSocketFactory(sslSocketFactory);
+            } catch (NoSuchAlgorithmException | KeyManagementException e) {
+                Timber.e(e);
+            }
         }
 
         final OkHttpClient okHttp = builder.build();
