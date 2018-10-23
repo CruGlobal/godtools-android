@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 
+import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.google.common.hash.HashCode;
 import com.google.common.io.Closer;
@@ -30,6 +31,7 @@ import org.cru.godtools.articles.aem.model.Resource;
 import org.cru.godtools.articles.aem.service.support.AemJsonParser;
 import org.cru.godtools.articles.aem.service.support.HtmlParserKt;
 import org.cru.godtools.articles.aem.util.ResourceUtilsKt;
+import org.cru.godtools.base.util.FileUtils;
 import org.cru.godtools.base.util.PriorityRunnable;
 import org.cru.godtools.model.Tool;
 import org.cru.godtools.model.Translation;
@@ -56,6 +58,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -401,6 +404,16 @@ public class AEMDownloadManger {
         try {
             lock.lock();
 
+            // determine which files are still being referenced
+            final Set<File> valid = Stream.of(mAemDb.resourceDao().getAll())
+                    .map(r -> r.getLocalFile(mContext))
+                    .collect(Collectors.toSet());
+
+            // delete any files not referenced
+            //noinspection ResultOfMethodCallIgnored
+            Stream.of(FileUtils.getResourcesDir(mContext).listFiles())
+                    .filterNot(valid::contains)
+                    .forEach(File::delete);
         } finally {
             lock.unlock();
         }
