@@ -42,6 +42,7 @@ public final class Manifest extends Base implements Styles {
     private static final String XML_TITLE = "title";
     private static final String XML_NAVBAR_COLOR = "navbar-color";
     private static final String XML_NAVBAR_CONTROL_COLOR = "navbar-control-color";
+    private static final String XML_CATEGORY_LABEL_COLOR = "category-label-color";
     private static final String XML_CATEGORIES = "categories";
     private static final String XML_PAGES = "pages";
     private static final String XML_PAGES_AEM_IMPORT = "aem-import";
@@ -112,6 +113,10 @@ public final class Manifest extends Base implements Styles {
     @Nullable
     @ColorInt
     private Integer mNavBarControlColor;
+
+    @Nullable
+    @ColorInt
+    private Integer mCategoryLabelColor;
 
     @Nullable
     private Text mTitle;
@@ -287,6 +292,12 @@ public final class Manifest extends Base implements Styles {
                 Styles.getPrimaryTextColor(manifest);
     }
 
+    @ColorInt
+    public static int getCategoryLabelColor(@Nullable final Manifest manifest) {
+        return manifest != null && manifest.mCategoryLabelColor != null ? manifest.mCategoryLabelColor :
+                Styles.getTextColor(manifest);
+    }
+
     @NonNull
     @WorkerThread
     public static Manifest fromXml(@NonNull final XmlPullParser parser, @NonNull final String manifestName,
@@ -312,6 +323,7 @@ public final class Manifest extends Base implements Styles {
         mBackgroundImageScaleType = parseScaleType(parser, XML_BACKGROUND_IMAGE_SCALE_TYPE, mBackgroundImageScaleType);
         mNavBarColor = parseColor(parser, XML_NAVBAR_COLOR, mNavBarColor);
         mNavBarControlColor = parseColor(parser, XML_NAVBAR_CONTROL_COLOR, mNavBarControlColor);
+        mCategoryLabelColor = parseColor(parser, XML_CATEGORY_LABEL_COLOR, mCategoryLabelColor);
 
         // process any child elements
         while (parser.next() != XmlPullParser.END_TAG) {
