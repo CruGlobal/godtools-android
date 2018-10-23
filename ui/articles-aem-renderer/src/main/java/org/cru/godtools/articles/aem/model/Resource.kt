@@ -34,12 +34,6 @@ class Resource(@field:PrimaryKey val uri: Uri) {
 
     @Throws(IOException::class)
     fun getInputStream(context: Context): InputStream? {
-        return getLocalFile(context)?.run {
-            if (isFile) {
-                FileInputStream(this)
-            } else {
-                null
-            }
-        }
+        return getLocalFile(context)?.let { FileInputStream(it) }
     }
 }
