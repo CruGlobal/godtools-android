@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentManager;
 
 import org.cru.godtools.R;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
-import org.keynote.godtools.android.fragment.LanguageSettingsFragment;
+import org.cru.godtools.fragment.LanguageSettingsFragment;
 
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_LANGUAGE_SETTINGS;
 import static org.cru.godtools.base.Settings.FEATURE_LANGUAGE_SETTINGS;

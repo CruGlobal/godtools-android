@@ -11,7 +11,7 @@ import android.support.v4.app.FragmentManager;
 import org.cru.godtools.R;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
-import org.keynote.godtools.android.fragment.LanguagesFragment;
+import org.cru.godtools.fragment.LanguagesFragment;
 
 import java.util.Locale;
 

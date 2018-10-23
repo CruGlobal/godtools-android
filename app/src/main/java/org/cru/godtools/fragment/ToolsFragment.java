@@ -45,7 +45,6 @@ import org.keynote.godtools.android.db.Contract.AttachmentTable;
 import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 import org.keynote.godtools.android.db.GodToolsDao;
-import org.keynote.godtools.android.fragment.BasePlatformFragment;
 
 import java.util.Locale;
 
