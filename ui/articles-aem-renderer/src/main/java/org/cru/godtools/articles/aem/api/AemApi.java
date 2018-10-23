@@ -1,6 +1,7 @@
 package org.cru.godtools.articles.aem.api;
 
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.api.retrofit2.converter.JSONObjectConverterFactory;
@@ -30,7 +31,13 @@ public interface AemApi {
 
     static AemApi buildInstance(@NonNull final String uri) {
 
-        final OkHttpClient okHttp = OkHttpClientProvider.createBuilder().build();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        if (Build.VERSION.SDK_INT <= 21) {
+           builder = OkHttpClientProvider.getEnabledTLSSupportedBuilder(builder);
+        }
+
+        final OkHttpClient okHttp = builder.build();
             // create RetroFit API
             return new Retrofit.Builder().baseUrl(uri)
                     .addConverterFactory(ScalarsConverterFactory.create())

@@ -1,6 +1,6 @@
 package org.cru.godtools.articles.aem.service;
 
-import android.os.Build;
+import com.annimon.stream.Stream;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -25,15 +25,7 @@ import timber.log.Timber;
 
 public class OkHttpClientProvider {
 
-    public static OkHttpClient.Builder createBuilder() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        return getEnabledTLSSupportedBuilder(builder);
-    }
-
-    private static OkHttpClient.Builder getEnabledTLSSupportedBuilder(OkHttpClient.Builder builder) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            return builder;
-        }
+    public static OkHttpClient.Builder getEnabledTLSSupportedBuilder(OkHttpClient.Builder builder) {
 
         try {
             TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
@@ -109,11 +101,11 @@ public class OkHttpClientProvider {
                 SSLSocket sslSocket = (SSLSocket) socket;
                 String[] supportedProtocols = sslSocket.getSupportedProtocols();
                 ArrayList<String> enabledProtocols = new ArrayList<>(Arrays.asList(sslSocket.getEnabledProtocols()));
-                for (String protocol : supportedProtocols) {
-                    if (!enabledProtocols.contains(protocol)) {
-                        enabledProtocols.add(protocol);
+                Stream.of(supportedProtocols).forEach(ep -> {
+                    if (!enabledProtocols.contains(ep)) {
+                        enabledProtocols.add(ep);
                     }
-                }
+                });
                 sslSocket.setEnabledProtocols(enabledProtocols.toArray(new String[0]));
             }
             return socket;
