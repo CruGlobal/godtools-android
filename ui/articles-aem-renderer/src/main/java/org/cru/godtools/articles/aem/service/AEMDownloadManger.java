@@ -1,5 +1,6 @@
 package org.cru.godtools.articles.aem.service;
 
+import android.arch.persistence.room.InvalidationTracker;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
@@ -78,6 +79,7 @@ import timber.log.Timber;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.util.Collections.synchronizedMap;
 import static org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS;
+import static org.cru.godtools.articles.aem.model.Constants.TABLE_NAME_RESOURCE;
 
 /**
  * This class hold all the logic for maintaining a local cache of AEM Articles.:wq
@@ -119,6 +121,7 @@ public class AEMDownloadManger {
         mApi = AemApi.buildInstance("https://www.example.com");
         mContext = context.getApplicationContext();
         mAemDb = ArticleRoomDatabase.getInstance(mContext);
+        mAemDb.getInvalidationTracker().addObserver(new RoomDatabaseChangeTracker(TABLE_NAME_RESOURCE));
         mDao = GodToolsDao.getInstance(mContext);
         mExecutor = new ThreadPoolExecutor(0, TASK_CONCURRENCY, 10, TimeUnit.SECONDS,
                                            new PriorityBlockingQueue<>(11, PriorityRunnable.COMPARATOR),
@@ -537,6 +540,23 @@ public class AEMDownloadManger {
             return tmpFile;
         } finally {
             lock.unlock();
+        }
+    }
+
+    private class RoomDatabaseChangeTracker extends InvalidationTracker.Observer {
+        RoomDatabaseChangeTracker(@NonNull final String firstTable, final String... rest) {
+            super(firstTable, rest);
+        }
+
+        @Override
+        public void onInvalidated(@NonNull final Set<String> tables) {
+            for (final String table : tables) {
+                switch (table) {
+                    case TABLE_NAME_RESOURCE:
+                        enqueueCleanOrphanedFiles();
+                        break;
+                }
+            }
         }
     }
 
