@@ -15,12 +15,17 @@ import static org.cru.godtools.model.Language.JSON_API_TYPE;
 public class Language extends Base {
     static final String JSON_API_TYPE = "language";
     private static final String JSON_CODE = "code";
+    private static final String JSON_NAME = "name";
 
     public static final Locale INVALID_CODE = new Locale("x", "inv");
 
     @Nullable
     @JsonApiAttribute(name = JSON_CODE)
     private Locale mCode;
+
+    @Nullable
+    @JsonApiAttribute(name = JSON_NAME)
+    private String mLanguageName;
 
     @JsonApiIgnore
     private boolean mAdded = false;
@@ -32,6 +37,15 @@ public class Language extends Base {
 
     public void setCode(@Nullable final Locale code) {
         mCode = code;
+    }
+
+    @NonNull
+    public String getLanguageName() {
+        return mLanguageName;
+    }
+
+    public void setLanguageName(String name) {
+        mLanguageName = name;
     }
 
     public boolean isAdded() {
