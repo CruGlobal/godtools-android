@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import org.ccci.gto.android.sync.ThreadedSyncIntentService;
 import org.ccci.gto.android.sync.event.SyncFinishedEvent;
 import org.cru.godtools.sync.job.SyncFollowupJobKt;
-import org.cru.godtools.sync.job.SyncSharesJob;
+import org.cru.godtools.sync.job.SyncSharesJobKt;
 import org.cru.godtools.sync.task.FollowupSyncTasks;
 import org.cru.godtools.sync.task.LanguagesSyncTasks;
 import org.cru.godtools.sync.task.ToolSyncTasks;
@@ -97,7 +97,7 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
                 case SYNCTYPE_TOOL_SHARES:
                     final boolean result = mToolSyncTasks.syncShares();
                     if (!result) {
-                        SyncSharesJob.scheduleSharesJob();
+                        SyncSharesJobKt.scheduleSharesJob();
                     }
                     break;
             }

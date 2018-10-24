@@ -11,7 +11,7 @@ public class SyncJobCreator implements JobCreator {
         switch (tag) {
             case SyncFollowupJobKt.FOLLOWUP_JOB_TAG:
                 return new SyncFollowupJob();
-            case SyncSharesJob.TAG:
+            case SyncSharesJobKt.SHARES_JOB_TAG:
                 return new SyncSharesJob();
             default:
                 return null;
