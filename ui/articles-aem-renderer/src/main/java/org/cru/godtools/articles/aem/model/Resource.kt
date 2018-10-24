@@ -12,7 +12,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.Date
 
-@Entity(tableName = "resources")
+@Entity(tableName = TABLE_NAME_RESOURCE)
 class Resource(@field:PrimaryKey val uri: Uri) {
     var contentType: MediaType? = null
     var localFileName: String? = null

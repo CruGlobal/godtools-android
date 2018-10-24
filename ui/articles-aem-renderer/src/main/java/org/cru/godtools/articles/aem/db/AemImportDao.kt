@@ -35,6 +35,12 @@ interface AemImportDao {
     fun removeOldArticles(aemImportUri: Uri, currentArticleUris: List<@JvmSuppressWildcards Uri>)
 
     @WorkerThread
+    @Query("""
+        DELETE FROM aemImports
+        WHERE uri NOT IN (SELECT aemImportUri FROM translationAemImports)""")
+    fun removeOrphanedAemImports()
+
+    @WorkerThread
     @Query("SELECT * FROM aemImports WHERE uri = :uri")
     fun find(uri: Uri?): AemImport?
 }

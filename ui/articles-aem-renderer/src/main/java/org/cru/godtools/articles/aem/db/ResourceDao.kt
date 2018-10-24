@@ -24,12 +24,20 @@ interface ResourceDao {
     fun updateLocalFile(uri: Uri, contentType: MediaType?, fileName: String?, downloadDate: Date?)
 
     @WorkerThread
+    @Query("""
+        DELETE FROM resources
+        WHERE uri NOT IN (SELECT uri FROM articleResources)""")
+    fun removeOrphanedResources()
+
+    @WorkerThread
     @Query("SELECT * FROM resources WHERE uri = :uri")
     fun find(uri: Uri): Resource?
 
+    @WorkerThread
     @Query("SELECT * FROM resources")
     fun getAll(): List<Resource>
 
+    @WorkerThread
     @Query("""
         SELECT r.*
         FROM resources AS r JOIN articleResources AS a ON a.resourceUri = r.uri
