@@ -90,5 +90,4 @@ public class BaseGodToolsApplication extends Application {
 
     @CallSuper
     protected void startServices() {}
-
 }
