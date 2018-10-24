@@ -22,11 +22,6 @@ public class LocaleUtils {
     }
 
     @NonNull
-    public static String getDisplayName(@NonNull final Locale locale) {
-        return getDisplayName(locale, null, null, null);
-    }
-
-    @NonNull
     public static String getDisplayName(@NonNull final Locale locale, @Nullable Context context,
                                         @Nullable final String defaultName, @Nullable final Locale inLocale) {
         // check for a language name string resource
@@ -53,7 +48,8 @@ public class LocaleUtils {
 
         // just rely on Locale.getDisplayName() which will default to the language code at this point
         Timber.tag("LocaleUtils")
-                .e(new RuntimeException("Unable to find display name for " + locale.toString()));
+                .e(new RuntimeException("Unable to find display name for " + locale.toString()),
+                   "LocaleUtils.getDisplayName(%s, %s)", locale, inLocale);
         return inLocale != null ? locale.getDisplayName(inLocale) : locale.getDisplayName();
     }
 
