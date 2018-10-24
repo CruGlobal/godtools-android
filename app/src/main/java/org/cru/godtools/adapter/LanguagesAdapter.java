@@ -14,7 +14,6 @@ import com.google.common.base.Objects;
 
 import org.cru.godtools.R;
 import org.cru.godtools.adapter.LanguagesAdapter.LanguageViewHolder;
-import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Language;
 import org.keynote.godtools.android.db.GodToolsDao;
@@ -145,6 +144,8 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         ImageView mActionRemove;
 
         @Nullable
+        Language mLanguage = null;
+        @Nullable
         Locale mLocale = null;
         boolean mAdded = false;
 
@@ -157,17 +158,16 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
 
         @Override
         void bind(final int position) {
-            final Language language = mShowNone && position == 0 ? null :
-                    mLanguages.get(position - (mShowNone ? 1 : 0));
-            mLocale = language != null ? language.getCode() : null;
-            mAdded = language != null && language.isAdded();
+            mLanguage = mShowNone && position == 0 ? null : mLanguages.get(position - (mShowNone ? 1 : 0));
+            mLocale = mLanguage != null ? mLanguage.getCode() : null;
+            mAdded = mLanguage != null && mLanguage.isAdded();
 
             if (mRoot != null) {
                 mRoot.setSelected(Objects.equal(mSelected, mLocale));
             }
             if (mTitle != null) {
-                if (mLocale != null) {
-                    mTitle.setText(LocaleUtils.getDisplayName(mLocale, mTitle.getContext(), null, null));
+                if (mLanguage != null) {
+                    mTitle.setText(mLanguage.getDisplayName(mTitle.getContext()));
                 } else {
                     mTitle.setText(R.string.label_language_none);
                 }

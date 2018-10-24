@@ -18,7 +18,6 @@ import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.R;
 import org.cru.godtools.adapter.LanguagesAdapter;
-import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
 import org.keynote.godtools.android.content.LanguagesLoader;
@@ -134,9 +133,8 @@ public class LanguagesFragment extends BasePlatformFragment implements Languages
             mLanguages = null;
         } else {
             mLanguages = Stream.of(languages)
-                    .collect(Collectors.toMap(
-                            l -> LocaleUtils.getDisplayName(l.getCode(), getContext(), null, null), l -> l,
-                            () -> new TreeMap<>(String::compareToIgnoreCase)));
+                    .collect(Collectors.toMap(l -> l.getDisplayName(getContext()), l -> l,
+                                              () -> new TreeMap<>(String::compareToIgnoreCase)));
         }
         updateLanguagesList();
     }

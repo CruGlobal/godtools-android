@@ -1,8 +1,11 @@
 package org.cru.godtools.model;
 
+import android.content.Context;
+
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType;
+import org.cru.godtools.base.util.LocaleUtils;
 
 import java.util.Locale;
 
@@ -57,8 +60,12 @@ public class Language extends Base {
     }
 
     @NonNull
-    public String getDisplayName() {
-        return mCode != null ? mCode.getDisplayName() : "";
+    public String getDisplayName(@Nullable final Context context) {
+        if (mCode == null) {
+            return "";
+        }
+
+        return LocaleUtils.getDisplayName(mCode, context, null, null);
     }
 
     @Override
