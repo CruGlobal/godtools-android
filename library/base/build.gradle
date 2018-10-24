@@ -2,6 +2,7 @@ dependencies {
     implementation "androidx.core:core:${deps.androidX.core}"
 
     implementation "org.ccci.gto.android:gto-support-compat:${deps.gtoSupport}"
+    implementation "org.ccci.gto.android:gto-support-util:${deps.gtoSupport}"
 
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "me.thekey.android:thekey-api:${deps.thekey}"
