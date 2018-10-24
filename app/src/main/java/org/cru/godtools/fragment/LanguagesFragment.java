@@ -10,18 +10,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
+import com.google.common.collect.ImmutableList;
 
 import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.R;
 import org.cru.godtools.adapter.LanguagesAdapter;
+import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.model.Language;
 import org.cru.godtools.sync.GodToolsSyncServiceKt;
 import org.keynote.godtools.android.content.LanguagesLoader;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
@@ -59,7 +65,7 @@ public class LanguagesFragment extends BasePlatformFragment implements Languages
     /*final*/ boolean mPrimary = true;
 
     @Nullable
-    private List<Language> mLanguages;
+    private SortedMap<String, Language> mLanguages;
 
     // search related properties
     private boolean mIsSearchViewOpen = false;
@@ -128,8 +134,9 @@ public class LanguagesFragment extends BasePlatformFragment implements Languages
             mLanguages = null;
         } else {
             mLanguages = Stream.of(languages)
-                    .sorted((l1, l2) -> l1.getDisplayName().compareToIgnoreCase(l2.getDisplayName()))
-                    .toList();
+                    .collect(Collectors.toMap(
+                            l -> LocaleUtils.getDisplayName(l.getCode(), getContext(), null, null), l -> l,
+                            () -> new TreeMap<>(String::compareToIgnoreCase)));
         }
         updateLanguagesList();
     }
@@ -249,20 +256,21 @@ public class LanguagesFragment extends BasePlatformFragment implements Languages
     }
 
     @Nullable
-    private List<Language> filterLangs(@Nullable final List<Language> languages, @Nullable final String query) {
+    private List<Language> filterLangs(@Nullable final Map<String, Language> languages, @Nullable final String query) {
         // short-circuit if there aren't any languages to filter
         if (languages == null || languages.isEmpty()) {
-            return languages;
+            return ImmutableList.of();
         }
 
         // short-circuit if there isn't a query
         if (TextUtils.isEmpty(query)) {
-            return languages;
+            return ImmutableList.copyOf(languages.values());
         }
 
         // otherwise filter the list of languages based on the query
         return Stream.of(languages)
-                .filter(l -> l.getDisplayName().toLowerCase().contains(query.toLowerCase()))
+                .filter(l -> l.getKey().toLowerCase().contains(query.toLowerCase()))
+                .map(Map.Entry::getValue)
                 .toList();
     }
 
