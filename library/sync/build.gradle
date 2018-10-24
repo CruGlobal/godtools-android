@@ -1,6 +1,10 @@
+apply plugin: 'kotlin-android'
+
 dependencies {
     implementation project(':library:base')
     implementation project(':library:sync-tasks')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
     implementation "org.ccci.gto.android:gto-support-sync:${deps.gtoSupport}"
 
