@@ -57,11 +57,13 @@ public class LanguageSettingsFragment extends BasePlatformFragment {
 
     private void updateLanguages() {
         if (mPrimaryLanguageView != null) {
-            mPrimaryLanguageView.setText(LocaleUtils.getDisplayName(mPrimaryLanguage));
+            mPrimaryLanguageView.setText(
+                    LocaleUtils.getDisplayName(mPrimaryLanguage, mPrimaryLanguageView.getContext(), null, null));
         }
         if (mParallelLanguageView != null) {
             if (mParallelLanguage != null) {
-                mParallelLanguageView.setText(LocaleUtils.getDisplayName(mParallelLanguage));
+                mParallelLanguageView.setText(
+                        LocaleUtils.getDisplayName(mParallelLanguage, mParallelLanguageView.getContext(), null, null));
             } else {
                 mParallelLanguageView.setText(R.string.action_language_parallel_select);
             }

@@ -18,6 +18,7 @@ import org.ccci.gto.android.common.support.v4.app.SimpleLoaderCallbacks;
 import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.R;
 import org.cru.godtools.base.ui.util.ModelUtils;
+import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.download.manager.DownloadProgress;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Attachment;
@@ -290,7 +291,8 @@ public class ToolDetailsFragment extends BasePlatformFragment
         if (mLanguagesView != null) {
             mLanguagesView.setVisibility(mLanguages.isEmpty() ? View.GONE : View.VISIBLE);
             mLanguagesView.setText(Stream.of(mLanguages)
-                                           .map(Locale::getDisplayName)
+                                           .map(l -> LocaleUtils.getDisplayName(l, mLanguagesView.getContext(), null,
+                                                                                null))
                                            .withoutNulls()
                                            .sorted(String.CASE_INSENSITIVE_ORDER)
                                            .reduce((l1, l2) -> l1 + ", " + l2)

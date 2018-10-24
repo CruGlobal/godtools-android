@@ -14,6 +14,7 @@ import com.google.common.base.Objects;
 
 import org.cru.godtools.R;
 import org.cru.godtools.adapter.LanguagesAdapter.LanguageViewHolder;
+import org.cru.godtools.base.util.LocaleUtils;
 import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.model.Language;
 import org.keynote.godtools.android.db.GodToolsDao;
@@ -166,7 +167,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
             }
             if (mTitle != null) {
                 if (mLocale != null) {
-                    mTitle.setText(mLocale.getDisplayName());
+                    mTitle.setText(LocaleUtils.getDisplayName(mLocale, mTitle.getContext(), null, null));
                 } else {
                     mTitle.setText(R.string.label_language_none);
                 }
