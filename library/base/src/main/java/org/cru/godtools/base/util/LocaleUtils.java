@@ -10,6 +10,7 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.os.ConfigurationCompat;
+import timber.log.Timber;
 
 import static org.ccci.gto.android.common.util.LocaleUtils.getOptionalDisplayName;
 
@@ -51,6 +52,8 @@ public class LocaleUtils {
         }
 
         // just rely on Locale.getDisplayName() which will default to the language code at this point
+        Timber.tag("LocaleUtils")
+                .e(new RuntimeException("Unable to find display name for " + locale.toString()));
         return inLocale != null ? locale.getDisplayName(inLocale) : locale.getDisplayName();
     }
 
