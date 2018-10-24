@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.sync.ThreadedSyncIntentService;
 import org.ccci.gto.android.sync.event.SyncFinishedEvent;
-import org.cru.godtools.sync.job.SyncFollowupJob;
+import org.cru.godtools.sync.job.SyncFollowupJobKt;
 import org.cru.godtools.sync.job.SyncSharesJob;
 import org.cru.godtools.sync.task.FollowupSyncTasks;
 import org.cru.godtools.sync.task.LanguagesSyncTasks;
@@ -90,7 +90,7 @@ public class GodToolsSyncService extends ThreadedSyncIntentService {
                     try {
                         mFollowupSyncTasks.syncFollowups();
                     } catch (final IOException e) {
-                        SyncFollowupJob.scheduleFollowupJob();
+                        SyncFollowupJobKt.scheduleFollowupJob();
                         throw e;
                     }
                     break;

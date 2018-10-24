@@ -9,7 +9,7 @@ public class SyncJobCreator implements JobCreator {
     @Override
     public Job create(@NonNull final String tag) {
         switch (tag) {
-            case SyncFollowupJob.TAG:
+            case SyncFollowupJobKt.FOLLOWUP_JOB_TAG:
                 return new SyncFollowupJob();
             case SyncSharesJob.TAG:
                 return new SyncSharesJob();
