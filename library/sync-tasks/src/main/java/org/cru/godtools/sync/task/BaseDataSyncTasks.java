@@ -74,7 +74,8 @@ abstract class BaseDataSyncTasks extends BaseSyncTasks {
             mDao.streamCompat(Query.select(Language.class).where(LanguageTable.FIELD_ID.eq(language.getId())).limit(1))
                     .findFirst()
                     .ifPresent(old -> {
-                        mDao.update(language, mDao.getPrimaryKeyWhere(old), LanguageTable.COLUMN_CODE, LanguageTable.COLUMN_NAME);
+                        mDao.update(language, mDao.getPrimaryKeyWhere(old), LanguageTable.COLUMN_CODE,
+                                LanguageTable.COLUMN_NAME);
                         coalesceEvent(events, LanguageUpdateEvent.INSTANCE);
                     });
         }
