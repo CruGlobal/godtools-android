@@ -310,7 +310,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
     @OnClick(R.id.action_add)
     void addTool() {
         if (mToolCode != null) {
-            GodToolsDownloadManager.getInstance(getContext()).addTool(mToolCode);
+            GodToolsDownloadManager.getInstance(requireContext()).addTool(mToolCode);
             final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
             if (callbacks != null) {
                 callbacks.onToolAdded();
@@ -322,7 +322,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
     @OnClick(R.id.action_remove)
     void removeTool() {
         if (mToolCode != null) {
-            GodToolsDownloadManager.getInstance(getContext()).removeTool(mToolCode);
+            GodToolsDownloadManager.getInstance(requireContext()).removeTool(mToolCode);
             final Callbacks callbacks = FragmentUtils.getListener(this, Callbacks.class);
             if (callbacks != null) {
                 callbacks.onToolRemoved();
@@ -361,7 +361,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
             switch (id) {
                 case LOADER_TOOL:
                     if (mToolCode != null) {
-                        return new ToolLoader(getContext(), mToolCode);
+                        return new ToolLoader(requireContext(), mToolCode);
                     }
                     break;
             }
@@ -385,7 +385,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
         public Loader<Attachment> onCreateLoader(final int id, @Nullable final Bundle args) {
             switch (id) {
                 case LOADER_BANNER:
-                    return new AttachmentLoader(getContext());
+                    return new AttachmentLoader(requireContext());
                 default:
                     return null;
             }
@@ -408,7 +408,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
             switch (id) {
                 case LOADER_LATEST_TRANSLATION:
                     if (mToolCode != null) {
-                        return new LatestTranslationLoader(getContext(), mToolCode, mPrimaryLanguage);
+                        return new LatestTranslationLoader(requireContext(), mToolCode, mPrimaryLanguage);
                     }
                     break;
             }
@@ -433,7 +433,7 @@ public class ToolDetailsFragment extends BasePlatformFragment
             switch (id) {
                 case LOADER_AVAILABLE_LANGUAGES:
                     if (mToolCode != null) {
-                        return new AvailableLanguagesLoader(getContext(), mToolCode);
+                        return new AvailableLanguagesLoader(requireContext(), mToolCode);
                     }
                     break;
             }
