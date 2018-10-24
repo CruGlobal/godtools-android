@@ -6,6 +6,8 @@ import org.cru.godtools.sync.task.FollowupSyncTasks;
 
 import java.io.IOException;
 
+import static org.cru.godtools.sync.job.BaseSyncJobKt.scheduleSyncJob;
+
 public final class SyncFollowupJob extends BaseSyncJob {
     static final String TAG = "sync_followup";
 

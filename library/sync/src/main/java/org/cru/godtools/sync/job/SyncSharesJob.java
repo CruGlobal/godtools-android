@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import org.cru.godtools.sync.task.ToolSyncTasks;
 
+import static org.cru.godtools.sync.job.BaseSyncJobKt.scheduleSyncJob;
+
 public final class SyncSharesJob extends BaseSyncJob {
     static final String TAG = "sync_shares";
 
