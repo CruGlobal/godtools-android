@@ -44,8 +44,8 @@ public class BaseDataSyncTasksTest {
 
         // run test
         mTasks.storeLanguage(mEvents, language(1L, newLocale, false));
-        assertThat(mDao.find(Language.class, originalLocale), nullValue());
-        final Language language = mDao.find(Language.class, newLocale);
+        assertThat(mDao.find(Language.class, originalLocale, originalLocale.getDisplayName()), nullValue());
+        final Language language = mDao.find(Language.class, newLocale, newLocale.getDisplayName());
         assertNotNull(language);
         assertEquals(newLocale, language.getCode());
         assertTrue(language.isAdded());
