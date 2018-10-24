@@ -26,7 +26,7 @@ import org.ccci.gto.android.common.support.v4.util.FragmentUtils;
 import org.cru.godtools.R;
 import org.cru.godtools.adapter.LanguagesAdapter;
 import org.cru.godtools.model.Language;
-import org.cru.godtools.sync.GodToolsSyncService;
+import org.cru.godtools.sync.GodToolsSyncServiceKt;
 import org.keynote.godtools.android.content.LanguagesLoader;
 
 import java.util.List;
@@ -220,7 +220,7 @@ public class LanguagesFragment extends BasePlatformFragment implements Languages
     @CallSuper
     protected void syncData(final boolean force) {
         super.syncData(force);
-        mSyncHelper.sync(GodToolsSyncService.syncLanguages(getContext(), force));
+        mSyncHelper.sync(GodToolsSyncServiceKt.syncLanguages(requireContext(), force));
     }
 
     // region Languages List
