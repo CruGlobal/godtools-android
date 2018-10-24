@@ -56,6 +56,7 @@ public class BaseDataSyncTasksTest {
         lang.setId(id);
         lang.setCode(locale);
         lang.setAdded(added);
+        lang.setLanguageName(locale.getDisplayName());
         return lang;
     }
 }
