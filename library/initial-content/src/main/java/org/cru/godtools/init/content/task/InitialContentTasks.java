@@ -2,9 +2,6 @@ package org.cru.godtools.init.content.task;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
 
 import com.annimon.stream.Stream;
 import com.google.common.collect.ImmutableSet;
@@ -40,6 +37,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 import timber.log.Timber;
 
 import static android.database.sqlite.SQLiteDatabase.CONFLICT_IGNORE;
