@@ -1,12 +1,13 @@
 package org.cru.godtools.util;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
 
 import org.cru.godtools.everystudent.EveryStudent;
 import org.cru.godtools.model.Tool;
 
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
 
 import static org.cru.godtools.model.Tool.CODE_EVERYSTUDENT;
 

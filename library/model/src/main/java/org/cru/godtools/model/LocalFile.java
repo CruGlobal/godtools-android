@@ -1,12 +1,13 @@
 package org.cru.godtools.model;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import org.cru.godtools.base.util.FileUtils;
 
 import java.io.File;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public final class LocalFile {
     public static final String INVALID_FILE_NAME = null;

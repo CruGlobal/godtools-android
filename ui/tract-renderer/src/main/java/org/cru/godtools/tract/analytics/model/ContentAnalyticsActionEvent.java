@@ -1,8 +1,5 @@
 package org.cru.godtools.tract.analytics.model;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import com.google.common.base.Strings;
 
 import org.cru.godtools.analytics.model.AnalyticsActionEvent;
@@ -10,6 +7,9 @@ import org.cru.godtools.analytics.model.AnalyticsSystem;
 import org.cru.godtools.xml.model.AnalyticsEvent;
 
 import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class ContentAnalyticsActionEvent extends AnalyticsActionEvent {
     @NonNull

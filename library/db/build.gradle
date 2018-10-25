@@ -1,8 +1,6 @@
 dependencies {
     implementation project(':library:model')
 
-    implementation "com.android.support:support-annotations:${deps.androidSupport}"
-
     api "org.ccci.gto.android:gto-support-db:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-db-async:${deps.gtoSupport}"
     api "org.ccci.gto.android:gto-support-db-stream:${deps.gtoSupport}"

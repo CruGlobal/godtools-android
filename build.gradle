@@ -7,18 +7,29 @@ buildscript {
                         core: '1.1.1',
                         room: '1.1.1'
                 ],
+                androidX             : [
+                        annotation      : '1.0.0',
+                        appCompat       : '1.0.0',
+                        archCore        : '2.0.0',
+                        browser         : '1.0.0',
+                        cardView        : '1.0.0',
+                        constraintLayout: '1.1.3',
+                        core            : '1.0.0',
+                        lifecycle       : '2.0.0',
+                        multidex        : '2.0.0',
+                        percentLayout   : '1.0.0',
+                        recyclerView    : '1.0.0',
+                        room            : '2.0.0',
+                        test            : '1.1.0',
+                ],
                 androidInstantApps   : '1.1.0',
-                androidLifecycle     : '1.1.1',
-                androidSupport       : '27.1.1',
-                androidTestingSupport: '1.0.2',
                 butterknife          : '9.0.0-rc1',
                 calligraphy          : '2.3.0',
-                constraintLayout     : '1.1.3',
                 crashlytics          : '2.9.5',
                 eventbus             : '3.1.1',
                 evernoteAndroidJob   : '1.2.5',
                 facebookStetho       : '1.5.0',
-                gtoSupport           : '1.3.2-SNAPSHOT',
+                gtoSupport           : '2.0.0-SNAPSHOT',
                 guava                : '26.0-android',
                 hamcrest             : '1.3',
                 jsoup                : '1.11.3',
@@ -27,9 +38,9 @@ buildscript {
                 ktlint               : '0.29.0',
                 leakcanary           : '1.6.2',
                 lightweightStream    : '1.2.1',
+                materialDesign       : '1.0.0',
                 mockito              : '2.17.0',
                 mockitoKotlin        : '2.0.0-RC3',
-                multidex             : '1.0.3',
                 newrelic             : '5.19.0',
                 okhttp3              : '3.11.0',
                 picassoTransforms    : '2.2.1',
@@ -37,7 +48,7 @@ buildscript {
                 powermock            : '2.0.0-beta.9',
                 retrofit2            : '2.4.0',
                 snowplow             : '0.8.0',
-                thekey               : '2.0.1-SNAPSHOT',
+                thekey               : '3.0.0-SNAPSHOT',
                 timber               : '4.7.1'
         ]
         uris = [
@@ -76,10 +87,10 @@ ext.versionCode = (grgit.log(includes:['HEAD']).size() * 2) + 4026000
 // define dependency versions for this project
 ext {
     applicationId = 'org.keynote.godtools.android'
-    compileSdk    = 27
+    compileSdk    = 28
     minSdk        = 15
     minSdkFeature = 21
-    targetSdk     = 27
+    targetSdk     = 28
 }
 
 subprojects {
@@ -91,20 +102,6 @@ subprojects {
         maven { url 'https://dl.bintray.com/powermock/maven' }
         maven { url 'https://cruglobal.jfrog.io/cruglobal/list/maven-locals/' }
         mavenLocal()
-    }
-
-    configurations.all {
-        // force versions when there are conflicts
-        resolutionStrategy.force(
-                "android.arch.lifecycle:livedata-core:${deps.androidLifecycle}",
-                "android.arch.lifecycle:runtime:${deps.androidLifecycle}",
-                "android.arch.lifecycle:viewmodel:${deps.androidLifecycle}",
-
-                // HACK: force the version of the support libraries in order to use new version of ButterKnife before
-                // HACK: we transition to AndroidX
-                "com.android.support:support-compat:${deps.androidSupport}",
-                "com.android.support:support-annotations:${deps.androidSupport}",
-        )
     }
 }
 
@@ -166,7 +163,7 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
                 minSdkVersion minSdk
                 targetSdkVersion targetSdk
 
-                testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+                testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
                 multiDexKeepProguard rootProject.file('multidex-keep.pro')
             }
 
@@ -188,6 +185,7 @@ configure(subprojects.findAll { it.path.startsWith(":library:") || it.path.start
         }
 
         dependencies {
+            compileOnly "androidx.annotation:annotation:${deps.androidX.annotation}"
             compileOnly 'org.jetbrains:annotations:16.0.1'
 
             testImplementation "junit:junit:${deps.junit}"

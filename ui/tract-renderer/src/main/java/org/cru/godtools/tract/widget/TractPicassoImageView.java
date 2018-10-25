@@ -1,14 +1,14 @@
 package org.cru.godtools.tract.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import org.ccci.gto.android.common.picasso.view.SimplePicassoImageView;
 import org.cru.godtools.base.tool.widget.ScaledPicassoImageView;
 import org.cru.godtools.xml.model.ImageScaleType;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal;
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical;
 

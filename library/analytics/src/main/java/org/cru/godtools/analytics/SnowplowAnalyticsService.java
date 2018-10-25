@@ -2,10 +2,6 @@ package org.cru.godtools.analytics;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.AnyThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
 
 import com.adobe.mobile.Visitor;
 import com.google.common.collect.ImmutableList;
@@ -34,6 +30,10 @@ import java.util.Map;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
 
+import androidx.annotation.AnyThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 import me.thekey.android.TheKey;
 
 import static com.snowplowanalytics.snowplow.tracker.emitter.RequestSecurity.HTTPS;

@@ -1,6 +1,6 @@
 package org.cru.godtools.model;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public final class TranslationFile {
     @Nullable

@@ -1,15 +1,15 @@
 package org.cru.godtools.articles.aem.db;
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule;
-import android.arch.lifecycle.LiveData;
-import android.support.test.runner.AndroidJUnit4;
-
 import org.cru.godtools.articles.aem.model.Article;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
+
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.LiveData;
+import androidx.test.runner.AndroidJUnit4;
 
 import static junit.framework.Assert.assertTrue;
 

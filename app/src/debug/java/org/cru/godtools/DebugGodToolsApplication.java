@@ -1,8 +1,6 @@
 package org.cru.godtools;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.multidex.MultiDex;
 
 import com.adobe.mobile.Config;
 import com.annimon.stream.Stream;
@@ -26,6 +24,8 @@ import org.keynote.godtools.android.db.GodToolsDatabase;
 import java.io.File;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.multidex.MultiDex;
 import timber.log.Timber;
 
 public class DebugGodToolsApplication extends GodToolsApplication {

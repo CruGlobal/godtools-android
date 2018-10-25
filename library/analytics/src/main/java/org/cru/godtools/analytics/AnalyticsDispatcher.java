@@ -1,14 +1,15 @@
 package org.cru.godtools.analytics;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.HashSet;
 import java.util.Set;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public final class AnalyticsDispatcher implements InvocationHandler {
     private final Set<AnalyticsService> mServices = new HashSet<>();

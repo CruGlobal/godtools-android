@@ -1,11 +1,10 @@
 package org.cru.godtools.api;
 
-import android.support.annotation.NonNull;
-
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject;
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams;
 import org.cru.godtools.model.Tool;
 
+import androidx.annotation.NonNull;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;

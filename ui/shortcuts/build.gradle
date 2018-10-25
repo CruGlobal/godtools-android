@@ -27,7 +27,7 @@ dependencies {
 
     // transitive dependencies for ui:tract-renderer, needed to build this module
     implementation project(':library:download-manager')
-    implementation "com.android.support:design:${deps.androidSupport}"
+    implementation "com.google.android.material:material:${deps.materialDesign}"
 
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:${deps.eventbus}"
 }

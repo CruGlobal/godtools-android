@@ -2,9 +2,10 @@ package org.keynote.godtools.android.db;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.annotation.NonNull;
 
 import org.cru.godtools.model.Language;
+
+import androidx.annotation.NonNull;
 
 import static org.keynote.godtools.android.db.Contract.LanguageTable.COLUMN_ADDED;
 import static org.keynote.godtools.android.db.Contract.LanguageTable.COLUMN_CODE;

@@ -1,11 +1,10 @@
 package org.cru.godtools.xml.model;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlPullParser;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import timber.log.Timber;
 
 public final class ImageGravity {

@@ -1,8 +1,5 @@
 package org.cru.godtools.tract.analytics.model;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import org.ccci.gto.android.common.compat.util.LocaleCompat;
 import org.cru.godtools.analytics.model.AnalyticsActionEvent;
 import org.cru.godtools.analytics.model.AnalyticsSystem;
@@ -11,6 +8,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import static org.cru.godtools.analytics.AdobeAnalyticsService.KEY_CONTENT_LANGUAGE_SECONDARY;
 

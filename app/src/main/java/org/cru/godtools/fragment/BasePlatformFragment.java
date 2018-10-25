@@ -3,11 +3,6 @@ package org.cru.godtools.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 
 import com.google.common.base.Objects;
@@ -24,6 +19,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Locale;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 
 import static org.cru.godtools.base.Settings.PREF_PARALLEL_LANGUAGE;

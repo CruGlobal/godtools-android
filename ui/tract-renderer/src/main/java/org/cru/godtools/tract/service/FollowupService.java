@@ -3,10 +3,6 @@ package org.cru.godtools.tract.service;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
 
 import org.ccci.gto.android.common.util.NumberUtils;
 import org.cru.godtools.base.model.Event;
@@ -18,6 +14,11 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.io.IOException;
+
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 
 import static org.cru.godtools.base.model.Event.Id.FOLLOWUP_EVENT;
 

@@ -8,10 +8,11 @@ import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 
 import org.cru.godtools.everystudent.analytics.model.EveryStudentSearchAnalyticsActionEvent;
 import org.greenrobot.eventbus.EventBus;
+
+import androidx.annotation.NonNull;
 
 /**
  * Provides access to the EveryStudent database.

@@ -2,15 +2,16 @@ package org.cru.godtools.xml.model;
 
 import android.graphics.Color;
 import android.net.Uri;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import org.jetbrains.annotations.Contract;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import static org.cru.godtools.xml.model.ImageScaleType.FILL_X;
 import static org.cru.godtools.xml.model.ImageScaleType.FILL_Y;

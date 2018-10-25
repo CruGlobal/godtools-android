@@ -1,7 +1,6 @@
 package org.cru.godtools.articles.aem.db;
 
 import android.net.Uri;
-import android.support.test.runner.AndroidJUnit4;
 
 import org.cru.godtools.articles.aem.model.Article;
 import org.junit.Before;
@@ -10,6 +9,8 @@ import org.junit.runner.RunWith;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import androidx.test.runner.AndroidJUnit4;
 
 @RunWith(AndroidJUnit4.class)
 public abstract class DBBaseTest extends BaseArticleRoomDatabaseIT {

@@ -1,12 +1,13 @@
 package org.cru.godtools.analytics.model;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.Locale;
 
 import javax.annotation.concurrent.Immutable;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 @Immutable
 public class AnalyticsScreenEvent extends AnalyticsBaseEvent {

@@ -22,9 +22,8 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${deps.kotlin}"
 
-    implementation "android.arch.lifecycle:extensions:${deps.androidLifecycle}"
-    api "android.arch.persistence.room:runtime:${deps.androidArch.room}"
-    implementation "com.android.support:appcompat-v7:${deps.androidSupport}"
+    implementation "androidx.lifecycle:lifecycle-extensions:${deps.androidX.lifecycle}"
+    api "androidx.room:room-runtime:${deps.androidX.room}"
 
     implementation "org.ccci.gto.android:gto-support-api-okhttp3:${deps.gtoSupport}"
     implementation "org.ccci.gto.android:gto-support-api-retrofit2:${deps.gtoSupport}"
@@ -41,16 +40,16 @@ dependencies {
     implementation "org.jsoup:jsoup:${deps.jsoup}"
 
     // For Testing
-    androidTestImplementation "android.arch.core:core-testing:${deps.androidArch.core}"
-    androidTestImplementation "android.arch.persistence.room:testing:${deps.androidArch.room}"
-    androidTestImplementation "com.android.support.test:runner:${deps.androidTestingSupport}"
+    androidTestImplementation "androidx.arch.core:core-testing:${deps.androidX.archCore}"
+    androidTestImplementation "androidx.room:room-testing:${deps.androidX.room}"
+    androidTestImplementation "androidx.test:runner:${deps.androidX.test}"
     androidTestImplementation "com.google.guava:guava:${deps.guava}"
     androidTestImplementation "org.ccci.gto.android:gto-support-core:${deps.gtoSupport}"
 
     testImplementation "org.mockito:mockito-core:${deps.mockito}"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${deps.mockitoKotlin}"
 
-    annotationProcessor "android.arch.lifecycle:compiler:${deps.androidLifecycle}"
-    annotationProcessor "android.arch.persistence.room:compiler:${deps.androidArch.room}"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:${deps.androidX.lifecycle}"
+    annotationProcessor "androidx.room:room-compiler:${deps.androidX.room}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${deps.butterknife}"
 }

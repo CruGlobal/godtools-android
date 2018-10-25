@@ -1,8 +1,8 @@
 package org.cru.godtools.articles.aem.db
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Transaction
-import android.support.annotation.WorkerThread
+import androidx.room.Dao
+import androidx.room.Transaction
+import androidx.annotation.WorkerThread
 import org.cru.godtools.articles.aem.model.Article
 
 @Dao

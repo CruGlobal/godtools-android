@@ -11,7 +11,4 @@ dependencies {
     implementation "com.evernote:android-job:${deps.evernoteAndroidJob}"
     implementation "com.google.guava:guava:${deps.guava}"
     implementation "org.greenrobot:eventbus:${deps.eventbus}"
-
-    // override a transitive dependency for com.evernote:android-job
-    compileOnly "com.android.support:support-media-compat:${deps.androidSupport}"
 }

@@ -1,9 +1,9 @@
 package org.cru.godtools.everystudent.analytics.model;
 
-import android.support.annotation.NonNull;
-
 import org.cru.godtools.analytics.model.AnalyticsActionEvent;
 import org.cru.godtools.analytics.model.AnalyticsSystem;
+
+import androidx.annotation.NonNull;
 
 public class EveryStudentSearchAnalyticsActionEvent extends AnalyticsActionEvent {
     private static final String CATEGORY_EVERYSTUDENT_SEARCH = "searchbar";

@@ -1,13 +1,13 @@
 package org.cru.godtools.tract.analytics.model;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
 
 import java.util.Locale;
 
 import javax.annotation.concurrent.Immutable;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 @Immutable
 public class TractPageAnalyticsScreenEvent extends AnalyticsScreenEvent {

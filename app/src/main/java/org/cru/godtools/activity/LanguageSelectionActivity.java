@@ -3,10 +3,6 @@ package org.cru.godtools.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 
 import org.cru.godtools.R;
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent;
@@ -14,6 +10,11 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager;
 import org.cru.godtools.fragment.LanguagesFragment;
 
 import java.util.Locale;
+
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
 
 import static org.cru.godtools.analytics.model.AnalyticsScreenEvent.SCREEN_LANGUAGE_SELECTION;
 

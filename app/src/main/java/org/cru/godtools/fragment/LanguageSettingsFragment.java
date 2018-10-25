@@ -1,7 +1,6 @@
 package org.cru.godtools.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,7 @@ import org.cru.godtools.R;
 import org.cru.godtools.activity.LanguageSelectionActivity;
 import org.keynote.godtools.android.utils.WordUtils;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Optional;

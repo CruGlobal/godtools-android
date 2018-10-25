@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.app.ApplicationUtils;
 import org.ccci.gto.android.common.db.CommonTables.LastSyncTable;
@@ -19,6 +18,7 @@ import org.keynote.godtools.android.db.Contract.ToolTable;
 import org.keynote.godtools.android.db.Contract.TranslationFileTable;
 import org.keynote.godtools.android.db.Contract.TranslationTable;
 
+import androidx.annotation.NonNull;
 import timber.log.Timber;
 
 public final class GodToolsDatabase extends WalSQLiteOpenHelper {

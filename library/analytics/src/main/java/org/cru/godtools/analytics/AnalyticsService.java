@@ -3,11 +3,12 @@ package org.cru.godtools.analytics;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.AnyThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.UiThread;
 
 import org.cru.godtools.base.model.Event;
+
+import androidx.annotation.AnyThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.UiThread;
 
 public interface AnalyticsService {
     /* Action event names */

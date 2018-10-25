@@ -1,9 +1,9 @@
 package org.cru.godtools.articles.aem.model
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
 import android.content.Context
 import android.net.Uri
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import okhttp3.MediaType
 import org.cru.godtools.articles.aem.util.getFile
 import java.io.File

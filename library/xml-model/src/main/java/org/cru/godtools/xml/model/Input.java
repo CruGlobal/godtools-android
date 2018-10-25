@@ -1,10 +1,5 @@
 package org.cru.godtools.xml.model;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.annotation.WorkerThread;
-
 import com.google.common.base.Strings;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
@@ -15,6 +10,11 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.annotation.WorkerThread;
 
 import static org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES;
 import static org.cru.godtools.xml.Constants.XMLNS_CONTENT;

@@ -3,12 +3,6 @@ package org.cru.godtools.tract.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.Loader;
 import android.view.View;
 
 import com.annimon.stream.Optional;
@@ -34,9 +28,15 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import butterknife.BindView;
 
-import static android.support.v4.app.ActivityOptionsCompat.makeCustomAnimation;
+import static androidx.core.app.ActivityOptionsCompat.makeCustomAnimation;
 import static org.cru.godtools.base.Constants.EXTRA_LANGUAGE;
 import static org.cru.godtools.base.Constants.EXTRA_TOOL;
 import static org.cru.godtools.tract.Constants.EXTRA_MANIFEST_FILE_NAME;

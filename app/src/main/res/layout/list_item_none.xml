@@ -6,18 +6,18 @@
 
     <RelativeLayout style="@style/Widget.GodTools.Static.Layout">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/icon"
             style="@style/Widget.GodTools.Static.Icon.Tinted.Blue"
             tools:src="@drawable/ic_add" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/label"
             style="@style/Widget.GodTools.Static.Label"
             android:layout_below="@id/icon"
             tools:text="@string/title_add_new_tools" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text"
             style="@style/Widget.GodTools.Static.Text"
             android:layout_below="@id/label"

@@ -2,10 +2,11 @@ package org.keynote.godtools.android.db;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.annotation.NonNull;
 
 import org.cru.godtools.model.Attachment;
 import org.cru.godtools.model.Tool;
+
+import androidx.annotation.NonNull;
 
 import static org.keynote.godtools.android.db.Contract.AttachmentTable.COLUMN_DOWNLOADED;
 import static org.keynote.godtools.android.db.Contract.AttachmentTable.COLUMN_FILENAME;

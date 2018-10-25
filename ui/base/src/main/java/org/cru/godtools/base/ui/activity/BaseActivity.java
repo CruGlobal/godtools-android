@@ -1,19 +1,19 @@
 package org.cru.godtools.base.ui.activity;
 
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.Lifecycle;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import org.cru.godtools.analytics.AnalyticsService;
 import org.cru.godtools.base.ui.R2;
 import org.greenrobot.eventbus.EventBus;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Lifecycle;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

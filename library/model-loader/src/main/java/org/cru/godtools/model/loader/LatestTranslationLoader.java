@@ -1,14 +1,15 @@
 package org.cru.godtools.model.loader;
 
 import android.content.Context;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
 
 import org.ccci.gto.android.common.eventbus.content.CachingAsyncTaskEventBusLoader;
 import org.cru.godtools.model.Translation;
 import org.keynote.godtools.android.db.GodToolsDao;
 
 import java.util.Locale;
+
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
 
 public final class LatestTranslationLoader extends CachingAsyncTaskEventBusLoader<Translation> {
     @NonNull

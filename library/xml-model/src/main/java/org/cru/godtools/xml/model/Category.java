@@ -1,9 +1,5 @@
 package org.cru.godtools.xml.model;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
-
 import com.google.common.collect.ImmutableSet;
 
 import org.ccci.gto.android.common.util.XmlPullParserUtils;
@@ -14,6 +10,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 
 import static org.cru.godtools.xml.Constants.XMLNS_ARTICLE;
 import static org.cru.godtools.xml.Constants.XMLNS_MANIFEST;

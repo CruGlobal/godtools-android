@@ -2,14 +2,6 @@ package org.cru.godtools.xml.model;
 
 import android.graphics.Color;
 import android.net.Uri;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DimenRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RestrictTo;
-import android.support.annotation.VisibleForTesting;
-import android.support.annotation.WorkerThread;
-import android.support.v4.util.SimpleArrayMap;
 
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
@@ -27,6 +19,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.DimenRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
+import androidx.annotation.VisibleForTesting;
+import androidx.annotation.WorkerThread;
+import androidx.collection.SimpleArrayMap;
 
 import static org.cru.godtools.xml.Constants.XMLNS_ARTICLE;
 import static org.cru.godtools.xml.Constants.XMLNS_MANIFEST;

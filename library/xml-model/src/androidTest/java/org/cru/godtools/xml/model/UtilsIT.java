@@ -2,10 +2,11 @@ package org.cru.godtools.xml.model;
 
 import android.graphics.Color;
 import android.net.Uri;
-import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import androidx.test.runner.AndroidJUnit4;
 
 import static org.cru.godtools.xml.model.Utils.parseColor;
 import static org.cru.godtools.xml.model.Utils.parseUrl;

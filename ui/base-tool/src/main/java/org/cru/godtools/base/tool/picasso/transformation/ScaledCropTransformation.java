@@ -1,12 +1,12 @@
 package org.cru.godtools.base.tool.picasso.transformation;
 
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
 
 import com.squareup.picasso.Transformation;
 
 import org.cru.godtools.xml.model.ImageScaleType;
 
+import androidx.annotation.NonNull;
 import jp.wasabeef.picasso.transformations.CropTransformation;
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal;
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical;

@@ -1,11 +1,12 @@
 package org.cru.godtools.articles.aem.db;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 
 import org.junit.After;
 import org.junit.Before;
+
+import androidx.room.Room;
+import androidx.test.InstrumentationRegistry;
 
 public abstract class BaseArticleRoomDatabaseIT {
     Context mContext;

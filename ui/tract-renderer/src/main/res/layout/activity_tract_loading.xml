@@ -8,7 +8,7 @@
 
     <RelativeLayout style="@style/Widget.GodTools.Static.Layout">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/icon"
             style="@style/Widget.GodTools.Static.Icon.Tinted.Green"
             app:srcCompat="@drawable/ic_checkmark" />
@@ -18,7 +18,7 @@
             style="@style/Widget.GodTools.Tract.Static.ProgressBar"
             android:layout_below="@id/icon" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             style="@style/Widget.GodTools.Static.Label"
             android:layout_below="@id/loading_progress"
             android:layout_marginBottom="0dp"

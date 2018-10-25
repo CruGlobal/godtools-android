@@ -1,13 +1,14 @@
 package org.cru.godtools.model;
 
 import android.annotation.SuppressLint;
-import android.support.annotation.Nullable;
 
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiId;
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore;
 
 import java.security.SecureRandom;
 import java.util.Random;
+
+import androidx.annotation.Nullable;
 
 public abstract class Base {
     public static final long INVALID_ID = -1;
